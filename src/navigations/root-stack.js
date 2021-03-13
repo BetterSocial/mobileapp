@@ -1,13 +1,14 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import Hello from '../screens/Hello';
+import ChooseUsername from '../screens/Onboarding/ChooseUsername';
+
 const Stack = createStackNavigator();
 const RootStact = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="halo"
-        component={Hello}
+        name="ChooseUsername"
+        component={ChooseUsername}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
