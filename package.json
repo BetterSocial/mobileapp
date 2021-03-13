@@ -18,7 +18,11 @@
     "react-native-gesture-handler": "^1.10.3",
     "react-native-reanimated": "^2.0.0",
     "react-native-safe-area-context": "^3.2.0",
-    "react-native-screens": "^2.18.1"
+    "react-native-screens": "^2.18.1",
+    "@human-id/react-native-humanid": "^1.0.0",
+    "@react-native-async-storage/async-storage": "^1.14.1",
+    "react-native-device-info": "^8.0.5",
+    "react-native-swiper-flatlist": "^3.0.14"
   },
   "devDependencies": {
     "@babel/core": "7.13.10",
