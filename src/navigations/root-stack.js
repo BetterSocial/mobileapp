@@ -1,14 +1,14 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import Hello from '../screens/Hello';
+import SplashScreen from '../screens/SplaceScreen/SplaceScreen';
 const Stack = createStackNavigator();
 const RootStact = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="halo"
-        component={Hello}
         options={{headerShown: false}}
+        name="Splash"
+        component={SplashScreen}
       />
     </Stack.Navigator>
   );
