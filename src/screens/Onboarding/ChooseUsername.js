@@ -4,7 +4,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput,
   Dimensions,
 } from 'react-native';
 import {ProgressBar} from '../../components/ProgressBar';
@@ -13,6 +12,7 @@ import IconFontAwesome5 from 'react-native-vector-icons//FontAwesome5';
 const width = Dimensions.get('screen').width;
 import {launchImageLibrary} from 'react-native-image-picker';
 import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
+import {Input} from '../../components/Input';
 const ChooseUsername = () => {
   const [username, setUsername] = useState('');
   const onPhoto = () => {
@@ -58,24 +58,11 @@ const ChooseUsername = () => {
 
 export default ChooseUsername;
 
-const Input = ({...props}) => {
-  return <TextInput style={styles.input} {...props} />;
-};
-
 const styles = StyleSheet.create({
   containerInput: {
     flexDirection: 'row',
     marginTop: 28,
     marginBottom: 24,
-  },
-  input: {
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: '#BDBDBD',
-    paddingHorizontal: 23,
-    paddingVertical: 13,
-    width: width - 100,
-    marginLeft: 13,
   },
   container: {
     paddingHorizontal: 20,
