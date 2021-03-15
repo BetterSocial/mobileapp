@@ -24,7 +24,7 @@ const ChooseUsername = () => {
     <View style={styles.container}>
       <View style={styles.content}>
         <ProgressBar isStatic={true} value={25} />
-        <Text style={styles.title}>Find your local community</Text>
+        <Text style={styles.title}>Choose your username</Text>
         <Text style={styles.desc}>
           Ping does not require real names - just make sure your friends will
           find & recognize you
