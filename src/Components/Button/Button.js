@@ -2,8 +2,9 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 
 const Btn = (props) => {
+  let disable = props.disabled ? props.disabled : false
   return (
-    <TouchableNativeFeedback onPress={props.onPress}>
+    <TouchableNativeFeedback disabled={disable} onPress={props.onPress}>
       <View style={{...styles.button, ...props.style}}>
         <Text style={{...styles.buttonText, ...props.textStyling}}>
           {props.children}
