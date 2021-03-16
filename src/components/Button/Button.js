@@ -1,23 +1,16 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
-
-const width = Dimensions.get('screen').width;
+import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 
 const Btn = (props) => {
+  let disable = props.disabled ? props.disabled : false
   return (
-    <TouchableOpacity onPress={props.onPress}>
+    <TouchableNativeFeedback disabled={disable} onPress={props.onPress}>
       <View style={{...styles.button, ...props.style}}>
         <Text style={{...styles.buttonText, ...props.textStyling}}>
           {props.children}
         </Text>
       </View>
-    </TouchableOpacity>
+    </TouchableNativeFeedback>
   );
 };
 
@@ -28,12 +21,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     borderRadius: 8,
     flexDirection: 'row',
-    justifyContent:'center'
+    height: 48,
+    justifyContent: 'center',
   },
   buttonText: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontFamily: 'Inter-Regular',
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '600',
   },
