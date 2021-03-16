@@ -11,10 +11,10 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import MyStatusBar from '../../Components/StatusBar';
-import {Button} from '../../Components/Button';
-import {ProgressBar} from '../../Components/ProgressBar';
-import {ChunkArray} from '../../Helpers/ChunkArray';
+import MyStatusBar from '../../components/StatusBar';
+import {Button} from '../../components/Button';
+import {ProgressBar} from '../../components/ProgressBar';
+import {ChunkArray} from '../../helpers/ChunkArray';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 
 const width = Dimensions.get('screen').width;
