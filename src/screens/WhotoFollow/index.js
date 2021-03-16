@@ -13,9 +13,9 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import MyStatusBar from '../../Components/StatusBar';
-import {Button} from '../../Components/Button';
-import {ProgressBar} from '../../Components/ProgressBar';
+import MyStatusBar from '../../components/StatusBar';
+import {Button} from '../../components/Button';
+import {ProgressBar} from '../../components/ProgressBar';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import CheckIcon from '../../../assets/icons/check.svg';
 import AddIcon from '../../../assets/icons/add.svg';
