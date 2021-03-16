@@ -10,15 +10,14 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
-import MyStatusBar from '../../Components/StatusBar';
-import {Button} from '../../Components/Button';
-import {ProgressBar} from '../../Components/ProgressBar';
-import {SearchModal} from '../../Components/Search';
+import MyStatusBar from '../../components/StatusBar';
+import {Button} from '../../components/Button';
+import {ProgressBar} from '../../components/ProgressBar';
+import {SearchModal} from '../../components/Search';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import PlusIcon from '../../../assets/icons/plus.svg';
 import PinIcon from '../../../assets/icons/pin.svg';
 import TrashIcon from '../../../assets/icons/trash.svg';
-import WarningCircleBlueIcon from '../../../assets/icons/warning-circle-blue.svg';
 
 const options = [
   {label: 'los angeles', value: 'la'},
@@ -41,7 +40,6 @@ const index = () => {
   const [optionsSearch, setOptionsSearch] = React.useState([]);
   const [optionsSearchSecond, setOptionsSearchSecond] = React.useState([]);
   const [addSecondLocation, setAddSecondLocation] = React.useState(false);
-  const [inputSecondLocation, setInputSecondLocation] = React.useState(false);
   const [isVisibleFirstLocation, setIsVisibleFirstLocation] = React.useState(
     false,
   );

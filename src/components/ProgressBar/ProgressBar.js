@@ -1,5 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {Text, View, StyleSheet, Animated} from 'react-native';
+import {View, StyleSheet, Animated} from 'react-native';
+import {LogBox} from 'react-native';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -8,6 +9,10 @@ function useInterval(callback, delay) {
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+  }, []);
 
   // Set up the interval.
   useEffect(() => {
@@ -34,7 +39,6 @@ const ProgressBar = (props) => {
     Animated.timing(animation.current, {
       toValue: progress,
       duration: 100,
-      // useNativeDriver: true,
     }).start();
   }, [progress]);
 
