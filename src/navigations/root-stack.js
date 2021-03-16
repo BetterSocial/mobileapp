@@ -1,14 +1,15 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import SplashScreen from '../screens/SplaceScreen/SplaceScreen';
+import ChooseUsername from '../screens/Onboarding/ChooseUsername';
+
 const Stack = createStackNavigator();
 const RootStact = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="ChooseUsername"
+        component={ChooseUsername}
         options={{headerShown: false}}
-        name="Splash"
-        component={SplashScreen}
       />
     </Stack.Navigator>
   );
