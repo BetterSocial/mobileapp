@@ -1,9 +1,5 @@
 import React from 'react';
-import {useState, useEffect} from 'react';
 import {
-  StatusBar,
-  Button,
-  SafeAreaView,
   TextInput,
   View,
   Text,
@@ -15,10 +11,8 @@ import Modal from 'react-native-modal';
 import CrossIcon from '../../../assets/icons/cross.svg';
 
 const width = Dimensions.get('screen').width;
-const height = Dimensions.get('screen').height;
 
 const SearchModal = (props) => {
-  const [data, setData] = useState('');
   return (
     <Modal
       testID={'modal'}
@@ -45,12 +39,14 @@ const SearchModal = (props) => {
                 placeholderTextColor="#BDBDBD"
               />
             </View>
+            {props.isLoading ? <Text>Please wait...</Text> : null}
+
             {typeof props.options !== 'undefined' &&
             props.options.length > 0 ? (
               <View style={styles.box}>
                 {props.options.map((value, index) => {
-                  let firstLetter = value.label.split(' ');
-                  let lastLetter = value.label.replace(
+                  let firstLetter = value.neighborhood.split(' ');
+                  let lastLetter = value.neighborhood.replace(
                     `${firstLetter[0]} `,
                     ' ',
                   );
@@ -165,7 +161,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17,
     color: '#000000',
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
   },
   label: {
     fontFamily: 'Inter',
@@ -174,7 +170,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17,
     color: '#000000',
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
   },
 });
 export default SearchModal;

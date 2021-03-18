@@ -1,6 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import ChooseUsername from '../screens/Onboarding/ChooseUsername';
+import ChooseUsername from '../screens/LocalComunity';
 
 
 const Stack = createStackNavigator();

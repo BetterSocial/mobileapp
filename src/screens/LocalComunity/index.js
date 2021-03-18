@@ -10,6 +10,7 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
+import {post} from '../../api/server';
 import MyStatusBar from '../../components/StatusBar';
 import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
@@ -19,27 +20,12 @@ import PlusIcon from '../../../assets/icons/plus.svg';
 import PinIcon from '../../../assets/icons/pin.svg';
 import TrashIcon from '../../../assets/icons/trash.svg';
 
-const options = [
-  {label: 'los angeles', value: 'la'},
-  {label: 'new york', value: 'ny'},
-  {label: 'medan', value: 'mdn'},
-  {label: 'jakarta', value: 'jkt'},
-  {label: 'bandung', value: 'bdg'},
-  {label: 'surabaya', value: 'sby'},
-  {label: 'jaya pura', value: 'jpr'},
-  {label: 'bogor', value: 'bgr'},
-  {label: 'malang', value: 'mlg'},
-];
-
 const width = Dimensions.get('screen').width;
 const index = () => {
   const [search, setSearch] = React.useState('');
   const [location, setLocation] = React.useState([]);
-  const [searchObjSecond, setSearchObjSecond] = React.useState({});
-  const [searchSecond, setSearchSecond] = React.useState('');
   const [optionsSearch, setOptionsSearch] = React.useState([]);
-  const [optionsSearchSecond, setOptionsSearchSecond] = React.useState([]);
-  const [addSecondLocation, setAddSecondLocation] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isVisibleFirstLocation, setIsVisibleFirstLocation] = React.useState(
     false,
   );
@@ -64,29 +50,26 @@ const index = () => {
   };
 
   const handleSearch = (value) => {
-    if (value.length > 3) {
-      let returnFilter = options.filter((val) =>
-        val.label.includes(value.toLowerCase()),
-      );
-      setOptionsSearch(returnFilter);
-      setAddSecondLocation(true);
+    if (value.length >= 3) {
+      setIsLoading(true);
+      let params = {
+        name: value,
+      };
+      post({url: '/location/list', params})
+        .then((res) => {
+          setIsLoading(false);
+          if (res.status == 200) {
+            console.log('isi ress ', res);
+            setOptionsSearch(res.data.body);
+          }
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
     } else {
-      setAddSecondLocation(false);
       setOptionsSearch([]);
     }
     setSearch(value);
-  };
-
-  const handleSearchSecond = (value) => {
-    if (value.length > 3) {
-      let returnFilter = options.filter((val) =>
-        val.label.includes(value.toLowerCase()),
-      );
-      setOptionsSearchSecond(returnFilter);
-    } else {
-      setOptionsSearchSecond([]);
-    }
-    setSearchSecond(value);
   };
 
   const capitalizeFirstLetter = (string) => {
@@ -98,24 +81,18 @@ const index = () => {
     if (tempLocation.length <= 1) {
       tempLocation.push(val);
     }
-    setSearch(capitalizeFirstLetter(val.label));
+    setSearch(capitalizeFirstLetter(val.neighborhood));
     setOptionsSearch([]);
     setLocation(tempLocation);
-  };
-
-  const handleSelectedSearchSecond = (val) => {
-    setSearchSecond(capitalizeFirstLetter(val.label));
-    setSearchObjSecond(val);
-    setOptionsSearchSecond([]);
   };
 
   const renderItem = ({item}) => (
     <View style={styles.containerLocation}>
       <View style={styles.containerRow}>
         <PinIcon width={14} height={20} fill="#000000" />
-        <Text style={styles.textLocation}>{item.label}</Text>
+        <Text style={styles.textLocation}>{item.neighborhood}</Text>
       </View>
-      <TouchableNativeFeedback onPress={() => handleDelete(item.value)}>
+      <TouchableNativeFeedback onPress={() => handleDelete(item.location_id)}>
         <TrashIcon width={18} height={20} fill="#000000" />
       </TouchableNativeFeedback>
     </View>
@@ -123,7 +100,7 @@ const index = () => {
 
   const handleDelete = (val) => {
     let tempLocation = [...location];
-    let index = tempLocation.findIndex((data) => data.value === val);
+    let index = tempLocation.findIndex((data) => data.location_id === val);
     if (index > -1) {
       tempLocation.splice(index, 1);
     }
@@ -149,7 +126,7 @@ const index = () => {
           <FlatList
             data={location}
             renderItem={renderItem}
-            keyExtractor={(item) => item.value}
+            keyExtractor={(item) => item.location_id}
           />
 
           {/* First Location */}
@@ -195,28 +172,44 @@ const index = () => {
         {/* First Location */}
         <SearchModal
           isVisible={isVisibleFirstLocation}
-          onClose={() => setIsVisibleFirstLocation(false)}
+          onClose={() => {
+            setIsVisibleFirstLocation(false);
+            setSearch('');
+          }}
           value={search}
           onChangeText={(text) => handleSearch(text)}
           placeholder="Search by ZIP, neighborhood or city"
           options={optionsSearch}
-          onSelect={(val) => handleSelectedSearch(val)}
+          onSelect={(val) => {
+            setIsVisibleFirstLocation(false);
+            setSearch('');
+            handleSelectedSearch(val);
+          }}
+          isLoading={isLoading}
         />
 
         {/* Second Location */}
         <SearchModal
           isVisible={isVisibleSecondLocation}
-          onClose={() => setIsVisibleSecondLocation(false)}
+          onClose={() => {
+            setIsVisibleSecondLocation(false);
+            setSearch('');
+          }}
           value={search}
           onChangeText={(text) => handleSearch(text)}
           placeholder="Search by ZIP, neighborhood or city"
           options={optionsSearch}
-          onSelect={(val) => handleSelectedSearch(val)}
+          onSelect={(val) => {
+            setIsVisibleSecondLocation(false);
+            setSearch('');
+            handleSelectedSearch(val);
+          }}
+          isLoading={isLoading}
         />
 
         <View style={styles.footer}>
           <Text style={styles.textSmall}>
-          We value privacy and do not ask for 24/7 location tracking
+            We value privacy and do not ask for 24/7 location tracking
           </Text>
           <Button>NEXT</Button>
         </View>
