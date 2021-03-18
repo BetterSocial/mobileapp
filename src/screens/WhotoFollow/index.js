@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -10,9 +10,11 @@ import {
   TouchableHighlight,
   Dimensions,
   FlatList,
-  ScrollView,
   Image,
+  ActivityIndicator,
 } from 'react-native';
+import {get} from '../../api/server';
+import VirtualizedView from '../../components/VirtualizedView';
 import MyStatusBar from '../../components/StatusBar';
 import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
@@ -22,90 +24,25 @@ import AddIcon from '../../../assets/icons/add.svg';
 
 const width = Dimensions.get('screen').width;
 
-const dataWhoToFollow = [
-  {
-    group_name: '🇺🇸 american',
-    data: [
-      {
-        id: 1,
-        username: '@Bradley_smith',
-        full_name: 'Bradley Smith',
-        image_path:
-          'https://ogletree.com/app/uploads/people/brandon-r-sher-515x560.jpg',
-      },
-      {
-        id: 2,
-        username: '@adam_sulaiman',
-        full_name: 'Adam Sulaiman',
-        image_path:
-          'https://i1.rgstatic.net/ii/profile.image/281920379342856-1444226464815_Q512/Adam-Sulaiman.jpg',
-      },
-      {
-        id: 3,
-        username: '@naruto',
-        full_name: 'Naruto',
-        image_path:
-          'https://i.pinimg.com/originals/2a/92/06/2a9206a4a0d1d23cf92636c42115d054.jpg',
-      },
-      {
-        id: 4,
-        username: '@mike_portnoy',
-        full_name: 'Mike Portnoy',
-        image_path:
-          'https://riftone.my.id/wp-content/uploads/2019/11/Mike_portnoy.jpg',
-      },
-      {
-        id: 5,
-        username: '@Synyster_gates',
-        full_name: 'Synyster Gates',
-        image_path:
-          'https://riftone.my.id/wp-content/uploads/2019/11/Mike_portnoy.jpg',
-      },
-    ],
-  },
-  {
-    group_name: '👴 Joe Biden',
-    data: [
-      {
-        id: 1,
-        username: '@Bradley_smith1',
-        full_name: 'Bradley Smith',
-        image_path:
-          'https://ogletree.com/app/uploads/people/brandon-r-sher-515x560.jpg',
-      },
-      {
-        id: 2,
-        username: '@adam_sulaiman1',
-        full_name: 'Adam Sulaiman',
-        image_path:
-          'https://i1.rgstatic.net/ii/profile.image/281920379342856-1444226464815_Q512/Adam-Sulaiman.jpg',
-      },
-      {
-        id: 3,
-        username: '@naruto1',
-        full_name: 'Naruto',
-        image_path:
-          'https://i.pinimg.com/originals/2a/92/06/2a9206a4a0d1d23cf92636c42115d054.jpg',
-      },
-      {
-        id: 4,
-        username: '@mike_portnoy1',
-        full_name: 'Mike Portnoy',
-        image_path:
-          'https://riftone.my.id/wp-content/uploads/2019/11/Mike_portnoy.jpg',
-      },
-      {
-        id: 5,
-        username: '@Synyster_gates1',
-        full_name: 'Synyster Gates',
-        image_path:
-          'https://riftone.my.id/wp-content/uploads/2019/11/Mike_portnoy.jpg',
-      },
-    ],
-  },
-];
 const index = () => {
+  const [users, setUsers] = useState([]);
   const [followed, setFollowed] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    get({url: '/who-to-follow/list'})
+      .then((res) => {
+        setIsLoading(false);
+        if (res.status == 200) {
+          setUsers(res.data.body);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, []);
 
   const renderHeader = () => {
     if (Platform.OS === 'android') {
@@ -125,7 +62,9 @@ const index = () => {
 
   const handleSelected = (value) => {
     let copyFollowed = [...followed];
-    let index = copyFollowed.findIndex((data) => data.username === value.username);
+    let index = copyFollowed.findIndex(
+      (data) => data.username === value.username,
+    );
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
@@ -135,17 +74,31 @@ const index = () => {
     setFollowed(copyFollowed);
   };
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    get({url: '/who-to-follow/list'})
+      .then((res) => {
+        setRefreshing(false)
+        if (res.status == 200) {
+          setUsers(res.data.body);
+        }
+      })
+      .catch((err) => {
+        setRefreshing(false)
+      });
+  }, []);
+
   const renderItem = ({item}) => (
     <View style={styles.containerCard}>
       <View style={styles.cardLeft}>
         <Image
           style={styles.tinyLogo}
           source={{
-            uri: item.image_path,
+            uri: item.profile_pic_path,
           }}
         />
         <View style={styles.containerTextCard}>
-          <Text style={styles.textFullName}>{item.full_name}</Text>
+          <Text style={styles.textFullName}>{item.real_name}</Text>
           <Text style={styles.textUsername}>{item.username}</Text>
         </View>
       </View>
@@ -176,27 +129,30 @@ const index = () => {
             These make it easy for people to find you
           </Text>
         </View>
-        <ScrollView style={{marginBottom: 90}}>
-          {dataWhoToFollow.map((value, index) => {
-            return (
-              <View>
-                <View style={styles.headerList}>
-                  <Text style={styles.titleHeader}>
-                    People in{' '}
-                    <Text style={styles.textBold}>{value.group_name}</Text>{' '}
-                    follow...
-                  </Text>
-                </View>
-                <FlatList
-                  style={styles.flatList}
-                  data={value.data}
-                  renderItem={renderItem}
-                  keyExtractor={(item) => item.id.toString()}
-                />
-              </View>
-            );
-          })}
-        </ScrollView>
+        {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
+        <VirtualizedView style={{marginBottom: 90}} onRefresh={onRefresh} refreshing={refreshing}>
+          {users !== undefined && users.length > 0
+            ? users.map((value, index) => {
+                return (
+                  <View key={index}>
+                    <View style={styles.headerList}>
+                      <Text style={styles.titleHeader}>
+                        People in{' '}
+                        <Text style={styles.textBold}>{value.group_name}</Text>{' '}
+                        follow...
+                      </Text>
+                    </View>
+                    <FlatList
+                      style={styles.flatList}
+                      data={value.data}
+                      renderItem={renderItem}
+                      keyExtractor={(item) => item.user_id}
+                    />
+                  </View>
+                );
+              })
+            : null}
+        </VirtualizedView>
         <View style={styles.footer}>
           <Button>FINISH</Button>
         </View>
@@ -311,6 +267,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000000',
     lineHeight: 21,
+    textTransform: 'capitalize',
   },
   textUsername: {
     fontFamily: 'Inter',
