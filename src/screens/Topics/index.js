@@ -27,16 +27,15 @@ const index = () => {
   const [topicSelected, setTopicSelected] = useState([]);
   const [topics, setTopics] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [minTopic, setMinTopic] = useState(3);
+  const [minTopic] = useState(3);
 
   useEffect(() => {
     setIsLoading(true);
     get({url: '/topics/list'})
       .then((res) => {
-        console.log(res.status);
         setIsLoading(false);
         if (res.status == 200) {
-          setTopics(res.data);
+          setTopics(res.data.body);
         }
       })
       .catch((err) => {
