@@ -11,11 +11,14 @@
   },
   "dependencies": {
     "@human-id/react-native-humanid": "^2.0.1",
+    "@react-native-async-storage/async-storage": "^1.14.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
+    "axios": "^0.21.1",
     "react": "16.13.1",
     "react-native": "0.63.4",
+    "react-native-config": "^1.4.2",
     "react-native-device-info": "^8.0.5",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-image-picker": "^3.2.1",
@@ -25,6 +28,7 @@
     "react-native-screens": "^2.18.1",
     "react-native-svg": "^12.1.0",
     "react-native-svg-transformer": "^0.14.3",
+    "react-native-swiper-flatlist": "^3.0.14",
     "react-native-vector-icons": "^8.1.0"
   },
   "devDependencies": {

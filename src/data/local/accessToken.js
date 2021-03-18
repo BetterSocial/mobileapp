@@ -5,7 +5,7 @@ export const setToken = async (value) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 export const getToken = async () => {
   try {
     const value = await AsyncStorage.getItem('t-ping');
@@ -15,4 +15,4 @@ export const getToken = async () => {
     // error reading value
     return null;
   }
-}
+};
