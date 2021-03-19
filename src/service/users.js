@@ -31,3 +31,13 @@ export const verifyUsername = async (username) => {
     console.log(error);
   }
 };
+export const registerUser = async (data) => {
+  try {
+    let resApi = await api.post('/users/register', {
+      data,
+    });
+    return resApi.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

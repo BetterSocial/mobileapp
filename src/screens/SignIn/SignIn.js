@@ -15,7 +15,6 @@ import {
   onError,
 } from '@human-id/react-native-humanid';
 import {
-  getUserId,
   removeLocalStorege,
   setToken,
   setUserId,
@@ -44,6 +43,7 @@ const SignIn = () => {
               removeLocalStorege('userId');
               navigation.dispatch(StackActions.replace('ChooseUsername'));
             }
+            setUserId(appUserId);
           });
         }
       });
