@@ -1,4 +1,5 @@
 import React from 'react';
+import {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -10,7 +11,10 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
+
+import {get} from '../../api/server';
 import MyStatusBar from '../../components/StatusBar';
 import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
@@ -20,7 +24,24 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 const width = Dimensions.get('screen').width;
 
 const index = () => {
-  const [topicSelected, setTopicSelected] = React.useState([]);
+  const [topicSelected, setTopicSelected] = useState([]);
+  const [topics, setTopics] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [minTopic] = useState(3);
+
+  useEffect(() => {
+    setIsLoading(true);
+    get({url: '/topics/list'})
+      .then((res) => {
+        setIsLoading(false);
+        if (res.status == 200) {
+          setTopics(res.data.body);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, []);
 
   const renderHeader = () => {
     if (Platform.OS === 'android') {
@@ -47,7 +68,7 @@ const index = () => {
 
   const handleSelectedLanguage = (val) => {
     let copytopicSelected = [...topicSelected];
-    let index = copytopicSelected.findIndex((data) => data.name === val.name);
+    let index = copytopicSelected.findIndex((data) => data.topic_id === val.topic_id);
     if (index > -1) {
       copytopicSelected.splice(index, 1);
     } else {
@@ -73,61 +94,68 @@ const index = () => {
             Find like-minded people
           </Text>
         </View>
+
         <ScrollView style={{marginBottom: 100}}>
-          {tempData.map((data, index) => {
-            return (
-              <View key={index} style={styles.containerTopic}>
-                <Text style={styles.title}>{data.name}</Text>
-                <View>
-                  {ChunkArray(data.data, 4).map((val, index) => {
-                    return (
-                      <ScrollView
-                        key={index}
-                        style={styles.listTopic}
-                        horizontal={true}>
-                        {val.map((value) => {
-                          return (
-                            <TouchableOpacity
-                              onPress={() => handleSelectedLanguage(value)}
-                              key={value.id}
-                              style={
-                                topicSelected.findIndex(
-                                  (data) => data.name === value.name,
-                                ) > -1
-                                  ? styles.bgTopicSelectActive
-                                  : styles.bgTopicSelectNotActive
-                              }>
-                              <Text>{value.icon}</Text>
-                              <Text
-                                style={
-                                  topicSelected.findIndex(
-                                    (data) => data.name === value.name,
-                                  ) > -1
-                                    ? styles.textTopicActive
-                                    : styles.textTopicNotActive
-                                }>
-                                {value.name}
-                              </Text>
-                            </TouchableOpacity>
-                          );
-                        })}
-                      </ScrollView>
-                    );
-                  })}
-                </View>
-              </View>
-            );
-          })}
+          {isLoading ? (
+            <ActivityIndicator size="small" color="#0000ff" />
+          ) : null}
+          {topics !== undefined
+            ? Object.keys(topics).map((attribute, index) => {
+                return (
+                  <View key={index} style={styles.containerTopic}>
+                    <Text style={styles.title}>{attribute}</Text>
+                    <View>
+                      {ChunkArray(topics[attribute], 4).map((val, idx) => {
+                        return (
+                          <ScrollView
+                            key={idx}
+                            style={styles.listTopic}
+                            horizontal={true}>
+                            {val.map((value, i) => {
+                              return (
+                                <TouchableOpacity
+                                  onPress={() => handleSelectedLanguage(value)}
+                                  key={i}
+                                  style={
+                                    topicSelected.findIndex(
+                                      (data) => data.topic_id === value.topic_id,
+                                    ) > -1
+                                      ? styles.bgTopicSelectActive
+                                      : styles.bgTopicSelectNotActive
+                                  }>
+                                  <Text>{value.icon}</Text>
+                                  <Text
+                                    style={
+                                      topicSelected.findIndex(
+                                        (data) => data.topic_id === value.topic_id,
+                                      ) > -1
+                                        ? styles.textTopicActive
+                                        : styles.textTopicNotActive
+                                    }>
+                                    {value.name}
+                                  </Text>
+                                </TouchableOpacity>
+                              );
+                            })}
+                          </ScrollView>
+                        );
+                      })}
+                    </View>
+                  </View>
+                );
+              })
+            : null}
         </ScrollView>
         <View style={styles.footer}>
           <Text style={styles.textSmall}>
             You can add and remove interests later
           </Text>
           <Button
-            disabled={topicSelected.length >= 2 ? false : true}
-            style={topicSelected.length >= 2 ? null : styles.button}>
-              {topicSelected.length >= 2 ? "NEXT" : `CHOOSE ${2 - topicSelected.length} MORE`}
-            
+            disabled={topicSelected.length >= minTopic ? false : true}
+            style={topicSelected.length >= minTopic ? null : styles.button}>
+            {topicSelected.length >= minTopic
+              ? 'NEXT'
+              : `CHOOSE ${minTopic - topicSelected.length} MORE`}
           </Button>
         </View>
       </SafeAreaView>
@@ -265,45 +293,3 @@ const styles = StyleSheet.create({
   },
 });
 export default index;
-
-let tempData = [
-  {
-    name: 'languages',
-    data: [
-      {id: 1, icon: '🇺🇸', name: 'American'},
-      {id: 2, icon: '🇪🇸', name: 'Spanish'},
-      {id: 3, icon: '🇷🇺', name: 'Russian'},
-      {id: 4, icon: '', name: '#Italian'},
-      {id: 5, icon: '🇮🇩', name: 'Indonesian'},
-      {id: 6, icon: '', name: '#Arabic'},
-      {id: 7, icon: '🇩🇪', name: 'Germany'},
-      {id: 8, icon: '', name: '#Portugese'},
-    ],
-  },
-  {
-    name: 'election',
-    data: [
-      {id: 1, icon: '🍊', name: 'Trump'},
-      {id: 2, icon: '', name: '#JoeBiden'},
-      {id: 3, icon: '', name: '#USA 1or2'},
-      {id: 4, icon: '', name: '#Italian'},
-      {id: 5, icon: '🧢', name: 'Great Trump'},
-      {id: 6, icon: '🕶', name: 'Cool Biden'},
-      {id: 7, icon: '', name: '#Holy Biden'},
-      {id: 8, icon: '', name: '#Holybiden'},
-    ],
-  },
-  {
-    name: 'movies',
-    data: [
-      {id: 1, icon: '🚢', name: 'Ghostship'},
-      {id: 2, icon: '', name: '#Jackjack'},
-      {id: 3, icon: '', name: '#Marvel'},
-      {id: 4, icon: '🏛', name: 'DC'},
-      {id: 5, icon: '➕', name: 'Disney Plus'},
-      {id: 6, icon: '', name: '#Netflix & Chill'},
-      {id: 7, icon: '', name: '#Holybiden'},
-      {id: 8, icon: '', name: '#Holybiden'},
-    ],
-  },
-];
