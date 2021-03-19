@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -11,6 +11,7 @@ import {
   FlatList,
 } from 'react-native';
 import {post} from '../../api/server';
+import {setLocalCommunity} from '../../context/actions/users';
 import MyStatusBar from '../../components/StatusBar';
 import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
@@ -22,16 +23,18 @@ import TrashIcon from '../../../assets/icons/trash.svg';
 
 const width = Dimensions.get('screen').width;
 const index = () => {
-  const [search, setSearch] = React.useState('');
-  const [location, setLocation] = React.useState([]);
-  const [optionsSearch, setOptionsSearch] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = React.useState(
+  const [search, setSearch] = useState('');
+  const [location, setLocation] = useState([]);
+  const [optionsSearch, setOptionsSearch] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = useState(
     false,
   );
-  const [isVisibleSecondLocation, setIsVisibleSecondLocation] = React.useState(
+  const [isVisibleSecondLocation, setIsVisibleSecondLocation] = useState(
     false,
   );
+
+  const [, dispatch] = useContext(Context).users;
 
   const renderHeader = () => {
     if (Platform.OS === 'android') {
@@ -59,7 +62,7 @@ const index = () => {
         .then((res) => {
           setIsLoading(false);
           if (res.status == 200) {
-            console.log('isi ress ', res);
+            console.log('isi ress ', res.data.body);
             setOptionsSearch(res.data.body);
           }
         })
@@ -83,7 +86,11 @@ const index = () => {
     }
     setSearch(capitalizeFirstLetter(val.neighborhood));
     setOptionsSearch([]);
+    let returnTempLocation = tempLocation.map((val) => {
+      return val.location_id
+    })
     setLocation(tempLocation);
+    setLocalCommunity(returnTempLocation, dispatch)
   };
 
   const renderItem = ({item}) => (

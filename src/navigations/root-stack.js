@@ -5,6 +5,8 @@ import ChooseUsername from '../screens/Onboarding/ChooseUsername';
 import SignIn from '../screens/SignIn/SignIn';
 import SplashScreen from '../screens/SplaceScreen/SplaceScreen';
 import LocalComunity from '../screens/LocalComunity';
+import Topics from '../screens/Topics';
+import WhotoFollow from '../screens/WhotoFollow';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
@@ -28,6 +30,16 @@ const RootStact = () => {
       <Stack.Screen
         name="LocalComunity"
         component={LocalComunity}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Topics"
+        component={Topics}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="WhotoFollow"
+        component={WhotoFollow}
         options={{headerShown: false}}
       />
       <Stack.Screen
