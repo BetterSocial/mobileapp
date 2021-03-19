@@ -33,17 +33,25 @@ const SignIn = () => {
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
       await setToken(exchangeToken);
-      let data = await checkToken(exchangeToken);
-      await setDataHumenId(data.data, dispatch);
-      // if (data) {
-      //   await showId(data.data);
-      //   console.log(data.data.appUserId);
-      // }
+      checkToken(exchangeToken).then((res) => {
+        if (res.data) {
+          let {appUserId, countryCode} = res.data;
+          setDataHumenId(res.data, dispatch);
+          verifyUser(appUserId).then((response) => {
+            if (response.data) {
+              navigation.dispatch(StackActions.replace('Home'));
+            } else {
+              removeLocalStorege('userId');
+              navigation.dispatch(StackActions.replace('ChooseUsername'));
+            }
+          });
+        }
+      });
 
       // let userID = getUserId();
       // let userVerify = await setUserId(userID);
       // console.log(userVerify);
-      // const varifyUserId = await verifyUser(data.data.appUserId);
+      // const varifyUserId = await verifyUser(userID);
       // if (varifyUserId.data) {
       //   navigation.dispatch(StackActions.replace('Home'));
       // } else {

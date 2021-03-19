@@ -50,10 +50,6 @@ const ChooseUsername = () => {
     if (username && username.length > 2 && typeFetch === 'available') {
       setUsername(username, dispatch);
       navigation.navigate('LocalComunity');
-      // showMessage({
-      //   message: 'Simple message',
-      //   type: 'info',
-      // });
     } else {
       showMessage({
         message: 'username cannot be empty',
