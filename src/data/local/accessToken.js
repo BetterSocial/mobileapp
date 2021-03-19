@@ -12,7 +12,29 @@ export const getToken = async () => {
     return value;
   } catch (e) {
     console.log(e);
-    // error reading value
     return null;
+  }
+};
+export const setUserId = async (value) => {
+  try {
+    await AsyncStorage.setItem('userId', value);
+  } catch (e) {
+    console.log(e);
+  }
+};
+export const getUserId = async () => {
+  try {
+    const value = await AsyncStorage.getItem('userId');
+    return value;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+export const removeLocalStorege = async (value) => {
+  try {
+    await AsyncStorage.removeItem(value);
+  } catch (e) {
+    console.log(e);
   }
 };

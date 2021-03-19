@@ -1,5 +1,12 @@
-import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useContext} from 'react';
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import SlideShow from '../../components/SignIn/SlideShow';
 import {
   logIn,
@@ -7,14 +14,42 @@ import {
   onCancel,
   onError,
 } from '@human-id/react-native-humanid';
-import {setToken} from '../../data/local/accessToken';
+import {
+  getUserId,
+  removeLocalStorege,
+  setToken,
+  setUserId,
+} from '../../data/local/accessToken';
 import {fonts} from '../../utils/fonts';
-
+import {checkToken} from '../../service/outh';
+import {verifyUser} from '../../service/users';
+import {useNavigation} from '@react-navigation/core';
+import {StackActions} from '@react-navigation/native';
+import {setDataHumenId} from '../../context/actions/users';
+import {Context} from '../../context';
 const SignIn = () => {
+  const navigation = useNavigation();
+  const [, dispatch] = useContext(Context).users;
   React.useEffect(() => {
-    onSuccess((exchangeToken) => {
-      setToken(exchangeToken);
-      console.log('exchangeToken', exchangeToken);
+    onSuccess(async (exchangeToken) => {
+      await setToken(exchangeToken);
+      let data = await checkToken(exchangeToken);
+      await setDataHumenId(data.data, dispatch);
+      // if (data) {
+      //   await showId(data.data);
+      //   console.log(data.data.appUserId);
+      // }
+
+      // let userID = getUserId();
+      // let userVerify = await setUserId(userID);
+      // console.log(userVerify);
+      // const varifyUserId = await verifyUser(data.data.appUserId);
+      // if (varifyUserId.data) {
+      //   navigation.dispatch(StackActions.replace('Home'));
+      // } else {
+      //   removeLocalStorege('userId');
+      //   navigation.dispatch(StackActions.replace('ChooseUsername'));
+      // }
     });
     onError((message) => {
       console.log('error message', message);
@@ -25,6 +60,9 @@ const SignIn = () => {
   }, []);
   const handleLogin = () => {
     logIn();
+  };
+  const showId = (v) => {
+    console.log(v);
   };
   return (
     <View style={S.container}>
