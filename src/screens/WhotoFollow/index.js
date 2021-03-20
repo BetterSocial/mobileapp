@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useState, useEffect} from 'react';
 import {
   SafeAreaView,
@@ -21,14 +21,23 @@ import {ProgressBar} from '../../components/ProgressBar';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import CheckIcon from '../../../assets/icons/check.svg';
 import AddIcon from '../../../assets/icons/add.svg';
+import {Context} from '../../context';
+import {registerUser} from '../../service/users';
+import {showMessage} from 'react-native-flash-message';
+import {useNavigation} from '@react-navigation/core';
 
 const width = Dimensions.get('screen').width;
 
-const index = () => {
+const WhotoFollow = () => {
   const [users, setUsers] = useState([]);
   const [followed, setFollowed] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [topics] = useContext(Context).topics;
+  const [localCommunity] = useContext(Context).localCommunity;
+  const [usersState] = useContext(Context).users;
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     setIsLoading(true);
@@ -62,9 +71,7 @@ const index = () => {
 
   const handleSelected = (value) => {
     let copyFollowed = [...followed];
-    let index = copyFollowed.findIndex(
-      (data) => data.username === value.username,
-    );
+    let index = copyFollowed.findIndex((data) => data === value);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
@@ -72,22 +79,64 @@ const index = () => {
     }
 
     setFollowed(copyFollowed);
+    copyFollowed.map((res) => {
+      console.log('user', res);
+    });
   };
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     get({url: '/who-to-follow/list'})
       .then((res) => {
-        setRefreshing(false)
+        setRefreshing(false);
         if (res.status == 200) {
           setUsers(res.data.body);
         }
       })
       .catch((err) => {
-        setRefreshing(false)
+        setRefreshing(false);
       });
   }, []);
-
+  const register = () => {
+    const data = {
+      users: {
+        // $$type: 'object|empty:false',
+        username: usersState.username,
+        human_id: usersState.userId,
+        country_code: usersState.countryCode,
+        real_name: 'test',
+        profile_pic_path: usersState.photo,
+        status: 'A',
+      },
+      local_community: localCommunity.local_community,
+      topics: topics.topics,
+      follows: followed,
+      follow_source: 'onboarding',
+    };
+    registerUser(data)
+      .then((res) => {
+        if (res.code === 200) {
+          showMessage({
+            message: 'register success',
+            type: 'success',
+          });
+          setTimeout(() => {
+            navigation.navigate('Home');
+          }, 2000);
+        } else {
+          showMessage({
+            message: 'register error',
+            type: 'danger',
+          });
+        }
+      })
+      .catch((res) => {
+        showMessage({
+          message: 'register error',
+          type: 'danger',
+        });
+      });
+  };
   const renderItem = ({item}) => (
     <View style={styles.containerCard}>
       <View style={styles.cardLeft}>
@@ -102,10 +151,9 @@ const index = () => {
           <Text style={styles.textUsername}>{item.username}</Text>
         </View>
       </View>
-      <TouchableNativeFeedback onPress={() => handleSelected(item)}>
+      <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}>
         <View style={styles.containerButton}>
-          {followed.findIndex((data) => data.username === item.username) >
-          -1 ? (
+          {followed.findIndex((data) => data === item.user_id) > -1 ? (
             <CheckIcon width={32} height={32} fill="#23C5B6" />
           ) : (
             <AddIcon width={20} height={20} fill="#000000" />
@@ -130,7 +178,10 @@ const index = () => {
           </Text>
         </View>
         {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
-        <VirtualizedView style={{marginBottom: 90}} onRefresh={onRefresh} refreshing={refreshing}>
+        <VirtualizedView
+          style={{marginBottom: 90}}
+          onRefresh={onRefresh}
+          refreshing={refreshing}>
           {users !== undefined && users.length > 0
             ? users.map((value, index) => {
                 return (
@@ -154,7 +205,7 @@ const index = () => {
             : null}
         </VirtualizedView>
         <View style={styles.footer}>
-          <Button>FINISH</Button>
+          <Button onPress={() => register()}>FINISH</Button>
         </View>
       </SafeAreaView>
     </>
@@ -323,4 +374,4 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
 });
-export default index;
+export default WhotoFollow;

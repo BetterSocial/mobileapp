@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -11,6 +11,7 @@ import {
   FlatList,
 } from 'react-native';
 import {post} from '../../api/server';
+import {setLocalCommunity} from '../../context/actions/localCommunity';
 import MyStatusBar from '../../components/StatusBar';
 import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
@@ -19,19 +20,21 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import PlusIcon from '../../../assets/icons/plus.svg';
 import PinIcon from '../../../assets/icons/pin.svg';
 import TrashIcon from '../../../assets/icons/trash.svg';
+import {Context} from '../../context';
+import {showMessage} from 'react-native-flash-message';
+import {useNavigation} from '@react-navigation/core';
 
 const width = Dimensions.get('screen').width;
-const index = () => {
-  const [search, setSearch] = React.useState('');
-  const [location, setLocation] = React.useState([]);
-  const [optionsSearch, setOptionsSearch] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = React.useState(
-    false,
-  );
-  const [isVisibleSecondLocation, setIsVisibleSecondLocation] = React.useState(
-    false,
-  );
+const LocalComunity = () => {
+  const navigation = useNavigation();
+  const [search, setSearch] = useState('');
+  const [location, setLocation] = useState([]);
+  const [optionsSearch, setOptionsSearch] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = useState(false);
+  const [isVisibleSecondLocation, setIsVisibleSecondLocation] = useState(false);
+
+  const [, dispatch] = useContext(Context).localCommunity;
 
   const renderHeader = () => {
     if (Platform.OS === 'android') {
@@ -59,7 +62,7 @@ const index = () => {
         .then((res) => {
           setIsLoading(false);
           if (res.status == 200) {
-            console.log('isi ress ', res);
+            console.log('isi ress ', res.data.body);
             setOptionsSearch(res.data.body);
           }
         })
@@ -83,7 +86,11 @@ const index = () => {
     }
     setSearch(capitalizeFirstLetter(val.neighborhood));
     setOptionsSearch([]);
+    let returnTempLocation = tempLocation.map((val) => {
+      return val.location_id;
+    });
     setLocation(tempLocation);
+    setLocalCommunity(returnTempLocation, dispatch);
   };
 
   const renderItem = ({item}) => (
@@ -105,6 +112,16 @@ const index = () => {
       tempLocation.splice(index, 1);
     }
     setLocation(tempLocation);
+  };
+  const next = () => {
+    if (location.length > 0) {
+      navigation.navigate('Topics');
+    } else {
+      showMessage({
+        message: 'please add a local community',
+        type: 'danger',
+      });
+    }
   };
 
   return (
@@ -211,7 +228,7 @@ const index = () => {
           <Text style={styles.textSmall}>
             We value privacy and do not ask for 24/7 location tracking
           </Text>
-          <Button>NEXT</Button>
+          <Button onPress={() => next()}>NEXT</Button>
         </View>
       </SafeAreaView>
     </>
@@ -350,4 +367,4 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-export default index;
+export default LocalComunity;

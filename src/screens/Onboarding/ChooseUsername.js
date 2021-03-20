@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,12 +13,100 @@ const width = Dimensions.get('screen').width;
 import {launchImageLibrary} from 'react-native-image-picker';
 import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
 import {Input} from '../../components/Input';
+import {Context} from '../../context';
+import {setImage, setUsername} from '../../context/actions/users';
+import {useNavigation} from '@react-navigation/core';
+import {verifyUsername} from '../../service/users';
+import {fonts} from '../../utils/fonts';
+import {showMessage} from 'react-native-flash-message';
 const ChooseUsername = () => {
-  const [username, setUsername] = useState('');
+  const navigation = useNavigation();
+  const [, dispatch] = useContext(Context).users;
+  const [username, setUsernameState] = useState('');
+  const [typeFetch, setTypeFetch] = useState('');
+
   const onPhoto = () => {
-    launchImageLibrary({mediaType: 'photo'}, (res) => {
-      console.log(res);
+    launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+      setImage(res.base64, dispatch);
     });
+  };
+  const checkUsername = async (v) => {
+    let value = v.replace(/[^a-zA-Z0-9-_]/g, '');
+    setTypeFetch('typing');
+    setUsernameState(value);
+    if (v.length > 2) {
+      setTypeFetch('fetch');
+      const user = await verifyUsername(value);
+      if (user.data) {
+        setTypeFetch('notavailable');
+      } else {
+        setTypeFetch('available');
+      }
+    } else {
+      setTypeFetch('typing');
+    }
+  };
+  const next = () => {
+    if (username && username.length > 2 && typeFetch === 'available') {
+      setUsername(username, dispatch);
+      navigation.navigate('LocalComunity');
+    } else {
+      showMessage({
+        message: 'username cannot be empty',
+        type: 'danger',
+      });
+    }
+  };
+  const messageTypeFetch = (type, user) => {
+    switch (type) {
+      case 'fetch':
+        return (
+          <Text
+            style={{
+              fontSize: 12,
+              color: '#BDBDBD',
+              fontFamily: fonts.inter[400],
+            }}>
+            Checking availability
+          </Text>
+        );
+      case 'available':
+        return (
+          <Text
+            style={{
+              fontSize: 12,
+              color: '#27AE60',
+              fontFamily: fonts.inter[400],
+            }}>
+            {' '}
+            Congrats - {user} is still available
+          </Text>
+        );
+      case 'notavailable':
+        return (
+          <Text
+            style={{
+              fontSize: 12,
+              color: '#EB5757',
+              fontFamily: fonts.inter[400],
+            }}>
+            Sorry, {user} has already been taken
+          </Text>
+        );
+      case 'typing':
+        return (
+          <Text
+            style={{
+              fontSize: 12,
+              color: '#EB5757',
+              fontFamily: fonts.inter[400],
+            }}>
+            username min 3 characters
+          </Text>
+        );
+      default:
+        return <Text />;
+    }
   };
   return (
     <View style={styles.container}>
@@ -35,11 +123,16 @@ const ChooseUsername = () => {
             onPress={() => onPhoto()}>
             <MemoIc_btn_add width={48} height={48} />
           </TouchableOpacity>
-          <Input
-            placeholder="Username"
-            onChangeText={(v) => setUsername(v)}
-            value={username}
-          />
+          <View>
+            <Input
+              placeholder="Username"
+              onChangeText={(v) => checkUsername(v)}
+              value={username}
+              autoCompleteType="username"
+              textContentType="username"
+            />
+            {messageTypeFetch(typeFetch, username)}
+          </View>
         </View>
         <View style={styles.constainerInfo}>
           <View style={styles.containerIcon}>
@@ -51,7 +144,7 @@ const ChooseUsername = () => {
           </Text>
         </View>
       </View>
-      <Button>NEXT</Button>
+      <Button onPress={() => next()}>NEXT</Button>
     </View>
   );
 };
@@ -126,5 +219,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 13,
   },
 });
