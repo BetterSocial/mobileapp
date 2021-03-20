@@ -34,16 +34,20 @@ const ChooseUsername = () => {
     let value = v.replace(/[^a-zA-Z0-9-_]/g, '');
     setTypeFetch('typing');
     setUsernameState(value);
-    if (v.length > 2) {
-      setTypeFetch('fetch');
-      const user = await verifyUsername(value);
-      if (user.data) {
-        setTypeFetch('notavailable');
+    if (v.length <= 15) {
+      if (v.length > 2) {
+        setTypeFetch('fetch');
+        const user = await verifyUsername(value);
+        if (user.data) {
+          setTypeFetch('notavailable');
+        } else {
+          setTypeFetch('available');
+        }
       } else {
-        setTypeFetch('available');
+        setTypeFetch('typing');
       }
     } else {
-      setTypeFetch('typing');
+      setTypeFetch('max');
     }
   };
   const next = () => {
@@ -102,6 +106,17 @@ const ChooseUsername = () => {
               fontFamily: fonts.inter[400],
             }}>
             username min 3 characters
+          </Text>
+        );
+      case 'max':
+        return (
+          <Text
+            style={{
+              fontSize: 12,
+              color: '#EB5757',
+              fontFamily: fonts.inter[400],
+            }}>
+            username maximum 15 characters
           </Text>
         );
       default:
