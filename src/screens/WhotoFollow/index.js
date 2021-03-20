@@ -25,6 +25,8 @@ import {Context} from '../../context';
 import {registerUser} from '../../service/users';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
+import {StackActions} from '@react-navigation/native';
+import Loading from '../Loading';
 
 const width = Dimensions.get('screen').width;
 
@@ -33,6 +35,7 @@ const WhotoFollow = () => {
   const [followed, setFollowed] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [fetchRegister, setFetchRegister] = useState(false);
   const [topics] = useContext(Context).topics;
   const [localCommunity] = useContext(Context).localCommunity;
   const [usersState] = useContext(Context).users;
@@ -98,13 +101,12 @@ const WhotoFollow = () => {
       });
   }, []);
   const register = () => {
+    setFetchRegister(true);
     const data = {
       users: {
-        // $$type: 'object|empty:false',
         username: usersState.username,
         human_id: usersState.userId,
         country_code: usersState.countryCode,
-        real_name: 'test',
         profile_pic_path: usersState.photo,
         status: 'A',
       },
@@ -115,15 +117,17 @@ const WhotoFollow = () => {
     };
     registerUser(data)
       .then((res) => {
+        setFetchRegister(false);
         if (res.code === 200) {
           showMessage({
             message: 'register success',
             type: 'success',
           });
           setTimeout(() => {
-            navigation.navigate('Home');
+            navigation.dispatch(StackActions.replace('Home'));
           }, 2000);
         } else {
+          console.log(res);
           showMessage({
             message: 'register error',
             type: 'danger',
@@ -131,6 +135,8 @@ const WhotoFollow = () => {
         }
       })
       .catch((res) => {
+        console.log(res);
+        setFetchRegister(false);
         showMessage({
           message: 'register error',
           type: 'danger',
@@ -207,6 +213,7 @@ const WhotoFollow = () => {
         <View style={styles.footer}>
           <Button onPress={() => register()}>FINISH</Button>
         </View>
+        <Loading visible={fetchRegister} />
       </SafeAreaView>
     </>
   );
@@ -327,7 +334,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#000000',
     lineHeight: 15,
-    lineHeight: 17,
   },
   headerList: {
     height: 40,
