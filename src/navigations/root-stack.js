@@ -1,5 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import Home from '../screens/HomeTest';
 import ChooseUsername from '../screens/Onboarding/ChooseUsername';
 import SignIn from '../screens/SignIn/SignIn';
@@ -7,9 +7,14 @@ import SplashScreen from '../screens/SplaceScreen/SplaceScreen';
 import LocalComunity from '../screens/LocalComunity';
 import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';
+import {StatusBar} from 'react-native';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
+  useEffect(() => {
+    StatusBar.setBackgroundColor('#ffffff');
+    StatusBar.setBarStyle('dark-content', true);
+  }, []);
   return (
     <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen

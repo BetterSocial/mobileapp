@@ -125,113 +125,110 @@ const LocalComunity = () => {
   };
 
   return (
-    <>
-      <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" />
-      <SafeAreaView style={styles.container}>
-        {renderHeader()}
-        <View style={styles.containerProgress}>
-          <ProgressBar isStatic={true} value={50} />
-        </View>
-        <View>
-          <Text style={styles.textFindYourLocalComunity}>
-            Find your local community
-          </Text>
-          <Text style={styles.textDesc}>
-            Join up to two cities you call home. Locations can only be adjusted
-            or added infrequently.{' '}
-          </Text>
-          <FlatList
-            data={location}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.location_id}
-          />
+    <SafeAreaView style={styles.container}>
+      {renderHeader()}
+      <View style={styles.containerProgress}>
+        <ProgressBar isStatic={true} value={50} />
+      </View>
+      <View>
+        <Text style={styles.textFindYourLocalComunity}>
+          Find your local community
+        </Text>
+        <Text style={styles.textDesc}>
+          Join up to two cities you call home. Locations can only be adjusted or
+          added infrequently.{' '}
+        </Text>
+        <FlatList
+          data={location}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.location_id}
+        />
 
-          {/* First Location */}
-          {location.length <= 0 ? (
-            <TouchableNativeFeedback
-              onPress={() => {
-                setIsVisibleFirstLocation(true);
-                setSearch('');
-              }}>
-              <View style={styles.card}>
-                <PlusIcon width={18} height={18} fill="#000000" />
-                <View style={styles.columnButton}>
-                  <Text style={styles.textAddLocation}>Add New Location</Text>
-                  <Text style={styles.textSearchYourFavorite}>
-                    Search your favorite location
-                  </Text>
-                </View>
-              </View>
-            </TouchableNativeFeedback>
-          ) : null}
-
-          {/* second Location*/}
-          {location.length === 1 ? (
-            <TouchableNativeFeedback
-              onPress={() => {
-                setIsVisibleSecondLocation(true);
-                setSearch('');
-              }}>
-              <View style={styles.card}>
-                <PlusIcon width={18} height={18} fill="#000000" />
-                <View style={styles.columnButton}>
-                  <Text style={styles.textAddLocation}>
-                    Add a second location
-                  </Text>
-                  <Text style={styles.textSearchYourFavorite}>
-                    🏡 Home away from home? Add a second location
-                  </Text>
-                </View>
-              </View>
-            </TouchableNativeFeedback>
-          ) : null}
-        </View>
         {/* First Location */}
-        <SearchModal
-          isVisible={isVisibleFirstLocation}
-          onClose={() => {
-            setIsVisibleFirstLocation(false);
-            setSearch('');
-          }}
-          value={search}
-          onChangeText={(text) => handleSearch(text)}
-          placeholder="Search by ZIP, neighborhood or city"
-          options={optionsSearch}
-          onSelect={(val) => {
-            setIsVisibleFirstLocation(false);
-            setSearch('');
-            handleSelectedSearch(val);
-          }}
-          isLoading={isLoading}
-        />
+        {location.length <= 0 ? (
+          <TouchableNativeFeedback
+            onPress={() => {
+              setIsVisibleFirstLocation(true);
+              setSearch('');
+            }}>
+            <View style={styles.card}>
+              <PlusIcon width={18} height={18} fill="#000000" />
+              <View style={styles.columnButton}>
+                <Text style={styles.textAddLocation}>Add New Location</Text>
+                <Text style={styles.textSearchYourFavorite}>
+                  Search your favorite location
+                </Text>
+              </View>
+            </View>
+          </TouchableNativeFeedback>
+        ) : null}
 
-        {/* Second Location */}
-        <SearchModal
-          isVisible={isVisibleSecondLocation}
-          onClose={() => {
-            setIsVisibleSecondLocation(false);
-            setSearch('');
-          }}
-          value={search}
-          onChangeText={(text) => handleSearch(text)}
-          placeholder="Search by ZIP, neighborhood or city"
-          options={optionsSearch}
-          onSelect={(val) => {
-            setIsVisibleSecondLocation(false);
-            setSearch('');
-            handleSelectedSearch(val);
-          }}
-          isLoading={isLoading}
-        />
+        {/* second Location*/}
+        {location.length === 1 ? (
+          <TouchableNativeFeedback
+            onPress={() => {
+              setIsVisibleSecondLocation(true);
+              setSearch('');
+            }}>
+            <View style={styles.card}>
+              <PlusIcon width={18} height={18} fill="#000000" />
+              <View style={styles.columnButton}>
+                <Text style={styles.textAddLocation}>
+                  Add a second location
+                </Text>
+                <Text style={styles.textSearchYourFavorite}>
+                  🏡 Home away from home? Add a second location
+                </Text>
+              </View>
+            </View>
+          </TouchableNativeFeedback>
+        ) : null}
+      </View>
+      {/* First Location */}
+      <SearchModal
+        isVisible={isVisibleFirstLocation}
+        onClose={() => {
+          setIsVisibleFirstLocation(false);
+          setSearch('');
+        }}
+        value={search}
+        onChangeText={(text) => handleSearch(text)}
+        placeholder="Search by ZIP, neighborhood or city"
+        options={optionsSearch}
+        onSelect={(val) => {
+          setIsVisibleFirstLocation(false);
+          setSearch('');
+          handleSelectedSearch(val);
+        }}
+        isLoading={isLoading}
+      />
 
-        <View style={styles.footer}>
-          <Text style={styles.textSmall}>
-            We value privacy and do not ask for 24/7 location tracking
-          </Text>
-          <Button onPress={() => next()}>NEXT</Button>
-        </View>
-      </SafeAreaView>
-    </>
+      {/* Second Location */}
+      <SearchModal
+        isVisible={isVisibleSecondLocation}
+        onClose={() => {
+          setIsVisibleSecondLocation(false);
+          setSearch('');
+        }}
+        value={search}
+        onChangeText={(text) => handleSearch(text)}
+        placeholder="Search by ZIP, neighborhood or city"
+        options={optionsSearch}
+        onSelect={(val) => {
+          setIsVisibleSecondLocation(false);
+          setSearch('');
+          handleSelectedSearch(val);
+        }}
+        isLoading={isLoading}
+      />
+
+      <View style={styles.footer}>
+        <Text style={styles.textSmall}>
+          We value privacy and do not ask for 24/7 location tracking
+        </Text>
+        <Button onPress={() => next()}>NEXT</Button>
+      </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
