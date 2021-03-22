@@ -23,6 +23,7 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {Context} from '../../context';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import {useNavigation} from '@react-navigation/core';
+import {colors} from '../../utils/colors';
 
 const width = Dimensions.get('screen').width;
 
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 22,
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.white,
   },
   containerProgress: {
     marginTop: 36,
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 36,
     lineHeight: 44,
-    color: '#11243D',
+    color: colors.bunting,
   },
   footer: {
     position: 'absolute',
@@ -206,8 +207,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 5,
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 14,
-    color: '#828282',
+    color: colors.gray,
     opacity: 0.84,
     marginTop: 8,
     marginBottom: 24,
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     lineHeight: 22,
-    color: '#000000',
+    color: colors.black,
     marginBottom: 13,
     textTransform: 'capitalize',
   },
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
   },
 
   bgTopicSelectActive: {
-    backgroundColor: '#23C5B6',
+    backgroundColor: colors.bondi_blue,
     minWidth: 100,
     height: 28,
     paddingLeft: 18,
@@ -258,11 +259,12 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
     borderRadius: 14,
     flexDirection: 'row',
+    justifyContent: 'center',
     marginRight: 8,
   },
 
   bgTopicSelectNotActive: {
-    backgroundColor: '#F2F2F2',
+    backgroundColor: colors.concrete,
     minWidth: 100,
     height: 28,
     paddingLeft: 18,
@@ -271,6 +273,7 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
     borderRadius: 14,
     flexDirection: 'row',
+    justifyContent: 'center',
     marginRight: 8,
   },
   textTopicActive: {
@@ -278,7 +281,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: '#FFFFFF',
+    color: colors.white,
     paddingLeft: 5,
     textTransform: 'capitalize',
   },
@@ -287,7 +290,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: '#333333',
+    color: colors.mine_shaft,
     paddingLeft: 5,
     textTransform: 'capitalize',
   },
@@ -297,12 +300,12 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 10,
     textAlign: 'center',
-    color: '#4F4F4F',
+    color: colors.emperor,
     marginBottom: 10,
     marginTop: 10,
   },
   button: {
-    backgroundColor: '#828282',
+    backgroundColor: colors.gray,
   },
 });
 export default Topics;

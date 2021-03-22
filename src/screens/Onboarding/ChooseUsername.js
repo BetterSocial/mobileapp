@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
+  SafeAreaView,
 } from 'react-native';
 import {ProgressBar} from '../../components/ProgressBar';
 import {Button} from '../../components/Button';
@@ -30,24 +31,29 @@ const ChooseUsername = () => {
       setImage(res.base64, dispatch);
     });
   };
-  const checkUsername = async (v) => {
-    let value = v.replace(/[^a-zA-Z0-9-_]/g, '');
+  const checkUsername = (v) => {
+    let value = v.replace(/[^a-z0-9-_]/g, '');
     setTypeFetch('typing');
     setUsernameState(value);
-    if (v.length <= 15) {
-      if (v.length > 2) {
-        setTypeFetch('fetch');
-        const user = await verifyUsername(value);
-        if (user.data) {
-          setTypeFetch('notavailable');
+    if (isNaN(v)) {
+      if (v.length <= 15) {
+        if (v.length > 2) {
+          setTypeFetch('fetch');
+          const user = verifyUsername(value);
+          setTypeFetch('max');
+          if (user.data && v.length > 2) {
+            setTypeFetch('notavailable');
+          } else {
+            setTypeFetch('available');
+          }
         } else {
-          setTypeFetch('available');
+          setTypeFetch('typing');
         }
       } else {
-        setTypeFetch('typing');
+        setTypeFetch('max');
       }
     } else {
-      setTypeFetch('max');
+      setTypeFetch('nan');
     }
   };
   const next = () => {
@@ -119,12 +125,23 @@ const ChooseUsername = () => {
             username maximum 15 characters
           </Text>
         );
+      case 'nan':
+        return (
+          <Text
+            style={{
+              fontSize: 12,
+              color: '#EB5757',
+              fontFamily: fonts.inter[400],
+            }}>
+            Username cannot be just a number
+          </Text>
+        );
       default:
         return <Text />;
     }
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <ProgressBar isStatic={true} value={25} />
         <Text style={styles.title}>Choose your username</Text>
@@ -145,6 +162,9 @@ const ChooseUsername = () => {
               value={username}
               autoCompleteType="username"
               textContentType="username"
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoFocus={true}
             />
             {messageTypeFetch(typeFetch, username)}
           </View>
@@ -160,7 +180,7 @@ const ChooseUsername = () => {
         </View>
       </View>
       <Button onPress={() => next()}>NEXT</Button>
-    </View>
+    </SafeAreaView>
   );
 };
 

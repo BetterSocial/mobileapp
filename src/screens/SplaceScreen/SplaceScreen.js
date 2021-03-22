@@ -12,18 +12,18 @@ const SplashScreen = () => {
   const verify = async () => {
     const userId = await getUserId();
     const varifyUserId = await verifyUser(userId);
-    await setTimeout(() => {
-      if (userId) {
-        if (varifyUserId.data) {
-          navigation.dispatch(StackActions.replace('Home'));
-        } else {
-          removeLocalStorege('userId');
-          navigation.dispatch(StackActions.replace('SignIn'));
-        }
+    // await setTimeout(() => {
+    if (userId) {
+      if (varifyUserId.data) {
+        navigation.dispatch(StackActions.replace('Home'));
       } else {
+        removeLocalStorege('userId');
         navigation.dispatch(StackActions.replace('SignIn'));
       }
-    }, 2000);
+    } else {
+      navigation.dispatch(StackActions.replace('SignIn'));
+    }
+    // }, 2000);
   };
 
   return (

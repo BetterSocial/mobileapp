@@ -10,7 +10,7 @@ import {
 const Home = () => {
   const [state, dispatch] = useContext(Context).users;
   return (
-    <View>
+    <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
       <Text>ini screen hanya untuk testing</Text>
       {/* <Button title="hman" onPress={() => setImage('hasilimage', dispatch)} />
       <Button

@@ -115,12 +115,14 @@ const WhotoFollow = () => {
       follows: followed,
       follow_source: 'onboarding',
     };
+    console.log('isi daya ', data)
     registerUser(data)
       .then((res) => {
         setFetchRegister(false);
         if (res.code === 200) {
           showMessage({
-            message: 'register success',
+            message: "Welcome to Ping",
+            description: 'Choose where to get started',
             type: 'success',
           });
           setTimeout(() => {
@@ -135,7 +137,6 @@ const WhotoFollow = () => {
         }
       })
       .catch((res) => {
-        console.log(res);
         setFetchRegister(false);
         showMessage({
           message: 'register error',
