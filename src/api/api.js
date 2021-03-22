@@ -1,9 +1,9 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import { API_URL } from '@env'
+import { BASE_URL } from '@env'
 
 const api = axios.create({
-  baseURL: "https://bettersocial-dev-user-api.herokuapp.com",
+  baseURL: BASE_URL,
   timeout: 3000,
   headers: {'content-type': 'application/json'},
 });

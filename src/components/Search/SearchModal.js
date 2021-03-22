@@ -1,4 +1,5 @@
 import React from 'react';
+import {useRef, useEffect, useState} from 'react';
 import {
   TextInput,
   View,
@@ -13,6 +14,16 @@ import CrossIcon from '../../../assets/icons/cross.svg';
 const width = Dimensions.get('screen').width;
 
 const SearchModal = (props) => {
+  const textRef = useRef(null);
+  const [focus, setFocus] = useState(false)
+
+
+  useEffect(() => {
+    if (props.isVisible) {
+      textRef.current.focus();
+    }
+  }, [props]);
+  
   return (
     <Modal
       testID={'modal'}
@@ -32,11 +43,14 @@ const SearchModal = (props) => {
           <View style={styles.containerInput}>
             <View style={{...styles.inputContainer, ...styles.containerInput}}>
               <TextInput
+                autoFocus={focus}
+                ref={textRef}
                 style={{...styles.searchInput, ...styles.textInput}}
                 onChangeText={props.onChangeText}
                 value={props.value}
                 placeholder={props.placeholder ? props.placeholder : ''}
                 placeholderTextColor="#BDBDBD"
+              
               />
             </View>
             {props.isLoading ? <Text>Please wait...</Text> : null}

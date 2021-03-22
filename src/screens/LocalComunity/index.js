@@ -21,6 +21,7 @@ import PlusIcon from '../../../assets/icons/plus.svg';
 import PinIcon from '../../../assets/icons/pin.svg';
 import TrashIcon from '../../../assets/icons/trash.svg';
 import {Context} from '../../context';
+import {colors} from '../../utils/colors';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
@@ -228,7 +229,12 @@ const LocalComunity = () => {
           <Text style={styles.textSmall}>
             We value privacy and do not ask for 24/7 location tracking
           </Text>
-          <Button onPress={() => next()}>NEXT</Button>
+          <Button
+            disabled={location.length >=1 ? false : true}
+            style={location.length >= 1 ? null : styles.button}
+            onPress={() => next()}>
+            NEXT
+          </Button>
         </View>
       </SafeAreaView>
     </>
@@ -245,11 +251,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 36,
     lineHeight: 44,
-    color: '#11243D',
+    color: colors.bunting,
   },
   containerInfo: {
     marginTop: 55,
-    backgroundColor: '#ddf2fe',
+    backgroundColor: colors.pattens_blue,
     width: width - 44,
     minHeight: 96,
     flexDirection: 'row',
@@ -266,7 +272,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 30,
-    backgroundColor: '#b6e4fd',
+    backgroundColor: colors.french_pass,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -279,8 +285,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 5,
@@ -302,7 +308,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 14,
     lineHeight: 24,
-    color: '#828282',
+    color: colors.gray,
     opacity: 0.84,
     marginTop: 8,
     marginBottom: 25,
@@ -323,7 +329,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     letterSpacing: -0.28,
-    color: '#000000',
+    color: colors.black,
   },
   textSearchYourFavorite: {
     fontFamily: 'Inter',
@@ -332,7 +338,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 24,
     letterSpacing: -0.28,
-    color: '#BDBDBD',
+    color: colors.silver,
   },
   containerLocation: {
     flexDirection: 'row',
@@ -352,7 +358,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     letterSpacing: -0.28,
-    color: '#000000',
+    color: colors.black,
     paddingLeft: 17,
     textTransform: 'capitalize',
   },
@@ -362,9 +368,12 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 10,
     textAlign: 'center',
-    color: '#4F4F4F',
+    color: colors.emperor,
     marginBottom: 10,
     marginTop: 10,
+  },
+  button: {
+    backgroundColor: colors.gray,
   },
 });
 export default LocalComunity;
