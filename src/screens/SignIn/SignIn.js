@@ -47,17 +47,6 @@ const SignIn = () => {
           });
         }
       });
-
-      // let userID = getUserId();
-      // let userVerify = await setUserId(userID);
-      // console.log(userVerify);
-      // const varifyUserId = await verifyUser(userID);
-      // if (varifyUserId.data) {
-      //   navigation.dispatch(StackActions.replace('Home'));
-      // } else {
-      //   removeLocalStorege('userId');
-      //   navigation.dispatch(StackActions.replace('ChooseUsername'));
-      // }
     });
     onError((message) => {
       console.log('error message', message);
