@@ -1,5 +1,12 @@
-import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useContext} from 'react';
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import SlideShow from '../../components/SignIn/SlideShow';
 import {
   logIn,
@@ -7,14 +14,50 @@ import {
   onCancel,
   onError,
 } from '@human-id/react-native-humanid';
-import {setToken} from '../../data/local/accessToken';
+import {
+  removeLocalStorege,
+  setToken,
+  setUserId,
+} from '../../data/local/accessToken';
 import {fonts} from '../../utils/fonts';
-
+import {checkToken} from '../../service/outh';
+import {verifyUser} from '../../service/users';
+import {useNavigation} from '@react-navigation/core';
+import {StackActions} from '@react-navigation/native';
+import {setDataHumenId} from '../../context/actions/users';
+import {Context} from '../../context';
 const SignIn = () => {
+  const navigation = useNavigation();
+  const [, dispatch] = useContext(Context).users;
   React.useEffect(() => {
-    onSuccess((exchangeToken) => {
-      setToken(exchangeToken);
-      console.log('exchangeToken', exchangeToken);
+    onSuccess(async (exchangeToken) => {
+      await setToken(exchangeToken);
+      checkToken(exchangeToken).then((res) => {
+        if (res.data) {
+          let {appUserId, countryCode} = res.data;
+          setDataHumenId(res.data, dispatch);
+          verifyUser(appUserId).then((response) => {
+            if (response.data) {
+              navigation.dispatch(StackActions.replace('Home'));
+            } else {
+              removeLocalStorege('userId');
+              navigation.dispatch(StackActions.replace('ChooseUsername'));
+            }
+            setUserId(appUserId);
+          });
+        }
+      });
+
+      // let userID = getUserId();
+      // let userVerify = await setUserId(userID);
+      // console.log(userVerify);
+      // const varifyUserId = await verifyUser(userID);
+      // if (varifyUserId.data) {
+      //   navigation.dispatch(StackActions.replace('Home'));
+      // } else {
+      //   removeLocalStorege('userId');
+      //   navigation.dispatch(StackActions.replace('ChooseUsername'));
+      // }
     });
     onError((message) => {
       console.log('error message', message);
@@ -25,6 +68,9 @@ const SignIn = () => {
   }, []);
   const handleLogin = () => {
     logIn();
+  };
+  const showId = (v) => {
+    console.log(v);
   };
   return (
     <View style={S.container}>

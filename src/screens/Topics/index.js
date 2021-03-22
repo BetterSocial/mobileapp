@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useState, useEffect} from 'react';
 import {
   SafeAreaView,
@@ -20,14 +20,19 @@ import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
 import {ChunkArray} from '../../helpers/ChunkArray';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import {Context} from '../../context';
+import {setTopics as setTopicsContext} from '../../context/actions/topics';
+import {useNavigation} from '@react-navigation/core';
 
 const width = Dimensions.get('screen').width;
 
-const index = () => {
+const Topics = () => {
+  const navigation = useNavigation();
   const [topicSelected, setTopicSelected] = useState([]);
   const [topics, setTopics] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [minTopic] = useState(3);
+  const [, dispatch] = useContext(Context).topics;
 
   useEffect(() => {
     setIsLoading(true);
@@ -68,14 +73,19 @@ const index = () => {
 
   const handleSelectedLanguage = (val) => {
     let copytopicSelected = [...topicSelected];
-    let index = copytopicSelected.findIndex((data) => data.topic_id === val.topic_id);
+    let index = copytopicSelected.findIndex((data) => data === val);
     if (index > -1) {
       copytopicSelected.splice(index, 1);
     } else {
       copytopicSelected.push(val);
     }
-
     setTopicSelected(copytopicSelected);
+  };
+  const next = () => {
+    if (topicSelected.length >= minTopic) {
+      setTopicsContext(topicSelected, dispatch);
+      navigation.navigate('WhotoFollow');
+    }
   };
 
   return (
@@ -114,11 +124,13 @@ const index = () => {
                             {val.map((value, i) => {
                               return (
                                 <TouchableOpacity
-                                  onPress={() => handleSelectedLanguage(value)}
+                                  onPress={() =>
+                                    handleSelectedLanguage(value.topic_id)
+                                  }
                                   key={i}
                                   style={
                                     topicSelected.findIndex(
-                                      (data) => data.topic_id === value.topic_id,
+                                      (data) => data === value.topic_id,
                                     ) > -1
                                       ? styles.bgTopicSelectActive
                                       : styles.bgTopicSelectNotActive
@@ -127,7 +139,7 @@ const index = () => {
                                   <Text
                                     style={
                                       topicSelected.findIndex(
-                                        (data) => data.topic_id === value.topic_id,
+                                        (data) => data === value.topic_id,
                                       ) > -1
                                         ? styles.textTopicActive
                                         : styles.textTopicNotActive
@@ -151,6 +163,7 @@ const index = () => {
             You can add and remove interests later
           </Text>
           <Button
+            onPress={() => next()}
             disabled={topicSelected.length >= minTopic ? false : true}
             style={topicSelected.length >= minTopic ? null : styles.button}>
             {topicSelected.length >= minTopic
@@ -292,4 +305,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#828282',
   },
 });
-export default index;
+export default Topics;
