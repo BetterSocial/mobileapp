@@ -61,6 +61,6 @@ buck-out/
 /ios/Pods/
 
 # Added for Sensitive Data
-android/app/keystore.properties
+android/keystore.properties
 android/app/debug.keystore
 android/app/google-services.json
