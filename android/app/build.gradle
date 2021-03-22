@@ -128,11 +128,13 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
     
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-
+    ndkVersion "22.0.7026061"
+    
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    flavorDimensions "default"
 
     defaultConfig {
         applicationId "org.bettersocial"
@@ -178,6 +180,7 @@ android {
 
     productFlavors {
         dev {
+            dimension "default"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
             resValue "string", "build_config_package", "org.bettersocial"
