@@ -12,9 +12,9 @@ const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
 const index = ({backgroundColor, ...props}) => {
   return (
     <View style={[styles.statusBar, {backgroundColor}]}>
-      <SafeAreaView>
-        <StatusBar translucent backgroundColor={backgroundColor} {...props} />
-      </SafeAreaView>
+      {/* <SafeAreaView> */}
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+      {/* </SafeAreaView> */}
     </View>
   );
 };
