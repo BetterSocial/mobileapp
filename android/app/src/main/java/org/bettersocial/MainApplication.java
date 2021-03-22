@@ -1,4 +1,4 @@
-package org.bettersocial.dev;
+package org.bettersocial;
 
 import android.app.Application;
 import android.content.Context;
@@ -63,7 +63,7 @@ public class MainApplication extends Application implements ReactApplication {
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-        Class<?> aClass = Class.forName("org.bettersocial.dev.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("org.bettersocial.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);

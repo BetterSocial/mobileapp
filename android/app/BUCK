@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "org.bettersocial.dev",
+    package = "org.bettersocial",
 )
 
 android_resource(
     name = "res",
-    package = "org.bettersocial.dev",
+    package = "org.bettersocial",
     res = "src/main/res",
 )
 

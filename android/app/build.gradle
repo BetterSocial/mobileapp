@@ -130,7 +130,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.bettersocial.dev"
+        applicationId "org.bettersocial"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

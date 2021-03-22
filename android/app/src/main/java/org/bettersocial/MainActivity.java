@@ -1,4 +1,4 @@
-package org.bettersocial.dev;
+package org.bettersocial;
 
 import com.facebook.react.ReactActivity;
 
