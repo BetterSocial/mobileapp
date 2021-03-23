@@ -8,6 +8,7 @@ import LocalComunity from '../screens/LocalComunity';
 import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';
 import {StatusBar} from 'react-native';
+import CreatePost from '../screens/Post/CreatePost';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
@@ -16,7 +17,7 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="CreatePost">
       <Stack.Screen
         name="SplashScreen"
         component={SplashScreen}
@@ -50,6 +51,11 @@ const RootStact = () => {
       <Stack.Screen
         name="Home"
         component={Home}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CreatePost"
+        component={CreatePost}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
