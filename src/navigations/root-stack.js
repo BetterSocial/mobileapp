@@ -8,6 +8,8 @@ import LocalComunity from '../screens/LocalComunity';
 import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';
 import {StatusBar} from 'react-native';
+import HomeBottomTabs from './HomeBottomTabs';
+import {ChannelScreen} from '../screens';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
@@ -17,6 +19,17 @@ const RootStact = () => {
   }, []);
   return (
     <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Screen
+        name="HomeTabs"
+        component={HomeBottomTabs}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ChannelScreen"
+        component={ChannelScreen}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen
         name="SplashScreen"
         component={SplashScreen}

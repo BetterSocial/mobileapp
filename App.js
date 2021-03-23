@@ -1,5 +1,5 @@
 import {NavigationContainer} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import 'react-native-gesture-handler';
 import RootStack from './src/navigations/root-stack';
 import {HumanIDProvider} from '@human-id/react-native-humanid';
@@ -7,24 +7,58 @@ import Store from './src/context/Store';
 import FlashMessage from 'react-native-flash-message';
 import fetchRemoteConfig from './src/utils/FirebaseUtil';
 
+import {StreamChat} from 'stream-chat';
+import {GETSTREAM_CLIENT, DUMY_TOKEN_GETSTREAM} from '@env';
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+import {OverlayProvider} from 'stream-chat-react-native';
+
+const AppContext = React.createContext();
+
+const chatClient = StreamChat.getInstance(GETSTREAM_CLIENT);
+const userToken = DUMY_TOKEN_GETSTREAM;
+const user = {
+  id: 'usup',
+};
+
 const App = () => {
+  const {bottom} = useSafeAreaInsets();
+  const [channel, setChannel] = useState();
   useEffect(() => {
     const init = async () => {
       try {
         let data = await fetchRemoteConfig();
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
     };
     init();
   }, []);
+
+  useEffect(() => {
+    const setupClient = async () => {
+      try {
+        let chat = await chatClient.connectUser(user, userToken);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    setupClient();
+  }, []);
+
   return (
     <>
       <HumanIDProvider />
       <Store>
         <NavigationContainer>
-          <RootStack />
+          <AppContext.Provider value={{channel, setChannel}}>
+            <OverlayProvider bottomInset={bottom}>
+              <RootStack />
+            </OverlayProvider>
+          </AppContext.Provider>
         </NavigationContainer>
       </Store>
       <FlashMessage position="top" />
@@ -32,4 +66,10 @@ const App = () => {
   );
 };
 
-export default App;
+export default () => {
+  return (
+    <SafeAreaProvider>
+      <App />
+    </SafeAreaProvider>
+  );
+};
