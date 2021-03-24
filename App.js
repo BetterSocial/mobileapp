@@ -17,7 +17,8 @@ import {OverlayProvider} from 'stream-chat-react-native';
 
 const AppContext = React.createContext();
 
-const chatClient = StreamChat.getInstance(GETSTREAM_CLIENT);
+// const chatClient = StreamChat.getInstance(GETSTREAM_CLIENT);
+const chatClient = new StreamChat(GETSTREAM_CLIENT);
 const userToken = DUMY_TOKEN_GETSTREAM;
 const user = {
   id: 'usup',
