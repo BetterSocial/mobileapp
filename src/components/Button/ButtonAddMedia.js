@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const ButtonAddMedia = () => {
+const ButtonAddMedia = ({onPress, style, label, labelStyle}) => {
   return (
-    <TouchableOpacity style={styles.container}>
-      <Text style={styles.text}>+ Add media or poll</Text>
+    <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
+      <Text style={labelStyle}>{label}</Text>
     </TouchableOpacity>
   );
 };
@@ -22,10 +22,5 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderStyle: 'dashed',
   },
-  text: {
-    color: colors.black,
-    fontFamily: fonts.inter[600],
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
+  text: {},
 });

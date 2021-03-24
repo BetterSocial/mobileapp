@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -17,14 +17,68 @@ import Timer from '../../assets/icons/Ic_timer';
 import Location from '../../assets/icons/Ic_location';
 import World from '../../assets/icons/Ic_world';
 import {fonts} from '../../utils/fonts';
+import SheetMedia from '../../Elements/Post/SheetMedia';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ShowMedia from '../../Elements/Post/ShowMedia';
 
 const CreatePost = () => {
+  const sheetMediaRef = useRef();
+  const [mediaStorage, setMediaStorage] = useState([]);
+  const uploadMediaFromLibrary = () => {
+    launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+      // console.log(res.base64);
+      let newArr = {
+        id: mediaStorage.length,
+        data: res.base64,
+      };
+      setMediaStorage((val) => [...val, newArr]);
+      sheetMediaRef.current.close();
+    });
+  };
+  const takePhoto = () => {
+    launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
+      let newArr = {
+        id: mediaStorage.length,
+        data: res.base64,
+      };
+      setMediaStorage((val) => [...val, newArr]);
+      sheetMediaRef.current.close();
+    });
+    // console.log(mediaStorage);
+  };
+  const onRemoveItem = (v) => {
+    let deleteItem = mediaStorage.filter((item) => item.id !== v);
+    setMediaStorage(deleteItem);
+  };
+  const onRemoveAllMedia = () => {
+    setMediaStorage([]);
+  };
+  const randerComponentMedia = () => {
+    if (mediaStorage.length > 0) {
+      return (
+        <ShowMedia
+          data={mediaStorage}
+          onRemoveItem={onRemoveItem}
+          onRemoveAll={() => onRemoveAllMedia()}
+          onAddMedia={() => sheetMediaRef.current.open()}
+        />
+      );
+    } else {
+      return (
+        <ButtonAddMedia
+          label="+ Add media or poll"
+          onPress={() => sheetMediaRef.current.open()}
+          labelStyle={styles.labelButtonAddMedia}
+        />
+      );
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header title="Create a post" />
         <UserProfile />
-        <TextInput placeholder="halo saya makan" multiline={true} />
+        <Gap style={{height: 8}} />
         <TextInput
           multiline={true}
           style={styles.input}
@@ -34,7 +88,7 @@ const CreatePost = () => {
           }
         />
         <Gap style={{height: 26}} />
-        <ButtonAddMedia />
+        {randerComponentMedia()}
         <Gap style={{height: 29}} />
         <Text style={styles.label}>Advanced Settings</Text>
         <Gap style={{height: 12}} />
@@ -70,6 +124,11 @@ const CreatePost = () => {
         <Gap style={{height: 25}} />
         <Button>Post</Button>
         <Gap style={{height: 18}} />
+        <SheetMedia
+          refMedia={sheetMediaRef}
+          uploadFromMedia={() => uploadMediaFromLibrary()}
+          takePhoto={() => takePhoto()}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -90,6 +149,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     height: 246,
     justifyContent: 'flex-start',
+    overflow: 'scroll',
   },
   hastagText: {
     color: colors.gray1,
@@ -107,4 +167,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   desc: {fontSize: 14, fontFamily: fonts.poppins[400]},
+  labelButtonAddMedia: {
+    color: colors.black,
+    fontFamily: fonts.inter[600],
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
 });
