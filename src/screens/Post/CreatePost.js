@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  View,
 } from 'react-native';
 import Header from '../../components/Header';
 import {Button, ButtonAddMedia} from '../../components/Button';
@@ -20,10 +21,15 @@ import {fonts} from '../../utils/fonts';
 import SheetMedia from '../../Elements/Post/SheetMedia';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ShowMedia from '../../Elements/Post/ShowMedia';
+import SheetAddTopic from '../../Elements/Post/SheetAddTopic';
+import TopicItem from '../../components/TopicItem';
 
 const CreatePost = () => {
   const sheetMediaRef = useRef();
+  const sheetTopicRef = useRef();
   const [mediaStorage, setMediaStorage] = useState([]);
+  const [topic, setTopic] = useState('');
+  const [listTopic, setListTopic] = useState([]);
   const uploadMediaFromLibrary = () => {
     launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
       // console.log(res.base64);
@@ -53,6 +59,15 @@ const CreatePost = () => {
   const onRemoveAllMedia = () => {
     setMediaStorage([]);
   };
+  const submitTopic = () => {
+    setListTopic((val) => [...val, topic]);
+    setTopic('');
+  };
+  const removeTopic = (v) => {
+    let newArr = listTopic.filter((e) => e !== v);
+    setListTopic(newArr);
+    console.log('topic ', v);
+  };
   const randerComponentMedia = () => {
     if (mediaStorage.length > 0) {
       return (
@@ -72,6 +87,23 @@ const CreatePost = () => {
         />
       );
     }
+  };
+  const renderListTopic = () => {
+    if (listTopic.length > 0) {
+      return (
+        <ScrollView
+          style={styles.listTopic}
+          horizontal
+          showsHorizontalScrollIndicator={false}>
+          {listTopic.map((value, index) => {
+            return (
+              <TopicItem key={index} label={value} removeTopic={removeTopic} />
+            );
+          })}
+        </ScrollView>
+      );
+    }
+    return <View />;
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -94,9 +126,11 @@ const CreatePost = () => {
         <Gap style={{height: 12}} />
         <ListItem
           icon={<MemoIc_hastag width={16.67} height={16.67} />}
+          topic={true}
+          listTopic={renderListTopic()}
           label="Add Topics"
           labelStyle={styles.hastagText}
-          onPress={() => {}}
+          onPress={() => sheetTopicRef.current.open()}
         />
         <Gap style={{height: 16}} />
         <ListItem
@@ -128,6 +162,14 @@ const CreatePost = () => {
           refMedia={sheetMediaRef}
           uploadFromMedia={() => uploadMediaFromLibrary()}
           takePhoto={() => takePhoto()}
+        />
+        <SheetAddTopic
+          refTopic={sheetTopicRef}
+          onAdd={() => submitTopic()}
+          topic={topic}
+          onChangeTextTopic={(v) => setTopic(v)}
+          listTopic={listTopic}
+          removeTopic={removeTopic}
         />
       </ScrollView>
     </SafeAreaView>
@@ -172,5 +214,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  listTopic: {
+    flexDirection: 'row',
+    marginLeft: 10,
+    zIndex: 99,
+    paddingTop: 11,
+    paddingBottom: 13,
   },
 });
