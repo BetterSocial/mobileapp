@@ -5,6 +5,8 @@ export const colors = {
   black: '#000000',
   emperor: '#4F4F4F',
   gray: '#828282',
+  gray1: '#C4C4C4',
+  lightgrey: '#F5F5F5',
   concrete: '#F2F2F2',
   mine_shaft: '#333333',
   bunting: '#11243D',
@@ -12,5 +14,7 @@ export const colors = {
   porcelain: '#ecf0f1',
   silver: '#BDBDBD',
   french_pass: '#b6e4fd',
-  pattens_blue: '#ddf2fe'
+  pattens_blue: '#ddf2fe',
+  blue: '#2F80ED',
+  red: '#FF2E63',
 };

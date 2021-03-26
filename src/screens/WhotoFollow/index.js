@@ -115,13 +115,13 @@ const WhotoFollow = () => {
       follows: followed,
       follow_source: 'onboarding',
     };
-    console.log('isi daya ', data)
+    console.log('isi daya ', data);
     registerUser(data)
       .then((res) => {
         setFetchRegister(false);
         if (res.code === 200) {
           showMessage({
-            message: "Welcome to Ping",
+            message: 'Welcome to Ping',
             description: 'Choose where to get started',
             type: 'success',
           });
