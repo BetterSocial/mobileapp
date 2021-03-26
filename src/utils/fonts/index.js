@@ -10,4 +10,15 @@ export const fonts = {
     800: 'Inter-Extra-bold',
     900: 'Inter-Black',
   },
+  poppins: {
+    100: 'Poppins-Thin',
+    200: 'Poppins-Extra-light',
+    300: 'Poppins-Light',
+    400: 'Poppins-Regular',
+    500: 'Poppins-Medium',
+    600: 'Poppins-Semi-bold',
+    700: 'Poppins-Bold',
+    800: 'Poppins-Extra-bold',
+    900: 'Poppins-Black',
+  },
 };

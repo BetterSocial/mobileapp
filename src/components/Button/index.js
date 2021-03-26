@@ -1,3 +1,3 @@
 import Button from './Button';
-
-export {Button}
+import ButtonAddMedia from './ButtonAddMedia';
+export {Button, ButtonAddMedia};
