@@ -29,6 +29,10 @@ import SheetPrivacy from '../../elements/Post/SheetPrivacy';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 
+const MemoShowMedia = React.memo(ShowMedia, compire);
+function compire(prevProps, nextProps) {
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+}
 const CreatePost = () => {
   const sheetMediaRef = useRef();
   const sheetTopicRef = useRef();
@@ -44,7 +48,7 @@ const CreatePost = () => {
     '30 days',
     'Never',
   ]);
-  const [expiredSelect, setExpiredSelect] = useState(0);
+  const [expiredSelect, setExpiredSelect] = useState(1);
   const [geoList, setGeoList] = useState([
     'Everywhere',
     'Massachusetts',
@@ -66,23 +70,34 @@ const CreatePost = () => {
   const [privacySelect, setPrivacySelect] = useState(0);
   const uploadMediaFromLibrary = () => {
     launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-      // console.log(res.base64);
-      let newArr = {
-        id: mediaStorage.length,
-        data: res.base64,
-      };
-      setMediaStorage((val) => [...val, newArr]);
-      sheetMediaRef.current.close();
+      if (res.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (res.uri) {
+        let newArr = {
+          id: mediaStorage.length,
+          data: res.base64,
+        };
+        setMediaStorage((val) => [...val, newArr]);
+        sheetMediaRef.current.close();
+      } else {
+        console.log(res);
+      }
     });
   };
   const takePhoto = () => {
     launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
-      let newArr = {
-        id: mediaStorage.length,
-        data: res.base64,
-      };
-      setMediaStorage((val) => [...val, newArr]);
-      sheetMediaRef.current.close();
+      if (res.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (res.uri) {
+        let newArr = {
+          id: mediaStorage.length,
+          data: res.base64,
+        };
+        setMediaStorage((val) => [...val, newArr]);
+        sheetMediaRef.current.close();
+      } else {
+        console.log(res);
+      }
     });
     // console.log(mediaStorage);
   };
@@ -105,7 +120,7 @@ const CreatePost = () => {
   const randerComponentMedia = () => {
     if (mediaStorage.length > 0) {
       return (
-        <ShowMedia
+        <MemoShowMedia
           data={mediaStorage.reverse()}
           onRemoveItem={onRemoveItem}
           onRemoveAll={() => onRemoveAllMedia()}
