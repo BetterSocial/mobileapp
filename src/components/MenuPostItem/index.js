@@ -3,7 +3,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import MemoIc_arrow_right from '../../assets/icons/Ic_arrow_right';
 import {colors} from '../../utils/colors';
 
-const ListItem = ({icon, label, labelStyle, onPress, topic, listTopic}) => {
+const MenuPostItem = ({icon, label, labelStyle, onPress, topic, listTopic}) => {
   if (topic) {
     return (
       <View style={styles.containerTopic}>
@@ -25,7 +25,7 @@ const ListItem = ({icon, label, labelStyle, onPress, topic, listTopic}) => {
   );
 };
 
-export default ListItem;
+export default MenuPostItem;
 
 const styles = StyleSheet.create({
   container: {
