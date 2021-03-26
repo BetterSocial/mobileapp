@@ -18,7 +18,7 @@ import VirtualizedView from '../../components/VirtualizedView';
 import MyStatusBar from '../../components/StatusBar';
 import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import CheckIcon from '../../../assets/icons/check.svg';
 import AddIcon from '../../../assets/icons/add.svg';
 import {Context} from '../../context';

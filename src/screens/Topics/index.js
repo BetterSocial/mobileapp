@@ -19,7 +19,7 @@ import MyStatusBar from '../../components/StatusBar';
 import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
 import {ChunkArray} from '../../helpers/ChunkArray';
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import {Context} from '../../context';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import {useNavigation} from '@react-navigation/core';

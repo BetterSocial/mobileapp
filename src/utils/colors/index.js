@@ -12,5 +12,6 @@ export const colors = {
   porcelain: '#ecf0f1',
   silver: '#BDBDBD',
   french_pass: '#b6e4fd',
-  pattens_blue: '#ddf2fe'
+  pattens_blue: '#ddf2fe',
+  wildSand: "#F5F5F5"
 };
