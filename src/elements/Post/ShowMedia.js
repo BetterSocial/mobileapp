@@ -17,12 +17,14 @@ const ShowMedia = ({onRemoveAll, onRemoveItem, onAddMedia, data}) => {
     <View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.contentImage}>
-          <ButtonAddMedia
-            onPress={onAddMedia}
-            label="+add more photos"
-            style={styles.btnMedia}
-            labelStyle={styles.btnIcon}
-          />
+          {data.length < 10 && (
+            <ButtonAddMedia
+              onPress={onAddMedia}
+              label="+add more photos"
+              style={styles.btnMedia}
+              labelStyle={styles.btnIcon}
+            />
+          )}
           <Gap style={{width: 8}} />
           {data.map((item) => (
             <ShowImage key={item.id} data={item} onPress={onRemoveItem} />
