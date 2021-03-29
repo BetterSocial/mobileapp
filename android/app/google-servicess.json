@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "70467963537",
+    "project_id": "bettersocial-dev",
+    "storage_bucket": "bettersocial-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70467963537:android:e10f4f938181e04ac64d30",
+        "android_client_info": {
+          "package_name": "org.bettersocial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70467963537-nn75115p1prtgvsqhcgmr2g8dj9gr74i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB_UmHgzk1jnOeSn47GjZh5UQzjoNtdZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70467963537-nn75115p1prtgvsqhcgmr2g8dj9gr74i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70467963537:android:7f14f97abcef4f46c64d30",
+        "android_client_info": {
+          "package_name": "org.bettersocial.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70467963537-nn75115p1prtgvsqhcgmr2g8dj9gr74i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB_UmHgzk1jnOeSn47GjZh5UQzjoNtdZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70467963537-nn75115p1prtgvsqhcgmr2g8dj9gr74i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

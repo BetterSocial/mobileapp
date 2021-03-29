@@ -69,13 +69,15 @@ const CreatePost = () => {
   ];
   const [privacySelect, setPrivacySelect] = useState(0);
   const uploadMediaFromLibrary = () => {
-    launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+    // , includeBase64: true
+    launchImageLibrary({mediaType: 'photo'}, (res) => {
+      console.log(res);
       if (res.didCancel) {
         console.log('User cancelled image picker');
       } else if (res.uri) {
         let newArr = {
           id: mediaStorage.length,
-          data: res.base64,
+          data: res.uri,
         };
         setMediaStorage((val) => [...val, newArr]);
         sheetMediaRef.current.close();
@@ -85,13 +87,15 @@ const CreatePost = () => {
     });
   };
   const takePhoto = () => {
-    launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
+    // , includeBase64: true
+    launchCamera({mediaType: 'photo'}, (res) => {
+      console.log(res);
       if (res.didCancel) {
         console.log('User cancelled image picker');
       } else if (res.uri) {
         let newArr = {
           id: mediaStorage.length,
-          data: res.base64,
+          data: res.uri,
         };
         setMediaStorage((val) => [...val, newArr]);
         sheetMediaRef.current.close();
