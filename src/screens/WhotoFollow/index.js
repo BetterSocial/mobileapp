@@ -115,7 +115,6 @@ const WhotoFollow = () => {
       follows: followed,
       follow_source: 'onboarding',
     };
-    console.log('isi daya ', data);
     registerUser(data)
       .then((res) => {
         setFetchRegister(false);
@@ -129,7 +128,6 @@ const WhotoFollow = () => {
             navigation.dispatch(StackActions.replace('Home'));
           }, 2000);
         } else {
-          console.log(res);
           showMessage({
             message: 'register error',
             type: 'danger',

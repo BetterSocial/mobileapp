@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState, useRef} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import {
   StatusBar,
   SafeAreaView,
@@ -10,33 +10,87 @@ import {
   Dimensions,
   TouchableNativeFeedback,
   Share,
-  TextInput,
+  ScrollView,
 } from 'react-native';
-import SeeMore from 'react-native-see-more-inline';
+import {STREAM_API_KEY, STREAM_API_TOKEN, STREAM_APP_ID} from '@env';
+import {StreamApp, FlatFeed} from 'react-native-activity-feed';
+import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/core';
+import {showMessage} from 'react-native-flash-message';
+import {
+  getMyProfile,
+  changeRealName,
+  updateImageProfile,
+  removeImageProfile,
+} from '../../service/profile';
 import ShareIcon from '../../assets/icons/images/share.svg';
 import SettingIcon from '../../assets/icons/images/setting.svg';
-import UserIcon from '../../assets/icons/images/user.svg';
-import MediaIcon from '../../assets/icons/images/media.svg';
-import CameraIcon from '../../assets/icons/images/camera.svg';
-import TrashIcon from '../../assets/icons/images/trash.svg';
-import {Button} from '../../components/Button';
+import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {BottomSheet} from '../../components/BottomSheet';
+import Loading from '../Loading';
+import RenderActivity from './RenderActivity';
+import BottomSheetImage from './BottomSheetImage';
+import BottomSheetRealname from './BottomSheetRealname';
+import {trimString} from '../../helpers/stringSplit';
 
 const width = Dimensions.get('screen').width;
-
-let VERY_LARGE_TEXT =
-  'Ullamco ullamco aute ad dolor enim quis. Mollit mollit eiusmod esse est nostrud est culpa. Dolor nisi deserunt non laboris adipisicing sunt. Ullamco veniam irure cupidatat veniam proident. Enim aliquip deserunt veniam ea. Irure eiusmod cupidatat deserunt officia consectetur. Ea reprehenderit mollit occaecat reprehenderit irure magna tempor aliqua culpa. Pariatur Lorem quis anim voluptate velit eu consectetur amet duis sit quis enim. Cillum magna eu magna elit nisi anim enim mollit ex.';
 
 const MyProfile = () => {
   const navigation = useNavigation();
   const bottomSheetNameRef = useRef();
   const bottomSheetProfilePictureRef = useRef();
+  const postRef = useRef(null);
+  const scrollViewReff = useRef(null);
 
-  const [fullName, setFullName] = useState('Ali Irawan');
+  const [dataMain, setDataMain] = useState({});
   const [tempFullName, setTempFullName] = useState('');
+  const [isOffsetScroll, setIsOffsetScroll] = useState(false);
+  const [isShowButton, setIsShowButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isChangeRealName, setIsChangeRealName] = useState(false);
+  const [isLoadingRemoveImage, setIsLoadingRemoveImage] = useState(false);
+  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = useState(
+    false,
+  );
+  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = useState(
+    false,
+  );
+  const [errorChangeRealName, setErrorChangeRealName] = useState('');
+  const [image, setImage] = useState('');
+
+  const apiKey = STREAM_API_KEY;
+  const appId = STREAM_APP_ID;
+  const token = STREAM_API_TOKEN;
+
+  useEffect(() => {
+    fetchMyProfile(true);
+  }, []);
+
+  const fetchMyProfile = async (withLoading) => {
+    withLoading ? setIsLoading(true) : null;
+    const result = await getMyProfile('288d5679-6c68-41ec-be83-7f15a4e82d3d');
+    if (result.code == 200) {
+      withLoading ? setIsLoading(false) : null;
+      setDataMain(result.data);
+    }
+  };
+
+  if (!apiKey) {
+    console.error('STREAM_API_KEY should be set');
+    return null;
+  }
+
+  if (!appId) {
+    console.error('STREAM_APP_ID should be set');
+    return null;
+  }
+
+  if (!token) {
+    console.error('STREAM_TOKEN should be set');
+    return null;
+  }
 
   const onShare = async () => {
     try {
@@ -61,129 +115,258 @@ const MyProfile = () => {
     navigation.navigate('Settings');
   };
 
-  const goToFollowings = () => {
-    navigation.navigate('Followings');
+  const goToFollowings = (user_id, username) => {
+    if (dataMain.following > 0) {
+      navigation.navigate('Followings', {user_id, username});
+    }
   };
 
   const changeName = () => {
     bottomSheetNameRef.current.open();
-    setTempFullName(fullName);
+    setTempFullName(dataMain.real_name ? dataMain.real_name : '');
   };
 
   const changeImage = () => {
     bottomSheetProfilePictureRef.current.open();
   };
 
-  const handleSave = () => {
-    setFullName(tempFullName);
-    bottomSheetNameRef.current.close();
+  const handleSave = async () => {
+    setIsChangeRealName(true);
+    const result = await changeRealName(dataMain.user_id, tempFullName);
+    if (result.code == 200) {
+      fetchMyProfile();
+      setIsChangeRealName(false);
+      bottomSheetNameRef.current.close();
+    } else {
+      setErrorChangeRealName(result.message);
+    }
+  };
+
+  const handleScroll = (event) => {
+    postRef.current.measure((x, y, width, height, pagex, pagey) => {
+      if (pagey < 0) {
+        setIsOffsetScroll(true);
+      } else {
+        setIsOffsetScroll(false);
+      }
+    });
+
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    if (currentOffset > 170) {
+      setIsShowButton(true);
+    } else {
+      setIsShowButton(false);
+    }
+  };
+
+  const toTop = () => {
+    scrollViewReff.current?.scrollTo({
+      y: 0,
+      animated: true,
+    });
+  };
+
+  const onOpenImageGalery = () => {
+    launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+      if (res.didCancel) {
+      } else {
+        setImage(res.base64);
+        handleUpdateImage('data:image/jpeg;base64,' + res.base64, 'gallery');
+      }
+    });
+  };
+
+  const onOpenCamera = () => {
+    launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
+      if (res.didCancel) {
+      } else {
+        setImage(res.base64);
+        handleUpdateImage('data:image/jpeg;base64,' + res.base64, 'camera');
+      }
+    });
+  };
+
+  const handleUpdateImage = (value, type) => {
+    if (type === 'gallery') {
+      setIsLoadingUpdateImageGalery(true);
+    } else {
+      setIsLoadingUpdateImageCamera(true);
+    }
+
+    let data = {
+      profile_pic_path: value,
+    };
+
+    updateImageProfile(dataMain.user_id, data)
+      .then((res) => {
+        if (type === 'gallery') {
+          setIsLoadingUpdateImageGalery(false);
+        } else {
+          setIsLoadingUpdateImageCamera(false);
+        }
+        if (res.code === 200) {
+          bottomSheetProfilePictureRef.current.close();
+          fetchMyProfile(false);
+        }
+      })
+      .catch(() => {
+        if (type === 'gallery') {
+          setIsLoadingUpdateImageGalery(false);
+        } else {
+          setIsLoadingUpdateImageCamera(false);
+        }
+      });
+  };
+
+  const handleRemoveImageProfile = async () => {
+    setIsLoadingRemoveImage(true);
+    removeImageProfile(dataMain.user_id)
+      .then((res) => {
+        setIsLoadingRemoveImage(false);
+        if (res.code === 200) {
+          bottomSheetProfilePictureRef.current.close();
+          fetchMyProfile(false);
+        }
+      })
+      .catch(() => {
+        setIsLoadingRemoveImage(false);
+        showMessage({
+          message: 'Remove image profile error',
+          type: 'danger',
+        });
+      });
+  };
+
+  const renderBio = (string) => {
+    return (
+      <TouchableNativeFeedback>
+        <View style={styles.containerBio}>
+          {string === null || string === undefined ? (
+            <Text>Add Bio</Text>
+          ) : (
+            <Text linkStyle={styles.seeMore}>
+              {trimString(string, 121)}{' '}
+              {string.length > 121 ? (
+                <Text style={{color: colors.blue}}>see more</Text>
+              ) : null}
+            </Text>
+          )}
+        </View>
+      </TouchableNativeFeedback>
+    );
   };
 
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={styles.textUsername}>van_darmawan2204</Text>
-            <View style={styles.wrapHeaderButton}>
-              <View style={{marginRight: 20}}>
-                <TouchableNativeFeedback onPress={onShare}>
-                  <ShareIcon width={20} height={20} fill="#000" />
-                </TouchableNativeFeedback>
-              </View>
-              <TouchableNativeFeedback onPress={goToSettings}>
-                <SettingIcon width={20} height={20} fill="#000" />
-              </TouchableNativeFeedback>
-            </View>
+      <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
+        {isOffsetScroll ? (
+          <View style={styles.tabsFixed}>
+            <Text style={styles.postText}>Post (12)</Text>
           </View>
-          <View style={styles.wrapImageProfile}>
-            <TouchableNativeFeedback onPress={changeImage}>
-              <Image
-                style={styles.profileImage}
-                source={{
-                  uri:
-                    'https://avatars.githubusercontent.com/u/811536?s=400&u=32007a4167b7250b321e81ab182116018fbee7b6&v=4',
-                }}
-              />
-            </TouchableNativeFeedback>
-            <TouchableNativeFeedback onPress={changeName}>
-              <Text style={styles.nameProfile}>{fullName}</Text>
-            </TouchableNativeFeedback>
-          </View>
-          <View style={{...styles.wrapFollower, marginTop: 12}}>
-            <View style={styles.wrapRow}>
-              <Text style={styles.textTotal}>{'>10'}</Text>
-              <Text style={styles.textFollow}>Followers</Text>
-            </View>
-            <View style={{marginLeft: 18}}>
-              <TouchableNativeFeedback onPress={goToFollowings}>
-                <View style={styles.wrapRow}>
-                  <Text style={styles.textTotal}>{'>50'}</Text>
-                  <Text style={styles.textFollow}>Following</Text>
+        ) : null}
+        <ScrollView onScroll={handleScroll} ref={scrollViewReff}>
+          <StreamApp apiKey={apiKey} appId={appId} token={token}>
+            {!isLoading ? (
+              <View style={styles.content}>
+                <View style={styles.header}>
+                  <Text style={styles.textUsername}>{dataMain.username}</Text>
+                  <View style={styles.wrapHeaderButton}>
+                    <View style={{marginRight: 20}}>
+                      <TouchableNativeFeedback onPress={onShare}>
+                        <ShareIcon width={20} height={20} fill={colors.black} />
+                      </TouchableNativeFeedback>
+                    </View>
+                    <TouchableNativeFeedback onPress={goToSettings}>
+                      <SettingIcon width={20} height={20} fill={colors.black} />
+                    </TouchableNativeFeedback>
+                  </View>
                 </View>
-              </TouchableNativeFeedback>
-            </View>
-          </View>
-          <View style={styles.containerBio}>
-            <SeeMore numberOfLines={3} linkStyle={styles.seeMore}>
-              {VERY_LARGE_TEXT}
-            </SeeMore>
-          </View>
-        </View>
-        <View style={styles.tabs}>
-          <Text style={styles.postText}>Post (12)</Text>
-        </View>
-        <BottomSheet
-          ref={bottomSheetNameRef}
-          closeOnPressMask={true}
-          height={300}>
-          <View style={styles.containerBottomSheet}>
-            <Text style={styles.textYourName}>Your name</Text>
-            <TextInput
-              autoFocus={true}
-              style={styles.inputYourName}
-              onChangeText={(text) => setTempFullName(text)}
-              value={tempFullName}
-              placeholder="Your Name"
-              placeholderTextColor={colors.silver}
-            />
-            <Text style={styles.descriptionYourname}>
-              Providing a common or real name is fully optional, but might make
-              it easier for others to find you.
-            </Text>
-            <Button
-              style={styles.button}
-              textStyling={styles.textStyling}
-              onPress={() => handleSave()}>
-              Save
-            </Button>
-          </View>
-        </BottomSheet>
+                <View style={styles.wrapImageProfile}>
+                  <TouchableNativeFeedback onPress={changeImage}>
+                    {dataMain.profile_pic_path ? (
+                      <Image
+                        style={styles.profileImage}
+                        source={{
+                          uri: dataMain.profile_pic_path,
+                        }}
+                      />
+                    ) : (
+                      <MemoIc_btn_add width={100} height={100} />
+                    )}
+                  </TouchableNativeFeedback>
+                  <TouchableNativeFeedback onPress={changeName}>
+                    <Text style={styles.nameProfile}>
+                      {dataMain.real_name
+                        ? dataMain.real_name
+                        : 'no name specifics'}
+                    </Text>
+                  </TouchableNativeFeedback>
+                </View>
+                <View style={{...styles.wrapFollower, marginTop: 12}}>
+                  <View style={styles.wrapRow}>
+                    <Text style={styles.textTotal}>
+                      {dataMain.follower_symbol}
+                    </Text>
+                    <Text style={styles.textFollow}>Followers</Text>
+                  </View>
+                  <View style={{marginLeft: 18}}>
+                    <TouchableNativeFeedback
+                      onPress={() =>
+                        goToFollowings(dataMain.user_id, dataMain.username)
+                      }>
+                      <View style={styles.wrapRow}>
+                        <Text style={styles.textTotal}>
+                          {dataMain.following_symbol}
+                        </Text>
+                        <Text style={styles.textFollow}>Following</Text>
+                      </View>
+                    </TouchableNativeFeedback>
+                  </View>
+                </View>
 
-        <BottomSheet
-          ref={bottomSheetProfilePictureRef}
-          closeOnPressMask={true}
-          height={300}>
-          <View style={styles.containerBottomSheet}>
-            <View style={styles.card}>
-              <UserIcon width={16.67} height={16.67} fill="#000" />
-              <Text style={styles.textCard}>View profile picture</Text>
+                {renderBio(dataMain.bio)}
+              </View>
+            ) : null}
+
+            {!isLoading ? (
+              <View>
+                <View style={styles.tabs} ref={postRef}>
+                  <Text style={styles.postText}>Post (12)</Text>
+                </View>
+                <View style={styles.containerFlatFeed}>
+                  <FlatFeed Activity={RenderActivity} notify />
+                </View>
+              </View>
+            ) : null}
+
+            <BottomSheetRealname
+              ref={bottomSheetNameRef}
+              setTempFullName={() => setTempFullName()}
+              tempFullName={tempFullName}
+              errorChangeRealName={errorChangeRealName}
+              isChangeRealName={isChangeRealName}
+              handleSave={() => handleSave()}
+            />
+            <BottomSheetImage
+              ref={bottomSheetProfilePictureRef}
+              onOpenImageGalery={() => onOpenImageGalery()}
+              onOpenCamera={() => onOpenCamera()}
+              handleRemoveImageProfile={() => handleRemoveImageProfile()}
+              isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
+              isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
+              isLoadingRemoveImage={isLoadingRemoveImage}
+            />
+          </StreamApp>
+        </ScrollView>
+        {isShowButton ? (
+          <TouchableNativeFeedback onPress={toTop}>
+            <View style={styles.btnBottom}>
+              <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
             </View>
-            <View style={styles.card}>
-              <MediaIcon width={16.67} height={16.67} fill="#000" />
-              <Text style={styles.textCard}>Upload from library</Text>
-            </View>
-            <View style={styles.card}>
-              <CameraIcon width={16.67} height={16.67} fill="#000" />
-              <Text style={styles.textCard}>Take a photo</Text>
-            </View>
-            <View style={styles.card}>
-              <TrashIcon width={16.67} height={16.67} fill="#000" />
-              <Text style={styles.textCard}>Remove current picture</Text>
-            </View>
-          </View>
-        </BottomSheet>
+          </TouchableNativeFeedback>
+        ) : null}
+        <Loading visible={isLoading} />
       </SafeAreaView>
     </>
   );
@@ -209,6 +392,60 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: 50,
   },
+  postText: {
+    fontFamily: fonts.inter[800],
+    fontWeight: 'bold',
+    fontSize: 14,
+    color: colors.black,
+    paddingBottom: 12,
+    borderBottomWidth: 2,
+    borderBottomColor: colors.bondi_blue,
+  },
+  containerFlatFeed: {
+    padding: 20,
+    flex: 1,
+  },
+  btnBottom: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    right: 20,
+    bottom: 50,
+    backgroundColor: colors.bondi_blue,
+    borderRadius: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerBio: {
+    marginTop: 8,
+  },
+  seeMore: {
+    fontFamily: fonts.inter[500],
+    fontSize: 14,
+    color: colors.black,
+  },
+  tabs: {
+    width: width,
+    borderBottomColor: colors.alto,
+    borderBottomWidth: 1,
+    paddingLeft: 20,
+    paddingRight: 20,
+    flexDirection: 'row',
+  },
+  tabsFixed: {
+    width: width,
+    borderBottomColor: colors.alto,
+    borderBottomWidth: 1,
+    paddingLeft: 20,
+    paddingRight: 20,
+    flexDirection: 'row',
+    position: 'absolute',
+    top: 0,
+    zIndex: 2000,
+    backgroundColor: colors.white,
+  },
+
   textUsername: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
@@ -253,81 +490,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.black,
     paddingRight: 4,
-  },
-  containerBio: {
-    marginTop: 8,
-  },
-  seeMore: {
-    fontFamily: fonts.inter[500],
-    fontSize: 14,
-    color: colors.black,
-  },
-  tabs: {
-    width: width,
-    borderBottomColor: colors.alto,
-    borderBottomWidth: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
-    flexDirection: 'row',
-  },
-  postText: {
-    fontFamily: fonts.inter[800],
-    fontWeight: 'bold',
-    fontSize: 14,
-    color: colors.black,
-    paddingBottom: 12,
-    borderBottomWidth: 2,
-    borderBottomColor: colors.bondi_blue,
-  },
-  containerBottomSheet: {
-    flexDirection: 'column',
-  },
-  textYourName: {
-    fontFamily: fonts.inter[800],
-    fontWeight: 'bold',
-    fontSize: 24,
-    color: colors.black,
-    marginBottom: 16,
-  },
-  inputYourName: {
-    height: 52,
-    backgroundColor: colors.wildSand,
-    color: colors.black,
-    fontFamily: fonts.inter[400],
-    fontSize: 18,
-  },
-  descriptionYourname: {
-    fontFamily: fonts.inter[400],
-    fontSize: 12,
-    color: colors.gray,
-    lineHeight: 24,
-  },
-  button: {
-    marginTop: 50,
-    backgroundColor: colors.bondi_blue,
-  },
-  textStyling: {
-    fontFamily: fonts.inter[600],
-    fontSize: 18,
-    color: colors.white,
-  },
-  card: {
-    height: 52,
-    backgroundColor: colors.wildSand,
-    borderRadius: 8,
-    paddingLeft: 21,
-    paddingRight: 21,
-    paddingTop: 17,
-    paddingBottom: 18,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  textCard: {
-    fontFamily: fonts.inter[500],
-    fontSize: 14,
-    color: colors.black,
-    paddingLeft: 9,
   },
 });
 export default MyProfile;

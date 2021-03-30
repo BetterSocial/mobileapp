@@ -7,7 +7,7 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 const Header = ({title}) => {

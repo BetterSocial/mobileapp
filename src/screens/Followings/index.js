@@ -1,4 +1,5 @@
 import React from 'react';
+import {useEffect, useState} from 'react';
 import {
   StatusBar,
   Dimensions,
@@ -7,9 +8,12 @@ import {
   Text,
   StyleSheet,
   TouchableNativeFeedback,
-  Image,
   FlatList,
 } from 'react-native';
+import {useRoute} from '@react-navigation/native';
+import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
+import Loading from '../Loading';
+import {getFollowing} from '../../service/profile';
 import {useNavigation} from '@react-navigation/core';
 import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import {colors} from '../../utils/colors';
@@ -17,86 +21,40 @@ import {fonts} from '../../utils/fonts';
 
 const width = Dimensions.get('screen').width;
 
-let dataFollowing = [
-  {
-    id: 'a',
-    username: 'dedesulaiman',
-    full_name: 'Dede Sulaiman',
-    image_path:
-      'https://cdn-2.tstatic.net/papua/foto/bank/images2/kiper-persipura-jayapura-dede-sulaiman-5.jpg',
-  },
-  {
-    id: 'b',
-    username: 'agnesmo',
-    full_name: 'Agnes Monica',
-    image_path:
-      'https://www.radarcirebon.com/wp-content/uploads/2018/07/agnes-mo.jpg',
-  },
-  {
-    id: 'c',
-    username: 'ariel',
-    full_name: 'Ariel',
-    image_path:
-      'https://cdns.klimg.com/dream.co.id/resized/640x320/news/2020/12/14/154929/pamer-foto-main-ps5-bareng-cewek-ariel-noah-bikin-cemburu-201214q.jpg',
-  },
-  {
-    id: 'd',
-    username: 'mak_beti',
-    full_name: 'Mak Beti',
-    image_path:
-      'https://pbs.twimg.com/profile_images/1250756325161578497/Noe2rL6z_400x400.jpg',
-  },
-  {
-    id: 'e',
-    username: 'deddy_corbuzier',
-    full_name: 'Deddy Corbuzier',
-    image_path:
-      'https://cdn.akurat.co/images/uploads/images/akurat_20200826023059_56Vw5h.jpg',
-  },
-  {
-    id: 'f',
-    username: 'amrilsyaifa',
-    full_name: 'Amril Syaifa',
-    image_path:
-      'https://miro.medium.com/max/3150/1*vkbI1dVtrT-cjMr-z96ySA.jpeg',
-  },
-  {
-    id: 'g',
-    username: 'riaricis',
-    full_name: 'Ria Ricis',
-    image_path:
-      'https://asset-a.grid.id/crop/0x0:0x0/360x240/photo/2020/03/30/1010759575.jpg',
-  },
-  {
-    id: 'h',
-    username: 'aderai',
-    full_name: 'Ade Rai',
-    image_path:
-      'https://cdns.klimg.com/kapanlagi.com/g/6/_/6_foto_ade_rai_ikuti_event_test_of_will_2019_badannya_atletis_banget/p/ade_rai-20190728-006-daniel.jpg',
-  },
-  {
-    id: 'i',
-    username: 'aa_raffi',
-    full_name: 'Raffi Ahmad',
-    image_path:
-      'https://cdns.klimg.com/kapanlagi.com/p/headline/476x238/nggak-tahu-pin-atm-dan-jumlah-kekayaan--d1c15a.jpg',
-  },
-  {
-    id: 'j',
-    username: 'bang_atta',
-    full_name: 'Atta Halilintar',
-    image_path:
-      'https://assets.pikiran-rakyat.com/crop/0x0:0x0/x/photo/2021/03/22/328846722.jpg',
-  },
-];
-
 const Followings = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const [user_id, setUserId] = useState('');
+  const [username, setUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataFollowing, setDataFollowing] = useState([]);
 
-  const goToOtherProfile = (data) => {
+  const {params} = route;
+
+  useEffect(() => {
+    setUserId(params.user_id);
+    setUsername(params.username);
+    fetchFollowing(true);
+  }, [params.user_id]);
+
+  const fetchFollowing = async (withLoading) => {
+    withLoading ? setIsLoading(true) : null;
+    const result = await getFollowing('288d5679-6c68-41ec-be83-7f15a4e82d3d');
+    if (result.code == 200) {
+      withLoading ? setIsLoading(false) : null;
+      setDataFollowing(result.data);
+    }
+  };
+
+  const goToOtherProfile = (value) => {
+    let data = {
+      user_id,
+      other_id: value.user_id_followed,
+      username,
+    };
     navigation.navigate('OtherProfile', {data});
   };
-  
+
   const renderItem = ({item}) => (
     <TouchableNativeFeedback
       onPress={(event) => {
@@ -105,21 +63,15 @@ const Followings = () => {
       }}>
       <View style={styles.card}>
         <View style={styles.wrapProfile}>
-          <Image
-            style={styles.imageProfile}
-            source={{
-              uri: item.image_path,
-            }}
-          />
+          <MemoIc_btn_add width={48} height={48} />
           <View style={styles.wrapTextProfile}>
-            <Text style={styles.textProfileUsername}>{item.username}</Text>
-            <Text style={styles.textProfileFullName}>{item.full_name}</Text>
+            <Text style={styles.textProfileUsername}>{item.user.username}</Text>
+            <Text style={styles.textProfileFullName}>
+              {item.user.real_name ? item.user.real_name : 'no name specifics'}
+            </Text>
           </View>
         </View>
-        <TouchableNativeFeedback
-          onPress={() => {
-            console.log('inner press');
-          }}>
+        <TouchableNativeFeedback>
           <View style={styles.buttonFollowing}>
             <Text style={styles.textButtonFollowing}>Following</Text>
           </View>
@@ -138,7 +90,7 @@ const Followings = () => {
               <ArrowLeftIcon width={20} height={12} fill="#000" />
             </TouchableNativeFeedback>
           </View>
-          <Text style={styles.textUsername}>van_darmawan2204</Text>
+          <Text style={styles.textUsername}>{username}</Text>
         </View>
         <View style={styles.tabs}>
           <View style={styles.wrapTextTabs}>
@@ -151,9 +103,10 @@ const Followings = () => {
           <FlatList
             data={dataFollowing}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.follow_action_id}
           />
         </View>
+        <Loading visible={isLoading} />
       </SafeAreaView>
     </>
   );

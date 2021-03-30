@@ -1,4 +1,5 @@
 import React from 'react';
+import {useEffect, useState} from 'react';
 import {
   StatusBar,
   SafeAreaView,
@@ -11,14 +12,17 @@ import {
   Share,
 } from 'react-native';
 import SeeMore from 'react-native-see-more-inline';
+import {getOtherProfile, setUnFollow, setFollow} from '../../service/profile';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
+import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
 import ShareIcon from '../../assets/icons/images/share.svg';
 import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import Loading from '../Loading';
 
 const width = Dimensions.get('screen').width;
 
@@ -28,8 +32,31 @@ let VERY_LARGE_TEXT =
 const OtherProfile = () => {
   const navigation = useNavigation();
   const route = useRoute();
+
+  const [dataMain, setDataMain] = useState({});
+  const [user_id, setUserId] = useState('');
+  const [username, setUsername] = useState('');
+  const [other_id, setOtherId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
   const {params} = route;
-  console.log('isi params ', params);
+
+  useEffect(() => {
+    setUserId(params.data.user_id);
+    setOtherId(params.data.other_id);
+    setUsername(params.data.username);
+    fetchOtherProfile(params.data.user_id, params.data.other_id, true);
+  }, [params.data]);
+
+  const fetchOtherProfile = async (userId, otherId, withLoading) => {
+    withLoading ? setIsLoading(true) : null;
+    const result = await getOtherProfile(userId, otherId);
+    if (result.code == 200) {
+      withLoading ? setIsLoading(false) : null;
+      setDataMain(result.data);
+    }
+  };
+
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -49,8 +76,28 @@ const OtherProfile = () => {
     }
   };
 
-  const goToFollowings = () => {
-    navigation.navigate('Followings');
+  const handleSetUnFollow = async () => {
+    let data = {
+      user_id_follower: user_id,
+      user_id_followed: other_id,
+      follow_source: 'other-profile',
+    };
+    const result = await setUnFollow(data);
+    if (result.code == 200) {
+      fetchOtherProfile(user_id, other_id, false);
+    }
+  };
+
+  const handleSetFollow = async () => {
+    let data = {
+      user_id_follower: user_id,
+      user_id_followed: other_id,
+      follow_source: 'other-profile',
+    };
+    const result = await setFollow(data);
+    if (result.code == 200) {
+      fetchOtherProfile(user_id, other_id, false);
+    }
   };
 
   return (
@@ -63,7 +110,7 @@ const OtherProfile = () => {
               <TouchableNativeFeedback onPress={() => navigation.goBack()}>
                 <ArrowLeftIcon width={20} height={12} fill="#000" />
               </TouchableNativeFeedback>
-              <Text style={styles.textUsername}>{params.data.username}</Text>
+              <Text style={styles.textUsername}>{username}</Text>
             </View>
             <TouchableNativeFeedback onPress={onShare}>
               <ShareIcon width={20} height={20} fill="#000" />
@@ -71,12 +118,24 @@ const OtherProfile = () => {
           </View>
           <View style={styles.wrapImageProfile}>
             <View style={styles.wrapImageAndStatus}>
-              <Image
-                style={styles.profileImage}
-                source={{
-                  uri: params.data.image_path,
-                }}
-              />
+              <View style={styles.wrapImageProfile}>
+                {dataMain.profile_pic_path ? (
+                  <Image
+                    style={styles.profileImage}
+                    source={{
+                      uri: dataMain.profile_pic_path,
+                    }}
+                  />
+                ) : (
+                  <MemoIc_btn_add width={100} height={100} />
+                )}
+
+                <Text style={styles.nameProfile}>
+                  {dataMain.real_name
+                    ? dataMain.real_name
+                    : 'no name specifics'}
+                </Text>
+              </View>
               <View style={styles.wrapButton}>
                 <TouchableNativeFeedback>
                   <BlockBlueIcon
@@ -92,30 +151,36 @@ const OtherProfile = () => {
                     fill={colors.bondi_blue}
                   />
                 </TouchableNativeFeedback>
-                <TouchableNativeFeedback
-                  onPress={() => {
-                    console.log('inner press');
-                  }}>
-                  <View style={styles.buttonFollowing}>
-                    <Text style={styles.textButtonFollowing}>Following</Text>
-                  </View>
-                </TouchableNativeFeedback>
+                {dataMain.is_following ? (
+                  <TouchableNativeFeedback onPress={() => handleSetUnFollow()}>
+                    <View style={styles.buttonFollowing}>
+                      <Text style={styles.textButtonFollowing}>Following</Text>
+                    </View>
+                  </TouchableNativeFeedback>
+                ) : (
+                  <TouchableNativeFeedback
+                    onPress={() => handleSetFollow()}>
+                    <View style={styles.buttonFollow}>
+                      <Text style={styles.textButtonFollow}>Follow</Text>
+                    </View>
+                  </TouchableNativeFeedback>
+                )}
               </View>
             </View>
             <Text style={styles.nameProfile}>{params.data.full_name}</Text>
           </View>
           <View style={{...styles.wrapFollower, marginTop: 12}}>
             <View style={styles.wrapRow}>
-              <Text style={styles.textTotal}>{'>10'}</Text>
+              <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
               <Text style={styles.textFollow}>Followers</Text>
             </View>
             <View style={{marginLeft: 18}}>
-              <TouchableNativeFeedback onPress={goToFollowings}>
-                <View style={styles.wrapRow}>
-                  <Text style={styles.textTotal}>{'>50'}</Text>
-                  <Text style={styles.textFollow}>Following</Text>
-                </View>
-              </TouchableNativeFeedback>
+              <View style={styles.wrapRow}>
+                <Text style={styles.textTotal}>
+                  {dataMain.following_symbol}
+                </Text>
+                <Text style={styles.textFollow}>Following</Text>
+              </View>
             </View>
           </View>
           <View style={styles.containerBio}>
@@ -125,7 +190,7 @@ const OtherProfile = () => {
           </View>
         </View>
         <View style={styles.tabs}>
-          <Text style={styles.postText}>Post (12)</Text>
+          <Text style={styles.postText}>Post (0)</Text>
         </View>
       </SafeAreaView>
     </>
@@ -242,11 +307,26 @@ const styles = StyleSheet.create({
     borderColor: colors.bondi_blue,
     borderRadius: 8,
   },
+  buttonFollow: {
+    width: 88,
+    height: 36,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    backgroundColor: colors.bondi_blue
+  },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
     color: colors.bondi_blue,
+  },
+  textButtonFollow: {
+    fontFamily: fonts.inter[600],
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: colors.white,
   },
 });
 export default OtherProfile;
