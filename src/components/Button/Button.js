@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
+import {fonts} from '../../utils/fonts';
 
 const Btn = (props) => {
   let disable = props.disabled ? props.disabled : false;
@@ -26,10 +27,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 14,
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontSize: 18,
+    fontFamily: fonts.inter[600],
   },
 });
 
