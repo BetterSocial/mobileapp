@@ -60,7 +60,7 @@ const OtherProfile = () => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: 'https://www.google.com/',
+        message: `https://dev.bettersocial.org/${dataMain.username}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -104,94 +104,101 @@ const OtherProfile = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <View style={styles.wrapNameAndbackButton}>
-              <TouchableNativeFeedback onPress={() => navigation.goBack()}>
-                <ArrowLeftIcon width={20} height={12} fill="#000" />
+        {!isLoading ? (
+          <View style={styles.content}>
+            <View style={styles.header}>
+              <View style={styles.wrapNameAndbackButton}>
+                <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+                  <ArrowLeftIcon width={20} height={12} fill="#000" />
+                </TouchableNativeFeedback>
+                <Text style={styles.textUsername}>{username}</Text>
+              </View>
+              <TouchableNativeFeedback onPress={onShare}>
+                <ShareIcon width={20} height={20} fill="#000" />
               </TouchableNativeFeedback>
-              <Text style={styles.textUsername}>{username}</Text>
             </View>
-            <TouchableNativeFeedback onPress={onShare}>
-              <ShareIcon width={20} height={20} fill="#000" />
-            </TouchableNativeFeedback>
-          </View>
-          <View style={styles.wrapImageProfile}>
-            <View style={styles.wrapImageAndStatus}>
-              <View style={styles.wrapImageProfile}>
-                {dataMain.profile_pic_path ? (
-                  <Image
-                    style={styles.profileImage}
-                    source={{
-                      uri: dataMain.profile_pic_path,
-                    }}
-                  />
-                ) : (
-                  <MemoIc_btn_add width={100} height={100} />
-                )}
+            <View style={styles.wrapImageProfile}>
+              <View style={styles.wrapImageAndStatus}>
+                <View style={styles.wrapImageProfile}>
+                  {dataMain.profile_pic_path ? (
+                    <Image
+                      style={styles.profileImage}
+                      source={{
+                        uri: dataMain.profile_pic_path,
+                      }}
+                    />
+                  ) : (
+                    <MemoIc_btn_add width={100} height={100} style={styles.profileImage}/>
+                  )}
 
-                <Text style={styles.nameProfile}>
-                  {dataMain.real_name
-                    ? dataMain.real_name
-                    : 'no name specifics'}
-                </Text>
-              </View>
-              <View style={styles.wrapButton}>
-                <TouchableNativeFeedback>
-                  <BlockBlueIcon
-                    width={20}
-                    height={20}
-                    fill={colors.bondi_blue}
-                  />
-                </TouchableNativeFeedback>
-                <TouchableNativeFeedback>
-                  <EnveloveBlueIcon
-                    width={20}
-                    height={16}
-                    fill={colors.bondi_blue}
-                  />
-                </TouchableNativeFeedback>
-                {dataMain.is_following ? (
-                  <TouchableNativeFeedback onPress={() => handleSetUnFollow()}>
-                    <View style={styles.buttonFollowing}>
-                      <Text style={styles.textButtonFollowing}>Following</Text>
-                    </View>
+                  <Text style={styles.nameProfile}>
+                    {dataMain.real_name
+                      ? dataMain.real_name
+                      : 'no name specifics'}
+                  </Text>
+                </View>
+                <View style={styles.wrapButton}>
+                  <TouchableNativeFeedback>
+                    <BlockBlueIcon
+                      width={20}
+                      height={20}
+                      fill={colors.bondi_blue}
+                    />
                   </TouchableNativeFeedback>
-                ) : (
-                  <TouchableNativeFeedback
-                    onPress={() => handleSetFollow()}>
-                    <View style={styles.buttonFollow}>
-                      <Text style={styles.textButtonFollow}>Follow</Text>
-                    </View>
+                  <TouchableNativeFeedback>
+                    <EnveloveBlueIcon
+                      width={20}
+                      height={16}
+                      fill={colors.bondi_blue}
+                    />
                   </TouchableNativeFeedback>
-                )}
+                  {dataMain.is_following ? (
+                    <TouchableNativeFeedback
+                      onPress={() => handleSetUnFollow()}>
+                      <View style={styles.buttonFollowing}>
+                        <Text style={styles.textButtonFollowing}>
+                          Following
+                        </Text>
+                      </View>
+                    </TouchableNativeFeedback>
+                  ) : (
+                    <TouchableNativeFeedback onPress={() => handleSetFollow()}>
+                      <View style={styles.buttonFollow}>
+                        <Text style={styles.textButtonFollow}>Follow</Text>
+                      </View>
+                    </TouchableNativeFeedback>
+                  )}
+                </View>
               </View>
+              <Text style={styles.nameProfile}>{params.data.full_name}</Text>
             </View>
-            <Text style={styles.nameProfile}>{params.data.full_name}</Text>
-          </View>
-          <View style={{...styles.wrapFollower, marginTop: 12}}>
-            <View style={styles.wrapRow}>
-              <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
-              <Text style={styles.textFollow}>Followers</Text>
-            </View>
-            <View style={{marginLeft: 18}}>
+            <View style={{...styles.wrapFollower, marginTop: 12}}>
               <View style={styles.wrapRow}>
-                <Text style={styles.textTotal}>
-                  {dataMain.following_symbol}
-                </Text>
-                <Text style={styles.textFollow}>Following</Text>
+                <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
+                <Text style={styles.textFollow}>Followers</Text>
+              </View>
+              <View style={{marginLeft: 18}}>
+                <View style={styles.wrapRow}>
+                  <Text style={styles.textTotal}>
+                    {dataMain.following_symbol}
+                  </Text>
+                  <Text style={styles.textFollow}>Following</Text>
+                </View>
               </View>
             </View>
+            <View style={styles.containerBio}>
+              <SeeMore numberOfLines={3} linkStyle={styles.seeMore}>
+                {VERY_LARGE_TEXT}
+              </SeeMore>
+            </View>
           </View>
-          <View style={styles.containerBio}>
-            <SeeMore numberOfLines={3} linkStyle={styles.seeMore}>
-              {VERY_LARGE_TEXT}
-            </SeeMore>
+        ) : null}
+        {!isLoading ? (
+          <View style={styles.tabs}>
+            <Text style={styles.postText}>Post (0)</Text>
           </View>
-        </View>
-        <View style={styles.tabs}>
-          <Text style={styles.postText}>Post (0)</Text>
-        </View>
+        ) : null}
+        <Loading visible={isLoading} />
       </SafeAreaView>
     </>
   );
@@ -314,7 +321,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue
+    backgroundColor: colors.bondi_blue,
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],

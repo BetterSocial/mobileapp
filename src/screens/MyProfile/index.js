@@ -342,7 +342,7 @@ const MyProfile = () => {
                         }}
                       />
                     ) : (
-                      <MemoIc_btn_add width={100} height={100} />
+                      <MemoIc_btn_add width={100} height={100} style={styles.profileImage} />
                     )}
                   </TouchableNativeFeedback>
                   <TouchableNativeFeedback onPress={changeName}>

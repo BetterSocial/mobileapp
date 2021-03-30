@@ -4,7 +4,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   TouchableNativeFeedback,
   ActivityIndicator,
 } from 'react-native';
@@ -84,6 +83,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
+  },
+  textCard: {
+    fontFamily: fonts.inter[500],
+    fontSize: 14,
+    color: colors.black,
+    paddingLeft: 9,
   },
 });
 

@@ -14,7 +14,7 @@ import {BottomSheet} from '../../components/BottomSheet';
 import {TextArea} from '../../components/TextArea';
 
 const BottomSheetBio = forwardRef((props, ref) => (
-  <BottomSheet ref={ref} closeOnPressMask={true} height={465}>
+  <BottomSheet ref={ref} closeOnPressMask={true} height={470}>
     <View style={styles.containerBottomSheet}>
       <Text style={styles.title}>Update your bio</Text>
       <TextArea
