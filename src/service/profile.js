@@ -105,3 +105,16 @@ export const removeImageProfile = async (userID) => {
       });
   });
 };
+
+export const updateBioProfile = async (userID, data) => {
+  return new Promise((resolve, reject) => {
+    api
+      .post(`/profiles/update-bio/${userID}`, data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};

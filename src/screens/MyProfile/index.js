@@ -23,6 +23,7 @@ import {
   changeRealName,
   updateImageProfile,
   removeImageProfile,
+  updateBioProfile,
 } from '../../service/profile';
 import ShareIcon from '../../assets/icons/images/share.svg';
 import SettingIcon from '../../assets/icons/images/setting.svg';
@@ -33,6 +34,7 @@ import Loading from '../Loading';
 import RenderActivity from './RenderActivity';
 import BottomSheetImage from './BottomSheetImage';
 import BottomSheetRealname from './BottomSheetRealname';
+import BottomSheetBio from './BottomSheetBio';
 import {trimString} from '../../helpers/stringSplit';
 
 const width = Dimensions.get('screen').width;
@@ -40,17 +42,22 @@ const width = Dimensions.get('screen').width;
 const MyProfile = () => {
   const navigation = useNavigation();
   const bottomSheetNameRef = useRef();
+  const bottomSheetBioRef = useRef();
   const bottomSheetProfilePictureRef = useRef();
   const postRef = useRef(null);
   const scrollViewReff = useRef(null);
 
   const [dataMain, setDataMain] = useState({});
   const [tempFullName, setTempFullName] = useState('');
+  const [tempBio, setTempBio] = useState('');
   const [isOffsetScroll, setIsOffsetScroll] = useState(false);
   const [isShowButton, setIsShowButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [opacity, setOpacity] = useState(0);
   const [isChangeRealName, setIsChangeRealName] = useState(false);
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = useState(false);
+  const [isLoadingUpdateBio, setIsLoadingUpdateBio] = useState(false);
+  const [errorBio, setErrorBio] = useState('');
   const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = useState(
     false,
   );
@@ -95,7 +102,7 @@ const MyProfile = () => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: 'https://www.example.better-social.com/van_darmawan2204',
+        message: `https://dev.bettersocial.org/${dataMain.username}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -152,10 +159,15 @@ const MyProfile = () => {
     });
 
     const currentOffset = event.nativeEvent.contentOffset.y;
-    if (currentOffset > 170) {
-      setIsShowButton(true);
-    } else {
+    if(currentOffset<70) {
+      setOpacity(0);
       setIsShowButton(false);
+    }else if(currentOffset >= 70 && currentOffset <= 270){
+      setIsShowButton(true);
+      setOpacity((currentOffset-70) * (1/100));
+    }else if(currentOffset > 270) {
+      setOpacity(1);
+      setIsShowButton(true);
     }
   };
 
@@ -237,9 +249,47 @@ const MyProfile = () => {
       });
   };
 
+  const changeBio = () => {
+    if (dataMain.bio !== null || dataMain.bio !== undefined) {
+      setTempBio(dataMain.bio);
+    }
+    bottomSheetBioRef.current.open();
+  };
+
+  const handleSaveBio = () => {
+    setIsLoadingUpdateBio(true);
+    let data = {
+      bio: tempBio,
+    };
+    updateBioProfile(dataMain.user_id, data)
+      .then((res) => {
+        setIsLoadingUpdateBio(false);
+        if (res.code === 200) {
+          bottomSheetBioRef.current.close();
+          fetchMyProfile(false);
+        }
+      })
+      .catch(() => {
+        setIsLoadingUpdateBio(false);
+        showMessage({
+          message: 'Update bio profile error',
+          type: 'danger',
+        });
+      });
+  };
+
+  const onChangeTempBio = (text) => {
+    if (text.length < 350) {
+      setErrorBio('');
+    } else {
+      setErrorBio('Max length bio 350');
+    }
+    setTempBio(text);
+  };
+
   const renderBio = (string) => {
     return (
-      <TouchableNativeFeedback>
+      <TouchableNativeFeedback onPress={() => changeBio()}>
         <View style={styles.containerBio}>
           {string === null || string === undefined ? (
             <Text>Add Bio</Text>
@@ -340,9 +390,17 @@ const MyProfile = () => {
               </View>
             ) : null}
 
+            <BottomSheetBio
+              ref={bottomSheetBioRef}
+              value={tempBio}
+              onChangeText={(text) => onChangeTempBio(text)}
+              handleSave={() => handleSaveBio()}
+              isLoadingUpdateBio={isLoadingUpdateBio}
+              error={errorBio}
+            />
             <BottomSheetRealname
               ref={bottomSheetNameRef}
-              setTempFullName={() => setTempFullName()}
+              setTempFullName={(text) => setTempFullName(text)}
               tempFullName={tempFullName}
               errorChangeRealName={errorChangeRealName}
               isChangeRealName={isChangeRealName}
@@ -361,7 +419,7 @@ const MyProfile = () => {
         </ScrollView>
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
-            <View style={styles.btnBottom}>
+            <View style={{...styles.btnBottom, opacity}}>
               <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
             </View>
           </TouchableNativeFeedback>
