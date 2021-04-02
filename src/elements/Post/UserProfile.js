@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import ProfileDefault from '../../assets/images/ProfileDefault.png';
-import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
+import ToggleSwitch from 'toggle-switch-react-native';
+import IconAnonymous from '../../assets/icon-svg/ic_profile_anonymous.svg';
+import IconProfile from '../../assets/icon-svg/ic_profile_default.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import ToggleSwitch from 'toggle-switch-react-native';
+import ProfileDefault from '../../assets/images/ProfileDefault.png';
+import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 
-const UserProfile = () => {
-  const [typeUser, setTypeUser] = useState(false);
+const UserProfile = ({typeUser, setTypeUser}) => {
   const userProfile = () => {
     if (typeUser) {
       return (
@@ -18,7 +19,8 @@ const UserProfile = () => {
             height={32}
             style={styles.image}
           />
-          <View>
+          {/* <IconAnonymous width={32} height={32} /> */}
+          <View style={styles.containerName}>
             <Text style={styles.username}>Anonymous</Text>
             <Text style={styles.desc}>Username not visible</Text>
           </View>
@@ -33,7 +35,8 @@ const UserProfile = () => {
             height={32}
             style={styles.image}
           />
-          <View>
+          {/* <IconProfile width={32} height={32} /> */}
+          <View style={styles.containerName}>
             <Text style={styles.username}>ali_irawan</Text>
             <Text style={styles.desc}>Your username is visible</Text>
           </View>
@@ -86,5 +89,8 @@ const styles = StyleSheet.create({
   },
   image: {
     marginRight: 8,
+    width: 32,
+    height: 32,
   },
+  containerName: {marginLeft: 8},
 });
