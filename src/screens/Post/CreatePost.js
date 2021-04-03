@@ -31,8 +31,9 @@ import MemoIc_world from '../../assets/icons/Ic_world';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import SheetCloseBtn from '../../elements/Post/SheetCloseBtn';
 import {useNavigation} from '@react-navigation/core';
-import {measure} from 'react-native-reanimated';
 import {createPost} from '../../service/post';
+import Loading from '../Loading';
+import {showMessage} from 'react-native-flash-message';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -50,10 +51,22 @@ const CreatePost = () => {
   const [listTopic, setListTopic] = useState([]);
   const [typeUser, setTypeUser] = useState(false);
   const [postExpired, setPostExpired] = useState([
-    '24 hours',
-    '7 days',
-    '30 days',
-    'Never',
+    {
+      label: '24 hours',
+      value: 24,
+    },
+    {
+      label: '7 days',
+      value: 7,
+    },
+    {
+      label: '30 days',
+      value: 30,
+    },
+    {
+      label: 'Never',
+      value: 'never',
+    },
   ]);
   const [expiredSelect, setExpiredSelect] = useState(1);
   const [geoList, setGeoList] = useState([
@@ -77,6 +90,7 @@ const CreatePost = () => {
   const [privacySelect, setPrivacySelect] = useState(0);
   const [message, setMessage] = useState('');
   const [dataImage, setDataImage] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', onBack);
     return () => {
@@ -156,6 +170,21 @@ const CreatePost = () => {
     sheetTopicRef.current.close();
   };
   const postTopic = async () => {
+    if (message === '') {
+      showMessage({
+        message: 'Post messages cannot be empty',
+        type: 'danger',
+      });
+      return true;
+    }
+    if (listTopic.length === 0) {
+      showMessage({
+        message: 'topic cannot be empty',
+        type: 'danger',
+      });
+      return true;
+    }
+    setLoading(true);
     let data = {
       topics: listTopic,
       message: message,
@@ -164,10 +193,26 @@ const CreatePost = () => {
       privacy: listPrivacy[privacySelect].label,
       anonimity: typeUser,
       location: geoList[geoSelect],
-      duration_feed: postExpired[expiredSelect],
+      duration_feed: postExpired[expiredSelect].value,
       images_url: dataImage,
     };
     let res = await createPost(data);
+    if (res.code === 200) {
+      showMessage({
+        message: 'success create a new post',
+        type: 'success',
+      });
+      setLoading(false);
+      setTimeout(() => {
+        navigation.goBack();
+      }, 2000);
+    } else {
+      setLoading(false);
+      showMessage({
+        message: 'failed to create new posts',
+        type: 'danger',
+      });
+    }
     console.log(res);
   };
   const randerComponentMedia = () => {
@@ -239,7 +284,7 @@ const CreatePost = () => {
         <Gap style={{height: 16}} />
         <ListItem
           icon={<Timer width={16.67} height={16.67} />}
-          label={postExpired[expiredSelect]}
+          label={postExpired[expiredSelect].label}
           labelStyle={styles.listText}
           onPress={() => sheetExpiredRef.current.open()}
         />
@@ -300,6 +345,7 @@ const CreatePost = () => {
           continueToEdit={() => sheetBackRef.current.close()}
         />
       </ScrollView>
+      <Loading visible={loading} />
     </SafeAreaView>
   );
 };
