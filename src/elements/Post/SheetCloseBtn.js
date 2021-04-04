@@ -1,55 +1,58 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import FlatListItem from '../../components/FlatListItem';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-const SheetExpiredPost = ({refExpired, data, select, onSelect}) => {
+import {Button} from '../../components/Button';
+import Gap from '../../components/Gap';
+
+const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
   return (
     <RBSheet
-      ref={refExpired}
+      ref={backRef}
       closeOnDragDown={true}
       closeOnPressMask={false}
       customStyles={{
         container: {
           borderTopRightRadius: 20,
           borderTopLeftRadius: 20,
-          height: 'auto',
+          height: 240,
         },
         draggableIcon: {
           backgroundColor: colors.alto,
         },
       }}>
       <View style={styles.container}>
-        <Text style={styles.header}>Post expiration after</Text>
-        {data.map((value, index) => (
-          <FlatListItem
-            key={index}
-            value={value.label}
-            index={index}
-            select={select}
-            onSelect={onSelect}
-          />
-        ))}
+        <Text style={styles.header}>Are you sure?</Text>
+        <Gap style={{height: 30}} />
+        <Button onPress={continueToEdit}>
+          <Text>Continue editing</Text>
+        </Button>
+        <Gap style={{height: 10}} />
+        <Button
+          onPress={goBack}
+          style={{backgroundColor: colors.porcelain}}
+          textStyling={{color: colors.black}}>
+          <Text>Discard post</Text>
+        </Button>
       </View>
     </RBSheet>
   );
 };
 
-{
-}
-export default SheetExpiredPost;
+export default SheetCloseBtn;
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
     paddingBottom: 38,
+    paddingHorizontal: 20,
   },
   header: {
     color: colors.black,
     fontFamily: fonts.inter[600],
     fontSize: 18,
     fontWeight: 'bold',
-    paddingHorizontal: 20,
   },
+  containerBtn: {flexDirection: 'row'},
 });
