@@ -10,17 +10,17 @@ import {
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-const Header = ({title, onPress}) => {
+const Header = ({title}) => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableNativeFeedback onPress={onPress}>
+        <TouchableNativeFeedback>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
       );
     } else {
       return (
-        <TouchableHighlight onPress={onPress}>
+        <TouchableHighlight>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableHighlight>
       );

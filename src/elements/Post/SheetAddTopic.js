@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {Button} from '../../components/Button';
@@ -10,27 +10,16 @@ import {TextInput} from 'react-native-gesture-handler';
 import Gap from '../../components/Gap';
 import TopicItem from '../../components/TopicItem';
 
-const SheetAddTopic = ({refTopic, onAdd, topics}) => {
-  // listTopic,
-  const [dataTopic, setTopic] = useState('');
-  const [listTopics, setlistTopics] = useState([]);
-  const add = () => {
-    if (dataTopic) {
-      setlistTopics((val) => [...val, dataTopic]);
-      setTopic('');
-    }
-  };
-  const removeTopic = (v) => {
-    let newArr = listTopics.filter((e) => e !== v);
-    setlistTopics(newArr);
-  };
-  const merge = () => {
-    console.log('merge');
-    setlistTopics(topics);
-  };
+const SheetAddTopic = ({
+  refTopic,
+  onAdd,
+  topic,
+  onChangeTextTopic,
+  listTopic,
+  removeTopic,
+}) => {
   return (
     <RBSheet
-      onOpen={() => merge()}
       ref={refTopic}
       closeOnDragDown={true}
       closeOnPressMask={false}
@@ -48,7 +37,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics}) => {
         <Text style={styles.title}>Add topics</Text>
         <View style={styles.content}>
           <View style={styles.listItem}>
-            {listTopics.map((value, index) => {
+            {listTopic.map((value, index) => {
               return (
                 <TopicItem
                   key={index}
@@ -59,25 +48,21 @@ const SheetAddTopic = ({refTopic, onAdd, topics}) => {
               );
             })}
           </View>
-          {listTopics.length < 5 && (
+          {listTopic.length < 5 && (
             <View style={styles.containerInput}>
               <Text style={styles.hashtag}>#</Text>
               <TextInput
-                style={{width: '100%', paddingStart: 0}}
-                onSubmitEditing={() => add()}
-                value={dataTopic}
-                onChangeText={(v) => setTopic(v)}
-                // returnKeyType="done"
-                autoFocus={true}
+                style={{width: '100%'}}
+                onSubmitEditing={onAdd}
+                value={topic}
+                onChangeText={onChangeTextTopic}
+                returnKeyType="done"
               />
             </View>
           )}
+          <Gap style={{height: 30}} />
         </View>
-        {/* <Gap style={{height: 30}} /> */}
-        <Text style={styles.textDesc}>
-          Hit space to start a new topic. Add up to 5 topics.
-        </Text>
-        <Button onPress={() => onAdd(listTopics)}>Save</Button>
+        <Button>Save</Button>
       </View>
     </RBSheet>
   );
@@ -98,7 +83,7 @@ const styles = StyleSheet.create({
     minHeight: 150,
     // height: 150,
     marginTop: 12,
-    // marginBottom: 44,
+    marginBottom: 44,
     borderRadius: 8,
   },
   title: {
@@ -135,12 +120,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '400',
     fontFamily: fonts.inter[400],
-  },
-  textDesc: {
-    fontSize: 10,
-    fontFamily: fonts.inter[400],
-    color: colors.gray,
-    marginTop: 5,
-    marginBottom: 21,
   },
 });
