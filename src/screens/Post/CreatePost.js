@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   BackHandler,
   SafeAreaView,
@@ -157,12 +157,15 @@ const CreatePost = () => {
     sheetPrivacyRef.current.close();
   };
   const onBack = () => {
-    if (message) {
-      sheetBackRef.current.open();
-      return true;
-    }
-    console.log('back = ', message);
-    navigation.goBack();
+    // console.log(onInput);
+    // if (message || onInput) {
+    //   sheetBackRef.current.open();
+    //   return true;
+    // }
+    // console.log('back = ', message);
+    // navigation.goBack();
+    // return true;
+    sheetBackRef.current.open();
     return true;
   };
   const onSaveTopic = (v) => {

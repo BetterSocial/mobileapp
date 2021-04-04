@@ -33,19 +33,20 @@ const SignIn = () => {
   const [, dispatch] = useContext(Context).users;
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
-      await setToken(exchangeToken);
+      // await setToken(exchangeToken);
       checkToken(exchangeToken).then((res) => {
         if (res.data) {
           let {appUserId, countryCode} = res.data;
           setDataHumenId(res.data, dispatch);
           verifyUser(appUserId).then((response) => {
             if (response.data) {
+              setToken(response.token);
               navigation.dispatch(StackActions.replace('HomeTabs'));
             } else {
               removeLocalStorege('userId');
               navigation.dispatch(StackActions.replace('ChooseUsername'));
             }
-            setUserId(appUserId);
+            // setUserId(appUserId);
           });
         }
       });
