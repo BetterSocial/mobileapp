@@ -96,7 +96,7 @@ const CreatePost = () => {
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', onBack);
     };
-  }, []);
+  }, [message]);
   const uploadMediaFromLibrary = () => {
     launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
       console.log(res);
@@ -157,15 +157,13 @@ const CreatePost = () => {
     sheetPrivacyRef.current.close();
   };
   const onBack = () => {
-    // console.log(onInput);
-    // if (message || onInput) {
-    //   sheetBackRef.current.open();
-    //   return true;
-    // }
-    // console.log('back = ', message);
-    // navigation.goBack();
-    // return true;
-    sheetBackRef.current.open();
+    console.log(message);
+    if (message) {
+      sheetBackRef.current.open();
+      return true;
+    }
+    console.log('back = ', message);
+    navigation.goBack();
     return true;
   };
   const onSaveTopic = (v) => {
