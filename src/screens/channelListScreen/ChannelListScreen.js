@@ -3,6 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {ChannelList, Chat} from 'stream-chat-react-native';
 import {API_URL, API_TOKEN, STREAM_API_KEY} from '@env';
 import JWTDecode from 'jwt-decode';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {StreamChat} from 'stream-chat';
 
