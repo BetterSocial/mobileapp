@@ -1,11 +1,12 @@
 import React, {useContext, useMemo, useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ChannelList, Chat} from 'stream-chat-react-native';
-import {API_URL, API_TOKEN} from '@env';
+import {API_URL, API_TOKEN, STREAM_API_KEY} from '@env';
+import JWTDecode from 'jwt-decode';
 
 import {StreamChat} from 'stream-chat';
 
-const chatClient = StreamChat.getInstance('q95x9hkbyd6p');
+const chatClient = new StreamChat(STREAM_API_KEY);
 
 const filters = {
   example: 'example-apps',
@@ -23,17 +24,28 @@ const ChannelListScreen = ({navigation}) => {
   const memoizedFilters = useMemo(() => filters, []);
 
   useEffect(() => {
-    const testEnv = () => {
-      console.log(API_TOKEN);
+    const setupClient = async () => {
+      try {
+        const value = await AsyncStorage.getItem('tkn-getstream');
+        const decoded = await JWTDecode(value);
+        let userId = decoded.user_id;
+        let user = {
+          id: userId,
+        };
+
+        await chatClient.connectUser(user, value);
+      } catch (err) {
+        console.log(err);
+      }
     };
-    testEnv();
+
+    setupClient();
   }, []);
 
   return (
     <Chat client={chatClient}>
       <View style={StyleSheet.absoluteFill}>
         <ChannelList
-          filters={memoizedFilters}
           onSelect={(channel) => {
             navigation.navigate('Channel', {channel: channel});
           }}
