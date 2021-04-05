@@ -7,9 +7,11 @@ import {HumanIDProvider} from '@human-id/react-native-humanid';
 import Store from './src/context/Store';
 import FlashMessage from 'react-native-flash-message';
 import fetchRemoteConfig from './src/utils/FirebaseUtil';
+import JWTDecode from 'jwt-decode';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {StreamChat} from 'stream-chat';
-import {GETSTREAM_CLIENT, DUMY_TOKEN_GETSTREAM} from '@env';
+import {STREAM_API_KEY, DUMY_TOKEN_GETSTREAM} from '@env';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
@@ -19,11 +21,7 @@ import {OverlayProvider} from 'stream-chat-react-native';
 const AppContext = React.createContext();
 
 // const chatClient = StreamChat.getInstance(GETSTREAM_CLIENT);
-const chatClient = new StreamChat(GETSTREAM_CLIENT);
-const userToken = DUMY_TOKEN_GETSTREAM;
-const user = {
-  id: 'usup',
-};
+const chatClient = new StreamChat(STREAM_API_KEY);
 
 const App = () => {
   const {bottom} = useSafeAreaInsets();
@@ -42,7 +40,15 @@ const App = () => {
   useEffect(() => {
     const setupClient = async () => {
       try {
-        let chat = await chatClient.connectUser(user, userToken);
+        const value = await AsyncStorage.getItem('tkn-getstream');
+        const decoded = await JWTDecode(value);
+        let userId = decoded.user_id;
+        console.log(userId);
+        let user = {
+          id: userId,
+        };
+
+        await chatClient.connectUser(user, value);
       } catch (err) {
         console.log(err);
       }
@@ -54,8 +60,8 @@ const App = () => {
   useEffect(() => {
     dynamicLinks()
       .getInitialLink()
-      .then(link => {
-       console.log('link ', link)
+      .then((link) => {
+        console.log('link ', link);
       });
   }, []);
 
@@ -83,4 +89,3 @@ export default () => {
     </SafeAreaProvider>
   );
 };
-

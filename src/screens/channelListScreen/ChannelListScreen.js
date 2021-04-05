@@ -9,12 +9,6 @@ import {StreamChat} from 'stream-chat';
 
 const chatClient = new StreamChat(STREAM_API_KEY);
 
-const filters = {
-  example: 'example-apps',
-  members: {$in: ['ron']},
-  type: 'messaging',
-};
-
 const sort = {last_message_at: -1};
 
 const AppContext = React.createContext();
@@ -22,6 +16,12 @@ const AppContext = React.createContext();
 const ChannelListScreen = ({navigation}) => {
   // const {setChannel} = useContext(AppContext);
 
+  const [userId, setUserId] = useState('');
+  const filters = {
+    example: 'example-apps',
+    members: {$in: [userId]},
+    type: 'messaging',
+  };
   const memoizedFilters = useMemo(() => filters, []);
 
   useEffect(() => {
@@ -30,10 +30,11 @@ const ChannelListScreen = ({navigation}) => {
         const value = await AsyncStorage.getItem('tkn-getstream');
         const decoded = await JWTDecode(value);
         let userId = decoded.user_id;
+        console.log(userId);
         let user = {
           id: userId,
         };
-
+        setUserId(userId);
         await chatClient.connectUser(user, value);
       } catch (err) {
         console.log(err);
@@ -47,6 +48,7 @@ const ChannelListScreen = ({navigation}) => {
     <Chat client={chatClient}>
       <View style={StyleSheet.absoluteFill}>
         <ChannelList
+          filters={memoizedFilters}
           onSelect={(channel) => {
             navigation.navigate('Channel', {channel: channel});
           }}
