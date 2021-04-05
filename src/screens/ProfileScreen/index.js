@@ -44,18 +44,6 @@ import {getToken} from '../../helpers/getToken';
 
 const width = Dimensions.get('screen').width;
 
-// const token_JWT =
-//   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjg4ZDU2NzktNmM2OC00MWVjLWJlODMtN2YxNWE0ZTgyZDNkIn0.0YNINzuHdf2afDN0ew3x0DRT0uJFzvBD0CbYL_Exm9c';
-
-// const getToken = async () => {
-//   let result = await AsyncStorage.getItem('userToken', token_JWT);
-//   if (result) {
-//     return result;
-//   } else {
-//     return '';
-//   }
-// };
-
 let token_JWT = '';
 
 const MyProfile = () => {
@@ -94,6 +82,14 @@ const MyProfile = () => {
     fetchMyProfile(true);
     // setToken()
   }, []);
+
+  // const setToken = async () => {
+  //   try {
+  //     await AsyncStorage.setItem('tkn-getstream', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjg4ZDU2NzktNmM2OC00MWVjLWJlODMtN2YxNWE0ZTgyZDNkIn0.0YNINzuHdf2afDN0ew3x0DRT0uJFzvBD0CbYL_Exm9c")
+  //   } catch (e) {
+  //     // saving error
+  //   } 
+  // };
 
   const fetchMyProfile = async (withLoading) => {
     const value = await AsyncStorage.getItem('tkn-getstream');
@@ -346,6 +342,8 @@ const MyProfile = () => {
   getToken().then((val) => {
     token_JWT = val;
   });
+
+  console.log('token jwt ', token_JWT)
 
   return (
     <>

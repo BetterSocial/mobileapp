@@ -8,7 +8,6 @@ import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';
 import {StatusBar} from 'react-native';
 import CreatePost from '../screens/Post/CreatePost';
-import MyProfile from '../screens/MyProfile';
 import Followings from '../screens/Followings';
 import OtherProfile from '../screens/OtherProfile';
 import Settings from '../screens/Settings';
@@ -22,7 +21,7 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="MyProfile">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="HomeTabs"
         component={HomeBottomTabs}
@@ -67,11 +66,6 @@ const RootStact = () => {
       <Stack.Screen
         name="CreatePost"
         component={CreatePost}
-        options={{headerShown: false}}
-      />
-       <Stack.Screen
-        name="MyProfile"
-        component={MyProfile}
         options={{headerShown: false}}
       />
       <Stack.Screen
