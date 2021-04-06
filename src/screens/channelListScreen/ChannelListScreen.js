@@ -1,7 +1,7 @@
 import React, {useContext, useMemo, useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ChannelList, Chat} from 'stream-chat-react-native';
-import {API_URL, API_TOKEN, STREAM_API_KEY} from '@env';
+import {STREAM_API_KEY} from '@env';
 import JWTDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -14,8 +14,6 @@ const sort = {last_message_at: -1};
 const AppContext = React.createContext();
 
 const ChannelListScreen = ({navigation}) => {
-  // const {setChannel} = useContext(AppContext);
-
   const [userId, setUserId] = useState('');
   const filters = {
     example: 'example-apps',
