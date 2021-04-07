@@ -1,27 +1,35 @@
 import React from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableNativeFeedback,
-  Dimensions,
+  Text,
   Platform,
+  Dimensions,
 } from 'react-native';
-import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
-import SeeMore from 'react-native-see-more-inline';
-import {Activity, Avatar} from 'react-native-activity-feed';
+import {
+  Activity,
+  Avatar,
+  LikeButton,
+  ReactionIcon,
+  FollowButton,
+  CommentItem,
+} from 'react-native-activity-feed';
 import moment from 'moment';
-import ShareIcon from '../../assets/icons/images/share.svg';
 import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
-import ArrowUpIcon from '../../assets/icons/images/arrow-up.svg';
-import ArrowDownRedIcon from '../../assets/icons/images/arrow-down-red.svg';
-import CommentIcon from '../../assets/icons/images/comment.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import SeeMore from 'react-native-see-more-inline';
+import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
+
+import ReplyIcon from '../../../assets/icons/reply/reply.png';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-const renderActivity = (props, data) => {
+const RenderActivity = (props) => {
+  const activity = props.activity;
+  console.log(activity);
+  let {profile_pic_path, real_name} = JSON.parse(activity.object);
   const _renderItem = ({item, index}, parallaxProps) => {
     return (
       <View key={index} style={styles.item}>
@@ -35,7 +43,6 @@ const renderActivity = (props, data) => {
       </View>
     );
   };
-
   return (
     <Activity
       {...props}
@@ -44,8 +51,8 @@ const renderActivity = (props, data) => {
           <View style={styles.rowCenter}>
             <Avatar
               source={
-                data.profile_pic_path
-                  ? data.profile_pic_path
+                profile_pic_path
+                  ? profile_pic_path
                   : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
               }
               size={48}
@@ -53,7 +60,7 @@ const renderActivity = (props, data) => {
             />
             <View style={styles.containerFeedProfile}>
               <Text style={styles.feedUsername}>
-                {data.real_name ? data.real_name : 'no name specifics'}
+                {real_name ? real_name : 'no name specifics'}
               </Text>
               <View style={styles.containerFeedText}>
                 <Text style={styles.feedDate}>20 Feb 2021</Text>
@@ -84,36 +91,25 @@ const renderActivity = (props, data) => {
               hasParallaxImages={true}
             />
           ) : null}
-          <View style={{...styles.rowSpaceBeetwen, marginTop: 23}}>
-            <View style={{...styles.rowSpaceBeetwen, width: 70}}>
-              <ArrowUpIcon width={20} height={16} fill={colors.black} />
-              <ArrowDownRedIcon width={20} height={16} fill="#FF2E63" />
-            </View>
-            <View style={{...styles.rowSpaceBeetwen, width: 70}}>
-              <CommentIcon width={20} height={18} fill={colors.black} />
-              <ShareIcon width={20} height={20} fill={colors.black} />
-            </View>
-          </View>
         </View>
       }
-      // Footer={
-      //   <View style={{flexDirection: 'column'}}>
-      //     <View style={{marginTop: 10}}>
-      //       <Text style={styles.textComment}>View all 3 comment</Text>
-      //     </View>
-      //     <View>
-      //       <Text style={styles.usernameComment}>
-      //         @geoffsmith{' '}
-      //         <Text style={styles.usernameTextComment}>
-      //           i don’t know about that
-      //         </Text>
-      //       </Text>
-      //     </View>
-      //   </View>
-      // }
+      Footer={
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <LikeButton {...props} />
+          <ReactionIcon
+            icon={ReplyIcon}
+            labelSingle="comment"
+            labelPlural="comments"
+            counts={activity.reaction_counts}
+            kind="comment"
+          />
+        </View>
+      }
     />
   );
 };
+
+export default RenderActivity;
 
 const styles = StyleSheet.create({
   rowSpaceBeetwen: {
@@ -204,4 +200,3 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 });
-export default renderActivity;
