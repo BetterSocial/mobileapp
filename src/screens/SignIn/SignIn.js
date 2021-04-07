@@ -27,7 +27,8 @@ import {StackActions} from '@react-navigation/native';
 import {setDataHumenId} from '../../context/actions/users';
 import {Context} from '../../context';
 import BtnHumanID from '../../assets/images/humanid.png';
-import {colors} from 'react-native-swiper-flatlist/src/themes';
+import {colors} from '../../utils/colors';
+import crashlytics from '@react-native-firebase/crashlytics';
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
@@ -47,11 +48,16 @@ const SignIn = () => {
               navigation.dispatch(StackActions.replace('ChooseUsername'));
             }
             // setUserId(appUserId);
+            crashlytics().setAttributes({
+              appUserId,
+              countryCode,
+            });
           });
         }
       });
     });
     onError((message) => {
+      crashlytics().recordError(message);
       console.log('error message', message);
     });
     onCancel(() => {

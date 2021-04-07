@@ -27,6 +27,7 @@ import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import Loading from '../Loading';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const width = Dimensions.get('screen').width;
 
@@ -129,6 +130,7 @@ const WhotoFollow = () => {
             navigation.dispatch(StackActions.replace('HomeTabs'));
           }, 2000);
         } else {
+          crashlytics().recordError(res);
           console.log(res);
           showMessage({
             message: 'register error',
@@ -136,7 +138,8 @@ const WhotoFollow = () => {
           });
         }
       })
-      .catch((res) => {
+      .catch((error) => {
+        crashlytics().recordError(error);
         setFetchRegister(false);
         showMessage({
           message: 'register error',
