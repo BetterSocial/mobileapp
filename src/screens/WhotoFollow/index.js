@@ -53,6 +53,7 @@ const WhotoFollow = () => {
         }
       })
       .catch((err) => {
+        crashlytics().recordError(err);
         setIsLoading(false);
       });
   }, []);
@@ -98,6 +99,7 @@ const WhotoFollow = () => {
         }
       })
       .catch((err) => {
+        crashlytics().recordError(err);
         setRefreshing(false);
       });
   }, []);
