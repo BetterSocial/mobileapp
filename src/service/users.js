@@ -7,7 +7,7 @@ export const verifyUser = async (userId) => {
     });
     return resApi.data;
   } catch (error) {
-    crashlytics().recordError(error);
+    crashlytics().recordError(new Error(error));
     console.log(error);
   }
 };
@@ -19,7 +19,7 @@ export const verifyToken = async (token) => {
     console.log(resApi.data);
     return resApi.data;
   } catch (error) {
-    crashlytics().recordError(error);
+    crashlytics().recordError(new Error(error));
     console.log(error);
   }
 };
@@ -30,7 +30,7 @@ export const verifyUsername = async (username) => {
     });
     return resApi.data;
   } catch (error) {
-    crashlytics().recordError(error);
+    crashlytics().recordError(new Error(error));
     console.log(error);
   }
 };
@@ -51,7 +51,7 @@ export const verifyTokenGetstream = async (token) => {
     console.log(resApi.data);
     return resApi.data;
   } catch (error) {
-    crashlytics().recordError(error);
+    crashlytics().recordError(new Error(error));
     console.log(error);
   }
 };

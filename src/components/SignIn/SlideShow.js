@@ -11,7 +11,8 @@ const SlideShow = () => {
   return (
     <SwiperFlatList
       autoplay
-      autoplayDelay={3}
+      autoplayDelay={4}
+      autoplayLoopKeepAnimation={true}
       autoplayLoop
       index={2}
       showPagination

@@ -4,6 +4,7 @@ import {ChannelList, Chat} from 'stream-chat-react-native';
 import {API_URL, API_TOKEN} from '@env';
 
 import {StreamChat} from 'stream-chat';
+import analytics from '@react-native-firebase/analytics';
 
 const chatClient = StreamChat.getInstance('q95x9hkbyd6p');
 
@@ -23,6 +24,10 @@ const ChannelListScreen = ({navigation}) => {
   const memoizedFilters = useMemo(() => filters, []);
 
   useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'ChannelListScreen',
+      screen_name: 'Channel List',
+    });
     const testEnv = () => {
       console.log(API_TOKEN);
     };

@@ -3,13 +3,14 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import {fonts} from '../../utils/fonts';
-
 const ButtonAddPost = () => {
   const navigator = useNavigation();
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigator.navigate('CreatePost')}>
+      onPress={() => {
+        navigator.navigate('CreatePost');
+      }}>
       <MemoIc_pencil width={16.67} height={16.67} />
       <Text style={styles.text}>New post</Text>
     </TouchableOpacity>

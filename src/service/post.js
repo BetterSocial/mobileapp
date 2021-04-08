@@ -5,7 +5,7 @@ export const createPost = async (data) => {
     let resApi = await api.post('/activity/post', data);
     return resApi.data;
   } catch (error) {
-    crashlytics().recordError(error);
+    crashlytics().recordError(new Error(error));
     console.log(error);
   }
 };

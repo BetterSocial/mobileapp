@@ -15,7 +15,7 @@ export const checkToken = (token) => {
       return data;
     })
     .catch((error) => {
-      crashlytics().recordError(error);
+      crashlytics().recordError(new Error(error));
       console.error('Error:', error);
     });
 };

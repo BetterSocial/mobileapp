@@ -34,6 +34,7 @@ import {useNavigation} from '@react-navigation/core';
 import {createPost} from '../../service/post';
 import Loading from '../Loading';
 import {showMessage} from 'react-native-flash-message';
+import analytics from '@react-native-firebase/analytics';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -91,6 +92,12 @@ const CreatePost = () => {
   const [message, setMessage] = useState('');
   const [dataImage, setDataImage] = useState([]);
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'ChooseUsername',
+      screen_name: 'ChooseUsername',
+    });
+  }, []);
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', onBack);
     return () => {
