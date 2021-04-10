@@ -115,7 +115,7 @@ const WhotoFollow = () => {
       follows: followed,
       follow_source: 'onboarding',
     };
-    console.log('isi daya ', data);
+
     registerUser(data)
       .then((res) => {
         setFetchRegister(false);
@@ -144,6 +144,7 @@ const WhotoFollow = () => {
         });
       });
   };
+
   const renderItem = ({item}) => (
     <View style={styles.containerCard}>
       <View style={styles.cardLeft}>
@@ -191,23 +192,76 @@ const WhotoFollow = () => {
           refreshing={refreshing}>
           {users !== undefined && users.length > 0
             ? users.map((value, index) => {
-                return (
-                  <View key={index}>
-                    <View style={styles.headerList}>
-                      <Text style={styles.titleHeader}>
-                        People in{' '}
-                        <Text style={styles.textBold}>{value.group_name}</Text>{' '}
-                        follow...
-                      </Text>
+                if (value.name === 'topic') {
+                  return (
+                    <View key={index}>
+                      {value.data.map((val, idx) => {
+                        return (
+                          <View key={idx}>
+                            <View style={styles.headerList}>
+                              <Text style={styles.titleHeader}>
+                                People in{' '}
+                                <Text style={styles.textBold}>{val.name}</Text>{' '}
+                                follow...
+                              </Text>
+                            </View>
+                            <FlatList
+                              style={styles.flatList}
+                              data={val.users}
+                              renderItem={renderItem}
+                              keyExtractor={(item) => item.user_id + "topic"}
+                            />
+                          </View>
+                        );
+                      })}
                     </View>
-                    <FlatList
-                      style={styles.flatList}
-                      data={value.data}
-                      renderItem={renderItem}
-                      keyExtractor={(item) => item.user_id}
-                    />
-                  </View>
-                );
+                  );
+                } else if (value.name === 'location') {
+                  return (
+                    <View key={index}>
+                      {value.data.map((val, idx) => {
+                        return (
+                          <View key={idx}>
+                            <View style={styles.headerList}>
+                              <Text style={styles.titleHeader}>
+                                People in{' '}
+                                <Text style={styles.textBold}>
+                                  {val.neighborhood}
+                                </Text>{' '}
+                                follow...
+                              </Text>
+                            </View>
+                            <FlatList
+                              style={styles.flatList}
+                              data={val.users}
+                              renderItem={renderItem}
+                              keyExtractor={(item) => item.user_id  + "location"}
+                            />
+                          </View>
+                        );
+                      })}
+                    </View>
+                  );
+                } else {
+                  return null;
+                }
+                // return (
+                //   <View key={index}>
+                //     <View style={styles.headerList}>
+                //       <Text style={styles.titleHeader}>
+                //         People in{' '}
+                //         <Text style={styles.textBold}>{value.group_name}</Text>{' '}
+                //         follow...
+                //       </Text>
+                //     </View>
+                //     <FlatList
+                //       style={styles.flatList}
+                //       data={value.data}
+                //       renderItem={renderItem}
+                //       keyExtractor={(item) => item.user_id}
+                //     />
+                //   </View>
+                // );
               })
             : null}
         </VirtualizedView>

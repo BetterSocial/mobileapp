@@ -1,4 +1,5 @@
 import {NavigationContainer} from '@react-navigation/native';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 import React, {useEffect, useState} from 'react';
 import 'react-native-gesture-handler';
 import RootStack from './src/navigations/root-stack';
@@ -50,6 +51,14 @@ const App = () => {
     setupClient();
   }, []);
 
+  useEffect(() => {
+    dynamicLinks()
+      .getInitialLink()
+      .then(link => {
+       console.log('link ', link)
+      });
+  }, []);
+
   return (
     <>
       <HumanIDProvider />
@@ -74,3 +83,4 @@ export default () => {
     </SafeAreaProvider>
   );
 };
+
