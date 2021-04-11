@@ -41,13 +41,3 @@ export const registerUser = async (data) => {
     console.log(error);
   }
 };
-
-export const verifyTokenGetstream = async (token) => {
-  try {
-    let resApi = await api.get('/users/veryfy-token-getstream');
-    console.log(resApi.data);
-    return resApi.data;
-  } catch (error) {
-    console.log(error);
-  }
-};

@@ -126,7 +126,7 @@ const WhotoFollow = () => {
             type: 'success',
           });
           setTimeout(() => {
-            navigation.dispatch(StackActions.replace('HomeTabs'));
+            navigation.dispatch(StackActions.replace('Home'));
           }, 2000);
         } else {
           console.log(res);

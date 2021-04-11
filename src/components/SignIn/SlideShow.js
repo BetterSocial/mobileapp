@@ -15,7 +15,6 @@ const SlideShow = () => {
       autoplayLoop
       index={2}
       showPagination
-      paginationStyleItem={styles.dot}
       data={data}
       renderItem={({item}) => <Card image={item} />}
     />
@@ -41,9 +40,4 @@ const styles = StyleSheet.create({
     width: screenWidth,
   },
   image: {flex: 1},
-  dot: {
-    width: 8,
-    height: 8,
-    marginHorizontal: 5,
-  },
 });
