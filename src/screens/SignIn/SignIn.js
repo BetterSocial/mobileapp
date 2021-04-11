@@ -39,17 +39,22 @@ const SignIn = () => {
         if (res.data) {
           let {appUserId, countryCode} = res.data;
           setDataHumenId(res.data, dispatch);
-          verifyUser(appUserId).then((response) => {
-            if (response.data) {
-              setToken(response.token);
-              setRefershToken(response.refresh_token);
-              navigation.dispatch(StackActions.replace('HomeTabs'));
-            } else {
-              removeLocalStorege('userId');
-              navigation.dispatch(StackActions.replace('ChooseUsername'));
-            }
-            // setUserId(appUserId);
-          });
+          verifyUser(appUserId)
+            .then((response) => {
+              console.log(response);
+              if (response.data) {
+                setToken(response.token);
+                setRefershToken(response.refresh_token);
+                navigation.dispatch(StackActions.replace('HomeTabs'));
+              } else {
+                removeLocalStorege('userId');
+                navigation.dispatch(StackActions.replace('ChooseUsername'));
+              }
+              // setUserId(appUserId);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       });
     });

@@ -35,11 +35,6 @@ const FeedScreen = (props) => {
       if (value) {
         var decoded = await JWTDecode(value);
         setTokenParse(decoded);
-        const result = await getMyProfile(decoded.user_id);
-        console.log('isi result ', result);
-        if (result.code == 200) {
-          setDataMain(result.data);
-        }
       }
     };
     parseToken();

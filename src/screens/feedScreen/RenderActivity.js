@@ -6,6 +6,7 @@ import {
   Text,
   Platform,
   Dimensions,
+  Image,
 } from 'react-native';
 import {
   Activity,
@@ -23,13 +24,21 @@ import SeeMore from 'react-native-see-more-inline';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 
 import ReplyIcon from '../../../assets/icons/reply/reply.png';
+import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 
 const {width: screenWidth} = Dimensions.get('window');
 
 const RenderActivity = (props) => {
   const activity = props.activity;
-  console.log(activity);
+  let {anonimity} = activity;
   let {profile_pic_path, real_name} = JSON.parse(activity.object);
+
+  const getTime = (time) => {
+    let date = new Date(time);
+    console.log(date.toISOString());
+    console.log(date.toLocaleDateString());
+    return date.toLocaleDateString();
+  };
   const _renderItem = ({item, index}, parallaxProps) => {
     return (
       <View key={index} style={styles.item}>
@@ -43,39 +52,67 @@ const RenderActivity = (props) => {
       </View>
     );
   };
+  const _renderAnonimity = () => (
+    <View style={styles.rowSpaceBeetwen}>
+      <View style={styles.rowCenter}>
+        <Image
+          source={AnonymousProfile}
+          width={32}
+          height={32}
+          style={styles.imageAnonimity}
+        />
+        <View style={styles.containerFeedProfile}>
+          <Text style={styles.feedUsername}>Anonymous</Text>
+          <View style={styles.containerFeedText}>
+            <Text style={styles.feedDate}>{getTime(activity.time)}</Text>
+            <View style={styles.point} />
+            <Text style={styles.feedDate}>
+              {moment.utc(props.activity.time).local().fromNow()}
+            </Text>
+          </View>
+        </View>
+      </View>
+      <TouchableNativeFeedback>
+        <ElipsisIcon width={18} height={3.94} fill={colors.black} />
+      </TouchableNativeFeedback>
+    </View>
+  );
+
+  const _renderProfileNormal = () => (
+    <View style={styles.rowSpaceBeetwen}>
+      <View style={styles.rowCenter}>
+        <Avatar
+          source={
+            profile_pic_path
+              ? profile_pic_path
+              : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+          }
+          size={48}
+          noShadow
+        />
+        <View style={styles.containerFeedProfile}>
+          <Text style={styles.feedUsername}>
+            {real_name ? real_name : 'no name specifics'}
+          </Text>
+          <View style={styles.containerFeedText}>
+            <Text style={styles.feedDate}>20 Feb 2021</Text>
+            <View style={styles.point} />
+            <Text style={styles.feedDate}>
+              {moment.utc(props.activity.time).local().fromNow()}
+            </Text>
+          </View>
+        </View>
+      </View>
+      <TouchableNativeFeedback>
+        <ElipsisIcon width={18} height={3.94} fill={colors.black} />
+      </TouchableNativeFeedback>
+    </View>
+  );
+
   return (
     <Activity
       {...props}
-      Header={
-        <View style={styles.rowSpaceBeetwen}>
-          <View style={styles.rowCenter}>
-            <Avatar
-              source={
-                profile_pic_path
-                  ? profile_pic_path
-                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
-              }
-              size={48}
-              noShadow
-            />
-            <View style={styles.containerFeedProfile}>
-              <Text style={styles.feedUsername}>
-                {real_name ? real_name : 'no name specifics'}
-              </Text>
-              <View style={styles.containerFeedText}>
-                <Text style={styles.feedDate}>20 Feb 2021</Text>
-                <View style={styles.point} />
-                <Text style={styles.feedDate}>
-                  {moment.utc(props.activity.time).local().fromNow()}
-                </Text>
-              </View>
-            </View>
-          </View>
-          <TouchableNativeFeedback>
-            <ElipsisIcon width={18} height={3.94} fill={colors.black} />
-          </TouchableNativeFeedback>
-        </View>
-      }
+      Header={anonimity === true ? _renderAnonimity() : _renderProfileNormal()}
       Content={
         <View style={styles.contentFeed}>
           <SeeMore numberOfLines={4} linkStyle={styles.textContentFeed}>
@@ -198,5 +235,10 @@ const styles = StyleSheet.create({
     flex: 1,
     aspectRatio: 1.5,
     resizeMode: 'contain',
+  },
+  imageAnonimity: {
+    marginRight: 8,
+    width: 32,
+    height: 32,
   },
 });

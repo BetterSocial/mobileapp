@@ -200,7 +200,7 @@ const CreatePost = () => {
     let res = await createPost(data);
     if (res.code === 200) {
       showMessage({
-        message: 'success create a new post',
+        message: 'Success! Your post was published',
         type: 'success',
       });
       setLoading(false);
