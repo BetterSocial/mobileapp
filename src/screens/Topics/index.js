@@ -24,6 +24,7 @@ import {Context} from '../../context';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import {useNavigation} from '@react-navigation/core';
 import {colors} from '../../utils/colors';
+import analytics from '@react-native-firebase/analytics';
 
 const width = Dimensions.get('screen').width;
 
@@ -36,6 +37,10 @@ const Topics = () => {
   const [, dispatch] = useContext(Context).topics;
 
   useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'Topics',
+      screen_name: 'Topics',
+    });
     setIsLoading(true);
     get({url: '/topics/list'})
       .then((res) => {
