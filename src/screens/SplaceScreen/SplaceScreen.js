@@ -3,12 +3,8 @@ import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
-import {
-  getToken,
-  getUserId,
-  removeLocalStorege,
-} from '../../data/local/accessToken';
-import {verifyTokenGetstream, verifyUser} from '../../service/users';
+import {getUserId, removeLocalStorege} from '../../data/local/accessToken';
+import {verifyUser} from '../../service/users';
 const SplashScreen = () => {
   const navigation = useNavigation();
   useEffect(() => {
@@ -19,17 +15,20 @@ const SplashScreen = () => {
     });
   }, []);
   const verify = async () => {
-    const token = await getToken();
-    if (token) {
-      const verifyToken = await verifyTokenGetstream();
-      if (verifyToken) {
-        navigation.dispatch(StackActions.replace('HomeTabs'));
+    const userId = await getUserId();
+    const varifyUserId = await verifyUser(userId);
+    // await setTimeout(() => {
+    if (userId) {
+      if (varifyUserId.data) {
+        navigation.dispatch(StackActions.replace('Home'));
       } else {
+        removeLocalStorege('userId');
         navigation.dispatch(StackActions.replace('SignIn'));
       }
     } else {
       navigation.dispatch(StackActions.replace('SignIn'));
     }
+    // }, 2000);
   };
 
   return (

@@ -44,9 +44,9 @@ const ChooseUsername = () => {
     let value = v.replace(/[^a-z0-9-_]/g, '');
     setTypeFetch('typing');
     setUsernameState(value);
-    if (value.length <= 15) {
-      if (value.length > 2) {
-        if (isNaN(v)) {
+    if (isNaN(v)) {
+      if (v.length <= 15) {
+        if (v.length > 2) {
           setTypeFetch('fetch');
           const user = verifyUsername(value);
           setTypeFetch('max');
@@ -56,13 +56,13 @@ const ChooseUsername = () => {
             setTypeFetch('available');
           }
         } else {
-          setTypeFetch('nan');
+          setTypeFetch('typing');
         }
       } else {
-        setTypeFetch('typing');
+        setTypeFetch('max');
       }
     } else {
-      setTypeFetch('max');
+      setTypeFetch('nan');
     }
   };
   const next = () => {
@@ -162,7 +162,7 @@ const ChooseUsername = () => {
           <TouchableOpacity
             style={styles.containerAddIcon}
             onPress={() => onPhoto()}>
-            <BtnAddPhoto width={52} height={57} />
+            <MemoIc_btn_add width={48} height={48} />
           </TouchableOpacity>
           <View>
             <Input
@@ -180,10 +180,11 @@ const ChooseUsername = () => {
         </View>
         <View style={styles.constainerInfo}>
           <View style={styles.containerIcon}>
-            <IconFontAwesome5 name="exclamation" size={14} color="#2F80ED" />
+            <IconFontAwesome5 name="exclamation" size={14} color="#3490cd" />
           </View>
           <Text style={styles.infoText}>
-            Usernames, you will always be able to post anonymously.
+            Remember that whatever your name, you will always be able to post
+            anonymously
           </Text>
         </View>
       </View>
@@ -212,16 +213,13 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '600',
     fontSize: 36,
-    lineHeight: 43.57,
+    lineHeight: 44,
     color: '#11243D',
     marginTop: 24,
   },
   desc: {
     fontSize: 14,
-    color: 'rgba(130,130,130,0.84)',
-    fontWeight: '400',
-    fontFamily: fonts.inter[400],
-    lineHeight: 24,
+    color: '#828282',
   },
   btnImage: {
     width: 23,
@@ -230,7 +228,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   constainerInfo: {
-    backgroundColor: 'rgba(47,128,237,0.2)',
+    backgroundColor: '#ddf2fe',
     flexDirection: 'row',
     borderRadius: 4,
     width: '100%',
@@ -243,7 +241,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 30,
-    backgroundColor: 'rgba(47,128,237,0.3)',
+    backgroundColor: '#b6e4fd',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -253,12 +251,18 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 14,
-    color: colors.blue,
+    color: '#258FCB',
     marginLeft: 12,
     lineHeight: 24,
     width: width - 95,
   },
   containerAddIcon: {
+    backgroundColor: '#2D9CDB',
+    width: 48,
+    height: 48,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 13,
   },
 });

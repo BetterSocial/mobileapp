@@ -25,7 +25,7 @@ const SheetExpiredPost = ({refExpired, data, select, onSelect}) => {
         {data.map((value, index) => (
           <FlatListItem
             key={index}
-            value={value.label}
+            value={value}
             index={index}
             select={select}
             onSelect={onSelect}
@@ -36,8 +36,6 @@ const SheetExpiredPost = ({refExpired, data, select, onSelect}) => {
   );
 };
 
-{
-}
 export default SheetExpiredPost;
 
 const styles = StyleSheet.create({

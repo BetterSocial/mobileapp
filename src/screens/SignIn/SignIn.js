@@ -18,6 +18,7 @@ import {
   removeLocalStorege,
   setToken,
   setUserId,
+  setRefershToken,
 } from '../../data/local/accessToken';
 import {fonts} from '../../utils/fonts';
 import {checkToken} from '../../service/outh';
@@ -26,10 +27,13 @@ import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import {setDataHumenId} from '../../context/actions/users';
 import {Context} from '../../context';
+<<<<<<< HEAD
 import BtnHumanID from '../../assets/images/humanid.png';
 import {colors} from '../../utils/colors';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
+=======
+>>>>>>> main
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
@@ -39,7 +43,7 @@ const SignIn = () => {
       screen_name: 'SignIn',
     });
     onSuccess(async (exchangeToken) => {
-      // await setToken(exchangeToken);
+      await setToken(exchangeToken);
       checkToken(exchangeToken).then((res) => {
         if (res.data) {
           let {appUserId, countryCode} = res.data;
@@ -79,14 +83,20 @@ const SignIn = () => {
   const handleLogin = () => {
     logIn();
   };
+  const showId = (v) => {
+    console.log(v);
+  };
   return (
     <View style={S.container}>
       <View style={S.containerSlideShow}>
         <SlideShow />
       </View>
       <View style={S.containerBtnLogin}>
-        <TouchableOpacity onPress={() => handleLogin()}>
-          <Image source={BtnHumanID} width={321} height={48} style={S.image} />
+        <TouchableOpacity style={S.btn} onPress={() => handleLogin()}>
+          <Image source={require('../../assets/HumanID.png')} style={S.image} />
+          <Text style={S.btnText}>
+            Anonymous Login with <Text style={S.humen}>human</Text>ID
+          </Text>
         </TouchableOpacity>
         <Text style={S.desc}>
           <Text style={S.humanID}>humanID</Text> is an independent non profit
@@ -112,9 +122,7 @@ const S = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: 321,
-    height: 48,
-    borderRadius: 5,
+    marginRight: 7,
   },
   containerSlideShow: {
     height: '70%',
@@ -123,7 +131,7 @@ const S = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
     alignItems: 'center',
-    paddingTop: 26,
+    paddingTop: 32,
   },
   btn: {
     backgroundColor: '#023B60',
@@ -135,18 +143,16 @@ const S = StyleSheet.create({
     alignItems: 'center',
   },
   desc: {
-    fontWeight: '400',
-    fontFamily: fonts.inter[400],
-    lineHeight: 24,
+    fontWeight: '500',
+    fontFamily: fonts.inter[500],
     fontSize: 12,
     width: 250,
     textAlign: 'center',
-    color: colors.gray,
-    marginTop: 16,
+    color: '#b0b0b0',
   },
   humanID: {
     color: '#11243D',
-    // fontWeight: 'bold',
+    fontWeight: 'bold',
     textDecorationLine: 'underline',
   },
   btnText: {fontSize: 17, color: '#fff', fontWeight: 'bold'},
