@@ -38,3 +38,19 @@ export const removeLocalStorege = async (value) => {
     console.log(e);
   }
 };
+
+export const setRefershToken = async (value) => {
+  try {
+    await AsyncStorage.setItem('refresh_token', value);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getRefreshToken = async () => {
+  try {
+    await AsyncStorage.getItem('refresh_token');
+  } catch (e) {
+    console.log(e);
+  }
+};

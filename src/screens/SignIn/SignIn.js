@@ -18,6 +18,7 @@ import {
   removeLocalStorege,
   setToken,
   setUserId,
+  setRefershToken,
 } from '../../data/local/accessToken';
 import {fonts} from '../../utils/fonts';
 import {checkToken} from '../../service/outh';
@@ -38,6 +39,8 @@ const SignIn = () => {
           setDataHumenId(res.data, dispatch);
           verifyUser(appUserId).then((response) => {
             if (response.data) {
+              setToken(response.token);
+              setRefershToken(response.refresh_token);
               navigation.dispatch(StackActions.replace('Home'));
             } else {
               removeLocalStorege('userId');
