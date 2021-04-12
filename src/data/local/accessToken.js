@@ -1,14 +1,14 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 export const setToken = async (value) => {
   try {
-    await AsyncStorage.setItem('tkn-getstream', value);
+    await AsyncStorage.setItem('t-ping', value);
   } catch (e) {
     console.log(e);
   }
 };
 export const getToken = async () => {
   try {
-    const value = await AsyncStorage.getItem('tkn-getstream');
+    const value = await AsyncStorage.getItem('t-ping');
     return value;
   } catch (e) {
     console.log(e);
@@ -34,6 +34,22 @@ export const getUserId = async () => {
 export const removeLocalStorege = async (value) => {
   try {
     await AsyncStorage.removeItem(value);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const setRefershToken = async (value) => {
+  try {
+    await AsyncStorage.setItem('refresh_token', value);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getRefreshToken = async () => {
+  try {
+    await AsyncStorage.getItem('refresh_token');
   } catch (e) {
     console.log(e);
   }

@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 7.33,
+    width: 122,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -30,7 +31,5 @@ const styles = StyleSheet.create({
   tag: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    marginRight: 5,
-    flexWrap: 'wrap',
   },
 });
