@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,6 +20,9 @@ import {useNavigation} from '@react-navigation/core';
 import {verifyUsername} from '../../service/users';
 import {fonts} from '../../utils/fonts';
 import {showMessage} from 'react-native-flash-message';
+import {colors} from '../../utils/colors';
+import BtnAddPhoto from '../../assets/icon-svg/ic_btn_add_photo.svg';
+import analytics from '@react-native-firebase/analytics';
 const ChooseUsername = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
@@ -31,6 +34,12 @@ const ChooseUsername = () => {
       setImage(res.base64, dispatch);
     });
   };
+  useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'ChooseUsername',
+      screen_name: 'ChooseUsername',
+    });
+  }, []);
   const checkUsername = (v) => {
     let value = v.replace(/[^a-z0-9-_]/g, '');
     setTypeFetch('typing');

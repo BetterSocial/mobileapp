@@ -6,6 +6,7 @@ import JWTDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {StreamChat} from 'stream-chat';
+import analytics from '@react-native-firebase/analytics';
 
 const chatClient = new StreamChat(STREAM_API_KEY);
 
@@ -23,6 +24,12 @@ const ChannelListScreen = ({navigation}) => {
   const memoizedFilters = useMemo(() => filters, []);
 
   useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'ChannelListScreen',
+      screen_name: 'Channel List',
+    });
+    setupClient();
+  }, []);
     const setupClient = async () => {
       try {
         const value = await AsyncStorage.getItem('tkn-getstream');
@@ -38,9 +45,9 @@ const ChannelListScreen = ({navigation}) => {
         console.log(err);
       }
     };
-
-    setupClient();
-  }, []);
+      const testEnv = () => {
+      console.log(API_TOKEN);
+      }
 
   return (
     <Chat client={chatClient}>
