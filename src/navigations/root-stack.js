@@ -1,5 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
+import Home from '../screens/HomeTest';
 import ChooseUsername from '../screens/Onboarding/ChooseUsername';
 import SignIn from '../screens/SignIn/SignIn';
 import SplashScreen from '../screens/SplaceScreen/SplaceScreen';
@@ -14,6 +15,7 @@ import Settings from '../screens/Settings';
 import HomeBottomTabs from './HomeBottomTabs';
 import {ChannelScreen} from '../screens';
 
+
 const Stack = createStackNavigator();
 const RootStact = () => {
   useEffect(() => {
@@ -21,7 +23,7 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="CreatePost">
       <Stack.Screen
         name="HomeTabs"
         component={HomeBottomTabs}
@@ -61,6 +63,11 @@ const RootStact = () => {
       <Stack.Screen
         name="WhotoFollow"
         component={WhotoFollow}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Home"
+        component={Home}
         options={{headerShown: false}}
       />
       <Stack.Screen
