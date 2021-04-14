@@ -41,7 +41,7 @@ import BottomSheetRealname from './BottomSheetRealname';
 import BottomSheetBio from './BottomSheetBio';
 import {trimString} from '../../helpers/stringSplit';
 import {getToken} from '../../helpers/getToken';
-
+import analytics from '@react-native-firebase/analytics';
 const width = Dimensions.get('screen').width;
 
 let token_JWT = '';
@@ -80,6 +80,10 @@ const ProfileScreen = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     fetchMyProfile(true);
     // setToken()
+    analytics().logScreenView({
+      screen_class: 'ProfileScreen',
+      screen_name: 'ProfileScreen',
+    });
   }, []);
 
   // const setToken = async () => {
