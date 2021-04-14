@@ -38,7 +38,7 @@ const SignIn = () => {
           setDataHumenId(res.data, dispatch);
           verifyUser(appUserId).then((response) => {
             if (response.data) {
-              navigation.dispatch(StackActions.replace('Home'));
+              navigation.dispatch(StackActions.replace('HomeTabs'));
             } else {
               removeLocalStorege('userId');
               navigation.dispatch(StackActions.replace('ChooseUsername'));

@@ -132,3 +132,15 @@ export const updateBioProfile = async (userID, data) => {
       });
   });
 };
+
+export const getProfileByUsername = async(username) => {
+  console.log("username "  + username)
+  return new Promise((resolve, reject) => {
+    if(!username) return reject()
+    
+    api
+      .get(`/profiles/get-profile/${username}`)
+      .then((res) => resolve(res.data))
+      .catch((err) => reject(err))
+  })
+}

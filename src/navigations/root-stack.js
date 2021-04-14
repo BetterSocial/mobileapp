@@ -23,7 +23,7 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="CreatePost">
+    <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="HomeTabs"
         component={HomeBottomTabs}

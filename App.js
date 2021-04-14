@@ -15,6 +15,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import {OverlayProvider} from 'stream-chat-react-native';
+import { Linking } from 'react-native';
 
 const AppContext = React.createContext();
 
@@ -28,6 +29,7 @@ const user = {
 const App = () => {
   const {bottom} = useSafeAreaInsets();
   const [channel, setChannel] = useState();
+  
   useEffect(() => {
     const init = async () => {
       try {
@@ -55,7 +57,7 @@ const App = () => {
     dynamicLinks()
       .getInitialLink()
       .then(link => {
-       console.log('link ', link)
+       console.log('link a', link)
       });
   }, []);
 

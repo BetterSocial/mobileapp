@@ -1,7 +1,6 @@
 import axios from 'axios';
 import {getToken} from '../data/local/accessToken';
 import { BASE_URL } from '@env'
-
 const api = axios.create({
   baseURL: BASE_URL,
   timeout: 3000,

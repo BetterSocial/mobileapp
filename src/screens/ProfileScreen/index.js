@@ -15,7 +15,8 @@ import {
 import {LogBox} from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import JWTDecode from 'jwt-decode';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-community/async-storage'
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
