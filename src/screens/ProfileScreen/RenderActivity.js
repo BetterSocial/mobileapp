@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableNativeFeedback,
   Dimensions,
-  Platform
+  Platform,
 } from 'react-native';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import SeeMore from 'react-native-see-more-inline';
@@ -21,8 +21,7 @@ import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-const renderActivity = (props, data,) => {
-
+const renderActivity = (props, data) => {
   const _renderItem = ({item, index}, parallaxProps) => {
     return (
       <View key={index} style={styles.item}>
@@ -190,7 +189,7 @@ const styles = StyleSheet.create({
     width: screenWidth - 20,
     height: screenWidth - 20,
     marginTop: 10,
-    marginLeft: -20 
+    marginLeft: -20,
   },
   imageContainer: {
     flex: 1,
@@ -201,7 +200,7 @@ const styles = StyleSheet.create({
   image: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    aspectRatio: 1.5, 
+    aspectRatio: 1.5,
     resizeMode: 'contain',
   },
 });

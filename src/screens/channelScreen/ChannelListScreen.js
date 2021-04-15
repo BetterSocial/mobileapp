@@ -13,7 +13,7 @@ import {
   OverlayProvider,
   useAttachmentPickerContext,
 } from 'stream-chat-react-native';
-
+import analytics from '@react-native-firebase/analytics';
 const AppContext = React.createContext();
 
 const ChannelScreen = (props) => {
@@ -23,6 +23,10 @@ const ChannelScreen = (props) => {
   const {setTopInset} = useAttachmentPickerContext();
 
   useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'Channel Screen',
+      screen_name: 'Channel',
+    });
     setTopInset(headerHeight);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerHeight]);

@@ -42,12 +42,12 @@ import BottomSheetRealname from './BottomSheetRealname';
 import BottomSheetBio from './BottomSheetBio';
 import {trimString} from '../../helpers/stringSplit';
 import {getToken} from '../../helpers/getToken';
-
+import analytics from '@react-native-firebase/analytics';
 const width = Dimensions.get('screen').width;
 
 let token_JWT = '';
 
-const MyProfile = () => {
+const ProfileScreen = () => {
   const navigation = useNavigation();
   const bottomSheetNameRef = useRef();
   const bottomSheetBioRef = useRef();
@@ -77,11 +77,14 @@ const MyProfile = () => {
   const [errorChangeRealName, setErrorChangeRealName] = useState('');
   const [image, setImage] = useState('');
 
-
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     fetchMyProfile(true);
     // setToken()
+    analytics().logScreenView({
+      screen_class: 'ProfileScreen',
+      screen_name: 'ProfileScreen',
+    });
   }, []);
 
   // const setToken = async () => {
@@ -89,23 +92,22 @@ const MyProfile = () => {
   //     await AsyncStorage.setItem('tkn-getstream', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjg4ZDU2NzktNmM2OC00MWVjLWJlODMtN2YxNWE0ZTgyZDNkIn0.0YNINzuHdf2afDN0ew3x0DRT0uJFzvBD0CbYL_Exm9c")
   //   } catch (e) {
   //     // saving error
-  //   } 
+  //   }
   // };
 
   const fetchMyProfile = async (withLoading) => {
     const value = await AsyncStorage.getItem('tkn-getstream');
-    if(value) {
+    if (value) {
       var decoded = await JWTDecode(value);
       setTokenParse(decoded);
       withLoading ? setIsLoading(true) : null;
       const result = await getMyProfile(decoded.user_id);
-      console.log('isi result ', result);
+      console.log(result);
       if (result.code == 200) {
         withLoading ? setIsLoading(false) : null;
         setDataMain(result.data);
       }
     }
-   
   };
 
   async function buildLink() {
@@ -344,7 +346,7 @@ const MyProfile = () => {
     token_JWT = val;
   });
 
-  console.log('token jwt ', token_JWT)
+  console.log('token jwt ', token_JWT);
 
   return (
     <>
@@ -358,7 +360,10 @@ const MyProfile = () => {
 
         <ScrollView onScroll={handleScroll} ref={scrollViewReff}>
           {token_JWT !== '' && (
-            <StreamApp apiKey={STREAM_API_KEY} appId={STREAM_APP_ID} token={token_JWT}>
+            <StreamApp
+              apiKey={STREAM_API_KEY}
+              appId={STREAM_APP_ID}
+              token={token_JWT}>
               {!isLoading ? (
                 <View style={styles.content}>
                   <View style={styles.header}>
@@ -607,4 +612,4 @@ const styles = StyleSheet.create({
     paddingRight: 4,
   },
 });
-export default MyProfile;
+export default ProfileScreen;

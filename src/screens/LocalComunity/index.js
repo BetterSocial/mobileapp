@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -24,6 +24,7 @@ import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
+import analytics from '@react-native-firebase/analytics';
 
 const width = Dimensions.get('screen').width;
 const LocalComunity = () => {
@@ -36,6 +37,12 @@ const LocalComunity = () => {
   const [isVisibleSecondLocation, setIsVisibleSecondLocation] = useState(false);
 
   const [, dispatch] = useContext(Context).localCommunity;
+  useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'LocalComunity',
+      screen_name: 'LocalComunity',
+    });
+  }, []);
 
   const renderHeader = () => {
     if (Platform.OS === 'android') {
