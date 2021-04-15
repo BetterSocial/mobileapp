@@ -101,7 +101,7 @@ const ProfileScreen = () => {
       setTokenParse(decoded);
       withLoading ? setIsLoading(true) : null;
       const result = await getMyProfile(decoded.user_id);
-      console.log('isi result ', result);
+      console.log(result);
       if (result.code == 200) {
         withLoading ? setIsLoading(false) : null;
         setDataMain(result.data);

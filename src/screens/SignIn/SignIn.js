@@ -46,29 +46,27 @@ const SignIn = () => {
       checkToken(exchangeToken).then((res) => {
         if (res.data) {
           let {appUserId, countryCode} = res.data;
-          // crashlytics().setAttributes({
-          //   'user-id': appUserId,
-          //   'country-code': countryCode,
-          // });
           setDataHumenId(res.data, dispatch);
           verifyUser(appUserId)
             .then((response) => {
               if (response.data) {
                 setToken(response.token);
                 setRefershToken(response.refresh_token);
-                navigation.dispatch(StackActions.replace('Home'));
+              navigation.dispatch(StackActions.replace('Home'));
               } else {
                 removeLocalStorege('userId');
                 navigation.dispatch(StackActions.replace('ChooseUsername'));
               }
               // setUserId(appUserId);
-              // crashlytics().setAttributes({
+            // crashlytics().setAttributes({
               //   appUserId,
               //   countryCode,
               // });
             })
             .catch((err) => {
-              crashlytics().recordError(new Error(err));
+              crashlytics().recordError(new Error(err));})
+            .catch((err) => {
+              console.log(err);
             });
         }
       });
@@ -105,13 +103,6 @@ const SignIn = () => {
           information
         </Text>
       </View>
-      {/* <Button
-        onPress={async () => {
-          crashlytics().recordError(new Error('error test'));
-          await console.log('test');
-        }}
-        title="test"
-      /> */}
     </View>
   );
 };
