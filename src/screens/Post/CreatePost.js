@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   View,
+  BackHandler,
 } from 'react-native';
 import Header from '../../components/Header';
 import {Button, ButtonAddMedia} from '../../components/Button';
@@ -137,6 +138,16 @@ const CreatePost = () => {
     let newArr = listTopic.filter((e) => e !== v);
     setListTopic(newArr);
     console.log('topic ', v);
+  };
+  const onBack = () => {
+    console.log(message);
+    if (message) {
+      sheetBackRef.current.open();
+      return true;
+    }
+    console.log('back = ', message);
+    navigation.goBack();
+    return true;
   };
   const randerComponentMedia = () => {
     if (mediaStorage.length > 0) {
