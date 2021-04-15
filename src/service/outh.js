@@ -1,3 +1,4 @@
+import crashlytics from '@react-native-firebase/crashlytics';
 export const checkToken = (token) => {
   return fetch('https://core.human-id.org/v0.0.3/server/users/exchange', {
     method: 'POST', // or 'PUT'
@@ -14,6 +15,7 @@ export const checkToken = (token) => {
       return data;
     })
     .catch((error) => {
+      crashlytics().recordError(new Error(error));
       console.error('Error:', error);
     });
 };

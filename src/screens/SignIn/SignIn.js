@@ -27,10 +27,20 @@ import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import {setDataHumenId} from '../../context/actions/users';
 import {Context} from '../../context';
+
+import crashlytics from '@react-native-firebase/crashlytics';
+import BtnHumanID from '../../assets/images/humanid.png';
+import {colors} from '../../utils/colors';
+import crashlytics from '@react-native-firebase/crashlytics';
+import analytics from '@react-native-firebase/analytics';
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
   React.useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'SignIn',
+      screen_name: 'SignIn',
+    });
     onSuccess(async (exchangeToken) => {
       await setToken(exchangeToken);
       checkToken(exchangeToken).then((res) => {
@@ -48,7 +58,13 @@ const SignIn = () => {
                 navigation.dispatch(StackActions.replace('ChooseUsername'));
               }
               // setUserId(appUserId);
+            // crashlytics().setAttributes({
+              //   appUserId,
+              //   countryCode,
+              // });
             })
+            .catch((err) => {
+              crashlytics().recordError(new Error(err));})
             .catch((err) => {
               console.log(err);
             });
@@ -56,6 +72,7 @@ const SignIn = () => {
       });
     });
     onError((message) => {
+      crashlytics().recordError(new Error(message));
       console.log('error message', message);
     });
     onCancel(() => {

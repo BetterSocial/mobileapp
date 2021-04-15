@@ -15,6 +15,7 @@ import JWTDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RenderActivity from './RenderActivity';
 import {getMyProfile} from '../../service/profile';
+import analytics from '@react-native-firebase/analytics';
 
 let token_JWT = '';
 

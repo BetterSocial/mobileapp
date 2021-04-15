@@ -1,3 +1,4 @@
+import analytics from '@react-native-firebase/analytics';
 import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import React, {useEffect} from 'react';
@@ -8,6 +9,10 @@ const SplashScreen = () => {
   const navigation = useNavigation();
   useEffect(() => {
     verify();
+    analytics().logScreenView({
+      screen_class: 'SplashScreen',
+      screen_name: 'Splash Screen',
+    });
   }, []);
   const verify = async () => {
     const userId = await getUserId();

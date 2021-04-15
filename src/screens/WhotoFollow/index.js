@@ -27,6 +27,8 @@ import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import Loading from '../Loading';
+import crashlytics from '@react-native-firebase/crashlytics';
+import analytics from '@react-native-firebase/analytics';
 
 const width = Dimensions.get('screen').width;
 
@@ -43,6 +45,10 @@ const WhotoFollow = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'WhotoFollow',
+      screen_name: 'WhotoFollow',
+    });
     setIsLoading(true);
     get({url: '/who-to-follow/list'})
       .then((res) => {
@@ -52,6 +58,7 @@ const WhotoFollow = () => {
         }
       })
       .catch((err) => {
+        crashlytics().recordError(new Error(err));
         setIsLoading(false);
       });
   }, []);
@@ -97,6 +104,7 @@ const WhotoFollow = () => {
         }
       })
       .catch((err) => {
+        crashlytics().recordError(new Error(err));
         setRefreshing(false);
       });
   }, []);
@@ -129,6 +137,7 @@ const WhotoFollow = () => {
             navigation.dispatch(StackActions.replace('Home'));
           }, 2000);
         } else {
+          crashlytics().recordError(new Error(res));
           console.log(res);
           showMessage({
             message: 'register error',
@@ -136,7 +145,8 @@ const WhotoFollow = () => {
           });
         }
       })
-      .catch((res) => {
+      .catch((error) => {
+        crashlytics().recordError(new Error(error));
         setFetchRegister(false);
         showMessage({
           message: 'register error',
