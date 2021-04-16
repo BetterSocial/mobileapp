@@ -31,7 +31,7 @@ import MemoIc_world from '../../assets/icons/Ic_world';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import SheetCloseBtn from '../../elements/Post/SheetCloseBtn';
 import {useNavigation} from '@react-navigation/core';
-import {createPost} from '../../service/post';
+import {createPost, ShowingAudience} from '../../service/post';
 import Loading from '../Loading';
 import {showMessage} from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
@@ -74,6 +74,7 @@ const CreatePost = () => {
       desc: 'Only those you follow in your geographic area can see ',
     },
   ];
+  const [audienceEstimations, setAudienceEstimations] = useState(0);
   const [privacySelect, setPrivacySelect] = useState(0);
   const [message, setMessage] = useState('');
   const [dataImage, setDataImage] = useState([]);
@@ -90,6 +91,20 @@ const CreatePost = () => {
       BackHandler.removeEventListener('hardwareBackPress', onBack);
     };
   }, [message]);
+  const getEstimationsAudience = async (privacy, location) => {
+    const data = await ShowingAudience('everywhere', 'indonesia');
+    setAudienceEstimations(data.data);
+  };
+  const updateGeoSelect = (v) => {
+    console.log('location', v);
+    getEstimationsAudience('', v);
+    setGeoSelect(v);
+  };
+  const updatePrivacySelect = (v) => {
+    console.log('privace', v);
+    getEstimationsAudience(v, '');
+    setPrivacySelect(v);
+  };
   const uploadMediaFromLibrary = () => {
     launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
       if (res.didCancel) {
@@ -236,8 +251,8 @@ const CreatePost = () => {
         />
         <Gap style={{height: 16}} />
         <Text style={styles.desc}>
-          Your post targets <Text style={styles.userTarget}>~27.000</Text>{' '}
-          users.
+          Your post targets{' '}
+          <Text style={styles.userTarget}>~ {audienceEstimations}</Text> users.
         </Text>
         <Gap style={{height: 25}} />
         <Button>Post</Button>
@@ -265,13 +280,13 @@ const CreatePost = () => {
           geoRef={sheetGeoRef}
           data={geoList}
           select={geoSelect}
-          onSelect={setGeoSelect}
+          onSelect={updateGeoSelect}
         />
         <SheetPrivacy
           privacyRef={sheetPrivacyRef}
           data={listPrivacy}
           select={privacySelect}
-          onSelect={setPrivacySelect}
+          onSelect={updatePrivacySelect}
         />
       </ScrollView>
     </SafeAreaView>

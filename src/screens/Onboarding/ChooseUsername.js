@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -22,7 +22,6 @@ import {fonts} from '../../utils/fonts';
 import {showMessage} from 'react-native-flash-message';
 import {colors} from '../../utils/colors';
 import BtnAddPhoto from '../../assets/icon-svg/ic_btn_add_photo.svg';
-import analytics from '@react-native-firebase/analytics';
 const ChooseUsername = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
@@ -34,19 +33,13 @@ const ChooseUsername = () => {
       setImage(res.base64, dispatch);
     });
   };
-  useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'ChooseUsername',
-      screen_name: 'ChooseUsername',
-    });
-  }, []);
   const checkUsername = (v) => {
     let value = v.replace(/[^a-z0-9-_]/g, '');
     setTypeFetch('typing');
     setUsernameState(value);
-    if (isNaN(v)) {
-      if (v.length <= 15) {
-        if (v.length > 2) {
+    if (value.length <= 15) {
+      if (value.length > 2) {
+        if (isNaN(v)) {
           setTypeFetch('fetch');
           const user = verifyUsername(value);
           setTypeFetch('max');
@@ -56,13 +49,13 @@ const ChooseUsername = () => {
             setTypeFetch('available');
           }
         } else {
-          setTypeFetch('typing');
+          setTypeFetch('nan');
         }
       } else {
-        setTypeFetch('max');
+        setTypeFetch('typing');
       }
     } else {
-      setTypeFetch('nan');
+      setTypeFetch('max');
     }
   };
   const next = () => {
@@ -162,7 +155,7 @@ const ChooseUsername = () => {
           <TouchableOpacity
             style={styles.containerAddIcon}
             onPress={() => onPhoto()}>
-            <MemoIc_btn_add width={48} height={48} />
+            <BtnAddPhoto width={52} height={57} />
           </TouchableOpacity>
           <View>
             <Input
@@ -173,18 +166,16 @@ const ChooseUsername = () => {
               textContentType="username"
               autoCapitalize="none"
               autoCorrect={false}
-              autoFocus={true}
             />
             {messageTypeFetch(typeFetch, username)}
           </View>
         </View>
         <View style={styles.constainerInfo}>
           <View style={styles.containerIcon}>
-            <IconFontAwesome5 name="exclamation" size={14} color="#3490cd" />
+            <IconFontAwesome5 name="exclamation" size={14} color="#2F80ED" />
           </View>
           <Text style={styles.infoText}>
-            Remember that whatever your name, you will always be able to post
-            anonymously
+            Usernames, you will always be able to post anonymously.
           </Text>
         </View>
       </View>
@@ -213,13 +204,16 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '600',
     fontSize: 36,
-    lineHeight: 44,
+    lineHeight: 43.57,
     color: '#11243D',
     marginTop: 24,
   },
   desc: {
     fontSize: 14,
-    color: '#828282',
+    color: 'rgba(130,130,130,0.84)',
+    fontWeight: '400',
+    fontFamily: fonts.inter[400],
+    lineHeight: 24,
   },
   btnImage: {
     width: 23,
@@ -228,7 +222,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   constainerInfo: {
-    backgroundColor: '#ddf2fe',
+    backgroundColor: 'rgba(47,128,237,0.2)',
     flexDirection: 'row',
     borderRadius: 4,
     width: '100%',
@@ -241,7 +235,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 30,
-    backgroundColor: '#b6e4fd',
+    backgroundColor: 'rgba(47,128,237,0.3)',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -251,18 +245,12 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 14,
-    color: '#258FCB',
+    color: colors.blue,
     marginLeft: 12,
     lineHeight: 24,
     width: width - 95,
   },
   containerAddIcon: {
-    backgroundColor: '#2D9CDB',
-    width: 48,
-    height: 48,
-    borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginRight: 13,
   },
 });

@@ -9,3 +9,14 @@ export const createPost = async (data) => {
     console.log(error);
   }
 };
+export const ShowingAudience = async (privacy, location) => {
+  try {
+    let resApi = await api.get(
+      `/users/showing-audience-estimates?privacy=${privacy}&location=${location}`,
+    );
+    return resApi.data;
+  } catch (error) {
+    console.log(error);
+    crashlytics().recordError(new Error(error));
+  }
+};

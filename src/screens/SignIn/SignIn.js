@@ -18,7 +18,6 @@ import {
   removeLocalStorege,
   setToken,
   setUserId,
-  setRefershToken,
 } from '../../data/local/accessToken';
 import {fonts} from '../../utils/fonts';
 import {checkToken} from '../../service/outh';
@@ -27,53 +26,32 @@ import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import {setDataHumenId} from '../../context/actions/users';
 import {Context} from '../../context';
-
-import crashlytics from '@react-native-firebase/crashlytics';
 import BtnHumanID from '../../assets/images/humanid.png';
-import {colors} from '../../utils/colors';
-import analytics from '@react-native-firebase/analytics';
+import {colors} from 'react-native-swiper-flatlist/src/themes';
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
   React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'SignIn',
-      screen_name: 'SignIn',
-    });
     onSuccess(async (exchangeToken) => {
-      await setToken(exchangeToken);
+      // await setToken(exchangeToken);
       checkToken(exchangeToken).then((res) => {
         if (res.data) {
           let {appUserId, countryCode} = res.data;
-          // crashlytics().setAttributes({
-          //   'user-id': appUserId,
-          //   'country-code': countryCode,
-          // });
           setDataHumenId(res.data, dispatch);
-          verifyUser(appUserId)
-            .then((response) => {
-              if (response.data) {
-                setToken(response.token);
-                setRefershToken(response.refresh_token);
-                navigation.dispatch(StackActions.replace('Home'));
-              } else {
-                removeLocalStorege('userId');
-                navigation.dispatch(StackActions.replace('ChooseUsername'));
-              }
-              // setUserId(appUserId);
-              // crashlytics().setAttributes({
-              //   appUserId,
-              //   countryCode,
-              // });
-            })
-            .catch((err) => {
-              crashlytics().recordError(new Error(err));
-            });
+          verifyUser(appUserId).then((response) => {
+            if (response.data) {
+              setToken(response.token);
+              navigation.dispatch(StackActions.replace('HomeTabs'));
+            } else {
+              removeLocalStorege('userId');
+              navigation.dispatch(StackActions.replace('ChooseUsername'));
+            }
+            // setUserId(appUserId);
+          });
         }
       });
     });
     onError((message) => {
-      crashlytics().recordError(new Error(message));
       console.log('error message', message);
     });
     onCancel(() => {
@@ -83,16 +61,13 @@ const SignIn = () => {
   const handleLogin = () => {
     logIn();
   };
-  const showId = (v) => {
-    console.log(v);
-  };
   return (
     <View style={S.container}>
       <View style={S.containerSlideShow}>
         <SlideShow />
       </View>
       <View style={S.containerBtnLogin}>
-        <TouchableOpacity onPress={() => handleLogin()}>
+        <TouchableOpacity onPress={() => handleLogin()} style={S.btnSign}>
           <Image source={BtnHumanID} width={321} height={48} style={S.image} />
         </TouchableOpacity>
         <Text style={S.desc}>
@@ -114,7 +89,7 @@ const S = StyleSheet.create({
   image: {
     width: 321,
     height: 48,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   containerSlideShow: {
     height: '70%',
@@ -151,4 +126,17 @@ const S = StyleSheet.create({
   },
   btnText: {fontSize: 17, color: '#fff', fontWeight: 'bold'},
   humen: {fontSize: 17, color: '#fff', fontWeight: '100'},
+  btnSign: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 2.62,
+    elevation: 3,
+    // height: 49,
+  },
 });
