@@ -1,11 +1,13 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
+  Alert,
+  BackHandler,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  View,
+  View
 } from 'react-native';
 import Header from '../../components/Header';
 import {Button, ButtonAddMedia} from '../../components/Button';
@@ -28,12 +30,8 @@ import SheetGeographic from '../../elements/Post/SheetGeographic';
 import SheetPrivacy from '../../elements/Post/SheetPrivacy';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
-import SheetCloseBtn from '../../elements/Post/SheetCloseBtn';
-import {useNavigation} from '@react-navigation/core';
-import {createPost} from '../../service/post';
-import Loading from '../Loading';
-import {showMessage} from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
+import CreatePollContainer from '../../elements/Post/CreatePollContainer';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -48,6 +46,8 @@ const CreatePost = () => {
   const [mediaStorage, setMediaStorage] = useState([]);
   const [topic, setTopic] = useState('');
   const [listTopic, setListTopic] = useState([]);
+  const [isPollShown, setIsPollShown] = useState(true)
+  const [polls, setPolls] = useState([])
   const [postExpired, setPostExpired] = useState([
     '24 hours',
     '7 days',
@@ -84,9 +84,9 @@ const CreatePost = () => {
     });
   }, []);
   useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', onBack);
+    // BackHandler.addEventListener('hardwareBackPress', onBack);
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', onBack);
+      // BackHandler.removeEventListener('hardwareBackPress', onBack);
     };
   }, [message]);
   const uploadMediaFromLibrary = () => {
@@ -139,6 +139,7 @@ const CreatePost = () => {
     console.log('topic ', v);
   };
   const randerComponentMedia = () => {
+    if (isPollShown) return <View/>
     if (mediaStorage.length > 0) {
       return (
         <MemoShowMedia
@@ -158,6 +159,25 @@ const CreatePost = () => {
       );
     }
   };
+
+  const createPoll = () => {
+    setIsPollShown(true)
+    sheetMediaRef.current.close()
+  }
+
+  const removeAllPoll = () => {
+    Alert.alert(
+      "Are you sure",
+      "Removing the poll will discard what you've typed.",
+      [
+        {text : "Cancel", style: 'cancel'},
+        {text : "Remove", onPress:() => { 
+          setIsPollShown(false)
+          setPolls([])
+        }},
+      ])
+  }
+
   const renderListTopic = () => {
     if (listTopic.length > 0) {
       return (
@@ -189,6 +209,10 @@ const CreatePost = () => {
             'What’s on your mind?\nRemember to be respectful .\nDownvotes  & Blocks harm all your posts’ visibility.'
           }
         />
+
+        { isPollShown && 
+          <CreatePollContainer
+            onremoveallpoll={() => removeAllPoll()}/> }
         <Gap style={{height: 26}} />
         {randerComponentMedia()}
         <Gap style={{height: 29}} />
@@ -233,8 +257,10 @@ const CreatePost = () => {
         <Gap style={{height: 18}} />
         <SheetMedia
           refMedia={sheetMediaRef}
+          medias={mediaStorage}
           uploadFromMedia={() => uploadMediaFromLibrary()}
           takePhoto={() => takePhoto()}
+          createPoll={() => createPoll()}
         />
         <SheetAddTopic
           refTopic={sheetTopicRef}

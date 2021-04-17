@@ -62,7 +62,7 @@ const Home = ({ navigation }) => {
       }
     }
 
-    getDeepLinkUrl()
+    // getDeepLinkUrl()
   }, [])
 
   let doVerifyUser = async() => {

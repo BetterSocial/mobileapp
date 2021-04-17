@@ -8,7 +8,8 @@ import Store from './src/context/Store';
 import FlashMessage from 'react-native-flash-message';
 import fetchRemoteConfig from './src/utils/FirebaseUtil';
 import JWTDecode from 'jwt-decode';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {StreamChat} from 'stream-chat';
 import {STREAM_API_KEY, DUMY_TOKEN_GETSTREAM} from '@env';

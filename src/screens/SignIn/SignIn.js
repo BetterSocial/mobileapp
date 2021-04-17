@@ -27,10 +27,6 @@ import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import {setDataHumenId} from '../../context/actions/users';
 import {Context} from '../../context';
-
-import crashlytics from '@react-native-firebase/crashlytics';
-import BtnHumanID from '../../assets/images/humanid.png';
-import {colors} from '../../utils/colors';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 const SignIn = () => {

@@ -21,7 +21,6 @@ import {verifyUsername} from '../../service/users';
 import {fonts} from '../../utils/fonts';
 import {showMessage} from 'react-native-flash-message';
 import {colors} from '../../utils/colors';
-import BtnAddPhoto from '../../assets/icon-svg/ic_btn_add_photo.svg';
 import analytics from '@react-native-firebase/analytics';
 const ChooseUsername = () => {
   const navigation = useNavigation();

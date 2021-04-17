@@ -7,7 +7,7 @@ import MemoIc_user from '../../assets/icons/Ic_user';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const SheetMedia = ({refMedia, uploadFromMedia, takePhoto}) => {
+const SheetMedia = ({refMedia, uploadFromMedia, takePhoto, createPoll, medias = []}) => {
   return (
     <RBSheet
       ref={refMedia}
@@ -23,11 +23,12 @@ const SheetMedia = ({refMedia, uploadFromMedia, takePhoto}) => {
         },
       }}>
       <View style={styles.container}>
-        <List
+        {/* Do not show poll if media exists */}
+        {medias.length === 0 && <List
           label="Create a poll"
           icon={<MemoIc_user width={16.67} height={16.67} />}
-          onPress={() => {}}
-        />
+          onPress={createPoll}
+        />}
         <List
           label="Upload media from library"
           icon={<MemoIc_media width={16.67} height={16.67} />}
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom: 38,
+    paddingBottom: 38
   },
   list: {
     flexDirection: 'row',
