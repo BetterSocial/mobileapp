@@ -28,9 +28,17 @@ import {setDataHumenId} from '../../context/actions/users';
 import {Context} from '../../context';
 import BtnHumanID from '../../assets/images/humanid.png';
 import {colors} from 'react-native-swiper-flatlist/src/themes';
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
+  React.useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'SignIn',
+      screen_name: 'SignIn',
+    });
+  });
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
       // await setToken(exchangeToken);
@@ -52,14 +60,21 @@ const SignIn = () => {
       });
     });
     onError((message) => {
+      crashlytics().recordError(new Error(message));
       console.log('error message', message);
     });
     onCancel(() => {
+      analytics().logEvent('cencel_auth_humanid', {
+        id: '1',
+      });
       console.log('canceled');
     });
   }, []);
   const handleLogin = () => {
     logIn();
+    analytics().logLogin({
+      method: 'humanid',
+    });
   };
   return (
     <View style={S.container}>

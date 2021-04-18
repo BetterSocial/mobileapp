@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
+import analytics from '@react-native-firebase/analytics';
 import {
   getToken,
   getUserId,
@@ -12,9 +13,14 @@ const SplashScreen = () => {
   const navigation = useNavigation();
   useEffect(() => {
     verify();
+    analytics().logScreenView({
+      screen_class: 'SplashScreen',
+      screen_name: 'SplashScreen',
+    });
   }, []);
   const verify = async () => {
     const token = await getToken();
+    console.log('ini token ', token);
     if (token) {
       const verifyToken = await verifyTokenGetstream();
       if (verifyToken) {

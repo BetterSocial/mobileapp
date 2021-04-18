@@ -47,7 +47,7 @@ const WhotoFollow = () => {
   useEffect(() => {
     analytics().logScreenView({
       screen_class: 'WhotoFollow',
-      screen_name: 'WhotoFollow',
+      screen_name: 'onb_select_follows',
     });
     setIsLoading(true);
     get({url: '/who-to-follow/list'})
@@ -110,6 +110,9 @@ const WhotoFollow = () => {
   }, []);
   const register = () => {
     setFetchRegister(true);
+    analytics().logEvent('onb_select_follows_btn_add', {
+      onb_whofollow_users_selected: followed,
+    });
     const data = {
       users: {
         username: usersState.username,
@@ -219,7 +222,7 @@ const WhotoFollow = () => {
                               style={styles.flatList}
                               data={val.users}
                               renderItem={renderItem}
-                              keyExtractor={(item) => item.user_id + "topic"}
+                              keyExtractor={(item) => item.user_id + 'topic'}
                             />
                           </View>
                         );
@@ -245,7 +248,7 @@ const WhotoFollow = () => {
                               style={styles.flatList}
                               data={val.users}
                               renderItem={renderItem}
-                              keyExtractor={(item) => item.user_id  + "location"}
+                              keyExtractor={(item) => item.user_id + 'location'}
                             />
                           </View>
                         );

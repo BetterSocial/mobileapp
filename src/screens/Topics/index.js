@@ -39,7 +39,7 @@ const Topics = () => {
   useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Topics',
-      screen_name: 'Topics',
+      screen_name: 'onb_select_topics',
     });
     setIsLoading(true);
     get({url: '/topics/list'})
@@ -89,6 +89,9 @@ const Topics = () => {
   };
   const next = () => {
     if (topicSelected.length >= minTopic) {
+      analytics().logEvent('onb_select_topics_add_btn', {
+        onb_topics_selected: topicSelected,
+      });
       setTopicsContext(topicSelected, dispatch);
       navigation.navigate('WhotoFollow');
     }

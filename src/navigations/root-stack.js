@@ -15,6 +15,7 @@ import Settings from '../screens/Settings';
 import HomeBottomTabs from './HomeBottomTabs';
 import {ChannelScreen} from '../screens';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
+import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
@@ -23,7 +24,7 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="TermsAndCondition">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="HomeTabs"
         component={HomeBottomTabs}
@@ -92,6 +93,11 @@ const RootStact = () => {
       <Stack.Screen
         name="TermsAndCondition"
         component={TermsAndCondition}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PrivacyPolicies"
+        component={PrivacyPolicies}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

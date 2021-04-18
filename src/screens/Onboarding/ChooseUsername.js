@@ -22,17 +22,28 @@ import {fonts} from '../../utils/fonts';
 import {showMessage} from 'react-native-flash-message';
 import {colors} from '../../utils/colors';
 import BtnAddPhoto from '../../assets/icon-svg/ic_btn_add_photo.svg';
+import analytics from '@react-native-firebase/analytics';
 const ChooseUsername = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
   const [username, setUsernameState] = useState('');
   const [typeFetch, setTypeFetch] = useState('');
+  useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'ChooseUsername',
+      screen_name: 'onb_user_profilepic',
+    });
+  }, []);
 
   const onPhoto = () => {
+    analytics().logEvent('btn_take_photo_profile', {
+      id: 2,
+    });
     launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
       setImage(res.base64, dispatch);
     });
   };
+
   const checkUsername = (v) => {
     let value = v.replace(/[^a-z0-9-_]/g, '');
     setTypeFetch('typing');
