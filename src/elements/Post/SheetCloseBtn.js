@@ -11,7 +11,7 @@ const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
     <RBSheet
       ref={backRef}
       closeOnDragDown={true}
-      closeOnPressMask={false}
+      closeOnPressMask={true}
       customStyles={{
         container: {
           borderTopRightRadius: 20,

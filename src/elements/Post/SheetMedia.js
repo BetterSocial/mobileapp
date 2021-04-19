@@ -12,7 +12,7 @@ const SheetMedia = ({refMedia, uploadFromMedia, takePhoto}) => {
     <RBSheet
       ref={refMedia}
       closeOnDragDown={true}
-      closeOnPressMask={false}
+      closeOnPressMask={true}
       customStyles={{
         container: {
           borderTopRightRadius: 20,

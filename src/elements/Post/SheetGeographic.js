@@ -10,7 +10,7 @@ const SheetGeographic = ({geoRef, data, select, onSelect}) => {
     <RBSheet
       ref={geoRef}
       closeOnDragDown={true}
-      closeOnPressMask={false}
+      closeOnPressMask={true}
       customStyles={{
         container: {
           borderTopRightRadius: 20,

@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {
   Platform,
@@ -11,18 +10,17 @@ import {
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-const Header = ({title}) => {
-  const navigation = useNavigation();
+const Header = ({title, onPress}) => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+        <TouchableNativeFeedback onPress={onPress}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
       );
     } else {
       return (
-        <TouchableHighlight onPress={() => navigation.goBack()}>
+        <TouchableHighlight onPress={onPress}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableHighlight>
       );

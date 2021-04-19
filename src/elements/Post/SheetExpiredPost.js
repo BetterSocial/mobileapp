@@ -9,7 +9,7 @@ const SheetExpiredPost = ({refExpired, data, select, onSelect}) => {
     <RBSheet
       ref={refExpired}
       closeOnDragDown={true}
-      closeOnPressMask={false}
+      closeOnPressMask={true}
       customStyles={{
         container: {
           borderTopRightRadius: 20,
@@ -25,7 +25,7 @@ const SheetExpiredPost = ({refExpired, data, select, onSelect}) => {
         {data.map((value, index) => (
           <FlatListItem
             key={index}
-            value={value}
+            value={value.label}
             index={index}
             select={select}
             onSelect={onSelect}

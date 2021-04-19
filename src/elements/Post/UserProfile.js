@@ -1,17 +1,19 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import ToggleSwitch from 'toggle-switch-react-native';
-
-const UserProfile = () => {
-  const [typeUser, setTypeUser] = useState(false);
+import {useNavigation} from '@react-navigation/core';
+const UserProfile = ({typeUser, setTypeUser}) => {
+  const navigation = useNavigation();
   const userProfile = () => {
     if (typeUser) {
       return (
-        <View style={styles.profile}>
+        <TouchableOpacity
+          style={styles.profile}
+          onPress={() => navigation.navigate('Profile')}>
           <Image
             source={AnonymousProfile}
             width={32}
@@ -22,11 +24,13 @@ const UserProfile = () => {
             <Text style={styles.username}>Anonymous</Text>
             <Text style={styles.desc}>Username not visible</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       );
     } else {
       return (
-        <View style={styles.profile}>
+        <TouchableOpacity
+          style={styles.profile}
+          onPress={() => navigation.navigate('Profile')}>
           <Image
             source={ProfileDefault}
             width={32}
@@ -37,7 +41,7 @@ const UserProfile = () => {
             <Text style={styles.username}>ali_irawan</Text>
             <Text style={styles.desc}>Your username is visible</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       );
     }
   };

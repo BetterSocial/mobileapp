@@ -41,19 +41,33 @@ function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
 const CreatePost = () => {
+  const navigation = useNavigation();
   const sheetMediaRef = useRef();
   const sheetTopicRef = useRef();
   const sheetExpiredRef = useRef();
   const sheetGeoRef = useRef();
   const sheetPrivacyRef = useRef();
+  const sheetBackRef = useRef();
   const [mediaStorage, setMediaStorage] = useState([]);
   const [topic, setTopic] = useState('');
   const [listTopic, setListTopic] = useState([]);
   const [postExpired, setPostExpired] = useState([
-    '24 hours',
-    '7 days',
-    '30 days',
-    'Never',
+    {
+      label: '24 hours',
+      value: 24,
+    },
+    {
+      label: '7 days',
+      value: 7,
+    },
+    {
+      label: '30 days',
+      value: 30,
+    },
+    {
+      label: 'Never',
+      value: 'never',
+    },
   ]);
   const [expiredSelect, setExpiredSelect] = useState(1);
   const [geoList, setGeoList] = useState([
@@ -71,7 +85,7 @@ const CreatePost = () => {
     {
       icon: <MemoIc_user_group height={16.67} width={16.67} />,
       label: 'People I follow',
-      desc: 'Only those you follow in your geographic area can see ',
+      desc: 'Only those you follow can see your post',
     },
   ];
   const [audienceEstimations, setAudienceEstimations] = useState(0);
@@ -79,6 +93,7 @@ const CreatePost = () => {
   const [message, setMessage] = useState('');
   const [dataImage, setDataImage] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [typeUser, setTypeUser] = useState(false);
   useEffect(() => {
     analytics().logScreenView({
       screen_class: 'ChooseUsername',
@@ -112,9 +127,10 @@ const CreatePost = () => {
       } else if (res.uri) {
         let newArr = {
           id: mediaStorage.length,
-          data: res.base64,
+          data: res.uri,
         };
         setMediaStorage((val) => [...val, newArr]);
+        setDataImage((val) => [...val, res.base64]);
         sheetMediaRef.current.close();
       } else {
         console.log(res);
@@ -128,9 +144,10 @@ const CreatePost = () => {
       } else if (res.uri) {
         let newArr = {
           id: mediaStorage.length,
-          data: res.base64,
+          data: res.uri,
         };
         setMediaStorage((val) => [...val, newArr]);
+        setDataImage((val) => [...val, res.base64]);
         sheetMediaRef.current.close();
       } else {
         console.log(res);
@@ -142,6 +159,7 @@ const CreatePost = () => {
     let deleteItem = mediaStorage.filter((item) => item.id !== v);
     setMediaStorage(deleteItem);
   };
+
   const onRemoveAllMedia = () => {
     setMediaStorage([]);
   };
@@ -152,7 +170,18 @@ const CreatePost = () => {
   const removeTopic = (v) => {
     let newArr = listTopic.filter((e) => e !== v);
     setListTopic(newArr);
-    console.log('topic ', v);
+  };
+  const onSetExpiredSelect = (v) => {
+    setExpiredSelect(v);
+    sheetExpiredRef.current.close();
+  };
+  const onSetGeoSelect = (v) => {
+    setGeoSelect(v);
+    sheetGeoRef.current.close();
+  };
+  const onSetPrivacySelect = (v) => {
+    setPrivacySelect(v);
+    sheetPrivacyRef.current.close();
   };
   const onBack = () => {
     console.log(message);
@@ -163,6 +192,56 @@ const CreatePost = () => {
     console.log('back = ', message);
     navigation.goBack();
     return true;
+  };
+  const onSaveTopic = (v) => {
+    setListTopic(v);
+    sheetTopicRef.current.close();
+  };
+  const postTopic = async () => {
+    if (message === '') {
+      showMessage({
+        message: 'Post messages cannot be empty',
+        type: 'danger',
+      });
+      return true;
+    }
+    if (listTopic.length === 0) {
+      showMessage({
+        message: 'topic cannot be empty',
+        type: 'danger',
+      });
+      return true;
+    }
+    setLoading(true);
+    let data = {
+      topics: listTopic,
+      message: message,
+      verb: 'tweet',
+      feedGroup: 'main_feed',
+      privacy: listPrivacy[privacySelect].label,
+      anonimity: typeUser,
+      location: geoList[geoSelect],
+      duration_feed: postExpired[expiredSelect].value,
+      images_url: dataImage,
+    };
+    let res = await createPost(data);
+    if (res.code === 200) {
+      showMessage({
+        message: 'success create a new post',
+        type: 'success',
+      });
+      setLoading(false);
+      setTimeout(() => {
+        navigation.goBack();
+      }, 2000);
+    } else {
+      setLoading(false);
+      showMessage({
+        message: 'failed to create new posts',
+        type: 'danger',
+      });
+    }
+    console.log(res);
   };
   const randerComponentMedia = () => {
     if (mediaStorage.length > 0) {
@@ -204,10 +283,12 @@ const CreatePost = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header title="Create a post" />
-        <UserProfile />
+        <Header title="Create a post" onPress={() => onBack()} />
+        <UserProfile typeUser={typeUser} setTypeUser={setTypeUser} />
         <Gap style={{height: 8}} />
         <TextInput
+          onChangeText={(v) => setMessage(v)}
+          value={message}
           multiline={true}
           style={styles.input}
           textAlignVertical="top"
@@ -231,7 +312,7 @@ const CreatePost = () => {
         <Gap style={{height: 16}} />
         <ListItem
           icon={<Timer width={16.67} height={16.67} />}
-          label={postExpired[expiredSelect]}
+          label={postExpired[expiredSelect].label}
           labelStyle={styles.listText}
           onPress={() => sheetExpiredRef.current.open()}
         />
@@ -255,7 +336,7 @@ const CreatePost = () => {
           <Text style={styles.userTarget}>~ {audienceEstimations}</Text> users.
         </Text>
         <Gap style={{height: 25}} />
-        <Button>Post</Button>
+        <Button onPress={() => postTopic()}>Post</Button>
         <Gap style={{height: 18}} />
         <SheetMedia
           refMedia={sheetMediaRef}
@@ -264,31 +345,35 @@ const CreatePost = () => {
         />
         <SheetAddTopic
           refTopic={sheetTopicRef}
-          onAdd={() => submitTopic()}
-          topic={topic}
-          onChangeTextTopic={(v) => setTopic(v)}
-          listTopic={listTopic}
-          removeTopic={removeTopic}
+          onAdd={(v) => onSaveTopic(v)}
+          topics={listTopic}
+          onClose={() => sheetTopicRef.current.close()}
         />
         <SheetExpiredPost
           refExpired={sheetExpiredRef}
           data={postExpired}
           select={expiredSelect}
-          onSelect={setExpiredSelect}
+          onSelect={onSetExpiredSelect}
         />
         <SheetGeographic
           geoRef={sheetGeoRef}
           data={geoList}
           select={geoSelect}
-          onSelect={updateGeoSelect}
+          onSelect={onSetGeoSelect}
         />
         <SheetPrivacy
           privacyRef={sheetPrivacyRef}
           data={listPrivacy}
           select={privacySelect}
-          onSelect={updatePrivacySelect}
+          onSelect={onSetPrivacySelect}
+        />
+        <SheetCloseBtn
+          backRef={sheetBackRef}
+          goBack={() => navigation.goBack()}
+          continueToEdit={() => sheetBackRef.current.close()}
         />
       </ScrollView>
+      <Loading visible={loading} />
     </SafeAreaView>
   );
 };
