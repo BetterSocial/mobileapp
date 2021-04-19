@@ -124,9 +124,12 @@ const WhotoFollow = () => {
       follow_source: 'onboarding',
     };
 
+    console.log(data)
+
     registerUser(data)
       .then((res) => {
         setFetchRegister(false);
+        console.log(res)
         if (res.code === 200) {
           showMessage({
             message: 'Welcome to Ping',
@@ -140,7 +143,7 @@ const WhotoFollow = () => {
           crashlytics().recordError(new Error(res));
           console.log(res);
           showMessage({
-            message: 'register error',
+            message: 'register error 1',
             type: 'danger',
           });
         }
@@ -149,7 +152,7 @@ const WhotoFollow = () => {
         crashlytics().recordError(new Error(error));
         setFetchRegister(false);
         showMessage({
-          message: 'register error',
+          message: 'register error 2',
           type: 'danger',
         });
       });
@@ -219,6 +222,7 @@ const WhotoFollow = () => {
                               style={styles.flatList}
                               data={val.users}
                               renderItem={renderItem}
+                              listKey={(item) => item.user_id  + "topic"}
                               keyExtractor={(item) => item.user_id + "topic"}
                             />
                           </View>
@@ -245,6 +249,7 @@ const WhotoFollow = () => {
                               style={styles.flatList}
                               data={val.users}
                               renderItem={renderItem}
+                              listKey={(item) => item.user_id  + "location"}
                               keyExtractor={(item) => item.user_id  + "location"}
                             />
                           </View>

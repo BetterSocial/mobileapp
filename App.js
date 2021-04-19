@@ -8,7 +8,8 @@ import Store from './src/context/Store';
 import FlashMessage from 'react-native-flash-message';
 import fetchRemoteConfig from './src/utils/FirebaseUtil';
 import JWTDecode from 'jwt-decode';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {StreamChat} from 'stream-chat';
 import {STREAM_API_KEY, DUMY_TOKEN_GETSTREAM} from '@env';
@@ -17,6 +18,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import {OverlayProvider} from 'stream-chat-react-native';
+import { Linking } from 'react-native';
 
 const AppContext = React.createContext();
 
@@ -26,6 +28,7 @@ const chatClient = new StreamChat(STREAM_API_KEY);
 const App = () => {
   const {bottom} = useSafeAreaInsets();
   const [channel, setChannel] = useState();
+  
   useEffect(() => {
     const init = async () => {
       try {

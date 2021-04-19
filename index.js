@@ -22,6 +22,9 @@ let clientId = __DEV__
   ? HUMAN_ID_CLIENT_ID_DEVELOPMENT
   : HUMAN_ID_CLIENT_ID_PRODUCTION;
 
+console.log(clientSecret)
+console.log(clientId)
+
 configureHumanID({
   appName: HUMAN_ID_APP_NAME,
   clientSecret: clientSecret,

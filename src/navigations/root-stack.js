@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import Home from '../screens/HomeTest';
 import ChooseUsername from '../screens/Onboarding/ChooseUsername';
 import SignIn from '../screens/SignIn/SignIn';
-import SplashScreen from '../screens/SplaceScreen/SplaceScreen';
+import SplashScreen from '../screens/SplashScreen/SplashScreen';
 import LocalComunity from '../screens/LocalComunity';
 import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';

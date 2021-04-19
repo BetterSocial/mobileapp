@@ -31,6 +31,7 @@ export const getUserId = async () => {
     return null;
   }
 };
+
 export const removeLocalStorege = async (value) => {
   try {
     await AsyncStorage.removeItem(value);
