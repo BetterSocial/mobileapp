@@ -35,6 +35,10 @@ import {createPost, ShowingAudience} from '../../service/post';
 import Loading from '../Loading';
 import {showMessage} from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
+import {getToken} from '../../data/local/accessToken';
+import JWTDecode from 'jwt-decode';
+import {getMyProfile} from '../../service/profile';
+import ProfileDefault from '../../assets/images/ProfileDefault.png';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -70,22 +74,31 @@ const CreatePost = () => {
     },
   ]);
   const [expiredSelect, setExpiredSelect] = useState(1);
-  const [geoList, setGeoList] = useState([
-    'Everywhere',
-    'Massachusetts',
-    'Cambridge',
-  ]);
+  // const [geoList, setGeoList] = useState([
+  //   'Everywhere',
+  //   'Massachusetts',
+  //   'Cambridge',
+  // ]);
+  const [geoList, setGeoList] = useState([]);
+  let location = [
+    {
+      location_id: 'everywhere',
+      neighborhood: 'Everywhere',
+    },
+  ];
   const [geoSelect, setGeoSelect] = useState(0);
   let listPrivacy = [
     {
       icon: <MemoIc_world height={16.67} width={16.67} />,
       label: 'Public',
       desc: 'Anyone in your geographic target area can see your post',
+      key: 'public',
     },
     {
       icon: <MemoIc_user_group height={16.67} width={16.67} />,
       label: 'People I follow',
       desc: 'Only those you follow can see your post',
+      key: 'people_i_follow',
     },
   ];
   const [audienceEstimations, setAudienceEstimations] = useState(0);
@@ -94,7 +107,33 @@ const CreatePost = () => {
   const [dataImage, setDataImage] = useState([]);
   const [loading, setLoading] = useState(false);
   const [typeUser, setTypeUser] = useState(false);
+  const [dataProfile, setDataProfile] = useState({});
+
+  const fetchMyProfile = async () => {
+    setLoading(true);
+    let token = await getToken();
+    if (token) {
+      var decoded = await JWTDecode(token);
+      const result = await getMyProfile(decoded.user_id);
+      if (result.code === 200) {
+        setDataProfile(result.data);
+        setLoading(false);
+        await result.data.locations.map((res) => {
+          location.push({
+            location_id: res.location_id,
+            neighborhood: res.neighborhood,
+          });
+        });
+        setGeoList(location);
+
+        // setGeoList((val) => [...val, result.data.locations]);
+        // (val) => [...val, topic];
+        // console.log('isi result ', result.data.locations);
+      }
+    }
+  };
   useEffect(() => {
+    fetchMyProfile();
     analytics().logScreenView({
       screen_class: 'ChooseUsername',
       screen_name: 'ChooseUsername',
@@ -107,18 +146,9 @@ const CreatePost = () => {
     };
   }, [message]);
   const getEstimationsAudience = async (privacy, location) => {
-    const data = await ShowingAudience('everywhere', 'indonesia');
+    const data = await ShowingAudience(privacy, location);
     setAudienceEstimations(data.data);
-  };
-  const updateGeoSelect = (v) => {
-    console.log('location', v);
-    getEstimationsAudience('', v);
-    setGeoSelect(v);
-  };
-  const updatePrivacySelect = (v) => {
-    console.log('privace', v);
-    getEstimationsAudience(v, '');
-    setPrivacySelect(v);
+    console.log('count ', data.data);
   };
   const uploadMediaFromLibrary = () => {
     launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
@@ -153,7 +183,6 @@ const CreatePost = () => {
         console.log(res);
       }
     });
-    // console.log(mediaStorage);
   };
   const onRemoveItem = (v) => {
     let deleteItem = mediaStorage.filter((item) => item.id !== v);
@@ -176,10 +205,15 @@ const CreatePost = () => {
     sheetExpiredRef.current.close();
   };
   const onSetGeoSelect = (v) => {
+    getEstimationsAudience(
+      listPrivacy[privacySelect].key,
+      geoList[v].location_id,
+    );
     setGeoSelect(v);
     sheetGeoRef.current.close();
   };
   const onSetPrivacySelect = (v) => {
+    getEstimationsAudience(listPrivacy[v].key, geoList[geoSelect].location_id);
     setPrivacySelect(v);
     sheetPrivacyRef.current.close();
   };
@@ -220,7 +254,7 @@ const CreatePost = () => {
       feedGroup: 'main_feed',
       privacy: listPrivacy[privacySelect].label,
       anonimity: typeUser,
-      location: geoList[geoSelect],
+      location: geoList[geoSelect].neighborhood,
       duration_feed: postExpired[expiredSelect].value,
       images_url: dataImage,
     };
@@ -284,7 +318,18 @@ const CreatePost = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header title="Create a post" onPress={() => onBack()} />
-        <UserProfile typeUser={typeUser} setTypeUser={setTypeUser} />
+        <UserProfile
+          typeUser={typeUser}
+          setTypeUser={setTypeUser}
+          username={
+            dataProfile.username ? dataProfile.username : 'Loading . . .'
+          }
+          photo={
+            dataProfile.profile_pic_path
+              ? {uri: dataProfile.profile_pic_path}
+              : ProfileDefault
+          }
+        />
         <Gap style={{height: 8}} />
         <TextInput
           onChangeText={(v) => setMessage(v)}
@@ -319,7 +364,9 @@ const CreatePost = () => {
         <Gap style={{height: 16}} />
         <ListItem
           icon={<Location width={16.67} height={16.67} />}
-          label={geoList[geoSelect]}
+          label={
+            geoList.length == 0 ? 'Loading...' : geoList[geoSelect].neighborhood
+          }
           labelStyle={styles.listText}
           onPress={() => sheetGeoRef.current.open()}
         />

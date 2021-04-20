@@ -1,5 +1,4 @@
-import React, {useContext} from 'react';
-import {useState, useEffect} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -131,13 +130,14 @@ const WhotoFollow = () => {
       .then((res) => {
         setFetchRegister(false);
         if (res.code === 200) {
+          console.log(res);
           showMessage({
             message: 'Welcome to Ping',
             description: 'Choose where to get started',
             type: 'success',
           });
           setTimeout(() => {
-            navigation.dispatch(StackActions.replace('Home'));
+            navigation.dispatch(StackActions.replace('HomeTabs'));
           }, 2000);
         } else {
           crashlytics().recordError(new Error(res));
