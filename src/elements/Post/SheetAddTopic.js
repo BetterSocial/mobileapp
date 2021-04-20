@@ -66,6 +66,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics}) => {
                 value={dataTopic}
                 onChangeText={(v) => setTopic(v)}
                 autoFocus={true}
+                autoCapitalize="none"
                 onKeyPress={({nativeEvent}) => {
                   if (nativeEvent.key.trim().length === 0) {
                     add();

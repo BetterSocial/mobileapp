@@ -28,6 +28,7 @@ import {StackActions} from '@react-navigation/native';
 import Loading from '../Loading';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
+import {setToken} from '../../data/local/accessToken';
 
 const width = Dimensions.get('screen').width;
 
@@ -130,7 +131,7 @@ const WhotoFollow = () => {
       .then((res) => {
         setFetchRegister(false);
         if (res.code === 200) {
-          console.log(res);
+          setToken(res.token);
           showMessage({
             message: 'Welcome to Ping',
             description: 'Choose where to get started',
