@@ -19,6 +19,7 @@ import {
   setToken,
   setUserId,
   setRefershToken,
+  setAccessToken,
 } from '../../data/local/accessToken';
 import {fonts} from '../../utils/fonts';
 import {checkToken} from '../../service/outh';
@@ -46,21 +47,22 @@ const SignIn = () => {
           verifyUser(appUserId)
             .then((response) => {
               if (response.data) {
-                setToken(response.token);
+                setAccessToken(response.token);
                 setRefershToken(response.refresh_token);
-              navigation.dispatch(StackActions.replace('Home'));
+                navigation.dispatch(StackActions.replace('HomeTabs'));
               } else {
                 removeLocalStorege('userId');
                 navigation.dispatch(StackActions.replace('ChooseUsername'));
               }
               setUserId(appUserId);
-            // crashlytics().setAttributes({
+              // crashlytics().setAttributes({
               //   appUserId,
               //   countryCode,
               // });
             })
             .catch((err) => {
-              crashlytics().recordError(new Error(err));})
+              crashlytics().recordError(new Error(err));
+            })
             .catch((err) => {
               console.log(err);
             });

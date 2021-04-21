@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import Home from '../screens/HomeTest';
 import ChooseUsername from '../screens/Onboarding/ChooseUsername';
 import SignIn from '../screens/SignIn/SignIn';
-import SplashScreen from '../screens/SplashScreen/SplashScreen';
+import SplashScreen from '../screens/SplaceScreen/SplaceScreen';
 import LocalComunity from '../screens/LocalComunity';
 import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';
@@ -15,7 +15,6 @@ import Settings from '../screens/Settings';
 import HomeBottomTabs from './HomeBottomTabs';
 import {ChannelScreen} from '../screens';
 
-
 const Stack = createStackNavigator();
 const RootStact = () => {
   useEffect(() => {
@@ -23,7 +22,7 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="CreatePost">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="HomeTabs"
         component={HomeBottomTabs}

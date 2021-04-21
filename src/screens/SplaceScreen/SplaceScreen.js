@@ -20,7 +20,7 @@ const SplashScreen = () => {
     // await setTimeout(() => {
     if (userId) {
       if (varifyUserId.data) {
-        navigation.dispatch(StackActions.replace('Home'));
+        navigation.dispatch(StackActions.replace('HomeTabs'));
       } else {
         removeLocalStorege('userId');
         navigation.dispatch(StackActions.replace('SignIn'));

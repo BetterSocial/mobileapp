@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View
+  View,
 } from 'react-native';
 import Header from '../../components/Header';
 import {Button, ButtonAddMedia} from '../../components/Button';
@@ -31,7 +31,7 @@ import SheetPrivacy from '../../elements/Post/SheetPrivacy';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import analytics from '@react-native-firebase/analytics';
-import CreatePollContainer from '../../elements/Post/CreatePollContainer';
+// import CreatePollContainer from '../../elements/Post/CreatePollContainer';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -46,8 +46,8 @@ const CreatePost = () => {
   const [mediaStorage, setMediaStorage] = useState([]);
   const [topic, setTopic] = useState('');
   const [listTopic, setListTopic] = useState([]);
-  const [isPollShown, setIsPollShown] = useState(true)
-  const [polls, setPolls] = useState([])
+  const [isPollShown, setIsPollShown] = useState(true);
+  const [polls, setPolls] = useState([]);
   const [postExpired, setPostExpired] = useState([
     '24 hours',
     '7 days',
@@ -139,7 +139,7 @@ const CreatePost = () => {
     console.log('topic ', v);
   };
   const randerComponentMedia = () => {
-    if (isPollShown) return <View/>
+    if (isPollShown) return <View />;
     if (mediaStorage.length > 0) {
       return (
         <MemoShowMedia
@@ -161,22 +161,26 @@ const CreatePost = () => {
   };
 
   const createPoll = () => {
-    setIsPollShown(true)
-    sheetMediaRef.current.close()
-  }
+    setIsPollShown(true);
+    sheetMediaRef.current.close();
+  };
 
   const removeAllPoll = () => {
     Alert.alert(
-      "Are you sure",
+      'Are you sure',
       "Removing the poll will discard what you've typed.",
       [
-        {text : "Cancel", style: 'cancel'},
-        {text : "Remove", onPress:() => { 
-          setIsPollShown(false)
-          setPolls([])
-        }},
-      ])
-  }
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'Remove',
+          onPress: () => {
+            setIsPollShown(false);
+            setPolls([]);
+          },
+        },
+      ],
+    );
+  };
 
   const renderListTopic = () => {
     if (listTopic.length > 0) {
@@ -210,9 +214,9 @@ const CreatePost = () => {
           }
         />
 
-        { isPollShown && 
-          <CreatePollContainer
-            onremoveallpoll={() => removeAllPoll()}/> }
+        {/* {isPollShown && (
+          <CreatePollContainer onremoveallpoll={() => removeAllPoll()} />
+        )} */}
         <Gap style={{height: 26}} />
         {randerComponentMedia()}
         <Gap style={{height: 29}} />
