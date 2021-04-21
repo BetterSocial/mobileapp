@@ -78,25 +78,7 @@ const CreatePost = () => {
     console.log(selectedTime)
   }, [selectedTime])
 
-  const [postExpired, setPostExpired] = useState([
-    { label : '24 hours', second : 24 * 60 * 60},
-    { label : '7 days', second : 7 * 24 * 60 * 60},
-    { label : '30 days', second : 30 * 24 * 60 * 60},
-    { label : 'Never', second : -1}
-  ]);
   const [expiredSelect, setExpiredSelect] = useState(1);
-  const [geoList, setGeoList] = useState([
-    { label : 'Everywhere', value: 0},
-    { label : 'Massachusetts', value: 1},
-    { label : 'Cambridge', value: 2},
-  ]);
-
-  const sheetBackRef = useRef();
-  const [mediaStorage, setMediaStorage] = useState([]);
-  const [topic, setTopic] = useState('');
-  const [listTopic, setListTopic] = useState([]);
-  const [isPollShown, setIsPollShown] = useState(true);
-  const [polls, setPolls] = useState([]);
   const [postExpired, setPostExpired] = useState([
     {
       label: '24 hours',
@@ -115,7 +97,6 @@ const CreatePost = () => {
       value: 'never',
     },
   ]);
-  const [expiredSelect, setExpiredSelect] = useState(1);
   // const [geoList, setGeoList] = useState([
   //   'Everywhere',
   //   'Massachusetts',

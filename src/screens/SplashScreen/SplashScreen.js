@@ -1,7 +1,6 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import analytics from '@react-native-firebase/analytics';
 import {useNavigation} from '@react-navigation/core';
-import {StackActions} from '@react-navigation/native';
 import jwtDecode from 'jwt-decode';
 import React, {useEffect, useState} from 'react';
 import {Alert, Image, Linking, StyleSheet, View} from 'react-native';
@@ -21,7 +20,7 @@ const SplashScreen = () => {
       screen_name: 'Splash Screen',
     });
 
-    if(getDynamicLink()) return
+    // if(getDynamicLink()) return
     getDeepLinkUrl()
   }, []);
 
@@ -36,7 +35,7 @@ const SplashScreen = () => {
   let getDynamicLink = async() => {
     try {
       dynamicLinks().getInitialLink().then((link) => {
-        console.log("get initial link ")
+        console.log("get initial dynamic link ")
         console.log(link)
         return true
       })
@@ -52,10 +51,8 @@ const SplashScreen = () => {
   }
 
   let getDeepLinkUrl = async() => {
-    let selfUserId = await doVerifyUser()
+    // let selfUserId = await doVerifyUser()
     let deepLinkUrl = await Linking.getInitialURL()
-    console.log(`selfuserid ${selfUserId}`)
-    console.log(`deeplink url ${deepLinkUrl}`)
     if(deepLinkUrl === null) return navigateWithoutDeeplink(selfUserId)
 
     let match = deepLinkUrl.match(`(?<=${BASE_DEEPLINK_URL_REGEX}\/).+`)

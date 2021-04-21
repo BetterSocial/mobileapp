@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
+import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
 import {ButtonNewPost} from '../../components/Button';
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
 import {
