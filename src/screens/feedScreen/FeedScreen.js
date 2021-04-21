@@ -1,40 +1,70 @@
-// import React, {useEffect} from 'react';
-// import {View, Text} from 'react-native';
-// import {ButtonNewPost} from '../../components/Button';
-// import analytics from '@react-native-firebase/analytics';
-
-// const FeedScreen = () => {
-//   // useEffect(() => {
-//   //   analytics().logScreenView({
-//   //     screen_class: 'FeedScreen',
-//   //     screen_name: 'Feed',
-//   //   });
-//   // }, []);
-//   return (
-//     <View style={{flex: 1, flexDirection: 'column'}}>
-//       <Text>Feed Screen</Text>
-//       <ButtonNewPost />
-//     </View>
-//   );
-// };
-
-// export default FeedScreen;
-import React, {useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, SafeAreaView} from 'react-native';
 import {ButtonNewPost} from '../../components/Button';
+import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
+import {
+  StreamApp,
+  FlatFeed,
+  Activity,
+  StatusUpdateForm,
+  LikeButton,
+} from 'react-native-activity-feed';
+import {getToken} from '../../helpers/getToken';
+import JWTDecode from 'jwt-decode';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import RenderActivity from './RenderActivity';
+import {getMyProfile} from '../../service/profile';
 import analytics from '@react-native-firebase/analytics';
-const FeedScreen = () => {
+
+let token_JWT = '';
+const FeedScreen = (props) => {
+  const [tokenParse, setTokenParse] = useState({});
+  const [dataMain, setDataMain] = useState({});
+  const apiKey = STREAM_API_KEY;
+  const appId = STREAM_APP_ID;
+  const token = token_JWT;
+
+  getToken().then((val) => {
+    token_JWT = val;
+  });
   useEffect(() => {
+    fetchMyProfile();
     analytics().logScreenView({
       screen_class: 'FeedScreen',
-      screen_name: 'Feed',
+      screen_name: 'Feed Screen',
     });
   }, []);
+  useEffect(() => {
+    const parseToken = async () => {
+      const value = await AsyncStorage.getItem('tkn-getstream');
+      if (value) {
+        var decoded = await JWTDecode(value);
+        setTokenParse(decoded);
+      }
+    };
+    parseToken();
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>feed</Text>
+    <SafeAreaView style={{flex: 1}} forceInset={{top: 'always'}}>
+      <View style={{flex: 1, backgroundColor: 'white', paddingHorizontal: 16}}>
+        {token !== '' && (
+          <StreamApp apiKey={apiKey} appId={appId} token={token}>
+            <FlatFeed
+              feedGroup="main_feed"
+              userId={tokenParse.user_id}
+              Activity={(props, index) => {
+                return RenderActivity(props);
+              }}
+              notify
+            />
+          </StreamApp>
+        )}
+      </View>
+
       <ButtonNewPost />
-    </View>
+    </SafeAreaView>
   );
 };
 

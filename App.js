@@ -17,6 +17,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import {OverlayProvider} from 'stream-chat-react-native';
+import {Linking} from 'react-native';
 
 const AppContext = React.createContext();
 
@@ -26,6 +27,7 @@ const chatClient = new StreamChat(STREAM_API_KEY);
 const App = () => {
   const {bottom} = useSafeAreaInsets();
   const [channel, setChannel] = useState();
+
   useEffect(() => {
     const init = async () => {
       try {
