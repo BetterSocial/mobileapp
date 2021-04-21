@@ -26,7 +26,7 @@ const SheetGeographic = ({geoRef, data, select, onSelect}) => {
         {data.map((value, index) => (
           <FlatListItem
             key={index}
-            value={value}
+            value={value.label}
             index={index}
             select={select}
             onSelect={onSelect}

@@ -6,10 +6,12 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import ToggleSwitch from 'toggle-switch-react-native';
 
-const UserProfile = () => {
-  const [typeUser, setTypeUser] = useState(false);
+const UserProfile = ({
+  isanonymous = false,
+  onanonymouschanged = (value) => {}
+}) => {
   const userProfile = () => {
-    if (typeUser) {
+    if (isanonymous) {
       return (
         <View style={styles.profile}>
           <Image
@@ -45,13 +47,13 @@ const UserProfile = () => {
     <View style={styles.container}>
       {userProfile()}
       <ToggleSwitch
-        isOn={typeUser}
+        isOn={isanonymous}
         onColor={colors.blue}
         label="Anonymity"
         offColor="#F5F5F5"
         size="small"
         labelStyle={styles.switch}
-        onToggle={() => setTypeUser(!typeUser)}
+        onToggle={() => onanonymouschanged(!isanonymous)}
       />
     </View>
   );

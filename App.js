@@ -61,11 +61,11 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    dynamicLinks()
-      .getInitialLink()
-      .then((link) => {
-        console.log('link ', link);
-      });
+    // dynamicLinks()
+    //   .getInitialLink()
+    //   .then((link) => {
+    //     console.log('link ', link);
+    //   });
   }, []);
 
   return (
