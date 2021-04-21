@@ -137,6 +137,9 @@ const ProfileScreen = () => {
   }
 
   const onShare = async () => {
+    analytics().logEvent('profile_screen_btn_share', {
+      id: 3,
+    });
     try {
       const result = await Share.share({
         message: await buildLink(),
@@ -156,6 +159,9 @@ const ProfileScreen = () => {
   };
 
   const goToSettings = () => {
+    analytics().logEvent('profile_screen_btn_settings', {
+      id: 3,
+    });
     navigation.navigate('Settings');
   };
 

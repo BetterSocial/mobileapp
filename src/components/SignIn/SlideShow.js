@@ -11,11 +11,11 @@ const SlideShow = () => {
   return (
     <SwiperFlatList
       autoplay
-      autoplayDelay={4}
-      autoplayLoopKeepAnimation={true}
+      autoplayDelay={3}
       autoplayLoop
       index={2}
       showPagination
+      paginationStyleItem={styles.dot}
       data={data}
       renderItem={({item}) => <Card image={item} />}
     />
@@ -41,4 +41,9 @@ const styles = StyleSheet.create({
     width: screenWidth,
   },
   image: {flex: 1},
+  dot: {
+    width: 8,
+    height: 8,
+    marginHorizontal: 5,
+  },
 });

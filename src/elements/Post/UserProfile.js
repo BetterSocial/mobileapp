@@ -1,17 +1,19 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import ToggleSwitch from 'toggle-switch-react-native';
-
-const UserProfile = () => {
-  const [typeUser, setTypeUser] = useState(false);
+import {useNavigation} from '@react-navigation/core';
+const UserProfile = ({typeUser, setTypeUser, username, photo}) => {
+  const navigation = useNavigation();
   const userProfile = () => {
-    if (typeUser) {
+    if (isanonymous) {
       return (
-        <View style={styles.profile}>
+        <TouchableOpacity
+          style={styles.profile}
+          onPress={() => navigation.navigate('Profile')}>
           <Image
             source={AnonymousProfile}
             width={32}
@@ -22,22 +24,19 @@ const UserProfile = () => {
             <Text style={styles.username}>Anonymous</Text>
             <Text style={styles.desc}>Username not visible</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       );
     } else {
       return (
-        <View style={styles.profile}>
-          <Image
-            source={ProfileDefault}
-            width={32}
-            height={32}
-            style={styles.image}
-          />
+        <TouchableOpacity
+          style={styles.profile}
+          onPress={() => navigation.navigate('Profile')}>
+          <Image source={photo} width={32} height={32} style={styles.image} />
           <View>
-            <Text style={styles.username}>ali_irawan</Text>
+            <Text style={styles.username}>{username}</Text>
             <Text style={styles.desc}>Your username is visible</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       );
     }
   };
@@ -45,13 +44,13 @@ const UserProfile = () => {
     <View style={styles.container}>
       {userProfile()}
       <ToggleSwitch
-        isOn={typeUser}
+        isOn={isanonymous}
         onColor={colors.blue}
         label="Anonymity"
         offColor="#F5F5F5"
         size="small"
         labelStyle={styles.switch}
-        onToggle={() => setTypeUser(!typeUser)}
+        onToggle={() => onanonymouschanged(!isanonymous)}
       />
     </View>
   );
@@ -86,5 +85,7 @@ const styles = StyleSheet.create({
   },
   image: {
     marginRight: 8,
+    width: 32,
+    height: 32,
   },
 });

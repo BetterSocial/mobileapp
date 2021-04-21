@@ -28,8 +28,10 @@ import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import {setDataHumenId} from '../../context/actions/users';
 import {Context} from '../../context';
-import crashlytics from '@react-native-firebase/crashlytics';
+import BtnHumanID from '../../assets/images/humanid.png';
+import {colors} from 'react-native-swiper-flatlist/src/themes';
 import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
@@ -38,34 +40,24 @@ const SignIn = () => {
       screen_class: 'SignIn',
       screen_name: 'SignIn',
     });
+  });
+  React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
-      await setToken(exchangeToken);
+      // await setToken(exchangeToken);
       checkToken(exchangeToken).then((res) => {
         if (res.data) {
           let {appUserId, countryCode} = res.data;
           setDataHumenId(res.data, dispatch);
-          verifyUser(appUserId)
-            .then((response) => {
-              if (response.data) {
-                setAccessToken(response.token);
-                setRefershToken(response.refresh_token);
+          verifyUser(appUserId).then((response) => {
+            if (response.data) {
+              setAccessToken(response.token);
                 navigation.dispatch(StackActions.replace('HomeTabs'));
               } else {
                 removeLocalStorege('userId');
                 navigation.dispatch(StackActions.replace('ChooseUsername'));
               }
               setUserId(appUserId);
-              // crashlytics().setAttributes({
-              //   appUserId,
-              //   countryCode,
-              // });
-            })
-            .catch((err) => {
-              crashlytics().recordError(new Error(err));
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+              });
         }
       });
     });
@@ -74,14 +66,17 @@ const SignIn = () => {
       console.log('error message', message);
     });
     onCancel(() => {
+      analytics().logEvent('cencel_auth_humanid', {
+        id: '1',
+      });
       console.log('canceled');
     });
   }, []);
   const handleLogin = () => {
     logIn();
-  };
-  const showId = (v) => {
-    console.log(v);
+    analytics().logLogin({
+      method: 'humanid',
+    });
   };
   return (
     <View style={S.container}>
@@ -89,11 +84,8 @@ const SignIn = () => {
         <SlideShow />
       </View>
       <View style={S.containerBtnLogin}>
-        <TouchableOpacity style={S.btn} onPress={() => handleLogin()}>
-          <Image source={require('../../assets/HumanID.png')} style={S.image} />
-          <Text style={S.btnText}>
-            Anonymous Login with <Text style={S.humen}>human</Text>ID
-          </Text>
+        <TouchableOpacity onPress={() => handleLogin()} style={S.btnSign}>
+          <Image source={BtnHumanID} width={321} height={48} style={S.image} />
         </TouchableOpacity>
         <Text style={S.desc}>
           <Text style={S.humanID}>humanID</Text> is an independent non profit
@@ -112,7 +104,9 @@ const S = StyleSheet.create({
     flex: 1,
   },
   image: {
-    marginRight: 7,
+    width: 321,
+    height: 48,
+    borderRadius: 10,
   },
   containerSlideShow: {
     height: '70%',
@@ -121,7 +115,7 @@ const S = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
     alignItems: 'center',
-    paddingTop: 32,
+    paddingTop: 26,
   },
   btn: {
     backgroundColor: '#023B60',
@@ -133,18 +127,33 @@ const S = StyleSheet.create({
     alignItems: 'center',
   },
   desc: {
-    fontWeight: '500',
-    fontFamily: fonts.inter[500],
+    fontWeight: '400',
+    fontFamily: fonts.inter[400],
+    lineHeight: 24,
     fontSize: 12,
     width: 250,
     textAlign: 'center',
-    color: '#b0b0b0',
+    color: colors.gray,
+    marginTop: 16,
   },
   humanID: {
     color: '#11243D',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     textDecorationLine: 'underline',
   },
   btnText: {fontSize: 17, color: '#fff', fontWeight: 'bold'},
   humen: {fontSize: 17, color: '#fff', fontWeight: '100'},
+  btnSign: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 2.62,
+    elevation: 3,
+    // height: 49,
+  },
 });

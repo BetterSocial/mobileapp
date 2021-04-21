@@ -17,4 +17,5 @@ export const colors = {
   pattens_blue: '#ddf2fe',
   blue: '#2F80ED',
   red: '#FF2E63',
+  green : ''
 };

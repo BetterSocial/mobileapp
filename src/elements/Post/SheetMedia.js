@@ -12,7 +12,7 @@ const SheetMedia = ({refMedia, uploadFromMedia, takePhoto, createPoll, medias = 
     <RBSheet
       ref={refMedia}
       closeOnDragDown={true}
-      closeOnPressMask={false}
+      closeOnPressMask={true}
       customStyles={{
         container: {
           borderTopRightRadius: 20,

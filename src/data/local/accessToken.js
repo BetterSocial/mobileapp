@@ -1,18 +1,17 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const KEY_ACCESS_TOKEN = 'access_token';
 const KEY_REFRESH_TOKEN = 'refresh_token';
-
 export const setToken = async (value) => {
   try {
-    await AsyncStorage.setItem('t-ping', value);
+    await AsyncStorage.setItem('tkn-getstream', value);
   } catch (e) {
     console.log(e);
   }
 };
 export const getToken = async () => {
   try {
-    const value = await AsyncStorage.getItem('t-ping');
+    const value = await AsyncStorage.getItem('tkn-getstream');
     return value;
   } catch (e) {
     console.log(e);
