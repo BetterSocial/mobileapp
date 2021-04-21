@@ -141,6 +141,9 @@ export const getProfileByUsername = async(username) => {
     api
       .get(`/profiles/get-profile/${username}`)
       .then((res) => resolve(res.data))
-      .catch((err) => reject(err))
+      .catch((err) => {
+        console.log(err)
+        reject(err)
+      })
   })
 }

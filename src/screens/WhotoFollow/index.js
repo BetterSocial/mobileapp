@@ -1,5 +1,4 @@
-import React, {useContext} from 'react';
-import {useState, useEffect} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -29,6 +28,7 @@ import {StackActions} from '@react-navigation/native';
 import Loading from '../Loading';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
+import {setToken} from '../../data/local/accessToken';
 
 const width = Dimensions.get('screen').width;
 
@@ -47,7 +47,7 @@ const WhotoFollow = () => {
   useEffect(() => {
     analytics().logScreenView({
       screen_class: 'WhotoFollow',
-      screen_name: 'WhotoFollow',
+      screen_name: 'onb_select_follows',
     });
     setIsLoading(true);
     get({url: '/who-to-follow/list'})
@@ -110,6 +110,9 @@ const WhotoFollow = () => {
   }, []);
   const register = () => {
     setFetchRegister(true);
+    analytics().logEvent('onb_select_follows_btn_add', {
+      onb_whofollow_users_selected: followed,
+    });
     const data = {
       users: {
         username: usersState.username,
@@ -124,20 +127,21 @@ const WhotoFollow = () => {
       follow_source: 'onboarding',
     };
 
-    console.log(data)
+    console.log(data);
 
     registerUser(data)
       .then((res) => {
         setFetchRegister(false);
-        console.log(res)
+        console.log(res);
         if (res.code === 200) {
+          setToken(res.token);
           showMessage({
             message: 'Welcome to Ping',
             description: 'Choose where to get started',
             type: 'success',
           });
           setTimeout(() => {
-            navigation.dispatch(StackActions.replace('Home'));
+            navigation.dispatch(StackActions.replace('HomeTabs'));
           }, 2000);
         } else {
           crashlytics().recordError(new Error(res));
@@ -222,8 +226,8 @@ const WhotoFollow = () => {
                               style={styles.flatList}
                               data={val.users}
                               renderItem={renderItem}
-                              listKey={(item) => item.user_id  + "topic"}
-                              keyExtractor={(item) => item.user_id + "topic"}
+                              listKey={(item) => item.user_id + 'topic'}
+                              keyExtractor={(item) => item.user_id + 'topic'}
                             />
                           </View>
                         );
@@ -249,8 +253,8 @@ const WhotoFollow = () => {
                               style={styles.flatList}
                               data={val.users}
                               renderItem={renderItem}
-                              listKey={(item) => item.user_id  + "location"}
-                              keyExtractor={(item) => item.user_id  + "location"}
+                              listKey={(item) => item.user_id + 'location'}
+                              keyExtractor={(item) => item.user_id + 'location'}
                             />
                           </View>
                         );

@@ -43,7 +43,7 @@ export default ShowMedia;
 const ShowImage = ({data, onPress}) => {
   return (
     <ImageBackground
-      source={{uri: `data:image/jpeg;base64,${data.data}`}}
+      source={{uri: data.data}}
       imageStyle={styles.image}
       style={styles.imageContainer}>
       <TouchableOpacity style={styles.icon} onPress={() => onPress(data.id)}>

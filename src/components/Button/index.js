@@ -1,3 +1,5 @@
 import Button from './Button';
 import ButtonAddMedia from './ButtonAddMedia';
-export {Button, ButtonAddMedia};
+import ButtonNewPost from './ButtonNewPost';
+
+export {Button, ButtonAddMedia, ButtonNewPost};

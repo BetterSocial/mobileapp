@@ -11,7 +11,7 @@ const SheetPrivacy = ({privacyRef, data, select, onSelect}) => {
     <RBSheet
       ref={privacyRef}
       closeOnDragDown={true}
-      closeOnPressMask={false}
+      closeOnPressMask={true}
       customStyles={{
         container: {
           borderTopRightRadius: 20,
