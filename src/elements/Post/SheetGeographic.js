@@ -10,7 +10,7 @@ const SheetGeographic = ({geoRef, data, select, onSelect}) => {
     <RBSheet
       ref={geoRef}
       closeOnDragDown={true}
-      closeOnPressMask={false}
+      closeOnPressMask={true}
       customStyles={{
         container: {
           borderTopRightRadius: 20,
@@ -26,7 +26,11 @@ const SheetGeographic = ({geoRef, data, select, onSelect}) => {
         {data.map((value, index) => (
           <FlatListItem
             key={index}
+<<<<<<< HEAD
             value={value.label}
+=======
+            value={value.neighborhood}
+>>>>>>> 521bce3c82af8e90583499f0b5f2a69f5523215b
             index={index}
             select={select}
             onSelect={onSelect}

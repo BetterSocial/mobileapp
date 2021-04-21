@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   StatusBar,
   SafeAreaView,
@@ -13,10 +13,17 @@ import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import analytics from '@react-native-firebase/analytics';
 
 const width = Dimensions.get('screen').width;
 const Settings = () => {
   const navigation = useNavigation();
+  useEffect(() => {
+    analytics().logScreenView({
+      screen_class: 'Settings',
+      screen_name: 'Settings',
+    });
+  }, []);
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -36,13 +43,15 @@ const Settings = () => {
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
           </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            onPress={() => navigation.navigate('TermsAndCondition')}>
             <View style={styles.card}>
               <Text style={styles.textCard}>Terms and Condition</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
           </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            onPress={() => navigation.navigate('PrivacyPolicies')}>
             <View style={styles.card}>
               <Text style={styles.textCard}>Privacy Policy</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
@@ -93,7 +102,7 @@ const styles = StyleSheet.create({
   card: {
     height: 52,
     borderRadius: 8,
-    backgroundColor: colors.wildSand,
+    backgroundColor: colors.lightgrey,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

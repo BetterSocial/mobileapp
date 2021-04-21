@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import Home from '../screens/HomeTest';
 import ChooseUsername from '../screens/Onboarding/ChooseUsername';
 import SignIn from '../screens/SignIn/SignIn';
-import SplashScreen from '../screens/SplashScreen/SplashScreen';
+import SplashScreen from '../screens/SplaceScreen/SplaceScreen';
 import LocalComunity from '../screens/LocalComunity';
 import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';
@@ -14,7 +14,8 @@ import OtherProfile from '../screens/OtherProfile';
 import Settings from '../screens/Settings';
 import HomeBottomTabs from './HomeBottomTabs';
 import {ChannelScreen} from '../screens';
-
+import TermsAndCondition from '../screens/WebView/TermsAndCondition';
+import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
@@ -23,7 +24,7 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="CreatePost">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="HomeTabs"
         component={HomeBottomTabs}
@@ -34,7 +35,6 @@ const RootStact = () => {
         component={ChannelScreen}
         options={{headerShown: false}}
       />
-
       <Stack.Screen
         name="SplashScreen"
         component={SplashScreen}
@@ -88,6 +88,16 @@ const RootStact = () => {
       <Stack.Screen
         name="Settings"
         component={Settings}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TermsAndCondition"
+        component={TermsAndCondition}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PrivacyPolicies"
+        component={PrivacyPolicies}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

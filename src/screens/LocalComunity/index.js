@@ -35,12 +35,14 @@ const LocalComunity = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisibleFirstLocation, setIsVisibleFirstLocation] = useState(false);
   const [isVisibleSecondLocation, setIsVisibleSecondLocation] = useState(false);
+  const [locationPost, setLocationPost] = useState([]);
+  const [locationLog, setLocationLog] = useState([]);
 
   const [, dispatch] = useContext(Context).localCommunity;
   useEffect(() => {
     analytics().logScreenView({
       screen_class: 'LocalComunity',
-      screen_name: 'LocalComunity',
+      screen_name: 'onb_select_location',
     });
   }, []);
 
@@ -70,7 +72,6 @@ const LocalComunity = () => {
         .then((res) => {
           setIsLoading(false);
           if (res.status == 200) {
-            console.log('isi ress ', res.data.body);
             setOptionsSearch(res.data.body);
           }
         })
@@ -87,18 +88,25 @@ const LocalComunity = () => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  const handleSelectedSearch = (val) => {
+  const handleSelectedSearch = async (val) => {
     let tempLocation = [...location];
     if (tempLocation.length <= 1) {
       tempLocation.push(val);
     }
+    console.log('isi val ', tempLocation);
     setSearch(capitalizeFirstLetter(val.neighborhood));
     setOptionsSearch([]);
-    let returnTempLocation = tempLocation.map((val) => {
+    let locLog = [];
+    let returnTempLocation = await tempLocation.map((val) => {
+      locLog.push({
+        location: `${val.city}, ${val.zip}`,
+        location_level: val.location_level,
+      });
       return val.location_id;
     });
-    setLocation(tempLocation);
-    setLocalCommunity(returnTempLocation, dispatch);
+    await setLocation(tempLocation);
+    await setLocationPost(returnTempLocation);
+    await setLocationLog(locLog);
   };
 
   const renderItem = ({item}) => (
@@ -113,16 +121,30 @@ const LocalComunity = () => {
     </View>
   );
 
-  const handleDelete = (val) => {
+  const handleDelete = async (val) => {
     let tempLocation = [...location];
     let index = tempLocation.findIndex((data) => data.location_id === val);
     if (index > -1) {
       tempLocation.splice(index, 1);
     }
-    setLocation(tempLocation);
+    let locLog = [];
+    let returnTempLocation = await tempLocation.map((val) => {
+      locLog.push({
+        location: `${val.city}, ${val.zip}`,
+        location_level: val.location_level,
+      });
+      return val.location_id;
+    });
+    await setLocation(tempLocation);
+    await setLocationPost(returnTempLocation);
+    await setLocationLog(locLog);
   };
   const next = () => {
     if (location.length > 0) {
+      setLocalCommunity(locationPost, dispatch);
+      analytics().logEvent('onb_select_location', {
+        location: locationLog,
+      });
       navigation.navigate('Topics');
     } else {
       showMessage({

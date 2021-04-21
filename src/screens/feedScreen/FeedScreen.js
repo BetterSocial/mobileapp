@@ -12,14 +12,12 @@ import {
 import {getToken} from '../../helpers/getToken';
 import JWTDecode from 'jwt-decode';
 
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import RenderActivity from './RenderActivity';
 import {getMyProfile} from '../../service/profile';
 import analytics from '@react-native-firebase/analytics';
 
 let token_JWT = '';
-
 const FeedScreen = (props) => {
   const [tokenParse, setTokenParse] = useState({});
   const [dataMain, setDataMain] = useState({});
@@ -30,7 +28,13 @@ const FeedScreen = (props) => {
   getToken().then((val) => {
     token_JWT = val;
   });
-
+  useEffect(() => {
+    fetchMyProfile();
+    analytics().logScreenView({
+      screen_class: 'FeedScreen',
+      screen_name: 'Feed Screen',
+    });
+  }, []);
   useEffect(() => {
     const parseToken = async () => {
       const value = await AsyncStorage.getItem('tkn-getstream');
@@ -65,3 +69,7 @@ const FeedScreen = (props) => {
 };
 
 export default FeedScreen;
+
+const styles = StyleSheet.create({
+  container: {flex: 1, flexDirection: 'column'},
+});

@@ -13,8 +13,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import JWTDecode from 'jwt-decode';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
@@ -30,7 +29,7 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import Loading from '../Loading';
 import {getToken} from '../../helpers/getToken';
-import { trimString } from '../../helpers/stringSplit';
+import {trimString} from '../../helpers/stringSplit';
 // import RenderActivity from './RenderActivity';
 
 const width = Dimensions.get('screen').width;
@@ -53,17 +52,17 @@ const OtherProfile = () => {
   const [isShowButton, setIsShowButton] = useState(false);
   const [opacity, setOpacity] = useState(0);
   const [isOffsetScroll, setIsOffsetScroll] = useState(false);
-  const [tokenJwt, setTokenJwt] = useState('')
+  const [tokenJwt, setTokenJwt] = useState('');
 
-  console.log(route.params)
+  console.log(route.params);
   const {params} = route;
 
   useEffect(() => {
-    let getJwtToken = async() => {
-      setTokenJwt(await getToken())
-    }
+    let getJwtToken = async () => {
+      setTokenJwt(await getToken());
+    };
 
-    getJwtToken()
+    getJwtToken();
 
     setUserId(params.data.user_id);
     setOtherId(params.data.other_id);
@@ -79,7 +78,7 @@ const OtherProfile = () => {
     const result = await getOtherProfile(userId, otherId);
     if (result.code == 200) {
       withLoading ? setIsLoading(false) : null;
-      console.log(result.data)
+      console.log(result.data);
       setDataMain(result.data);
     }
   };

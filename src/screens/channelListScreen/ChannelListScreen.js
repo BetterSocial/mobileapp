@@ -3,8 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {ChannelList, Chat} from 'stream-chat-react-native';
 import {STREAM_API_KEY} from '@env';
 import JWTDecode from 'jwt-decode';
-// import AsyncStorage from '@react-native-async-storage/async-storage'
-import AsyncStorage from '@react-native-community/async-storage';;
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {StreamChat} from 'stream-chat';
 import analytics from '@react-native-firebase/analytics';
@@ -31,24 +30,24 @@ const ChannelListScreen = ({navigation}) => {
     });
     setupClient();
   }, []);
-    const setupClient = async () => {
-      try {
-        const value = await AsyncStorage.getItem('tkn-getstream');
-        const decoded = await JWTDecode(value);
-        let userId = decoded.user_id;
-        console.log(userId);
-        let user = {
-          id: userId,
-        };
-        setUserId(userId);
-        await chatClient.connectUser(user, value);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-      const testEnv = () => {
-      console.log(API_TOKEN);
-      }
+  const setupClient = async () => {
+    try {
+      const value = await AsyncStorage.getItem('tkn-getstream');
+      const decoded = await JWTDecode(value);
+      let userId = decoded.user_id;
+      console.log(userId);
+      let user = {
+        id: userId,
+      };
+      setUserId(userId);
+      await chatClient.connectUser(user, value);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const testEnv = () => {
+    console.log(API_TOKEN);
+  };
 
   return (
     <Chat client={chatClient}>

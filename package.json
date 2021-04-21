@@ -1,5 +1,5 @@
 {
-  "name": "BetterSocial",
+  "name": "bettersocial",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -9,12 +9,14 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "android:release": "cd android && ./gradlew app:assembleRelease"
+    "android:release": "cd android && ./gradlew app:assembleRelease",
+    "android:clean": "cd android && ./gradlew clean && ./gradlew cleanBuildCache",
+    "reinstall": "rm -rf node_modules && yarn install"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.12",
     "@human-id/react-native-humanid": "^2.0.1",
-    "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-async-storage/async-storage": "^1.15.2",
     "@react-native-community/blur": "^3.6.0",
     "@react-native-community/cameraroll": "^4.0.3",
     "@react-native-community/masked-view": "^0.1.10",
@@ -60,7 +62,7 @@
     "react-native-swiper-flatlist": "^3.0.14",
     "react-native-text-size": "^4.0.0-rc.1",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-wheel-picker-android": "^2.0.6",
+    "react-native-webview": "^11.4.0",
     "stream-chat-react-native": "^3.1.2",
     "toggle-switch-react-native": "^3.2.0"
   },
