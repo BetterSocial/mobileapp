@@ -51,38 +51,42 @@ const SplashScreen = () => {
   }
 
   let getDeepLinkUrl = async() => {
-    // let selfUserId = await doVerifyUser()
-    let deepLinkUrl = await Linking.getInitialURL()
-    if(deepLinkUrl === null) return navigateWithoutDeeplink(selfUserId)
+    try {
+      let selfUserId = await doVerifyUser()
+      let deepLinkUrl = await Linking.getInitialURL()
+      if(deepLinkUrl === null) return navigateWithoutDeeplink(selfUserId)
 
-    let match = deepLinkUrl.match(`(?<=${BASE_DEEPLINK_URL_REGEX}\/).+`)
-    if(match.length > 0) {
-      setIsModalShown(true)
-      let username = match[0]
-      let otherProfile = await doGetProfileByUsername(username)
+      let match = deepLinkUrl.match(`(?<=${BASE_DEEPLINK_URL_REGEX}\/).+`)
+      if(match.length > 0) {
+        setIsModalShown(true)
+        let username = match[0]
+        let otherProfile = await doGetProfileByUsername(username)
 
-      if(!selfUserId || !otherProfile){
-        if(!otherProfile) Alert.alert(`${username}'s Profile not found`)
-        return navigateWithoutDeeplink(selfUserId)
-      } 
-      
-      // Check if myself 
-      if(selfUserId === otherProfile.user_id) {
-        navigation.replace("HomeTabs", {
-          screen : 'Profile'
+        if(!selfUserId || !otherProfile){
+          if(!otherProfile) Alert.alert(`${username}'s Profile not found`)
+          return navigateWithoutDeeplink(selfUserId)
+        } 
+        
+        // Check if myself 
+        if(selfUserId === otherProfile.user_id) {
+          navigation.replace("HomeTabs", {
+            screen : 'Profile'
+          })
+          return setIsModalShown(false)
+        }
+
+        navigation.replace("OtherProfile", {
+          data : {
+            user_id :selfUserId ,
+            other_id: otherProfile.user_id,
+            username : otherProfile.username
+          }
         })
+
         return setIsModalShown(false)
       }
-
-      navigation.replace("OtherProfile", {
-        data : {
-          user_id :selfUserId ,
-          other_id: otherProfile.user_id,
-          username : otherProfile.username
-        }
-      })
-
-      return setIsModalShown(false)
+    } catch(e) {
+      return navigateWithoutDeeplink(null)
     }
   }
 

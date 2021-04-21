@@ -54,7 +54,7 @@ const SignIn = () => {
               removeLocalStorege('userId');
               navigation.dispatch(StackActions.replace('ChooseUsername'));
             }
-            // setUserId(appUserId);
+            setUserId(appUserId);
           });
         }
       });
