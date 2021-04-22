@@ -37,9 +37,12 @@ import Loading from '../Loading';
 import {showMessage} from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
 // import CreatePollContainer from '../../elements/Post/CreatePollContainer';
-import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from "../../helpers/constants"
-import { createPollPost } from '../../service/post';
-import {getToken} from '../../data/local/accessToken';
+import {
+  MAX_POLLING_ALLOWED,
+  MIN_POLLING_ALLOWED,
+} from '../../helpers/constants';
+import {createPollPost} from '../../service/post';
+import {getAccessToken, getToken} from '../../data/local/accessToken';
 import JWTDecode from 'jwt-decode';
 import {getMyProfile} from '../../service/profile';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
@@ -49,10 +52,7 @@ function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
 const CreatePost = () => {
-  let defaultPollItem = [
-    {text : ""},
-    {text : ""},
-  ]
+  let defaultPollItem = [{text: ''}, {text: ''}];
   const navigation = useNavigation();
   const sheetMediaRef = useRef();
   const sheetTopicRef = useRef();
@@ -60,23 +60,23 @@ const CreatePost = () => {
   const sheetGeoRef = useRef();
   const sheetPrivacyRef = useRef();
 
-  const [message, setMessage] = useState("")
-  const [isAnonymous, setIsAnonymous] = useState(false)
+  const [message, setMessage] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const [mediaStorage, setMediaStorage] = useState([]);
   const [topic, setTopic] = useState('');
   const [listTopic, setListTopic] = useState([]);
-  const [isPollShown, setIsPollShown] = useState(true);
-  const [polls, setPolls] = useState([...defaultPollItem])
+  const [isPollShown, setIsPollShown] = useState(false);
+  const [polls, setPolls] = useState([...defaultPollItem]);
   const [isPollMultipleChoice, setIsPollMultipleChoice] = useState(false);
   const [selectedTime, setSelectedTime] = useState({
-    day : 1,
-    hour : 0,
-    minute : 0
-  })
+    day: 1,
+    hour: 0,
+    minute: 0,
+  });
 
   useEffect(() => {
-    console.log(selectedTime)
-  }, [selectedTime])
+    console.log(selectedTime);
+  }, [selectedTime]);
   const [expiredSelect, setExpiredSelect] = useState(1);
   const [postExpired, setPostExpired] = useState([
     {
@@ -132,7 +132,8 @@ const CreatePost = () => {
 
   const fetchMyProfile = async () => {
     setLoading(true);
-    let token = await getToken();
+    let token = await getAccessToken();
+    console.log(token);
     if (token) {
       var decoded = await JWTDecode(token);
       const result = await getMyProfile(decoded.user_id);
@@ -253,50 +254,59 @@ const CreatePost = () => {
     sheetTopicRef.current.close();
   };
   const postTopic = async () => {
-    if (message === '') {
-      showMessage({
-        message: 'Post messages cannot be empty',
-        type: 'danger',
-      });
-      return true;
-    }
-    if (listTopic.length === 0) {
-      showMessage({
-        message: 'topic cannot be empty',
-        type: 'danger',
-      });
-      return true;
-    }
-    setLoading(true);
-    let data = {
-      topics: listTopic,
-      message: message,
-      verb: 'tweet',
-      feedGroup: 'main_feed',
-      privacy: listPrivacy[privacySelect].label,
-      anonimity: typeUser,
-      location: geoList[geoSelect].neighborhood,
-      duration_feed: postExpired[expiredSelect].value,
-      images_url: dataImage,
-    };
-    let res = await createPost(data);
-    if (res.code === 200) {
-      showMessage({
-        message: 'success create a new post',
-        type: 'success',
-      });
-      setLoading(false);
-      setTimeout(() => {
-        navigation.goBack();
-      }, 2000);
-    } else {
-      setLoading(false);
+    try {
+      if (message === '') {
+        showMessage({
+          message: 'Post messages cannot be empty',
+          type: 'danger',
+        });
+        return true;
+      }
+      if (listTopic.length === 0) {
+        showMessage({
+          message: 'topic cannot be empty',
+          type: 'danger',
+        });
+        return true;
+      }
+      setLoading(true);
+      let data = {
+        topics: listTopic,
+        message: message,
+        verb: 'tweet',
+        feedGroup: 'main_feed',
+        privacy: listPrivacy[privacySelect].label,
+        anonimity: typeUser,
+        location: geoList[geoSelect].neighborhood,
+        duration_feed: postExpired[expiredSelect].value,
+        images_url: dataImage,
+      };
+      let res = await createPost(data);
+      if (res.code === 200) {
+        showMessage({
+          message: 'success create a new post',
+          type: 'success',
+        });
+        setLoading(false);
+        setTimeout(() => {
+          navigation.goBack();
+        }, 2000);
+      } else {
+        setLoading(false);
+        showMessage({
+          message: 'failed to create new posts',
+          type: 'danger',
+        });
+      }
+      console.log(res);
+    } catch (error) {
+      console.log(error);
       showMessage({
         message: 'failed to create new posts',
         type: 'danger',
       });
+      setLoading(false);
     }
-    console.log(res);
   };
   const randerComponentMedia = () => {
     if (isPollShown) return <View />;
@@ -326,73 +336,80 @@ const CreatePost = () => {
   };
 
   const removeAllPoll = () => {
-    let isPollNotEmpty = polls.reduce((accumulator, current) =>  accumulator || current.text !== "", false)
-    if(isPollNotEmpty) return Alert.alert(
-      'Are you sure',
-      "Removing the poll will discard what you've typed.",
-      [
-        {text : "Cancel", style: 'cancel'},
-        {text : "Remove", onPress:() => { 
-          setIsPollShown(false)
-          setPolls(defaultPollItem)
-        }},
-      ])
-
+    let isPollNotEmpty = polls.reduce(
+      (accumulator, current) => accumulator || current.text !== '',
+      false,
+    );
+    if (isPollNotEmpty)
+      return Alert.alert(
+        'Are you sure',
+        "Removing the poll will discard what you've typed.",
+        [
+          {text: 'Cancel', style: 'cancel'},
+          {
+            text: 'Remove',
+            onPress: () => {
+              setIsPollShown(false);
+              setPolls(defaultPollItem);
+            },
+          },
+        ],
+      );
     else {
-      setIsPollShown(false)
-      setPolls(defaultPollItem)
+      setIsPollShown(false);
+      setPolls(defaultPollItem);
     }
-  }
+  };
 
   const addNewPollItem = () => {
-    if(polls.length >= MAX_POLLING_ALLOWED) return
-    setPolls([...polls, {text : ""}])
-  }
+    if (polls.length >= MAX_POLLING_ALLOWED) return;
+    setPolls([...polls, {text: ''}]);
+  };
 
   const removeSinglePollByIndex = (index) => {
-    if(polls.length <= MIN_POLLING_ALLOWED) return
-    polls.splice(index, 1)
-    setPolls([...polls])
-  }
+    if (polls.length <= MIN_POLLING_ALLOWED) return;
+    polls.splice(index, 1);
+    setPolls([...polls]);
+  };
 
   const onSinglePollChanged = (item, index) => {
-    polls[index] = item
-    setPolls([...polls])
-  }
+    polls[index] = item;
+    setPolls([...polls]);
+  };
 
   const isPollButtonDisabled = () => {
     let reducedPoll = polls.reduce((acc, current) => {
-      if(current.text !== "") acc.push(current)
-      return acc
-    }, [])
+      if (current.text !== '') acc.push(current);
+      return acc;
+    }, []);
 
-    return reducedPoll.length < 2
-  }
+    return reducedPoll.length < 2;
+  };
 
   const sendPollPost = async () => {
     let reducedPoll = polls.reduce((acc, current) => {
-      if(current.text !== "") acc.push(current)
-      return acc
-    }, [])
+      if (current.text !== '') acc.push(current);
+      return acc;
+    }, []);
 
     let data = {
       message,
-      verb : "poll",
-      object : {},
-      privacy : listPrivacy[privacySelect],
-      anonimity : isAnonymous,
-      location : geoList[geoSelect].label,
-      duration_feed : postExpired[expiredSelect].label,
-      polls : reducedPoll,
-      pollsduration : selectedTime,
-      multiplechoice : isPollMultipleChoice
-    }
+      verb: 'poll',
+      object: {},
+      privacy: listPrivacy[privacySelect],
+      anonimity: isAnonymous,
+      location: geoList[geoSelect].label,
+      duration_feed: postExpired[expiredSelect].label,
+      polls: reducedPoll,
+      pollsduration: selectedTime,
+      multiplechoice: isPollMultipleChoice,
+    };
 
     try {
-      let response = await createPollPost(data)
-      console.log(response)
-    } catch(e) {
-      console.log(e)
+      let response = await createPollPost(data);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -444,18 +461,23 @@ const CreatePost = () => {
           onChangeText={(value) => setMessage(value)}
         />
 
-        { isPollShown && 
+        {isPollShown && (
           <CreatePollContainer
             polls={polls}
             onaddpoll={() => addNewPollItem()}
-            onsinglepollchanged={(item, index) => onSinglePollChanged(item, index)}
+            onsinglepollchanged={(item, index) =>
+              onSinglePollChanged(item, index)
+            }
             onremovesinglepoll={(index) => removeSinglePollByIndex(index)}
             onremoveallpoll={() => removeAllPoll()}
             ismultiplechoice={isPollMultipleChoice}
             selectedtime={selectedTime}
             ontimechanged={(timeObject) => setSelectedTime(timeObject)}
-            onmultiplechoicechanged={(ismultiplechoice) => setIsPollMultipleChoice(ismultiplechoice)}/>
-        }
+            onmultiplechoicechanged={(ismultiplechoice) =>
+              setIsPollMultipleChoice(ismultiplechoice)
+            }
+          />
+        )}
         <Gap style={{height: 26}} />
         {randerComponentMedia()}
         <Gap style={{height: 29}} />
@@ -498,12 +520,15 @@ const CreatePost = () => {
           <Text style={styles.userTarget}>~ {audienceEstimations}</Text> users.
         </Text>
         <Gap style={{height: 25}} />
-        { isPollShown ?
+        {isPollShown ? (
           <Button
             disabled={isPollButtonDisabled()}
-            onPress={() => sendPollPost()}>Post</Button> : /* Poll Button */
+            onPress={() => sendPollPost()}>
+            Post
+          </Button> /* Poll Button */
+        ) : (
           <Button onPress={() => postTopic()}>Post</Button>
-        }
+        )}
         <Gap style={{height: 18}} />
         <SheetMedia
           refMedia={sheetMediaRef}
@@ -536,17 +561,16 @@ const CreatePost = () => {
           select={privacySelect}
           onSelect={onSetPrivacySelect}
         />
-        <SheetCloseBtn
+        {/* <SheetCloseBtn
           backRef={sheetBackRef}
           goBack={() => navigation.goBack()}
           continueToEdit={() => sheetBackRef.current.close()}
-        />
+        /> */}
       </ScrollView>
       <Loading visible={loading} />
     </SafeAreaView>
   );
 };
-
 
 export default CreatePost;
 
