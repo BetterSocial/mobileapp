@@ -1,4 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const KEY_ACCESS_TOKEN = 'access_token';
+const KEY_REFRESH_TOKEN = 'refresh_token';
 export const setToken = async (value) => {
   try {
     await AsyncStorage.setItem('tkn-getstream', value);
@@ -40,18 +43,28 @@ export const removeLocalStorege = async (value) => {
   }
 };
 
-export const setRefershToken = async (value) => {
+const getAccessToken = async () => {
+  return await AsyncStorage.getItem(KEY_ACCESS_TOKEN);
+};
+
+const setAccessToken = async (token) => {
+  await AsyncStorage.setItem(KEY_ACCESS_TOKEN, token);
+};
+
+const setRefreshToken = async (value) => {
   try {
-    await AsyncStorage.setItem('refresh_token', value);
+    await AsyncStorage.setItem(KEY_REFRESH_TOKEN, value);
   } catch (e) {
     console.log(e);
   }
 };
 
-export const getRefreshToken = async () => {
+const getRefreshToken = async () => {
   try {
-    await AsyncStorage.getItem('refresh_token');
+    await AsyncStorage.getItem(KEY_REFRESH_TOKEN);
   } catch (e) {
     console.log(e);
   }
 };
+
+export {getAccessToken, setAccessToken, setRefreshToken, getRefreshToken};

@@ -15,7 +15,6 @@ import {
 import {LogBox} from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import JWTDecode from 'jwt-decode';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
@@ -42,6 +41,7 @@ import BottomSheetBio from './BottomSheetBio';
 import {trimString} from '../../helpers/stringSplit';
 import {getToken} from '../../helpers/getToken';
 import analytics from '@react-native-firebase/analytics';
+import {getAccessToken} from '../../data/local/accessToken';
 const width = Dimensions.get('screen').width;
 
 let token_JWT = '';
@@ -95,14 +95,14 @@ const ProfileScreen = () => {
   // };
 
   const fetchMyProfile = async (withLoading) => {
-    const value = await AsyncStorage.getItem('tkn-getstream');
+    const value = await getAccessToken();
     if (value) {
       var decoded = await JWTDecode(value);
       setTokenParse(decoded);
       withLoading ? setIsLoading(true) : null;
       const result = await getMyProfile(decoded.user_id);
       console.log(result);
-      if (result.code == 200) {
+      if (result.code === 200) {
         withLoading ? setIsLoading(false) : null;
         setDataMain(result.data);
       }
@@ -351,8 +351,6 @@ const ProfileScreen = () => {
     token_JWT = val;
   });
 
-  console.log('token jwt ', token_JWT);
-
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -444,7 +442,7 @@ const ProfileScreen = () => {
                   </View>
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed
-                      feedGroup="main_feed"
+                      feedGroup="user"
                       userId={tokenParse.user_id}
                       Activity={(props, index) => {
                         return RenderActivity(props, dataMain);

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {getToken} from '../data/local/accessToken';
+import {getAccessToken, getToken} from '../data/local/accessToken';
 import {BASE_URL, BASE_URL_DEV} from '@env';
 
 const api = axios.create({
@@ -9,7 +9,7 @@ const api = axios.create({
 });
 api.interceptors.request.use(
   async (config) => {
-    const token = await getToken();
+    const token = await getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
