@@ -22,6 +22,7 @@ import {fonts} from '../../utils/fonts';
 import {showMessage} from 'react-native-flash-message';
 import {colors} from '../../utils/colors';
 import analytics from '@react-native-firebase/analytics';
+import BtnAddPhoto from '../../assets/icon-svg/ic_btn_add_photo.svg';
 const ChooseUsername = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
@@ -165,7 +166,7 @@ const ChooseUsername = () => {
           <TouchableOpacity
             style={styles.containerAddIcon}
             onPress={() => onPhoto()}>
-            {/* <BtnAddPhoto width={52} height={57} /> */}
+            <BtnAddPhoto width={52} height={57} />
           </TouchableOpacity>
           <View>
             <Input
