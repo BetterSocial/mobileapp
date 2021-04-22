@@ -36,7 +36,7 @@ import {createPost, ShowingAudience} from '../../service/post';
 import Loading from '../Loading';
 import {showMessage} from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
-// import CreatePollContainer from '../../elements/Post/CreatePollContainer';
+import CreatePollContainer from '../../elements/Post/CreatePollContainer';
 import {
   MAX_POLLING_ALLOWED,
   MIN_POLLING_ALLOWED,
