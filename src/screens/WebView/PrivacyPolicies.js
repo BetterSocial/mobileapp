@@ -3,7 +3,9 @@ import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import Header from '../../components/Header';
 import {WebView} from 'react-native-webview';
 import analytics from '@react-native-firebase/analytics';
+import {useNavigation} from '@react-navigation/core';
 const PrivacyPolicies = () => {
+  const navigator = useNavigation();
   useEffect(() => {
     analytics().logScreenView({
       screen_class: 'PrivacyPolicies',
@@ -12,7 +14,7 @@ const PrivacyPolicies = () => {
   }, []);
   return (
     <View style={styles.container}>
-      <Header title="Privacy Policies" />
+      <Header title="Privacy Policies" onPress={() => navigator.goBack()} />
       <WebView
         source={{uri: 'https://www.lipsum.com/feed/html'}}
         showsVerticalScrollIndicator={false}

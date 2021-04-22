@@ -52,6 +52,7 @@ const FeedScreen = (props) => {
         {token !== '' && (
           <StreamApp apiKey={apiKey} appId={appId} token={token}>
             <FlatFeed
+              flatListProps={{showsVerticalScrollIndicator: false}}
               feedGroup="main_feed"
               userId={tokenParse.user_id}
               Activity={(props, index) => {
