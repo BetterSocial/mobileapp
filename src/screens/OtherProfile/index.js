@@ -30,7 +30,7 @@ import {fonts} from '../../utils/fonts';
 import Loading from '../Loading';
 import {getToken} from '../../helpers/getToken';
 import {trimString} from '../../helpers/stringSplit';
-// import RenderActivity from './RenderActivity';
+import RenderActivity from './RenderActivity';
 
 const width = Dimensions.get('screen').width;
 

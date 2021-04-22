@@ -351,8 +351,6 @@ const ProfileScreen = () => {
     token_JWT = val;
   });
 
-  console.log('token jwt ', token_JWT);
-
   return (
     <>
       <StatusBar barStyle="dark-content" />

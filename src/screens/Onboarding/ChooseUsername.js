@@ -165,7 +165,7 @@ const ChooseUsername = () => {
           <TouchableOpacity
             style={styles.containerAddIcon}
             onPress={() => onPhoto()}>
-            <BtnAddPhoto width={52} height={57} />
+            {/* <BtnAddPhoto width={52} height={57} /> */}
           </TouchableOpacity>
           <View>
             <Input

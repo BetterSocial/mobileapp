@@ -7,6 +7,7 @@ import {fonts} from '../../utils/fonts';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {useNavigation} from '@react-navigation/core';
 const UserProfile = ({typeUser, setTypeUser, username, photo}) => {
+  const [isanonymous, onanonymouschanged] = useState();
   const navigation = useNavigation();
   const userProfile = () => {
     if (isanonymous) {

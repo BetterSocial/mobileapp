@@ -18,6 +18,8 @@ import {useNavigation} from '@react-navigation/core';
 import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {getAccessToken} from '../../data/local/accessToken';
+import jwtDecode from 'jwt-decode';
 
 const width = Dimensions.get('screen').width;
 
@@ -39,7 +41,11 @@ const Followings = () => {
 
   const fetchFollowing = async (withLoading) => {
     withLoading ? setIsLoading(true) : null;
-    const result = await getFollowing('288d5679-6c68-41ec-be83-7f15a4e82d3d');
+    const token = await getAccessToken();
+    const userId = await jwtDecode(token).user_id;
+    console.log(userId);
+    const result = await getFollowing(userId);
+    console.log(result);
     if (result.code == 200) {
       withLoading ? setIsLoading(false) : null;
       setDataFollowing(result.data);
