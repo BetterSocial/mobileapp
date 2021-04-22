@@ -4,7 +4,7 @@ import {BASE_URL, BASE_URL_DEV} from '@env';
 
 const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000,
+  timeout: 3000,
   headers: {'content-type': 'application/json'},
 });
 api.interceptors.request.use(

@@ -59,13 +59,14 @@ const CreatePost = () => {
   const sheetExpiredRef = useRef();
   const sheetGeoRef = useRef();
   const sheetPrivacyRef = useRef();
+  const sheetBackRef = useRef();
 
   const [message, setMessage] = useState("")
   const [isAnonymous, setIsAnonymous] = useState(false)
   const [mediaStorage, setMediaStorage] = useState([]);
   const [topic, setTopic] = useState('');
   const [listTopic, setListTopic] = useState([]);
-  const [isPollShown, setIsPollShown] = useState(true)
+  const [isPollShown, setIsPollShown] = useState(false)
   const [polls, setPolls] = useState([...defaultPollItem])
   const [isPollMultipleChoice, setIsPollMultipleChoice] = useState(false)
   const [selectedTime, setSelectedTime] = useState({
@@ -378,21 +379,28 @@ const CreatePost = () => {
 
     let data = {
       message,
+      topics : ["poll"],
       verb : "poll",
       object : {},
-      privacy : listPrivacy[privacySelect],
-      anonimity : isAnonymous,
-      location : geoList[geoSelect].label,
-      duration_feed : postExpired[expiredSelect].label,
+      privacy : listPrivacy[privacySelect].label,
+      anonimity : typeUser,
+      location : geoList[geoSelect].neighborhood,
+      duration_feed : postExpired[expiredSelect].value,
       polls : reducedPoll,
       pollsduration : selectedTime,
       multiplechoice : isPollMultipleChoice
     }
 
     try {
+      // let createTokenResponse = await createToken()
+      // if(createTokenResponse.hasOwnProperty("token")) {
+        
+      //   console.log(response)
+      // }
+      console.log(data)
       let response = await createPollPost(data)
-      console.log(response)
     } catch(e) {
+      console.log("Error")
       console.log(e)
     }
   };
