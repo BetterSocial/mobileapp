@@ -51,7 +51,7 @@ const setAccessToken = async (token) => {
   await AsyncStorage.setItem(KEY_ACCESS_TOKEN, token);
 };
 
-const setRefershToken = async (value) => {
+const setRefreshToken = async (value) => {
   try {
     await AsyncStorage.setItem(KEY_REFRESH_TOKEN, value);
   } catch (e) {
@@ -67,4 +67,4 @@ const getRefreshToken = async () => {
   }
 };
 
-export {getAccessToken, setAccessToken, setRefershToken, getRefreshToken};
+export {getAccessToken, setAccessToken, setRefreshToken, getRefreshToken};

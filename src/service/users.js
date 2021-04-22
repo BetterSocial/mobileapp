@@ -7,6 +7,7 @@ export const verifyUser = async (userId) => {
     });
     return resApi.data;
   } catch (error) {
+    console.log('error verify user');
     crashlytics().recordError(new Error(error));
     console.log(error);
   }

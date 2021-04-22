@@ -18,7 +18,7 @@ import {
   removeLocalStorege,
   setToken,
   setUserId,
-  setRefershToken,
+  setRefreshToken,
   setAccessToken,
 } from '../../data/local/accessToken';
 import {fonts} from '../../utils/fonts';
@@ -35,6 +35,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
+
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'SignIn',
@@ -51,13 +52,14 @@ const SignIn = () => {
           verifyUser(appUserId).then((response) => {
             if (response.data) {
               setAccessToken(response.token);
-                navigation.dispatch(StackActions.replace('HomeTabs'));
-              } else {
-                removeLocalStorege('userId');
-                navigation.dispatch(StackActions.replace('ChooseUsername'));
-              }
-              setUserId(appUserId);
-              });
+              setRefreshToken(response.refresh_token);
+              navigation.dispatch(StackActions.replace('HomeTabs'));
+            } else {
+              removeLocalStorege('userId');
+              navigation.dispatch(StackActions.replace('ChooseUsername'));
+            }
+            setUserId(appUserId);
+          });
         }
       });
     });

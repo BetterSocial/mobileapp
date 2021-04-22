@@ -5,7 +5,7 @@ import {STREAM_API_KEY} from '@env';
 import JWTDecode from 'jwt-decode';
 import {StreamChat} from 'stream-chat';
 import analytics from '@react-native-firebase/analytics';
-import {getToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../data/local/accessToken';
 
 const chatClient = new StreamChat(STREAM_API_KEY);
 
@@ -31,17 +31,17 @@ const ChannelListScreen = ({navigation}) => {
   }, []);
   const setupClient = async () => {
     try {
-      const value = await getToken();
-      console.log(value);
-      const decoded = await JWTDecode(value);
-      let userId = decoded.user_id;
-      console.log(userId);
+      const token = await getAccessToken();
+      console.log(token);
+      const id = await JWTDecode(token).user_id;
+      console.log(id);
       let user = {
-        id: userId,
+        id: id,
       };
-      setUserId(userId);
-      await chatClient.connectUser(user, value);
+      setUserId(id);
+      await chatClient.connectUser(user, token);
     } catch (err) {
+      console.log('Channel list screen');
       console.log(err);
     }
   };

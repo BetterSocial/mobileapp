@@ -29,7 +29,7 @@ const FeedScreen = (props) => {
     token_JWT = val;
   });
   useEffect(() => {
-    fetchMyProfile();
+    // fetchMyProfile();
     analytics().logScreenView({
       screen_class: 'FeedScreen',
       screen_name: 'Feed Screen',
