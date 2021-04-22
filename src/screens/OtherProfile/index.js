@@ -31,6 +31,7 @@ import Loading from '../Loading';
 import {getToken} from '../../helpers/getToken';
 import {trimString} from '../../helpers/stringSplit';
 import RenderActivity from './RenderActivity';
+import {getAccessToken} from '../../data/local/accessToken';
 
 const width = Dimensions.get('screen').width;
 
@@ -71,7 +72,7 @@ const OtherProfile = () => {
   }, [params.data]);
 
   const fetchOtherProfile = async (userId, otherId, withLoading) => {
-    const value = await AsyncStorage.getItem('tkn-getstream');
+    const value = await getAccessToken();
     var decoded = await JWTDecode(value);
     setTokenParse(decoded);
     withLoading ? setIsLoading(true) : null;
@@ -304,7 +305,7 @@ const OtherProfile = () => {
                   </View>
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed
-                      feedGroup="main_feed"
+                      feedGroup="user"
                       userId={other_id}
                       Activity={(props, index) => {
                         return RenderActivity(props, dataMain);

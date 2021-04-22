@@ -35,8 +35,6 @@ const RenderActivity = (props) => {
 
   const getTime = (time) => {
     let date = new Date(time);
-    console.log(date.toISOString());
-    console.log(date.toLocaleDateString());
     return date.toLocaleDateString();
   };
   const _renderItem = ({item, index}, parallaxProps) => {
