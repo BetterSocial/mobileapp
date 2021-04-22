@@ -43,10 +43,9 @@ const Followings = () => {
     withLoading ? setIsLoading(true) : null;
     const token = await getAccessToken();
     const userId = await jwtDecode(token).user_id;
-    console.log(userId);
     const result = await getFollowing(userId);
     console.log(result);
-    if (result.code == 200) {
+    if (result.code === 200) {
       withLoading ? setIsLoading(false) : null;
       setDataFollowing(result.data);
     }
