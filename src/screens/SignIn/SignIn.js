@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Button,
   Image,
@@ -32,9 +32,12 @@ import BtnHumanID from '../../assets/images/humanid.png';
 import {colors} from 'react-native-swiper-flatlist/src/themes';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
+import Loading from '../Loading';
+
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
+  const [loading, setLoading] = useState(false);
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -45,21 +48,27 @@ const SignIn = () => {
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
       // await setToken(exchangeToken);
+      setLoading(true);
       checkToken(exchangeToken).then((res) => {
         if (res.data) {
           let {appUserId, countryCode} = res.data;
           setDataHumenId(res.data, dispatch);
-          verifyUser(appUserId).then((response) => {
-            if (response.data) {
-              setAccessToken(response.token);
-              setRefreshToken(response.refresh_token);
-              navigation.dispatch(StackActions.replace('HomeTabs'));
-            } else {
-              removeLocalStorege('userId');
-              navigation.dispatch(StackActions.replace('ChooseUsername'));
-            }
-            setUserId(appUserId);
-          });
+          verifyUser(appUserId)
+            .then((response) => {
+              setLoading(false);
+              if (response.data) {
+                setAccessToken(response.token);
+                setRefreshToken(response.refresh_token);
+                navigation.dispatch(StackActions.replace('HomeTabs'));
+              } else {
+                removeLocalStorege('userId');
+                navigation.dispatch(StackActions.replace('ChooseUsername'));
+              }
+              setUserId(appUserId);
+            })
+            .catch((e) => {
+              setLoading(false);
+            });
         }
       });
     });
@@ -95,6 +104,7 @@ const SignIn = () => {
           information
         </Text>
       </View>
+      <Loading visible={loading} />
     </View>
   );
 };
