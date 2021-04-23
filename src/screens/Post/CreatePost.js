@@ -59,6 +59,7 @@ const CreatePost = () => {
   const sheetExpiredRef = useRef();
   const sheetGeoRef = useRef();
   const sheetPrivacyRef = useRef();
+  const sheetBackRef = useRef();
 
   const [message, setMessage] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -394,22 +395,29 @@ const CreatePost = () => {
 
     let data = {
       message,
-      verb: 'poll',
-      object: {},
-      privacy: listPrivacy[privacySelect],
-      anonimity: isAnonymous,
-      location: geoList[geoSelect].label,
-      duration_feed: postExpired[expiredSelect].label,
-      polls: reducedPoll,
-      pollsduration: selectedTime,
-      multiplechoice: isPollMultipleChoice,
-    };
+      topics : ["poll"],
+      verb : "poll",
+      object : {},
+      privacy : listPrivacy[privacySelect].label,
+      anonimity : typeUser,
+      location : geoList[geoSelect].neighborhood,
+      duration_feed : postExpired[expiredSelect].value,
+      polls : reducedPoll,
+      pollsduration : selectedTime,
+      multiplechoice : isPollMultipleChoice
+    }
 
     try {
-      let response = await createPollPost(data);
-      console.log(response);
-    } catch (e) {
-      console.log(e);
+      // let createTokenResponse = await createToken()
+      // if(createTokenResponse.hasOwnProperty("token")) {
+        
+      //   console.log(response)
+      // }
+      console.log(data)
+      let response = await createPollPost(data)
+    } catch(e) {
+      console.log("Error")
+      console.log(e)
     }
   };
 

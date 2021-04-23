@@ -13,7 +13,25 @@ export const createPost = async (data) => {
 export const createPollPost = async(data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let resApi = await api.post('/api/v1/feeds/post/poll', data);
+      let resApi = await api.post('/api/v1/activity/post/poll', data
+        // headers : {
+        //   "Authorization" : getstreamToken
+        // }
+      );
+      console.log(resApi)
+      resolve(resApi.data);
+    } catch (error) {
+      console.log("API Error");
+      console.log(error.response);
+      reject(error)
+    }
+  })
+}
+
+export const createFeedToken = async(data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let resApi = await api.post('/api/v1/activity/create-token', data);
       resolve(resApi.data);
     } catch (error) {
       console.log(error);
