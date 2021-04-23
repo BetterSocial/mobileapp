@@ -39,6 +39,7 @@ export default function CreatePollContainer({
         {polls.map((item, index) => {
             return <PollItem index={index} 
                 poll={item}
+                key={`poll-item-${index}`}
                 showdeleteicon={polls.length > MIN_POLLING_ALLOWED}
                 onremovepoll={(index) => onremovesinglepoll(index)}
                 onpollchanged={(item) => {
@@ -91,7 +92,7 @@ export default function CreatePollContainer({
                         ontimechanged(selectedTime)
                     }}>
                     {days.map((item, index) => {
-                        return <PickerItem label={`${item}`} value={index} key={index}/>
+                        return <PickerItem label={`${item}`} value={index} key={`picker-item-day-${index}`}/>
                     })}
                 </Picker>
             </View>
@@ -111,7 +112,7 @@ export default function CreatePollContainer({
                         ontimechanged(selectedTime)
                     }}>
                     {hour.map((item, index) => {
-                        return <PickerItem label={`${item}`} value={index} key={index}/>
+                        return <PickerItem label={`${item}`} value={index} key={`picker-item-${index}`}/>
                     })}
                 </Picker>
             </View>
@@ -130,7 +131,7 @@ export default function CreatePollContainer({
                         ontimechanged(selectedTime)
                     }}>
                     {minute.map((item, index) => {
-                        return <PickerItem label={`${item}`} value={index} key={index}/>
+                        return <PickerItem label={`${item}`} value={index} key={`picker-item-minute-${index}`}/>
                     })}
                 </Picker>
             </View>
