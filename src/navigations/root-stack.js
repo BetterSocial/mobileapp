@@ -16,7 +16,6 @@ import HomeBottomTabs from './HomeBottomTabs';
 import {ChannelScreen} from '../screens';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
-
 const Stack = createStackNavigator();
 const RootStact = () => {
   useEffect(() => {

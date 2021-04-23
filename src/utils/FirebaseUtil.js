@@ -21,14 +21,13 @@ export const fetchRemoteConfig = () => {
       //     IS_APPLICATION_ON: !!snapshot.IS_APPLICATION_ON.asBoolean(),
       //     IS_ANNOUNCEMENTS_ON: !!snapshot.IS_ANNOUNCEMENTS_ON.asBoolean(),
       //   };
-      console.log(res);
       //   let data = snapshot.enable_chat.asBoolean();
       //   console.log(data);
       Object.entries(res).forEach(($) => {
         const [key, entry] = $;
-        console.log('Key: ', key);
-        console.log('Source: ', entry.getSource());
-        console.log('Value: ', entry.asBoolean());
+        // console.log('Key: ', key);
+        // console.log('Source: ', entry.getSource());
+        // console.log('Value: ', entry.asBoolean());
       });
       return res;
     })

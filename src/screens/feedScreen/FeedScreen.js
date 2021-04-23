@@ -12,10 +12,10 @@ import {
 import {getToken} from '../../helpers/getToken';
 import JWTDecode from 'jwt-decode';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import RenderActivity from './RenderActivity';
 import {getMyProfile} from '../../service/profile';
 import analytics from '@react-native-firebase/analytics';
+import {getAccessToken} from '../../data/local/accessToken';
 
 let token_JWT = '';
 const FeedScreen = (props) => {
@@ -33,7 +33,7 @@ const FeedScreen = (props) => {
     token_JWT = val;
   });
   useEffect(() => {
-    fetchMyProfile();
+    // fetchMyProfile();
     analytics().logScreenView({
       screen_class: 'FeedScreen',
       screen_name: 'Feed Screen',
@@ -41,7 +41,7 @@ const FeedScreen = (props) => {
   }, []);
   useEffect(() => {
     const parseToken = async () => {
-      const value = await AsyncStorage.getItem('tkn-getstream');
+      const value = await getAccessToken();
       if (value) {
         var decoded = await JWTDecode(value);
         setTokenParse(decoded);
@@ -79,6 +79,7 @@ const FeedScreen = (props) => {
         {token !== '' && (
           <StreamApp apiKey={apiKey} appId={appId} token={token}>
             <FlatFeed
+              flatListProps={{showsVerticalScrollIndicator: false}}
               feedGroup="main_feed"
               userId={tokenParse.user_id}
               Activity={(props, index) => {

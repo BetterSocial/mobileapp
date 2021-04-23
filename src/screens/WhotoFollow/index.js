@@ -28,7 +28,11 @@ import {StackActions} from '@react-navigation/native';
 import Loading from '../Loading';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
-import {setToken} from '../../data/local/accessToken';
+import {
+  setAccessToken,
+  setRefreshToken,
+  setToken,
+} from '../../data/local/accessToken';
 
 const width = Dimensions.get('screen').width;
 
@@ -132,9 +136,10 @@ const WhotoFollow = () => {
     registerUser(data)
       .then((res) => {
         setFetchRegister(false);
-        console.log(res);
         if (res.code === 200) {
           setToken(res.token);
+          setAccessToken(res.token);
+          setRefreshToken(res.refresh_token);
           showMessage({
             message: 'Welcome to Ping',
             description: 'Choose where to get started',
@@ -145,7 +150,6 @@ const WhotoFollow = () => {
           }, 2000);
         } else {
           crashlytics().recordError(new Error(res));
-          console.log(res);
           showMessage({
             message: 'register error 1',
             type: 'danger',
