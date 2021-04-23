@@ -46,6 +46,7 @@ import {getAccessToken, getToken} from '../../data/local/accessToken';
 import JWTDecode from 'jwt-decode';
 import {getMyProfile} from '../../service/profile';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
+import crashlytics from '@react-native-firebase/crashlytics';
 // import CreatePollContainer from '../../elements/Post/CreatePollContainer';
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -281,6 +282,16 @@ const CreatePost = () => {
         duration_feed: postExpired[expiredSelect].value,
         images_url: dataImage,
       };
+      analytics().logEvent('create_post', {
+        id: 6,
+        newpost_reach: geoList[geoSelect].neighborhood,
+        newpost_privacy: listPrivacy[privacySelect].label,
+        num_images: dataImage.length,
+        added_poll: false,
+        topics_added: listTopic,
+        anon: typeUser,
+        predicted_audience: audienceEstimations,
+      });
       let res = await createPost(data);
       if (res.code === 200) {
         showMessage({
@@ -387,6 +398,7 @@ const CreatePost = () => {
   };
 
   const sendPollPost = async () => {
+    setLoading(true);
     let reducedPoll = polls.reduce((acc, current) => {
       if (current.text !== '') acc.push(current);
       return acc;
@@ -394,23 +406,43 @@ const CreatePost = () => {
 
     let data = {
       message,
-      verb: 'poll',
-      object: {},
-      privacy: listPrivacy[privacySelect],
+      verb: 'post',
+      topics: listTopic,
+      feedGroup: 'main_feed',
+      // object: {},
+      privacy: listPrivacy[privacySelect].label,
       anonimity: isAnonymous,
-      location: geoList[geoSelect].label,
-      duration_feed: postExpired[expiredSelect].label,
+      location: geoList[geoSelect].neighborhood,
+      duration_feed: String(postExpired[expiredSelect].value),
       polls: reducedPoll,
       pollsduration: selectedTime,
       multiplechoice: isPollMultipleChoice,
+      images_url: null,
     };
 
     try {
       let response = await createPollPost(data);
-      console.log(response);
+      console.log('create poll', response);
+      showMessage({
+        message: 'success create a new post',
+        type: 'success',
+      });
+      setLoading(false);
     } catch (e) {
-      console.log(e);
+      crashlytics().recordError(new Error(e));
+      console.log('err', e);
+      setLoading(false);
     }
+    analytics().logEvent('create_post', {
+      id: 6,
+      newpost_reach: geoList[geoSelect].neighborhood,
+      newpost_privacy: listPrivacy[privacySelect].label,
+      num_images: 0,
+      added_poll: true,
+      topics_added: listTopic,
+      anon: typeUser,
+      predicted_audience: audienceEstimations,
+    });
   };
 
   const renderListTopic = () => {

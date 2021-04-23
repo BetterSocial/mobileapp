@@ -84,8 +84,17 @@ const ProfileScreen = () => {
       screen_class: 'ProfileScreen',
       screen_name: 'ProfileScreen',
     });
+    analytics().logEvent('myprofile_begin_view', {
+      id: 'profile_begin',
+      myprofile_begin_view: Date.now(),
+    });
+    return () => {
+      analytics().logEvent('myprofile_end_view', {
+        id: 'myprofile_end_view',
+        myprofile_end_view: Date.now(),
+      });
+    };
   }, []);
-
   // const setToken = async () => {
   //   try {
   //     await AsyncStorage.setItem('tkn-getstream', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjg4ZDU2NzktNmM2OC00MWVjLWJlODMtN2YxNWE0ZTgyZDNkIn0.0YNINzuHdf2afDN0ew3x0DRT0uJFzvBD0CbYL_Exm9c")
@@ -136,7 +145,7 @@ const ProfileScreen = () => {
 
   const onShare = async () => {
     analytics().logEvent('profile_screen_btn_share', {
-      id: 3,
+      id: 'btn_share',
     });
     try {
       const result = await Share.share({
@@ -158,7 +167,7 @@ const ProfileScreen = () => {
 
   const goToSettings = () => {
     analytics().logEvent('profile_screen_btn_settings', {
-      id: 3,
+      id: 'btn_settings',
     });
     navigation.navigate('Settings');
   };
