@@ -82,19 +82,19 @@ const CreatePost = () => {
   const [postExpired, setPostExpired] = useState([
     {
       label: '24 hours',
-      value: 24,
+      value: "24",
     },
     {
       label: '7 days',
-      value: 7,
+      value: "7",
     },
     {
       label: '30 days',
-      value: 30,
+      value: "30",
     },
     {
       label: 'Never',
-      value: 'never',
+      value: "never",
     },
   ]);
   // const [geoList, setGeoList] = useState([
@@ -388,6 +388,7 @@ const CreatePost = () => {
   };
 
   const sendPollPost = async () => {
+    setLoading(true)
     let reducedPoll = polls.reduce((acc, current) => {
       if (current.text !== '') acc.push(current);
       return acc;
@@ -398,6 +399,7 @@ const CreatePost = () => {
       topics : ["poll"],
       verb : "poll",
       object : {},
+      feedGroup : "main_feed",
       privacy : listPrivacy[privacySelect].label,
       anonimity : typeUser,
       location : geoList[geoSelect].neighborhood,
@@ -415,9 +417,14 @@ const CreatePost = () => {
       // }
       console.log(data)
       let response = await createPollPost(data)
+      if(response.status) {
+        navigation.goBack()
+        setLoading(false)
+      }
     } catch(e) {
       console.log("Error")
       console.log(e)
+      setLoading(false)
     }
   };
 
