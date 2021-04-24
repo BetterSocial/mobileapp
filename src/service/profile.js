@@ -9,6 +9,8 @@ export const getMyProfile = async (userId) => {
         resolve(res.data);
       })
       .catch((err) => {
+        console.log("ERR")
+        console.log(err)
         reject(err);
       });
   });

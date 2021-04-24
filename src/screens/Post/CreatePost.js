@@ -75,9 +75,6 @@ const CreatePost = () => {
     minute: 0,
   });
 
-  useEffect(() => {
-    console.log(selectedTime);
-  }, [selectedTime]);
   const [expiredSelect, setExpiredSelect] = useState(1);
   const [postExpired, setPostExpired] = useState([
     {
@@ -134,9 +131,9 @@ const CreatePost = () => {
   const fetchMyProfile = async () => {
     setLoading(true);
     let token = await getAccessToken();
-    console.log(token);
     if (token) {
       var decoded = await JWTDecode(token);
+      console.log(decoded)
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
@@ -153,6 +150,8 @@ const CreatePost = () => {
         // (val) => [...val, topic];
         // console.log('isi result ', result.data.locations);
       }
+
+      setLoading(false)
     }
   };
   useEffect(() => {
@@ -163,9 +162,9 @@ const CreatePost = () => {
     });
   }, []);
   useEffect(() => {
-    // BackHandler.addEventListener('hardwareBackPress', onBack);
+    BackHandler.addEventListener('hardwareBackPress', onBack);
     return () => {
-      // BackHandler.removeEventListener('hardwareBackPress', onBack);
+      BackHandler.removeEventListener('hardwareBackPress', onBack);
     };
   }, [message]);
   const getEstimationsAudience = async (privacy, location) => {
@@ -415,7 +414,6 @@ const CreatePost = () => {
         
       //   console.log(response)
       // }
-      console.log(data)
       let response = await createPollPost(data)
       if(response.status) {
         navigation.goBack()
@@ -423,7 +421,7 @@ const CreatePost = () => {
       }
     } catch(e) {
       console.log("Error")
-      console.log(e)
+      Alert.alert("Error", "error")
       setLoading(false)
     }
   };

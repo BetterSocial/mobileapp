@@ -32,9 +32,9 @@ const ChannelListScreen = ({navigation}) => {
   const setupClient = async () => {
     try {
       const token = await getAccessToken();
-      console.log(token);
+      // console.log(token);
       const id = await JWTDecode(token).user_id;
-      console.log(id);
+      // console.log(id);
       let user = {
         id: id,
       };
