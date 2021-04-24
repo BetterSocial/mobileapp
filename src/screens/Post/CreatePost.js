@@ -60,6 +60,7 @@ const CreatePost = () => {
   const sheetExpiredRef = useRef();
   const sheetGeoRef = useRef();
   const sheetPrivacyRef = useRef();
+  const sheetBackRef = useRef();
 
   const [message, setMessage] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -82,15 +83,15 @@ const CreatePost = () => {
   const [postExpired, setPostExpired] = useState([
     {
       label: '24 hours',
-      value: 24,
+      value: '24',
     },
     {
       label: '7 days',
-      value: 7,
+      value: '7',
     },
     {
       label: '30 days',
-      value: 30,
+      value: '30',
     },
     {
       label: 'Never',
@@ -163,9 +164,9 @@ const CreatePost = () => {
     });
   }, []);
   useEffect(() => {
-    // BackHandler.addEventListener('hardwareBackPress', onBack);
+    BackHandler.addEventListener('hardwareBackPress', onBack);
     return () => {
-      // BackHandler.removeEventListener('hardwareBackPress', onBack);
+      BackHandler.removeEventListener('hardwareBackPress', onBack);
     };
   }, [message]);
   const getEstimationsAudience = async (privacy, location) => {
@@ -406,31 +407,34 @@ const CreatePost = () => {
 
     let data = {
       message,
-      verb: 'post',
-      topics: listTopic,
+      topics: ['poll'],
+      verb: 'poll',
+      object: {},
       feedGroup: 'main_feed',
-      // object: {},
       privacy: listPrivacy[privacySelect].label,
-      anonimity: isAnonymous,
+      anonimity: typeUser,
       location: geoList[geoSelect].neighborhood,
-      duration_feed: String(postExpired[expiredSelect].value),
+      duration_feed: postExpired[expiredSelect].value,
       polls: reducedPoll,
       pollsduration: selectedTime,
       multiplechoice: isPollMultipleChoice,
-      images_url: null,
     };
 
     try {
+      // let createTokenResponse = await createToken()
+      // if(createTokenResponse.hasOwnProperty("token")) {
+
+      //   console.log(response)
+      // }
       let response = await createPollPost(data);
-      console.log('create poll', response);
-      showMessage({
-        message: 'success create a new post',
-        type: 'success',
-      });
-      setLoading(false);
+      if (response.status) {
+        console.log('res ', response);
+        navigation.goBack();
+        setLoading(false);
+      }
     } catch (e) {
-      crashlytics().recordError(new Error(e));
-      console.log('err', e);
+      console.log('Error');
+      console.log(e);
       setLoading(false);
     }
     analytics().logEvent('create_post', {

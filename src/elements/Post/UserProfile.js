@@ -10,7 +10,7 @@ const UserProfile = ({typeUser, setTypeUser, username, photo}) => {
   const [isanonymous, onanonymouschanged] = useState();
   const navigation = useNavigation();
   const userProfile = () => {
-    if (isanonymous) {
+    if (typeUser) {
       return (
         <TouchableOpacity
           style={styles.profile}
@@ -45,13 +45,13 @@ const UserProfile = ({typeUser, setTypeUser, username, photo}) => {
     <View style={styles.container}>
       {userProfile()}
       <ToggleSwitch
-        isOn={isanonymous}
+        isOn={typeUser}
         onColor={colors.blue}
         label="Anonymity"
         offColor="#F5F5F5"
         size="small"
         labelStyle={styles.switch}
-        onToggle={() => onanonymouschanged(!isanonymous)}
+        onToggle={() => setTypeUser(!typeUser)}
       />
     </View>
   );

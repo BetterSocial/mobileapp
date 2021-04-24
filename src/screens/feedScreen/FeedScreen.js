@@ -25,6 +25,10 @@ const FeedScreen = (props) => {
   const appId = STREAM_APP_ID;
   const token = token_JWT;
 
+  const [dataProfile, setDataProfile] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [geoList, setGeoList] = useState([]);
+
   getToken().then((val) => {
     token_JWT = val;
   });
@@ -46,6 +50,29 @@ const FeedScreen = (props) => {
     parseToken();
   }, []);
 
+  const fetchMyProfile = async () => {
+    setLoading(true);
+    let token = await getToken();
+    if (token) {
+      var decoded = await JWTDecode(token);
+      const result = await getMyProfile(decoded.user_id);
+      if (result.code === 200) {
+        setDataProfile(result.data);
+        setLoading(false);
+        await result.data.locations.map((res) => {
+          location.push({
+            location_id: res.location_id,
+            neighborhood: res.neighborhood,
+          });
+        });
+        setGeoList(location);
+
+        // setGeoList((val) => [...val, result.data.locations]);
+        // (val) => [...val, topic];
+        // console.log('isi result ', result.data.locations);
+      }
+    }
+  };
   return (
     <SafeAreaView style={{flex: 1}} forceInset={{top: 'always'}}>
       <View style={{flex: 1, backgroundColor: 'white', paddingHorizontal: 16}}>
@@ -56,7 +83,7 @@ const FeedScreen = (props) => {
               feedGroup="main_feed"
               userId={tokenParse.user_id}
               Activity={(props, index) => {
-                return RenderActivity(props);
+                return <RenderActivity {...props} />;
               }}
               notify
             />
