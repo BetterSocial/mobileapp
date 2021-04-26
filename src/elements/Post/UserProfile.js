@@ -29,7 +29,7 @@ const UserProfile = ({typeUser, setTypeUser, username, photo}) => {
       return (
         <TouchableOpacity
           style={styles.profile}
-          onPress={() => navigation.navigate('Profile')}>
+          onPress={() => navigation.navigate('ProfileScreen')}>
           <Image source={photo} width={32} height={32} style={styles.image} />
           <View>
             <Text style={styles.username}>{username}</Text>
