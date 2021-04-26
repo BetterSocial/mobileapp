@@ -12,9 +12,7 @@ const UserProfile = ({typeUser, setTypeUser, username, photo}) => {
   const userProfile = () => {
     if (typeUser) {
       return (
-        <TouchableOpacity
-          style={styles.profile}
-          onPress={() => navigation.navigate('Profile')}>
+        <View style={styles.profile}>
           <Image
             source={AnonymousProfile}
             width={32}
@@ -25,7 +23,7 @@ const UserProfile = ({typeUser, setTypeUser, username, photo}) => {
             <Text style={styles.username}>Anonymous</Text>
             <Text style={styles.desc}>Username not visible</Text>
           </View>
-        </TouchableOpacity>
+        </View>
       );
     } else {
       return (
