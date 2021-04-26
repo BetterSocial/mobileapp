@@ -76,26 +76,23 @@ const CreatePost = () => {
     minute: 0,
   });
 
-  useEffect(() => {
-    console.log(selectedTime);
-  }, [selectedTime]);
   const [expiredSelect, setExpiredSelect] = useState(1);
   const [postExpired, setPostExpired] = useState([
     {
       label: '24 hours',
-      value: '24',
+      value: 24,
     },
     {
       label: '7 days',
-      value: '7',
+      value: 7,
     },
     {
       label: '30 days',
-      value: '30',
+      value: 30,
     },
     {
       label: 'Never',
-      value: 'never',
+      value: 999,
     },
   ]);
   // const [geoList, setGeoList] = useState([
@@ -135,9 +132,9 @@ const CreatePost = () => {
   const fetchMyProfile = async () => {
     setLoading(true);
     let token = await getAccessToken();
-    console.log(token);
     if (token) {
       var decoded = await JWTDecode(token);
+      console.log(decoded);
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
@@ -154,6 +151,8 @@ const CreatePost = () => {
         // (val) => [...val, topic];
         // console.log('isi result ', result.data.locations);
       }
+
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -293,6 +292,7 @@ const CreatePost = () => {
         anon: typeUser,
         predicted_audience: audienceEstimations,
       });
+      console.log(data);
       let res = await createPost(data);
       if (res.code === 200) {
         showMessage({
@@ -414,7 +414,7 @@ const CreatePost = () => {
       privacy: listPrivacy[privacySelect].label,
       anonimity: typeUser,
       location: geoList[geoSelect].neighborhood,
-      duration_feed: postExpired[expiredSelect].value,
+      duration_feed: String(postExpired[expiredSelect].value),
       polls: reducedPoll,
       pollsduration: selectedTime,
       multiplechoice: isPollMultipleChoice,
@@ -428,13 +428,12 @@ const CreatePost = () => {
       // }
       let response = await createPollPost(data);
       if (response.status) {
-        console.log('res ', response);
         navigation.goBack();
         setLoading(false);
       }
     } catch (e) {
       console.log('Error');
-      console.log(e);
+      Alert.alert('Error', 'error');
       setLoading(false);
     }
     analytics().logEvent('create_post', {
@@ -597,11 +596,11 @@ const CreatePost = () => {
           select={privacySelect}
           onSelect={onSetPrivacySelect}
         />
-        {/* <SheetCloseBtn
+        <SheetCloseBtn
           backRef={sheetBackRef}
           goBack={() => navigation.goBack()}
           continueToEdit={() => sheetBackRef.current.close()}
-        /> */}
+        />
       </ScrollView>
       <Loading visible={loading} />
     </SafeAreaView>

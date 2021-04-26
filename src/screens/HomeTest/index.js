@@ -41,7 +41,7 @@ const Home = ({navigation}) => {
         let token = await doVerifyUser();
         let otherProfile = await doGetProfileByUsername(username);
 
-        console.log(otherProfile.user_id);
+        // console.log(otherProfile.user_id);
 
         let selfUserId = null;
         if (token) {

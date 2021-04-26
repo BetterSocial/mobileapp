@@ -24,7 +24,7 @@ export const createPollPost = async (data) => {
       resolve(resApi.data);
     } catch (error) {
       console.log('API Error');
-      console.log(error.response);
+      console.log(error);
       reject(error);
     }
   });
