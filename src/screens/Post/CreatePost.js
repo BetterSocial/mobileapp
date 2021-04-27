@@ -80,18 +80,34 @@ const CreatePost = () => {
     {
       label: '24 hours',
       value: "24",
+      expiredobject : {
+        hour : 24,
+        day : 1
+      }
     },
     {
       label: '7 days',
       value: "7",
+      expiredobject : {
+        hour : 24,
+        day : 7
+      }
     },
     {
       label: '30 days',
       value: "30",
+      expiredobject : {
+        hour : 24,
+        day : 30
+      }
     },
     {
       label: 'Never',
       value: "never",
+      expiredobject : {
+        hour : 24,
+        day : 30
+      }
     },
   ]);
   // const [geoList, setGeoList] = useState([
@@ -342,8 +358,8 @@ const CreatePost = () => {
     );
     if (isPollNotEmpty)
       return Alert.alert(
-        'Are you sure',
-        "Removing the poll will discard what you've typed.",
+        'Are you sure?',
+        "This cannot be undone",
         [
           {text: 'Cancel', style: 'cancel'},
           {
@@ -408,17 +424,19 @@ const CreatePost = () => {
       multiplechoice : isPollMultipleChoice
     }
 
+    console.log(data)
+
     try {
       // let createTokenResponse = await createToken()
       // if(createTokenResponse.hasOwnProperty("token")) {
         
       //   console.log(response)
       // }
-      let response = await createPollPost(data)
-      if(response.status) {
-        navigation.goBack()
-        setLoading(false)
-      }
+      // // let response = await createPollPost(data)
+      // if(response.status) {
+      //   navigation.goBack()
+      //   setLoading(false)
+      // }
     } catch(e) {
       console.log("Error")
       Alert.alert("Error", "error")
@@ -489,6 +507,7 @@ const CreatePost = () => {
             onmultiplechoicechanged={(ismultiplechoice) =>
               setIsPollMultipleChoice(ismultiplechoice)
             }
+            expiredobject={postExpired[expiredSelect].expiredobject}
           />
         )}
         <Gap style={{height: 26}} />

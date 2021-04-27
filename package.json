@@ -30,6 +30,7 @@
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
     "@stream-io/flat-list-mvcp": "^0.0.9",
+    "@victorzimnikov/react-native-wheel-picker-android": "^3.0.3",
     "axios": "^0.21.1",
     "global": "^4.4.0",
     "jwt-decode": "^3.1.2",
