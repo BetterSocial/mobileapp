@@ -468,7 +468,9 @@ const CreatePost = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always">
         <Header title="Create a post" onPress={() => onBack()} />
         <UserProfile
           typeUser={typeUser}
@@ -577,6 +579,7 @@ const CreatePost = () => {
           onAdd={(v) => onSaveTopic(v)}
           topics={listTopic}
           onClose={() => sheetTopicRef.current.close()}
+          saveOnClose={(v) => setListTopic(v)}
         />
         <SheetExpiredPost
           refExpired={sheetExpiredRef}
@@ -649,7 +652,7 @@ const styles = StyleSheet.create({
   listTopic: {
     flexDirection: 'row',
     marginLeft: 10,
-    zIndex: 99,
+    zIndex: 999,
     paddingTop: 11,
     paddingBottom: 13,
   },

@@ -1,17 +1,28 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import MemoIc_arrow_right from '../../assets/icons/Ic_arrow_right';
 import {colors} from '../../utils/colors';
 
 const MenuPostItem = ({icon, label, labelStyle, onPress, topic, listTopic}) => {
   if (topic) {
     return (
-      <View style={styles.containerTopic}>
+      <Pressable
+        style={styles.containerTopic}
+        onPress={onPress}
+        hitSlop={{bottom: 0, top: 0}}>
         <View style={styles.content}>
           <TouchableOpacity onPress={onPress}>{icon}</TouchableOpacity>
           {listTopic}
         </View>
-      </View>
+      </Pressable>
     );
   }
   return (

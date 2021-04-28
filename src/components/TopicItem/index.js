@@ -7,7 +7,7 @@ const TopicItem = ({label, removeTopic, style}) => {
   return (
     <View style={[styles.containerTag, style]}>
       <Text style={styles.tag}>{label}</Text>
-      <TouchableOpacity onPress={() => removeTopic(label)}>
+      <TouchableOpacity onPress={() => removeTopic(label)} style={styles.btn}>
         <Icon name="close" size={13.33} />
       </TouchableOpacity>
     </View>
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 7.33,
-    width: 122,
+    // width: 122,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -32,4 +32,5 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
   },
+  btn: {marginLeft: 10},
 });

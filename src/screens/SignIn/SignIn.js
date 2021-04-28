@@ -29,6 +29,7 @@ import {StackActions} from '@react-navigation/native';
 import {setDataHumenId} from '../../context/actions/users';
 import {Context} from '../../context';
 import BtnHumanID from '../../assets/images/humanid.png';
+import ButtonSign from '../../assets/icon-svg/button_sign.svg';
 import {colors} from 'react-native-swiper-flatlist/src/themes';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -96,12 +97,13 @@ const SignIn = () => {
       </View>
       <View style={S.containerBtnLogin}>
         <TouchableOpacity onPress={() => handleLogin()} style={S.btnSign}>
-          <Image source={BtnHumanID} width={321} height={48} style={S.image} />
+          {/* <Image source={BtnHumanID} width={321} height={48} style={S.image} /> */}
+          <ButtonSign />
         </TouchableOpacity>
         <Text style={S.desc}>
-          <Text style={S.humanID}>humanID</Text> is an independent non profit
-          guaranteeing you privacy. Ping will receive absolutely zero personal
-          information
+          <Text style={S.humanID}>humanID</Text> is an independent non-profit
+          guaranteeing you privacy and anonymity. Better Social will receive
+          absolutely zero personal information.
         </Text>
       </View>
       <Loading visible={loading} />
