@@ -234,9 +234,9 @@ const OtherProfile = () => {
                           }}
                         />
                         <Text style={styles.nameProfile}>
-                          {dataMain.real_name
-                            ? dataMain.real_name
-                            : 'no name specifics'}
+                          {dataMain.bio
+                            ? dataMain.bio
+                            : ''}
                         </Text>
                       </View>
                       <View style={styles.wrapButton}>
@@ -301,7 +301,7 @@ const OtherProfile = () => {
               {!isLoading ? (
                 <View>
                   <View style={styles.tabs} ref={postRef}>
-                    <Text style={styles.postText}>Post ({})</Text>
+                    <Text style={styles.postText}>Post ({/* Please change this to post size */ 0})</Text>
                   </View>
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed

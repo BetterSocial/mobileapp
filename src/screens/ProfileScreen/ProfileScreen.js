@@ -401,13 +401,13 @@ const ProfileScreen = () => {
                         }}
                       />
                     </TouchableNativeFeedback>
-                    <TouchableNativeFeedback onPress={changeName}>
+                    {/* <TouchableNativeFeedback onPress={changeName}>
                       <Text style={styles.nameProfile}>
-                        {dataMain.real_name
-                          ? dataMain.real_name
-                          : 'no name specifics'}
+                        {dataMain.bio
+                          ? 'asdads'
+                          : 'asdasd'}
                       </Text>
-                    </TouchableNativeFeedback>
+                    </TouchableNativeFeedback> */}
                   </View>
                   <View style={{...styles.wrapFollower, marginTop: 12}}>
                     <View style={styles.wrapRow}>
@@ -438,7 +438,7 @@ const ProfileScreen = () => {
               {!isLoading ? (
                 <View>
                   <View style={styles.tabs} ref={postRef}>
-                    <Text style={styles.postText}>Post ({})</Text>
+                    <Text style={styles.postText}>Post ({/* Please change this to post size*/ 0})</Text>
                   </View>
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed

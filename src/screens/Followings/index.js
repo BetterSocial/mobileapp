@@ -9,6 +9,7 @@ import {
   StyleSheet,
   TouchableNativeFeedback,
   FlatList,
+  Image,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
@@ -52,27 +53,37 @@ const Followings = () => {
   };
 
   const goToOtherProfile = (value) => {
+    // let data = {
+    //   user_id,
+    //   other_id: value.user_id_followed,
+    //   username,
+    // };
+
     let data = {
       user_id,
-      other_id: value.user_id_followed,
-      username,
-    };
+      other_id : value.user_id_followed,
+      username : value.user.username
+    }
+
     navigation.navigate('OtherProfile', {data});
   };
 
-  const renderItem = ({item}) => (
-    <TouchableNativeFeedback
+  const renderItem = ({item}) => {
+    console.log(item.user.profile_pic_path)
+    return <TouchableNativeFeedback
       onPress={(event) => {
         event.preventDefault();
         goToOtherProfile(item);
       }}>
       <View style={styles.card}>
         <View style={styles.wrapProfile}>
-          <MemoIc_btn_add width={48} height={48} />
+          <Image source={{
+            uri : item.user.profile_pic_path
+          }} style={styles.profilepicture} width={48} height={48}/>
           <View style={styles.wrapTextProfile}>
             <Text style={styles.textProfileUsername}>{item.user.username}</Text>
-            <Text style={styles.textProfileFullName}>
-              {item.user.real_name ? item.user.real_name : 'no name specifics'}
+            <Text style={styles.textProfileFullName} numberOfLines={1} ellipsizeMode={'tail'}>
+              {item.user.bio ? item.user.bio : ''}
             </Text>
           </View>
         </View>
@@ -83,7 +94,7 @@ const Followings = () => {
         </TouchableNativeFeedback>
       </View>
     </TouchableNativeFeedback>
-  );
+  };
 
   return (
     <>
@@ -165,7 +176,6 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   content: {
-    padding: 20,
     flexDirection: 'column',
     paddingBottom: 150,
   },
@@ -174,10 +184,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width : '100%',
+    paddingHorizontal : 20,
+    marginVertical : 10
   },
   wrapProfile: {
     flexDirection: 'row',
     alignItems: 'center',
+    width : '100%',
+    flex : 1,
+    marginEnd : 16
   },
   imageProfile: {
     width: 48,
@@ -187,6 +203,7 @@ const styles = StyleSheet.create({
   wrapTextProfile: {
     marginLeft: 12,
     flexDirection: 'column',
+    flex : 1,
     justifyContent: 'space-between',
   },
   textProfileUsername: {
@@ -199,6 +216,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.gray,
+    flexWrap : 'wrap'
   },
   buttonFollowing: {
     width: 88,
@@ -208,7 +226,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.bondi_blue,
-    borderRadius: 8,
+    borderRadius: 8
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
@@ -216,5 +234,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.bondi_blue,
   },
+  profilepicture : {
+    width : 48,
+    height : 48,
+    backgroundColor : colors.bondi_blue,
+    borderRadius : 24,
+    resizeMode : 'cover'
+  }
 });
 export default Followings;
