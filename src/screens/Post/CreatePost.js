@@ -430,17 +430,6 @@ const CreatePost = () => {
 
       //   console.log(response)
       // }
-<<<<<<< HEAD
-      // // let response = await createPollPost(data)
-      // if(response.status) {
-      //   navigation.goBack()
-      //   setLoading(false)
-      // }
-    } catch(e) {
-      console.log("Error")
-      Alert.alert("Error", "error")
-      setLoading(false)
-=======
       let response = await createPollPost(data);
       if (response.status) {
         navigation.goBack();
@@ -450,7 +439,6 @@ const CreatePost = () => {
       console.log('Error');
       Alert.alert('Error', 'error');
       setLoading(false);
->>>>>>> 85699e2e67d2680d420d3091b21d3bca546e3327
     }
   };
 
