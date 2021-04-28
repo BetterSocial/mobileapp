@@ -62,7 +62,6 @@ const CreatePost = () => {
   const sheetBackRef = useRef();
 
   const [message, setMessage] = useState('');
-  const [isAnonymous, setIsAnonymous] = useState(false);
   const [mediaStorage, setMediaStorage] = useState([]);
   const [topic, setTopic] = useState('');
   const [listTopic, setListTopic] = useState([]);
@@ -79,7 +78,7 @@ const CreatePost = () => {
   const [postExpired, setPostExpired] = useState([
     {
       label: '24 hours',
-      value: "24",
+      value: '24',
       expiredobject : {
         hour : 24,
         day : 1
@@ -87,7 +86,7 @@ const CreatePost = () => {
     },
     {
       label: '7 days',
-      value: "7",
+      value: '7',
       expiredobject : {
         hour : 24,
         day : 7
@@ -95,7 +94,7 @@ const CreatePost = () => {
     },
     {
       label: '30 days',
-      value: "30",
+      value: '30',
       expiredobject : {
         hour : 24,
         day : 30
@@ -149,7 +148,6 @@ const CreatePost = () => {
     let token = await getAccessToken();
     if (token) {
       var decoded = await JWTDecode(token);
-      console.log(decoded)
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
@@ -167,7 +165,7 @@ const CreatePost = () => {
         // console.log('isi result ', result.data.locations);
       }
 
-      setLoading(false)
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -403,7 +401,7 @@ const CreatePost = () => {
   };
 
   const sendPollPost = async () => {
-    setLoading(true)
+    setLoading(true);
     let reducedPoll = polls.reduce((acc, current) => {
       if (current.text !== '') acc.push(current);
       return acc;
@@ -411,27 +409,28 @@ const CreatePost = () => {
 
     let data = {
       message,
-      topics : ["poll"],
-      verb : "poll",
-      object : {},
-      feedGroup : "main_feed",
-      privacy : listPrivacy[privacySelect].label,
-      anonimity : typeUser,
-      location : geoList[geoSelect].neighborhood,
-      duration_feed : postExpired[expiredSelect].value,
-      polls : reducedPoll,
-      pollsduration : selectedTime,
-      multiplechoice : isPollMultipleChoice
-    }
+      topics: ['poll'],
+      verb: 'poll',
+      object: {},
+      feedGroup: 'main_feed',
+      privacy: listPrivacy[privacySelect].label,
+      anonimity: typeUser,
+      location: geoList[geoSelect].neighborhood,
+      duration_feed: postExpired[expiredSelect].value,
+      polls: reducedPoll,
+      pollsduration: selectedTime,
+      multiplechoice: isPollMultipleChoice,
+    };
 
     console.log(data)
 
     try {
       // let createTokenResponse = await createToken()
       // if(createTokenResponse.hasOwnProperty("token")) {
-        
+
       //   console.log(response)
       // }
+<<<<<<< HEAD
       // // let response = await createPollPost(data)
       // if(response.status) {
       //   navigation.goBack()
@@ -441,6 +440,17 @@ const CreatePost = () => {
       console.log("Error")
       Alert.alert("Error", "error")
       setLoading(false)
+=======
+      let response = await createPollPost(data);
+      if (response.status) {
+        navigation.goBack();
+        setLoading(false);
+      }
+    } catch (e) {
+      console.log('Error');
+      Alert.alert('Error', 'error');
+      setLoading(false);
+>>>>>>> 85699e2e67d2680d420d3091b21d3bca546e3327
     }
   };
 
