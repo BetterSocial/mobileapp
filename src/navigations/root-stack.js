@@ -13,7 +13,7 @@ import Followings from '../screens/Followings';
 import OtherProfile from '../screens/OtherProfile';
 import Settings from '../screens/Settings';
 import HomeBottomTabs from './HomeBottomTabs';
-import {ChannelScreen} from '../screens';
+import {ChannelScreen, ProfileScreen} from '../screens';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 const Stack = createStackNavigator();
@@ -97,6 +97,11 @@ const RootStact = () => {
       <Stack.Screen
         name="PrivacyPolicies"
         component={PrivacyPolicies}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
