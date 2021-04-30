@@ -13,13 +13,13 @@ const BottomSheet = React.forwardRef((props, ref)=> {
       customStyles={{
         container: {
           borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
+          borderTopLeftRadius: 20
         },
         draggableIcon: {
           backgroundColor: colors.alto,
         },
       }}>
-      <View style={styles.container}>
+      <View style={{...styles.container, ...props.viewstyle}}>
         {props.children}
       </View>
     </RBSheet>
@@ -32,6 +32,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom: 38,
+    paddingBottom: 38
   },
 });
