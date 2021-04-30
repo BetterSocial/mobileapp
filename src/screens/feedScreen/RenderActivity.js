@@ -26,12 +26,16 @@ import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import ReplyIcon from '../../../assets/icons/reply/reply.png';
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 
+import MemoIc_world from '../../assets/icons/Ic_world';
+import Memoic_globe from '../../assets/icons/ic_globe';
+import MemoIc_user_group from '../../assets/icons/Ic_user_group';
+
 const {width: screenWidth} = Dimensions.get('window');
 
 const RenderActivity = (props) => {
   const activity = props.activity;
-  let {anonimity} = activity;
-  let {profile_pic_path, real_name} = JSON.parse(activity.object);
+  let {anonimity, privacy, location} = activity;
+  let {profile_pic_path, real_name, username} = JSON.parse(activity.object);
 
   const getTime = (time) => {
     let date = new Date(time);
@@ -90,14 +94,20 @@ const RenderActivity = (props) => {
         />
         <View style={styles.containerFeedProfile}>
           <Text style={styles.feedUsername}>
-            {real_name ? real_name : 'no name specifics'}
+            {username ? username : 'no name specifics'}
           </Text>
           <View style={styles.containerFeedText}>
-            <Text style={styles.feedDate}>20 Feb 2021</Text>
-            <View style={styles.point} />
             <Text style={styles.feedDate}>
               {moment.utc(props.activity.time).local().fromNow()}
             </Text>
+            <View style={styles.point} />
+            {privacy ? (
+              <Memoic_globe height={17} width={17} />
+            ) : (
+              <MemoIc_user_group height={17} width={17} />
+            )}
+            <View style={styles.point} />
+            <Text style={styles.feedDate}>{location}</Text>
           </View>
         </View>
       </View>

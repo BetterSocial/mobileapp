@@ -280,6 +280,7 @@ const CreatePost = () => {
         images_url: dataImage,
       };
       let res = await createPost(data);
+      console.log(res);
       if (res.code === 200) {
         showMessage({
           message: 'success create a new post',

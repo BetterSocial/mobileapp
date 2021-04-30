@@ -1,6 +1,7 @@
 import api from './config';
 import crashlytics from '@react-native-firebase/crashlytics';
 export const createPost = async (data) => {
+  console.log(data);
   try {
     let resApi = await api.post('/activity/post', data);
     return resApi.data;
@@ -10,35 +11,37 @@ export const createPost = async (data) => {
   }
 };
 
-export const createPollPost = async(data) => {
+export const createPollPost = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let resApi = await api.post('/activity/post/poll', data
+      let resApi = await api.post(
+        '/activity/post/poll',
+        data,
         // headers : {
         //   "Authorization" : getstreamToken
         // }
       );
-      console.log(resApi)
+      console.log(resApi);
       resolve(resApi.data);
     } catch (error) {
-      console.log("API Error");
+      console.log('API Error');
       console.log(error);
-      reject(error)
+      reject(error);
     }
-  })
-}
+  });
+};
 
-export const createFeedToken = async(data) => {
+export const createFeedToken = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       let resApi = await api.post('/activity/create-token', data);
       resolve(resApi.data);
     } catch (error) {
       console.log(error);
-      reject(error)
+      reject(error);
     }
-  })
-}
+  });
+};
 
 export const ShowingAudience = async (privacy, location) => {
   try {
@@ -49,5 +52,16 @@ export const ShowingAudience = async (privacy, location) => {
   } catch (error) {
     console.log(error);
     crashlytics().recordError(new Error(error));
+  }
+};
+
+export const getMainFeed = async () => {
+  try {
+    let res = await api.get('/activity/feeds');
+    return res.data;
+  } catch (err) {
+    console.log('ini error');
+    console.log(err);
+    crashlytics().recordError(new Error(err));
   }
 };
