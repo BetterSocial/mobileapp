@@ -18,12 +18,14 @@ import {BottomSheet} from '../../components/BottomSheet';
 const BottomSheetImage = forwardRef((props, ref) => (
   <BottomSheet ref={ref} closeOnPressMask={true} height={300}>
     <View style={styles.containerBottomSheet}>
-      <View style={styles.card}>
-        <View style={styles.wrapCardImage}>
-          <UserIcon width={16.67} height={16.67} fill={colors.black} />
-          <Text style={styles.textCard}>View profile picture</Text>
+      <TouchableNativeFeedback onPress={() => props.onViewProfilePicture()}>
+        <View style={styles.card}>
+          <View style={styles.wrapCardImage}>
+            <UserIcon width={16.67} height={16.67} fill={colors.black} />
+            <Text style={styles.textCard}>View profile picture</Text>
+          </View>
         </View>
-      </View>
+      </TouchableNativeFeedback>
       <TouchableNativeFeedback onPress={() => props.onOpenImageGalery()}>
         <View style={styles.card}>
           <View style={styles.wrapCardImage}>

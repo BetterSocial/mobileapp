@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import MemoIcClearCircle from '../../assets/icons/ic_clear_circle'
 import MemoIcClose from '../../assets/icons/ic_close'
 import { MAX_POLLING_CHARACTER_ALLOWED } from '../../helpers/constants'
 import { colors } from '../../utils/colors'
@@ -9,18 +10,23 @@ export default function PollItem({
     poll,
     onremovepoll = (index) => {},
     onpollchanged = (item, index) => {},
-    showdeleteicon
+    showdeleteicon,
+    showcharactercount = false
 }) {
-    return <View style={S.pollitemcontainer}>
+    let [isTextInputFocus, setIsTextInputFocus] = useState(false)
+
+    return <View style={isTextInputFocus ? S.focuspollitemcontainer : S.pollitemcontainer}>
         <TextInput placeholder={`Choice ${index + 1}`} 
             style={S.pollitemtextinput}
+            onFocus={() => setIsTextInputFocus(true)}
+            onBlur={() => setIsTextInputFocus(false)}
             onChangeText={(value) => {
                 if(value.length <= MAX_POLLING_CHARACTER_ALLOWED) return onpollchanged({text: value}, index)
             }}
             value={poll.text}/>
-        <Text style={S.pollitemtextcount}>{`${poll.text.length}/${MAX_POLLING_CHARACTER_ALLOWED}`}</Text>
+        { showcharactercount && <Text style={S.pollitemtextcount}>{`${poll.text.length}/${MAX_POLLING_CHARACTER_ALLOWED}`}</Text> }
         { showdeleteicon &&<TouchableOpacity style={S.removepollcontainer} onPress={() => onremovepoll(index)}>
-            <MemoIcClose style={S.removepollicon}/> 
+            <MemoIcClearCircle width={20} height={20} style={S.removepollicon}/> 
         </TouchableOpacity>}
     </View>
 }
@@ -34,6 +40,16 @@ const S = StyleSheet.create({
         borderRadius : 10,
         marginVertical : 4,
         paddingHorizontal : 8
+    },
+
+    focuspollitemcontainer : {
+        display : 'flex',
+        flexDirection : 'row',
+        borderWidth : 1,
+        borderRadius : 10,
+        marginVertical : 4,
+        paddingHorizontal : 8,
+        borderColor : colors.holytosca
     },
     
     pollitemtextinput : {

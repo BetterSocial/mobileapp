@@ -63,7 +63,6 @@ const CreatePost = () => {
   const sheetBackRef = useRef();
 
   const [message, setMessage] = useState('');
-  const [isAnonymous, setIsAnonymous] = useState(false);
   const [mediaStorage, setMediaStorage] = useState([]);
   const [topic, setTopic] = useState('');
   const [listTopic, setListTopic] = useState([]);
@@ -80,19 +79,35 @@ const CreatePost = () => {
   const [postExpired, setPostExpired] = useState([
     {
       label: '24 hours',
-      value: 24,
+      value: '24',
+      expiredobject : {
+        hour : 24,
+        day : 1
+      }
     },
     {
       label: '7 days',
-      value: 7,
+      value: '7',
+      expiredobject : {
+        hour : 24,
+        day : 7
+      }
     },
     {
       label: '30 days',
-      value: 30,
+      value: '30',
+      expiredobject : {
+        hour : 24,
+        day : 30
+      }
     },
     {
       label: 'Never',
-      value: 999,
+      value: "never",
+      expiredobject : {
+        hour : 24,
+        day : 30
+      }
     },
   ]);
   // const [geoList, setGeoList] = useState([
@@ -134,7 +149,6 @@ const CreatePost = () => {
     let token = await getAccessToken();
     if (token) {
       var decoded = await JWTDecode(token);
-      console.log(decoded);
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
@@ -354,8 +368,8 @@ const CreatePost = () => {
     );
     if (isPollNotEmpty)
       return Alert.alert(
-        'Are you sure',
-        "Removing the poll will discard what you've typed.",
+        'Are you sure?',
+        "This cannot be undone",
         [
           {text: 'Cancel', style: 'cancel'},
           {
@@ -414,11 +428,14 @@ const CreatePost = () => {
       privacy: listPrivacy[privacySelect].label,
       anonimity: typeUser,
       location: geoList[geoSelect].neighborhood,
-      duration_feed: String(postExpired[expiredSelect].value),
+
+      duration_feed: postExpired[expiredSelect].value,
+
       polls: reducedPoll,
       pollsduration: selectedTime,
       multiplechoice: isPollMultipleChoice,
     };
+    console.log(data)
 
     try {
       // let createTokenResponse = await createToken()
@@ -511,6 +528,7 @@ const CreatePost = () => {
             onmultiplechoicechanged={(ismultiplechoice) =>
               setIsPollMultipleChoice(ismultiplechoice)
             }
+            expiredobject={postExpired[expiredSelect].expiredobject}
           />
         )}
         <Gap style={{height: 26}} />

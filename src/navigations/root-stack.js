@@ -13,9 +13,10 @@ import Followings from '../screens/Followings';
 import OtherProfile from '../screens/OtherProfile';
 import Settings from '../screens/Settings';
 import HomeBottomTabs from './HomeBottomTabs';
-import {ChannelScreen} from '../screens';
+import {ChannelScreen, ProfileScreen} from '../screens';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
+import ImageViewerScreen from '../screens/ImageViewer';
 const Stack = createStackNavigator();
 const RootStact = () => {
   useEffect(() => {
@@ -98,6 +99,15 @@ const RootStact = () => {
         name="PrivacyPolicies"
         component={PrivacyPolicies}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ImageViewer"
+        component={ImageViewerScreen}
       />
     </Stack.Navigator>
   );
