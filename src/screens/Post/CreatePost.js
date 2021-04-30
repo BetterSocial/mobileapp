@@ -149,6 +149,7 @@ const CreatePost = () => {
     let token = await getAccessToken();
     if (token) {
       var decoded = await JWTDecode(token);
+      console.log(decoded);
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
@@ -428,9 +429,7 @@ const CreatePost = () => {
       privacy: listPrivacy[privacySelect].label,
       anonimity: typeUser,
       location: geoList[geoSelect].neighborhood,
-
       duration_feed: postExpired[expiredSelect].value,
-
       polls: reducedPoll,
       pollsduration: selectedTime,
       multiplechoice: isPollMultipleChoice,
@@ -485,7 +484,9 @@ const CreatePost = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always">
         <Header title="Create a post" onPress={() => onBack()} />
         <UserProfile
           typeUser={typeUser}
@@ -595,6 +596,7 @@ const CreatePost = () => {
           onAdd={(v) => onSaveTopic(v)}
           topics={listTopic}
           onClose={() => sheetTopicRef.current.close()}
+          saveOnClose={(v) => setListTopic(v)}
         />
         <SheetExpiredPost
           refExpired={sheetExpiredRef}
@@ -667,7 +669,7 @@ const styles = StyleSheet.create({
   listTopic: {
     flexDirection: 'row',
     marginLeft: 10,
-    zIndex: 99,
+    zIndex: 999,
     paddingTop: 11,
     paddingBottom: 13,
   },
