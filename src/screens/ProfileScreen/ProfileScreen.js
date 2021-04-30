@@ -44,8 +44,6 @@ import analytics from '@react-native-firebase/analytics';
 import {getAccessToken} from '../../data/local/accessToken';
 const width = Dimensions.get('screen').width;
 
-let token_JWT = '';
-
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const bottomSheetNameRef = useRef();
@@ -54,6 +52,7 @@ const ProfileScreen = () => {
   const postRef = useRef(null);
   const scrollViewReff = useRef(null);
 
+  let [token_JWT, setTokenJwt] = useState('')
   const [tokenParse, setTokenParse] = useState({});
   const [dataMain, setDataMain] = useState({});
   const [tempFullName, setTempFullName] = useState('');
@@ -67,6 +66,7 @@ const ProfileScreen = () => {
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = useState(false);
   const [errorBio, setErrorBio] = useState('');
   const [postLenght, setPostLenght] = useState(0);
+  let [rerender, setRerender] = useState(0)
   const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = useState(
     false,
   );
@@ -79,6 +79,12 @@ const ProfileScreen = () => {
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     fetchMyProfile(true);
+
+    getToken().then((val) => {
+      setTokenJwt(val);
+      setRerender(rerender++)
+      setRerender(rerender++)
+    });
     // setToken()
     analytics().logScreenView({
       screen_class: 'ProfileScreen',
@@ -103,8 +109,8 @@ const ProfileScreen = () => {
       const result = await getMyProfile(decoded.user_id);
       console.log(result);
       if (result.code === 200) {
-        withLoading ? setIsLoading(false) : null;
         setDataMain(result.data);
+        withLoading ? setIsLoading(false) : null;
       }
     }
   };
@@ -239,6 +245,17 @@ const ProfileScreen = () => {
     });
   };
 
+  const onViewProfilePicture = () => {
+    bottomSheetProfilePictureRef.current.close()
+    console.log(dataMain)
+    navigation.push("ImageViewer", {
+      title : dataMain.username,
+      images : [
+        {url : dataMain.profile_pic_path}
+      ]
+    })
+  } 
+
   const handleUpdateImage = (value, type) => {
     if (type === 'gallery') {
       setIsLoadingUpdateImageGalery(true);
@@ -333,7 +350,7 @@ const ProfileScreen = () => {
       <TouchableNativeFeedback onPress={() => changeBio()}>
         <View style={styles.containerBio}>
           {string === null || string === undefined ? (
-            <Text>Add Bio</Text>
+            <Text style={{color : colors.blue}}>Add Bio</Text>
           ) : (
             <Text linkStyle={styles.seeMore}>
               {trimString(string, 121)}{' '}
@@ -347,9 +364,11 @@ const ProfileScreen = () => {
     );
   };
 
-  getToken().then((val) => {
-    token_JWT = val;
-  });
+  // getToken().then((val) => {
+  //   setTokenJwt(val);
+  //   setRerender(rerender++)
+  //   setRerender(rerender++)
+  // });
 
   return (
     <>
@@ -357,7 +376,7 @@ const ProfileScreen = () => {
       <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
         {isOffsetScroll ? (
           <View style={styles.tabsFixed}>
-            <Text style={styles.postText}>Post ({})</Text>
+            <Text style={styles.postText}>Post ({/* Change this to post size*/0})</Text>
           </View>
         ) : null}
 
@@ -471,6 +490,7 @@ const ProfileScreen = () => {
               />
               <BottomSheetImage
                 ref={bottomSheetProfilePictureRef}
+                onViewProfilePicture={() => onViewProfilePicture()}
                 onOpenImageGalery={() => onOpenImageGalery()}
                 onOpenCamera={() => onOpenCamera()}
                 handleRemoveImageProfile={() => handleRemoveImageProfile()}
@@ -502,12 +522,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    padding: 20,
+    padding: 20
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   wrapHeaderButton: {
     flexDirection: 'row',
@@ -541,7 +561,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerBio: {
-    marginTop: 8,
+    marginTop: 8
   },
   seeMore: {
     fontFamily: fonts.inter[500],

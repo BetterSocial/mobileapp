@@ -14,7 +14,7 @@ import {
 import {useRoute} from '@react-navigation/native';
 import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
 import Loading from '../Loading';
-import {getFollowing} from '../../service/profile';
+import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
 import {useNavigation} from '@react-navigation/core';
 import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import {colors} from '../../utils/colors';
@@ -68,8 +68,44 @@ const Followings = () => {
     navigation.navigate('OtherProfile', {data});
   };
 
-  const renderItem = ({item}) => {
-    console.log(item.user.profile_pic_path)
+  const handleSetUnFollow = async (index) => {
+    let newDataFollowing = [...dataFollowing]
+    let singleDataFollowing = newDataFollowing[index]
+    newDataFollowing[index].isunfollowed = true
+    setDataFollowing(newDataFollowing)
+
+    let data = {
+      user_id_follower: user_id,
+      user_id_followed: singleDataFollowing.user.user_id,
+      follow_source: 'other-profile',
+    };
+
+    const result = await setUnFollow(data);
+    // if (result.code == 200) {
+      // fetchOtherProfile(user_id, other_id, false);
+      // fetchFollowing()
+    // }
+  };
+
+  const handleSetFollow = async (index) => {
+    let newDataFollowing = [...dataFollowing]
+    let singleDataFollowing = newDataFollowing[index]
+    delete newDataFollowing[index].isunfollowed
+    setDataFollowing(newDataFollowing)
+
+    let data = {
+      user_id_follower: user_id,
+      user_id_followed: singleDataFollowing.user.user_id,
+      follow_source: 'other-profile',
+    };
+    const result = await setFollow(data);
+    // if (result.code == 200) {
+      // fetchOtherProfile(user_id, other_id, false);
+      // fetchFollowing()
+    // }
+  };
+
+  const renderItem = ({item, index}) => {
     return <TouchableNativeFeedback
       onPress={(event) => {
         event.preventDefault();
@@ -87,11 +123,21 @@ const Followings = () => {
             </Text>
           </View>
         </View>
-        <TouchableNativeFeedback>
+        { item.hasOwnProperty("isunfollowed") ?
+        <TouchableNativeFeedback
+          onPress={() => handleSetFollow(index)}>
+          <View style={styles.buttonFollow}>
+            <Text style={styles.textButtonFollow}>
+              Follow
+            </Text>
+          </View>
+        </TouchableNativeFeedback> :
+        <TouchableNativeFeedback onPress={() => handleSetUnFollow(index)}>
           <View style={styles.buttonFollowing}>
             <Text style={styles.textButtonFollowing}>Following</Text>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableNativeFeedback> 
+        }
       </View>
     </TouchableNativeFeedback>
   };
@@ -228,11 +274,26 @@ const styles = StyleSheet.create({
     borderColor: colors.bondi_blue,
     borderRadius: 8
   },
+  buttonFollow: {
+    width: 88,
+    height: 36,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    backgroundColor: colors.bondi_blue
+  },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
     color: colors.bondi_blue,
+  },
+  textButtonFollow: {
+    fontFamily: fonts.inter[600],
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: colors.white,
   },
   profilepicture : {
     width : 48,

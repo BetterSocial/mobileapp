@@ -449,6 +449,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     backgroundColor: colors.bondi_blue,
+    color : colors.white
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],

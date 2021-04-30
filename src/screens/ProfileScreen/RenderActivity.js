@@ -53,7 +53,7 @@ const renderActivity = (props, data) => {
             />
             <View style={styles.containerFeedProfile}>
               <Text style={styles.feedUsername}>
-                {data.real_name ? data.real_name : 'no name specifics'}
+                {data.username ? data.username : 'no name specifics'}
               </Text>
               <View style={styles.containerFeedText}>
                 <Text style={styles.feedDate}>20 Feb 2021</Text>
