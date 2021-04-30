@@ -84,7 +84,7 @@ const FeedScreen = (props) => {
               feedGroup="main_feed"
               userId={tokenParse.user_id}
               Activity={(props, index) => {
-                return RenderActivity(props);
+                return <RenderActivity {...props} />;
               }}
               notify
             />
