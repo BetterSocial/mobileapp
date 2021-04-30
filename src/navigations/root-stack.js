@@ -16,6 +16,7 @@ import HomeBottomTabs from './HomeBottomTabs';
 import {ChannelScreen, ProfileScreen} from '../screens';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
+import PostDetailPage from '../screens/Post/PostDetailPage';
 const Stack = createStackNavigator();
 const RootStact = () => {
   useEffect(() => {
@@ -23,7 +24,12 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="PostDetailPage">
+      <Stack.Screen
+        name="PostDetailPage"
+        component={PostDetailPage}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="HomeTabs"
         component={HomeBottomTabs}
