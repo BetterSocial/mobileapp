@@ -1,32 +1,41 @@
-import React from 'react';
-import {TextInput, StyleSheet} from 'react-native';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import {TextInput, StyleSheet, KeyboardAvoidingView, View} from 'react-native';
 import {colors} from '../../utils/colors'
 import {fonts} from '../../utils/fonts';
 
-const TextArea = (props) => {
-  let textAlignVerticalVal = props.textAlignVertical
-    ? props.textAlignVertical
-    : 'top';
-  let multiLine = props.multiline ? props.multiline : true;
-  let placeHolder = props.placeholder ?props.placeholder : ""
-  return (
-    <TextInput
-      value={props.value}
-      onChangeText={props.onChangeText}
-      multiline={multiLine}
-      style={{...styles.input, ...props.style}}
-      textAlignVertical={textAlignVerticalVal}
-      placeholder={placeHolder}
-    />
-  );
-};
+const TextArea = ({
+  textAlignVertical = 'top',
+  multiline = true,
+  placeholder = "",
+  onChangeText = () => {},
+  value = "",
+  style={},
+  onRef = (ref) => {}
+}) => {
+
+  console.log(React.forwardRef())
+  let textRef = useRef()
+  useEffect(() => {
+    onRef(textRef)
+  },[])
+
+  return <TextInput
+        autoFocus={true}
+        value={value}
+        onChangeText={onChangeText}
+        multiline={multiline}
+        style={{...styles.input, ...style}}
+        textAlignVertical={textAlignVertical}
+        placeholder={placeholder}
+      />
+}
 
 const styles = StyleSheet.create({
   input: {
     backgroundColor: colors.lightgrey,
     paddingVertical: 16,
     paddingHorizontal: 12,
-    height: 261,
+    height : 150,
     justifyContent: 'flex-start',
     overflow: 'scroll',
     borderRadius: 8,
