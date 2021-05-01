@@ -29,12 +29,55 @@ import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
+import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
+import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
+import MemoZero_twentyFour from '../../assets/timer/Zero_twentyFour';
+import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
+import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
+import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
+import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
+import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 
 const {width: screenWidth} = Dimensions.get('window');
 
+const validationTimer = (timer, duration_feed, message) => {
+  let date1 = new Date(timer);
+  let date2 = new Date();
+  let totalFeed = 24 * duration_feed;
+  var hours = Math.abs(date1 - date2) / 36e5;
+  let total = (hours / totalFeed) * 100;
+  console.log(timer);
+  console.log(duration_feed);
+  console.log(total);
+  console.log('================');
+  switch (true) {
+    case total < 25:
+      return <MemoZero_twentyFour height={17} width={17} />;
+    case total < 38:
+      return <MemoTwentyFive_thirtySix height={17} width={17} />;
+    case total < 50:
+      return <MemoThirtySeven_fourtyNine height={17} width={17} />;
+    case total < 63:
+      return <MemoFivety_sixtyTwo height={17} width={17} />;
+    case total < 75:
+      return <MemoSixtyThree_seventyFour height={17} width={17} />;
+    case total < 88:
+      return <MemoSeventyFive_eightySeven height={17} width={17} />;
+    default:
+      return <MemoEightyEight_hundred height={17} width={17} />;
+  }
+};
+
 const RenderActivity = (props) => {
   const activity = props.activity;
-  let {anonimity, privacy, location} = activity;
+  let {
+    anonimity,
+    privacy,
+    location,
+    expired_at,
+    duration_feed,
+    message,
+  } = activity;
   let {profile_pic_path, real_name, username} = JSON.parse(activity.object);
 
   const getTime = (time) => {
@@ -66,11 +109,22 @@ const RenderActivity = (props) => {
         <View style={styles.containerFeedProfile}>
           <Text style={styles.feedUsername}>Anonymous</Text>
           <View style={styles.containerFeedText}>
-            <Text style={styles.feedDate}>{getTime(activity.time)}</Text>
-            <View style={styles.point} />
             <Text style={styles.feedDate}>
               {moment.utc(props.activity.time).local().fromNow()}
             </Text>
+            <View style={styles.point} />
+            {privacy === 'Public' ? (
+              <Memoic_globe height={16} width={16} />
+            ) : (
+              <MemoPeopleFollow height={16} width={16} />
+            )}
+
+            {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+            {duration_feed !== 'never'
+              ? validationTimer(expired_at, duration_feed, message)
+              : null}
+            <View style={styles.point} />
+            <Text style={styles.feedDate}>{location}</Text>
           </View>
         </View>
       </View>
@@ -101,11 +155,16 @@ const RenderActivity = (props) => {
               {moment.utc(props.activity.time).local().fromNow()}
             </Text>
             <View style={styles.point} />
-            {privacy ? (
-              <Memoic_globe height={17} width={17} />
+            {privacy === 'Public' ? (
+              <Memoic_globe height={16} width={16} />
             ) : (
-              <MemoIc_user_group height={17} width={17} />
+              <MemoPeopleFollow height={16} width={16} />
             )}
+
+            {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+            {duration_feed !== 'never'
+              ? validationTimer(expired_at, duration_feed, message)
+              : null}
             <View style={styles.point} />
             <Text style={styles.feedDate}>{location}</Text>
           </View>
@@ -196,12 +255,12 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   point: {
-    width: 4,
-    height: 4,
-    borderRadius: 4,
+    width: 2,
+    height: 2,
+    borderRadius: 2,
     backgroundColor: colors.gray,
-    marginLeft: 8,
-    marginRight: 8,
+    marginLeft: 6,
+    marginRight: 6,
   },
   contentFeed: {
     marginTop: 12,
