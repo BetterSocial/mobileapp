@@ -80,34 +80,34 @@ const CreatePost = () => {
     {
       label: '24 hours',
       value: '24',
-      expiredobject : {
-        hour : 24,
-        day : 1
-      }
+      expiredobject: {
+        hour: 24,
+        day: 1,
+      },
     },
     {
       label: '7 days',
       value: '7',
-      expiredobject : {
-        hour : 24,
-        day : 7
-      }
+      expiredobject: {
+        hour: 24,
+        day: 7,
+      },
     },
     {
       label: '30 days',
       value: '30',
-      expiredobject : {
-        hour : 24,
-        day : 30
-      }
+      expiredobject: {
+        hour: 24,
+        day: 30,
+      },
     },
     {
       label: 'Never',
-      value: "never",
-      expiredobject : {
-        hour : 24,
-        day : 30
-      }
+      value: 'never',
+      expiredobject: {
+        hour: 24,
+        day: 30,
+      },
     },
   ]);
   // const [geoList, setGeoList] = useState([
@@ -294,7 +294,7 @@ const CreatePost = () => {
         privacy: listPrivacy[privacySelect].label,
         anonimity: typeUser,
         location: geoList[geoSelect].neighborhood,
-        duration_feed: postExpired[expiredSelect].value,
+        duration_feed: Number(postExpired[expiredSelect].value),
         images_url: dataImage,
       };
       analytics().logEvent('create_post', {
@@ -368,20 +368,16 @@ const CreatePost = () => {
       false,
     );
     if (isPollNotEmpty)
-      return Alert.alert(
-        'Are you sure?',
-        "This cannot be undone",
-        [
-          {text: 'Cancel', style: 'cancel'},
-          {
-            text: 'Remove',
-            onPress: () => {
-              setIsPollShown(false);
-              setPolls(defaultPollItem);
-            },
+      return Alert.alert('Are you sure?', 'This cannot be undone', [
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'Remove',
+          onPress: () => {
+            setIsPollShown(false);
+            setPolls(defaultPollItem);
           },
-        ],
-      );
+        },
+      ]);
     else {
       setIsPollShown(false);
       setPolls(defaultPollItem);
@@ -434,7 +430,7 @@ const CreatePost = () => {
       pollsduration: selectedTime,
       multiplechoice: isPollMultipleChoice,
     };
-    console.log(data)
+    console.log(data);
 
     try {
       // let createTokenResponse = await createToken()
@@ -499,6 +495,10 @@ const CreatePost = () => {
               ? {uri: dataProfile.profile_pic_path}
               : ProfileDefault
           }
+          onPress={() => {
+            setMessage('');
+            navigation.navigate('ProfileScreen');
+          }}
         />
         <Gap style={{height: 8}} />
         <TextInput
