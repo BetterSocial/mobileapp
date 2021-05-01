@@ -40,16 +40,12 @@ import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-const validationTimer = (timer, duration_feed, message) => {
+const validationTimer = (timer, duration_feed) => {
   let date1 = new Date(timer);
   let date2 = new Date();
   let totalFeed = 24 * duration_feed;
   var hours = Math.abs(date1 - date2) / 36e5;
   let total = (hours / totalFeed) * 100;
-  console.log(timer);
-  console.log(duration_feed);
-  console.log(total);
-  console.log('================');
   switch (true) {
     case total < 25:
       return <MemoZero_twentyFour height={17} width={17} />;
@@ -121,7 +117,7 @@ const RenderActivity = (props) => {
 
             {duration_feed !== 'never' ? <View style={styles.point} /> : null}
             {duration_feed !== 'never'
-              ? validationTimer(expired_at, duration_feed, message)
+              ? validationTimer(expired_at, duration_feed)
               : null}
             <View style={styles.point} />
             <Text style={styles.feedDate}>{location}</Text>
