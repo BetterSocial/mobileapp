@@ -44,8 +44,6 @@ import analytics from '@react-native-firebase/analytics';
 import {getAccessToken} from '../../data/local/accessToken';
 const width = Dimensions.get('screen').width;
 
-let token_JWT = '';
-
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const bottomSheetNameRef = useRef();
@@ -54,6 +52,7 @@ const ProfileScreen = () => {
   const postRef = useRef(null);
   const scrollViewReff = useRef(null);
 
+  let [token_JWT, setTokenJwt] = useState('')
   const [tokenParse, setTokenParse] = useState({});
   const [dataMain, setDataMain] = useState({});
   const [tempFullName, setTempFullName] = useState('');
@@ -67,6 +66,7 @@ const ProfileScreen = () => {
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = useState(false);
   const [errorBio, setErrorBio] = useState('');
   const [postLenght, setPostLenght] = useState(0);
+  let [rerender, setRerender] = useState(0)
   const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = useState(
     false,
   );
@@ -79,13 +79,28 @@ const ProfileScreen = () => {
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     fetchMyProfile(true);
+
+    getToken().then((val) => {
+      setTokenJwt(val);
+      setRerender(rerender++)
+      setRerender(rerender++)
+    });
     // setToken()
     analytics().logScreenView({
       screen_class: 'ProfileScreen',
       screen_name: 'ProfileScreen',
     });
+    analytics().logEvent('myprofile_begin_view', {
+      id: 'profile_begin',
+      myprofile_begin_view: Date.now(),
+    });
+    return () => {
+      analytics().logEvent('myprofile_end_view', {
+        id: 'myprofile_end_view',
+        myprofile_end_view: Date.now(),
+      });
+    };
   }, []);
-
   // const setToken = async () => {
   //   try {
   //     await AsyncStorage.setItem('tkn-getstream', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjg4ZDU2NzktNmM2OC00MWVjLWJlODMtN2YxNWE0ZTgyZDNkIn0.0YNINzuHdf2afDN0ew3x0DRT0uJFzvBD0CbYL_Exm9c")
@@ -103,8 +118,8 @@ const ProfileScreen = () => {
       const result = await getMyProfile(decoded.user_id);
       console.log(result);
       if (result.code === 200) {
-        withLoading ? setIsLoading(false) : null;
         setDataMain(result.data);
+        withLoading ? setIsLoading(false) : null;
       }
     }
   };
@@ -136,7 +151,7 @@ const ProfileScreen = () => {
 
   const onShare = async () => {
     analytics().logEvent('profile_screen_btn_share', {
-      id: 3,
+      id: 'btn_share',
     });
     try {
       const result = await Share.share({
@@ -158,7 +173,7 @@ const ProfileScreen = () => {
 
   const goToSettings = () => {
     analytics().logEvent('profile_screen_btn_settings', {
-      id: 3,
+      id: 'btn_settings',
     });
     navigation.navigate('Settings');
   };
@@ -238,6 +253,17 @@ const ProfileScreen = () => {
       }
     });
   };
+
+  const onViewProfilePicture = () => {
+    bottomSheetProfilePictureRef.current.close()
+    console.log(dataMain)
+    navigation.push("ImageViewer", {
+      title : dataMain.username,
+      images : [
+        {url : dataMain.profile_pic_path}
+      ]
+    })
+  } 
 
   const handleUpdateImage = (value, type) => {
     if (type === 'gallery') {
@@ -333,7 +359,7 @@ const ProfileScreen = () => {
       <TouchableNativeFeedback onPress={() => changeBio()}>
         <View style={styles.containerBio}>
           {string === null || string === undefined ? (
-            <Text>Add Bio</Text>
+            <Text style={{color : colors.blue}}>Add Bio</Text>
           ) : (
             <Text linkStyle={styles.seeMore}>
               {trimString(string, 121)}{' '}
@@ -347,9 +373,11 @@ const ProfileScreen = () => {
     );
   };
 
-  getToken().then((val) => {
-    token_JWT = val;
-  });
+  // getToken().then((val) => {
+  //   setTokenJwt(val);
+  //   setRerender(rerender++)
+  //   setRerender(rerender++)
+  // });
 
   return (
     <>
@@ -357,7 +385,7 @@ const ProfileScreen = () => {
       <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
         {isOffsetScroll ? (
           <View style={styles.tabsFixed}>
-            <Text style={styles.postText}>Post ({})</Text>
+            <Text style={styles.postText}>Post ({/* Change this to post size*/0})</Text>
           </View>
         ) : null}
 
@@ -401,13 +429,13 @@ const ProfileScreen = () => {
                         }}
                       />
                     </TouchableNativeFeedback>
-                    <TouchableNativeFeedback onPress={changeName}>
+                    {/* <TouchableNativeFeedback onPress={changeName}>
                       <Text style={styles.nameProfile}>
-                        {dataMain.real_name
-                          ? dataMain.real_name
-                          : 'no name specifics'}
+                        {dataMain.bio
+                          ? 'asdads'
+                          : 'asdasd'}
                       </Text>
-                    </TouchableNativeFeedback>
+                    </TouchableNativeFeedback> */}
                   </View>
                   <View style={{...styles.wrapFollower, marginTop: 12}}>
                     <View style={styles.wrapRow}>
@@ -438,7 +466,7 @@ const ProfileScreen = () => {
               {!isLoading ? (
                 <View>
                   <View style={styles.tabs} ref={postRef}>
-                    <Text style={styles.postText}>Post ({})</Text>
+                    <Text style={styles.postText}>Post ({/* Please change this to post size*/ 0})</Text>
                   </View>
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed
@@ -471,6 +499,7 @@ const ProfileScreen = () => {
               />
               <BottomSheetImage
                 ref={bottomSheetProfilePictureRef}
+                onViewProfilePicture={() => onViewProfilePicture()}
                 onOpenImageGalery={() => onOpenImageGalery()}
                 onOpenCamera={() => onOpenCamera()}
                 handleRemoveImageProfile={() => handleRemoveImageProfile()}
@@ -502,12 +531,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    padding: 20,
+    padding: 20
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   wrapHeaderButton: {
     flexDirection: 'row',
@@ -541,7 +570,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerBio: {
-    marginTop: 8,
+    marginTop: 8
   },
   seeMore: {
     fontFamily: fonts.inter[500],

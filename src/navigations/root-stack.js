@@ -16,6 +16,7 @@ import HomeBottomTabs from './HomeBottomTabs';
 import {ChannelScreen, ProfileScreen} from '../screens';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
+import ImageViewerScreen from '../screens/ImageViewer';
 const Stack = createStackNavigator();
 const RootStact = () => {
   useEffect(() => {
@@ -103,6 +104,10 @@ const RootStact = () => {
         name="ProfileScreen"
         component={ProfileScreen}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ImageViewer"
+        component={ImageViewerScreen}
       />
     </Stack.Navigator>
   );

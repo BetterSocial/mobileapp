@@ -37,6 +37,7 @@ export const createFeedToken = async (data) => {
       let resApi = await api.post('/activity/create-token', data);
       resolve(resApi.data);
     } catch (error) {
+      crashlytics().recordError(new Error(error));
       console.log(error);
       reject(error);
     }

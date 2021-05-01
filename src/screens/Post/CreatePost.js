@@ -46,6 +46,7 @@ import {getAccessToken, getToken} from '../../data/local/accessToken';
 import JWTDecode from 'jwt-decode';
 import {getMyProfile} from '../../service/profile';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
+import crashlytics from '@react-native-firebase/crashlytics';
 // import CreatePollContainer from '../../elements/Post/CreatePollContainer';
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -79,18 +80,34 @@ const CreatePost = () => {
     {
       label: '24 hours',
       value: '24',
+      expiredobject: {
+        hour: 24,
+        day: 1,
+      },
     },
     {
       label: '7 days',
       value: '7',
+      expiredobject: {
+        hour: 24,
+        day: 7,
+      },
     },
     {
       label: '30 days',
       value: '30',
+      expiredobject: {
+        hour: 24,
+        day: 30,
+      },
     },
     {
       label: 'Never',
       value: 'never',
+      expiredobject: {
+        hour: 24,
+        day: 30,
+      },
     },
   ]);
   // const [geoList, setGeoList] = useState([
@@ -132,6 +149,7 @@ const CreatePost = () => {
     let token = await getAccessToken();
     if (token) {
       var decoded = await JWTDecode(token);
+      console.log(decoded);
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
@@ -276,9 +294,20 @@ const CreatePost = () => {
         privacy: listPrivacy[privacySelect].label,
         anonimity: typeUser,
         location: geoList[geoSelect].neighborhood,
-        duration_feed: postExpired[expiredSelect].value,
+        duration_feed: Number(postExpired[expiredSelect].value),
         images_url: dataImage,
       };
+      analytics().logEvent('create_post', {
+        id: 6,
+        newpost_reach: geoList[geoSelect].neighborhood,
+        newpost_privacy: listPrivacy[privacySelect].label,
+        num_images: dataImage.length,
+        added_poll: false,
+        topics_added: listTopic,
+        anon: typeUser,
+        predicted_audience: audienceEstimations,
+      });
+      console.log(data);
       let res = await createPost(data);
       console.log(res);
       if (res.code === 200) {
@@ -340,20 +369,16 @@ const CreatePost = () => {
       false,
     );
     if (isPollNotEmpty)
-      return Alert.alert(
-        'Are you sure',
-        "Removing the poll will discard what you've typed.",
-        [
-          {text: 'Cancel', style: 'cancel'},
-          {
-            text: 'Remove',
-            onPress: () => {
-              setIsPollShown(false);
-              setPolls(defaultPollItem);
-            },
+      return Alert.alert('Are you sure?', 'This cannot be undone', [
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'Remove',
+          onPress: () => {
+            setIsPollShown(false);
+            setPolls(defaultPollItem);
           },
-        ],
-      );
+        },
+      ]);
     else {
       setIsPollShown(false);
       setPolls(defaultPollItem);
@@ -406,6 +431,7 @@ const CreatePost = () => {
       pollsduration: selectedTime,
       multiplechoice: isPollMultipleChoice,
     };
+    console.log(data);
 
     try {
       // let createTokenResponse = await createToken()
@@ -423,6 +449,16 @@ const CreatePost = () => {
       Alert.alert('Error', 'error');
       setLoading(false);
     }
+    analytics().logEvent('create_post', {
+      id: 6,
+      newpost_reach: geoList[geoSelect].neighborhood,
+      newpost_privacy: listPrivacy[privacySelect].label,
+      num_images: 0,
+      added_poll: true,
+      topics_added: listTopic,
+      anon: typeUser,
+      predicted_audience: audienceEstimations,
+    });
   };
 
   const renderListTopic = () => {
@@ -445,7 +481,9 @@ const CreatePost = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always">
         <Header title="Create a post" onPress={() => onBack()} />
         <UserProfile
           typeUser={typeUser}
@@ -458,6 +496,10 @@ const CreatePost = () => {
               ? {uri: dataProfile.profile_pic_path}
               : ProfileDefault
           }
+          onPress={() => {
+            setMessage('');
+            navigation.navigate('ProfileScreen');
+          }}
         />
         <Gap style={{height: 8}} />
         <TextInput
@@ -488,6 +530,7 @@ const CreatePost = () => {
             onmultiplechoicechanged={(ismultiplechoice) =>
               setIsPollMultipleChoice(ismultiplechoice)
             }
+            expiredobject={postExpired[expiredSelect].expiredobject}
           />
         )}
         <Gap style={{height: 26}} />
@@ -554,6 +597,7 @@ const CreatePost = () => {
           onAdd={(v) => onSaveTopic(v)}
           topics={listTopic}
           onClose={() => sheetTopicRef.current.close()}
+          saveOnClose={(v) => setListTopic(v)}
         />
         <SheetExpiredPost
           refExpired={sheetExpiredRef}
@@ -573,11 +617,11 @@ const CreatePost = () => {
           select={privacySelect}
           onSelect={onSetPrivacySelect}
         />
-        {/* <SheetCloseBtn
+        <SheetCloseBtn
           backRef={sheetBackRef}
           goBack={() => navigation.goBack()}
           continueToEdit={() => sheetBackRef.current.close()}
-        /> */}
+        />
       </ScrollView>
       <Loading visible={loading} />
     </SafeAreaView>
@@ -626,7 +670,7 @@ const styles = StyleSheet.create({
   listTopic: {
     flexDirection: 'row',
     marginLeft: 10,
-    zIndex: 99,
+    zIndex: 999,
     paddingTop: 11,
     paddingBottom: 13,
   },

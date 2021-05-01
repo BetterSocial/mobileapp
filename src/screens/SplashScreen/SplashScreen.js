@@ -105,6 +105,7 @@ const SplashScreen = () => {
       // }
       let token = await getAccessToken();
       if (token !== null || token !== '') {
+        console.log(token);
         return await jwtDecode(token).user_id;
       }
       return null;

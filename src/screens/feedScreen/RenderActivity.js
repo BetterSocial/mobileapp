@@ -116,42 +116,48 @@ const RenderActivity = (props) => {
       </TouchableNativeFeedback>
     </View>
   );
-
-  return (
-    <Activity
-      {...props}
-      Header={anonimity === true ? _renderAnonimity() : _renderProfileNormal()}
-      Content={
-        <View style={styles.contentFeed}>
-          <SeeMore numberOfLines={4} linkStyle={styles.textContentFeed}>
-            {props.activity.message}
-          </SeeMore>
-          {props.activity.images_url.length > 0 ? (
-            <Carousel
-              sliderWidth={screenWidth}
-              sliderHeight={screenWidth}
-              itemWidth={screenWidth - 20}
-              data={props.activity.images_url}
-              renderItem={_renderItem}
-              hasParallaxImages={true}
+  console.log('err fedd', props.activity.images_url);
+  if (props) {
+    return (
+      <Activity
+        {...props}
+        Header={
+          anonimity === true ? _renderAnonimity() : _renderProfileNormal()
+        }
+        Content={
+          <View style={styles.contentFeed}>
+            <SeeMore numberOfLines={4} linkStyle={styles.textContentFeed}>
+              {props.activity.message}
+            </SeeMore>
+            {props.activity.images_url !== undefined &&
+            props.activity.images_url.length > 0 ? (
+              <Carousel
+                sliderWidth={screenWidth}
+                sliderHeight={screenWidth}
+                itemWidth={screenWidth - 20}
+                data={props.activity.images_url}
+                renderItem={_renderItem}
+                hasParallaxImages={true}
+              />
+            ) : null}
+          </View>
+        }
+        Footer={
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <LikeButton {...props} />
+            <ReactionIcon
+              icon={ReplyIcon}
+              labelSingle="comment"
+              labelPlural="comments"
+              counts={activity.reaction_counts}
+              kind="comment"
             />
-          ) : null}
-        </View>
-      }
-      Footer={
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <LikeButton {...props} />
-          <ReactionIcon
-            icon={ReplyIcon}
-            labelSingle="comment"
-            labelPlural="comments"
-            counts={activity.reaction_counts}
-            kind="comment"
-          />
-        </View>
-      }
-    />
-  );
+          </View>
+        }
+      />
+    );
+  }
+  return <View />;
 };
 
 export default RenderActivity;
