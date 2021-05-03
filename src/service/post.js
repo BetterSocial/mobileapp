@@ -1,6 +1,7 @@
 import api from './config';
 import crashlytics from '@react-native-firebase/crashlytics';
 export const createPost = async (data) => {
+  console.log(data);
   try {
     let resApi = await api.post('/activity/post', data);
     return resApi.data;
@@ -52,5 +53,16 @@ export const ShowingAudience = async (privacy, location) => {
   } catch (error) {
     console.log(error);
     crashlytics().recordError(new Error(error));
+  }
+};
+
+export const getMainFeed = async () => {
+  try {
+    let res = await api.get('/activity/feeds');
+    return res.data;
+  } catch (err) {
+    console.log('ini error');
+    console.log(err);
+    crashlytics().recordError(new Error(err));
   }
 };

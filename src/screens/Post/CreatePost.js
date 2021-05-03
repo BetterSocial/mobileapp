@@ -294,7 +294,7 @@ const CreatePost = () => {
         privacy: listPrivacy[privacySelect].label,
         anonimity: typeUser,
         location: geoList[geoSelect].neighborhood,
-        duration_feed: Number(postExpired[expiredSelect].value),
+        duration_feed: postExpired[expiredSelect].value,
         images_url: dataImage,
       };
       analytics().logEvent('create_post', {
@@ -309,6 +309,7 @@ const CreatePost = () => {
       });
       console.log(data);
       let res = await createPost(data);
+      console.log(res);
       if (res.code === 200) {
         showMessage({
           message: 'success create a new post',
