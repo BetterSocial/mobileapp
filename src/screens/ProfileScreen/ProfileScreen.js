@@ -11,6 +11,7 @@ import {
   TouchableNativeFeedback,
   Share,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import {LogBox} from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
@@ -42,12 +43,17 @@ import {trimString} from '../../helpers/stringSplit';
 import {getToken} from '../../helpers/getToken';
 import analytics from '@react-native-firebase/analytics';
 import {getAccessToken} from '../../data/local/accessToken';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import { DEFAULT_PROFILE_PIC_PATH } from '../../helpers/constants';
+import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
+import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 const width = Dimensions.get('screen').width;
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const bottomSheetNameRef = useRef();
   const bottomSheetBioRef = useRef();
+  const bottomSheetBioTextAreaRef = useRef(null);
   const bottomSheetProfilePictureRef = useRef();
   const postRef = useRef(null);
   const scrollViewReff = useRef(null);
@@ -118,6 +124,7 @@ const ProfileScreen = () => {
       const result = await getMyProfile(decoded.user_id);
       console.log(result);
       if (result.code === 200) {
+        console.log(result.data)
         setDataMain(result.data);
         withLoading ? setIsLoading(false) : null;
       }
@@ -420,14 +427,17 @@ const ProfileScreen = () => {
                   </View>
                   <View style={styles.wrapImageProfile}>
                     <TouchableNativeFeedback onPress={changeImage}>
-                      <Image
-                        style={styles.profileImage}
-                        source={{
-                          uri: dataMain.profile_pic_path
-                            ? dataMain.profile_pic_path
-                            : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-                        }}
-                      />
+                      <View>
+                        <Image
+                          style={styles.profileImage}
+                          source={{
+                            uri: dataMain.profile_pic_path
+                              ? dataMain.profile_pic_path
+                              : DEFAULT_PROFILE_PIC_PATH,
+                          }}
+                        />
+                        {!dataMain.profile_pic_path ? <MemoIcAddCircle width={48} height={48} style={{position : 'absolute', top : 25, left : 25}}/> : <></>}
+                      </View>
                     </TouchableNativeFeedback>
                     {/* <TouchableNativeFeedback onPress={changeName}>
                       <Text style={styles.nameProfile}>
@@ -489,6 +499,7 @@ const ProfileScreen = () => {
                 isLoadingUpdateBio={isLoadingUpdateBio}
                 error={errorBio}
               />
+
               <BottomSheetRealname
                 ref={bottomSheetNameRef}
                 setTempFullName={(text) => setTempFullName(text)}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {forwardRef} from 'react';
 import {
   View,
@@ -7,6 +7,7 @@ import {
   Dimensions,
   ActivityIndicator,
   KeyboardAvoidingView,
+  TextInput,
 } from 'react-native';
 import {Button} from '../../components/Button';
 import {colors} from '../../utils/colors';
@@ -21,7 +22,7 @@ const BottomSheetBio = forwardRef((props, ref) => {
   const textAreaRef = useRef()
 
   return <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-    <BottomSheet ref={ref} closeOnPressMask={true} height={470} viewstyle={{}} onOpenEnd={() => textAreaRef.current.focus()}>
+    <BottomSheet ref={ref} closeOnPressMask={true} height={470} viewstyle={{}}>
       <View style={styles.containerBottomSheet}>
         <Text style={styles.title}>Update your bio</Text>
         <TextArea
@@ -79,6 +80,19 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 18,
     color: colors.white,
+  },
+  input: {
+    backgroundColor: colors.lightgrey,
+    paddingVertical: 16,
+    paddingHorizontal: 12,
+    height : 150,
+    justifyContent: 'flex-start',
+    overflow: 'scroll',
+    borderRadius: 8,
+    fontFamily: fonts.inter[500],
+    fontSize: 14,
+    color: colors.black,
+    lineHeight: 24
   },
 });
 export default BottomSheetBio;

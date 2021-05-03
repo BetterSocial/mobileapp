@@ -255,9 +255,19 @@ const CreatePost = () => {
     setPrivacySelect(v);
     sheetPrivacyRef.current.close();
   };
+
+  const getReducedPoll = () => {
+    let reducedPoll = polls.reduce((acc, current) => {
+      if (current.text !== '') acc.push(current);
+      return acc;
+    }, []);
+
+    return reducedPoll
+  }
+
   const onBack = () => {
     console.log(message);
-    if (message) {
+    if (message || getReducedPoll().length > 0 || mediaStorage.length > 0) {
       sheetBackRef.current.open();
       return true;
     }
@@ -401,20 +411,11 @@ const CreatePost = () => {
   };
 
   const isPollButtonDisabled = () => {
-    let reducedPoll = polls.reduce((acc, current) => {
-      if (current.text !== '') acc.push(current);
-      return acc;
-    }, []);
-
-    return reducedPoll.length < 2;
+    return getReducedPoll().length < 2;
   };
 
   const sendPollPost = async () => {
     setLoading(true);
-    let reducedPoll = polls.reduce((acc, current) => {
-      if (current.text !== '') acc.push(current);
-      return acc;
-    }, []);
 
     let data = {
       message,
@@ -426,7 +427,7 @@ const CreatePost = () => {
       anonimity: typeUser,
       location: geoList[geoSelect].neighborhood,
       duration_feed: postExpired[expiredSelect].value,
-      polls: reducedPoll,
+      polls: getReducedPoll(),
       pollsduration: selectedTime,
       multiplechoice: isPollMultipleChoice,
     };

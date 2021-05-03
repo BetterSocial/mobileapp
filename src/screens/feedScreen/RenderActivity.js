@@ -31,6 +31,7 @@ const {width: screenWidth} = Dimensions.get('window');
 const RenderActivity = (props) => {
   const activity = props.activity;
   let {anonimity} = activity;
+  let { username } = activity.actor.data
   let {profile_pic_path, real_name} = JSON.parse(activity.object);
 
   const getTime = (time) => {
@@ -90,7 +91,8 @@ const RenderActivity = (props) => {
         />
         <View style={styles.containerFeedProfile}>
           <Text style={styles.feedUsername}>
-            {real_name ? real_name : 'no name specifics'}
+            {/* {real_name ? real_name : 'no name specifics'} */}
+            { username ? username : 'no name specifics'}
           </Text>
           <View style={styles.containerFeedText}>
             <Text style={styles.feedDate}>20 Feb 2021</Text>
