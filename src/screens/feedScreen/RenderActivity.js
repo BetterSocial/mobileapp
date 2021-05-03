@@ -38,6 +38,12 @@ import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
 import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 
+import ArrowUpIcon from '../../assets/icons/images/arrow-up.svg';
+import ArrowDownRedIcon from '../../assets/icons/images/arrow-down-red.svg';
+import CommentIcon from '../../assets/icons/images/comment.svg';
+import ShareIcon from '../../assets/icons/images/share.svg';
+import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
+
 const {width: screenWidth} = Dimensions.get('window');
 
 const validationTimer = (timer, duration_feed) => {
@@ -197,16 +203,29 @@ const RenderActivity = (props) => {
             ) : null}
           </View>
         }
+        // Footer={
+        //   <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        //     <LikeButton {...props} />
+        //     <ReactionIcon
+        //       icon={ReplyIcon}
+        //       labelSingle="comment"
+        //       labelPlural="comments"
+        //       counts={activity.reaction_counts}
+        //       kind="comment"
+        //     />
+        //   </View>
+        // }
         Footer={
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <LikeButton {...props} />
-            <ReactionIcon
-              icon={ReplyIcon}
-              labelSingle="comment"
-              labelPlural="comments"
-              counts={activity.reaction_counts}
-              kind="comment"
-            />
+          <View style={{...styles.rowSpaceBeetwen, marginTop: 23}}>
+            <View style={{...styles.rowSpaceBeetwen, width: 70}}>
+              <ShareIcon width={20} height={20} fill={colors.black} />
+              <CommentIcon width={20} height={18} fill={colors.black} />
+            </View>
+            <View style={{...styles.rowSpaceBeetwen, width: 90}}>
+              <MemoIc_block_inactive height={17} width={17} />
+              <ArrowDownRedIcon width={20} height={16} fill="#FF2E63" />
+              <ArrowUpIcon width={20} height={16} fill={colors.black} />
+            </View>
           </View>
         }
       />
