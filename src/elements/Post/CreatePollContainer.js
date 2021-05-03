@@ -173,7 +173,7 @@ const S = StyleSheet.create({
         alignItems : 'center',
         marginTop : 10,
         marginBottom : 2,
-        paddingVertical : 12,
+        paddingVertical : 12
     },
 
     addpollitemplusicon : {

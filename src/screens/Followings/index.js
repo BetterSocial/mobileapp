@@ -149,7 +149,9 @@ const Followings = () => {
         <View style={styles.header}>
           <View style={styles.floatLeft}>
             <TouchableNativeFeedback onPress={() => navigation.goBack()}>
-              <ArrowLeftIcon width={20} height={12} fill="#000" />
+              <View style={{padding : 12}}>
+                <ArrowLeftIcon width={20} height={12} fill="#000"/>
+              </View>
             </TouchableNativeFeedback>
           </View>
           <Text style={styles.textUsername}>{username}</Text>
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
   floatLeft: {
     position: 'absolute',
     left: 20,
-    top: 20,
+    top: 10,
   },
   tabs: {
     width: width,
