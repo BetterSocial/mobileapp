@@ -13,13 +13,13 @@ const TextArea = ({
   onRef = (ref) => {}
 }) => {
 
-  console.log(React.forwardRef())
   let textRef = useRef()
   useEffect(() => {
     onRef(textRef)
   },[])
 
   return <TextInput
+        ref={textRef}
         autoFocus={true}
         value={value}
         onChangeText={onChangeText}

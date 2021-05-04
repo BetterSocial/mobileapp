@@ -15,13 +15,17 @@ const Header = ({title, onPress}) => {
     if (Platform.OS === 'android') {
       return (
         <TouchableNativeFeedback onPress={onPress}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
+          <View style={{padding : 10, marginLeft : -4}}>
+            <ArrowLeftIcon width={20} height={12} fill="#000"/>
+          </View>
         </TouchableNativeFeedback>
       );
     } else {
       return (
         <TouchableHighlight onPress={onPress}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
+          <View style={{padding : 10, marginLeft : -8}}>
+            <ArrowLeftIcon width={20} height={12} fill="#000"/>
+          </View>
         </TouchableHighlight>
       );
     }
@@ -47,6 +51,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontFamily: fonts.poppins[600],
     fontSize: 14,
+    marginLeft : -20,
     fontWeight: 'bold',
   },
 });

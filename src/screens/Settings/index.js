@@ -14,6 +14,8 @@ import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import analytics from '@react-native-firebase/analytics';
+import Header from '../../components/Header';
+import VersionNumber from 'react-native-version-number'
 
 const width = Dimensions.get('screen').width;
 const Settings = () => {
@@ -24,17 +26,21 @@ const Settings = () => {
       screen_name: 'Settings',
     });
   }, []);
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
           <View style={styles.floatLeft}>
             <TouchableNativeFeedback onPress={() => navigation.goBack()}>
               <ArrowLeftIcon width={20} height={12} fill="#000" />
             </TouchableNativeFeedback>
           </View>
           <Text style={styles.textSettings}>Settings</Text>
+        </View> */}
+        <View style={{padding : 16}}>
+          <Header title="Settings"/>
         </View>
         <View style={styles.content}>
           <TouchableNativeFeedback>
@@ -65,7 +71,7 @@ const Settings = () => {
           </TouchableNativeFeedback>
         </View>
         <View style={styles.footer}>
-          <Text style={styles.textVersion}>Version 1.1.0</Text>
+          <Text style={styles.textVersion}>{`Version ${VersionNumber.appVersion}`}</Text>
         </View>
       </SafeAreaView>
     </>

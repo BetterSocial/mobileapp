@@ -124,7 +124,6 @@ const ProfileScreen = () => {
       const result = await getMyProfile(decoded.user_id);
       console.log(result);
       if (result.code === 200) {
-        console.log(result.data)
         setDataMain(result.data);
         withLoading ? setIsLoading(false) : null;
       }
@@ -427,12 +426,12 @@ const ProfileScreen = () => {
                   </View>
                   <View style={styles.wrapImageProfile}>
                     <TouchableNativeFeedback onPress={changeImage}>
-                      <View>
+                      <View style={styles.profileImageContainer}>
                         <Image
                           style={styles.profileImage}
                           source={{
                             uri: dataMain.profile_pic_path
-                              ? dataMain.profile_pic_path
+                              ? `${dataMain.profile_pic_path}?${new Date().getUTCMilliseconds()}`
                               : DEFAULT_PROFILE_PIC_PATH,
                           }}
                         />
@@ -447,7 +446,7 @@ const ProfileScreen = () => {
                       </Text>
                     </TouchableNativeFeedback> */}
                   </View>
-                  <View style={{...styles.wrapFollower, marginTop: 12}}>
+                  <View style={{...styles.wrapFollower, marginTop: 24}}>
                     <View style={styles.wrapRow}>
                       <Text style={styles.textTotal}>
                         {dataMain.follower_symbol}
@@ -581,7 +580,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerBio: {
-    marginTop: 8
+    marginTop: 8,
+    paddingVertical : 8
   },
   seeMore: {
     fontFamily: fonts.inter[500],
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 100,
-    marginBottom: 12,
+    // marginBottom: 12
   },
   wrapImageProfile: {
     marginTop: 24,
@@ -635,7 +635,7 @@ const styles = StyleSheet.create({
   },
   wrapFollower: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   wrapRow: {
     flexDirection: 'row',
@@ -654,5 +654,9 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingRight: 4,
   },
+  profileImageContainer : {
+    width : 100, 
+    borderRadius : 100
+  }
 });
 export default ProfileScreen;
