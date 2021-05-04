@@ -10,7 +10,7 @@ import {
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-const Header = ({title, onPress}) => {
+const Header = ({title, onPress, titleStyle = {}, containerStyle={}}) => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
@@ -31,9 +31,9 @@ const Header = ({title, onPress}) => {
     }
   };
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, ...containerStyle}}>
       {renderHeader()}
-      <Text style={styles.text}>{title}</Text>
+      <Text style={{...styles.text, ...titleStyle}}>{title}</Text>
       <View style={{width: 20, height: 12}} />
     </View>
   );

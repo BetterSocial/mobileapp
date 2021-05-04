@@ -186,7 +186,10 @@ const ProfileScreen = () => {
 
   const goToFollowings = (user_id, username) => {
     if (dataMain.following > 0) {
-      navigation.navigate('Followings', {user_id, username});
+      navigation.navigate('Followings', {
+        screen : "TabFollowing",
+        params : { user_id, username }
+      });
     }
   };
 

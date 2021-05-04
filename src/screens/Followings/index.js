@@ -49,6 +49,9 @@ const Followings = () => {
     if (result.code === 200) {
       withLoading ? setIsLoading(false) : null;
       setDataFollowing(result.data);
+      navigation.setOptions({
+        title : `Users (${result.data.length})`
+      })
     }
   };
 
@@ -144,9 +147,9 @@ const Followings = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      {/* <StatusBar barStyle="dark-content" /> */}
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
           <View style={styles.floatLeft}>
             <TouchableNativeFeedback onPress={() => navigation.goBack()}>
               <View style={{padding : 12}}>
@@ -155,14 +158,14 @@ const Followings = () => {
             </TouchableNativeFeedback>
           </View>
           <Text style={styles.textUsername}>{username}</Text>
-        </View>
-        <View style={styles.tabs}>
+        </View> */}
+        {/* <View style={styles.tabs}>
           <View style={styles.wrapTextTabs}>
             <Text style={styles.textTabs}>
               Following ({dataFollowing.length})
             </Text>
           </View>
-        </View>
+        </View> */}
         <View style={styles.content}>
           <FlatList
             data={dataFollowing}

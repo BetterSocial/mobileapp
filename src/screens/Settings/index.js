@@ -40,7 +40,7 @@ const Settings = () => {
           <Text style={styles.textSettings}>Settings</Text>
         </View> */}
         <View style={{padding : 16}}>
-          <Header title="Settings"/>
+          <Header title="Settings" onPress={() => navigation.goBack()}/>
         </View>
         <View style={styles.content}>
           <TouchableNativeFeedback>

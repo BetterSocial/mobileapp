@@ -7,7 +7,7 @@ import SplashScreen from '../screens/SplashScreen/SplashScreen';
 import LocalComunity from '../screens/LocalComunity';
 import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';
-import {StatusBar} from 'react-native';
+import {StatusBar, Text} from 'react-native';
 import CreatePost from '../screens/Post/CreatePost';
 import Followings from '../screens/Followings';
 import OtherProfile from '../screens/OtherProfile';
@@ -17,6 +17,9 @@ import {ChannelScreen, ProfileScreen} from '../screens';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ImageViewerScreen from '../screens/ImageViewer';
+import FollowingScreen from '../screens/Followings/FollowingScreen';
+import Header from '../components/Header';
+import { colors } from '../utils/colors';
 const Stack = createStackNavigator();
 const RootStact = () => {
   useEffect(() => {
@@ -77,8 +80,16 @@ const RootStact = () => {
       />
       <Stack.Screen
         name="Followings"
-        component={Followings}
-        options={{headerShown: false}}
+        component={FollowingScreen}
+        options={{
+          headerShown: true,
+          header : ({navigation}) => {
+            return <Header title="Who you're following"
+              containerStyle={{backgroundColor : colors.white, padding : 20, paddingBottom : 10}}
+              titleStyle={{fontSize : 16}}
+              onPress={() => navigation.goBack()}/>
+          }
+        }}
       />
       <Stack.Screen
         name="OtherProfile"
