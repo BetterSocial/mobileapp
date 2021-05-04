@@ -26,12 +26,61 @@ import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import ReplyIcon from '../../../assets/icons/reply/reply.png';
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 
+import MemoIc_world from '../../assets/icons/Ic_world';
+import Memoic_globe from '../../assets/icons/ic_globe';
+import MemoIc_user_group from '../../assets/icons/Ic_user_group';
+import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
+import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
+import MemoZero_twentyFour from '../../assets/timer/Zero_twentyFour';
+import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
+import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
+import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
+import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
+import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
+
+import ArrowUpIcon from '../../assets/icons/images/arrow-up.svg';
+import ArrowDownRedIcon from '../../assets/icons/images/arrow-down-red.svg';
+import CommentIcon from '../../assets/icons/images/comment.svg';
+import ShareIcon from '../../assets/icons/images/share.svg';
+import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
+
 const {width: screenWidth} = Dimensions.get('window');
+
+const validationTimer = (timer, duration_feed) => {
+  let date1 = new Date(timer);
+  let date2 = new Date();
+  let totalFeed = 24 * duration_feed;
+  var hours = Math.abs(date1 - date2) / 36e5;
+  let total = (hours / totalFeed) * 100;
+  switch (true) {
+    case total < 25:
+      return <MemoZero_twentyFour height={17} width={17} />;
+    case total < 38:
+      return <MemoTwentyFive_thirtySix height={17} width={17} />;
+    case total < 50:
+      return <MemoThirtySeven_fourtyNine height={17} width={17} />;
+    case total < 63:
+      return <MemoFivety_sixtyTwo height={17} width={17} />;
+    case total < 75:
+      return <MemoSixtyThree_seventyFour height={17} width={17} />;
+    case total < 88:
+      return <MemoSeventyFive_eightySeven height={17} width={17} />;
+    default:
+      return <MemoEightyEight_hundred height={17} width={17} />;
+  }
+};
 
 const RenderActivity = (props) => {
   const activity = props.activity;
-  let {anonimity} = activity;
-  let { username } = activity.actor.data
+  let {
+    anonimity,
+    privacy,
+    location,
+    expired_at,
+    duration_feed,
+    message,
+  } = activity;
+  let { username } = props.activity.actor.data
   let {profile_pic_path, real_name} = JSON.parse(activity.object);
 
   const getTime = (time) => {
@@ -63,11 +112,22 @@ const RenderActivity = (props) => {
         <View style={styles.containerFeedProfile}>
           <Text style={styles.feedUsername}>Anonymous</Text>
           <View style={styles.containerFeedText}>
-            <Text style={styles.feedDate}>{getTime(activity.time)}</Text>
-            <View style={styles.point} />
             <Text style={styles.feedDate}>
               {moment.utc(props.activity.time).local().fromNow()}
             </Text>
+            <View style={styles.point} />
+            {privacy === 'Public' ? (
+              <Memoic_globe height={16} width={16} />
+            ) : (
+              <MemoPeopleFollow height={16} width={16} />
+            )}
+
+            {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+            {duration_feed !== 'never'
+              ? validationTimer(expired_at, duration_feed)
+              : null}
+            <View style={styles.point} />
+            <Text style={styles.feedDate}>{location}</Text>
           </View>
         </View>
       </View>
@@ -95,11 +155,22 @@ const RenderActivity = (props) => {
             { username ? username : 'no name specifics'}
           </Text>
           <View style={styles.containerFeedText}>
-            <Text style={styles.feedDate}>20 Feb 2021</Text>
-            <View style={styles.point} />
             <Text style={styles.feedDate}>
               {moment.utc(props.activity.time).local().fromNow()}
             </Text>
+            <View style={styles.point} />
+            {privacy === 'Public' ? (
+              <Memoic_globe height={16} width={16} />
+            ) : (
+              <MemoPeopleFollow height={16} width={16} />
+            )}
+
+            {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+            {duration_feed !== 'never'
+              ? validationTimer(expired_at, duration_feed, message)
+              : null}
+            <View style={styles.point} />
+            <Text style={styles.feedDate}>{location}</Text>
           </View>
         </View>
       </View>
@@ -134,16 +205,29 @@ const RenderActivity = (props) => {
             ) : null}
           </View>
         }
+        // Footer={
+        //   <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        //     <LikeButton {...props} />
+        //     <ReactionIcon
+        //       icon={ReplyIcon}
+        //       labelSingle="comment"
+        //       labelPlural="comments"
+        //       counts={activity.reaction_counts}
+        //       kind="comment"
+        //     />
+        //   </View>
+        // }
         Footer={
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <LikeButton {...props} />
-            <ReactionIcon
-              icon={ReplyIcon}
-              labelSingle="comment"
-              labelPlural="comments"
-              counts={activity.reaction_counts}
-              kind="comment"
-            />
+          <View style={{...styles.rowSpaceBeetwen, marginTop: 23}}>
+            <View style={{...styles.rowSpaceBeetwen, width: 70}}>
+              <ShareIcon width={20} height={20} fill={colors.black} />
+              <CommentIcon width={20} height={18} fill={colors.black} />
+            </View>
+            <View style={{...styles.rowSpaceBeetwen, width: 90}}>
+              <MemoIc_block_inactive height={17} width={17} />
+              <ArrowDownRedIcon width={20} height={16} fill="#FF2E63" />
+              <ArrowUpIcon width={20} height={16} fill={colors.black} />
+            </View>
           </View>
         }
       />
@@ -188,12 +272,12 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   point: {
-    width: 4,
-    height: 4,
-    borderRadius: 4,
+    width: 2,
+    height: 2,
+    borderRadius: 2,
     backgroundColor: colors.gray,
-    marginLeft: 8,
-    marginRight: 8,
+    marginLeft: 6,
+    marginRight: 6,
   },
   contentFeed: {
     marginTop: 12,

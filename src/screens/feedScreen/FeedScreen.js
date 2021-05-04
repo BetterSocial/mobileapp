@@ -43,6 +43,7 @@ const FeedScreen = (props) => {
   useEffect(() => {
     const parseToken = async () => {
       const value = await getAccessToken();
+      console.log(value);
       if (value) {
         var decoded = await JWTDecode(value);
         setTokenParse(decoded);
