@@ -2,7 +2,6 @@ import React, {useRef, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import RBSheet from 'react-native-raw-bottom-sheet';
-// import GestureRecognizer from 'react-native-swipe-gestures';
 import {Button} from '../../components/Button';
 import TopicItem from '../../components/TopicItem';
 import {colors} from '../../utils/colors';

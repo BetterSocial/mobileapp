@@ -6,7 +6,7 @@ import IconMt from 'react-native-vector-icons/MaterialIcons';
 import IconMtC from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-const Footer = () => {
+const Footer = ({onBlock}) => {
   return (
     <View style={styles.constainer}>
       <TouchableOpacity style={styles.btn}>
@@ -16,7 +16,7 @@ const Footer = () => {
           color={colors.gray1}
         />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.btn}>
+      <TouchableOpacity style={styles.btn} onPress={() => onBlock()}>
         <IconEn name="block" size={17} color={colors.gray1} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.btn}>

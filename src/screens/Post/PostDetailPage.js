@@ -17,6 +17,11 @@ import WriteComment from '../../elements/PostDetail/WriteComment';
 import {fonts} from '../../utils/fonts';
 import {getMyProfile} from '../../service/profile';
 import BlockUser from '../../elements/Blocking/BlockUser';
+import BlockDomain from '../../elements/Blocking/BlockDomain';
+import ReportUser from '../../elements/Blocking/ReportUser';
+import ReportDomain from '../../elements/Blocking/ReportDomain';
+import SpecificIssue from '../../elements/Blocking/SpecificIssue';
+import Toast from 'react-native-simple-toast';
 
 const PostDetailPage = () => {
   const [more, setMore] = useState(10);
@@ -24,10 +29,34 @@ const PostDetailPage = () => {
   const [loading, setLoading] = useState(false);
   const [dataProfile, setDataProfile] = useState({});
   const refBlockUser = useRef();
+  const refBlockDomain = useRef();
+  const refReportUser = useRef();
+  const refReportDomain = useRef();
+  const refSpecificIssue = useRef();
+
   useEffect(() => {
     fetchMyProfile();
-    refBlockUser.current.open();
+    // refBlockUser.current.open();
+    // refBlockDomain.current.open();
+    // refReportUser.current.open();
   }, []);
+  const onSelectBlocking = (v) => {
+    if (v !== 1) {
+      // refBlockDomain.current.open();
+      refReportUser.current.open();
+    }
+    refBlockUser.current.close();
+  };
+
+  const onNextQuestion = (v) => {
+    console.log(v);
+    refReportUser.current.close();
+    refSpecificIssue.current.open();
+  };
+  const onIssue = () => {
+    refSpecificIssue.current.close();
+    Toast.show('Your report was filed & will be investigated', Toast.LONG);
+  };
   const fetchMyProfile = async () => {
     let token = await getAccessToken();
     if (token) {
@@ -53,7 +82,7 @@ const PostDetailPage = () => {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header />
+        <Header onSetting={() => {}} onSearch={() => {}} />
         <Profile />
         <View style={styles.containerText}>
           <Text
@@ -78,11 +107,23 @@ const PostDetailPage = () => {
             </TouchableOpacity>
           )}
         </View>
-        <Footer />
+        <Footer onBlock={() => refBlockUser.current.open()} />
         <ContainerComment />
       </ScrollView>
       <WriteComment />
-      <BlockUser refBlockUser={refBlockUser} />
+      <BlockUser
+        refBlockUser={refBlockUser}
+        onSelect={(v) => onSelectBlocking(v)}
+        username="ayaka_kaminari_test"
+      />
+      <BlockDomain
+        refBlockUser={refBlockDomain}
+        domain="guardian.com"
+        onSelect={() => {}}
+      />
+      <ReportUser refReportUser={refReportUser} onSelect={onNextQuestion} />
+      <ReportDomain refReportDomain={refReportDomain} />
+      <SpecificIssue refSpecificIssue={refSpecificIssue} onPress={onIssue} />
     </View>
   );
 };

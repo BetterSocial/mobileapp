@@ -4,7 +4,7 @@ import {fonts} from '../../utils/fonts';
 import Icon from 'react-native-vector-icons/Octicons';
 import Gap from '../../components/Gap';
 
-const Header = () => {
+const Header = ({onSetting, onSearch}) => {
   return (
     <View style={styles.header}>
       <View style={{flexDirection: 'row'}}>
@@ -12,14 +12,14 @@ const Header = () => {
           source={require('../../assets/images/ProfileDefault.png')}
           style={styles.image}
         />
-        <TouchableOpacity style={styles.setting}>
+        <TouchableOpacity style={styles.setting} onPress={onSearch}>
           <Icon name="search" size={20} />
         </TouchableOpacity>
       </View>
       <Text style={styles.headerTitle}>Post</Text>
       <View style={{flexDirection: 'row'}}>
         <Gap style={{width: 50}} />
-        <TouchableOpacity style={styles.setting}>
+        <TouchableOpacity style={styles.setting} onPress={onSetting}>
           <Icon name="settings" size={20} />
         </TouchableOpacity>
       </View>
