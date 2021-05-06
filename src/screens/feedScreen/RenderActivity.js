@@ -7,6 +7,7 @@ import {
   Platform,
   Dimensions,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import {
   Activity,
@@ -43,6 +44,10 @@ import ArrowDownRedIcon from '../../assets/icons/images/arrow-down-red.svg';
 import CommentIcon from '../../assets/icons/images/comment.svg';
 import ShareIcon from '../../assets/icons/images/share.svg';
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
+import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_arrow_upvote_on';
+import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_arrow_down_vote_on';
+import MemoIc_share from '../../assets/icons/Ic_share';
+import MemoIc_comment from '../../assets/icons/Ic_comment';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -218,13 +223,23 @@ const RenderActivity = (props) => {
         Footer={
           <View style={{...styles.rowSpaceBeetwen, marginTop: 23}}>
             <View style={{...styles.rowSpaceBeetwen, width: 70}}>
-              <ShareIcon width={20} height={20} fill={colors.black} />
-              <CommentIcon width={20} height={18} fill={colors.black} />
+              <TouchableOpacity>
+                <MemoIc_share height={20} width={20} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MemoIc_comment height={20} width={20} />
+              </TouchableOpacity>
             </View>
             <View style={{...styles.rowSpaceBeetwen, width: 90}}>
-              <MemoIc_block_inactive height={17} width={17} />
-              <ArrowDownRedIcon width={20} height={16} fill="#FF2E63" />
-              <ArrowUpIcon width={20} height={16} fill={colors.black} />
+              <TouchableOpacity>
+                <MemoIc_block_inactive height={18} width={18} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MemoIc_arrow_down_vote_on width={18} height={18} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MemoIc_arrow_upvote_on width={18} height={18} />
+              </TouchableOpacity>
             </View>
           </View>
         }
