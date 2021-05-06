@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 import {ButtonNewPost} from '../../components/Button';
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
 
@@ -17,11 +24,14 @@ import RenderActivity from './RenderActivity';
 import {getMyProfile} from '../../service/profile';
 import analytics from '@react-native-firebase/analytics';
 import {getAccessToken} from '../../data/local/accessToken';
+import {getMainFeed} from '../../service/post';
+import RenderItem from './RenderItem';
+import Loading from '../../components/Loading';
 
 let token_JWT = '';
 const FeedScreen = (props) => {
   const [tokenParse, setTokenParse] = useState({});
-  const [dataMain, setDataMain] = useState({});
+  const [mainFeeds, setMainFeeds] = useState([]);
   const apiKey = STREAM_API_KEY;
   const appId = STREAM_APP_ID;
   const token = token_JWT;
@@ -29,6 +39,17 @@ const FeedScreen = (props) => {
   const [dataProfile, setDataProfile] = useState({});
   const [loading, setLoading] = useState(false);
   const [geoList, setGeoList] = useState([]);
+
+  useEffect(() => {
+    const getDataFeeds = async () => {
+      setLoading(true);
+      const dataFeeds = await getMainFeed();
+      console.log(dataFeeds.data.lengthr);
+      setMainFeeds(dataFeeds.data);
+      setLoading(false);
+    };
+    getDataFeeds();
+  }, []);
 
   getToken().then((val) => {
     token_JWT = val;
@@ -40,12 +61,12 @@ const FeedScreen = (props) => {
       screen_name: 'Feed Screen',
     });
   }, []);
+
   useEffect(() => {
     const parseToken = async () => {
       const value = await getAccessToken();
-      console.log(value);
       if (value) {
-        var decoded = await JWTDecode(value);
+        const decoded = await JWTDecode(value);
         setTokenParse(decoded);
       }
     };
@@ -56,7 +77,7 @@ const FeedScreen = (props) => {
     setLoading(true);
     let token = await getToken();
     if (token) {
-      var decoded = await JWTDecode(token);
+      const decoded = await JWTDecode(token);
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
@@ -78,7 +99,7 @@ const FeedScreen = (props) => {
   return (
     <SafeAreaView style={{flex: 1}} forceInset={{top: 'always'}}>
       <View style={{flex: 1, backgroundColor: 'white', paddingHorizontal: 16}}>
-        {token !== '' && (
+        {/* {token !== '' && (
           <StreamApp apiKey={apiKey} appId={appId} token={token}>
             <FlatFeed
               flatListProps={{showsVerticalScrollIndicator: false}}
@@ -90,8 +111,17 @@ const FeedScreen = (props) => {
               notify
             />
           </StreamApp>
-        )}
+        )} */}
+        <FlatList
+          style={{flex: 1, height: '100%'}}
+          data={mainFeeds}
+          renderItem={({item, index}) => <RenderItem item={item} />}
+          keyExtractor={(item) => item.id}
+          pagingEnabled={true}
+        />
       </View>
+
+      <Loading visible={loading} />
 
       <ButtonNewPost />
     </SafeAreaView>

@@ -38,7 +38,6 @@ const SplashScreen = () => {
         });
 
       dynamicLinks().onLink((link) => {
-        console.log('dynamic link ' + link);
         return true;
       });
     } catch (e) {
@@ -50,7 +49,6 @@ const SplashScreen = () => {
   let getDeepLinkUrl = async () => {
     try {
       let selfUserId = await doVerifyUser();
-      console.log(selfUserId);
       let deepLinkUrl = await Linking.getInitialURL();
       if (deepLinkUrl === null) return navigateWithoutDeeplink(selfUserId);
 
@@ -105,7 +103,6 @@ const SplashScreen = () => {
       // }
       let token = await getAccessToken();
       if (token !== null || token !== '') {
-        console.log(token);
         return await jwtDecode(token).user_id;
       }
       return null;
