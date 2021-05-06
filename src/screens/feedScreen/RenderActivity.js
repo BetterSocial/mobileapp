@@ -46,6 +46,8 @@ import ShareIcon from '../../assets/icons/images/share.svg';
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_arrow_upvote_on';
 import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_arrow_down_vote_on';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
+import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
 import MemoIc_share from '../../assets/icons/Ic_share';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 
@@ -235,10 +237,10 @@ const RenderActivity = (props) => {
                 <MemoIc_block_inactive height={18} width={18} />
               </TouchableOpacity>
               <TouchableOpacity>
-                <MemoIc_arrow_down_vote_on width={18} height={18} />
+                <MemoIc_arrow_down_vote_off width={18} height={18} />
               </TouchableOpacity>
               <TouchableOpacity>
-                <MemoIc_arrow_upvote_on width={18} height={18} />
+                <MemoIc_arrow_upvote_off width={18} height={18} />
               </TouchableOpacity>
             </View>
           </View>
