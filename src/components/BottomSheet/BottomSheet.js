@@ -7,6 +7,7 @@ const BottomSheet = React.forwardRef((props, ref)=> {
   return (
     <RBSheet
       ref={ref}
+      onOpen={() => props.onOpen ? props.onOpen() : {}}
       closeOnDragDown={true}
       closeOnPressMask={props.closeOnPressMask}
       height={props.height ? props.height : 260}

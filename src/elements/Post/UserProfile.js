@@ -84,5 +84,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     width: 32,
     height: 32,
+    borderRadius : 16
   },
 });

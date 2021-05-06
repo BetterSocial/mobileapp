@@ -34,13 +34,13 @@ export default function CreatePollContainer({
     let hour = arrayContentToString([...Array(expiredobject.hour).keys()])
     let minute = arrayContentToString([...Array(60).keys()])
 
-    let [isDurationModalShown, setIsDurationModalShown] = useState(true)
+    let [isDurationModalShown, setIsDurationModalShown] = useState(false)
     let [pickerDay, setPickerDay] = useState(selectedtime.day)
     let [pickerHour, setPickerHour] = useState(selectedtime.hour)
     let [pickerMinute, setPickerMinute] = useState(selectedtime.minute)
   
     const getDurationTimeText = () => {
-        let dayText = selectedtime.day > 0 ? `${selectedtime.day} day(s)` : ``
+        let dayText = selectedtime.day > 0 ? `${selectedtime.day} Day(s)` : ``
         let hourText = selectedtime.hour > 0 ? 
                         `${selectedtime.day > 0 ? `, ` : ` `}${selectedtime.hour}h` : 
                         ``
@@ -91,7 +91,7 @@ export default function CreatePollContainer({
 
         <Modal isVisible={isDurationModalShown} style={S.modalcontainer}>
             <View style={S.parentcolumncontainer}>
-                <Text style={S.setdurationtext}>Set Durations</Text>
+                <Text style={S.setdurationtext}>Set Duration</Text>
                 <View style={S.modalrowcontainer}>
                     <View style={S.pickercontainer}>
                         <Text style={S.pickerlabeltext}>Days</Text>
@@ -171,12 +171,14 @@ const S = StyleSheet.create({
     addpollitemcontainer : {
         display : 'flex',
         alignItems : 'center',
-        marginTop : 16,
-        marginBottom : 8
+        marginTop : 10,
+        marginBottom : 2,
+        paddingVertical : 12
     },
 
     addpollitemplusicon : {
         color : colors.black,
+        alignSelf : 'center'
     },
 
     removepolltext : {

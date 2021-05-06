@@ -20,17 +20,21 @@ const styles = StyleSheet.create({
   containerTag: {
     backgroundColor: colors.white,
     borderRadius: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 7.33,
+    paddingLeft: 16,
+    // paddingVertical: 7.33,
     // width: 122,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginRight: 12,
+    marginRight: 12
   },
   tag: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
   },
-  btn: {marginLeft: 10},
+  btn: {
+    marginLeft: 7,
+    paddingVertical : 10,
+    padding : 10
+  },
 });
