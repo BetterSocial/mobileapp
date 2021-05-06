@@ -1,0 +1,103 @@
+import React from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TextInput,
+} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
+import IconFA5 from 'react-native-vector-icons/FontAwesome5';
+import ItemList from '../../components/Blocking/ItemList';
+import {Button} from '../../components/Button';
+import Gap from '../../components/Gap';
+
+const SpecificIssue = ({refSpecificIssue, onPress}) => {
+  return (
+    <RBSheet
+      ref={refSpecificIssue}
+      closeOnDragDown={true}
+      closeOnPressMask={true}
+      customStyles={{
+        container: {
+          height: 'auto',
+          borderTopRightRadius: 20,
+          borderTopLeftRadius: 20,
+        },
+        draggableIcon: {
+          backgroundColor: colors.alto,
+          width: 60,
+        },
+      }}>
+      <View>
+        <Text style={styles.title}>Please specify the issue</Text>
+        <TextInput
+          style={styles.input}
+          textAlignVertical="top"
+          placeholder={`Please provide more details to inform our\n team (min. 50 characters)`}
+        />
+        <TouchableOpacity style={styles.btnSkip}>
+          <Text style={styles.btnSkipText}>Skip & just block this account</Text>
+          <IconFA5 name="chevron-right" size={17} color={'#000'} />
+        </TouchableOpacity>
+        <View style={styles.containerBtn}>
+          <Button onPress={() => onPress()}>
+            <Text>File Report</Text>
+          </Button>
+        </View>
+      </View>
+    </RBSheet>
+  );
+};
+
+export default SpecificIssue;
+
+const styles = StyleSheet.create({
+  title: {
+    fontFamily: fonts.inter[700],
+    fontSize: 18,
+    color: '#000',
+    marginLeft: 21,
+    marginTop: 18,
+  },
+  containerBtn: {
+    marginRight: 22,
+    marginLeft: 18,
+    marginBottom: 19,
+  },
+  btn: {
+    paddingLeft: 18,
+    paddingRight: 22,
+    paddingTop: 8,
+  },
+  btnSkip: {
+    backgroundColor: '#E0E0E0',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 17,
+    paddingVertical: 18,
+    marginVertical: 22,
+  },
+  btnSkipText: {
+    fontFamily: fonts.inter[700],
+    fontSize: 14,
+    color: '#000',
+  },
+  input: {
+    backgroundColor: colors.lightgrey,
+    marginLeft: 17,
+    marginRight: 23,
+    borderRadius: 8,
+    height: 233,
+    marginTop: 14,
+    paddingVertical: 19,
+    paddingRight: 13,
+    paddingLeft: 19,
+    fontFamily: fonts.inter[400],
+    color: colors.gray,
+  },
+});

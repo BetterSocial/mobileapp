@@ -16,6 +16,7 @@ import HomeBottomTabs from './HomeBottomTabs';
 import {ChannelScreen, ProfileScreen} from '../screens';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
+import PostDetailPage from '../screens/Post/PostDetailPage';
 import ImageViewerScreen from '../screens/ImageViewer';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import Header from '../components/Header';
@@ -27,7 +28,12 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="PostDetailPage">
+      <Stack.Screen
+        name="PostDetailPage"
+        component={PostDetailPage}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="HomeTabs"
         component={HomeBottomTabs}
@@ -116,10 +122,7 @@ const RootStact = () => {
         component={ProfileScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="ImageViewer"
-        component={ImageViewerScreen}
-      />
+      <Stack.Screen name="ImageViewer" component={ImageViewerScreen} />
     </Stack.Navigator>
   );
 };
