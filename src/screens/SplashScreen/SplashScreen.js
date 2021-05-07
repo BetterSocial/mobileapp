@@ -10,7 +10,7 @@ import {
   setAccessToken,
 } from '../../data/local/accessToken';
 import {getProfileByUsername} from '../../service/profile';
-import {verifyUser} from '../../service/users';
+import {verifyTokenGetstream, verifyUser} from '../../service/users';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import fetchRemoteConfig from '../../utils/FirebaseUtil';
 
@@ -105,8 +105,13 @@ const SplashScreen = () => {
       // }
       let token = await getAccessToken();
       if (token !== null || token !== '') {
-        console.log(token);
-        return await jwtDecode(token).user_id;
+        const verify = await verifyTokenGetstream();
+        if (verify !== null || verify !== '') {
+          console.log('veri', verify);
+          console.log('token ', token);
+          return await jwtDecode(token).user_id;
+        }
+        return null;
       }
       return null;
     } catch (e) {
