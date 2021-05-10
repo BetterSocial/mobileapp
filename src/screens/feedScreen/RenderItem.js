@@ -9,7 +9,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
 
 import {Card} from 'react-native-card-stack-swiper';
-import { POST_VERB_POLL } from '../../utils/constants';
+import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
 const {width, height} = Dimensions.get('window');
@@ -80,10 +80,15 @@ const RenderItem = ({item}) => {
         },
       ]}>
       <Header props={item} />
-      { item.verb === POST_VERB_POLL ?
-        <ContentPoll message={item.message} images_url={item.images_url} polls={item.pollOptions} /> :
-        <Content message={item.message} images_url={item.images_url} /> 
-      }
+      {item.verb === POST_VERB_POLL ? (
+        <ContentPoll
+          message={item.message}
+          images_url={item.images_url}
+          polls={item.pollOptions}
+        />
+      ) : (
+        <Content message={item.message} images_url={item.images_url} />
+      )}
       <Footer
         onPressShare={() => {
           onShare(item.actor.data.username);
