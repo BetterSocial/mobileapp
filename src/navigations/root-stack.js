@@ -18,6 +18,7 @@ import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import PostDetailPage from '../screens/Post/PostDetailPage';
 import ImageViewerScreen from '../screens/ImageViewer';
+import ReplyComment from '../screens/Post/ReplyComment';
 const Stack = createStackNavigator();
 const RootStact = () => {
   useEffect(() => {
@@ -25,7 +26,12 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="PostDetailPage">
+    <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Screen
+        name="ReplayComment"
+        component={ReplyComment}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="PostDetailPage"
         component={PostDetailPage}

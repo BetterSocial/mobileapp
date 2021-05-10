@@ -10,10 +10,10 @@ const ContainerComment = () => {
       <View style={styles.containerReply}>
         <ReplayComment />
       </View>
-      <Comment />
-      <ContainerReply>
+      {/* <Comment /> */}
+      {/* <ContainerReply>
         <ReplayComment />
-      </ContainerReply>
+      </ContainerReply> */}
     </View>
   );
 };
@@ -35,7 +35,6 @@ export default ContainerComment;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 22,
-    marginBottom: 70,
   },
   containerReply: {
     borderLeftColor: colors.gray1,

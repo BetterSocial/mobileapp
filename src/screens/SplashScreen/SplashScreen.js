@@ -104,9 +104,9 @@ const SplashScreen = () => {
       //   return await jwtDecode(response.token).user_id;
       // }
       let token = await getAccessToken();
-      if (token !== null || token !== '') {
+      if (token !== null && token !== '') {
         const verify = await verifyTokenGetstream();
-        if (verify !== null || verify !== '') {
+        if (verify !== null && verify !== '') {
           console.log('veri', verify);
           console.log('token ', token);
           return await jwtDecode(token).user_id;
