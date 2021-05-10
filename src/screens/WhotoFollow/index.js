@@ -113,6 +113,14 @@ const WhotoFollow = () => {
       });
   }, []);
   const register = () => {
+    console.log('click regiter');
+    if (followed.length < 2) {
+      showMessage({
+        message: 'minimum follow 3 users',
+        type: 'danger',
+      });
+      return null;
+    }
     setFetchRegister(true);
     analytics().logEvent('onb_select_follows_btn_add', {
       onb_whofollow_users_selected: followed,
@@ -151,16 +159,17 @@ const WhotoFollow = () => {
         } else {
           crashlytics().recordError(new Error(res));
           showMessage({
-            message: 'register error 1',
+            message: 'please complete the data',
             type: 'danger',
           });
         }
       })
       .catch((error) => {
         crashlytics().recordError(new Error(error));
+        // console.log(error.response);
         setFetchRegister(false);
         showMessage({
-          message: 'register error 2',
+          message: 'please complete the data',
           type: 'danger',
         });
       });
@@ -193,112 +202,110 @@ const WhotoFollow = () => {
   );
 
   return (
-    <>
-      <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" />
-      <SafeAreaView style={styles.container}>
-        <View style={styles.wrapperHeader}>{renderHeader()}</View>
-        <View style={styles.containerProgress}>
-          <ProgressBar isStatic={true} value={100} />
-        </View>
-        <View style={styles.content}>
-          <Text style={styles.textWhoToFollow}>Who to follow</Text>
-          <Text style={styles.textDescription}>
-            These make it easy for people to find you
-          </Text>
-        </View>
-        {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
-        <VirtualizedView
-          style={{marginBottom: 90}}
-          onRefresh={onRefresh}
-          refreshing={refreshing}>
-          {users !== undefined && users.length > 0
-            ? users.map((value, index) => {
-                if (value.name === 'topic') {
-                  return (
-                    <View key={index}>
-                      {value.data.map((val, idx) => {
-                        return (
-                          <View key={idx}>
-                            <View style={styles.headerList}>
-                              <Text style={styles.titleHeader}>
-                                People in{' '}
-                                <Text style={styles.textBold}>{val.name}</Text>{' '}
-                                follow...
-                              </Text>
-                            </View>
-                            <FlatList
-                              style={styles.flatList}
-                              data={val.users}
-                              renderItem={renderItem}
-                              listKey={(item) => item.user_id + 'topic'}
-                              keyExtractor={(item) => item.user_id + 'topic'}
-                            />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.wrapperHeader}>{renderHeader()}</View>
+      <View style={styles.containerProgress}>
+        <ProgressBar isStatic={true} value={100} />
+      </View>
+      <View style={styles.content}>
+        <Text style={styles.textWhoToFollow}>Who to follow</Text>
+        <Text style={styles.textDescription}>
+          These make it easy for people to find you
+        </Text>
+      </View>
+      {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
+      <VirtualizedView
+        style={{marginBottom: 90}}
+        onRefresh={onRefresh}
+        refreshing={refreshing}>
+        {users !== undefined && users.length > 0
+          ? users.map((value, index) => {
+              if (value.name === 'topic') {
+                return (
+                  <View key={index}>
+                    {value.data.map((val, idx) => {
+                      return (
+                        <View key={idx}>
+                          <View style={styles.headerList}>
+                            <Text style={styles.titleHeader}>
+                              People in{' '}
+                              <Text style={styles.textBold}>{val.name}</Text>{' '}
+                              follow...
+                            </Text>
                           </View>
-                        );
-                      })}
-                    </View>
-                  );
-                } else if (value.name === 'location') {
-                  return (
-                    <View key={index}>
-                      {value.data.map((val, idx) => {
-                        return (
-                          <View key={idx}>
-                            <View style={styles.headerList}>
-                              <Text style={styles.titleHeader}>
-                                People in{' '}
-                                <Text style={styles.textBold}>
-                                  {val.neighborhood}
-                                </Text>{' '}
-                                follow...
-                              </Text>
-                            </View>
-                            <FlatList
-                              style={styles.flatList}
-                              data={val.users}
-                              renderItem={renderItem}
-                              listKey={(item) => item.user_id + 'location'}
-                              keyExtractor={(item) => item.user_id + 'location'}
-                            />
+                          <FlatList
+                            style={styles.flatList}
+                            data={val.users}
+                            renderItem={renderItem}
+                            listKey={(item) => item.user_id + 'topic'}
+                            keyExtractor={(item) => item.user_id + 'topic'}
+                          />
+                        </View>
+                      );
+                    })}
+                  </View>
+                );
+              } else if (value.name === 'location') {
+                return (
+                  <View key={index}>
+                    {value.data.map((val, idx) => {
+                      return (
+                        <View key={idx}>
+                          <View style={styles.headerList}>
+                            <Text style={styles.titleHeader}>
+                              People in{' '}
+                              <Text style={styles.textBold}>
+                                {val.neighborhood}
+                              </Text>{' '}
+                              follow...
+                            </Text>
                           </View>
-                        );
-                      })}
-                    </View>
-                  );
-                } else {
-                  return null;
-                }
-                // return (
-                //   <View key={index}>
-                //     <View style={styles.headerList}>
-                //       <Text style={styles.titleHeader}>
-                //         People in{' '}
-                //         <Text style={styles.textBold}>{value.group_name}</Text>{' '}
-                //         follow...
-                //       </Text>
-                //     </View>
-                //     <FlatList
-                //       style={styles.flatList}
-                //       data={value.data}
-                //       renderItem={renderItem}
-                //       keyExtractor={(item) => item.user_id}
-                //     />
-                //   </View>
-                // );
-              })
-            : null}
-        </VirtualizedView>
-        <View style={styles.footer}>
-          <Button onPress={() => register()}>FINISH</Button>
-        </View>
-        <Loading visible={fetchRegister} />
-      </SafeAreaView>
-    </>
+                          <FlatList
+                            style={styles.flatList}
+                            data={val.users}
+                            renderItem={renderItem}
+                            listKey={(item) => item.user_id + 'location'}
+                            keyExtractor={(item) => item.user_id + 'location'}
+                          />
+                        </View>
+                      );
+                    })}
+                  </View>
+                );
+              } else {
+                return null;
+              }
+              // return (
+              //   <View key={index}>
+              //     <View style={styles.headerList}>
+              //       <Text style={styles.titleHeader}>
+              //         People in{' '}
+              //         <Text style={styles.textBold}>{value.group_name}</Text>{' '}
+              //         follow...
+              //       </Text>
+              //     </View>
+              //     <FlatList
+              //       style={styles.flatList}
+              //       data={value.data}
+              //       renderItem={renderItem}
+              //       keyExtractor={(item) => item.user_id}
+              //     />
+              //   </View>
+              // );
+            })
+          : null}
+      </VirtualizedView>
+      <View style={styles.footer}>
+        <Button onPress={() => register()}>FINISH</Button>
+      </View>
+      <Loading visible={fetchRegister} />
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   content: {
     padding: 22,

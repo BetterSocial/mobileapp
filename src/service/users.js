@@ -41,7 +41,8 @@ export const registerUser = async (data) => {
     });
     return resApi.data;
   } catch (error) {
-    console.log(error);
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
   }
 };
 
