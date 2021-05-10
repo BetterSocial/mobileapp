@@ -48,14 +48,13 @@ const Content = ({message, images_url}) => {
               linkStyle={styles.textContentFeed}>
               {message}
             </SeeMore>
-            <Gap height={8} />
+            <Gap height={16} />
             <FlatList
               style={{flex: 1}}
               horizontal={true}
               pagingEnabled={true}
               data={images_url}
               renderItem={({item, index}) => {
-                console.log(item);
                 return (
                   <Image
                     source={{uri: item}}

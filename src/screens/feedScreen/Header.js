@@ -57,7 +57,13 @@ const validationTimer = (timer, duration_feed) => {
   }
 };
 
-const _renderAnonimity = (time) => (
+const _renderAnonimity = (
+  time,
+  privacy,
+  duration_feed,
+  expired_at,
+  location,
+) => (
   <View style={styles.rowSpaceBeetwen}>
     <View style={styles.rowCenter}>
       <Image
@@ -69,11 +75,22 @@ const _renderAnonimity = (time) => (
       <View style={styles.containerFeedProfile}>
         <Text style={styles.feedUsername}>Anonymous</Text>
         <View style={styles.containerFeedText}>
-          <Text style={styles.feedDate}>{getTime(time)}</Text>
-          <View style={styles.point} />
           <Text style={styles.feedDate}>
             {moment.utc(time).local().fromNow()}
           </Text>
+          <View style={styles.point} />
+          {privacy === 'Public' ? (
+            <Memoic_globe height={16} width={16} />
+          ) : (
+            <MemoPeopleFollow height={16} width={16} />
+          )}
+
+          {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+          {duration_feed !== 'never'
+            ? validationTimer(expired_at, duration_feed)
+            : null}
+          <View style={styles.point} />
+          <Text style={styles.feedDate}>{location}</Text>
         </View>
       </View>
     </View>
@@ -145,7 +162,7 @@ const Header = ({props}) => {
     actor,
   } = props;
   if (anonimity) {
-    return _renderAnonimity(time);
+    return _renderAnonimity(time, privacy, duration_feed, expired_at, location);
   } else {
     return _renderProfileNormal(
       actor.data.username,
