@@ -8,6 +8,10 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import analytics from '@react-native-firebase/analytics';
 
+import {Card} from 'react-native-card-stack-swiper';
+
+const {width, height} = Dimensions.get('window');
+
 async function buildLink(username) {
   const link = await dynamicLinks().buildLink(
     {
@@ -57,13 +61,22 @@ const onShare = async (username) => {
 
 const RenderItem = ({item}) => {
   return (
-    <View
-      style={{
-        flex: 1,
-        height: Dimensions.get('screen').height - 100,
-        marginBottom: 16,
-        marginTop: 8,
-      }}>
+    <Card
+      style={[
+        {
+          width: width,
+          height: height - 90,
+          borderRadius: 5,
+          shadowColor: 'rgba(0,0,0,0.5)',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.5,
+          backgroundColor: 'white',
+          paddingHorizontal: 16,
+        },
+      ]}>
       <Header props={item} />
       <Content message={item.message} images_url={item.images_url} />
       <Footer
@@ -71,7 +84,7 @@ const RenderItem = ({item}) => {
           onShare(item.actor.data.username);
         }}
       />
-    </View>
+    </Card>
   );
 };
 
