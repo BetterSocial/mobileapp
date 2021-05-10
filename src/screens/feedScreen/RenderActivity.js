@@ -80,7 +80,8 @@ const RenderActivity = (props) => {
     duration_feed,
     message,
   } = activity;
-  let {profile_pic_path, real_name, username} = JSON.parse(activity.object);
+  let { username } = props.activity.actor.data
+  let {profile_pic_path, real_name} = JSON.parse(activity.object);
 
   const getTime = (time) => {
     let date = new Date(time);
@@ -150,7 +151,8 @@ const RenderActivity = (props) => {
         />
         <View style={styles.containerFeedProfile}>
           <Text style={styles.feedUsername}>
-            {username ? username : 'no name specifics'}
+            {/* {real_name ? real_name : 'no name specifics'} */}
+            { username ? username : 'no name specifics'}
           </Text>
           <View style={styles.containerFeedText}>
             <Text style={styles.feedDate}>
