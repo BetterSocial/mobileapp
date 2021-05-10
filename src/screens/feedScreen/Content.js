@@ -7,24 +7,14 @@ import {
   Platform,
   Dimensions,
   Image,
+  FlatList,
 } from 'react-native';
-import {
-  Activity,
-  Avatar,
-  LikeButton,
-  ReactionIcon,
-  FollowButton,
-  CommentItem,
-} from 'react-native-activity-feed';
-import moment from 'moment';
-import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
+
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import SeeMore from 'react-native-see-more-inline';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
-
-import ReplyIcon from '../../../assets/icons/reply/reply.png';
-import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
+import Gap from '../../components/Gap';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -42,24 +32,48 @@ const _renderItem = ({item, index}, parallaxProps) => {
   );
 };
 
-const Content = (item) => {
-  console.log(item.props.message);
+const Content = ({message, images_url}) => {
   return (
     <View style={styles.contentFeed}>
-      <SeeMore numberOfLines={4} linkStyle={styles.textContentFeed}>
-        {item.props.message}
-      </SeeMore>
-      {item.props.image !== null ? (
-        item.props.images_url.length > 0 ? (
-          <Carousel
-            sliderWidth={screenWidth}
-            sliderHeight={screenWidth}
-            itemWidth={screenWidth - 20}
-            data={item.props.images_url}
-            renderItem={_renderItem}
-            hasParallaxImages={true}
-          />
-        ) : null
+      {images_url !== null ? (
+        images_url.length > 0 ? (
+          <View
+            style={{
+              flex: 1,
+              paddingBottom: 16,
+            }}>
+            <SeeMore
+              seeLessText={' '}
+              numberOfLines={4}
+              linkStyle={styles.textContentFeed}>
+              {message}
+            </SeeMore>
+            <Gap height={16} />
+            <FlatList
+              style={{flex: 1}}
+              horizontal={true}
+              pagingEnabled={true}
+              data={images_url}
+              renderItem={({item, index}) => {
+                return (
+                  <Image
+                    source={{uri: item}}
+                    style={{flex: 1, width: screenWidth - 32, borderRadius: 16}}
+                    resizeMode={'cover'}
+                  />
+                );
+              }}
+              keyExtractor={({item, index}) => index}
+            />
+          </View>
+        ) : (
+          <View
+            style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+            <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
+              {message}
+            </SeeMore>
+          </View>
+        )
       ) : null}
     </View>
   );
@@ -109,12 +123,12 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   contentFeed: {
+    flex: 1,
     marginTop: 12,
-    flexDirection: 'column',
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
-    fontSize: 14,
+    fontSize: 24,
     lineHeight: 24,
     color: colors.black,
   },
@@ -142,6 +156,7 @@ const styles = StyleSheet.create({
     height: screenWidth - 20,
     marginTop: 10,
     marginLeft: -20,
+    backgroundColor: 'pink',
   },
   imageContainer: {
     flex: 1,
@@ -153,7 +168,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     flex: 1,
     aspectRatio: 1.5,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   imageAnonimity: {
     marginRight: 8,
