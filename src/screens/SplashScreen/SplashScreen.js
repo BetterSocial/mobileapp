@@ -38,7 +38,6 @@ const SplashScreen = () => {
         });
 
       dynamicLinks().onLink((link) => {
-        console.log('dynamic link ' + link);
         return true;
       });
     } catch (e) {
@@ -50,7 +49,6 @@ const SplashScreen = () => {
   let getDeepLinkUrl = async () => {
     try {
       let selfUserId = await doVerifyUser();
-      console.log(selfUserId);
       let deepLinkUrl = await Linking.getInitialURL();
       if (deepLinkUrl === null) return navigateWithoutDeeplink(selfUserId);
 
