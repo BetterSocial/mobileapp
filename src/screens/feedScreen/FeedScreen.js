@@ -186,7 +186,7 @@ const data = [
 ];
 const FeedScreen = (props) => {
   const [tokenParse, setTokenParse] = useState({});
-  const [mainFeeds, setMainFeeds] = useState(data);
+  const [mainFeeds, setMainFeeds] = useState([]);
   const apiKey = STREAM_API_KEY;
   const appId = STREAM_APP_ID;
   const token = token_JWT;

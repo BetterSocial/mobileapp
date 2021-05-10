@@ -84,18 +84,23 @@ const ContentPoll = ({message, images_url, polls = []}) => {
                 */
                 let optionPercentage = totalPollCount === 0 ? 0 : item.counter / totalPollCount
                 return <TouchableNativeFeedback>
-                    <View key={`poll-options-${index}`} style={styles.pollOptionItemContainer}>
+                    <View key={`poll-options-${index}`} style={index % 2 === 0 ? styles.pollOptionItemContainerActive : styles.pollOptionItemContainer}>
                     <View style={styles.percentageBar(optionPercentage)}/>
                     <View style={styles.pollOptionTextContainer}>
+                      <View style={index % 2 === 0 ? styles.pollRadioButtonActive : styles.pollRadioButton}/>
                       <Text style={styles.pollOptionItemText}>{item.option}</Text>
-                      <Text style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text>
+                      {/* <Text style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text> */}
                     </View>
                   </View>
                   </TouchableNativeFeedback>
               })}
             </View>
 
-            <Text style={styles.totalpolltext}>{`${totalPollCount} votes`}</Text>
+            <View style={styles.totalVotesContainer}>
+              <Text style={styles.totalpolltext}>{`${totalPollCount} votes `}</Text>
+              <View style={{width : 4, height : 4, borderRadius : 4, alignSelf : "center", backgroundColor : colors.blackgrey}}/>
+              <Text style={styles.totalpolltext}>{` 24 hours 34 minutes left`}</Text>
+            </View>
           </View>
         )
       ) : null}
@@ -208,10 +213,20 @@ const styles = StyleSheet.create({
     marginBottom : 8
   },
   pollOptionItemContainer : {
-    borderColor : colors.holytosca,
-    borderWidth : 1.25,
-    marginBottom : 4,
-    borderRadius : 4,
+    // borderColor : colors.holytosca,
+    backgroundColor : colors.lightgrey,
+    // borderWidth : 1.25,
+    marginBottom : 8,
+    borderRadius : 8,
+    display : 'flex',
+    flexDirection : 'row'
+  },
+  pollOptionItemContainerActive : {
+    // borderColor : colors.holytosca,
+    backgroundColor : colors.holytosca30percent,
+    // borderWidth : 1.25,
+    marginBottom : 8,
+    borderRadius : 8,
     display : 'flex',
     flexDirection : 'row'
   },
@@ -244,6 +259,31 @@ const styles = StyleSheet.create({
       backgroundColor : colors.bondi_blue
   }},
   totalpolltext : {
-    fontFamily : fonts.inter[300]
+    fontFamily : fonts.inter[400],
+    fontSize : 12,
+    lineHeight: 16,
+    color : colors.blackgrey
+  },
+  pollRadioButton : {
+    width : 12,
+    height : 12,
+    alignSelf : 'center',
+    borderRadius : 6,
+    borderColor : colors.black,
+    borderWidth : 1,
+    marginEnd : 12
+  },
+
+  pollRadioButtonActive : {
+    width : 12,
+    height : 12,
+    alignSelf : 'center',
+    borderRadius : 6,
+    backgroundColor : colors.holytosca,
+    marginEnd : 12
+  },
+  totalVotesContainer : {
+    display : 'flex',
+    flexDirection : 'row'
   }
 });
