@@ -12,11 +12,9 @@ import {
   Image,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
-import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
 import Loading from '../Loading';
 import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
 import {useNavigation} from '@react-navigation/core';
-import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../data/local/accessToken';
