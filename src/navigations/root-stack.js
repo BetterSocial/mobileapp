@@ -28,7 +28,7 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="PostDetailPage">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="PostDetailPage"
         component={PostDetailPage}
