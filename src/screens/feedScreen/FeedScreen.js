@@ -333,7 +333,7 @@ const FeedScreen = (props) => {
 
       <Loading visible={loading} />
 
-      <ButtonNewPost />
+      {/* <ButtonNewPost /> */}
     </SafeAreaView>
   );
 };
