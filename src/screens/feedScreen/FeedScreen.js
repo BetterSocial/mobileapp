@@ -200,9 +200,9 @@ const FeedScreen = (props) => {
     const getDataFeeds = async () => {
       setInitialLoading(true);
       const dataFeeds = await getMainFeed();
-      // console.log("pollOptions")
-      // console.log(dataFeeds.data.results)
-      let data = dataFeeds.data.results;
+      console.log("pollOptions")
+      console.log(dataFeeds.data)
+      let data = dataFeeds.data;
       setMainFeeds(data);
       setInitialLoading(false);
     };
@@ -333,7 +333,7 @@ const FeedScreen = (props) => {
 
       <Loading visible={loading} />
 
-      {/* <ButtonNewPost /> */}
+      <ButtonNewPost />
     </SafeAreaView>
   );
 };
