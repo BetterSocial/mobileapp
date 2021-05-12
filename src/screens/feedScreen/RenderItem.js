@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions, Share} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Share,
+  TouchableNativeFeedback,
+} from 'react-native';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
@@ -8,7 +15,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import analytics from '@react-native-firebase/analytics';
 
-import {Card} from 'react-native-card-stack-swiper';
+import {Card} from '../../components/CardStack';
 import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
@@ -61,7 +68,7 @@ const onShare = async (username) => {
   }
 };
 
-const RenderItem = ({item}) => {
+const RenderItem = ({item, onPress}) => {
   return (
     <Card
       style={[

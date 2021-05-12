@@ -27,7 +27,7 @@ import {getAccessToken} from '../../data/local/accessToken';
 import {getMainFeed} from '../../service/post';
 import RenderItem from './RenderItem';
 import Loading from '../../components/Loading';
-import CardStack, {Card} from 'react-native-card-stack-swiper';
+import CardStack, {Card} from '../../components/CardStack';
 
 const {width, height} = Dimensions.get('window');
 
@@ -43,25 +43,33 @@ const FeedScreen = (props) => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [geoList, setGeoList] = useState([]);
+  const [countStack, setCountStack] = useState(null);
+  const [idLt, setIdLt] = useState('');
 
   useEffect(() => {
-    const getDataFeeds = async () => {
-      setInitialLoading(true);
-      try {
-        const dataFeeds = await getMainFeed();
-        // console.log("pollOptions")
-        // console.log(dataFeeds.data.results)
-        let data = dataFeeds.data;
-        console.log(data);
-        setMainFeeds(data);
-        setInitialLoading(false);
-      } catch (e) {
-        console.log(e);
-        setInitialLoading(false);
-      }
-    };
     getDataFeeds();
   }, []);
+
+  const getDataFeeds = async (id = '') => {
+    setCountStack(null);
+    setInitialLoading(true);
+    try {
+      let query = '';
+      if (id !== '') {
+        query = '?id_lt=' + id;
+      }
+      const dataFeeds = await getMainFeed(query);
+      if (dataFeeds.data.length > 0) {
+        let data = dataFeeds.data;
+        setCountStack(data.length);
+        setMainFeeds(data);
+      }
+      setInitialLoading(false);
+    } catch (e) {
+      console.log(e);
+      setInitialLoading(false);
+    }
+  };
 
   getToken().then((val) => {
     token_JWT = val;
@@ -79,7 +87,6 @@ const FeedScreen = (props) => {
       const value = await getAccessToken();
       if (value) {
         const decoded = await JWTDecode(value);
-        console.log(value);
         setTokenParse(decoded);
       }
     };
@@ -129,14 +136,20 @@ const FeedScreen = (props) => {
             backgroundColor: 'white',
           }}
           renderNoMoreCards={() => {
-            console.log('no more card');
             // setInit();
             // setLoading(true);
-            return (
-              <Text style={{fontWeight: '700', fontSize: 18, color: 'gray'}}>
-                Load more cards :(
-              </Text>
-            );
+            // console.log(countStack);
+            if (countStack === 0) {
+              let lastId = mainFeeds[mainFeeds.length - 1].id;
+              console.log(lastId);
+              setIdLt(lastId);
+              getDataFeeds(lastId);
+            }
+            // return (
+            //   <Text style={{fontWeight: '700', fontSize: 18, color: 'gray'}}>
+            //     Load more cards :(
+            //   </Text>
+            // );
           }}
           ref={(swiper) => {
             this.swiper = swiper;
@@ -147,11 +160,14 @@ const FeedScreen = (props) => {
           verticalThreshold={1}
           horizontalSwipe={false}
           onSwipedBottom={() => {
-            this.swiper.goBackFromTop();
-            this.swiper.goBackFromTop();
+            // this.swiper.goBackFromTop();
+            // this.swiper.goBackFromTop();
+            setCountStack(countStack + 1);
+            // console.log('onSwipeBottom');
           }}
           onSwipedTop={() => {
-            console.log('onSwiped Top');
+            setCountStack(countStack - 1);
+            // console.log('onSwiped top');
           }}>
           {mainFeeds !== undefined
             ? mainFeeds.map((item) => (
@@ -163,7 +179,7 @@ const FeedScreen = (props) => {
 
       <Loading visible={loading} />
 
-      <ButtonNewPost />
+      {/* <ButtonNewPost /> */}
     </SafeAreaView>
   );
 };

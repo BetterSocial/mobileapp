@@ -23,7 +23,7 @@ import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
 import Toast from 'react-native-simple-toast';
 
-const PostDetailPage = () => {
+const PostDetailPage = (props) => {
   const [more, setMore] = useState(10);
   const [totalLine, setTotalLine] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -33,6 +33,13 @@ const PostDetailPage = () => {
   const refReportUser = useRef();
   const refReportDomain = useRef();
   const refSpecificIssue = useRef();
+
+  useEffect(() => {
+    const initial = () => {
+      console.log(props.navigation);
+    };
+    initial();
+  }, [props]);
 
   useEffect(() => {
     fetchMyProfile();
