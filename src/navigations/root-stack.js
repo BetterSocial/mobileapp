@@ -18,6 +18,7 @@ import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import PostDetailPage from '../screens/Post/PostDetailPage';
 import ImageViewerScreen from '../screens/ImageViewer';
+import ReplyComment from '../screens/Post/ReplyComment';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import Header from '../components/Header';
 import { colors } from '../utils/colors';
@@ -29,6 +30,11 @@ const RootStact = () => {
   }, []);
   return (
     <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Screen
+        name="ReplayComment"
+        component={ReplyComment}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="PostDetailPage"
         component={PostDetailPage}
