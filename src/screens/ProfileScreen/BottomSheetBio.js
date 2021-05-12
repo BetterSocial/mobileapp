@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {forwardRef} from 'react';
 import {
   View,
@@ -7,30 +7,43 @@ import {
   Dimensions,
   ActivityIndicator,
   KeyboardAvoidingView,
+  TextInput,
 } from 'react-native';
 import {Button} from '../../components/Button';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {BottomSheet} from '../../components/BottomSheet';
 import {TextArea} from '../../components/TextArea';
+import AutoFocusTextArea from '../../components/TextArea/AutoFocusTextArea';
 
 let textRef
 
 const BottomSheetBio = forwardRef((props, ref) => {
   let [shouldTextAreaFocus, setShouldTextAreaFocus] = useState(false)
   const textAreaRef = useRef()
+  let [refState, setRefState] = useState(null)
+
+  useEffect(() => {
+    console.log("ref effect")
+    if(refState !== null) {
+      console.log("asdasdadadsa")
+      console.log(refState.getNativeRef().current)
+    }
+  },[refState])
 
   return <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-    <BottomSheet ref={ref} closeOnPressMask={true} height={470} viewstyle={{}} onOpenEnd={() => textAreaRef.current.focus()}>
+    <BottomSheet ref={ref} closeOnPressMask={true} height={470} viewstyle={{}} onOpen={() => {
+      if(refState) {
+        console.log("qweqeqweq")
+        console.log(refState.getNativeRef().current)
+      }
+    }}>
       <View style={styles.containerBottomSheet}>
         <Text style={styles.title}>Update your bio</Text>
-        <TextArea
-          onRef={(ref) => textRef = ref }
-          ref={textAreaRef}
-          value={props.value}
+        <AutoFocusTextArea 
+          value={props.value} 
           onChangeText={props.onChangeText}
-          placeholder="Add Bio"
-        />
+          placeholder="Add Bio"/>
         <Text style={styles.description}>{props.value.length}/350</Text>
         {props.error ? <Text style={styles.errorText}>{props.error}</Text> : null}
       </View>
@@ -79,6 +92,19 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 18,
     color: colors.white,
+  },
+  input: {
+    backgroundColor: colors.lightgrey,
+    paddingVertical: 16,
+    paddingHorizontal: 12,
+    height : 150,
+    justifyContent: 'flex-start',
+    overflow: 'scroll',
+    borderRadius: 8,
+    fontFamily: fonts.inter[500],
+    fontSize: 14,
+    color: colors.black,
+    lineHeight: 24
   },
 });
 export default BottomSheetBio;

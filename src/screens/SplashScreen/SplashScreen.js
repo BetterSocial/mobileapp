@@ -10,7 +10,7 @@ import {
   setAccessToken,
 } from '../../data/local/accessToken';
 import {getProfileByUsername} from '../../service/profile';
-import {verifyUser} from '../../service/users';
+import {verifyTokenGetstream, verifyUser} from '../../service/users';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import fetchRemoteConfig from '../../utils/FirebaseUtil';
 
@@ -38,7 +38,6 @@ const SplashScreen = () => {
         });
 
       dynamicLinks().onLink((link) => {
-        console.log('dynamic link ' + link);
         return true;
       });
     } catch (e) {
@@ -50,7 +49,6 @@ const SplashScreen = () => {
   let getDeepLinkUrl = async () => {
     try {
       let selfUserId = await doVerifyUser();
-      console.log(selfUserId);
       let deepLinkUrl = await Linking.getInitialURL();
       if (deepLinkUrl === null) return navigateWithoutDeeplink(selfUserId);
 
@@ -104,9 +102,14 @@ const SplashScreen = () => {
       //   return await jwtDecode(response.token).user_id;
       // }
       let token = await getAccessToken();
-      if (token !== null || token !== '') {
-        console.log(token);
-        return await jwtDecode(token).user_id;
+      if (token !== null && token !== '') {
+        const verify = await verifyTokenGetstream();
+        if (verify !== null && verify !== '') {
+          console.log('veri', verify);
+          console.log('token ', token);
+          return await jwtDecode(token).user_id;
+        }
+        return null;
       }
       return null;
     } catch (e) {

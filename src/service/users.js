@@ -41,17 +41,19 @@ export const registerUser = async (data) => {
     });
     return resApi.data;
   } catch (error) {
-    console.log(error);
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
   }
 };
 
-export const verifyTokenGetstream = async (token) => {
+export const verifyTokenGetstream = async () => {
   try {
     let resApi = await api.get('/users/veryfy-token-getstream');
-    console.log(resApi.data);
+    console.log('tokn very', resApi.data);
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
     console.log(error);
+    return null;
   }
 };

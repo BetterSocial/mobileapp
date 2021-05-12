@@ -12,11 +12,9 @@ import {
   Image,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
-import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
 import Loading from '../Loading';
 import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
 import {useNavigation} from '@react-navigation/core';
-import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../data/local/accessToken';
@@ -49,6 +47,9 @@ const Followings = () => {
     if (result.code === 200) {
       withLoading ? setIsLoading(false) : null;
       setDataFollowing(result.data);
+      navigation.setOptions({
+        title : `Users (${result.data.length})`
+      })
     }
   };
 
@@ -144,23 +145,25 @@ const Followings = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      {/* <StatusBar barStyle="dark-content" /> */}
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
           <View style={styles.floatLeft}>
             <TouchableNativeFeedback onPress={() => navigation.goBack()}>
-              <ArrowLeftIcon width={20} height={12} fill="#000" />
+              <View style={{padding : 12}}>
+                <ArrowLeftIcon width={20} height={12} fill="#000"/>
+              </View>
             </TouchableNativeFeedback>
           </View>
           <Text style={styles.textUsername}>{username}</Text>
-        </View>
-        <View style={styles.tabs}>
+        </View> */}
+        {/* <View style={styles.tabs}>
           <View style={styles.wrapTextTabs}>
             <Text style={styles.textTabs}>
               Following ({dataFollowing.length})
             </Text>
           </View>
-        </View>
+        </View> */}
         <View style={styles.content}>
           <FlatList
             data={dataFollowing}
@@ -195,7 +198,7 @@ const styles = StyleSheet.create({
   floatLeft: {
     position: 'absolute',
     left: 20,
-    top: 20,
+    top: 10,
   },
   tabs: {
     width: width,

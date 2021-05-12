@@ -6,7 +6,7 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {useNavigation} from '@react-navigation/core';
-const UserProfile = ({typeUser, setTypeUser, username, photo}) => {
+const UserProfile = ({typeUser, setTypeUser, username, photo, onPress}) => {
   const [isanonymous, onanonymouschanged] = useState();
   const navigation = useNavigation();
   const userProfile = () => {
@@ -27,9 +27,7 @@ const UserProfile = ({typeUser, setTypeUser, username, photo}) => {
       );
     } else {
       return (
-        <TouchableOpacity
-          style={styles.profile}
-          onPress={() => navigation.navigate('ProfileScreen')}>
+        <TouchableOpacity style={styles.profile} onPress={() => onPress()}>
           <Image source={photo} width={32} height={32} style={styles.image} />
           <View>
             <Text style={styles.username}>{username}</Text>
@@ -86,5 +84,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     width: 32,
     height: 32,
+    borderRadius : 16
   },
 });
