@@ -37,6 +37,7 @@ const Footer = ({
   onPressBlock,
   onPressUpvote,
   onPressDownVote,
+  item,
 }) => {
   return (
     <View style={{...styles.rowSpaceBeetwen}}>
@@ -49,7 +50,7 @@ const Footer = ({
         </TouchableOpacity>
       </View>
       <View style={{...styles.rowSpaceBeetwen, width: 90}}>
-        <TouchableOpacity onPress={onPressBlock}>
+        <TouchableOpacity onPress={() => onPressBlock(item)}>
           <MemoIc_block_inactive height={18} width={18} />
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressDownVote}>

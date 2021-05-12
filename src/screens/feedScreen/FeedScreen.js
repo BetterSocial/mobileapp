@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   Dimensions,
+  Alert,
 } from 'react-native';
 import {ButtonNewPost} from '../../components/Button';
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
@@ -28,6 +29,11 @@ import {getMainFeed} from '../../service/post';
 import RenderItem from './RenderItem';
 import Loading from '../../components/Loading';
 import CardStack, {Card} from '../../components/CardStack';
+import BlockUser from '../../elements/Blocking/BlockUser';
+import BlockDomain from '../../elements/Blocking/BlockDomain';
+import ReportUser from '../../elements/Blocking/ReportUser';
+import ReportDomain from '../../elements/Blocking/ReportDomain';
+import SpecificIssue from '../../elements/Blocking/SpecificIssue';
 
 const {width, height} = Dimensions.get('window');
 
@@ -44,7 +50,32 @@ const FeedScreen = (props) => {
   const [loading, setLoading] = useState(false);
   const [geoList, setGeoList] = useState([]);
   const [countStack, setCountStack] = useState(null);
-  const [idLt, setIdLt] = useState('');
+  const [username, setUsername] = useState('');
+
+  const refBlockUser = useRef();
+  const refBlockDomain = useRef();
+  const refReportUser = useRef();
+  const refReportDomain = useRef();
+  const refSpecificIssue = useRef();
+
+  const onSelectBlocking = (v) => {
+    if (v !== 1) {
+      // refBlockDomain.current.open();
+      refReportUser.current.open();
+    }
+    refBlockUser.current.close();
+  };
+
+  const onNextQuestion = (v) => {
+    console.log(v);
+    refReportUser.current.close();
+    refSpecificIssue.current.open();
+  };
+
+  const onIssue = () => {
+    refSpecificIssue.current.close();
+    Alert.alert('Information', 'Your report was filed & will be investigated');
+  };
 
   useEffect(() => {
     getDataFeeds();
@@ -82,40 +113,16 @@ const FeedScreen = (props) => {
     });
   }, []);
 
-  useEffect(() => {
-    const parseToken = async () => {
-      const value = await getAccessToken();
-      if (value) {
-        const decoded = await JWTDecode(value);
-        setTokenParse(decoded);
-      }
-    };
-    parseToken();
-  }, []);
-
-  const fetchMyProfile = async () => {
-    setLoading(true);
-    let token = await getToken();
-    if (token) {
-      const decoded = await JWTDecode(token);
-      const result = await getMyProfile(decoded.user_id);
-      if (result.code === 200) {
-        setDataProfile(result.data);
-        setLoading(false);
-        await result.data.locations.map((res) => {
-          location.push({
-            location_id: res.location_id,
-            neighborhood: res.neighborhood,
-          });
-        });
-        setGeoList(location);
-
-        // setGeoList((val) => [...val, result.data.locations]);
-        // (val) => [...val, topic];
-        // console.log('isi result ', result.data.locations);
-      }
-    }
-  };
+  // useEffect(() => {
+  //   const parseToken = async () => {
+  //     const value = await getAccessToken();
+  //     if (value) {
+  //       const decoded = await JWTDecode(value);
+  //       setTokenParse(decoded);
+  //     }
+  //   };
+  //   parseToken();
+  // }, []);
 
   if (initialLoading === true) {
     return (
@@ -141,8 +148,6 @@ const FeedScreen = (props) => {
             // console.log(countStack);
             if (countStack === 0) {
               let lastId = mainFeeds[mainFeeds.length - 1].id;
-              console.log(lastId);
-              setIdLt(lastId);
               getDataFeeds(lastId);
             }
             // return (
@@ -171,7 +176,18 @@ const FeedScreen = (props) => {
           }}>
           {mainFeeds !== undefined
             ? mainFeeds.map((item) => (
-                <RenderItem key={Math.random() * 1000} item={item} />
+                <RenderItem
+                  key={Math.random() * 1000}
+                  item={item}
+                  onPressBlock={(value) => {
+                    if (value.anonimity === true) {
+                      setUsername('Anonymous');
+                    } else {
+                      setUsername(value.actor.data.username);
+                    }
+                    refBlockUser.current.open();
+                  }}
+                />
               ))
             : null}
         </CardStack>
@@ -180,6 +196,19 @@ const FeedScreen = (props) => {
       <Loading visible={loading} />
 
       {/* <ButtonNewPost /> */}
+      <BlockUser
+        refBlockUser={refBlockUser}
+        onSelect={(v) => onSelectBlocking(v)}
+        username={username}
+      />
+      <BlockDomain
+        refBlockUser={refBlockDomain}
+        domain="guardian.com"
+        onSelect={() => {}}
+      />
+      <ReportUser refReportUser={refReportUser} onSelect={onNextQuestion} />
+      <ReportDomain refReportDomain={refReportDomain} />
+      <SpecificIssue refSpecificIssue={refSpecificIssue} onPress={onIssue} />
     </SafeAreaView>
   );
 };

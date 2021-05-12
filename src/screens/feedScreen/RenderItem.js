@@ -68,24 +68,9 @@ const onShare = async (username) => {
   }
 };
 
-const RenderItem = ({item, onPress}) => {
+const RenderItem = ({item, onPress, onPressBlock}) => {
   return (
-    <Card
-      style={[
-        {
-          width: width,
-          height: height - 90,
-          borderRadius: 5,
-          shadowColor: 'rgba(0,0,0,0.5)',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.5,
-          backgroundColor: 'white',
-          paddingHorizontal: 16,
-        },
-      ]}>
+    <Card style={[styles.container]}>
       <Header props={item} />
       {item.verb === POST_VERB_POLL ? (
         <ContentPoll
@@ -97,12 +82,30 @@ const RenderItem = ({item, onPress}) => {
         <Content message={item.message} images_url={item.images_url} />
       )}
       <Footer
+        item={item}
         onPressShare={() => {
           onShare(item.actor.data.username);
         }}
+        onPressBlock={onPressBlock}
       />
     </Card>
   );
 };
 
 export default RenderItem;
+
+const styles = StyleSheet.create({
+  container: {
+    width: width,
+    height: height - 90,
+    borderRadius: 5,
+    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    paddingHorizontal: 16,
+  },
+});
