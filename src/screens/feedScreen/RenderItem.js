@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions, Share} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Share,
+  TouchableNativeFeedback,
+} from 'react-native';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
@@ -8,8 +15,8 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import analytics from '@react-native-firebase/analytics';
 
-import {Card} from 'react-native-card-stack-swiper';
-import { POST_VERB_POLL } from '../../utils/constants';
+import {Card} from '../../components/CardStack';
+import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
 const {width, height} = Dimensions.get('window');
@@ -61,36 +68,44 @@ const onShare = async (username) => {
   }
 };
 
-const RenderItem = ({item}) => {
+const RenderItem = ({item, onPress, onPressBlock}) => {
   return (
-    <Card
-      style={[
-        {
-          width: width,
-          height: height - 90,
-          borderRadius: 5,
-          shadowColor: 'rgba(0,0,0,0.5)',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.5,
-          backgroundColor: 'white',
-          paddingHorizontal: 16,
-        },
-      ]}>
+    <Card style={[styles.container]}>
       <Header props={item} />
-      { item.verb === POST_VERB_POLL ?
-        <ContentPoll message={item.message} images_url={item.images_url} polls={item.pollOptions} /> :
-        <Content message={item.message} images_url={item.images_url} /> 
-      }
+      {item.verb === POST_VERB_POLL ? (
+        <ContentPoll
+          message={item.message}
+          images_url={item.images_url}
+          polls={item.pollOptions}
+        />
+      ) : (
+        <Content message={item.message} images_url={item.images_url} />
+      )}
       <Footer
+        item={item}
         onPressShare={() => {
           onShare(item.actor.data.username);
         }}
+        onPressBlock={onPressBlock}
       />
     </Card>
   );
 };
 
 export default RenderItem;
+
+const styles = StyleSheet.create({
+  container: {
+    width: width,
+    height: height - 90,
+    borderRadius: 5,
+    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    paddingHorizontal: 16,
+  },
+});

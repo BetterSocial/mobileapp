@@ -56,9 +56,10 @@ export const ShowingAudience = async (privacy, location) => {
   }
 };
 
-export const getMainFeed = async () => {
+export const getMainFeed = async (query) => {
+  console.log(query);
   try {
-    let res = await api.get('/activity/feeds');
+    let res = await api.get('/activity/feeds' + query);
     return res.data;
   } catch (err) {
     console.log('ini error');

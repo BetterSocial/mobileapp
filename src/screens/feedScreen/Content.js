@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View,
   StyleSheet,
-  TouchableNativeFeedback,
+  TouchableOpacity,
   Text,
   Platform,
   Dimensions,
@@ -58,7 +58,11 @@ const Content = ({message, images_url}) => {
                 return (
                   <Image
                     source={{uri: item}}
-                    style={{flex: 1, width: screenWidth - 32, borderRadius: 16}}
+                    style={{
+                      flex: 1,
+                      width: screenWidth - 32,
+                      borderRadius: 16,
+                    }}
                     resizeMode={'cover'}
                   />
                 );
