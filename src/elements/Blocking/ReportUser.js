@@ -1,6 +1,12 @@
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet, Text, View, FlatList} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -9,7 +15,7 @@ import ItemList from '../../components/Blocking/ItemList';
 import {Button} from '../../components/Button';
 import Gap from '../../components/Gap';
 
-const ReportUser = ({refReportUser, onSelect}) => {
+const ReportUser = ({refReportUser, onSelect, onSkip}) => {
   const data = [
     {
       id: 1,
@@ -41,17 +47,23 @@ const ReportUser = ({refReportUser, onSelect}) => {
     },
   ];
   const [active, setActive] = useState([]);
-  const onChoice = (id, type) => {
+  const [activeLabel, setActiveLabel] = useState([]);
+
+  const onChoice = (id, value, type) => {
     if (type === 'add') {
       let newArr = [...active, id];
+      let newArrLabel = [...activeLabel, value];
+      setActiveLabel(newArrLabel);
       setActive(newArr);
     } else {
       let newArr = active.filter((e) => e !== id);
       setActive(newArr);
+      let newArrLabel = activeLabel.filter((e) => e !== value);
+      setActiveLabel(newArrLabel);
     }
   };
   const onNext = () => {
-    onSelect(active);
+    onSelect(activeLabel);
   };
   return (
     // <View>
@@ -72,7 +84,7 @@ const ReportUser = ({refReportUser, onSelect}) => {
       }}>
       {/* <View style={{flex: 1}}> */}
       <ScrollView nestedScrollEnabled={true}>
-        <TouchableOpacity style={styles.btnSkip}>
+        <TouchableOpacity style={styles.btnSkip} onPress={() => onSkip()}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>
           <IconFA5 name="chevron-right" size={17} color={'#000'} />
         </TouchableOpacity>
