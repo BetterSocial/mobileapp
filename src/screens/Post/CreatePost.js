@@ -304,7 +304,7 @@ const CreatePost = () => {
         privacy: listPrivacy[privacySelect].label,
         anonimity: typeUser,
         location: geoList[geoSelect].neighborhood,
-        duration_feed: postExpired[expiredSelect].value,
+        duration_feed: Number(postExpired[expiredSelect].value),
         images_url: dataImage,
       };
       analytics().logEvent('create_post', {

@@ -9,10 +9,10 @@ const ItemList = ({label, active, onSelect, id}) => {
   const [type, setType] = useState('add');
   const onActive = () => {
     if (type === 'add') {
-      onSelect(id, type);
+      onSelect(id, label, type);
       setType('remove');
     } else {
-      onSelect(id, type);
+      onSelect(id, label, type);
       setType('add');
     }
   };

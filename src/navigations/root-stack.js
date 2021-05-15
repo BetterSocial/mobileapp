@@ -21,7 +21,7 @@ import ImageViewerScreen from '../screens/ImageViewer';
 import ReplyComment from '../screens/Post/ReplyComment';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import Header from '../components/Header';
-import { colors } from '../utils/colors';
+import {colors} from '../utils/colors';
 const Stack = createStackNavigator();
 const RootStact = () => {
   useEffect(() => {
@@ -95,12 +95,20 @@ const RootStact = () => {
         component={FollowingScreen}
         options={{
           headerShown: true,
-          header : ({navigation}) => {
-            return <Header title="Who you're following"
-              containerStyle={{backgroundColor : colors.white, padding : 20, paddingBottom : 10}}
-              titleStyle={{fontSize : 16}}
-              onPress={() => navigation.goBack()}/>
-          }
+          header: ({navigation}) => {
+            return (
+              <Header
+                title="Who you're following"
+                containerStyle={{
+                  backgroundColor: colors.white,
+                  padding: 20,
+                  paddingBottom: 10,
+                }}
+                titleStyle={{fontSize: 16}}
+                onPress={() => navigation.goBack()}
+              />
+            );
+          },
         }}
       />
       <Stack.Screen
