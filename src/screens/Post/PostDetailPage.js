@@ -5,13 +5,12 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
 } from 'react-native';
 import JWTDecode from 'jwt-decode';
 import {getAccessToken} from '../../data/local/accessToken';
 import Comment from '../../elements/PostDetail/Comment';
 import ContainerComment from '../../elements/PostDetail/ContainerComment';
-import Footer from '../../elements/PostDetail/Footer';
-import Header from '../../elements/PostDetail/Header';
 import Profile from '../../elements/PostDetail/Profile';
 import WriteComment from '../../elements/PostDetail/WriteComment';
 import {fonts} from '../../utils/fonts';
@@ -22,6 +21,12 @@ import ReportUser from '../../elements/Blocking/ReportUser';
 import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
 import Toast from 'react-native-simple-toast';
+import Header from '../feedScreen/Header';
+import Content from '../feedScreen/Content';
+import Footer from '../feedScreen/Footer';
+import Gap from '../../components/Gap';
+
+const {width, height} = Dimensions.get('window');
 
 const PostDetailPage = (props) => {
   const [more, setMore] = useState(10);
@@ -88,23 +93,20 @@ const PostDetailPage = (props) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Header onSetting={() => {}} onSearch={() => {}} />
-        <Profile />
-        <View style={styles.containerText}>
-          <Text
-            style={styles.textDesc}
-            numberOfLines={more}
-            onTextLayout={onTextLayout}>
-            {item.message}
-          </Text>
-          {more < totalLine && (
-            <TouchableOpacity onPress={() => onMore()}>
-              <Text style={styles.more}>More</Text>
-            </TouchableOpacity>
-          )}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{height: height * 0.9}}>
+        <View style={styles.content}>
+          <Header props={item} isBackButton={true} />
+          <Content
+            message={item.message}
+            images_url={item.images_url}
+            style={item.images_url.length > 0 ? {height: height * 0.5} : null}
+          />
+          <Gap style={{height: 16}} />
+          <Footer />
         </View>
-        <Footer onBlock={() => refBlockUser.current.open()} />
+
         <ContainerComment />
       </ScrollView>
       <WriteComment />
@@ -145,5 +147,18 @@ const styles = StyleSheet.create({
     color: '#0e24b3',
     fontFamily: fonts.inter[400],
     fontSize: 14,
+  },
+  content: {
+    width: width,
+    borderRadius: 5,
+    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    paddingHorizontal: 16,
+    marginBottom: 16,
   },
 });

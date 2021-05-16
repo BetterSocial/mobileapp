@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -13,7 +13,8 @@ import ContainerComment from '../../elements/PostDetail/ContainerComment';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const ReplyComment = () => {
+const ReplyComment = (props) => {
+  const [item, setItem] = useState(props.route.params.item);
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -21,7 +22,10 @@ const ReplyComment = () => {
           <TouchableOpacity>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>Reply to {'{name}'}</Text>
+          <Text style={styles.headerText}>
+            Reply to{' '}
+            {item.anonimiti === true ? Anonymous : item.actor.data.username}
+          </Text>
           <TouchableOpacity style={styles.btn}>
             <Text style={styles.btnText}>Post</Text>
           </TouchableOpacity>

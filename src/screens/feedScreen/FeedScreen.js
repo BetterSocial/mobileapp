@@ -188,11 +188,8 @@ const FeedScreen = (props) => {
                     }
                     refBlockUser.current.open();
                   }}
-                  onPress={() =>
-                    props.navigation.navigate('PostDetailPage', {item: item})
-                  }
                   onPressComment={() => {
-                    props.navigation.navigate('ReplayComment', {item: item});
+                    props.navigation.navigate('PostDetailPage', {item: item});
                   }}
                 />
               ))
