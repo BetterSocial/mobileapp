@@ -97,7 +97,7 @@ export default RenderItem;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height - 90,
+    height: height - height * 0.15,
     borderRadius: 5,
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {
