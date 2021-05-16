@@ -68,9 +68,9 @@ const onShare = async (username) => {
   }
 };
 
-const RenderItem = ({item, onPress, onPressBlock}) => {
+const RenderItem = ({item, onPress, onPressBlock, onPressComment}) => {
   return (
-    <Card style={[styles.container]}>
+    <Card style={[styles.container]} key={item.id}>
       <Header props={item} />
       {item.verb === POST_VERB_POLL ? (
         <ContentPoll
@@ -79,7 +79,11 @@ const RenderItem = ({item, onPress, onPressBlock}) => {
           polls={item.pollOptions}
         />
       ) : (
-        <Content message={item.message} images_url={item.images_url} />
+        <Content
+          message={item.message}
+          images_url={item.images_url}
+          onPress={onPress}
+        />
       )}
       <Footer
         item={item}
@@ -87,6 +91,7 @@ const RenderItem = ({item, onPress, onPressBlock}) => {
           onShare(item.actor.data.username);
         }}
         onPressBlock={onPressBlock}
+        onPressComment={onPressComment}
       />
     </Card>
   );

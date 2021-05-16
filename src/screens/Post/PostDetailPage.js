@@ -33,10 +33,11 @@ const PostDetailPage = (props) => {
   const refReportUser = useRef();
   const refReportDomain = useRef();
   const refSpecificIssue = useRef();
+  const [item, setItem] = useState(props.route.params.item);
 
   useEffect(() => {
     const initial = () => {
-      console.log(props.navigation);
+      console.log(props.route.params.item.id);
     };
     initial();
   }, [props]);
@@ -71,7 +72,6 @@ const PostDetailPage = (props) => {
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
-        console.log('detai ', result.data);
         setLoading(false);
       }
       setLoading(false);
@@ -96,17 +96,7 @@ const PostDetailPage = (props) => {
             style={styles.textDesc}
             numberOfLines={more}
             onTextLayout={onTextLayout}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae
-            diam et tortor rutrum tincidunt vitae non arcu. Pellentesque mattis
-            tellus quam, sed porttitor nunc aliquam vitae. Donec id dui lacinia,
-            pellentesque ipsum sed, commodo sapien. Praesent tincidunt accumsan
-            nibh, id laoreet sapien porta et. Ut aliquet purus sit amet lectus
-            fermentum, id consectetur lorem porta. Donec vestibulum lobortis
-            ligula, sit amet luctus enim tincidunt non. Nam ultricies lacus ac
-            nibh molestie volutpat. Ut aliquet purus sit amet lectus fermentum,
-            id consectetur lorem porta. Donec vestibulum lobortis ligula, sit
-            amet luctus enim tincidunt non. Nam ultricies lacus ac nibh molestie
-            volutpat.
+            {item.message}
           </Text>
           {more < totalLine && (
             <TouchableOpacity onPress={() => onMore()}>

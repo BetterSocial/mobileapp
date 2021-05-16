@@ -113,16 +113,17 @@ const FeedScreen = (props) => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   const parseToken = async () => {
-  //     const value = await getAccessToken();
-  //     if (value) {
-  //       const decoded = await JWTDecode(value);
-  //       setTokenParse(decoded);
-  //     }
-  //   };
-  //   parseToken();
-  // }, []);
+  useEffect(() => {
+    const parseToken = async () => {
+      const value = await getAccessToken();
+      console.log(value);
+      if (value) {
+        const decoded = await JWTDecode(value);
+        setTokenParse(decoded);
+      }
+    };
+    parseToken();
+  }, []);
 
   if (initialLoading === true) {
     return (
@@ -177,7 +178,7 @@ const FeedScreen = (props) => {
           {mainFeeds !== undefined
             ? mainFeeds.map((item) => (
                 <RenderItem
-                  key={Math.random() * 1000}
+                  key={item}
                   item={item}
                   onPressBlock={(value) => {
                     if (value.anonimity === true) {
@@ -186,6 +187,12 @@ const FeedScreen = (props) => {
                       setUsername(value.actor.data.username);
                     }
                     refBlockUser.current.open();
+                  }}
+                  onPress={() =>
+                    props.navigation.navigate('PostDetailPage', {item: item})
+                  }
+                  onPressComment={() => {
+                    props.navigation.navigate('ReplayComment', {item: item});
                   }}
                 />
               ))
