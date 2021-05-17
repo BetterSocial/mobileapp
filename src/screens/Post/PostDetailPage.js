@@ -61,7 +61,7 @@ const PostDetailPage = (props) => {
     refBlockUser.current.close();
   };
 
-  const userBlock = async (type) => {
+  const userBlock = async () => {
     const data = {
       userId: '118d5679-6c68-cdws-be83-7f15a4e82d3d',
       postId: '228d5679-6c68-54sd-be83-7f15a4e82d3d',

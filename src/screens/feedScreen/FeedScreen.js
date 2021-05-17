@@ -34,6 +34,9 @@ import BlockDomain from '../../elements/Blocking/BlockDomain';
 import ReportUser from '../../elements/Blocking/ReportUser';
 import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
+import Toast from 'react-native-simple-toast';
+import {blockUser} from '../../service/blocking';
+import {downVote, upVote} from '../../service/vote';
 
 const {width, height} = Dimensions.get('window');
 
@@ -51,6 +54,10 @@ const FeedScreen = (props) => {
   const [geoList, setGeoList] = useState([]);
   const [countStack, setCountStack] = useState(null);
   const [username, setUsername] = useState('');
+  const [reportOption, setReportOption] = useState([]);
+  const [messageReport, setMessageReport] = useState('');
+  const [userId, setUserId] = useState('');
+  const [postId, setPostId] = useState('');
 
   const refBlockUser = useRef();
   const refBlockDomain = useRef();
@@ -62,19 +69,49 @@ const FeedScreen = (props) => {
     if (v !== 1) {
       // refBlockDomain.current.open();
       refReportUser.current.open();
+    } else {
+      userBlock();
     }
     refBlockUser.current.close();
   };
 
   const onNextQuestion = (v) => {
     console.log(v);
+    setReportOption(v);
     refReportUser.current.close();
     refSpecificIssue.current.open();
   };
 
-  const onIssue = () => {
+  const userBlock = async () => {
+    const data = {
+      userId: userId,
+      postId: postId,
+      source: 'screen_feed',
+      reason: reportOption,
+      message: messageReport,
+    };
+    let result = await blockUser(data);
+    if (result.code == 200) {
+      Toast.show(
+        'The user was blocked successfully. \nThanks for making BetterSocial better!',
+        Toast.LONG,
+      );
+    } else {
+      Toast.show('Your report was filed & will be investigated', Toast.LONG);
+    }
+    console.log('result block user ', result);
+  };
+
+  const onIssue = (v) => {
     refSpecificIssue.current.close();
-    Alert.alert('Information', 'Your report was filed & will be investigated');
+    setMessageReport(v);
+    setTimeout(() => {
+      userBlock();
+    }, 500);
+  };
+  const onSkipOnlyBlock = () => {
+    refReportUser.current.close();
+    userBlock();
   };
 
   useEffect(() => {
@@ -112,6 +149,33 @@ const FeedScreen = (props) => {
       screen_name: 'Feed Screen',
     });
   }, []);
+  const setDataToState = (value) => {
+    if (value.anonimity === true) {
+      setUsername('Anonymous');
+      setPostId(value.id);
+      setUserId(value.actor.id + '-anonymous');
+    } else {
+      setUsername(value.actor.data.username);
+      setPostId(value.id);
+      setUserId(value.actor.id);
+    }
+  };
+  const setUpVote = async (id) => {
+    let result = await upVote({activity_id: id});
+    if (result.code == 200) {
+      Toast.show('up vote was successful', Toast.LONG);
+    } else {
+      Toast.show('up vote failed', Toast.LONG);
+    }
+  };
+  const setDownVote = async (id) => {
+    let result = await downVote({activity_id: id});
+    if (result.code == 200) {
+      Toast.show('down vote success', Toast.LONG);
+    } else {
+      Toast.show('down vote failed', Toast.LONG);
+    }
+  };
 
   // useEffect(() => {
   //   const parseToken = async () => {
@@ -180,12 +244,14 @@ const FeedScreen = (props) => {
                   key={Math.random() * 1000}
                   item={item}
                   onPressBlock={(value) => {
-                    if (value.anonimity === true) {
-                      setUsername('Anonymous');
-                    } else {
-                      setUsername(value.actor.data.username);
-                    }
+                    setDataToState(value);
                     refBlockUser.current.open();
+                  }}
+                  onPressUpvote={(value) => {
+                    setUpVote(value.id);
+                  }}
+                  onPressDownVote={(value) => {
+                    setDownVote(value.id);
                   }}
                 />
               ))
@@ -206,9 +272,17 @@ const FeedScreen = (props) => {
         domain="guardian.com"
         onSelect={() => {}}
       />
-      <ReportUser refReportUser={refReportUser} onSelect={onNextQuestion} />
+      <ReportUser
+        refReportUser={refReportUser}
+        onSelect={onNextQuestion}
+        onSkip={onSkipOnlyBlock}
+      />
       <ReportDomain refReportDomain={refReportDomain} />
-      <SpecificIssue refSpecificIssue={refSpecificIssue} onPress={onIssue} />
+      <SpecificIssue
+        refSpecificIssue={refSpecificIssue}
+        onPress={onIssue}
+        onSkip={onSkipOnlyBlock}
+      />
     </SafeAreaView>
   );
 };
