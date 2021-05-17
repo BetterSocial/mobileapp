@@ -68,7 +68,15 @@ const onShare = async (username) => {
   }
 };
 
-const RenderItem = ({item, onPressBlock, onPressComment}) => {
+const RenderItem = ({
+  item,
+  onPress,
+  onPressBlock,
+  onPressUpvote,
+  onPressDownVote,
+  onPressComment
+}) => {
+
   return (
     <Card style={[styles.container]} key={item.id}>
       <Header props={item} />
@@ -87,6 +95,8 @@ const RenderItem = ({item, onPressBlock, onPressComment}) => {
           onShare(item.actor.data.username);
         }}
         onPressBlock={onPressBlock}
+        onPressUpvote={onPressUpvote}
+        onPressDownVote={onPressDownVote}
         onPressComment={onPressComment}
       />
     </Card>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -17,6 +17,7 @@ import {Button} from '../../components/Button';
 import Gap from '../../components/Gap';
 
 const SpecificIssue = ({refSpecificIssue, onPress}) => {
+  const [message, setMessage] = useState('');
   return (
     <RBSheet
       ref={refSpecificIssue}
@@ -37,6 +38,8 @@ const SpecificIssue = ({refSpecificIssue, onPress}) => {
         <Text style={styles.title}>Please specify the issue</Text>
         <TextInput
           style={styles.input}
+          value={message}
+          onChangeText={(v) => setMessage(v)}
           textAlignVertical="top"
           placeholder={`Please provide more details to inform our\n team (min. 50 characters)`}
         />
@@ -45,7 +48,7 @@ const SpecificIssue = ({refSpecificIssue, onPress}) => {
           <IconFA5 name="chevron-right" size={17} color={'#000'} />
         </TouchableOpacity>
         <View style={styles.containerBtn}>
-          <Button onPress={() => onPress()}>
+          <Button onPress={() => onPress(message)}>
             <Text>File Report</Text>
           </Button>
         </View>
