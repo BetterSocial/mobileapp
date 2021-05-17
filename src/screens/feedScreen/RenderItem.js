@@ -94,9 +94,9 @@ const RenderItem = ({
           onShare(item.actor.data.username);
         }}
         onPressBlock={onPressBlock}
+        onPressComment={onPressComment}
         onPressUpvote={onPressUpvote}
         onPressDownVote={onPressDownVote}
-        onPressComment={onPressComment}
       />
     </Card>
   );

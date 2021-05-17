@@ -161,7 +161,6 @@ const FeedScreen = (props) => {
     }
   };
   const setUpVote = async (id) => {
-    console.log(id);
     let result = await upVote({activity_id: id});
     if (result.code == 200) {
       Toast.show('up vote was successful', Toast.LONG);
@@ -249,15 +248,16 @@ const FeedScreen = (props) => {
                     setDataToState(value);
                     refBlockUser.current.open();
                   }}
+                  onPressComment={() => {
+                    props.navigation.navigate('PostDetailPage', {item: item})
+                  }}
                   onPressUpvote={(value) => {
                     setUpVote(value.id);
                   }}
                   onPressDownVote={(value) => {
                     setDownVote(value.id);
                   }}
-                  onPressComment={() => {
-                    props.navigation.navigate('PostDetailPage', {item: item});
-                  }}
+
                 />
               ))
             : null}
