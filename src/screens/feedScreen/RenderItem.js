@@ -84,9 +84,14 @@ const RenderItem = ({
           message={item.message}
           images_url={item.images_url}
           polls={item.pollOptions}
+          onPress={onPress}
         />
       ) : (
-        <Content message={item.message} images_url={item.images_url} />
+        <Content
+          message={item.message}
+          images_url={item.images_url}
+          onPress={onPress}
+        />
       )}
       <Footer
         item={item}

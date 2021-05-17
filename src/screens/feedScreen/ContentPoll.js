@@ -8,6 +8,7 @@ import {
   Dimensions,
   Image,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 
 import {colors} from '../../utils/colors';
@@ -32,13 +33,13 @@ const _renderItem = ({item, index}, parallaxProps) => {
   );
 };
 
-const ContentPoll = ({message, images_url, polls = []}) => {
+const ContentPoll = ({message, images_url, polls = [], onPress}) => {
   let totalPollCount = polls.reduce((acc, current) => {
-    return acc + parseInt(current.counter)
-  },0)
+    return acc + parseInt(current.counter);
+  }, 0);
 
   return (
-    <View style={styles.contentFeed}>
+    <TouchableOpacity onPress={onPress} style={styles.contentFeed}>
       {images_url !== null ? (
         images_url.length > 0 ? (
           <View
@@ -71,40 +72,68 @@ const ContentPoll = ({message, images_url, polls = []}) => {
             />
           </View>
         ) : (
-          <View
-            style={{justifyContent: 'center', flex: 1}}>
+          <View style={{justifyContent: 'center', flex: 1}}>
             <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
               {`${message}`}
             </SeeMore>
 
             <View style={styles.pollOptionsContainer}>
-              { polls.map((item, index) => {
+              {polls.map((item, index) => {
                 /*
                   TODO : Count percentage
                 */
-                let optionPercentage = totalPollCount === 0 ? 0 : item.counter / totalPollCount
-                return <TouchableNativeFeedback>
-                    <View key={`poll-options-${index}`} style={index % 2 === 0 ? styles.pollOptionItemContainerActive : styles.pollOptionItemContainer}>
-                    <View style={styles.percentageBar(optionPercentage)}/>
-                    <View style={styles.pollOptionTextContainer}>
-                      <View style={index % 2 === 0 ? styles.pollRadioButtonActive : styles.pollRadioButton}/>
-                      <Text style={styles.pollOptionItemText}>{item.option}</Text>
-                      {/* <Text style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text> */}
+                let optionPercentage =
+                  totalPollCount === 0 ? 0 : item.counter / totalPollCount;
+                return (
+                  <TouchableNativeFeedback>
+                    <View
+                      key={`poll-options-${index}`}
+                      style={
+                        index % 2 === 0
+                          ? styles.pollOptionItemContainerActive
+                          : styles.pollOptionItemContainer
+                      }>
+                      <View style={styles.percentageBar(optionPercentage)} />
+                      <View style={styles.pollOptionTextContainer}>
+                        <View
+                          style={
+                            index % 2 === 0
+                              ? styles.pollRadioButtonActive
+                              : styles.pollRadioButton
+                          }
+                        />
+                        <Text style={styles.pollOptionItemText}>
+                          {item.option}
+                        </Text>
+                        {/* <Text style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text> */}
+                      </View>
                     </View>
-                  </View>
                   </TouchableNativeFeedback>
+                );
               })}
             </View>
 
             <View style={styles.totalVotesContainer}>
-              <Text style={styles.totalpolltext}>{`${totalPollCount} votes `}</Text>
-              <View style={{width : 4, height : 4, borderRadius : 4, alignSelf : "center", backgroundColor : colors.blackgrey}}/>
-              <Text style={styles.totalpolltext}>{` 24 hours 34 minutes left`}</Text>
+              <Text
+                style={styles.totalpolltext}>{`${totalPollCount} votes `}</Text>
+              <View
+                style={{
+                  width: 4,
+                  height: 4,
+                  borderRadius: 4,
+                  alignSelf: 'center',
+                  backgroundColor: colors.blackgrey,
+                }}
+              />
+              <Text
+                style={
+                  styles.totalpolltext
+                }>{` 24 hours 34 minutes left`}</Text>
             </View>
           </View>
         )
       ) : null}
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -204,86 +233,87 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
   },
-  pollOptionsContainer : {
+  pollOptionsContainer: {
     // borderColor : 'red',
     // borderWidth : 4,
-    width : '100%',
-    padding : 0,
-    marginTop : 16,
-    marginBottom : 8
+    width: '100%',
+    padding: 0,
+    marginTop: 16,
+    marginBottom: 8,
   },
-  pollOptionItemContainer : {
+  pollOptionItemContainer: {
     // borderColor : colors.holytosca,
-    backgroundColor : colors.lightgrey,
+    backgroundColor: colors.lightgrey,
     // borderWidth : 1.25,
-    marginBottom : 8,
-    borderRadius : 8,
-    display : 'flex',
-    flexDirection : 'row'
+    marginBottom: 8,
+    borderRadius: 8,
+    display: 'flex',
+    flexDirection: 'row',
   },
-  pollOptionItemContainerActive : {
+  pollOptionItemContainerActive: {
     // borderColor : colors.holytosca,
-    backgroundColor : colors.holytosca30percent,
+    backgroundColor: colors.holytosca30percent,
     // borderWidth : 1.25,
-    marginBottom : 8,
-    borderRadius : 8,
-    display : 'flex',
-    flexDirection : 'row'
+    marginBottom: 8,
+    borderRadius: 8,
+    display: 'flex',
+    flexDirection: 'row',
   },
-  pollOptionTextContainer : {
-    display : 'flex',
-    flexDirection : 'row',
-    width : '100%',
-    paddingVertical : 16,
-    paddingHorizontal : 12
+  pollOptionTextContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    paddingVertical: 16,
+    paddingHorizontal: 12,
   },
-  pollOptionItemText : {
-    flex : 1,
-    color : colors.black,
-    fontFamily : fonts.inter[400]
+  pollOptionItemText: {
+    flex: 1,
+    color: colors.black,
+    fontFamily: fonts.inter[400],
     // backgroundColor : 'red'
   },
-  pollOptionItemPercentage : {
+  pollOptionItemPercentage: {
     // backgroundColor : 'red'
   },
-  percentageBar : (percent) => {
-    if(!percent) percent = 0
-    if(percent > 100) percent = 100
+  percentageBar: (percent) => {
+    if (!percent) percent = 0;
+    if (percent > 100) percent = 100;
 
     return {
-      width : `${percent}%`,
-      height : '100%',
-      position : 'absolute',
-      top : 0,
-      left : 0,
-      backgroundColor : colors.bondi_blue
-  }},
-  totalpolltext : {
-    fontFamily : fonts.inter[400],
-    fontSize : 12,
-    lineHeight: 16,
-    color : colors.blackgrey
+      width: `${percent}%`,
+      height: '100%',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      backgroundColor: colors.bondi_blue,
+    };
   },
-  pollRadioButton : {
-    width : 12,
-    height : 12,
-    alignSelf : 'center',
-    borderRadius : 6,
-    borderColor : colors.black,
-    borderWidth : 1,
-    marginEnd : 12
+  totalpolltext: {
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    lineHeight: 16,
+    color: colors.blackgrey,
+  },
+  pollRadioButton: {
+    width: 12,
+    height: 12,
+    alignSelf: 'center',
+    borderRadius: 6,
+    borderColor: colors.black,
+    borderWidth: 1,
+    marginEnd: 12,
   },
 
-  pollRadioButtonActive : {
-    width : 12,
-    height : 12,
-    alignSelf : 'center',
-    borderRadius : 6,
-    backgroundColor : colors.holytosca,
-    marginEnd : 12
+  pollRadioButtonActive: {
+    width: 12,
+    height: 12,
+    alignSelf: 'center',
+    borderRadius: 6,
+    backgroundColor: colors.holytosca,
+    marginEnd: 12,
   },
-  totalVotesContainer : {
-    display : 'flex',
-    flexDirection : 'row'
-  }
+  totalVotesContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
 });

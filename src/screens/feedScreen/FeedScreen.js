@@ -244,12 +244,15 @@ const FeedScreen = (props) => {
                 <RenderItem
                   key={item}
                   item={item}
+                  onPress={() => {
+                    props.navigation.navigate('PostDetailPage', {item: item});
+                  }}
                   onPressBlock={(value) => {
                     setDataToState(value);
                     refBlockUser.current.open();
                   }}
                   onPressComment={() => {
-                    props.navigation.navigate('PostDetailPage', {item: item})
+                    props.navigation.navigate('PostDetailPage', {item: item});
                   }}
                   onPressUpvote={(value) => {
                     setUpVote(value.id);
@@ -257,7 +260,6 @@ const FeedScreen = (props) => {
                   onPressDownVote={(value) => {
                     setDownVote(value.id);
                   }}
-
                 />
               ))
             : null}
