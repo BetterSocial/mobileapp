@@ -7,12 +7,15 @@ import {
   Platform,
   Dimensions,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import {Avatar} from 'react-native-activity-feed';
 import moment from 'moment';
 import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+
+import {useNavigation} from '@react-navigation/native';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 
@@ -25,6 +28,7 @@ import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNin
 import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
 import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
+import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -108,10 +112,22 @@ const _renderProfileNormal = (
   duration_feed,
   expired_at,
   location,
+  isBackButton,
 ) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.rowSpaceBeetwen}>
       <View style={styles.rowCenter}>
+        {isBackButton ? (
+          <View style={{marginEnd: 16}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <MemoIc_arrow_back height={20} width={20} />
+            </TouchableOpacity>
+          </View>
+        ) : null}
         <Avatar
           source={
             profile_pic_path
@@ -151,7 +167,7 @@ const _renderProfileNormal = (
     </View>
   );
 };
-const Header = ({props}) => {
+const Header = ({props, isBackButton = false}) => {
   let {
     anonimity,
     time,
@@ -162,7 +178,14 @@ const Header = ({props}) => {
     actor,
   } = props;
   if (anonimity) {
-    return _renderAnonimity(time, privacy, duration_feed, expired_at, location);
+    return _renderAnonimity(
+      time,
+      privacy,
+      duration_feed,
+      expired_at,
+      location,
+      isBackButton,
+    );
   } else {
     return _renderProfileNormal(
       actor.data.username,
@@ -172,6 +195,7 @@ const Header = ({props}) => {
       duration_feed,
       expired_at,
       location,
+      isBackButton,
     );
   }
 };

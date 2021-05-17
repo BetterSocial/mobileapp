@@ -8,6 +8,7 @@ import {
   getUserId,
   removeLocalStorege,
   setAccessToken,
+  setRefreshToken,
 } from '../../data/local/accessToken';
 import {getProfileByUsername} from '../../service/profile';
 import {verifyTokenGetstream, verifyUser} from '../../service/users';

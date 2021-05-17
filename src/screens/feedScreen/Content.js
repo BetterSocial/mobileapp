@@ -32,9 +32,9 @@ const _renderItem = ({item, index}, parallaxProps) => {
   );
 };
 
-const Content = ({message, images_url}) => {
+const Content = ({message, images_url, style}) => {
   return (
-    <View style={styles.contentFeed}>
+    <View style={[styles.contentFeed, style]}>
       {images_url !== null ? (
         images_url.length > 0 ? (
           <View

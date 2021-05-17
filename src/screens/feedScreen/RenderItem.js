@@ -74,9 +74,10 @@ const RenderItem = ({
   onPressBlock,
   onPressUpvote,
   onPressDownVote,
+  onPressComment
 }) => {
   return (
-    <Card style={[styles.container]}>
+    <Card style={[styles.container]} key={item.id}>
       <Header props={item} />
       {item.verb === POST_VERB_POLL ? (
         <ContentPoll
@@ -93,6 +94,7 @@ const RenderItem = ({
           onShare(item.actor.data.username);
         }}
         onPressBlock={onPressBlock}
+        onPressComment={onPressComment}
         onPressUpvote={onPressUpvote}
         onPressDownVote={onPressDownVote}
       />
@@ -105,7 +107,7 @@ export default RenderItem;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height - 90,
+    height: height - height * 0.15,
     borderRadius: 5,
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {

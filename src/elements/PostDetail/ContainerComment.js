@@ -7,9 +7,7 @@ const ContainerComment = () => {
   return (
     <View style={styles.container}>
       <Comment />
-      <View style={styles.containerReply}>
-        <ReplayComment />
-      </View>
+      <View style={styles.containerReply}>{/* <ReplayComment /> */}</View>
       {/* <Comment /> */}
       {/* <ContainerReply>
         <ReplayComment />

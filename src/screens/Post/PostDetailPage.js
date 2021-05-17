@@ -5,13 +5,12 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
 } from 'react-native';
 import JWTDecode from 'jwt-decode';
 import {getAccessToken} from '../../data/local/accessToken';
 import Comment from '../../elements/PostDetail/Comment';
 import ContainerComment from '../../elements/PostDetail/ContainerComment';
-import Footer from '../../elements/PostDetail/Footer';
-import Header from '../../elements/PostDetail/Header';
 import Profile from '../../elements/PostDetail/Profile';
 import WriteComment from '../../elements/PostDetail/WriteComment';
 import {fonts} from '../../utils/fonts';
@@ -22,6 +21,14 @@ import ReportUser from '../../elements/Blocking/ReportUser';
 import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
 import Toast from 'react-native-simple-toast';
+import Header from '../feedScreen/Header';
+import Content from '../feedScreen/Content';
+import Footer from '../feedScreen/Footer';
+import Gap from '../../components/Gap';
+import { POST_VERB_POLL } from '../../utils/constants';
+import ContentPoll from '../feedScreen/ContentPoll';
+
+const {width, height} = Dimensions.get('window');
 import {blockUser} from '../../service/blocking';
 import {showMessage} from 'react-native-flash-message';
 
@@ -37,10 +44,11 @@ const PostDetailPage = (props) => {
   const refReportUser = useRef();
   const refReportDomain = useRef();
   const refSpecificIssue = useRef();
+  const [item, setItem] = useState(props.route.params.item);
 
   useEffect(() => {
     const initial = () => {
-      console.log(props.navigation);
+      console.log(props.route.params.item.id);
     };
     initial();
   }, [props]);
@@ -104,7 +112,6 @@ const PostDetailPage = (props) => {
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
-        console.log('detai ', result.data);
         setLoading(false);
       }
       setLoading(false);
@@ -121,33 +128,29 @@ const PostDetailPage = (props) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Header onSetting={() => {}} onSearch={() => {}} />
-        <Profile />
-        <View style={styles.containerText}>
-          <Text
-            style={styles.textDesc}
-            numberOfLines={more}
-            onTextLayout={onTextLayout}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae
-            diam et tortor rutrum tincidunt vitae non arcu. Pellentesque mattis
-            tellus quam, sed porttitor nunc aliquam vitae. Donec id dui lacinia,
-            pellentesque ipsum sed, commodo sapien. Praesent tincidunt accumsan
-            nibh, id laoreet sapien porta et. Ut aliquet purus sit amet lectus
-            fermentum, id consectetur lorem porta. Donec vestibulum lobortis
-            ligula, sit amet luctus enim tincidunt non. Nam ultricies lacus ac
-            nibh molestie volutpat. Ut aliquet purus sit amet lectus fermentum,
-            id consectetur lorem porta. Donec vestibulum lobortis ligula, sit
-            amet luctus enim tincidunt non. Nam ultricies lacus ac nibh molestie
-            volutpat.
-          </Text>
-          {more < totalLine && (
-            <TouchableOpacity onPress={() => onMore()}>
-              <Text style={styles.more}>More</Text>
-            </TouchableOpacity>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{height: height * 0.9}}>
+        <View style={styles.content}>
+          <Header props={item} isBackButton={true} />
+          {item.verb === POST_VERB_POLL ? (
+            <ContentPoll
+              message={item.message}
+              images_url={item.images_url}
+              polls={item.pollOptions}
+            />
+          ) : (
+            <Content
+            message={item.message}
+            images_url={item.images_url}
+            style={item.images_url.length > 0 ? {height: height * 0.5} : null}
+          />
           )}
+         
+          <Gap style={{height: 16}} />
+          <Footer />
         </View>
-        <Footer onBlock={() => refBlockUser.current.open()} />
+
         <ContainerComment />
       </ScrollView>
       <WriteComment />
@@ -196,5 +199,18 @@ const styles = StyleSheet.create({
     color: '#0e24b3',
     fontFamily: fonts.inter[400],
     fontSize: 14,
+  },
+  content: {
+    width: width,
+    borderRadius: 5,
+    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    paddingHorizontal: 16,
+    marginBottom: 16,
   },
 });
