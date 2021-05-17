@@ -74,9 +74,8 @@ const RenderItem = ({
   onPressBlock,
   onPressUpvote,
   onPressDownVote,
-  onPressComment
+  onPressComment,
 }) => {
-
   return (
     <Card style={[styles.container]} key={item.id}>
       <Header props={item} />

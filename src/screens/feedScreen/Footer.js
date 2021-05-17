@@ -53,10 +53,10 @@ const Footer = ({
         <TouchableOpacity onPress={() => onPressBlock(item)}>
           <MemoIc_block_inactive height={18} width={18} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onPressDownVote}>
+        <TouchableOpacity onPress={() => onPressDownVote(item)}>
           <MemoIc_arrow_down_vote_off width={18} height={18} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onPressUpvote}>
+        <TouchableOpacity onPress={() => onPressUpvote(item)}>
           <MemoIc_arrow_upvote_off width={18} height={18} />
         </TouchableOpacity>
       </View>

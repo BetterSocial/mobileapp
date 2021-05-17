@@ -161,6 +161,7 @@ const FeedScreen = (props) => {
     }
   };
   const setUpVote = async (id) => {
+    console.log(id);
     let result = await upVote({activity_id: id});
     if (result.code == 200) {
       Toast.show('up vote was successful', Toast.LONG);
