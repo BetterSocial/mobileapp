@@ -106,9 +106,9 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
                   onChangeText={(v) => setTopic(v)}
                   autoCapitalize="none"
                   onKeyPress={({nativeEvent}) => {
-                    if (nativeEvent.key.trim().length === 0) {
-                      add();
-                    }
+                    console.log(`a${nativeEvent.key}b`)
+                    if (nativeEvent.key === " ") return add()
+                    if (nativeEvent.key.trim().length === 0) return add();
                   }}
                   blurOnSubmit={false}
                 />

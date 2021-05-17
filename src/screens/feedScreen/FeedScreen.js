@@ -266,7 +266,7 @@ const FeedScreen = (props) => {
 
       <Loading visible={loading} />
 
-      {/* <ButtonNewPost /> */}
+      <ButtonNewPost />
       <BlockUser
         refBlockUser={refBlockUser}
         onSelect={(v) => onSelectBlocking(v)}
