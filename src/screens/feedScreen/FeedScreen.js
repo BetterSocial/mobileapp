@@ -244,6 +244,9 @@ const FeedScreen = (props) => {
                 <RenderItem
                   key={item}
                   item={item}
+                  onPress={() => {
+                    props.navigation.navigate('PostDetailPage', {item: item});
+                  }}
                   onPressBlock={(value) => {
                     setDataToState(value);
                     refBlockUser.current.open();

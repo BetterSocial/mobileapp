@@ -32,9 +32,9 @@ const _renderItem = ({item, index}, parallaxProps) => {
   );
 };
 
-const Content = ({message, images_url, style}) => {
+const Content = ({message, images_url, style, onPress}) => {
   return (
-    <View style={[styles.contentFeed, style]}>
+    <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
       {images_url !== null ? (
         images_url.length > 0 ? (
           <View
@@ -79,7 +79,7 @@ const Content = ({message, images_url, style}) => {
           </View>
         )
       ) : null}
-    </View>
+    </TouchableOpacity>
   );
 };
 
