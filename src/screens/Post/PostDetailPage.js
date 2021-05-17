@@ -107,7 +107,7 @@ const PostDetailPage = (props) => {
           <Footer />
         </View>
 
-        <ContainerComment />
+        {/* <ContainerComment /> */}
       </ScrollView>
       <WriteComment />
       <BlockUser
