@@ -29,12 +29,16 @@ import { POST_VERB_POLL } from '../../utils/constants';
 import ContentPoll from '../feedScreen/ContentPoll';
 
 const {width, height} = Dimensions.get('window');
+import {blockUser} from '../../service/blocking';
+import {showMessage} from 'react-native-flash-message';
 
 const PostDetailPage = (props) => {
   const [more, setMore] = useState(10);
   const [totalLine, setTotalLine] = useState(0);
   const [loading, setLoading] = useState(false);
   const [dataProfile, setDataProfile] = useState({});
+  const [reportOption, setReportOption] = useState([]);
+  const [messageReport, setMessageReport] = useState('');
   const refBlockUser = useRef();
   const refBlockDomain = useRef();
   const refReportUser = useRef();
@@ -59,18 +63,47 @@ const PostDetailPage = (props) => {
     if (v !== 1) {
       // refBlockDomain.current.open();
       refReportUser.current.open();
+    } else {
+      userBlock();
     }
     refBlockUser.current.close();
   };
 
+  const userBlock = async () => {
+    const data = {
+      userId: '118d5679-6c68-cdws-be83-7f15a4e82d3d',
+      postId: '228d5679-6c68-54sd-be83-7f15a4e82d3d',
+      source: 'screen_post_detail',
+      reason: reportOption,
+      message: messageReport,
+    };
+    let result = await blockUser(data);
+    if (result.code == 200) {
+      Toast.show(
+        'The user was blocked successfully. \nThanks for making BetterSocial better!',
+        Toast.LONG,
+      );
+    } else {
+      Toast.show('Your report was filed & will be investigated', Toast.LONG);
+    }
+    console.log('result block user ', result);
+  };
+  const onSkipOnlyBlock = () => {
+    refReportUser.current.close();
+    userBlock();
+  };
+
   const onNextQuestion = (v) => {
-    console.log(v);
+    setReportOption(v);
     refReportUser.current.close();
     refSpecificIssue.current.open();
   };
-  const onIssue = () => {
+  const onIssue = (v) => {
     refSpecificIssue.current.close();
-    Toast.show('Your report was filed & will be investigated', Toast.LONG);
+    setMessageReport(v);
+    setTimeout(() => {
+      userBlock();
+    }, 500);
   };
   const fetchMyProfile = async () => {
     let token = await getAccessToken();
@@ -131,9 +164,17 @@ const PostDetailPage = (props) => {
         domain="guardian.com"
         onSelect={() => {}}
       />
-      <ReportUser refReportUser={refReportUser} onSelect={onNextQuestion} />
+      <ReportUser
+        refReportUser={refReportUser}
+        onSelect={onNextQuestion}
+        onSkip={onSkipOnlyBlock}
+      />
       <ReportDomain refReportDomain={refReportDomain} />
-      <SpecificIssue refSpecificIssue={refSpecificIssue} onPress={onIssue} />
+      <SpecificIssue
+        refSpecificIssue={refSpecificIssue}
+        onPress={onIssue}
+        onSkip={onSkipOnlyBlock}
+      />
     </View>
   );
 };
