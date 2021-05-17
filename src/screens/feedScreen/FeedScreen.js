@@ -257,6 +257,7 @@ const FeedScreen = (props) => {
                   onPressDownVote={(value) => {
                     setDownVote(value.id);
                   }}
+
                 />
               ))
             : null}

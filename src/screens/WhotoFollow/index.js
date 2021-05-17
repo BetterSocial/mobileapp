@@ -112,8 +112,8 @@ const WhotoFollow = () => {
         setRefreshing(false);
       });
   }, []);
+
   const register = () => {
-    console.log('click regiter');
     if (followed.length < 2) {
       showMessage({
         message: 'minimum follow 3 users',
@@ -138,8 +138,6 @@ const WhotoFollow = () => {
       follows: followed,
       follow_source: 'onboarding',
     };
-
-    console.log(data);
 
     registerUser(data)
       .then((res) => {

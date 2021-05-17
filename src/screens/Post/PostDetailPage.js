@@ -21,16 +21,16 @@ import ReportUser from '../../elements/Blocking/ReportUser';
 import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
 import Toast from 'react-native-simple-toast';
+import {blockUser} from '../../service/blocking';
+import {showMessage} from 'react-native-flash-message';
 import Header from '../feedScreen/Header';
 import Content from '../feedScreen/Content';
 import Footer from '../feedScreen/Footer';
 import Gap from '../../components/Gap';
-import { POST_VERB_POLL } from '../../utils/constants';
+import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from '../feedScreen/ContentPoll';
 
 const {width, height} = Dimensions.get('window');
-import {blockUser} from '../../service/blocking';
-import {showMessage} from 'react-native-flash-message';
 
 const PostDetailPage = (props) => {
   const [more, setMore] = useState(10);
@@ -141,17 +141,17 @@ const PostDetailPage = (props) => {
             />
           ) : (
             <Content
-            message={item.message}
-            images_url={item.images_url}
-            style={item.images_url.length > 0 ? {height: height * 0.5} : null}
-          />
+              message={item.message}
+              images_url={item.images_url}
+              style={item.images_url.length > 0 ? {height: height * 0.5} : null}
+            />
           )}
-         
+
           <Gap style={{height: 16}} />
           <Footer />
         </View>
 
-        <ContainerComment />
+        {/* <ContainerComment /> */}
       </ScrollView>
       <WriteComment />
       <BlockUser
