@@ -249,7 +249,7 @@ const FeedScreen = (props) => {
                     refBlockUser.current.open();
                   }}
                   onPressComment={() => {
-                    props.navigation.navigate('PostDetailPage', {item: item})
+                    props.navigation.navigate('PostDetailPage', {item: item});
                   }}
                   onPressUpvote={(value) => {
                     setUpVote(value.id);
@@ -257,7 +257,6 @@ const FeedScreen = (props) => {
                   onPressDownVote={(value) => {
                     setDownVote(value.id);
                   }}
-
                 />
               ))
             : null}
@@ -266,7 +265,7 @@ const FeedScreen = (props) => {
 
       <Loading visible={loading} />
 
-      {/* <ButtonNewPost /> */}
+      <ButtonNewPost />
       <BlockUser
         refBlockUser={refBlockUser}
         onSelect={(v) => onSelectBlocking(v)}
