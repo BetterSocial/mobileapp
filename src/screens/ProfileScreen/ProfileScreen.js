@@ -185,12 +185,10 @@ const ProfileScreen = () => {
   };
 
   const goToFollowings = (user_id, username) => {
-    if (dataMain.following > 0) {
-      navigation.navigate('Followings', {
-        screen : "TabFollowing",
-        params : { user_id, username }
-      });
-    }
+    navigation.navigate('Followings', {
+      screen : "TabFollowing",
+      params : { user_id, username }
+    });
   };
 
   const changeName = () => {
@@ -449,7 +447,7 @@ const ProfileScreen = () => {
                       </Text>
                     </TouchableNativeFeedback> */}
                   </View>
-                  <View style={{...styles.wrapFollower, marginTop: 24}}>
+                  <View style={{...styles.wrapFollower, marginTop : 12}}>
                     <View style={styles.wrapRow}>
                       <Text style={styles.textTotal}>
                         {dataMain.follower_symbol}
@@ -583,7 +581,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerBio: {
-    marginTop: 8,
     paddingVertical : 8
   },
   seeMore: {
@@ -634,6 +631,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 17,
+    marginTop : 12,
     color: colors.black,
   },
   wrapFollower: {
@@ -643,6 +641,7 @@ const styles = StyleSheet.create({
   wrapRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical : 8
   },
   textTotal: {
     fontFamily: fonts.inter[800],

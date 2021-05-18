@@ -18,10 +18,13 @@ import ArrowDownRedIcon from '../../assets/icons/images/arrow-down-red.svg';
 import CommentIcon from '../../assets/icons/images/comment.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import PollOptions from '../../components/PollOptions';
+import { POST_VERB_POLL } from '../../utils/constants';
 
 const {width: screenWidth} = Dimensions.get('window');
 
 const renderActivity = (props, data) => {
+  console.log(props)
   const _renderItem = ({item, index}, parallaxProps) => {
     return (
       <View key={index} style={styles.item}>
@@ -35,6 +38,16 @@ const renderActivity = (props, data) => {
       </View>
     );
   };
+
+  const _renderPollOptions = () => {
+    if(!props.verb === POST_VERB_POLL) return <></>
+    else return <View style={{
+      display : 'flex',
+      backgroundColor : 'red'
+    }}>
+      {props.polls.map((item, index) => <PollOptions item={item} index={index} total={0}/>)}
+    </View>
+  }
 
   return (
     <Activity
@@ -74,6 +87,7 @@ const renderActivity = (props, data) => {
           <SeeMore numberOfLines={4} linkStyle={styles.textContentFeed}>
             {props.activity.message}
           </SeeMore>
+          {/* {_renderPollOptions()} */}
           {props.activity.images_url.length > 0 ? (
             <Carousel
               sliderWidth={screenWidth}
@@ -94,7 +108,7 @@ const renderActivity = (props, data) => {
               <ShareIcon width={20} height={20} fill={colors.black} />
             </View>
           </View>
-        </View>
+        </View> 
       }
       // Footer={
       //   <View style={{flexDirection: 'column'}}>

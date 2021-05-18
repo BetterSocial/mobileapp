@@ -16,6 +16,7 @@ import {fonts} from '../../utils/fonts';
 import SeeMore from 'react-native-see-more-inline';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import Gap from '../../components/Gap';
+import PollOptions from '../../components/PollOptions';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -82,34 +83,8 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
                 /*
                   TODO : Count percentage
                 */
-                let optionPercentage =
-                  totalPollCount === 0 ? 0 : item.counter / totalPollCount;
-                return (
-                  <TouchableNativeFeedback>
-                    <View
-                      key={`poll-options-${index}`}
-                      style={
-                        index % 2 === 0
-                          ? styles.pollOptionItemContainerActive
-                          : styles.pollOptionItemContainer
-                      }>
-                      <View style={styles.percentageBar(optionPercentage)} />
-                      <View style={styles.pollOptionTextContainer}>
-                        <View
-                          style={
-                            index % 2 === 0
-                              ? styles.pollRadioButtonActive
-                              : styles.pollRadioButton
-                          }
-                        />
-                        <Text style={styles.pollOptionItemText}>
-                          {item.option}
-                        </Text>
-                        {/* <Text style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text> */}
-                      </View>
-                    </View>
-                  </TouchableNativeFeedback>
-                );
+
+                return <PollOptions item={item} index={index} total={totalPollCount}/>
               })}
             </View>
 

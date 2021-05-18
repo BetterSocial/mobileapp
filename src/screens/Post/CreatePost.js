@@ -288,13 +288,13 @@ const CreatePost = () => {
         });
         return true;
       }
-      if (listTopic.length === 0) {
-        showMessage({
-          message: 'topic cannot be empty',
-          type: 'danger',
-        });
-        return true;
-      }
+      // if (listTopic.length === 0) {
+      //   showMessage({
+      //     message: 'topic cannot be empty',
+      //     type: 'danger',
+      //   });
+      //   return true;
+      // }
       setLoading(true);
       let data = {
         topics: listTopic,
@@ -304,7 +304,7 @@ const CreatePost = () => {
         privacy: listPrivacy[privacySelect].label,
         anonimity: typeUser,
         location: geoList[geoSelect].neighborhood,
-        duration_feed: Number(postExpired[expiredSelect].value),
+        duration_feed: postExpired[expiredSelect].value,
         images_url: dataImage,
       };
       analytics().logEvent('create_post', {
@@ -319,6 +319,7 @@ const CreatePost = () => {
       });
       console.log(data);
       let res = await createPost(data);
+      console.log("res");
       console.log(res);
       if (res.code === 200) {
         showMessage({
@@ -338,7 +339,8 @@ const CreatePost = () => {
       }
       console.log(res);
     } catch (error) {
-      console.log(error);
+      console.log("error response");
+      console.log(error.request);
       showMessage({
         message: 'failed to create new posts',
         type: 'danger',
