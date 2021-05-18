@@ -45,10 +45,14 @@ const PostDetailPage = (props) => {
   const refReportDomain = useRef();
   const refSpecificIssue = useRef();
   const [item, setItem] = useState(props.route.params.item);
+  const [isReaction, setReaction] = useState(false);
 
   useEffect(() => {
     const initial = () => {
-      console.log(props.route.params.item.id);
+      let reactionCount = props.route.params.item.reaction_counts;
+      if (JSON.stringify(reactionCount) !== '{}') {
+        setReaction(true);
+      }
     };
     initial();
   }, [props]);
@@ -150,8 +154,7 @@ const PostDetailPage = (props) => {
           <Gap style={{height: 16}} />
           <Footer />
         </View>
-
-        {/* <ContainerComment /> */}
+        {isReaction && <ContainerComment props={item} />}
       </ScrollView>
       <WriteComment />
       <BlockUser

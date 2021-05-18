@@ -20,6 +20,22 @@ import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
 const {width, height} = Dimensions.get('window');
+const getCount = (item) => {
+  let reactionCount = item.reaction_counts;
+  let count = 0;
+  if (JSON.stringify(reactionCount) !== '{}') {
+    let upvote = reactionCount.upvotes;
+    if (upvote !== undefined) {
+      console.log(upvote);
+      count = count + upvote;
+    }
+    let downvote = reactionCount.downvotes;
+    if (downvote !== undefined) {
+      count = count - downvote;
+    }
+  }
+  return count;
+};
 
 async function buildLink(username) {
   const link = await dynamicLinks().buildLink(
@@ -77,7 +93,7 @@ const RenderItem = ({
   onPressComment,
 }) => {
   return (
-    <Card style={[styles.container]} key={item.id}>
+    <Card style={[styles.container]}>
       <Header props={item} />
       {item.verb === POST_VERB_POLL ? (
         <ContentPoll
@@ -102,6 +118,7 @@ const RenderItem = ({
         onPressComment={onPressComment}
         onPressUpvote={onPressUpvote}
         onPressDownVote={onPressDownVote}
+        count={getCount(item)}
       />
     </Card>
   );

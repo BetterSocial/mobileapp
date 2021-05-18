@@ -240,9 +240,9 @@ const FeedScreen = (props) => {
             // console.log('onSwiped top');
           }}>
           {mainFeeds !== undefined
-            ? mainFeeds.map((item) => (
+            ? mainFeeds.map((item, index) => (
                 <RenderItem
-                  key={item}
+                  key={index}
                   item={item}
                   onPress={() => {
                     props.navigation.navigate('PostDetailPage', {item: item});

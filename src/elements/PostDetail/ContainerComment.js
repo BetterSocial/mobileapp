@@ -3,15 +3,15 @@ import {StyleSheet, Text, View} from 'react-native';
 import {colors} from '../../utils/colors';
 import Comment from './Comment';
 
-const ContainerComment = () => {
+const ContainerComment = (props) => {
   return (
     <View style={styles.container}>
-      <Comment />
+      <Comment comment={'ini comment'} username={'user'} />
       <View style={styles.containerReply}>{/* <ReplayComment /> */}</View>
-      {/* <Comment /> */}
-      {/* <ContainerReply>
+      <Comment />
+      <ContainerReply>
         <ReplayComment />
-      </ContainerReply> */}
+      </ContainerReply>
     </View>
   );
 };
