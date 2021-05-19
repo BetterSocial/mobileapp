@@ -87,7 +87,7 @@ const RenderActivity = (props) => {
     duration_feed,
     message,
   } = activity;
-  let { username } = props.activity.actor.data
+  let {username} = props.activity.actor.data;
   let {profile_pic_path, real_name} = JSON.parse(activity.object);
 
   const getTime = (time) => {
@@ -159,7 +159,7 @@ const RenderActivity = (props) => {
         <View style={styles.containerFeedProfile}>
           <Text style={styles.feedUsername}>
             {/* {real_name ? real_name : 'no name specifics'} */}
-            { username ? username : 'no name specifics'}
+            {username ? username : 'no name specifics'}
           </Text>
           <View style={styles.containerFeedText}>
             <Text style={styles.feedDate}>
@@ -186,7 +186,6 @@ const RenderActivity = (props) => {
       </TouchableNativeFeedback>
     </View>
   );
-  console.log('err fedd', props.activity.images_url);
   if (props) {
     return (
       <Activity

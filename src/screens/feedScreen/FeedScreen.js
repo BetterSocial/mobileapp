@@ -11,24 +11,15 @@ import {
 import {ButtonNewPost} from '../../components/Button';
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
 
-import {
-  StreamApp,
-  FlatFeed,
-  Activity,
-  StatusUpdateForm,
-  LikeButton,
-} from 'react-native-activity-feed';
 import {getToken} from '../../helpers/getToken';
 import JWTDecode from 'jwt-decode';
 
-import RenderActivity from './RenderActivity';
-import {getMyProfile} from '../../service/profile';
 import analytics from '@react-native-firebase/analytics';
 import {getAccessToken} from '../../data/local/accessToken';
 import {getMainFeed} from '../../service/post';
 import RenderItem from './RenderItem';
 import Loading from '../../components/Loading';
-import CardStack, {Card} from '../../components/CardStack';
+import CardStack from '../../components/CardStack';
 import BlockUser from '../../elements/Blocking/BlockUser';
 import BlockDomain from '../../elements/Blocking/BlockDomain';
 import ReportUser from '../../elements/Blocking/ReportUser';
@@ -38,7 +29,7 @@ import Toast from 'react-native-simple-toast';
 import {blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
 
-const {width, height} = Dimensions.get('window');
+import {useFocusEffect} from '@react-navigation/native';
 
 let token_JWT = '';
 const FeedScreen = (props) => {
@@ -58,6 +49,7 @@ const FeedScreen = (props) => {
   const [messageReport, setMessageReport] = useState('');
   const [userId, setUserId] = useState('');
   const [postId, setPostId] = useState('');
+  const [lastId, setLastId] = useState('');
 
   const refBlockUser = useRef();
   const refBlockDomain = useRef();
@@ -76,7 +68,6 @@ const FeedScreen = (props) => {
   };
 
   const onNextQuestion = (v) => {
-    console.log(v);
     setReportOption(v);
     refReportUser.current.close();
     refSpecificIssue.current.open();
@@ -91,7 +82,7 @@ const FeedScreen = (props) => {
       message: messageReport,
     };
     let result = await blockUser(data);
-    if (result.code == 200) {
+    if (result.code === 200) {
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -114,30 +105,32 @@ const FeedScreen = (props) => {
     userBlock();
   };
 
-  useEffect(() => {
-    getDataFeeds();
-  }, []);
-
-  const getDataFeeds = async (id = '') => {
-    setCountStack(null);
-    setInitialLoading(true);
-    try {
-      let query = '';
-      if (id !== '') {
-        query = '?id_lt=' + id;
-      }
-      const dataFeeds = await getMainFeed(query);
-      if (dataFeeds.data.length > 0) {
-        let data = dataFeeds.data;
-        setCountStack(data.length);
-        setMainFeeds(data);
-      }
-      setInitialLoading(false);
-    } catch (e) {
-      console.log(e);
-      setInitialLoading(false);
-    }
-  };
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log(lastId);
+      const getDataFeeds = async (id = '') => {
+        setCountStack(null);
+        setInitialLoading(true);
+        try {
+          let query = '';
+          if (id !== '') {
+            query = '?id_lt=' + id;
+          }
+          const dataFeeds = await getMainFeed(query);
+          if (dataFeeds.data.length > 0) {
+            let data = dataFeeds.data;
+            setCountStack(data.length);
+            setMainFeeds(data);
+          }
+          setInitialLoading(false);
+        } catch (e) {
+          console.log(e);
+          setInitialLoading(false);
+        }
+      };
+      getDataFeeds(lastId);
+    }, [lastId]),
+  );
 
   getToken().then((val) => {
     token_JWT = val;
@@ -162,7 +155,7 @@ const FeedScreen = (props) => {
   };
   const setUpVote = async (id) => {
     let result = await upVote({activity_id: id});
-    if (result.code == 200) {
+    if (result.code === 200) {
       Toast.show('up vote was successful', Toast.LONG);
     } else {
       Toast.show('up vote failed', Toast.LONG);
@@ -170,7 +163,7 @@ const FeedScreen = (props) => {
   };
   const setDownVote = async (id) => {
     let result = await downVote({activity_id: id});
-    if (result.code == 200) {
+    if (result.code === 200) {
       Toast.show('down vote success', Toast.LONG);
     } else {
       Toast.show('down vote failed', Toast.LONG);
@@ -212,8 +205,9 @@ const FeedScreen = (props) => {
             // setLoading(true);
             // console.log(countStack);
             if (countStack === 0) {
-              let lastId = mainFeeds[mainFeeds.length - 1].id;
-              getDataFeeds(lastId);
+              let id = mainFeeds[mainFeeds.length - 1].id;
+              // getDataFeeds(lastId);
+              setLastId(id);
             }
             // return (
             //   <Text style={{fontWeight: '700', fontSize: 18, color: 'gray'}}>

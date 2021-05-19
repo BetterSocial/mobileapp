@@ -106,11 +106,10 @@ const SplashScreen = () => {
       if (token !== null && token !== '') {
         const verify = await verifyTokenGetstream();
         if (verify !== null && verify !== '') {
-          console.log('veri', verify);
-          console.log('token ', token);
           return await jwtDecode(token).user_id;
+        } else {
+          return null;
         }
-        return null;
       }
       return null;
     } catch (e) {
