@@ -102,7 +102,7 @@ const SignIn = () => {
         </TouchableOpacity>
         <Text style={S.desc}>
           <Text style={S.humanID}>humanID</Text> is an independent non-profit
-          guaranteeing you privacy and anonymity. Better Social will receive
+          guaranteeing your privacy and anonymity. BetterSocial will receive
           absolutely zero personal information.
         </Text>
       </View>
@@ -126,7 +126,8 @@ const S = StyleSheet.create({
     height: '70%',
   },
   containerBtnLogin: {
-    backgroundColor: '#fff',
+    // backgroundColor: 'orange',
+    // backgroundColor: '#fff',
     flex: 1,
     alignItems: 'center',
     paddingTop: 26,
@@ -158,16 +159,15 @@ const S = StyleSheet.create({
   btnText: {fontSize: 17, color: '#fff', fontWeight: 'bold'},
   humen: {fontSize: 17, color: '#fff', fontWeight: '100'},
   btnSign: {
-    backgroundColor: 'white',
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.48,
-    shadowRadius: 2.62,
-    elevation: 3,
-    // height: 49,
+    // backgroundColor: '#BDBDBB',
+    // shadowColor: 'rgba(189,189,187,0.32)',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 1,
+    // },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 1.62,
+    // elevation: 2,
   },
 });
