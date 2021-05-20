@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  Alert,
 } from 'react-native';
 import JWTDecode from 'jwt-decode';
 import {getAccessToken} from '../../data/local/accessToken';
@@ -29,6 +30,7 @@ import Footer from '../feedScreen/Footer';
 import Gap from '../../components/Gap';
 import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from '../feedScreen/ContentPoll';
+import {createCommentParent} from '../../service/comment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -46,12 +48,19 @@ const PostDetailPage = (props) => {
   const refSpecificIssue = useRef();
   const [item, setItem] = useState(props.route.params.item);
   const [isReaction, setReaction] = useState(false);
+  const [textComment, setTextComment] = useState('');
+  const [typeComment, setTypeComment] = useState('parent');
 
   useEffect(() => {
     const initial = () => {
       let reactionCount = props.route.params.item.reaction_counts;
       if (JSON.stringify(reactionCount) !== '{}') {
-        setReaction(true);
+        let comment = reactionCount.comment;
+        if (comment !== undefined) {
+          if (comment > 0) {
+            setReaction(true);
+          }
+        }
       }
     };
     initial();
@@ -130,6 +139,25 @@ const PostDetailPage = (props) => {
     }
   };
 
+  const onComment = () => {
+    if (typeComment === 'parent') {
+      commentParent();
+    }
+  };
+
+  const commentParent = async () => {
+    try {
+      let data = await createCommentParent(textComment, item.id);
+      console.log(data);
+      if (data.code === 200) {
+        setTextComment('');
+      }
+    } catch (e) {
+      console.log(e);
+      Alert.alert('Failed create comment');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -154,9 +182,17 @@ const PostDetailPage = (props) => {
           <Gap style={{height: 16}} />
           <Footer />
         </View>
-        {isReaction && <ContainerComment props={item} />}
+        {isReaction && (
+          <ContainerComment comments={item.latest_reactions.comment} />
+        )}
       </ScrollView>
-      <WriteComment />
+      <WriteComment
+        value={textComment}
+        onChangeText={(value) => setTextComment(value)}
+        onPress={() => {
+          onComment();
+        }}
+      />
       <BlockUser
         refBlockUser={refBlockUser}
         onSelect={(v) => onSelectBlocking(v)}

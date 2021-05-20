@@ -7,7 +7,7 @@ import IconEn from 'react-native-vector-icons/Entypo';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconMtC from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Comment = ({username, comment}) => {
+const Comment = ({username, comment, onPress}) => {
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
@@ -19,7 +19,7 @@ const Comment = ({username, comment}) => {
       </View>
       <Text style={styles.post}>{comment}</Text>
       <View style={styles.constainerFooter}>
-        <TouchableOpacity style={styles.btnReply}>
+        <TouchableOpacity style={styles.btnReply} onPress={onPress}>
           <IconAnt name="back" size={15.77} color={colors.gray1} />
           <Text style={styles.btnReplyText}>Reply</Text>
         </TouchableOpacity>

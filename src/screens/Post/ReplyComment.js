@@ -10,11 +10,24 @@ import {
 } from 'react-native';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import ContainerComment from '../../elements/PostDetail/ContainerComment';
+import {createChildComment, createCommentParent} from '../../service/comment';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const ReplyComment = (props) => {
   const [item, setItem] = useState(props.route.params.item);
+  const [textComment, setTextComment] = useState('');
+  const createComment = async () => {
+    try {
+      let data = await createChildComment(textComment, item.id);
+      console.log(data);
+      if (data.code === 200) {
+        setTextComment('');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -24,13 +37,13 @@ const ReplyComment = (props) => {
           </TouchableOpacity>
           <Text style={styles.headerText}>
             Reply to{' '}
-            {item.anonimiti === true ? Anonymous : item.actor.data.username}
+            {/* {item.anonimiti === true ? Anonymous : item.actor.data.username} */}
           </Text>
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity style={styles.btn} onPress={() => createComment()}>
             <Text style={styles.btnText}>Post</Text>
           </TouchableOpacity>
         </View>
-        <ContainerComment />
+        {/* <ContainerComment comments={} /> */}
         <View style={styles.comment}>
           <Image
             source={require('../.../../../assets/images/ProfileDefault.png')}
@@ -42,6 +55,8 @@ const ReplyComment = (props) => {
             multiline={true}
             numberOfLines={4}
             textAlignVertical="top"
+            onChangeText={(v) => setTextComment(v)}
+            value={textComment}
           />
         </View>
       </ScrollView>

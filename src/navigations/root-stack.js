@@ -31,7 +31,7 @@ const RootStact = () => {
   return (
     <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
-        name="ReplayComment"
+        name="ReplyComment"
         component={ReplyComment}
         options={{headerShown: false}}
       />

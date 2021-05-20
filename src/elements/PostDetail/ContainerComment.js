@@ -2,16 +2,21 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {colors} from '../../utils/colors';
 import Comment from './Comment';
+import {useNavigation} from '@react-navigation/native';
 
-const ContainerComment = (props) => {
+const ContainerComment = ({comments}) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Comment comment={'ini comment'} username={'user'} />
-      <View style={styles.containerReply}>{/* <ReplayComment /> */}</View>
-      <Comment />
-      <ContainerReply>
-        <ReplayComment />
-      </ContainerReply>
+      {comments.map((item, index) => {
+        return (
+          <Comment
+            comment={item.data.text}
+            username={item.user.data.username}
+            onPress={() => navigation.navigate('ReplyComment', {item: item})}
+          />
+        );
+      })}
     </View>
   );
 };

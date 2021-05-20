@@ -262,8 +262,8 @@ const CreatePost = () => {
       return acc;
     }, []);
 
-    return reducedPoll
-  }
+    return reducedPoll;
+  };
 
   const onBack = () => {
     console.log(message);
@@ -304,7 +304,7 @@ const CreatePost = () => {
         privacy: listPrivacy[privacySelect].label,
         anonimity: typeUser,
         location: geoList[geoSelect].neighborhood,
-        duration_feed: Number(postExpired[expiredSelect].value),
+        duration_feed: postExpired[expiredSelect].value,
         images_url: dataImage,
       };
       analytics().logEvent('create_post', {
