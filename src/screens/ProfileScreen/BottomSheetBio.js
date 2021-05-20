@@ -32,12 +32,10 @@ const BottomSheetBio = forwardRef((props, ref) => {
   },[refState])
 
   return <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-    <BottomSheet ref={ref} closeOnPressMask={true} height={470} viewstyle={{}} onOpen={() => {
-      if(refState) {
-        console.log("qweqeqweq")
-        console.log(refState.getNativeRef().current)
-      }
-    }}>
+    <BottomSheet ref={ref} closeOnPressMask={true} 
+      height={380} 
+      pullBottom
+      viewstyle={styles.bottomsheet}>
       <View style={styles.containerBottomSheet}>
         <Text style={styles.title}>Update your bio</Text>
         <AutoFocusTextArea 
@@ -62,8 +60,11 @@ const BottomSheetBio = forwardRef((props, ref) => {
 });
 
 const styles = StyleSheet.create({
+  bottomsheet : {
+    paddingBottom : 20
+  },
   containerBottomSheet: {
-    flexDirection: 'column' 
+    flexDirection: 'column'
   },
   title: {
     fontFamily: fonts.inter[400],

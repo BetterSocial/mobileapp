@@ -127,6 +127,7 @@ const FeedScreen = (props) => {
         query = '?id_lt=' + id;
       }
       const dataFeeds = await getMainFeed(query);
+      console.log(dataFeeds.data)
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         setCountStack(data.length);
