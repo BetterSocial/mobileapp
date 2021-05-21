@@ -29,6 +29,7 @@ import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
 import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
+import MemoOne from '../../assets/timer/One';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -44,20 +45,36 @@ const validationTimer = (timer, duration_feed) => {
   var hours = Math.abs(date1 - date2) / 36e5;
   let total = (hours / totalFeed) * 100;
   switch (true) {
+    // case total < 25:
+    //   return <MemoZero_twentyFour height={17} width={17} />;
+    // case total < 38:
+    //   return <MemoTwentyFive_thirtySix height={17} width={17} />;
+    // case total < 50:
+    //   return <MemoThirtySeven_fourtyNine height={17} width={17} />;
+    // case total < 63:
+    //   return <MemoFivety_sixtyTwo height={17} width={17} />;
+    // case total < 75:
+    //   return <MemoSixtyThree_seventyFour height={17} width={17} />;
+    // case total < 88:
+    //   return <MemoSeventyFive_eightySeven height={17} width={17} />;
+    // default:
+    //   return <MemoEightyEight_hundred height={17} width={17} />;
+
     case total < 25:
-      return <MemoZero_twentyFour height={17} width={17} />;
+      return <MemoEightyEight_hundred height={17} width={17} />;
     case total < 38:
-      return <MemoTwentyFive_thirtySix height={17} width={17} />;
+      return <MemoSeventyFive_eightySeven height={17} width={17} />;
     case total < 50:
-      return <MemoThirtySeven_fourtyNine height={17} width={17} />;
+      return <MemoSixtyThree_seventyFour height={17} width={17} />;
     case total < 63:
       return <MemoFivety_sixtyTwo height={17} width={17} />;
     case total < 75:
-      return <MemoSixtyThree_seventyFour height={17} width={17} />;
+      return <MemoThirtySeven_fourtyNine height={17} width={17} />;
     case total < 88:
-      return <MemoSeventyFive_eightySeven height={17} width={17} />;
+      return <MemoTwentyFive_thirtySix height={17} width={17} />;
+    // return <MemoOne height={17} width={17} />;
     default:
-      return <MemoEightyEight_hundred height={17} width={17} />;
+      return <MemoOne height={17} width={17} />;
   }
 };
 

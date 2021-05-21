@@ -61,7 +61,7 @@ const setRefreshToken = async (value) => {
 
 const getRefreshToken = async () => {
   try {
-    await AsyncStorage.getItem(KEY_REFRESH_TOKEN);
+    return await AsyncStorage.getItem(KEY_REFRESH_TOKEN);
   } catch (e) {
     console.log(e);
   }

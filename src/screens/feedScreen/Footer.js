@@ -2,28 +2,16 @@ import React from 'react';
 import {
   View,
   StyleSheet,
-  TouchableNativeFeedback,
   Text,
   Platform,
   Dimensions,
-  Image,
   TouchableOpacity,
 } from 'react-native';
-import {
-  Activity,
-  Avatar,
-  LikeButton,
-  ReactionIcon,
-  FollowButton,
-  CommentItem,
-} from 'react-native-activity-feed';
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
-import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_arrow_upvote_on';
-import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_arrow_down_vote_on';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
 import MemoIc_share from '../../assets/icons/Ic_share';
@@ -38,6 +26,7 @@ const Footer = ({
   onPressUpvote,
   onPressDownVote,
   item,
+  count = 0,
 }) => {
   return (
     <View style={{...styles.rowSpaceBeetwen}}>
@@ -56,6 +45,15 @@ const Footer = ({
         <TouchableOpacity onPress={() => onPressDownVote(item)}>
           <MemoIc_arrow_down_vote_off width={18} height={18} />
         </TouchableOpacity>
+        {count > 0 && (
+          <Text
+            style={[
+              styles.textCount,
+              {color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : 'black'},
+            ]}>
+            {count}
+          </Text>
+        )}
         <TouchableOpacity onPress={() => onPressUpvote(item)}>
           <MemoIc_arrow_upvote_off width={18} height={18} />
         </TouchableOpacity>
@@ -158,5 +156,10 @@ const styles = StyleSheet.create({
     marginRight: 8,
     width: 32,
     height: 32,
+  },
+  textCount: {
+    fontFamily: fonts.inter[400],
+    fontSize: 18,
+    lineHeight: 24,
   },
 });

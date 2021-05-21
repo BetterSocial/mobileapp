@@ -57,13 +57,10 @@ export const ShowingAudience = async (privacy, location) => {
 };
 
 export const getMainFeed = async (query) => {
-  console.log(query);
   try {
     let res = await api.get('/activity/feeds' + query);
     return res.data;
   } catch (err) {
-    console.log('ini error');
-    console.log(err);
     crashlytics().recordError(new Error(err));
   }
 };

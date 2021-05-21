@@ -7,7 +7,7 @@ import IconEn from 'react-native-vector-icons/Entypo';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconMtC from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Comment = () => {
+const Comment = ({username, comment, onPress}) => {
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
@@ -15,11 +15,11 @@ const Comment = () => {
           source={require('../../assets/images/ProfileDefault.png')}
           style={styles.image}
         />
-        <Text style={styles.username}>Marlyn • 4h</Text>
+        <Text style={styles.username}>{username}</Text>
       </View>
-      <Text style={styles.post}>How many color variants are there?</Text>
+      <Text style={styles.post}>{comment}</Text>
       <View style={styles.constainerFooter}>
-        <TouchableOpacity style={styles.btnReply}>
+        <TouchableOpacity style={styles.btnReply} onPress={onPress}>
           <IconAnt name="back" size={15.77} color={colors.gray1} />
           <Text style={styles.btnReplyText}>Reply</Text>
         </TouchableOpacity>

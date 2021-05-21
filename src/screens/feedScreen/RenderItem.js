@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  Share,
-  TouchableNativeFeedback,
-} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Share} from 'react-native';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
@@ -20,6 +13,22 @@ import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
 const {width, height} = Dimensions.get('window');
+const getCount = (item) => {
+  let reactionCount = item.reaction_counts;
+  let count = 0;
+  if (JSON.stringify(reactionCount) !== '{}') {
+    let upvote = reactionCount.upvotes;
+    if (upvote !== undefined) {
+      console.log(upvote);
+      count = count + upvote;
+    }
+    let downvote = reactionCount.downvotes;
+    if (downvote !== undefined) {
+      count = count - downvote;
+    }
+  }
+  return count;
+};
 
 async function buildLink(username) {
   const link = await dynamicLinks().buildLink(
@@ -68,7 +77,7 @@ const onShare = async (username) => {
   }
 };
 
-const RenderItem = ({
+const Item = ({
   item,
   onPress,
   onPressBlock,
@@ -77,7 +86,7 @@ const RenderItem = ({
   onPressComment,
 }) => {
   return (
-    <Card style={[styles.container]} key={item.id}>
+    <Card style={[styles.container]}>
       <Header props={item} />
       {item.verb === POST_VERB_POLL ? (
         <ContentPoll
@@ -102,25 +111,33 @@ const RenderItem = ({
         onPressComment={onPressComment}
         onPressUpvote={onPressUpvote}
         onPressDownVote={onPressDownVote}
+        count={getCount(item)}
       />
     </Card>
   );
 };
+function compare(prevProps, nextProps) {
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+}
 
+const RenderItem = React.memo(Item, compare);
 export default RenderItem;
 
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height - height * 0.15,
-    borderRadius: 5,
-    shadowColor: 'rgba(0,0,0,0.5)',
+    height: height - height * 0.1,
+    shadowColor: '#c4c4c4',
     shadowOffset: {
-      width: 0,
-      height: 1,
+      width: 1,
+      height: 8,
     },
+    elevation: 8,
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingBottom: 8,
+    borderBottomColor: 'transparent',
   },
 });
