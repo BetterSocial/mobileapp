@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import ContainerComment from '../../elements/PostDetail/ContainerComment';
 import {createChildComment, createCommentParent} from '../../service/comment';

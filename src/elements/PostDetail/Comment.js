@@ -7,9 +7,13 @@ import IconEn from 'react-native-vector-icons/Entypo';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconMtC from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Comment = ({username, comment, onPress}) => {
+const Comment = ({username, comment, onPress, isLast}) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {borderLeftColor: isLast ? '#fFF' : colors.gray1},
+      ]}>
       <View style={styles.profile}>
         <Image
           source={require('../../assets/images/ProfileDefault.png')}
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   container: {
-    borderLeftColor: colors.gray1,
+    // borderLeftColor: colors.gray1,
     borderLeftWidth: 1,
   },
   username: {
