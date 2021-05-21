@@ -72,7 +72,11 @@ const Content = ({message, images_url, style, onPress}) => {
           </View>
         ) : (
           <View
-            style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+            }}>
             <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
               {message}
             </SeeMore>
