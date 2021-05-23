@@ -184,8 +184,8 @@ const WhotoFollow = () => {
           }}
         />
         <View style={styles.containerTextCard}>
-          <Text style={styles.textFullName}>{item.real_name}</Text>
-          <Text style={styles.textUsername}>{item.username}</Text>
+          <Text style={styles.textFullName}>{item.username}</Text>
+          <Text style={styles.textUsername}>{item.bio ? item.bio : "No bio"}</Text>
         </View>
       </View>
       <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}>
@@ -409,6 +409,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000000',
     lineHeight: 21,
+    alignSelf : 'flex-start',
     textTransform: 'capitalize',
   },
   textUsername: {
@@ -418,6 +419,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#000000',
     lineHeight: 15,
+    alignSelf : 'flex-start',
   },
   headerList: {
     height: 40,
