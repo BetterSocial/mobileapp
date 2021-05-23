@@ -365,7 +365,7 @@ const ProfileScreen = () => {
     return (
       <TouchableNativeFeedback onPress={() => changeBio()}>
         <View style={styles.containerBio}>
-          {string === null || string === undefined ? (
+          {(string === null || string === undefined) ? (
             <Text style={{color : colors.blue}}>Add Bio</Text>
           ) : (
             <Text linkStyle={styles.seeMore}>
