@@ -114,13 +114,13 @@ const WhotoFollow = () => {
   }, []);
 
   const register = () => {
-    if (followed.length < 2) {
-      showMessage({
-        message: 'minimum follow 3 users',
-        type: 'danger',
-      });
-      return null;
-    }
+    // if (followed.length < 2) {
+    //   showMessage({
+    //     message: 'minimum follow 3 users',
+    //     type: 'danger',
+    //   });
+    //   return null;
+    // }
     setFetchRegister(true);
     analytics().logEvent('onb_select_follows_btn_add', {
       onb_whofollow_users_selected: followed,
@@ -156,6 +156,7 @@ const WhotoFollow = () => {
           }, 2000);
         } else {
           crashlytics().recordError(new Error(res));
+          console.log(res);
           showMessage({
             message: 'please complete the data',
             type: 'danger',

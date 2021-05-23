@@ -173,7 +173,7 @@ const Followings = () => {
             /> 
           </View> :
           <View style={styles.nousercontent}>
-            <Text style={styles.nousertext}>You have not followed any user</Text>
+            <Text style={styles.nousertext}>{`You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following`}</Text>
           </View>
         }
         <Loading visible={isLoading} />
@@ -239,7 +239,9 @@ const styles = StyleSheet.create({
     justifyContent : 'center'
   },
   nousertext : {
-    alignSelf : "center"
+    alignSelf : "center",
+    textAlign : "center",
+    marginHorizontal : 36
   },
   card: {
     height: 68,
