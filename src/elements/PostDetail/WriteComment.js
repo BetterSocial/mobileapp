@@ -1,19 +1,57 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
-const WriteComment = () => {
+const WriteComment = ({value = null, onPress, onChangeText}) => {
   return (
     <View style={styles.container}>
       <Image
         style={styles.image}
         source={require('../../assets/images/ProfileDefault.png')}
       />
-      <TextInput
-        placeholder="Add a comment"
-        style={styles.text}
-        multiline={true}
-      />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: colors.lightgrey,
+          marginLeft: 10,
+          borderRadius: 5,
+          paddingHorizontal: 15,
+          marginEnd: 24,
+        }}>
+        <TextInput
+          placeholder="Add a comment"
+          multiline={true}
+          style={styles.text}
+          onChangeText={onChangeText}
+          value={value}
+        />
+        <TouchableOpacity onPress={onPress}>
+          <View
+            style={{
+              backgroundColor: '#00ADB5',
+              paddingHorizontal: 16,
+              paddingVertical: 4,
+              borderRadius: 8,
+              width: 80,
+              height: 32,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{color: 'white', fontFamily: fonts.inter[400]}}>
+              Reply
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -39,10 +77,6 @@ const styles = StyleSheet.create({
     height: 32,
   },
   text: {
-    backgroundColor: colors.lightgrey,
     flex: 1,
-    marginLeft: 10,
-    borderRadius: 5,
-    paddingHorizontal: 15,
   },
 });

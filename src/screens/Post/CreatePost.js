@@ -262,8 +262,8 @@ const CreatePost = () => {
       return acc;
     }, []);
 
-    return reducedPoll
-  }
+    return reducedPoll;
+  };
 
   const onBack = () => {
     console.log(message);
