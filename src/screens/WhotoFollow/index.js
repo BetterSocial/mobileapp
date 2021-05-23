@@ -70,13 +70,13 @@ const WhotoFollow = () => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={() => navigation.goBack()}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
       );
     } else {
       return (
-        <TouchableHighlight>
+        <TouchableHighlight onPress={() => navigation.goBack()}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableHighlight>
       );
