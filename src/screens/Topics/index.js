@@ -54,7 +54,7 @@ const Topics = () => {
   }, []);
 
   const renderHeader = () => {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === 'android') {
       return (
         <View style={styles.header}>
           <TouchableNativeFeedback onPress={() => navigation.goBack()}>

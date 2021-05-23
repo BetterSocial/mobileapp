@@ -28,8 +28,8 @@ const SplashScreen = () => {
 
     // if(getDynamicLink()) return
     getDeepLinkUrl();
-    // setAccessToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYThmMThjMDgtMDgyZS00MzM4LTg1YjgtN2EwZDg1YWIzYzkwIiwiZXhwIjoxNjIxNDEyMzcwfQ.cGYRpnZq1wvX88MvZKA3-dKAg7ffTyVrAE-iYxBIPNk")
-    // setRefreshToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYThmMThjMDgtMDgyZS00MzM4LTg1YjgtN2EwZDg1YWIzYzkwIiwiZXhwIjoxNjIxMzI5NTcwfQ.2DFjVUfPA6KtZuPBAI-FWOEJf3TYkm-6Uv61UknCXyc")
+    // setAccessToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiODgzNTM1NTEtYjliZC00Y2Y1LWE4OWUtY2U2MTk3Yjg4MGMwIiwiZXhwIjoxNjIxODQ0ODA4fQ.cHJPZwR2_ByQkwvmVkC766Rqu5Yf1JtQ0OIjpgCUlL8")
+    // setRefreshToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiODgzNTM1NTEtYjliZC00Y2Y1LWE4OWUtY2U2MTk3Yjg4MGMwIiwiZXhwIjoxNjIyMzYzMjA4fQ.F0FzODB6wU_fw_pqYZT4abtjPPvoutDnlqE4n-LxqmI")
   }, []);
 
   let getDynamicLink = async () => {

@@ -44,7 +44,7 @@ const ChooseUsername = () => {
     });
   };
 
-  const checkUsername = (v) => {
+  const checkUsername = async (v) => {
     let value = v.replace(/[^a-z0-9-_]/g, '');
     setTypeFetch('typing');
     setUsernameState(value);
@@ -52,7 +52,8 @@ const ChooseUsername = () => {
       if (value.length > 2) {
         if (isNaN(v)) {
           setTypeFetch('fetch');
-          const user = verifyUsername(value);
+          const user = await verifyUsername(value);
+          console.log(user)
           setTypeFetch('max');
           if (user.data && v.length > 2) {
             setTypeFetch('notavailable');
