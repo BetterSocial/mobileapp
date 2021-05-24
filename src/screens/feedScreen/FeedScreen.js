@@ -107,7 +107,6 @@ const FeedScreen = (props) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log(lastId);
       const getDataFeeds = async (id = '') => {
         setCountStack(null);
         setInitialLoading(true);

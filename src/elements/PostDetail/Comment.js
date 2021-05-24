@@ -6,8 +6,10 @@ import IconIc from 'react-native-vector-icons/Ionicons';
 import IconEn from 'react-native-vector-icons/Entypo';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconMtC from 'react-native-vector-icons/MaterialCommunityIcons';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
+import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
 
-const Comment = ({username, comment, onPress, isLast}) => {
+const Comment = ({username, comment, onPress, isLast = false}) => {
   return (
     <View
       style={[
@@ -23,27 +25,23 @@ const Comment = ({username, comment, onPress, isLast}) => {
       </View>
       <Text style={styles.post}>{comment}</Text>
       <View style={styles.constainerFooter}>
-        <TouchableOpacity style={styles.btnReply} onPress={onPress}>
-          <IconAnt name="back" size={15.77} color={colors.gray1} />
-          <Text style={styles.btnReplyText}>Reply</Text>
-        </TouchableOpacity>
+        {isLast === true ? (
+          <View style={{marginBottom: 8}} />
+        ) : (
+          <TouchableOpacity style={styles.btnReply} onPress={onPress}>
+            <IconAnt name="back" size={15.77} color={colors.gray1} />
+            <Text style={styles.btnReplyText}>Reply</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity style={styles.btnBlock}>
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.arrowup}>
-          <IconMtC
-            name="arrow-up-bold-outline"
-            size={17}
-            color={colors.gray1}
-          />
+          <MemoIc_arrow_down_vote_off width={18} height={18} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <IconMtC
-            name="arrow-down-bold-outline"
-            size={17}
-            color={colors.gray1}
-          />
+          <MemoIc_arrow_upvote_off width={18} height={18} />
         </TouchableOpacity>
       </View>
     </View>

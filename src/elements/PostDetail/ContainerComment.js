@@ -15,7 +15,9 @@ const ContainerComment = ({comments}) => {
               key={'p' + index}
               comment={item.data.text}
               username={item.user.data.username}
-              onPress={() => navigation.navigate('ReplyComment', {item: item})}
+              onPress={() => {
+                navigation.navigate('ReplyComment', {item: item});
+              }}
             />
             {item.children_counts.comment > 0 && (
               <ReplyComment
@@ -34,7 +36,6 @@ const ReplyComment = ({data, countComment, navigation}) => {
   return (
     <ContainerReply>
       {data.map((item, index) => {
-        console.log('count repy', item.children_counts.comment);
         return (
           <>
             <Comment
@@ -51,6 +52,7 @@ const ReplyComment = ({data, countComment, navigation}) => {
                 data={item.latest_children.comment}
                 countComment={item.children_counts.comment}
                 navigation={navigation}
+                parent={item}
               />
             )}
           </>
@@ -60,7 +62,13 @@ const ReplyComment = ({data, countComment, navigation}) => {
   );
 };
 
-const ReplyCommentChild = ({data, countComment, navigation, isLast}) => {
+const ReplyCommentChild = ({
+  data,
+  countComment,
+  navigation,
+  isLast,
+  parent,
+}) => {
   return (
     <ContainerReply isGrandchild={countComment === 1}>
       {data.map((item, index) => {
@@ -69,7 +77,11 @@ const ReplyCommentChild = ({data, countComment, navigation, isLast}) => {
             key={'c' + index}
             comment={item.data.text}
             username={item.user.data.username}
-            onPress={() => navigation.navigate('ReplyComment', {item: item})}
+            onPress={() => {
+              console.log(parent);
+              console.log('======');
+              navigation.navigate('ReplyComment', {item: item, parent: parent});
+            }}
             isLast={index === countComment - 1}
           />
         );
