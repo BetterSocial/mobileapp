@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import Comment from '../../elements/PostDetail/Comment';
 import ContainerComment from '../../elements/PostDetail/ContainerComment';
 import WriteComment from '../../elements/PostDetail/WriteComment';
 import {createChildComment, createCommentParent} from '../../service/comment';
@@ -62,6 +63,42 @@ const ReplyComment = (props) => {
         </Text>
         <View style={styles.btn} />
       </View>
+      <View style={styles.containerComment}>
+        <Comment
+          username={item.user.data.username}
+          comment={item.data.text}
+          onPress={() => {}}
+        />
+        {item.children_counts.comment > 0 &&
+          item.latest_children.comment.map((itemReply, index) => {
+            return (
+              <ContainerReply>
+                <Comment
+                  key={'r' + index}
+                  username={itemReply.user.data.username}
+                  comment={itemReply.data.text}
+                  onPress={() => {}}
+                />
+                {itemReply.children_counts.comment > 0 &&
+                  itemReply.latest_children.comment.map(
+                    (itemReplyChild, index) => {
+                      return (
+                        <ContainerReply>
+                          <Comment
+                            key={'rc' + index}
+                            username={itemReplyChild.user.data.username}
+                            comment={itemReplyChild.data.text}
+                            onPress={() => {}}
+                          />
+                          {}
+                        </ContainerReply>
+                      );
+                    },
+                  )}
+              </ContainerReply>
+            );
+          })}
+      </View>
       {/* <Text style={styles.post}>text commentParent</Text> */}
       {/* {isReaction && <ContainerComment comments={item.latest_children} />} */}
       {/* <View style={styles.comment}>
@@ -88,7 +125,17 @@ const ReplyComment = (props) => {
     </View>
   );
 };
-
+const ContainerReply = ({children, isGrandchild}) => {
+  return (
+    <View
+      style={[
+        styles.containerReply,
+        {borderColor: isGrandchild ? '#fff' : colors.gray1},
+      ]}>
+      {children}
+    </View>
+  );
+};
 export default ReplyComment;
 
 const styles = StyleSheet.create({
@@ -96,12 +143,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  containerComment: {paddingHorizontal: 20, marginTop: 24.5},
   header: {
     paddingTop: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 22,
     alignItems: 'center',
+  },
+  containerReply: {
+    borderLeftWidth: 1,
+    paddingLeft: 30,
   },
   btn: {
     // backgroundColor: colors.bondi_blue,
