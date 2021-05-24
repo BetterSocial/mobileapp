@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: width * 0.03,
     paddingBottom: 8,
     borderBottomColor: 'transparent',
   },
