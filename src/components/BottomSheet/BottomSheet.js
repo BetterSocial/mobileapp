@@ -4,6 +4,10 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../../utils/colors';
 
 const BottomSheet = React.forwardRef((props, ref)=> {
+  let {
+    pullBottom = false
+  } = props
+
   return (
     <RBSheet
       ref={ref}
@@ -14,7 +18,8 @@ const BottomSheet = React.forwardRef((props, ref)=> {
       customStyles={{
         container: {
           borderTopRightRadius: 20,
-          borderTopLeftRadius: 20
+          borderTopLeftRadius: 20,
+          justifyContent : pullBottom ? "flex-end" : "flex-start"
         },
         draggableIcon: {
           backgroundColor: colors.alto,

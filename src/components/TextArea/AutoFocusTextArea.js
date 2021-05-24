@@ -15,7 +15,7 @@ export default class AutoFocusTextArea extends React.Component {
             if(this.inputElement) {
                 this.inputElement.current.focus()
             }
-        },250)
+        },50)
     }
 
     render(){

@@ -42,7 +42,7 @@ export default function FollowingScreen({
               const inputRange = state.routes.map((_, i) => i);
               const opacity = Animated.interpolateNode(position, {
                 inputRange,
-                outputRange: inputRange.map(i => (i === index ? 1 : 0.5)),
+                outputRange: inputRange.map(i => (i === index ? 1 : 0.3)),
               });
       
               return (
@@ -102,24 +102,26 @@ const S = StyleSheet.create({
 
     toptabcontainer : {
         flexDirection : 'row',
-        backgroundColor : colors.white
+        backgroundColor : colors.white,
+        borderBottomColor : "#00000050",
+        borderBottomWidth : 1,
+        paddingHorizontal : 4
     },
 
     singletab : {
         flex : 1,
-        borderBottomColor : "#00000050",
-        borderBottomWidth : 1
+        paddingLeft : 16,
     },
 
     singletabtext : {
         fontFamily : fonts.inter[500],
-        textAlign : 'center',
-        padding : 15
+        textAlign : 'left',
+        fontSize : 14,
+        paddingVertical : 10,
     },
 
     viewborderbottom : {
         borderBottomColor : colors.holytosca,
-        borderBottomWidth : 2,
-        marginHorizontal : 8
+        borderBottomWidth : 1,
     }
 })

@@ -57,7 +57,7 @@ const Topics = () => {
     if (Platform.OS === 'android') {
       return (
         <View style={styles.header}>
-          <TouchableNativeFeedback>
+          <TouchableNativeFeedback onPress={() => navigation.goBack()}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableNativeFeedback>
         </View>
@@ -65,7 +65,7 @@ const Topics = () => {
     } else {
       return (
         <View style={styles.header}>
-          <TouchableHighlight>
+          <TouchableHighlight onPress={() => navigation.goBack()}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableHighlight>
           <TouchableNativeFeedback>
@@ -97,9 +97,8 @@ const Topics = () => {
   };
 
   return (
-    <>
-      <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" />
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+        {/* <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" /> */}
         {renderHeader()}
         <View style={styles.containerProgress}>
           <ProgressBar isStatic={true} value={75} />
@@ -180,7 +179,6 @@ const Topics = () => {
           </Button>
         </View>
       </SafeAreaView>
-    </>
   );
 };
 const styles = StyleSheet.create({

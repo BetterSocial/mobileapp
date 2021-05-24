@@ -164,13 +164,18 @@ const Followings = () => {
             </Text>
           </View>
         </View> */}
-        <View style={styles.content}>
-          <FlatList
-            data={dataFollowing}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.follow_action_id}
-          />
-        </View>
+        {dataFollowing.length > 0 ? 
+          <View style={styles.content}>
+            <FlatList
+              data={dataFollowing}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.follow_action_id}
+            /> 
+          </View> :
+          <View style={styles.nousercontent}>
+            <Text style={styles.nousertext}>{`You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following`}</Text>
+          </View>
+        }
         <Loading visible={isLoading} />
       </SafeAreaView>
     </>
@@ -226,7 +231,17 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    paddingBottom: 150,
+    paddingBottom : 150
+  },
+  nousercontent : {
+    flexDirection : "column",
+    flex : 1,
+    justifyContent : 'center'
+  },
+  nousertext : {
+    alignSelf : "center",
+    textAlign : "center",
+    marginHorizontal : 36
   },
   card: {
     height: 68,

@@ -7,7 +7,7 @@ export const createPost = async (data) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    console.log(error);
+    console.log(error.response);
   }
 };
 

@@ -19,32 +19,18 @@ import AutoFocusTextArea from '../../components/TextArea/AutoFocusTextArea';
 let textRef
 
 const BottomSheetBio = forwardRef((props, ref) => {
-  let [shouldTextAreaFocus, setShouldTextAreaFocus] = useState(false)
-  const textAreaRef = useRef()
-  let [refState, setRefState] = useState(null)
-
-  useEffect(() => {
-    console.log("ref effect")
-    if(refState !== null) {
-      console.log("asdasdadadsa")
-      console.log(refState.getNativeRef().current)
-    }
-  },[refState])
-
   return <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-    <BottomSheet ref={ref} closeOnPressMask={true} height={470} viewstyle={{}} onOpen={() => {
-      if(refState) {
-        console.log("qweqeqweq")
-        console.log(refState.getNativeRef().current)
-      }
-    }}>
+    <BottomSheet ref={ref} closeOnPressMask={true} 
+      height={380} 
+      pullBottom
+      viewstyle={styles.bottomsheet}>
       <View style={styles.containerBottomSheet}>
         <Text style={styles.title}>Update your bio</Text>
         <AutoFocusTextArea 
           value={props.value} 
           onChangeText={props.onChangeText}
           placeholder="Add Bio"/>
-        <Text style={styles.description}>{props.value.length}/350</Text>
+        <Text style={styles.description}>{props.value? props.value.length : 0 }/350</Text>
         {props.error ? <Text style={styles.errorText}>{props.error}</Text> : null}
       </View>
       <Button
@@ -62,8 +48,11 @@ const BottomSheetBio = forwardRef((props, ref) => {
 });
 
 const styles = StyleSheet.create({
+  bottomsheet : {
+    paddingBottom : 20
+  },
   containerBottomSheet: {
-    flexDirection: 'column' 
+    flexDirection: 'column'
   },
   title: {
     fontFamily: fonts.inter[400],
