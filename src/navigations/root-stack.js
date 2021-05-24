@@ -22,7 +22,7 @@ import ReplyComment from '../screens/Post/ReplyComment';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import Header from '../components/Header';
 import {colors} from '../utils/colors';
-import { fonts } from '../utils/fonts';
+import {fonts} from '../utils/fonts';
 const Stack = createStackNavigator();
 const RootStact = () => {
   useEffect(() => {
@@ -105,7 +105,7 @@ const RootStact = () => {
                   padding: 20,
                   paddingBottom: 10,
                 }}
-                titleStyle={{fontSize: 16, fontFamily : fonts.inter[600]}}
+                titleStyle={{fontSize: 16, fontFamily: fonts.inter[600]}}
                 onPress={() => navigation.goBack()}
               />
             );
