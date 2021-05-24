@@ -156,16 +156,29 @@ const WhotoFollow = () => {
           }, 2000);
         } else {
           crashlytics().recordError(new Error(res));
-          console.log(res);
-          showMessage({
-            message: 'please complete the data',
-            type: 'danger',
-          });
+          if (typeof res.message == 'object') {
+            showMessage({
+              message: res.message[0].message,
+              type: 'danger',
+            });
+          } else if (typeof res.message == 'string') {
+            showMessage({
+              message: res.message,
+              type: 'danger',
+            });
+          } else {
+            showMessage({
+              message: 'please complete the data',
+              type: 'danger',
+            });
+          }
+          console.log('err 1 ', res.message[0].message);
+          // console.log('err 1 ', res[0].message);
         }
       })
       .catch((error) => {
-        crashlytics().recordError(new Error(error));
-        // console.log(error.response);
+        crashlytics().recordError(new Error(error.response));
+        console.log('e ', error.response);
         setFetchRegister(false);
         showMessage({
           message: 'please complete the data',
@@ -185,7 +198,7 @@ const WhotoFollow = () => {
         />
         <View style={styles.containerTextCard}>
           <Text style={styles.textFullName}>{item.username}</Text>
-          <Text style={styles.textUsername}>{item.bio ? item.bio : ""}</Text>
+          <Text style={styles.textUsername}>{item.bio ? item.bio : ''}</Text>
         </View>
       </View>
       <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}>
@@ -409,7 +422,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000000',
     lineHeight: 21,
-    alignSelf : 'flex-start',
+    alignSelf: 'flex-start',
     textTransform: 'capitalize',
   },
   textUsername: {
@@ -419,7 +432,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#000000',
     lineHeight: 15,
-    alignSelf : 'flex-start',
+    alignSelf: 'flex-start',
   },
   headerList: {
     height: 40,
