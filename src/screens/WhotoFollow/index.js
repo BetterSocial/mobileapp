@@ -185,7 +185,7 @@ const WhotoFollow = () => {
         />
         <View style={styles.containerTextCard}>
           <Text style={styles.textFullName}>{item.username}</Text>
-          <Text style={styles.textUsername}>{item.bio ? item.bio : "No bio"}</Text>
+          <Text style={styles.textUsername}>{item.bio ? item.bio : ""}</Text>
         </View>
       </View>
       <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}>
