@@ -430,6 +430,7 @@ const ProfileScreen = () => {
                       <View style={styles.profileImageContainer}>
                         <Image
                           style={styles.profileImage}
+                          key={dataMain.profile_pic_path || DEFAULT_PROFILE_PIC_PATH}
                           source={{
                             uri: dataMain.profile_pic_path
                               ? `${dataMain.profile_pic_path}?${new Date().getUTCMilliseconds()}`
