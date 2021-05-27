@@ -48,6 +48,7 @@ import {getMyProfile} from '../../service/profile';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import crashlytics from '@react-native-firebase/crashlytics';
 // import CreatePollContainer from '../../elements/Post/CreatePollContainer';
+
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);

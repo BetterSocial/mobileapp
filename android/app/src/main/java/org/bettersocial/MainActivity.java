@@ -4,6 +4,8 @@ import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
+import android.view.KeyEvent;
+import com.github.kevinejohn.keyevent.KeyEventModule; 
 
 public class MainActivity extends ReactActivity {
 
@@ -16,7 +18,32 @@ public class MainActivity extends ReactActivity {
     return "BetterSocial";
   }
 
-    @Override
+  @Override
+  public boolean dispatchKeyEvent(KeyEvent event) {
+    int keyEvent = event.getAction();
+    if(keyEvent == KeyEvent.ACTION_UP){
+      KeyEventModule.getInstance().onKeyUpEvent(event.getKeyCode(), event);
+    }
+    return super.dispatchKeyEvent(event);
+  }
+
+  @Override 
+  public boolean onKeyUp(int keyCode, KeyEvent event) {
+    KeyEventModule.getInstance().onKeyUpEvent(keyCode, event);
+      // There are 2 ways this can be done:
+      //  1.  Override the default keyboard event behavior
+      //    super.onKeyUp(keyCode, event);
+      //    return true;
+
+      //  2.  Keep default keyboard event behavior
+      //    return super.onKeyUp(keyCode, event);
+
+      // Using method #1
+      super.onKeyUp(keyCode, event);
+      return true;
+    }
+
+  @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
     return new ReactActivityDelegate(this, getMainComponentName()) {
       @Override
