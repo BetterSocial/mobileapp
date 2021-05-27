@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     position: 'absolute',
     flexDirection: 'row',
-    bottom: 50,
+    bottom: 60,
     right: 20,
   },
   content: {},
