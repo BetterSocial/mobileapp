@@ -79,7 +79,7 @@ const CreatePost = () => {
   const [postExpired, setPostExpired] = useState([
     {
       label: '24 hours',
-      value: '24',
+      value: '1',
       expiredobject: {
         hour: 24,
         day: 1,
@@ -319,7 +319,7 @@ const CreatePost = () => {
       });
       console.log(data);
       let res = await createPost(data);
-      console.log("res");
+      console.log('res');
       console.log(res);
       if (res.code === 200) {
         showMessage({
@@ -339,7 +339,7 @@ const CreatePost = () => {
       }
       console.log(res);
     } catch (error) {
-      console.log("error response");
+      console.log('error response');
       console.log(error.request);
       showMessage({
         message: 'failed to create new posts',
