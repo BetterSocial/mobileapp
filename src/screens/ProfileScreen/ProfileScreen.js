@@ -396,7 +396,7 @@ const ProfileScreen = () => {
           </View>
         ) : null}
 
-        <ScrollView onScroll={handleScroll} ref={scrollViewReff}>
+        <ScrollView onScroll={handleScroll} ref={scrollViewReff} keyboardShouldPersistTaps="always">
           {token_JWT !== '' && (
             <StreamApp
               apiKey={STREAM_API_KEY}
