@@ -132,13 +132,12 @@ class CardStack extends Component {
               this.props.duration,
             );
           } else if (swipeDirection > 0 && !disableBottomSwipe) {
-            // this._nextCard(
-            //   'bottom',
-            //   gestureState.dx,
-            //   swipeDirection,
-            //   this.props.duration,
-            // );
-            this.goBackFromBottom();
+            this._nextCard(
+              'bottom',
+              gestureState.dx,
+              swipeDirection,
+              this.props.duration,
+            );
           } else {
             this._resetCard();
           }
@@ -292,7 +291,6 @@ class CardStack extends Component {
             this.state.dragDistance.setValue(width);
             break;
           case 'bottom':
-            this.props.onSwipedBottom(0);
             this.state.drag.setValue({x: 0, y: height});
             this.state.dragDistance.setValue(width);
             break;

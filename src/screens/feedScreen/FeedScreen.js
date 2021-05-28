@@ -217,17 +217,19 @@ const FeedScreen = (props) => {
           ref={(swiper) => {
             this.swiper = swiper;
           }}
+          disableTopSwipe={false}
           disableLeftSwipe={true}
           disableRightSwipe={true}
           verticalSwipe={true}
           verticalThreshold={1}
           horizontalSwipe={false}
-          onSwipedBottom={() => {
-            // this.swiper.goBackFromTop();
-            // this.swiper.goBackFromTop();
-            setCountStack(countStack + 1);
-            // console.log('onSwipeBottom');
-          }}
+          disableBottomSwipe={true}
+          // onSwipedBottom={() => {
+          //   // this.swiper.goBackFromTop();
+          //   // this.swiper.goBackFromTop();
+          //   setCountStack(countStack + 1);
+          //   // console.log('onSwipeBottom');
+          // }}
           onSwipedTop={() => {
             setCountStack(countStack - 1);
             // console.log('onSwiped top');

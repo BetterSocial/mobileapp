@@ -13,7 +13,7 @@ import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
 const {width, height} = Dimensions.get('window');
-const getCount = (item) => {
+const getCountVote = (item) => {
   let reactionCount = item.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
@@ -25,6 +25,18 @@ const getCount = (item) => {
     let downvote = reactionCount.downvotes;
     if (downvote !== undefined) {
       count = count - downvote;
+    }
+  }
+  return count;
+};
+
+const getCountComment = (item) => {
+  let reactionCount = item.reaction_counts;
+  let count = 0;
+  if (JSON.stringify(reactionCount) !== '{}') {
+    let comment = reactionCount.comment;
+    if (comment !== undefined) {
+      count = comment;
     }
   }
   return count;
@@ -111,7 +123,8 @@ const Item = ({
         onPressComment={onPressComment}
         onPressUpvote={onPressUpvote}
         onPressDownVote={onPressDownVote}
-        count={getCount(item)}
+        totalVote={getCountVote(item)}
+        totalComment={getCountComment(item)}
       />
     </Card>
   );

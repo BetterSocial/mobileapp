@@ -33,11 +33,9 @@ const _renderItem = ({item, index}, parallaxProps) => {
 };
 
 const Content = ({message, images_url, style, onPress}) => {
-  console.log("LOGLOG")
-  console.log(`images_url : ${images_url}`)
   return (
     <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
-      {images_url !== null && images_url !== "" && images_url !== undefined  ? (
+      {images_url !== null && images_url !== '' && images_url !== undefined ? (
         images_url.length > 0 ? (
           <View
             style={{

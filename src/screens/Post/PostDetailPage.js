@@ -50,17 +50,30 @@ const PostDetailPage = (props) => {
   const [isReaction, setReaction] = useState(false);
   const [textComment, setTextComment] = useState('');
   const [typeComment, setTypeComment] = useState('parent');
+  const [totalComment, setTotalComment] = useState(0);
+  const [totalVote, setTotalVote] = useState(0);
 
   useEffect(() => {
     const initial = () => {
       let reactionCount = props.route.params.item.reaction_counts;
       if (JSON.stringify(reactionCount) !== '{}') {
+        let count = 0;
         let comment = reactionCount.comment;
         if (comment !== undefined) {
           if (comment > 0) {
             setReaction(true);
+            setTotalComment(comment);
           }
         }
+        let upvote = reactionCount.upvotes;
+        if (upvote !== undefined) {
+          count = count + upvote;
+        }
+        let downvote = reactionCount.downvotes;
+        if (downvote !== undefined) {
+          count = count - downvote;
+        }
+        setTotalVote(count);
       }
     };
     initial();
@@ -180,7 +193,7 @@ const PostDetailPage = (props) => {
           )}
 
           <Gap style={{height: 16}} />
-          <Footer />
+          <Footer totalComment={totalComment} totalVote={totalVote} />
         </View>
         {isReaction && (
           <ContainerComment comments={item.latest_reactions.comment} />
