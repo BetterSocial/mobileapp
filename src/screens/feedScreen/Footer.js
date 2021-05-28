@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
@@ -47,22 +46,22 @@ const Footer = ({
         <TouchableOpacity onPress={() => onPressDownVote(item)}>
           <MemoIc_arrow_down_vote_off width={18} height={18} />
         </TouchableOpacity>
-        {totalVote > 0 && (
-          <Text
-            style={[
-              styles.textCount,
-              {
-                color:
-                  totalVote > 0
-                    ? '#00ADB5'
-                    : totalVote < 0
-                    ? '#FF2E63'
-                    : 'black',
-              },
-            ]}>
-            {totalVote}
-          </Text>
-        )}
+
+        <Text
+          style={[
+            styles.textCount,
+            {
+              color:
+                totalVote > 0
+                  ? '#00ADB5'
+                  : totalVote < 0
+                  ? '#FF2E63'
+                  : '#C4C4C4',
+            },
+          ]}>
+          {totalVote}
+        </Text>
+
         <TouchableOpacity onPress={() => onPressUpvote(item)}>
           <MemoIc_arrow_upvote_off width={18} height={18} />
         </TouchableOpacity>

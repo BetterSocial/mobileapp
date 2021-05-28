@@ -1,15 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-  Alert,
-} from 'react-native';
+import {View, SafeAreaView, StyleSheet} from 'react-native';
 import {ButtonNewPost} from '../../components/Button';
-import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
 
 import {getToken} from '../../helpers/getToken';
 import JWTDecode from 'jwt-decode';
@@ -31,18 +22,12 @@ import {downVote, upVote} from '../../service/vote';
 
 import {useFocusEffect} from '@react-navigation/native';
 
-let token_JWT = '';
 const FeedScreen = (props) => {
   const [tokenParse, setTokenParse] = useState({});
   const [mainFeeds, setMainFeeds] = useState([]);
-  const apiKey = STREAM_API_KEY;
-  const appId = STREAM_APP_ID;
-  const token = token_JWT;
 
-  const [dataProfile, setDataProfile] = useState({});
   const [initialLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [geoList, setGeoList] = useState([]);
   const [countStack, setCountStack] = useState(null);
   const [username, setUsername] = useState('');
   const [reportOption, setReportOption] = useState([]);
@@ -50,6 +35,7 @@ const FeedScreen = (props) => {
   const [userId, setUserId] = useState('');
   const [postId, setPostId] = useState('');
   const [lastId, setLastId] = useState('');
+  const [selectedPost, setSelectedPost] = useState({});
 
   const refBlockUser = useRef();
   const refBlockDomain = useRef();
@@ -250,9 +236,11 @@ const FeedScreen = (props) => {
                     props.navigation.navigate('PostDetailPage', {item: item});
                   }}
                   onPressUpvote={(value) => {
+                    setSelectedPost(value);
                     setUpVote(value.id);
                   }}
                   onPressDownVote={(value) => {
+                    setSelectedPost(value);
                     setDownVote(value.id);
                   }}
                 />
@@ -290,7 +278,3 @@ const FeedScreen = (props) => {
 };
 
 export default FeedScreen;
-
-const styles = StyleSheet.create({
-  container: {flex: 1, flexDirection: 'column'},
-});
