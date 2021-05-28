@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {useState, useRef, useEffect} from 'react';
 import {
   StatusBar,
@@ -47,6 +47,8 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import { DEFAULT_PROFILE_PIC_PATH } from '../../helpers/constants';
 import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
+import { Context } from '../../context';
+import { SET_DATA_IMAGE } from '../../context/Types';
 const width = Dimensions.get('screen').width;
 
 const ProfileScreen = () => {
@@ -81,6 +83,9 @@ const ProfileScreen = () => {
   );
   const [errorChangeRealName, setErrorChangeRealName] = useState('');
   const [image, setImage] = useState('');
+
+  let context = useContext(Context)
+  let [users, dispatch] = context.users
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -125,6 +130,7 @@ const ProfileScreen = () => {
       console.log(result);
       if (result.code === 200) {
         setDataMain(result.data);
+        dispatch({type : SET_DATA_IMAGE, payload : result.data.profile_pic_path})
         withLoading ? setIsLoading(false) : null;
       }
     }

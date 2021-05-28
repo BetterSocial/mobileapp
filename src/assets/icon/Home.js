@@ -4,7 +4,7 @@ import { colors } from '../../utils/colors';
 
 function Home(props) {
   return (
-    <Svg width="20" height="20" viewBox="0 0 18 22" fill="none" {...props}>
+    <Svg width="19" height="19" viewBox="0 0 20 20" fill="none" {...props}>
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

@@ -20,6 +20,7 @@ import { Text } from 'react-native';
 import MemoHome from '../assets/icon/Home'
 import MemoFeed from '../assets/icon/Feed';
 import MemoNews from '../assets/icon/News';
+import MemoProfileIcon from '../assets/icon/Profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,9 +42,11 @@ function HomeBottomTabs() {
         return {
           activeTintColor : colors.holytosca,
           tabBarLabel : () => <Text style={{
-            fontSize : 8,
+            fontSize : 6,
             color : colors.holytosca,
-            marginBottom : 5
+            marginTop : -12,
+            marginBottom : 5,
+            alignSelf : 'center'
           }}>{navigation.isFocused() ? "\u2B24" : ""}</Text>
         }
       }}>
@@ -76,13 +79,7 @@ function HomeBottomTabs() {
         component={ProfileScreen}
         options={{
           activeTintColor : colors.holytosca,
-          tabBarIcon: ({focused}) => {
-            if (focused) {
-              return <MemoProfileSelected />;
-            } else {
-              return <MemoProfileUnselected />;
-            }
-          },
+          tabBarIcon: ({focused}) => <MemoProfileIcon/>
         }}
       />
     </Tab.Navigator>
