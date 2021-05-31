@@ -125,7 +125,7 @@ const ChooseUsername = () => {
               color: '#EB5757',
               fontFamily: fonts.inter[400],
             }}>
-            username min 3 characters
+            Username min. 3 characters
           </Text>
         );
       case 'max':
@@ -136,7 +136,7 @@ const ChooseUsername = () => {
               color: '#EB5757',
               fontFamily: fonts.inter[400],
             }}>
-            username maximum 15 characters
+            Username maximum 15 characters
           </Text>
         );
       case 'nan':
@@ -187,7 +187,7 @@ const ChooseUsername = () => {
             <IconFontAwesome5 name="exclamation" size={14} color="#2F80ED" />
           </View>
           <Text style={styles.infoText}>
-            Usernames, you will always be able to post anonymously.
+            Whatever your username, you will always be able to post anonymously.
           </Text>
         </View>
       </View>
