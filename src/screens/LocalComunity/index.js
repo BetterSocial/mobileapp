@@ -33,7 +33,7 @@ const LocalComunity = () => {
   const [location, setLocation] = useState([]);
   const [optionsSearch, setOptionsSearch] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = useState(false);
+  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = useState(true);
   const [isVisibleSecondLocation, setIsVisibleSecondLocation] = useState(false);
   const [locationPost, setLocationPost] = useState([]);
   const [locationLog, setLocationLog] = useState([]);
@@ -254,7 +254,7 @@ const LocalComunity = () => {
 
       <View style={styles.footer}>
         <Text style={styles.textSmall}>
-          We value privacy and do not ask for 24/7 location tracking
+          We value privacy and do not ask for location tracking access
         </Text>
         <Button
           disabled={location.length >= 1 ? false : true}

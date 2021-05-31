@@ -125,6 +125,7 @@ const Topics = () => {
                       {ChunkArray(topics[attribute], 4).map((val, idx) => {
                         return (
                           <ScrollView
+                            showsHorizontalScrollIndicator={false}
                             key={idx}
                             style={styles.listTopic}
                             horizontal={true}>
@@ -167,7 +168,7 @@ const Topics = () => {
         </ScrollView>
         <View style={styles.footer}>
           <Text style={styles.textSmall}>
-            You can add and remove interests later
+            Others cannot see whics topics you're following
           </Text>
           <Button
             onPress={() => next()}

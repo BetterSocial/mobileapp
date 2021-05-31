@@ -33,6 +33,7 @@ import {
   setRefreshToken,
   setToken,
 } from '../../data/local/accessToken';
+import { colors } from '../../utils/colors';
 
 const width = Dimensions.get('screen').width;
 
@@ -147,9 +148,10 @@ const WhotoFollow = () => {
           setAccessToken(res.token);
           setRefreshToken(res.refresh_token);
           showMessage({
-            message: 'Welcome to Ping',
-            description: 'Choose where to get started',
+            message: 'Welcome to Better Social',
+            // description: 'Choose where to get started',
             type: 'success',
+            color : colors.holytosca
           });
           setTimeout(() => {
             navigation.dispatch(StackActions.replace('HomeTabs'));
@@ -222,7 +224,7 @@ const WhotoFollow = () => {
       <View style={styles.content}>
         <Text style={styles.textWhoToFollow}>Who to follow</Text>
         <Text style={styles.textDescription}>
-          These make it easy for people to find you
+          Interesting people to follow. You can edit this anytime, and others cannot see who you follow.
         </Text>
       </View>
       {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
@@ -338,7 +340,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: 32,
+    fontSize: 36,
     lineHeight: 44,
     color: '#11243D',
   },
@@ -451,7 +453,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: '#4F4F4F',
-    textTransform: 'capitalize',
+    // textTransform: 'capitalize',
   },
   flatList: {
     paddingLeft: 22,

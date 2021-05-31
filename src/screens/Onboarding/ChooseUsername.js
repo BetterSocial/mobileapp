@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {ProgressBar} from '../../components/ProgressBar';
 import {Button} from '../../components/Button';
@@ -156,6 +158,9 @@ const ChooseUsername = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView style={styles.keyboardavoidingview} 
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={-100}>
       <View style={styles.content}>
         <ProgressBar isStatic={true} value={25} />
         <Text style={styles.title}>Choose your username</Text>
@@ -191,7 +196,11 @@ const ChooseUsername = () => {
           </Text>
         </View>
       </View>
-      <Button onPress={() => next()}>NEXT</Button>
+
+      <View style={{flex : 1}}/>
+      <Button style={{marginTop : 16}} onPress={() => next()}>NEXT</Button>
+      </KeyboardAvoidingView>
+
     </SafeAreaView>
   );
 };
@@ -205,10 +214,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   container: {
-    paddingHorizontal: 20,
-    paddingTop: 75,
-    paddingBottom: 32,
-    justifyContent: 'space-between',
     flex: 1,
   },
   title: {
@@ -265,4 +270,14 @@ const styles = StyleSheet.create({
   containerAddIcon: {
     marginRight: 13,
   },
+  content : {
+
+  },
+  keyboardavoidingview : {
+    flex : 1,
+    paddingHorizontal: 20,
+    paddingTop: 75,
+    paddingBottom: 32,
+    justifyContent : 'flex-end'
+  }
 });
