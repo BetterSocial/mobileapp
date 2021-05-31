@@ -99,7 +99,7 @@ const ChooseUsername = () => {
           <Text
             style={{
               fontSize: 12,
-              color: '#27AE60',
+              color: colors.holytosca,
               fontFamily: fonts.inter[400],
             }}>
             {' '}
@@ -111,7 +111,7 @@ const ChooseUsername = () => {
           <Text
             style={{
               fontSize: 12,
-              color: '#EB5757',
+              color: colors.red,
               fontFamily: fonts.inter[400],
             }}>
             Sorry, {user} has already been taken
@@ -122,7 +122,7 @@ const ChooseUsername = () => {
           <Text
             style={{
               fontSize: 12,
-              color: '#EB5757',
+              color: colors.red,
               fontFamily: fonts.inter[400],
             }}>
             Username min. 3 characters
@@ -133,7 +133,7 @@ const ChooseUsername = () => {
           <Text
             style={{
               fontSize: 12,
-              color: '#EB5757',
+              color: colors.red,
               fontFamily: fonts.inter[400],
             }}>
             Username maximum 15 characters
@@ -144,7 +144,7 @@ const ChooseUsername = () => {
           <Text
             style={{
               fontSize: 12,
-              color: '#EB5757',
+              color: colors.red,
               fontFamily: fonts.inter[400],
             }}>
             Username cannot be just a number

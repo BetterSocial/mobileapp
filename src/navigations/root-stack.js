@@ -30,7 +30,7 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="ChooseUsername">
       <Stack.Screen
         name="ReplyComment"
         component={ReplyComment}
