@@ -1,7 +1,7 @@
 import analytics from '@react-native-firebase/analytics';
 import {useNavigation} from '@react-navigation/core';
 import jwtDecode from 'jwt-decode';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Alert, Image, Linking, StyleSheet, View} from 'react-native';
 import {
   getAccessToken,
@@ -10,12 +10,17 @@ import {
   setAccessToken,
   setRefreshToken,
 } from '../../data/local/accessToken';
-import {getProfileByUsername} from '../../service/profile';
+import {getMyProfile, getProfileByUsername} from '../../service/profile';
 import {verifyTokenGetstream, verifyUser} from '../../service/users';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import fetchRemoteConfig from '../../utils/FirebaseUtil';
+import { Context } from '../../context';
+import { SET_DATA_IMAGE } from '../../context/Types';
 
 const SplashScreen = () => {
+  let context = useContext(Context)
+  let [users, dispatch] = context.users
+
   const navigation = useNavigation();
   const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org';
   let [isModalShown, setIsModalShown] = useState(false);
@@ -52,6 +57,8 @@ const SplashScreen = () => {
   let getDeepLinkUrl = async () => {
     try {
       let selfUserId = await doVerifyUser();
+      let profile = await getMyProfile(selfUserId)
+      dispatch({type : SET_DATA_IMAGE, payload : profile.data.profile_pic_path})
       let deepLinkUrl = await Linking.getInitialURL();
       if (deepLinkUrl === null) return navigateWithoutDeeplink(selfUserId);
 

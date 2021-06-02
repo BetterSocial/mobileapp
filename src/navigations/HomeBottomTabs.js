@@ -15,6 +15,12 @@ import MemoFeedUnselected from '../assets/icon/FeedUnselected';
 import MemoNewsUnselected from '../assets/icon/NewsUnselected';
 import MemoProfileSelected from '../assets/icon/ProfileSelected';
 import MemoProfileUnselected from '../assets/icon/ProfileUnselected';
+import { colors } from '../utils/colors';
+import { Text } from 'react-native';
+import MemoHome from '../assets/icon/Home'
+import MemoFeed from '../assets/icon/Feed';
+import MemoNews from '../assets/icon/News';
+import MemoProfileIcon from '../assets/icon/Profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,58 +31,55 @@ function HomeBottomTabs() {
     style: {backgroundColor: 'white'},
   };
   return (
-    <Tab.Navigator tabBarOptions={customTabBarStyle}>
+    <Tab.Navigator tabBarOptions={customTabBarStyle}
+      tabBarOptions={{
+        showLabel : true,
+        activeTintColor : colors.holytosca,
+        inactiveTintColor : colors.gray1
+      }}
+      screenOptions={({route, navigation}) => {
+        console.log(navigation)
+        return {
+          activeTintColor : colors.holytosca,
+          tabBarLabel : () => <Text style={{
+            fontSize : 6,
+            color : colors.holytosca,
+            marginTop : -12,
+            marginBottom : 5,
+            alignSelf : 'center'
+          }}>{navigation.isFocused() ? "\u2B24" : ""}</Text>
+        }
+      }}>
       <Tab.Screen
         name="ChannelList"
         component={ChannelListScreen}
         options={{
-          tabBarLabel: 'Chats',
-          tabBarIcon: ({focused}) => {
-            if (focused) {
-              return <MemoHomeSelected />;
-            } else {
-              return <MemoHomeUnselected />;
-            }
-          },
+          activeTintColor : colors.holytosca,
+          tabBarIcon: ({color}) => <MemoHome fill={color}/>,
         }}
       />
       <Tab.Screen
         name="Feed"
         component={FeedScreen}
         options={{
-          tabBarIcon: ({focused}) => {
-            if (focused) {
-              return <MemoFeedSelected />;
-            } else {
-              return <MemoFeedUnselected />;
-            }
-          },
+          activeTintColor : colors.holytosca,
+          tabBarIcon: ({color}) => <MemoFeed fill={color}/>
         }}
       />
       <Tab.Screen
         name="News"
         component={NewsScreen}
         options={{
-          tabBarIcon: ({focused}) => {
-            if (focused) {
-              return <MemoNewsSelected />;
-            } else {
-              return <MemoNewsUnselected />;
-            }
-          },
+          activeTintColor : colors.holytosca,
+          tabBarIcon: ({focused, color}) => <MemoNews fill={color}/> ,
         }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarIcon: ({focused}) => {
-            if (focused) {
-              return <MemoProfileSelected />;
-            } else {
-              return <MemoProfileUnselected />;
-            }
-          },
+          activeTintColor : colors.holytosca,
+          tabBarIcon: ({focused}) => <MemoProfileIcon/>
         }}
       />
     </Tab.Navigator>

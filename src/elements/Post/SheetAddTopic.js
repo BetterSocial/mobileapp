@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -6,11 +6,34 @@ import {Button} from '../../components/Button';
 import TopicItem from '../../components/TopicItem';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import KeyEvent from 'react-native-keyevent';
 
 const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
   const [dataTopic, setTopic] = useState('');
   const [listTopics, setlistTopics] = useState([]);
+  const [trigger, setTrigger] = useState(-1)
   let inputRef = useRef();
+
+  useEffect(() => {
+    KeyEvent.onKeyUpListener((keyEvent) => {
+      console.log(`key ${keyEvent.keyCode}`)
+      onKeyUp(keyEvent.keyCode)
+    })
+
+    return () => {
+      KeyEvent.removeKeyUpListener()
+    }
+  }, [])
+
+  useEffect(() => {
+    add()
+  }, [trigger])
+
+  const onKeyUp = (keycode) => {
+    if(keycode === 62) {
+      setTrigger(new Date().valueOf())
+    }
+  }
 
   const add = () => {
     let data = dataTopic.replace(/\s/g, '').toLowerCase();
@@ -106,9 +129,9 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
                   onChangeText={(v) => setTopic(v)}
                   autoCapitalize="none"
                   onKeyPress={({nativeEvent}) => {
-                    console.log(`a${nativeEvent.key}b`)
-                    if (nativeEvent.key === " ") return add()
-                    if (nativeEvent.key.trim().length === 0) return add();
+                    // console.log(`a${nativeEvent.key}b`)
+                    // if (nativeEvent.key === " ") return add()
+                    // if (nativeEvent.key.trim().length === 0) return add();
                   }}
                   blurOnSubmit={false}
                 />

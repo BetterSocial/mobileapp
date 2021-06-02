@@ -43,6 +43,7 @@ const SearchModal = (props) => {
           <View style={styles.containerInput}>
             <View style={{...styles.inputContainer, ...styles.containerInput}}>
               <TextInput
+                autoCapitalize={"words"}
                 autoFocus={focus}
                 ref={textRef}
                 style={{...styles.searchInput, ...styles.textInput}}

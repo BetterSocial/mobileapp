@@ -17,8 +17,12 @@ import WriteComment from '../../elements/PostDetail/WriteComment';
 import {createChildComment, createCommentParent} from '../../service/comment';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {useNavigation} from '@react-navigation/native';
+
+import Toast from 'react-native-simple-toast';
 
 const ReplyComment = (props) => {
+  const navigation = useNavigation();
   const [item, setItem] = useState(props.route.params.item);
   const [parent, setParent] = useState(props.route.params.parent);
   const [textComment, setTextComment] = useState('');
@@ -44,8 +48,13 @@ const ReplyComment = (props) => {
       console.log(data);
       if (data.code === 200) {
         setTextComment('');
+        Toast.show('Successfully Comment', Toast.LONG);
+        navigation.goBack();
+      } else {
+        Toast.show('Failed Comment', Toast.LONG);
       }
     } catch (error) {
+      Toast.show('Failed Comment', Toast.LONG);
       console.log(error);
     }
   };

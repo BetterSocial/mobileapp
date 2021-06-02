@@ -173,7 +173,7 @@ const Followings = () => {
             /> 
           </View> :
           <View style={styles.nousercontent}>
-            <Text style={styles.nousertext}>{`You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following`}</Text>
+            <Text style={styles.nousertext}>{`You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.`}</Text>
           </View>
         }
         <Loading visible={isLoading} />

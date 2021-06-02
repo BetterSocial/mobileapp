@@ -164,10 +164,13 @@ const PostDetailPage = (props) => {
       console.log(data);
       if (data.code === 200) {
         setTextComment('');
+        Toast.show('Successfully Comment', Toast.LONG);
+      } else {
+        Toast.show('Failed Comment', Toast.LONG);
       }
     } catch (e) {
       console.log(e);
-      Alert.alert('Failed create comment');
+      Toast.show('Failed Comment', Toast.LONG);
     }
   };
 

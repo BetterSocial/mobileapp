@@ -12,6 +12,8 @@
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 
+#import <RNKeyEvent.h> 
+
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
   SKDescriptorMapper *layoutDescriptorMapper = [[SKDescriptorMapper alloc] initWithDefaults];
@@ -54,5 +56,42 @@ static void InitializeFlipper(UIApplication *application) {
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
+
+/*!
+ * react-native-keyevent support
+ */
+RNKeyEvent *keyEvent = nil;
+
+- (NSMutableArray<UIKeyCommand *> *)keyCommands {
+  NSMutableArray *keys = [NSMutableArray new];
+  
+  if (keyEvent == nil) {
+    keyEvent = [[RNKeyEvent alloc] init];
+  }
+  
+  if ([keyEvent isListening]) {
+    NSArray *namesArray = [[keyEvent getKeys] componentsSeparatedByString:@","];
+    
+    NSCharacterSet *validChars = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+    
+    for (NSString* names in namesArray) {
+      NSRange  range = [names rangeOfCharacterFromSet:validChars];
+      
+      if (NSNotFound != range.location) {
+        [keys addObject: [UIKeyCommand keyCommandWithInput:names modifierFlags:UIKeyModifierShift action:@selector(keyInput:)]];
+      } else {
+        [keys addObject: [UIKeyCommand keyCommandWithInput:names modifierFlags:0 action:@selector(keyInput:)]];
+      }
+    }
+  }
+  
+  return keys;
+}
+
+- (void)keyInput:(UIKeyCommand *)sender {
+  NSString *selected = sender.input;
+  [keyEvent sendKeyEvent:selected];
+}
+
 
 @end
