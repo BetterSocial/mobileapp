@@ -31,6 +31,7 @@ import Gap from '../../components/Gap';
 import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from '../feedScreen/ContentPoll';
 import {createCommentParent} from '../../service/comment';
+import {downVote, upVote} from '../../service/vote';
 
 const {width, height} = Dimensions.get('window');
 
@@ -174,6 +175,23 @@ const PostDetailPage = (props) => {
     }
   };
 
+  const setUpVote = async (id) => {
+    let result = await upVote({activity_id: id});
+    if (result.code === 200) {
+      Toast.show('up vote was successful', Toast.LONG);
+    } else {
+      Toast.show('up vote failed', Toast.LONG);
+    }
+  };
+  const setDownVote = async (id) => {
+    let result = await downVote({activity_id: id});
+    if (result.code === 200) {
+      Toast.show('down vote success', Toast.LONG);
+    } else {
+      Toast.show('down vote failed', Toast.LONG);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -196,7 +214,20 @@ const PostDetailPage = (props) => {
           )}
 
           <Gap style={{height: 16}} />
-          <Footer totalComment={totalComment} totalVote={totalVote} />
+          <Footer
+            item={item}
+            totalComment={totalComment}
+            totalVote={totalVote}
+            onPressBlock={() => {}}
+            onPressComment={() => {}}
+            onPressShare={() => {}}
+            onPressUpvote={(v) => {
+              setUpVote(v.id);
+            }}
+            onPressDownVote={(v) => {
+              setDownVote(v.id);
+            }}
+          />
         </View>
         {isReaction && (
           <ContainerComment comments={item.latest_reactions.comment} />

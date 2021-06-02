@@ -70,8 +70,6 @@ const Footer = ({
   );
 };
 
-export default Footer;
-
 const styles = StyleSheet.create({
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -85,3 +83,5 @@ const styles = StyleSheet.create({
     color: '#C4C4C4',
   },
 });
+
+export default Footer;
