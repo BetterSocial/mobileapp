@@ -53,6 +53,10 @@ const PostDetailPage = (props) => {
   const [typeComment, setTypeComment] = useState('parent');
   const [totalComment, setTotalComment] = useState(0);
   const [totalVote, setTotalVote] = useState(0);
+  const [userId, setUserId] = useState('');
+  const [username, setUsername] = useState('');
+  const [postId, setPostId] = useState('');
+  const [yourselfId, setYourselfId] = useState('');
 
   useEffect(() => {
     const initial = () => {
@@ -96,10 +100,21 @@ const PostDetailPage = (props) => {
     refBlockUser.current.close();
   };
 
+  useEffect(() => {
+    const parseToken = async () => {
+      const value = await getAccessToken();
+      if (value) {
+        const decoded = await JWTDecode(value);
+        setYourselfId(decoded.user_id);
+      }
+    };
+    parseToken();
+  }, []);
+
   const userBlock = async () => {
     const data = {
-      userId: '118d5679-6c68-cdws-be83-7f15a4e82d3d',
-      postId: '228d5679-6c68-54sd-be83-7f15a4e82d3d',
+      userId: userId,
+      postId: postId,
       source: 'screen_post_detail',
       reason: reportOption,
       message: messageReport,
@@ -144,6 +159,19 @@ const PostDetailPage = (props) => {
       setLoading(false);
     }
   };
+
+  const setDataToState = (value) => {
+    if (value.anonimity === true) {
+      setUsername('Anonymous');
+      setPostId(value.id);
+      setUserId(value.actor.id + '-anonymous');
+    } else {
+      setUsername(value.actor.data.username);
+      setPostId(value.id);
+      setUserId(value.actor.id);
+    }
+  };
+
   const onTextLayout = (e) => {
     setTotalLine(e.nativeEvent.lines.length);
   };
@@ -162,7 +190,6 @@ const PostDetailPage = (props) => {
   const commentParent = async () => {
     try {
       let data = await createCommentParent(textComment, item.id);
-      console.log(data);
       if (data.code === 200) {
         setTextComment('');
         Toast.show('Successfully Comment', Toast.LONG);
@@ -225,7 +252,14 @@ const PostDetailPage = (props) => {
             }}
             onPressShare={() => {}}
             onPressComment={() => {}}
-            onPressBlock={() => {}}
+            onPressBlock={(value) => {
+              if (value.actor.id === yourselfId) {
+                Toast.show("Can't Block yourself", Toast.LONG);
+              } else {
+                setDataToState(value);
+                refBlockUser.current.open();
+              }
+            }}
           />
         </View>
         {isReaction && (
@@ -242,7 +276,7 @@ const PostDetailPage = (props) => {
       <BlockUser
         refBlockUser={refBlockUser}
         onSelect={(v) => onSelectBlocking(v)}
-        username="ayaka_kaminari_test"
+        username={username}
       />
       <BlockDomain
         refBlockUser={refBlockDomain}

@@ -36,6 +36,7 @@ const FeedScreen = (props) => {
   const [postId, setPostId] = useState('');
   const [lastId, setLastId] = useState('');
   const [selectedPost, setSelectedPost] = useState({});
+  const [yourselfId, setYourselfId] = useState('');
 
   const refBlockUser = useRef();
   const refBlockDomain = useRef();
@@ -158,9 +159,9 @@ const FeedScreen = (props) => {
   useEffect(() => {
     const parseToken = async () => {
       const value = await getAccessToken();
-      console.log(value);
       if (value) {
         const decoded = await JWTDecode(value);
+        setYourselfId(decoded.user_id);
         setTokenParse(decoded);
       }
     };
@@ -229,8 +230,12 @@ const FeedScreen = (props) => {
                     props.navigation.navigate('PostDetailPage', {item: item});
                   }}
                   onPressBlock={(value) => {
-                    setDataToState(value);
-                    refBlockUser.current.open();
+                    if (value.actor.id === yourselfId) {
+                      Toast.show("Can't Block yourself", Toast.LONG);
+                    } else {
+                      setDataToState(value);
+                      refBlockUser.current.open();
+                    }
                   }}
                   onPressComment={() => {
                     props.navigation.navigate('PostDetailPage', {item: item});
