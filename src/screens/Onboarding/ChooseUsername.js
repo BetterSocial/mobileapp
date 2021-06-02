@@ -47,7 +47,8 @@ const ChooseUsername = () => {
   };
 
   const checkUsername = async (v) => {
-    let value = v.replace(/[^a-z0-9-_]/g, '');
+    let value = v.replace(/[^a-zA-Z0-9-_]/g, '');
+    value = value.toLowerCase()
     setTypeFetch('typing');
     setUsernameState(value);
     if (value.length <= 15) {
