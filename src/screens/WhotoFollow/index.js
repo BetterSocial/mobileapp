@@ -59,6 +59,7 @@ const WhotoFollow = () => {
       .then((res) => {
         setIsLoading(false);
         if (res.status == 200) {
+          console.log(JSON.stringify(res.data.body))
           setUsers(res.data.body);
         }
       })
@@ -86,7 +87,8 @@ const WhotoFollow = () => {
 
   const handleSelected = (value) => {
     let copyFollowed = [...followed];
-    let index = copyFollowed.findIndex((data) => data === value);
+    // let index = copyFollowed.findIndex((data) => data === value);
+    let index = copyFollowed.indexOf(value);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
@@ -94,9 +96,9 @@ const WhotoFollow = () => {
     }
 
     setFollowed(copyFollowed);
-    copyFollowed.map((res) => {
-      console.log('user', res);
-    });
+    // copyFollowed.map((res) => {
+    //   console.log('user', res);
+    // });
   };
 
   const onRefresh = React.useCallback(() => {
@@ -203,15 +205,22 @@ const WhotoFollow = () => {
           <Text style={styles.textUsername}>{item.bio ? item.bio : ''}</Text>
         </View>
       </View>
-      <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}>
         <View style={styles.containerButton}>
-          {followed.findIndex((data) => data === item.user_id) > -1 ? (
-            <CheckIcon width={32} height={32} fill="#23C5B6" />
+          {/* {followed.findIndex((data) => data === item.user_id) > -1 ? ( */}
+          {followed.indexOf(item.user_id) > -1 ? (
+            <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}
+            background={TouchableNativeFeedback.Ripple('#AAF', true, 20)} 
+            style={{width : 18, height : 18}}>
+              <CheckIcon width={32} height={32} fill="#23C5B6" />
+          </TouchableNativeFeedback>
           ) : (
-            <AddIcon width={20} height={20} fill="#000000" />
+            <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}
+              background={TouchableNativeFeedback.Ripple('#AAF', true, 10)} 
+              style={{width : 10, height : 10}}>
+                <AddIcon width={20} height={20} fill="#000000" />
+            </TouchableNativeFeedback>
           )}
         </View>
-      </TouchableNativeFeedback>
     </View>
   );
 
@@ -467,6 +476,8 @@ const styles = StyleSheet.create({
   containerButton: {
     width: 32,
     height: 32,
+    // backgroundColor : 'red',
+    borderRadius : 16,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
