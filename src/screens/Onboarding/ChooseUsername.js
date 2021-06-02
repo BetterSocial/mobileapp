@@ -47,7 +47,8 @@ const ChooseUsername = () => {
   };
 
   const checkUsername = async (v) => {
-    let value = v.replace(/[^a-z0-9-_]/g, '');
+    let value = v.replace(/[^a-zA-Z0-9-_]/g, '');
+    value = value.toLowerCase()
     setTypeFetch('typing');
     setUsernameState(value);
     if (value.length <= 15) {
@@ -160,7 +161,8 @@ const ChooseUsername = () => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.keyboardavoidingview} 
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={-100}>
+        keyboardVerticalOffset={100}
+        enabled>
       <View style={styles.content}>
         <ProgressBar isStatic={true} value={25} />
         <Text style={styles.title}>Choose your username</Text>
