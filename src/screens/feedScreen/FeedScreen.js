@@ -229,8 +229,12 @@ const FeedScreen = (props) => {
                     props.navigation.navigate('PostDetailPage', {item: item});
                   }}
                   onPressBlock={(value) => {
-                    setDataToState(value);
-                    refBlockUser.current.open();
+                    if (value.actor.id === userId) {
+                      Toast.show("Can't Block yourself", Toast.LONG);
+                    } else {
+                      setDataToState(value);
+                      refBlockUser.current.open();
+                    }
                   }}
                   onPressComment={() => {
                     props.navigation.navigate('PostDetailPage', {item: item});
