@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import {fonts} from '../../utils/fonts';
+import PropTypes from 'prop-types';
 
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
@@ -83,5 +84,16 @@ const styles = StyleSheet.create({
     color: '#C4C4C4',
   },
 });
+
+Footer.propTypes = {
+  onPressShare: PropTypes.func,
+  onPressComment: PropTypes.func,
+  onPressBlock: PropTypes.func,
+  onPressUpvote: PropTypes.func,
+  onPressDownVote: PropTypes.func,
+  item: PropTypes.object.isRequired,
+  totalVote: PropTypes.number,
+  totalComment: PropTypes.number,
+};
 
 export default Footer;

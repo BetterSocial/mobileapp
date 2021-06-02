@@ -22,7 +22,6 @@ import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
 import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
-import MemoZero_twentyFour from '../../assets/timer/Zero_twentyFour';
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
 import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
@@ -30,6 +29,8 @@ import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFou
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
+
+import PropsTypes from 'prop-types';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -311,5 +312,10 @@ const styles = StyleSheet.create({
     height: 32,
   },
 });
+
+Header.propsTypes = {
+  props: PropsTypes.object,
+  isBackButton: PropsTypes.bool,
+};
 
 export default Header;
