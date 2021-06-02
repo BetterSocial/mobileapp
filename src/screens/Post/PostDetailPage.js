@@ -191,6 +191,23 @@ const PostDetailPage = (props) => {
     }
   };
 
+  const setUpVote = async (id) => {
+    let result = await upVote({activity_id: id});
+    if (result.code === 200) {
+      Toast.show('up vote was successful', Toast.LONG);
+    } else {
+      Toast.show('up vote failed', Toast.LONG);
+    }
+  };
+  const setDownVote = async (id) => {
+    let result = await downVote({activity_id: id});
+    if (result.code === 200) {
+      Toast.show('down vote success', Toast.LONG);
+    } else {
+      Toast.show('down vote failed', Toast.LONG);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
