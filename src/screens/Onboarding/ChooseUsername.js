@@ -160,7 +160,8 @@ const ChooseUsername = () => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.keyboardavoidingview} 
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={-100}>
+        keyboardVerticalOffset={100}
+        enabled>
       <View style={styles.content}>
         <ProgressBar isStatic={true} value={25} />
         <Text style={styles.title}>Choose your username</Text>
