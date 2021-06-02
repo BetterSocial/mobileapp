@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Dimensions, Share} from 'react-native';
 import Content from './Content';
 import Footer from './Footer';
@@ -95,7 +95,35 @@ const Item = ({
   onPressUpvote,
   onPressDownVote,
   onPressComment,
+  selfUserId,
 }) => {
+  const [voteStatus, setVoteStatus] = useState('none');
+  useEffect(() => {
+    const validationStatusVote = () => {
+      if (item.reaction_counts !== undefined || null) {
+        if (item.latest_reactions.upvotes !== undefined) {
+          let upvote = item.latest_reactions.upvotes.filter(
+            (vote) => vote.user_id === selfUserId,
+          );
+          console.log(upvote);
+          if (upvote !== undefined) {
+            setVoteStatus('upvote');
+          }
+        }
+
+        if (item.latest_reactions.downvotes !== undefined) {
+          let downvotes = item.latest_reactions.downvotes.filter(
+            (vote) => vote.user_id === selfUserId,
+          );
+          console.log(downvotes);
+          if (downvotes !== undefined) {
+            setVoteStatus('downvote');
+          }
+        }
+      }
+    };
+    validationStatusVote();
+  }, [item, selfUserId]);
   return (
     <Card style={[styles.container]}>
       <Header props={item} />
@@ -124,6 +152,7 @@ const Item = ({
         onPressDownVote={onPressDownVote}
         totalVote={getCountVote(item)}
         totalComment={getCountComment(item)}
+        statusVote={voteStatus}
       />
     </Card>
   );

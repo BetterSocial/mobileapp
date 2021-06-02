@@ -248,6 +248,7 @@ const FeedScreen = (props) => {
                     setSelectedPost(value);
                     setDownVote(value.id);
                   }}
+                  selfUserId={yourselfId}
                 />
               ))
             : null}
