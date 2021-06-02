@@ -17,7 +17,6 @@ const SearchModal = (props) => {
   const textRef = useRef(null);
   const [focus, setFocus] = useState(false)
 
-
   useEffect(() => {
     if (props.isVisible) {
       textRef.current.focus();

@@ -174,6 +174,22 @@ const PostDetailPage = (props) => {
       Toast.show('Failed Comment', Toast.LONG);
     }
   };
+  const setUpVote = async (id) => {
+    let result = await upVote({activity_id: id});
+    if (result.code === 200) {
+      Toast.show('up vote was successful', Toast.LONG);
+    } else {
+      Toast.show('up vote failed', Toast.LONG);
+    }
+  };
+  const setDownVote = async (id) => {
+    let result = await downVote({activity_id: id});
+    if (result.code === 200) {
+      Toast.show('down vote success', Toast.LONG);
+    } else {
+      Toast.show('down vote failed', Toast.LONG);
+    }
+  };
 
   const setUpVote = async (id) => {
     let result = await upVote({activity_id: id});
@@ -218,15 +234,15 @@ const PostDetailPage = (props) => {
             item={item}
             totalComment={totalComment}
             totalVote={totalVote}
-            onPressBlock={() => {}}
-            onPressComment={() => {}}
-            onPressShare={() => {}}
             onPressUpvote={(v) => {
               setUpVote(v.id);
             }}
             onPressDownVote={(v) => {
               setDownVote(v.id);
             }}
+            onPressShare={() => {}}
+            onPressComment={() => {}}
+            onPressBlock={() => {}}
           />
         </View>
         {isReaction && (

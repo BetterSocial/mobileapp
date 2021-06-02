@@ -1,12 +1,12 @@
 import crashlytics from '@react-native-firebase/crashlytics';
+import {CLIENT_ID, CLIENT_SECRET} from '@env';
 export const checkToken = (token) => {
   return fetch('https://core.human-id.org/v0.0.3/server/users/exchange', {
     method: 'POST', // or 'PUT'
     headers: {
       'Content-Type': 'application/json',
-      'client-id': 'SERVER_GZXRP7RJAUL11ZZPN31P3Y',
-      'client-secret':
-        'zIEj7ZB5wbEm99CEs0ydI3L9AVYkkglIejDnqhu9UtoF3YNtPFCETgWm7qXzEq0e',
+      'client-id': CLIENT_ID,
+      'client-secret': CLIENT_SECRET,
     },
     body: JSON.stringify({exchangeToken: token}),
   })
