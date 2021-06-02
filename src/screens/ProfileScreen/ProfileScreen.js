@@ -398,7 +398,7 @@ const ProfileScreen = () => {
       <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
         {isOffsetScroll ? (
           <View style={styles.tabsFixed}>
-            <Text style={styles.postText}>Post ({/* Change this to post size*/0})</Text>
+            <Text style={styles.postText}>Post{/* Change this to post size*/}</Text>
           </View>
         ) : null}
 
