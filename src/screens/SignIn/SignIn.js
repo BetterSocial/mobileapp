@@ -34,6 +34,7 @@ import {colors} from 'react-native-swiper-flatlist/src/themes';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Loading from '../Loading';
+import jwtDecode from 'jwt-decode';
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -86,10 +87,35 @@ const SignIn = () => {
   }, []);
   const handleLogin = () => {
     logIn();
+    // dummyLogin()
+    console.log("Dummy Login")
     analytics().logLogin({
       method: 'humanid',
     });
   };
+
+  // const dummyLogin = () => {
+  //   let appUserId = "HQEGNQCHA8J1OIX4G2CP"
+  //   setDataHumenId(appUserId, dispatch);
+  //   verifyUser(appUserId)
+  //     .then(async (response) => {
+  //       setLoading(false);
+  //       if (response.data) {
+  //         setAccessToken(response.token);
+  //         setRefreshToken(response.refresh_token);
+  //         let decodedToken = await jwtDecode(response.token)
+  //         console.log(decodedToken)
+  //         navigation.dispatch(StackActions.replace('HomeTabs'));
+  //       } else {
+  //         removeLocalStorege('userId');
+  //         navigation.dispatch(StackActions.replace('ChooseUsername'));
+  //       }
+  //       setUserId(appUserId);
+  //     })
+  //     .catch((e) => {
+  //       setLoading(false);
+  //     });
+  // }
   return (
     <View style={S.container}>
       <View style={S.containerSlideShow}>

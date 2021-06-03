@@ -7,14 +7,6 @@ import {
   ProfileScreen,
 } from '../screens';
 
-import MemoNewsSelected from '../assets/icon/NewsSelected';
-import MemoHomeUnselected from '../assets/icon/HomeUnselected';
-import MemoHomeSelected from '../assets/icon/HomeSelected';
-import MemoFeedSelected from '../assets/icon/FeedSelected';
-import MemoFeedUnselected from '../assets/icon/FeedUnselected';
-import MemoNewsUnselected from '../assets/icon/NewsUnselected';
-import MemoProfileSelected from '../assets/icon/ProfileSelected';
-import MemoProfileUnselected from '../assets/icon/ProfileUnselected';
 import { colors } from '../utils/colors';
 import { Text } from 'react-native';
 import MemoHome from '../assets/icon/Home'
@@ -38,7 +30,6 @@ function HomeBottomTabs() {
         inactiveTintColor : colors.gray1
       }}
       screenOptions={({route, navigation}) => {
-        console.log(navigation)
         return {
           activeTintColor : colors.holytosca,
           tabBarLabel : () => <Text style={{
