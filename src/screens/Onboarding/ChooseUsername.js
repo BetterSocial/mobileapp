@@ -48,7 +48,7 @@ const ChooseUsername = () => {
 
   const checkUsername = async (v) => {
     let value = v.replace(/[^a-zA-Z0-9-_]/g, '');
-    value = value.toLowerCase()
+    value = value.toLowerCase();
     setTypeFetch('typing');
     setUsernameState(value);
     if (value.length <= 15) {
@@ -56,7 +56,7 @@ const ChooseUsername = () => {
         if (isNaN(v)) {
           setTypeFetch('fetch');
           const user = await verifyUsername(value);
-          console.log(user)
+          console.log(user);
           setTypeFetch('max');
           if (user.data && v.length > 2) {
             setTypeFetch('notavailable');
@@ -159,50 +159,54 @@ const ChooseUsername = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView style={styles.keyboardavoidingview} 
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      <KeyboardAvoidingView
+        style={styles.keyboardavoidingview}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={100}
         enabled>
-      <View style={styles.content}>
-        <ProgressBar isStatic={true} value={25} />
-        <Text style={styles.title}>Choose your username</Text>
-        <Text style={styles.desc}>
-          Ping does not require real names - just make sure your friends will
-          find & recognize you
-        </Text>
-        <View style={styles.containerInput}>
-          <TouchableOpacity
-            style={styles.containerAddIcon}
-            onPress={() => onPhoto()}>
-            <BtnAddPhoto width={52} height={57} />
-          </TouchableOpacity>
-          <View>
-            <Input
-              placeholder="Username"
-              onChangeText={(v) => checkUsername(v)}
-              value={username}
-              autoCompleteType="username"
-              textContentType="username"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-            {messageTypeFetch(typeFetch, username)}
-          </View>
-        </View>
-        <View style={styles.constainerInfo}>
-          <View style={styles.containerIcon}>
-            <IconFontAwesome5 name="exclamation" size={14} color="#2F80ED" />
-          </View>
-          <Text style={styles.infoText}>
-            Whatever your username, you will always be able to post anonymously.
+        <View style={styles.content}>
+          <ProgressBar isStatic={true} value={25} />
+          <Text style={styles.title}>Choose your username</Text>
+          <Text style={styles.desc}>
+            Ping does not require real names - just make sure your friends will
+            find & recognize you
           </Text>
+          <View style={styles.containerInput}>
+            <TouchableOpacity
+              style={styles.containerAddIcon}
+              onPress={() => onPhoto()}>
+              <BtnAddPhoto width={52} height={57} />
+            </TouchableOpacity>
+            <View testID="wrapUsername">
+              <Input
+                testID="usernameInput"
+                placeholder="Username"
+                onChangeText={(v) => checkUsername(v)}
+                value={username}
+                autoCompleteType="username"
+                textContentType="username"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              {messageTypeFetch(typeFetch, username)}
+            </View>
+          </View>
+          <View style={styles.constainerInfo}>
+            <View style={styles.containerIcon}>
+              <IconFontAwesome5 name="exclamation" size={14} color="#2F80ED" />
+            </View>
+            <Text style={styles.infoText}>
+              Whatever your username, you will always be able to post
+              anonymously.
+            </Text>
+          </View>
         </View>
-      </View>
 
-      <View style={{flex : 1}}/>
-      <Button style={{marginTop : 16}} onPress={() => next()}>NEXT</Button>
+        <View style={{flex: 1}} />
+        <Button style={{marginTop: 16}} onPress={() => next()}>
+          NEXT
+        </Button>
       </KeyboardAvoidingView>
-
     </SafeAreaView>
   );
 };
@@ -272,14 +276,12 @@ const styles = StyleSheet.create({
   containerAddIcon: {
     marginRight: 13,
   },
-  content : {
-
-  },
-  keyboardavoidingview : {
-    flex : 1,
+  content: {},
+  keyboardavoidingview: {
+    flex: 1,
     paddingHorizontal: 20,
     paddingTop: 75,
     paddingBottom: 32,
-    justifyContent : 'flex-end'
-  }
+    justifyContent: 'flex-end',
+  },
 });
