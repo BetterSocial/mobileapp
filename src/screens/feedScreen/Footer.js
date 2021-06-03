@@ -32,6 +32,7 @@ const Footer = ({
   totalVote = 0,
   totalComment = 0,
   statusVote = 'none',
+  isSelf = false,
 }) => {
   return (
     <View style={{...styles.rowSpaceBeetwen, marginBottom: 8}}>
@@ -107,6 +108,7 @@ Footer.propTypes = {
   totalVote: PropTypes.number,
   totalComment: PropTypes.number,
   statusVote: PropTypes.oneOf(['none', 'upvote', 'downvote']),
+  isSelf: PropTypes.bool,
 };
 
 export default Footer;
