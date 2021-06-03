@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "android:release": "cd android && ./gradlew app:assembleRelease",
     "android:clean": "cd android && ./gradlew clean && ./gradlew cleanBuildCache",
-    "reinstall": "rm -rf node_modules && yarn install"
+    "reinstall": "rm -rf node_modules && yarn install",
+    "reset": "react-native start --reset-cache"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.12",

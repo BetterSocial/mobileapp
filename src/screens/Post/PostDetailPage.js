@@ -31,6 +31,7 @@ import Gap from '../../components/Gap';
 import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from '../feedScreen/ContentPoll';
 import {createCommentParent} from '../../service/comment';
+import {downVote, upVote} from '../../service/vote';
 
 const {width, height} = Dimensions.get('window');
 
@@ -50,17 +51,34 @@ const PostDetailPage = (props) => {
   const [isReaction, setReaction] = useState(false);
   const [textComment, setTextComment] = useState('');
   const [typeComment, setTypeComment] = useState('parent');
+  const [totalComment, setTotalComment] = useState(0);
+  const [totalVote, setTotalVote] = useState(0);
+  const [userId, setUserId] = useState('');
+  const [username, setUsername] = useState('');
+  const [postId, setPostId] = useState('');
+  const [yourselfId, setYourselfId] = useState('');
 
   useEffect(() => {
     const initial = () => {
       let reactionCount = props.route.params.item.reaction_counts;
       if (JSON.stringify(reactionCount) !== '{}') {
+        let count = 0;
         let comment = reactionCount.comment;
         if (comment !== undefined) {
           if (comment > 0) {
             setReaction(true);
+            setTotalComment(comment);
           }
         }
+        let upvote = reactionCount.upvotes;
+        if (upvote !== undefined) {
+          count = count + upvote;
+        }
+        let downvote = reactionCount.downvotes;
+        if (downvote !== undefined) {
+          count = count - downvote;
+        }
+        setTotalVote(count);
       }
     };
     initial();
@@ -82,10 +100,21 @@ const PostDetailPage = (props) => {
     refBlockUser.current.close();
   };
 
+  useEffect(() => {
+    const parseToken = async () => {
+      const value = await getAccessToken();
+      if (value) {
+        const decoded = await JWTDecode(value);
+        setYourselfId(decoded.user_id);
+      }
+    };
+    parseToken();
+  }, []);
+
   const userBlock = async () => {
     const data = {
-      userId: '118d5679-6c68-cdws-be83-7f15a4e82d3d',
-      postId: '228d5679-6c68-54sd-be83-7f15a4e82d3d',
+      userId: userId,
+      postId: postId,
       source: 'screen_post_detail',
       reason: reportOption,
       message: messageReport,
@@ -130,6 +159,19 @@ const PostDetailPage = (props) => {
       setLoading(false);
     }
   };
+
+  const setDataToState = (value) => {
+    if (value.anonimity === true) {
+      setUsername('Anonymous');
+      setPostId(value.id);
+      setUserId(value.actor.id + '-anonymous');
+    } else {
+      setUsername(value.actor.data.username);
+      setPostId(value.id);
+      setUserId(value.actor.id);
+    }
+  };
+
   const onTextLayout = (e) => {
     setTotalLine(e.nativeEvent.lines.length);
   };
@@ -148,7 +190,6 @@ const PostDetailPage = (props) => {
   const commentParent = async () => {
     try {
       let data = await createCommentParent(textComment, item.id);
-      console.log(data);
       if (data.code === 200) {
         setTextComment('');
         Toast.show('Successfully Comment', Toast.LONG);
@@ -158,6 +199,22 @@ const PostDetailPage = (props) => {
     } catch (e) {
       console.log(e);
       Toast.show('Failed Comment', Toast.LONG);
+    }
+  };
+  const setUpVote = async (id) => {
+    let result = await upVote({activity_id: id});
+    if (result.code === 200) {
+      Toast.show('up vote was successful', Toast.LONG);
+    } else {
+      Toast.show('up vote failed', Toast.LONG);
+    }
+  };
+  const setDownVote = async (id) => {
+    let result = await downVote({activity_id: id});
+    if (result.code === 200) {
+      Toast.show('down vote success', Toast.LONG);
+    } else {
+      Toast.show('down vote failed', Toast.LONG);
     }
   };
 
@@ -183,7 +240,27 @@ const PostDetailPage = (props) => {
           )}
 
           <Gap style={{height: 16}} />
-          <Footer />
+          <Footer
+            item={item}
+            totalComment={totalComment}
+            totalVote={totalVote}
+            onPressUpvote={(v) => {
+              setUpVote(v.id);
+            }}
+            onPressDownVote={(v) => {
+              setDownVote(v.id);
+            }}
+            onPressShare={() => {}}
+            onPressComment={() => {}}
+            onPressBlock={(value) => {
+              if (value.actor.id === yourselfId) {
+                Toast.show("Can't Block yourself", Toast.LONG);
+              } else {
+                setDataToState(value);
+                refBlockUser.current.open();
+              }
+            }}
+          />
         </View>
         {isReaction && (
           <ContainerComment comments={item.latest_reactions.comment} />
@@ -199,7 +276,7 @@ const PostDetailPage = (props) => {
       <BlockUser
         refBlockUser={refBlockUser}
         onSelect={(v) => onSelectBlocking(v)}
-        username="ayaka_kaminari_test"
+        username={username}
       />
       <BlockDomain
         refBlockUser={refBlockDomain}

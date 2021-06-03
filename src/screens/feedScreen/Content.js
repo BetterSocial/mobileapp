@@ -18,6 +18,8 @@ import Gap from '../../components/Gap';
 
 const {width: screenWidth} = Dimensions.get('window');
 
+import PropTypes from 'prop-types';
+
 const _renderItem = ({item, index}, parallaxProps) => {
   return (
     <View key={index} style={styles.item}>
@@ -33,11 +35,9 @@ const _renderItem = ({item, index}, parallaxProps) => {
 };
 
 const Content = ({message, images_url, style, onPress}) => {
-  console.log("LOGLOG")
-  console.log(`images_url : ${images_url}`)
   return (
     <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
-      {images_url !== null && images_url !== "" && images_url !== undefined  ? (
+      {images_url !== null && images_url !== '' && images_url !== undefined ? (
         images_url.length > 0 ? (
           <View
             style={{
@@ -87,6 +87,13 @@ const Content = ({message, images_url, style, onPress}) => {
       ) : null}
     </TouchableOpacity>
   );
+};
+
+Content.propTypes = {
+  message: PropTypes.string,
+  images_url: PropTypes.array,
+  style: PropTypes.object,
+  onPress: PropTypes.func,
 };
 
 export default Content;
