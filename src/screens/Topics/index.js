@@ -59,7 +59,7 @@ const Topics = () => {
       return (
         <View style={styles.header}>
           <TouchableNativeFeedback onPress={() => navigation.goBack()}        
-            background={TouchableNativeFeedback.Ripple("#AAF", true, 20)}>
+            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableNativeFeedback>
         </View>

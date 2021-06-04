@@ -73,7 +73,7 @@ const WhotoFollow = () => {
     if (Platform.OS === 'android') {
       return (
         <TouchableNativeFeedback onPress={() => navigation.goBack()}
-          background={TouchableNativeFeedback.Ripple("#AAF", true, 20)}>
+          background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
       );
@@ -210,13 +210,13 @@ const WhotoFollow = () => {
           {/* {followed.findIndex((data) => data === item.user_id) > -1 ? ( */}
           {followed.indexOf(item.user_id) > -1 ? (
             <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}
-            background={TouchableNativeFeedback.Ripple('#AAF', true, 20)} 
+            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)} 
             style={{width : 18, height : 18}}>
               <CheckIcon width={32} height={32} fill="#23C5B6" />
           </TouchableNativeFeedback>
           ) : (
             <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}
-              background={TouchableNativeFeedback.Ripple('#AAF', true, 10)} 
+              background={TouchableNativeFeedback.Ripple(colors.gray1, true, 10)} 
               style={{width : 10, height : 10}}>
                 <AddIcon width={20} height={20} fill="#000000" />
             </TouchableNativeFeedback>

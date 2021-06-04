@@ -11,6 +11,7 @@ import {
 import Modal from 'react-native-modal';
 import CrossIcon from '../../../assets/icons/cross.svg';
 import StringConstant from '../../utils/string/StringConstant';
+import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
 
 const width = Dimensions.get('screen').width;
 
@@ -20,7 +21,7 @@ const SearchModal = (props) => {
 
   useEffect(() => {
     if (props.isVisible) {
-      textRef.current.focus();
+      // textRef.current.focus();
     }
   }, [props]);
   
@@ -42,17 +43,16 @@ const SearchModal = (props) => {
           </View>
           <View style={styles.containerInput}>
             <View style={{...styles.inputContainer, ...styles.containerInput}}>
-              <TextInput
-                autoCapitalize={"words"}
-                autoFocus={focus}
-                ref={textRef}
-                style={{...styles.searchInput, ...styles.textInput}}
-                onChangeText={props.onChangeText}
-                value={props.value}
-                placeholder={props.placeholder ? props.placeholder : ''}
-                placeholderTextColor="#BDBDBD"
-              
-              />
+              <AutoFocusTextArea
+                 autoCapitalize={"words"}
+                 autoFocus={focus}
+                 ref={textRef}
+                 style={{...styles.searchInput, ...styles.textInput}}
+                 onChangeText={props.onChangeText}
+                 value={props.value}
+                 placeholder={props.placeholder ? props.placeholder : ''}
+                 placeholderTextColor="#BDBDBD"
+               />
             </View>
             {props.isLoading ? <Text>Please wait...</Text> : null}
 

@@ -52,7 +52,7 @@ const LocalComunity = () => {
       return (
         <View style={{paddingHorizontal : 22, paddingTop : 22, paddingBottom : 5}}>
         <TouchableNativeFeedback 
-          background={TouchableNativeFeedback.Ripple("#AAF", true, 20)}
+          background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}
           onPress={() => navigation.goBack()}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
@@ -93,10 +93,12 @@ const LocalComunity = () => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  const handleSelectedSearch = async (val) => {
+  const handleSelectedSearch = async (val, index) => {
     let tempLocation = [...location];
     if (tempLocation.length <= 1) {
       tempLocation.push(val);
+    } else {
+      tempLocation[index] = val
     }
     console.log('isi val ', tempLocation);
     setSearch(capitalizeFirstLetter(val.neighborhood));
@@ -124,7 +126,8 @@ const LocalComunity = () => {
           <PinIcon width={14} height={20} fill="#000000" />
           <Text style={styles.textLocation}>{item.neighborhood}</Text>
         </View>
-        <TouchableNativeFeedback onPress={() => handleDelete(item.location_id)}>
+        <TouchableNativeFeedback onPress={() => handleDelete(item.location_id)}
+          background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
           <TrashIcon width={18} height={20} fill="#000000" />
         </TouchableNativeFeedback>
       </View>
@@ -235,7 +238,7 @@ const LocalComunity = () => {
         onSelect={(val) => {
           setIsVisibleFirstLocation(false);
           setSearch('');
-          handleSelectedSearch(val);
+          handleSelectedSearch(val, 0);
         }}
         isLoading={isLoading}
       />
@@ -254,7 +257,7 @@ const LocalComunity = () => {
         onSelect={(val) => {
           setIsVisibleSecondLocation(false);
           setSearch('');
-          handleSelectedSearch(val);
+          handleSelectedSearch(val, 1);
         }}
         isLoading={isLoading}
       />
