@@ -25,6 +25,7 @@ import {colors} from '../../utils/colors';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
+import StringConstant from '../../utils/string/StringConstant';
 
 const width = Dimensions.get('screen').width;
 const LocalComunity = () => {
@@ -33,7 +34,7 @@ const LocalComunity = () => {
   const [location, setLocation] = useState([]);
   const [optionsSearch, setOptionsSearch] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = useState(true);
+  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = useState(false);
   const [isVisibleSecondLocation, setIsVisibleSecondLocation] = useState(false);
   const [locationPost, setLocationPost] = useState([]);
   const [locationLog, setLocationLog] = useState([]);
@@ -49,7 +50,9 @@ const LocalComunity = () => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+        <TouchableNativeFeedback 
+          background={TouchableNativeFeedback.Ripple("#AAF", true, 20)}
+          onPress={() => navigation.goBack()}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
       );
@@ -162,11 +165,10 @@ const LocalComunity = () => {
       </View>
       <View>
         <Text style={styles.textFindYourLocalComunity}>
-          Find your local community
+          {StringConstant.onboardingLocalCommunityHeadline}
         </Text>
         <Text style={styles.textDesc}>
-          Join up to two cities you call home. Locations can only be adjusted or
-          added infrequently.{' '}
+          {StringConstant.onboardingLocalCommunitySubHeadline}
         </Text>
         <FlatList
           data={location}
@@ -184,10 +186,8 @@ const LocalComunity = () => {
             <View style={styles.card}>
               <PlusIcon width={18} height={18} fill="#000000" />
               <View style={styles.columnButton}>
-                <Text style={styles.textAddLocation}>Add New Location</Text>
-                <Text style={styles.textSearchYourFavorite}>
-                  Search your favorite location
-                </Text>
+                <Text style={styles.textAddLocation}>{StringConstant.onboardingLocalCommunityPrimaryLocationTitle}</Text>
+                <Text style={styles.textSearchYourFavorite}>{StringConstant.onboardingLocalCommunityPrimaryLocationSubTitle}</Text>
               </View>
             </View>
           </TouchableNativeFeedback>
@@ -204,10 +204,10 @@ const LocalComunity = () => {
               <PlusIcon width={18} height={18} fill="#000000" />
               <View style={styles.columnButton}>
                 <Text style={styles.textAddLocation}>
-                  Add a second location
+                  {StringConstant.onboardingLocalCommunitySecondaryLocationTitle}
                 </Text>
                 <Text style={styles.textSearchYourFavorite}>
-                  🏡 Home away from home? Add a second location
+                  {StringConstant.onboardingLocalCommunitySecondaryLocationSubTitle}
                 </Text>
               </View>
             </View>
@@ -223,7 +223,7 @@ const LocalComunity = () => {
         }}
         value={search}
         onChangeText={(text) => handleSearch(text)}
-        placeholder="Search by ZIP, neighborhood or city"
+        placeholder={StringConstant.searchModalPlaceholder}
         options={optionsSearch}
         onSelect={(val) => {
           setIsVisibleFirstLocation(false);
@@ -242,7 +242,7 @@ const LocalComunity = () => {
         }}
         value={search}
         onChangeText={(text) => handleSearch(text)}
-        placeholder="Search by ZIP, neighborhood or city"
+        placeholder={StringConstant.searchModalPlaceholder}
         options={optionsSearch}
         onSelect={(val) => {
           setIsVisibleSecondLocation(false);

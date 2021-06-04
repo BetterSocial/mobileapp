@@ -35,6 +35,9 @@ import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Loading from '../Loading';
 import jwtDecode from 'jwt-decode';
+import { getMyProfile } from '../../service/profile';
+import { SET_DATA_IMAGE } from '../../context/Types';
+import StringConstant from '../../utils/string/StringConstant';
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -88,34 +91,38 @@ const SignIn = () => {
   const handleLogin = () => {
     logIn();
     // dummyLogin()
-    console.log("Dummy Login")
+    // console.log("Dummy Login")
     analytics().logLogin({
       method: 'humanid',
     });
   };
 
-  // const dummyLogin = () => {
-  //   let appUserId = "HQEGNQCHA8J1OIX4G2CP"
-  //   setDataHumenId(appUserId, dispatch);
-  //   verifyUser(appUserId)
-  //     .then(async (response) => {
-  //       setLoading(false);
-  //       if (response.data) {
-  //         setAccessToken(response.token);
-  //         setRefreshToken(response.refresh_token);
-  //         let decodedToken = await jwtDecode(response.token)
-  //         console.log(decodedToken)
-  //         navigation.dispatch(StackActions.replace('HomeTabs'));
-  //       } else {
-  //         removeLocalStorege('userId');
-  //         navigation.dispatch(StackActions.replace('ChooseUsername'));
-  //       }
-  //       setUserId(appUserId);
-  //     })
-  //     .catch((e) => {
-  //       setLoading(false);
-  //     });
-  // }
+  const dummyLogin = () => {
+    let appUserId = "HQEGNQCHA8J1OIX4G2CP"
+    setDataHumenId(appUserId, dispatch);
+    verifyUser(appUserId)
+      .then(async (response) => {
+        setLoading(false);
+        if (response.data) {
+          setAccessToken(response.token);
+          setRefreshToken(response.refresh_token);
+          // let decodedToken = await jwtDecode(response.token)
+          // let profile = await getMyProfile(decodedToken.user_id)
+          // await dispatch({type : SET_DATA_IMAGE, payload : profile.data.profile_pic_path})
+          setTimeout(() => {
+            navigation.dispatch(StackActions.replace('HomeTabs'));
+          }, 100)
+        } else {
+          removeLocalStorege('userId');
+          navigation.dispatch(StackActions.replace('ChooseUsername'));
+        }
+        setUserId(appUserId);
+      })
+      .catch((e) => {
+        console.log(e)
+        setLoading(false);
+      });
+  }
   return (
     <View style={S.container}>
       <View style={S.containerSlideShow}>
@@ -127,9 +134,10 @@ const SignIn = () => {
           <ButtonSign />
         </TouchableOpacity>
         <Text style={S.desc}>
-          <Text style={S.humanID}>humanID</Text> is an independent non-profit
+          {/* <Text style={S.humanID}>{StringConstant.signInScreenHumanIdBrand}</Text> is an independent non-profit
           guaranteeing your privacy and anonymity. BetterSocial will receive
-          absolutely zero personal information.
+          absolutely zero personal information. */}
+          <Text style={S.humanID}>{StringConstant.signInScreenHumanIdBrand}</Text>{` ${StringConstant.signInScreenHumanIdDetail}`}
         </Text>
       </View>
       <Loading visible={loading} />

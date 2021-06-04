@@ -301,7 +301,7 @@ const OtherProfile = () => {
               {!isLoading ? (
                 <View>
                   <View style={styles.tabs} ref={postRef}>
-                    <Text style={styles.postText}>Post ({/* Please change this to post size */ 0})</Text>
+                    <Text style={styles.postText}>Post{/* Please change this to post size */}</Text>
                   </View>
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed

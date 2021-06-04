@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import CrossIcon from '../../../assets/icons/cross.svg';
+import StringConstant from '../../utils/string/StringConstant';
 
 const width = Dimensions.get('screen').width;
 
@@ -37,7 +38,7 @@ const SearchModal = (props) => {
             <TouchableNativeFeedback onPress={props.onClose}>
               <CrossIcon width={18} height={18} fill="#000" />
             </TouchableNativeFeedback>
-            <Text style={styles.textSearch}>Search</Text>
+            <Text style={styles.textSearch}>{StringConstant.searchModalTitle}</Text>
           </View>
           <View style={styles.containerInput}>
             <View style={{...styles.inputContainer, ...styles.containerInput}}>

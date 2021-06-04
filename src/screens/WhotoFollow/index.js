@@ -72,7 +72,8 @@ const WhotoFollow = () => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+        <TouchableNativeFeedback onPress={() => navigation.goBack()}
+          background={TouchableNativeFeedback.Ripple("#AAF", true, 20)}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
       );
@@ -434,7 +435,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     lineHeight: 21,
     alignSelf: 'flex-start',
-    textTransform: 'capitalize',
+    // textTransform: 'capitalize',
   },
   textUsername: {
     fontFamily: 'Inter',

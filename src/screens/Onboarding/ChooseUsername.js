@@ -25,6 +25,7 @@ import {showMessage} from 'react-native-flash-message';
 import {colors} from '../../utils/colors';
 import analytics from '@react-native-firebase/analytics';
 import BtnAddPhoto from '../../assets/icon-svg/ic_btn_add_photo.svg';
+import StringConstant from '../../utils/string/StringConstant';
 const ChooseUsername = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
@@ -47,8 +48,7 @@ const ChooseUsername = () => {
   };
 
   const checkUsername = async (v) => {
-    let value = v.replace(/[^a-zA-Z0-9-_]/g, '');
-    value = value.toLowerCase()
+    let value = v.toLowerCase().replace(/[^a-z0-9-_]/g, '');
     setTypeFetch('typing');
     setUsernameState(value);
     if (value.length <= 15) {
@@ -56,7 +56,7 @@ const ChooseUsername = () => {
         if (isNaN(v)) {
           setTypeFetch('fetch');
           const user = await verifyUsername(value);
-          console.log(user)
+          // console.log(user)
           setTypeFetch('max');
           if (user.data && v.length > 2) {
             setTypeFetch('notavailable');
@@ -78,10 +78,41 @@ const ChooseUsername = () => {
       setUsername(username, dispatch);
       navigation.navigate('LocalComunity');
     } else {
-      showMessage({
-        message: 'username cannot be empty',
+      if(!username) return showMessage({
+        message: StringConstant.onboardingChooseUsernameErrorCannotBeEmpty,
         type: 'danger',
+        backgroundColor : colors.red
       });
+
+      if(username.length <= 2) return showMessage({
+        message: StringConstant.onboardingChooseUsernameLabelMinimumChar,
+        type: 'danger',
+        backgroundColor : colors.red
+      });
+
+      if(username.length > 15) return showMessage({
+        message: StringConstant.onboardingChooseUsernameLabelMaximumChar,
+        type: 'danger',
+        backgroundColor : colors.red
+      });
+
+      if(typeFetch === "notavailable") return showMessage({
+        message: StringConstant.onboardingChooseUsernameLabelUserTaken(username),
+        type: 'danger',
+        backgroundColor : colors.red
+      });
+
+      if(typeFetch === "nan") return showMessage({
+        message: StringConstant.onboardingChooseUsernameLabelJustANumber,
+        type: 'danger',
+        backgroundColor : colors.red
+      });
+
+      // showMessage({
+      //   message: StringConstant.onboardingChooseUsernameErrorCannotBeEmpty,
+      //   type: 'danger',
+      //   backgroundColor : colors.red
+      // });
     }
   };
   const messageTypeFetch = (type, user) => {
@@ -92,9 +123,10 @@ const ChooseUsername = () => {
             style={{
               fontSize: 12,
               color: '#BDBDBD',
+              marginTop : 6,
               fontFamily: fonts.inter[400],
             }}>
-            Checking availability
+            {` ${StringConstant.onboardingChooseUsernameLabelCheckingAvailability}`}
           </Text>
         );
       case 'available':
@@ -104,9 +136,9 @@ const ChooseUsername = () => {
               fontSize: 12,
               color: colors.holytosca,
               fontFamily: fonts.inter[400],
+              marginTop : 6,
             }}>
-            {' '}
-            Congrats - {user} is still available
+            {` ${StringConstant.onboardingChooseUsernameLabelUserAvailable(user)}`}
           </Text>
         );
       case 'notavailable':
@@ -116,8 +148,9 @@ const ChooseUsername = () => {
               fontSize: 12,
               color: colors.red,
               fontFamily: fonts.inter[400],
+              marginTop : 6,
             }}>
-            Sorry, {user} has already been taken
+            {` ${StringConstant.onboardingChooseUsernameLabelUserTaken(user)}`}
           </Text>
         );
       case 'typing':
@@ -127,8 +160,9 @@ const ChooseUsername = () => {
               fontSize: 12,
               color: colors.red,
               fontFamily: fonts.inter[400],
+              marginTop : 6,
             }}>
-            Username min. 3 characters
+            {` ${StringConstant.onboardingChooseUsernameLabelMinimumChar}`}
           </Text>
         );
       case 'max':
@@ -139,7 +173,7 @@ const ChooseUsername = () => {
               color: colors.red,
               fontFamily: fonts.inter[400],
             }}>
-            Username maximum 15 characters
+            {` ${StringConstant.onboardingChooseUsernameLabelMaximumChar}`}
           </Text>
         );
       case 'nan':
@@ -150,7 +184,7 @@ const ChooseUsername = () => {
               color: colors.red,
               fontFamily: fonts.inter[400],
             }}>
-            Username cannot be just a number
+            {` ${StringConstant.onboardingChooseUsernameLabelJustANumber}`}
           </Text>
         );
       default:
@@ -161,15 +195,12 @@ const ChooseUsername = () => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.keyboardavoidingview} 
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={100}
+        keyboardVerticalOffset={18}
         enabled>
       <View style={styles.content}>
         <ProgressBar isStatic={true} value={25} />
-        <Text style={styles.title}>Choose your username</Text>
-        <Text style={styles.desc}>
-          Ping does not require real names - just make sure your friends will
-          find & recognize you
-        </Text>
+        <Text style={styles.title}>{StringConstant.onboardingChooseUsernameHeadline}</Text>
+        <Text style={styles.desc}>{StringConstant.onboardingChooseUsernameSubHeadline}</Text>
         <View style={styles.containerInput}>
           <TouchableOpacity
             style={styles.containerAddIcon}
@@ -193,14 +224,12 @@ const ChooseUsername = () => {
           <View style={styles.containerIcon}>
             <IconFontAwesome5 name="exclamation" size={14} color="#2F80ED" />
           </View>
-          <Text style={styles.infoText}>
-            Whatever your username, you will always be able to post anonymously.
-          </Text>
+          <Text style={styles.infoText}>{StringConstant.onboardingChooseUsernameBlueBoxHint}</Text>
         </View>
       </View>
 
       <View style={{flex : 1}}/>
-      <Button style={{marginTop : 16}} onPress={() => next()}>NEXT</Button>
+      <Button style={{marginTop : 16}} onPress={() => next()}>{StringConstant.onboardingChooseUsernameButtonStateNext}</Button>
       </KeyboardAvoidingView>
 
     </SafeAreaView>

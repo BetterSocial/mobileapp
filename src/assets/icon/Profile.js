@@ -1,17 +1,19 @@
-import React, { useContext } from 'react'
+import jwtDecode from 'jwt-decode'
+import React, { useContext, useEffect, useState } from 'react'
 import { Image } from 'react-native'
 import Store, { Context } from '../../context/Store'
+import { getAccessToken } from '../../data/local/accessToken'
 import { DEFAULT_PROFILE_PIC_PATH } from '../../helpers/constants'
+import { getMyProfile } from '../../service/profile'
 import { colors } from '../../utils/colors'
 
 
-let ProfileIcon = ({}) => {
-    let context = useContext(Context)
-    let [users, dispatch] = context.users
-    let imageUri = users.photo ? users.photo : DEFAULT_PROFILE_PIC_PATH
+let ProfileIcon = ({uri}) => {
+    let imageUri = uri ? uri : DEFAULT_PROFILE_PIC_PATH
 
-    return <Image key={imageUri} source={{
-        uri : imageUri
+    if(imageUri) return <Image key={`${imageUri}?time=${new Date().valueOf()}`} source={{
+        uri : `${imageUri}?time=${new Date().valueOf()}`,
+        cache : 'reload'
     }} width={19} height={19} style={{
         borderRadius : 19,
         width : 19,
@@ -19,6 +21,10 @@ let ProfileIcon = ({}) => {
         borderWidth : 0.25,
         borderColor : colors.gray1
     }}/>
+
+    return <></>
 }
 
-export default ProfileIcon
+let MemoProfileIcon = React.memo(ProfileIcon)
+
+export default MemoProfileIcon
