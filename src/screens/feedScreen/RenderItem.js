@@ -13,6 +13,7 @@ import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
 const {width, height} = Dimensions.get('window');
+
 const getCountVote = (item) => {
   let reactionCount = item.reaction_counts;
   let count = 0;
@@ -153,6 +154,7 @@ const Item = ({
         totalVote={getCountVote(item)}
         totalComment={getCountComment(item)}
         statusVote={voteStatus}
+        isSelf={selfUserId === item.actor.id ? true : false}
       />
     </Card>
   );

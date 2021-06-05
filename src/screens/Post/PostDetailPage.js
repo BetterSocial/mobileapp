@@ -260,6 +260,7 @@ const PostDetailPage = (props) => {
                 refBlockUser.current.open();
               }
             }}
+            isSelf={yourselfId === item.actor.id ? true : false}
           />
         </View>
         {isReaction && (

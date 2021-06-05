@@ -46,9 +46,14 @@ const Footer = ({
         <Text style={styles.textCount}>{totalComment}</Text>
       </View>
       <View style={{...styles.rowSpaceBeetwen, width: screenWidth * 0.3}}>
-        <TouchableOpacity onPress={() => onPressBlock(item)}>
-          <MemoIc_block_inactive height={18} width={18} />
-        </TouchableOpacity>
+        {isSelf ? (
+          <View />
+        ) : (
+          <TouchableOpacity onPress={() => onPressBlock(item)}>
+            <MemoIc_block_inactive height={18} width={18} />
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity onPress={() => onPressDownVote(item)}>
           {statusVote === 'downvote' ? (
             <MemoIc_arrow_down_vote_on width={18} height={18} />

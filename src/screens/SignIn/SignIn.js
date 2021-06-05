@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   Button,
   Image,
@@ -39,6 +39,29 @@ const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
   const [loading, setLoading] = useState(false);
+
+  // auto login ketika error humanId
+  useEffect(() => {
+    const autoLogin = () => {
+      verifyUser('P19FGPQGMSZ5VSHA0YSQ')
+        .then((response) => {
+          setLoading(false);
+          if (response.data) {
+            setAccessToken(response.token);
+            setRefreshToken(response.refresh_token);
+            navigation.dispatch(StackActions.replace('HomeTabs'));
+          } else {
+            removeLocalStorege('userId');
+            navigation.dispatch(StackActions.replace('ChooseUsername'));
+          }
+          setUserId('P19FGPQGMSZ5VSHA0YSQ');
+        })
+        .catch((e) => {
+          setLoading(false);
+        });
+    };
+    autoLogin();
+  }, []);
 
   React.useEffect(() => {
     analytics().logScreenView({
