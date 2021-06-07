@@ -75,6 +75,9 @@ const SignIn = () => {
               setLoading(false);
             });
         }
+      }).catch((e) => {
+        console.log("error")
+        console.log(e)
       });
     });
     onError((message) => {

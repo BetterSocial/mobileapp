@@ -154,7 +154,7 @@ const WhotoFollow = () => {
             message: 'Welcome to Better Social',
             // description: 'Choose where to get started',
             type: 'success',
-            color : colors.holytosca
+            backgroundColor : colors.holytosca
           });
           setTimeout(() => {
             navigation.dispatch(StackActions.replace('HomeTabs'));
@@ -175,6 +175,7 @@ const WhotoFollow = () => {
             showMessage({
               message: 'please complete the data',
               type: 'danger',
+              backgroundColor : colors.red
             });
           }
           console.log('err 1 ', res.message[0].message);
@@ -188,6 +189,7 @@ const WhotoFollow = () => {
         showMessage({
           message: 'please complete the data',
           type: 'danger',
+          backgroundColor : colors.red
         });
       });
   };
