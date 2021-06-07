@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {
   Button,
   Image,
@@ -38,11 +38,16 @@ import jwtDecode from 'jwt-decode';
 import { getMyProfile } from '../../service/profile';
 import { SET_DATA_IMAGE } from '../../context/Types';
 import StringConstant from '../../utils/string/StringConstant';
+import RBSheet from 'react-native-raw-bottom-sheet';
+
+const ENABLE_DEV_ONLY_FEATURE = true
 
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = useContext(Context).users;
   const [loading, setLoading] = useState(false);
+
+  let dummyLoginRbSheetRef = useRef(null)
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -100,8 +105,11 @@ const SignIn = () => {
     });
   };
 
-  const dummyLogin = () => {
-    let appUserId = "HQEGNQCHA8J1OIX4G2CP"
+  const dummyLogin = (appUserId) => {
+    if(ENABLE_DEV_ONLY_FEATURE) {
+      dummyLoginRbSheetRef.current.close()
+    }
+    setLoading(true)
     setDataHumenId(appUserId, dispatch);
     verifyUser(appUserId)
       .then(async (response) => {
@@ -128,6 +136,10 @@ const SignIn = () => {
   }
   return (
     <View style={S.container}>
+      { ENABLE_DEV_ONLY_FEATURE ? <View style={S.devTrialView}>
+        <Button title={"Dev Dummy Onboarding"} onPress={() => navigation.navigate("ChooseUsername")}/>
+        <Button title={"Dev Dummy Login"} onPress={() => dummyLoginRbSheetRef.current.open()}/>
+      </View> :<></>}
       <View style={S.containerSlideShow}>
         <SlideShow />
       </View>
@@ -144,6 +156,30 @@ const SignIn = () => {
         </Text>
       </View>
       <Loading visible={loading} />
+      { ENABLE_DEV_ONLY_FEATURE ? <RBSheet ref={dummyLoginRbSheetRef}>
+        <Text>Choose an account you wish to login</Text>
+        <TouchableOpacity onPress={() => dummyLogin("HQEGNQCHA8J1OIX4G2CP")}>
+          <View style={S.divider}/>
+          <Text style={S.dummyAccountItem}>fajarism : HQEGNQCHA8J1OIX4G2CP</Text>
+          <View style={S.divider}/>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => dummyLogin("KVL1JKD8VG6KMHUZ0RY5")}>
+          <Text style={S.dummyAccountItem}>bas_v1-4 : KVL1JKD8VG6KMHUZ0RY5</Text>
+          <View style={S.divider}/>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => dummyLogin("P19FGPQGMSZ5VSHA0YSQ")}>
+          <Text style={S.dummyAccountItem}>usupsuparma : P19FGPQGMSZ5VSHA0YSQ</Text>
+          <View style={S.divider}/>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => dummyLogin("6I7SIFD7BPSKZGK0Y6DF")}>
+          <Text style={S.dummyAccountItem}>eka : 6I7SIFD7BPSKZGK0Y6DF</Text>
+          <View style={S.divider}/>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => dummyLogin("TVGBYD1BI9YMXMAA6CQS")}>
+          <Text style={S.dummyAccountItem}>busanid : TVGBYD1BI9YMXMAA6CQS</Text>
+          <View style={S.divider}/>
+        </TouchableOpacity>
+      </RBSheet>: <></>}
     </View>
   );
 };
@@ -153,6 +189,26 @@ export default SignIn;
 const S = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  devTrialView : {
+    position : 'absolute',
+    top : 0,
+    left : 0,
+    width : "100%",
+    zIndex : 999,
+    backgroundColor : 'red',
+  },
+  dummyLoginButton : {
+    
+  },
+  dummyAccountItem : {
+    paddingHorizontal : 16,
+    paddingVertical : 8
+  },
+  divider : {
+    width : '100%',
+    backgroundColor : colors.gray,
+    height : 2
   },
   image: {
     width: 321,
