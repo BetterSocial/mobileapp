@@ -22,50 +22,29 @@ const {width: screenWidth} = Dimensions.get('window');
 import PropTypes from 'prop-types';
 import {isContainUrl, smartRender} from '../../utils/Utils';
 
-const _renderItem = ({item, index}, parallaxProps) => {
-  return (
-    <View key={index} style={styles.item}>
-      <ParallaxImage
-        source={{uri: item}}
-        containerStyle={styles.imageContainer}
-        style={styles.image}
-        parallaxFactor={0.4}
-        {...parallaxProps}
-      />
-    </View>
-  );
-};
-
 const Content = ({message, images_url, style, onPress}) => {
   if (isContainUrl(message)) {
     return (
-      <View style={styles.contentFeed}>
-        <Text>ini url</Text>
+      <TouchableOpacity
+        onPress={onPress}
+        style={[
+          styles.contentFeed,
+          {justifyContent: 'center', alignItems: 'center'},
+        ]}>
         {smartRender(Card, {
+          domain: 'guardian.com',
+          date: 'May, 2, 2021',
+          domainImage:
+            'https://www.rollingstone.com/wp-content/uploads/2018/08/GettyImages-1020376858.jpg',
           title:
             "'Queen' rapper rescheduling dates to 2019 after deciding to &#8220;reevaluate elements of production on the 'NickiHndrxx Tour'",
           description:
             'Why choose one when you can wear both? These energizing pairings stand out from the crowd',
           image:
             'https://www.rollingstone.com/wp-content/uploads/2018/08/GettyImages-1020376858.jpg',
-          url:
-            'https://www.rollingstone.com/music/music-news/nicki-minaj-cancels-north-american-tour-with-future-714315/',
-          og: {
-            description:
-              'Why choose one when you can wear both? These energizing pairings stand out from the crowd',
-            title:
-              "'Queen' rapper rescheduling dates to 2019 after deciding to &#8220;reevaluate elements of production on the 'NickiHndrxx Tour'",
-            url:
-              'https://www.rollingstone.com/music/music-news/nicki-minaj-cancels-north-american-tour-with-future-714315/',
-            images: [
-              {
-                image:
-                  'https://www.rollingstone.com/wp-content/uploads/2018/08/GettyImages-1020376858.jpg',
-              },
-            ],
-          },
+          url: 'https://www.rollingstone.com/music/music-news/nicki-minaj-cancels-north-american-tour-with-future-714315/',
         })}
-      </View>
+      </TouchableOpacity>
     );
   } else {
     return (

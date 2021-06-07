@@ -12,6 +12,8 @@ import {Card} from '../../components/CardStack';
 import {POST_VERB_POLL} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
+import {isContainUrl, smartRender} from '../../utils/Utils';
+
 const {width, height} = Dimensions.get('window');
 
 const getCountVote = (item) => {
