@@ -15,10 +15,12 @@ import {fonts} from '../../utils/fonts';
 import SeeMore from 'react-native-see-more-inline';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import Gap from '../../components/Gap';
+import Card from '../../components/Card/Card';
 
 const {width: screenWidth} = Dimensions.get('window');
 
 import PropTypes from 'prop-types';
+import {isContainUrl, smartRender} from '../../utils/Utils';
 
 const _renderItem = ({item, index}, parallaxProps) => {
   return (
@@ -35,58 +37,92 @@ const _renderItem = ({item, index}, parallaxProps) => {
 };
 
 const Content = ({message, images_url, style, onPress}) => {
-  return (
-    <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
-      {images_url !== null && images_url !== '' && images_url !== undefined ? (
-        images_url.length > 0 ? (
-          <View
-            style={{
-              flex: 1,
-              paddingBottom: 16,
-            }}>
-            <SeeMore
-              seeLessText={' '}
-              numberOfLines={4}
-              linkStyle={styles.textContentFeed}>
-              {message}
-            </SeeMore>
-            <Gap height={16} />
-            <FlatList
-              style={{flex: 1}}
-              horizontal={true}
-              pagingEnabled={true}
-              data={images_url}
-              renderItem={({item, index}) => {
-                return (
-                  <Image
-                    source={{uri: item}}
-                    style={{
-                      flex: 1,
-                      width: screenWidth - 32,
-                      borderRadius: 16,
-                    }}
-                    resizeMode={'cover'}
-                  />
-                );
-              }}
-              keyExtractor={({item, index}) => index}
-            />
-          </View>
-        ) : (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: 1,
-            }}>
-            <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
-              {message}
-            </SeeMore>
-          </View>
-        )
-      ) : null}
-    </TouchableOpacity>
-  );
+  if (isContainUrl(message)) {
+    return (
+      <View style={styles.contentFeed}>
+        <Text>ini url</Text>
+        {smartRender(Card, {
+          title:
+            "'Queen' rapper rescheduling dates to 2019 after deciding to &#8220;reevaluate elements of production on the 'NickiHndrxx Tour'",
+          description:
+            'Why choose one when you can wear both? These energizing pairings stand out from the crowd',
+          image:
+            'https://www.rollingstone.com/wp-content/uploads/2018/08/GettyImages-1020376858.jpg',
+          url:
+            'https://www.rollingstone.com/music/music-news/nicki-minaj-cancels-north-american-tour-with-future-714315/',
+          og: {
+            description:
+              'Why choose one when you can wear both? These energizing pairings stand out from the crowd',
+            title:
+              "'Queen' rapper rescheduling dates to 2019 after deciding to &#8220;reevaluate elements of production on the 'NickiHndrxx Tour'",
+            url:
+              'https://www.rollingstone.com/music/music-news/nicki-minaj-cancels-north-american-tour-with-future-714315/',
+            images: [
+              {
+                image:
+                  'https://www.rollingstone.com/wp-content/uploads/2018/08/GettyImages-1020376858.jpg',
+              },
+            ],
+          },
+        })}
+      </View>
+    );
+  } else {
+    return (
+      <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
+        {images_url !== null &&
+        images_url !== '' &&
+        images_url !== undefined ? (
+          images_url.length > 0 ? (
+            <View
+              style={{
+                flex: 1,
+                paddingBottom: 16,
+              }}>
+              <SeeMore
+                seeLessText={' '}
+                numberOfLines={4}
+                linkStyle={styles.textContentFeed}>
+                {message}
+              </SeeMore>
+              <Gap height={16} />
+              <FlatList
+                style={{flex: 1}}
+                horizontal={true}
+                pagingEnabled={true}
+                data={images_url}
+                renderItem={({item, index}) => {
+                  return (
+                    <Image
+                      source={{uri: item}}
+                      style={{
+                        flex: 1,
+                        width: screenWidth - 32,
+                        borderRadius: 16,
+                      }}
+                      resizeMode={'cover'}
+                    />
+                  );
+                }}
+                keyExtractor={({item, index}) => index}
+              />
+            </View>
+          ) : (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 1,
+              }}>
+              <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
+                {message}
+              </SeeMore>
+            </View>
+          )
+        ) : null}
+      </TouchableOpacity>
+    );
+  }
 };
 
 Content.propTypes = {

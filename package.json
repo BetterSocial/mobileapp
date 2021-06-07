@@ -8,7 +8,7 @@
     "build:apk:android": "cd android && ENVFILE=.env.development ./gradlew assembleDevDebug",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest --verbose",
     "lint": "eslint .",
     "android:release": "cd android && ./gradlew app:assembleRelease",
     "android:clean": "cd android && ./gradlew clean && ./gradlew cleanBuildCache",
