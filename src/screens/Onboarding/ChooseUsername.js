@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  Image
 } from 'react-native';
 import {ProgressBar} from '../../components/ProgressBar';
 import {Button} from '../../components/Button';
@@ -26,11 +27,14 @@ import {colors} from '../../utils/colors';
 import analytics from '@react-native-firebase/analytics';
 import BtnAddPhoto from '../../assets/icon-svg/ic_btn_add_photo.svg';
 import StringConstant from '../../utils/string/StringConstant';
+import { DEFAULT_PROFILE_PIC_PATH } from '../../helpers/constants';
+import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 const ChooseUsername = () => {
   const navigation = useNavigation();
-  const [, dispatch] = useContext(Context).users;
+  const [users, dispatch] = useContext(Context).users;
   const [username, setUsernameState] = useState('');
   const [typeFetch, setTypeFetch] = useState('');
+
   useEffect(() => {
     analytics().logScreenView({
       screen_class: 'ChooseUsername',
@@ -43,7 +47,7 @@ const ChooseUsername = () => {
       id: 2,
     });
     launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-      setImage(res.base64, dispatch);
+      if(res.base64) setImage(`${res.base64}`, dispatch);
     });
   };
 
@@ -205,7 +209,20 @@ const ChooseUsername = () => {
           <TouchableOpacity
             style={styles.containerAddIcon}
             onPress={() => onPhoto()}>
-            <BtnAddPhoto width={52} height={57} />
+            {/* <BtnAddPhoto width={52} height={57} /> */}
+            <View>
+              <Image source={{
+                uri : users.photo ? `data:image/png;base64,${users.photo}` : DEFAULT_PROFILE_PIC_PATH,
+                cache : 'reload'
+              }} width={52} height={52} style={{
+                height : 52,
+                width : 52,
+                borderRadius : 26
+              }}/>
+              <View style={{width : 14, height : 14, position : "absolute", bottom : -5, left : 19}}>
+                <MemoOnboardingChangeProfilePlusIcon/>
+              </View>
+            </View>
           </TouchableOpacity>
           <View>
             <Input

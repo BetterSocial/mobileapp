@@ -283,7 +283,7 @@ const ProfileScreen = () => {
     } else {
       setIsLoadingUpdateImageCamera(true);
     }
-
+    
     let data = {
       profile_pic_path: value,
     };

@@ -118,6 +118,7 @@ const LocalComunity = () => {
 
   const renderItem = ({index, item}) => (
     <TouchableNativeFeedback onPress={() => {
+      setSearch("")
       if(index === 0) return setIsVisibleFirstLocation(true)
       else if(index === 1) return setIsVisibleSecondLocation(true)
     }}>
