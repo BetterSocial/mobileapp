@@ -25,6 +25,7 @@ import {colors} from '../../utils/colors';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
+import StringConstant from '../../utils/string/StringConstant';
 
 const width = Dimensions.get('screen').width;
 const LocalComunity = () => {
@@ -33,7 +34,7 @@ const LocalComunity = () => {
   const [location, setLocation] = useState([]);
   const [optionsSearch, setOptionsSearch] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = useState(true);
+  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = useState(false);
   const [isVisibleSecondLocation, setIsVisibleSecondLocation] = useState(false);
   const [locationPost, setLocationPost] = useState([]);
   const [locationLog, setLocationLog] = useState([]);
@@ -49,9 +50,13 @@ const LocalComunity = () => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+        <View style={{paddingHorizontal : 22, paddingTop : 22, paddingBottom : 5}}>
+        <TouchableNativeFeedback 
+          background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}
+          onPress={() => navigation.goBack()}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
+        </View>
       );
     } else {
       return (
@@ -88,10 +93,12 @@ const LocalComunity = () => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  const handleSelectedSearch = async (val) => {
+  const handleSelectedSearch = async (val, index) => {
     let tempLocation = [...location];
     if (tempLocation.length <= 1) {
       tempLocation.push(val);
+    } else {
+      tempLocation[index] = val
     }
     console.log('isi val ', tempLocation);
     setSearch(capitalizeFirstLetter(val.neighborhood));
@@ -109,16 +116,23 @@ const LocalComunity = () => {
     await setLocationLog(locLog);
   };
 
-  const renderItem = ({item}) => (
-    <View style={styles.containerLocation}>
-      <View style={styles.containerRow}>
-        <PinIcon width={14} height={20} fill="#000000" />
-        <Text style={styles.textLocation}>{item.neighborhood}</Text>
+  const renderItem = ({index, item}) => (
+    <TouchableNativeFeedback onPress={() => {
+      setSearch("")
+      if(index === 0) return setIsVisibleFirstLocation(true)
+      else if(index === 1) return setIsVisibleSecondLocation(true)
+    }}>
+      <View style={styles.containerLocation}>
+        <View style={styles.containerRow}>
+          <PinIcon width={14} height={20} fill="#000000" />
+          <Text style={styles.textLocation}>{item.neighborhood}</Text>
+        </View>
+        <TouchableNativeFeedback onPress={() => handleDelete(item.location_id)}
+          background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
+          <TrashIcon width={18} height={20} fill="#000000" />
+        </TouchableNativeFeedback>
       </View>
-      <TouchableNativeFeedback onPress={() => handleDelete(item.location_id)}>
-        <TrashIcon width={18} height={20} fill="#000000" />
-      </TouchableNativeFeedback>
-    </View>
+    </TouchableNativeFeedback>
   );
 
   const handleDelete = async (val) => {
@@ -162,11 +176,10 @@ const LocalComunity = () => {
       </View>
       <View>
         <Text style={styles.textFindYourLocalComunity}>
-          Find your local community
+          {StringConstant.onboardingLocalCommunityHeadline}
         </Text>
         <Text style={styles.textDesc}>
-          Join up to two cities you call home. Locations can only be adjusted or
-          added infrequently.{' '}
+          {StringConstant.onboardingLocalCommunitySubHeadline}
         </Text>
         <FlatList
           data={location}
@@ -184,10 +197,8 @@ const LocalComunity = () => {
             <View style={styles.card}>
               <PlusIcon width={18} height={18} fill="#000000" />
               <View style={styles.columnButton}>
-                <Text style={styles.textAddLocation}>Add New Location</Text>
-                <Text style={styles.textSearchYourFavorite}>
-                  Search your favorite location
-                </Text>
+                <Text style={styles.textAddLocation}>{StringConstant.onboardingLocalCommunityPrimaryLocationTitle}</Text>
+                <Text style={styles.textSearchYourFavorite}>{StringConstant.onboardingLocalCommunityPrimaryLocationSubTitle}</Text>
               </View>
             </View>
           </TouchableNativeFeedback>
@@ -204,10 +215,10 @@ const LocalComunity = () => {
               <PlusIcon width={18} height={18} fill="#000000" />
               <View style={styles.columnButton}>
                 <Text style={styles.textAddLocation}>
-                  Add a second location
+                  {StringConstant.onboardingLocalCommunitySecondaryLocationTitle}
                 </Text>
                 <Text style={styles.textSearchYourFavorite}>
-                  🏡 Home away from home? Add a second location
+                  {StringConstant.onboardingLocalCommunitySecondaryLocationSubTitle}
                 </Text>
               </View>
             </View>
@@ -223,12 +234,12 @@ const LocalComunity = () => {
         }}
         value={search}
         onChangeText={(text) => handleSearch(text)}
-        placeholder="Search by ZIP, neighborhood or city"
+        placeholder={StringConstant.searchModalPlaceholder}
         options={optionsSearch}
         onSelect={(val) => {
           setIsVisibleFirstLocation(false);
           setSearch('');
-          handleSelectedSearch(val);
+          handleSelectedSearch(val, 0);
         }}
         isLoading={isLoading}
       />
@@ -242,12 +253,12 @@ const LocalComunity = () => {
         }}
         value={search}
         onChangeText={(text) => handleSearch(text)}
-        placeholder="Search by ZIP, neighborhood or city"
+        placeholder={StringConstant.searchModalPlaceholder}
         options={optionsSearch}
         onSelect={(val) => {
           setIsVisibleSecondLocation(false);
           setSearch('');
-          handleSelectedSearch(val);
+          handleSelectedSearch(val, 1);
         }}
         isLoading={isLoading}
       />
@@ -269,7 +280,7 @@ const LocalComunity = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 22,
+    // padding: 22,
   },
   textFindYourLocalComunity: {
     fontFamily: 'Inter',
@@ -277,6 +288,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 36,
     lineHeight: 44,
+    paddingHorizontal : 22,
     color: colors.bunting,
   },
   containerInfo: {
@@ -327,6 +339,7 @@ const styles = StyleSheet.create({
   containerProgress: {
     marginTop: 36,
     marginBottom: 24,
+    paddingHorizontal: 22,
   },
   textDesc: {
     fontFamily: 'Inter',
@@ -337,12 +350,15 @@ const styles = StyleSheet.create({
     color: colors.gray,
     opacity: 0.84,
     marginTop: 8,
-    marginBottom: 25,
+    marginBottom: 12,
+    paddingHorizontal : 22,
   },
 
   card: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal : 22,
+    // backgroundColor : 'blue'
   },
   columnButton: {
     flexDirection: 'column',
@@ -355,6 +371,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     letterSpacing: -0.28,
+    marginTop : 13,
     color: colors.black,
   },
   textSearchYourFavorite: {
@@ -364,14 +381,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 24,
     letterSpacing: -0.28,
+    marginBottom : 10,
     color: colors.silver,
   },
   containerLocation: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 30,
-    marginBottom: 35,
+    paddingHorizontal : 22,
+    // marginBottom: 35,
+    // paddingVertical : 0,
+    // marginBottom: 20,
+    // paddingVertical : 20,
+    // backgroundColor : 'red'
   },
   containerRow: {
     flexDirection: 'row',
@@ -384,6 +406,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     letterSpacing: -0.28,
+    marginTop : 22,
+    marginBottom : 22,
     color: colors.black,
     paddingLeft: 17,
     textTransform: 'capitalize',

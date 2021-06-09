@@ -126,7 +126,10 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
                   style={{width: '100%', paddingStart: 0}}
                   onSubmitEditing={() => add()}
                   value={dataTopic}
-                  onChangeText={(v) => setTopic(v)}
+                  onChangeText={(v) => {
+                    if(v.match(/\s+$/gm)) return add()
+                    setTopic(v)
+                  }}
                   autoCapitalize="none"
                   onKeyPress={({nativeEvent}) => {
                     // console.log(`a${nativeEvent.key}b`)
