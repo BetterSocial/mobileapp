@@ -62,7 +62,7 @@ jest.doMock('react-native', () => {
         },
       },
       StyleSheet: {
-        create: jest.fn(),
+        create: jest.fn((e) => e),
       },
     },
     ReactNative,

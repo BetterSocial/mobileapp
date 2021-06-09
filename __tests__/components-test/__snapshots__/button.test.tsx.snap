@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`button Button renders correctly 1`] = `
+<View
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "borderColor": "#E0E0E0",
+      "borderRadius": 8,
+      "borderStyle": "dashed",
+      "borderWidth": 2,
+      "opacity": 1,
+      "paddingVertical": 32,
+    }
+  }
+>
+  <Text
+    style={Object {}}
+  >
+    +add more photos
+  </Text>
+</View>
+`;
+
+exports[`button button snapshot 1`] = `
+<ForwardRef
+  onPress={[Function]}
+  style={
+    Array [
+      Object {
+        "alignItems": "center",
+        "borderColor": "#E0E0E0",
+        "borderRadius": 8,
+        "borderStyle": "dashed",
+        "borderWidth": 2,
+        "paddingVertical": 32,
+      },
+      Object {},
+    ]
+  }
+>
+  <Text
+    style={Object {}}
+  >
+    +add more photos
+  </Text>
+</ForwardRef>
+`;
