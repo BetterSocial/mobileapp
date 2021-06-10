@@ -22,53 +22,45 @@ const {width: screenWidth} = Dimensions.get('window');
 import PropTypes from 'prop-types';
 import {isContainUrl, smartRender} from '../../utils/Utils';
 
-const _renderItem = ({item, index}, parallaxProps) => {
-  return (
-    <View key={index} style={styles.item}>
-      <ParallaxImage
-        source={{uri: item}}
-        containerStyle={styles.imageContainer}
-        style={styles.image}
-        parallaxFactor={0.4}
-        {...parallaxProps}
-      />
-    </View>
-  );
+const dateFormat = (date) => {
+  return date === undefined
+    ? new Date().toLocaleDateString()
+    : new Date(date).toLocaleDateString();
 };
 
-const ContentUrl = ({message, images_url, style, onPress}) => {
+const ContentLink = ({og, style, onPress}) => {
+  console.log(og);
+  const {date, description, domain, domainImage, image, title, url} = og;
   return (
     <TouchableOpacity
-      onPress={() => onPress}
+      onPress={onPress}
       style={[
         styles.contentFeed,
         {justifyContent: 'center', alignItems: 'center'},
       ]}>
       {smartRender(Card, {
-        domain: 'facebook.com',
-        date: 'May, 2, 2021',
+        domain: domain,
+        date: dateFormat(date),
         domainImage:
-          'https://www.rollingstone.com/wp-content/uploads/2018/08/GettyImages-1020376858.jpg',
-        title:
-          "'Queen' rapper rescheduling dates to 2019 after deciding to &#8220;reevaluate elements of production on the 'NickiHndrxx Tour'",
-        description:
-          'Why choose one when you can wear both? These energizing pairings stand out from the crowd',
-        image:
-          'https://www.rollingstone.com/wp-content/uploads/2018/08/GettyImages-1020376858.jpg',
-        url: 'https://www.rollingstone.com/music/music-news/nicki-minaj-cancels-north-american-tour-with-future-714315/',
+          domainImage !== ''
+            ? domainImage
+            : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
+        title: title,
+        description: description,
+        image: image,
+        url: url,
       })}
     </TouchableOpacity>
   );
 };
 
-ContentUrl.propTypes = {
-  message: PropTypes.string,
-  images_url: PropTypes.array,
+ContentLink.propTypes = {
+  og: PropTypes.object,
   style: PropTypes.object,
   onPress: PropTypes.func,
 };
 
-export default ContentUrl;
+export default ContentLink;
 
 const styles = StyleSheet.create({
   rowSpaceBeetwen: {

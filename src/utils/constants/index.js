@@ -1,5 +1,7 @@
-const POST_VERB_POLL = "poll"
+const POST_VERB_POLL = 'poll';
 
-export {
-    POST_VERB_POLL
-}
+const POST_TYPE_STANDARD = 0;
+const POST_TYPE_POLL = 1;
+const POST_TYPE_LINK = 2;
+
+export {POST_VERB_POLL, POST_TYPE_STANDARD, POST_TYPE_POLL, POST_TYPE_LINK};

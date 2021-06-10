@@ -249,6 +249,12 @@ const FeedScreen = (props) => {
                     setDownVote(value.id);
                   }}
                   selfUserId={yourselfId}
+                  onPressDomain={() => {
+                    console.log('onPress domain');
+                    props.navigation.navigate('DomainScreen', {
+                      item: item,
+                    });
+                  }}
                 />
               ))
             : null}

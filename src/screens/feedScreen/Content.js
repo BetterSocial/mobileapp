@@ -23,85 +23,58 @@ import PropTypes from 'prop-types';
 import {isContainUrl, smartRender} from '../../utils/Utils';
 
 const Content = ({message, images_url, style, onPress}) => {
-  if (isContainUrl(message)) {
-    return (
-      <TouchableOpacity
-        onPress={onPress}
-        style={[
-          styles.contentFeed,
-          {justifyContent: 'center', alignItems: 'center'},
-        ]}>
-        {smartRender(Card, {
-          domain: 'guardian.com',
-          date: 'May, 2, 2021',
-          domainImage:
-            'https://www.rollingstone.com/wp-content/uploads/2018/08/GettyImages-1020376858.jpg',
-          title:
-            "'Queen' rapper rescheduling dates to 2019 after deciding to &#8220;reevaluate elements of production on the 'NickiHndrxx Tour'",
-          description:
-            'Why choose one when you can wear both? These energizing pairings stand out from the crowd',
-          image:
-            'https://www.rollingstone.com/wp-content/uploads/2018/08/GettyImages-1020376858.jpg',
-          url: 'https://www.rollingstone.com/music/music-news/nicki-minaj-cancels-north-american-tour-with-future-714315/',
-        })}
-      </TouchableOpacity>
-    );
-  } else {
-    return (
-      <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
-        {images_url !== null &&
-        images_url !== '' &&
-        images_url !== undefined ? (
-          images_url.length > 0 ? (
-            <View
-              style={{
-                flex: 1,
-                paddingBottom: 16,
-              }}>
-              <SeeMore
-                seeLessText={' '}
-                numberOfLines={4}
-                linkStyle={styles.textContentFeed}>
-                {message}
-              </SeeMore>
-              <Gap height={16} />
-              <FlatList
-                style={{flex: 1}}
-                horizontal={true}
-                pagingEnabled={true}
-                data={images_url}
-                renderItem={({item, index}) => {
-                  return (
-                    <Image
-                      source={{uri: item}}
-                      style={{
-                        flex: 1,
-                        width: screenWidth - 32,
-                        borderRadius: 16,
-                      }}
-                      resizeMode={'cover'}
-                    />
-                  );
-                }}
-                keyExtractor={({item, index}) => index}
-              />
-            </View>
-          ) : (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-              }}>
-              <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
-                {message}
-              </SeeMore>
-            </View>
-          )
-        ) : null}
-      </TouchableOpacity>
-    );
-  }
+  return (
+    <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
+      {images_url !== null && images_url !== '' && images_url !== undefined ? (
+        images_url.length > 0 ? (
+          <View
+            style={{
+              flex: 1,
+              paddingBottom: 16,
+            }}>
+            <SeeMore
+              seeLessText={' '}
+              numberOfLines={4}
+              linkStyle={styles.textContentFeed}>
+              {message}
+            </SeeMore>
+            <Gap height={16} />
+            <FlatList
+              style={{flex: 1}}
+              horizontal={true}
+              pagingEnabled={true}
+              data={images_url}
+              renderItem={({item, index}) => {
+                return (
+                  <Image
+                    source={{uri: item}}
+                    style={{
+                      flex: 1,
+                      width: screenWidth - 32,
+                      borderRadius: 16,
+                    }}
+                    resizeMode={'cover'}
+                  />
+                );
+              }}
+              keyExtractor={({item, index}) => index}
+            />
+          </View>
+        ) : (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+            }}>
+            <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
+              {message}
+            </SeeMore>
+          </View>
+        )
+      ) : null}
+    </TouchableOpacity>
+  );
 };
 
 Content.propTypes = {

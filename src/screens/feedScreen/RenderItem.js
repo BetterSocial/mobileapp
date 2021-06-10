@@ -9,10 +9,15 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
 
 import {Card} from '../../components/CardStack';
-import {POST_VERB_POLL} from '../../utils/constants';
+import {
+  POST_VERB_POLL,
+  POST_TYPE_POLL,
+  POST_TYPE_LINK,
+} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
 import {isContainUrl, smartRender} from '../../utils/Utils';
+import ContentLink from './ContentLink';
 
 const {width, height} = Dimensions.get('window');
 
@@ -99,6 +104,7 @@ const Item = ({
   onPressDownVote,
   onPressComment,
   selfUserId,
+  onPressDomain,
 }) => {
   const [voteStatus, setVoteStatus] = useState('none');
   useEffect(() => {
@@ -127,10 +133,40 @@ const Item = ({
     };
     validationStatusVote();
   }, [item, selfUserId]);
+
+  const renderContent = (item, onPress, onPressDomain) => {
+    let component = [];
+    switch (item.post_type) {
+      case POST_TYPE_POLL:
+        component.push(
+          <ContentPoll
+            message={item.message}
+            images_url={item.images_url}
+            polls={item.pollOptions}
+            onPress={onPress}
+          />,
+        );
+        break;
+      case POST_TYPE_LINK:
+        component.push(<ContentLink og={item.og} onPress={onPressDomain} />);
+        break;
+
+      default:
+        component.push(
+          <Content
+            message={item.message}
+            images_url={item.images_url}
+            onPress={onPress}
+          />,
+        );
+        break;
+    }
+    return component;
+  };
   return (
     <Card style={[styles.container]}>
       <Header props={item} />
-      {item.verb === POST_VERB_POLL ? (
+      {/* {item.post_type === POST_TYPE_POLL ? (
         <ContentPoll
           message={item.message}
           images_url={item.images_url}
@@ -143,7 +179,10 @@ const Item = ({
           images_url={item.images_url}
           onPress={onPress}
         />
-      )}
+      )} */}
+
+      {renderContent(item, onPress, onPressDomain)}
+
       <Footer
         item={item}
         onPressShare={() => {
