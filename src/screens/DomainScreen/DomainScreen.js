@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -6,13 +6,18 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  FlatList,
 } from 'react-native';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoIc_interface from '../../assets/icons/Ic_interface';
+import MemoIc_question_mark from '../../assets/icons/Ic_question_mark';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import Gap from '../../components/Gap';
 import {fonts} from '../../utils/fonts';
+import {useRoute} from '@react-navigation/native';
+import {getDetailDomains} from '../../service/domain';
+import Loading from '../Loading';
 
 const {width, height} = Dimensions.get('window');
 
@@ -24,14 +29,15 @@ const Navigation = ({domain}) => (
     </View>
   </View>
 );
-const Header = ({onPress}) => (
+const Header = ({image, domain, description, followers, onPress}) => (
   <View style={styles.headerDomain}>
     <View style={{flexDirection: 'row'}}>
       <View style={{flex: 1.3}}>
         <Image
           source={{
-            uri:
-              'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
+            uri: image
+              ? image
+              : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
           }}
           style={{width: 80, height: 80, borderRadius: 45}}
         />
@@ -55,7 +61,7 @@ const Header = ({onPress}) => (
           fontFamily: fonts.inter[600],
           fontWeight: 'bold',
         }}>
-        guardion.com
+        {domain}
       </Text>
       <View style={{marginStart: 8, justifyContent: 'center'}}>
         <MemoIc_interface width={22} height={22} />
@@ -70,30 +76,74 @@ const Header = ({onPress}) => (
           fontSize: 16,
           fontWeight: '700',
         }}>
-        12k
+        {followers}k
       </Text>
       <Gap style={{width: 4}} />
       <Text>Followers</Text>
     </View>
-    <Gap style={{height: 16}} />
+    <Gap style={{height: 8}} />
     <Text style={{fontSize: 14, fontFamily: fonts.inter[400], lineHeight: 16}}>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat
-      erat tellus, non consequat mi sollicitudin quis.
+      {description}
     </Text>
-    <Gap style={{height: 16}} />
-    <MemoIc_rectangle_gradient width={width * 0.75} height={10} />
+    <Gap style={{height: 8}} />
+    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <MemoIc_rectangle_gradient width={width * 0.75} height={20} />
+      <Gap style={{width: 4}} />
+      <MemoIc_question_mark width={16} height={16} />
+    </View>
   </View>
 );
 
 const DomainScreen = () => {
+  const route = useRoute();
+  const [item, setItem] = useState(route.params.item);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const init = async () => {
+      setLoading(true);
+      let res = await getDetailDomains(item.og.domain);
+      if (res.code === 200) {
+        setData(res.data);
+        setLoading(false);
+      }
+      setLoading(false);
+    };
+    init();
+  }, [item]);
+
+  const RenderItem = ({domain}) => (
+    <View style={{height: 30, width: width}}>
+      <Text>{domain.content.author}</Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
-      <Navigation domain={'guardian.com'} />
+      <Navigation domain={item.og.domain} />
       <Header
+        description={
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placeraterat tellus, non consequat mi sollicitudin quis.'
+        }
+        domain={item.og.domain}
+        followers={10}
         onPress={(v) => {
           console.log(v);
         }}
       />
+      <Gap style={{height: 16}} />
+
+      <FlatList
+        data={data}
+        renderItem={({item, index}) => {
+          return <RenderItem domain={item} />;
+        }}
+        style={{flex: 1}}
+        keyExtractor={(i) => i.id}
+      />
+
+      <Loading visible={loading} />
     </View>
   );
 };
@@ -103,6 +153,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 8,
+    backgroundColor: 'white',
   },
   Header: {
     flexDirection: 'row',
@@ -121,6 +172,7 @@ const styles = StyleSheet.create({
   },
   headerDomain: {
     flexDirection: 'column',
+    backgroundColor: 'white',
   },
   buttonPrimary: {
     height: 32,

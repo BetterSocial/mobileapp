@@ -11,3 +11,14 @@ export const getDomains = async () => {
     throw new Error(error);
   }
 };
+
+export const getDetailDomains = async (domain) => {
+  try {
+    let res = await api.get(`/domain/domain/${domain}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};

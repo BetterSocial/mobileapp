@@ -29,7 +29,6 @@ const dateFormat = (date) => {
 };
 
 const ContentLink = ({og, style, onPress}) => {
-  console.log(og);
   const {date, description, domain, domainImage, image, title, url} = og;
   return (
     <TouchableOpacity

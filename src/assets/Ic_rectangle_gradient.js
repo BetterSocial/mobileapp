@@ -1,5 +1,5 @@
-import * as React from "react";
-import Svg, { Rect, Defs, LinearGradient, Stop } from "react-native-svg";
+import * as React from 'react';
+import Svg, {Rect, Defs, LinearGradient, Stop} from 'react-native-svg';
 
 function Ic_rectangle_gradient(props) {
   return (
@@ -17,8 +17,7 @@ function Ic_rectangle_gradient(props) {
           y1={2.5}
           x2={181.667}
           y2={2.5}
-          gradientUnits="userSpaceOnUse"
-        >
+          gradientUnits="userSpaceOnUse">
           <Stop stopColor="#17CB80" />
           <Stop offset={0.526} stopColor="#F0F414" />
           <Stop offset={0.802} stopColor="#FEF515" />
