@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component gap gap renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "width": 20,
+    }
+  }
+/>
+`;
+
+exports[`component gap gap snapshot 1`] = `
+<View
+  style={
+    Object {
+      "width": 20,
+    }
+  }
+/>
+`;

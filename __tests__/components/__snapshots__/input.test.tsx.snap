@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component Input Input renders correctly 1`] = `
+<TextInput
+  allowFontScaling={true}
+  autoCapitalize="none"
+  autoCorrect={false}
+  onChangeText={[Function]}
+  placeholder="Test"
+  rejectResponderTermination={true}
+  style={
+    Object {
+      "borderColor": "#BDBDBD",
+      "borderRadius": 8,
+      "borderWidth": 1,
+      "paddingHorizontal": 23,
+      "paddingVertical": 13,
+      "width": 650,
+    }
+  }
+  underlineColorAndroid="transparent"
+  value="Test Input"
+/>
+`;
+
+exports[`component Input Input snapshot 1`] = `
+<Component
+  allowFontScaling={true}
+  autoCapitalize="none"
+  autoCorrect={false}
+  onChangeText={[Function]}
+  placeholder="Test"
+  rejectResponderTermination={true}
+  style={
+    Object {
+      "borderColor": "#BDBDBD",
+      "borderRadius": 8,
+      "borderWidth": 1,
+      "paddingHorizontal": 23,
+      "paddingVertical": 13,
+      "width": 650,
+    }
+  }
+  underlineColorAndroid="transparent"
+  value="Test Input"
+/>
+`;

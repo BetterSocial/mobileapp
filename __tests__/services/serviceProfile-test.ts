@@ -59,8 +59,8 @@ describe('testing endpoit user profile', () => {
       .then(onResponse)
       .catch(onError)
       .finally(() => {
-        // console.log('ini test err ', JSON.stringify(onError.mock.calls));
-        // console.log('ini test ', JSON.stringify(onResponse.mock.calls));
+        console.log('ini test err ', JSON.stringify(onError.mock.calls));
+        console.log('ini test ', JSON.stringify(onResponse.mock.calls));
         // console.log('ini test ', JSON.stringify(onResponse.mock.instances));
         // console.log('ini test ', JSON.stringify(onResponse.mock.results));
         // console.log(
