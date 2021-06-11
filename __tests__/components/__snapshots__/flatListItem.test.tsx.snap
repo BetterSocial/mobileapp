@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FlatListItem FlatListItem renders correctly 1`] = `
+<View
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "borderBottomColor": "#E0E0E0",
+      "borderBottomWidth": 1,
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "opacity": 1,
+      "paddingHorizontal": 20,
+      "paddingVertical": 16,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "width": "auto",
+      }
+    }
+  >
+    <View />
+    <View
+      style={
+        Object {
+          "flexWrap": "nowrap",
+          "paddingLeft": 12,
+          "width": "88%",
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#000000",
+            "fontFamily": "Inter-Medium",
+            "fontSize": 14,
+            "fontWeight": "500",
+          }
+        }
+      >
+        value test
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#828282",
+            "flexWrap": "wrap",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 12,
+            "fontWeight": "400",
+          }
+        }
+      >
+        value desc
+      </Text>
+    </View>
+  </View>
+  <Icon
+    color="#00ADB5"
+    name="check-circle"
+    size={20}
+  />
+</View>
+`;
+
+exports[`FlatListItem FlatListItem snapshot 1`] = `
+<ForwardRef
+  onPress={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "borderBottomColor": "#E0E0E0",
+      "borderBottomWidth": 1,
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "paddingHorizontal": 20,
+      "paddingVertical": 16,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "width": "auto",
+      }
+    }
+  >
+    <View />
+    <View
+      style={
+        Object {
+          "flexWrap": "nowrap",
+          "paddingLeft": 12,
+          "width": "88%",
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#000000",
+            "fontFamily": "Inter-Medium",
+            "fontSize": 14,
+            "fontWeight": "500",
+          }
+        }
+      >
+        value test
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#828282",
+            "flexWrap": "wrap",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 12,
+            "fontWeight": "400",
+          }
+        }
+      >
+        value desc
+      </Text>
+    </View>
+  </View>
+  <Icon
+    color="#00ADB5"
+    name="check-circle"
+    size={20}
+  />
+</ForwardRef>
+`;

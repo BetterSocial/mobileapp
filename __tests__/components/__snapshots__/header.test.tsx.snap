@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component header header snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+    }
+  }
+>
+  <TouchableNativeFeedback
+    onPress={[Function]}
+  >
+    <View
+      style={
+        Object {
+          "marginLeft": -4,
+          "padding": 10,
+        }
+      }
+    >
+      <[object Object]
+        fill="#000"
+        height={12}
+        width={20}
+      />
+    </View>
+  </TouchableNativeFeedback>
+  <Text
+    style={
+      Object {
+        "color": "#000000",
+        "fontFamily": "Poppins-Semi-bold",
+        "fontSize": 14,
+        "fontWeight": "bold",
+        "marginLeft": -20,
+      }
+    }
+  >
+    Title Header Test
+  </Text>
+  <View
+    style={
+      Object {
+        "height": 12,
+        "width": 20,
+      }
+    }
+  />
+</View>
+`;
