@@ -16,6 +16,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import fetchRemoteConfig from '../../utils/FirebaseUtil';
 import { Context } from '../../context';
 import { SET_DATA_IMAGE } from '../../context/Types';
+import StringConstant from '../../utils/string/StringConstant';
 
 const SplashScreen = () => {
   let context = useContext(Context)
@@ -57,8 +58,8 @@ const SplashScreen = () => {
   let getDeepLinkUrl = async () => {
     try {
       let selfUserId = await doVerifyUser();
-      let profile = await getMyProfile(selfUserId)
-      dispatch({type : SET_DATA_IMAGE, payload : profile.data.profile_pic_path})
+      // let profile = await getMyProfile(selfUserId)
+      // dispatch({type : SET_DATA_IMAGE, payload : profile.data.profile_pic_path})
       let deepLinkUrl = await Linking.getInitialURL();
       if (deepLinkUrl === null) return navigateWithoutDeeplink(selfUserId);
 
@@ -69,7 +70,7 @@ const SplashScreen = () => {
         let otherProfile = await doGetProfileByUsername(username);
 
         if (!selfUserId || !otherProfile) {
-          if (!otherProfile) Alert.alert(`${username}'s Profile not found`);
+          if (!otherProfile) Alert.alert(StringConstant.splashScreenDeeplinkGetProfileNotFound(username));
           return navigateWithoutDeeplink(selfUserId);
         }
 

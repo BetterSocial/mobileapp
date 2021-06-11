@@ -24,6 +24,7 @@ import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import {useNavigation} from '@react-navigation/core';
 import {colors} from '../../utils/colors';
 import analytics from '@react-native-firebase/analytics';
+import StringConstant from '../../utils/string/StringConstant';
 
 const width = Dimensions.get('screen').width;
 
@@ -57,7 +58,8 @@ const Topics = () => {
     if (Platform.OS === 'android') {
       return (
         <View style={styles.header}>
-          <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+          <TouchableNativeFeedback onPress={() => navigation.goBack()}        
+            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableNativeFeedback>
         </View>
@@ -69,7 +71,7 @@ const Topics = () => {
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableHighlight>
           <TouchableNativeFeedback>
-            <Text style={styles.textSkip}>Skip</Text>
+            <Text style={styles.textSkip}>{StringConstant.headerIosSkip}</Text>
           </TouchableNativeFeedback>
         </View>
       );
@@ -105,10 +107,10 @@ const Topics = () => {
         </View>
         <View>
           <Text style={styles.textPickYourTopic}>
-            Pick your topics of interest
+            {StringConstant.onboardingTopicsHeadline}
           </Text>
           <Text style={styles.textGetPersonalContent}>
-            Find like-minded people
+            {StringConstant.onboardingTopicsSubHeadline}
           </Text>
         </View>
 
@@ -167,16 +169,14 @@ const Topics = () => {
             : null}
         </ScrollView>
         <View style={styles.footer}>
-          <Text style={styles.textSmall}>
-            Others cannot see whics topics you're following
-          </Text>
+          <Text style={styles.textSmall}>{`${StringConstant.onboardingTopicsOthersCannotSee}`}</Text>
           <Button
             onPress={() => next()}
             disabled={topicSelected.length >= minTopic ? false : true}
             style={topicSelected.length >= minTopic ? null : styles.button}>
             {topicSelected.length >= minTopic
-              ? 'NEXT'
-              : `CHOOSE ${minTopic - topicSelected.length} MORE`}
+              ? StringConstant.onboardingTopicsButtonStateNext
+              : StringConstant.onboardingTopicsButtonStateChooseMore(minTopic - topicSelected.length)}
           </Button>
         </View>
       </SafeAreaView>

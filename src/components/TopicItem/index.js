@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   btn: {
     marginLeft: 7,
     paddingVertical: 10,
-    padding: 10,
+    paddingLeft: 4,
+    paddingRight: 10,
   },
 });

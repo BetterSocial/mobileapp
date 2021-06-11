@@ -84,8 +84,8 @@ const ProfileScreen = () => {
   const [errorChangeRealName, setErrorChangeRealName] = useState('');
   const [image, setImage] = useState('');
 
-  let context = useContext(Context)
-  let [users, dispatch] = context.users
+  // let context = useContext(Context)
+  // let [, dispatch] = context.users
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -130,7 +130,6 @@ const ProfileScreen = () => {
       console.log(result);
       if (result.code === 200) {
         setDataMain(result.data);
-        dispatch({type : SET_DATA_IMAGE, payload : result.data.profile_pic_path})
         withLoading ? setIsLoading(false) : null;
       }
     }
@@ -284,7 +283,7 @@ const ProfileScreen = () => {
     } else {
       setIsLoadingUpdateImageCamera(true);
     }
-
+    
     let data = {
       profile_pic_path: value,
     };
@@ -398,7 +397,7 @@ const ProfileScreen = () => {
       <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
         {isOffsetScroll ? (
           <View style={styles.tabsFixed}>
-            <Text style={styles.postText}>Post ({/* Change this to post size*/0})</Text>
+            <Text style={styles.postText}>Post{/* Change this to post size*/}</Text>
           </View>
         ) : null}
 
@@ -436,10 +435,11 @@ const ProfileScreen = () => {
                       <View style={styles.profileImageContainer}>
                         <Image
                           style={styles.profileImage}
-                          key={dataMain.profile_pic_path || DEFAULT_PROFILE_PIC_PATH}
+                          key={`${dataMain.profile_pic_path}?time=${new Date().valueOf()}` || DEFAULT_PROFILE_PIC_PATH}
                           source={{
+                            cache:'reload',
                             uri: dataMain.profile_pic_path
-                              ? `${dataMain.profile_pic_path}?${new Date().getUTCMilliseconds()}`
+                              ? `${dataMain.profile_pic_path}?time=${new Date().valueOf()}`
                               : DEFAULT_PROFILE_PIC_PATH,
                           }}
                         />
@@ -483,7 +483,7 @@ const ProfileScreen = () => {
               {!isLoading ? (
                 <View>
                   <View style={styles.tabs} ref={postRef}>
-                    <Text style={styles.postText}>Post ({/* Please change this to post size*/ 0})</Text>
+                    <Text style={styles.postText}>Post{/* Please change this to post size*/ }</Text>
                   </View>
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed
