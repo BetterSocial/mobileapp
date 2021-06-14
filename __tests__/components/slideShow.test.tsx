@@ -1,29 +1,21 @@
 import React from 'react';
-import { View } from 'react-native';
-import { shallow, configure } from 'enzyme';
+import {View} from 'react-native';
+import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
 import SlideShow from '../../src/components/SignIn/SlideShow';
 
-jest.mock("react-native", () => {
+jest.mock('react-native', () => {
   const React = require('react');
   const View = React.View;
 
   function MockedFlatList(props) {
     const items = props.data.map((item, index) => {
       const key = props.keyExtractor(item, index);
-      return (
-        <View key={key}>
-          {props.renderItem({ item, index })}
-        </View>
-      );
+      return <View key={key}>{props.renderItem({item, index})}</View>;
     });
-    return (
-      <View>
-        {items}
-      </View>
-    );
+    return <View>{items}</View>;
   }
   return {
     Dimensions: {
@@ -32,17 +24,26 @@ jest.mock("react-native", () => {
           return {
             width: 200,
             height: 200,
-          }
+          };
         }
-      }
+      },
     },
     FlatList: {
       get: () => MockedFlatList,
-    }
-  }
+    },
+    StyleSheet: {
+      create: jest.fn((e) => e),
+    },
+    Platform: {
+      OS: 'android',
+      select: () => {
+        /* do nothing */
+      },
+    },
+  };
 });
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 describe('component SlideShow', () => {
   it('SlideShow  snapshot', () => {
     const component = shallow(<SlideShow />);

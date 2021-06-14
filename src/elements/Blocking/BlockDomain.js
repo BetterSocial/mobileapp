@@ -48,6 +48,7 @@ const BlockDomain = ({refBlockUser, onSelect, domain}) => {
         </Text>
         {data.map((item) => (
           <ItemListLarge
+            key={item.id}
             id={item.id}
             label={item.label}
             desc={item.desc}

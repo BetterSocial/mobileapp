@@ -49,6 +49,7 @@ const BlockUser = ({refBlockUser, onSelect, username}) => {
         </Text>
         {data.map((item) => (
           <ItemListLarge
+            key={item.id}
             id={item.id}
             label={item.label}
             desc={item.desc}

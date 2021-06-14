@@ -122,6 +122,7 @@ jest.doMock('@react-navigation/native', () => {
     createNavigatorFactory: jest.fn(),
   };
 });
+// jest.mock('react-native-swiper-flatlist', () => jest.fn());
 jest.mock('react', () => {
   const originReact = jest.requireActual('react');
   const mUseRef = jest.fn();
@@ -136,3 +137,4 @@ jest.mock('react-native-vector-icons/FontAwesome5', () => 'Icon');
 jest.mock('react-native-vector-icons/Entypo', () => 'Icon');
 jest.mock('react-native-vector-icons/MaterialIcons', () => 'Icon');
 jest.mock('react-native-vector-icons/Fontisto', () => 'Icon');
+jest.mock('react-native-vector-icons/AntDesign', () => 'Icon');

@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component SpecificIssue SpecificIssue snapshot 1`] = `
+<RBSheet
+  animationType="none"
+  closeDuration={200}
+  closeOnDragDown={true}
+  closeOnPressBack={true}
+  closeOnPressMask={true}
+  customStyles={
+    Object {
+      "container": Object {
+        "borderTopLeftRadius": 20,
+        "borderTopRightRadius": 20,
+        "height": "auto",
+      },
+      "draggableIcon": Object {
+        "backgroundColor": "#E0E0E0",
+        "width": 60,
+      },
+    }
+  }
+  dragFromTopOnly={false}
+  height={260}
+  keyboardAvoidingViewEnabled={false}
+  minClosingHeight={0}
+  onClose={null}
+  onOpen={null}
+  openDuration={300}
+>
+  <View>
+    <Text
+      style={
+        Object {
+          "color": "#000",
+          "fontFamily": "Inter-Bold",
+          "fontSize": 18,
+          "marginLeft": 21,
+          "marginTop": 18,
+        }
+      }
+    >
+      Please specify the issue
+    </Text>
+    <Component
+      allowFontScaling={true}
+      onChangeText={[Function]}
+      placeholder="Please provide more details to inform our
+ team (min. 50 characters)"
+      rejectResponderTermination={true}
+      style={
+        Object {
+          "backgroundColor": "#F5F5F5",
+          "borderRadius": 8,
+          "color": "#828282",
+          "fontFamily": "Inter-Regular",
+          "height": 233,
+          "marginLeft": 17,
+          "marginRight": 23,
+          "marginTop": 14,
+          "paddingLeft": 19,
+          "paddingRight": 13,
+          "paddingVertical": 19,
+        }
+      }
+      textAlignVertical="top"
+      underlineColorAndroid="transparent"
+      value=""
+    />
+    <TouchableOpacity
+      activeOpacity={0.2}
+      delayLongPress={600}
+      extraButtonProps={
+        Object {
+          "rippleColor": "transparent",
+        }
+      }
+      style={
+        Object {
+          "backgroundColor": "#E0E0E0",
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginVertical": 22,
+          "paddingHorizontal": 17,
+          "paddingVertical": 18,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#000",
+            "fontFamily": "Inter-Bold",
+            "fontSize": 14,
+          }
+        }
+      >
+        Skip & just block this account
+      </Text>
+      <Icon
+        color="#000"
+        name="chevron-right"
+        size={17}
+      />
+    </TouchableOpacity>
+    <View
+      style={
+        Object {
+          "marginBottom": 19,
+          "marginLeft": 18,
+          "marginRight": 22,
+        }
+      }
+    >
+      <Btn
+        onPress={[Function]}
+      >
+        <Text>
+          File Report
+        </Text>
+      </Btn>
+    </View>
+  </View>
+</RBSheet>
+`;

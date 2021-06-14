@@ -105,6 +105,9 @@
     "moduleDirectories": [
       "<rootDir>/node_modules",
       "<rootDir>/src"
-    ]
+    ],
+     "moduleNameMapper": {
+      "\\.svg": "<rootDir>/__mocks__/svgMock.ts"
+    }
   }
 }
