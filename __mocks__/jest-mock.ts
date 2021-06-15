@@ -2,6 +2,14 @@
 import * as ReactNative from 'react-native';
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 import 'react-native-gesture-handler/jestSetup';
+import {NativeModules} from 'react-native';
+
+NativeModules.RNCNetInfo = {
+  getCurrentState: jest.fn(() => Promise.resolve()),
+  addListener: jest.fn(),
+  removeListeners: jest.fn(),
+};
+
 jest.doMock('react-native-fs', () => {
   return {
     readFile: jest.fn(),
@@ -118,7 +126,7 @@ jest.mock('@react-navigation/core', () => ({
 
 jest.doMock('@react-navigation/native', () => {
   return {
-    // useNavigation: () => ({setOptions: jest.fn()}),
+    useNavigation: () => ({setOptions: jest.fn()}),
     createNavigatorFactory: jest.fn(),
   };
 });
@@ -138,3 +146,6 @@ jest.mock('react-native-vector-icons/Entypo', () => 'Icon');
 jest.mock('react-native-vector-icons/MaterialIcons', () => 'Icon');
 jest.mock('react-native-vector-icons/Fontisto', () => 'Icon');
 jest.mock('react-native-vector-icons/AntDesign', () => 'Icon');
+jest.mock('react-native-vector-icons/Ionicons', () => 'Icon');
+jest.mock('react-native-vector-icons/Octicons', () => 'Icon');
+jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon');

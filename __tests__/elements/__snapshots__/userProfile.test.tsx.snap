@@ -32,6 +32,11 @@ exports[`component UserProfile UserProfile renders correctly 1`] = `
   >
     <Image
       height={32}
+      source={
+        Object {
+          "uri": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
+        }
+      }
       style={
         Object {
           "borderRadius": 16,
@@ -52,7 +57,9 @@ exports[`component UserProfile UserProfile renders correctly 1`] = `
             "fontWeight": "bold",
           }
         }
-      />
+      >
+        user Test
+      </Text>
       <Text
         style={
           Object {

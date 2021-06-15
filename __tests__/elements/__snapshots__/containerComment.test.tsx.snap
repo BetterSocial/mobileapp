@@ -1,0 +1,379 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component ContainerComment ContainerComment renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "paddingHorizontal": 22,
+    }
+  }
+>
+  <View>
+    <View
+      style={
+        Array [
+          Object {
+            "borderLeftWidth": 1,
+          },
+          Object {
+            "borderLeftColor": "#C4C4C4",
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          Object {
+            "flexDirection": "row",
+            "marginLeft": -12,
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "testUri": "../../../src/assets/images/ProfileDefault.png",
+            }
+          }
+          style={
+            Object {
+              "height": 24,
+              "width": 24,
+            }
+          }
+        />
+        <Text
+          style={
+            Object {
+              "color": "#828282",
+              "fontFamily": "Inter-Semi-bold",
+              "fontSize": 12,
+              "marginLeft": 17,
+            }
+          }
+        >
+          user sebelas
+        </Text>
+      </View>
+      <Text
+        style={
+          Object {
+            "color": "#333333",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 16,
+            "marginLeft": 28,
+          }
+        }
+      >
+        user 15 comment
+      </Text>
+      <View
+        style={
+          Object {
+            "flexDirection": "row",
+            "justifyContent": "flex-end",
+            "marginTop": 11.13,
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "opacity": 1,
+            }
+          }
+        >
+          <Icon
+            color="#C4C4C4"
+            name="back"
+            size={15.77}
+          />
+          <Text
+            style={
+              Object {
+                "color": "#C4C4C4",
+                "fontFamily": "Inter-Regular",
+                "fontSize": 13,
+                "marginLeft": 8.98,
+              }
+            }
+          >
+            Reply
+          </Text>
+        </View>
+        <View
+          accessible={true}
+          focusable={false}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "marginLeft": 28.61,
+              "marginRight": 28.51,
+              "opacity": 1,
+            }
+          }
+        >
+          <Icon
+            color="#C4C4C4"
+            name="block"
+            size={15.02}
+          />
+        </View>
+        <View
+          accessible={true}
+          focusable={false}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "marginRight": 33.04,
+              "opacity": 1,
+            }
+          }
+        >
+          <View />
+        </View>
+        <View
+          accessible={true}
+          focusable={false}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+            }
+          }
+        >
+          <View />
+        </View>
+      </View>
+    </View>
+  </View>
+  <View>
+    <View
+      style={
+        Array [
+          Object {
+            "borderLeftWidth": 1,
+          },
+          Object {
+            "borderLeftColor": "#C4C4C4",
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          Object {
+            "flexDirection": "row",
+            "marginLeft": -12,
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "testUri": "../../../src/assets/images/ProfileDefault.png",
+            }
+          }
+          style={
+            Object {
+              "height": 24,
+              "width": 24,
+            }
+          }
+        />
+        <Text
+          style={
+            Object {
+              "color": "#828282",
+              "fontFamily": "Inter-Semi-bold",
+              "fontSize": 12,
+              "marginLeft": 17,
+            }
+          }
+        >
+          usupsuparma
+        </Text>
+      </View>
+      <Text
+        style={
+          Object {
+            "color": "#333333",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 16,
+            "marginLeft": 28,
+          }
+        }
+      >
+        sedang mikirin kamu
+      </Text>
+      <View
+        style={
+          Object {
+            "flexDirection": "row",
+            "justifyContent": "flex-end",
+            "marginTop": 11.13,
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "opacity": 1,
+            }
+          }
+        >
+          <Icon
+            color="#C4C4C4"
+            name="back"
+            size={15.77}
+          />
+          <Text
+            style={
+              Object {
+                "color": "#C4C4C4",
+                "fontFamily": "Inter-Regular",
+                "fontSize": 13,
+                "marginLeft": 8.98,
+              }
+            }
+          >
+            Reply
+          </Text>
+        </View>
+        <View
+          accessible={true}
+          focusable={false}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "marginLeft": 28.61,
+              "marginRight": 28.51,
+              "opacity": 1,
+            }
+          }
+        >
+          <Icon
+            color="#C4C4C4"
+            name="block"
+            size={15.02}
+          />
+        </View>
+        <View
+          accessible={true}
+          focusable={false}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "marginRight": 33.04,
+              "opacity": 1,
+            }
+          }
+        >
+          <View />
+        </View>
+        <View
+          accessible={true}
+          focusable={false}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+            }
+          }
+        >
+          <View />
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`component ContainerComment ContainerComment snapshot 1`] = `
+<View
+  style={
+    Object {
+      "paddingHorizontal": 22,
+    }
+  }
+>
+  <View
+    key="p0"
+  >
+    <Comment
+      comment="user 15 comment"
+      key="p0"
+      onPress={[Function]}
+      username="user sebelas"
+    />
+  </View>
+  <View
+    key="p1"
+  >
+    <Comment
+      comment="sedang mikirin kamu"
+      key="p1"
+      onPress={[Function]}
+      username="usupsuparma"
+    />
+  </View>
+</View>
+`;

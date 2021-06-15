@@ -8,6 +8,7 @@ import SearchModal from '../../src/components/Search/SearchModal';
 import SearchAutoComplete from '../../src/components/Search/SearchAutoComplete';
 
 configure({adapter: new Adapter()});
+jest.useFakeTimers();
 describe('component Search', () => {
   it('Search snapshot', () => {
     const component = shallow(

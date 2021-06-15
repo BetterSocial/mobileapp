@@ -10,7 +10,7 @@ const ContainerComment = ({comments}) => {
     <View style={styles.container}>
       {comments.map((item, index) => {
         return (
-          <>
+          <View key={'p' + index}>
             <Comment
               key={'p' + index}
               comment={item.data.text}
@@ -26,7 +26,7 @@ const ContainerComment = ({comments}) => {
                 navigation={navigation}
               />
             )}
-          </>
+          </View>
         );
       })}
     </View>
@@ -37,7 +37,7 @@ const ReplyComment = ({data, countComment, navigation}) => {
     <ContainerReply>
       {data.map((item, index) => {
         return (
-          <>
+          <View key={'c' + index}>
             <Comment
               key={'c' + index}
               comment={item.data.text}
@@ -55,7 +55,7 @@ const ReplyComment = ({data, countComment, navigation}) => {
                 parent={item}
               />
             )}
-          </>
+          </View>
         );
       })}
     </ContainerReply>
