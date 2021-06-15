@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {Avatar} from 'react-native-activity-feed';
 import moment from 'moment';
-import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
+import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
@@ -31,6 +31,8 @@ import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
 
 import PropsTypes from 'prop-types';
+import { getAccessToken } from '../../data/local/accessToken';
+import jwtDecode from 'jwt-decode';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -122,17 +124,32 @@ const _renderAnonimity = (
   </View>
 );
 
-const _renderProfileNormal = (
-  real_name,
-  profile_pic_path,
+const _renderProfileNormal = ({
+  actor,
   time,
   privacy,
   duration_feed,
   expired_at,
   location,
   isBackButton,
-) => {
+}) => {
+
   const navigation = useNavigation();
+  let userId = actor.id
+  let { profile_pic_path, username } = actor.data
+  
+  let navigateToProfile = async () => {
+    let selfAccessToken = await getAccessToken()
+    let selfUserId = await jwtDecode(selfAccessToken).user_id
+    navigation.navigate("OtherProfile", {
+      data : {
+        user_id : selfUserId,
+        other_id : userId,
+        username
+      }
+    })
+  }
+
   return (
     <View style={styles.rowSpaceBeetwen}>
       <View style={styles.rowCenter}>
@@ -146,19 +163,33 @@ const _renderProfileNormal = (
             </TouchableOpacity>
           </View>
         ) : null}
-        <Avatar
-          source={
-            profile_pic_path
-              ? profile_pic_path
-              : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
-          }
-          size={48}
-          noShadow
-        />
+        <TouchableNativeFeedback onPress={() => navigateToProfile()}
+          background={TouchableNativeFeedback.Ripple(colors.gray1, true, 28)}>
+          <View style={{}}>
+            <Avatar
+              source={
+                profile_pic_path
+                  ? profile_pic_path
+                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+              }
+              size={48}
+              noShadow/>
+          </View>
+          </TouchableNativeFeedback>
         <View style={styles.containerFeedProfile}>
-          <Text style={styles.feedUsername}>
-            {real_name ? real_name : 'no name specifics'}
-          </Text>
+          <View style={styles.containerFeedName}>
+            <TouchableNativeFeedback onPress={() => navigateToProfile()}
+              background={TouchableNativeFeedback.Ripple(colors.gray1, false, 30)}>
+              <Text style={styles.feedUsername}>
+                {username ? username : 'no name specifics'}
+              </Text>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(colors.gray1, true, 8)}>
+              <View style={{alignSelf : 'center', zIndex : 1000}}>
+                <ElipsisIcon width={3.94} height={18} fill={colors.black} />
+              </View>
+            </TouchableNativeFeedback>
+          </View>
           <View style={styles.containerFeedText}>
             <Text style={styles.feedDate}>
               {moment.utc(time).local().fromNow()}
@@ -175,13 +206,10 @@ const _renderProfileNormal = (
               ? validationTimer(expired_at, duration_feed)
               : null}
             <View style={styles.point} />
-            <Text style={styles.feedDate}>{location}</Text>
+            <Text style={styles.feedDateLocation} numberOfLines={1}>{location}</Text>
           </View>
         </View>
       </View>
-      <TouchableNativeFeedback>
-        <ElipsisIcon width={18} height={3.94} fill={colors.black} />
-      </TouchableNativeFeedback>
     </View>
   );
 };
@@ -195,6 +223,7 @@ const Header = ({props, isBackButton = false}) => {
     location,
     actor,
   } = props;
+  
   if (anonimity) {
     return _renderAnonimity(
       time,
@@ -205,16 +234,15 @@ const Header = ({props, isBackButton = false}) => {
       isBackButton,
     );
   } else {
-    return _renderProfileNormal(
-      actor.data.username,
-      actor.data.profile_pic_url,
+    return _renderProfileNormal({
+      actor,
       time,
       privacy,
       duration_feed,
       expired_at,
       location,
       isBackButton,
-    );
+    });
   }
 };
 
@@ -223,41 +251,67 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderBottomColor : colors.gray1,
+    borderBottomWidth : 0.4,
+    paddingBottom : 8,
+    paddingTop : 8,
+    paddingLeft : 16,
+    paddingRight : 16,
+    marginLeft : -16,
+    marginRight : -16,
   },
   rowCenter: {
     flexDirection: 'row',
     alignItems: 'center',
+    // backgroundColor : 'green'
   },
   containerFeedProfile: {
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginLeft: 13,
+    flex : 1,
+    // backgroundColor : 'blue'
   },
-
+  containerFeedName : {
+    flexDirection : 'row',
+    // backgroundColor : 'red',
+    // paddingTop : 8
+  },
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 14,
     color: colors.black,
+    flex : 1
   },
   containerFeedText: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 5,
+    width : '100%',
   },
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.black,
+    color: colors.blackgrey,
+    lineHeight: 18,
+  },
+  feedDateLocation: {
+    flex : 1,
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    color: colors.blackgrey,
     lineHeight: 18,
   },
   point: {
-    width: 4,
-    height: 4,
+    width: 2,
+    height: 2,
     borderRadius: 4,
     backgroundColor: colors.gray,
     marginLeft: 8,
     marginRight: 8,
+    alignSelf : 'center',
+    marginTop : 2
   },
   contentFeed: {
     marginTop: 12,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -17,6 +17,8 @@ import SeeMore from 'react-native-see-more-inline';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
+import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
+import { getPollTime, isPollExpired } from '../../utils/string/StringUtils';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -34,10 +36,13 @@ const _renderItem = ({item, index}, parallaxProps) => {
   );
 };
 
-const ContentPoll = ({message, images_url, polls = [], onPress}) => {
+const ContentPoll = ({message, images_url, polls = [], onPress, multiplechoice = false, pollexpiredat}) => {
   let totalPollCount = polls.reduce((acc, current) => {
     return acc + parseInt(current.counter);
   }, 0);
+
+  let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = useState(-1) 
+  let [multipleChoiceSelected, setMultipleChoiceSelected] = useState([1])
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.contentFeed}>
@@ -84,7 +89,21 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
                   TODO : Count percentage
                 */
 
-                return <PollOptions item={item} index={index} total={totalPollCount}/>
+                return multiplechoice ? 
+                  <PollOptionsMultipleChoice item={item} index={index} 
+                    selectedindex={multipleChoiceSelected}
+                    onselected={(indexes) => {
+                      console.log(indexes)
+                      console.log(indexes)
+                      setMultipleChoiceSelected(indexes)} 
+                    }
+                    isexpired={isPollExpired(pollexpiredat)}
+                    total={totalPollCount}/> :
+                  <PollOptions item={item} index={index} 
+                    selectedindex={singleChoiceSelectedIndex} 
+                    total={totalPollCount}
+                    isexpired={isPollExpired(pollexpiredat)}
+                    onselected={(index) => setSingleChoiceSelectedIndex(index)}/>
               })}
             </View>
 
@@ -102,8 +121,14 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
               />
               <Text
                 style={
-                  styles.totalpolltext
-                }>{` 24 hours 34 minutes left`}</Text>
+                  styles.polltime
+                }>{` ${getPollTime(pollexpiredat)}`}</Text>
+
+              <View style={styles.seeresultscontainer}>
+                  <TouchableOpacity>
+                    <Text style={styles.seeresultstext}>See Results</Text>
+                  </TouchableOpacity>
+              </View>
             </View>
           </View>
         )
@@ -268,6 +293,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     color: colors.blackgrey,
+    alignSelf : 'center'
+  },
+  polltime: {
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    lineHeight: 16,
+    color: colors.blackgrey,
+    alignSelf : 'center',
+    flex : 1
   },
   pollRadioButton: {
     width: 12,
@@ -291,4 +325,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
+  seeresultscontainer : {
+    alignSelf : 'center'
+  },
+  seeresultstext : {
+    color : colors.holytosca,
+    fontFamily : fonts.inter[500]
+  }
 });

@@ -96,6 +96,8 @@ const Item = ({
   onPressDownVote,
   onPressComment,
 }) => {
+  // console.log("item")
+  // console.log(item)
   return (
     <Card style={[styles.container]}>
       <Header props={item} />
@@ -105,6 +107,8 @@ const Item = ({
           images_url={item.images_url}
           polls={item.pollOptions}
           onPress={onPress}
+          pollexpiredat={item.polls_expired_at}
+          multiplechoice={item.multiplechoice}
         />
       ) : (
         <Content

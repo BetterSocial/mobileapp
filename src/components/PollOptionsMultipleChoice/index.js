@@ -1,29 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, TouchableNativeFeedback, View, Text } from 'react-native'
+import CheckBox from '@react-native-community/checkbox'
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 
-let PollOptions = ({item, index, total, selectedindex, isexpired = false, onselected=(index) => {} }) => {
+let PollOptionsMultipleChoice = ({item, index, total, selectedindex, isexpired, onselected=() => {}}) => {
     let optionPercentage =
         total === 0 ? 0 : item.counter / total;
+
+    // console.log("selectedindex, index")
+    // console.log(selectedindex.includes(index))
+    let selected = selectedindex.includes(index)
                 
-    return <TouchableNativeFeedback onPress={() => onselected(index)} disabled={isexpired}>
+    return <TouchableNativeFeedback disabled={isexpired} onPress={() => {
+        if(selected) {
+          let idx = selectedindex.indexOf(index)
+          console.log("idx")
+          console.log(idx)
+          let newSelectedIndex = [...selectedindex]
+          newSelectedIndex.splice(idx,1)
+          console.log("newSelectedIndex remove")
+          console.log(newSelectedIndex)
+          onselected(newSelectedIndex)
+        } else {
+          let newSelectedIndex = [...selectedindex]
+          newSelectedIndex.push(index)
+          console.log("newSelectedIndex add")
+          console.log(newSelectedIndex)
+          onselected(newSelectedIndex)
+        }
+    }}>
         <View
             key={`poll-options-${index}`}
             style={
-                selectedindex === index
+                selected
                 ? styles.pollOptionItemContainerActive
                 : styles.pollOptionItemContainer
             }>
             <View style={styles.percentageBar(optionPercentage)} />
             <View style={styles.pollOptionTextContainer}>
-                {isexpired ? <></> : <View
+                {/* <View
                 style={
-                    selectedindex === index
+                    false
                     ? styles.pollRadioButtonActive
                     : styles.pollRadioButton
                 }
-                />}
+                /> */}
+                {isexpired ? <></> : <CheckBox value={selected} 
+                  tintColors={{true : colors.holytosca, false : colors.black}}/>}
                 <Text style={styles.pollOptionItemText(isexpired)}>
                 {item.option}
                 </Text>
@@ -64,7 +88,7 @@ let styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
-        paddingVertical: 16,
+        paddingVertical: 8,
         paddingHorizontal: 12,
       },
       pollOptionItemText: (isexpired) => {
@@ -72,8 +96,11 @@ let styles = StyleSheet.create({
           flex: 1,
           color: colors.black,
           fontFamily: fonts.inter[400],
-          marginStart : isexpired ? 12 : 0
-          // backgroundColor : 'red'
+          alignSelf : 'center',
+          marginTop : isexpired ? 6 : 0,
+          marginBottom : isexpired ? 6 : 0,
+          marginLeft : isexpired ? 18 : 0  
+        // backgroundColor : 'red'
       }},
       pollOptionItemPercentage: {
         // backgroundColor : 'red'
@@ -101,10 +128,10 @@ let styles = StyleSheet.create({
         width: 12,
         height: 12,
         alignSelf: 'center',
-        borderRadius: 6,
+        borderRadius: 0,
         borderColor: colors.black,
         borderWidth: 1,
-        marginEnd: 8,
+        marginEnd: 12,
       },
     
       pollRadioButtonActive: {
@@ -113,7 +140,7 @@ let styles = StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 6,
         backgroundColor: colors.holytosca,
-        marginEnd: 8,
+        marginEnd: 12,
       },
       totalVotesContainer: {
         display: 'flex',
@@ -121,4 +148,4 @@ let styles = StyleSheet.create({
       },
 })
 
-export default PollOptions
+export default PollOptionsMultipleChoice
