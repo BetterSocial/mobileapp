@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component PrivacyPolicies PrivacyPolicies snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "paddingHorizontal": 20,
+      "paddingTop": 21,
+    }
+  }
+>
+  <Header
+    onPress={[Function]}
+    title="Privacy Policies"
+  />
+  <WebView
+    cacheEnabled={true}
+    javaScriptEnabled={true}
+    originWhitelist={
+      Array [
+        "http://*",
+        "https://*",
+      ]
+    }
+    renderLoading={[Function]}
+    showsVerticalScrollIndicator={false}
+    source={
+      Object {
+        "uri": "https://www.lipsum.com/feed/html",
+      }
+    }
+    startInLoadingState={true}
+    useSharedProcessPool={true}
+  />
+</View>
+`;

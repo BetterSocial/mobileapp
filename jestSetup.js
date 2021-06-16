@@ -1,15 +1,10 @@
 import {configure} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import {NativeModules} from 'react-native';
 
 configure({
   adapter: new Adapter(),
 });
-NativeModules.RNCNetInfo = {
-  getCurrentState: jest.fn(() => Promise.resolve()),
-  addListener: jest.fn(),
-  removeListeners: jest.fn(),
-};
+
 // Auto-mock YellowBox component.
 // jest.mock('YellowBox');
 

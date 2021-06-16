@@ -2,13 +2,12 @@
 import * as ReactNative from 'react-native';
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 import 'react-native-gesture-handler/jestSetup';
-import {NativeModules} from 'react-native';
 
-NativeModules.RNCNetInfo = {
+jest.doMock('@react-native-community/netinfo', () => ({
   getCurrentState: jest.fn(() => Promise.resolve()),
   addListener: jest.fn(),
   removeListeners: jest.fn(),
-};
+}));
 
 jest.doMock('react-native-fs', () => {
   return {
