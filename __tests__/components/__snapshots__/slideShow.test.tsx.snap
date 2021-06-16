@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component SlideShow SlideShow  snapshot 1`] = `
+<ForwardRef
+  autoplay={true}
+  autoplayDelay={3}
+  autoplayLoop={true}
+  data={
+    Array [
+      "https://picsum.photos/id/1/200/300",
+      "https://picsum.photos/id/1036/200/300",
+      "https://picsum.photos/id/1048/200/300",
+    ]
+  }
+  index={2}
+  paginationStyleItem={
+    Object {
+      "height": 8,
+      "marginHorizontal": 5,
+      "width": 8,
+    }
+  }
+  renderItem={[Function]}
+  showPagination={true}
+/>
+`;

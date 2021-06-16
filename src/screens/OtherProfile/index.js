@@ -199,7 +199,7 @@ const OtherProfile = () => {
       <SafeAreaView style={styles.container}>
         {isOffsetScroll ? (
           <View style={styles.tabsFixed}>
-            <Text style={styles.postText}>Post ({})</Text>
+            <Text style={styles.postText}>Post{}</Text>
           </View>
         ) : null}
         <ScrollView onScroll={handleScroll} ref={scrollViewReff}>
@@ -301,7 +301,7 @@ const OtherProfile = () => {
               {!isLoading ? (
                 <View>
                   <View style={styles.tabs} ref={postRef}>
-                    <Text style={styles.postText}>Post ({/* Please change this to post size */ 0})</Text>
+                    <Text style={styles.postText}>Post{/* Please change this to post size */}</Text>
                   </View>
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed

@@ -27,6 +27,7 @@ export default class AutoFocusTextArea extends React.Component {
             style={{...styles.input, ...this.props.style}}
             textAlignVertical={"top"}
             placeholder={this.props.placeholder}
+            {...this.props}
       />
     }
 }

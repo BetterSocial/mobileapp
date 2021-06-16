@@ -74,19 +74,36 @@
     "react-native-version-number": "^0.3.6",
     "react-native-webview": "^11.4.0",
     "stream-chat-react-native": "^3.1.2",
-    "toggle-switch-react-native": "^3.2.0"
+    "toggle-switch-react-native": "^3.2.0",
+    "ts-jest": "^27.0.2"
   },
   "devDependencies": {
     "@babel/core": "7.13.10",
+    "@babel/preset-env": "^7.14.4",
     "@babel/runtime": "7.13.10",
     "@react-native-community/eslint-config": "1.1.0",
-    "babel-jest": "25.5.1",
+    "@testing-library/react-native": "^7.2.0",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/jest": "^26.0.23",
+    "babel-jest": "^27.0.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "enzyme-to-json": "^3.6.2",
     "eslint": "6.8.0",
     "jest": "25.5.4",
     "metro-react-native-babel-preset": "0.59.0",
+    "react-dom": "^17.0.2",
     "react-test-renderer": "16.13.1"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "setupFilesAfterEnv": [
+      "<rootDir>/jestSetup.js"
+    ],
+    "moduleDirectories": [
+      "<rootDir>/node_modules",
+      "<rootDir>/src"
+    ]
   }
 }
