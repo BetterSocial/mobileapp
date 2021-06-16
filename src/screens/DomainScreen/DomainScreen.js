@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import * as React from 'react';
 import {
   View,
   Text,
@@ -8,99 +8,35 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
+
+import Gap from '../../components/Gap';
+import {fonts} from '../../utils/fonts';
+import {useRoute} from '@react-navigation/native';
+import {getDetailDomains, getProfileDomain} from '../../service/domain';
+import Loading from '../Loading';
+
+import {colors} from '../../utils/colors';
+import Memoic_globe from '../../assets/icons/ic_globe';
+import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoIc_interface from '../../assets/icons/Ic_interface';
 import MemoIc_question_mark from '../../assets/icons/Ic_question_mark';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
-import Gap from '../../components/Gap';
-import {fonts} from '../../utils/fonts';
-import {useRoute} from '@react-navigation/native';
-import {getDetailDomains} from '../../service/domain';
-import Loading from '../Loading';
+import Header from './Header';
+import Navigation from './Navigation';
 
 const {width, height} = Dimensions.get('window');
 
-const Navigation = ({domain}) => (
-  <View style={styles.Header}>
-    <MemoIc_arrow_back width={18} height={18} />
-    <View style={styles.domain}>
-      <Text style={styles.domainText}>{domain}</Text>
-    </View>
-  </View>
-);
-const Header = ({image, domain, description, followers, onPress}) => (
-  <View style={styles.headerDomain}>
-    <View style={{flexDirection: 'row'}}>
-      <View style={{flex: 1.3}}>
-        <Image
-          source={{
-            uri: image
-              ? image
-              : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-          }}
-          style={{width: 80, height: 80, borderRadius: 45}}
-        />
-      </View>
-      <View style={styles.wrapperHeader}>
-        <TouchableOpacity
-          style={styles.buttonPrimary}
-          onPress={() => onPress(1)}>
-          <Text style={{fontSize: 14, color: 'white'}}>Follow</Text>
-        </TouchableOpacity>
-        <Gap style={{width: 8}} />
-        <TouchableOpacity style={styles.buttonBlock} onPress={() => onPress(0)}>
-          <Text style={{fontSize: 14, color: '#FF2E63'}}>Block</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-    <View style={{flexDirection: 'row', marginTop: 8}}>
-      <Text
-        style={{
-          fontSize: 24,
-          fontFamily: fonts.inter[600],
-          fontWeight: 'bold',
-        }}>
-        {domain}
-      </Text>
-      <View style={{marginStart: 8, justifyContent: 'center'}}>
-        <MemoIc_interface width={22} height={22} />
-      </View>
-    </View>
-
-    <View style={{flexDirection: 'row'}}>
-      <Text
-        style={{
-          color: '#00ADB5',
-          fontFamily: fonts.inter[400],
-          fontSize: 16,
-          fontWeight: '700',
-        }}>
-        {followers}k
-      </Text>
-      <Gap style={{width: 4}} />
-      <Text>Followers</Text>
-    </View>
-    <Gap style={{height: 8}} />
-    <Text style={{fontSize: 14, fontFamily: fonts.inter[400], lineHeight: 16}}>
-      {description}
-    </Text>
-    <Gap style={{height: 8}} />
-    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-      <MemoIc_rectangle_gradient width={width * 0.75} height={20} />
-      <Gap style={{width: 4}} />
-      <MemoIc_question_mark width={16} height={16} />
-    </View>
-  </View>
-);
-
 const DomainScreen = () => {
   const route = useRoute();
-  const [item, setItem] = useState(route.params.item);
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [item, setItem] = React.useState(route.params.item);
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [profile, setProfile] = React.useState({});
+  const [domain, setDomain] = React.useState(route.params.item.og.domain);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const init = async () => {
       setLoading(true);
       let res = await getDetailDomains(item.og.domain);
@@ -113,9 +49,85 @@ const DomainScreen = () => {
     init();
   }, [item]);
 
+  React.useEffect(() => {
+    const getProfile = async () => {
+      let res = await getProfileDomain(domain);
+      if (res.code === 200) {
+        setProfile(res.data);
+      }
+    };
+    getProfile();
+  }, [domain]);
+
   const RenderItem = ({domain}) => (
-    <View style={{height: 30, width: width}}>
-      <Text>{domain.content.author}</Text>
+    <View style={styles.wrapperItem}>
+      <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
+        <View
+          style={{
+            borderRadius: 45,
+            borderWidth: 0.2,
+            borderColor: 'rgba(0,0,0,0.5)',
+            width: 46,
+            height: 46,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Image
+            source={{uri: profile.logo}}
+            style={[
+              {height: 46, width: 46, borderRadius: 45},
+              StyleSheet.absoluteFillObject,
+            ]}
+          />
+        </View>
+        <Gap style={{width: 8}} />
+        <View style={{flex: 1}}>
+          <Text>{domain.domain.name ? domain.domain.name : 'undefined'}</Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text>{new Date(domain.time).toLocaleDateString()}</Text>
+            <View style={styles.point} />
+            <Memoic_globe height={16} width={16} />
+            <View style={styles.point} />
+
+            <MemoPeopleFollow height={16} width={16} />
+            <Gap style={{width: 4}} />
+            <Text style={{color: '#828282'}}>12k</Text>
+          </View>
+          <MemoIc_rectangle_gradient width={width * 0.43} height={20} />
+        </View>
+        <View>
+          <TouchableOpacity>
+            <View
+              style={{
+                backgroundColor: 'white',
+                borderRadius: 8,
+                borderColor: '#00ADB5',
+                width: 32,
+                height: 32,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderWidth: 0.5,
+              }}>
+              <Text style={{fontSize: 24, color: '#00ADB5'}}>+</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={{paddingHorizontal: 16}}>
+        <Text style={{fontSize: 16, fontFamily: fonts.inter[700]}}>
+          {domain.content.title}
+        </Text>
+      </View>
+      <Gap style={{height: 8}} />
+      <Image
+        source={{uri: domain.content.image}}
+        style={{height: height * 0.3}}
+      />
+      <Gap style={{height: 16}} />
+      <View style={{paddingHorizontal: 16}}>
+        <Text>{domain.content.description}</Text>
+      </View>
+      <Gap style={{height: 16}} />
     </View>
   );
 
@@ -123,10 +135,9 @@ const DomainScreen = () => {
     <View style={styles.container}>
       <Navigation domain={item.og.domain} />
       <Header
-        description={
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placeraterat tellus, non consequat mi sollicitudin quis.'
-        }
-        domain={item.og.domain}
+        image={profile.logo}
+        description={profile.short_description}
+        domain={profile.domain_name}
         followers={10}
         onPress={(v) => {
           console.log(v);
@@ -151,54 +162,18 @@ const DomainScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
     paddingTop: 8,
     backgroundColor: 'white',
   },
-  Header: {
-    flexDirection: 'row',
-    height: 35,
+  point: {
+    width: 4,
+    height: 4,
+    borderRadius: 4,
+    backgroundColor: colors.gray,
+    marginLeft: 8,
+    marginRight: 8,
   },
-  domain: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  domainText: {
-    fontSize: 16,
-    fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
-    lineHeight: 19,
-  },
-  headerDomain: {
-    flexDirection: 'column',
-    backgroundColor: 'white',
-  },
-  buttonPrimary: {
-    height: 32,
-    backgroundColor: '#00ADB5',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-  },
-  buttonBlock: {
-    flex: 1,
-    height: 32,
-    borderWidth: 0.5,
-    borderRadius: 8,
-    borderColor: '#FF2E63',
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  wrapperHeader: {
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
+  wrapperItem: {backgroundColor: 'white', marginBottom: 16},
 });
 
 export default DomainScreen;

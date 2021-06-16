@@ -47,8 +47,9 @@ const BlockUser = ({refBlockUser, onSelect, username}) => {
           Blocking a user will not just remove their post from your feed, but
           also reduce their visibility for all other users.
         </Text>
-        {data.map((item) => (
+        {data.map((item, index) => (
           <ItemListLarge
+            key={index}
             id={item.id}
             label={item.label}
             desc={item.desc}

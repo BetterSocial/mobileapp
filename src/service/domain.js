@@ -22,3 +22,14 @@ export const getDetailDomains = async (domain) => {
     throw new Error(error);
   }
 };
+
+export const getProfileDomain = async (name) => {
+  try {
+    let res = await api.get(`/domain/profile-domain/${name}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};

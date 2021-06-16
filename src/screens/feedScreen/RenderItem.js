@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import * as React from 'react';
 import {View, Text, StyleSheet, Dimensions, Share} from 'react-native';
 import Content from './Content';
 import Footer from './Footer';
@@ -10,9 +10,9 @@ import analytics from '@react-native-firebase/analytics';
 
 import {Card} from '../../components/CardStack';
 import {
-  POST_VERB_POLL,
   POST_TYPE_POLL,
   POST_TYPE_LINK,
+  POST_TYPE_STANDARD,
 } from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
@@ -105,9 +105,10 @@ const Item = ({
   onPressComment,
   selfUserId,
   onPressDomain,
+  index,
 }) => {
-  const [voteStatus, setVoteStatus] = useState('none');
-  useEffect(() => {
+  const [voteStatus, setVoteStatus] = React.useState('none');
+  React.useEffect(() => {
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
@@ -134,55 +135,29 @@ const Item = ({
     validationStatusVote();
   }, [item, selfUserId]);
 
-  const renderContent = (item, onPress, onPressDomain) => {
-    let component = [];
-    switch (item.post_type) {
-      case POST_TYPE_POLL:
-        component.push(
-          <ContentPoll
-            message={item.message}
-            images_url={item.images_url}
-            polls={item.pollOptions}
-            onPress={onPress}
-          />,
-        );
-        break;
-      case POST_TYPE_LINK:
-        component.push(<ContentLink og={item.og} onPress={onPressDomain} />);
-        break;
-
-      default:
-        component.push(
-          <Content
-            message={item.message}
-            images_url={item.images_url}
-            onPress={onPress}
-          />,
-        );
-        break;
-    }
-    return component;
-  };
   return (
     <Card style={[styles.container]}>
       <Header props={item} />
-      {/* {item.post_type === POST_TYPE_POLL ? (
+
+      {item.post_type === POST_TYPE_POLL && (
         <ContentPoll
           message={item.message}
           images_url={item.images_url}
           polls={item.pollOptions}
           onPress={onPress}
         />
-      ) : (
+      )}
+
+      {item.post_type === POST_TYPE_LINK && (
+        <ContentLink og={item.og} onPress={onPressDomain} />
+      )}
+      {item.post_type === POST_TYPE_STANDARD && (
         <Content
           message={item.message}
           images_url={item.images_url}
           onPress={onPress}
         />
-      )} */}
-
-      {renderContent(item, onPress, onPressDomain)}
-
+      )}
       <Footer
         item={item}
         onPressShare={() => {

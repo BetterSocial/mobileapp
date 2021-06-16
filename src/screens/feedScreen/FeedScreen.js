@@ -121,6 +121,7 @@ const FeedScreen = (props) => {
   getToken().then((val) => {
     token_JWT = val;
   });
+
   useEffect(() => {
     // fetchMyProfile();
     analytics().logScreenView({
@@ -177,29 +178,15 @@ const FeedScreen = (props) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}} forceInset={{top: 'always'}}>
+    <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
       {mainFeeds !== undefined && (
         <CardStack
-          style={{
-            flex: 5,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-          }}
+          style={styles.cardStack}
           renderNoMoreCards={() => {
-            // setInit();
-            // setLoading(true);
-            // console.log(countStack);
             if (countStack === 0) {
               let id = mainFeeds[mainFeeds.length - 1].id;
-              // getDataFeeds(lastId);
               setLastId(id);
             }
-            // return (
-            //   <Text style={{fontWeight: '700', fontSize: 18, color: 'gray'}}>
-            //     Load more cards :(
-            //   </Text>
-            // );
           }}
           ref={(swiper) => {
             this.swiper = swiper;
@@ -211,19 +198,13 @@ const FeedScreen = (props) => {
           verticalThreshold={1}
           horizontalSwipe={false}
           disableBottomSwipe={true}
-          // onSwipedBottom={() => {
-          //   // this.swiper.goBackFromTop();
-          //   // this.swiper.goBackFromTop();
-          //   setCountStack(countStack + 1);
-          //   // console.log('onSwipeBottom');
-          // }}
           onSwipedTop={() => {
             setCountStack(countStack - 1);
-            // console.log('onSwiped top');
           }}>
           {mainFeeds !== undefined
             ? mainFeeds.map((item, index) => (
                 <RenderItem
+                  index={index}
                   key={index}
                   item={item}
                   onPress={() => {
@@ -289,5 +270,15 @@ const FeedScreen = (props) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  cardStack: {
+    flex: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+  },
+  container: {flex: 1},
+});
 
 export default FeedScreen;

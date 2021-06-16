@@ -27,10 +27,25 @@ const Card = (props) => {
 
   const Header = ({domain, image, date}) => (
     <View style={{flexDirection: 'row', padding: 8}}>
-      <Image
-        style={{width: 36, height: 36, borderRadius: 45}}
-        source={{uri: image}}
-      />
+      <View
+        style={{
+          borderRadius: 45,
+          borderWidth: 0.2,
+          borderColor: 'rgba(0,0,0,0.5)',
+          width: 36,
+          height: 36,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Image
+          style={[
+            {height: '100%', width: '100%', borderRadius: 45},
+            StyleSheet.absoluteFillObject,
+          ]}
+          source={{uri: image}}
+          resizeMode={'cover'}
+        />
+      </View>
       <Gap style={{width: 8}} />
       <View style={{justifyContent: 'space-around'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
