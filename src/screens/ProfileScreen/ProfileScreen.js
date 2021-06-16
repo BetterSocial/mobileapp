@@ -75,6 +75,7 @@ const ProfileScreen = () => {
   const [errorBio, setErrorBio] = useState('');
   const [postLenght, setPostLenght] = useState(0);
   let [rerender, setRerender] = useState(0)
+  const [currentProfilePicture, setCurrentProfilePicture] = useState(DEFAULT_PROFILE_PIC_PATH)
   const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = useState(
     false,
   );
@@ -88,37 +89,34 @@ const ProfileScreen = () => {
   // let [, dispatch] = context.users
 
   useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    fetchMyProfile(true);
+    setCurrentProfilePicture(`${dataMain?.profile_pic_path}?time=${new Date().valueOf()}`)
+  },[dataMain?.profile_pic_path])
 
-    getToken().then((val) => {
-      setTokenJwt(val);
-      setRerender(rerender++)
-      setRerender(rerender++)
-    });
-    // setToken()
-    analytics().logScreenView({
-      screen_class: 'ProfileScreen',
-      screen_name: 'ProfileScreen',
-    });
-    analytics().logEvent('myprofile_begin_view', {
-      id: 'profile_begin',
-      myprofile_begin_view: Date.now(),
-    });
-    return () => {
-      analytics().logEvent('myprofile_end_view', {
-        id: 'myprofile_end_view',
-        myprofile_end_view: Date.now(),
+  useEffect(() => {
+    (async () => {
+      LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+      await fetchMyProfile(true);
+      
+      getToken().then((val) => {
+        setTokenJwt(val);
+      }); 
+      analytics().logScreenView({
+        screen_class: 'ProfileScreen',
+        screen_name: 'ProfileScreen',
       });
-    };
+      analytics().logEvent('myprofile_begin_view', {
+        id: 'profile_begin',
+        myprofile_begin_view: Date.now(),
+      });
+      return () => {
+        analytics().logEvent('myprofile_end_view', {
+          id: 'myprofile_end_view',
+          myprofile_end_view: Date.now(),
+        });
+      };
+  
+    })()
   }, []);
-  // const setToken = async () => {
-  //   try {
-  //     await AsyncStorage.setItem('tkn-getstream', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjg4ZDU2NzktNmM2OC00MWVjLWJlODMtN2YxNWE0ZTgyZDNkIn0.0YNINzuHdf2afDN0ew3x0DRT0uJFzvBD0CbYL_Exm9c")
-  //   } catch (e) {
-  //     // saving error
-  //   }
-  // };
 
   const fetchMyProfile = async (withLoading) => {
     const value = await getAccessToken();
@@ -146,11 +144,6 @@ const ProfileScreen = () => {
         navigation: {
           forcedRedirectEnabled: false,
         },
-        // ios: {
-        //   bundleId: '',
-        //   // customScheme: 'giftit',
-        //   appStoreId: '',
-        // },
         android: {
           packageName: 'org.bettersocial.dev',
         },
@@ -170,12 +163,12 @@ const ProfileScreen = () => {
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
-          // shared with activity type of result.activityType
+
         } else {
-          // shared
+
         }
       } else if (result.action === Share.dismissedAction) {
-        // dismissed
+
       }
     } catch (error) {
       alert(error.message);
@@ -385,11 +378,11 @@ const ProfileScreen = () => {
     );
   };
 
-  // getToken().then((val) => {
-  //   setTokenJwt(val);
-  //   setRerender(rerender++)
-  //   setRerender(rerender++)
-  // });
+  getToken().then((val) => {
+    setTokenJwt(val);
+    // setRerender(rerender++)
+    // setRerender(rerender++)
+  });
 
   return (
     <>
@@ -435,24 +428,15 @@ const ProfileScreen = () => {
                       <View style={styles.profileImageContainer}>
                         <Image
                           style={styles.profileImage}
-                          key={`${dataMain.profile_pic_path}?time=${new Date().valueOf()}` || DEFAULT_PROFILE_PIC_PATH}
+                          key={currentProfilePicture}
                           source={{
                             cache:'reload',
-                            uri: dataMain.profile_pic_path
-                              ? `${dataMain.profile_pic_path}?time=${new Date().valueOf()}`
-                              : DEFAULT_PROFILE_PIC_PATH,
+                            uri: currentProfilePicture,
                           }}
                         />
                         {!dataMain.profile_pic_path ? <MemoIcAddCircle width={48} height={48} style={{position : 'absolute', top : 25, left : 25}}/> : <></>}
                       </View>
                     </TouchableNativeFeedback>
-                    {/* <TouchableNativeFeedback onPress={changeName}>
-                      <Text style={styles.nameProfile}>
-                        {dataMain.bio
-                          ? 'asdads'
-                          : 'asdasd'}
-                      </Text>
-                    </TouchableNativeFeedback> */}
                   </View>
                   <View style={{...styles.wrapFollower, marginTop : 12}}>
                     <View style={styles.wrapRow}>
