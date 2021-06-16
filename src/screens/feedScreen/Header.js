@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   View,
   StyleSheet,
@@ -9,16 +9,16 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
+import {useNavigation} from '@react-navigation/native';
 import {Avatar} from 'react-native-activity-feed';
 import moment from 'moment';
 import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-
-import {useNavigation} from '@react-navigation/native';
+import PropsTypes from 'prop-types';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
-
 import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
 import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
@@ -48,21 +48,6 @@ const validationTimer = (timer, duration_feed) => {
   var hours = Math.abs(date1 - date2) / 36e5;
   let total = (hours / totalFeed) * 100;
   switch (true) {
-    // case total < 25:
-    //   return <MemoZero_twentyFour height={17} width={17} />;
-    // case total < 38:
-    //   return <MemoTwentyFive_thirtySix height={17} width={17} />;
-    // case total < 50:
-    //   return <MemoThirtySeven_fourtyNine height={17} width={17} />;
-    // case total < 63:
-    //   return <MemoFivety_sixtyTwo height={17} width={17} />;
-    // case total < 75:
-    //   return <MemoSixtyThree_seventyFour height={17} width={17} />;
-    // case total < 88:
-    //   return <MemoSeventyFive_eightySeven height={17} width={17} />;
-    // default:
-    //   return <MemoEightyEight_hundred height={17} width={17} />;
-
     case total < 25:
       return <MemoEightyEight_hundred height={17} width={17} />;
     case total < 38:
@@ -92,8 +77,8 @@ const _renderAnonimity = (
     <View style={styles.rowCenter}>
       <Image
         source={AnonymousProfile}
-        width={32}
-        height={32}
+        width={48}
+        height={48}
         style={styles.imageAnonimity}
       />
       <View style={styles.containerFeedProfile}>
@@ -362,8 +347,8 @@ const styles = StyleSheet.create({
   },
   imageAnonimity: {
     marginRight: 8,
-    width: 32,
-    height: 32,
+    width: 48,
+    height: 48,
   },
 });
 

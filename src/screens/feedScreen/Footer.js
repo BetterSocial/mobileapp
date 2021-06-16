@@ -6,6 +6,7 @@ import {
   Platform,
   Dimensions,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 
 import {fonts} from '../../utils/fonts';
@@ -16,6 +17,8 @@ import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
 import MemoIc_share from '../../assets/icons/Ic_share';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
+import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_arrow_down_vote_on';
+import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_arrow_upvote_on';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -28,6 +31,8 @@ const Footer = ({
   item,
   totalVote = 0,
   totalComment = 0,
+  statusVote = 'none',
+  isSelf = false,
 }) => {
   return (
     <View style={{...styles.rowSpaceBeetwen, marginBottom: 8}}>
@@ -41,11 +46,20 @@ const Footer = ({
         <Text style={styles.textCount}>{totalComment}</Text>
       </View>
       <View style={{...styles.rowSpaceBeetwen, width: screenWidth * 0.3}}>
-        <TouchableOpacity onPress={() => onPressBlock(item)}>
-          <MemoIc_block_inactive height={18} width={18} />
-        </TouchableOpacity>
+        {isSelf ? (
+          <View />
+        ) : (
+          <TouchableOpacity onPress={() => onPressBlock(item)}>
+            <MemoIc_block_inactive height={18} width={18} />
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity onPress={() => onPressDownVote(item)}>
-          <MemoIc_arrow_down_vote_off width={18} height={18} />
+          {statusVote === 'downvote' ? (
+            <MemoIc_arrow_down_vote_on width={18} height={18} />
+          ) : (
+            <MemoIc_arrow_down_vote_off width={18} height={18} />
+          )}
         </TouchableOpacity>
 
         <Text
@@ -64,7 +78,11 @@ const Footer = ({
         </Text>
 
         <TouchableOpacity onPress={() => onPressUpvote(item)}>
-          <MemoIc_arrow_upvote_off width={18} height={18} />
+          {statusVote === 'upvote' ? (
+            <MemoIc_arrow_upvote_on width={18} height={18} />
+          ) : (
+            <MemoIc_arrow_upvote_off width={18} height={18} />
+          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -94,6 +112,8 @@ Footer.propTypes = {
   item: PropTypes.object.isRequired,
   totalVote: PropTypes.number,
   totalComment: PropTypes.number,
+  statusVote: PropTypes.oneOf(['none', 'upvote', 'downvote']),
+  isSelf: PropTypes.bool,
 };
 
 export default Footer;

@@ -46,8 +46,9 @@ const BlockDomain = ({refBlockUser, onSelect, domain}) => {
           Blocking a domain will not just remove their link from your feed, but
           also reduce their visibility for all other users.
         </Text>
-        {data.map((item) => (
+        {data.map((item, index) => (
           <ItemListLarge
+            key={index}
             id={item.id}
             label={item.label}
             desc={item.desc}
