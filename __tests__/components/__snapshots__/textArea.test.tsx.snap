@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component TextArea AutoFocusTextArea renders correctly 1`] = `
+<TextInput
+  allowFontScaling={true}
+  multiline={true}
+  onChangeText={[Function]}
+  placeholder="Input Text"
+  rejectResponderTermination={true}
+  style={
+    Object {
+      "backgroundColor": "#F5F5F5",
+      "borderRadius": 8,
+      "color": "#000000",
+      "fontFamily": "Inter-Medium",
+      "fontSize": 14,
+      "height": 150,
+      "justifyContent": "flex-start",
+      "lineHeight": 24,
+      "overflow": "scroll",
+      "paddingHorizontal": 12,
+      "paddingVertical": 16,
+    }
+  }
+  textAlignVertical="top"
+  underlineColorAndroid="transparent"
+  value="Input"
+/>
+`;
+
+exports[`component TextArea AutoFocusTextArea snapshot 1`] = `
+<Component
+  allowFontScaling={true}
+  multiline={true}
+  onChangeText={[Function]}
+  placeholder="Input Text"
+  rejectResponderTermination={true}
+  style={
+    Object {
+      "backgroundColor": "#F5F5F5",
+      "borderRadius": 8,
+      "color": "#000000",
+      "fontFamily": "Inter-Medium",
+      "fontSize": 14,
+      "height": 150,
+      "justifyContent": "flex-start",
+      "lineHeight": 24,
+      "overflow": "scroll",
+      "paddingHorizontal": 12,
+      "paddingVertical": 16,
+    }
+  }
+  textAlignVertical="top"
+  underlineColorAndroid="transparent"
+  value="Input"
+/>
+`;
+
+exports[`component TextArea TextArea renders correctly 1`] = `
+<TextInput
+  allowFontScaling={true}
+  autoFocus={true}
+  multiline={true}
+  onChangeText={[Function]}
+  placeholder="Input Text"
+  rejectResponderTermination={true}
+  style={
+    Object {
+      "backgroundColor": "#F5F5F5",
+      "borderRadius": 8,
+      "color": "#000000",
+      "fontFamily": "Inter-Medium",
+      "fontSize": 14,
+      "height": 150,
+      "justifyContent": "flex-start",
+      "lineHeight": 24,
+      "overflow": "scroll",
+      "paddingHorizontal": 12,
+      "paddingVertical": 16,
+    }
+  }
+  textAlignVertical="top"
+  underlineColorAndroid="transparent"
+  value="Input"
+/>
+`;
+
+exports[`component TextArea TextArea snapshot 1`] = `
+<Component
+  allowFontScaling={true}
+  autoFocus={true}
+  multiline={true}
+  onChangeText={[Function]}
+  placeholder="Input Text"
+  rejectResponderTermination={true}
+  style={
+    Object {
+      "backgroundColor": "#F5F5F5",
+      "borderRadius": 8,
+      "color": "#000000",
+      "fontFamily": "Inter-Medium",
+      "fontSize": 14,
+      "height": 150,
+      "justifyContent": "flex-start",
+      "lineHeight": 24,
+      "overflow": "scroll",
+      "paddingHorizontal": 12,
+      "paddingVertical": 16,
+    }
+  }
+  textAlignVertical="top"
+  underlineColorAndroid="transparent"
+  value="Input"
+/>
+`;

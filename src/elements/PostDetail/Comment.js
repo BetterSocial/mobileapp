@@ -1,13 +1,13 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import IconIc from 'react-native-vector-icons/Ionicons';
+
 import IconEn from 'react-native-vector-icons/Entypo';
 import IconAnt from 'react-native-vector-icons/AntDesign';
-import IconMtC from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
 const Comment = ({username, comment, onPress, isLast = false}) => {
   return (
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     height: 24,
   },
   container: {
-    // borderLeftColor: colors.gray1,
     borderLeftWidth: 1,
   },
   username: {

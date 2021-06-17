@@ -1,23 +1,21 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import {
-  ScrollView,
   StyleSheet,
   Text,
-  View,
-  FlatList,
   TextInput,
+  View,
+  TouchableOpacity,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+
 import RBSheet from 'react-native-raw-bottom-sheet';
+import IconFA5 from 'react-native-vector-icons/FontAwesome5';
+
+import {Button} from '../../components/Button';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import IconFA5 from 'react-native-vector-icons/FontAwesome5';
-import ItemList from '../../components/Blocking/ItemList';
-import {Button} from '../../components/Button';
-import Gap from '../../components/Gap';
 
 const SpecificIssue = ({refSpecificIssue, onPress}) => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = React.useState('');
   return (
     <RBSheet
       ref={refSpecificIssue}
@@ -41,7 +39,9 @@ const SpecificIssue = ({refSpecificIssue, onPress}) => {
           value={message}
           onChangeText={(v) => setMessage(v)}
           textAlignVertical="top"
-          placeholder={`Please provide more details to inform our\n team (min. 50 characters)`}
+          placeholder={
+            'Please provide more details to inform our\n team (min. 50 characters)'
+          }
         />
         <TouchableOpacity style={styles.btnSkip}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>

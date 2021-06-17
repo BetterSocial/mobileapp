@@ -1,8 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+
+import {useNavigation} from '@react-navigation/native';
+
 import {colors} from '../../utils/colors';
 import Comment from './Comment';
-import {useNavigation} from '@react-navigation/native';
 
 const ContainerComment = ({comments}) => {
   const navigation = useNavigation();

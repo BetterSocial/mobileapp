@@ -1,52 +1,50 @@
-import React, {useEffect, useState, useRef} from 'react';
+import * as React from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
-import {ButtonNewPost} from '../../components/Button';
 
-import {getToken} from '../../helpers/getToken';
+import {useFocusEffect} from '@react-navigation/native';
 import JWTDecode from 'jwt-decode';
-
 import analytics from '@react-native-firebase/analytics';
-import {getAccessToken} from '../../data/local/accessToken';
-import {getMainFeed} from '../../service/post';
+import Toast from 'react-native-simple-toast';
+
 import RenderItem from './RenderItem';
 import Loading from '../../components/Loading';
 import CardStack from '../../components/CardStack';
+import {ButtonNewPost} from '../../components/Button';
 import BlockUser from '../../elements/Blocking/BlockUser';
 import BlockDomain from '../../elements/Blocking/BlockDomain';
 import ReportUser from '../../elements/Blocking/ReportUser';
 import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
-import Toast from 'react-native-simple-toast';
-import {blockUser} from '../../service/blocking';
+import {getAccessToken} from '../../data/local/accessToken';
 import {downVote, upVote} from '../../service/vote';
-
-import {useFocusEffect} from '@react-navigation/native';
+import {blockUser} from '../../service/blocking';
+import {getMainFeed} from '../../service/post';
+import {getToken} from '../../helpers/getToken';
 
 const FeedScreen = (props) => {
-  const [tokenParse, setTokenParse] = useState({});
-  const [mainFeeds, setMainFeeds] = useState([]);
+  const [tokenParse, setTokenParse] = React.useState({});
+  const [mainFeeds, setMainFeeds] = React.useState([]);
 
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [countStack, setCountStack] = useState(null);
-  const [username, setUsername] = useState('');
-  const [reportOption, setReportOption] = useState([]);
-  const [messageReport, setMessageReport] = useState('');
-  const [userId, setUserId] = useState('');
-  const [postId, setPostId] = useState('');
-  const [lastId, setLastId] = useState('');
-  const [selectedPost, setSelectedPost] = useState({});
-  const [yourselfId, setYourselfId] = useState('');
+  const [initialLoading, setInitialLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
+  const [countStack, setCountStack] = React.useState(null);
+  const [username, setUsername] = React.useState('');
+  const [reportOption, setReportOption] = React.useState([]);
+  const [messageReport, setMessageReport] = React.useState('');
+  const [userId, setUserId] = React.useState('');
+  const [postId, setPostId] = React.useState('');
+  const [lastId, setLastId] = React.useState('');
+  const [selectedPost, setSelectedPost] = React.useState({});
+  const [yourselfId, setYourselfId] = React.useState('');
 
-  const refBlockUser = useRef();
-  const refBlockDomain = useRef();
-  const refReportUser = useRef();
-  const refReportDomain = useRef();
-  const refSpecificIssue = useRef();
+  const refBlockUser = React.useRef();
+  const refBlockDomain = React.useRef();
+  const refReportUser = React.useRef();
+  const refReportDomain = React.useRef();
+  const refSpecificIssue = React.useRef();
 
   const onSelectBlocking = (v) => {
     if (v !== 1) {
-      // refBlockDomain.current.open();
       refReportUser.current.open();
     } else {
       userBlock();
@@ -118,11 +116,7 @@ const FeedScreen = (props) => {
     }, [lastId]),
   );
 
-  getToken().then((val) => {
-    token_JWT = val;
-  });
-
-  useEffect(() => {
+  React.useEffect(() => {
     // fetchMyProfile();
     analytics().logScreenView({
       screen_class: 'FeedScreen',
@@ -157,7 +151,7 @@ const FeedScreen = (props) => {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const parseToken = async () => {
       const value = await getAccessToken();
       if (value) {
@@ -187,9 +181,6 @@ const FeedScreen = (props) => {
               let id = mainFeeds[mainFeeds.length - 1].id;
               setLastId(id);
             }
-          }}
-          ref={(swiper) => {
-            this.swiper = swiper;
           }}
           disableTopSwipe={false}
           disableLeftSwipe={true}

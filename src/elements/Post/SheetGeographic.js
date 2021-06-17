@@ -1,6 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+
 import RBSheet from 'react-native-raw-bottom-sheet';
+
 import FlatListItem from '../../components/FlatListItem';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -15,7 +17,6 @@ const SheetGeographic = ({geoRef, data, select, onSelect}) => {
         container: {
           borderTopRightRadius: 20,
           borderTopLeftRadius: 20,
-          //   height: 'auto',
         },
         draggableIcon: {
           backgroundColor: colors.alto,

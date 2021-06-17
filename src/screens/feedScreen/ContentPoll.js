@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
-  TouchableNativeFeedback,
   Text,
   Platform,
   Dimensions,
@@ -11,14 +10,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
 import SeeMore from 'react-native-see-more-inline';
-import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
+import {ParallaxImage} from 'react-native-snap-carousel';
+
 import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
-import { getPollTime, isPollExpired } from '../../utils/string/StringUtils';
+import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -36,13 +36,20 @@ const _renderItem = ({item, index}, parallaxProps) => {
   );
 };
 
-const ContentPoll = ({message, images_url, polls = [], onPress, multiplechoice = false, pollexpiredat}) => {
+const ContentPoll = ({
+  message,
+  images_url,
+  polls = [],
+  onPress,
+  multiplechoice = false,
+  pollexpiredat,
+}) => {
   let totalPollCount = polls.reduce((acc, current) => {
     return acc + parseInt(current.counter);
   }, 0);
 
-  let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = useState(-1) 
-  let [multipleChoiceSelected, setMultipleChoiceSelected] = useState([1])
+  let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = useState(-1);
+  let [multipleChoiceSelected, setMultipleChoiceSelected] = useState([1]);
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.contentFeed}>
@@ -89,21 +96,27 @@ const ContentPoll = ({message, images_url, polls = [], onPress, multiplechoice =
                   TODO : Count percentage
                 */
 
-                return multiplechoice ? 
-                  <PollOptionsMultipleChoice item={item} index={index} 
+                return multiplechoice ? (
+                  <PollOptionsMultipleChoice
+                    item={item}
+                    index={index}
                     selectedindex={multipleChoiceSelected}
                     onselected={(indexes) => {
-                      console.log(indexes)
-                      console.log(indexes)
-                      setMultipleChoiceSelected(indexes)} 
-                    }
+                      setMultipleChoiceSelected(indexes);
+                    }}
                     isexpired={isPollExpired(pollexpiredat)}
-                    total={totalPollCount}/> :
-                  <PollOptions item={item} index={index} 
-                    selectedindex={singleChoiceSelectedIndex} 
+                    total={totalPollCount}
+                  />
+                ) : (
+                  <PollOptions
+                    item={item}
+                    index={index}
+                    selectedindex={singleChoiceSelectedIndex}
                     total={totalPollCount}
                     isexpired={isPollExpired(pollexpiredat)}
-                    onselected={(index) => setSingleChoiceSelectedIndex(index)}/>
+                    onselected={(index) => setSingleChoiceSelectedIndex(index)}
+                  />
+                );
               })}
             </View>
 
@@ -119,15 +132,14 @@ const ContentPoll = ({message, images_url, polls = [], onPress, multiplechoice =
                   backgroundColor: colors.blackgrey,
                 }}
               />
-              <Text
-                style={
-                  styles.polltime
-                }>{` ${getPollTime(pollexpiredat)}`}</Text>
+              <Text style={styles.polltime}>{` ${getPollTime(
+                pollexpiredat,
+              )}`}</Text>
 
               <View style={styles.seeresultscontainer}>
-                  <TouchableOpacity>
-                    <Text style={styles.seeresultstext}>See Results</Text>
-                  </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text style={styles.seeresultstext}>See Results</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -276,8 +288,12 @@ const styles = StyleSheet.create({
     // backgroundColor : 'red'
   },
   percentageBar: (percent) => {
-    if (!percent) percent = 0;
-    if (percent > 100) percent = 100;
+    if (!percent) {
+      percent = 0;
+    }
+    if (percent > 100) {
+      percent = 100;
+    }
 
     return {
       width: `${percent}%`,
@@ -293,15 +309,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     color: colors.blackgrey,
-    alignSelf : 'center'
+    alignSelf: 'center',
   },
   polltime: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 16,
     color: colors.blackgrey,
-    alignSelf : 'center',
-    flex : 1
+    alignSelf: 'center',
+    flex: 1,
   },
   pollRadioButton: {
     width: 12,
@@ -325,11 +341,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
-  seeresultscontainer : {
-    alignSelf : 'center'
+  seeresultscontainer: {
+    alignSelf: 'center',
   },
-  seeresultstext : {
-    color : colors.holytosca,
-    fontFamily : fonts.inter[500]
-  }
+  seeresultstext: {
+    color: colors.holytosca,
+    fontFamily: fonts.inter[500],
+  },
 });

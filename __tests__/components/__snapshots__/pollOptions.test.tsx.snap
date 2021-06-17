@@ -1,0 +1,139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component PollOptions PollOptions renders correctly 1`] = `
+<View
+  accessible={true}
+  focusable={false}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "backgroundColor": "#F5F5F5",
+      "borderRadius": 8,
+      "display": "flex",
+      "flexDirection": "row",
+      "marginBottom": 8,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#00ADB5",
+        "height": "100%",
+        "left": 0,
+        "position": "absolute",
+        "top": 0,
+        "width": "0%",
+      }
+    }
+  />
+  <View
+    style={
+      Object {
+        "display": "flex",
+        "flexDirection": "row",
+        "paddingHorizontal": 12,
+        "paddingVertical": 16,
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignSelf": "center",
+          "borderColor": "#000000",
+          "borderRadius": 6,
+          "borderWidth": 1,
+          "height": 12,
+          "marginEnd": 12,
+          "width": 12,
+        }
+      }
+    />
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "flex": 1,
+          "fontFamily": "Inter-Regular",
+        }
+      }
+    >
+      test
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`component PollOptions PollOptions snapshot 1`] = `
+<TouchableNativeFeedback>
+  <View
+    key="poll-options-1"
+    style={
+      Object {
+        "backgroundColor": "#F5F5F5",
+        "borderRadius": 8,
+        "display": "flex",
+        "flexDirection": "row",
+        "marginBottom": 8,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "#00ADB5",
+          "height": "100%",
+          "left": 0,
+          "position": "absolute",
+          "top": 0,
+          "width": "0%",
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "row",
+          "paddingHorizontal": 12,
+          "paddingVertical": 16,
+          "width": "100%",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignSelf": "center",
+            "borderColor": "#000000",
+            "borderRadius": 6,
+            "borderWidth": 1,
+            "height": 12,
+            "marginEnd": 12,
+            "width": 12,
+          }
+        }
+      />
+      <Text
+        style={
+          Object {
+            "color": "#000000",
+            "flex": 1,
+            "fontFamily": "Inter-Regular",
+          }
+        }
+      >
+        test
+      </Text>
+    </View>
+  </View>
+</TouchableNativeFeedback>
+`;

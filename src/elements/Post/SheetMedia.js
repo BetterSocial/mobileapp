@@ -1,14 +1,21 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import RBSheet from 'react-native-raw-bottom-sheet';
+
 import MemoIc_camera from '../../assets/icons/Ic_camera';
 import MemoIcCreatePoll from '../../assets/icons/ic_create_poll';
 import MemoIc_media from '../../assets/icons/Ic_media';
-import MemoIc_user from '../../assets/icons/Ic_user';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const SheetMedia = ({refMedia, uploadFromMedia, takePhoto, createPoll, medias = []}) => {
+const SheetMedia = ({
+  refMedia,
+  uploadFromMedia,
+  takePhoto,
+  createPoll,
+  medias = [],
+}) => {
   return (
     <RBSheet
       ref={refMedia}
@@ -24,12 +31,13 @@ const SheetMedia = ({refMedia, uploadFromMedia, takePhoto, createPoll, medias = 
         },
       }}>
       <View style={styles.container}>
-        {/* Do not show poll if media exists */}
-        {medias.length === 0 && <List
-          label="Add a poll"
-          icon={<MemoIcCreatePoll width={16.67} height={16.67} />}
-          onPress={createPoll}
-        />}
+        {medias.length === 0 && (
+          <List
+            label="Add a poll"
+            icon={<MemoIcCreatePoll width={16.67} height={16.67} />}
+            onPress={createPoll}
+          />
+        )}
         <List
           label="Upload media from library"
           icon={<MemoIc_media width={16.67} height={16.67} />}
@@ -56,7 +64,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom: 38
+    paddingBottom: 38,
   },
   list: {
     flexDirection: 'row',

@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+
 import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
 
 const ButtonAddMedia = ({onPress, style, label, labelStyle}) => {
   return (

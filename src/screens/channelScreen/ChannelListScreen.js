@@ -1,34 +1,31 @@
-import React, {useEffect, useState, useContext} from 'react';
-import {View, SafeAreaView, StyleSheet} from 'react-native';
-import {useHeaderHeight} from '@react-navigation/stack';
+import * as React from 'react';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 
+import analytics from '@react-native-firebase/analytics';
+import {useHeaderHeight} from '@react-navigation/stack';
 import {StreamChat} from 'stream-chat';
-const chatClient = StreamChat.getInstance('q95x9hkbyd6p');
 import {
   Channel,
-  ChannelList,
   Chat,
   MessageInput,
   MessageList,
-  OverlayProvider,
   useAttachmentPickerContext,
 } from 'stream-chat-react-native';
-import analytics from '@react-native-firebase/analytics';
-const AppContext = React.createContext();
+
+const chatClient = StreamChat.getInstance('q95x9hkbyd6p');
 
 const ChannelScreen = (props) => {
   console.log(props);
-  const [channel, setChannel] = useState(props.route.params.channel);
+  const [channel, setChannel] = React.useState(props.route.params.channel);
   const headerHeight = useHeaderHeight();
   const {setTopInset} = useAttachmentPickerContext();
 
-  useEffect(() => {
+  React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Channel Screen',
       screen_name: 'Channel',
     });
     setTopInset(headerHeight);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerHeight]);
 
   return (

@@ -15,8 +15,7 @@ import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import PropsTypes from 'prop-types';
 
-import { getAccessToken } from '../../data/local/accessToken';
-
+import {getAccessToken} from '../../data/local/accessToken';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
@@ -116,22 +115,21 @@ const _renderProfileNormal = ({
   location,
   isBackButton,
 }) => {
-
   const navigation = useNavigation();
-  let userId = actor.id
-  let { profile_pic_path, username } = actor.data
-  
+  let userId = actor.id;
+  let {profile_pic_path, username} = actor.data;
+
   let navigateToProfile = async () => {
-    let selfAccessToken = await getAccessToken()
-    let selfUserId = await jwtDecode(selfAccessToken).user_id
-    navigation.navigate("OtherProfile", {
-      data : {
-        user_id : selfUserId,
-        other_id : userId,
-        username
-      }
-    })
-  }
+    let selfAccessToken = await getAccessToken();
+    let selfUserId = await jwtDecode(selfAccessToken).user_id;
+    navigation.navigate('OtherProfile', {
+      data: {
+        user_id: selfUserId,
+        other_id: userId,
+        username,
+      },
+    });
+  };
 
   return (
     <View style={styles.rowSpaceBeetwen}>
@@ -146,7 +144,8 @@ const _renderProfileNormal = ({
             </TouchableOpacity>
           </View>
         ) : null}
-        <TouchableNativeFeedback onPress={() => navigateToProfile()}
+        <TouchableNativeFeedback
+          onPress={() => navigateToProfile()}
           background={TouchableNativeFeedback.Ripple(colors.gray1, true, 28)}>
           <View style={{}}>
             <Avatar
@@ -156,19 +155,30 @@ const _renderProfileNormal = ({
                   : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
               }
               size={48}
-              noShadow/>
+              noShadow
+            />
           </View>
-          </TouchableNativeFeedback>
+        </TouchableNativeFeedback>
         <View style={styles.containerFeedProfile}>
           <View style={styles.containerFeedName}>
-            <TouchableNativeFeedback onPress={() => navigateToProfile()}
-              background={TouchableNativeFeedback.Ripple(colors.gray1, false, 30)}>
+            <TouchableNativeFeedback
+              onPress={() => navigateToProfile()}
+              background={TouchableNativeFeedback.Ripple(
+                colors.gray1,
+                false,
+                30,
+              )}>
               <Text style={styles.feedUsername}>
                 {username ? username : 'no name specifics'}
               </Text>
             </TouchableNativeFeedback>
-            <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(colors.gray1, true, 8)}>
-              <View style={{alignSelf : 'center', zIndex : 1000}}>
+            <TouchableNativeFeedback
+              background={TouchableNativeFeedback.Ripple(
+                colors.gray1,
+                true,
+                8,
+              )}>
+              <View style={{alignSelf: 'center', zIndex: 1000}}>
                 <ElipsisIcon width={3.94} height={18} fill={colors.black} />
               </View>
             </TouchableNativeFeedback>
@@ -189,7 +199,9 @@ const _renderProfileNormal = ({
               ? validationTimer(expired_at, duration_feed)
               : null}
             <View style={styles.point} />
-            <Text style={styles.feedDateLocation} numberOfLines={1}>{location}</Text>
+            <Text style={styles.feedDateLocation} numberOfLines={1}>
+              {location}
+            </Text>
           </View>
         </View>
       </View>
@@ -197,16 +209,9 @@ const _renderProfileNormal = ({
   );
 };
 const Header = ({props, isBackButton = false}) => {
-  let {
-    anonimity,
-    time,
-    privacy,
-    duration_feed,
-    expired_at,
-    location,
-    actor,
-  } = props;
-  
+  let {anonimity, time, privacy, duration_feed, expired_at, location, actor} =
+    props;
+
   if (anonimity) {
     return _renderAnonimity(
       time,
@@ -234,14 +239,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomColor : colors.gray1,
-    borderBottomWidth : 0.4,
-    paddingBottom : 8,
-    paddingTop : 8,
-    paddingLeft : 16,
-    paddingRight : 16,
-    marginLeft : -16,
-    marginRight : -16,
+    borderBottomColor: colors.gray1,
+    borderBottomWidth: 0.4,
+    paddingBottom: 8,
+    paddingTop: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+    marginLeft: -16,
+    marginRight: -16,
   },
   rowCenter: {
     flexDirection: 'row',
@@ -252,11 +257,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginLeft: 13,
-    flex : 1,
+    flex: 1,
     // backgroundColor : 'blue'
   },
-  containerFeedName : {
-    flexDirection : 'row',
+  containerFeedName: {
+    flexDirection: 'row',
     // backgroundColor : 'red',
     // paddingTop : 8
   },
@@ -265,13 +270,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     color: colors.black,
-    flex : 1
+    flex: 1,
   },
   containerFeedText: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 5,
-    width : '100%',
+    width: '100%',
   },
   feedDate: {
     fontFamily: fonts.inter[400],
@@ -280,7 +285,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   feedDateLocation: {
-    flex : 1,
+    flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.blackgrey,
@@ -293,8 +298,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
     marginLeft: 8,
     marginRight: 8,
-    alignSelf : 'center',
-    marginTop : 2
+    alignSelf: 'center',
+    marginTop: 2,
   },
   contentFeed: {
     marginTop: 12,

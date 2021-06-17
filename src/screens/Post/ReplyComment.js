@@ -1,34 +1,24 @@
-import React, {useState, useEffect} from 'react';
-import {
-  Alert,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import Comment from '../../elements/PostDetail/Comment';
-import ContainerComment from '../../elements/PostDetail/ContainerComment';
-import WriteComment from '../../elements/PostDetail/WriteComment';
-import {createChildComment, createCommentParent} from '../../service/comment';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {useNavigation} from '@react-navigation/native';
+import * as React from 'react';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import Toast from 'react-native-simple-toast';
+import {useNavigation} from '@react-navigation/native';
+
+import Comment from '../../elements/PostDetail/Comment';
+import WriteComment from '../../elements/PostDetail/WriteComment';
+import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import {fonts} from '../../utils/fonts';
+import {colors} from '../../utils/colors';
+import {createChildComment} from '../../service/comment';
 
 const ReplyComment = (props) => {
   const navigation = useNavigation();
-  const [item, setItem] = useState(props.route.params.item);
-  const [parent, setParent] = useState(props.route.params.parent);
-  const [textComment, setTextComment] = useState('');
-  const [isReaction, setReaction] = useState(false);
+  const [item, setItem] = React.useState(props.route.params.item);
+  const [parent, setParent] = React.useState(props.route.params.parent);
+  const [textComment, setTextComment] = React.useState('');
+  const [isReaction, setReaction] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const init = () => {
       if (JSON.stringify(item.children_counts) !== {}) {
         setReaction(true);
@@ -165,7 +155,6 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
   },
   btn: {
-    // backgroundColor: colors.bondi_blue,
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 20,
@@ -192,7 +181,6 @@ const styles = StyleSheet.create({
   },
   comment: {
     flexDirection: 'row',
-    // marginTop: 30,
     paddingRight: 20,
     position: 'absolute',
     bottom: 0,

@@ -1,0 +1,12 @@
+{
+  "preset": "react-native",
+  "transformIgnorePatterns": [],
+  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+  "verbose": true,
+  "setupFilesAfterEnv": [
+    "<rootDir>/__mocks__/jest-mock.ts"
+    ],
+  "globals": {
+    "window": {}
+  }
+}
