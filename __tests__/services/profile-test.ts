@@ -25,12 +25,10 @@ beforeAll(async () => {
       await setAccessToken(res.token);
       await setToken(res.token);
       await setRefreshToken(res.refresh_token);
-      console.log(res);
-
       return true;
     })
     .catch((err) => {
-      console.log('error ', err);
+      console.log('error Login');
       return true;
     });
 });
@@ -59,20 +57,12 @@ describe('testing endpoit user profile', () => {
       .then(onResponse)
       .catch(onError)
       .finally(() => {
-        console.log('ini test err ', JSON.stringify(onError.mock.calls));
-        console.log('ini test ', JSON.stringify(onResponse.mock.calls));
-        // console.log('ini test ', JSON.stringify(onResponse.mock.instances));
-        // console.log('ini test ', JSON.stringify(onResponse.mock.results));
-        // console.log(
-        //   'ini test ',
-        //   JSON.stringify(onResponse.mock.invocationCallOrder),
-        // );
-        // expect(onResponse).toHaveBeenCalled();
-        // expect(onResponse.mock.calls[0][0]).not.toBeNull();
-        // expect(onResponse.mock.calls[0][0]).toHaveProperty('status', 'success');
-        // expect(onResponse.mock.calls[0][0]).toHaveProperty('code', 200);
-        // expect(onResponse.mock.calls[0][0]).toHaveProperty('data');
-        // expect(onResponse.mock.calls[0][0].data).not.toBeNull();
+        expect(onResponse).toHaveBeenCalled();
+        expect(onResponse.mock.calls[0][0]).not.toBeNull();
+        expect(onResponse.mock.calls[0][0]).toHaveProperty('status', 'success');
+        expect(onResponse.mock.calls[0][0]).toHaveProperty('code', 200);
+        expect(onResponse.mock.calls[0][0]).toHaveProperty('data');
+        expect(onResponse.mock.calls[0][0].data).not.toBeNull();
       });
   });
   it('testing endpoint getOtherProfile', async () => {

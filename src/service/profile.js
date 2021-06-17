@@ -9,8 +9,8 @@ export const getMyProfile = async (userId) => {
         resolve(res.data);
       })
       .catch((err) => {
-        console.log("ERR")
-        console.log(err)
+        console.log('ERR');
+        console.log(err);
         reject(err);
       });
   });
@@ -18,8 +18,8 @@ export const getMyProfile = async (userId) => {
 
 export const getPost = async (userId) => {
   return new Promise((resolve, reject) => {
-    api2
-      .get(`api/v1/activity/feeds`)
+    api
+      .get('/activity/feeds')
       .then((res) => {
         resolve(res.data);
       })
@@ -73,7 +73,7 @@ export const getFollowing = async (userId, real_name) => {
 export const setUnFollow = async (data) => {
   return new Promise((resolve, reject) => {
     api
-      .post(`/profiles/unset-following`, data)
+      .post('/profiles/unset-following', data)
       .then((res) => {
         resolve(res.data);
       })
@@ -86,7 +86,7 @@ export const setUnFollow = async (data) => {
 export const setFollow = async (data) => {
   return new Promise((resolve, reject) => {
     api
-      .post(`/profiles/set-following`, data)
+      .post('/profiles/set-following', data)
       .then((res) => {
         resolve(res.data);
       })
@@ -135,17 +135,19 @@ export const updateBioProfile = async (userID, data) => {
   });
 };
 
-export const getProfileByUsername = async(username) => {
-  console.log("username "  + username)
+export const getProfileByUsername = async (username) => {
+  console.log('username ' + username);
   return new Promise((resolve, reject) => {
-    if(!username) return reject()
-    
+    if (!username) {
+      return reject();
+    }
+
     api
       .get(`/profiles/get-profile/${username}`)
       .then((res) => resolve(res.data))
       .catch((err) => {
-        console.log(err)
-        reject(err)
-      })
-  })
-}
+        console.log(err);
+        reject(err);
+      });
+  });
+};
