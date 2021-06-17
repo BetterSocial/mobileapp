@@ -14,6 +14,7 @@ jest.doMock('react-native-fs', () => {
     readFile: jest.fn(),
   };
 });
+
 jest.doMock('react-native', () => {
   return Object.setPrototypeOf(
     {

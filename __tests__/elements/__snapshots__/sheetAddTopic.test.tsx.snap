@@ -179,11 +179,7 @@ exports[`component SheetAddTopic SheetAddTopic renders correctly 1`] = `
                   allowFontScaling={true}
                   autoCapitalize="none"
                   blurOnSubmit={false}
-                  collapsable={false}
                   onChangeText={[Function]}
-                  onGestureHandlerEvent={[Function]}
-                  onGestureHandlerStateChange={[Function]}
-                  onKeyPress={[Function]}
                   onSubmitEditing={[Function]}
                   rejectResponderTermination={true}
                   style={
@@ -344,17 +340,19 @@ exports[`component SheetAddTopic SheetAddTopic snapshot 1`] = `
             #
           </Text>
           <Component
+            allowFontScaling={true}
             autoCapitalize="none"
             blurOnSubmit={false}
             onChangeText={[Function]}
-            onKeyPress={[Function]}
             onSubmitEditing={[Function]}
+            rejectResponderTermination={true}
             style={
               Object {
                 "paddingStart": 0,
                 "width": "100%",
               }
             }
+            underlineColorAndroid="transparent"
             value=""
           />
         </View>
