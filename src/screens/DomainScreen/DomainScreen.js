@@ -88,14 +88,6 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     backgroundColor: 'white',
   },
-  point: {
-    width: 4,
-    height: 4,
-    borderRadius: 4,
-    backgroundColor: colors.gray,
-    marginLeft: 8,
-    marginRight: 8,
-  },
 });
 
 export default DomainScreen;

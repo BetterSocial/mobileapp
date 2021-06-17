@@ -6,6 +6,7 @@ import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import theme, {COLORS, FONTS, SIZES} from '../../utils/theme';
+import {colors} from '../../utils/colors';
 
 const RenderItem = ({domain, image}) => {
   const getname = (d) => {
@@ -106,6 +107,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0.5,
+  },
+  point: {
+    width: 4,
+    height: 4,
+    borderRadius: 4,
+    backgroundColor: colors.gray,
+    marginLeft: 8,
+    marginRight: 8,
   },
 });
 
