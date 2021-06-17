@@ -20,7 +20,6 @@ describe('component Search', () => {
     );
     expect(toJson(component)).toMatchSnapshot();
   });
-
   it('Search renders correctly', () => {
     const tree = renderer
       .create(
@@ -33,7 +32,6 @@ describe('component Search', () => {
       .toJSON();
     expect(tree).toMatchSnapshot();
   });
-
   it('SearchModal snapshot', () => {
     const component = shallow(
       <SearchModal
@@ -50,7 +48,6 @@ describe('component Search', () => {
     );
     expect(toJson(component)).toMatchSnapshot();
   });
-
   it('SearchModal renders correctly', () => {
     const tree = renderer
       .create(
@@ -69,7 +66,6 @@ describe('component Search', () => {
       .toJSON();
     expect(tree).toMatchSnapshot();
   });
-
   it('SearchAutoComplete snapshot', () => {
     const component = shallow(
       <SearchAutoComplete
@@ -86,7 +82,6 @@ describe('component Search', () => {
     );
     expect(toJson(component)).toMatchSnapshot();
   });
-
   it('SearchAutoComplete renders correctly', () => {
     const tree = renderer
       .create(
