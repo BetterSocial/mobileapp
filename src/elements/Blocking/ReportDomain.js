@@ -1,13 +1,20 @@
-import React, {useState} from 'react';
-import {ScrollView, StyleSheet, Text, View, FlatList} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import * as React from 'react';
+import {
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+
 import RBSheet from 'react-native-raw-bottom-sheet';
+import IconFA5 from 'react-native-vector-icons/FontAwesome5';
+
+import {Button} from '../../components/Button';
+import ItemList from '../../components/Blocking/ItemList';
+import Gap from '../../components/Gap';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import IconFA5 from 'react-native-vector-icons/FontAwesome5';
-import ItemList from '../../components/Blocking/ItemList';
-import {Button} from '../../components/Button';
-import Gap from '../../components/Gap';
 
 const ReportDomain = ({refReportDomain, onSelect}) => {
   const data = [
@@ -36,7 +43,7 @@ const ReportDomain = ({refReportDomain, onSelect}) => {
       label: 'Something else',
     },
   ];
-  const [active, setActive] = useState([]);
+  const [active, setActive] = React.useState([]);
   const onChoice = (id, type) => {
     if (type === 'add') {
       let newArr = [...active, id];

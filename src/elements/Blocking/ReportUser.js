@@ -1,19 +1,20 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import {
   ScrollView,
   StyleSheet,
   Text,
   View,
-  FlatList,
   TouchableOpacity,
 } from 'react-native';
+
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
 import IconFA5 from 'react-native-vector-icons/FontAwesome5';
+
 import ItemList from '../../components/Blocking/ItemList';
 import {Button} from '../../components/Button';
 import Gap from '../../components/Gap';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
 const ReportUser = ({refReportUser, onSelect, onSkip}) => {
   const data = [
@@ -46,8 +47,8 @@ const ReportUser = ({refReportUser, onSelect, onSkip}) => {
       label: 'Something else',
     },
   ];
-  const [active, setActive] = useState([]);
-  const [activeLabel, setActiveLabel] = useState([]);
+  const [active, setActive] = React.useState([]);
+  const [activeLabel, setActiveLabel] = React.useState([]);
 
   const onChoice = (id, value, type) => {
     if (type === 'add') {

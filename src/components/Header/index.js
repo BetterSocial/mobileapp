@@ -7,24 +7,26 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
+
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-const Header = ({title, onPress, titleStyle = {}, containerStyle={}}) => {
+
+const Header = ({title, onPress, titleStyle = {}, containerStyle = {}}) => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
         <TouchableNativeFeedback onPress={onPress}>
-          <View style={{padding : 10, marginLeft : -4}}>
-            <ArrowLeftIcon width={20} height={12} fill="#000"/>
+          <View style={{padding: 10, marginLeft: -4}}>
+            <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
         </TouchableNativeFeedback>
       );
     } else {
       return (
         <TouchableHighlight onPress={onPress}>
-          <View style={{padding : 10, marginLeft : -8}}>
-            <ArrowLeftIcon width={20} height={12} fill="#000"/>
+          <View style={{padding: 10, marginLeft: -8}}>
+            <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
         </TouchableHighlight>
       );
@@ -51,7 +53,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontFamily: fonts.poppins[600],
     fontSize: 14,
-    marginLeft : -20,
+    marginLeft: -20,
     fontWeight: 'bold',
   },
 });

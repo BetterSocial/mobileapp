@@ -1,55 +1,38 @@
 import React from 'react';
 import {
-  View,
-  StyleSheet,
-  TouchableNativeFeedback,
-  Text,
-  Platform,
   Dimensions,
   Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import {
-  Activity,
-  Avatar,
-  LikeButton,
-  ReactionIcon,
-  FollowButton,
-  CommentItem,
-} from 'react-native-activity-feed';
+
 import moment from 'moment';
-import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import {Activity, Avatar} from 'react-native-activity-feed';
 import SeeMore from 'react-native-see-more-inline';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 
-import ReplyIcon from '../../../assets/icons/reply/reply.png';
-import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
-
-import MemoIc_world from '../../assets/icons/Ic_world';
-import Memoic_globe from '../../assets/icons/ic_globe';
-import MemoIc_user_group from '../../assets/icons/Ic_user_group';
-import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
-import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
-import MemoZero_twentyFour from '../../assets/timer/Zero_twentyFour';
-import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
-import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
-import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
-import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
-import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
-
-import ArrowUpIcon from '../../assets/icons/images/arrow-up.svg';
-import ArrowDownRedIcon from '../../assets/icons/images/arrow-down-red.svg';
-import CommentIcon from '../../assets/icons/images/comment.svg';
-import ShareIcon from '../../assets/icons/images/share.svg';
-import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
-import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_arrow_upvote_on';
-import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_arrow_down_vote_on';
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
-import MemoIc_share from '../../assets/icons/Ic_share';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
+import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
+import Memoic_globe from '../../assets/icons/ic_globe';
+import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
+import MemoIc_share from '../../assets/icons/Ic_share';
+import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
+import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
+import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
+import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
+import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
+import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
+import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
+import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
+import MemoZero_twentyFour from '../../assets/timer/Zero_twentyFour';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 

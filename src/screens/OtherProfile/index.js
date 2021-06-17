@@ -1,5 +1,4 @@
 import React from 'react';
-import {useEffect, useState, useRef} from 'react';
 import {
   StatusBar,
   SafeAreaView,
@@ -12,53 +11,52 @@ import {
   Share,
   ScrollView,
 } from 'react-native';
+
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import JWTDecode from 'jwt-decode';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
-import {getOtherProfile, setUnFollow, setFollow} from '../../service/profile';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
+
+import {getOtherProfile, setUnFollow, setFollow} from '../../service/profile';
+import RenderActivity from './RenderActivity';
+import Loading from '../Loading';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
+import {getToken} from '../../helpers/getToken';
+import {trimString} from '../../helpers/stringSplit';
+import {getAccessToken} from '../../data/local/accessToken';
 import ShareIcon from '../../assets/icons/images/share.svg';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import Loading from '../Loading';
-import {getToken} from '../../helpers/getToken';
-import {trimString} from '../../helpers/stringSplit';
-import RenderActivity from './RenderActivity';
-import {getAccessToken} from '../../data/local/accessToken';
 
 const width = Dimensions.get('screen').width;
-
-let token_JWT = '';
 
 const OtherProfile = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const scrollViewReff = useRef(null);
-  const postRef = useRef(null);
+  const scrollViewReff = React.useRef(null);
+  const postRef = React.useRef(null);
 
-  const [tokenParse, setTokenParse] = useState({});
-  const [dataMain, setDataMain] = useState({});
-  const [user_id, setUserId] = useState('');
-  const [username, setUsername] = useState('');
-  const [other_id, setOtherId] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [isShowButton, setIsShowButton] = useState(false);
-  const [opacity, setOpacity] = useState(0);
-  const [isOffsetScroll, setIsOffsetScroll] = useState(false);
-  const [tokenJwt, setTokenJwt] = useState('');
+  const [tokenParse, setTokenParse] = React.useState({});
+  const [dataMain, setDataMain] = React.useState({});
+  const [user_id, setUserId] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  const [other_id, setOtherId] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isShowButton, setIsShowButton] = React.useState(false);
+  const [opacity, setOpacity] = React.useState(0);
+  const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
+  const [tokenJwt, setTokenJwt] = React.useState('');
 
   console.log(route.params);
   const {params} = route;
 
-  useEffect(() => {
+  React.useEffect(() => {
     let getJwtToken = async () => {
       setTokenJwt(await getToken());
     };
@@ -234,9 +232,7 @@ const OtherProfile = () => {
                           }}
                         />
                         <Text style={styles.nameProfile}>
-                          {dataMain.bio
-                            ? dataMain.bio
-                            : ''}
+                          {dataMain.bio ? dataMain.bio : ''}
                         </Text>
                       </View>
                       <View style={styles.wrapButton}>
@@ -301,7 +297,9 @@ const OtherProfile = () => {
               {!isLoading ? (
                 <View>
                   <View style={styles.tabs} ref={postRef}>
-                    <Text style={styles.postText}>Post{/* Please change this to post size */}</Text>
+                    <Text style={styles.postText}>
+                      Post{/* Please change this to post size */}
+                    </Text>
                   </View>
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed
@@ -449,7 +447,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     backgroundColor: colors.bondi_blue,
-    color : colors.white
+    color: colors.white,
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],

@@ -1,38 +1,38 @@
-import React from 'react';
-import {useEffect, useState} from 'react';
+import * as React from 'react';
 import {
-  StatusBar,
   Dimensions,
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableNativeFeedback,
   FlatList,
   Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
 } from 'react-native';
-import {useRoute} from '@react-navigation/native';
-import Loading from '../Loading';
-import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
+
 import {useNavigation} from '@react-navigation/core';
+import {useRoute} from '@react-navigation/native';
+import jwtDecode from 'jwt-decode';
+
+import {getAccessToken} from '../../data/local/accessToken';
+import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
+import Loading from '../Loading';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {getAccessToken} from '../../data/local/accessToken';
-import jwtDecode from 'jwt-decode';
 
 const width = Dimensions.get('screen').width;
 
 const Followings = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [user_id, setUserId] = useState('');
-  const [username, setUsername] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [dataFollowing, setDataFollowing] = useState([]);
+  const [user_id, setUserId] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [dataFollowing, setDataFollowing] = React.useState([]);
 
   const {params} = route;
 
-  useEffect(() => {
+  React.useEffect(() => {
     setUserId(params.user_id);
     setUsername(params.username);
     fetchFollowing(true);
@@ -48,8 +48,8 @@ const Followings = () => {
       withLoading ? setIsLoading(false) : null;
       setDataFollowing(result.data);
       navigation.setOptions({
-        title : `Users (${result.data.length})`
-      })
+        title: `Users (${result.data.length})`,
+      });
     }
   };
 
@@ -62,18 +62,18 @@ const Followings = () => {
 
     let data = {
       user_id,
-      other_id : value.user_id_followed,
-      username : value.user.username
-    }
+      other_id: value.user_id_followed,
+      username: value.user.username,
+    };
 
     navigation.navigate('OtherProfile', {data});
   };
 
   const handleSetUnFollow = async (index) => {
-    let newDataFollowing = [...dataFollowing]
-    let singleDataFollowing = newDataFollowing[index]
-    newDataFollowing[index].isunfollowed = true
-    setDataFollowing(newDataFollowing)
+    let newDataFollowing = [...dataFollowing];
+    let singleDataFollowing = newDataFollowing[index];
+    newDataFollowing[index].isunfollowed = true;
+    setDataFollowing(newDataFollowing);
 
     let data = {
       user_id_follower: user_id,
@@ -83,16 +83,16 @@ const Followings = () => {
 
     const result = await setUnFollow(data);
     // if (result.code == 200) {
-      // fetchOtherProfile(user_id, other_id, false);
-      // fetchFollowing()
+    // fetchOtherProfile(user_id, other_id, false);
+    // fetchFollowing()
     // }
   };
 
   const handleSetFollow = async (index) => {
-    let newDataFollowing = [...dataFollowing]
-    let singleDataFollowing = newDataFollowing[index]
-    delete newDataFollowing[index].isunfollowed
-    setDataFollowing(newDataFollowing)
+    let newDataFollowing = [...dataFollowing];
+    let singleDataFollowing = newDataFollowing[index];
+    delete newDataFollowing[index].isunfollowed;
+    setDataFollowing(newDataFollowing);
 
     let data = {
       user_id_follower: user_id,
@@ -101,46 +101,56 @@ const Followings = () => {
     };
     const result = await setFollow(data);
     // if (result.code == 200) {
-      // fetchOtherProfile(user_id, other_id, false);
-      // fetchFollowing()
+    // fetchOtherProfile(user_id, other_id, false);
+    // fetchFollowing()
     // }
   };
 
   const renderItem = ({item, index}) => {
-    return <TouchableNativeFeedback
-      onPress={(event) => {
-        event.preventDefault();
-        goToOtherProfile(item);
-      }}>
-      <View style={styles.card}>
-        <View style={styles.wrapProfile}>
-          <Image source={{
-            uri : item.user.profile_pic_path
-          }} style={styles.profilepicture} width={48} height={48}/>
-          <View style={styles.wrapTextProfile}>
-            <Text style={styles.textProfileUsername}>{item.user.username}</Text>
-            <Text style={styles.textProfileFullName} numberOfLines={1} ellipsizeMode={'tail'}>
-              {item.user.bio ? item.user.bio : ''}
-            </Text>
+    return (
+      <TouchableNativeFeedback
+        onPress={(event) => {
+          event.preventDefault();
+          goToOtherProfile(item);
+        }}>
+        <View style={styles.card}>
+          <View style={styles.wrapProfile}>
+            <Image
+              source={{
+                uri: item.user.profile_pic_path,
+              }}
+              style={styles.profilepicture}
+              width={48}
+              height={48}
+            />
+            <View style={styles.wrapTextProfile}>
+              <Text style={styles.textProfileUsername}>
+                {item.user.username}
+              </Text>
+              <Text
+                style={styles.textProfileFullName}
+                numberOfLines={1}
+                ellipsizeMode={'tail'}>
+                {item.user.bio ? item.user.bio : ''}
+              </Text>
+            </View>
           </View>
+          {item.hasOwnProperty('isunfollowed') ? (
+            <TouchableNativeFeedback onPress={() => handleSetFollow(index)}>
+              <View style={styles.buttonFollow}>
+                <Text style={styles.textButtonFollow}>Follow</Text>
+              </View>
+            </TouchableNativeFeedback>
+          ) : (
+            <TouchableNativeFeedback onPress={() => handleSetUnFollow(index)}>
+              <View style={styles.buttonFollowing}>
+                <Text style={styles.textButtonFollowing}>Following</Text>
+              </View>
+            </TouchableNativeFeedback>
+          )}
         </View>
-        { item.hasOwnProperty("isunfollowed") ?
-        <TouchableNativeFeedback
-          onPress={() => handleSetFollow(index)}>
-          <View style={styles.buttonFollow}>
-            <Text style={styles.textButtonFollow}>
-              Follow
-            </Text>
-          </View>
-        </TouchableNativeFeedback> :
-        <TouchableNativeFeedback onPress={() => handleSetUnFollow(index)}>
-          <View style={styles.buttonFollowing}>
-            <Text style={styles.textButtonFollowing}>Following</Text>
-          </View>
-        </TouchableNativeFeedback> 
-        }
-      </View>
-    </TouchableNativeFeedback>
+      </TouchableNativeFeedback>
+    );
   };
 
   return (
@@ -164,18 +174,23 @@ const Followings = () => {
             </Text>
           </View>
         </View> */}
-        {dataFollowing.length > 0 ? 
+        {dataFollowing.length > 0 ? (
           <View style={styles.content}>
             <FlatList
               data={dataFollowing}
               renderItem={renderItem}
               keyExtractor={(item) => item.follow_action_id}
-            /> 
-          </View> :
-          <View style={styles.nousercontent}>
-            <Text style={styles.nousertext}>{`You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.`}</Text>
+            />
           </View>
-        }
+        ) : (
+          <View style={styles.nousercontent}>
+            <Text style={styles.nousertext}>
+              {
+                'You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.'
+              }
+            </Text>
+          </View>
+        )}
         <Loading visible={isLoading} />
       </SafeAreaView>
     </>
@@ -231,33 +246,33 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    paddingBottom : 150
+    paddingBottom: 150,
   },
-  nousercontent : {
-    flexDirection : "column",
-    flex : 1,
-    justifyContent : 'center'
+  nousercontent: {
+    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'center',
   },
-  nousertext : {
-    alignSelf : "center",
-    textAlign : "center",
-    marginHorizontal : 36
+  nousertext: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    marginHorizontal: 36,
   },
   card: {
     height: 68,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width : '100%',
-    paddingHorizontal : 20,
-    marginVertical : 10
+    width: '100%',
+    paddingHorizontal: 20,
+    marginVertical: 10,
   },
   wrapProfile: {
     flexDirection: 'row',
     alignItems: 'center',
-    width : '100%',
-    flex : 1,
-    marginEnd : 16
+    width: '100%',
+    flex: 1,
+    marginEnd: 16,
   },
   imageProfile: {
     width: 48,
@@ -267,7 +282,7 @@ const styles = StyleSheet.create({
   wrapTextProfile: {
     marginLeft: 12,
     flexDirection: 'column',
-    flex : 1,
+    flex: 1,
     justifyContent: 'space-between',
   },
   textProfileUsername: {
@@ -280,7 +295,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.gray,
-    flexWrap : 'wrap'
+    flexWrap: 'wrap',
   },
   buttonFollowing: {
     width: 88,
@@ -290,7 +305,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.bondi_blue,
-    borderRadius: 8
+    borderRadius: 8,
   },
   buttonFollow: {
     width: 88,
@@ -299,7 +314,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue
+    backgroundColor: colors.bondi_blue,
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
@@ -313,12 +328,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.white,
   },
-  profilepicture : {
-    width : 48,
-    height : 48,
-    backgroundColor : colors.bondi_blue,
-    borderRadius : 24,
-    resizeMode : 'cover'
-  }
+  profilepicture: {
+    width: 48,
+    height: 48,
+    backgroundColor: colors.bondi_blue,
+    borderRadius: 24,
+    resizeMode: 'cover',
+  },
 });
 export default Followings;

@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
   StyleSheet,
-  TouchableNativeFeedback,
   Text,
   Platform,
   Dimensions,
@@ -11,12 +10,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
 import SeeMore from 'react-native-see-more-inline';
-import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
+import {ParallaxImage} from 'react-native-snap-carousel';
+
 import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -84,7 +84,13 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
                   TODO : Count percentage
                 */
 
-                return <PollOptions item={item} index={index} total={totalPollCount}/>
+                return (
+                  <PollOptions
+                    item={item}
+                    index={index}
+                    total={totalPollCount}
+                  />
+                );
               })}
             </View>
 
@@ -100,10 +106,9 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
                   backgroundColor: colors.blackgrey,
                 }}
               />
-              <Text
-                style={
-                  styles.totalpolltext
-                }>{` 24 hours 34 minutes left`}</Text>
+              <Text style={styles.totalpolltext}>
+                {' 24 hours 34 minutes left'}
+              </Text>
             </View>
           </View>
         )
@@ -251,8 +256,12 @@ const styles = StyleSheet.create({
     // backgroundColor : 'red'
   },
   percentageBar: (percent) => {
-    if (!percent) percent = 0;
-    if (percent > 100) percent = 100;
+    if (!percent) {
+      percent = 0;
+    }
+    if (percent > 100) {
+      percent = 100;
+    }
 
     return {
       width: `${percent}%`,

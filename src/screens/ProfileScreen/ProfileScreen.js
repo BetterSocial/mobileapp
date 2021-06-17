@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import {useState, useRef, useEffect} from 'react';
+import * as React from 'react';
 import {
   StatusBar,
   SafeAreaView,
@@ -11,90 +10,89 @@ import {
   TouchableNativeFeedback,
   Share,
   ScrollView,
-  TextInput,
+  LogBox,
 } from 'react-native';
-import {LogBox} from 'react-native';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
+
 import JWTDecode from 'jwt-decode';
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
-import {StreamApp, FlatFeed} from 'react-native-activity-feed';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/core';
 import {showMessage} from 'react-native-flash-message';
+import analytics from '@react-native-firebase/analytics';
+import {StreamApp, FlatFeed} from 'react-native-activity-feed';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+
 import {
   getMyProfile,
-  getPost,
   changeRealName,
   updateImageProfile,
   removeImageProfile,
   updateBioProfile,
 } from '../../service/profile';
-import ShareIcon from '../../assets/icons/images/share.svg';
-import SettingIcon from '../../assets/icons/images/setting.svg';
-import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
 import Loading from '../Loading';
+import BottomSheetBio from './BottomSheetBio';
 import RenderActivity from './RenderActivity';
 import BottomSheetImage from './BottomSheetImage';
 import BottomSheetRealname from './BottomSheetRealname';
-import BottomSheetBio from './BottomSheetBio';
-import {trimString} from '../../helpers/stringSplit';
+import ShareIcon from '../../assets/icons/images/share.svg';
+import SettingIcon from '../../assets/icons/images/setting.svg';
+import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import {fonts} from '../../utils/fonts';
+import {colors} from '../../utils/colors';
 import {getToken} from '../../helpers/getToken';
-import analytics from '@react-native-firebase/analytics';
+import {trimString} from '../../helpers/stringSplit';
 import {getAccessToken} from '../../data/local/accessToken';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import { DEFAULT_PROFILE_PIC_PATH } from '../../helpers/constants';
-import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../helpers/constants';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
-import { Context } from '../../context';
-import { SET_DATA_IMAGE } from '../../context/Types';
+
 const width = Dimensions.get('screen').width;
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
-  const bottomSheetNameRef = useRef();
-  const bottomSheetBioRef = useRef();
-  const bottomSheetBioTextAreaRef = useRef(null);
-  const bottomSheetProfilePictureRef = useRef();
-  const postRef = useRef(null);
-  const scrollViewReff = useRef(null);
+  const bottomSheetNameRef = React.useRef();
+  const bottomSheetBioRef = React.useRef();
+  const bottomSheetBioTextAreaRef = React.useRef(null);
+  const bottomSheetProfilePictureRef = React.useRef();
+  const postRef = React.useRef(null);
+  const scrollViewReff = React.useRef(null);
 
-  let [token_JWT, setTokenJwt] = useState('')
-  const [tokenParse, setTokenParse] = useState({});
-  const [dataMain, setDataMain] = useState({});
-  const [tempFullName, setTempFullName] = useState('');
-  const [tempBio, setTempBio] = useState('');
-  const [isOffsetScroll, setIsOffsetScroll] = useState(false);
-  const [isShowButton, setIsShowButton] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [opacity, setOpacity] = useState(0);
-  const [isChangeRealName, setIsChangeRealName] = useState(false);
-  const [isLoadingRemoveImage, setIsLoadingRemoveImage] = useState(false);
-  const [isLoadingUpdateBio, setIsLoadingUpdateBio] = useState(false);
-  const [errorBio, setErrorBio] = useState('');
-  const [postLenght, setPostLenght] = useState(0);
-  let [rerender, setRerender] = useState(0)
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = useState(
-    false,
-  );
-  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = useState(
-    false,
-  );
-  const [errorChangeRealName, setErrorChangeRealName] = useState('');
-  const [image, setImage] = useState('');
+  let [token_JWT, setTokenJwt] = React.useState('');
+  const [tokenParse, setTokenParse] = React.useState({});
+  const [dataMain, setDataMain] = React.useState({});
+  const [tempFullName, setTempFullName] = React.useState('');
+  const [tempBio, setTempBio] = React.useState('');
+  const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
+  const [isShowButton, setIsShowButton] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [opacity, setOpacity] = React.useState(0);
+  const [isChangeRealName, setIsChangeRealName] = React.useState(false);
+  const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
+  const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
+  const [errorBio, setErrorBio] = React.useState('');
+  const [postLenght, setPostLenght] = React.useState(0);
+  let [rerender, setRerender] = React.useState(0);
+  const [
+    isLoadingUpdateImageGalery,
+    setIsLoadingUpdateImageGalery,
+  ] = React.useState(false);
+  const [
+    isLoadingUpdateImageCamera,
+    setIsLoadingUpdateImageCamera,
+  ] = React.useState(false);
+  const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
+  const [image, setImage] = React.useState('');
 
   // let context = useContext(Context)
   // let [, dispatch] = context.users
 
-  useEffect(() => {
+  React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     fetchMyProfile(true);
 
     getToken().then((val) => {
       setTokenJwt(val);
-      setRerender(rerender++)
-      setRerender(rerender++)
+      setRerender(rerender++);
+      setRerender(rerender++);
     });
     // setToken()
     analytics().logScreenView({
@@ -191,8 +189,8 @@ const ProfileScreen = () => {
 
   const goToFollowings = (user_id, username) => {
     navigation.navigate('Followings', {
-      screen : "TabFollowing",
-      params : { user_id, username }
+      screen: 'TabFollowing',
+      params: {user_id, username},
     });
   };
 
@@ -267,15 +265,13 @@ const ProfileScreen = () => {
   };
 
   const onViewProfilePicture = () => {
-    bottomSheetProfilePictureRef.current.close()
-    console.log(dataMain)
-    navigation.push("ImageViewer", {
-      title : dataMain.username,
-      images : [
-        {url : dataMain.profile_pic_path}
-      ]
-    })
-  } 
+    bottomSheetProfilePictureRef.current.close();
+    console.log(dataMain);
+    navigation.push('ImageViewer', {
+      title: dataMain.username,
+      images: [{url: dataMain.profile_pic_path}],
+    });
+  };
 
   const handleUpdateImage = (value, type) => {
     if (type === 'gallery') {
@@ -283,7 +279,7 @@ const ProfileScreen = () => {
     } else {
       setIsLoadingUpdateImageCamera(true);
     }
-    
+
     let data = {
       profile_pic_path: value,
     };
@@ -370,8 +366,8 @@ const ProfileScreen = () => {
     return (
       <TouchableNativeFeedback onPress={() => changeBio()}>
         <View style={styles.containerBio}>
-          {(string === null || string === undefined) ? (
-            <Text style={{color : colors.blue}}>Add Bio</Text>
+          {string === null || string === undefined ? (
+            <Text style={{color: colors.blue}}>Add Bio</Text>
           ) : (
             <Text linkStyle={styles.seeMore}>
               {trimString(string, 121)}{' '}
@@ -397,11 +393,16 @@ const ProfileScreen = () => {
       <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
         {isOffsetScroll ? (
           <View style={styles.tabsFixed}>
-            <Text style={styles.postText}>Post{/* Change this to post size*/}</Text>
+            <Text style={styles.postText}>
+              Post{/* Change this to post size*/}
+            </Text>
           </View>
         ) : null}
 
-        <ScrollView onScroll={handleScroll} ref={scrollViewReff} keyboardShouldPersistTaps="always">
+        <ScrollView
+          onScroll={handleScroll}
+          ref={scrollViewReff}
+          keyboardShouldPersistTaps="always">
           {token_JWT !== '' && (
             <StreamApp
               apiKey={STREAM_API_KEY}
@@ -435,15 +436,30 @@ const ProfileScreen = () => {
                       <View style={styles.profileImageContainer}>
                         <Image
                           style={styles.profileImage}
-                          key={`${dataMain.profile_pic_path}?time=${new Date().valueOf()}` || DEFAULT_PROFILE_PIC_PATH}
+                          key={
+                            `${
+                              dataMain.profile_pic_path
+                            }?time=${new Date().valueOf()}` ||
+                            DEFAULT_PROFILE_PIC_PATH
+                          }
                           source={{
-                            cache:'reload',
+                            cache: 'reload',
                             uri: dataMain.profile_pic_path
-                              ? `${dataMain.profile_pic_path}?time=${new Date().valueOf()}`
+                              ? `${
+                                  dataMain.profile_pic_path
+                                }?time=${new Date().valueOf()}`
                               : DEFAULT_PROFILE_PIC_PATH,
                           }}
                         />
-                        {!dataMain.profile_pic_path ? <MemoIcAddCircle width={48} height={48} style={{position : 'absolute', top : 25, left : 25}}/> : <></>}
+                        {!dataMain.profile_pic_path ? (
+                          <MemoIcAddCircle
+                            width={48}
+                            height={48}
+                            style={{position: 'absolute', top: 25, left: 25}}
+                          />
+                        ) : (
+                          <></>
+                        )}
                       </View>
                     </TouchableNativeFeedback>
                     {/* <TouchableNativeFeedback onPress={changeName}>
@@ -454,7 +470,7 @@ const ProfileScreen = () => {
                       </Text>
                     </TouchableNativeFeedback> */}
                   </View>
-                  <View style={{...styles.wrapFollower, marginTop : 12}}>
+                  <View style={{...styles.wrapFollower, marginTop: 12}}>
                     <View style={styles.wrapRow}>
                       <Text style={styles.textTotal}>
                         {dataMain.follower_symbol}
@@ -483,7 +499,9 @@ const ProfileScreen = () => {
               {!isLoading ? (
                 <View>
                   <View style={styles.tabs} ref={postRef}>
-                    <Text style={styles.postText}>Post{/* Please change this to post size*/ }</Text>
+                    <Text style={styles.postText}>
+                      Post{/* Please change this to post size*/}
+                    </Text>
                   </View>
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed
@@ -549,12 +567,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    padding: 20
+    padding: 20,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   wrapHeaderButton: {
     flexDirection: 'row',
@@ -588,7 +606,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerBio: {
-    paddingVertical : 8
+    paddingVertical: 8,
   },
   seeMore: {
     fontFamily: fonts.inter[500],
@@ -638,17 +656,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 17,
-    marginTop : 12,
+    marginTop: 12,
     color: colors.black,
   },
   wrapFollower: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   wrapRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical : 8
+    paddingVertical: 8,
   },
   textTotal: {
     fontFamily: fonts.inter[800],
@@ -663,9 +681,9 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingRight: 4,
   },
-  profileImageContainer : {
-    width : 100, 
-    borderRadius : 100
-  }
+  profileImageContainer: {
+    width: 100,
+    borderRadius: 100,
+  },
 });
 export default ProfileScreen;

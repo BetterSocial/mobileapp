@@ -1,12 +1,15 @@
 import React from 'react';
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, View} from 'react-native';
+
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
-const {width: screenWidth} = Dimensions.get('window');
+
 const data = [
   'https://picsum.photos/id/1/200/300',
   'https://picsum.photos/id/1036/200/300',
   'https://picsum.photos/id/1048/200/300',
 ];
+const {width: screenWidth} = Dimensions.get('window');
+
 const SlideShow = () => {
   return (
     <SwiperFlatList

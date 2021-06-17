@@ -1,8 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import Icon from 'react-native-vector-icons/Fontisto';
+
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+
 const TopicItem = ({label, removeTopic, style}) => {
   return (
     <View style={[styles.containerTag, style]}>
@@ -21,8 +24,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 14,
     paddingLeft: 16,
-    // paddingVertical: 7.33,
-    // width: 122,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
