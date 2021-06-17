@@ -9,15 +9,16 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-
 import {useNavigation} from '@react-navigation/native';
 import {Avatar} from 'react-native-activity-feed';
 import moment from 'moment';
-import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import jwtDecode from 'jwt-decode';
 import PropsTypes from 'prop-types';
 
+import { getAccessToken } from '../../data/local/accessToken';
+
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
@@ -29,10 +30,7 @@ import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFou
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
-
-import PropsTypes from 'prop-types';
-import { getAccessToken } from '../../data/local/accessToken';
-import jwtDecode from 'jwt-decode';
+import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
 
 const {width: screenWidth} = Dimensions.get('window');
 
