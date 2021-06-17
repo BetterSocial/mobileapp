@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import * as React from 'react';
 import {
   StatusBar,
   SafeAreaView,
@@ -8,19 +8,21 @@ import {
   TouchableNativeFeedback,
   Dimensions,
 } from 'react-native';
+
 import {useNavigation} from '@react-navigation/core';
-import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
-import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import VersionNumber from 'react-native-version-number';
 import analytics from '@react-native-firebase/analytics';
+
 import Header from '../../components/Header';
-import VersionNumber from 'react-native-version-number'
+import {fonts} from '../../utils/fonts';
+import {colors} from '../../utils/colors';
+import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 
 const width = Dimensions.get('screen').width;
+
 const Settings = () => {
   const navigation = useNavigation();
-  useEffect(() => {
+  React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Settings',
       screen_name: 'Settings',
@@ -39,8 +41,8 @@ const Settings = () => {
           </View>
           <Text style={styles.textSettings}>Settings</Text>
         </View> */}
-        <View style={{padding : 16}}>
-          <Header title="Settings" onPress={() => navigation.goBack()}/>
+        <View style={{padding: 16}}>
+          <Header title="Settings" onPress={() => navigation.goBack()} />
         </View>
         <View style={styles.content}>
           <TouchableNativeFeedback>
@@ -71,7 +73,10 @@ const Settings = () => {
           </TouchableNativeFeedback>
         </View>
         <View style={styles.footer}>
-          <Text style={styles.textVersion}>{`Version ${VersionNumber.appVersion}`}</Text>
+          <Text
+            style={
+              styles.textVersion
+            }>{`Version ${VersionNumber.appVersion}`}</Text>
         </View>
       </SafeAreaView>
     </>

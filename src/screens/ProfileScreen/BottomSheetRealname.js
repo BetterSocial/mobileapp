@@ -1,21 +1,18 @@
-import React from 'react';
-import {forwardRef} from 'react';
+import * as React from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   TextInput,
   ActivityIndicator,
 } from 'react-native';
+
 import {Button} from '../../components/Button';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
 import {BottomSheet} from '../../components/BottomSheet';
+import {fonts} from '../../utils/fonts';
+import {colors} from '../../utils/colors';
 
-const width = Dimensions.get('screen').width;
-
-const BottomSheetRealname = forwardRef((props, ref) => (
+const BottomSheetRealname = React.forwardRef((props, ref) => (
   <BottomSheet ref={ref} closeOnPressMask={true} height={300}>
     <View style={styles.containerBottomSheet}>
       <Text style={styles.textYourName}>Your name</Text>
@@ -75,7 +72,6 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
-    color: colors.gray,
     lineHeight: 24,
     color: colors.red,
   },

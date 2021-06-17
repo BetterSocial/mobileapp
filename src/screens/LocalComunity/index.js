@@ -1,46 +1,51 @@
-import React, {useContext, useEffect, useState} from 'react';
+import * as React from 'react';
 import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  TouchableNativeFeedback,
-  TouchableHighlight,
   Dimensions,
   FlatList,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  TouchableNativeFeedback,
+  View,
 } from 'react-native';
+
+import analytics from '@react-native-firebase/analytics';
+import {useNavigation} from '@react-navigation/core';
+import {showMessage} from 'react-native-flash-message';
+
+import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import PinIcon from '../../../assets/icons/pin.svg';
+import PlusIcon from '../../../assets/icons/plus.svg';
+import TrashIcon from '../../../assets/icons/trash.svg';
 import {post} from '../../api/server';
-import {setLocalCommunity} from '../../context/actions/localCommunity';
-import MyStatusBar from '../../components/StatusBar';
 import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
 import {SearchModal} from '../../components/Search';
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import PlusIcon from '../../../assets/icons/plus.svg';
-import PinIcon from '../../../assets/icons/pin.svg';
-import TrashIcon from '../../../assets/icons/trash.svg';
 import {Context} from '../../context';
+import {setLocalCommunity} from '../../context/actions/localCommunity';
 import {colors} from '../../utils/colors';
-import {showMessage} from 'react-native-flash-message';
-import {useNavigation} from '@react-navigation/core';
-import analytics from '@react-native-firebase/analytics';
 import StringConstant from '../../utils/string/StringConstant';
 
 const width = Dimensions.get('screen').width;
 const LocalComunity = () => {
   const navigation = useNavigation();
-  const [search, setSearch] = useState('');
-  const [location, setLocation] = useState([]);
-  const [optionsSearch, setOptionsSearch] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = useState(false);
-  const [isVisibleSecondLocation, setIsVisibleSecondLocation] = useState(false);
-  const [locationPost, setLocationPost] = useState([]);
-  const [locationLog, setLocationLog] = useState([]);
+  const [search, setSearch] = React.useState('');
+  const [location, setLocation] = React.useState([]);
+  const [optionsSearch, setOptionsSearch] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = React.useState(
+    false,
+  );
+  const [isVisibleSecondLocation, setIsVisibleSecondLocation] = React.useState(
+    false,
+  );
+  const [locationPost, setLocationPost] = React.useState([]);
+  const [locationLog, setLocationLog] = React.useState([]);
 
-  const [, dispatch] = useContext(Context).localCommunity;
-  useEffect(() => {
+  const [, dispatch] = React.useContext(Context).localCommunity;
+  React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'LocalComunity',
       screen_name: 'onb_select_location',
@@ -50,12 +55,12 @@ const LocalComunity = () => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <View style={{paddingHorizontal : 22, paddingTop : 22, paddingBottom : 5}}>
-        <TouchableNativeFeedback 
-          background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}
-          onPress={() => navigation.goBack()}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
-        </TouchableNativeFeedback>
+        <View style={{paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5}}>
+          <TouchableNativeFeedback
+            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}
+            onPress={() => navigation.goBack()}>
+            <ArrowLeftIcon width={20} height={12} fill="#000" />
+          </TouchableNativeFeedback>
         </View>
       );
     } else {
@@ -98,7 +103,7 @@ const LocalComunity = () => {
     if (tempLocation.length <= 1) {
       tempLocation.push(val);
     } else {
-      tempLocation[index] = val
+      tempLocation[index] = val;
     }
     console.log('isi val ', tempLocation);
     setSearch(capitalizeFirstLetter(val.neighborhood));
@@ -117,17 +122,22 @@ const LocalComunity = () => {
   };
 
   const renderItem = ({index, item}) => (
-    <TouchableNativeFeedback onPress={() => {
-      setSearch("")
-      if(index === 0) return setIsVisibleFirstLocation(true)
-      else if(index === 1) return setIsVisibleSecondLocation(true)
-    }}>
+    <TouchableNativeFeedback
+      onPress={() => {
+        setSearch('');
+        if (index === 0) {
+          return setIsVisibleFirstLocation(true);
+        } else if (index === 1) {
+          return setIsVisibleSecondLocation(true);
+        }
+      }}>
       <View style={styles.containerLocation}>
         <View style={styles.containerRow}>
           <PinIcon width={14} height={20} fill="#000000" />
           <Text style={styles.textLocation}>{item.neighborhood}</Text>
         </View>
-        <TouchableNativeFeedback onPress={() => handleDelete(item.location_id)}
+        <TouchableNativeFeedback
+          onPress={() => handleDelete(item.location_id)}
           background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
           <TrashIcon width={18} height={20} fill="#000000" />
         </TouchableNativeFeedback>
@@ -197,8 +207,14 @@ const LocalComunity = () => {
             <View style={styles.card}>
               <PlusIcon width={18} height={18} fill="#000000" />
               <View style={styles.columnButton}>
-                <Text style={styles.textAddLocation}>{StringConstant.onboardingLocalCommunityPrimaryLocationTitle}</Text>
-                <Text style={styles.textSearchYourFavorite}>{StringConstant.onboardingLocalCommunityPrimaryLocationSubTitle}</Text>
+                <Text style={styles.textAddLocation}>
+                  {StringConstant.onboardingLocalCommunityPrimaryLocationTitle}
+                </Text>
+                <Text style={styles.textSearchYourFavorite}>
+                  {
+                    StringConstant.onboardingLocalCommunityPrimaryLocationSubTitle
+                  }
+                </Text>
               </View>
             </View>
           </TouchableNativeFeedback>
@@ -215,10 +231,14 @@ const LocalComunity = () => {
               <PlusIcon width={18} height={18} fill="#000000" />
               <View style={styles.columnButton}>
                 <Text style={styles.textAddLocation}>
-                  {StringConstant.onboardingLocalCommunitySecondaryLocationTitle}
+                  {
+                    StringConstant.onboardingLocalCommunitySecondaryLocationTitle
+                  }
                 </Text>
                 <Text style={styles.textSearchYourFavorite}>
-                  {StringConstant.onboardingLocalCommunitySecondaryLocationSubTitle}
+                  {
+                    StringConstant.onboardingLocalCommunitySecondaryLocationSubTitle
+                  }
                 </Text>
               </View>
             </View>
@@ -288,7 +308,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 36,
     lineHeight: 44,
-    paddingHorizontal : 22,
+    paddingHorizontal: 22,
     color: colors.bunting,
   },
   containerInfo: {
@@ -351,13 +371,13 @@ const styles = StyleSheet.create({
     opacity: 0.84,
     marginTop: 8,
     marginBottom: 12,
-    paddingHorizontal : 22,
+    paddingHorizontal: 22,
   },
 
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal : 22,
+    paddingHorizontal: 22,
     // backgroundColor : 'blue'
   },
   columnButton: {
@@ -371,7 +391,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     letterSpacing: -0.28,
-    marginTop : 13,
+    marginTop: 13,
     color: colors.black,
   },
   textSearchYourFavorite: {
@@ -381,14 +401,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 24,
     letterSpacing: -0.28,
-    marginBottom : 10,
+    marginBottom: 10,
     color: colors.silver,
   },
   containerLocation: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal : 22,
+    paddingHorizontal: 22,
     // marginBottom: 35,
     // paddingVertical : 0,
     // marginBottom: 20,
@@ -406,8 +426,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     letterSpacing: -0.28,
-    marginTop : 22,
-    marginBottom : 22,
+    marginTop: 22,
+    marginBottom: 22,
     color: colors.black,
     paddingLeft: 17,
     textTransform: 'capitalize',

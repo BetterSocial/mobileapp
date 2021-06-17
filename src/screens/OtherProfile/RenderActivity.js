@@ -5,11 +5,14 @@ import {
   StyleSheet,
   TouchableNativeFeedback,
   Dimensions,
+  Platform,
 } from 'react-native';
+
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import SeeMore from 'react-native-see-more-inline';
 import {Activity, Avatar} from 'react-native-activity-feed';
 import moment from 'moment';
+
 import ShareIcon from '../../assets/icons/images/share.svg';
 import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
 import ArrowUpIcon from '../../assets/icons/images/arrow-up.svg';
@@ -20,8 +23,7 @@ import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-const renderActivity = (props, data,) => {
-
+const renderActivity = (props, data) => {
   const _renderItem = ({item, index}, parallaxProps) => {
     return (
       <View style={styles.item}>
@@ -78,7 +80,7 @@ const renderActivity = (props, data,) => {
             <Carousel
               sliderWidth={screenWidth}
               sliderHeight={screenWidth}
-              itemWidth={screenWidth -20}
+              itemWidth={screenWidth - 20}
               data={props.activity.images_url}
               renderItem={_renderItem}
               hasParallaxImages={true}
@@ -189,7 +191,7 @@ const styles = StyleSheet.create({
     width: screenWidth - 20,
     height: screenWidth - 20,
     marginTop: 10,
-    marginLeft: -20 
+    marginLeft: -20,
   },
   imageContainer: {
     flex: 1,
@@ -200,7 +202,7 @@ const styles = StyleSheet.create({
   image: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    aspectRatio: 1.5, 
+    aspectRatio: 1.5,
     resizeMode: 'contain',
   },
 });

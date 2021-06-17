@@ -1,6 +1,4 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {polyfill} from 'react-lifecycles-compat';
+import * as React from 'react';
 import {
   View,
   Animated,
@@ -10,9 +8,12 @@ import {
   Platform,
 } from 'react-native';
 
+import PropTypes from 'prop-types';
+import {polyfill} from 'react-lifecycles-compat';
+
 const {height, width} = Dimensions.get('window');
 
-class CardStack extends Component {
+class CardStack extends React.Component {
   static distance(x, y) {
     return Math.hypot(x, y);
   }
@@ -153,7 +154,9 @@ class CardStack extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (typeof this.props.children === 'undefined') return;
+    if (typeof this.props.children === 'undefined') {
+      return;
+    }
     if (!this._isSameChildren(this.props.children, prevProps.children)) {
       const children = Array.isArray(this.props.children)
         ? this.props.children
@@ -183,10 +186,16 @@ class CardStack extends Component {
   }
 
   _isSameChildren(a, b) {
-    if (typeof a != typeof b) return false;
-    if (typeof a === 'undefined') return false;
+    if (typeof a !== typeof b) {
+      return false;
+    }
+    if (typeof a === 'undefined') {
+      return false;
+    }
     if (Array.isArray(a) && Array.isArray(b)) {
-      if (a.length != b.length) return false;
+      if (a.length != b.length) {
+        return false;
+      }
       for (let i in a) {
         if (a[i].key != b[i].key) {
           return false;
@@ -194,13 +203,17 @@ class CardStack extends Component {
       }
       return true;
     }
-    if (a.key !== b.key) return false;
+    if (a.key !== b.key) {
+      return false;
+    }
 
     return true;
   }
 
   initDeck() {
-    if (typeof this.props.children === 'undefined') return;
+    if (typeof this.props.children === 'undefined') {
+      return;
+    }
     const {children, loop} = this.props;
     const cards = Array.isArray(children) ? children : [children];
     const initialIndexA =
@@ -254,7 +267,9 @@ class CardStack extends Component {
   _goBack(direction) {
     const {cards, sindex, topCard} = this.state;
 
-    if (sindex - 3 < 0 && !this.props.loop) return;
+    if (sindex - 3 < 0 && !this.props.loop) {
+      return;
+    }
 
     const previusCardIndex = this.mod(sindex - 3, cards.length);
     let update = {};
@@ -384,33 +399,37 @@ class CardStack extends Component {
             if (
               this.state.cards[index] &&
               this.state.cards[index].props.onSwipedLeft
-            )
+            ) {
               this.state.cards[index] &&
                 this.state.cards[index].props.onSwipedLeft();
+            }
             break;
           case 'right':
             this.props.onSwipedRight(index);
             if (
               this.state.cards[index] &&
               this.state.cards[index].props.onSwipedRight
-            )
+            ) {
               this.state.cards[index].props.onSwipedRight();
+            }
             break;
           case 'top':
             this.props.onSwipedTop(index);
             if (
               this.state.cards[index] &&
               this.state.cards[index].props.onSwipedTop
-            )
+            ) {
               this.state.cards[index].props.onSwipedTop();
+            }
             break;
           case 'bottom':
             this.props.onSwipedBottom(index);
             if (
               this.state.cards[index] &&
               this.state.cards[index].props.onSwipedBottom
-            )
+            ) {
               this.state.cards[index].props.onSwipedBottom();
+            }
             break;
           default:
         }

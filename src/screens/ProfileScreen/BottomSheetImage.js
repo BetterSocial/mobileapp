@@ -1,5 +1,4 @@
-import React from 'react';
-import {forwardRef} from 'react';
+import * as React from 'react';
 import {
   View,
   Text,
@@ -7,15 +6,16 @@ import {
   TouchableNativeFeedback,
   ActivityIndicator,
 } from 'react-native';
+
+import {BottomSheet} from '../../components/BottomSheet';
+import {fonts} from '../../utils/fonts';
+import {colors} from '../../utils/colors';
 import UserIcon from '../../assets/icons/images/user.svg';
+import TrashIcon from '../../assets/icons/images/trash.svg';
 import MediaIcon from '../../assets/icons/images/media.svg';
 import CameraIcon from '../../assets/icons/images/camera.svg';
-import TrashIcon from '../../assets/icons/images/trash.svg';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {BottomSheet} from '../../components/BottomSheet';
 
-const BottomSheetImage = forwardRef((props, ref) => (
+const BottomSheetImage = React.forwardRef((props, ref) => (
   <BottomSheet ref={ref} closeOnPressMask={true} height={300}>
     <View style={styles.containerBottomSheet}>
       <TouchableNativeFeedback onPress={() => props.onViewProfilePicture()}>

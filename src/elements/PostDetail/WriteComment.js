@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 

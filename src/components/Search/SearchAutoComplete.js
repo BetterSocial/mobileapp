@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableNativeFeedback,
 } from 'react-native';
+
 import SearchIcon from '../../../assets/icons/search.svg';
 
 const SearchAutoComplete = (props) => {
@@ -24,7 +25,9 @@ const SearchAutoComplete = (props) => {
         <View style={styles.box}>
           {props.options.map((value, index) => {
             return (
-              <TouchableNativeFeedback key={index} onPress={() => props.onSelect(value)}>
+              <TouchableNativeFeedback
+                key={index}
+                onPress={() => props.onSelect(value)}>
                 <View style={styles.list}>
                   <Text style={styles.label}>{value.label}</Text>
                 </View>
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
     width: '100%',
     top: 50,
     zIndex: 2000,
-    elevation: 2000
+    elevation: 2000,
   },
   list: {
     minHeight: 35,
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   label: {
-      textTransform: 'capitalize'
-  }
+    textTransform: 'capitalize',
+  },
 });
 export default SearchAutoComplete;

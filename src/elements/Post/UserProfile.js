@@ -1,14 +1,13 @@
-import React, {useState} from 'react';
-import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import ProfileDefault from '../../assets/images/ProfileDefault.png';
+import React from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
+import ToggleSwitch from 'toggle-switch-react-native';
+
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import ToggleSwitch from 'toggle-switch-react-native';
-import {useNavigation} from '@react-navigation/core';
+
 const UserProfile = ({typeUser, setTypeUser, username, photo, onPress}) => {
-  const [isanonymous, onanonymouschanged] = useState();
-  const navigation = useNavigation();
   const userProfile = () => {
     if (typeUser) {
       return (
@@ -84,6 +83,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     width: 32,
     height: 32,
-    borderRadius : 16
+    borderRadius: 16,
   },
 });

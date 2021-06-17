@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,32 +10,34 @@ import {
   Platform,
   Image,
 } from 'react-native';
+
+import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {useNavigation} from '@react-navigation/core';
+import {showMessage} from 'react-native-flash-message';
+import analytics from '@react-native-firebase/analytics';
+
 import {ProgressBar} from '../../components/ProgressBar';
 import {Button} from '../../components/Button';
-import IconFontAwesome5 from 'react-native-vector-icons//FontAwesome5';
-const width = Dimensions.get('screen').width;
-import {launchImageLibrary} from 'react-native-image-picker';
-import MemoIc_btn_add from '../../assets/icons/Ic_btn_add';
 import {Input} from '../../components/Input';
 import {Context} from '../../context';
 import {setImage, setUsername} from '../../context/actions/users';
-import {useNavigation} from '@react-navigation/core';
 import {verifyUsername} from '../../service/users';
 import {fonts} from '../../utils/fonts';
-import {showMessage} from 'react-native-flash-message';
 import {colors} from '../../utils/colors';
-import analytics from '@react-native-firebase/analytics';
-import BtnAddPhoto from '../../assets/icon-svg/ic_btn_add_photo.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../helpers/constants';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
+
+const width = Dimensions.get('screen').width;
+
 const ChooseUsername = () => {
   const navigation = useNavigation();
-  const [users, dispatch] = useContext(Context).users;
-  const [username, setUsernameState] = useState('');
-  const [typeFetch, setTypeFetch] = useState('');
+  const [users, dispatch] = React.useContext(Context).users;
+  const [username, setUsernameState] = React.useState('');
+  const [typeFetch, setTypeFetch] = React.useState('');
 
-  useEffect(() => {
+  React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'ChooseUsername',
       screen_name: 'onb_user_profilepic',
@@ -47,7 +49,9 @@ const ChooseUsername = () => {
       id: 2,
     });
     launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-      if (res.base64) setImage(`${res.base64}`, dispatch);
+      if (res.base64) {
+        setImage(`${res.base64}`, dispatch);
+      }
     });
   };
 
@@ -82,28 +86,31 @@ const ChooseUsername = () => {
       setUsername(username, dispatch);
       navigation.navigate('LocalComunity');
     } else {
-      if (!username)
+      if (!username) {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameErrorCannotBeEmpty,
           type: 'danger',
           backgroundColor: colors.red,
         });
+      }
 
-      if (username.length <= 2)
+      if (username.length <= 2) {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelMinimumChar,
           type: 'danger',
           backgroundColor: colors.red,
         });
+      }
 
-      if (username.length > 15)
+      if (username.length > 15) {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelMaximumChar,
           type: 'danger',
           backgroundColor: colors.red,
         });
+      }
 
-      if (typeFetch === 'notavailable')
+      if (typeFetch === 'notavailable') {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelUserTaken(
             username,
@@ -111,13 +118,15 @@ const ChooseUsername = () => {
           type: 'danger',
           backgroundColor: colors.red,
         });
+      }
 
-      if (typeFetch === 'nan')
+      if (typeFetch === 'nan') {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelJustANumber,
           type: 'danger',
           backgroundColor: colors.red,
         });
+      }
 
       // showMessage({
       //   message: StringConstant.onboardingChooseUsernameErrorCannotBeEmpty,
