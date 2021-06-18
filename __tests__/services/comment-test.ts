@@ -1,8 +1,4 @@
-import {
-  setAccessToken,
-  setRefreshToken,
-  setToken,
-} from '../../src/data/local/accessToken';
+import {setAccessToken, setRefreshToken, setToken} from '../../src/utils/token';
 import {
   createCommentParent,
   createChildComment,

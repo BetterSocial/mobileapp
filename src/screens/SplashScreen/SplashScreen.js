@@ -8,7 +8,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import {verifyTokenGetstream} from '../../service/users';
 import {getProfileByUsername} from '../../service/profile';
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 import StringConstant from '../../utils/string/StringConstant';
 
 const SplashScreen = () => {

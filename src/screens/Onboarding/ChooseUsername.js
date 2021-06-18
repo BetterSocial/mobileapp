@@ -26,7 +26,7 @@ import {verifyUsername} from '../../service/users';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import StringConstant from '../../utils/string/StringConstant';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../helpers/constants';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 
 const width = Dimensions.get('screen').width;

@@ -24,9 +24,8 @@ import RenderActivity from './RenderActivity';
 import Loading from '../Loading';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {getToken} from '../../helpers/getToken';
-import {trimString} from '../../helpers/stringSplit';
-import {getAccessToken} from '../../data/local/accessToken';
+import {trimString} from '../../utils/string/TrimString';
+import {getAccessToken} from '../../utils/token';
 import ShareIcon from '../../assets/icons/images/share.svg';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
@@ -58,7 +57,7 @@ const OtherProfile = () => {
 
   React.useEffect(() => {
     let getJwtToken = async () => {
-      setTokenJwt(await getToken());
+      setTokenJwt(await getAccessToken());
     };
 
     getJwtToken();

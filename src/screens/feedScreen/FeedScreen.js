@@ -15,11 +15,10 @@ import BlockDomain from '../../elements/Blocking/BlockDomain';
 import ReportUser from '../../elements/Blocking/ReportUser';
 import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 import {downVote, upVote} from '../../service/vote';
 import {blockUser} from '../../service/blocking';
 import {getMainFeed} from '../../service/post';
-import {getToken} from '../../helpers/getToken';
 
 const FeedScreen = (props) => {
   const [tokenParse, setTokenParse] = React.useState({});

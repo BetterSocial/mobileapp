@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import MemoIcClearCircle from '../../assets/icons/ic_clear_circle';
-import {MAX_POLLING_CHARACTER_ALLOWED} from '../../helpers/constants';
+import {MAX_POLLING_CHARACTER_ALLOWED} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 
 export default function PollItem({

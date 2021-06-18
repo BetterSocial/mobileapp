@@ -8,10 +8,7 @@ import {WheelPicker} from '@victorzimnikov/react-native-wheel-picker-android';
 import PollItem from './PollItem';
 import MemoIcPlus from '../../assets/icons/ic_plus';
 import {colors} from '../../utils/colors';
-import {
-  MAX_POLLING_ALLOWED,
-  MIN_POLLING_ALLOWED,
-} from '../../helpers/constants';
+import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
 import MemoIc_arrow_right from '../../assets/icons/Ic_arrow_right';
 
 export default function CreatePollContainer({

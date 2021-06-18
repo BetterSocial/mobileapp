@@ -32,10 +32,7 @@ import SheetExpiredPost from '../../elements/Post/SheetExpiredPost';
 import SheetGeographic from '../../elements/Post/SheetGeographic';
 import SheetPrivacy from '../../elements/Post/SheetPrivacy';
 import CreatePollContainer from '../../elements/Post/CreatePollContainer';
-import {
-  MAX_POLLING_ALLOWED,
-  MIN_POLLING_ALLOWED,
-} from '../../helpers/constants';
+import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
 import {getMyProfile} from '../../service/profile';
 import {colors} from '../../utils/colors';
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
@@ -46,7 +43,7 @@ import {fonts} from '../../utils/fonts';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import {createPollPost} from '../../service/post';
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);

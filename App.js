@@ -17,7 +17,7 @@ import {
 } from 'react-native-safe-area-context';
 import {OverlayProvider} from 'stream-chat-react-native';
 import {Linking} from 'react-native';
-import {getAccessToken} from './src/data/local/accessToken';
+import {getAccessToken} from './src/utils/token';
 
 const AppContext = React.createContext();
 
