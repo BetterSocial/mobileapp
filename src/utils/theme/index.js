@@ -23,8 +23,8 @@ export const SIZES = {
   h3: 14,
   h4: 12,
   body1: 24,
-  body2: 26,
-  body3: 24,
+  body2: 16,
+  body3: 14,
   body4: 12,
 
   // app dimensions
