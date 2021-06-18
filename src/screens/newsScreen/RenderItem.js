@@ -27,10 +27,8 @@ const RenderItem = ({item}) => {
         <Footer item={item} totalComment={0} totalVote={0} />
       </View>
       <Gap height={8} />
-      <View
-        style={{height: 1, width: '100%', backgroundColor: '#C4C4C4, 100%'}}
-      />
-      <Gap height={8} />
+      <View style={{height: 1, width: '100%', backgroundColor: '#C4C4C4'}} />
+      <Gap height={16} />
     </View>
   );
 };
