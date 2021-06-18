@@ -19,7 +19,6 @@ import {getAccessToken} from '../../data/local/accessToken';
 import {downVote, upVote} from '../../service/vote';
 import {blockUser} from '../../service/blocking';
 import {getMainFeed} from '../../service/post';
-import {getToken} from '../../helpers/getToken';
 
 const FeedScreen = (props) => {
   const [tokenParse, setTokenParse] = React.useState({});
