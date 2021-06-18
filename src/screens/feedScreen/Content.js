@@ -13,6 +13,7 @@ import SeeMore from 'react-native-see-more-inline';
 import {ParallaxImage} from 'react-native-snap-carousel';
 
 import Gap from '../../components/Gap';
+import Card from '../../components/Card/Card';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 

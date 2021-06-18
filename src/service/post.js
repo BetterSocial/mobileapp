@@ -1,13 +1,12 @@
 import api from './config';
 import crashlytics from '@react-native-firebase/crashlytics';
 export const createPost = async (data) => {
-  console.log(data);
   try {
     let resApi = await api.post('/activity/post', data);
     return resApi.data;
   } catch (error) {
-    crashlytics().recordError(new Error(error));
-    console.log(error.response);
+    crashlytics().recordError(error.response.data);
+    console.log(error.response.data);
   }
 };
 
@@ -21,11 +20,10 @@ export const createPollPost = async (data) => {
         //   "Authorization" : getstreamToken
         // }
       );
-      console.log(resApi);
+
       resolve(resApi.data);
     } catch (error) {
-      console.log('API Error');
-      console.log(error);
+      crashlytics().recordError(error.response.data);
       reject(error);
     }
   });
@@ -37,8 +35,8 @@ export const createFeedToken = async (data) => {
       let resApi = await api.post('/activity/create-token', data);
       resolve(resApi.data);
     } catch (error) {
-      crashlytics().recordError(new Error(error));
-      console.log(error);
+      crashlytics().recordError(error.response.data);
+      // console.log(error);
       reject(error);
     }
   });

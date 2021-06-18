@@ -3,18 +3,21 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import ProgressBar from '../../src/components/ProgressBar/ProgressBar';
+import Comment from '../../src/elements/PostDetail/Comment';
 
 configure({adapter: new Adapter()});
-describe('component ProgressBar', () => {
-  it('ProgressBar snapshot', () => {
-    const component = shallow(<ProgressBar isStatic={true} value={30} />);
+
+describe('component Comment', () => {
+  it('Comment snapshot', () => {
+    const component = shallow(
+      <Comment onPress={() => {}} comment="test" username="test" />,
+    );
     expect(toJson(component)).toMatchSnapshot();
   });
 
-  it('ProgressBar renders correctly', () => {
+  it('Comment renders correctly', () => {
     const tree = renderer
-      .create(<ProgressBar isStatic={true} value={30} />)
+      .create(<Comment onPress={() => {}} comment="test" username="test" />)
       .toJSON();
     expect(tree).toMatchSnapshot();
   });

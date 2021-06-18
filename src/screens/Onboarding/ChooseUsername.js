@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-native';
 
-import IconFontAwesome5 from 'react-native-vector-icon`s/FontAwesome5';
+import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/core';
 import {showMessage} from 'react-native-flash-message';

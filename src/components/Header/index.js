@@ -11,7 +11,6 @@ import {
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-
 const Header = ({title, onPress, titleStyle = {}, containerStyle = {}}) => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {

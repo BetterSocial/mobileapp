@@ -3,30 +3,29 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import Header from '../../src/components/Header';
+import WriteComment from '../../src/elements/PostDetail/WriteComment';
 
 configure({adapter: new Adapter()});
-describe('component header', () => {
-  it('header snapshot', () => {
+
+describe('component WriteComment', () => {
+  it('WriteComment snapshot', () => {
     const component = shallow(
-      <Header
-        title="Title Header Test"
+      <WriteComment
         onPress={() => {}}
-        titleStyle={{}}
-        containerStyle={{}}
+        value={'halo'}
+        onChangeText={() => {}}
       />,
     );
     expect(toJson(component)).toMatchSnapshot();
   });
 
-  it('header renders correctly', () => {
+  it('WriteComment renders correctly', () => {
     const tree = renderer
       .create(
-        <Header
-          title="Title Header Test"
+        <WriteComment
           onPress={() => {}}
-          titleStyle={{}}
-          containerStyle={{}}
+          value={'halo'}
+          onChangeText={() => {}}
         />,
       )
       .toJSON();

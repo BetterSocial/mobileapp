@@ -122,7 +122,8 @@ const _renderProfileNormal = ({
   let navigateToProfile = async () => {
     let selfAccessToken = await getAccessToken();
     let selfUserId = await jwtDecode(selfAccessToken).user_id;
-    navigation.navigate('OtherProfile', {
+    if (selfUserId === userId) return navigation.navigate('ProfileScreen');
+    return navigation.navigate('OtherProfile', {
       data: {
         user_id: selfUserId,
         other_id: userId,
