@@ -9,16 +9,15 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {Avatar} from 'react-native-activity-feed';
+
 import moment from 'moment';
+import {Avatar} from 'react-native-activity-feed';
+import {useNavigation} from '@react-navigation/native';
+
 import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-
-import {useNavigation} from '@react-navigation/native';
-
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
-
 import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
 import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';

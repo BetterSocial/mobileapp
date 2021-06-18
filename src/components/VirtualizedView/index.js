@@ -10,7 +10,10 @@ export default function VirtualizedView(props) {
       keyExtractor={() => 'dummy'}
       renderItem={null}
       refreshControl={
-        <RefreshControl refreshing={props.refreshing} onRefresh={props.onRefresh} />
+        <RefreshControl
+          refreshing={props.refreshing}
+          onRefresh={props.onRefresh}
+        />
       }
       ListHeaderComponent={() => (
         <React.Fragment>{props.children}</React.Fragment>

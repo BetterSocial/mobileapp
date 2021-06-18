@@ -1,6 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+
 import RBSheet from 'react-native-raw-bottom-sheet';
+
 import ItemListLarge from '../../components/Blocking/ItemListLarge';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -48,6 +50,7 @@ const BlockDomain = ({refBlockUser, onSelect, domain}) => {
         </Text>
         {data.map((item) => (
           <ItemListLarge
+            key={item.id}
             id={item.id}
             label={item.label}
             desc={item.desc}

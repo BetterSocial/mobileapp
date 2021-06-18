@@ -1,22 +1,20 @@
-import React, {useRef, useState, useEffect} from 'react';
-import {View, StyleSheet, Animated} from 'react-native';
-import {LogBox} from 'react-native';
-import {colors} from '../../utils/colors'
+import * as React from 'react';
+import {LogBox, View, StyleSheet, Animated} from 'react-native';
+
+import {colors} from '../../utils/colors';
 
 function useInterval(callback, delay) {
-  const savedCallback = useRef();
+  const savedCallback = React.useRef();
 
-  // Remember the latest callback.
-  useEffect(() => {
+  React.useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
   }, []);
 
-  // Set up the interval.
-  useEffect(() => {
+  React.useEffect(() => {
     function tick() {
       savedCallback.current();
     }
@@ -28,22 +26,22 @@ function useInterval(callback, delay) {
 }
 
 const ProgressBar = (props) => {
-  let animation = useRef(new Animated.Value(0));
-  const [progress, setProgress] = useState(50);
+  let animation = React.useRef(new Animated.Value(0));
+  const [progress, setProgress] = React.useState(50);
   useInterval(() => {
     if (progress < 100 && !props.isStatic) {
       setProgress(progress + 5);
     }
   }, 1000);
 
-  useEffect(() => {
+  React.useEffect(() => {
     Animated.timing(animation.current, {
       toValue: progress,
       duration: 100,
     }).start();
   }, [progress]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setProgress(props.value);
   }, [props.value]);
 

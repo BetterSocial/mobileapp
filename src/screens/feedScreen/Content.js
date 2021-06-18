@@ -3,18 +3,18 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Text,
   Platform,
   Dimensions,
   Image,
   FlatList,
 } from 'react-native';
 
+import SeeMore from 'react-native-see-more-inline';
+import {ParallaxImage} from 'react-native-snap-carousel';
+
+import Gap from '../../components/Gap';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import SeeMore from 'react-native-see-more-inline';
-import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
-import Gap from '../../components/Gap';
 
 const {width: screenWidth} = Dimensions.get('window');
 

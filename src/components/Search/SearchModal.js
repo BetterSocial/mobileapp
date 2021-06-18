@@ -1,14 +1,14 @@
-import React from 'react';
-import {useRef, useEffect, useState} from 'react';
+import * as React from 'react';
 import {
-  TextInput,
   View,
   Text,
   StyleSheet,
   Dimensions,
   TouchableNativeFeedback,
 } from 'react-native';
+
 import Modal from 'react-native-modal';
+
 import CrossIcon from '../../../assets/icons/cross.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
@@ -16,15 +16,14 @@ import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
 const width = Dimensions.get('screen').width;
 
 const SearchModal = (props) => {
-  const textRef = useRef(null);
-  const [focus, setFocus] = useState(false)
+  const textRef = React.useRef(null);
+  const [focus, setFocus] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (props.isVisible) {
-      // textRef.current.focus();
     }
   }, [props]);
-  
+
   return (
     <Modal
       testID={'modal'}
@@ -39,20 +38,22 @@ const SearchModal = (props) => {
             <TouchableNativeFeedback onPress={props.onClose}>
               <CrossIcon width={18} height={18} fill="#000" />
             </TouchableNativeFeedback>
-            <Text style={styles.textSearch}>{StringConstant.searchModalTitle}</Text>
+            <Text style={styles.textSearch}>
+              {StringConstant.searchModalTitle}
+            </Text>
           </View>
           <View style={styles.containerInput}>
             <View style={{...styles.inputContainer, ...styles.containerInput}}>
               <AutoFocusTextArea
-                 autoCapitalize={"words"}
-                 autoFocus={focus}
-                 ref={textRef}
-                 style={{...styles.searchInput, ...styles.textInput}}
-                 onChangeText={props.onChangeText}
-                 value={props.value}
-                 placeholder={props.placeholder ? props.placeholder : ''}
-                 placeholderTextColor="#BDBDBD"
-               />
+                autoCapitalize={'words'}
+                autoFocus={focus}
+                ref={textRef}
+                style={{...styles.searchInput, ...styles.textInput}}
+                onChangeText={props.onChangeText}
+                value={props.value}
+                placeholder={props.placeholder ? props.placeholder : ''}
+                placeholderTextColor="#BDBDBD"
+              />
             </View>
             {props.isLoading ? <Text>Please wait...</Text> : null}
 

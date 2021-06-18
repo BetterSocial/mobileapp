@@ -1,0 +1,306 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component SheetMedia SheetMedia renders correctly 1`] = `
+<Modal
+  animationType="none"
+  hardwareAccelerated={false}
+  onRequestClose={[Function]}
+  supportedOrientations={
+    Array [
+      "portrait",
+      "portrait-upside-down",
+      "landscape",
+      "landscape-left",
+      "landscape-right",
+    ]
+  }
+  transparent={true}
+  visible={false}
+>
+  <View
+    onLayout={[Function]}
+    style={
+      Array [
+        Array [
+          Object {
+            "backgroundColor": "#00000077",
+            "flex": 1,
+          },
+          undefined,
+        ],
+        Object {
+          "paddingBottom": 0,
+        },
+      ]
+    }
+  >
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "opacity": 1,
+        }
+      }
+    />
+    <View
+      onMoveShouldSetResponder={[Function]}
+      onMoveShouldSetResponderCapture={[Function]}
+      onResponderEnd={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderReject={[Function]}
+      onResponderRelease={[Function]}
+      onResponderStart={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      onStartShouldSetResponderCapture={[Function]}
+      style={
+        Object {
+          "backgroundColor": "#fff",
+          "borderTopLeftRadius": 20,
+          "borderTopRightRadius": 20,
+          "height": 0,
+          "overflow": "hidden",
+          "transform": Array [
+            Object {
+              "translateX": 0,
+            },
+            Object {
+              "translateY": 0,
+            },
+          ],
+          "width": "100%",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "transparent",
+            "width": "100%",
+          }
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "backgroundColor": "#ccc",
+                "borderRadius": 5,
+                "height": 5,
+                "margin": 10,
+                "width": 35,
+              },
+              Object {
+                "backgroundColor": "#E0E0E0",
+              },
+            ]
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "paddingBottom": 38,
+            "paddingHorizontal": 20,
+            "paddingTop": 20,
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "#F5F5F5",
+              "borderRadius": 8,
+              "flexDirection": "row",
+              "marginBottom": 12,
+              "opacity": 1,
+              "paddingLeft": 21.67,
+              "paddingVertical": 17.67,
+            }
+          }
+        >
+          <View />
+          <Text
+            style={
+              Object {
+                "color": "#000000",
+                "fontFamily": "Inter-Medium",
+                "fontSize": 14,
+                "paddingLeft": 8,
+              }
+            }
+          >
+            Add a poll
+          </Text>
+        </View>
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "#F5F5F5",
+              "borderRadius": 8,
+              "flexDirection": "row",
+              "marginBottom": 12,
+              "opacity": 1,
+              "paddingLeft": 21.67,
+              "paddingVertical": 17.67,
+            }
+          }
+        >
+          <View />
+          <Text
+            style={
+              Object {
+                "color": "#000000",
+                "fontFamily": "Inter-Medium",
+                "fontSize": 14,
+                "paddingLeft": 8,
+              }
+            }
+          >
+            Upload media from library
+          </Text>
+        </View>
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "#F5F5F5",
+              "borderRadius": 8,
+              "flexDirection": "row",
+              "marginBottom": 12,
+              "opacity": 1,
+              "paddingLeft": 21.67,
+              "paddingVertical": 17.67,
+            }
+          }
+        >
+          <View />
+          <Text
+            style={
+              Object {
+                "color": "#000000",
+                "fontFamily": "Inter-Medium",
+                "fontSize": 14,
+                "paddingLeft": 8,
+              }
+            }
+          >
+            Take a photo
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</Modal>
+`;
+
+exports[`component SheetMedia SheetMedia snapshot 1`] = `
+<RBSheet
+  animationType="none"
+  closeDuration={200}
+  closeOnDragDown={true}
+  closeOnPressBack={true}
+  closeOnPressMask={true}
+  customStyles={
+    Object {
+      "container": Object {
+        "borderTopLeftRadius": 20,
+        "borderTopRightRadius": 20,
+      },
+      "draggableIcon": Object {
+        "backgroundColor": "#E0E0E0",
+      },
+    }
+  }
+  dragFromTopOnly={false}
+  height={260}
+  keyboardAvoidingViewEnabled={false}
+  minClosingHeight={0}
+  onClose={null}
+  onOpen={null}
+  openDuration={300}
+>
+  <View
+    style={
+      Object {
+        "paddingBottom": 38,
+        "paddingHorizontal": 20,
+        "paddingTop": 20,
+      }
+    }
+  >
+    <List
+      icon={
+        <Memo(IcCreatePoll)
+          height={16.67}
+          width={16.67}
+        />
+      }
+      label="Add a poll"
+      onPress={[Function]}
+    />
+    <List
+      icon={
+        <Memo(Ic_media)
+          height={16.67}
+          width={16.67}
+        />
+      }
+      label="Upload media from library"
+      onPress={[Function]}
+    />
+    <List
+      icon={
+        <Memo(Ic_camera)
+          height={16.67}
+          width={16.67}
+        />
+      }
+      label="Take a photo"
+      onPress={[Function]}
+    />
+  </View>
+</RBSheet>
+`;

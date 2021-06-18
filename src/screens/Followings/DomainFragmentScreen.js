@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react'
-import { Text } from 'react-native'
+import * as React from 'react';
+import {Text} from 'react-native';
 
-export default function DomainFragmentScreen({navigation}) {
-    useEffect(() => {
-        navigation.setOptions({
-            title : "Domains (3)"
-        })    
-    },[])
+const DomainFragmentScreen = ({navigation}) => {
+  React.useEffect(() => {
+    navigation.setOptions({
+      title: 'Domains (3)',
+    });
+  }, []);
 
-    return <Text>Domain</Text>
-}
+  return <Text>Domain</Text>;
+};
+
+export default DomainFragmentScreen;

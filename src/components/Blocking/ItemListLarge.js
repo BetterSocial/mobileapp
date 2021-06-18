@@ -1,11 +1,14 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
+import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 import IconEn from 'react-native-vector-icons/Entypo';
+
 import Handcuffs from '../../assets/icon-svg/handcuffs.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import IconFA5 from 'react-native-vector-icons/FontAwesome5';
-const ItemListLarge = ({id, label, desc, iconReght, icon, onPress}) => {
+
+const ItemListLarge = ({label, desc, iconReght, icon, onPress}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.header}>

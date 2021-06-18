@@ -41,7 +41,8 @@ exports[`component TopicItem TopicItem renders correctly 1`] = `
       Object {
         "marginLeft": 7,
         "opacity": 1,
-        "padding": 10,
+        "paddingLeft": 4,
+        "paddingRight": 10,
         "paddingVertical": 10,
       }
     }
@@ -87,7 +88,8 @@ exports[`component TopicItem TopicItem snapshot 1`] = `
     style={
       Object {
         "marginLeft": 7,
-        "padding": 10,
+        "paddingLeft": 4,
+        "paddingRight": 10,
         "paddingVertical": 10,
       }
     }

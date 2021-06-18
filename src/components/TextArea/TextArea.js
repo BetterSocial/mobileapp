@@ -1,5 +1,6 @@
-import React, {forwardRef, useEffect, useRef, useState} from 'react';
-import {TextInput, StyleSheet, KeyboardAvoidingView, View} from 'react-native';
+import * as React from 'react';
+import {StyleSheet, TextInput} from 'react-native';
+
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
@@ -12,8 +13,8 @@ const TextArea = ({
   style = {},
   onRef = (ref) => {},
 }) => {
-  let textRef = useRef();
-  useEffect(() => {
+  let textRef = React.useRef();
+  React.useEffect(() => {
     onRef(textRef);
   }, []);
 

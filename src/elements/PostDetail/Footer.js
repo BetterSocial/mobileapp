@@ -1,9 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import IconIc from 'react-native-vector-icons/Ionicons';
 import IconEn from 'react-native-vector-icons/Entypo';
 import IconMt from 'react-native-vector-icons/MaterialIcons';
 import IconMtC from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 const Footer = ({onBlock}) => {
