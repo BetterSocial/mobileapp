@@ -1,30 +1,32 @@
+import * as React from 'react';
+import {StatusBar} from 'react-native';
+
 import {createStackNavigator} from '@react-navigation/stack';
-import React, {useEffect} from 'react';
-import ChooseUsername from '../screens/Onboarding/ChooseUsername';
-import SignIn from '../screens/SignIn/SignIn';
-import SplashScreen from '../screens/SplashScreen/SplashScreen';
-import LocalComunity from '../screens/LocalComunity';
+
+import {fonts} from '../utils/fonts';
 import Topics from '../screens/Topics';
-import WhotoFollow from '../screens/WhotoFollow';
-import {StatusBar, Text} from 'react-native';
-import CreatePost from '../screens/Post/CreatePost';
-import Followings from '../screens/Followings';
-import OtherProfile from '../screens/OtherProfile';
+import {colors} from '../utils/colors';
+import Header from '../components/Header';
 import Settings from '../screens/Settings';
 import HomeBottomTabs from './HomeBottomTabs';
+import SignIn from '../screens/SignIn/SignIn';
+import WhotoFollow from '../screens/WhotoFollow';
+import OtherProfile from '../screens/OtherProfile';
+import CreatePost from '../screens/Post/CreatePost';
+import LocalComunity from '../screens/LocalComunity';
 import {ChannelScreen, ProfileScreen} from '../screens';
-import TermsAndCondition from '../screens/WebView/TermsAndCondition';
-import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
-import PostDetailPage from '../screens/Post/PostDetailPage';
 import ImageViewerScreen from '../screens/ImageViewer';
 import ReplyComment from '../screens/Post/ReplyComment';
+import PostDetailPage from '../screens/Post/PostDetailPage';
+import SplashScreen from '../screens/SplashScreen/SplashScreen';
+import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
+import ChooseUsername from '../screens/Onboarding/ChooseUsername';
+import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
-import Header from '../components/Header';
-import {colors} from '../utils/colors';
-import {fonts} from '../utils/fonts';
+
 const Stack = createStackNavigator();
 const RootStact = () => {
-  useEffect(() => {
+  React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
   }, []);

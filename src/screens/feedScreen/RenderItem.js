@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {StyleSheet, Dimensions, Share} from 'react-native';
 
 import dynamicLinks from '@react-native-firebase/dynamic-links';
