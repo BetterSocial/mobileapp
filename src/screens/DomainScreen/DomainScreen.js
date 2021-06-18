@@ -71,7 +71,11 @@ const DomainScreen = () => {
       <FlatList
         data={data}
         renderItem={({item, index}) => {
-          return <RenderItem key={index} domain={item} image={profile.logo} />;
+          if (item.content) {
+            return (
+              <RenderItem key={index} domain={item} image={profile.logo} />
+            );
+          }
         }}
         style={{flex: 1}}
         keyExtractor={(i) => i.id}

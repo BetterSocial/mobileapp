@@ -12,7 +12,7 @@ const NewsScreen = (props) => {
     });
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const initData = async () => {
       let data = await getDomains();
       console.log(data.length);

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, SafeAreaView} from 'react-native';
+import {View, SafeAreaView, StyleSheet} from 'react-native';
 
 import {useFocusEffect} from '@react-navigation/native';
 import JWTDecode from 'jwt-decode';
@@ -19,7 +19,6 @@ import {getAccessToken} from '../../data/local/accessToken';
 import {downVote, upVote} from '../../service/vote';
 import {blockUser} from '../../service/blocking';
 import {getMainFeed} from '../../service/post';
-import {getToken} from '../../helpers/getToken';
 
 const FeedScreen = (props) => {
   const [tokenParse, setTokenParse] = React.useState({});
