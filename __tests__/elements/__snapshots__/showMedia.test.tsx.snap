@@ -1,0 +1,386 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component ShowMedia ShowMedia renders correctly 1`] = `
+<View>
+  <RCTScrollView
+    horizontal={true}
+    showsHorizontalScrollIndicator={false}
+  >
+    <View>
+      <View
+        style={
+          Object {
+            "alignItems": "flex-end",
+            "flexDirection": "row",
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "borderColor": "#E0E0E0",
+              "borderRadius": 8,
+              "borderStyle": "dashed",
+              "borderWidth": 2,
+              "height": 120,
+              "justifyContent": "center",
+              "opacity": 1,
+              "paddingVertical": 32,
+              "width": 120,
+              "zIndex": 99,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "#000000",
+                "fontFamily": "Inter-Regular",
+                "fontSize": 12,
+                "textAlign": "center",
+                "width": 91,
+              }
+            }
+          >
+            +add more photos
+          </Text>
+        </View>
+        <View
+          style={
+            Object {
+              "width": 8,
+            }
+          }
+        />
+        <View
+          accessibilityIgnoresInvertColors={true}
+          style={
+            Object {
+              "alignItems": "flex-end",
+              "height": 120,
+              "marginRight": 12,
+              "marginTop": 10,
+              "width": 120,
+            }
+          }
+        >
+          <Image
+            source={
+              Object {
+                "uri": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
+              }
+            }
+            style={
+              Array [
+                Object {
+                  "bottom": 0,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
+                },
+                Object {
+                  "height": 120,
+                  "width": 120,
+                },
+                Object {
+                  "borderRadius": 8,
+                },
+              ]
+            }
+          />
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "marginRight": -8,
+                "marginTop": -8,
+                "opacity": 1,
+              }
+            }
+          >
+            <Icon
+              name="closecircle"
+              size={20}
+            />
+          </View>
+        </View>
+        <View
+          accessibilityIgnoresInvertColors={true}
+          style={
+            Object {
+              "alignItems": "flex-end",
+              "height": 120,
+              "marginRight": 12,
+              "marginTop": 10,
+              "width": 120,
+            }
+          }
+        >
+          <Image
+            source={
+              Object {
+                "uri": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
+              }
+            }
+            style={
+              Array [
+                Object {
+                  "bottom": 0,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
+                },
+                Object {
+                  "height": 120,
+                  "width": 120,
+                },
+                Object {
+                  "borderRadius": 8,
+                },
+              ]
+            }
+          />
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "marginRight": -8,
+                "marginTop": -8,
+                "opacity": 1,
+              }
+            }
+          >
+            <Icon
+              name="closecircle"
+              size={20}
+            />
+          </View>
+        </View>
+        <View
+          accessibilityIgnoresInvertColors={true}
+          style={
+            Object {
+              "alignItems": "flex-end",
+              "height": 120,
+              "marginRight": 12,
+              "marginTop": 10,
+              "width": 120,
+            }
+          }
+        >
+          <Image
+            source={
+              Object {
+                "uri": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
+              }
+            }
+            style={
+              Array [
+                Object {
+                  "bottom": 0,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
+                },
+                Object {
+                  "height": 120,
+                  "width": 120,
+                },
+                Object {
+                  "borderRadius": 8,
+                },
+              ]
+            }
+          />
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "marginRight": -8,
+                "marginTop": -8,
+                "opacity": 1,
+              }
+            }
+          >
+            <Icon
+              name="closecircle"
+              size={20}
+            />
+          </View>
+        </View>
+      </View>
+    </View>
+  </RCTScrollView>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "marginBottom": -14,
+        "marginTop": 12,
+        "opacity": 1,
+        "paddingVertical": 16,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#FF2E63",
+          "fontFamily": "Inter-Semi-bold",
+          "fontSize": 14,
+          "fontWeight": "bold",
+          "textAlign": "center",
+        }
+      }
+    >
+      Remove all photos
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`component ShowMedia ShowMedia snapshot 1`] = `
+<View>
+  <ScrollView
+    horizontal={true}
+    showsHorizontalScrollIndicator={false}
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "flex-end",
+          "flexDirection": "row",
+        }
+      }
+    >
+      <ButtonAddMedia
+        label="+add more photos"
+        labelStyle={
+          Object {
+            "color": "#000000",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 12,
+            "textAlign": "center",
+            "width": 91,
+          }
+        }
+        onPress={[Function]}
+        style={
+          Object {
+            "height": 120,
+            "justifyContent": "center",
+            "width": 120,
+            "zIndex": 99,
+          }
+        }
+      />
+      <Gap
+        style={
+          Object {
+            "width": 8,
+          }
+        }
+      />
+      <ShowImage
+        data={
+          Object {
+            "data": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
+            "id": 1,
+          }
+        }
+        key="1"
+        onPress={[Function]}
+      />
+      <ShowImage
+        data={
+          Object {
+            "data": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
+            "id": 2,
+          }
+        }
+        key="2"
+        onPress={[Function]}
+      />
+      <ShowImage
+        data={
+          Object {
+            "data": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
+            "id": 3,
+          }
+        }
+        key="3"
+        onPress={[Function]}
+      />
+    </View>
+  </ScrollView>
+  <ForwardRef
+    onPress={[Function]}
+    style={
+      Object {
+        "marginBottom": -14,
+        "marginTop": 12,
+        "paddingVertical": 16,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#FF2E63",
+          "fontFamily": "Inter-Semi-bold",
+          "fontSize": 14,
+          "fontWeight": "bold",
+          "textAlign": "center",
+        }
+      }
+    >
+      Remove all photos
+    </Text>
+  </ForwardRef>
+</View>
+`;

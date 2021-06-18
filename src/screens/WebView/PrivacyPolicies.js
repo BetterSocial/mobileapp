@@ -1,12 +1,15 @@
-import React, {useEffect} from 'react';
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import Header from '../../components/Header';
+import * as React from 'react';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
+
 import {WebView} from 'react-native-webview';
 import analytics from '@react-native-firebase/analytics';
 import {useNavigation} from '@react-navigation/core';
+
+import Header from '../../components/Header';
+
 const PrivacyPolicies = () => {
   const navigator = useNavigation();
-  useEffect(() => {
+  React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'PrivacyPolicies',
       screen_name: 'PrivacyPolicies',

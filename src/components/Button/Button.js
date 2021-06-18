@@ -1,11 +1,12 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
-import { colors } from '../../utils/colors';
+
+import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const Btn = (props) => {
   let disable = props.disabled ? props.disabled : false;
-  let disabledStyle = props.disabled ? styles.disabledbutton : {}
+  let disabledStyle = props.disabled ? styles.disabledbutton : {};
   return (
     <TouchableNativeFeedback disabled={disable} onPress={props.onPress}>
       <View style={{...styles.button, ...props.style, ...disabledStyle}}>
@@ -32,9 +33,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: fonts.inter[600],
   },
-  disabledbutton : {
-    backgroundColor : colors.gray1
-  }
+  disabledbutton: {
+    backgroundColor: colors.gray1,
+  },
 });
 
 export default Btn;

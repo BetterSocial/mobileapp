@@ -1,64 +1,55 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-  Alert,
-} from 'react-native';
+import * as React from 'react';
+import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
+
 import JWTDecode from 'jwt-decode';
 import {getAccessToken} from '../../data/local/accessToken';
-import Comment from '../../elements/PostDetail/Comment';
-import ContainerComment from '../../elements/PostDetail/ContainerComment';
-import Profile from '../../elements/PostDetail/Profile';
-import WriteComment from '../../elements/PostDetail/WriteComment';
-import {fonts} from '../../utils/fonts';
-import {getMyProfile} from '../../service/profile';
+import Toast from 'react-native-simple-toast';
+
+import Gap from '../../components/Gap';
+import Footer from '../feedScreen/Footer';
+import Header from '../feedScreen/Header';
+import Content from '../feedScreen/Content';
 import BlockUser from '../../elements/Blocking/BlockUser';
 import BlockDomain from '../../elements/Blocking/BlockDomain';
 import ReportUser from '../../elements/Blocking/ReportUser';
 import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
-import Toast from 'react-native-simple-toast';
+import WriteComment from '../../elements/PostDetail/WriteComment';
+import ContainerComment from '../../elements/PostDetail/ContainerComment';
+import {fonts} from '../../utils/fonts';
+import {getMyProfile} from '../../service/profile';
 import {blockUser} from '../../service/blocking';
-import {showMessage} from 'react-native-flash-message';
-import Header from '../feedScreen/Header';
-import Content from '../feedScreen/Content';
-import Footer from '../feedScreen/Footer';
-import Gap from '../../components/Gap';
-import {POST_VERB_POLL} from '../../utils/constants';
-import ContentPoll from '../feedScreen/ContentPoll';
-import {createCommentParent} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
+import ContentPoll from '../feedScreen/ContentPoll';
+import {POST_VERB_POLL} from '../../utils/constants';
+import {createCommentParent} from '../../service/comment';
 
 const {width, height} = Dimensions.get('window');
 
 const PostDetailPage = (props) => {
-  const [more, setMore] = useState(10);
-  const [totalLine, setTotalLine] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [dataProfile, setDataProfile] = useState({});
-  const [reportOption, setReportOption] = useState([]);
-  const [messageReport, setMessageReport] = useState('');
-  const refBlockUser = useRef();
-  const refBlockDomain = useRef();
-  const refReportUser = useRef();
-  const refReportDomain = useRef();
-  const refSpecificIssue = useRef();
-  const [item, setItem] = useState(props.route.params.item);
-  const [isReaction, setReaction] = useState(false);
-  const [textComment, setTextComment] = useState('');
-  const [typeComment, setTypeComment] = useState('parent');
-  const [totalComment, setTotalComment] = useState(0);
-  const [totalVote, setTotalVote] = useState(0);
-  const [userId, setUserId] = useState('');
-  const [username, setUsername] = useState('');
-  const [postId, setPostId] = useState('');
-  const [yourselfId, setYourselfId] = useState('');
+  const [more, setMore] = React.useState(10);
+  const [totalLine, setTotalLine] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
+  const [dataProfile, setDataProfile] = React.useState({});
+  const [reportOption, setReportOption] = React.useState([]);
+  const [messageReport, setMessageReport] = React.useState('');
+  const refBlockUser = React.useRef();
+  const refBlockDomain = React.useRef();
+  const refReportUser = React.useRef();
+  const refReportDomain = React.useRef();
+  const refSpecificIssue = React.useRef();
+  const [item, setItem] = React.useState(props.route.params.item);
+  const [isReaction, setReaction] = React.useState(false);
+  const [textComment, setTextComment] = React.useState('');
+  const [typeComment, setTypeComment] = React.useState('parent');
+  const [totalComment, setTotalComment] = React.useState(0);
+  const [totalVote, setTotalVote] = React.useState(0);
+  const [userId, setUserId] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  const [postId, setPostId] = React.useState('');
+  const [yourselfId, setYourselfId] = React.useState('');
 
-  useEffect(() => {
+  React.useEffect(() => {
     const initial = () => {
       let reactionCount = props.route.params.item.reaction_counts;
       if (JSON.stringify(reactionCount) !== '{}') {
@@ -84,7 +75,7 @@ const PostDetailPage = (props) => {
     initial();
   }, [props]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetchMyProfile();
     // refBlockUser.current.open();
     // refBlockDomain.current.open();
@@ -100,7 +91,7 @@ const PostDetailPage = (props) => {
     refBlockUser.current.close();
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const parseToken = async () => {
       const value = await getAccessToken();
       if (value) {

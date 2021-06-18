@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   View,
@@ -13,29 +13,30 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import {get} from '../../api/server';
-import MyStatusBar from '../../components/StatusBar';
-import {Button} from '../../components/Button';
-import {ProgressBar} from '../../components/ProgressBar';
-import {ChunkArray} from '../../helpers/ChunkArray';
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import {Context} from '../../context';
-import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import {useNavigation} from '@react-navigation/core';
-import {colors} from '../../utils/colors';
 import analytics from '@react-native-firebase/analytics';
+
+import {get} from '../../api/server';
+import {Button} from '../../components/Button';
+import {Context} from '../../context';
+import {colors} from '../../utils/colors';
+import {ChunkArray} from '../../helpers/ChunkArray';
+import {ProgressBar} from '../../components/ProgressBar';
+import StringConstant from '../../utils/string/StringConstant';
+import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import {setTopics as setTopicsContext} from '../../context/actions/topics';
 
 const width = Dimensions.get('screen').width;
 
 const Topics = () => {
   const navigation = useNavigation();
-  const [topicSelected, setTopicSelected] = useState([]);
-  const [topics, setTopics] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [minTopic] = useState(3);
-  const [, dispatch] = useContext(Context).topics;
+  const [topicSelected, setTopicSelected] = React.useState([]);
+  const [topics, setTopics] = React.useState({});
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [minTopic] = React.useState(3);
+  const [, dispatch] = React.useContext(Context).topics;
 
-  useEffect(() => {
+  React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Topics',
       screen_name: 'onb_select_topics',
@@ -57,7 +58,9 @@ const Topics = () => {
     if (Platform.OS === 'android') {
       return (
         <View style={styles.header}>
-          <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+          <TouchableNativeFeedback
+            onPress={() => navigation.goBack()}
+            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableNativeFeedback>
         </View>
@@ -69,7 +72,7 @@ const Topics = () => {
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableHighlight>
           <TouchableNativeFeedback>
-            <Text style={styles.textSkip}>Skip</Text>
+            <Text style={styles.textSkip}>{StringConstant.headerIosSkip}</Text>
           </TouchableNativeFeedback>
         </View>
       );
@@ -98,88 +101,89 @@ const Topics = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-        {/* <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" /> */}
-        {renderHeader()}
-        <View style={styles.containerProgress}>
-          <ProgressBar isStatic={true} value={75} />
-        </View>
-        <View>
-          <Text style={styles.textPickYourTopic}>
-            Pick your topics of interest
-          </Text>
-          <Text style={styles.textGetPersonalContent}>
-            Find like-minded people
-          </Text>
-        </View>
+      {/* <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" /> */}
+      {renderHeader()}
+      <View style={styles.containerProgress}>
+        <ProgressBar isStatic={true} value={75} />
+      </View>
+      <View>
+        <Text style={styles.textPickYourTopic}>
+          {StringConstant.onboardingTopicsHeadline}
+        </Text>
+        <Text style={styles.textGetPersonalContent}>
+          {StringConstant.onboardingTopicsSubHeadline}
+        </Text>
+      </View>
 
-        <ScrollView style={{marginBottom: 100}}>
-          {isLoading ? (
-            <ActivityIndicator size="small" color="#0000ff" />
-          ) : null}
-          {topics !== undefined
-            ? Object.keys(topics).map((attribute, index) => {
-                return (
-                  <View key={index} style={styles.containerTopic}>
-                    <Text style={styles.title}>{attribute}</Text>
-                    <View>
-                      {ChunkArray(topics[attribute], 4).map((val, idx) => {
-                        return (
-                          <ScrollView
-                            showsHorizontalScrollIndicator={false}
-                            key={idx}
-                            style={styles.listTopic}
-                            horizontal={true}>
-                            {val.map((value, i) => {
-                              return (
-                                <TouchableOpacity
-                                  onPress={() =>
-                                    handleSelectedLanguage(value.topic_id)
-                                  }
-                                  key={i}
+      <ScrollView style={{marginBottom: 100}}>
+        {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
+        {topics !== undefined
+          ? Object.keys(topics).map((attribute, index) => {
+              return (
+                <View key={index} style={styles.containerTopic}>
+                  <Text style={styles.title}>{attribute}</Text>
+                  <View>
+                    {ChunkArray(topics[attribute], 4).map((val, idx) => {
+                      return (
+                        <ScrollView
+                          showsHorizontalScrollIndicator={false}
+                          key={idx}
+                          style={styles.listTopic}
+                          horizontal={true}>
+                          {val.map((value, i) => {
+                            return (
+                              <TouchableOpacity
+                                onPress={() =>
+                                  handleSelectedLanguage(value.topic_id)
+                                }
+                                key={i}
+                                style={
+                                  topicSelected.findIndex(
+                                    (data) => data === value.topic_id,
+                                  ) > -1
+                                    ? styles.bgTopicSelectActive
+                                    : styles.bgTopicSelectNotActive
+                                }>
+                                <Text>{value.icon}</Text>
+                                <Text
                                   style={
                                     topicSelected.findIndex(
                                       (data) => data === value.topic_id,
                                     ) > -1
-                                      ? styles.bgTopicSelectActive
-                                      : styles.bgTopicSelectNotActive
+                                      ? styles.textTopicActive
+                                      : styles.textTopicNotActive
                                   }>
-                                  <Text>{value.icon}</Text>
-                                  <Text
-                                    style={
-                                      topicSelected.findIndex(
-                                        (data) => data === value.topic_id,
-                                      ) > -1
-                                        ? styles.textTopicActive
-                                        : styles.textTopicNotActive
-                                    }>
-                                    {value.name}
-                                  </Text>
-                                </TouchableOpacity>
-                              );
-                            })}
-                          </ScrollView>
-                        );
-                      })}
-                    </View>
+                                  {value.name}
+                                </Text>
+                              </TouchableOpacity>
+                            );
+                          })}
+                        </ScrollView>
+                      );
+                    })}
                   </View>
-                );
-              })
-            : null}
-        </ScrollView>
-        <View style={styles.footer}>
-          <Text style={styles.textSmall}>
-            Others cannot see whics topics you're following
-          </Text>
-          <Button
-            onPress={() => next()}
-            disabled={topicSelected.length >= minTopic ? false : true}
-            style={topicSelected.length >= minTopic ? null : styles.button}>
-            {topicSelected.length >= minTopic
-              ? 'NEXT'
-              : `CHOOSE ${minTopic - topicSelected.length} MORE`}
-          </Button>
-        </View>
-      </SafeAreaView>
+                </View>
+              );
+            })
+          : null}
+      </ScrollView>
+      <View style={styles.footer}>
+        <Text
+          style={
+            styles.textSmall
+          }>{`${StringConstant.onboardingTopicsOthersCannotSee}`}</Text>
+        <Button
+          onPress={() => next()}
+          disabled={topicSelected.length >= minTopic ? false : true}
+          style={topicSelected.length >= minTopic ? null : styles.button}>
+          {topicSelected.length >= minTopic
+            ? StringConstant.onboardingTopicsButtonStateNext
+            : StringConstant.onboardingTopicsButtonStateChooseMore(
+                minTopic - topicSelected.length,
+              )}
+        </Button>
+      </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

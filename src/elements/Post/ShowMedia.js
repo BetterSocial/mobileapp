@@ -7,11 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+
 import Icon from 'react-native-vector-icons/AntDesign';
+
 import {ButtonAddMedia} from '../../components/Button';
 import Gap from '../../components/Gap';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 const ShowMedia = ({onRemoveAll, onRemoveItem, onAddMedia, data}) => {
   return (
     <View>

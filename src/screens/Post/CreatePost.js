@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import * as React from 'react';
 import {
   Alert,
   BackHandler,
@@ -9,45 +9,45 @@ import {
   TextInput,
   View,
 } from 'react-native';
+
+import JWTDecode from 'jwt-decode';
+import {useNavigation} from '@react-navigation/core';
+import {showMessage} from 'react-native-flash-message';
+import analytics from '@react-native-firebase/analytics';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
 import Header from '../../components/Header';
 import {Button, ButtonAddMedia} from '../../components/Button';
 import UserProfile from '../../elements/Post/UserProfile';
-import {colors} from '../../utils/colors';
+import SheetCloseBtn from '../../elements/Post/SheetCloseBtn';
+import {createPost, ShowingAudience} from '../../service/post';
 import Gap from '../../components/Gap';
 import ListItem from '../../components/MenuPostItem';
-import MemoIc_hastag from '../../assets/icons/Ic_hastag';
-import Timer from '../../assets/icons/Ic_timer';
-import Location from '../../assets/icons/Ic_location';
-import World from '../../assets/icons/Ic_world';
-import {fonts} from '../../utils/fonts';
+import Loading from '../Loading';
 import SheetMedia from '../../elements/Post/SheetMedia';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ShowMedia from '../../elements/Post/ShowMedia';
 import SheetAddTopic from '../../elements/Post/SheetAddTopic';
 import TopicItem from '../../components/TopicItem';
 import SheetExpiredPost from '../../elements/Post/SheetExpiredPost';
 import SheetGeographic from '../../elements/Post/SheetGeographic';
 import SheetPrivacy from '../../elements/Post/SheetPrivacy';
-import MemoIc_world from '../../assets/icons/Ic_world';
-import MemoIc_user_group from '../../assets/icons/Ic_user_group';
-import SheetCloseBtn from '../../elements/Post/SheetCloseBtn';
-import {useNavigation} from '@react-navigation/core';
-import {createPost, ShowingAudience} from '../../service/post';
-import Loading from '../Loading';
-import {showMessage} from 'react-native-flash-message';
-import analytics from '@react-native-firebase/analytics';
 import CreatePollContainer from '../../elements/Post/CreatePollContainer';
 import {
   MAX_POLLING_ALLOWED,
   MIN_POLLING_ALLOWED,
 } from '../../helpers/constants';
-import {createPollPost} from '../../service/post';
-import {getAccessToken, getToken} from '../../data/local/accessToken';
-import JWTDecode from 'jwt-decode';
 import {getMyProfile} from '../../service/profile';
+import {colors} from '../../utils/colors';
+import MemoIc_hastag from '../../assets/icons/Ic_hastag';
+import Timer from '../../assets/icons/Ic_timer';
+import Location from '../../assets/icons/Ic_location';
+import World from '../../assets/icons/Ic_world';
+import {fonts} from '../../utils/fonts';
+import MemoIc_world from '../../assets/icons/Ic_world';
+import MemoIc_user_group from '../../assets/icons/Ic_user_group';
+import {createPollPost} from '../../service/post';
+import {getAccessToken} from '../../data/local/accessToken';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
-import crashlytics from '@react-native-firebase/crashlytics';
-// import CreatePollContainer from '../../elements/Post/CreatePollContainer';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -56,28 +56,28 @@ function compire(prevProps, nextProps) {
 const CreatePost = () => {
   let defaultPollItem = [{text: ''}, {text: ''}];
   const navigation = useNavigation();
-  const sheetMediaRef = useRef();
-  const sheetTopicRef = useRef();
-  const sheetExpiredRef = useRef();
-  const sheetGeoRef = useRef();
-  const sheetPrivacyRef = useRef();
-  const sheetBackRef = useRef();
+  const sheetMediaRef = React.useRef();
+  const sheetTopicRef = React.useRef();
+  const sheetExpiredRef = React.useRef();
+  const sheetGeoRef = React.useRef();
+  const sheetPrivacyRef = React.useRef();
+  const sheetBackRef = React.useRef();
 
-  const [message, setMessage] = useState('');
-  const [mediaStorage, setMediaStorage] = useState([]);
-  const [topic, setTopic] = useState('');
-  const [listTopic, setListTopic] = useState([]);
-  const [isPollShown, setIsPollShown] = useState(false);
-  const [polls, setPolls] = useState([...defaultPollItem]);
-  const [isPollMultipleChoice, setIsPollMultipleChoice] = useState(false);
-  const [selectedTime, setSelectedTime] = useState({
+  const [message, setMessage] = React.useState('');
+  const [mediaStorage, setMediaStorage] = React.useState([]);
+  const [topic, setTopic] = React.useState('');
+  const [listTopic, setListTopic] = React.useState([]);
+  const [isPollShown, setIsPollShown] = React.useState(false);
+  const [polls, setPolls] = React.useState([...defaultPollItem]);
+  const [isPollMultipleChoice, setIsPollMultipleChoice] = React.useState(false);
+  const [selectedTime, setSelectedTime] = React.useState({
     day: 1,
     hour: 0,
     minute: 0,
   });
 
-  const [expiredSelect, setExpiredSelect] = useState(1);
-  const [postExpired, setPostExpired] = useState([
+  const [expiredSelect, setExpiredSelect] = React.useState(1);
+  const [postExpired, setPostExpired] = React.useState([
     {
       label: '24 hours',
       value: '1',
@@ -111,19 +111,19 @@ const CreatePost = () => {
       },
     },
   ]);
-  // const [geoList, setGeoList] = useState([
+  // const [geoList, setGeoList] = React.useState([
   //   'Everywhere',
   //   'Massachusetts',
   //   'Cambridge',
   // ]);
-  const [geoList, setGeoList] = useState([]);
+  const [geoList, setGeoList] = React.useState([]);
   let location = [
     {
       location_id: 'everywhere',
       neighborhood: 'Everywhere',
     },
   ];
-  const [geoSelect, setGeoSelect] = useState(0);
+  const [geoSelect, setGeoSelect] = React.useState(0);
   let listPrivacy = [
     {
       icon: <MemoIc_world height={16.67} width={16.67} />,
@@ -138,12 +138,12 @@ const CreatePost = () => {
       key: 'people_i_follow',
     },
   ];
-  const [audienceEstimations, setAudienceEstimations] = useState(0);
-  const [privacySelect, setPrivacySelect] = useState(0);
-  const [dataImage, setDataImage] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [typeUser, setTypeUser] = useState(false);
-  const [dataProfile, setDataProfile] = useState({});
+  const [audienceEstimations, setAudienceEstimations] = React.useState(0);
+  const [privacySelect, setPrivacySelect] = React.useState(0);
+  const [dataImage, setDataImage] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [typeUser, setTypeUser] = React.useState(false);
+  const [dataProfile, setDataProfile] = React.useState({});
 
   const fetchMyProfile = async () => {
     setLoading(true);
@@ -171,14 +171,14 @@ const CreatePost = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
+  React.useEffect(() => {
     fetchMyProfile();
     analytics().logScreenView({
       screen_class: 'ChooseUsername',
       screen_name: 'ChooseUsername',
     });
   }, []);
-  useEffect(() => {
+  React.useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', onBack);
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', onBack);
@@ -259,7 +259,9 @@ const CreatePost = () => {
 
   const getReducedPoll = () => {
     let reducedPoll = polls.reduce((acc, current) => {
-      if (current.text !== '') acc.push(current);
+      if (current.text !== '') {
+        acc.push(current);
+      }
       return acc;
     }, []);
 
@@ -350,7 +352,9 @@ const CreatePost = () => {
     }
   };
   const randerComponentMedia = () => {
-    if (isPollShown) return <View />;
+    if (isPollShown) {
+      return <View />;
+    }
     if (mediaStorage.length > 0) {
       return (
         <MemoShowMedia
@@ -381,7 +385,7 @@ const CreatePost = () => {
       (accumulator, current) => accumulator || current.text !== '',
       false,
     );
-    if (isPollNotEmpty)
+    if (isPollNotEmpty) {
       return Alert.alert('Are you sure?', 'This cannot be undone', [
         {text: 'Cancel', style: 'cancel'},
         {
@@ -392,19 +396,23 @@ const CreatePost = () => {
           },
         },
       ]);
-    else {
+    } else {
       setIsPollShown(false);
       setPolls(defaultPollItem);
     }
   };
 
   const addNewPollItem = () => {
-    if (polls.length >= MAX_POLLING_ALLOWED) return;
+    if (polls.length >= MAX_POLLING_ALLOWED) {
+      return;
+    }
     setPolls([...polls, {text: ''}]);
   };
 
   const removeSinglePollByIndex = (index) => {
-    if (polls.length <= MIN_POLLING_ALLOWED) return;
+    if (polls.length <= MIN_POLLING_ALLOWED) {
+      return;
+    }
     polls.splice(index, 1);
     setPolls([...polls]);
   };
@@ -515,8 +523,6 @@ const CreatePost = () => {
           placeholder={
             'What’s on your mind?\nRemember to be respectful .\nDownvotes  & Blocks harm all your posts’ visibility.'
           }
-          value={message}
-          onChangeText={(value) => setMessage(value)}
         />
 
         {isPollShown && (

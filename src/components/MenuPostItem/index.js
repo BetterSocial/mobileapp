@@ -3,11 +3,10 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
+
 import MemoIc_arrow_right from '../../assets/icons/Ic_arrow_right';
 import {colors} from '../../utils/colors';
 

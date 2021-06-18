@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, Modal, ActivityIndicator} from 'react-native';
+import {StyleSheet, View, Modal, ActivityIndicator} from 'react-native';
 
 const Loading = ({visible}) => {
   return (

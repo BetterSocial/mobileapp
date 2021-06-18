@@ -1,39 +1,40 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import * as React from 'react';
+import {TextInput, ScrollView, StyleSheet, Text, View} from 'react-native';
+
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {Button} from '../../components/Button';
-import TopicItem from '../../components/TopicItem';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
 import KeyEvent from 'react-native-keyevent';
 
-const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
-  const [dataTopic, setTopic] = useState('');
-  const [listTopics, setlistTopics] = useState([]);
-  const [trigger, setTrigger] = useState(-1)
-  let inputRef = useRef();
+import TopicItem from '../../components/TopicItem';
+import {Button} from '../../components/Button';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
-  useEffect(() => {
+const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
+  const [dataTopic, setTopic] = React.useState('');
+  const [listTopics, setlistTopics] = React.useState([]);
+  const [trigger, setTrigger] = React.useState(-1);
+  let inputRef = React.useRef();
+
+  React.useEffect(() => {
     KeyEvent.onKeyUpListener((keyEvent) => {
-      console.log(`key ${keyEvent.keyCode}`)
-      onKeyUp(keyEvent.keyCode)
-    })
+      console.log(`key ${keyEvent.keyCode}`);
+      onKeyUp(keyEvent.keyCode);
+    });
 
     return () => {
-      KeyEvent.removeKeyUpListener()
-    }
-  }, [])
+      KeyEvent.removeKeyUpListener();
+    };
+  }, []);
 
-  useEffect(() => {
-    add()
-  }, [trigger])
+  React.useEffect(() => {
+    add();
+  }, [trigger]);
 
   const onKeyUp = (keycode) => {
-    if(keycode === 62) {
-      setTrigger(new Date().valueOf())
+    if (keycode === 62) {
+      setTrigger(new Date().valueOf());
     }
-  }
+  };
 
   const add = () => {
     let data = dataTopic.replace(/\s/g, '').toLowerCase();
@@ -126,13 +127,13 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
                   style={{width: '100%', paddingStart: 0}}
                   onSubmitEditing={() => add()}
                   value={dataTopic}
-                  onChangeText={(v) => setTopic(v)}
-                  autoCapitalize="none"
-                  onKeyPress={({nativeEvent}) => {
-                    // console.log(`a${nativeEvent.key}b`)
-                    // if (nativeEvent.key === " ") return add()
-                    // if (nativeEvent.key.trim().length === 0) return add();
+                  onChangeText={(v) => {
+                    if (v.match(/\s+$/gm)) {
+                      return add();
+                    }
+                    setTopic(v);
                   }}
+                  autoCapitalize="none"
                   blurOnSubmit={false}
                 />
               </View>
@@ -154,18 +155,16 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingTop: 20,
-    // paddingBottom: 100,
     paddingBottom: 38,
   },
   content: {
     backgroundColor: colors.lightgrey,
     paddingHorizontal: 16,
     paddingTop: 17,
-    // paddingBottom: 130,
     minHeight: 150,
-    // height: 150,
+
     marginTop: 12,
-    // marginBottom: 44,
+
     borderRadius: 8,
   },
   title: {

@@ -12,7 +12,11 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 import {Avatar} from 'react-native-activity-feed';
+
 import moment from 'moment';
+
+import {Avatar} from 'react-native-activity-feed';
+import {useNavigation} from '@react-navigation/native';
 
 import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
 import {colors} from '../../utils/colors';

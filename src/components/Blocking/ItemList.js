@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
-import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
-import {fonts} from '../../utils/fonts';
+import * as React from 'react';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
 const ItemList = ({label, active, onSelect, id}) => {
-  // add | remove
-  const [type, setType] = useState('add');
+  const [type, setType] = React.useState('add');
   const onActive = () => {
     if (type === 'add') {
       onSelect(id, label, type);

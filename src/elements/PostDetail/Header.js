@@ -1,7 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import {fonts} from '../../utils/fonts';
+
 import Icon from 'react-native-vector-icons/Octicons';
+
+import {fonts} from '../../utils/fonts';
 import Gap from '../../components/Gap';
 
 const Header = ({onSetting, onSearch}) => {

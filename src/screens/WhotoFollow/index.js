@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import * as React from 'react';
 import {
   SafeAreaView,
   View,
@@ -12,44 +12,45 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import {get} from '../../api/server';
-import VirtualizedView from '../../components/VirtualizedView';
-import MyStatusBar from '../../components/StatusBar';
-import {Button} from '../../components/Button';
-import {ProgressBar} from '../../components/ProgressBar';
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import CheckIcon from '../../../assets/icons/check.svg';
-import AddIcon from '../../../assets/icons/add.svg';
-import {Context} from '../../context';
-import {registerUser} from '../../service/users';
+
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
-import Loading from '../Loading';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
+
+import Loading from '../Loading';
+import {get} from '../../api/server';
+import {Button} from '../../components/Button';
+import {ProgressBar} from '../../components/ProgressBar';
+import VirtualizedView from '../../components/VirtualizedView';
+import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import CheckIcon from '../../../assets/icons/check.svg';
+import AddIcon from '../../../assets/icons/add.svg';
+import {registerUser} from '../../service/users';
+import {Context} from '../../context';
 import {
   setAccessToken,
   setRefreshToken,
   setToken,
 } from '../../data/local/accessToken';
-import { colors } from '../../utils/colors';
+import {colors} from '../../utils/colors';
 
 const width = Dimensions.get('screen').width;
 
 const WhotoFollow = () => {
-  const [users, setUsers] = useState([]);
-  const [followed, setFollowed] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [fetchRegister, setFetchRegister] = useState(false);
-  const [topics] = useContext(Context).topics;
-  const [localCommunity] = useContext(Context).localCommunity;
-  const [usersState] = useContext(Context).users;
+  const [users, setUsers] = React.useState([]);
+  const [followed, setFollowed] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [refreshing, setRefreshing] = React.React.useState(false);
+  const [fetchRegister, setFetchRegister] = React.useState(false);
+  const [topics] = React.useContext(Context).topics;
+  const [localCommunity] = React.useContext(Context).localCommunity;
+  const [usersState] = React.useContext(Context).users;
 
   const navigation = useNavigation();
 
-  useEffect(() => {
+  React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'WhotoFollow',
       screen_name: 'onb_select_follows',
@@ -59,7 +60,7 @@ const WhotoFollow = () => {
       .then((res) => {
         setIsLoading(false);
         if (res.status == 200) {
-          console.log(JSON.stringify(res.data.body))
+          console.log(JSON.stringify(res.data.body));
           setUsers(res.data.body);
         }
       })
@@ -72,7 +73,9 @@ const WhotoFollow = () => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+        <TouchableNativeFeedback
+          onPress={() => navigation.goBack()}
+          background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
       );
@@ -153,19 +156,19 @@ const WhotoFollow = () => {
             message: 'Welcome to Better Social',
             // description: 'Choose where to get started',
             type: 'success',
-            color : colors.holytosca
+            backgroundColor: colors.holytosca,
           });
           setTimeout(() => {
             navigation.dispatch(StackActions.replace('HomeTabs'));
           }, 2000);
         } else {
           crashlytics().recordError(new Error(res));
-          if (typeof res.message == 'object') {
+          if (typeof res.message === 'object') {
             showMessage({
               message: res.message[0].message,
               type: 'danger',
             });
-          } else if (typeof res.message == 'string') {
+          } else if (typeof res.message === 'string') {
             showMessage({
               message: res.message,
               type: 'danger',
@@ -174,6 +177,7 @@ const WhotoFollow = () => {
             showMessage({
               message: 'please complete the data',
               type: 'danger',
+              backgroundColor: colors.red,
             });
           }
           console.log('err 1 ', res.message[0].message);
@@ -187,6 +191,7 @@ const WhotoFollow = () => {
         showMessage({
           message: 'please complete the data',
           type: 'danger',
+          backgroundColor: colors.red,
         });
       });
   };
@@ -205,22 +210,24 @@ const WhotoFollow = () => {
           <Text style={styles.textUsername}>{item.bio ? item.bio : ''}</Text>
         </View>
       </View>
-        <View style={styles.containerButton}>
-          {/* {followed.findIndex((data) => data === item.user_id) > -1 ? ( */}
-          {followed.indexOf(item.user_id) > -1 ? (
-            <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}
-            background={TouchableNativeFeedback.Ripple('#AAF', true, 20)} 
-            style={{width : 18, height : 18}}>
-              <CheckIcon width={32} height={32} fill="#23C5B6" />
+      <View style={styles.containerButton}>
+        {/* {followed.findIndex((data) => data === item.user_id) > -1 ? ( */}
+        {followed.indexOf(item.user_id) > -1 ? (
+          <TouchableNativeFeedback
+            onPress={() => handleSelected(item.user_id)}
+            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}
+            style={{width: 18, height: 18}}>
+            <CheckIcon width={32} height={32} fill="#23C5B6" />
           </TouchableNativeFeedback>
-          ) : (
-            <TouchableNativeFeedback onPress={() => handleSelected(item.user_id)}
-              background={TouchableNativeFeedback.Ripple('#AAF', true, 10)} 
-              style={{width : 10, height : 10}}>
-                <AddIcon width={20} height={20} fill="#000000" />
-            </TouchableNativeFeedback>
-          )}
-        </View>
+        ) : (
+          <TouchableNativeFeedback
+            onPress={() => handleSelected(item.user_id)}
+            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 10)}
+            style={{width: 10, height: 10}}>
+            <AddIcon width={20} height={20} fill="#000000" />
+          </TouchableNativeFeedback>
+        )}
+      </View>
     </View>
   );
 
@@ -233,7 +240,8 @@ const WhotoFollow = () => {
       <View style={styles.content}>
         <Text style={styles.textWhoToFollow}>Who to follow</Text>
         <Text style={styles.textDescription}>
-          Interesting people to follow. You can edit this anytime, and others cannot see who you follow.
+          Interesting people to follow. You can edit this anytime, and others
+          cannot see who you follow.
         </Text>
       </View>
       {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
@@ -434,7 +442,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     lineHeight: 21,
     alignSelf: 'flex-start',
-    textTransform: 'capitalize',
+    // textTransform: 'capitalize',
   },
   textUsername: {
     fontFamily: 'Inter',
@@ -477,7 +485,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     // backgroundColor : 'red',
-    borderRadius : 16,
+    borderRadius: 16,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',

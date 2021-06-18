@@ -1,0 +1,196 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component WriteComment WriteComment renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "borderTopColor": "#C4C4C4",
+      "borderTopWidth": 1,
+      "bottom": 0,
+      "flex": 1,
+      "flexDirection": "row",
+      "paddingHorizontal": 22,
+      "paddingVertical": 10,
+      "position": "absolute",
+      "width": "100%",
+    }
+  }
+>
+  <Image
+    source={
+      Object {
+        "testUri": "../../../src/assets/images/ProfileDefault.png",
+      }
+    }
+    style={
+      Object {
+        "height": 32,
+        "width": 32,
+      }
+    }
+  />
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#F5F5F5",
+        "borderRadius": 5,
+        "flexDirection": "row",
+        "marginEnd": 24,
+        "marginLeft": 10,
+        "paddingHorizontal": 15,
+      }
+    }
+  >
+    <TextInput
+      allowFontScaling={true}
+      multiline={true}
+      onChangeText={[Function]}
+      placeholder="Add a comment"
+      rejectResponderTermination={true}
+      style={
+        Object {
+          "flex": 1,
+        }
+      }
+      underlineColorAndroid="transparent"
+      value="halo"
+    />
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#00ADB5",
+            "borderRadius": 8,
+            "height": 32,
+            "justifyContent": "center",
+            "paddingHorizontal": 16,
+            "paddingVertical": 4,
+            "width": 80,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "white",
+              "fontFamily": "Inter-Regular",
+            }
+          }
+        >
+          Reply
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`component WriteComment WriteComment snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "borderTopColor": "#C4C4C4",
+      "borderTopWidth": 1,
+      "bottom": 0,
+      "flex": 1,
+      "flexDirection": "row",
+      "paddingHorizontal": 22,
+      "paddingVertical": 10,
+      "position": "absolute",
+      "width": "100%",
+    }
+  }
+>
+  <Image
+    source={
+      Object {
+        "testUri": "../../../src/assets/images/ProfileDefault.png",
+      }
+    }
+    style={
+      Object {
+        "height": 32,
+        "width": 32,
+      }
+    }
+  />
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#F5F5F5",
+        "borderRadius": 5,
+        "flexDirection": "row",
+        "marginEnd": 24,
+        "marginLeft": 10,
+        "paddingHorizontal": 15,
+      }
+    }
+  >
+    <Component
+      allowFontScaling={true}
+      multiline={true}
+      onChangeText={[Function]}
+      placeholder="Add a comment"
+      rejectResponderTermination={true}
+      style={
+        Object {
+          "flex": 1,
+        }
+      }
+      underlineColorAndroid="transparent"
+      value="halo"
+    />
+    <ForwardRef
+      onPress={[Function]}
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#00ADB5",
+            "borderRadius": 8,
+            "height": 32,
+            "justifyContent": "center",
+            "paddingHorizontal": 16,
+            "paddingVertical": 4,
+            "width": 80,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "white",
+              "fontFamily": "Inter-Regular",
+            }
+          }
+        >
+          Reply
+        </Text>
+      </View>
+    </ForwardRef>
+  </View>
+</View>
+`;

@@ -1,13 +1,11 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Dimensions, Share} from 'react-native';
+import {StyleSheet, Dimensions, Share} from 'react-native';
+
+import dynamicLinks from '@react-native-firebase/dynamic-links';
+import analytics from '@react-native-firebase/analytics';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
-
-import dynamicLinks from '@react-native-firebase/dynamic-links';
-
-import analytics from '@react-native-firebase/analytics';
-
 import {Card} from '../../components/CardStack';
 import {
   POST_TYPE_POLL,

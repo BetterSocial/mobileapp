@@ -1,9 +1,12 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import IconEn from 'react-native-vector-icons/Entypo';
 import IconIon from 'react-native-vector-icons/Ionicons';
+
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+
 const Profile = () => {
   return (
     <View style={styles.profileContainer}>

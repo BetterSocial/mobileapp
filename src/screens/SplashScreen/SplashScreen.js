@@ -1,31 +1,22 @@
-import analytics from '@react-native-firebase/analytics';
-import {useNavigation} from '@react-navigation/core';
-import jwtDecode from 'jwt-decode';
-import React, {useContext, useEffect, useState} from 'react';
+import * as React from 'react';
 import {Alert, Image, Linking, StyleSheet, View} from 'react-native';
-import {
-  getAccessToken,
-  getUserId,
-  removeLocalStorege,
-  setAccessToken,
-  setRefreshToken,
-} from '../../data/local/accessToken';
-import {getMyProfile, getProfileByUsername} from '../../service/profile';
-import {verifyTokenGetstream, verifyUser} from '../../service/users';
+
+import jwtDecode from 'jwt-decode';
+import {useNavigation} from '@react-navigation/core';
+import analytics from '@react-native-firebase/analytics';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import fetchRemoteConfig from '../../utils/FirebaseUtil';
-import { Context } from '../../context';
-import { SET_DATA_IMAGE } from '../../context/Types';
+
+import {verifyTokenGetstream} from '../../service/users';
+import {getProfileByUsername} from '../../service/profile';
+import {getAccessToken} from '../../data/local/accessToken';
+import StringConstant from '../../utils/string/StringConstant';
 
 const SplashScreen = () => {
-  let context = useContext(Context)
-  let [users, dispatch] = context.users
-
   const navigation = useNavigation();
   const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org';
-  let [isModalShown, setIsModalShown] = useState(false);
+  let [isModalShown, setIsModalShown] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'SplashScreen',
       screen_name: 'Splash Screen',
@@ -57,10 +48,12 @@ const SplashScreen = () => {
   let getDeepLinkUrl = async () => {
     try {
       let selfUserId = await doVerifyUser();
-      let profile = await getMyProfile(selfUserId)
-      dispatch({type : SET_DATA_IMAGE, payload : profile.data.profile_pic_path})
+      // let profile = await getMyProfile(selfUserId)
+      // dispatch({type : SET_DATA_IMAGE, payload : profile.data.profile_pic_path})
       let deepLinkUrl = await Linking.getInitialURL();
-      if (deepLinkUrl === null) return navigateWithoutDeeplink(selfUserId);
+      if (deepLinkUrl === null) {
+        return navigateWithoutDeeplink(selfUserId);
+      }
 
       let match = deepLinkUrl.match(`(?<=${BASE_DEEPLINK_URL_REGEX}\/).+`);
       if (match.length > 0) {
@@ -69,7 +62,11 @@ const SplashScreen = () => {
         let otherProfile = await doGetProfileByUsername(username);
 
         if (!selfUserId || !otherProfile) {
-          if (!otherProfile) Alert.alert(`${username}'s Profile not found`);
+          if (!otherProfile) {
+            Alert.alert(
+              StringConstant.splashScreenDeeplinkGetProfileNotFound(username),
+            );
+          }
           return navigateWithoutDeeplink(selfUserId);
         }
 
@@ -131,7 +128,9 @@ const SplashScreen = () => {
   let doGetProfileByUsername = async (username) => {
     try {
       let response = await getProfileByUsername(username);
-      if (response.code === 200) return response.data;
+      if (response.code === 200) {
+        return response.data;
+      }
       return false;
     } catch (e) {
       return false;
