@@ -1,10 +1,6 @@
 import * as React from 'react';
-<<<<<<< HEAD
-import {View, Text} from 'react-native';
-=======
 import {View, Text, StyleSheet, FlatList} from 'react-native';
 
->>>>>>> 5bc145395ad89ce9a4ed252efa5629c17c9e14fc
 import analytics from '@react-native-firebase/analytics';
 
 import RenderItem from './RenderItem';
