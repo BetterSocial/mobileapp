@@ -32,10 +32,8 @@ const DomainScreen = () => {
   React.useEffect(() => {
     const init = async () => {
       setLoading(true);
-      console.log(item.og.domain);
       let res = await getDetailDomains(item.og.domain);
       if (res.code === 200) {
-        console.log(res.data);
         setData(res.data);
         setLoading(false);
       }

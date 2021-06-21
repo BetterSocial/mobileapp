@@ -7,11 +7,13 @@ import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import theme, {COLORS, FONTS, SIZES} from '../../utils/theme';
 import {colors} from '../../utils/colors';
+import {Footer} from '../../components';
+import {fonts} from '../../utils/fonts';
 
 const RenderItem = ({domain, image}) => {
   const getname = (d) => {
     try {
-      return d.name;
+      return d.domain.name;
     } catch (error) {
       return 'undenfined';
     }
@@ -41,9 +43,9 @@ const RenderItem = ({domain, image}) => {
             style={[styles.image, StyleSheet.absoluteFillObject]}
           />
         </View>
-        <Gap style={{width: 8}} />
+        <Gap width={SIZES.base} />
         <View style={{flex: 1}}>
-          <Text>{name}</Text>
+          <Text style={{...FONTS.h3, color: '#000000'}}>{name}</Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text>{new Date(time).toLocaleDateString()}</Text>
             <View style={styles.point} />
@@ -52,14 +54,21 @@ const RenderItem = ({domain, image}) => {
 
             <MemoPeopleFollow height={16} width={16} />
             <Gap style={{width: 4}} />
-            <Text style={{color: '#828282'}}>12k</Text>
+            <Text
+              style={{
+                color: '#828282',
+                fontFamily: fonts.inter[700],
+                fontWeight: 'bold',
+              }}>
+              12k
+            </Text>
           </View>
           <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
         </View>
-        <View>
+        <View style={{justifyContent: 'center'}}>
           <TouchableOpacity>
             <View style={styles.wrapperText}>
-              <Text style={{fontSize: 24, color: '#00ADB5'}}>+</Text>
+              <Text style={{fontSize: 36, color: COLORS.holyTosca}}>+</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -67,17 +76,27 @@ const RenderItem = ({domain, image}) => {
       <View style={{paddingHorizontal: 16}}>
         <Text style={{...FONTS.h2}}>{content.title}</Text>
       </View>
-      <Gap style={{height: 8}} />
+      <Gap height={SIZES.base} />
       <Image
         source={{uri: content.image}}
         style={{height: SIZES.height * 0.3}}
       />
       <Gap />
-      <Gap style={{height: 16}} />
+      <Gap height={16} />
       <View style={{paddingHorizontal: 16}}>
         <Text>{content.description}</Text>
       </View>
-      <Gap style={{height: 16}} />
+      <Gap height={16} />
+      <View style={styles.wrapperFooter}>
+        <Footer
+          totalComment={0}
+          totalVote={0}
+          onPressShare={() => alert('share')}
+          onPressComment={() => alert('comment')}
+          onPressDownVote={() => alert('down vote')}
+          onPressUpvote={() => alert('upvote')}
+        />
+      </View>
     </View>
   );
 };
@@ -102,8 +121,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     borderColor: '#00ADB5',
-    width: 32,
-    height: 32,
+    width: 36,
+    height: 36,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0.5,
@@ -115,6 +134,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
     marginLeft: 8,
     marginRight: 8,
+  },
+  wrapperFooter: {
+    marginHorizontal: 16,
   },
 });
 

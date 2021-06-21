@@ -166,7 +166,9 @@ const Item = ({
         totalVote={getCountVote(item)}
         totalComment={getCountComment(item)}
         statusVote={voteStatus}
-        isSelf={selfUserId === item.actor.id ? true : false}
+        isSelf={
+          item.anonimity ? false : selfUserId === item.actor.id ? true : false
+        }
       />
     </Card>
   );

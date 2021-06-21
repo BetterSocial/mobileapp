@@ -3,7 +3,7 @@ import {View, Text, Image, StyleSheet} from 'react-native';
 
 import Header from './Header';
 import Content from './Content';
-import Footer from './Footer';
+import {Footer} from '../../components';
 import {COLORS, SIZES} from '../../utils/theme';
 import Gap from '../../components/Gap';
 

@@ -18,7 +18,6 @@ const Footer = ({
   isSelf,
   onPressBlock,
   statusVote,
-  item,
   onPressDownVote,
   onPressUpvote,
   totalVote,
@@ -38,12 +37,12 @@ const Footer = ({
         {isSelf ? (
           <View />
         ) : (
-          <TouchableOpacity onPress={() => onPressBlock(item)}>
+          <TouchableOpacity onPress={onPressBlock}>
             <MemoIc_block_inactive height={18} width={18} />
           </TouchableOpacity>
         )}
 
-        <TouchableOpacity onPress={() => onPressDownVote(item)}>
+        <TouchableOpacity onPress={onPressDownVote}>
           {statusVote === 'downvote' ? (
             <MemoIc_arrow_down_vote_on width={18} height={18} />
           ) : (
@@ -60,7 +59,7 @@ const Footer = ({
           {totalVote}
         </Text>
 
-        <TouchableOpacity onPress={() => onPressUpvote(item)}>
+        <TouchableOpacity onPress={onPressUpvote}>
           {statusVote === 'upvote' ? (
             <MemoIc_arrow_upvote_on width={18} height={18} />
           ) : (
