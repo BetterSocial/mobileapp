@@ -221,7 +221,6 @@ const FeedScreen = (props) => {
                   }}
                   selfUserId={yourselfId}
                   onPressDomain={() => {
-                    console.log('onPress domain');
                     props.navigation.navigate('DomainScreen', {
                       item: item,
                     });
