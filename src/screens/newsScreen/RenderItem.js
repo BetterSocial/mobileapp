@@ -24,7 +24,7 @@ const RenderItem = ({item}) => {
         />
       </View>
       <View style={styles.wrapperFooter}>
-        <Footer item={item} totalComment={0} totalVote={0} />
+        <Footer totalComment={0} totalVote={0} />
       </View>
       <Gap height={8} />
       <View style={{height: 1, width: '100%', backgroundColor: '#C4C4C4'}} />
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: SIZES.base,
     borderRadius: SIZES.radius,
-    borderWidth: 0.3,
+    elevation: 1,
     borderColor: COLORS.gray,
     paddingVertical: SIZES.base,
     marginHorizontal: SIZES.base,
