@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   View,
   StyleSheet,
@@ -9,18 +9,17 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
+
+import {smartRender} from '../../utils/Utils';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 import Gap from '../../components/Gap';
 import Card from '../../components/Card/Card';
 
 const {width: screenWidth} = Dimensions.get('window');
-
-import PropTypes from 'prop-types';
-import {smartRender} from '../../utils/Utils';
 
 const dateFormat = (date) => {
   return date === undefined
@@ -28,7 +27,7 @@ const dateFormat = (date) => {
     : new Date(date).toLocaleDateString();
 };
 
-const ContentLink = ({og, onPress}) => {
+const ContentLink = ({og, onPress, onCardPress}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -47,6 +46,7 @@ const ContentLink = ({og, onPress}) => {
         description: og.description,
         image: og.image,
         url: og.url,
+        onCardPress,
       })}
     </TouchableOpacity>
   );

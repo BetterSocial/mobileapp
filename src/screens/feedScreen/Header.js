@@ -63,48 +63,63 @@ const validationTimer = (timer, duration_feed) => {
   }
 };
 
-const _renderAnonimity = (
+const _renderAnonimity = ({
   time,
   privacy,
   duration_feed,
   expired_at,
   location,
-) => (
-  <View style={styles.rowSpaceBeetwen}>
-    <View style={styles.rowCenter}>
-      <Image
-        source={AnonymousProfile}
-        width={48}
-        height={48}
-        style={styles.imageAnonimity}
-      />
-      <View style={styles.containerFeedProfile}>
-        <Text style={styles.feedUsername}>Anonymous</Text>
-        <View style={styles.containerFeedText}>
-          <Text style={styles.feedDate}>
-            {moment.utc(time).local().fromNow()}
-          </Text>
-          <View style={styles.point} />
-          {privacy === 'Public' ? (
-            <Memoic_globe height={16} width={16} />
-          ) : (
-            <MemoPeopleFollow height={16} width={16} />
-          )}
+  isBackButton,
+}) => {
+  const navigation = useNavigation();
 
-          {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-          {duration_feed !== 'never'
-            ? validationTimer(expired_at, duration_feed)
-            : null}
-          <View style={styles.point} />
-          <Text style={styles.feedDate}>{location}</Text>
+  return (
+    <View style={styles.rowSpaceBeetwen}>
+      <View style={styles.rowCenter}>
+        {isBackButton ? (
+          <View style={{marginEnd: 16}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <MemoIc_arrow_back height={20} width={20} />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+        <Image
+          source={AnonymousProfile}
+          width={48}
+          height={48}
+          style={styles.imageAnonimity}
+        />
+        <View style={styles.containerFeedProfile}>
+          <Text style={styles.feedUsername}>Anonymous</Text>
+          <View style={styles.containerFeedText}>
+            <Text style={styles.feedDate}>
+              {moment.utc(time).local().fromNow()}
+            </Text>
+            <View style={styles.point} />
+            {privacy === 'Public' ? (
+              <Memoic_globe height={16} width={16} />
+            ) : (
+              <MemoPeopleFollow height={16} width={16} />
+            )}
+
+            {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+            {duration_feed !== 'never'
+              ? validationTimer(expired_at, duration_feed)
+              : null}
+            <View style={styles.point} />
+            <Text style={styles.feedDate}>{location}</Text>
+          </View>
         </View>
       </View>
+      <TouchableNativeFeedback>
+        <ElipsisIcon width={18} height={3.94} fill={colors.black} />
+      </TouchableNativeFeedback>
     </View>
-    <TouchableNativeFeedback>
-      <ElipsisIcon width={18} height={3.94} fill={colors.black} />
-    </TouchableNativeFeedback>
-  </View>
-);
+  );
+};
 
 const _renderProfileNormal = ({
   actor,
@@ -214,14 +229,14 @@ const Header = ({props, isBackButton = false}) => {
     props;
 
   if (anonimity) {
-    return _renderAnonimity(
+    return _renderAnonimity({
       time,
       privacy,
       duration_feed,
       expired_at,
       location,
       isBackButton,
-    );
+    });
   } else {
     return _renderProfileNormal({
       actor,

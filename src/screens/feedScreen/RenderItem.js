@@ -134,7 +134,6 @@ const Item = ({
     validationStatusVote();
   }, [item, selfUserId]);
 
-
   // console.log("item.isalreadypolling");
   // console.log(item.isalreadypolling);
 
@@ -158,7 +157,11 @@ const Item = ({
       )}
 
       {item.post_type === POST_TYPE_LINK && (
-        <ContentLink og={item.og} onPress={onPressDomain} />
+        <ContentLink
+          og={item.og}
+          onPress={onPress}
+          onCardPress={onPressDomain}
+        />
       )}
       {item.post_type === POST_TYPE_STANDARD && (
         <Content
