@@ -81,6 +81,9 @@ const PostDetailPage = (props) => {
     initial();
   }, [props]);
 
+  console.log("item in content");
+  console.log(item);
+
   React.useEffect(() => {
     fetchMyProfile();
     // refBlockUser.current.open();
@@ -230,9 +233,15 @@ const PostDetailPage = (props) => {
           <Header props={item} isBackButton={true} />
           {item.post_type === POST_TYPE_POLL && (
             <ContentPoll
+              index={0}
               message={item.message}
               images_url={item.images_url}
               polls={item.pollOptions}
+              onPress={() => {}}
+              pollexpiredat={item.polls_expired_at}
+              multiplechoice={item.multiplechoice}
+              isalreadypolling={item.isalreadypolling}
+              onnewpollfetched={() => {}}
             />
           )}
 

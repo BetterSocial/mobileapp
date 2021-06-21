@@ -8,7 +8,7 @@ const api = axios.create({
   timeout: 3000,
   headers: {'content-type': 'application/json'},
 });
-console.log(api.getUri);
+
 api.interceptors.request.use(
   async (config) => {
     const token = await getAccessToken();

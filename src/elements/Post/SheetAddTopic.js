@@ -17,7 +17,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
 
   React.useEffect(() => {
     KeyEvent.onKeyUpListener((keyEvent) => {
-      console.log(`key ${keyEvent.keyCode}`);
+      // console.log(`key ${keyEvent.keyCode}`);
       onKeyUp(keyEvent.keyCode);
     });
 

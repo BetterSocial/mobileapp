@@ -59,6 +59,21 @@ export const getMainFeed = async (query) => {
     let res = await api.get('/activity/feeds' + query);
     return res.data;
   } catch (err) {
+    console.log(err.response);
     crashlytics().recordError(new Error(err));
+  }
+};
+
+export const inputSingleChoicePoll = async (polling_id, polling_option_id) => {
+  try {
+    let resApi = await api.post('/activity/post/poll/input', {
+      polling_id,
+      polling_option_id,
+    });
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(error.response.data);
+    // console.log(error);
+    return error;
   }
 };

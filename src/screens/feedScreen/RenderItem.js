@@ -103,6 +103,7 @@ const Item = ({
   onPressComment,
   selfUserId,
   onPressDomain,
+  onNewPollFetched,
   index,
 }) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
@@ -133,18 +134,26 @@ const Item = ({
     validationStatusVote();
   }, [item, selfUserId]);
 
+
+  // console.log("item.isalreadypolling");
+  // console.log(item.isalreadypolling);
+
   return (
     <Card style={[styles.container]}>
       <Header props={item} />
 
       {item.post_type === POST_TYPE_POLL && (
         <ContentPoll
+          index={index}
           message={item.message}
           images_url={item.images_url}
           polls={item.pollOptions}
           onPress={onPress}
+          item={item}
           pollexpiredat={item.polls_expired_at}
           multiplechoice={item.multiplechoice}
+          onnewpollfetched={onNewPollFetched}
+          isalreadypolling={item.isalreadypolling}
         />
       )}
 
@@ -180,7 +189,7 @@ function compare(prevProps, nextProps) {
 }
 
 const RenderItem = React.memo(Item, compare);
-export default RenderItem;
+export default Item;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import {
   View,
   StyleSheet,
@@ -13,10 +13,11 @@ import {
 import SeeMore from 'react-native-see-more-inline';
 import {ParallaxImage} from 'react-native-snap-carousel';
 
+import {inputSingleChoicePoll} from '../../service/post';
+import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
 import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
-import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
@@ -41,15 +42,67 @@ const ContentPoll = ({
   images_url,
   polls = [],
   onPress,
+  item,
   multiplechoice = false,
+  onnewpollfetched,
+  isalreadypolling,
   pollexpiredat,
+  index = -1,
 }) => {
   let totalPollCount = polls.reduce((acc, current) => {
     return acc + parseInt(current.counter);
   }, 0);
 
-  let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = useState(-1);
-  let [multipleChoiceSelected, setMultipleChoiceSelected] = useState([1]);
+  let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = React.useState(-1);
+  let [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
+  let [isFetchingResultPoll, setIsFetchingResultPoll] = React.useState(false);
+  let [isAlreadyPolling, setIsAlreadyPolling] = React.useState(isalreadypolling);
+
+  // console.log("item.isalreadypolling content");
+  console.log(item);
+
+  let onSeeResultsClicked = () => {
+    if (isFetchingResultPoll) return;
+    // setIsFetchingResultPoll(true);
+    let newPolls = [...polls];
+    let newItem = {...item};
+
+    if (multiplechoice) {
+      if (multipleChoiceSelected.length === 0) return;
+      setIsAlreadyPolling(true);
+      for (let i = 0; i < multipleChoiceSelected.length; i++) {
+        let changedPollIndex = multipleChoiceSelected[i];
+        let selectedPoll = polls[changedPollIndex];
+        newPolls[changedPollIndex].counter = parseInt(selectedPoll.counter) + 1;
+        inputSingleChoicePoll(
+          selectedPoll.polling_id,
+          selectedPoll.polling_option_id,
+        );
+      }
+      newItem.isalreadypolling = true;
+      newItem.refreshtoken = new Date().valueOf();
+      newItem.pollOptions = newPolls;
+      onnewpollfetched(newItem, index);
+      setIsAlreadyPolling(true);
+    } else {
+      if (singleChoiceSelectedIndex === -1) return;
+      let selectedPoll = polls[singleChoiceSelectedIndex];
+      newPolls[singleChoiceSelectedIndex].counter = parseInt(selectedPoll.counter) + 1;
+      newItem.isalreadypolling = true;
+      newItem.refreshtoken = new Date().valueOf();
+      newItem.pollOptions = newPolls;
+      onnewpollfetched(newItem, index);
+      setIsAlreadyPolling(true);
+      inputSingleChoicePoll(
+        selectedPoll.polling_id,
+        selectedPoll.polling_option_id,
+      );
+    }
+  };
+
+  let showSetResultsButton = () => {
+    return !isPollExpired(pollexpiredat) && !isAlreadyPolling;
+  };
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.contentFeed}>
@@ -105,6 +158,7 @@ const ContentPoll = ({
                       setMultipleChoiceSelected(indexes);
                     }}
                     isexpired={isPollExpired(pollexpiredat)}
+                    isalreadypolling={isAlreadyPolling}
                     total={totalPollCount}
                   />
                 ) : (
@@ -114,6 +168,7 @@ const ContentPoll = ({
                     selectedindex={singleChoiceSelectedIndex}
                     total={totalPollCount}
                     isexpired={isPollExpired(pollexpiredat)}
+                    isalreadypolling={isAlreadyPolling}
                     onselected={(index) => setSingleChoiceSelectedIndex(index)}
                   />
                 );
@@ -136,11 +191,15 @@ const ContentPoll = ({
                 pollexpiredat,
               )}`}</Text>
 
-              <View style={styles.seeresultscontainer}>
-                <TouchableOpacity>
-                  <Text style={styles.seeresultstext}>See Results</Text>
-                </TouchableOpacity>
-              </View>
+              {showSetResultsButton() && (
+                <View style={styles.seeresultscontainer}>
+                  <TouchableOpacity onPress={onSeeResultsClicked}>
+                    <Text style={styles.seeresultstext}>
+                      {isFetchingResultPoll ? 'Loading...' : 'See Results'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           </View>
         )

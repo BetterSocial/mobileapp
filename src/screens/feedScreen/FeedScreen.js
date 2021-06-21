@@ -35,6 +35,7 @@ const FeedScreen = (props) => {
   const [lastId, setLastId] = React.useState('');
   const [selectedPost, setSelectedPost] = React.useState({});
   const [yourselfId, setYourselfId] = React.useState('');
+  const [rerender, setRerender] = React.useState(0);
 
   const refBlockUser = React.useRef();
   const refBlockDomain = React.useRef();
@@ -100,6 +101,8 @@ const FeedScreen = (props) => {
             query = '?id_lt=' + id;
           }
           const dataFeeds = await getMainFeed(query);
+          console.log('dataFeeds');
+          console.log(dataFeeds);
           if (dataFeeds.data.length > 0) {
             let data = dataFeeds.data;
             setCountStack(data.length);
@@ -122,6 +125,7 @@ const FeedScreen = (props) => {
       screen_name: 'Feed Screen',
     });
   }, []);
+
   const setDataToState = (value) => {
     if (value.anonimity === true) {
       setUsername('Anonymous');
@@ -162,6 +166,12 @@ const FeedScreen = (props) => {
     parseToken();
   }, []);
 
+  let onNewPollFetched = (newPolls, index) => {
+    let newMainFeeds = [...mainFeeds];
+    newMainFeeds[index] = newPolls;
+    setMainFeeds(newMainFeeds);
+  };
+
   if (initialLoading === true) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -195,10 +205,14 @@ const FeedScreen = (props) => {
             ? mainFeeds.map((item, index) => (
                 <RenderItem
                   index={index}
-                  key={index}
+                  key={`${index}${item.refreshtoken ? item.refreshtoken : ''}`}
                   item={item}
+                  onNewPollFetched={onNewPollFetched}
                   onPress={() => {
-                    props.navigation.navigate('PostDetailPage', {item: item});
+                    props.navigation.navigate('PostDetailPage', {
+                      item: mainFeeds[index],
+                      isalreadypolling: item.isalreadypolling,
+                    });
                   }}
                   onPressBlock={(value) => {
                     if (value.actor.id === yourselfId) {

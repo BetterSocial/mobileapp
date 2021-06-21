@@ -10,14 +10,19 @@ let PollOptions = ({
   total,
   selectedindex,
   isexpired = false,
+  isalreadypolling = false,
   onselected = (index) => {},
 }) => {
-  let optionPercentage = total === 0 ? 0 : item.counter / total;
+  let optionPercentage = total === 0 ? 0 : (item.counter / total) * 100;
+
+  let isPollDisabled = () => isexpired || isalreadypolling;
+  let onPollPressed = () => {
+    if (isalreadypolling) return;
+    onselected(index);
+  };
 
   return (
-    <TouchableNativeFeedback
-      onPress={() => onselected(index)}
-      disabled={isexpired}>
+    <TouchableNativeFeedback onPress={onPollPressed}>
       <View
         key={`poll-options-${index}`}
         style={
@@ -27,7 +32,7 @@ let PollOptions = ({
         }>
         <View style={styles.percentageBar(optionPercentage)} />
         <View style={styles.pollOptionTextContainer}>
-          {isexpired ? (
+          {isPollDisabled() ? (
             <></>
           ) : (
             <View
@@ -41,7 +46,10 @@ let PollOptions = ({
           <Text style={styles.pollOptionItemText(isexpired)}>
             {item.option}
           </Text>
-          {/* <Text style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text> */}
+          <Text
+            style={
+              styles.pollOptionItemPercentage
+            }>{`${optionPercentage}%`}</Text>
         </View>
       </View>
     </TouchableNativeFeedback>
