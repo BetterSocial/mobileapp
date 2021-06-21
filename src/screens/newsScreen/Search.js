@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../assets/icons/Ic_search';
+import {fonts} from '../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 
 const Search = ({onPress}) => {
@@ -16,11 +17,11 @@ const Search = ({onPress}) => {
       <View style={styles.wrapperSearch}>
         <TextInput
           multiline={false}
-          placeholder={'Search Better'}
+          placeholder={'Search News'}
           style={styles.input}
         />
         <View style={styles.wrapperIcon}>
-          <MemoIc_search width={20} height={20} />
+          <MemoIc_search width={22} height={22} />
         </View>
       </View>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
     height: 46,
     backgroundColor: 'white',
     marginBottom: SIZES.base,
+    marginHorizontal: SIZES.base,
   },
   wrapperSearch: {
     flex: 3,
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.radius,
   },
   wrapperButton: {
-    flex: 1,
+    flex: 1.5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -56,7 +58,8 @@ const styles = StyleSheet.create({
   input: {
     marginHorizontal: 16,
     flex: 1,
-    paddingStart: 16,
+    paddingStart: 20,
+    fontFamily: fonts.inter[400],
   },
   wrapperIcon: {
     position: 'absolute',
