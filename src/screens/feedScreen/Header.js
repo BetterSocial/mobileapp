@@ -20,6 +20,8 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import PropsTypes from 'prop-types';
 
+import {calculateTime} from '../../utils/time';
+
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
@@ -34,10 +36,7 @@ import MemoOne from '../../assets/timer/One';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-const getTime = (time) => {
-  let date = new Date(time);
-  return date.toLocaleDateString();
-};
+const getTime = (date) => calculateTime(date);
 
 const validationTimer = (timer, duration_feed) => {
   let date1 = new Date(timer);
@@ -82,9 +81,7 @@ const _renderAnonimity = (
       <View style={styles.containerFeedProfile}>
         <Text style={styles.feedUsername}>Anonymous</Text>
         <View style={styles.containerFeedText}>
-          <Text style={styles.feedDate}>
-            {moment.utc(time).local().fromNow()}
-          </Text>
+          <Text style={styles.feedDate}>{getTime(time)}</Text>
           <View style={styles.point} />
           {privacy === 'Public' ? (
             <Memoic_globe height={16} width={16} />
@@ -145,9 +142,7 @@ const _renderProfileNormal = (
             {real_name ? real_name : 'no name specifics'}
           </Text>
           <View style={styles.containerFeedText}>
-            <Text style={styles.feedDate}>
-              {moment.utc(time).local().fromNow()}
-            </Text>
+            <Text style={styles.feedDate}>{getTime(time)}</Text>
             <View style={styles.point} />
             {privacy === 'Public' ? (
               <Memoic_globe height={16} width={16} />
@@ -171,15 +166,8 @@ const _renderProfileNormal = (
   );
 };
 const Header = ({props, isBackButton = false}) => {
-  let {
-    anonimity,
-    time,
-    privacy,
-    duration_feed,
-    expired_at,
-    location,
-    actor,
-  } = props;
+  let {anonimity, time, privacy, duration_feed, expired_at, location, actor} =
+    props;
   if (anonimity) {
     return _renderAnonimity(
       time,

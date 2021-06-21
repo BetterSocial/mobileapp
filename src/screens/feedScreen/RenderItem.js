@@ -113,7 +113,6 @@ const Item = ({
           let upvote = item.latest_reactions.upvotes.filter(
             (vote) => vote.user_id === selfUserId,
           );
-          console.log(upvote);
           if (upvote !== undefined) {
             setVoteStatus('upvote');
           }
@@ -123,7 +122,6 @@ const Item = ({
           let downvotes = item.latest_reactions.downvotes.filter(
             (vote) => vote.user_id === selfUserId,
           );
-          console.log(downvotes);
           if (downvotes !== undefined) {
             setVoteStatus('downvote');
           }
