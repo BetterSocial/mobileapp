@@ -62,14 +62,8 @@ const validationTimer = (timer, duration_feed) => {
 
 const RenderActivity = (props) => {
   const activity = props.activity;
-  let {
-    anonimity,
-    privacy,
-    location,
-    expired_at,
-    duration_feed,
-    message,
-  } = activity;
+  let {anonimity, privacy, location, expired_at, duration_feed, message} =
+    activity;
   let {username} = props.activity.actor.data;
   let {profile_pic_path, real_name} = JSON.parse(activity.object);
 

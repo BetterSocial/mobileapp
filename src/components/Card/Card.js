@@ -48,7 +48,7 @@ const Card = (props) => {
       </View>
       <Gap style={{width: 8}} />
       <View style={styles.headerDomainDateContainer}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={}>
           <Text style={styles.cardHeaderDomainName}>{domain}</Text>
           <View style={styles.point} />
           <Text style={styles.cardHeaderDate}>{date}</Text>
@@ -77,13 +77,7 @@ const Card = (props) => {
             <Gap style={{width: 2}} />
             <Text
               onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
-              style={{
-                color: '#2f80ed',
-                textDecorationLine: 'underline',
-                marginStart: 8,
-                fontFamily: 'bold',
-                fontSize: 12,
-              }}>
+              style={styles.openLinkText}>
               Open Link
             </Text>
           </Text>
@@ -133,6 +127,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginLeft: 8,
   },
+  headerDomainDateRowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   image: {
     width: '100%',
     height: 135,
@@ -180,6 +178,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#828282',
     fontFamily: fonts.inter[200],
+  },
+  openLinkText: {
+    color: '#2f80ed',
+    textDecorationLine: 'underline',
+    marginStart: 8,
+    fontFamily: 'bold',
+    fontSize: 12,
   },
 });
 
