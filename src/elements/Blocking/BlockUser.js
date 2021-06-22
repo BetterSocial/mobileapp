@@ -32,17 +32,9 @@ const BlockUser = ({refBlockUser, onSelect, username}) => {
         ref={refBlockUser}
         closeOnDragDown={true}
         closeOnPressMask={true}
-        // openDuration={250}
         customStyles={{
-          container: {
-            height: 'auto',
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 20,
-          },
-          draggableIcon: {
-            backgroundColor: colors.alto,
-            width: 60,
-          },
+          container: styles.container,
+          draggableIcon: styles.draggableIcon,
         }}>
         <Text style={styles.title}>What do you want to do?</Text>
         <Text style={styles.desc}>
@@ -81,5 +73,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 21,
     marginTop: 17,
     marginBottom: 29,
+  },
+  container: {
+    height: 'auto',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+  },
+  draggableIcon: {
+    backgroundColor: colors.alto,
+    width: 60,
   },
 });

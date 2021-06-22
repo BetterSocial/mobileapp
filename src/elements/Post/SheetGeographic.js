@@ -14,13 +14,8 @@ const SheetGeographic = ({geoRef, data, select, onSelect}) => {
       closeOnDragDown={true}
       closeOnPressMask={true}
       customStyles={{
-        container: {
-          borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
-        },
-        draggableIcon: {
-          backgroundColor: colors.alto,
-        },
+        container: styles.containerSheet,
+        draggableIcon: styles.draggableIcon,
       }}>
       <View style={styles.container}>
         <Text style={styles.header}>Where is this post relevant</Text>
@@ -51,5 +46,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     paddingHorizontal: 20,
+  },
+  containerSheet: {
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+  },
+  draggableIcon: {
+    backgroundColor: colors.alto,
   },
 });

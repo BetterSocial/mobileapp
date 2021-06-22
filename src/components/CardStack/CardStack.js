@@ -6,6 +6,7 @@ import {
   Dimensions,
   Text,
   Platform,
+  StyleSheet,
 } from 'react-native';
 
 import PropTypes from 'prop-types';
@@ -463,27 +464,13 @@ class CardStack extends React.Component {
     return (
       <View
         {...this._panResponder.panHandlers}
-        style={[{position: 'relative'}, this.props.style]}>
+        style={[styles.container, this.props.style]}>
         {renderNoMoreCards()}
 
         <Animated.View
           {...this._setPointerEvents(topCard, 'cardB')}
           style={[
-            {
-              position: 'absolute',
-              zIndex: topCard === 'cardB' ? 3 : 2,
-              ...Platform.select({
-                android: {
-                  elevation: topCard === 'cardB' ? 3 : 2,
-                },
-              }),
-              transform: [
-                {rotate: topCard === 'cardB' ? rotate : '0deg'},
-                {translateX: topCard === 'cardB' ? drag.x : 0},
-                {translateY: topCard === 'cardB' ? drag.y : 0},
-                {scale: topCard === 'cardB' ? 1 : scale},
-              ],
-            },
+            styles.cardStyle('cardB', topCard, rotate, scale, drag),
             this.props.cardContainerStyle,
           ]}>
           {cardB}
@@ -491,21 +478,7 @@ class CardStack extends React.Component {
         <Animated.View
           {...this._setPointerEvents(topCard, 'cardA')}
           style={[
-            {
-              position: 'absolute',
-              zIndex: topCard === 'cardA' ? 3 : 2,
-              ...Platform.select({
-                android: {
-                  elevation: topCard === 'cardA' ? 3 : 2,
-                },
-              }),
-              transform: [
-                {rotate: topCard === 'cardA' ? rotate : '0deg'},
-                {translateX: topCard === 'cardA' ? drag.x : 0},
-                {translateY: topCard === 'cardA' ? drag.y : 0},
-                {scale: topCard === 'cardA' ? 1 : scale},
-              ],
-            },
+            styles.cardStyle('cardA', topCard, rotate, scale, drag),
             this.props.cardContainerStyle,
           ]}>
           {cardA}
@@ -586,4 +559,24 @@ CardStack.defaultProps = {
   duration: 300,
 };
 polyfill(CardStack);
+
+const styles = StyleSheet.create({
+  container: {position: 'relative'},
+  cardStyle: (cardLabel, topCard, rotate, scale, drag) => ({
+    position: 'absolute',
+    zIndex: topCard === cardLabel ? 3 : 2,
+    ...Platform.select({
+      android: {
+        elevation: topCard === cardLabel ? 3 : 2,
+      },
+    }),
+    transform: [
+      {rotate: topCard === cardLabel ? rotate : '0deg'},
+      {translateX: topCard === cardLabel ? drag.x : 0},
+      {translateY: topCard === cardLabel ? drag.y : 0},
+      {scale: topCard === cardLabel ? 1 : scale},
+    ],
+  }),
+});
+
 export default CardStack;

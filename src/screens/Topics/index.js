@@ -49,7 +49,7 @@ const Topics = () => {
           setTopics(res.data.body);
         }
       })
-      .catch((err) => {
+      .catch(() => {
         setIsLoading(false);
       });
   }, []);
@@ -115,7 +115,7 @@ const Topics = () => {
         </Text>
       </View>
 
-      <ScrollView style={{marginBottom: 100}}>
+      <ScrollView style={styles.scrollViewStyle}>
         {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
         {topics !== undefined
           ? Object.keys(topics).map((attribute, index) => {
@@ -187,6 +187,7 @@ const Topics = () => {
   );
 };
 const styles = StyleSheet.create({
+  scrollViewStyle: {marginBottom: 100},
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

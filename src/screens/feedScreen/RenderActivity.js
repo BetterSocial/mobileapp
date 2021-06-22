@@ -207,8 +207,8 @@ const RenderActivity = (props) => {
         //   </View>
         // }
         Footer={
-          <View style={{...styles.rowSpaceBeetwen, marginTop: 23}}>
-            <View style={{...styles.rowSpaceBeetwen, width: 70}}>
+          <View style={[styles.rowSpaceBeetwen, styles.container]}>
+            <View style={[styles.rowSpaceBeetwen, styles.width(70)]}>
               <TouchableOpacity>
                 <MemoIc_share height={20} width={20} />
               </TouchableOpacity>
@@ -216,7 +216,7 @@ const RenderActivity = (props) => {
                 <MemoIc_comment height={20} width={20} />
               </TouchableOpacity>
             </View>
-            <View style={{...styles.rowSpaceBeetwen, width: 90}}>
+            <View style={[styles.rowSpaceBeetwen, styles.width(70)]}>
               <TouchableOpacity>
                 <MemoIc_block_inactive height={18} width={18} />
               </TouchableOpacity>
@@ -238,6 +238,12 @@ const RenderActivity = (props) => {
 export default RenderActivity;
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 23,
+  },
+  width: (width) => ({
+    width,
+  }),
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',

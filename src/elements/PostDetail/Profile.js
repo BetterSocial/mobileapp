@@ -15,11 +15,7 @@ const Profile = () => {
           source={require('../../assets/images/ProfileDefault.png')}
           style={styles.profileImage}
         />
-        <View
-          style={{
-            marginLeft: 10,
-            justifyContent: 'center',
-          }}>
+        <View style={styles.content}>
           <Text style={styles.username}>ayaka_kaminari</Text>
           <Text style={styles.desc}>
             35d ego . <IconIon name="globe-outline" />
@@ -38,6 +34,10 @@ const Profile = () => {
 export default Profile;
 
 const styles = StyleSheet.create({
+  content: {
+    marginLeft: 10,
+    justifyContent: 'center',
+  },
   profileImage: {
     height: 48,
     width: 48,

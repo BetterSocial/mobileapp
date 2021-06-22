@@ -404,7 +404,7 @@ const ProfileScreen = () => {
                   <View style={styles.header}>
                     <Text style={styles.textUsername}>{dataMain.username}</Text>
                     <View style={styles.wrapHeaderButton}>
-                      <View style={{marginRight: 20}}>
+                      <View style={styles.btnShare}>
                         <TouchableNativeFeedback onPress={onShare}>
                           <ShareIcon
                             width={20}
@@ -446,7 +446,7 @@ const ProfileScreen = () => {
                           <MemoIcAddCircle
                             width={48}
                             height={48}
-                            style={{position: 'absolute', top: 25, left: 25}}
+                            style={styles.addCircle}
                           />
                         ) : (
                           <></>
@@ -461,14 +461,14 @@ const ProfileScreen = () => {
                       </Text>
                     </TouchableNativeFeedback> */}
                   </View>
-                  <View style={{...styles.wrapFollower, marginTop: 12}}>
+                  <View style={styles.wrapFollower}>
                     <View style={styles.wrapRow}>
                       <Text style={styles.textTotal}>
                         {dataMain.follower_symbol}
                       </Text>
                       <Text style={styles.textFollow}>Followers</Text>
                     </View>
-                    <View style={{marginLeft: 18}}>
+                    <View style={styles.following}>
                       <TouchableNativeFeedback
                         onPress={() =>
                           goToFollowings(dataMain.user_id, dataMain.username)
@@ -653,6 +653,7 @@ const styles = StyleSheet.create({
   wrapFollower: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 12,
   },
   wrapRow: {
     flexDirection: 'row',
@@ -676,5 +677,8 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 100,
   },
+  btnShare: {marginRight: 20},
+  addCircle: {position: 'absolute', top: 25, left: 25},
+  following: {marginLeft: 18},
 });
 export default ProfileScreen;

@@ -117,7 +117,7 @@ const PostDetailPage = (props) => {
       message: messageReport,
     };
     let result = await blockUser(data);
-    if (result.code == 200) {
+    if (result.code === 200) {
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -248,7 +248,7 @@ const PostDetailPage = (props) => {
             />
           )}
 
-          <Gap style={{height: 16}} />
+          <Gap style={styles.gap} />
           <Footer
             item={item}
             totalComment={totalComment}
@@ -344,4 +344,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 16,
   },
+  gap: {height: 16},
 });

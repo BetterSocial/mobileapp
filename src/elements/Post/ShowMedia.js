@@ -27,7 +27,7 @@ const ShowMedia = ({onRemoveAll, onRemoveItem, onAddMedia, data}) => {
               labelStyle={styles.btnIcon}
             />
           )}
-          <Gap style={{width: 8}} />
+          <Gap style={styles.gap} />
           {data.map((item) => (
             <ShowImage key={item.id} data={item} onPress={onRemoveItem} />
           ))}
@@ -94,4 +94,5 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: -14,
   },
+  gap: {width: 8},
 });

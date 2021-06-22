@@ -16,7 +16,7 @@ const Header = ({title, onPress, titleStyle = {}, containerStyle = {}}) => {
     if (Platform.OS === 'android') {
       return (
         <TouchableNativeFeedback onPress={onPress}>
-          <View style={{padding: 10, marginLeft: -4}}>
+          <View style={styles.content(-4)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
         </TouchableNativeFeedback>
@@ -24,7 +24,7 @@ const Header = ({title, onPress, titleStyle = {}, containerStyle = {}}) => {
     } else {
       return (
         <TouchableHighlight onPress={onPress}>
-          <View style={{padding: 10, marginLeft: -8}}>
+          <View style={styles.content(-8)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
         </TouchableHighlight>
@@ -35,7 +35,7 @@ const Header = ({title, onPress, titleStyle = {}, containerStyle = {}}) => {
     <View style={{...styles.container, ...containerStyle}}>
       {renderHeader()}
       <Text style={{...styles.text, ...titleStyle}}>{title}</Text>
-      <View style={{width: 20, height: 12}} />
+      <View style={styles.gap} />
     </View>
   );
 };
@@ -48,6 +48,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  content: (marginLeft) => ({
+    padding: 10,
+    marginLeft: marginLeft,
+  }),
   text: {
     color: colors.black,
     fontFamily: fonts.poppins[600],
@@ -55,4 +59,5 @@ const styles = StyleSheet.create({
     marginLeft: -20,
     fontWeight: 'bold',
   },
+  gap: {width: 20, height: 12},
 });

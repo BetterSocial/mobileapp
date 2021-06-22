@@ -27,11 +27,7 @@ const Content = ({message, images_url, style, onPress}) => {
     <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
       {images_url !== null && images_url !== '' && images_url !== undefined ? (
         images_url.length > 0 ? (
-          <View
-            style={{
-              flex: 1,
-              paddingBottom: 16,
-            }}>
+          <View style={styles.container}>
             <SeeMore
               seeLessText={' '}
               numberOfLines={4}
@@ -40,7 +36,7 @@ const Content = ({message, images_url, style, onPress}) => {
             </SeeMore>
             <Gap height={16} />
             <FlatList
-              style={{flex: 1}}
+              style={styles.fletlist}
               horizontal={true}
               pagingEnabled={true}
               data={images_url}
@@ -48,11 +44,7 @@ const Content = ({message, images_url, style, onPress}) => {
                 return (
                   <Image
                     source={{uri: item}}
-                    style={{
-                      flex: 1,
-                      width: screenWidth - 32,
-                      borderRadius: 16,
-                    }}
+                    style={styles.imageList}
                     resizeMode={'cover'}
                   />
                 );
@@ -61,12 +53,7 @@ const Content = ({message, images_url, style, onPress}) => {
             />
           </View>
         ) : (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: 1,
-            }}>
+          <View style={styles.containerShowMessage}>
             <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
               {message}
             </SeeMore>
@@ -87,6 +74,21 @@ Content.propTypes = {
 export default Content;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingBottom: 16,
+  },
+  fletlist: {flex: 1},
+  imageList: {
+    flex: 1,
+    width: screenWidth - 32,
+    borderRadius: 16,
+  },
+  containerShowMessage: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
