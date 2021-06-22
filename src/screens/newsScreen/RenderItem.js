@@ -6,8 +6,42 @@ import Content from './Content';
 import {Footer} from '../../components';
 import {COLORS, SIZES} from '../../utils/theme';
 import Gap from '../../components/Gap';
+import {getCountComment, getCountVote} from '../../utils/getstream';
 
-const RenderItem = ({item}) => {
+const RenderItem = ({
+  item,
+  onPressShare = () => {},
+  onPressComment = () => {},
+  onPressBlock = () => {},
+  onPressDownVote = () => {},
+  onPressUpvote = () => {},
+  selfUserId,
+}) => {
+  const [voteStatus, setVoteStatus] = React.useState('none');
+  React.useEffect(() => {
+    const validationStatusVote = () => {
+      if (item.reaction_counts !== undefined || null) {
+        if (item.latest_reactions.upvotes !== undefined) {
+          let upvote = item.latest_reactions.upvotes.filter(
+            (vote) => vote.user_id === selfUserId,
+          );
+          if (upvote !== undefined) {
+            setVoteStatus('upvote');
+          }
+        }
+
+        if (item.latest_reactions.downvotes !== undefined) {
+          let downvotes = item.latest_reactions.downvotes.filter(
+            (vote) => vote.user_id === selfUserId,
+          );
+          if (downvotes !== undefined) {
+            setVoteStatus('downvote');
+          }
+        }
+      }
+    };
+    validationStatusVote();
+  }, [item, selfUserId]);
   return (
     <View>
       <View style={styles.container}>
@@ -24,7 +58,16 @@ const RenderItem = ({item}) => {
         />
       </View>
       <View style={styles.wrapperFooter}>
-        <Footer totalComment={0} totalVote={0} />
+        <Footer
+          totalComment={getCountComment(item)}
+          totalVote={getCountVote(item)}
+          onPressShare={() => onPressShare(item)}
+          onPressComment={() => onPressComment(item)}
+          onPressBlock={() => onPressBlock(item)}
+          onPressDownVote={() => onPressDownVote(item)}
+          onPressUpvote={() => onPressUpvote(item)}
+          statusVote={voteStatus}
+        />
       </View>
       <Gap height={8} />
       <View style={{height: 1, width: '100%', backgroundColor: '#C4C4C4'}} />
