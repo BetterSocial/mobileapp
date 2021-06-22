@@ -20,7 +20,7 @@ import {get} from '../../api/server';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
-import {ChunkArray} from '../../helpers/ChunkArray';
+import {ChunkArray} from '../../utils/array/ChunkArray';
 import {ProgressBar} from '../../components/ProgressBar';
 import StringConstant from '../../utils/string/StringConstant';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';

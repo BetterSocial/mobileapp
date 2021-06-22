@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   ChannelListScreen,
   FeedScreen,
@@ -13,41 +13,34 @@ import MemoHome from '../assets/icon/Home';
 import MemoFeed from '../assets/icon/Feed';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
-import { Context } from '../context';
 import jwtDecode from 'jwt-decode';
-import { getAccessToken } from '../data/local/accessToken';
-import { getMyProfile } from '../service/profile';
+import {getAccessToken} from '../utils/token';
+import {getMyProfile} from '../service/profile';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs() {
   // let context = useContext(Context)
   // let [users] = context.users
-  let [profilePic, setProfilePic] = useState(null)
+  let [profilePic, setProfilePic] = useState(null);
 
-    useEffect(() => {
-      let getProfile = async() => {
-        try {
-          let token = await getAccessToken()
-          let selfUserId = await jwtDecode(token).user_id
-          let profile = await getMyProfile(selfUserId)
-          setProfilePic(profile.data.profile_pic_path)
-        } catch(e) {
-          console.log(e)
-        }
+  useEffect(() => {
+    let getProfile = async () => {
+      try {
+        let token = await getAccessToken();
+        let selfUserId = await jwtDecode(token).user_id;
+        let profile = await getMyProfile(selfUserId);
+        setProfilePic(profile.data.profile_pic_path);
+      } catch (e) {
+        console.log(e);
       }
+    };
 
-      getProfile()
-    }, [])
+    getProfile();
+  }, []);
 
-  const customTabBarStyle = {
-    activeTintColor: '#23C5B6',
-    inactiveTintColor: 'gray',
-    style: {backgroundColor: 'white'},
-  };
   return (
     <Tab.Navigator
-      tabBarOptions={customTabBarStyle}
       tabBarOptions={{
         showLabel: true,
         activeTintColor: colors.holytosca,
@@ -99,7 +92,7 @@ function HomeBottomTabs() {
         component={ProfileScreen}
         options={{
           activeTintColor: colors.holytosca,
-          tabBarIcon: ({focused}) => <MemoProfileIcon uri={profilePic}/>,
+          tabBarIcon: ({focused}) => <MemoProfileIcon uri={profilePic} />,
         }}
       />
     </Tab.Navigator>

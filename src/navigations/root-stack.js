@@ -1,6 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
-import Home from '../screens/HomeTest';
 import ChooseUsername from '../screens/Onboarding/ChooseUsername';
 import SignIn from '../screens/SignIn/SignIn';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
@@ -80,11 +79,6 @@ const RootStact = () => {
       <Stack.Screen
         name="WhotoFollow"
         component={WhotoFollow}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Home"
-        component={Home}
         options={{headerShown: false}}
       />
       <Stack.Screen

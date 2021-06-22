@@ -29,11 +29,7 @@ import CheckIcon from '../../../assets/icons/check.svg';
 import AddIcon from '../../../assets/icons/add.svg';
 import {registerUser} from '../../service/users';
 import {Context} from '../../context';
-import {
-  setAccessToken,
-  setRefreshToken,
-  setToken,
-} from '../../data/local/accessToken';
+import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
 import {colors} from '../../utils/colors';
 
 const width = Dimensions.get('screen').width;

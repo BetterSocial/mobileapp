@@ -21,7 +21,6 @@ import analytics from '@react-native-firebase/analytics';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-
 import {
   getMyProfile,
   changeRealName,
@@ -39,10 +38,9 @@ import SettingIcon from '../../assets/icons/images/setting.svg';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
-import {getToken} from '../../helpers/getToken';
-import {trimString} from '../../helpers/stringSplit';
-import {getAccessToken} from '../../data/local/accessToken';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../helpers/constants';
+import {trimString} from '../../utils/string/TrimString';
+import {getAccessToken} from '../../utils/token';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 
 const width = Dimensions.get('screen').width;
@@ -89,12 +87,11 @@ const ProfileScreen = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     fetchMyProfile(true);
 
-    getToken().then((val) => {
+    getAccessToken().then((val) => {
       setTokenJwt(val);
       setRerender(rerender++);
       setRerender(rerender++);
     });
-    // setToken()
     analytics().logScreenView({
       screen_class: 'ProfileScreen',
       screen_name: 'ProfileScreen',
@@ -380,12 +377,6 @@ const ProfileScreen = () => {
       </TouchableNativeFeedback>
     );
   };
-
-  // getToken().then((val) => {
-  //   setTokenJwt(val);
-  //   setRerender(rerender++)
-  //   setRerender(rerender++)
-  // });
 
   return (
     <>

@@ -21,7 +21,7 @@ import {
   setAccessToken,
   setRefreshToken,
   removeLocalStorege,
-} from '../../data/local/accessToken';
+} from '../../utils/token';
 import {Context} from '../../context';
 import {fonts} from '../../utils/fonts';
 import {checkToken} from '../../service/outh';

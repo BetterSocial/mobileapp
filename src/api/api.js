@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL, BASE_URL_DEV} from '@env';
-import {getAccessToken} from '../data/local/accessToken';
+import {getAccessToken} from '../utils/token';
 
 const api = axios.create({
   baseURL: BASE_URL,

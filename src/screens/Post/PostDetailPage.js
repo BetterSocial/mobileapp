@@ -2,7 +2,7 @@ import * as React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
 
 import JWTDecode from 'jwt-decode';
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 import Toast from 'react-native-simple-toast';
 
 import Gap from '../../components/Gap';
