@@ -13,9 +13,9 @@ import {useNavigation} from '@react-navigation/core';
 import VersionNumber from 'react-native-version-number';
 import analytics from '@react-native-firebase/analytics';
 
-import Header from '../../components/Header';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
+import Header from '../../components/Header';
 import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 
 const width = Dimensions.get('screen').width;
@@ -41,7 +41,7 @@ const Settings = () => {
           </View>
           <Text style={styles.textSettings}>Settings</Text>
         </View> */}
-        <View style={{padding: 16}}>
+        <View style={styles.containerHeader}>
           <Header title="Settings" onPress={() => navigation.goBack()} />
         </View>
         <View style={styles.content}>
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
+  containerHeader: {padding: 16},
   header: {
     flexDirection: 'row',
     justifyContent: 'center',

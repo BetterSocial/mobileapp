@@ -274,14 +274,14 @@ const OtherProfile = () => {
                       {params.data.full_name}
                     </Text>
                   </View>
-                  <View style={{...styles.wrapFollower, marginTop: 12}}>
+                  <View style={styles.wrapFollower}>
                     <View style={styles.wrapRow}>
                       <Text style={styles.textTotal}>
                         {dataMain.follower_symbol}
                       </Text>
                       <Text style={styles.textFollow}>Followers</Text>
                     </View>
-                    <View style={{marginLeft: 18}}>
+                    <View style={styles.following}>
                       <View style={styles.wrapRow}>
                         <Text style={styles.textTotal}>
                           {dataMain.following_symbol}
@@ -342,6 +342,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  following: {marginLeft: 18},
   textUsername: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
@@ -370,6 +371,7 @@ const styles = StyleSheet.create({
   wrapFollower: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 12,
   },
   wrapRow: {
     flexDirection: 'row',

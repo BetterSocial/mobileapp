@@ -136,7 +136,7 @@ const _renderProfileNormal = (
     <View style={styles.rowSpaceBeetwen}>
       <View style={styles.rowCenter}>
         {isBackButton ? (
-          <View style={{marginEnd: 16}}>
+          <View style={styles.btn}>
             <TouchableOpacity
               onPress={() => {
                 navigation.goBack();
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft: 13,
   },
-
+  btn: {marginEnd: 16},
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',

@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     bottom: 60,
     right: 20,
   },
-  content: {},
   text: {
     fontFamily: fonts.inter[500],
     color: '#fff',

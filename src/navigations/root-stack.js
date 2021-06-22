@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, StyleSheet} from 'react-native';
 
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -96,12 +96,8 @@ const RootStact = () => {
             return (
               <Header
                 title="Who you're following"
-                containerStyle={{
-                  backgroundColor: colors.white,
-                  padding: 20,
-                  paddingBottom: 10,
-                }}
-                titleStyle={{fontSize: 16, fontFamily: fonts.inter[600]}}
+                containerStyle={styles.header}
+                titleStyle={styles.title}
                 onPress={() => navigation.goBack()}
               />
             );
@@ -139,3 +135,11 @@ const RootStact = () => {
 };
 
 export default RootStact;
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: colors.white,
+    padding: 20,
+    paddingBottom: 10,
+  },
+  title: {fontSize: 16, fontFamily: fonts.inter[600]},
+});

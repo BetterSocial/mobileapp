@@ -86,12 +86,12 @@ const renderActivity = (props, data) => {
               hasParallaxImages={true}
             />
           ) : null}
-          <View style={{...styles.rowSpaceBeetwen, marginTop: 23}}>
-            <View style={{...styles.rowSpaceBeetwen, width: 70}}>
+          <View style={styles.rowSpaceBeetwen(0, 23)}>
+            <View style={styles.rowSpaceBeetwen(70, 0)}>
               <ArrowUpIcon width={20} height={16} fill={colors.black} />
               <ArrowDownRedIcon width={20} height={16} fill="#FF2E63" />
             </View>
-            <View style={{...styles.rowSpaceBeetwen, width: 70}}>
+            <View style={styles.rowSpaceBeetwen(70, 0)}>
               <CommentIcon width={20} height={18} fill={colors.black} />
               <ShareIcon width={20} height={20} fill={colors.black} />
             </View>
@@ -118,11 +118,13 @@ const renderActivity = (props, data) => {
 };
 
 const styles = StyleSheet.create({
-  rowSpaceBeetwen: {
+  rowSpaceBeetwen: (width, marginTop) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
+    width: width,
+    marginTop: marginTop,
+  }),
   rowCenter: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, SafeAreaView} from 'react-native';
+import {View, SafeAreaView, StyleSheet} from 'react-native';
 
 import {useFocusEffect} from '@react-navigation/native';
 import JWTDecode from 'jwt-decode';
@@ -164,22 +164,17 @@ const FeedScreen = (props) => {
 
   if (initialLoading === true) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.containerLoading}>
         <Loading visible={initialLoading} />
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={{flex: 1}} forceInset={{top: 'always'}}>
+    <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
       {mainFeeds !== undefined && (
         <CardStack
-          style={{
-            flex: 5,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-          }}
+          style={styles.content}
           renderNoMoreCards={() => {
             // setInit();
             // setLoading(true);
@@ -275,3 +270,13 @@ const FeedScreen = (props) => {
 };
 
 export default FeedScreen;
+const styles = StyleSheet.create({
+  container: {flex: 1},
+  content: {
+    flex: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+  },
+  containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+});

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Text} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 
 import jwtDecode from 'jwt-decode';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -49,14 +49,7 @@ function HomeBottomTabs() {
         return {
           activeTintColor: colors.holytosca,
           tabBarLabel: () => (
-            <Text
-              style={{
-                fontSize: 6,
-                color: colors.holytosca,
-                marginTop: -12,
-                marginBottom: 5,
-                alignSelf: 'center',
-              }}>
+            <Text style={styles.label}>
               {navigation.isFocused() ? '\u2B24' : ''}
             </Text>
           ),
@@ -99,3 +92,12 @@ function HomeBottomTabs() {
 }
 
 export default HomeBottomTabs;
+const styles = StyleSheet.create({
+  label: {
+    fontSize: 6,
+    color: colors.holytosca,
+    marginTop: -12,
+    marginBottom: 5,
+    alignSelf: 'center',
+  },
+});
