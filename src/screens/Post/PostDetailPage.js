@@ -238,6 +238,7 @@ const PostDetailPage = (props) => {
               images_url={item.images_url}
               polls={item.pollOptions}
               onPress={() => {}}
+              item={item}
               pollexpiredat={item.polls_expired_at}
               multiplechoice={item.multiplechoice}
               isalreadypolling={item.isalreadypolling}

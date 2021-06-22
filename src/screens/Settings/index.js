@@ -71,6 +71,13 @@ const Settings = () => {
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
           </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            onPress={() => navigation.navigate('SignIn')}>
+            <View style={styles.card}>
+              <Text style={styles.textCard}>Logout</Text>
+              <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
+            </View>
+          </TouchableNativeFeedback>
         </View>
         <View style={styles.footer}>
           <Text

@@ -5,7 +5,8 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 let PollOptions = ({
-  item,
+  mypoll,
+  poll,
   index,
   total,
   selectedindex,
@@ -13,13 +14,18 @@ let PollOptions = ({
   isalreadypolling = false,
   onselected = (index) => {},
 }) => {
-  let optionPercentage = total === 0 ? 0 : (item.counter / total) * 100;
+  let optionPercentage = total === 0 ? 0 : (poll.counter / total) * 100;
 
   let isPollDisabled = () => isexpired || isalreadypolling;
   let onPollPressed = () => {
     if (isalreadypolling) return;
     onselected(index);
   };
+
+  let isMyPoll = () => mypoll.polling_option_id === poll.polling_option_id;
+  console.log(mypoll);
+  console.log("vs " + isMyPoll());
+  console.log(poll);
 
   return (
     <TouchableNativeFeedback onPress={onPollPressed}>
@@ -30,7 +36,7 @@ let PollOptions = ({
             ? styles.pollOptionItemContainerActive
             : styles.pollOptionItemContainer
         }>
-        <View style={styles.percentageBar(optionPercentage)} />
+        <View style={styles.percentageBar(optionPercentage, isMyPoll())} />
         <View style={styles.pollOptionTextContainer}>
           {isPollDisabled() ? (
             <></>
@@ -44,7 +50,7 @@ let PollOptions = ({
             />
           )}
           <Text style={styles.pollOptionItemText(isexpired)}>
-            {item.option}
+            {poll.option}
           </Text>
           <Text
             style={
@@ -93,7 +99,7 @@ let styles = StyleSheet.create({
     };
   },
   pollOptionItemPercentage: {},
-  percentageBar: (percent) => {
+  percentageBar: (percent, isMyPoll = false) => {
     if (!percent) percent = 0;
     if (percent > 100) percent = 100;
 
@@ -103,7 +109,7 @@ let styles = StyleSheet.create({
       position: 'absolute',
       top: 0,
       left: 0,
-      backgroundColor: colors.bondi_blue,
+      backgroundColor: isMyPoll ? colors.bondi_blue : colors.gray1,
     };
   },
   totalpolltext: {

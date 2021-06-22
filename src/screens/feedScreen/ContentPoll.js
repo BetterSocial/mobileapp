@@ -58,9 +58,6 @@ const ContentPoll = ({
   let [isFetchingResultPoll, setIsFetchingResultPoll] = React.useState(false);
   let [isAlreadyPolling, setIsAlreadyPolling] = React.useState(isalreadypolling);
 
-  // console.log("item.isalreadypolling content");
-  console.log(item);
-
   let onSeeResultsClicked = () => {
     if (isFetchingResultPoll) return;
     // setIsFetchingResultPoll(true);
@@ -70,10 +67,12 @@ const ContentPoll = ({
     if (multiplechoice) {
       if (multipleChoiceSelected.length === 0) return;
       setIsAlreadyPolling(true);
+      let selectedPolls = [];
       for (let i = 0; i < multipleChoiceSelected.length; i++) {
         let changedPollIndex = multipleChoiceSelected[i];
         let selectedPoll = polls[changedPollIndex];
         newPolls[changedPollIndex].counter = parseInt(selectedPoll.counter) + 1;
+        selectedPolls.push(selectedPoll);
         inputSingleChoicePoll(
           selectedPoll.polling_id,
           selectedPoll.polling_option_id,
@@ -82,6 +81,7 @@ const ContentPoll = ({
       newItem.isalreadypolling = true;
       newItem.refreshtoken = new Date().valueOf();
       newItem.pollOptions = newPolls;
+      newItem.mypolling = selectedPolls;
       onnewpollfetched(newItem, index);
       setIsAlreadyPolling(true);
     } else {
@@ -91,6 +91,7 @@ const ContentPoll = ({
       newItem.isalreadypolling = true;
       newItem.refreshtoken = new Date().valueOf();
       newItem.pollOptions = newPolls;
+      newItem.mypolling = selectedPoll;
       onnewpollfetched(newItem, index);
       setIsAlreadyPolling(true);
       inputSingleChoicePoll(
@@ -144,15 +145,19 @@ const ContentPoll = ({
             </SeeMore>
 
             <View style={styles.pollOptionsContainer}>
-              {polls.map((item, index) => {
+              {polls.map((pollItem, index) => {
                 /*
                   TODO : Count percentage
                 */
 
+                console.log("item");
+                console.log(item);
+
                 return multiplechoice ? (
                   <PollOptionsMultipleChoice
-                    item={item}
+                    item={pollItem}
                     index={index}
+                    mypoll={item.mypolling}
                     selectedindex={multipleChoiceSelected}
                     onselected={(indexes) => {
                       setMultipleChoiceSelected(indexes);
@@ -163,7 +168,8 @@ const ContentPoll = ({
                   />
                 ) : (
                   <PollOptions
-                    item={item}
+                    poll={pollItem}
+                    mypoll={item.mypolling}
                     index={index}
                     selectedindex={singleChoiceSelectedIndex}
                     total={totalPollCount}

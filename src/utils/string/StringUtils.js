@@ -16,7 +16,7 @@ let getPollTime = (pollExpiredAtString) => {
   if (diff > 0) {
     if (diffInDays > 0) return `${diffInDays}d left`;
     if (diffInHours > 0) return `${diffInHours}h ${diffInMinutes % 60}m left`;
-    else `${diffInMinutes % 60}m left`;
+    else return `${diffInMinutes % 60}m left`;
   }
   // Poll ended
   else {

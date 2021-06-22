@@ -6,6 +6,7 @@ import {fonts} from '../../utils/fonts';
 
 let PollOptionsMultipleChoice = ({
   item,
+  mypoll,
   index,
   total,
   selectedindex,
@@ -13,11 +14,21 @@ let PollOptionsMultipleChoice = ({
   isalreadypolling = false,
   onselected = (index) => {},
 }) => {
-  let optionPercentage = total === 0 ? 0 : (item.counter / total) * 100;
+  let optionPercentage = total === 0 ? 0 : ((item.counter / total) * 100).toFixed(0);
 
   let isPollDisabled = () => isalreadypolling || isexpired;
 
   let selected = selectedindex.includes(index);
+
+  let isMyPoll = () => {
+    return mypoll.reduce((acc, current) => {
+      let isCurrentItemMyPoll =
+        item.polling_option_id === current.polling_option_id;
+      return acc || isCurrentItemMyPoll;
+    }, false);
+  };
+
+  // console.log(isMyPoll());
 
   let onOptionsClicked = () => {
     if (isPollDisabled()) return;
@@ -48,7 +59,13 @@ let PollOptionsMultipleChoice = ({
             ? styles.pollOptionItemContainerActive
             : styles.pollOptionItemContainer
         }>
-        <View style={styles.percentageBar(optionPercentage)} />
+        <View
+          style={styles.percentageBar(
+            optionPercentage,
+            isMyPoll(),
+            isPollDisabled(),
+          )}
+        />
         <View style={styles.pollOptionTextContainer}>
           {/* <View
                 style={
@@ -131,9 +148,11 @@ let styles = StyleSheet.create({
     // backgroundColor : 'red'
     alignSelf: 'center',
   },
-  percentageBar: (percent) => {
+  percentageBar: (percent, isMyPoll = false, isPollDisabled = false) => {
     if (!percent) percent = 0;
     if (percent > 100) percent = 100;
+
+    if (!isPollDisabled) percent = 0;
 
     return {
       width: `${percent}%`,
@@ -141,7 +160,7 @@ let styles = StyleSheet.create({
       position: 'absolute',
       top: 0,
       left: 0,
-      backgroundColor: colors.bondi_blue,
+      backgroundColor: isMyPoll ? colors.bondi_blue : colors.gray1,
     };
   },
   totalpolltext: {
