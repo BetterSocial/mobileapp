@@ -15,10 +15,10 @@ import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import PropsTypes from 'prop-types';
 
-import {getAccessToken} from '../../data/local/accessToken';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
+import {getAccessToken} from '../../utils/token';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import Memoic_globe from '../../assets/icons/ic_globe';

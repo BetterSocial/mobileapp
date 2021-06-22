@@ -48,7 +48,7 @@ const Card = (props) => {
       </View>
       <Gap style={{width: 8}} />
       <View style={styles.headerDomainDateContainer}>
-        <View style={}>
+        <View style={styles.headerDomainDateRowContainer}>
           <Text style={styles.cardHeaderDomainName}>{domain}</Text>
           <View style={styles.point} />
           <Text style={styles.cardHeaderDate}>{date}</Text>
