@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {TextInput, View, StyleSheet} from 'react-native';
 
 import SearchIcon from '../../../assets/icons/search.svg';

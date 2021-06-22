@@ -1,30 +1,29 @@
+import * as React from 'react';
+import {Text} from 'react-native';
+
+import jwtDecode from 'jwt-decode';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useContext, useEffect, useState} from 'react';
+
 import {
   ChannelListScreen,
   FeedScreen,
   NewsScreen,
   ProfileScreen,
 } from '../screens';
-
 import {colors} from '../utils/colors';
-import {Text} from 'react-native';
 import MemoHome from '../assets/icon/Home';
 import MemoFeed from '../assets/icon/Feed';
 import MemoNews from '../assets/icon/News';
-import MemoProfileIcon from '../assets/icon/Profile';
-import jwtDecode from 'jwt-decode';
 import {getAccessToken} from '../utils/token';
 import {getMyProfile} from '../service/profile';
+import MemoProfileIcon from '../assets/icon/Profile';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs() {
-  // let context = useContext(Context)
-  // let [users] = context.users
-  let [profilePic, setProfilePic] = useState(null);
+  let [profilePic, setProfilePic] = React.useState(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     let getProfile = async () => {
       try {
         let token = await getAccessToken();
