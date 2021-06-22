@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, SafeAreaView} from 'react-native';
+import {View, SafeAreaView, StyleSheet} from 'react-native';
 
 import {useFocusEffect} from '@react-navigation/native';
 import JWTDecode from 'jwt-decode';
@@ -171,29 +171,15 @@ const FeedScreen = (props) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}} forceInset={{top: 'always'}}>
+    <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
       {mainFeeds !== undefined && (
         <CardStack
-          style={{
-            flex: 5,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-          }}
+          style={styles.cardStack}
           renderNoMoreCards={() => {
-            // setInit();
-            // setLoading(true);
-            // console.log(countStack);
             if (countStack === 0) {
               let id = mainFeeds[mainFeeds.length - 1].id;
-              // getDataFeeds(lastId);
               setLastId(id);
             }
-            // return (
-            //   <Text style={{fontWeight: '700', fontSize: 18, color: 'gray'}}>
-            //     Load more cards :(
-            //   </Text>
-            // );
           }}
           disableTopSwipe={false}
           disableLeftSwipe={true}
@@ -202,19 +188,13 @@ const FeedScreen = (props) => {
           verticalThreshold={1}
           horizontalSwipe={false}
           disableBottomSwipe={true}
-          // onSwipedBottom={() => {
-          //   // this.swiper.goBackFromTop();
-          //   // this.swiper.goBackFromTop();
-          //   setCountStack(countStack + 1);
-          //   // console.log('onSwipeBottom');
-          // }}
           onSwipedTop={() => {
             setCountStack(countStack - 1);
-            // console.log('onSwiped top');
           }}>
           {mainFeeds !== undefined
             ? mainFeeds.map((item, index) => (
                 <RenderItem
+                  index={index}
                   key={index}
                   item={item}
                   onPress={() => {
@@ -238,6 +218,12 @@ const FeedScreen = (props) => {
                   onPressDownVote={(value) => {
                     setSelectedPost(value);
                     setDownVote(value.id);
+                  }}
+                  selfUserId={yourselfId}
+                  onPressDomain={() => {
+                    props.navigation.navigate('DomainScreen', {
+                      item: item,
+                    });
                   }}
                 />
               ))
@@ -273,5 +259,15 @@ const FeedScreen = (props) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  cardStack: {
+    flex: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+  },
+  container: {flex: 1},
+});
 
 export default FeedScreen;
