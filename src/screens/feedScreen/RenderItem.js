@@ -3,15 +3,22 @@ import {StyleSheet, Dimensions, Share} from 'react-native';
 
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
-
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
 import {Card} from '../../components/CardStack';
-import {POST_VERB_POLL} from '../../utils/constants';
+import {
+  POST_TYPE_POLL,
+  POST_TYPE_LINK,
+  POST_TYPE_STANDARD,
+} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
+import {isContainUrl, smartRender} from '../../utils/Utils';
+import ContentLink from './ContentLink';
+
 const {width, height} = Dimensions.get('window');
+
 const getCountVote = (item) => {
   let reactionCount = item.reaction_counts;
   let count = 0;
@@ -94,18 +101,53 @@ const Item = ({
   onPressUpvote,
   onPressDownVote,
   onPressComment,
+  selfUserId,
+  onPressDomain,
+  index,
 }) => {
+  const [voteStatus, setVoteStatus] = React.useState('none');
+  React.useEffect(() => {
+    const validationStatusVote = () => {
+      if (item.reaction_counts !== undefined || null) {
+        if (item.latest_reactions.upvotes !== undefined) {
+          let upvote = item.latest_reactions.upvotes.filter(
+            (vote) => vote.user_id === selfUserId,
+          );
+          if (upvote !== undefined) {
+            setVoteStatus('upvote');
+          }
+        }
+
+        if (item.latest_reactions.downvotes !== undefined) {
+          let downvotes = item.latest_reactions.downvotes.filter(
+            (vote) => vote.user_id === selfUserId,
+          );
+          if (downvotes !== undefined) {
+            setVoteStatus('downvote');
+          }
+        }
+      }
+    };
+    validationStatusVote();
+  }, [item, selfUserId]);
+
   return (
     <Card style={[styles.container]}>
       <Header props={item} />
-      {item.verb === POST_VERB_POLL ? (
+
+      {item.post_type === POST_TYPE_POLL && (
         <ContentPoll
           message={item.message}
           images_url={item.images_url}
           polls={item.pollOptions}
           onPress={onPress}
         />
-      ) : (
+      )}
+
+      {item.post_type === POST_TYPE_LINK && (
+        <ContentLink og={item.og} onPress={onPressDomain} />
+      )}
+      {item.post_type === POST_TYPE_STANDARD && (
         <Content
           message={item.message}
           images_url={item.images_url}
@@ -123,6 +165,8 @@ const Item = ({
         onPressDownVote={onPressDownVote}
         totalVote={getCountVote(item)}
         totalComment={getCountComment(item)}
+        statusVote={voteStatus}
+        isSelf={selfUserId === item.actor.id ? true : false}
       />
     </Card>
   );

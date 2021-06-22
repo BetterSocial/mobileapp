@@ -3,6 +3,7 @@ import {View, Text} from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';
 
+import {getDomains} from '../../service/domain';
 const NewsScreen = (props) => {
   React.useEffect(() => {
     analytics().logScreenView({
@@ -10,6 +11,15 @@ const NewsScreen = (props) => {
       screen_name: 'Feed',
     });
   }, []);
+
+  React.useEffect(() => {
+    const initData = async () => {
+      let data = await getDomains();
+      console.log(data.length);
+    };
+    initData();
+  }, []);
+
   return (
     <View>
       <Text>News Screen</Text>
