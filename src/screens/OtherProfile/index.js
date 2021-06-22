@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   StatusBar,
   SafeAreaView,
@@ -24,9 +24,8 @@ import RenderActivity from './RenderActivity';
 import Loading from '../Loading';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {getToken} from '../../helpers/getToken';
-import {trimString} from '../../helpers/stringSplit';
-import {getAccessToken} from '../../data/local/accessToken';
+import {trimString} from '../../utils/string/TrimString';
+import {getAccessToken} from '../../utils/token';
 import ShareIcon from '../../assets/icons/images/share.svg';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
@@ -58,7 +57,7 @@ const OtherProfile = () => {
 
   React.useEffect(() => {
     let getJwtToken = async () => {
-      setTokenJwt(await getToken());
+      setTokenJwt(await getAccessToken());
     };
 
     getJwtToken();
@@ -275,14 +274,14 @@ const OtherProfile = () => {
                       {params.data.full_name}
                     </Text>
                   </View>
-                  <View style={{...styles.wrapFollower, marginTop: 12}}>
+                  <View style={styles.wrapFollower}>
                     <View style={styles.wrapRow}>
                       <Text style={styles.textTotal}>
                         {dataMain.follower_symbol}
                       </Text>
                       <Text style={styles.textFollow}>Followers</Text>
                     </View>
-                    <View style={{marginLeft: 18}}>
+                    <View style={styles.following}>
                       <View style={styles.wrapRow}>
                         <Text style={styles.textTotal}>
                           {dataMain.following_symbol}
@@ -343,6 +342,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  following: {marginLeft: 18},
   textUsername: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
@@ -371,6 +371,7 @@ const styles = StyleSheet.create({
   wrapFollower: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 12,
   },
   wrapRow: {
     flexDirection: 'row',

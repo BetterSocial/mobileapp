@@ -14,7 +14,7 @@ import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 import jwtDecode from 'jwt-decode';
 
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
 import Loading from '../Loading';
 import {colors} from '../../utils/colors';

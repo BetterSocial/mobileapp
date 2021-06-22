@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -22,13 +22,8 @@ const SheetMedia = ({
       closeOnDragDown={true}
       closeOnPressMask={true}
       customStyles={{
-        container: {
-          borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
-        },
-        draggableIcon: {
-          backgroundColor: colors.alto,
-        },
+        container: styles.containerSheet,
+        draggableIcon: styles.draggableIcon,
       }}>
       <View style={styles.container}>
         {medias.length === 0 && (
@@ -80,5 +75,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.black,
     paddingLeft: 8,
+  },
+  containerSheet: {
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+  },
+  draggableIcon: {
+    backgroundColor: colors.alto,
   },
 });

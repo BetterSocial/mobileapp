@@ -1,7 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const KEY_ACCESS_TOKEN = 'access_token';
-const KEY_REFRESH_TOKEN = 'refresh_token';
+import {KEY_ACCESS_TOKEN, KEY_REFRESH_TOKEN} from '../constants';
 export const setToken = async (value) => {
   try {
     await AsyncStorage.setItem('tkn-getstream', value);

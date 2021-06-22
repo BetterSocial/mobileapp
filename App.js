@@ -1,23 +1,22 @@
-import {NavigationContainer} from '@react-navigation/native';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
-import React, {useEffect, useState} from 'react';
-import 'react-native-gesture-handler';
-import RootStack from './src/navigations/root-stack';
-import {HumanIDProvider} from '@human-id/react-native-humanid';
-import Store from './src/context/Store';
-import FlashMessage from 'react-native-flash-message';
-import fetchRemoteConfig from './src/utils/FirebaseUtil';
-import JWTDecode from 'jwt-decode';
+import * as React from 'react';
 
-import {StreamChat} from 'stream-chat';
-import {STREAM_API_KEY} from '@env';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import JWTDecode from 'jwt-decode';
+import 'react-native-gesture-handler';
+import {StreamChat} from 'stream-chat';
+import FlashMessage from 'react-native-flash-message';
 import {OverlayProvider} from 'stream-chat-react-native';
-import {Linking} from 'react-native';
-import {getAccessToken} from './src/data/local/accessToken';
+import {NavigationContainer} from '@react-navigation/native';
+import {HumanIDProvider} from '@human-id/react-native-humanid';
+
+import {STREAM_API_KEY} from '@env';
+import Store from './src/context/Store';
+import {getAccessToken} from './src/utils/token';
+import RootStack from './src/navigations/root-stack';
+import fetchRemoteConfig from './src/utils/FirebaseUtil';
 
 const AppContext = React.createContext();
 
@@ -26,9 +25,9 @@ const chatClient = new StreamChat(STREAM_API_KEY);
 
 const App = () => {
   const {bottom} = useSafeAreaInsets();
-  const [channel, setChannel] = useState();
+  const [channel, setChannel] = React.useState();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const init = async () => {
       try {
         fetchRemoteConfig();
@@ -39,7 +38,7 @@ const App = () => {
     init();
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const setupClient = async () => {
       try {
         const token = await getAccessToken();
@@ -56,15 +55,6 @@ const App = () => {
 
     setupClient();
   }, []);
-
-  useEffect(() => {
-    // dynamicLinks()
-    //   .getInitialLink()
-    //   .then((link) => {
-    //     console.log('link ', link);
-    //   });
-  }, []);
-
   return (
     <>
       <HumanIDProvider />

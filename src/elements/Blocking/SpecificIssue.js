@@ -22,15 +22,8 @@ const SpecificIssue = ({refSpecificIssue, onPress}) => {
       closeOnDragDown={true}
       closeOnPressMask={true}
       customStyles={{
-        container: {
-          height: 'auto',
-          borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
-        },
-        draggableIcon: {
-          backgroundColor: colors.alto,
-          width: 60,
-        },
+        container: styles.container,
+        draggableIcon: styles.draggableIcon,
       }}>
       <View>
         <Text style={styles.title}>Please specify the issue</Text>
@@ -102,5 +95,14 @@ const styles = StyleSheet.create({
     paddingLeft: 19,
     fontFamily: fonts.inter[400],
     color: colors.gray,
+  },
+  container: {
+    height: 'auto',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+  },
+  draggableIcon: {
+    backgroundColor: colors.alto,
+    width: 60,
   },
 });

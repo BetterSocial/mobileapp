@@ -8,7 +8,7 @@ import analytics from '@react-native-firebase/analytics';
 import {StreamChat} from 'stream-chat';
 const chatClient = new StreamChat(STREAM_API_KEY);
 
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 const sort = {last_message_at: -1};
 
 const ChannelListScreen = ({navigation}) => {

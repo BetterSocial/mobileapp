@@ -23,7 +23,7 @@ const PrivacyPolicies = () => {
         showsVerticalScrollIndicator={false}
         startInLoadingState={true}
         renderLoading={() => (
-          <View style={{flex: 1, position: 'relative'}}>
+          <View style={styles.content}>
             <ActivityIndicator size="large" color="#00ADB5" />
           </View>
         )}
@@ -41,4 +41,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  content: {flex: 1, position: 'relative'},
 });

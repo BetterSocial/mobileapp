@@ -33,7 +33,7 @@ const SearchModal = (props) => {
       swipeDirection={['down']}
       style={styles.view}>
       <View style={styles.container}>
-        <View style={{flex: 1}} />
+        <View style={styles.space} />
         <View style={styles.content}>
           <View style={styles.header}>
             <TouchableNativeFeedback onPress={props.onClose}>
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
   },
+  space: {flex: 1},
   content: {
     backgroundColor: 'white',
     flexDirection: 'column',

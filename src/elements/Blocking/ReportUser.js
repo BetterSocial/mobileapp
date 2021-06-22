@@ -12,7 +12,6 @@ import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 
 import ItemList from '../../components/Blocking/ItemList';
 import {Button} from '../../components/Button';
-import Gap from '../../components/Gap';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
@@ -67,23 +66,14 @@ const ReportUser = ({refReportUser, onSelect, onSkip}) => {
     onSelect(activeLabel);
   };
   return (
-    // <View>
     <RBSheet
       ref={refReportUser}
       closeOnDragDown={true}
       closeOnPressMask={true}
       customStyles={{
-        container: {
-          height: '80%',
-          borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
-        },
-        draggableIcon: {
-          backgroundColor: colors.alto,
-          width: 60,
-        },
+        container: styles.container,
+        draggableIcon: styles.draggableIcon,
       }}>
-      {/* <View style={{flex: 1}}> */}
       <ScrollView nestedScrollEnabled={true}>
         <TouchableOpacity style={styles.btnSkip} onPress={() => onSkip()}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>
@@ -107,11 +97,8 @@ const ReportUser = ({refReportUser, onSelect, onSkip}) => {
             <Text>Provide info on next screen</Text>
           </Button>
         </View>
-        <Gap style={{height: 30}} />
       </ScrollView>
-      {/* </View> */}
     </RBSheet>
-    // </View>
   );
 };
 
@@ -136,6 +123,7 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
     paddingRight: 22,
     paddingTop: 8,
+    marginBottom: 30,
   },
   btnSkip: {
     backgroundColor: '#E0E0E0',
@@ -149,5 +137,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[700],
     fontSize: 14,
     color: '#000',
+  },
+  container: {
+    height: '80%',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+  },
+  draggableIcon: {
+    backgroundColor: colors.alto,
+    width: 60,
   },
 });

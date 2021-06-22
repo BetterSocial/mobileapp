@@ -15,14 +15,8 @@ const BottomSheet = React.forwardRef((props, ref) => {
       closeOnPressMask={props.closeOnPressMask}
       height={props.height ? props.height : 260}
       customStyles={{
-        container: {
-          borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
-          justifyContent: pullBottom ? 'flex-end' : 'flex-start',
-        },
-        draggableIcon: {
-          backgroundColor: colors.alto,
-        },
+        container: styles.containerSheet(pullBottom),
+        draggableIcon: styles.draggableIcon,
       }}>
       <View style={{...styles.container, ...props.viewstyle}}>
         {props.children}
@@ -38,5 +32,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 38,
+  },
+  containerSheet: (pullBottom) => ({
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    justifyContent: pullBottom ? 'flex-end' : 'flex-start',
+  }),
+  draggableIcon: {
+    backgroundColor: colors.alto,
   },
 });

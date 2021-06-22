@@ -92,14 +92,8 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
       closeOnDragDown={true}
       closeOnPressMask={true}
       customStyles={{
-        container: {
-          borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
-          height: 'auto',
-        },
-        draggableIcon: {
-          backgroundColor: colors.alto,
-        },
+        container: styles.containerSheet,
+        draggableIcon: styles.draggableIcon,
       }}>
       <View style={styles.container}>
         <ScrollView
@@ -114,7 +108,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
                     key={index}
                     label={value}
                     removeTopic={removeTopic}
-                    style={{marginBottom: 12}}
+                    style={styles.topicItem}
                   />
                 );
               })}
@@ -124,7 +118,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
                 <Text style={styles.hashtag}>#</Text>
                 <TextInput
                   ref={inputRef}
-                  style={{width: '100%', paddingStart: 0}}
+                  style={styles.input}
                   onSubmitEditing={() => add()}
                   value={dataTopic}
                   onChangeText={(v) => {
@@ -162,9 +156,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 17,
     minHeight: 150,
-
     marginTop: 12,
-
     borderRadius: 8,
   },
   title: {
@@ -209,4 +201,16 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 21,
   },
+  containerSheet: {
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    height: 'auto',
+  },
+  draggableIcon: {
+    backgroundColor: colors.alto,
+  },
+  topicItem: {
+    marginBottom: 12,
+  },
+  input: {width: '100%', paddingStart: 0},
 });

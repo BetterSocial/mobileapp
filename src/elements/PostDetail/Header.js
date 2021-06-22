@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Octicons';
@@ -9,7 +9,7 @@ import Gap from '../../components/Gap';
 const Header = ({onSetting, onSearch}) => {
   return (
     <View style={styles.header}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={styles.content}>
         <Image
           source={require('../../assets/images/ProfileDefault.png')}
           style={styles.image}
@@ -19,8 +19,8 @@ const Header = ({onSetting, onSearch}) => {
         </TouchableOpacity>
       </View>
       <Text style={styles.headerTitle}>Post</Text>
-      <View style={{flexDirection: 'row'}}>
-        <Gap style={{width: 50}} />
+      <View style={styles.content}>
+        <Gap style={styles.gap} />
         <TouchableOpacity style={styles.setting} onPress={onSetting}>
           <Icon name="settings" size={20} />
         </TouchableOpacity>
@@ -37,6 +37,8 @@ const styles = StyleSheet.create({
     width: 32,
     marginRight: 10,
   },
+  gap: {width: 50},
+  content: {flexDirection: 'row'},
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

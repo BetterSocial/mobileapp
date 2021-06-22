@@ -29,11 +29,7 @@ import CheckIcon from '../../../assets/icons/check.svg';
 import AddIcon from '../../../assets/icons/add.svg';
 import {registerUser} from '../../service/users';
 import {Context} from '../../context';
-import {
-  setAccessToken,
-  setRefreshToken,
-  setToken,
-} from '../../data/local/accessToken';
+import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
 import {colors} from '../../utils/colors';
 
 const width = Dimensions.get('screen').width;
@@ -216,14 +212,14 @@ const WhotoFollow = () => {
           <TouchableNativeFeedback
             onPress={() => handleSelected(item.user_id)}
             background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}
-            style={{width: 18, height: 18}}>
+            style={styles.followAction(18, 18)}>
             <CheckIcon width={32} height={32} fill="#23C5B6" />
           </TouchableNativeFeedback>
         ) : (
           <TouchableNativeFeedback
             onPress={() => handleSelected(item.user_id)}
             background={TouchableNativeFeedback.Ripple(colors.gray1, true, 10)}
-            style={{width: 10, height: 10}}>
+            style={styles.followAction(10, 10)}>
             <AddIcon width={20} height={20} fill="#000000" />
           </TouchableNativeFeedback>
         )}
@@ -246,7 +242,7 @@ const WhotoFollow = () => {
       </View>
       {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
       <VirtualizedView
-        style={{marginBottom: 90}}
+        style={styles.listUser}
         onRefresh={onRefresh}
         refreshing={refreshing}>
         {users !== undefined && users.length > 0
@@ -498,6 +494,13 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: '#4F4F4F',
     textTransform: 'capitalize',
+  },
+  followAction: (awidth, height) => ({
+    height,
+    width: awidth,
+  }),
+  listUser: {
+    marginBottom: 90,
   },
 });
 export default WhotoFollow;

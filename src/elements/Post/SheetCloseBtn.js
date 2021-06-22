@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -15,22 +15,16 @@ const SheetCloseBtn = ({backRef, goBack, continueToEdit}) => {
       closeOnDragDown={true}
       closeOnPressMask={true}
       customStyles={{
-        container: {
-          borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
-          height: 240,
-        },
-        draggableIcon: {
-          backgroundColor: colors.alto,
-        },
+        container: styles.containerSheet,
+        draggableIcon: styles.draggableIcon,
       }}>
       <View style={styles.container}>
         <Text style={styles.header}>Are you sure?</Text>
-        <Gap style={{height: 30}} />
+        <Gap style={styles.gap(30)} />
         <Button onPress={continueToEdit}>
           <Text>Continue editing</Text>
         </Button>
-        <Gap style={{height: 10}} />
+        <Gap style={styles.gap(10)} />
         <Button
           onPress={goBack}
           style={{backgroundColor: colors.porcelain}}
@@ -57,4 +51,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   containerBtn: {flexDirection: 'row'},
+  containerSheet: {
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    height: 240,
+  },
+  draggableIcon: {
+    backgroundColor: colors.alto,
+  },
+  gap: (height) => ({
+    height,
+  }),
 });

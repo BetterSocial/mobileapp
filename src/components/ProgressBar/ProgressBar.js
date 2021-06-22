@@ -55,10 +55,7 @@ const ProgressBar = (props) => {
     <View style={styles.container}>
       <View style={styles.progressBar}>
         <Animated.View
-          style={
-            ([StyleSheet.absoluteFill],
-            {backgroundColor: colors.bondi_blue, borderRadius: 5, width})
-          }
+          style={([StyleSheet.absoluteFill], styles.animated(width))}
         />
       </View>
     </View>
@@ -82,4 +79,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.alto,
     borderRadius: 5,
   },
+  animated: (width) => ({
+    backgroundColor: colors.bondi_blue,
+    borderRadius: 5,
+    width,
+  }),
 });
