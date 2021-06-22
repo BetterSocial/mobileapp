@@ -23,7 +23,8 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ChooseUsername from '../screens/Onboarding/ChooseUsername';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
-import DomainFragmentScreen from '../screens/Followings/DomainFragmentScreen';
+import DomainScreen from '../screens/DomainScreen/DomainScreen';
+
 const Stack = createStackNavigator();
 const RootStact = () => {
   React.useEffect(() => {
