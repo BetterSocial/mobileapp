@@ -23,7 +23,7 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ChooseUsername from '../screens/Onboarding/ChooseUsername';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
-
+import DomainFragmentScreen from '../screens/Followings/DomainFragmentScreen';
 const Stack = createStackNavigator();
 const RootStact = () => {
   React.useEffect(() => {
@@ -130,6 +130,11 @@ const RootStact = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen name="ImageViewer" component={ImageViewerScreen} />
+      <Stack.Screen
+        name="DomainScreen"
+        component={DomainFragmentScreen}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };

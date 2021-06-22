@@ -176,19 +176,10 @@ const FeedScreen = (props) => {
         <CardStack
           style={styles.content}
           renderNoMoreCards={() => {
-            // setInit();
-            // setLoading(true);
-            // console.log(countStack);
             if (countStack === 0) {
               let id = mainFeeds[mainFeeds.length - 1].id;
-              // getDataFeeds(lastId);
               setLastId(id);
             }
-            // return (
-            //   <Text style={{fontWeight: '700', fontSize: 18, color: 'gray'}}>
-            //     Load more cards :(
-            //   </Text>
-            // );
           }}
           disableTopSwipe={false}
           disableLeftSwipe={true}
@@ -197,19 +188,13 @@ const FeedScreen = (props) => {
           verticalThreshold={1}
           horizontalSwipe={false}
           disableBottomSwipe={true}
-          // onSwipedBottom={() => {
-          //   // this.swiper.goBackFromTop();
-          //   // this.swiper.goBackFromTop();
-          //   setCountStack(countStack + 1);
-          //   // console.log('onSwipeBottom');
-          // }}
           onSwipedTop={() => {
             setCountStack(countStack - 1);
-            // console.log('onSwiped top');
           }}>
           {mainFeeds !== undefined
             ? mainFeeds.map((item, index) => (
                 <RenderItem
+                  index={index}
                   key={index}
                   item={item}
                   onPress={() => {
@@ -233,6 +218,12 @@ const FeedScreen = (props) => {
                   onPressDownVote={(value) => {
                     setSelectedPost(value);
                     setDownVote(value.id);
+                  }}
+                  selfUserId={yourselfId}
+                  onPressDomain={() => {
+                    props.navigation.navigate('DomainScreen', {
+                      item: item,
+                    });
                   }}
                 />
               ))

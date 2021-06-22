@@ -10,13 +10,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import moment from 'moment';
-import {Avatar} from 'react-native-activity-feed';
 import {useNavigation} from '@react-navigation/native';
+import {Avatar} from 'react-native-activity-feed';
+
+import moment from 'moment';
 
 import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import PropsTypes from 'prop-types';
+
+import {calculateTime} from '../../utils/time';
+
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
@@ -29,14 +34,9 @@ import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
 
-import PropsTypes from 'prop-types';
-
 const {width: screenWidth} = Dimensions.get('window');
 
-const getTime = (time) => {
-  let date = new Date(time);
-  return date.toLocaleDateString();
-};
+const getTime = (date) => calculateTime(date);
 
 const validationTimer = (timer, duration_feed) => {
   let date1 = new Date(timer);
@@ -45,21 +45,6 @@ const validationTimer = (timer, duration_feed) => {
   var hours = Math.abs(date1 - date2) / 36e5;
   let total = (hours / totalFeed) * 100;
   switch (true) {
-    // case total < 25:
-    //   return <MemoZero_twentyFour height={17} width={17} />;
-    // case total < 38:
-    //   return <MemoTwentyFive_thirtySix height={17} width={17} />;
-    // case total < 50:
-    //   return <MemoThirtySeven_fourtyNine height={17} width={17} />;
-    // case total < 63:
-    //   return <MemoFivety_sixtyTwo height={17} width={17} />;
-    // case total < 75:
-    //   return <MemoSixtyThree_seventyFour height={17} width={17} />;
-    // case total < 88:
-    //   return <MemoSeventyFive_eightySeven height={17} width={17} />;
-    // default:
-    //   return <MemoEightyEight_hundred height={17} width={17} />;
-
     case total < 25:
       return <MemoEightyEight_hundred height={17} width={17} />;
     case total < 38:
@@ -89,16 +74,14 @@ const _renderAnonimity = (
     <View style={styles.rowCenter}>
       <Image
         source={AnonymousProfile}
-        width={32}
-        height={32}
+        width={48}
+        height={48}
         style={styles.imageAnonimity}
       />
       <View style={styles.containerFeedProfile}>
         <Text style={styles.feedUsername}>Anonymous</Text>
         <View style={styles.containerFeedText}>
-          <Text style={styles.feedDate}>
-            {moment.utc(time).local().fromNow()}
-          </Text>
+          <Text style={styles.feedDate}>{getTime(time)}</Text>
           <View style={styles.point} />
           {privacy === 'Public' ? (
             <Memoic_globe height={16} width={16} />
@@ -159,9 +142,7 @@ const _renderProfileNormal = (
             {real_name ? real_name : 'no name specifics'}
           </Text>
           <View style={styles.containerFeedText}>
-            <Text style={styles.feedDate}>
-              {moment.utc(time).local().fromNow()}
-            </Text>
+            <Text style={styles.feedDate}>{getTime(time)}</Text>
             <View style={styles.point} />
             {privacy === 'Public' ? (
               <Memoic_globe height={16} width={16} />
@@ -185,15 +166,8 @@ const _renderProfileNormal = (
   );
 };
 const Header = ({props, isBackButton = false}) => {
-  let {
-    anonimity,
-    time,
-    privacy,
-    duration_feed,
-    expired_at,
-    location,
-    actor,
-  } = props;
+  let {anonimity, time, privacy, duration_feed, expired_at, location, actor} =
+    props;
   if (anonimity) {
     return _renderAnonimity(
       time,
@@ -307,8 +281,8 @@ const styles = StyleSheet.create({
   },
   imageAnonimity: {
     marginRight: 8,
-    width: 32,
-    height: 32,
+    width: 48,
+    height: 48,
   },
 });
 

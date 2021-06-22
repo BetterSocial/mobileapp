@@ -13,26 +13,14 @@ import SeeMore from 'react-native-see-more-inline';
 import {ParallaxImage} from 'react-native-snap-carousel';
 
 import Gap from '../../components/Gap';
+import Card from '../../components/Card/Card';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
 import PropTypes from 'prop-types';
-
-const _renderItem = ({item, index}, parallaxProps) => {
-  return (
-    <View key={index} style={styles.item}>
-      <ParallaxImage
-        source={{uri: item}}
-        containerStyle={styles.imageContainer}
-        style={styles.image}
-        parallaxFactor={0.4}
-        {...parallaxProps}
-      />
-    </View>
-  );
-};
+import {isContainUrl, smartRender} from '../../utils/Utils';
 
 const Content = ({message, images_url, style, onPress}) => {
   return (
