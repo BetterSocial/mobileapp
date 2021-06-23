@@ -3,7 +3,7 @@ import {
   setAccessToken,
   setRefreshToken,
   setToken,
-} from '../../src/data/local/accessToken';
+} from '../../src/utils/token';
 import {
   verifyUser,
   verifyUsername,

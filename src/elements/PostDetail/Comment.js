@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import IconEn from 'react-native-vector-icons/Entypo';
@@ -8,25 +8,29 @@ import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {calculateTime} from '../../utils/time';
 
-const Comment = ({username, comment, onPress, isLast = false}) => {
+const Comment = ({username, comment, onPress, isLast = false, time, photo}) => {
   return (
-    <View
-      style={[
-        styles.container,
-        {borderLeftColor: isLast ? '#fFF' : colors.gray1},
-      ]}>
+    <View style={styles.container(isLast)}>
       <View style={styles.profile}>
         <Image
-          source={require('../../assets/images/ProfileDefault.png')}
+          source={
+            photo
+              ? {uri: photo}
+              : require('../../assets/images/ProfileDefault.png')
+          }
           style={styles.image}
         />
-        <Text style={styles.username}>{username}</Text>
+        <View style={styles.containerUsername}>
+          <Text style={styles.username}>{username} •</Text>
+          <Text style={styles.time}> {calculateTime(time)}</Text>
+        </View>
       </View>
       <Text style={styles.post}>{comment}</Text>
       <View style={styles.constainerFooter}>
         {isLast === true ? (
-          <View style={{marginBottom: 8}} />
+          <View style={styles.gap} />
         ) : (
           <TouchableOpacity style={styles.btnReply} onPress={onPress}>
             <IconAnt name="back" size={15.77} color={colors.gray1} />
@@ -55,13 +59,16 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  container: {
+  container: (isLast) => ({
     borderLeftWidth: 1,
-  },
+    borderLeftColor: isLast ? '#fFF' : colors.gray1,
+    paddingBottom: 16,
+  }),
   username: {
-    fontFamily: fonts.inter[600],
+    fontFamily: fonts.inter[700],
     fontSize: 12,
     color: '#828282',
+    lineHeight: 14,
     marginLeft: 17,
   },
   post: {
@@ -95,5 +102,16 @@ const styles = StyleSheet.create({
   },
   arrowup: {
     marginRight: 33.04,
+  },
+  gap: {marginBottom: 8},
+  time: {
+    fontFamily: fonts.inter[400],
+    fontSize: 10,
+    color: '#828282',
+    lineHeight: 12,
+  },
+  containerUsername: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

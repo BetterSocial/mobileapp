@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   View,
   StyleSheet,
@@ -43,11 +43,7 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
     <TouchableOpacity onPress={onPress} style={styles.contentFeed}>
       {images_url !== null ? (
         images_url.length > 0 ? (
-          <View
-            style={{
-              flex: 1,
-              paddingBottom: 16,
-            }}>
+          <View style={styles.container}>
             <SeeMore
               seeLessText={' '}
               numberOfLines={4}
@@ -56,7 +52,7 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
             </SeeMore>
             <Gap height={16} />
             <FlatList
-              style={{flex: 1}}
+              style={styles.fletlist}
               horizontal={true}
               pagingEnabled={true}
               data={images_url}
@@ -64,7 +60,7 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
                 return (
                   <Image
                     source={{uri: item}}
-                    style={{flex: 1, width: screenWidth - 32, borderRadius: 16}}
+                    style={styles.imageList}
                     resizeMode={'cover'}
                   />
                 );
@@ -73,7 +69,7 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
             />
           </View>
         ) : (
-          <View style={{justifyContent: 'center', flex: 1}}>
+          <View style={styles.containerShowMessage}>
             <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
               {`${message}`}
             </SeeMore>
@@ -97,15 +93,7 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
             <View style={styles.totalVotesContainer}>
               <Text
                 style={styles.totalpolltext}>{`${totalPollCount} votes `}</Text>
-              <View
-                style={{
-                  width: 4,
-                  height: 4,
-                  borderRadius: 4,
-                  alignSelf: 'center',
-                  backgroundColor: colors.blackgrey,
-                }}
-              />
+              <View style={styles.dot} />
               <Text style={styles.totalpolltext}>
                 {' 24 hours 34 minutes left'}
               </Text>
@@ -120,6 +108,20 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
 export default ContentPoll;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingBottom: 16,
+  },
+  dot: {
+    width: 4,
+    height: 4,
+    borderRadius: 4,
+    alignSelf: 'center',
+    backgroundColor: colors.blackgrey,
+  },
+  fletlist: {flex: 1},
+  containerShowMessage: {justifyContent: 'center', flex: 1},
+  imageList: {flex: 1, width: screenWidth - 32, borderRadius: 16},
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   SafeAreaView,
   View,
@@ -20,7 +20,7 @@ import {get} from '../../api/server';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
-import {ChunkArray} from '../../helpers/ChunkArray';
+import {ChunkArray} from '../../utils/array/ChunkArray';
 import {ProgressBar} from '../../components/ProgressBar';
 import StringConstant from '../../utils/string/StringConstant';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
@@ -49,7 +49,7 @@ const Topics = () => {
           setTopics(res.data.body);
         }
       })
-      .catch((err) => {
+      .catch(() => {
         setIsLoading(false);
       });
   }, []);
@@ -115,7 +115,7 @@ const Topics = () => {
         </Text>
       </View>
 
-      <ScrollView style={{marginBottom: 100}}>
+      <ScrollView style={styles.scrollViewStyle}>
         {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
         {topics !== undefined
           ? Object.keys(topics).map((attribute, index) => {
@@ -187,6 +187,7 @@ const Topics = () => {
   );
 };
 const styles = StyleSheet.create({
+  scrollViewStyle: {marginBottom: 100},
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

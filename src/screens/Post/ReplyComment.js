@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
@@ -28,20 +28,19 @@ const ReplyComment = (props) => {
   }, [item]);
 
   const createComment = async () => {
-    if (textComment === '') {
-      Alert.alert('warning', 'Comment not null');
-      return;
-    }
-
     try {
-      let data = await createChildComment(textComment, item.id);
-      console.log(data);
-      if (data.code === 200) {
-        setTextComment('');
-        Toast.show('Successfully Comment', Toast.LONG);
-        navigation.goBack();
+      if (textComment.trim() !== '') {
+        let data = await createChildComment(textComment, item.id);
+        console.log(data);
+        if (data.code === 200) {
+          setTextComment('');
+          Toast.show('Comment successful', Toast.LONG);
+          navigation.goBack();
+        } else {
+          Toast.show('Failed Comment', Toast.LONG);
+        }
       } else {
-        Toast.show('Failed Comment', Toast.LONG);
+        Toast.show('Comments are not empty', Toast.LONG);
       }
     } catch (error) {
       Toast.show('Failed Comment', Toast.LONG);
@@ -80,11 +79,11 @@ const ReplyComment = (props) => {
                 />
                 {itemReply.children_counts.comment > 0 &&
                   itemReply.latest_children.comment.map(
-                    (itemReplyChild, index) => {
+                    (itemReplyChild, ind) => {
                       return (
                         <ContainerReply>
                           <Comment
-                            key={'rc' + index}
+                            key={'rc' + ind}
                             username={itemReplyChild.user.data.username}
                             comment={itemReplyChild.data.text}
                             onPress={() => {}}
@@ -125,15 +124,7 @@ const ReplyComment = (props) => {
   );
 };
 const ContainerReply = ({children, isGrandchild}) => {
-  return (
-    <View
-      style={[
-        styles.containerReply,
-        {borderColor: isGrandchild ? '#fff' : colors.gray1},
-      ]}>
-      {children}
-    </View>
-  );
+  return <View style={styles.containerReply(isGrandchild)}>{children}</View>;
 };
 export default ReplyComment;
 
@@ -150,10 +141,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     alignItems: 'center',
   },
-  containerReply: {
+  containerReply: (isGrandchild) => ({
     borderLeftWidth: 1,
     paddingLeft: 30,
-  },
+    borderColor: isGrandchild ? '#fff' : colors.gray1,
+  }),
   btn: {
     paddingVertical: 8,
     paddingHorizontal: 20,

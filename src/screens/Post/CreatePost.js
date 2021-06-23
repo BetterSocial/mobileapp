@@ -32,10 +32,7 @@ import SheetExpiredPost from '../../elements/Post/SheetExpiredPost';
 import SheetGeographic from '../../elements/Post/SheetGeographic';
 import SheetPrivacy from '../../elements/Post/SheetPrivacy';
 import CreatePollContainer from '../../elements/Post/CreatePollContainer';
-import {
-  MAX_POLLING_ALLOWED,
-  MIN_POLLING_ALLOWED,
-} from '../../helpers/constants';
+import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
 import {getMyProfile} from '../../service/profile';
 import {colors} from '../../utils/colors';
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
@@ -46,7 +43,7 @@ import {fonts} from '../../utils/fonts';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import {createPollPost} from '../../service/post';
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
@@ -513,7 +510,7 @@ const CreatePost = () => {
             navigation.navigate('ProfileScreen');
           }}
         />
-        <Gap style={{height: 8}} />
+        <Gap style={styles.height(8)} />
         <TextInput
           onChangeText={(v) => setMessage(v)}
           value={message}
@@ -543,11 +540,11 @@ const CreatePost = () => {
             expiredobject={postExpired[expiredSelect].expiredobject}
           />
         )}
-        <Gap style={{height: 26}} />
+        <Gap style={styles.height(26)} />
         {randerComponentMedia()}
-        <Gap style={{height: 29}} />
+        <Gap style={styles.height(29)} />
         <Text style={styles.label}>Advanced Settings</Text>
-        <Gap style={{height: 12}} />
+        <Gap style={styles.height(12)} />
         <ListItem
           icon={<MemoIc_hastag width={16.67} height={16.67} />}
           topic={listTopic.length > 0}
@@ -556,35 +553,37 @@ const CreatePost = () => {
           labelStyle={styles.hastagText}
           onPress={() => sheetTopicRef.current.open()}
         />
-        <Gap style={{height: 16}} />
+        <Gap style={styles.height(16)} />
         <ListItem
           icon={<Timer width={16.67} height={16.67} />}
           label={postExpired[expiredSelect].label}
           labelStyle={styles.listText}
           onPress={() => sheetExpiredRef.current.open()}
         />
-        <Gap style={{height: 16}} />
+        <Gap style={styles.height(16)} />
         <ListItem
           icon={<Location width={16.67} height={16.67} />}
           label={
-            geoList.length == 0 ? 'Loading...' : geoList[geoSelect].neighborhood
+            geoList.length === 0
+              ? 'Loading...'
+              : geoList[geoSelect].neighborhood
           }
           labelStyle={styles.listText}
           onPress={() => sheetGeoRef.current.open()}
         />
-        <Gap style={{height: 16}} />
+        <Gap style={styles.height(16)} />
         <ListItem
           icon={<World width={16.67} height={16.67} />}
           label={listPrivacy[privacySelect].label}
           labelStyle={styles.listText}
           onPress={() => sheetPrivacyRef.current.open()}
         />
-        <Gap style={{height: 16}} />
+        <Gap style={styles.height(16)} />
         <Text style={styles.desc}>
           Your post targets{' '}
           <Text style={styles.userTarget}>~ {audienceEstimations}</Text> users.
         </Text>
-        <Gap style={{height: 25}} />
+        <Gap style={styles.height(25)} />
         {isPollShown ? (
           <Button
             disabled={isPollButtonDisabled()}
@@ -594,7 +593,7 @@ const CreatePost = () => {
         ) : (
           <Button onPress={() => postTopic()}>Post</Button>
         )}
-        <Gap style={{height: 18}} />
+        <Gap style={styles.height(18)} />
         <SheetMedia
           refMedia={sheetMediaRef}
           medias={mediaStorage}
@@ -689,4 +688,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fonts.poppins[400],
   },
+  height: (height) => ({
+    height,
+  }),
 });

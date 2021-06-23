@@ -119,7 +119,7 @@ const _renderProfileNormal = (
     <View style={styles.rowSpaceBeetwen}>
       <View style={styles.rowCenter}>
         {isBackButton ? (
-          <View style={{marginEnd: 16}}>
+          <View style={styles.btn}>
             <TouchableOpacity
               onPress={() => {
                 navigation.goBack();
@@ -165,9 +165,17 @@ const _renderProfileNormal = (
     </View>
   );
 };
+
 const Header = ({props, isBackButton = false}) => {
-  let {anonimity, time, privacy, duration_feed, expired_at, location, actor} =
-    props;
+  let {
+    anonimity,
+    time,
+    privacy,
+    duration_feed,
+    expired_at,
+    location,
+    actor,
+  } = props;
   if (anonimity) {
     return _renderAnonimity(
       time,
@@ -206,7 +214,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft: 13,
   },
-
+  btn: {marginEnd: 16},
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',

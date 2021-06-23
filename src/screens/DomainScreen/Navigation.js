@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   StyleSheet,
   Text,
@@ -26,7 +26,7 @@ import {verifyUsername} from '../../service/users';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import StringConstant from '../../utils/string/StringConstant';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../helpers/constants';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 
 const width = Dimensions.get('screen').width;
@@ -139,25 +139,13 @@ const ChooseUsername = () => {
     switch (type) {
       case 'fetch':
         return (
-          <Text
-            style={{
-              fontSize: 12,
-              color: '#BDBDBD',
-              marginTop: 6,
-              fontFamily: fonts.inter[400],
-            }}>
+          <Text style={styles.textMessage('#BDBDBD', true)}>
             {` ${StringConstant.onboardingChooseUsernameLabelCheckingAvailability}`}
           </Text>
         );
       case 'available':
         return (
-          <Text
-            style={{
-              fontSize: 12,
-              color: colors.holytosca,
-              fontFamily: fonts.inter[400],
-              marginTop: 6,
-            }}>
+          <Text style={styles.textMessage(colors.holytosca, true)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserAvailable(
               user,
             )}`}
@@ -165,47 +153,25 @@ const ChooseUsername = () => {
         );
       case 'notavailable':
         return (
-          <Text
-            style={{
-              fontSize: 12,
-              color: colors.red,
-              fontFamily: fonts.inter[400],
-              marginTop: 6,
-            }}>
+          <Text style={styles.textMessage(colors.red, true)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserTaken(user)}`}
           </Text>
         );
       case 'typing':
         return (
-          <Text
-            style={{
-              fontSize: 12,
-              color: colors.red,
-              fontFamily: fonts.inter[400],
-              marginTop: 6,
-            }}>
+          <Text style={styles.textMessage(colors.red, true)}>
             {` ${StringConstant.onboardingChooseUsernameLabelMinimumChar}`}
           </Text>
         );
       case 'max':
         return (
-          <Text
-            style={{
-              fontSize: 12,
-              color: colors.red,
-              fontFamily: fonts.inter[400],
-            }}>
+          <Text style={styles.textMessage(colors.red, false)}>
             {` ${StringConstant.onboardingChooseUsernameLabelMaximumChar}`}
           </Text>
         );
       case 'nan':
         return (
-          <Text
-            style={{
-              fontSize: 12,
-              color: colors.red,
-              fontFamily: fonts.inter[400],
-            }}>
+          <Text style={styles.textMessage(colors.red, false)}>
             {` ${StringConstant.onboardingChooseUsernameLabelJustANumber}`}
           </Text>
         );
@@ -232,7 +198,6 @@ const ChooseUsername = () => {
             <TouchableOpacity
               style={styles.containerAddIcon}
               onPress={() => onPhoto()}>
-              {/* <BtnAddPhoto width={52} height={57} /> */}
               <View>
                 <Image
                   source={{
@@ -243,20 +208,9 @@ const ChooseUsername = () => {
                   }}
                   width={52}
                   height={52}
-                  style={{
-                    height: 52,
-                    width: 52,
-                    borderRadius: 26,
-                  }}
+                  style={styles.textMessage.image}
                 />
-                <View
-                  style={{
-                    width: 14,
-                    height: 14,
-                    position: 'absolute',
-                    bottom: -5,
-                    left: 19,
-                  }}>
+                <View style={styles.icon}>
                   <MemoOnboardingChangeProfilePlusIcon />
                 </View>
               </View>
@@ -291,8 +245,8 @@ const ChooseUsername = () => {
             </Text>
           </View>
         </View>
-        <View style={{flex: 1}} />
-        <Button style={{marginTop: 16}} onPress={() => next()}>
+        <View style={styles.gap} />
+        <Button style={styles.btnNext} onPress={() => next()}>
           {StringConstant.onboardingChooseUsernameButtonStateNext}
         </Button>
       </KeyboardAvoidingView>
@@ -310,6 +264,20 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  btnNext: {marginTop: 16},
+  gap: {flex: 1},
+  icon: {
+    width: 14,
+    height: 14,
+    position: 'absolute',
+    bottom: -5,
+    left: 19,
+  },
+  image: {
+    height: 52,
+    width: 52,
+    borderRadius: 26,
   },
   title: {
     fontFamily: 'Inter-Bold',
@@ -373,4 +341,10 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
     justifyContent: 'flex-end',
   },
+  textMessage: (color, marginTop) => ({
+    fontSize: 12,
+    color: color,
+    fontFamily: fonts.inter[400],
+    marginTop: marginTop ? 6 : 0,
+  }),
 });

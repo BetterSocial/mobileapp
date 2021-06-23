@@ -15,7 +15,7 @@ import BlockDomain from '../../elements/Blocking/BlockDomain';
 import ReportUser from '../../elements/Blocking/ReportUser';
 import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 import {downVote, upVote} from '../../service/vote';
 import {blockUser} from '../../service/blocking';
 import {getMainFeed} from '../../service/post';
@@ -164,7 +164,7 @@ const FeedScreen = (props) => {
 
   if (initialLoading === true) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.containerLoading}>
         <Loading visible={initialLoading} />
       </View>
     );
@@ -174,7 +174,7 @@ const FeedScreen = (props) => {
     <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
       {mainFeeds !== undefined && (
         <CardStack
-          style={styles.cardStack}
+          style={styles.content}
           renderNoMoreCards={() => {
             if (countStack === 0) {
               let id = mainFeeds[mainFeeds.length - 1].id;
@@ -260,14 +260,14 @@ const FeedScreen = (props) => {
   );
 };
 
+export default FeedScreen;
 const styles = StyleSheet.create({
-  cardStack: {
+  container: {flex: 1},
+  content: {
     flex: 5,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
   },
-  container: {flex: 1},
+  containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
 });
-
-export default FeedScreen;

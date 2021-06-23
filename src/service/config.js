@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {getAccessToken} from '../data/local/accessToken';
+import {getAccessToken} from '../utils/token';
 import {BASE_URL} from '@env';
 
 const api = axios.create({

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
 
 import JWTDecode from 'jwt-decode';
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 import Toast from 'react-native-simple-toast';
 
 import Gap from '../../components/Gap';
@@ -117,7 +117,7 @@ const PostDetailPage = (props) => {
       message: messageReport,
     };
     let result = await blockUser(data);
-    if (result.code == 200) {
+    if (result.code === 200) {
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -186,12 +186,16 @@ const PostDetailPage = (props) => {
 
   const commentParent = async () => {
     try {
-      let data = await createCommentParent(textComment, item.id);
-      if (data.code === 200) {
-        setTextComment('');
-        Toast.show('Successfully Comment', Toast.LONG);
+      if (textComment.trim() !== '') {
+        let data = await createCommentParent(textComment, item.id);
+        if (data.code === 200) {
+          setTextComment('');
+          Toast.show('Comment successful', Toast.LONG);
+        } else {
+          Toast.show('Failed Comment', Toast.LONG);
+        }
       } else {
-        Toast.show('Failed Comment', Toast.LONG);
+        Toast.show('Comments are not empty', Toast.LONG);
       }
     } catch (e) {
       console.log(e);
@@ -248,7 +252,7 @@ const PostDetailPage = (props) => {
             />
           )}
 
-          <Gap style={{height: 16}} />
+          <Gap style={styles.gap} />
           <Footer
             item={item}
             totalComment={totalComment}
@@ -344,4 +348,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 16,
   },
+  gap: {height: 16},
 });

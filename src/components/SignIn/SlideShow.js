@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {Dimensions, Image, StyleSheet, View} from 'react-native';
 
 import {SwiperFlatList} from 'react-native-swiper-flatlist';

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import {colors} from '../../utils/colors';
@@ -22,5 +22,4 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderStyle: 'dashed',
   },
-  text: {},
 });

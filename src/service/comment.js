@@ -12,8 +12,8 @@ const createCommentParent = async (text, activityId) => {
     return resApi.data;
   } catch (error) {
     console.log(error);
-    throw new Error(error);
     crashlytics().recordError(new Error(error));
+    throw new Error(error);
   }
 };
 
@@ -28,8 +28,8 @@ const createChildComment = async (text, reactionId) => {
     return resApi.data;
   } catch (error) {
     console.log(error);
+    crashlytics().recordError(error.response.data);
     throw new Error(error);
-    crashlytics().recordError(new Error(error));
   }
 };
 
