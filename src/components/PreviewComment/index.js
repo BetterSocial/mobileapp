@@ -1,10 +1,9 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import _ from 'lodash';
+import SeeMore from 'react-native-see-more-inline';
 
 import {calculateTime} from '../../utils/time';
-
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
 import {colors} from '../../utils/colors';
@@ -12,35 +11,52 @@ import {fonts} from '../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 import {Dot, Gap} from '../../components';
 
-const PreviewComment = ({username, comment, time, image}) => {
+const PreviewComment = ({
+  username,
+  comment,
+  time,
+  image,
+  totalComment,
+  onPress,
+}) => {
   return (
-    <View style={[styles.container]}>
-      <View style={styles.profile}>
-        <Image
-          source={
-            image
-              ? {uri: image}
-              : require('../../assets/images/ProfileDefault.png')
-          }
-          style={styles.image}
-        />
-        <View style={{alignItems: 'center', flexDirection: 'row'}}>
-          <Text style={styles.username}>{username}</Text>
-          <Gap width={4} />
-          <Dot size={4} color={'#828282'} />
-          <Gap width={4} />
-          <Text style={{color: COLORS.gray, ...FONTS.body4}}>
-            {calculateTime(time)}
-          </Text>
+    <View>
+      <View style={[styles.container]}>
+        <View style={styles.profile}>
+          <Image
+            source={
+              image
+                ? {uri: image}
+                : require('../../assets/images/ProfileDefault.png')
+            }
+            style={styles.image}
+          />
+          <View style={{alignItems: 'center', flexDirection: 'row'}}>
+            <Text style={styles.username}>{username}</Text>
+            <Gap width={4} />
+            <Dot size={4} color={'#828282'} />
+            <Gap width={4} />
+            <Text style={{color: COLORS.gray, ...FONTS.body4}}>
+              {calculateTime(time)}
+            </Text>
+          </View>
         </View>
+        <View style={styles.text}>
+          <SeeMore seeMoreText={'More'} seeLessText={'Less'} numberOfLines={2}>
+            {comment}
+          </SeeMore>
+        </View>
+        <Gap height={SIZES.base} />
       </View>
-      <Text style={{...FONTS.comment, color: '#333333', marginStart: 16}}>
-        {_.truncate(comment, {
-          length: 100,
-          separator: 'green',
-          omission: 'more',
-        })}
-      </Text>
+      {totalComment >= 1 && (
+        <TouchableOpacity style={{marginStart: 8}} onPress={onPress}>
+          <Text
+            style={{
+              color: '#2F80ED',
+              ...FONTS.body4,
+            }}>{`${totalComment} More replies`}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -48,6 +64,9 @@ const PreviewComment = ({username, comment, time, image}) => {
 export default PreviewComment;
 
 const styles = StyleSheet.create({
+  text: {
+    marginStart: 20,
+  },
   image: {
     width: 24,
     height: 24,

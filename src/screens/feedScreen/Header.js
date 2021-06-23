@@ -20,7 +20,7 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import PropsTypes from 'prop-types';
 
-import {calculateTime} from '../../utils/time';
+import {calculateTimeWithAgo} from '../../utils/time';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import Memoic_globe from '../../assets/icons/ic_globe';
@@ -36,7 +36,7 @@ import MemoOne from '../../assets/timer/One';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-const getTime = (date) => calculateTime(date);
+const getTime = (date) => calculateTimeWithAgo(date);
 
 const validationTimer = (timer, duration_feed) => {
   let date1 = new Date(timer);

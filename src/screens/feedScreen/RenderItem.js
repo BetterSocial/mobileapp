@@ -198,6 +198,8 @@ const Item = ({
             comment={previewComment.data.text}
             image={previewComment.user.data.profile_pic_url}
             time={previewComment.created_at}
+            totalComment={item.latest_reactions.comment.length - 1}
+            onPress={onPressComment}
           />
           <Gap height={16} />
         </View>

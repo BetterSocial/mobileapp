@@ -23,7 +23,7 @@ export const calculateTime = (time) => {
   }
 
   if (days < 2) {
-    return 'yesterday';
+    return 'Yesterday';
   }
 
   if (days >= 2 && days <= 6) {
@@ -35,4 +35,9 @@ export const calculateTime = (time) => {
   }
 
   return `${weeks}w`;
+};
+
+export const calculateTimeWithAgo = (time) => {
+  let result = calculateTime(time);
+  return result + ' Ago';
 };
