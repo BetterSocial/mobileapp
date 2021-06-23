@@ -12,7 +12,7 @@ import {Loading} from '../../components';
 import theme, {COLORS, FONTS, SIZES} from '../../utils/theme';
 
 import Search from './Search';
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 const NewsScreen = ({navigation}) => {
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
