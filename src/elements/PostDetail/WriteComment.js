@@ -7,11 +7,18 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+import MemoSendComment from '../../assets/icon/IconSendComment';
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import StringConstant from '../../utils/string/StringConstant';
 
 const WriteComment = ({value = null, onPress, onChangeText}) => {
+  let isCommentEnabled = value.length > 0;
+  let isSendButtonPressed = () => {
+    if (isCommentEnabled) return onPress();
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -20,16 +27,19 @@ const WriteComment = ({value = null, onPress, onChangeText}) => {
       />
       <View style={styles.content}>
         <TextInput
-          placeholder="Add a comment"
+          placeholder={StringConstant.commentBoxDefaultPlaceholder}
           multiline={true}
+          placeholderTextColor={colors.gray1}
           style={styles.text}
           onChangeText={onChangeText}
           value={value}
         />
-        <TouchableOpacity onPress={onPress} style={styles.btn}>
-          <Text style={styles.btnText}>Reply</Text>
-        </TouchableOpacity>
       </View>
+      <TouchableOpacity
+        onPress={isSendButtonPressed}
+        style={styles.btn(isCommentEnabled)}>
+        <MemoSendComment style={styles.icSendButton} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -45,7 +55,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    paddingHorizontal: 22,
+    paddingRight: 10,
+    paddingLeft: 20,
     paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
@@ -55,19 +66,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.lightgrey,
     marginLeft: 10,
-    borderRadius: 5,
-    paddingHorizontal: 15,
-    marginEnd: 24,
-  },
-  btn: {
-    backgroundColor: '#00ADB5',
-    paddingHorizontal: 16,
-    paddingVertical: 4,
     borderRadius: 8,
-    width: 80,
-    height: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingLeft: 6,
+    paddingRight: 8,
+    marginEnd: 8,
+    flex: 1,
+  },
+  btn: (isCommentEnabled) => {
+    return {
+      backgroundColor: isCommentEnabled ? colors.bondi_blue : colors.gray1,
+      borderRadius: 18,
+      width: 35,
+      height: 35,
+      display: 'flex',
+      justifyContent: 'center',
+    };
   },
   btnText: {color: 'white', fontFamily: fonts.inter[400]},
   image: {
@@ -76,5 +89,14 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
+    fontSize: 14,
+    fontFamily: fonts.inter[400],
+    color: colors.black,
+    lineHeight: 24,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  icSendButton: {
+    alignSelf: 'center',
   },
 });

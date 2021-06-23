@@ -46,6 +46,7 @@ let onboardingTopicsButtonStateChooseMore = (count) => `CHOOSE ${count} MORE`;
 let headerIosSkip = 'Skip';
 let searchModalTitle = 'Search';
 let searchModalPlaceholder = 'Search by ZIP, neighborhood or city';
+let commentBoxDefaultPlaceholder = 'Add a reply';
 
 // Wording need to be discussed :
 // Splash Screen
@@ -86,4 +87,5 @@ export default {
   headerIosSkip,
   searchModalTitle,
   searchModalPlaceholder,
+  commentBoxDefaultPlaceholder,
 };
