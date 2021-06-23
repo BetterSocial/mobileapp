@@ -9,6 +9,7 @@ export const COLORS = {
   red: '#FF2E63',
   lightBlue: '#2F80ED',
   blueSea: '#55C2FF',
+  blue: '#2F80ED',
 };
 export const SIZES = {
   // global sizes

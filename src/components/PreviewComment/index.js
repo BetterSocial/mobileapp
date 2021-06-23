@@ -52,9 +52,9 @@ const PreviewComment = ({
         <TouchableOpacity style={{marginStart: 8}} onPress={onPress}>
           <Text
             style={{
-              color: '#2F80ED',
+              color: COLORS.blue,
               ...FONTS.body4,
-            }}>{`${totalComment} More replies`}</Text>
+            }}>{`${totalComment} more replies`}</Text>
         </TouchableOpacity>
       )}
     </View>
