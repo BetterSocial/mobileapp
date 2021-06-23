@@ -186,12 +186,16 @@ const PostDetailPage = (props) => {
 
   const commentParent = async () => {
     try {
-      let data = await createCommentParent(textComment, item.id);
-      if (data.code === 200) {
-        setTextComment('');
-        Toast.show('Successfully Comment', Toast.LONG);
+      if (textComment.trim() !== '') {
+        let data = await createCommentParent(textComment, item.id);
+        if (data.code === 200) {
+          setTextComment('');
+          Toast.show('Comment successful', Toast.LONG);
+        } else {
+          Toast.show('Failed Comment', Toast.LONG);
+        }
       } else {
-        Toast.show('Failed Comment', Toast.LONG);
+        Toast.show('Comments are not empty', Toast.LONG);
       }
     } catch (e) {
       console.log(e);

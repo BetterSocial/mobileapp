@@ -77,13 +77,4 @@ const styles = StyleSheet.create({
   text: {
     flex: 1,
   },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.lightgrey,
-    marginLeft: 10,
-    borderRadius: 5,
-    paddingHorizontal: 15,
-    marginEnd: 24,
-  },
 });

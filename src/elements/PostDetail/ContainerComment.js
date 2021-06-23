@@ -17,6 +17,8 @@ const ContainerComment = ({comments}) => {
               key={'p' + index}
               comment={item.data.text}
               username={item.user.data.username}
+              time={item.created_at}
+              photo={item.user.data.profile_pic_url}
               onPress={() => {
                 navigation.navigate('ReplyComment', {item: item});
               }}
@@ -42,6 +44,8 @@ const ReplyComment = ({data, countComment, navigation}) => {
           <View key={'c' + index}>
             <Comment
               key={'c' + index}
+              photo={item.user.data.profile_pic_url}
+              time={item.created_at}
               comment={item.data.text}
               username={item.user.data.username}
               onPress={() => navigation.navigate('ReplyComment', {item: item})}
@@ -77,7 +81,9 @@ const ReplyCommentChild = ({
         return (
           <Comment
             key={'c' + index}
+            photo={item.user.data.profile_pic_url}
             comment={item.data.text}
+            time={item.created_at}
             username={item.user.data.username}
             onPress={() => {
               console.log(parent);
@@ -93,15 +99,7 @@ const ReplyCommentChild = ({
 };
 
 const ContainerReply = ({children, isGrandchild}) => {
-  return (
-    <View
-      style={[
-        styles.containerReply,
-        {borderColor: isGrandchild ? '#fff' : colors.gray1},
-      ]}>
-      {children}
-    </View>
-  );
+  return <View style={styles.containerReply(isGrandchild)}>{children}</View>;
 };
 export default ContainerComment;
 
@@ -109,8 +107,9 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 22,
   },
-  containerReply: {
+  containerReply: (isGrandchild) => ({
     borderLeftWidth: 1,
     paddingLeft: 30,
-  },
+    borderColor: isGrandchild ? '#fff' : colors.gray1,
+  }),
 });
