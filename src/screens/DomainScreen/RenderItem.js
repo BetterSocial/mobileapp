@@ -7,10 +7,12 @@ import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import theme, {COLORS, FONTS, SIZES} from '../../utils/theme';
 import {colors} from '../../utils/colors';
-import {Footer} from '../../components';
+import {Footer, PreviewComment} from '../../components';
 import {fonts} from '../../utils/fonts';
 
 const RenderItem = ({domain, image}) => {
+  const [previewComment, setPreviewComment] = React.useState({});
+  const [isReaction, setReaction] = React.useState(false);
   const getname = (d) => {
     try {
       return d.domain.name;
@@ -30,6 +32,23 @@ const RenderItem = ({domain, image}) => {
   const {content} = domain;
   const name = getname(domain);
   const time = getTime(domain);
+
+  React.useEffect(() => {
+    const initial = () => {
+      let reactionCount = domain.reaction_counts;
+      if (JSON.stringify(reactionCount) !== '{}') {
+        let comment = reactionCount.comment;
+        if (comment !== undefined) {
+          if (comment > 0) {
+            setReaction(true);
+            setPreviewComment(domain.latest_reactions.comment[0]);
+          }
+        }
+      }
+    };
+    initial();
+  }, [domain]);
+
   return (
     <View style={styles.wrapperItem}>
       <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
@@ -96,6 +115,19 @@ const RenderItem = ({domain, image}) => {
           onPressDownVote={() => alert('down vote')}
           onPressUpvote={() => alert('upvote')}
         />
+        {isReaction && (
+          <View>
+            <PreviewComment
+              username={previewComment.user.data.username}
+              comment={previewComment.data.text}
+              image={previewComment.user.data.profile_pic_url}
+              time={previewComment.created_at}
+              totalComment={item.latest_reactions.comment.length - 1}
+              onPress={() => alert('comment')}
+            />
+            <Gap height={16} />
+          </View>
+        )}
       </View>
     </View>
   );
