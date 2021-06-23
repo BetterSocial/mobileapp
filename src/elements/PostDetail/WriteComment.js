@@ -18,16 +18,7 @@ const WriteComment = ({value = null, onPress, onChangeText}) => {
         style={styles.image}
         source={require('../../assets/images/ProfileDefault.png')}
       />
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: colors.lightgrey,
-          marginLeft: 10,
-          borderRadius: 5,
-          paddingHorizontal: 15,
-          marginEnd: 24,
-        }}>
+      <View style={styles.content}>
         <TextInput
           placeholder="Add a comment"
           multiline={true}
@@ -79,5 +70,14 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.lightgrey,
+    marginLeft: 10,
+    borderRadius: 5,
+    paddingHorizontal: 15,
+    marginEnd: 24,
   },
 });
