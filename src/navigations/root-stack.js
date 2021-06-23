@@ -133,7 +133,7 @@ const RootStact = () => {
       <Stack.Screen name="ImageViewer" component={ImageViewerScreen} />
       <Stack.Screen
         name="DomainScreen"
-        component={DomainFragmentScreen}
+        component={DomainScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

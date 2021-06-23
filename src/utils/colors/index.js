@@ -19,6 +19,6 @@ export const colors = {
   red: '#FF2E63',
   holytosca: '#00ADB5',
   holytosca30percent: '#00ADB54D',
-  blackgrey : '#828282',
+  blackgrey: '#828282',
   redalert: '#FF2E63',
 };

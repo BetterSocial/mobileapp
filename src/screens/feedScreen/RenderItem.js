@@ -132,7 +132,7 @@ const Item = ({
   }, [item, selfUserId]);
 
   return (
-    <Card style={[styles.container]}>
+    <Card style={styles.container}>
       <Header props={item} />
 
       {item.post_type === POST_TYPE_POLL && (
