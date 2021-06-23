@@ -1,10 +1,12 @@
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
-
+import {StyleSheet, View, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import StringConstant from '../../utils/string/StringConstant';
 import {colors} from '../../utils/colors';
 import Comment from './Comment';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import ConnectorWrapper from './ConnectorWrapper';
 
 const ContainerComment = ({comments}) => {
   const navigation = useNavigation();
@@ -35,29 +37,52 @@ const ContainerComment = ({comments}) => {
   );
 };
 const ReplyComment = ({data, countComment, navigation}) => {
+  const [isChildShown, setIsChildShown] = React.useState(false);
+  const onShowReplyClicked = () => setIsChildShown(!isChildShown);
+
   return (
     <ContainerReply>
       {data.map((item, index) => {
         return (
-          <View key={'c' + index}>
-            <Comment
-              key={'c' + index}
-              comment={item.data.text}
-              username={item.user.data.username}
-              onPress={() => navigation.navigate('ReplyComment', {item: item})}
-              isLast={
-                index === countComment - 1 && item.children_counts.comment === 0
-              }
-            />
-            {item.children_counts.comment > 0 && (
-              <ReplyCommentChild
-                data={item.latest_children.comment}
-                countComment={item.children_counts.comment}
-                navigation={navigation}
-                parent={item}
+          <ConnectorWrapper index={index}>
+            <View key={'c' + index}>
+              <Comment
+                key={'c' + index}
+                comment={item.data.text}
+                username={item.user.data.username}
+                onPress={() => navigation.navigate('ReplyComment', {item: item})}
+                isLast={
+                  index === countComment - 1 && item.children_counts.comment === 0
+                }
               />
-            )}
-          </View>
+              {item.children_counts.comment > 0 && (
+                <>
+                  {isChildShown && (
+                    <ReplyCommentChild
+                      data={item.latest_children.comment}
+                      countComment={item.children_counts.comment}
+                      navigation={navigation}
+                      parent={item}
+                    />
+                  )}
+                  <>
+                    {!isChildShown && (
+                      <View style={styles.seeRepliesContainer}>
+                        <View style={styles.connector} />
+                        <TouchableOpacity onPress={onShowReplyClicked}>
+                          <Text style={styles.seeRepliesText}>
+                            {StringConstant.postDetailPageSeeReplies(
+                              item.children_counts.comment || 0,
+                            )}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </>
+                </>
+              )}
+            </View>
+          </ConnectorWrapper>
         );
       })}
     </ContainerReply>
@@ -75,17 +100,22 @@ const ReplyCommentChild = ({
     <ContainerReply isGrandchild={countComment === 1}>
       {data.map((item, index) => {
         return (
-          <Comment
-            key={'c' + index}
-            comment={item.data.text}
-            username={item.user.data.username}
-            onPress={() => {
-              console.log(parent);
-              console.log('======');
-              navigation.navigate('ReplyComment', {item: item, parent: parent});
-            }}
-            isLast={index === countComment - 1}
-          />
+          <ConnectorWrapper index={index}>
+            <Comment
+              key={'c' + index}
+              comment={item.data.text}
+              username={item.user.data.username}
+              onPress={() => {
+                console.log(parent);
+                console.log('======');
+                navigation.navigate('ReplyComment', {
+                  item: item,
+                  parent: parent,
+                });
+              }}
+              isLast={index === countComment - 1}
+            />
+          </ConnectorWrapper>
         );
       })}
     </ContainerReply>
@@ -111,6 +141,24 @@ const styles = StyleSheet.create({
   },
   containerReply: {
     borderLeftWidth: 1,
-    paddingLeft: 30,
+    // paddingLeft: 30,
+  },
+  seeRepliesContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: 14,
+  },
+  seeRepliesText: {
+    color: colors.blue,
+  },
+  connector: {
+    width: 15,
+    height: 10,
+    borderLeftWidth: 1,
+    borderBottomWidth: 1,
+    borderBottomLeftRadius: 21,
+    borderLeftColor: colors.gray1,
+    borderBottomColor: colors.gray1,
+    marginRight: 4,
   },
 });

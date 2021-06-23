@@ -42,6 +42,11 @@ let onboardingTopicsOthersCannotSee =
 let onboardingTopicsButtonStateNext = 'NEXT';
 let onboardingTopicsButtonStateChooseMore = (count) => `CHOOSE ${count} MORE`;
 
+// Post Detail Page
+let postDetailPageSeeReplies = (count) => {
+  return `See ${count} ${count > 1 ? `replies` : 'reply'}`;
+};
+
 // Component
 let headerIosSkip = 'Skip';
 let searchModalTitle = 'Search';
@@ -83,6 +88,8 @@ export default {
   onboardingTopicsOthersCannotSee,
   onboardingTopicsButtonStateNext,
   onboardingTopicsButtonStateChooseMore,
+
+  postDetailPageSeeReplies,
 
   headerIosSkip,
   searchModalTitle,

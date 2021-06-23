@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginTop: 11.13,
     marginBottom: 12,
+    marginLeft: 30,
   },
   btnReply: {
     flexDirection: 'row',
@@ -86,13 +87,16 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#C4C4C4',
     marginLeft: 8.98,
+    marginRight: 28.61,
   },
   btnBlock: {
-    marginLeft: 28.61,
+    // marginLeft: 28.61,
     marginRight: 28.51,
   },
   arrowup: {
     marginRight: 33.04,
   },
-  gap: {marginBottom: 8},
+  gap: {
+    marginBottom: 8,
+  },
 });
