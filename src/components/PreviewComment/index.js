@@ -3,7 +3,7 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import SeeMore from 'react-native-see-more-inline';
 
-import {calculateTime} from '../../utils/time';
+import {calculateTime, calculateTimeWithAgo} from '../../utils/time';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
 import {colors} from '../../utils/colors';
@@ -37,7 +37,7 @@ const PreviewComment = ({
             <Dot size={4} color={'#828282'} />
             <Gap width={4} />
             <Text style={{color: COLORS.gray, ...FONTS.body4}}>
-              {calculateTime(time)}
+              {calculateTime(time).replace('ago', '')}
             </Text>
           </View>
         </View>

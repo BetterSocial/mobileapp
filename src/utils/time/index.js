@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 export const calculateTime = (time) => {
   let now = moment();
   let utc = now;
@@ -14,30 +15,25 @@ export const calculateTime = (time) => {
 
   if (minutes < 60) {
     if (minutes === 0) {
-      return '1m';
+      return '1m ago';
     }
-    return `${minutes}m`;
+    return `${minutes}m ago`;
   }
   if (hours < 24) {
-    return `${hours}h`;
+    return `${hours}h ago`;
   }
 
   if (days < 2) {
-    return 'Yesterday';
+    return 'Yesterday ago';
   }
 
   if (days >= 2 && days <= 6) {
-    return `${days}d`;
+    return `${days}d ago`;
   }
 
   if (days >= 7 && days <= 13) {
-    return '1w';
+    return '1w ago';
   }
 
-  return `${weeks}w`;
-};
-
-export const calculateTimeWithAgo = (time) => {
-  let result = calculateTime(time);
-  return result + ' Ago';
+  return `${weeks}w ago`;
 };
