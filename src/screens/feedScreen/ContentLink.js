@@ -33,7 +33,7 @@ const ContentLink = ({og, onPress, onCardPress}) => {
       onPress={onPress}
       style={[
         styles.contentFeed,
-        {justifyContent: 'center', alignItems: 'center'},
+        {justifyContent: 'center', alignItems: 'center', marginBottom: 10},
       ]}>
       {smartRender(Card, {
         domain: og.domain,

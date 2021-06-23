@@ -412,6 +412,7 @@ const styles = StyleSheet.create({
   totalVotesContainer: {
     display: 'flex',
     flexDirection: 'row',
+    marginBottom: 10,
   },
   seeresultscontainer: {
     alignSelf: 'center',

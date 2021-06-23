@@ -1,20 +1,22 @@
 import * as React from 'react';
 import {StyleSheet, Dimensions, Share} from 'react-native';
-
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
+
+import {
+  POST_VERB_POLL,
+  POST_VERB_LINK,
+  POST_VERB_STANDARD,
+  POST_TYPE_LINK,
+  POST_TYPE_POLL,
+  POST_TYPE_STANDARD,
+} from '../../utils/constants';
+import {isContainUrl, smartRender} from '../../utils/Utils';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
 import {Card} from '../../components/CardStack';
-import {
-  POST_TYPE_POLL,
-  POST_TYPE_LINK,
-  POST_TYPE_STANDARD,
-} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
-
-import {isContainUrl, smartRender} from '../../utils/Utils';
 import ContentLink from './ContentLink';
 
 const {width, height} = Dimensions.get('window');
@@ -136,7 +138,7 @@ const Item = ({
   // console.log(item.isalreadypolling);
 
   return (
-    <Card style={[styles.container]}>
+    <Card style={styles.container}>
       <Header props={item} />
 
       {item.post_type === POST_TYPE_POLL && (
@@ -195,7 +197,8 @@ export default Item;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height - height * 0.1,
+    height: height - height * 0.1 + 8,
+    flex: 1,
     shadowColor: '#c4c4c4',
     shadowOffset: {
       width: 1,
@@ -203,6 +206,7 @@ const styles = StyleSheet.create({
     },
     elevation: 8,
     shadowOpacity: 0.5,
+    marginTop: -8,
     backgroundColor: 'white',
     paddingHorizontal: 16,
     paddingVertical: width * 0.03,

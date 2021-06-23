@@ -251,8 +251,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomColor: colors.gray1,
     borderBottomWidth: 0.4,
-    paddingBottom: 8,
     paddingTop: 8,
+    paddingBottom: 8,
     paddingLeft: 16,
     paddingRight: 16,
     marginLeft: -16,
@@ -261,14 +261,12 @@ const styles = StyleSheet.create({
   rowCenter: {
     flexDirection: 'row',
     alignItems: 'center',
-    // backgroundColor : 'green'
   },
   containerFeedProfile: {
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginLeft: 13,
     flex: 1,
-    // backgroundColor : 'blue'
   },
   containerFeedName: {
     flexDirection: 'row',

@@ -8,9 +8,9 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-
 import SeeMore from 'react-native-see-more-inline';
 import {ParallaxImage} from 'react-native-snap-carousel';
+import {useNavigation, useRoute} from '@react-navigation/core';
 
 import Gap from '../../components/Gap';
 import Card from '../../components/Card/Card';
@@ -23,8 +23,12 @@ import PropTypes from 'prop-types';
 import {isContainUrl, smartRender} from '../../utils/Utils';
 
 const Content = ({message, images_url, style, onPress}) => {
+  const route = useRoute();
+
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={{...styles.contentFeed, ...style}}>
       {images_url !== null && images_url !== '' && images_url !== undefined ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
@@ -53,7 +57,7 @@ const Content = ({message, images_url, style, onPress}) => {
             />
           </View>
         ) : (
-          <View style={styles.containerShowMessage}>
+          <View style={styles.containerShowMessage(route.name)}>
             <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
               {message}
             </SeeMore>
@@ -84,10 +88,14 @@ const styles = StyleSheet.create({
     width: screenWidth - 32,
     borderRadius: 16,
   },
-  containerShowMessage: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
+  containerShowMessage: (currentRouteName) => {
+    return {
+      justifyContent: currentRouteName === 'Feed' ? 'center' : 'flex-start',
+      alignItems: currentRouteName === 'Feed' ? 'center' : 'flex-start',
+      flex: 1,
+      paddingBottom: 10,
+      minHeight: 100,
+    };
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',

@@ -1,10 +1,22 @@
 import * as React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
-
 import JWTDecode from 'jwt-decode';
 import {getAccessToken} from '../../utils/token';
 import Toast from 'react-native-simple-toast';
 
+import {
+  POST_VERB_POLL,
+  POST_VERB_STANDARD,
+  POST_VERB_LINK,
+  POST_TYPE_LINK,
+  POST_TYPE_POLL,
+  POST_TYPE_STANDARD,
+} from '../../utils/constants';
+import {fonts} from '../../utils/fonts';
+import {getMyProfile} from '../../service/profile';
+import {blockUser} from '../../service/blocking';
+import {downVote, upVote} from '../../service/vote';
+import {createCommentParent} from '../../service/comment';
 import Gap from '../../components/Gap';
 import Footer from '../feedScreen/Footer';
 import Header from '../feedScreen/Header';
@@ -16,18 +28,7 @@ import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
 import WriteComment from '../../elements/PostDetail/WriteComment';
 import ContainerComment from '../../elements/PostDetail/ContainerComment';
-import {fonts} from '../../utils/fonts';
-import {getMyProfile} from '../../service/profile';
-import {blockUser} from '../../service/blocking';
-import {downVote, upVote} from '../../service/vote';
 import ContentPoll from '../feedScreen/ContentPoll';
-import {
-  POST_VERB_POLL,
-  POST_TYPE_LINK,
-  POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
-} from '../../utils/constants';
-import {createCommentParent} from '../../service/comment';
 import ContentLink from '../feedScreen/ContentLink';
 
 const {width, height} = Dimensions.get('window');
@@ -55,6 +56,8 @@ const PostDetailPage = (props) => {
   const [postId, setPostId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
 
+  const scrollViewRef = React.useRef(null);
+
   React.useEffect(() => {
     const initial = () => {
       let reactionCount = props.route.params.item.reaction_counts;
@@ -80,9 +83,6 @@ const PostDetailPage = (props) => {
     };
     initial();
   }, [props]);
-
-  console.log("item in content");
-  console.log(item);
 
   React.useEffect(() => {
     fetchMyProfile();
@@ -222,11 +222,18 @@ const PostDetailPage = (props) => {
     props.navigation.navigate('DomainScreen', {
       item: item,
     });
+    // scrollViewRef.current.scrollTo
+  };
+
+  const onCommentButtonClicked = () => {
+    console.log('Comment Button Clicked');
+    scrollViewRef.current.scrollToEnd();
   };
 
   return (
     <View style={styles.container}>
       <ScrollView
+        ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
         style={{height: height * 0.9}}>
         <View style={styles.content}>
@@ -270,7 +277,7 @@ const PostDetailPage = (props) => {
               setDownVote(v.id);
             }}
             onPressShare={() => {}}
-            onPressComment={() => {}}
+            onPressComment={onCommentButtonClicked}
             onPressBlock={(value) => {
               if (value.actor.id === yourselfId) {
                 Toast.show("Can't Block yourself", Toast.LONG);

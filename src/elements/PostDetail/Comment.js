@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: 11.13,
+    marginBottom: 12,
   },
   btnReply: {
     flexDirection: 'row',
