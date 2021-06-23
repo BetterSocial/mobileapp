@@ -19,6 +19,11 @@ const ContainerComment = ({comments}) => {
               key={'p' + index}
               comment={item.data.text}
               username={item.user.data.username}
+              level={0}
+              isLast={
+                index === comments.length - 1 ||
+                item.children_counts.comment === 0
+              }
               onPress={() => {
                 navigation.navigate('ReplyComment', {item: item});
               }}
@@ -50,7 +55,10 @@ const ReplyComment = ({data, countComment, navigation}) => {
                 key={'c' + index}
                 comment={item.data.text}
                 username={item.user.data.username}
-                onPress={() => navigation.navigate('ReplyComment', {item: item})}
+                level={1}
+                onPress={() =>
+                  navigation.navigate('ReplyComment', {item: item})
+                }
                 isLast={
                   index === countComment - 1 && item.children_counts.comment === 0
                 }
@@ -104,6 +112,7 @@ const ReplyCommentChild = ({
             <Comment
               key={'c' + index}
               comment={item.data.text}
+              level={2}
               username={item.user.data.username}
               onPress={() => {
                 console.log(parent);
@@ -141,7 +150,6 @@ const styles = StyleSheet.create({
   },
   containerReply: {
     borderLeftWidth: 1,
-    // paddingLeft: 30,
   },
   seeRepliesContainer: {
     display: 'flex',

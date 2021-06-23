@@ -9,7 +9,8 @@ import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_of
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const Comment = ({username, comment, onPress, isLast = false}) => {
+const Comment = ({username, comment, onPress, isLast, level}) => {
+  console.log(`${comment} ${isLast}`);
   return (
     <View style={styles.container(isLast)}>
       <View style={styles.profile}>
@@ -21,7 +22,7 @@ const Comment = ({username, comment, onPress, isLast = false}) => {
       </View>
       <Text style={styles.post}>{comment}</Text>
       <View style={styles.constainerFooter}>
-        {isLast === true ? (
+        {isLast && level === 2 ? (
           <View style={styles.gap} />
         ) : (
           <TouchableOpacity style={styles.btnReply} onPress={onPress}>
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
   },
   container: (isLast) => ({
     borderLeftWidth: 1,
-    borderLeftColor: isLast ? '#fFF' : colors.gray1,
+    borderLeftColor: isLast ? 'transparent' : colors.gray1,
   }),
   username: {
     fontFamily: fonts.inter[600],
