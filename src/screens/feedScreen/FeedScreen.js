@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, SafeAreaView} from 'react-native';
+import {View, SafeAreaView, StyleSheet} from 'react-native';
 
 import {useFocusEffect} from '@react-navigation/native';
 import JWTDecode from 'jwt-decode';
@@ -15,11 +15,10 @@ import BlockDomain from '../../elements/Blocking/BlockDomain';
 import ReportUser from '../../elements/Blocking/ReportUser';
 import ReportDomain from '../../elements/Blocking/ReportDomain';
 import SpecificIssue from '../../elements/Blocking/SpecificIssue';
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 import {downVote, upVote} from '../../service/vote';
 import {blockUser} from '../../service/blocking';
 import {getMainFeed} from '../../service/post';
-import {getToken} from '../../helpers/getToken';
 
 const FeedScreen = (props) => {
   const [tokenParse, setTokenParse] = React.useState({});
@@ -165,36 +164,22 @@ const FeedScreen = (props) => {
 
   if (initialLoading === true) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.containerLoading}>
         <Loading visible={initialLoading} />
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={{flex: 1}} forceInset={{top: 'always'}}>
+    <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
       {mainFeeds !== undefined && (
         <CardStack
-          style={{
-            flex: 5,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-          }}
+          style={styles.content}
           renderNoMoreCards={() => {
-            // setInit();
-            // setLoading(true);
-            // console.log(countStack);
             if (countStack === 0) {
               let id = mainFeeds[mainFeeds.length - 1].id;
-              // getDataFeeds(lastId);
               setLastId(id);
             }
-            // return (
-            //   <Text style={{fontWeight: '700', fontSize: 18, color: 'gray'}}>
-            //     Load more cards :(
-            //   </Text>
-            // );
           }}
           disableTopSwipe={false}
           disableLeftSwipe={true}
@@ -203,19 +188,13 @@ const FeedScreen = (props) => {
           verticalThreshold={1}
           horizontalSwipe={false}
           disableBottomSwipe={true}
-          // onSwipedBottom={() => {
-          //   // this.swiper.goBackFromTop();
-          //   // this.swiper.goBackFromTop();
-          //   setCountStack(countStack + 1);
-          //   // console.log('onSwipeBottom');
-          // }}
           onSwipedTop={() => {
             setCountStack(countStack - 1);
-            // console.log('onSwiped top');
           }}>
           {mainFeeds !== undefined
             ? mainFeeds.map((item, index) => (
                 <RenderItem
+                  index={index}
                   key={index}
                   item={item}
                   onPress={() => {
@@ -239,6 +218,12 @@ const FeedScreen = (props) => {
                   onPressDownVote={(value) => {
                     setSelectedPost(value);
                     setDownVote(value.id);
+                  }}
+                  selfUserId={yourselfId}
+                  onPressDomain={() => {
+                    props.navigation.navigate('DomainScreen', {
+                      item: item,
+                    });
                   }}
                 />
               ))
@@ -276,3 +261,13 @@ const FeedScreen = (props) => {
 };
 
 export default FeedScreen;
+const styles = StyleSheet.create({
+  container: {flex: 1},
+  content: {
+    flex: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+  },
+  containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+});

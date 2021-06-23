@@ -21,7 +21,6 @@ import analytics from '@react-native-firebase/analytics';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-
 import {
   getMyProfile,
   changeRealName,
@@ -39,10 +38,9 @@ import SettingIcon from '../../assets/icons/images/setting.svg';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
-import {getToken} from '../../helpers/getToken';
-import {trimString} from '../../helpers/stringSplit';
-import {getAccessToken} from '../../data/local/accessToken';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../helpers/constants';
+import {trimString} from '../../utils/string/TrimString';
+import {getAccessToken} from '../../utils/token';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 
 const width = Dimensions.get('screen').width;
@@ -89,12 +87,11 @@ const ProfileScreen = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     fetchMyProfile(true);
 
-    getToken().then((val) => {
+    getAccessToken().then((val) => {
       setTokenJwt(val);
       setRerender(rerender++);
       setRerender(rerender++);
     });
-    // setToken()
     analytics().logScreenView({
       screen_class: 'ProfileScreen',
       screen_name: 'ProfileScreen',
@@ -381,12 +378,6 @@ const ProfileScreen = () => {
     );
   };
 
-  // getToken().then((val) => {
-  //   setTokenJwt(val);
-  //   setRerender(rerender++)
-  //   setRerender(rerender++)
-  // });
-
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -413,7 +404,7 @@ const ProfileScreen = () => {
                   <View style={styles.header}>
                     <Text style={styles.textUsername}>{dataMain.username}</Text>
                     <View style={styles.wrapHeaderButton}>
-                      <View style={{marginRight: 20}}>
+                      <View style={styles.btnShare}>
                         <TouchableNativeFeedback onPress={onShare}>
                           <ShareIcon
                             width={20}
@@ -455,7 +446,7 @@ const ProfileScreen = () => {
                           <MemoIcAddCircle
                             width={48}
                             height={48}
-                            style={{position: 'absolute', top: 25, left: 25}}
+                            style={styles.addCircle}
                           />
                         ) : (
                           <></>
@@ -470,14 +461,14 @@ const ProfileScreen = () => {
                       </Text>
                     </TouchableNativeFeedback> */}
                   </View>
-                  <View style={{...styles.wrapFollower, marginTop: 12}}>
+                  <View style={styles.wrapFollower}>
                     <View style={styles.wrapRow}>
                       <Text style={styles.textTotal}>
                         {dataMain.follower_symbol}
                       </Text>
                       <Text style={styles.textFollow}>Followers</Text>
                     </View>
-                    <View style={{marginLeft: 18}}>
+                    <View style={styles.following}>
                       <TouchableNativeFeedback
                         onPress={() =>
                           goToFollowings(dataMain.user_id, dataMain.username)
@@ -662,6 +653,7 @@ const styles = StyleSheet.create({
   wrapFollower: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 12,
   },
   wrapRow: {
     flexDirection: 'row',
@@ -685,5 +677,8 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 100,
   },
+  btnShare: {marginRight: 20},
+  addCircle: {position: 'absolute', top: 25, left: 25},
+  following: {marginLeft: 18},
 });
 export default ProfileScreen;

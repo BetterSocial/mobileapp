@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   Image,
   StyleSheet,
@@ -26,22 +26,8 @@ const WriteComment = ({value = null, onPress, onChangeText}) => {
           onChangeText={onChangeText}
           value={value}
         />
-        <TouchableOpacity onPress={onPress}>
-          <View
-            style={{
-              backgroundColor: '#00ADB5',
-              paddingHorizontal: 16,
-              paddingVertical: 4,
-              borderRadius: 8,
-              width: 80,
-              height: 32,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: 'white', fontFamily: fonts.inter[400]}}>
-              Reply
-            </Text>
-          </View>
+        <TouchableOpacity onPress={onPress} style={styles.btn}>
+          <Text style={styles.btnText}>Reply</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -64,6 +50,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.lightgrey,
+    marginLeft: 10,
+    borderRadius: 5,
+    paddingHorizontal: 15,
+    marginEnd: 24,
+  },
+  btn: {
+    backgroundColor: '#00ADB5',
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+    borderRadius: 8,
+    width: 80,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {color: 'white', fontFamily: fonts.inter[400]},
   image: {
     width: 32,
     height: 32,

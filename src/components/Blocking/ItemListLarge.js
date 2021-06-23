@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import IconFA5 from 'react-native-vector-icons/FontAwesome5';
@@ -16,7 +16,7 @@ const ItemListLarge = ({label, desc, iconReght, icon, onPress}) => {
         {icon === 'handcuffs' && <Handcuffs />}
         <Text style={styles.label}>{label}</Text>
       </View>
-      <View style={{flexDirection: 'row'}}>
+      <View style={styles.content}>
         <Text style={styles.desc}>{desc}</Text>
         {iconReght && (
           <TouchableOpacity style={styles.btn}>
@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     borderTopColor: '#E0E0E0',
     borderTopWidth: 1,
+  },
+  content: {
+    flexDirection: 'row',
   },
   btn: {
     justifyContent: 'center',

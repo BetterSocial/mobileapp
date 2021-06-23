@@ -12,7 +12,6 @@ import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 
 import {Button} from '../../components/Button';
 import ItemList from '../../components/Blocking/ItemList';
-import Gap from '../../components/Gap';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
@@ -61,17 +60,10 @@ const ReportDomain = ({refReportDomain, onSelect}) => {
         closeOnDragDown={false}
         closeOnPressMask={true}
         customStyles={{
-          container: {
-            height: '80%',
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 20,
-          },
-          draggableIcon: {
-            backgroundColor: colors.alto,
-            width: 60,
-          },
+          container: styles.container,
+          draggableIcon: styles.draggableIcon,
         }}>
-        <View style={{flex: 1}}>
+        <View style={styles.content}>
           <ScrollView nestedScrollEnabled={true}>
             <TouchableOpacity style={styles.btnSkip}>
               <Text style={styles.btnSkipText}>
@@ -97,7 +89,6 @@ const ReportDomain = ({refReportDomain, onSelect}) => {
                 <Text>Provide info on next screen</Text>
               </Button>
             </View>
-            <Gap style={{height: 30}} />
           </ScrollView>
         </View>
       </RBSheet>
@@ -108,6 +99,7 @@ const ReportDomain = ({refReportDomain, onSelect}) => {
 export default ReportDomain;
 
 const styles = StyleSheet.create({
+  content: {flex: 1},
   title: {
     fontFamily: fonts.inter[700],
     fontSize: 16,
@@ -126,6 +118,7 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
     paddingRight: 22,
     paddingTop: 8,
+    marginBottom: 30,
   },
   btnSkip: {
     backgroundColor: '#E0E0E0',
@@ -139,5 +132,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[700],
     fontSize: 14,
     color: '#000',
+  },
+  container: {
+    height: '80%',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+  },
+  draggableIcon: {
+    backgroundColor: colors.alto,
+    width: 60,
   },
 });

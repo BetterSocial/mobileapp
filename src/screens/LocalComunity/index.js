@@ -55,7 +55,7 @@ const LocalComunity = () => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <View style={{paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5}}>
+        <View style={styles.header}>
           <TouchableNativeFeedback
             background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}
             onPress={() => navigation.goBack()}>
@@ -300,8 +300,8 @@ const LocalComunity = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // padding: 22,
   },
+  header: {paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5},
   textFindYourLocalComunity: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
@@ -317,7 +317,6 @@ const styles = StyleSheet.create({
     width: width - 44,
     minHeight: 96,
     flexDirection: 'row',
-    // alignItems: 'center',
     borderRadius: 4,
     justifyContent: 'space-between',
     padding: 14,
@@ -378,7 +377,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 22,
-    // backgroundColor : 'blue'
   },
   columnButton: {
     flexDirection: 'column',
@@ -409,11 +407,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 22,
-    // marginBottom: 35,
-    // paddingVertical : 0,
-    // marginBottom: 20,
-    // paddingVertical : 20,
-    // backgroundColor : 'red'
   },
   containerRow: {
     flexDirection: 'row',

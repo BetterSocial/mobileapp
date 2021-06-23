@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -31,26 +31,18 @@ const BlockDomain = ({refBlockUser, onSelect, domain}) => {
         ref={refBlockUser}
         closeOnDragDown={true}
         closeOnPressMask={true}
-        // openDuration={250}
         customStyles={{
-          container: {
-            height: 'auto',
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 20,
-          },
-          draggableIcon: {
-            backgroundColor: colors.alto,
-            width: 60,
-          },
+          container: styles.container,
+          draggableIcon: styles.draggableIcon,
         }}>
         <Text style={styles.title}>What do you want to do?</Text>
         <Text style={styles.desc}>
           Blocking a domain will not just remove their link from your feed, but
           also reduce their visibility for all other users.
         </Text>
-        {data.map((item) => (
+        {data.map((item, index) => (
           <ItemListLarge
-            key={item.id}
+            key={index}
             id={item.id}
             label={item.label}
             desc={item.desc}
@@ -80,5 +72,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 21,
     marginTop: 17,
     marginBottom: 29,
+  },
+
+  container: {
+    height: 'auto',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+  },
+  draggableIcon: {
+    backgroundColor: colors.alto,
+    width: 60,
   },
 });

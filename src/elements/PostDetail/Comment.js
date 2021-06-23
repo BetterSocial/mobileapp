@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import IconEn from 'react-native-vector-icons/Entypo';
@@ -11,11 +11,7 @@ import {fonts} from '../../utils/fonts';
 
 const Comment = ({username, comment, onPress, isLast = false}) => {
   return (
-    <View
-      style={[
-        styles.container,
-        {borderLeftColor: isLast ? '#fFF' : colors.gray1},
-      ]}>
+    <View style={styles.container(isLast)}>
       <View style={styles.profile}>
         <Image
           source={require('../../assets/images/ProfileDefault.png')}
@@ -26,7 +22,7 @@ const Comment = ({username, comment, onPress, isLast = false}) => {
       <Text style={styles.post}>{comment}</Text>
       <View style={styles.constainerFooter}>
         {isLast === true ? (
-          <View style={{marginBottom: 8}} />
+          <View style={styles.gap} />
         ) : (
           <TouchableOpacity style={styles.btnReply} onPress={onPress}>
             <IconAnt name="back" size={15.77} color={colors.gray1} />
@@ -55,9 +51,10 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  container: {
+  container: (isLast) => ({
     borderLeftWidth: 1,
-  },
+    borderLeftColor: isLast ? '#fFF' : colors.gray1,
+  }),
   username: {
     fontFamily: fonts.inter[600],
     fontSize: 12,
@@ -96,4 +93,5 @@ const styles = StyleSheet.create({
   arrowup: {
     marginRight: 33.04,
   },
+  gap: {marginBottom: 8},
 });

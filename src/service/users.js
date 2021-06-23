@@ -1,13 +1,10 @@
 import api from './config';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {
-  getRefreshToken,
-  setAccessToken,
-  setRefreshToken,
-} from '../data/local/accessToken';
+import {getRefreshToken, setAccessToken, setRefreshToken} from '../utils/token';
 import {BASE_URL} from '@env';
 export const verifyUser = async (userId) => {
   try {
+    console.log(BASE_URL);
     let resApi = await api.post('/users/verify-user', {
       user_id: userId,
     });

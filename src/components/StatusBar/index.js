@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {StatusBar, View, StyleSheet, Platform} from 'react-native';
 
 const STATUSBAR_HEIGHT = StatusBar.currentHeight;

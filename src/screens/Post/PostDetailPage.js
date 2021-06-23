@@ -2,7 +2,7 @@ import * as React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
 
 import JWTDecode from 'jwt-decode';
-import {getAccessToken} from '../../data/local/accessToken';
+import {getAccessToken} from '../../utils/token';
 import Toast from 'react-native-simple-toast';
 
 import Gap from '../../components/Gap';
@@ -21,8 +21,14 @@ import {getMyProfile} from '../../service/profile';
 import {blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
 import ContentPoll from '../feedScreen/ContentPoll';
-import {POST_VERB_POLL} from '../../utils/constants';
+import {
+  POST_VERB_POLL,
+  POST_TYPE_LINK,
+  POST_TYPE_POLL,
+  POST_TYPE_STANDARD,
+} from '../../utils/constants';
 import {createCommentParent} from '../../service/comment';
+import ContentLink from '../feedScreen/ContentLink';
 
 const {width, height} = Dimensions.get('window');
 
@@ -111,7 +117,7 @@ const PostDetailPage = (props) => {
       message: messageReport,
     };
     let result = await blockUser(data);
-    if (result.code == 200) {
+    if (result.code === 200) {
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -209,6 +215,12 @@ const PostDetailPage = (props) => {
     }
   };
 
+  const onPressDomain = () => {
+    props.navigation.navigate('DomainScreen', {
+      item: item,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -216,13 +228,19 @@ const PostDetailPage = (props) => {
         style={{height: height * 0.9}}>
         <View style={styles.content}>
           <Header props={item} isBackButton={true} />
-          {item.verb === POST_VERB_POLL ? (
+          {item.post_type === POST_TYPE_POLL && (
             <ContentPoll
               message={item.message}
               images_url={item.images_url}
               polls={item.pollOptions}
             />
-          ) : (
+          )}
+
+          {item.post_type === POST_TYPE_LINK && (
+            <ContentLink og={item.og} onPress={onPressDomain} />
+          )}
+
+          {item.post_type === POST_TYPE_STANDARD && (
             <Content
               message={item.message}
               images_url={item.images_url}
@@ -230,7 +248,7 @@ const PostDetailPage = (props) => {
             />
           )}
 
-          <Gap style={{height: 16}} />
+          <Gap style={styles.gap} />
           <Footer
             item={item}
             totalComment={totalComment}
@@ -251,6 +269,7 @@ const PostDetailPage = (props) => {
                 refBlockUser.current.open();
               }
             }}
+            isSelf={yourselfId === item.actor.id ? true : false}
           />
         </View>
         {isReaction && (
@@ -296,6 +315,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
     paddingBottom: 75,
+    paddingTop: 8,
   },
   containerText: {
     marginTop: 20,
@@ -324,4 +344,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 16,
   },
+  gap: {height: 16},
 });
