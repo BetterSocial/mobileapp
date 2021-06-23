@@ -60,21 +60,21 @@ const NewsScreen = ({navigation}) => {
   const blockNews = (news) => {};
 
   const upvoteNews = async (news) => {
-    let result = await upVote({activity_id: news.id});
-    if (result.code === 200) {
-      Toast.show('up vote was successful', Toast.LONG);
-    } else {
-      Toast.show('up vote failed', Toast.LONG);
-    }
+    // let result = await upVote({activity_id: news.id});
+    // if (result.code === 200) {
+    //   Toast.show('up vote was successful', Toast.LONG);
+    // } else {
+    //   Toast.show('up vote failed', Toast.LONG);
+    // }
   };
 
   const downvoteNews = async (news) => {
-    let result = await downVote({activity_id: news.id});
-    if (result.code === 200) {
-      Toast.show('down vote success', Toast.LONG);
-    } else {
-      Toast.show('down vote failed', Toast.LONG);
-    }
+    // let result = await downVote({activity_id: news.id});
+    // if (result.code === 200) {
+    //   Toast.show('down vote success', Toast.LONG);
+    // } else {
+    //   Toast.show('down vote failed', Toast.LONG);
+    // }
   };
 
   console.log('news screen');

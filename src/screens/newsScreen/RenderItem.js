@@ -18,30 +18,23 @@ const RenderItem = ({
   selfUserId,
 }) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
+  const [statusUpvote, setStatusUpvote] = React.useState(false);
+  const [statusDownvote, setStatusDowvote] = React.useState(false);
   React.useEffect(() => {
     const validationStatusVote = () => {
-      if (item.reaction_counts !== undefined || null) {
-        if (item.latest_reactions.upvotes !== undefined) {
-          let upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === selfUserId,
-          );
-          if (upvote !== undefined) {
-            setVoteStatus('upvote');
-          }
-        }
-
-        if (item.latest_reactions.downvotes !== undefined) {
-          let downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === selfUserId,
-          );
-          if (downvotes !== undefined) {
-            setVoteStatus('downvote');
-          }
-        }
+      if (statusDownvote === false && statusUpvote === false) {
+        setVoteStatus('none');
+      } else if (statusDownvote === true) {
+        setVoteStatus('downvote');
+      } else if (statusUpvote === true) {
+        setVoteStatus('upvote');
       }
+      console.log(voteStatus);
     };
+
     validationStatusVote();
-  }, [item, selfUserId]);
+  }, [item, selfUserId, statusDownvote, statusUpvote, voteStatus]);
+
   return (
     <View>
       <View style={styles.container}>
@@ -64,8 +57,26 @@ const RenderItem = ({
           onPressShare={() => onPressShare(item)}
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
-          onPressDownVote={() => onPressDownVote(item)}
-          onPressUpvote={() => onPressUpvote(item)}
+          onPressDownVote={() => {
+            // onPressDownVote(item);
+            setStatusDowvote((prev) => {
+              prev = !prev;
+              if (prev) {
+                setStatusUpvote(false);
+              }
+              return prev;
+            });
+          }}
+          onPressUpvote={() => {
+            // onPressUpvote(item);
+            setStatusUpvote((prev) => {
+              prev = !prev;
+              if (prev) {
+                setStatusDowvote(false);
+              }
+              return prev;
+            });
+          }}
           statusVote={voteStatus}
         />
       </View>

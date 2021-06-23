@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, Dimensions, Share} from 'react-native';
+import {StyleSheet, Dimensions, Share, View} from 'react-native';
 
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
@@ -16,6 +16,8 @@ import ContentPoll from './ContentPoll';
 
 import {isContainUrl, smartRender} from '../../utils/Utils';
 import ContentLink from './ContentLink';
+import ContainerComment from '../../elements/PostDetail/ContainerComment';
+import {Gap, PreviewComment} from '../../components';
 
 const {width, height} = Dimensions.get('window');
 
@@ -106,6 +108,24 @@ const Item = ({
   index,
 }) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
+  const [isReaction, setReaction] = React.useState(false);
+  const [previewComment, setPreviewComment] = React.useState({});
+  React.useEffect(() => {
+    const initial = () => {
+      let reactionCount = item.reaction_counts;
+      if (JSON.stringify(reactionCount) !== '{}') {
+        let count = 0;
+        let comment = reactionCount.comment;
+        if (comment !== undefined) {
+          if (comment > 0) {
+            setReaction(true);
+            setPreviewComment(item.latest_reactions.comment[0]);
+          }
+        }
+      }
+    };
+    initial();
+  }, [item]);
   React.useEffect(() => {
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
@@ -170,6 +190,18 @@ const Item = ({
           item.anonimity ? false : selfUserId === item.actor.id ? true : false
         }
       />
+
+      {isReaction && (
+        <View>
+          <PreviewComment
+            username={previewComment.user.data.username}
+            comment={previewComment.data.text}
+            image={previewComment.user.data.profile_pic_url}
+            time={previewComment.created_at}
+          />
+          <Gap height={16} />
+        </View>
+      )}
     </Card>
   );
 };

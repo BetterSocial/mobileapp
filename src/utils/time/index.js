@@ -14,12 +14,12 @@ export const calculateTime = (time) => {
 
   if (minutes < 60) {
     if (minutes === 0) {
-      return '1m ago';
+      return '1m';
     }
-    return `${minutes}m ago`;
+    return `${minutes}m`;
   }
   if (hours < 24) {
-    return `${hours}h ago`;
+    return `${hours}h`;
   }
 
   if (days < 2) {
@@ -27,12 +27,12 @@ export const calculateTime = (time) => {
   }
 
   if (days >= 2 && days <= 6) {
-    return `${days}d ago`;
+    return `${days}d`;
   }
 
   if (days >= 7 && days <= 13) {
-    return '1w ago';
+    return '1w';
   }
 
-  return `${weeks}w ago`;
+  return `${weeks}w`;
 };
