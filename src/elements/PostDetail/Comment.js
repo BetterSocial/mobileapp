@@ -9,10 +9,9 @@ import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_of
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const Comment = ({username, comment, onPress, isLast, level}) => {
-  console.log(`${comment} ${isLast}`);
+const Comment = ({username, comment, onPress, isLast, level, style}) => {
   return (
-    <View style={styles.container(isLast)}>
+    <View style={styles.container(isLast, style)}>
       <View style={styles.profile}>
         <Image
           source={require('../../assets/images/ProfileDefault.png')}
@@ -52,9 +51,10 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  container: (isLast) => ({
+  container: (isLast, style) => ({
     borderLeftWidth: 1,
     borderLeftColor: isLast ? 'transparent' : colors.gray1,
+    ...style,
   }),
   username: {
     fontFamily: fonts.inter[600],

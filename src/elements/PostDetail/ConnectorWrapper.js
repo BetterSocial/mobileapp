@@ -20,7 +20,7 @@ let styles = StyleSheet.create({
   },
   connector: (index) => {
     return {
-      marginLeft: -1,
+      marginLeft: 0,
       width: 30,
       height: 13,
       borderLeftWidth: 1,
