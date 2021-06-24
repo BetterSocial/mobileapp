@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   container: (isLast, style) => ({
+    flex: 1,
     borderLeftWidth: 1,
     borderLeftColor: isLast ? 'transparent' : colors.gray1,
     ...style,

@@ -66,7 +66,7 @@ const ReplyComment = ({data, countComment, navigation, showLeftConnector}) => {
       {data.map((item, index) => {
         return (
           <ConnectorWrapper index={index}>
-            <View key={'c' + index}>
+            <View key={'c' + index} style={styles.levelOneCommentWrapper}>
               <Comment
                 key={'c' + index}
                 comment={item.data.text}
@@ -186,5 +186,8 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.gray1,
     borderBottomColor: colors.gray1,
     marginRight: 4,
+  },
+  levelOneCommentWrapper: {
+    flex: 1,
   },
 });
