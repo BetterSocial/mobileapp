@@ -11,10 +11,13 @@ import ConnectorWrapper from './ConnectorWrapper';
 const ContainerComment = ({comments}) => {
   const navigation = useNavigation();
   let isLast = (index, item) => {
-    return index === comments.length - 1 && item.children_counts.comment === 0;
+    return (
+      index === comments.length - 1 && (item.children_counts.comment || 0) === 0
+    );
   };
 
-  let showLeftConnector = (index) => {
+  let hideLeftConnector = (index, item) => {
+    // console.log(index === comments.length - 1 && item.children_counts.comment > 0);
     return index === comments.length - 1;
   };
 
@@ -39,7 +42,7 @@ const ContainerComment = ({comments}) => {
             </View>
             {item.children_counts.comment > 0 && (
               <ReplyComment
-                showLeftConnector={showLeftConnector(index)}
+                hideLeftConnector={hideLeftConnector(index, item)}
                 data={item.latest_children.comment}
                 countComment={item.children_counts.comment}
                 navigation={navigation}
@@ -51,7 +54,7 @@ const ContainerComment = ({comments}) => {
     </View>
   );
 };
-const ReplyComment = ({data, countComment, navigation, showLeftConnector}) => {
+const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
   const [isChildShown, setIsChildShown] = React.useState(false);
   const onShowReplyClicked = () => setIsChildShown(!isChildShown);
 
@@ -62,7 +65,7 @@ const ReplyComment = ({data, countComment, navigation, showLeftConnector}) => {
   };
 
   return (
-    <ContainerReply showLeftConnector={showLeftConnector}>
+    <ContainerReply hideLeftConnector={hideLeftConnector}>
       {data.map((item, index) => {
         return (
           <ConnectorWrapper index={index}>
@@ -149,11 +152,12 @@ const ReplyCommentChild = ({
   );
 };
 
-const ContainerReply = ({children, isGrandchild, showLeftConnector}) => {
+const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
+  console.log(hideLeftConnector);
   return (
     <View
       style={[
-        styles.containerReply(showLeftConnector),
+        styles.containerReply(hideLeftConnector),
         {borderColor: isGrandchild ? '#fff' : colors.gray1},
       ]}>
       {children}
@@ -166,8 +170,8 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 22,
   },
-  containerReply: (showLeftConnector) => ({
-    borderLeftWidth: showLeftConnector ? 0 : 1,
+  containerReply: (hideLeftConnector) => ({
+    borderLeftWidth: hideLeftConnector ? 0 : 1,
   }),
   seeRepliesContainer: {
     display: 'flex',

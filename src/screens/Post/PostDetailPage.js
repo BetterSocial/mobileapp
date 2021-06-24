@@ -30,6 +30,7 @@ import WriteComment from '../../elements/PostDetail/WriteComment';
 import ContainerComment from '../../elements/PostDetail/ContainerComment';
 import ContentPoll from '../feedScreen/ContentPoll';
 import ContentLink from '../feedScreen/ContentLink';
+import moment from 'moment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -45,7 +46,6 @@ const PostDetailPage = (props) => {
   const refReportUser = React.useRef();
   const refReportDomain = React.useRef();
   const refSpecificIssue = React.useRef();
-  const [item, setItem] = React.useState(props.route.params.item);
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
   const [typeComment, setTypeComment] = React.useState('parent');
@@ -57,6 +57,21 @@ const PostDetailPage = (props) => {
   const [yourselfId, setYourselfId] = React.useState('');
 
   const scrollViewRef = React.useRef(null);
+
+  let itemProp = props.route.params.item;
+  let comments = itemProp.latest_reactions.comment;
+  let sortedComment = comments.sort((current, next) => {
+    let currentMoment = moment(current.updated_at);
+    let nextMoment = moment(next.updated_at);
+    return currentMoment.diff(nextMoment);
+  });
+
+  let newItemProp = {...itemProp};
+  newItemProp.latest_reactions.comment = sortedComment;
+
+  const [item, setItem] = React.useState(newItemProp);
+
+  // console.log(item.latest_reactions.comment);
 
   React.useEffect(() => {
     const initial = () => {
