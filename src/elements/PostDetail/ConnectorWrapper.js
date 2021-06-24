@@ -22,7 +22,7 @@ let styles = StyleSheet.create({
     return {
       marginLeft: 0,
       width: 30,
-      height: 13,
+      height: 14,
       borderLeftWidth: 1,
       borderBottomWidth: 1,
       borderBottomLeftRadius: 21,

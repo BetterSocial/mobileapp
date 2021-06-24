@@ -193,5 +193,6 @@ const styles = StyleSheet.create({
   },
   levelOneCommentWrapper: {
     flex: 1,
+    marginLeft: 0,
   },
 });

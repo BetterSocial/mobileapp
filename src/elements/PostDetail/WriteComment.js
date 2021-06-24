@@ -84,8 +84,9 @@ const styles = StyleSheet.create({
   },
   btnText: {color: 'white', fontFamily: fonts.inter[400]},
   image: {
-    width: 32,
-    height: 32,
+    width: 24,
+    height: 24,
+    marginLeft: -10,
   },
   text: {
     flex: 1,
