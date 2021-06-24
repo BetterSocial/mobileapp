@@ -29,6 +29,8 @@ const ContainerComment = ({comments}) => {
                 comment={item.data.text}
                 username={item.user.data.username}
                 level={0}
+                time={item.created_at}
+                photo={item.user.data.profile_pic_url}
                 isLast={isLast(index, item)}
                 onPress={() => {
                   navigation.navigate('ReplyComment', {item: item});
@@ -70,6 +72,8 @@ const ReplyComment = ({data, countComment, navigation, showLeftConnector}) => {
                 comment={item.data.text}
                 username={item.user.data.username}
                 level={1}
+                photo={item.user.data.profile_pic_url}
+                time={item.created_at}
                 onPress={() =>
                   navigation.navigate('ReplyComment', {item: item})
                 }
@@ -123,7 +127,9 @@ const ReplyCommentChild = ({
           <ConnectorWrapper index={index}>
             <Comment
               key={'c' + index}
+              photo={item.user.data.profile_pic_url}
               comment={item.data.text}
+              time={item.created_at}
               level={2}
               username={item.user.data.username}
               onPress={() => {

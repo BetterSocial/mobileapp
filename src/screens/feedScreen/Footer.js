@@ -18,6 +18,7 @@ import MemoIc_share from '../../assets/icons/Ic_share';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_arrow_down_vote_on';
 import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_arrow_upvote_on';
+import {colors} from '../../utils/colors';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -36,13 +37,15 @@ const Footer = ({
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
       <View style={[styles.rowSpaceBeetwen, styles.width(0.25)]}>
-        <TouchableOpacity onPress={onPressShare}>
+        <TouchableOpacity onPress={onPressShare} style={styles.widthFlex}>
           <MemoIc_share height={20} width={20} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onPressComment}>
+        <TouchableOpacity onPress={onPressComment} style={styles.widthFlex}>
           <MemoIc_comment height={20} width={20} />
         </TouchableOpacity>
-        <Text style={styles.textCount}>{totalComment}</Text>
+        <TouchableOpacity onPress={onPressComment} style={styles.widthFlex}>
+          <Text style={styles.textCount(0)}>{totalComment}</Text>
+        </TouchableOpacity>
       </View>
       <View style={[styles.rowSpaceBeetwen, styles.width(0.25)]}>
         <TouchableOpacity onPress={() => onPressBlock(item)}>
@@ -71,7 +74,14 @@ const Footer = ({
 };
 
 const styles = StyleSheet.create({
-  container: {marginBottom: 8},
+  container: {
+    marginBottom: 8,
+    marginHorizontal: -16,
+    paddingBottom: 16.12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.gray1,
+  },
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -86,6 +96,9 @@ const styles = StyleSheet.create({
   width: (count) => ({
     width: screenWidth * count,
   }),
+  widthFlex: {
+    flex: 1,
+  },
 });
 
 Footer.propTypes = {

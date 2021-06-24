@@ -8,16 +8,33 @@ import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {calculateTime} from '../../utils/time';
 
-const Comment = ({username, comment, onPress, isLast, level, style}) => {
+const Comment = ({
+  username,
+  comment,
+  onPress,
+  isLast = false,
+  time,
+  style,
+  photo,
+  level,
+}) => {
   return (
     <View style={styles.container(isLast, style)}>
       <View style={styles.profile}>
         <Image
-          source={require('../../assets/images/ProfileDefault.png')}
+          source={
+            photo
+              ? {uri: photo}
+              : require('../../assets/images/ProfileDefault.png')
+          }
           style={styles.image}
         />
-        <Text style={styles.username}>{username}</Text>
+        <View style={styles.containerUsername}>
+          <Text style={styles.username}>{username} •</Text>
+          <Text style={styles.time}> {calculateTime(time)}</Text>
+        </View>
       </View>
       <Text style={styles.post}>{comment}</Text>
       <View style={styles.constainerFooter}>
@@ -57,9 +74,10 @@ const styles = StyleSheet.create({
     ...style,
   }),
   username: {
-    fontFamily: fonts.inter[600],
+    fontFamily: fonts.inter[700],
     fontSize: 12,
     color: '#828282',
+    lineHeight: 14,
     marginLeft: 17,
   },
   post: {
@@ -97,7 +115,15 @@ const styles = StyleSheet.create({
   arrowup: {
     marginRight: 33.04,
   },
-  gap: {
-    marginBottom: 8,
+  gap: {marginBottom: 8},
+  time: {
+    fontFamily: fonts.inter[400],
+    fontSize: 10,
+    color: '#828282',
+    lineHeight: 12,
+  },
+  containerUsername: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
