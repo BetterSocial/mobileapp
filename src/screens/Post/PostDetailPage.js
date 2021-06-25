@@ -313,6 +313,7 @@ const PostDetailPage = (props) => {
         )}
       </ScrollView>
       <WriteComment
+        username={item.actor.data.username}
         value={textComment}
         onChangeText={(value) => setTextComment(value)}
         onPress={() => {

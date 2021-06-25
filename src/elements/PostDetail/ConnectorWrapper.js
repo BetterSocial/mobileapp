@@ -20,15 +20,15 @@ let styles = StyleSheet.create({
   },
   connector: (index) => {
     return {
-      marginLeft: 0,
-      width: 30,
+      marginLeft: -1,
+      width: 24,
       height: 14,
       borderLeftWidth: 1,
       borderBottomWidth: 1,
       borderBottomLeftRadius: 21,
       borderLeftColor: index === 0 ? colors.gray1 : 'transparent',
       borderBottomColor: index === 0 ? colors.gray1 : 'transparent',
-      marginRight: 4,
+      // marginRight: 4,
     };
   },
 });

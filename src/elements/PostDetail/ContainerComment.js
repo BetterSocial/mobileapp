@@ -16,9 +16,13 @@ const ContainerComment = ({comments}) => {
     );
   };
 
-  let hideLeftConnector = (index, item) => {
-    // console.log(index === comments.length - 1 && item.children_counts.comment > 0);
+  let isLastInParent = (index, item) => {
     return index === comments.length - 1;
+  };
+
+  let hideLeftConnector = (index, item) => {
+    return index === comments.length - 1;
+    // return false;
   };
 
   return (
@@ -35,6 +39,7 @@ const ContainerComment = ({comments}) => {
                 time={item.created_at}
                 photo={item.user.data.profile_pic_url}
                 isLast={isLast(index, item)}
+                isLastInParent={isLastInParent(index, item)}
                 onPress={() => {
                   navigation.navigate('ReplyComment', {item: item});
                 }}
@@ -62,6 +67,10 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
     return (
       index === countComment - 1 && (item.children_counts.comment || 0) === 0
     );
+  };
+
+  let isLastInParent = (index) => {
+    return index === countComment - 1;
   };
 
   return (
@@ -94,7 +103,10 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
                   )}
                   <>
                     {!isChildShown && (
-                      <View style={styles.seeRepliesContainer}>
+                      <View
+                        style={styles.seeRepliesContainer(
+                          isLastInParent(index),
+                        )}>
                         <View style={styles.connector} />
                         <TouchableOpacity onPress={onShowReplyClicked}>
                           <Text style={styles.seeRepliesText}>
@@ -153,7 +165,6 @@ const ReplyCommentChild = ({
 };
 
 const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
-  console.log(hideLeftConnector);
   return (
     <View
       style={[
@@ -171,13 +182,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
   },
   containerReply: (hideLeftConnector) => ({
-    borderLeftWidth: hideLeftConnector ? 0 : 1,
+    borderLeftWidth: 1,
   }),
-  seeRepliesContainer: {
+  seeRepliesContainer: (isLast) => ({
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: 14,
-  },
+    paddingBottom: 14,
+    borderLeftColor: isLast ? 'transparent' : colors.gray1,
+    borderLeftWidth: 1,
+  }),
   seeRepliesText: {
     color: colors.blue,
   },
@@ -190,6 +203,7 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.gray1,
     borderBottomColor: colors.gray1,
     marginRight: 4,
+    marginLeft: -1,
   },
   levelOneCommentWrapper: {
     flex: 1,

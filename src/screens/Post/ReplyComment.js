@@ -115,6 +115,7 @@ const ReplyComment = (props) => {
         />
       </View> */}
       <WriteComment
+        username={item.user.data.username}
         onChangeText={(v) => setTextComment(v)}
         onPress={() => createComment()}
         value={textComment}
@@ -133,7 +134,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  containerComment: {paddingHorizontal: 20, marginTop: 24.5},
+  containerComment: {
+    paddingHorizontal: 22,
+    marginTop: 24.5,
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+  },
   header: {
     paddingTop: 10,
     flexDirection: 'row',

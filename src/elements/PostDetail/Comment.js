@@ -15,13 +15,14 @@ const Comment = ({
   comment,
   onPress,
   isLast = false,
+  isLastInParent = false,
   time,
   style,
   photo,
   level,
 }) => {
   return (
-    <View style={styles.container(isLast, style)}>
+    <View style={styles.container({isLast, style, level, isLastInParent})}>
       <View style={styles.profile}>
         <Image
           source={
@@ -68,8 +69,10 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  container: (isLast, style) => ({
+  container: ({isLast, style, level, isLastInParent}) => ({
     flex: 1,
+    // marginLeft: isLastInParent ? -1 : 0,
+    // flexDirection: 'column',
     borderLeftWidth: 1,
     borderLeftColor: isLast ? 'transparent' : colors.gray1,
     ...style,
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#828282',
     lineHeight: 14,
-    marginLeft: 17,
+    marginLeft: 16,
   },
   post: {
     fontFamily: fonts.inter[400],
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
   },
   profile: {
     flexDirection: 'row',
-    marginLeft: -12,
+    marginLeft: -13,
   },
   constainerFooter: {
     flexDirection: 'row',
