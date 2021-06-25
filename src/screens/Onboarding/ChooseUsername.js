@@ -227,23 +227,19 @@ const ChooseUsername = () => {
               />
               {messageTypeFetch(typeFetch, username)}
             </View>
-            <View style={styles.constainerInfo}>
-              <View style={styles.containerIcon}>
-                <IconFontAwesome5
-                  name="exclamation"
-                  size={14}
-                  color="#2F80ED"
-                />
-              </View>
-              <Text style={styles.infoText}>
-                Whatever your username, you will always be able to post
-                anonymously.
-              </Text>
+          </View>
+          <View style={styles.constainerInfo}>
+            <View style={styles.containerIcon}>
+              <IconFontAwesome5 name="exclamation" size={14} color="#2F80ED" />
             </View>
             <Text style={styles.infoText}>
-              {StringConstant.onboardingChooseUsernameBlueBoxHint}
+              Whatever your username, you will always be able to post
+              anonymously.
             </Text>
           </View>
+          <Text style={styles.infoText}>
+            {StringConstant.onboardingChooseUsernameBlueBoxHint}
+          </Text>
         </View>
         <View style={styles.gap} />
         <Button style={styles.btnNext} onPress={() => next()}>

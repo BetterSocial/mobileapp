@@ -58,6 +58,7 @@ const PostDetailPage = (props) => {
   React.useEffect(() => {
     const initial = () => {
       let reactionCount = props.route.params.item.reaction_counts;
+      console.log(props.route.params.item);
       if (JSON.stringify(reactionCount) !== '{}') {
         let count = 0;
         let comment = reactionCount.comment;
