@@ -20,6 +20,16 @@ const RenderItem = ({
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
+  const [totalVote, setTotalVote] = React.useState(0);
+
+  React.useEffect(() => {
+    const initialVote = () => {
+      let c = getCountVote(item);
+      setTotalVote(c);
+    };
+    initialVote();
+  }, [item]);
+
   React.useEffect(() => {
     const validationStatusVote = () => {
       if (statusDownvote === false && statusUpvote === false) {
@@ -29,7 +39,6 @@ const RenderItem = ({
       } else if (statusUpvote === true) {
         setVoteStatus('upvote');
       }
-      console.log(voteStatus);
     };
 
     validationStatusVote();
@@ -49,40 +58,56 @@ const RenderItem = ({
           description={item.content.description}
           url={item.content.url}
         />
+        <Gap height={8} />
+        <View style={styles.wrapperFooter}>
+          <Footer
+            totalComment={getCountComment(item)}
+            totalVote={totalVote}
+            onPressShare={() => onPressShare(item)}
+            onPressComment={() => onPressComment(item)}
+            onPressBlock={() => onPressBlock(item)}
+            onPressDownVote={() => {
+              setStatusDowvote((prev) => {
+                prev = !prev;
+                onPressDownVote({id: item.id, status: prev});
+                if (prev) {
+                  if (statusUpvote === true) {
+                    setTotalVote((p) => p - 2);
+                  } else {
+                    setTotalVote((p) => p - 1);
+                  }
+                  setStatusUpvote(false);
+                } else {
+                  setTotalVote((p) => p + 1);
+                }
+                return prev;
+              });
+            }}
+            onPressUpvote={() => {
+              setStatusUpvote((prev) => {
+                prev = !prev;
+                onPressUpvote({id: item.id, status: prev});
+                if (prev) {
+                  if (statusDownvote === true) {
+                    setTotalVote((p) => p + 2);
+                  } else {
+                    setTotalVote((p) => p + 1);
+                  }
+                  setStatusDowvote(false);
+                } else {
+                  setTotalVote((p) => p - 1);
+                }
+                return prev;
+              });
+            }}
+            statusVote={voteStatus}
+          />
+        </View>
       </View>
-      <View style={styles.wrapperFooter}>
-        <Footer
-          totalComment={getCountComment(item)}
-          totalVote={getCountVote(item)}
-          onPressShare={() => onPressShare(item)}
-          onPressComment={() => onPressComment(item)}
-          onPressBlock={() => onPressBlock(item)}
-          onPressDownVote={() => {
-            // onPressDownVote(item);
-            setStatusDowvote((prev) => {
-              prev = !prev;
-              if (prev) {
-                setStatusUpvote(false);
-              }
-              return prev;
-            });
-          }}
-          onPressUpvote={() => {
-            // onPressUpvote(item);
-            setStatusUpvote((prev) => {
-              prev = !prev;
-              if (prev) {
-                setStatusDowvote(false);
-              }
-              return prev;
-            });
-          }}
-          statusVote={voteStatus}
-        />
-      </View>
+
       <Gap height={8} />
-      <View style={{height: 1, width: '100%', backgroundColor: '#C4C4C4'}} />
-      <Gap height={16} />
+      {/* <View style={{height: 1, width: '100%', backgroundColor: '#C4C4C4'}} /> */}
+      {/* <Gap height={16} /> */}
     </View>
   );
 };

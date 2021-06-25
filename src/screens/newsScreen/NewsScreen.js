@@ -60,6 +60,7 @@ const NewsScreen = ({navigation}) => {
   const blockNews = (news) => {};
 
   const upvoteNews = async (news) => {
+    console.log(news);
     // let result = await upVote({activity_id: news.id});
     // if (result.code === 200) {
     //   Toast.show('up vote was successful', Toast.LONG);
@@ -69,6 +70,7 @@ const NewsScreen = ({navigation}) => {
   };
 
   const downvoteNews = async (news) => {
+    console.log(news);
     // let result = await downVote({activity_id: news.id});
     // if (result.code === 200) {
     //   Toast.show('down vote success', Toast.LONG);

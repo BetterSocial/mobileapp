@@ -21,15 +21,15 @@ const Search = ({onPress}) => {
           style={styles.input}
         />
         <View style={styles.wrapperIcon}>
-          <MemoIc_search width={22} height={22} />
+          <MemoIc_search width={20} height={20} />
         </View>
       </View>
-      <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
+      {/* <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
         <Text style={{color: COLORS.holyTosca, ...FONTS.h3}}>New Post</Text>
         <View>
           <MemoIc_pencil height={18} width={18} />
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
