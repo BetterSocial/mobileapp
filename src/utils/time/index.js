@@ -10,7 +10,7 @@ export const calculateTime = (time) => {
     let weeks = utc.diff(date, 'weeks');
 
     if (days >= 30) {
-      return new Date(date).toLocaleDateString;
+      return new Date(date).toLocaleDateString();
     }
 
     if (minutes < 60) {
@@ -24,7 +24,7 @@ export const calculateTime = (time) => {
     }
 
     if (days < 2) {
-      return 'yesterday';
+      return 'Yesterday';
     }
 
     if (days >= 2 && days <= 6) {

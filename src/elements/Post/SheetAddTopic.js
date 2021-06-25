@@ -8,6 +8,7 @@ import TopicItem from '../../components/TopicItem';
 import {Button} from '../../components/Button';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import AutoFocusTextArea from '../../components/TextArea/AutoFocusTextArea';
 
 const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
   const [dataTopic, setTopic] = React.useState('');
@@ -49,11 +50,6 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
     setlistTopics(newArr);
   };
   const merge = () => {
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    }, 500);
     setlistTopics(topics);
   };
   const save = () => {
@@ -84,10 +80,9 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
   };
   return (
     <RBSheet
-      onOpen={() => merge()}
-      onClose={() => {
-        onSwepDown();
-      }}
+      height={330}
+      onOpen={merge}
+      onClose={onSwepDown}
       ref={refTopic}
       closeOnDragDown={true}
       closeOnPressMask={true}
@@ -116,7 +111,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
             {listTopics.length < 5 && (
               <View style={styles.containerInput}>
                 <Text style={styles.hashtag}>#</Text>
-                <TextInput
+                <AutoFocusTextArea
                   ref={inputRef}
                   style={styles.input}
                   onSubmitEditing={() => add()}
@@ -193,6 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '400',
     fontFamily: fonts.inter[400],
+    marginTop: -8,
   },
   textDesc: {
     fontSize: 10,
@@ -204,7 +200,6 @@ const styles = StyleSheet.create({
   containerSheet: {
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    height: 'auto',
   },
   draggableIcon: {
     backgroundColor: colors.alto,

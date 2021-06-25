@@ -11,7 +11,6 @@ import Modal from 'react-native-modal';
 
 import CrossIcon from '../../../assets/icons/cross.svg';
 import StringConstant from '../../utils/string/StringConstant';
-import { displayFormattedSearchLocations } from '../../utils/string/StringUtils';
 import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
 
 const width = Dimensions.get('screen').width;
@@ -46,6 +45,7 @@ const SearchModal = (props) => {
           <View style={styles.containerInput}>
             <View style={{...styles.inputContainer, ...styles.containerInput}}>
               <AutoFocusTextArea
+                keyboardAppearDelay={50}
                 autoCapitalize={'words'}
                 autoFocus={focus}
                 ref={textRef}
@@ -62,7 +62,6 @@ const SearchModal = (props) => {
             props.options.length > 0 ? (
               <View style={styles.box}>
                 {props.options.map((value, index) => {
-                  console.log(value)
                   let firstLetter = value.neighborhood.split(' ');
                   let lastLetter = value.neighborhood.replace(
                     `${firstLetter[0]} `,
@@ -73,10 +72,10 @@ const SearchModal = (props) => {
                       key={index}
                       onPress={() => props.onSelect(value)}>
                       <View style={styles.list}>
-                          <Text style={styles.labelBold}>{firstLetter[0]}</Text>
-                          {firstLetter.length > 1 ? (
-                            <Text style={styles.label}>{lastLetter}</Text>
-                          ) : null}
+                        <Text style={styles.labelBold}>{firstLetter[0]}</Text>
+                        {firstLetter.length > 1 ? (
+                          <Text style={styles.label}>{lastLetter}</Text>
+                        ) : null}
                       </View>
                     </TouchableNativeFeedback>
                   );

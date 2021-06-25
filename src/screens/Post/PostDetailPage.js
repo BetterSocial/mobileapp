@@ -59,7 +59,7 @@ const PostDetailPage = (props) => {
   const scrollViewRef = React.useRef(null);
 
   let itemProp = props.route.params.item;
-  let comments = itemProp.latest_reactions.comment;
+  let comments = itemProp.latest_reactions.comment || [];
   let sortedComment = comments.sort((current, next) => {
     let currentMoment = moment(current.updated_at);
     let nextMoment = moment(next.updated_at);

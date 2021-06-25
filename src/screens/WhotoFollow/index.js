@@ -38,7 +38,7 @@ const WhotoFollow = () => {
   const [users, setUsers] = React.useState([]);
   const [followed, setFollowed] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [refreshing, setRefreshing] = React.React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [fetchRegister, setFetchRegister] = React.useState(false);
   const [topics] = React.useContext(Context).topics;
   const [localCommunity] = React.useContext(Context).localCommunity;
