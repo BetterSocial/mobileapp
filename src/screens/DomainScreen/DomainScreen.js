@@ -64,7 +64,6 @@ const DomainScreen = () => {
           console.log(v);
         }}
       />
-      <Gap style={{height: 16}} />
 
       <FlatList
         data={data}

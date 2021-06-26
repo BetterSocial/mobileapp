@@ -8,7 +8,7 @@ const SingleSidedShadowBox = ({children, style}) => (
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    paddingBottom: 5,
+    paddingBottom: 2,
   },
 });
 

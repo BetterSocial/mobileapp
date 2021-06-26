@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'white',
     paddingHorizontal: 16,
-    marginBottom: SIZES.base,
     borderTopColor: 'transparent',
     borderBottomColor: COLORS.gray,
     elevation: 3,
