@@ -25,7 +25,7 @@ const Navigation = ({domain}) => {
 const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
-    height: 35,
+    height: 24,
     paddingHorizontal: 16,
     alignItems: 'center',
     marginBottom: 8,

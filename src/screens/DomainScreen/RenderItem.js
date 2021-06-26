@@ -51,7 +51,12 @@ const RenderItem = ({domain, image}) => {
 
   return (
     <View style={styles.wrapperItem}>
-      <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          paddingHorizontal: 16,
+          alignItems: 'center',
+        }}>
         <View style={styles.wrapperImage}>
           <Image
             source={{
@@ -66,7 +71,9 @@ const RenderItem = ({domain, image}) => {
         <View style={{flex: 1}}>
           <Text style={{...FONTS.h3, color: '#000000'}}>{name}</Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text>{new Date(time).toLocaleDateString()}</Text>
+            <Text style={{...FONTS.body3, color: '#828282'}}>
+              {new Date(time).toLocaleDateString()}
+            </Text>
             <View style={styles.point} />
             <Memoic_globe height={16} width={16} />
             <View style={styles.point} />
@@ -93,7 +100,7 @@ const RenderItem = ({domain, image}) => {
         </View>
       </View>
       <View style={{paddingHorizontal: 16}}>
-        <Text style={{...FONTS.h2}}>{content.title}</Text>
+        <Text style={{...FONTS.h3}}>{content.title}</Text>
       </View>
       <Gap height={SIZES.base} />
       <Image
@@ -101,7 +108,7 @@ const RenderItem = ({domain, image}) => {
         style={{height: SIZES.height * 0.3}}
       />
       <Gap />
-      <Gap height={16} />
+      <Gap height={SIZES.base} />
       <View style={{paddingHorizontal: 16}}>
         <Text>{content.description}</Text>
       </View>
@@ -139,14 +146,14 @@ const styles = StyleSheet.create({
     borderRadius: 45,
     borderWidth: 0.2,
     borderColor: 'rgba(0,0,0,0.5)',
-    width: 46,
-    height: 46,
+    width: 36,
+    height: 36,
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    height: 46,
-    width: 46,
+    height: '100%',
+    width: '100%',
     borderRadius: 45,
   },
   wrapperText: {
