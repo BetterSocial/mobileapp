@@ -5,9 +5,7 @@ import JWTDecode from 'jwt-decode';
 import {getAccessToken} from '../../utils/token';
 import Toast from 'react-native-simple-toast';
 
-import {Gap, Footer} from '../../components';
-import Header from '../feedScreen/Header';
-import Content from '../feedScreen/Content';
+import {DomainHeader} from '../../components';
 import BlockUser from '../../elements/Blocking/BlockUser';
 import BlockDomain from '../../elements/Blocking/BlockDomain';
 import ReportUser from '../../elements/Blocking/ReportUser';
@@ -28,10 +26,11 @@ import {
 } from '../../utils/constants';
 import {createCommentParent} from '../../service/comment';
 import ContentLink from '../feedScreen/ContentLink';
+import RenderItem from '../newsScreen/RenderItem';
 
 const {width, height} = Dimensions.get('window');
 
-const PostDetailPage = (props) => {
+const DetailDomainScreen = (props) => {
   const [more, setMore] = React.useState(10);
   const [totalLine, setTotalLine] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
@@ -53,21 +52,6 @@ const PostDetailPage = (props) => {
   const [username, setUsername] = React.useState('');
   const [postId, setPostId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
-  const [voteStatus, setVoteStatus] = React.useState('none');
-  const [statusUpvote, setStatusUpvote] = React.useState(false);
-  const [statusDownvote, setStatusDowvote] = React.useState(false);
-
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const value = await getAccessToken();
-      if (value) {
-        const decoded = await JWTDecode(value);
-        console.log(decoded.user_id);
-        setYourselfId(decoded.user_id);
-      }
-    };
-    parseToken();
-  }, []);
 
   React.useEffect(() => {
     const initial = () => {
@@ -96,33 +80,6 @@ const PostDetailPage = (props) => {
   }, [props]);
 
   React.useEffect(() => {
-    const validationStatusVote = () => {
-      if (item.reaction_counts !== undefined || null) {
-        if (item.latest_reactions.upvotes !== undefined) {
-          let upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === yourselfId,
-          );
-          if (upvote !== undefined) {
-            setVoteStatus('upvote');
-            setStatusUpvote(true);
-          }
-        }
-
-        if (item.latest_reactions.downvotes !== undefined) {
-          let downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === yourselfId,
-          );
-          if (downvotes !== undefined) {
-            setVoteStatus('downvote');
-            setStatusDowvote(true);
-          }
-        }
-      }
-    };
-    validationStatusVote();
-  }, [item, yourselfId]);
-
-  React.useEffect(() => {
     fetchMyProfile();
     // refBlockUser.current.open();
     // refBlockDomain.current.open();
@@ -137,6 +94,17 @@ const PostDetailPage = (props) => {
     }
     refBlockUser.current.close();
   };
+
+  React.useEffect(() => {
+    const parseToken = async () => {
+      const value = await getAccessToken();
+      if (value) {
+        const decoded = await JWTDecode(value);
+        setYourselfId(decoded.user_id);
+      }
+    };
+    parseToken();
+  }, []);
 
   const userBlock = async () => {
     const data = {
@@ -232,18 +200,27 @@ const PostDetailPage = (props) => {
       Toast.show('Failed Comment', Toast.LONG);
     }
   };
+  const setUpVote = async (id) => {
+    let result = await upVote({activity_id: id});
+    if (result.code === 200) {
+      Toast.show('up vote was successful', Toast.LONG);
+    } else {
+      Toast.show('up vote failed', Toast.LONG);
+    }
+  };
+  const setDownVote = async (id) => {
+    let result = await downVote({activity_id: id});
+    if (result.code === 200) {
+      Toast.show('down vote success', Toast.LONG);
+    } else {
+      Toast.show('down vote failed', Toast.LONG);
+    }
+  };
 
   const onPressDomain = () => {
     props.navigation.navigate('DomainScreen', {
       item: item,
     });
-  };
-
-  const setUpVote = async (post) => {
-    upVote(post);
-  };
-  const setDownVote = async (post) => {
-    downVote(post);
   };
 
   return (
@@ -252,93 +229,13 @@ const PostDetailPage = (props) => {
         showsVerticalScrollIndicator={false}
         style={{height: height * 0.9}}>
         <View style={styles.content}>
-          <Header props={item} isBackButton={true} />
-
-          {item.post_type === POST_TYPE_POLL && (
-            <ContentPoll
-              message={item.message}
-              images_url={item.images_url}
-              polls={item.pollOptions}
-            />
-          )}
-
-          {item.post_type === POST_TYPE_LINK && (
-            <ContentLink og={item.og} onPress={onPressDomain} />
-          )}
-
-          {item.post_type === POST_TYPE_STANDARD && (
-            <Content
-              message={item.message}
-              images_url={item.images_url}
-              style={item.images_url.length > 0 ? {height: height * 0.5} : null}
-            />
-          )}
-
-          <Gap height={16} />
-          <Footer
-            item={item}
-            disableComment={true}
-            totalComment={totalComment}
-            totalVote={totalVote}
-            onPressDownVote={() => {
-              setStatusDowvote((prev) => {
-                prev = !prev;
-                setDownVote({
-                  activity_id: item.id,
-                  status: prev,
-                  feed_group: 'main_feed',
-                });
-                if (prev) {
-                  setVoteStatus('downvote');
-                  if (statusUpvote === true) {
-                    setTotalVote((p) => p - 2);
-                  } else {
-                    setTotalVote((p) => p - 1);
-                  }
-                  setStatusUpvote(false);
-                } else {
-                  setVoteStatus('none');
-                  setTotalVote((p) => p + 1);
-                }
-                return prev;
-              });
-            }}
-            onPressUpvote={() => {
-              setStatusUpvote((prev) => {
-                prev = !prev;
-                setUpVote({
-                  activity_id: item.id,
-                  status: prev,
-                  feed_group: 'main_feed',
-                });
-                if (prev) {
-                  setVoteStatus('upvote');
-                  if (statusDownvote === true) {
-                    setTotalVote((p) => p + 2);
-                  } else {
-                    setTotalVote((p) => p + 1);
-                  }
-                  setStatusDowvote(false);
-                } else {
-                  setVoteStatus('none');
-                  setTotalVote((p) => p - 1);
-                }
-                return prev;
-              });
-            }}
-            statusVote={voteStatus}
-            onPressShare={() => {}}
-            onPressComment={() => {}}
-            onPressBlock={(value) => {
-              if (value.actor.id === yourselfId) {
-                Toast.show("Can't Block yourself", Toast.LONG);
-              } else {
-                setDataToState(value);
-                refBlockUser.current.open();
-              }
-            }}
-            isSelf={yourselfId === item.actor.id ? true : false}
+          <DomainHeader
+            domain={item.domain.name}
+            time={item.content.created_at}
+            image={item.domain.image}
           />
+
+          <RenderItem item={item} />
         </View>
         {isReaction && (
           <ContainerComment comments={item.latest_reactions.comment} />
@@ -376,7 +273,7 @@ const PostDetailPage = (props) => {
   );
 };
 
-export default PostDetailPage;
+export default DetailDomainScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   container: {
     borderLeftWidth: 1,
-    marginHorizontal: 16,
+    marginHorizontal: SIZES.base,
     borderLeftColor: '#C4C4C4',
   },
   username: {

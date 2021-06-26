@@ -4,7 +4,6 @@ import {StyleSheet, Dimensions, Share, View} from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
 import Content from './Content';
-import Footer from './Footer';
 import Header from './Header';
 import {Card} from '../../components/CardStack';
 import {
@@ -17,7 +16,7 @@ import ContentPoll from './ContentPoll';
 import {isContainUrl, smartRender} from '../../utils/Utils';
 import ContentLink from './ContentLink';
 import ContainerComment from '../../elements/PostDetail/ContainerComment';
-import {Gap, PreviewComment} from '../../components';
+import {Gap, PreviewComment, Footer} from '../../components';
 
 const {width, height} = Dimensions.get('window');
 
@@ -105,16 +104,18 @@ const Item = ({
   onPressComment,
   selfUserId,
   onPressDomain,
-  index,
 }) => {
-  const [voteStatus, setVoteStatus] = React.useState('none');
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
+  const [totalVote, setTotalVote] = React.useState(0);
+  const [voteStatus, setVoteStatus] = React.useState('none');
+  const [statusUpvote, setStatusUpvote] = React.useState(false);
+  const [statusDownvote, setStatusDowvote] = React.useState(false);
+
   React.useEffect(() => {
     const initial = () => {
       let reactionCount = item.reaction_counts;
       if (JSON.stringify(reactionCount) !== '{}') {
-        let count = 0;
         let comment = reactionCount.comment;
         if (comment !== undefined) {
           if (comment > 0) {
@@ -126,6 +127,7 @@ const Item = ({
     };
     initial();
   }, [item]);
+
   React.useEffect(() => {
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
@@ -135,6 +137,7 @@ const Item = ({
           );
           if (upvote !== undefined) {
             setVoteStatus('upvote');
+            setStatusUpvote(true);
           }
         }
 
@@ -144,12 +147,31 @@ const Item = ({
           );
           if (downvotes !== undefined) {
             setVoteStatus('downvote');
+            setStatusDowvote(true);
           }
         }
       }
     };
     validationStatusVote();
   }, [item, selfUserId]);
+
+  React.useEffect(() => {
+    const initialVote = () => {
+      let c = getCountVote(item);
+      setTotalVote(c);
+    };
+    initialVote();
+  }, [item]);
+
+  // React.useEffect(() => {
+  //   const validationStatusVote = () => {
+  //     if (statusDownvote === false && statusUpvote === false) {
+  //       setVoteStatus('none');
+  //     }
+  //   };
+
+  //   validationStatusVote();
+  // }, [item, selfUserId, statusDownvote, statusUpvote, voteStatus]);
 
   return (
     <Card style={styles.container}>
@@ -175,16 +197,57 @@ const Item = ({
         />
       )}
       <Footer
-        item={item}
-        onPressShare={() => {
-          onShare(item.actor.data.username);
-        }}
-        onPressBlock={onPressBlock}
-        onPressComment={onPressComment}
-        onPressUpvote={onPressUpvote}
-        onPressDownVote={onPressDownVote}
-        totalVote={getCountVote(item)}
         totalComment={getCountComment(item)}
+        totalVote={totalVote}
+        onPressShare={() => onShare(item)}
+        onPressComment={() => onPressComment(item)}
+        onPressBlock={() => onPressBlock(item)}
+        onPressDownVote={() => {
+          setStatusDowvote((prev) => {
+            prev = !prev;
+            onPressDownVote({
+              activity_id: item.id,
+              status: prev,
+              feed_group: 'main_feed',
+            });
+            if (prev) {
+              setVoteStatus('downvote');
+              if (statusUpvote === true) {
+                setTotalVote((p) => p - 2);
+              } else {
+                setTotalVote((p) => p - 1);
+              }
+              setStatusUpvote(false);
+            } else {
+              setVoteStatus('none');
+              setTotalVote((p) => p + 1);
+            }
+            return prev;
+          });
+        }}
+        onPressUpvote={() => {
+          setStatusUpvote((prev) => {
+            prev = !prev;
+            onPressUpvote({
+              activity_id: item.id,
+              status: prev,
+              feed_group: 'main_feed',
+            });
+            if (prev) {
+              setVoteStatus('upvote');
+              if (statusDownvote === true) {
+                setTotalVote((p) => p + 2);
+              } else {
+                setTotalVote((p) => p + 1);
+              }
+              setStatusDowvote(false);
+            } else {
+              setVoteStatus('none');
+              setTotalVote((p) => p - 1);
+            }
+            return prev;
+          });
+        }}
         statusVote={voteStatus}
         isSelf={
           item.anonimity ? false : selfUserId === item.actor.id ? true : false
@@ -193,6 +256,7 @@ const Item = ({
 
       {isReaction && (
         <View>
+          <Gap height={8} />
           <PreviewComment
             username={previewComment.user.data.username}
             comment={previewComment.data.text}
@@ -201,7 +265,7 @@ const Item = ({
             totalComment={item.latest_reactions.comment.length - 1}
             onPress={onPressComment}
           />
-          <Gap height={16} />
+          <Gap height={8} />
         </View>
       )}
     </Card>

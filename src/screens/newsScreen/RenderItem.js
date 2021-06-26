@@ -69,7 +69,11 @@ const RenderItem = ({
             onPressDownVote={() => {
               setStatusDowvote((prev) => {
                 prev = !prev;
-                onPressDownVote({id: item.id, status: prev});
+                onPressDownVote({
+                  activity_id: item.id,
+                  status: prev,
+                  feed_group: 'domain',
+                });
                 if (prev) {
                   if (statusUpvote === true) {
                     setTotalVote((p) => p - 2);
@@ -86,7 +90,11 @@ const RenderItem = ({
             onPressUpvote={() => {
               setStatusUpvote((prev) => {
                 prev = !prev;
-                onPressUpvote({id: item.id, status: prev});
+                onPressUpvote({
+                  activity_id: item.id,
+                  status: prev,
+                  feed_group: 'domain',
+                });
                 if (prev) {
                   if (statusDownvote === true) {
                     setTotalVote((p) => p + 2);
@@ -116,7 +124,7 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: SIZES.base,
     borderRadius: SIZES.radius,
-    elevation: 1,
+    elevation: 0.5,
     borderColor: COLORS.gray,
     paddingVertical: SIZES.base,
     marginHorizontal: SIZES.base,

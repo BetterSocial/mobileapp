@@ -54,14 +54,14 @@ const NewsScreen = ({navigation}) => {
   const shareNews = (news) => {};
 
   const comment = (news) => {
-    alert('comment');
+    navigation.navigate('DetailDomainScreen', {item: news});
   };
 
   const blockNews = (news) => {};
 
   const upvoteNews = async (news) => {
-    console.log(news);
-    // let result = await upVote({activity_id: news.id});
+    // console.log(news);
+    upVote(news);
     // if (result.code === 200) {
     //   Toast.show('up vote was successful', Toast.LONG);
     // } else {
@@ -71,7 +71,7 @@ const NewsScreen = ({navigation}) => {
 
   const downvoteNews = async (news) => {
     console.log(news);
-    // let result = await downVote({activity_id: news.id});
+    downVote(news);
     // if (result.code === 200) {
     //   Toast.show('down vote success', Toast.LONG);
     // } else {
