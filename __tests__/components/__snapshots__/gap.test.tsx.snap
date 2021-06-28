@@ -3,9 +3,15 @@
 exports[`component gap gap renders correctly 1`] = `
 <View
   style={
-    Object {
-      "width": 20,
-    }
+    Array [
+      Object {
+        "height": undefined,
+        "width": undefined,
+      },
+      Object {
+        "width": 20,
+      },
+    ]
   }
 />
 `;
@@ -13,9 +19,15 @@ exports[`component gap gap renders correctly 1`] = `
 exports[`component gap gap snapshot 1`] = `
 <View
   style={
-    Object {
-      "width": 20,
-    }
+    Array [
+      Object {
+        "height": undefined,
+        "width": undefined,
+      },
+      Object {
+        "width": 20,
+      },
+    ]
   }
 />
 `;

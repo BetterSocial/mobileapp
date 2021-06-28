@@ -10,6 +10,8 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import {createChildComment} from '../../service/comment';
+import ConnectorWrapper from '../../elements/PostDetail/ConnectorWrapper';
+import StringConstant from '../../utils/string/StringConstant';
 
 const ReplyComment = (props) => {
   const navigation = useNavigation();
@@ -17,6 +19,8 @@ const ReplyComment = (props) => {
   const [parent, setParent] = React.useState(props.route.params.parent);
   const [textComment, setTextComment] = React.useState('');
   const [isReaction, setReaction] = React.useState(false);
+
+  console.log(props.route.params.item);
 
   React.useEffect(() => {
     const init = () => {
@@ -47,21 +51,22 @@ const ReplyComment = (props) => {
       console.log(error);
     }
   };
+
+  const navigationGoBack = () => navigation.goBack();
+
   return (
     <View style={styles.container}>
-      {/* <ScrollView> */}
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={navigationGoBack}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableOpacity>
         <Text style={styles.headerText}>
-          Reply to{' '}
-          {/* {item.anonimiti === true ? Anonymous : item.actor.data.username} */}
-          {item.user.data.username}
+          Reply to {item.user.data.username}
         </Text>
         <View style={styles.btn} />
       </View>
       <View style={styles.containerComment}>
+        {/* <View style={styles.mainLeftConnector} /> */}
         <Comment
           username={item.user.data.username}
           comment={item.data.text}
@@ -69,52 +74,78 @@ const ReplyComment = (props) => {
         />
         {item.children_counts.comment > 0 &&
           item.latest_children.comment.map((itemReply, index) => {
+            const showCommentView = () =>
+              navigation.navigate('ReplyComment', {item: item});
+
+            let isLastInParent = (index) => {
+              return index === (item.children_counts.comment || 0) - 1;
+            };
+
+            // console.log(`${itemReply.data.text} vs `);
             return (
               <ContainerReply>
-                <Comment
-                  key={'r' + index}
-                  username={itemReply.user.data.username}
-                  comment={itemReply.data.text}
-                  onPress={() => {}}
-                />
-                {itemReply.children_counts.comment > 0 &&
-                  itemReply.latest_children.comment.map(
-                    (itemReplyChild, ind) => {
-                      return (
-                        <ContainerReply>
-                          <Comment
-                            key={'rc' + ind}
-                            username={itemReplyChild.user.data.username}
-                            comment={itemReplyChild.data.text}
-                            onPress={() => {}}
-                          />
-                          {}
-                        </ContainerReply>
-                      );
-                    },
-                  )}
+                <ConnectorWrapper index={index}>
+                  <View>
+                    <Comment
+                      isLast={
+                        index === item.children_counts.comment - 1 &&
+                        (itemReply.children_counts.comment || 0) === 0
+                      }
+                      key={'r' + index}
+                      username={itemReply.user.data.username}
+                      comment={itemReply.data.text}
+                      onPress={() => {}}
+                    />
+                    {/* {itemReply.children_counts.comment > 0 &&
+                      itemReply.latest_children.comment.map(
+                        (itemReplyChild, ind) => {
+                          return (
+                            <ContainerReply
+                              isGrandchild={
+                                index === item.children_counts.comment - 1
+                              }>
+                              <ConnectorWrapper index={ind}>
+                                <Comment
+                                  isLast={
+                                    ind ===
+                                    itemReply.latest_children.comment.length - 1
+                                  }
+                                  level={2}
+                                  key={'rc' + ind}
+                                  username={itemReplyChild.user.data.username}
+                                  comment={itemReplyChild.data.text}
+                                  onPress={() => {}}
+                                />
+                              </ConnectorWrapper>
+                            </ContainerReply>
+                          );
+                        },
+                      )} */}
+                    {item.children_counts.comment > 0 && (
+                      <>
+                        <View
+                          style={styles.seeRepliesContainer(
+                            isLastInParent(index),
+                          )}>
+                          <View style={styles.connector} />
+                          <TouchableOpacity onPress={showCommentView}>
+                            <Text style={styles.seeRepliesText}>
+                              {StringConstant.postDetailPageSeeReplies(
+                                item.children_counts.comment || 0,
+                              )}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </>
+                    )}
+                  </View>
+                </ConnectorWrapper>
               </ContainerReply>
             );
           })}
       </View>
-      {/* <Text style={styles.post}>text commentParent</Text> */}
-      {/* {isReaction && <ContainerComment comments={item.latest_children} />} */}
-      {/* <View style={styles.comment}>
-        <Image
-          source={require('../.../../../assets/images/ProfileDefault.png')}
-          style={styles.image}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Your comment"
-          multiline={true}
-          numberOfLines={4}
-          textAlignVertical="top"
-          onChangeText={(v) => setTextComment(v)}
-          value={textComment}
-        />
-      </View> */}
       <WriteComment
+        inReplyCommentView={true}
         username={item.user.data.username}
         onChangeText={(v) => setTextComment(v)}
         onPress={() => createComment()}
@@ -124,8 +155,19 @@ const ReplyComment = (props) => {
     </View>
   );
 };
-const ContainerReply = ({children, isGrandchild}) => {
-  return <View style={styles.containerReply(isGrandchild)}>{children}</View>;
+// const ContainerReply = ({children, isGrandchild}) => {
+//   return <View style={styles.containerReply(isGrandchild)}>{children}</View>;
+// };
+const ContainerReply = ({children, isGrandchild = true, hideLeftConnector}) => {
+  return (
+    <View
+      style={[
+        styles.containerReply(hideLeftConnector),
+        {borderColor: isGrandchild ? '#fff' : colors.gray1},
+      ]}>
+      {children}
+    </View>
+  );
 };
 export default ReplyComment;
 
@@ -148,10 +190,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     alignItems: 'center',
   },
-  containerReply: (isGrandchild) => ({
+  containerReply: (hideLeftConnector) => ({
     borderLeftWidth: 1,
-    paddingLeft: 30,
-    borderColor: isGrandchild ? '#fff' : colors.gray1,
+    backgroundColor: 'white',
+    // flex: 1,
   }),
   btn: {
     paddingVertical: 8,
@@ -189,5 +231,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333333',
     marginLeft: 28,
+  },
+  mainLeftConnector: {
+    height: '100%',
+    width: 1,
+    position: 'absolute',
+    backgroundColor: colors.gray1,
+    left: 46,
+    zIndex: -100,
   },
 });

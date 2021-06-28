@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   containerShowMessage: (currentRouteName) => {
     return {
-      justifyContent: currentRouteName === 'Feed' ? 'center' : 'flex-start',
+      justifyContent: 'center',
       alignItems: currentRouteName === 'Feed' ? 'center' : 'flex-start',
       flex: 1,
       paddingBottom: 10,

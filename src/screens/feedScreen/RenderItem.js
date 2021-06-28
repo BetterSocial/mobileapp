@@ -197,7 +197,7 @@ export default Item;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height - height * 0.1 + 8,
+    height: height - height * 0.1 + 20,
     flex: 1,
     shadowColor: '#c4c4c4',
     shadowOffset: {
@@ -206,11 +206,11 @@ const styles = StyleSheet.create({
     },
     elevation: 8,
     shadowOpacity: 0.5,
-    marginTop: -8,
+    marginTop: 0,
     backgroundColor: 'white',
     paddingHorizontal: 16,
     paddingVertical: width * 0.03,
-    paddingBottom: 8,
+    paddingBottom: 0,
     borderBottomColor: 'transparent',
   },
 });

@@ -15,7 +15,7 @@ export default class AutoFocusTextArea extends React.Component {
   componentDidMount() {
     setTimeout(() => {
       if (this.inputElement) {
-        this.inputElement.current.focus();
+        if (this.inputElement.current) this.inputElement.current.focus();
       }
     }, this.props.keyboardAppearDelay || 50);
   }

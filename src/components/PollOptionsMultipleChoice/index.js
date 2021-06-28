@@ -14,7 +14,8 @@ let PollOptionsMultipleChoice = ({
   isalreadypolling = false,
   onselected = (index) => {},
 }) => {
-  let optionPercentage = total === 0 ? 0 : ((item.counter / total) * 100).toFixed(0);
+  let counter = item?.counter || 0;
+  let optionPercentage = total === 0 ? 0 : ((counter / total) * 100).toFixed(0);
 
   let isPollDisabled = () => isalreadypolling || isexpired;
 
@@ -23,7 +24,7 @@ let PollOptionsMultipleChoice = ({
   let isMyPoll = () => {
     return mypoll.reduce((acc, current) => {
       let isCurrentItemMyPoll =
-        item.polling_option_id === current.polling_option_id;
+        item?.polling_option_id === current?.polling_option_id;
       return acc || isCurrentItemMyPoll;
     }, false);
   };

@@ -254,8 +254,8 @@ const PostDetailPage = (props) => {
       <ScrollView
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
-        style={{height: height * 0.9}}>
-        <View style={styles.content}>
+        style={{height: height, marginBottom: 86}}>
+        <View style={styles.content(height)}>
           <Header props={item} isBackButton={true} />
           {item.post_type === POST_TYPE_POLL && (
             <ContentPoll
@@ -280,7 +280,10 @@ const PostDetailPage = (props) => {
             <Content
               message={item.message}
               images_url={item.images_url}
-              style={item.images_url.length > 0 ? {height: height * 0.5} : null}
+              style={styles.additionalContentStyle(
+                item.images_url.length,
+                height,
+              )}
             />
           )}
 
@@ -351,8 +354,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     flex: 1,
-    paddingBottom: 56,
-    paddingTop: 8,
+    // marginBottom: 86,
   },
   containerText: {
     marginTop: 20,
@@ -368,18 +370,30 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
   },
-  content: {
-    width: width,
-    borderRadius: 5,
-    shadowColor: 'rgba(0,0,0,0.5)',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.5,
-    backgroundColor: 'white',
-    paddingHorizontal: 16,
-    marginBottom: 16,
+  content: (height) => {
+    return {
+      width: width,
+      borderRadius: 5,
+      shadowColor: 'rgba(0,0,0,0.5)',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.5,
+      backgroundColor: 'white',
+      paddingHorizontal: 16,
+      marginBottom: 16,
+      height: height - 100,
+    };
   },
   gap: {height: 16},
+  additionalContentStyle: (imageLength, height) => {
+    if (imageLength > 0) {
+      return {
+        height: height * 0.5,
+      };
+    } else {
+      return {};
+    }
+  },
 });

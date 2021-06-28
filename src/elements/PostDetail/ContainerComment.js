@@ -60,9 +60,6 @@ const ContainerComment = ({comments}) => {
   );
 };
 const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
-  const [isChildShown, setIsChildShown] = React.useState(false);
-  const onShowReplyClicked = () => setIsChildShown(!isChildShown);
-
   let isLast = (item, index) => {
     return (
       index === countComment - 1 && (item.children_counts.comment || 0) === 0
@@ -76,6 +73,9 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
   return (
     <ContainerReply hideLeftConnector={hideLeftConnector}>
       {data.map((item, index) => {
+        const showCommentView = () =>
+          navigation.navigate('ReplyComment', {item: item});
+
         return (
           <ConnectorWrapper index={index}>
             <View key={'c' + index} style={styles.levelOneCommentWrapper}>
@@ -86,38 +86,22 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
                 level={1}
                 photo={item.user.data.profile_pic_url}
                 time={item.created_at}
-                onPress={() =>
-                  navigation.navigate('ReplyComment', {item: item})
-                }
+                onPress={showCommentView}
                 isLast={isLast(item, index)}
               />
               {item.children_counts.comment > 0 && (
                 <>
-                  {isChildShown && (
-                    <ReplyCommentChild
-                      data={item.latest_children.comment}
-                      countComment={item.children_counts.comment}
-                      navigation={navigation}
-                      parent={item}
-                    />
-                  )}
-                  <>
-                    {!isChildShown && (
-                      <View
-                        style={styles.seeRepliesContainer(
-                          isLastInParent(index),
-                        )}>
-                        <View style={styles.connector} />
-                        <TouchableOpacity onPress={onShowReplyClicked}>
-                          <Text style={styles.seeRepliesText}>
-                            {StringConstant.postDetailPageSeeReplies(
-                              item.children_counts.comment || 0,
-                            )}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    )}
-                  </>
+                  <View
+                    style={styles.seeRepliesContainer(isLastInParent(index))}>
+                    <View style={styles.connector} />
+                    <TouchableOpacity onPress={showCommentView}>
+                      <Text style={styles.seeRepliesText}>
+                        {StringConstant.postDetailPageSeeReplies(
+                          item.children_counts.comment || 0,
+                        )}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </>
               )}
             </View>

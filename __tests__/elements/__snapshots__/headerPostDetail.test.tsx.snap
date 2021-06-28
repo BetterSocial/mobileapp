@@ -83,9 +83,15 @@ exports[`component Header Header renders correctly 1`] = `
   >
     <View
       style={
-        Object {
-          "width": 50,
-        }
+        Array [
+          Object {
+            "height": undefined,
+            "width": undefined,
+          },
+          Object {
+            "width": 50,
+          },
+        ]
       }
     />
     <View

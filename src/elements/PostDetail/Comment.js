@@ -9,6 +9,7 @@ import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_of
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
+import MemoCommentReply from '../../assets/icon/CommentReply';
 
 const Comment = ({
   username,
@@ -43,7 +44,7 @@ const Comment = ({
           <View style={styles.gap} />
         ) : (
           <TouchableOpacity style={styles.btnReply} onPress={onPress}>
-            <IconAnt name="back" size={15.77} color={colors.gray1} />
+            <MemoCommentReply />
             <Text style={styles.btnReplyText}>Reply</Text>
           </TouchableOpacity>
         )}
@@ -70,11 +71,15 @@ const styles = StyleSheet.create({
     height: 24,
   },
   container: ({isLast, style, level, isLastInParent}) => ({
-    flex: 1,
+    // flex: 1,
     // marginLeft: isLastInParent ? -1 : 0,
     // flexDirection: 'column',
     borderLeftWidth: 1,
-    borderLeftColor: isLast ? 'transparent' : colors.gray1,
+    borderLeftColor: isLast
+      ? level === 0
+        ? colors.gray1
+        : 'transparent'
+      : colors.gray1,
     ...style,
   }),
   username: {

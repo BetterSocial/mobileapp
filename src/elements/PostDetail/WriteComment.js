@@ -7,27 +7,35 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import MemoSendComment from '../../assets/icon/IconSendComment';
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import StringConstant from '../../utils/string/StringConstant';
+import MemoSendComment from '../../assets/icon/IconSendComment';
 
-const WriteComment = ({value = null, onPress, onChangeText, username}) => {
+const WriteComment = ({
+  value = null,
+  onPress,
+  onChangeText,
+  username,
+  inReplyCommentView = false,
+}) => {
   let isCommentEnabled = value.length > 0;
   let isSendButtonPressed = () => {
-    if (isCommentEnabled) return onPress();
+    if (isCommentEnabled) {
+      return onPress();
+    }
   };
 
   return (
     <View style={styles.columnContainer}>
-      <View style={styles.connector} />
-      <Text style={styles.replyToContainer}>
+      <View style={styles.connectorTop(inReplyCommentView)} />
+      <Text style={styles.replyToContainer(inReplyCommentView)}>
         <Text style={styles.replyToTitle}>Reply to </Text>
         {username}
       </Text>
-      <View style={styles.container}>
-        <View style={styles.connector} />
+      <View style={styles.container(inReplyCommentView)}>
+        <View style={styles.connectorBottom(inReplyCommentView)} />
         <Image
           style={styles.image}
           source={require('../../assets/images/ProfileDefault.png')}
@@ -35,7 +43,7 @@ const WriteComment = ({value = null, onPress, onChangeText, username}) => {
         <View style={styles.content}>
           <TextInput
             placeholder={StringConstant.commentBoxDefaultPlaceholder}
-            multiline={true}
+            multiline={false}
             placeholderTextColor={colors.gray1}
             style={styles.text}
             onChangeText={onChangeText}
@@ -66,29 +74,35 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.gray1,
     // zIndex: 1,
-    paddingBottom: 15,
+    paddingBottom: 14,
   },
-  replyToContainer: {
-    marginLeft: 48,
-    fontFamily: fonts.inter[500],
-    marginBottom: 11,
-    marginTop: 7,
-    lineHeight: 14.52,
-    color: colors.gray1,
+  replyToContainer: (inReplyCommentView) => {
+    return {
+      marginLeft: inReplyCommentView ? 70 : 48,
+      fontFamily: fonts.inter[500],
+      marginBottom: 11,
+      marginTop: 7,
+      lineHeight: 14.52,
+      color: colors.gray1,
+    };
   },
   replyToTitle: {
     fontFamily: fonts.inter[700],
     lineHeight: 14.52,
     color: colors.black,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    width: '100%',
-    paddingRight: 10,
-    paddingLeft: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
+  container: (inReplyCommentView) => {
+    return {
+      flex: 1,
+      backgroundColor: '#fff',
+      width: '100%',
+      paddingRight: 10,
+      paddingLeft: inReplyCommentView ? 42 : 20,
+      flexDirection: 'row',
+      zIndex: 100,
+      // backgroundColor: 'red',
+      alignItems: 'center',
+    };
   },
   content: {
     display: 'flex',
@@ -131,13 +145,26 @@ const styles = StyleSheet.create({
   icSendButton: {
     alignSelf: 'center',
   },
-  connector: {
-    height: '50%',
-    width: 1,
-    backgroundColor: colors.gray1,
-    position: 'absolute',
-    top: 0,
-    left: 22,
-    zIndex: -100,
+  connectorTop: (inReplyCommentView) => {
+    return {
+      height: 36,
+      width: 1,
+      backgroundColor: colors.gray1,
+      position: 'absolute',
+      top: 0,
+      left: inReplyCommentView ? 46 : 22,
+      zIndex: -100,
+    };
+  },
+  connectorBottom: (inReplyCommentView) => {
+    return {
+      height: 20,
+      width: 1,
+      backgroundColor: colors.gray1,
+      position: 'absolute',
+      top: 0,
+      left: inReplyCommentView ? 46 : 22,
+      zIndex: -100,
+    };
   },
 });

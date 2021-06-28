@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   containerFeedText: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5,
+    marginTop: 2,
     width: '100%',
   },
   feedDate: {

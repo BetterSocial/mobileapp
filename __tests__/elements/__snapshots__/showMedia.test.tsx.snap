@@ -57,9 +57,15 @@ exports[`component ShowMedia ShowMedia renders correctly 1`] = `
         </View>
         <View
           style={
-            Object {
-              "width": 8,
-            }
+            Array [
+              Object {
+                "height": undefined,
+                "width": undefined,
+              },
+              Object {
+                "width": 8,
+              },
+            ]
           }
         />
         <View

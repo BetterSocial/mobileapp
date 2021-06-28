@@ -14,7 +14,8 @@ let PollOptions = ({
   isalreadypolling = false,
   onselected = (index) => {},
 }) => {
-  let optionPercentage = total === 0 ? 0 : (poll.counter / total) * 100;
+  let counter = poll?.counter || 0;
+  let optionPercentage = total === 0 ? 0 : (counter / total) * 100;
 
   let isPollDisabled = () => isexpired || isalreadypolling;
   let onPollPressed = () => {
@@ -22,10 +23,10 @@ let PollOptions = ({
     onselected(index);
   };
 
-  let isMyPoll = () => mypoll.polling_option_id === poll.polling_option_id;
-  console.log(mypoll);
-  console.log("vs " + isMyPoll());
-  console.log(poll);
+  let isMyPoll = () => mypoll?.polling_option_id === poll?.polling_option_id;
+  // console.log(mypoll);
+  // console.log("vs " + isMyPoll());
+  // console.log(poll);
 
   return (
     <TouchableNativeFeedback onPress={onPollPressed}>
@@ -50,7 +51,7 @@ let PollOptions = ({
             />
           )}
           <Text style={styles.pollOptionItemText(isexpired)}>
-            {poll.option}
+            {poll?.option}
           </Text>
           <Text
             style={

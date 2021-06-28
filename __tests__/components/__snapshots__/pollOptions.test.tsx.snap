@@ -3,7 +3,7 @@
 exports[`component PollOptions PollOptions renders correctly 1`] = `
 <View
   accessible={true}
-  focusable={false}
+  focusable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -52,7 +52,7 @@ exports[`component PollOptions PollOptions renders correctly 1`] = `
           "borderRadius": 6,
           "borderWidth": 1,
           "height": 12,
-          "marginEnd": 12,
+          "marginEnd": 8,
           "width": 12,
         }
       }
@@ -63,17 +63,23 @@ exports[`component PollOptions PollOptions renders correctly 1`] = `
           "color": "#000000",
           "flex": 1,
           "fontFamily": "Inter-Regular",
+          "marginStart": 0,
         }
       }
+    />
+    <Text
+      style={Object {}}
     >
-      test
+      0%
     </Text>
   </View>
 </View>
 `;
 
 exports[`component PollOptions PollOptions snapshot 1`] = `
-<TouchableNativeFeedback>
+<TouchableNativeFeedback
+  onPress={[Function]}
+>
   <View
     key="poll-options-1"
     style={
@@ -117,7 +123,7 @@ exports[`component PollOptions PollOptions snapshot 1`] = `
             "borderRadius": 6,
             "borderWidth": 1,
             "height": 12,
-            "marginEnd": 12,
+            "marginEnd": 8,
             "width": 12,
           }
         }
@@ -128,10 +134,14 @@ exports[`component PollOptions PollOptions snapshot 1`] = `
             "color": "#000000",
             "flex": 1,
             "fontFamily": "Inter-Regular",
+            "marginStart": 0,
           }
         }
+      />
+      <Text
+        style={Object {}}
       >
-        test
+        0%
       </Text>
     </View>
   </View>
