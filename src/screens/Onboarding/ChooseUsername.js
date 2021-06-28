@@ -208,7 +208,7 @@ const ChooseUsername = () => {
                   }}
                   width={52}
                   height={52}
-                  style={styles.textMessage.image}
+                  style={styles.image}
                 />
                 <View style={styles.icon}>
                   <MemoOnboardingChangeProfilePlusIcon />
@@ -233,13 +233,9 @@ const ChooseUsername = () => {
               <IconFontAwesome5 name="exclamation" size={14} color="#2F80ED" />
             </View>
             <Text style={styles.infoText}>
-              Whatever your username, you will always be able to post
-              anonymously.
+              {StringConstant.onboardingChooseUsernameBlueBoxHint}
             </Text>
           </View>
-          <Text style={styles.infoText}>
-            {StringConstant.onboardingChooseUsernameBlueBoxHint}
-          </Text>
         </View>
         <View style={styles.gap} />
         <Button style={styles.btnNext} onPress={() => next()}>
