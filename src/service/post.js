@@ -59,6 +59,16 @@ export const getMainFeed = async (query) => {
     let res = await api.get('/activity/feeds' + query);
     return res.data;
   } catch (err) {
-    crashlytics().recordError(new Error(err));
+    crashlytics().recordError(err.response.data);
+    return err.response.data;
+  }
+};
+export const getFeedDetail = async (id) => {
+  try {
+    let resApi = await api.get(`/feeds/detail-feed?id=${id}`);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(error.response.data);
+    return null;
   }
 };

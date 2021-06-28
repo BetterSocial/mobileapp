@@ -1,7 +1,9 @@
-import React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import * as React from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
+
 import ItemUser from './ItemUser';
 import Label from './Label';
+
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }

@@ -10,6 +10,7 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import {createChildComment} from '../../service/comment';
+import {getFeedDetail} from '../../service/post';
 
 const ReplyComment = (props) => {
   const navigation = useNavigation();
@@ -26,7 +27,6 @@ const ReplyComment = (props) => {
     };
     init();
   }, [item]);
-
   const createComment = async () => {
     try {
       if (textComment.trim() !== '') {
