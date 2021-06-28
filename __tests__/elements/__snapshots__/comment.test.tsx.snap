@@ -6,6 +6,7 @@ exports[`component Comment Comment renders correctly 1`] = `
     Object {
       "borderLeftColor": "#C4C4C4",
       "borderLeftWidth": 1,
+      "width": "100%",
     }
   }
 >
@@ -193,6 +194,7 @@ exports[`component Comment Comment snapshot 1`] = `
     Object {
       "borderLeftColor": "#C4C4C4",
       "borderLeftWidth": 1,
+      "width": "100%",
     }
   }
 >

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 
 import StringConstant from '../../utils/string/StringConstant';
 import {colors} from '../../utils/colors';
 import Comment from './Comment';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import ConnectorWrapper from './ConnectorWrapper';
 
 const ContainerComment = ({comments}) => {
@@ -28,6 +28,11 @@ const ContainerComment = ({comments}) => {
   return (
     <View style={styles.container}>
       {comments.map((item, index) => {
+        (item.latest_children.comment || []).sort((current, next) => {
+          let currentMoment = moment(current.updated_at);
+          let nextMoment = moment(next.updated_at);
+          return currentMoment.diff(nextMoment);
+        });
         return (
           <View>
             <View key={'p' + index}>

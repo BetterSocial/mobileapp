@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       width: '100%',
       paddingRight: 10,
-      paddingLeft: inReplyCommentView ? 42 : 20,
+      paddingLeft: inReplyCommentView ? 58 : 20,
       flexDirection: 'row',
       zIndex: 100,
       // backgroundColor: 'red',
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
       backgroundColor: colors.gray1,
       position: 'absolute',
       top: 0,
-      left: inReplyCommentView ? 46 : 22,
+      left: inReplyCommentView ? 60 : 22,
       zIndex: -100,
     };
   },
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
       backgroundColor: colors.gray1,
       position: 'absolute',
       top: 0,
-      left: inReplyCommentView ? 46 : 22,
+      left: inReplyCommentView ? 60 : 22,
       zIndex: -100,
     };
   },

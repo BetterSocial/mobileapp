@@ -21,9 +21,17 @@ const Comment = ({
   style,
   photo,
   level,
+  showLeftConnector = true,
 }) => {
   return (
-    <View style={styles.container({isLast, style, level, isLastInParent})}>
+    <View
+      style={styles.container({
+        isLast,
+        style,
+        level,
+        isLastInParent,
+        showLeftConnector,
+      })}>
       <View style={styles.profile}>
         <Image
           source={
@@ -70,11 +78,9 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  container: ({isLast, style, level, isLastInParent}) => ({
-    // flex: 1,
-    // marginLeft: isLastInParent ? -1 : 0,
-    // flexDirection: 'column',
-    borderLeftWidth: 1,
+  container: ({isLast, style, level, isLastInParent, showLeftConnector}) => ({
+    width: '100%',
+    borderLeftWidth: showLeftConnector ? 1 : 0,
     borderLeftColor: isLast
       ? level === 0
         ? colors.gray1
