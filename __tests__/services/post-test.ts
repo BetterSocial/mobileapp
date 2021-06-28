@@ -5,6 +5,7 @@ import {
   createFeedToken,
   createPollPost,
   createPost,
+  getFeedDetail,
 } from '../../src/service/post';
 import {verifyUser} from '../../src/service/users';
 beforeAll(async () => {
@@ -96,6 +97,18 @@ describe('services posts', () => {
       images_url: [],
     };
     await createPost(data)
+      .then(onResponse)
+      .catch(onError)
+      .finally(() => {
+        expect(onResponse).toHaveBeenCalled();
+      });
+  });
+
+  it('testing service getFeedDetail', async () => {
+    const onResponse = jest.fn();
+    const onError = jest.fn();
+    const id = '7d494d78-a9cf-4ec1-948e-d5442b31c738';
+    getFeedDetail(id)
       .then(onResponse)
       .catch(onError)
       .finally(() => {
