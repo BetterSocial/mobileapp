@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   replyToContainer: (inReplyCommentView) => {
     return {
-      marginLeft: inReplyCommentView ? 70 : 48,
+      marginLeft: inReplyCommentView ? 90 : 60,
       fontFamily: fonts.inter[500],
       marginBottom: 11,
       marginTop: 7,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       width: '100%',
       paddingRight: 10,
-      paddingLeft: inReplyCommentView ? 58 : 20,
+      paddingLeft: inReplyCommentView ? 50 : 20,
       flexDirection: 'row',
       zIndex: 100,
       // backgroundColor: 'red',
@@ -128,19 +128,19 @@ const styles = StyleSheet.create({
   },
   btnText: {color: 'white', fontFamily: fonts.inter[400]},
   image: {
-    width: 24,
-    height: 24,
-    marginLeft: -10,
+    width: 36,
+    height: 36,
+    marginLeft: -7,
     zIndex: -10,
   },
   text: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: fonts.inter[400],
     color: colors.black,
-    lineHeight: 24,
-    paddingTop: 5,
-    paddingBottom: 5,
+    lineHeight: 14.52,
+    paddingTop: 0,
+    paddingBottom: 0,
   },
   icSendButton: {
     alignSelf: 'center',
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
       backgroundColor: colors.gray1,
       position: 'absolute',
       top: 0,
-      left: inReplyCommentView ? 60 : 22,
+      left: inReplyCommentView ? 60 : 30,
       zIndex: -100,
     };
   },
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
       backgroundColor: colors.gray1,
       position: 'absolute',
       top: 0,
-      left: inReplyCommentView ? 60 : 22,
+      left: inReplyCommentView ? 60 : 30,
       zIndex: -100,
     };
   },

@@ -267,6 +267,8 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginTop: 12,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],

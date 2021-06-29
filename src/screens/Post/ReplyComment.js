@@ -73,23 +73,21 @@ const ReplyComment = (props) => {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={navigationGoBack} style={styles.backArrow}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>
-          Reply to {item.user.data.username}
-        </Text>
-        <View style={styles.btn} />
-      </View>
-      {/* Header */}
-      <ScrollView
-        contentContainerStyle={{
-          minHeight: '93%',
-          paddingBottom: 85,
-        }}>
+      <ScrollView contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity
+              onPress={navigationGoBack}
+              style={styles.backArrow}>
+              <ArrowLeftIcon width={20} height={12} fill="#000" />
+            </TouchableOpacity>
+            <Text style={styles.headerText}>
+              Reply to {item.user.data.username}
+            </Text>
+            <View style={styles.btn} />
+          </View>
+          {/* Header */}
           <Comment
             username={item.user.data.username}
             comment={item.data.text}
@@ -100,10 +98,14 @@ const ReplyComment = (props) => {
           {item.children_counts.comment > 0 &&
             item.latest_children.comment.map((itemReply, index) => {
               const showCommentView = () =>
-                navigation.navigate('ReplyComment', {item: item});
+                navigation.push('ReplyComment', {item: itemReply});
 
               let isLastInParent = (index) => {
                 return index === (item.children_counts.comment || 0) - 1;
+              };
+
+              const goToComment = () => {
+                navigation.push('ReplyComment', {item: itemReply});
               };
 
               return (
@@ -121,7 +123,7 @@ const ReplyComment = (props) => {
                         key={'r' + index}
                         username={itemReply.user.data.username}
                         comment={itemReply.data.text}
-                        onPress={() => {}}
+                        onPress={goToComment}
                       />
                       {itemReply.children_counts.comment > 0 && (
                         <>
@@ -190,9 +192,10 @@ const styles = StyleSheet.create({
     paddingRight: 36,
   },
   header: {
+    marginLeft: -20,
+    marginRight: -20,
+    marginBottom: 8,
     paddingVertical: 8,
-    paddingLeft: 14,
-    paddingRight: 24,
     flexDirection: 'row',
     justifyContent: 'space-between',
     // paddingHorizontal: 22,
@@ -283,5 +286,9 @@ const styles = StyleSheet.create({
   backArrow: {
     padding: 10,
     alignSelf: 'center',
+  },
+  commentScrollView: {
+    minHeight: '100%',
+    paddingBottom: 83,
   },
 });

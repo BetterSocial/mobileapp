@@ -269,7 +269,7 @@ const PostDetailPage = (props) => {
       <ScrollView
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
-        style={{height: height, marginBottom: 86}}>
+        style={styles.contentScrollView}>
         <View style={styles.content(height)}>
           <Header props={item} isBackButton={true} />
           {item.post_type === POST_TYPE_POLL && (
@@ -411,4 +411,8 @@ const styles = StyleSheet.create({
       return {};
     }
   },
+  contentScrollView: {
+    height: height,
+    marginBottom: 82,
+  }
 });

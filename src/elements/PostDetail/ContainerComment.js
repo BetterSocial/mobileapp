@@ -168,7 +168,7 @@ export default ContainerComment;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 22,
+    paddingHorizontal: 30,
   },
   containerReply: (hideLeftConnector) => ({
     borderLeftWidth: 1,
