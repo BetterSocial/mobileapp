@@ -14,6 +14,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import {createChildComment} from '../../service/comment';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
+import {getFeedDetail} from '../../service/post';
 import Comment from '../../elements/PostDetail/Comment';
 import WriteComment from '../../elements/PostDetail/WriteComment';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
@@ -47,7 +48,6 @@ const ReplyComment = (props) => {
     };
     init();
   }, [item]);
-
   const createComment = async () => {
     try {
       if (textComment.trim() !== '') {

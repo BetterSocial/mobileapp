@@ -1,8 +1,10 @@
 import * as React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
 import JWTDecode from 'jwt-decode';
-import {getAccessToken} from '../../utils/token';
 import Toast from 'react-native-simple-toast';
+import {getAccessToken} from '../../utils/token';
+import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 
 import {
   POST_VERB_POLL,
@@ -16,6 +18,7 @@ import {fonts} from '../../utils/fonts';
 import {getMyProfile} from '../../service/profile';
 import {blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
+import {getFeedDetail} from '../../service/post';
 import {createCommentParent} from '../../service/comment';
 import Gap from '../../components/Gap';
 import Footer from '../feedScreen/Footer';
@@ -30,11 +33,11 @@ import WriteComment from '../../elements/PostDetail/WriteComment';
 import ContainerComment from '../../elements/PostDetail/ContainerComment';
 import ContentPoll from '../feedScreen/ContentPoll';
 import ContentLink from '../feedScreen/ContentLink';
-import moment from 'moment';
 
 const {width, height} = Dimensions.get('window');
 
 const PostDetailPage = (props) => {
+  const navigation = useNavigation();
   const [more, setMore] = React.useState(10);
   const [totalLine, setTotalLine] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
@@ -97,9 +100,13 @@ const PostDetailPage = (props) => {
       }
     };
     initial();
-  }, [props]);
-
+  }, [props, item]);
   React.useEffect(() => {
+    navigation.addListener('focus', () => {
+      if (item) {
+        updateFeed();
+      }
+    });
     fetchMyProfile();
     // refBlockUser.current.open();
     // refBlockDomain.current.open();
@@ -195,6 +202,13 @@ const PostDetailPage = (props) => {
       setMore(more + 10);
     }
   };
+  const updateFeed = async () => {
+    let data = await getFeedDetail(item.id);
+    if (data) {
+      console.log('reed', data.results[0]);
+      setItem(data.results[0]);
+    }
+  };
 
   const onComment = () => {
     if (typeComment === 'parent') {
@@ -208,6 +222,7 @@ const PostDetailPage = (props) => {
         let data = await createCommentParent(textComment, item.id);
         if (data.code === 200) {
           setTextComment('');
+          updateFeed();
           Toast.show('Comment successful', Toast.LONG);
         } else {
           Toast.show('Failed Comment', Toast.LONG);
