@@ -414,5 +414,5 @@ const styles = StyleSheet.create({
   contentScrollView: {
     height: height,
     marginBottom: 82,
-  }
+  },
 });

@@ -93,6 +93,8 @@ const ReplyComment = (props) => {
             comment={item.data.text}
             time={item.created_at}
             photo={item.user.data.profile_pic_url}
+            isLast={(item.children_counts.comment || 0) === 0}
+            level={1}
             onPress={() => {}}
           />
           {item.children_counts.comment > 0 &&
@@ -147,7 +149,9 @@ const ReplyComment = (props) => {
                 </ContainerReply>
               );
             })}
-          <View style={styles.childLevelMainConnector} />
+          {(item.children_counts.comment || 0) !== 0 && (
+            <View style={styles.childLevelMainConnector} />
+          )}
         </View>
       </ScrollView>
       <WriteComment
