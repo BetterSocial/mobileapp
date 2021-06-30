@@ -3,7 +3,7 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import ContainerComment from '../../src/elements/PostDetail/ContainerComment';
+import ContainerComment from '../../src/components/Comments/ContainerComment';
 
 configure({adapter: new Adapter()});
 jest.useFakeTimers();
