@@ -3,7 +3,7 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import SheetGeographic from '../../src/elements/Post/SheetGeographic';
+import SheetGeographic from '../../src/screens/CreatePost/elements/SheetGeographic';
 
 configure({adapter: new Adapter()});
 // jest.useFakeTimers();
