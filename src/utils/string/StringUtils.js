@@ -33,12 +33,22 @@ let isPollExpired = (pollExpiredAtString) => {
 
 let displayFormattedSearchLocations = (searchQuery, locationObject) => {
   // console.log(searchQuery)
-  if (locationObject.country.toLowerCase() === searchQuery.toLowerCase()) {
-    return <Text style={styles.bold}>{locationObject.country}</Text>;
-  }
+  // if (locationObject.country.toLowerCase() === searchQuery.toLowerCase()) {
+  //   return <Text style={styles.bold}>{locationObject.country}</Text>;
+  // }
+  let zipString =
+    locationObject.zip === '' || locationObject.zip === undefined
+      ? ''
+      : `, ${locationObject.zip}`;
 
   if (locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
-    return <Text style={styles.bold}>{locationObject.state}</Text>;
+    return (
+      <Text>
+        {`${locationObject.neighborhood}, ${locationObject.city}, `}
+        <Text style={styles.bold}>{locationObject.state}</Text>
+        {`, ${locationObject.country}${zipString}`}
+      </Text>
+    );
   }
 
   if (locationObject.city.toLowerCase() === searchQuery.toLowerCase()) {
@@ -48,21 +58,18 @@ let displayFormattedSearchLocations = (searchQuery, locationObject) => {
         : `, ${locationObject.zip}`;
     return (
       <Text>
+        {`${locationObject.neighborhood}, `}
         <Text style={styles.bold}>{locationObject.city}</Text>
-        {`${zipString}`}
+        {`, ${locationObject.state}, ${locationObject.country}${zipString}`}
       </Text>
     );
   }
 
   if (locationObject.neighborhood.toLowerCase() === searchQuery.toLowerCase()) {
-    let zipString =
-      locationObject.zip === '' || locationObject.zip === undefined
-        ? ''
-        : `, ${locationObject.zip}`;
     return (
       <Text>
         <Text style={styles.bold}>{locationObject.neighborhood}</Text>
-        {`, ${locationObject.city}${zipString}`}
+        {`, ${locationObject.city} , ${locationObject.state}, ${locationObject.country}${zipString}`}
       </Text>
     );
   }
@@ -70,8 +77,8 @@ let displayFormattedSearchLocations = (searchQuery, locationObject) => {
   if (locationObject.zip.toLowerCase() === searchQuery.toLowerCase()) {
     return (
       <Text>
-        <Text style={styles.bold}>{locationObject.zip}</Text>
-        {` ${locationObject.city}`}
+        {`${locationObject.neighborhood}, ${locationObject.city} , ${locationObject.state}, ${locationObject.country}`}
+        <Text style={styles.bold}>{zipString}</Text>
       </Text>
     );
   }

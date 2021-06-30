@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
 
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import JWTDecode from 'jwt-decode';
 import analytics from '@react-native-firebase/analytics';
 import Toast from 'react-native-simple-toast';
@@ -21,6 +21,7 @@ import {blockUser} from '../../service/blocking';
 import {getMainFeed} from '../../service/post';
 
 const FeedScreen = (props) => {
+  const navigation = useNavigation();
   const [tokenParse, setTokenParse] = React.useState({});
   const [mainFeeds, setMainFeeds] = React.useState([]);
 
@@ -90,41 +91,53 @@ const FeedScreen = (props) => {
     userBlock();
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const getDataFeeds = async (id = '') => {
-        setCountStack(null);
-        setInitialLoading(true);
-        try {
-          let query = '';
-          if (id !== '') {
-            query = '?id_lt=' + id;
-          }
-          const dataFeeds = await getMainFeed(query);
-          console.log('dataFeeds');
-          console.log(dataFeeds);
-          if (dataFeeds.data.length > 0) {
-            let data = dataFeeds.data;
-            setCountStack(data.length);
-            setMainFeeds(data);
-          }
-          setInitialLoading(false);
-        } catch (e) {
-          console.log(e);
-          setInitialLoading(false);
-        }
-      };
-      getDataFeeds(lastId);
-    }, [lastId]),
-  );
+  const getDataFeeds = async (id = '') => {
+    setCountStack(null);
+    setInitialLoading(true);
+    try {
+      let query = '';
+      if (id !== '') {
+        query = '?id_lt=' + id;
+      }
+      const dataFeeds = await getMainFeed(query);
+      console.log('dataFeeds');
+      console.log(dataFeeds);
+      if (dataFeeds.data.length > 0) {
+        let data = dataFeeds.data;
+        setCountStack(data.length);
+        setMainFeeds(data);
+      }
+      setInitialLoading(false);
+    } catch (e) {
+      console.log(e);
+      setInitialLoading(false);
+    }
+  };
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getDataFeeds(lastId);
+  //   }, [lastId]),
+  // );
 
   React.useEffect(() => {
-    // fetchMyProfile();
     analytics().logScreenView({
       screen_class: 'FeedScreen',
       screen_name: 'Feed Screen',
     });
   }, []);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
+      getDataFeeds(lastId);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  React.useEffect(() => {
+    getDataFeeds(lastId);
+  }, [lastId]);
 
   const setDataToState = (value) => {
     if (value.anonimity === true) {
