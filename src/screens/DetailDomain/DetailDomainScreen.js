@@ -19,7 +19,7 @@ import {blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
 import {createCommentParent} from '../../service/comment';
 import {SIZES} from '../../utils/theme';
-import ContentLink from '../feedScreen/ContentLink';
+import ContentLink from '../FeedScreen/ContentLink';
 
 const {width, height} = Dimensions.get('window');
 

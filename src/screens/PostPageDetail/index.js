@@ -7,8 +7,8 @@ import {getAccessToken} from '../../utils/token';
 import {useNavigation} from '@react-navigation/native';
 
 import {Gap, Footer} from '../../components';
-import Header from '../feedScreen/Header';
-import Content from '../feedScreen/Content';
+import Header from '../FeedScreen/Header';
+import Content from '../FeedScreen/Content';
 import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import ReportUser from '../../components/Blocking/ReportUser';
