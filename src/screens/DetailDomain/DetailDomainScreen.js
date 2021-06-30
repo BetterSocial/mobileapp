@@ -6,19 +6,18 @@ import {getAccessToken} from '../../utils/token';
 import Toast from 'react-native-simple-toast';
 
 import {DomainHeader, Gap, Footer} from '../../components';
-import BlockUser from '../../elements/Blocking/BlockUser';
-import BlockDomain from '../../elements/Blocking/BlockDomain';
-import ReportUser from '../../elements/Blocking/ReportUser';
-import ReportDomain from '../../elements/Blocking/ReportDomain';
-import SpecificIssue from '../../elements/Blocking/SpecificIssue';
-import WriteComment from '../../elements/PostDetail/WriteComment';
-import ContainerComment from '../../elements/PostDetail/ContainerComment';
+import BlockUser from '../../components/Blocking/BlockUser';
+import BlockDomain from '../../components/Blocking/BlockDomain';
+import ReportUser from '../../components/Blocking/ReportUser';
+import ReportDomain from '../../components/Blocking/ReportDomain';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import WriteComment from '../../components/Comments/WriteComment';
+import ContainerComment from '../../components/Comments/ContainerComment';
 import {fonts} from '../../utils/fonts';
 import {getMyProfile} from '../../service/profile';
 import {blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
 import {createCommentParent} from '../../service/comment';
-import RenderItem from '../newsScreen/RenderItem';
 import {SIZES} from '../../utils/theme';
 import ContentLink from '../feedScreen/ContentLink';
 

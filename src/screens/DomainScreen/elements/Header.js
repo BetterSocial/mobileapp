@@ -18,9 +18,8 @@ import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
 import MemoIc_user_group from '../../../assets/icons/Ic_user_group';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import {fonts} from '../../../utils/fonts';
-import Gap from '../../../components/Gap';
-import {SIZES, COLORS, FONTS} from '../../utils/theme';
-import {SingleSidedShadowBox} from '../../components';
+import {SIZES, COLORS, FONTS} from '../../../utils/theme';
+import {SingleSidedShadowBox, Gap} from '../../../components';
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis.';

@@ -125,7 +125,6 @@ const PostPageDetail = (props) => {
     validationStatusVote();
   }, [item, yourselfId]);
 
-  }, [props, item]);
   React.useEffect(() => {
     navigation.addListener('focus', () => {
       if (item) {

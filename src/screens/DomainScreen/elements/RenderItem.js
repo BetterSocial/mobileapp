@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
-import Gap from '../../../components/Gap';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import theme, {COLORS, FONTS, SIZES} from '../../../utils/theme';
 import {colors} from '../../../utils/colors';
-import {Footer, PreviewComment} from '../../components';
-import {fonts} from '../../utils/fonts';
+import {Footer, PreviewComment, Gap} from '../../../components';
+import {fonts} from '../../../utils/fonts';
 
 const RenderItem = ({domain, image}) => {
   const [previewComment, setPreviewComment] = React.useState({});

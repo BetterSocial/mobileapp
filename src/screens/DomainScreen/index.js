@@ -9,10 +9,6 @@ import Loading from '../Loading';
 import Header from './elements/Header';
 import Navigation from './elements/Navigation';
 import RenderItem from './elements/RenderItem';
-import {colors} from '../../utils/colors';
-import Header from './Header';
-import Navigation from './Navigation';
-import RenderItem from './RenderItem';
 import {SIZES} from '../../utils/theme';
 
 const {width, height} = Dimensions.get('window');

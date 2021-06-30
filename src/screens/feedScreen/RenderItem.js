@@ -13,9 +13,7 @@ import {
 } from '../../utils/constants';
 import ContentPoll from './ContentPoll';
 
-import {isContainUrl, smartRender} from '../../utils/Utils';
 import ContentLink from './ContentLink';
-import ContainerComment from '../../elements/PostDetail/ContainerComment';
 import {Gap, PreviewComment, Footer} from '../../components';
 
 const {width, height} = Dimensions.get('window');
