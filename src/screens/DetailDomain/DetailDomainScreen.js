@@ -5,7 +5,7 @@ import JWTDecode from 'jwt-decode';
 import {getAccessToken} from '../../utils/token';
 import Toast from 'react-native-simple-toast';
 
-import {DomainHeader} from '../../components';
+import {DomainHeader, Gap, Footer} from '../../components';
 import BlockUser from '../../elements/Blocking/BlockUser';
 import BlockDomain from '../../elements/Blocking/BlockDomain';
 import ReportUser from '../../elements/Blocking/ReportUser';
@@ -17,16 +17,10 @@ import {fonts} from '../../utils/fonts';
 import {getMyProfile} from '../../service/profile';
 import {blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
-import ContentPoll from '../feedScreen/ContentPoll';
-import {
-  POST_VERB_POLL,
-  POST_TYPE_LINK,
-  POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
-} from '../../utils/constants';
 import {createCommentParent} from '../../service/comment';
-import ContentLink from '../feedScreen/ContentLink';
 import RenderItem from '../newsScreen/RenderItem';
+import {SIZES} from '../../utils/theme';
+import ContentLink from '../feedScreen/ContentLink';
 
 const {width, height} = Dimensions.get('window');
 
@@ -52,6 +46,9 @@ const DetailDomainScreen = (props) => {
   const [username, setUsername] = React.useState('');
   const [postId, setPostId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+  const [voteStatus, setVoteStatus] = React.useState('none');
+  const [statusUpvote, setStatusUpvote] = React.useState(false);
+  const [statusDownvote, setStatusDowvote] = React.useState(false);
 
   React.useEffect(() => {
     const initial = () => {
@@ -200,21 +197,11 @@ const DetailDomainScreen = (props) => {
       Toast.show('Failed Comment', Toast.LONG);
     }
   };
-  const setUpVote = async (id) => {
-    let result = await upVote({activity_id: id});
-    if (result.code === 200) {
-      Toast.show('up vote was successful', Toast.LONG);
-    } else {
-      Toast.show('up vote failed', Toast.LONG);
-    }
+  const setUpVote = async (post) => {
+    upVote(post);
   };
-  const setDownVote = async (id) => {
-    let result = await downVote({activity_id: id});
-    if (result.code === 200) {
-      Toast.show('down vote success', Toast.LONG);
-    } else {
-      Toast.show('down vote failed', Toast.LONG);
-    }
+  const setDownVote = async (post) => {
+    downVote(post);
   };
 
   const onPressDomain = () => {
@@ -229,13 +216,81 @@ const DetailDomainScreen = (props) => {
         showsVerticalScrollIndicator={false}
         style={{height: height * 0.9}}>
         <View style={styles.content}>
-          <DomainHeader
-            domain={item.domain.name}
-            time={item.content.created_at}
-            image={item.domain.image}
-          />
+          <View style={{paddingHorizontal: 16}}>
+            <DomainHeader
+              domain={item.domain.name}
+              time={item.content.created_at}
+              image={item.domain.image}
+            />
+          </View>
 
-          <RenderItem item={item} />
+          <Gap height={16} />
+          <View style={{marginHorizontal: SIZES.base}}>
+            <ContentLink
+              og={{
+                date: item.content.created_at,
+                description: item.content.description,
+                domain: item.domain.name,
+                domainImage: item.domain.image,
+                image: item.content.image,
+                title: item.content.title,
+                url: item.content.url,
+              }}
+            />
+            <Gap height={SIZES.base} />
+            <Footer
+              disableComment={true}
+              statusVote={voteStatus}
+              totalComment={totalComment}
+              totalVote={totalVote}
+              onPressDownVote={() => {
+                setStatusDowvote((prev) => {
+                  prev = !prev;
+                  setDownVote({
+                    activity_id: item.id,
+                    status: prev,
+                    feed_group: 'domain',
+                  });
+                  if (prev) {
+                    setVoteStatus('downvote');
+                    if (statusUpvote === true) {
+                      setTotalVote((p) => p - 2);
+                    } else {
+                      setTotalVote((p) => p - 1);
+                    }
+                    setStatusUpvote(false);
+                  } else {
+                    setVoteStatus('none');
+                    setTotalVote((p) => p + 1);
+                  }
+                  return prev;
+                });
+              }}
+              onPressUpvote={() => {
+                setStatusUpvote((prev) => {
+                  prev = !prev;
+                  setUpVote({
+                    activity_id: item.id,
+                    status: prev,
+                    feed_group: 'domain',
+                  });
+                  if (prev) {
+                    setVoteStatus('upvote');
+                    if (statusDownvote === true) {
+                      setTotalVote((p) => p + 2);
+                    } else {
+                      setTotalVote((p) => p + 1);
+                    }
+                    setStatusDowvote(false);
+                  } else {
+                    setVoteStatus('none');
+                    setTotalVote((p) => p - 1);
+                  }
+                  return prev;
+                });
+              }}
+            />
+          </View>
         </View>
         {isReaction && (
           <ContainerComment comments={item.latest_reactions.comment} />
@@ -306,7 +361,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
-    paddingHorizontal: 16,
     marginBottom: 16,
   },
   gap: {height: 16},

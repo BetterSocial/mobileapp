@@ -248,12 +248,13 @@ const PostDetailPage = (props) => {
 
   return (
     <View style={styles.container}>
+      <View style={{paddingHorizontal: 16}}>
+        <Header props={item} isBackButton={true} />
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{height: height * 0.9}}>
         <View style={styles.content}>
-          <Header props={item} isBackButton={true} />
-
           {item.post_type === POST_TYPE_POLL && (
             <ContentPoll
               message={item.message}

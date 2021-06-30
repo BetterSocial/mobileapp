@@ -21,6 +21,7 @@ const Footer = ({
   onPressDownVote,
   onPressUpvote,
   totalVote,
+  disableComment = false,
 }) => {
   return (
     <View style={{...styles.rowSpaceBeetwen}}>
@@ -28,9 +29,15 @@ const Footer = ({
         <TouchableOpacity onPress={onPressShare}>
           <MemoIc_share height={20} width={20} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onPressComment}>
-          <MemoIc_comment height={20} width={20} />
-        </TouchableOpacity>
+        {disableComment ? (
+          <View onPress={onPressComment}>
+            <MemoIc_comment height={20} width={20} />
+          </View>
+        ) : (
+          <TouchableOpacity onPress={onPressComment}>
+            <MemoIc_comment height={20} width={20} />
+          </TouchableOpacity>
+        )}
         <Text style={styles.text}>{totalComment}</Text>
       </View>
       <View style={{...styles.rowSpaceBeetwen, width: SIZES.width * 0.3}}>

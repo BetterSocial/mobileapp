@@ -8,7 +8,7 @@ import {COLORS, FONTS, SIZES} from '../../utils/theme';
 const Header = ({image, domain, time}) => {
   return (
     <View style={{flexDirection: 'row', paddingHorizontal: SIZES.base}}>
-      <Avatar image={image} />
+      <Avatar image={image} style={{width: 36, height: 36}} />
       <Gap width={8} />
       <View style={{flex: 1, justifyContent: 'center'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>

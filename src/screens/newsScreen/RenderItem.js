@@ -45,84 +45,78 @@ const RenderItem = ({
   }, [item, selfUserId, statusDownvote, statusUpvote, voteStatus]);
 
   return (
-    <View>
-      <View style={styles.container}>
-        <Header
-          image={item.domain.image}
-          domain={item.domain.name}
-          time={item.content.created_at}
-        />
-        <Content
-          title={item.content.title}
-          image={item.content.image}
-          description={item.content.description}
-          url={item.content.url}
-        />
-        <Gap height={8} />
-        <View style={styles.wrapperFooter}>
-          <Footer
-            totalComment={getCountComment(item)}
-            totalVote={totalVote}
-            onPressShare={() => onPressShare(item)}
-            onPressComment={() => onPressComment(item)}
-            onPressBlock={() => onPressBlock(item)}
-            onPressDownVote={() => {
-              setStatusDowvote((prev) => {
-                prev = !prev;
-                onPressDownVote({
-                  activity_id: item.id,
-                  status: prev,
-                  feed_group: 'domain',
-                });
-                if (prev) {
-                  if (statusUpvote === true) {
-                    setTotalVote((p) => p - 2);
-                  } else {
-                    setTotalVote((p) => p - 1);
-                  }
-                  setStatusUpvote(false);
-                } else {
-                  setTotalVote((p) => p + 1);
-                }
-                return prev;
+    <View style={styles.container}>
+      <Header
+        image={item.domain.image}
+        domain={item.domain.name}
+        time={item.content.created_at}
+      />
+      <Content
+        title={item.content.title}
+        image={item.content.image}
+        description={item.content.description}
+        url={item.content.url}
+      />
+      <Gap height={8} />
+      <View style={styles.wrapperFooter}>
+        <Footer
+          totalComment={getCountComment(item)}
+          totalVote={totalVote}
+          onPressShare={() => onPressShare(item)}
+          onPressComment={() => onPressComment(item)}
+          onPressBlock={() => onPressBlock(item)}
+          onPressDownVote={() => {
+            setStatusDowvote((prev) => {
+              prev = !prev;
+              onPressDownVote({
+                activity_id: item.id,
+                status: prev,
+                feed_group: 'domain',
               });
-            }}
-            onPressUpvote={() => {
-              setStatusUpvote((prev) => {
-                prev = !prev;
-                onPressUpvote({
-                  activity_id: item.id,
-                  status: prev,
-                  feed_group: 'domain',
-                });
-                if (prev) {
-                  if (statusDownvote === true) {
-                    setTotalVote((p) => p + 2);
-                  } else {
-                    setTotalVote((p) => p + 1);
-                  }
-                  setStatusDowvote(false);
+              if (prev) {
+                if (statusUpvote === true) {
+                  setTotalVote((p) => p - 2);
                 } else {
                   setTotalVote((p) => p - 1);
                 }
-                return prev;
+                setStatusUpvote(false);
+              } else {
+                setTotalVote((p) => p + 1);
+              }
+              return prev;
+            });
+          }}
+          onPressUpvote={() => {
+            setStatusUpvote((prev) => {
+              prev = !prev;
+              onPressUpvote({
+                activity_id: item.id,
+                status: prev,
+                feed_group: 'domain',
               });
-            }}
-            statusVote={voteStatus}
-          />
-        </View>
+              if (prev) {
+                if (statusDownvote === true) {
+                  setTotalVote((p) => p + 2);
+                } else {
+                  setTotalVote((p) => p + 1);
+                }
+                setStatusDowvote(false);
+              } else {
+                setTotalVote((p) => p - 1);
+              }
+              return prev;
+            });
+          }}
+          statusVote={voteStatus}
+        />
       </View>
-
-      <Gap height={8} />
-      {/* <View style={{height: 1, width: '100%', backgroundColor: '#C4C4C4'}} /> */}
-      {/* <Gap height={16} /> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: SIZES.base,
+    marginBottom: 16,
     borderRadius: SIZES.radius,
     elevation: 0.5,
     borderColor: COLORS.gray,

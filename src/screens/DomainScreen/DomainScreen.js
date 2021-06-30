@@ -18,6 +18,7 @@ import {colors} from '../../utils/colors';
 import Header from './Header';
 import Navigation from './Navigation';
 import RenderItem from './RenderItem';
+import {SIZES} from '../../utils/theme';
 
 const {width, height} = Dimensions.get('window');
 
@@ -64,6 +65,8 @@ const DomainScreen = () => {
           console.log(v);
         }}
       />
+
+      <Gap height={SIZES.base} />
 
       <FlatList
         data={data}

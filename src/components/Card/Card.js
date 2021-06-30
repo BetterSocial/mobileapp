@@ -46,7 +46,7 @@ const Card = (props) => {
           resizeMode={'cover'}
         />
       </View>
-      <Gap style={{width: 8}} />
+      <Gap width={8} />
       <View style={{justifyContent: 'space-around'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text
