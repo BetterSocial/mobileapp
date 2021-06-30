@@ -70,35 +70,28 @@ exports[`component WriteComment WriteComment renders correctly 1`] = `
       onStartShouldSetResponder={[Function]}
       style={
         Object {
+          "alignItems": "center",
+          "backgroundColor": "#00ADB5",
+          "borderRadius": 8,
+          "height": 32,
+          "justifyContent": "center",
           "opacity": 1,
+          "paddingHorizontal": 16,
+          "paddingVertical": 4,
+          "width": 80,
         }
       }
     >
-      <View
+      <Text
         style={
           Object {
-            "alignItems": "center",
-            "backgroundColor": "#00ADB5",
-            "borderRadius": 8,
-            "height": 32,
-            "justifyContent": "center",
-            "paddingHorizontal": 16,
-            "paddingVertical": 4,
-            "width": 80,
+            "color": "white",
+            "fontFamily": "Inter-Regular",
           }
         }
       >
-        <Text
-          style={
-            Object {
-              "color": "white",
-              "fontFamily": "Inter-Regular",
-            }
-          }
-        >
-          Reply
-        </Text>
-      </View>
+        Reply
+      </Text>
     </View>
   </View>
 </View>
@@ -164,32 +157,29 @@ exports[`component WriteComment WriteComment snapshot 1`] = `
     />
     <ForwardRef
       onPress={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#00ADB5",
+          "borderRadius": 8,
+          "height": 32,
+          "justifyContent": "center",
+          "paddingHorizontal": 16,
+          "paddingVertical": 4,
+          "width": 80,
+        }
+      }
     >
-      <View
+      <Text
         style={
           Object {
-            "alignItems": "center",
-            "backgroundColor": "#00ADB5",
-            "borderRadius": 8,
-            "height": 32,
-            "justifyContent": "center",
-            "paddingHorizontal": 16,
-            "paddingVertical": 4,
-            "width": 80,
+            "color": "white",
+            "fontFamily": "Inter-Regular",
           }
         }
       >
-        <Text
-          style={
-            Object {
-              "color": "white",
-              "fontFamily": "Inter-Regular",
-            }
-          }
-        >
-          Reply
-        </Text>
-      </View>
+        Reply
+      </Text>
     </ForwardRef>
   </View>
 </View>

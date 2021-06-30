@@ -6,11 +6,13 @@ import {
   StyleSheet,
   Platform,
   TouchableNativeFeedback,
+  TouchableOpacity,
   TouchableHighlight,
   Dimensions,
   FlatList,
   Image,
   ActivityIndicator,
+  SectionList,
 } from 'react-native';
 
 import {showMessage} from 'react-native-flash-message';
@@ -31,14 +33,21 @@ import {registerUser} from '../../service/users';
 import {Context} from '../../context';
 import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
 import {colors} from '../../utils/colors';
+import ItemUser from './elements/ItemUser';
+import Label from './elements/Label';
+import ListUser from './elements/ListUser';
 
 const width = Dimensions.get('screen').width;
+function compire(prevProps, nextProps) {
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+}
+const MemoListUser = React.memo(ListUser, compire);
 
 const WhotoFollow = () => {
   const [users, setUsers] = React.useState([]);
   const [followed, setFollowed] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [refreshing, setRefreshing] = React.React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [fetchRegister, setFetchRegister] = React.useState(false);
   const [topics] = React.useContext(Context).topics;
   const [localCommunity] = React.useContext(Context).localCommunity;
@@ -55,8 +64,8 @@ const WhotoFollow = () => {
     get({url: '/who-to-follow/list'})
       .then((res) => {
         setIsLoading(false);
-        if (res.status == 200) {
-          console.log(JSON.stringify(res.data.body));
+        if (res.status === 200) {
+          // console.log(JSON.stringify(res.data.body));
           setUsers(res.data.body);
         }
       })
@@ -86,26 +95,23 @@ const WhotoFollow = () => {
 
   const handleSelected = (value) => {
     let copyFollowed = [...followed];
-    // let index = copyFollowed.findIndex((data) => data === value);
     let index = copyFollowed.indexOf(value);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
       copyFollowed.push(value);
     }
-
     setFollowed(copyFollowed);
-    // copyFollowed.map((res) => {
-    //   console.log('user', res);
-    // });
   };
+  const memoHandleSelected = React.useCallback(handleSelected, [followed]);
 
   const onRefresh = React.useCallback(() => {
+    console.log('onRefresh ');
     setRefreshing(true);
     get({url: '/who-to-follow/list'})
       .then((res) => {
         setRefreshing(false);
-        if (res.status == 200) {
+        if (res.status === 200) {
           setUsers(res.data.body);
         }
       })
@@ -192,41 +198,6 @@ const WhotoFollow = () => {
       });
   };
 
-  const renderItem = ({item}) => (
-    <View style={styles.containerCard}>
-      <View style={styles.cardLeft}>
-        <Image
-          style={styles.tinyLogo}
-          source={{
-            uri: item.profile_pic_path,
-          }}
-        />
-        <View style={styles.containerTextCard}>
-          <Text style={styles.textFullName}>{item.username}</Text>
-          <Text style={styles.textUsername}>{item.bio ? item.bio : ''}</Text>
-        </View>
-      </View>
-      <View style={styles.containerButton}>
-        {/* {followed.findIndex((data) => data === item.user_id) > -1 ? ( */}
-        {followed.indexOf(item.user_id) > -1 ? (
-          <TouchableNativeFeedback
-            onPress={() => handleSelected(item.user_id)}
-            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}
-            style={styles.followAction(18, 18)}>
-            <CheckIcon width={32} height={32} fill="#23C5B6" />
-          </TouchableNativeFeedback>
-        ) : (
-          <TouchableNativeFeedback
-            onPress={() => handleSelected(item.user_id)}
-            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 10)}
-            style={styles.followAction(10, 10)}>
-            <AddIcon width={20} height={20} fill="#000000" />
-          </TouchableNativeFeedback>
-        )}
-      </View>
-    </View>
-  );
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperHeader}>{renderHeader()}</View>
@@ -245,82 +216,11 @@ const WhotoFollow = () => {
         style={styles.listUser}
         onRefresh={onRefresh}
         refreshing={refreshing}>
-        {users !== undefined && users.length > 0
-          ? users.map((value, index) => {
-              if (value.name === 'topic') {
-                return (
-                  <View key={index}>
-                    {value.data.map((val, idx) => {
-                      return (
-                        <View key={idx}>
-                          <View style={styles.headerList}>
-                            <Text style={styles.titleHeader}>
-                              People in{' '}
-                              <Text style={styles.textBold}>{val.name}</Text>{' '}
-                              follow...
-                            </Text>
-                          </View>
-                          <FlatList
-                            style={styles.flatList}
-                            data={val.users}
-                            renderItem={renderItem}
-                            listKey={(item) => item.user_id + 'topic'}
-                            keyExtractor={(item) => item.user_id + 'topic'}
-                          />
-                        </View>
-                      );
-                    })}
-                  </View>
-                );
-              } else if (value.name === 'location') {
-                return (
-                  <View key={index}>
-                    {value.data.map((val, idx) => {
-                      return (
-                        <View key={idx}>
-                          <View style={styles.headerList}>
-                            <Text style={styles.titleHeader}>
-                              People in{' '}
-                              <Text style={styles.textBold}>
-                                {val.neighborhood}
-                              </Text>{' '}
-                              follow...
-                            </Text>
-                          </View>
-                          <FlatList
-                            style={styles.flatList}
-                            data={val.users}
-                            renderItem={renderItem}
-                            listKey={(item) => item.user_id + 'location'}
-                            keyExtractor={(item) => item.user_id + 'location'}
-                          />
-                        </View>
-                      );
-                    })}
-                  </View>
-                );
-              } else {
-                return null;
-              }
-              // return (
-              //   <View key={index}>
-              //     <View style={styles.headerList}>
-              //       <Text style={styles.titleHeader}>
-              //         People in{' '}
-              //         <Text style={styles.textBold}>{value.group_name}</Text>{' '}
-              //         follow...
-              //       </Text>
-              //     </View>
-              //     <FlatList
-              //       style={styles.flatList}
-              //       data={value.data}
-              //       renderItem={renderItem}
-              //       keyExtractor={(item) => item.user_id}
-              //     />
-              //   </View>
-              // );
-            })
-          : null}
+        <MemoListUser
+          users={users}
+          followed={followed}
+          onPress={(item) => memoHandleSelected(item)}
+        />
       </VirtualizedView>
       <View style={styles.footer}>
         <Button onPress={() => register()}>FINISH</Button>
@@ -329,6 +229,7 @@ const WhotoFollow = () => {
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -466,7 +367,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: '#4F4F4F',
-    // textTransform: 'capitalize',
   },
   flatList: {
     paddingLeft: 22,
@@ -498,6 +398,9 @@ const styles = StyleSheet.create({
   followAction: (awidth, height) => ({
     height,
     width: awidth,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
   }),
   listUser: {
     marginBottom: 90,

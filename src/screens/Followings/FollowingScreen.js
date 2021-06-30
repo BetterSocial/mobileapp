@@ -4,8 +4,8 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Animated from 'react-native-reanimated';
 
-import DomainFragmentScreen from './DomainFragmentScreen';
-import TopicFragmentScreen from './TopicFragmentScreen';
+import DomainFragmentScreen from './elements/DomainFragmentScreen';
+import TopicFragmentScreen from './elements/TopicFragmentScreen';
 import Followings from '.';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';

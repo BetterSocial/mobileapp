@@ -11,14 +11,11 @@ exports[`component ContainerComment ContainerComment renders correctly 1`] = `
   <View>
     <View
       style={
-        Array [
-          Object {
-            "borderLeftWidth": 1,
-          },
-          Object {
-            "borderLeftColor": "#C4C4C4",
-          },
-        ]
+        Object {
+          "borderLeftColor": "#C4C4C4",
+          "borderLeftWidth": 1,
+          "paddingBottom": 16,
+        }
       }
     >
       <View
@@ -32,7 +29,7 @@ exports[`component ContainerComment ContainerComment renders correctly 1`] = `
         <Image
           source={
             Object {
-              "testUri": "../../../src/assets/images/ProfileDefault.png",
+              "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png",
             }
           }
           style={
@@ -42,18 +39,41 @@ exports[`component ContainerComment ContainerComment renders correctly 1`] = `
             }
           }
         />
-        <Text
+        <View
           style={
             Object {
-              "color": "#828282",
-              "fontFamily": "Inter-Semi-bold",
-              "fontSize": 12,
-              "marginLeft": 17,
+              "alignItems": "center",
+              "flexDirection": "row",
             }
           }
         >
-          user sebelas
-        </Text>
+          <Text
+            style={
+              Object {
+                "color": "#828282",
+                "fontFamily": "Inter-Bold",
+                "fontSize": 12,
+                "lineHeight": 14,
+                "marginLeft": 17,
+              }
+            }
+          >
+            user sebelas
+             •
+          </Text>
+          <Text
+            style={
+              Object {
+                "color": "#828282",
+                "fontFamily": "Inter-Regular",
+                "fontSize": 10,
+                "lineHeight": 12,
+              }
+            }
+          >
+             
+          </Text>
+        </View>
       </View>
       <Text
         style={
@@ -179,14 +199,11 @@ exports[`component ContainerComment ContainerComment renders correctly 1`] = `
   <View>
     <View
       style={
-        Array [
-          Object {
-            "borderLeftWidth": 1,
-          },
-          Object {
-            "borderLeftColor": "#C4C4C4",
-          },
-        ]
+        Object {
+          "borderLeftColor": "#C4C4C4",
+          "borderLeftWidth": 1,
+          "paddingBottom": 16,
+        }
       }
     >
       <View
@@ -200,7 +217,7 @@ exports[`component ContainerComment ContainerComment renders correctly 1`] = `
         <Image
           source={
             Object {
-              "testUri": "../../../src/assets/images/ProfileDefault.png",
+              "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png",
             }
           }
           style={
@@ -210,18 +227,41 @@ exports[`component ContainerComment ContainerComment renders correctly 1`] = `
             }
           }
         />
-        <Text
+        <View
           style={
             Object {
-              "color": "#828282",
-              "fontFamily": "Inter-Semi-bold",
-              "fontSize": 12,
-              "marginLeft": 17,
+              "alignItems": "center",
+              "flexDirection": "row",
             }
           }
         >
-          usupsuparma
-        </Text>
+          <Text
+            style={
+              Object {
+                "color": "#828282",
+                "fontFamily": "Inter-Bold",
+                "fontSize": 12,
+                "lineHeight": 14,
+                "marginLeft": 17,
+              }
+            }
+          >
+            usupsuparma
+             •
+          </Text>
+          <Text
+            style={
+              Object {
+                "color": "#828282",
+                "fontFamily": "Inter-Regular",
+                "fontSize": 10,
+                "lineHeight": 12,
+              }
+            }
+          >
+             
+          </Text>
+        </View>
       </View>
       <Text
         style={
@@ -362,6 +402,8 @@ exports[`component ContainerComment ContainerComment snapshot 1`] = `
       comment="user 15 comment"
       key="p0"
       onPress={[Function]}
+      photo="https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png"
+      time="2021-05-24T13:01:24.317789Z"
       username="user sebelas"
     />
   </View>
@@ -372,6 +414,8 @@ exports[`component ContainerComment ContainerComment snapshot 1`] = `
       comment="sedang mikirin kamu"
       key="p1"
       onPress={[Function]}
+      photo="https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png"
+      time="2021-05-24T08:13:46.933655Z"
       username="usupsuparma"
     />
   </View>
