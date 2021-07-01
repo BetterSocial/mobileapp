@@ -133,9 +133,15 @@ exports[`component SheetCloseBtn SheetCloseBtn renders correctly 1`] = `
         </Text>
         <View
           style={
-            Object {
-              "height": 30,
-            }
+            Array [
+              Object {
+                "height": 30,
+              },
+              Object {
+                "height": undefined,
+                "width": undefined,
+              },
+            ]
           }
         />
         <View
@@ -176,9 +182,15 @@ exports[`component SheetCloseBtn SheetCloseBtn renders correctly 1`] = `
         </View>
         <View
           style={
-            Object {
-              "height": 10,
-            }
+            Array [
+              Object {
+                "height": 10,
+              },
+              Object {
+                "height": undefined,
+                "width": undefined,
+              },
+            ]
           }
         />
         <View

@@ -1,5 +1,5 @@
-import ChannelListScreen from './channelListScreen/ChannelListScreen';
-import ChannelScreen from './channelScreen/ChannelListScreen';
+import ChannelListScreen from './ChannelListScreen/ChannelListScreen';
+import ChannelScreen from './ChannelScreen/ChannelScreen';
 import FeedScreen from './FeedScreen/FeedScreen';
 import NewsScreen from './NewsScreen';
 import ProfileScreen from './ProfileScreen';

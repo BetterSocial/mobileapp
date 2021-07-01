@@ -24,7 +24,6 @@ import ChooseUsername from '../screens/InputUsername';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import DomainScreen from '../screens/DomainScreen';
-import DetailDomainScreen from '../screens/DetailDomain/DetailDomainScreen';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
@@ -135,11 +134,6 @@ const RootStact = () => {
       <Stack.Screen
         name="DomainScreen"
         component={DomainScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="DetailDomainScreen"
-        component={DetailDomainScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
