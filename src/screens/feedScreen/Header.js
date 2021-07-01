@@ -129,7 +129,7 @@ const _renderProfileNormal = ({
 }) => {
   const navigation = useNavigation();
   let userId = actor.id;
-  let {profile_pic_path, username} = actor.data;
+  let {profile_pic_url, username} = actor.data;
 
   let navigateToProfile = async () => {
     let selfAccessToken = await getAccessToken();
@@ -163,8 +163,8 @@ const _renderProfileNormal = ({
           <View style={{}}>
             <Avatar
               source={
-                profile_pic_path
-                  ? profile_pic_path
+                profile_pic_url
+                  ? profile_pic_url
                   : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
               }
               size={48}

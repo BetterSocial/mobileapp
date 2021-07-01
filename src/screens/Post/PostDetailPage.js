@@ -203,10 +203,18 @@ const PostDetailPage = (props) => {
     }
   };
   const updateFeed = async () => {
-    let data = await getFeedDetail(item.id);
-    if (data) {
-      console.log('reed', data.results[0]);
-      setItem(data.results[0]);
+    console.log('update feed');
+    try {
+      let data = await getFeedDetail(item.id);
+      if (data) {
+        console.log('reed', data.results[0]);
+        setItem(data.results[0]);
+      } else {
+        console.log('else if');
+      }
+    } catch (e) {
+      console.log('error updating feed');
+      console.log(e);
     }
   };
 
@@ -222,7 +230,7 @@ const PostDetailPage = (props) => {
         let data = await createCommentParent(textComment, item.id);
         if (data.code === 200) {
           setTextComment('');
-          updateFeed();
+          // updateFeed();
           Toast.show('Comment successful', Toast.LONG);
         } else {
           Toast.show('Failed Comment', Toast.LONG);
