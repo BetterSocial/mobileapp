@@ -20,7 +20,7 @@ import {fonts} from '../../utils/fonts';
 import {getMyProfile} from '../../service/profile';
 import {blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
-import ContentPoll from '../feedScreen/ContentPoll';
+import ContentPoll from '../FeedScreen/ContentPoll';
 import {
   POST_VERB_POLL,
   POST_TYPE_LINK,
@@ -28,7 +28,7 @@ import {
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
 import {createCommentParent} from '../../service/comment';
-import ContentLink from '../feedScreen/ContentLink';
+import ContentLink from '../FeedScreen/ContentLink';
 import {getFeedDetail} from '../../service/post';
 
 const {width, height} = Dimensions.get('window');
@@ -65,7 +65,6 @@ const PostPageDetail = (props) => {
       const value = await getAccessToken();
       if (value) {
         const decoded = await JWTDecode(value);
-        console.log(decoded.user_id);
         setYourselfId(decoded.user_id);
       }
     };

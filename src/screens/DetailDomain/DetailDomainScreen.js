@@ -102,6 +102,33 @@ const DetailDomainScreen = (props) => {
     parseToken();
   }, []);
 
+  React.useEffect(() => {
+    const validationStatusVote = () => {
+      if (item.reaction_counts !== undefined || null) {
+        if (item.latest_reactions.upvotes !== undefined) {
+          let upvote = item.latest_reactions.upvotes.filter(
+            (vote) => vote.user_id === yourselfId,
+          );
+          if (upvote !== undefined) {
+            setVoteStatus('upvote');
+            setStatusUpvote(true);
+          }
+        }
+
+        if (item.latest_reactions.downvotes !== undefined) {
+          let downvotes = item.latest_reactions.downvotes.filter(
+            (vote) => vote.user_id === yourselfId,
+          );
+          if (downvotes !== undefined) {
+            setVoteStatus('downvote');
+            setStatusDowvote(true);
+          }
+        }
+      }
+    };
+    validationStatusVote();
+  }, [item, yourselfId]);
+
   const userBlock = async () => {
     const data = {
       userId: userId,
@@ -148,27 +175,6 @@ const DetailDomainScreen = (props) => {
         setLoading(false);
       }
       setLoading(false);
-    }
-  };
-
-  const setDataToState = (value) => {
-    if (value.anonimity === true) {
-      setUsername('Anonymous');
-      setPostId(value.id);
-      setUserId(value.actor.id + '-anonymous');
-    } else {
-      setUsername(value.actor.data.username);
-      setPostId(value.id);
-      setUserId(value.actor.id);
-    }
-  };
-
-  const onTextLayout = (e) => {
-    setTotalLine(e.nativeEvent.lines.length);
-  };
-  const onMore = () => {
-    if (more < totalLine) {
-      setMore(more + 10);
     }
   };
 

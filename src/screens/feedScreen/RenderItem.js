@@ -161,16 +161,6 @@ const Item = ({
     initialVote();
   }, [item]);
 
-  // React.useEffect(() => {
-  //   const validationStatusVote = () => {
-  //     if (statusDownvote === false && statusUpvote === false) {
-  //       setVoteStatus('none');
-  //     }
-  //   };
-
-  //   validationStatusVote();
-  // }, [item, selfUserId, statusDownvote, statusUpvote, voteStatus]);
-
   return (
     <Card style={styles.container}>
       <Header props={item} />
