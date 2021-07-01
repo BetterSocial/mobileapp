@@ -3,7 +3,7 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import ShowMedia from '../../src/elements/Post/ShowMedia';
+import ShowMedia from '../../src/screens/SignIn/elements/SlideShow';
 
 configure({adapter: new Adapter()});
 // jest.useFakeTimers();

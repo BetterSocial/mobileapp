@@ -1,4 +1,3 @@
-//pindeh ke replay comment
 import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 

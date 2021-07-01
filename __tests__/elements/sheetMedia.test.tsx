@@ -3,7 +3,7 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import SheetMedia from '../../src/elements/Post/SheetMedia';
+import SheetMedia from '../../src/screens/CreatePost/elements/SheetMedia';
 configure({adapter: new Adapter()});
 // jest.useFakeTimers();
 describe('component SheetMedia', () => {

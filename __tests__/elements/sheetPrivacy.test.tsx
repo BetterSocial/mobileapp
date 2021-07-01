@@ -3,7 +3,7 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import SheetPrivacy from '../../src/elements/Post/SheetPrivacy';
+import SheetPrivacy from '../../src/screens/CreatePost/elements/SheetPrivacy';
 import MemoIc_world from '../../src/assets/icons/Ic_world';
 import MemoIc_user_group from '../../src/assets/icons/Ic_user_group';
 
