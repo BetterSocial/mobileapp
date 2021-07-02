@@ -34,13 +34,18 @@ const FeedScreen = (props) => {
   const [postId, setPostId] = React.useState('');
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
-  const [rerender, setRerender] = React.useState(0);
 
   const refBlockUser = React.useRef();
   const refBlockDomain = React.useRef();
   const refReportUser = React.useRef();
   const refReportDomain = React.useRef();
   const refSpecificIssue = React.useRef();
+
+  console.log(props.route.params?.refresh);
+  React.useEffect(() => {
+    let isRefresh = props.route.params?.refresh;
+    if (isRefresh) getDataFeeds(lastId);
+  },[props.route.params])
 
   const onSelectBlocking = (v) => {
     if (v !== 1) {
