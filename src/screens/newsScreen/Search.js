@@ -5,18 +5,25 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  Animated,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../assets/icons/Ic_search';
+import StringConstant from '../../utils/string/StringConstant';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 
-const Search = ({onPress}) => {
+const Search = ({onPress, animatedValue}) => {
+  const insets = useSafeAreaInsets();
+  const HEADER_HEIGHT = 50;
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={styles.animatedViewContainer(animatedValue)}>
       <View style={styles.wrapperSearch}>
         <TextInput
           multiline={false}
-          placeholder={'Search Better'}
+          placeholder={StringConstant.newsTabHeaderPlaceholder}
           style={styles.input}
         />
         <View style={styles.wrapperIcon}>
@@ -24,38 +31,41 @@ const Search = ({onPress}) => {
         </View>
       </View>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={{color: COLORS.holyTosca, ...FONTS.h3}}>New Post</Text>
+        <Text style={styles.newPostText}>New Post</Text>
         <View>
           <MemoIc_pencil height={18} width={18} />
         </View>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: 46,
     backgroundColor: 'white',
     marginBottom: SIZES.base,
   },
   wrapperSearch: {
-    flex: 3,
+    flex: 1,
     backgroundColor: '#F5F5F5',
-    marginHorizontal: 8,
+    marginLeft: 15,
+    marginRight: 15,
     borderRadius: SIZES.radius,
+    alignSelf: 'center',
   },
   wrapperButton: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
     marginEnd: SIZES.base,
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 9,
+    paddingBottom: 9,
   },
   input: {
     marginHorizontal: 16,
-    flex: 1,
     paddingStart: 16,
   },
   wrapperIcon: {
@@ -65,6 +75,25 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
   },
+  newPostText: {
+    color: COLORS.holyTosca,
+    marginRight: 11,
+    ...FONTS.h3,
+  },
+  animatedViewContainer: (animatedValue) => ({
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    marginBottom: SIZES.base,
+    marginTop: animatedValue,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    padding: 7,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.gray1,
+  }),
 });
 
 export default Search;

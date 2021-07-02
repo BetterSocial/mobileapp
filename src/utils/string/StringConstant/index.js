@@ -47,6 +47,9 @@ let postDetailPageSeeReplies = (count) => {
   return `See ${count} ${count > 1 ? `replies` : 'reply'}`;
 };
 
+// News Tab
+let newsTabHeaderPlaceholder = 'Search News';
+
 // Component
 let headerIosSkip = 'Skip';
 let searchModalTitle = 'Search';
@@ -90,6 +93,8 @@ export default {
   onboardingTopicsButtonStateChooseMore,
 
   postDetailPageSeeReplies,
+
+  newsTabHeaderPlaceholder,
 
   headerIosSkip,
   searchModalTitle,
