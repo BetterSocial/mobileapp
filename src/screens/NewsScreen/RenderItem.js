@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
     borderRadius: SIZES.radius,
+    backgroundColor: COLORS.white,
     elevation: 0.5,
     borderColor: COLORS.gray,
     paddingVertical: SIZES.base,
