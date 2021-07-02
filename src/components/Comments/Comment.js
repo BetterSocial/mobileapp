@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   image: {
     width: 24,
     height: 24,
+    borderRadius: 12,
   },
   container: ({isLast, style, level, isLastInParent, showLeftConnector}) => ({
     width: '100%',

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {ActivityIndicator, Modal, StyleSheet, View} from 'react-native';
+import {COLORS} from '../../utils/theme';
 
 const Loading = ({visible}) => {
   return (
     <Modal transparent visible={visible}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color={COLORS.holyTosca} />
         </View>
       </View>
     </Modal>

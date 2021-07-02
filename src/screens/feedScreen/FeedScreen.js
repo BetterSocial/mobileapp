@@ -34,13 +34,17 @@ const FeedScreen = (props) => {
   const [postId, setPostId] = React.useState('');
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
-  const [rerender, setRerender] = React.useState(0);
 
   const refBlockUser = React.useRef();
   const refBlockDomain = React.useRef();
   const refReportUser = React.useRef();
   const refReportDomain = React.useRef();
   const refSpecificIssue = React.useRef();
+
+  React.useEffect(() => {
+    let isRefresh = props.route.params?.refresh;
+    if (isRefresh) getDataFeeds(lastId);
+  },[props.route.params])
 
   const onSelectBlocking = (v) => {
     if (v !== 1) {
@@ -148,21 +152,11 @@ const FeedScreen = (props) => {
       setUserId(value.actor.id);
     }
   };
-  const setUpVote = async (id) => {
-    let result = await upVote({activity_id: id});
-    if (result.code === 200) {
-      Toast.show('up vote was successful', Toast.LONG);
-    } else {
-      Toast.show('up vote failed', Toast.LONG);
-    }
+  const setUpVote = async (post) => {
+    upVote(post);
   };
-  const setDownVote = async (id) => {
-    let result = await downVote({activity_id: id});
-    if (result.code === 200) {
-      Toast.show('down vote success', Toast.LONG);
-    } else {
-      Toast.show('down vote failed', Toast.LONG);
-    }
+  const setDownVote = async (post) => {
+    downVote(post);
   };
 
   React.useEffect(() => {
@@ -235,12 +229,8 @@ const FeedScreen = (props) => {
                   onPressComment={() => {
                     props.navigation.navigate('PostDetailPage', {item: item});
                   }}
-                  onPressUpvote={(value) => {
-                    setUpVote(value.id);
-                  }}
-                  onPressDownVote={(value) => {
-                    setDownVote(value.id);
-                  }}
+                  onPressUpvote={(post) => setUpVote(post)}
+                  onPressDownVote={(post) => setDownVote(post)}
                   selfUserId={yourselfId}
                   onPressDomain={() => {
                     props.navigation.navigate('DomainScreen', {

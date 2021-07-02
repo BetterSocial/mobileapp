@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 export const calculateTime = (time) => {
   if (time) {
     let now = moment();

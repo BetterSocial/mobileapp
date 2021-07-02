@@ -1,13 +1,11 @@
 import * as React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
-import JWTDecode from 'jwt-decode';
-import Toast from 'react-native-simple-toast';
-import {useNavigation} from '@react-navigation/native';
-import moment from 'moment';
 
-import {Gap, Footer} from '../../components';
-import Header from '../FeedScreen/Header';
-import Content from '../FeedScreen/Content';
+import JWTDecode from 'jwt-decode';
+import {getAccessToken} from '../../utils/token';
+import Toast from 'react-native-simple-toast';
+
+import {DomainHeader, Gap, Footer} from '../../components';
 import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import ReportUser from '../../components/Blocking/ReportUser';
@@ -18,22 +16,17 @@ import ContainerComment from '../../components/Comments/ContainerComment';
 import {fonts} from '../../utils/fonts';
 import {getMyProfile} from '../../service/profile';
 import {blockUser} from '../../service/blocking';
-import {downVote, upVote} from '../../service/vote';
-import ContentPoll from '../FeedScreen/ContentPoll';
-import {
-  POST_VERB_POLL,
-  POST_TYPE_LINK,
-  POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
-} from '../../utils/constants';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import {createCommentParent} from '../../service/comment';
+import {SIZES} from '../../utils/theme';
 import ContentLink from '../FeedScreen/ContentLink';
-import {getFeedDetail} from '../../service/post';
 
 const {width, height} = Dimensions.get('window');
 
-const PostPageDetail = (props) => {
-  const navigation = useNavigation();
+const DetailDomainScreen = (props) => {
+  const [more, setMore] = React.useState(10);
+  const [totalLine, setTotalLine] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
   const [dataProfile, setDataProfile] = React.useState({});
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
@@ -42,6 +35,7 @@ const PostPageDetail = (props) => {
   const refReportUser = React.useRef();
   const refReportDomain = React.useRef();
   const refSpecificIssue = React.useRef();
+  const [item, setItem] = React.useState(props.route.params.item);
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
   const [typeComment, setTypeComment] = React.useState('parent');
@@ -54,34 +48,6 @@ const PostPageDetail = (props) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
-
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const value = await getAccessToken();
-      if (value) {
-        const decoded = await JWTDecode(value);
-        setYourselfId(decoded.user_id);
-      }
-    };
-    parseToken();
-  }, []);
-
-  const scrollViewRef = React.useRef(null);
-
-  let itemProp = props.route.params.item;
-  let comments = itemProp.latest_reactions.comment || [];
-  let sortedComment = comments.sort((current, next) => {
-    let currentMoment = moment(current.updated_at);
-    let nextMoment = moment(next.updated_at);
-    return currentMoment.diff(nextMoment);
-  });
-
-  let newItemProp = {...itemProp};
-  newItemProp.latest_reactions.comment = sortedComment;
-
-  const [item, setItem] = React.useState(newItemProp);
-
-  // console.log(item.latest_reactions.comment);
 
   React.useEffect(() => {
     const initial = () => {
@@ -110,6 +76,33 @@ const PostPageDetail = (props) => {
   }, [props]);
 
   React.useEffect(() => {
+    fetchMyProfile();
+    // refBlockUser.current.open();
+    // refBlockDomain.current.open();
+    // refReportUser.current.open();
+  }, []);
+  const onSelectBlocking = (v) => {
+    if (v !== 1) {
+      // refBlockDomain.current.open();
+      refReportUser.current.open();
+    } else {
+      userBlock();
+    }
+    refBlockUser.current.close();
+  };
+
+  React.useEffect(() => {
+    const parseToken = async () => {
+      const value = await getAccessToken();
+      if (value) {
+        const decoded = await JWTDecode(value);
+        setYourselfId(decoded.user_id);
+      }
+    };
+    parseToken();
+  }, []);
+
+  React.useEffect(() => {
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
@@ -135,23 +128,6 @@ const PostPageDetail = (props) => {
     };
     validationStatusVote();
   }, [item, yourselfId]);
-
-  React.useEffect(() => {
-    navigation.addListener('focus', () => {
-      if (item) {
-        updateFeed();
-      }
-    });
-    fetchMyProfile();
-  }, []);
-  const onSelectBlocking = (v) => {
-    if (v !== 1) {
-      refReportUser.current.open();
-    } else {
-      userBlock();
-    }
-    refBlockUser.current.close();
-  };
 
   const userBlock = async () => {
     const data = {
@@ -196,35 +172,9 @@ const PostPageDetail = (props) => {
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
+        setLoading(false);
       }
-    }
-  };
-
-  const setDataToState = (value) => {
-    if (value.anonimity === true) {
-      setUsername('Anonymous');
-      setPostId(value.id);
-      setUserId(value.actor.id + '-anonymous');
-    } else {
-      setUsername(value.actor.data.username);
-      setPostId(value.id);
-      setUserId(value.actor.id);
-    }
-  };
-
-  const updateFeed = async () => {
-    console.log('update feed');
-    try {
-      let data = await getFeedDetail(item.id);
-      if (data) {
-        console.log('reed', data.results[0]);
-        setItem(data.results[0]);
-      } else {
-        console.log('else if');
-      }
-    } catch (e) {
-      console.log('error updating feed');
-      console.log(e);
+      setLoading(false);
     }
   };
 
@@ -240,7 +190,6 @@ const PostPageDetail = (props) => {
         let data = await createCommentParent(textComment, item.id);
         if (data.code === 200) {
           setTextComment('');
-          // updateFeed();
           Toast.show('Comment successful', Toast.LONG);
         } else {
           Toast.show('Failed Comment', Toast.LONG);
@@ -253,139 +202,108 @@ const PostPageDetail = (props) => {
       Toast.show('Failed Comment', Toast.LONG);
     }
   };
+  const setUpVote = async (post) => {
+    upVoteDomain(post);
+  };
+  const setDownVote = async (post) => {
+    downVoteDomain(post);
+  };
 
   const onPressDomain = () => {
     props.navigation.navigate('DomainScreen', {
       item: item,
     });
-    // scrollViewRef.current.scrollTo
-  };
-
-  const onCommentButtonClicked = () => {
-    console.log('Comment Button Clicked');
-    scrollViewRef.current.scrollToEnd();
-  };
-
-  const setUpVote = async (post) => {
-    upVote(post);
-  };
-  const setDownVote = async (post) => {
-    downVote(post);
   };
 
   return (
     <View style={styles.container}>
-      <View style={{paddingHorizontal: 16}}>
-        <Header props={item} isBackButton={true} />
-      </View>
       <ScrollView
-        ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
-        style={styles.contentScrollView(totalComment)}>
-        <View style={styles.content(height)}>
-          <Header props={item} isBackButton={true} />
-          {item.post_type === POST_TYPE_POLL && (
-            <ContentPoll
-              index={0}
-              message={item.message}
-              images_url={item.images_url}
-              polls={item.pollOptions}
-              onPress={() => {}}
-              item={item}
-              pollexpiredat={item.polls_expired_at}
-              multiplechoice={item.multiplechoice}
-              isalreadypolling={item.isalreadypolling}
-              onnewpollfetched={() => {}}
+        style={{height: height * 0.9}}>
+        <View style={styles.content}>
+          <View style={{paddingHorizontal: 16}}>
+            <DomainHeader
+              domain={item.domain.name}
+              time={item.content.created_at}
+              image={item.domain.image}
             />
-          )}
-
-          {item.post_type === POST_TYPE_LINK && (
-            <ContentLink og={item.og} onPress={onPressDomain} />
-          )}
-
-          {item.post_type === POST_TYPE_STANDARD && (
-            <Content
-              message={item.message}
-              images_url={item.images_url}
-              style={styles.additionalContentStyle(
-                item.images_url.length,
-                height,
-              )}
-            />
-          )}
+          </View>
 
           <Gap height={16} />
-          <Footer
-            item={item}
-            disableComment={true}
-            totalComment={totalComment}
-            totalVote={totalVote}
-            onPressDownVote={() => {
-              setStatusDowvote((prev) => {
-                prev = !prev;
-                setDownVote({
-                  activity_id: item.id,
-                  status: prev,
-                  feed_group: 'main_feed',
-                });
-                if (prev) {
-                  setVoteStatus('downvote');
-                  if (statusUpvote === true) {
-                    setTotalVote((p) => p - 2);
+          <View style={{marginHorizontal: SIZES.base}}>
+            <ContentLink
+              og={{
+                date: item.content.created_at,
+                description: item.content.description,
+                domain: item.domain.name,
+                domainImage: item.domain.image,
+                image: item.content.image,
+                title: item.content.title,
+                url: item.content.url,
+              }}
+            />
+            <Gap height={SIZES.base} />
+            <Footer
+              disableComment={true}
+              statusVote={voteStatus}
+              totalComment={totalComment}
+              totalVote={totalVote}
+              onPressDownVote={() => {
+                setStatusDowvote((prev) => {
+                  prev = !prev;
+                  setDownVote({
+                    activity_id: item.id,
+                    status: prev,
+                    feed_group: 'domain',
+                    domain: item.domain.name,
+                  });
+                  if (prev) {
+                    setVoteStatus('downvote');
+                    if (statusUpvote === true) {
+                      setTotalVote((p) => p - 2);
+                    } else {
+                      setTotalVote((p) => p - 1);
+                    }
+                    setStatusUpvote(false);
                   } else {
-                    setTotalVote((p) => p - 1);
-                  }
-                  setStatusUpvote(false);
-                } else {
-                  setVoteStatus('none');
-                  setTotalVote((p) => p + 1);
-                }
-                return prev;
-              });
-            }}
-            onPressUpvote={() => {
-              setStatusUpvote((prev) => {
-                prev = !prev;
-                setUpVote({
-                  activity_id: item.id,
-                  status: prev,
-                  feed_group: 'main_feed',
-                });
-                if (prev) {
-                  setVoteStatus('upvote');
-                  if (statusDownvote === true) {
-                    setTotalVote((p) => p + 2);
-                  } else {
+                    setVoteStatus('none');
                     setTotalVote((p) => p + 1);
                   }
-                  setStatusDowvote(false);
-                } else {
-                  setVoteStatus('none');
-                  setTotalVote((p) => p - 1);
-                }
-                return prev;
-              });
-            }}
-            statusVote={voteStatus}
-            onPressShare={() => {}}
-            onPressComment={onCommentButtonClicked}
-            onPressBlock={(value) => {
-              if (value.actor.id === yourselfId) {
-                Toast.show("Can't Block yourself", Toast.LONG);
-              } else {
-                setDataToState(value);
-                refBlockUser.current.open();
-              }
-            }}
-            isSelf={yourselfId === item.actor.id ? true : false}
-          />
+                  return prev;
+                });
+              }}
+              onPressUpvote={() => {
+                setStatusUpvote((prev) => {
+                  prev = !prev;
+                  setUpVote({
+                    activity_id: item.id,
+                    status: prev,
+                    feed_group: 'domain',
+                    domain: item.domain.name,
+                  });
+                  if (prev) {
+                    setVoteStatus('upvote');
+                    if (statusDownvote === true) {
+                      setTotalVote((p) => p + 2);
+                    } else {
+                      setTotalVote((p) => p + 1);
+                    }
+                    setStatusDowvote(false);
+                  } else {
+                    setVoteStatus('none');
+                    setTotalVote((p) => p - 1);
+                  }
+                  return prev;
+                });
+              }}
+            />
+          </View>
         </View>
         {isReaction && (
           <ContainerComment comments={item.latest_reactions.comment} />
         )}
       </ScrollView>
       <WriteComment
-        username={item.actor.data.username}
         value={textComment}
         onChangeText={(value) => setTextComment(value)}
         onPress={() => {
@@ -417,13 +335,14 @@ const PostPageDetail = (props) => {
   );
 };
 
-export default PostPageDetail;
+export default DetailDomainScreen;
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     flex: 1,
-    // marginBottom: 86,
+    paddingBottom: 75,
+    paddingTop: 8,
   },
   containerText: {
     marginTop: 20,
@@ -439,34 +358,17 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
   },
-  content: (height) => {
-    return {
-      width: width,
-      borderRadius: 5,
-      shadowColor: 'rgba(0,0,0,0.5)',
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.5,
-      backgroundColor: 'white',
-      paddingHorizontal: 16,
-      marginBottom: 16,
-      height: height - 100,
-    };
+  content: {
+    width: width,
+    borderRadius: 5,
+    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    marginBottom: 16,
   },
   gap: {height: 16},
-  additionalContentStyle: (imageLength, height) => {
-    if (imageLength > 0) {
-      return {
-        height: height * 0.5,
-      };
-    } else {
-      return {};
-    }
-  },
-  contentScrollView: (totalComment) => ({
-    height: height,
-    marginBottom: totalComment > 0 ? 82 : 0,
-  }),
 });

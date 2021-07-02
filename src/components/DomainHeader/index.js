@@ -1,20 +1,33 @@
 import * as React from 'react';
+
+import {useNavigation} from '@react-navigation/native';
+
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import {Avatar} from '../../components';
 import Gap from '../../components/Gap';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
+import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 
 const Header = ({image, domain, time}) => {
+  const navigation = useNavigation();
   return (
-    <View style={styles.container}>
-      <Avatar image={image} style={{width: 36, height: 36}} />
+    <View style={{flexDirection: 'row'}}>
+      <TouchableOpacity
+        style={{justifyContent: 'center', alignItems: 'center'}}
+        onPress={() => {
+          navigation.goBack();
+        }}>
+        <MemoIc_arrow_back height={16} width={16} />
+      </TouchableOpacity>
+      <Gap width={8} />
+      <Avatar image={image} />
       <Gap width={8} />
       <View style={{flex: 1, justifyContent: 'center'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={{...FONTS.h4}}>{domain}</Text>
+          <Text style={{...FONTS.h3, color: 'black'}}>{domain}</Text>
           <View style={styles.point} />
-          <Text style={{color: COLORS.gray, ...FONTS.body4}}>
+          <Text style={{color: COLORS.gray, ...FONTS.body3}}>
             {new Date(time).toLocaleDateString()}
           </Text>
         </View>
@@ -25,13 +38,6 @@ const Header = ({image, domain, time}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    paddingHorizontal: SIZES.base,
-    marginLeft: 12,
-    marginRight: 12,
-    marginTop: 4,
-  },
   wrapperItem: {backgroundColor: 'white', marginBottom: 16},
   wrapperImage: {
     borderRadius: 45,

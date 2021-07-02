@@ -156,6 +156,7 @@ const ReplyComment = (props) => {
       </ScrollView>
       <WriteComment
         inReplyCommentView={true}
+        showProfileConnector={(item.children_counts.comment || 0) !== 0}
         username={item.user.data.username}
         onChangeText={(v) => setTextComment(v)}
         onPress={() => createComment()}

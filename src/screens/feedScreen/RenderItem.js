@@ -1,22 +1,21 @@
 import * as React from 'react';
-import {StyleSheet, Dimensions, Share} from 'react-native';
+import {StyleSheet, Dimensions, Share, View} from 'react-native';
+
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
 
-import {
-  POST_VERB_POLL,
-  POST_VERB_LINK,
-  POST_VERB_STANDARD,
-  POST_TYPE_LINK,
-  POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
-} from '../../utils/constants';
 import Content from './Content';
-import Footer from './Footer';
 import Header from './Header';
 import {Card} from '../../components/CardStack';
+import {
+  POST_TYPE_POLL,
+  POST_TYPE_LINK,
+  POST_TYPE_STANDARD,
+} from '../../utils/constants';
 import ContentPoll from './ContentPoll';
+
 import ContentLink from './ContentLink';
+import {Gap, PreviewComment, Footer} from '../../components';
 
 const {width, height} = Dimensions.get('window');
 
@@ -59,6 +58,11 @@ async function buildLink(username) {
       navigation: {
         forcedRedirectEnabled: false,
       },
+      // ios: {
+      //   bundleId: '',
+      //   // customScheme: 'giftit',
+      //   appStoreId: '',
+      // },
       android: {
         packageName: 'org.bettersocial.dev',
       },
@@ -99,10 +103,30 @@ const Item = ({
   onPressComment,
   selfUserId,
   onPressDomain,
-  onNewPollFetched,
-  index,
 }) => {
+  const [isReaction, setReaction] = React.useState(false);
+  const [previewComment, setPreviewComment] = React.useState({});
+  const [totalVote, setTotalVote] = React.useState(0);
   const [voteStatus, setVoteStatus] = React.useState('none');
+  const [statusUpvote, setStatusUpvote] = React.useState(false);
+  const [statusDownvote, setStatusDowvote] = React.useState(false);
+
+  React.useEffect(() => {
+    const initial = () => {
+      let reactionCount = item.reaction_counts;
+      if (JSON.stringify(reactionCount) !== '{}') {
+        let comment = reactionCount.comment;
+        if (comment !== undefined) {
+          if (comment > 0) {
+            setReaction(true);
+            setPreviewComment(item.latest_reactions.comment[0]);
+          }
+        }
+      }
+    };
+    initial();
+  }, [item]);
+
   React.useEffect(() => {
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
@@ -112,6 +136,7 @@ const Item = ({
           );
           if (upvote !== undefined) {
             setVoteStatus('upvote');
+            setStatusUpvote(true);
           }
         }
 
@@ -121,6 +146,7 @@ const Item = ({
           );
           if (downvotes !== undefined) {
             setVoteStatus('downvote');
+            setStatusDowvote(true);
           }
         }
       }
@@ -128,8 +154,13 @@ const Item = ({
     validationStatusVote();
   }, [item, selfUserId]);
 
-  // console.log("item.isalreadypolling");
-  // console.log(item.isalreadypolling);
+  React.useEffect(() => {
+    const initialVote = () => {
+      let c = getCountVote(item);
+      setTotalVote(c);
+    };
+    initialVote();
+  }, [item]);
 
   return (
     <Card style={styles.container}>
@@ -137,25 +168,16 @@ const Item = ({
 
       {item.post_type === POST_TYPE_POLL && (
         <ContentPoll
-          index={index}
           message={item.message}
           images_url={item.images_url}
           polls={item.pollOptions}
           onPress={onPress}
           item={item}
-          pollexpiredat={item.polls_expired_at}
-          multiplechoice={item.multiplechoice}
-          onnewpollfetched={onNewPollFetched}
-          isalreadypolling={item.isalreadypolling}
         />
       )}
 
       {item.post_type === POST_TYPE_LINK && (
-        <ContentLink
-          og={item.og}
-          onPress={onPress}
-          onCardPress={onPressDomain}
-        />
+        <ContentLink og={item.og} onPress={onPressDomain} />
       )}
       {item.post_type === POST_TYPE_STANDARD && (
         <Content
@@ -165,19 +187,77 @@ const Item = ({
         />
       )}
       <Footer
-        item={item}
-        onPressShare={() => {
-          onShare(item.actor.data.username);
-        }}
-        onPressBlock={onPressBlock}
-        onPressComment={onPressComment}
-        onPressUpvote={onPressUpvote}
-        onPressDownVote={onPressDownVote}
-        totalVote={getCountVote(item)}
         totalComment={getCountComment(item)}
+        totalVote={totalVote}
+        onPressShare={() => onShare(item)}
+        onPressComment={() => onPressComment(item)}
+        onPressBlock={() => onPressBlock(item)}
+        onPressDownVote={() => {
+          setStatusDowvote((prev) => {
+            prev = !prev;
+            onPressDownVote({
+              activity_id: item.id,
+              status: prev,
+              feed_group: 'main_feed',
+            });
+            if (prev) {
+              setVoteStatus('downvote');
+              if (statusUpvote === true) {
+                setTotalVote((p) => p - 2);
+              } else {
+                setTotalVote((p) => p - 1);
+              }
+              setStatusUpvote(false);
+            } else {
+              setVoteStatus('none');
+              setTotalVote((p) => p + 1);
+            }
+            return prev;
+          });
+        }}
+        onPressUpvote={() => {
+          setStatusUpvote((prev) => {
+            prev = !prev;
+            onPressUpvote({
+              activity_id: item.id,
+              status: prev,
+              feed_group: 'main_feed',
+            });
+            if (prev) {
+              setVoteStatus('upvote');
+              if (statusDownvote === true) {
+                setTotalVote((p) => p + 2);
+              } else {
+                setTotalVote((p) => p + 1);
+              }
+              setStatusDowvote(false);
+            } else {
+              setVoteStatus('none');
+              setTotalVote((p) => p - 1);
+            }
+            return prev;
+          });
+        }}
         statusVote={voteStatus}
-        isSelf={selfUserId === item.actor.id ? true : false}
+        isSelf={
+          item.anonimity ? false : selfUserId === item.actor.id ? true : false
+        }
       />
+
+      {isReaction && (
+        <View>
+          <Gap height={8} />
+          <PreviewComment
+            username={previewComment.user.data.username}
+            comment={previewComment.data.text}
+            image={previewComment.user.data.profile_pic_url}
+            time={previewComment.created_at}
+            totalComment={item.latest_reactions.comment.length - 1}
+            onPress={onPressComment}
+          />
+          <Gap height={8} />
+        </View>
+      )}
     </Card>
   );
 };
@@ -186,13 +266,12 @@ function compare(prevProps, nextProps) {
 }
 
 const RenderItem = React.memo(Item, compare);
-export default Item;
+export default RenderItem;
 
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height - height * 0.1 + 20,
-    flex: 1,
+    height: height - height * 0.1,
     shadowColor: '#c4c4c4',
     shadowOffset: {
       width: 1,
@@ -200,11 +279,10 @@ const styles = StyleSheet.create({
     },
     elevation: 8,
     shadowOpacity: 0.5,
-    marginTop: 0,
     backgroundColor: 'white',
     paddingHorizontal: 16,
     paddingVertical: width * 0.03,
-    paddingBottom: 0,
+    paddingBottom: 8,
     borderBottomColor: 'transparent',
   },
 });

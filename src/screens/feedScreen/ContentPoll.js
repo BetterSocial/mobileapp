@@ -135,7 +135,7 @@ const ContentPoll = ({
                   <PollOptionsMultipleChoice
                     item={pollItem}
                     index={index}
-                    mypoll={item.mypolling}
+                    mypoll={item?.mypolling || []}
                     selectedindex={multipleChoiceSelected}
                     onselected={(indexes) => {
                       setMultipleChoiceSelected(indexes);
@@ -147,7 +147,7 @@ const ContentPoll = ({
                 ) : (
                   <PollOptions
                     poll={pollItem}
-                    mypoll={item.mypolling}
+                    mypoll={item?.mypolling || {}}
                     index={index}
                     selectedindex={singleChoiceSelectedIndex}
                     total={totalPollCount}

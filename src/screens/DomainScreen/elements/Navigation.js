@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: 'center',
     marginBottom: 8,
+    backgroundColor: 'white',
   },
   domain: {
     flex: 1,

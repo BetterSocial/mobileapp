@@ -20,3 +20,22 @@ export const downVote = async (data) => {
     return error.response.data;
   }
 };
+export const upVoteDomain = async (data) => {
+  try {
+    let resApi = await api.post('/activity/upvote-domain', data);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};
+
+export const downVoteDomain = async (data) => {
+  try {
+    let resApi = await api.post('/activity/downvote-domain', data);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};

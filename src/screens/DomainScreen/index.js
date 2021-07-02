@@ -1,22 +1,41 @@
 import * as React from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
+import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
 
-import {useRoute} from '@react-navigation/native';
+import JWTDecode from 'jwt-decode';
+import {useRoute, useNavigation} from '@react-navigation/native';
 
+import {upVoteDomain, downVoteDomain} from '../../service/vote';
+import {getAccessToken} from '../../utils/token';
 import Loading from '../Loading';
 import Gap from '../../components/Gap';
 import Header from './elements/Header';
 import Navigation from './elements/Navigation';
 import RenderItem from './elements/RenderItem';
 import {getDetailDomains, getProfileDomain} from '../../service/domain';
+import {SIZES} from '../../utils/theme';
+
+const {width, height} = Dimensions.get('window');
 
 const DomainScreen = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const [item, setItem] = React.useState(route.params.item);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [profile, setProfile] = React.useState({});
   const [domain, setDomain] = React.useState(route.params.item.og.domain);
+  const [idFromToken, setIdFromToken] = React.useState('');
+
+  React.useEffect(() => {
+    const parseToken = async () => {
+      const value = await getAccessToken();
+      if (value) {
+        const decoded = await JWTDecode(value);
+        setIdFromToken(decoded.user_id);
+      }
+    };
+    parseToken();
+  }, []);
 
   React.useEffect(() => {
     const init = async () => {
@@ -41,6 +60,30 @@ const DomainScreen = () => {
     getProfile();
   }, [domain]);
 
+  const handleOnPressComment = (item) => {
+    navigation.navigate('DetailDomainScreen', {item: item});
+  };
+
+  const upvoteNews = async (news) => {
+    // console.log(news);
+    upVoteDomain(news);
+    // if (result.code === 200) {
+    //   Toast.show('up vote was successful', Toast.LONG);
+    // } else {
+    //   Toast.show('up vote failed', Toast.LONG);
+    // }
+  };
+
+  const downvoteNews = async (news) => {
+    console.log(news);
+    downVoteDomain(news);
+    // if (result.code === 200) {
+    //   Toast.show('down vote success', Toast.LONG);
+    // } else {
+    //   Toast.show('down vote failed', Toast.LONG);
+    // }
+  };
+
   return (
     <View style={styles.container}>
       <Navigation domain={item.og.domain} />
@@ -53,14 +96,23 @@ const DomainScreen = () => {
           console.log(v);
         }}
       />
-      <Gap style={styles.height(16)} />
+
+      <Gap height={SIZES.base} />
 
       <FlatList
         data={data}
         renderItem={({item, index}) => {
           if (item.content) {
             return (
-              <RenderItem key={index} domain={item} image={profile.logo} />
+              <RenderItem
+                key={index}
+                item={item}
+                image={profile.logo}
+                onPressComment={(item) => handleOnPressComment(item)}
+                onPressUpvote={(news) => upvoteNews(news)}
+                onPressDownVote={(news) => downvoteNews(news)}
+                selfUserId={idFromToken}
+              />
             );
           }
         }}

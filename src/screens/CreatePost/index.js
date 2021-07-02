@@ -282,6 +282,7 @@ const CreatePost = () => {
         duration_feed: postExpired[expiredSelect].value,
         images_url: dataImage,
       };
+
       analytics().logEvent('create_post', {
         id: 6,
         newpost_reach: geoList[geoSelect].neighborhood,
@@ -300,7 +301,12 @@ const CreatePost = () => {
         });
         setLoading(false);
         setTimeout(() => {
-          navigation.goBack();
+          navigation.navigate('HomeTabs', {
+            screen: 'Feed',
+            params: {
+              refresh: true,
+            },
+          });
         }, 2000);
       } else {
         setLoading(false);
@@ -414,7 +420,12 @@ const CreatePost = () => {
     try {
       let response = await createPollPost(data);
       if (response.status) {
-        navigation.goBack();
+        navigation.navigate('HomeTabs', {
+          screen: 'Feed',
+          params: {
+            refresh: true,
+          },
+        });
         setLoading(false);
       }
     } catch (e) {

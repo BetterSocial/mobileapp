@@ -5,11 +5,19 @@ exports[`component gap gap renders correctly 1`] = `
   style={
     Array [
       Object {
+<<<<<<< HEAD
         "height": undefined,
         "width": undefined,
       },
       Object {
         "width": 20,
+=======
+        "width": 20,
+      },
+      Object {
+        "height": undefined,
+        "width": undefined,
+>>>>>>> 35de01e456279601a87341ab69c3a71df1569942
       },
     ]
   }
@@ -21,11 +29,19 @@ exports[`component gap gap snapshot 1`] = `
   style={
     Array [
       Object {
+<<<<<<< HEAD
         "height": undefined,
         "width": undefined,
       },
       Object {
         "width": 20,
+=======
+        "width": 20,
+      },
+      Object {
+        "height": undefined,
+        "width": undefined,
+>>>>>>> 35de01e456279601a87341ab69c3a71df1569942
       },
     ]
   }

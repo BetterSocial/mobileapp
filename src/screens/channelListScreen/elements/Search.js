@@ -8,11 +8,10 @@ import {
   Animated,
 } from 'react-native';
 
-import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-import MemoIc_search from '../../assets/icons/Ic_search';
-import StringConstant from '../../utils/string/StringConstant';
-import {fonts} from '../../utils/fonts';
-import {COLORS, FONTS, SIZES} from '../../utils/theme';
+import MemoIcNewChat from '../../../assets/icons/ic_new_chat';
+import MemoIc_search from '../../../assets/icons/Ic_search';
+import StringConstant from '../../../utils/string/StringConstant';
+import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
 const Search = ({onPress, animatedValue}) => {
   return (
@@ -20,7 +19,7 @@ const Search = ({onPress, animatedValue}) => {
       <View style={styles.wrapperSearch}>
         <TextInput
           multiline={false}
-          placeholder={StringConstant.newsTabHeaderPlaceholder}
+          placeholder={StringConstant.chatTabHeaderPlaceholder}
           style={styles.input}
         />
         <View style={styles.wrapperIcon}>
@@ -29,10 +28,10 @@ const Search = ({onPress, animatedValue}) => {
       </View>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
         <Text style={styles.newPostText}>
-          {StringConstant.newsTabHeaderCreatePostButtonText}
+          {StringConstant.chatTabHeaderCreateChatButtonText}
         </Text>
         <View>
-          <MemoIc_pencil height={18} width={18} />
+          <MemoIcNewChat height={17} width={15} style={{marginTop: 4}} />
         </View>
       </TouchableOpacity>
     </Animated.View>
@@ -44,7 +43,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     marginBottom: SIZES.base,
-    marginHorizontal: SIZES.base,
   },
   wrapperSearch: {
     flex: 1,
@@ -63,13 +61,12 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     paddingTop: 9,
     paddingBottom: 9,
+    // backgroundColor: 'red',
   },
   input: {
-    marginHorizontal: 16,
+    marginLeft: 24,
     paddingStart: 16,
-    flex: 1,
-    // paddingStart: 20,
-    fontFamily: fonts.inter[400],
+    lineHeight: 24,
   },
   wrapperIcon: {
     position: 'absolute',
@@ -81,7 +78,7 @@ const styles = StyleSheet.create({
   newPostText: {
     color: COLORS.holyTosca,
     marginRight: 11,
-    ...FONTS.h3,
+    ...FONTS.h4,
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',

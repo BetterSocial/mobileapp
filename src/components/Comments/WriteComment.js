@@ -19,6 +19,7 @@ const WriteComment = ({
   onChangeText,
   username,
   inReplyCommentView = false,
+  showProfileConnector = true,
 }) => {
   let isCommentEnabled = value.length > 0;
   let isSendButtonPressed = () => {
@@ -29,13 +30,20 @@ const WriteComment = ({
 
   return (
     <View style={styles.columnContainer}>
-      <View style={styles.connectorTop(inReplyCommentView)} />
+      <View
+        style={styles.connectorTop(inReplyCommentView, showProfileConnector)}
+      />
       <Text style={styles.replyToContainer(inReplyCommentView)}>
         <Text style={styles.replyToTitle}>Reply to </Text>
         {username}
       </Text>
       <View style={styles.container(inReplyCommentView)}>
-        <View style={styles.connectorBottom(inReplyCommentView)} />
+        <View
+          style={styles.connectorBottom(
+            inReplyCommentView,
+            showProfileConnector,
+          )}
+        />
         <Image
           style={styles.image}
           source={require('../../assets/images/ProfileDefault.png')}
@@ -145,9 +153,9 @@ const styles = StyleSheet.create({
   icSendButton: {
     alignSelf: 'center',
   },
-  connectorTop: (inReplyCommentView) => {
+  connectorTop: (inReplyCommentView, showProfileConnector) => {
     return {
-      height: 36,
+      height: showProfileConnector ? 36 : 0,
       width: 1,
       backgroundColor: colors.gray1,
       position: 'absolute',
@@ -156,9 +164,9 @@ const styles = StyleSheet.create({
       zIndex: -100,
     };
   },
-  connectorBottom: (inReplyCommentView) => {
+  connectorBottom: (inReplyCommentView, showProfileConnector) => {
     return {
-      height: 20,
+      height: showProfileConnector ? 20 : 0,
       width: 1,
       backgroundColor: colors.gray1,
       position: 'absolute',
