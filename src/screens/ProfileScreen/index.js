@@ -21,6 +21,7 @@ import analytics from '@react-native-firebase/analytics';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+
 import {
   getMyProfile,
   changeRealName,
@@ -49,7 +50,6 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const bottomSheetNameRef = React.useRef();
   const bottomSheetBioRef = React.useRef();
-  const bottomSheetBioTextAreaRef = React.useRef(null);
   const bottomSheetProfilePictureRef = React.useRef();
   const postRef = React.useRef(null);
   const scrollViewReff = React.useRef(null);
@@ -67,7 +67,6 @@ const ProfileScreen = () => {
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
   const [errorBio, setErrorBio] = React.useState('');
-  const [postLenght, setPostLenght] = React.useState(0);
   let [rerender, setRerender] = React.useState(0);
   const [
     isLoadingUpdateImageGalery,
@@ -79,9 +78,6 @@ const ProfileScreen = () => {
   ] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
-
-  // let context = useContext(Context)
-  // let [, dispatch] = context.users
 
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -107,14 +103,6 @@ const ProfileScreen = () => {
       });
     };
   }, []);
-  // const setToken = async () => {
-  //   try {
-  //     await AsyncStorage.setItem('tkn-getstream', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjg4ZDU2NzktNmM2OC00MWVjLWJlODMtN2YxNWE0ZTgyZDNkIn0.0YNINzuHdf2afDN0ew3x0DRT0uJFzvBD0CbYL_Exm9c")
-  //   } catch (e) {
-  //     // saving error
-  //   }
-  // };
-
   const fetchMyProfile = async (withLoading) => {
     const value = await getAccessToken();
     if (value) {
@@ -141,11 +129,7 @@ const ProfileScreen = () => {
         navigation: {
           forcedRedirectEnabled: false,
         },
-        // ios: {
-        //   bundleId: '',
-        //   // customScheme: 'giftit',
-        //   appStoreId: '',
-        // },
+
         android: {
           packageName: 'org.bettersocial.dev',
         },
@@ -191,11 +175,6 @@ const ProfileScreen = () => {
     });
   };
 
-  const changeName = () => {
-    bottomSheetNameRef.current.open();
-    setTempFullName(dataMain.real_name ? dataMain.real_name : '');
-  };
-
   const changeImage = () => {
     bottomSheetProfilePictureRef.current.open();
   };
@@ -203,7 +182,7 @@ const ProfileScreen = () => {
   const handleSave = async () => {
     setIsChangeRealName(true);
     const result = await changeRealName(dataMain.user_id, tempFullName);
-    if (result.code == 200) {
+    if (result.code === 200) {
       fetchMyProfile();
       setIsChangeRealName(false);
       bottomSheetNameRef.current.close();
@@ -263,7 +242,6 @@ const ProfileScreen = () => {
 
   const onViewProfilePicture = () => {
     bottomSheetProfilePictureRef.current.close();
-    console.log(dataMain);
     navigation.push('ImageViewer', {
       title: dataMain.username,
       images: [{url: dataMain.profile_pic_path}],
@@ -453,13 +431,6 @@ const ProfileScreen = () => {
                         )}
                       </View>
                     </TouchableNativeFeedback>
-                    {/* <TouchableNativeFeedback onPress={changeName}>
-                      <Text style={styles.nameProfile}>
-                        {dataMain.bio
-                          ? 'asdads'
-                          : 'asdasd'}
-                      </Text>
-                    </TouchableNativeFeedback> */}
                   </View>
                   <View style={styles.wrapFollower}>
                     <View style={styles.wrapRow}>

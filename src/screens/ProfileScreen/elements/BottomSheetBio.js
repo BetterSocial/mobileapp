@@ -8,13 +8,11 @@ import {
   Platform,
 } from 'react-native';
 
+import {fonts} from '../../../utils/fonts';
+import {colors} from '../../../utils/colors';
 import {Button} from '../../../components/Button';
 import {BottomSheet} from '../../../components/BottomSheet';
 import AutoFocusTextArea from '../../../components/TextArea/AutoFocusTextArea';
-import {fonts} from '../../../utils/fonts';
-import {colors} from '../../../utils/colors';
-
-let textRef;
 
 const BottomSheetBio = React.forwardRef((props, ref) => {
   return (

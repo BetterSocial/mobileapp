@@ -38,6 +38,7 @@ const LocalComunity = () => {
   const [isVisibleFirstLocation, setIsVisibleFirstLocation] = React.useState(
     false,
   );
+
   const [isVisibleSecondLocation, setIsVisibleSecondLocation] = React.useState(
     false,
   );
@@ -81,11 +82,11 @@ const LocalComunity = () => {
       post({url: '/location/list', params})
         .then((res) => {
           setIsLoading(false);
-          if (res.status == 200) {
+          if (res.status === 200) {
             setOptionsSearch(res.data.body);
           }
         })
-        .catch((err) => {
+        .catch(() => {
           setIsLoading(false);
         });
     } else {
@@ -109,12 +110,12 @@ const LocalComunity = () => {
     setSearch(capitalizeFirstLetter(val.neighborhood));
     setOptionsSearch([]);
     let locLog = [];
-    let returnTempLocation = await tempLocation.map((val) => {
+    let returnTempLocation = await tempLocation.map((item) => {
       locLog.push({
-        location: `${val.city}, ${val.zip}`,
-        location_level: val.location_level,
+        location: `${item.city}, ${item.zip}`,
+        location_level: item.location_level,
       });
-      return val.location_id;
+      return item.location_id;
     });
     await setLocation(tempLocation);
     await setLocationPost(returnTempLocation);
@@ -152,12 +153,12 @@ const LocalComunity = () => {
       tempLocation.splice(index, 1);
     }
     let locLog = [];
-    let returnTempLocation = await tempLocation.map((val) => {
+    let returnTempLocation = await tempLocation.map((item) => {
       locLog.push({
-        location: `${val.city}, ${val.zip}`,
-        location_level: val.location_level,
+        location: `${item.city}, ${item.zip}`,
+        location_level: item.location_level,
       });
-      return val.location_id;
+      return item.location_id;
     });
     await setLocation(tempLocation);
     await setLocationPost(returnTempLocation);

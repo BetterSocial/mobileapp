@@ -133,7 +133,6 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
               </View>
             )}
           </View>
-          {/* <Gap style={{height: 30}} /> */}
           <Text style={styles.textDesc}>
             Hit space to start a new topic. Add up to 5 topics.
           </Text>

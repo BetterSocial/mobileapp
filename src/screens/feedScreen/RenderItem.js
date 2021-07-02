@@ -3,6 +3,7 @@ import {StyleSheet, Dimensions, Share} from 'react-native';
 
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
+
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
@@ -13,8 +14,6 @@ import {
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
 import ContentPoll from './ContentPoll';
-
-import {isContainUrl, smartRender} from '../../utils/Utils';
 import ContentLink from './ContentLink';
 
 const {width, height} = Dimensions.get('window');
@@ -58,11 +57,6 @@ async function buildLink(username) {
       navigation: {
         forcedRedirectEnabled: false,
       },
-      // ios: {
-      //   bundleId: '',
-      //   // customScheme: 'giftit',
-      //   appStoreId: '',
-      // },
       android: {
         packageName: 'org.bettersocial.dev',
       },

@@ -3,13 +3,13 @@ import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
 
 import JWTDecode from 'jwt-decode';
 import Toast from 'react-native-simple-toast';
-import {getAccessToken} from '../../utils/token';
 import {useNavigation} from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
 import Footer from '../feedScreen/Footer';
 import Header from '../feedScreen/Header';
 import Content from '../feedScreen/Content';
+import {getAccessToken} from '../../utils/token';
 import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import ReportUser from '../../components/Blocking/ReportUser';
@@ -23,7 +23,6 @@ import {blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
 import ContentPoll from '../feedScreen/ContentPoll';
 import {
-  POST_VERB_POLL,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
@@ -36,9 +35,6 @@ const {width, height} = Dimensions.get('window');
 
 const PostPageDetail = (props) => {
   const navigation = useNavigation();
-  const [more, setMore] = React.useState(10);
-  const [totalLine, setTotalLine] = React.useState(0);
-  const [loading, setLoading] = React.useState(false);
   const [dataProfile, setDataProfile] = React.useState({});
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
@@ -90,13 +86,9 @@ const PostPageDetail = (props) => {
       }
     });
     fetchMyProfile();
-    // refBlockUser.current.open();
-    // refBlockDomain.current.open();
-    // refReportUser.current.open();
   }, []);
   const onSelectBlocking = (v) => {
     if (v !== 1) {
-      // refBlockDomain.current.open();
       refReportUser.current.open();
     } else {
       userBlock();
@@ -158,9 +150,7 @@ const PostPageDetail = (props) => {
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
-        setLoading(false);
       }
-      setLoading(false);
     }
   };
 
@@ -176,14 +166,6 @@ const PostPageDetail = (props) => {
     }
   };
 
-  const onTextLayout = (e) => {
-    setTotalLine(e.nativeEvent.lines.length);
-  };
-  const onMore = () => {
-    if (more < totalLine) {
-      setMore(more + 10);
-    }
-  };
   const updateFeed = async () => {
     let data = await getFeedDetail(item.id);
     if (data) {

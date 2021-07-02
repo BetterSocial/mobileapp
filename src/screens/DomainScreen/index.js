@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
+import {View, StyleSheet, FlatList} from 'react-native';
 
-import Gap from '../../components/Gap';
 import {useRoute} from '@react-navigation/native';
-import {getDetailDomains, getProfileDomain} from '../../service/domain';
-import Loading from '../Loading';
 
+import Loading from '../Loading';
+import Gap from '../../components/Gap';
 import Header from './elements/Header';
 import Navigation from './elements/Navigation';
 import RenderItem from './elements/RenderItem';
+import {getDetailDomains, getProfileDomain} from '../../service/domain';
 
 const DomainScreen = () => {
   const route = useRoute();
@@ -21,10 +21,8 @@ const DomainScreen = () => {
   React.useEffect(() => {
     const init = async () => {
       setLoading(true);
-      console.log(item.og.domain);
       let res = await getDetailDomains(item.og.domain);
       if (res.code === 200) {
-        console.log(res.data);
         setData(res.data);
         setLoading(false);
       }
@@ -55,7 +53,7 @@ const DomainScreen = () => {
           console.log(v);
         }}
       />
-      <Gap style={{height: 16}} />
+      <Gap style={styles.height(16)} />
 
       <FlatList
         data={data}
@@ -66,7 +64,7 @@ const DomainScreen = () => {
             );
           }
         }}
-        style={{flex: 1}}
+        style={styles.list}
         keyExtractor={(i) => i.id}
       />
 
@@ -76,11 +74,15 @@ const DomainScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  list: {flex: 1},
   container: {
     flex: 1,
     paddingTop: 8,
     backgroundColor: 'white',
   },
+  height: (height) => ({
+    height: height,
+  }),
 });
 
 export default DomainScreen;

@@ -5,7 +5,6 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 
 import {fonts} from '../../utils/fonts';

@@ -10,12 +10,10 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import {createChildComment} from '../../service/comment';
-import {getFeedDetail} from '../../service/post';
 
 const ReplyComment = (props) => {
   const navigation = useNavigation();
   const [item, setItem] = React.useState(props.route.params.item);
-  const [parent, setParent] = React.useState(props.route.params.parent);
   const [textComment, setTextComment] = React.useState('');
   const [isReaction, setReaction] = React.useState(false);
 
@@ -49,15 +47,12 @@ const ReplyComment = (props) => {
   };
   return (
     <View style={styles.container}>
-      {/* <ScrollView> */}
       <View style={styles.header}>
         <TouchableOpacity>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableOpacity>
         <Text style={styles.headerText}>
-          Reply to{' '}
-          {/* {item.anonimiti === true ? Anonymous : item.actor.data.username} */}
-          {item.user.data.username}
+          Reply to {item.user.data.username}
         </Text>
         <View style={styles.btn} />
       </View>
@@ -97,29 +92,11 @@ const ReplyComment = (props) => {
             );
           })}
       </View>
-      {/* <Text style={styles.post}>text commentParent</Text> */}
-      {/* {isReaction && <ContainerComment comments={item.latest_children} />} */}
-      {/* <View style={styles.comment}>
-        <Image
-          source={require('../.../../../assets/images/ProfileDefault.png')}
-          style={styles.image}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Your comment"
-          multiline={true}
-          numberOfLines={4}
-          textAlignVertical="top"
-          onChangeText={(v) => setTextComment(v)}
-          value={textComment}
-        />
-      </View> */}
       <WriteComment
         onChangeText={(v) => setTextComment(v)}
         onPress={() => createComment()}
         value={textComment}
       />
-      {/* </ScrollView> */}
     </View>
   );
 };

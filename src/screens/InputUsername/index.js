@@ -11,11 +11,11 @@ import {
   Image,
 } from 'react-native';
 
-import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/core';
 import {showMessage} from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
+import {launchImageLibrary} from 'react-native-image-picker';
+import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import {ProgressBar} from '../../components/ProgressBar';
 import {Button} from '../../components/Button';
@@ -127,12 +127,6 @@ const ChooseUsername = () => {
           backgroundColor: colors.red,
         });
       }
-
-      // showMessage({
-      //   message: StringConstant.onboardingChooseUsernameErrorCannotBeEmpty,
-      //   type: 'danger',
-      //   backgroundColor : colors.red
-      // });
     }
   };
   const messageTypeFetch = (type, user) => {

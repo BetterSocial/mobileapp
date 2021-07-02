@@ -33,14 +33,6 @@ const Settings = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
-        {/* <View style={styles.header}>
-          <View style={styles.floatLeft}>
-            <TouchableNativeFeedback onPress={() => navigation.goBack()}>
-              <ArrowLeftIcon width={20} height={12} fill="#000" />
-            </TouchableNativeFeedback>
-          </View>
-          <Text style={styles.textSettings}>Settings</Text>
-        </View> */}
         <View style={styles.containerHeader}>
           <Header title="Settings" onPress={() => navigation.goBack()} />
         </View>

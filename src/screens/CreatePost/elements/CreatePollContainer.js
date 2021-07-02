@@ -56,6 +56,14 @@ export default function CreatePollContainer({
 
     return `${dayText}${hourText}${minuteText}`;
   };
+  const setDuration = () => {
+    let selectedTime = {...selectedtime};
+    selectedTime.day = pickerDay;
+    selectedTime.hour = pickerHour;
+    selectedTime.minute = pickerMinute;
+    ontimechanged(selectedTime);
+    setIsDurationModalShown(false);
+  };
 
   return (
     <View style={S.createpollcontainer}>
@@ -66,9 +74,9 @@ export default function CreatePollContainer({
             poll={item}
             key={`poll-item-${index}`}
             showdeleteicon={polls.length > MIN_POLLING_ALLOWED}
-            onremovepoll={(index) => onremovesinglepoll(index)}
-            onpollchanged={(item) => {
-              onsinglepollchanged(item, index);
+            onremovepoll={(ind) => onremovesinglepoll(ind)}
+            onpollchanged={(v) => {
+              onsinglepollchanged(v, index);
             }}
           />
         );
@@ -164,14 +172,7 @@ export default function CreatePollContainer({
               </TouchableOpacity>
               <TouchableOpacity
                 style={S.buttoncontainer}
-                onPress={() => {
-                  let selectedTime = {...selectedtime};
-                  selectedTime.day = pickerDay;
-                  selectedTime.hour = pickerHour;
-                  selectedTime.minute = pickerMinute;
-                  ontimechanged(selectedTime);
-                  setIsDurationModalShown(false);
-                }}>
+                onPress={() => setDuration()}>
                 <Text style={S.bottombuttontext}>Set</Text>
               </TouchableOpacity>
             </View>

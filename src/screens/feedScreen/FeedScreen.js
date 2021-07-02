@@ -21,7 +21,6 @@ import {blockUser} from '../../service/blocking';
 import {getMainFeed} from '../../service/post';
 
 const FeedScreen = (props) => {
-  const [tokenParse, setTokenParse] = React.useState({});
   const [mainFeeds, setMainFeeds] = React.useState([]);
 
   const [initialLoading, setInitialLoading] = React.useState(true);
@@ -33,7 +32,6 @@ const FeedScreen = (props) => {
   const [userId, setUserId] = React.useState('');
   const [postId, setPostId] = React.useState('');
   const [lastId, setLastId] = React.useState('');
-  const [selectedPost, setSelectedPost] = React.useState({});
   const [yourselfId, setYourselfId] = React.useState('');
 
   const refBlockUser = React.useRef();
@@ -116,7 +114,6 @@ const FeedScreen = (props) => {
   );
 
   React.useEffect(() => {
-    // fetchMyProfile();
     analytics().logScreenView({
       screen_class: 'FeedScreen',
       screen_name: 'Feed Screen',
@@ -156,7 +153,6 @@ const FeedScreen = (props) => {
       if (value) {
         const decoded = await JWTDecode(value);
         setYourselfId(decoded.user_id);
-        setTokenParse(decoded);
       }
     };
     parseToken();
@@ -212,11 +208,9 @@ const FeedScreen = (props) => {
                     props.navigation.navigate('PostDetailPage', {item: item});
                   }}
                   onPressUpvote={(value) => {
-                    setSelectedPost(value);
                     setUpVote(value.id);
                   }}
                   onPressDownVote={(value) => {
-                    setSelectedPost(value);
                     setDownVote(value.id);
                   }}
                   selfUserId={yourselfId}

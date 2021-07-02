@@ -4,7 +4,6 @@ import {Alert, Image, Linking, StyleSheet, View} from 'react-native';
 import jwtDecode from 'jwt-decode';
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import {verifyTokenGetstream} from '../../service/users';
 import {getProfileByUsername} from '../../service/profile';
@@ -22,34 +21,12 @@ const SplashScreen = () => {
       screen_name: 'Splash Screen',
     });
 
-    // if(getDynamicLink()) return
     getDeepLinkUrl();
-    // setAccessToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiODgzNTM1NTEtYjliZC00Y2Y1LWE4OWUtY2U2MTk3Yjg4MGMwIiwiZXhwIjoxNjIxODQ0ODA4fQ.cHJPZwR2_ByQkwvmVkC766Rqu5Yf1JtQ0OIjpgCUlL8")
-    // setRefreshToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiODgzNTM1NTEtYjliZC00Y2Y1LWE4OWUtY2U2MTk3Yjg4MGMwIiwiZXhwIjoxNjIyMzYzMjA4fQ.F0FzODB6wU_fw_pqYZT4abtjPPvoutDnlqE4n-LxqmI")
   }, []);
-
-  let getDynamicLink = async () => {
-    try {
-      dynamicLinks()
-        .getInitialLink()
-        .then((link) => {
-          return true;
-        });
-
-      dynamicLinks().onLink((link) => {
-        return true;
-      });
-    } catch (e) {
-      console.log('error ' + e);
-      return false;
-    }
-  };
 
   let getDeepLinkUrl = async () => {
     try {
       let selfUserId = await doVerifyUser();
-      // let profile = await getMyProfile(selfUserId)
-      // dispatch({type : SET_DATA_IMAGE, payload : profile.data.profile_pic_path})
       let deepLinkUrl = await Linking.getInitialURL();
       if (deepLinkUrl === null) {
         return navigateWithoutDeeplink(selfUserId);
@@ -99,15 +76,6 @@ const SplashScreen = () => {
 
   let doVerifyUser = async () => {
     try {
-      // console.log('splash screen');
-      // let humanUserId = await getUserId();
-      // console.log(`humanUserId ${humanUserId}`);
-      // let response = await verifyUser(humanUserId);
-      // console.log(response);
-      // if (response.code === 200) {
-      //   setAccessToken(response.token);
-      //   return await jwtDecode(response.token).user_id;
-      // }
       let token = await getAccessToken();
       console.log(token);
       if (token !== null && token !== '') {

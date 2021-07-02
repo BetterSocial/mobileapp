@@ -2,11 +2,11 @@ import * as React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 import Gap from '../../../components/Gap';
+import {colors} from '../../../utils/colors';
+import {FONTS, SIZES} from '../../../utils/theme';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
-import theme, {COLORS, FONTS, SIZES} from '../../../utils/theme';
-import {colors} from '../../../utils/colors';
 
 const RenderItem = ({domain, image}) => {
   const getname = (d) => {
@@ -30,7 +30,7 @@ const RenderItem = ({domain, image}) => {
   const time = getTime(domain);
   return (
     <View style={styles.wrapperItem}>
-      <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
+      <View style={styles.content}>
         <View style={styles.wrapperImage}>
           <Image
             source={{
@@ -41,48 +41,54 @@ const RenderItem = ({domain, image}) => {
             style={[styles.image, StyleSheet.absoluteFillObject]}
           />
         </View>
-        <Gap style={{width: 8}} />
-        <View style={{flex: 1}}>
+        <Gap style={styles.width(8)} />
+        <View style={styles.containerDetail}>
           <Text>{name}</Text>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.contentDetail}>
             <Text>{new Date(time).toLocaleDateString()}</Text>
             <View style={styles.point} />
             <Memoic_globe height={16} width={16} />
             <View style={styles.point} />
 
             <MemoPeopleFollow height={16} width={16} />
-            <Gap style={{width: 4}} />
-            <Text style={{color: '#828282'}}>12k</Text>
+            <Gap style={styles.width(4)} />
+            <Text style={styles.views}>12k</Text>
           </View>
           <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
         </View>
         <View>
           <TouchableOpacity>
             <View style={styles.wrapperText}>
-              <Text style={{fontSize: 24, color: '#00ADB5'}}>+</Text>
+              <Text style={styles.iconPlush}>+</Text>
             </View>
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{paddingHorizontal: 16}}>
+      <View style={styles.containerText}>
         <Text style={{...FONTS.h2}}>{content.title}</Text>
       </View>
-      <Gap style={{height: 8}} />
+      <Gap style={styles.height(8)} />
       <Image
         source={{uri: content.image}}
-        style={{height: SIZES.height * 0.3}}
+        style={styles.height(SIZES.height * 0.3)}
       />
       <Gap />
-      <Gap style={{height: 16}} />
-      <View style={{paddingHorizontal: 16}}>
+      <Gap style={styles.height(16)} />
+      <View style={styles.containerText}>
         <Text>{content.description}</Text>
       </View>
-      <Gap style={{height: 16}} />
+      <Gap style={styles.height(16)} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  containerText: {paddingHorizontal: 16},
+  iconPlush: {fontSize: 24, color: '#00ADB5'},
+  views: {color: '#828282'},
+  containerDetail: {flex: 1},
+  contentDetail: {flexDirection: 'row', alignItems: 'center'},
+  content: {flexDirection: 'row', paddingHorizontal: 16},
   wrapperItem: {backgroundColor: 'white', marginBottom: 16},
   wrapperImage: {
     borderRadius: 45,
@@ -116,6 +122,8 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
   },
+  height: (height) => ({height}),
+  width: (width) => ({width}),
 });
 
 export default RenderItem;

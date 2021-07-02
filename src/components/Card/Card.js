@@ -1,72 +1,17 @@
-//
 import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Linking,
-  StyleSheet,
-} from 'react-native';
-import PropTypes from 'prop-types';
+import {View, Text, Image, Linking, StyleSheet} from 'react-native';
 
+import PropTypes from 'prop-types';
 import _ from 'lodash';
+
 import {sanitizeUrlForLinking} from '../../utils/Utils';
 import {colors} from '../../utils/colors';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import {fonts} from '../../utils/fonts';
 import Gap from '../Gap';
 
-/**
- * Card element
- * @example ./examples/Card.md
- */
 const Card = (props) => {
   const {title, description, image, url, domain, domainImage, date} = props;
-  // const styles = buildStylesheet('card', props.styles);
-
-  const Header = ({domain, image, date}) => (
-    <View style={{flexDirection: 'row', padding: 8}}>
-      <View
-        style={{
-          borderRadius: 45,
-          borderWidth: 0.2,
-          borderColor: 'rgba(0,0,0,0.5)',
-          width: 36,
-          height: 36,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Image
-          style={[
-            {height: '100%', width: '100%', borderRadius: 45},
-            StyleSheet.absoluteFillObject,
-          ]}
-          source={{uri: image}}
-          resizeMode={'cover'}
-        />
-      </View>
-      <Gap style={{width: 8}} />
-      <View style={{justifyContent: 'space-around'}}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text
-            style={{
-              fontSize: 16,
-              lineHeight: 16,
-              color: '#000000',
-              fontWeight: 'bold',
-              fontFamily: fonts.inter[600],
-            }}>
-            {domain}
-          </Text>
-          <View style={styles.point} />
-          <Text style={{fontSize: 12, color: '#828282'}}>{date}</Text>
-        </View>
-        <MemoIc_rectangle_gradient height={10} width={180} />
-      </View>
-    </View>
-  );
-
   return (
     <View style={styles.container}>
       <Header domain={domain} image={domainImage} date={date} />
@@ -82,16 +27,10 @@ const Card = (props) => {
         <Text style={styles.description}>
           {/* {_.truncate(description, {length: 120})} */}
           {description}
-          <Gap style={{width: 2}} />
+          <Gap style={styles.width(2)} />
           <Text
             onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
-            style={{
-              color: '#2f80ed',
-              textDecorationLine: 'underline',
-              marginStart: 8,
-              fontFamily: 'bold',
-              fontSize: 12,
-            }}>
+            style={styles.link}>
             Open Link
           </Text>
         </Text>
@@ -99,7 +38,26 @@ const Card = (props) => {
     </View>
   );
 };
-
+const Header = ({domain, image, date}) => (
+  <View style={styles.constainerHeader}>
+    <View style={styles.contentHeader}>
+      <Image
+        style={[styles.imageHeader, StyleSheet.absoluteFillObject]}
+        source={{uri: image}}
+        resizeMode={'cover'}
+      />
+    </View>
+    <Gap style={styles.width(8)} />
+    <View style={styles.containerDomain}>
+      <View style={styles.contentDomain}>
+        <Text style={styles.domain}>{domain}</Text>
+        <View style={styles.point} />
+        <Text style={styles.date}>{date}</Text>
+      </View>
+      <MemoIc_rectangle_gradient height={10} width={180} />
+    </View>
+  </View>
+);
 Card.propTypes = {
   domain: PropTypes.string,
   domainImage: PropTypes.string,
@@ -113,8 +71,41 @@ Card.propTypes = {
 };
 
 const styles = StyleSheet.create({
+  link: {
+    color: '#2f80ed',
+    textDecorationLine: 'underline',
+    marginStart: 8,
+    fontFamily: 'bold',
+    fontSize: 12,
+  },
+  contentDomain: {flexDirection: 'row', alignItems: 'center'},
+  containerDomain: {justifyContent: 'space-around'},
+  date: {fontSize: 12, color: '#828282'},
+  domain: {
+    fontSize: 16,
+    lineHeight: 16,
+    color: '#000000',
+    fontWeight: 'bold',
+    fontFamily: fonts.inter[600],
+  },
+  width: (width) => ({
+    width,
+  }),
+  imageHeader: {height: '100%', width: '100%', borderRadius: 45},
+  constainerHeader: {
+    flexDirection: 'row',
+    padding: 8,
+  },
+  contentHeader: {
+    borderRadius: 45,
+    borderWidth: 0.2,
+    borderColor: 'rgba(0,0,0,0.5)',
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
-    // flex: 1,
     borderWidth: 0.5,
     borderRadius: 8,
     borderColor: 'rgba(0,0,0, 0.5)',
