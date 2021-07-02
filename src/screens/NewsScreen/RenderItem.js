@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import Header from './Header';
 import Content from './Content';
@@ -8,28 +9,38 @@ import {COLORS, SIZES} from '../../utils/theme';
 import Gap from '../../components/Gap';
 
 const RenderItem = ({item}) => {
+  const navigation = useNavigation();
+  const onCardPressed = () => {
+    // console.log(JSON.stringify(item));
+    // navigation.push('DomainScreen', {
+    //   item: item,
+    // });
+  };
+
   return (
-    <View>
-      <View style={styles.container}>
-        <Header
-          image={item.domain.image}
-          domain={item.domain.name}
-          time={item.content.created_at}
-        />
-        <Content
-          title={item.content.title}
-          image={item.content.image}
-          description={item.content.description}
-          url={item.content.url}
-        />
+    <TouchableOpacity onPress={onCardPressed}>
+      <View>
+        <View style={styles.container}>
+          <Header
+            image={item.domain.image}
+            domain={item.domain.name}
+            time={item.content.created_at}
+          />
+          <Content
+            title={item.content.title}
+            image={item.content.image}
+            description={item.content.description}
+            url={item.content.url}
+          />
+        </View>
+        <View style={styles.wrapperFooter}>
+          <Footer item={item} totalComment={0} totalVote={0} />
+        </View>
+        <Gap height={8} />
+        <View style={{height: 1, width: '100%', backgroundColor: '#C4C4C4'}} />
+        <Gap height={16} />
       </View>
-      <View style={styles.wrapperFooter}>
-        <Footer item={item} totalComment={0} totalVote={0} />
-      </View>
-      <Gap height={8} />
-      <View style={{height: 1, width: '100%', backgroundColor: '#C4C4C4'}} />
-      <Gap height={16} />
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -44,7 +44,7 @@ const ChannelListScreen = ({navigation}) => {
   };
 
   return (
-    <View style={{backgroundColor: 'red', height: '100%'}}>
+    <View style={{height: '100%'}}>
       <Search animatedValue={0} />
       <Chat client={chatClient}>
         <View style={StyleSheet.absoluteFill}>

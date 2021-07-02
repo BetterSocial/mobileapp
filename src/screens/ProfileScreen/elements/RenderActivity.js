@@ -107,7 +107,6 @@ const renderActivity = (props, data) => {
 const styles = StyleSheet.create({
   containerPoll: {
     display: 'flex',
-    backgroundColor: 'red',
   },
   rowSpaceBeetwen: (width, marginTop) => ({
     flexDirection: 'row',
