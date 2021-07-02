@@ -4,7 +4,7 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import Card from '../../components/Card/Card';
 import {smartRender} from '../../utils/Utils';
 
-const ContentLink = ({og, onPress}) => {
+const ContentLink = ({og, onPress, onCardPress}) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.contentFeed}>
       {smartRender(Card, {
@@ -18,6 +18,7 @@ const ContentLink = ({og, onPress}) => {
         description: og.description,
         image: og.image,
         url: og.url,
+        onCardPress,
       })}
     </TouchableOpacity>
   );

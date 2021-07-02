@@ -4,60 +4,135 @@ exports[`component WriteComment WriteComment renders correctly 1`] = `
 <View
   style={
     Object {
-      "alignItems": "center",
-      "backgroundColor": "#fff",
+      "backgroundColor": "#ffffff",
       "borderTopColor": "#C4C4C4",
       "borderTopWidth": 1,
       "bottom": 0,
+      "display": "flex",
       "flex": 1,
-      "flexDirection": "row",
-      "paddingHorizontal": 22,
-      "paddingVertical": 10,
+      "flexDirection": "column",
+      "paddingBottom": 14,
       "position": "absolute",
       "width": "100%",
     }
   }
 >
-  <Image
-    source={
-      Object {
-        "testUri": "../../../src/assets/images/ProfileDefault.png",
-      }
-    }
+  <View
     style={
       Object {
-        "height": 32,
-        "width": 32,
+        "backgroundColor": "#C4C4C4",
+        "height": 36,
+        "left": 22,
+        "position": "absolute",
+        "top": 0,
+        "width": 1,
+        "zIndex": -100,
       }
     }
   />
+  <Text
+    style={
+      Object {
+        "color": "#C4C4C4",
+        "fontFamily": "Inter-Medium",
+        "lineHeight": 14.52,
+        "marginBottom": 11,
+        "marginLeft": 48,
+        "marginTop": 7,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "Inter-Bold",
+          "lineHeight": 14.52,
+        }
+      }
+    >
+      Reply to 
+    </Text>
+  </Text>
   <View
     style={
       Object {
         "alignItems": "center",
-        "backgroundColor": "#F5F5F5",
-        "borderRadius": 5,
+        "backgroundColor": "#fff",
+        "flex": 1,
         "flexDirection": "row",
-        "marginEnd": 24,
-        "marginLeft": 10,
-        "paddingHorizontal": 15,
+        "paddingLeft": 20,
+        "paddingRight": 10,
+        "width": "100%",
+        "zIndex": 100,
       }
     }
   >
-    <TextInput
-      allowFontScaling={true}
-      multiline={true}
-      onChangeText={[Function]}
-      placeholder="Add a comment"
-      rejectResponderTermination={true}
+    <View
       style={
         Object {
-          "flex": 1,
+          "backgroundColor": "#C4C4C4",
+          "height": 20,
+          "left": 22,
+          "position": "absolute",
+          "top": 0,
+          "width": 1,
+          "zIndex": -100,
         }
       }
-      underlineColorAndroid="transparent"
-      value="halo"
     />
+    <Image
+      source={
+        Object {
+          "testUri": "../../../src/assets/images/ProfileDefault.png",
+        }
+      }
+      style={
+        Object {
+          "height": 24,
+          "marginLeft": -10,
+          "width": 24,
+          "zIndex": -10,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "#F5F5F5",
+          "borderRadius": 8,
+          "display": "flex",
+          "flex": 1,
+          "flexDirection": "column",
+          "marginEnd": 8,
+          "marginLeft": 10,
+          "paddingLeft": 6,
+          "paddingRight": 8,
+        }
+      }
+    >
+      <TextInput
+        allowFontScaling={true}
+        multiline={false}
+        onChangeText={[Function]}
+        placeholder="Add a reply"
+        placeholderTextColor="#C4C4C4"
+        rejectResponderTermination={true}
+        style={
+          Object {
+            "color": "#000000",
+            "flex": 1,
+            "fontFamily": "Inter-Regular",
+            "fontSize": 14,
+            "lineHeight": 24,
+            "paddingBottom": 5,
+            "paddingTop": 5,
+          }
+        }
+        underlineColorAndroid="transparent"
+        value="halo"
+      />
+    </View>
     <View
       accessible={true}
       focusable={true}
@@ -70,28 +145,17 @@ exports[`component WriteComment WriteComment renders correctly 1`] = `
       onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "alignItems": "center",
           "backgroundColor": "#00ADB5",
-          "borderRadius": 8,
-          "height": 32,
+          "borderRadius": 18,
+          "display": "flex",
+          "height": 35,
           "justifyContent": "center",
           "opacity": 1,
-          "paddingHorizontal": 16,
-          "paddingVertical": 4,
-          "width": 80,
+          "width": 35,
         }
       }
     >
-      <Text
-        style={
-          Object {
-            "color": "white",
-            "fontFamily": "Inter-Regular",
-          }
-        }
-      >
-        Reply
-      </Text>
+      <View />
     </View>
   </View>
 </View>
@@ -101,85 +165,155 @@ exports[`component WriteComment WriteComment snapshot 1`] = `
 <View
   style={
     Object {
-      "alignItems": "center",
-      "backgroundColor": "#fff",
+      "backgroundColor": "#ffffff",
       "borderTopColor": "#C4C4C4",
       "borderTopWidth": 1,
       "bottom": 0,
+      "display": "flex",
       "flex": 1,
-      "flexDirection": "row",
-      "paddingHorizontal": 22,
-      "paddingVertical": 10,
+      "flexDirection": "column",
+      "paddingBottom": 14,
       "position": "absolute",
       "width": "100%",
     }
   }
 >
-  <Image
-    source={
-      Object {
-        "testUri": "../../../src/assets/images/ProfileDefault.png",
-      }
-    }
+  <View
     style={
       Object {
-        "height": 32,
-        "width": 32,
+        "backgroundColor": "#C4C4C4",
+        "height": 36,
+        "left": 22,
+        "position": "absolute",
+        "top": 0,
+        "width": 1,
+        "zIndex": -100,
       }
     }
   />
+  <Text
+    style={
+      Object {
+        "color": "#C4C4C4",
+        "fontFamily": "Inter-Medium",
+        "lineHeight": 14.52,
+        "marginBottom": 11,
+        "marginLeft": 48,
+        "marginTop": 7,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "Inter-Bold",
+          "lineHeight": 14.52,
+        }
+      }
+    >
+      Reply to 
+    </Text>
+  </Text>
   <View
     style={
       Object {
         "alignItems": "center",
-        "backgroundColor": "#F5F5F5",
-        "borderRadius": 5,
+        "backgroundColor": "#fff",
+        "flex": 1,
         "flexDirection": "row",
-        "marginEnd": 24,
-        "marginLeft": 10,
-        "paddingHorizontal": 15,
+        "paddingLeft": 20,
+        "paddingRight": 10,
+        "width": "100%",
+        "zIndex": 100,
       }
     }
   >
-    <Component
-      allowFontScaling={true}
-      multiline={true}
-      onChangeText={[Function]}
-      placeholder="Add a comment"
-      rejectResponderTermination={true}
+    <View
       style={
         Object {
-          "flex": 1,
+          "backgroundColor": "#C4C4C4",
+          "height": 20,
+          "left": 22,
+          "position": "absolute",
+          "top": 0,
+          "width": 1,
+          "zIndex": -100,
         }
       }
-      underlineColorAndroid="transparent"
-      value="halo"
     />
+    <Image
+      source={
+        Object {
+          "testUri": "../../../src/assets/images/ProfileDefault.png",
+        }
+      }
+      style={
+        Object {
+          "height": 24,
+          "marginLeft": -10,
+          "width": 24,
+          "zIndex": -10,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "#F5F5F5",
+          "borderRadius": 8,
+          "display": "flex",
+          "flex": 1,
+          "flexDirection": "column",
+          "marginEnd": 8,
+          "marginLeft": 10,
+          "paddingLeft": 6,
+          "paddingRight": 8,
+        }
+      }
+    >
+      <Component
+        allowFontScaling={true}
+        multiline={false}
+        onChangeText={[Function]}
+        placeholder="Add a reply"
+        placeholderTextColor="#C4C4C4"
+        rejectResponderTermination={true}
+        style={
+          Object {
+            "color": "#000000",
+            "flex": 1,
+            "fontFamily": "Inter-Regular",
+            "fontSize": 14,
+            "lineHeight": 24,
+            "paddingBottom": 5,
+            "paddingTop": 5,
+          }
+        }
+        underlineColorAndroid="transparent"
+        value="halo"
+      />
+    </View>
     <ForwardRef
       onPress={[Function]}
       style={
         Object {
-          "alignItems": "center",
           "backgroundColor": "#00ADB5",
-          "borderRadius": 8,
-          "height": 32,
+          "borderRadius": 18,
+          "display": "flex",
+          "height": 35,
           "justifyContent": "center",
-          "paddingHorizontal": 16,
-          "paddingVertical": 4,
-          "width": 80,
+          "width": 35,
         }
       }
     >
-      <Text
+      <Memo(SendComment)
         style={
           Object {
-            "color": "white",
-            "fontFamily": "Inter-Regular",
+            "alignSelf": "center",
           }
         }
-      >
-        Reply
-      </Text>
+      />
     </ForwardRef>
   </View>
 </View>

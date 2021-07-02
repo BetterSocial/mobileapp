@@ -9,10 +9,29 @@ import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_of
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
+import MemoCommentReply from '../../assets/icon/CommentReply';
 
-const Comment = ({username, comment, onPress, isLast = false, time, photo}) => {
+const Comment = ({
+  username,
+  comment,
+  onPress,
+  isLast = false,
+  isLastInParent = false,
+  time,
+  style,
+  photo,
+  level,
+  showLeftConnector = true,
+}) => {
   return (
-    <View style={styles.container(isLast)}>
+    <View
+      style={styles.container({
+        isLast,
+        style,
+        level,
+        isLastInParent,
+        showLeftConnector,
+      })}>
       <View style={styles.profile}>
         <Image
           source={
@@ -29,11 +48,11 @@ const Comment = ({username, comment, onPress, isLast = false, time, photo}) => {
       </View>
       <Text style={styles.post}>{comment}</Text>
       <View style={styles.constainerFooter}>
-        {isLast === true ? (
+        {isLast && level === 2 ? (
           <View style={styles.gap} />
         ) : (
           <TouchableOpacity style={styles.btnReply} onPress={onPress}>
-            <IconAnt name="back" size={15.77} color={colors.gray1} />
+            <MemoCommentReply />
             <Text style={styles.btnReplyText}>Reply</Text>
           </TouchableOpacity>
         )}
@@ -59,17 +78,22 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  container: (isLast) => ({
-    borderLeftWidth: 1,
-    borderLeftColor: isLast ? '#fFF' : colors.gray1,
-    paddingBottom: 16,
+  container: ({isLast, style, level, isLastInParent, showLeftConnector}) => ({
+    width: '100%',
+    borderLeftWidth: showLeftConnector ? 1 : 0,
+    borderLeftColor: isLast
+      ? level === 0
+        ? colors.gray1
+        : 'transparent'
+      : colors.gray1,
+    ...style,
   }),
   username: {
     fontFamily: fonts.inter[700],
     fontSize: 12,
     color: '#828282',
     lineHeight: 14,
-    marginLeft: 17,
+    marginLeft: 16,
   },
   post: {
     fontFamily: fonts.inter[400],
@@ -79,12 +103,14 @@ const styles = StyleSheet.create({
   },
   profile: {
     flexDirection: 'row',
-    marginLeft: -12,
+    marginLeft: -13,
   },
   constainerFooter: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: 11.13,
+    marginBottom: 12,
+    marginLeft: 30,
   },
   btnReply: {
     flexDirection: 'row',
@@ -95,9 +121,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#C4C4C4',
     marginLeft: 8.98,
+    marginRight: 28.61,
   },
   btnBlock: {
-    marginLeft: 28.61,
+    // marginLeft: 28.61,
     marginRight: 28.51,
   },
   arrowup: {

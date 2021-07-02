@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
 
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import JWTDecode from 'jwt-decode';
 import analytics from '@react-native-firebase/analytics';
 import Toast from 'react-native-simple-toast';
@@ -21,6 +21,7 @@ import {blockUser} from '../../service/blocking';
 import {getMainFeed} from '../../service/post';
 
 const FeedScreen = (props) => {
+  const navigation = useNavigation();
   const [mainFeeds, setMainFeeds] = React.useState([]);
 
   const [initialLoading, setInitialLoading] = React.useState(true);
@@ -33,6 +34,7 @@ const FeedScreen = (props) => {
   const [postId, setPostId] = React.useState('');
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+  const [rerender, setRerender] = React.useState(0);
 
   const refBlockUser = React.useRef();
   const refBlockDomain = React.useRef();
@@ -87,31 +89,34 @@ const FeedScreen = (props) => {
     userBlock();
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const getDataFeeds = async (id = '') => {
-        setCountStack(null);
-        setInitialLoading(true);
-        try {
-          let query = '';
-          if (id !== '') {
-            query = '?id_lt=' + id;
-          }
-          const dataFeeds = await getMainFeed(query);
-          if (dataFeeds.data.length > 0) {
-            let data = dataFeeds.data;
-            setCountStack(data.length);
-            setMainFeeds(data);
-          }
-          setInitialLoading(false);
-        } catch (e) {
-          console.log(e);
-          setInitialLoading(false);
-        }
-      };
-      getDataFeeds(lastId);
-    }, [lastId]),
-  );
+  const getDataFeeds = async (id = '') => {
+    setCountStack(null);
+    setInitialLoading(true);
+    try {
+      let query = '';
+      if (id !== '') {
+        query = '?id_lt=' + id;
+      }
+      const dataFeeds = await getMainFeed(query);
+      // console.log('dataFeeds');
+      // console.log(JSON.stringify(dataFeeds));
+      if (dataFeeds.data.length > 0) {
+        let data = dataFeeds.data;
+        setCountStack(data.length);
+        setMainFeeds(data);
+      }
+      setInitialLoading(false);
+    } catch (e) {
+      console.log(e);
+      setInitialLoading(false);
+    }
+  };
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getDataFeeds(lastId);
+  //   }, [lastId]),
+  // );
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -119,6 +124,19 @@ const FeedScreen = (props) => {
       screen_name: 'Feed Screen',
     });
   }, []);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
+      getDataFeeds(lastId);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  React.useEffect(() => {
+    getDataFeeds(lastId);
+  }, [lastId]);
+
   const setDataToState = (value) => {
     if (value.anonimity === true) {
       setUsername('Anonymous');
@@ -158,6 +176,12 @@ const FeedScreen = (props) => {
     parseToken();
   }, []);
 
+  let onNewPollFetched = (newPolls, index) => {
+    let newMainFeeds = [...mainFeeds];
+    newMainFeeds[index] = newPolls;
+    setMainFeeds(newMainFeeds);
+  };
+
   if (initialLoading === true) {
     return (
       <View style={styles.containerLoading}>
@@ -191,10 +215,14 @@ const FeedScreen = (props) => {
             ? mainFeeds.map((item, index) => (
                 <RenderItem
                   index={index}
-                  key={index}
+                  key={`${index}${item.refreshtoken ? item.refreshtoken : ''}`}
                   item={item}
+                  onNewPollFetched={onNewPollFetched}
                   onPress={() => {
-                    props.navigation.navigate('PostDetailPage', {item: item});
+                    props.navigation.navigate('PostDetailPage', {
+                      item: mainFeeds[index],
+                      isalreadypolling: item.isalreadypolling,
+                    });
                   }}
                   onPressBlock={(value) => {
                     if (value.actor.id === yourselfId) {

@@ -1,11 +1,27 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Animated,
+  ScrollView,
+  PanResponder,
+} from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';
 
 import {getDomains} from '../../service/domain';
+import theme, {COLORS, FONTS, SIZES} from '../../utils/theme';
+import RenderItem from './RenderItem';
+import Search from './Search';
 
 const NewsScreen = (props) => {
+  const [data, setData] = React.useState([]);
+  const offset = React.useRef(new Animated.Value(0)).current;
+
+  let lastDragY = 0;
+
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'FeedScreen',
@@ -15,17 +31,54 @@ const NewsScreen = (props) => {
 
   React.useEffect(() => {
     const initData = async () => {
-      let data = await getDomains();
-      console.log(data.length);
+      let res = await getDomains();
+      setData([{dummy: 'dummy'}, ...res.data]);
     };
     initData();
   }, []);
 
   return (
-    <View>
-      <Text>News Screen</Text>
+    <View style={styles.container}>
+      <Search animatedValue={offset} />
+      <Animated.View>
+        <FlatList
+          onScrollBeginDrag={(event) => {
+            lastDragY = event.nativeEvent.contentOffset.y;
+          }}
+          onScroll={(event) => {
+            let y = event.nativeEvent.contentOffset.y;
+            let dy = y - lastDragY;
+            console.log(`${y} - ${lastDragY} = ${dy}`);
+            if (dy <= 0)
+              return Animated.timing(offset, {
+                toValue: 0,
+                duration: 50,
+                useNativeDriver: false,
+              }).start();
+            else if (dy > 0)
+              return Animated.timing(offset, {
+                toValue: -70,
+                duration: 50,
+                useNativeDriver: false,
+              }).start();
+          }}
+          scrollEventThrottle={16}
+          data={data}
+          renderItem={({item, index}) => {
+            if (item.dummy) return <View key={index} style={{height: 60}} />;
+            return <RenderItem key={item} item={item} />;
+          }}
+        />
+      </Animated.View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: SIZES.base,
+    backgroundColor: 'white',
+  },
+});
 
 export default NewsScreen;

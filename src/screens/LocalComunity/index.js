@@ -35,13 +35,10 @@ const LocalComunity = () => {
   const [location, setLocation] = React.useState([]);
   const [optionsSearch, setOptionsSearch] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isVisibleFirstLocation, setIsVisibleFirstLocation] = React.useState(
-    false,
-  );
-
-  const [isVisibleSecondLocation, setIsVisibleSecondLocation] = React.useState(
-    false,
-  );
+  const [isVisibleFirstLocation, setIsVisibleFirstLocation] =
+    React.useState(false);
+  const [isVisibleSecondLocation, setIsVisibleSecondLocation] =
+    React.useState(false);
   const [locationPost, setLocationPost] = React.useState([]);
   const [locationLog, setLocationLog] = React.useState([]);
 

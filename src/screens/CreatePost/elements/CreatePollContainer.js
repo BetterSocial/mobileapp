@@ -135,47 +135,52 @@ export default function CreatePollContainer({
                   isCyclic={true}
                 />
               </View>
-
-              <View style={S.pickercontainer}>
-                <Text style={S.pickerlabeltext}>Hours</Text>
-                <View style={{}}>
-                  <WheelPicker
-                    data={hour}
-                    selectedItem={selectedtime.hour}
-                    indicatorColor={colors.holytosca}
-                    indicatorWidth={3}
-                    onItemSelected={(value) => setPickerHour(value)}
-                    isCyclic={true}
-                  />
-                </View>
-              </View>
-              <View style={S.pickercontainer}>
-                <Text style={S.pickerlabeltext}>Min</Text>
-                <View style={{}}>
-                  <WheelPicker
-                    data={minute}
-                    selectedItem={selectedtime.minute}
-                    onItemSelected={(value) => setPickerMinute(value)}
-                    indicatorColor={colors.holytosca}
-                    indicatorWidth={3}
-                    isCyclic={true}
-                  />
-                </View>
+            </View>
+            <View style={S.pickercontainer}>
+              <Text style={S.pickerlabeltext}>Hours</Text>
+              <View style={{}}>
+                <WheelPicker
+                  data={hour}
+                  selectedItem={selectedtime.hour}
+                  indicatorColor={colors.holytosca}
+                  indicatorWidth={3}
+                  onItemSelected={(value) => setPickerHour(value)}
+                  isCyclic={true}
+                />
               </View>
             </View>
-
-            <View style={S.bottombuttonrowcontainer}>
-              <TouchableOpacity
-                style={S.buttoncontainer}
-                onPress={() => setIsDurationModalShown(false)}>
-                <Text style={S.bottombuttontext}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={S.buttoncontainer}
-                onPress={() => setDuration()}>
-                <Text style={S.bottombuttontext}>Set</Text>
-              </TouchableOpacity>
+            <View style={S.pickercontainer}>
+              <Text style={S.pickerlabeltext}>Min</Text>
+              <View style={{}}>
+                <WheelPicker
+                  data={minute}
+                  selectedItem={selectedtime.minute}
+                  onItemSelected={(value) => setPickerMinute(value)}
+                  indicatorColor={colors.holytosca}
+                  indicatorWidth={3}
+                  isCyclic={true}
+                />
+              </View>
             </View>
+          </View>
+          <View style={S.bottombuttonrowcontainer}>
+            <TouchableOpacity
+              style={S.buttoncontainer}
+              onPress={() => setIsDurationModalShown(false)}>
+              <Text style={S.bottombuttontext}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={S.buttoncontainer}
+              onPress={() => {
+                let selectedTime = {...selectedtime};
+                selectedTime.day = pickerDay;
+                selectedTime.hour = pickerHour;
+                selectedTime.minute = pickerMinute;
+                ontimechanged(selectedTime);
+                setIsDurationModalShown(false);
+              }}>
+              <Text style={S.bottombuttontext}>Set</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

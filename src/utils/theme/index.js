@@ -9,6 +9,23 @@ export const COLORS = {
   red: '#FF2E63',
   lightBlue: '#2F80ED',
   blueSea: '#55C2FF',
+  bondi_blue: '#00ADB5',
+  emperor: '#4F4F4F',
+  gray1: '#C4C4C4',
+  lightgrey: '#F5F5F5',
+  concrete: '#F2F2F2',
+  mine_shaft: '#333333',
+  bunting: '#11243D',
+  alto: '#E0E0E0',
+  porcelain: '#ecf0f1',
+  silver: '#BDBDBD',
+  french_pass: '#b6e4fd',
+  pattens_blue: '#ddf2fe',
+  blue: '#2F80ED',
+  holytosca: '#00ADB5',
+  holytosca30percent: '#00ADB54D',
+  blackgrey: '#828282',
+  redalert: '#FF2E63',
 };
 export const SIZES = {
   // global sizes
@@ -23,8 +40,8 @@ export const SIZES = {
   h3: 14,
   h4: 12,
   body1: 24,
-  body2: 26,
-  body3: 24,
+  body2: 16,
+  body3: 14,
   body4: 12,
 
   // app dimensions

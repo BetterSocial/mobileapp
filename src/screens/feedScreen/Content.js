@@ -8,6 +8,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
+import {useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
@@ -19,6 +20,7 @@ import {fonts} from '../../utils/fonts';
 const {width: screenWidth} = Dimensions.get('window');
 
 const Content = ({message, images_url, style, onPress}) => {
+  const route = useRoute();
   const cekImage = () => {
     return images_url !== null && images_url !== '' && images_url !== undefined;
   };
@@ -53,7 +55,7 @@ const Content = ({message, images_url, style, onPress}) => {
             />
           </View>
         ) : (
-          <View style={styles.containerShowMessage}>
+          <View style={styles.containerShowMessage(route.name)}>
             <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
               {message}
             </SeeMore>
@@ -84,10 +86,14 @@ const styles = StyleSheet.create({
     width: screenWidth - 32,
     borderRadius: 16,
   },
-  containerShowMessage: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
+  containerShowMessage: (currentRouteName) => {
+    return {
+      justifyContent: 'center',
+      alignItems: currentRouteName === 'Feed' ? 'center' : 'flex-start',
+      flex: 1,
+      paddingBottom: 10,
+      minHeight: 100,
+    };
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -132,6 +138,8 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginTop: 12,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],

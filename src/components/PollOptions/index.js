@@ -4,28 +4,59 @@ import {StyleSheet, TouchableNativeFeedback, View, Text} from 'react-native';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-let PollOptions = ({item, index, total}) => {
-  let optionPercentage = total === 0 ? 0 : item.counter / total;
+let PollOptions = ({
+  mypoll,
+  poll,
+  index,
+  total,
+  selectedindex,
+  isexpired = false,
+  isalreadypolling = false,
+  onselected = (index) => {},
+}) => {
+  let counter = poll?.counter || 0;
+  let optionPercentage = total === 0 ? 0 : (counter / total) * 100;
+
+  let isPollDisabled = () => isexpired || isalreadypolling;
+  let onPollPressed = () => {
+    if (isalreadypolling) return;
+    onselected(index);
+  };
+
+  let isMyPoll = () => mypoll?.polling_option_id === poll?.polling_option_id;
+  // console.log(mypoll);
+  // console.log("vs " + isMyPoll());
+  // console.log(poll);
+
   return (
-    <TouchableNativeFeedback>
+    <TouchableNativeFeedback onPress={onPollPressed}>
       <View
         key={`poll-options-${index}`}
         style={
-          index % 2 === 0
+          selectedindex === index
             ? styles.pollOptionItemContainerActive
             : styles.pollOptionItemContainer
         }>
-        <View style={styles.percentageBar(optionPercentage)} />
+        <View style={styles.percentageBar(optionPercentage, isMyPoll())} />
         <View style={styles.pollOptionTextContainer}>
-          <View
+          {isPollDisabled() ? (
+            <></>
+          ) : (
+            <View
+              style={
+                selectedindex === index
+                  ? styles.pollRadioButtonActive
+                  : styles.pollRadioButton
+              }
+            />
+          )}
+          <Text style={styles.pollOptionItemText(isexpired)}>
+            {poll?.option}
+          </Text>
+          <Text
             style={
-              index % 2 === 0
-                ? styles.pollRadioButtonActive
-                : styles.pollRadioButton
-            }
-          />
-          <Text style={styles.pollOptionItemText}>{item.option}</Text>
-          {/* <Text style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text> */}
+              styles.pollOptionItemPercentage
+            }>{`${optionPercentage}%`}</Text>
         </View>
       </View>
     </TouchableNativeFeedback>
@@ -60,18 +91,18 @@ let styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 12,
   },
-  pollOptionItemText: {
-    flex: 1,
-    color: colors.black,
-    fontFamily: fonts.inter[400],
+  pollOptionItemText: (isexpired) => {
+    return {
+      flex: 1,
+      color: colors.black,
+      fontFamily: fonts.inter[400],
+      marginStart: isexpired ? 12 : 0,
+    };
   },
-  percentageBar: (percent) => {
-    if (!percent) {
-      percent = 0;
-    }
-    if (percent > 100) {
-      percent = 100;
-    }
+  pollOptionItemPercentage: {},
+  percentageBar: (percent, isMyPoll = false) => {
+    if (!percent) percent = 0;
+    if (percent > 100) percent = 100;
 
     return {
       width: `${percent}%`,
@@ -79,7 +110,7 @@ let styles = StyleSheet.create({
       position: 'absolute',
       top: 0,
       left: 0,
-      backgroundColor: colors.bondi_blue,
+      backgroundColor: isMyPoll ? colors.bondi_blue : colors.gray1,
     };
   },
   totalpolltext: {
@@ -95,7 +126,7 @@ let styles = StyleSheet.create({
     borderRadius: 6,
     borderColor: colors.black,
     borderWidth: 1,
-    marginEnd: 12,
+    marginEnd: 8,
   },
 
   pollRadioButtonActive: {
@@ -104,7 +135,7 @@ let styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 6,
     backgroundColor: colors.holytosca,
-    marginEnd: 12,
+    marginEnd: 8,
   },
   totalVotesContainer: {
     display: 'flex',

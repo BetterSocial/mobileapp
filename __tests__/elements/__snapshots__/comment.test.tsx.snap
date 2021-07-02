@@ -6,7 +6,7 @@ exports[`component Comment Comment renders correctly 1`] = `
     Object {
       "borderLeftColor": "#C4C4C4",
       "borderLeftWidth": 1,
-      "paddingBottom": 16,
+      "width": "100%",
     }
   }
 >
@@ -14,7 +14,7 @@ exports[`component Comment Comment renders correctly 1`] = `
     style={
       Object {
         "flexDirection": "row",
-        "marginLeft": -12,
+        "marginLeft": -13,
       }
     }
   >
@@ -46,7 +46,7 @@ exports[`component Comment Comment renders correctly 1`] = `
             "fontFamily": "Inter-Bold",
             "fontSize": 12,
             "lineHeight": 14,
-            "marginLeft": 17,
+            "marginLeft": 16,
           }
         }
       >
@@ -84,6 +84,8 @@ exports[`component Comment Comment renders correctly 1`] = `
       Object {
         "flexDirection": "row",
         "justifyContent": "flex-end",
+        "marginBottom": 12,
+        "marginLeft": 30,
         "marginTop": 11.13,
       }
     }
@@ -106,11 +108,7 @@ exports[`component Comment Comment renders correctly 1`] = `
         }
       }
     >
-      <Icon
-        color="#C4C4C4"
-        name="back"
-        size={15.77}
-      />
+      <View />
       <Text
         style={
           Object {
@@ -118,6 +116,7 @@ exports[`component Comment Comment renders correctly 1`] = `
             "fontFamily": "Inter-Regular",
             "fontSize": 13,
             "marginLeft": 8.98,
+            "marginRight": 28.61,
           }
         }
       >
@@ -136,7 +135,6 @@ exports[`component Comment Comment renders correctly 1`] = `
       onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "marginLeft": 28.61,
           "marginRight": 28.51,
           "opacity": 1,
         }
@@ -195,7 +193,7 @@ exports[`component Comment Comment snapshot 1`] = `
     Object {
       "borderLeftColor": "#C4C4C4",
       "borderLeftWidth": 1,
-      "paddingBottom": 16,
+      "width": "100%",
     }
   }
 >
@@ -203,7 +201,7 @@ exports[`component Comment Comment snapshot 1`] = `
     style={
       Object {
         "flexDirection": "row",
-        "marginLeft": -12,
+        "marginLeft": -13,
       }
     }
   >
@@ -235,7 +233,7 @@ exports[`component Comment Comment snapshot 1`] = `
             "fontFamily": "Inter-Bold",
             "fontSize": 12,
             "lineHeight": 14,
-            "marginLeft": 17,
+            "marginLeft": 16,
           }
         }
       >
@@ -274,6 +272,8 @@ exports[`component Comment Comment snapshot 1`] = `
       Object {
         "flexDirection": "row",
         "justifyContent": "flex-end",
+        "marginBottom": 12,
+        "marginLeft": 30,
         "marginTop": 11.13,
       }
     }
@@ -287,11 +287,7 @@ exports[`component Comment Comment snapshot 1`] = `
         }
       }
     >
-      <Icon
-        color="#C4C4C4"
-        name="back"
-        size={15.77}
-      />
+      <Memo(CommentReply) />
       <Text
         style={
           Object {
@@ -299,6 +295,7 @@ exports[`component Comment Comment snapshot 1`] = `
             "fontFamily": "Inter-Regular",
             "fontSize": 13,
             "marginLeft": 8.98,
+            "marginRight": 28.61,
           }
         }
       >
@@ -308,7 +305,6 @@ exports[`component Comment Comment snapshot 1`] = `
     <ForwardRef
       style={
         Object {
-          "marginLeft": 28.61,
           "marginRight": 28.51,
         }
       }

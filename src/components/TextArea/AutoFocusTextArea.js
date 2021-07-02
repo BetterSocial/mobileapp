@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {StyleSheet, TextInput} from 'react-native';
+import PropTypes from 'prop-types';
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -14,9 +15,9 @@ export default class AutoFocusTextArea extends React.Component {
   componentDidMount() {
     setTimeout(() => {
       if (this.inputElement) {
-        this.inputElement.current.focus();
+        if (this.inputElement.current) this.inputElement.current.focus();
       }
-    }, 50);
+    }, this.props.keyboardAppearDelay || 50);
   }
 
   render() {
@@ -34,6 +35,14 @@ export default class AutoFocusTextArea extends React.Component {
     );
   }
 }
+
+AutoFocusTextArea.propTypes = {
+  keyboardAppearDelay: PropTypes.number,
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
+  onChangeText: PropTypes.func,
+  style: PropTypes.object,
+};
 
 const styles = StyleSheet.create({
   input: {

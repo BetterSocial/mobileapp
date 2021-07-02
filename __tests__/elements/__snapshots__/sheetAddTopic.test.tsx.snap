@@ -70,7 +70,7 @@ exports[`component SheetAddTopic SheetAddTopic renders correctly 1`] = `
           "backgroundColor": "#fff",
           "borderTopLeftRadius": 20,
           "borderTopRightRadius": 20,
-          "height": "auto",
+          "height": 0,
           "overflow": "hidden",
           "transform": Array [
             Object {
@@ -170,6 +170,7 @@ exports[`component SheetAddTopic SheetAddTopic renders correctly 1`] = `
                       "fontFamily": "Inter-Regular",
                       "fontSize": 12,
                       "fontWeight": "400",
+                      "marginTop": -8,
                     }
                   }
                 >
@@ -179,6 +180,7 @@ exports[`component SheetAddTopic SheetAddTopic renders correctly 1`] = `
                   allowFontScaling={true}
                   autoCapitalize="none"
                   blurOnSubmit={false}
+                  multiline={true}
                   onChangeText={[Function]}
                   onSubmitEditing={[Function]}
                   rejectResponderTermination={true}
@@ -188,6 +190,7 @@ exports[`component SheetAddTopic SheetAddTopic renders correctly 1`] = `
                       "width": "100%",
                     }
                   }
+                  textAlignVertical="top"
                   underlineColorAndroid="transparent"
                   value=""
                 />
@@ -260,7 +263,6 @@ exports[`component SheetAddTopic SheetAddTopic snapshot 1`] = `
       "container": Object {
         "borderTopLeftRadius": 20,
         "borderTopRightRadius": 20,
-        "height": "auto",
       },
       "draggableIcon": Object {
         "backgroundColor": "#E0E0E0",
@@ -268,7 +270,7 @@ exports[`component SheetAddTopic SheetAddTopic snapshot 1`] = `
     }
   }
   dragFromTopOnly={false}
-  height={260}
+  height={330}
   keyboardAvoidingViewEnabled={false}
   minClosingHeight={0}
   onClose={[Function]}
@@ -334,25 +336,23 @@ exports[`component SheetAddTopic SheetAddTopic snapshot 1`] = `
                 "fontFamily": "Inter-Regular",
                 "fontSize": 12,
                 "fontWeight": "400",
+                "marginTop": -8,
               }
             }
           >
             #
           </Text>
-          <Component
-            allowFontScaling={true}
+          <AutoFocusTextArea
             autoCapitalize="none"
             blurOnSubmit={false}
             onChangeText={[Function]}
             onSubmitEditing={[Function]}
-            rejectResponderTermination={true}
             style={
               Object {
                 "paddingStart": 0,
                 "width": "100%",
               }
             }
-            underlineColorAndroid="transparent"
             value=""
           />
         </View>

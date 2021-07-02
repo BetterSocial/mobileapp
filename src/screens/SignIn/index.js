@@ -14,8 +14,6 @@ import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {colors} from 'react-native-swiper-flatlist/src/themes';
 
-import Loading from '../Loading';
-import SlideShow from './elements/SlideShow';
 import {
   setUserId,
   setAccessToken,
@@ -29,6 +27,8 @@ import {verifyUser} from '../../service/users';
 import {setDataHumenId} from '../../context/actions/users';
 import StringConstant from '../../utils/string/StringConstant';
 import ButtonSign from '../../assets/icon-svg/button_sign.svg';
+import Loading from '../Loading';
+import SlideShow from './elements/SlideShow';
 
 const ENABLE_DEV_ONLY_FEATURE = true;
 

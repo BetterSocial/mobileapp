@@ -68,14 +68,10 @@ const ProfileScreen = () => {
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
   const [errorBio, setErrorBio] = React.useState('');
   let [rerender, setRerender] = React.useState(0);
-  const [
-    isLoadingUpdateImageGalery,
-    setIsLoadingUpdateImageGalery,
-  ] = React.useState(false);
-  const [
-    isLoadingUpdateImageCamera,
-    setIsLoadingUpdateImageCamera,
-  ] = React.useState(false);
+  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] =
+    React.useState(false);
+  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
+    React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
 
@@ -85,8 +81,6 @@ const ProfileScreen = () => {
 
     getAccessToken().then((val) => {
       setTokenJwt(val);
-      setRerender(rerender++);
-      setRerender(rerender++);
     });
     analytics().logScreenView({
       screen_class: 'ProfileScreen',
@@ -101,8 +95,13 @@ const ProfileScreen = () => {
         id: 'myprofile_end_view',
         myprofile_end_view: Date.now(),
       });
+      analytics().logEvent('myprofile_begin_view', {
+        id: 'profile_begin',
+        myprofile_begin_view: Date.now(),
+      });
     };
   }, []);
+  
   const fetchMyProfile = async (withLoading) => {
     const value = await getAccessToken();
     if (value) {
@@ -129,7 +128,6 @@ const ProfileScreen = () => {
         navigation: {
           forcedRedirectEnabled: false,
         },
-
         android: {
           packageName: 'org.bettersocial.dev',
         },
@@ -149,12 +147,9 @@ const ProfileScreen = () => {
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
-          // shared with activity type of result.activityType
         } else {
-          // shared
         }
       } else if (result.action === Share.dismissedAction) {
-        // dismissed
       }
     } catch (error) {
       alert(error.message);

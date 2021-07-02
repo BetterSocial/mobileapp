@@ -1,0 +1,227 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component Header Header renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "borderBottomColor": "#e8e8e8",
+      "borderBottomWidth": 1,
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "paddingHorizontal": 20,
+      "paddingVertical": 10,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Image
+      source={
+        Object {
+          "testUri": "../../../src/assets/images/ProfileDefault.png",
+        }
+      }
+      style={
+        Object {
+          "height": 32,
+          "marginRight": 10,
+          "width": 32,
+        }
+      }
+    />
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#e8e8e8",
+          "borderRadius": 16,
+          "height": 32,
+          "justifyContent": "center",
+          "opacity": 1,
+          "width": 32,
+        }
+      }
+    >
+      <Icon
+        name="search"
+        size={20}
+      />
+    </View>
+  </View>
+  <Text
+    style={
+      Object {
+        "color": "#363131",
+        "fontFamily": "Inter-Bold",
+        "fontSize": 18,
+      }
+    }
+  >
+    Post
+  </Text>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "height": undefined,
+            "width": undefined,
+          },
+          Object {
+            "width": 50,
+          },
+        ]
+      }
+    />
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#e8e8e8",
+          "borderRadius": 16,
+          "height": 32,
+          "justifyContent": "center",
+          "opacity": 1,
+          "width": 32,
+        }
+      }
+    >
+      <Icon
+        name="settings"
+        size={20}
+      />
+    </View>
+  </View>
+</View>
+`;
+
+exports[`component Header Header snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "borderBottomColor": "#e8e8e8",
+      "borderBottomWidth": 1,
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "paddingHorizontal": 20,
+      "paddingVertical": 10,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Image
+      source={
+        Object {
+          "testUri": "../../../src/assets/images/ProfileDefault.png",
+        }
+      }
+      style={
+        Object {
+          "height": 32,
+          "marginRight": 10,
+          "width": 32,
+        }
+      }
+    />
+    <ForwardRef
+      onPress={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#e8e8e8",
+          "borderRadius": 16,
+          "height": 32,
+          "justifyContent": "center",
+          "width": 32,
+        }
+      }
+    >
+      <Icon
+        name="search"
+        size={20}
+      />
+    </ForwardRef>
+  </View>
+  <Text
+    style={
+      Object {
+        "color": "#363131",
+        "fontFamily": "Inter-Bold",
+        "fontSize": 18,
+      }
+    }
+  >
+    Post
+  </Text>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Gap
+      style={
+        Object {
+          "width": 50,
+        }
+      }
+    />
+    <ForwardRef
+      onPress={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#e8e8e8",
+          "borderRadius": 16,
+          "height": 32,
+          "justifyContent": "center",
+          "width": 32,
+        }
+      }
+    >
+      <Icon
+        name="settings"
+        size={20}
+      />
+    </ForwardRef>
+  </View>
+</View>
+`;

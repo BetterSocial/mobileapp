@@ -72,3 +72,17 @@ export const getFeedDetail = async (id) => {
     return null;
   }
 };
+
+export const inputSingleChoicePoll = async (polling_id, polling_option_id) => {
+  try {
+    let resApi = await api.post('/activity/post/poll/input', {
+      polling_id,
+      polling_option_id,
+    });
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(error.response.data);
+    // console.log(error);
+    return error;
+  }
+};

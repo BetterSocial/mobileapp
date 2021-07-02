@@ -42,10 +42,19 @@ let onboardingTopicsOthersCannotSee =
 let onboardingTopicsButtonStateNext = 'NEXT';
 let onboardingTopicsButtonStateChooseMore = (count) => `CHOOSE ${count} MORE`;
 
+// Post Detail Page
+let postDetailPageSeeReplies = (count) => {
+  return `See ${count} ${count > 1 ? `replies` : 'reply'}`;
+};
+
+// News Tab
+let newsTabHeaderPlaceholder = 'Search News';
+
 // Component
 let headerIosSkip = 'Skip';
 let searchModalTitle = 'Search';
 let searchModalPlaceholder = 'Search by ZIP, neighborhood or city';
+let commentBoxDefaultPlaceholder = 'Add a reply';
 
 // Wording need to be discussed :
 // Splash Screen
@@ -83,7 +92,12 @@ export default {
   onboardingTopicsButtonStateNext,
   onboardingTopicsButtonStateChooseMore,
 
+  postDetailPageSeeReplies,
+
+  newsTabHeaderPlaceholder,
+
   headerIosSkip,
   searchModalTitle,
   searchModalPlaceholder,
+  commentBoxDefaultPlaceholder,
 };

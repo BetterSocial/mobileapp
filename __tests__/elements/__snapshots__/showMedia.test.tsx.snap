@@ -70,9 +70,62 @@ Array [
         <View
           style={
             Object {
+<<<<<<< HEAD
+              "alignItems": "center",
+              "borderColor": "#E0E0E0",
+              "borderRadius": 8,
+              "borderStyle": "dashed",
+              "borderWidth": 2,
+              "height": 120,
+              "justifyContent": "center",
+              "opacity": 1,
+              "paddingVertical": 32,
+              "width": 120,
+              "zIndex": 99,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "#000000",
+                "fontFamily": "Inter-Regular",
+                "fontSize": 12,
+                "textAlign": "center",
+                "width": 91,
+              }
+            }
+          >
+            +add more photos
+          </Text>
+        </View>
+        <View
+          style={
+            Array [
+              Object {
+                "height": undefined,
+                "width": undefined,
+              },
+              Object {
+                "width": 8,
+              },
+            ]
+          }
+        />
+        <View
+          accessibilityIgnoresInvertColors={true}
+          style={
+            Object {
+              "alignItems": "flex-end",
+              "height": 120,
+              "marginRight": 12,
+              "marginTop": 10,
+              "width": 120,
+=======
               "backgroundColor": "gray",
               "flex": 1,
               "width": 750,
+>>>>>>> 12d39802d188a192e8d24698fe19cc898bf44e2c
             }
           }
         >

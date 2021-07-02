@@ -12,17 +12,83 @@ import {
 
 import SeeMore from 'react-native-see-more-inline';
 
+import {inputSingleChoicePoll} from '../../service/post';
+import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
 import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
+import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-const ContentPoll = ({message, images_url, polls = [], onPress}) => {
+const ContentPoll = ({
+  message,
+  images_url,
+  polls = [],
+  onPress,
+  item,
+  multiplechoice = false,
+  onnewpollfetched,
+  isalreadypolling,
+  pollexpiredat,
+  index = -1,
+}) => {
   let totalPollCount = polls.reduce((acc, current) => {
     return acc + parseInt(current.counter);
   }, 0);
+
+  let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = React.useState(-1);
+  let [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
+  let [isFetchingResultPoll, setIsFetchingResultPoll] = React.useState(false);
+  let [isAlreadyPolling, setIsAlreadyPolling] = React.useState(isalreadypolling);
+
+  let onSeeResultsClicked = () => {
+    if (isFetchingResultPoll) return;
+    // setIsFetchingResultPoll(true);
+    let newPolls = [...polls];
+    let newItem = {...item};
+
+    if (multiplechoice) {
+      if (multipleChoiceSelected.length === 0) return;
+      setIsAlreadyPolling(true);
+      let selectedPolls = [];
+      for (let i = 0; i < multipleChoiceSelected.length; i++) {
+        let changedPollIndex = multipleChoiceSelected[i];
+        let selectedPoll = polls[changedPollIndex];
+        newPolls[changedPollIndex].counter = parseInt(selectedPoll.counter) + 1;
+        selectedPolls.push(selectedPoll);
+        inputSingleChoicePoll(
+          selectedPoll.polling_id,
+          selectedPoll.polling_option_id,
+        );
+      }
+      newItem.isalreadypolling = true;
+      newItem.refreshtoken = new Date().valueOf();
+      newItem.pollOptions = newPolls;
+      newItem.mypolling = selectedPolls;
+      onnewpollfetched(newItem, index);
+      setIsAlreadyPolling(true);
+    } else {
+      if (singleChoiceSelectedIndex === -1) return;
+      let selectedPoll = polls[singleChoiceSelectedIndex];
+      newPolls[singleChoiceSelectedIndex].counter = parseInt(selectedPoll.counter) + 1;
+      newItem.isalreadypolling = true;
+      newItem.refreshtoken = new Date().valueOf();
+      newItem.pollOptions = newPolls;
+      newItem.mypolling = selectedPoll;
+      onnewpollfetched(newItem, index);
+      setIsAlreadyPolling(true);
+      inputSingleChoicePoll(
+        selectedPoll.polling_id,
+        selectedPoll.polling_option_id,
+      );
+    }
+  };
+
+  let showSetResultsButton = () => {
+    return !isPollExpired(pollexpiredat) && !isAlreadyPolling;
+  };
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.contentFeed}>
@@ -60,16 +126,34 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
             </SeeMore>
 
             <View style={styles.pollOptionsContainer}>
-              {polls.map((item, index) => {
+              {polls.map((pollItem, index) => {
                 /*
                   TODO : Count percentage
                 */
 
-                return (
-                  <PollOptions
-                    item={item}
+                return multiplechoice ? (
+                  <PollOptionsMultipleChoice
+                    item={pollItem}
                     index={index}
+                    mypoll={item.mypolling}
+                    selectedindex={multipleChoiceSelected}
+                    onselected={(indexes) => {
+                      setMultipleChoiceSelected(indexes);
+                    }}
+                    isexpired={isPollExpired(pollexpiredat)}
+                    isalreadypolling={isAlreadyPolling}
                     total={totalPollCount}
+                  />
+                ) : (
+                  <PollOptions
+                    poll={pollItem}
+                    mypoll={item.mypolling}
+                    index={index}
+                    selectedindex={singleChoiceSelectedIndex}
+                    total={totalPollCount}
+                    isexpired={isPollExpired(pollexpiredat)}
+                    isalreadypolling={isAlreadyPolling}
+                    onselected={(index) => setSingleChoiceSelectedIndex(index)}
                   />
                 );
               })}
@@ -78,10 +162,28 @@ const ContentPoll = ({message, images_url, polls = [], onPress}) => {
             <View style={styles.totalVotesContainer}>
               <Text
                 style={styles.totalpolltext}>{`${totalPollCount} votes `}</Text>
-              <View style={styles.dot} />
-              <Text style={styles.totalpolltext}>
-                {' 24 hours 34 minutes left'}
-              </Text>
+              <View
+                style={{
+                  width: 4,
+                  height: 4,
+                  borderRadius: 4,
+                  alignSelf: 'center',
+                  backgroundColor: colors.blackgrey,
+                }}
+              />
+              <Text style={styles.polltime}>{` ${getPollTime(
+                pollexpiredat,
+              )}`}</Text>
+
+              {showSetResultsButton() && (
+                <View style={styles.seeresultscontainer}>
+                  <TouchableOpacity onPress={onSeeResultsClicked}>
+                    <Text style={styles.seeresultstext}>
+                      {isFetchingResultPoll ? 'Loading...' : 'See Results'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           </View>
         )
@@ -150,6 +252,8 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginTop: 12,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
@@ -254,6 +358,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     color: colors.blackgrey,
+    alignSelf: 'center',
+  },
+  polltime: {
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    lineHeight: 16,
+    color: colors.blackgrey,
+    alignSelf: 'center',
+    flex: 1,
   },
   pollRadioButton: {
     width: 12,
@@ -276,5 +389,13 @@ const styles = StyleSheet.create({
   totalVotesContainer: {
     display: 'flex',
     flexDirection: 'row',
+    marginBottom: 10,
+  },
+  seeresultscontainer: {
+    alignSelf: 'center',
+  },
+  seeresultstext: {
+    color: colors.holytosca,
+    fontFamily: fonts.inter[500],
   },
 });

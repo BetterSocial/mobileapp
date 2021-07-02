@@ -3,7 +3,6 @@ import {StyleSheet, Text} from 'react-native';
 
 import jwtDecode from 'jwt-decode';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
 import {
   ChannelListScreen,
   FeedScreen,

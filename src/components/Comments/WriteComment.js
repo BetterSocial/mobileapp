@@ -10,24 +10,50 @@ import {
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import StringConstant from '../../utils/string/StringConstant';
+import MemoSendComment from '../../assets/icon/IconSendComment';
 
-const WriteComment = ({value = null, onPress, onChangeText}) => {
+const WriteComment = ({
+  value = null,
+  onPress,
+  onChangeText,
+  username,
+  inReplyCommentView = false,
+}) => {
+  let isCommentEnabled = value.length > 0;
+  let isSendButtonPressed = () => {
+    if (isCommentEnabled) {
+      return onPress();
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={require('../../assets/images/ProfileDefault.png')}
-      />
-      <View style={styles.content}>
-        <TextInput
-          placeholder="Add a comment"
-          multiline={true}
-          style={styles.text}
-          onChangeText={onChangeText}
-          value={value}
+    <View style={styles.columnContainer}>
+      <View style={styles.connectorTop(inReplyCommentView)} />
+      <Text style={styles.replyToContainer(inReplyCommentView)}>
+        <Text style={styles.replyToTitle}>Reply to </Text>
+        {username}
+      </Text>
+      <View style={styles.container(inReplyCommentView)}>
+        <View style={styles.connectorBottom(inReplyCommentView)} />
+        <Image
+          style={styles.image}
+          source={require('../../assets/images/ProfileDefault.png')}
         />
-        <TouchableOpacity onPress={onPress} style={styles.btn}>
-          <Text style={styles.btnText}>Reply</Text>
+        <View style={styles.content}>
+          <TextInput
+            placeholder={StringConstant.commentBoxDefaultPlaceholder}
+            multiline={false}
+            placeholderTextColor={colors.gray1}
+            style={styles.text}
+            onChangeText={onChangeText}
+            value={value}
+          />
+        </View>
+        <TouchableOpacity
+          onPress={isSendButtonPressed}
+          style={styles.btn(isCommentEnabled)}>
+          <MemoSendComment style={styles.icSendButton} />
         </TouchableOpacity>
       </View>
     </View>
@@ -37,44 +63,108 @@ const WriteComment = ({value = null, onPress, onChangeText}) => {
 export default WriteComment;
 
 const styles = StyleSheet.create({
-  container: {
+  columnContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: colors.white,
     flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: colors.gray1,
-    backgroundColor: '#fff',
+    width: '100%',
     position: 'absolute',
     bottom: 0,
-    width: '100%',
-    paddingHorizontal: 22,
-    paddingVertical: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: colors.gray1,
+    // zIndex: 1,
+    paddingBottom: 14,
+  },
+  replyToContainer: (inReplyCommentView) => {
+    return {
+      marginLeft: inReplyCommentView ? 90 : 60,
+      fontFamily: fonts.inter[500],
+      marginBottom: 11,
+      marginTop: 7,
+      lineHeight: 14.52,
+      color: colors.gray1,
+    };
+  },
+  replyToTitle: {
+    fontFamily: fonts.inter[700],
+    lineHeight: 14.52,
+    color: colors.black,
+  },
+  container: (inReplyCommentView) => {
+    return {
+      flex: 1,
+      backgroundColor: '#fff',
+      width: '100%',
+      paddingRight: 10,
+      paddingLeft: inReplyCommentView ? 50 : 20,
+      flexDirection: 'row',
+      zIndex: 100,
+      // backgroundColor: 'red',
+      alignItems: 'center',
+    };
   },
   content: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    // alignItems: 'center',
     backgroundColor: colors.lightgrey,
     marginLeft: 10,
-    borderRadius: 5,
-    paddingHorizontal: 15,
-    marginEnd: 24,
-  },
-  btn: {
-    backgroundColor: '#00ADB5',
-    paddingHorizontal: 16,
-    paddingVertical: 4,
     borderRadius: 8,
-    width: 80,
-    height: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingLeft: 6,
+    paddingRight: 8,
+    marginEnd: 8,
+    flex: 1,
+  },
+  btn: (isCommentEnabled) => {
+    return {
+      backgroundColor: isCommentEnabled ? colors.bondi_blue : colors.gray1,
+      borderRadius: 18,
+      width: 35,
+      height: 35,
+      display: 'flex',
+      justifyContent: 'center',
+    };
   },
   btnText: {color: 'white', fontFamily: fonts.inter[400]},
   image: {
-    width: 32,
-    height: 32,
+    width: 36,
+    height: 36,
+    marginLeft: -7,
+    zIndex: -10,
   },
   text: {
     flex: 1,
+    fontSize: 12,
+    fontFamily: fonts.inter[400],
+    color: colors.black,
+    lineHeight: 14.52,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  icSendButton: {
+    alignSelf: 'center',
+  },
+  connectorTop: (inReplyCommentView) => {
+    return {
+      height: 36,
+      width: 1,
+      backgroundColor: colors.gray1,
+      position: 'absolute',
+      top: 0,
+      left: inReplyCommentView ? 60 : 30,
+      zIndex: -100,
+    };
+  },
+  connectorBottom: (inReplyCommentView) => {
+    return {
+      height: 20,
+      width: 1,
+      backgroundColor: colors.gray1,
+      position: 'absolute',
+      top: 0,
+      left: inReplyCommentView ? 60 : 30,
+      zIndex: -100,
+    };
   },
 });

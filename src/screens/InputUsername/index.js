@@ -112,9 +112,8 @@ const ChooseUsername = () => {
 
       if (typeFetch === 'notavailable') {
         return showMessage({
-          message: StringConstant.onboardingChooseUsernameLabelUserTaken(
-            username,
-          ),
+          message:
+            StringConstant.onboardingChooseUsernameLabelUserTaken(username),
           type: 'danger',
           backgroundColor: colors.red,
         });
@@ -192,7 +191,7 @@ const ChooseUsername = () => {
             <TouchableOpacity
               style={styles.containerAddIcon}
               onPress={() => onPhoto()}>
-              <View>
+              <View style={{}}>
                 <Image
                   source={{
                     uri: users.photo
@@ -246,7 +245,7 @@ const styles = StyleSheet.create({
   containerInput: {
     flexDirection: 'row',
     marginTop: 28,
-    marginBottom: 24,
+    marginBottom: 20,
   },
   container: {
     flex: 1,

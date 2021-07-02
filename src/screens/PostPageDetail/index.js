@@ -1,10 +1,24 @@
 import * as React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
-
 import JWTDecode from 'jwt-decode';
 import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 
+import {
+  POST_VERB_POLL,
+  POST_VERB_STANDARD,
+  POST_VERB_LINK,
+  POST_TYPE_LINK,
+  POST_TYPE_POLL,
+  POST_TYPE_STANDARD,
+} from '../../utils/constants';
+import {fonts} from '../../utils/fonts';
+import {getMyProfile} from '../../service/profile';
+import {blockUser} from '../../service/blocking';
+import {downVote, upVote} from '../../service/vote';
+import {getFeedDetail} from '../../service/post';
+import {createCommentParent} from '../../service/comment';
 import Gap from '../../components/Gap';
 import Footer from '../feedScreen/Footer';
 import Header from '../feedScreen/Header';
@@ -17,19 +31,8 @@ import ReportDomain from '../../components/Blocking/ReportDomain';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import WriteComment from '../../components/Comments/WriteComment';
 import ContainerComment from '../../components/Comments/ContainerComment';
-import {fonts} from '../../utils/fonts';
-import {getMyProfile} from '../../service/profile';
-import {blockUser} from '../../service/blocking';
-import {downVote, upVote} from '../../service/vote';
 import ContentPoll from '../feedScreen/ContentPoll';
-import {
-  POST_TYPE_LINK,
-  POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
-} from '../../utils/constants';
-import {createCommentParent} from '../../service/comment';
 import ContentLink from '../feedScreen/ContentLink';
-import {getFeedDetail} from '../../service/post';
 
 const {width, height} = Dimensions.get('window');
 
@@ -43,7 +46,6 @@ const PostPageDetail = (props) => {
   const refReportUser = React.useRef();
   const refReportDomain = React.useRef();
   const refSpecificIssue = React.useRef();
-  const [item, setItem] = React.useState(props.route.params.item);
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
   const [typeComment, setTypeComment] = React.useState('parent');
@@ -53,6 +55,23 @@ const PostPageDetail = (props) => {
   const [username, setUsername] = React.useState('');
   const [postId, setPostId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+
+  const scrollViewRef = React.useRef(null);
+
+  let itemProp = props.route.params.item;
+  let comments = itemProp.latest_reactions.comment || [];
+  let sortedComment = comments.sort((current, next) => {
+    let currentMoment = moment(current.updated_at);
+    let nextMoment = moment(next.updated_at);
+    return currentMoment.diff(nextMoment);
+  });
+
+  let newItemProp = {...itemProp};
+  newItemProp.latest_reactions.comment = sortedComment;
+
+  const [item, setItem] = React.useState(newItemProp);
+
+  // console.log(item.latest_reactions.comment);
 
   React.useEffect(() => {
     const initial = () => {
@@ -167,10 +186,18 @@ const PostPageDetail = (props) => {
   };
 
   const updateFeed = async () => {
-    let data = await getFeedDetail(item.id);
-    if (data) {
-      console.log('reed', data.results[0]);
-      setItem(data.results[0]);
+    console.log('update feed');
+    try {
+      let data = await getFeedDetail(item.id);
+      if (data) {
+        console.log('reed', data.results[0]);
+        setItem(data.results[0]);
+      } else {
+        console.log('else if');
+      }
+    } catch (e) {
+      console.log('error updating feed');
+      console.log(e);
     }
   };
 
@@ -186,7 +213,7 @@ const PostPageDetail = (props) => {
         let data = await createCommentParent(textComment, item.id);
         if (data.code === 200) {
           setTextComment('');
-          updateFeed();
+          // updateFeed();
           Toast.show('Comment successful', Toast.LONG);
         } else {
           Toast.show('Failed Comment', Toast.LONG);
@@ -220,20 +247,34 @@ const PostPageDetail = (props) => {
     props.navigation.navigate('DomainScreen', {
       item: item,
     });
+    // scrollViewRef.current.scrollTo
+  };
+
+  const onCommentButtonClicked = () => {
+    console.log('Comment Button Clicked');
+    scrollViewRef.current.scrollToEnd();
   };
 
   return (
     <View style={styles.container}>
       <ScrollView
+        ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
-        style={{height: height * 0.9}}>
-        <View style={styles.content}>
+        style={styles.contentScrollView}>
+        <View style={styles.content(height)}>
           <Header props={item} isBackButton={true} />
           {item.post_type === POST_TYPE_POLL && (
             <ContentPoll
+              index={0}
               message={item.message}
               images_url={item.images_url}
               polls={item.pollOptions}
+              onPress={() => {}}
+              item={item}
+              pollexpiredat={item.polls_expired_at}
+              multiplechoice={item.multiplechoice}
+              isalreadypolling={item.isalreadypolling}
+              onnewpollfetched={() => {}}
             />
           )}
 
@@ -245,7 +286,10 @@ const PostPageDetail = (props) => {
             <Content
               message={item.message}
               images_url={item.images_url}
-              style={item.images_url.length > 0 ? {height: height * 0.5} : null}
+              style={styles.additionalContentStyle(
+                item.images_url.length,
+                height,
+              )}
             />
           )}
 
@@ -261,7 +305,7 @@ const PostPageDetail = (props) => {
               setDownVote(v.id);
             }}
             onPressShare={() => {}}
-            onPressComment={() => {}}
+            onPressComment={onCommentButtonClicked}
             onPressBlock={(value) => {
               if (value.actor.id === yourselfId) {
                 Toast.show("Can't Block yourself", Toast.LONG);
@@ -278,6 +322,7 @@ const PostPageDetail = (props) => {
         )}
       </ScrollView>
       <WriteComment
+        username={item.actor.data.username}
         value={textComment}
         onChangeText={(value) => setTextComment(value)}
         onPress={() => {
@@ -315,8 +360,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     flex: 1,
-    paddingBottom: 75,
-    paddingTop: 8,
+    // marginBottom: 86,
   },
   containerText: {
     marginTop: 20,
@@ -332,18 +376,34 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
   },
-  content: {
-    width: width,
-    borderRadius: 5,
-    shadowColor: 'rgba(0,0,0,0.5)',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.5,
-    backgroundColor: 'white',
-    paddingHorizontal: 16,
-    marginBottom: 16,
+  content: (height) => {
+    return {
+      width: width,
+      borderRadius: 5,
+      shadowColor: 'rgba(0,0,0,0.5)',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.5,
+      backgroundColor: 'white',
+      paddingHorizontal: 16,
+      marginBottom: 16,
+      height: height - 100,
+    };
   },
   gap: {height: 16},
+  additionalContentStyle: (imageLength, height) => {
+    if (imageLength > 0) {
+      return {
+        height: height * 0.5,
+      };
+    } else {
+      return {};
+    }
+  },
+  contentScrollView: {
+    height: height,
+    marginBottom: 82,
+  },
 });

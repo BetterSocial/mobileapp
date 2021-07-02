@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {View, Text, Image, Linking, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Linking,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -11,48 +18,65 @@ import {fonts} from '../../utils/fonts';
 import Gap from '../Gap';
 
 const Card = (props) => {
-  const {title, description, image, url, domain, domainImage, date} = props;
+  const {
+    title,
+    description,
+    image,
+    url,
+    domain,
+    domainImage,
+    date,
+    onCardPress,
+  } = props;
+  // const styles = buildStylesheet('card', props.styles);
+
   return (
-    <View style={styles.container}>
-      <Header domain={domain} image={domainImage} date={date} />
-      <View style={styles.content}>
-        <Text style={styles.title}>
-          {_.truncate(title, {length: 60, separator: ''})}
-        </Text>
-        <Image
-          style={styles.image}
-          source={image ? {uri: image} : null}
-          resizeMethod="resize"
-        />
-        <Text style={styles.description}>
-          {/* {_.truncate(description, {length: 120})} */}
-          {description}
-          <Gap style={styles.width(2)} />
-          <Text
-            onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
-            style={styles.link}>
-            Open Link
+    <TouchableOpacity onPress={onCardPress}>
+      <View style={styles.container}>
+        <Header domain={domain} image={domainImage} date={date} />
+        <View style={styles.content}>
+          <Text style={styles.title}>
+            {_.truncate(title, {length: 60, separator: ''})}
           </Text>
-        </Text>
+          <Image
+            style={styles.image}
+            source={image ? {uri: image} : null}
+            resizeMethod="resize"
+          />
+          <Text style={styles.description}>
+            {/* {_.truncate(description, {length: 120})} */}
+            {description}
+            <Gap style={styles.width(2)} />
+            <Text
+              onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
+              style={styles.link}>
+              Open Link
+            </Text>
+          </Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
+
 const Header = ({domain, image, date}) => (
-  <View style={styles.constainerHeader}>
-    <View style={styles.contentHeader}>
+  <View style={styles.headerContainer}>
+    <View style={styles.headerImageContainer}>
       <Image
-        style={[styles.imageHeader, StyleSheet.absoluteFillObject]}
+        style={[
+          {height: '100%', width: '100%', borderRadius: 45},
+          StyleSheet.absoluteFillObject,
+        ]}
         source={{uri: image}}
         resizeMode={'cover'}
       />
     </View>
-    <Gap style={styles.width(8)} />
-    <View style={styles.containerDomain}>
-      <View style={styles.contentDomain}>
-        <Text style={styles.domain}>{domain}</Text>
+    <Gap style={{width: 8}} />
+    <View style={styles.headerDomainDateContainer}>
+      <View style={styles.headerDomainDateRowContainer}>
+        <Text style={styles.cardHeaderDomainName}>{domain}</Text>
         <View style={styles.point} />
-        <Text style={styles.date}>{date}</Text>
+        <Text style={styles.cardHeaderDate}>{date}</Text>
       </View>
       <MemoIc_rectangle_gradient height={10} width={180} />
     </View>
@@ -112,27 +136,55 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     paddingBottom: 8,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    paddingTop: 12,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  headerImageContainer: {
+    borderRadius: 45,
+    borderWidth: 0.2,
+    borderColor: 'rgba(0,0,0,0.5)',
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerDomainDateContainer: {
+    justifyContent: 'space-around',
+    marginLeft: 8,
+  },
+  headerDomainDateRowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   image: {
     width: '100%',
     height: 135,
   },
   content: {
-    // padding: 8,
+    paddingTop: 8,
   },
   title: {
     color: '#000000',
-    fontWeight: '500',
+    fontWeight: '700',
     fontSize: 14,
     lineHeight: 17,
-    marginBottom: 7,
-    fontFamily: fonts.inter[400],
+    marginBottom: 8,
+    fontFamily: fonts.inter[700],
     paddingHorizontal: 8,
+    paddingRight: 20,
+    paddingLeft: 20,
   },
   description: {
     color: '#364047',
     fontSize: 12,
     fontFamily: fonts.inter[600],
-    paddingHorizontal: 8,
+    paddingRight: 20,
+    paddingLeft: 20,
+    marginTop: 5,
+    lineHeight: 18,
   },
   point: {
     width: 4,
@@ -141,6 +193,26 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
     marginLeft: 8,
     marginRight: 8,
+  },
+  cardHeaderDomainName: {
+    fontSize: 12,
+    lineHeight: 16,
+    color: '#000000',
+    fontWeight: 'bold',
+    fontFamily: fonts.inter[600],
+    // marginLeft: 8,
+  },
+  cardHeaderDate: {
+    fontSize: 12,
+    color: '#828282',
+    fontFamily: fonts.inter[200],
+  },
+  openLinkText: {
+    color: '#2f80ed',
+    textDecorationLine: 'underline',
+    marginStart: 8,
+    fontFamily: 'bold',
+    fontSize: 12,
   },
 });
 
