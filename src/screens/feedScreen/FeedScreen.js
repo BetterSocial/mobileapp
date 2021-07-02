@@ -152,21 +152,11 @@ const FeedScreen = (props) => {
       setUserId(value.actor.id);
     }
   };
-  const setUpVote = async (id) => {
-    let result = await upVote({activity_id: id});
-    if (result.code === 200) {
-      Toast.show('up vote was successful', Toast.LONG);
-    } else {
-      Toast.show('up vote failed', Toast.LONG);
-    }
+  const setUpVote = async (post) => {
+    upVote(post);
   };
-  const setDownVote = async (id) => {
-    let result = await downVote({activity_id: id});
-    if (result.code === 200) {
-      Toast.show('down vote success', Toast.LONG);
-    } else {
-      Toast.show('down vote failed', Toast.LONG);
-    }
+  const setDownVote = async (post) => {
+    downVote(post);
   };
 
   React.useEffect(() => {
@@ -239,12 +229,8 @@ const FeedScreen = (props) => {
                   onPressComment={() => {
                     props.navigation.navigate('PostDetailPage', {item: item});
                   }}
-                  onPressUpvote={(value) => {
-                    setUpVote(value.id);
-                  }}
-                  onPressDownVote={(value) => {
-                    setDownVote(value.id);
-                  }}
+                  onPressUpvote={(post) => setUpVote(post)}
+                  onPressDownVote={(post) => setDownVote(post)}
                   selfUserId={yourselfId}
                   onPressDomain={() => {
                     props.navigation.navigate('DomainScreen', {

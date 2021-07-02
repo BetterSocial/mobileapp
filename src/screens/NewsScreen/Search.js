@@ -11,6 +11,7 @@ import {
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../assets/icons/Ic_search';
 import StringConstant from '../../utils/string/StringConstant';
+import {fonts} from '../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 
 const Search = ({onPress, animatedValue}) => {
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     marginBottom: SIZES.base,
+    marginHorizontal: SIZES.base,
   },
   wrapperSearch: {
     flex: 1,
@@ -65,6 +67,9 @@ const styles = StyleSheet.create({
   input: {
     marginHorizontal: 16,
     paddingStart: 16,
+    flex: 1,
+    // paddingStart: 20,
+    fontFamily: fonts.inter[400],
   },
   wrapperIcon: {
     position: 'absolute',

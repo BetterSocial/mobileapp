@@ -1,54 +1,143 @@
 import * as React from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {View, Text, Image, StyleSheet} from 'react-native';
 
 import Header from './Header';
 import Content from './Content';
-import Footer from './Footer';
+import {Footer} from '../../components';
 import {COLORS, SIZES} from '../../utils/theme';
 import Gap from '../../components/Gap';
+import {getCountComment, getCountVote} from '../../utils/getstream';
 
-const RenderItem = ({item}) => {
-  const navigation = useNavigation();
-  const onCardPressed = () => {
-    // console.log(JSON.stringify(item));
-    // navigation.push('DomainScreen', {
-    //   item: item,
-    // });
-  };
+const RenderItem = ({
+  item,
+  onPressShare = () => {},
+  onPressComment = () => {},
+  onPressBlock = () => {},
+  onPressDownVote = () => {},
+  onPressUpvote = () => {},
+  selfUserId,
+}) => {
+  const [voteStatus, setVoteStatus] = React.useState('none');
+  const [statusUpvote, setStatusUpvote] = React.useState(false);
+  const [statusDownvote, setStatusDowvote] = React.useState(false);
+  const [totalVote, setTotalVote] = React.useState(0);
+
+  React.useEffect(() => {
+    const initialVote = () => {
+      let c = getCountVote(item);
+      setTotalVote(c);
+    };
+    initialVote();
+  }, [item]);
+
+  React.useEffect(() => {
+    const validationStatusVote = () => {
+      if (item.reaction_counts !== undefined || null) {
+        if (item.latest_reactions.upvotes !== undefined) {
+          let upvote = item.latest_reactions.upvotes.filter(
+            (vote) => vote.user_id === selfUserId,
+          );
+          if (upvote !== undefined) {
+            setVoteStatus('upvote');
+            setStatusUpvote(true);
+          }
+        }
+
+        if (item.latest_reactions.downvotes !== undefined) {
+          let downvotes = item.latest_reactions.downvotes.filter(
+            (vote) => vote.user_id === selfUserId,
+          );
+          if (downvotes !== undefined) {
+            setVoteStatus('downvote');
+            setStatusDowvote(true);
+          }
+        }
+      }
+    };
+    validationStatusVote();
+  }, [item, selfUserId]);
 
   return (
-    <TouchableOpacity onPress={onCardPressed}>
-      <View>
-        <View style={styles.container}>
-          <Header
-            image={item.domain.image}
-            domain={item.domain.name}
-            time={item.content.created_at}
-          />
-          <Content
-            title={item.content.title}
-            image={item.content.image}
-            description={item.content.description}
-            url={item.content.url}
-          />
-        </View>
-        <View style={styles.wrapperFooter}>
-          <Footer item={item} totalComment={0} totalVote={0} />
-        </View>
-        <Gap height={8} />
-        <View style={{height: 1, width: '100%', backgroundColor: '#C4C4C4'}} />
-        <Gap height={16} />
+    <View style={styles.container}>
+      <Header
+        image={item.domain.image}
+        domain={item.domain.name}
+        time={item.content.created_at}
+      />
+      <Content
+        title={item.content.title}
+        image={item.content.image}
+        description={item.content.description}
+        url={item.content.url}
+      />
+      <Gap height={8} />
+      <View style={styles.wrapperFooter}>
+        <Footer
+          totalComment={getCountComment(item)}
+          totalVote={totalVote}
+          onPressShare={() => onPressShare(item)}
+          onPressComment={() => onPressComment(item)}
+          onPressBlock={() => onPressBlock(item)}
+          onPressDownVote={() => {
+            setStatusDowvote((prev) => {
+              prev = !prev;
+              onPressDownVote({
+                activity_id: item.id,
+                status: prev,
+                feed_group: 'domain',
+                domain: item.domain.name,
+              });
+              if (prev) {
+                setVoteStatus('downvote');
+                if (statusUpvote === true) {
+                  setTotalVote((p) => p - 2);
+                } else {
+                  setTotalVote((p) => p - 1);
+                }
+                setStatusUpvote(false);
+              } else {
+                setVoteStatus('none');
+                setTotalVote((p) => p + 1);
+              }
+              return prev;
+            });
+          }}
+          onPressUpvote={() => {
+            setStatusUpvote((prev) => {
+              prev = !prev;
+              onPressUpvote({
+                activity_id: item.id,
+                status: prev,
+                feed_group: 'domain',
+                domain: item.domain.name,
+              });
+              if (prev) {
+                setVoteStatus('upvote');
+                if (statusDownvote === true) {
+                  setTotalVote((p) => p + 2);
+                } else {
+                  setTotalVote((p) => p + 1);
+                }
+                setStatusDowvote(false);
+              } else {
+                setVoteStatus('none');
+                setTotalVote((p) => p - 1);
+              }
+              return prev;
+            });
+          }}
+          statusVote={voteStatus}
+        />
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: SIZES.base,
+    marginBottom: 16,
     borderRadius: SIZES.radius,
-    borderWidth: 0.3,
+    elevation: 0.5,
     borderColor: COLORS.gray,
     paddingVertical: SIZES.base,
     marginHorizontal: SIZES.base,

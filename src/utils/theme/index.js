@@ -57,6 +57,7 @@ export const FONTS = {
   body2: {fontFamily: 'Inter-Regular', fontSize: SIZES.body2, lineHeight: 30},
   body3: {fontFamily: 'Inter-Regular', fontSize: SIZES.body3, lineHeight: 22},
   body4: {fontFamily: 'Inter-Regular', fontSize: SIZES.body4, lineHeight: 22},
+  comment: {fontFamily: 'Inter-Regular', fontSize: SIZES.body3, lineHeight: 19},
 };
 
 const appTheme = {COLORS, SIZES, FONTS};

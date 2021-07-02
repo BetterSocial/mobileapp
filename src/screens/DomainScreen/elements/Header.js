@@ -12,58 +12,77 @@ import MemoIc_interface from '../../../assets/icons/Ic_interface';
 import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import {fonts} from '../../../utils/fonts';
-import Gap from '../../../components/Gap';
+import {SIZES, COLORS, FONTS} from '../../../utils/theme';
+import {SingleSidedShadowBox, Gap} from '../../../components';
+
+const lorem =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis.';
 
 const {width} = Dimensions.get('window');
 
 const Header = ({image, domain, description, followers, onPress}) => (
-  <View style={styles.headerDomain}>
-    <View style={styles.container}>
-      <View style={styles.containerImage}>
-        <View style={styles.boxImage}>
-          <Image
-            source={{
-              uri: image
-                ? image
-                : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-            }}
-            style={[styles.image, StyleSheet.absoluteFillObject]}
-          />
+  <SingleSidedShadowBox>
+    <View style={styles.headerDomain}>
+      <View style={styles.row}>
+        <View style={{flex: 1.3}}>
+          <View style={styles.wrapperImage}>
+            <Image
+              source={{
+                uri: image
+                  ? image
+                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
+              }}
+              style={[
+                {height: '100%', width: '100%', borderRadius: 45},
+                StyleSheet.absoluteFillObject,
+              ]}
+            />
+          </View>
+        </View>
+        <View style={styles.wrapperHeader}>
+          <TouchableOpacity
+            style={styles.buttonPrimary}
+            onPress={() => onPress(1)}>
+            <Text style={{fontSize: 14, color: 'white'}}>Follow</Text>
+          </TouchableOpacity>
+          <Gap width={SIZES.base} />
+          <TouchableOpacity
+            style={styles.buttonBlock}
+            onPress={() => onPress(0)}>
+            <Text style={{fontSize: 14, color: '#FF2E63'}}>Block</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.wrapperHeader}>
-        <TouchableOpacity
-          style={styles.buttonPrimary}
-          onPress={() => onPress(1)}>
-          <Text style={styles.actionText('white')}>Follow</Text>
-        </TouchableOpacity>
-        <Gap style={styles.width(8)} />
-        <TouchableOpacity style={styles.buttonBlock} onPress={() => onPress(0)}>
-          <Text style={styles.actionText('#FF2E63')}>Block</Text>
-        </TouchableOpacity>
+      <Gap height={SIZES.base} />
+      <View style={styles.row}>
+        <Text style={{...FONTS.h2, color: '#000000'}}>{domain}</Text>
+        <View style={{marginStart: 8, justifyContent: 'center'}}>
+          <MemoIc_interface width={20} height={20} />
+        </View>
       </View>
-    </View>
-    <View style={styles.wrapperDomain}>
-      <Text style={styles.domain}>{domain}</Text>
-      <View style={styles.iconDomain}>
-        <MemoIc_interface width={22} height={22} />
-      </View>
-    </View>
 
-    <View style={styles.containerFollowers}>
-      <Text style={styles.followers}>{followers}k</Text>
-      <Gap style={styles.width(4)} />
-      <Text>Followers</Text>
+      <View style={[styles.row, {alignItems: 'center'}]}>
+        <Text
+          style={{
+            color: '#00ADB5',
+            fontFamily: fonts.inter[400],
+            fontSize: 16,
+            fontWeight: '700',
+          }}>
+          {followers}k
+        </Text>
+        <Gap width={4} />
+        <Text>Followers</Text>
+      </View>
+      <Gap height={8} />
+      <Text style={{...FONTS.body3}}>{description ? description : lorem}</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <MemoIc_rectangle_gradient width={width * 0.75} height={20} />
+        <Gap width={4} />
+        <MemoIc_question_mark width={16} height={16} />
+      </View>
     </View>
-    <Gap style={styles.height(8)} />
-    <Text style={styles.desc}>{description}</Text>
-    <Gap style={styles.height(8)} />
-    <View style={styles.icon}>
-      <MemoIc_rectangle_gradient width={width * 0.75} height={20} />
-      <Gap style={styles.width(4)} />
-      <MemoIc_question_mark width={16} height={16} />
-    </View>
-  </View>
+  </SingleSidedShadowBox>
 );
 
 const styles = StyleSheet.create({
@@ -91,6 +110,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'white',
     paddingHorizontal: 16,
+    borderTopColor: 'transparent',
+    borderBottomColor: COLORS.gray,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.8,
+    shadowRadius: 1,
   },
   container: {
     flexDirection: 'row',
@@ -131,13 +157,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
-
   width: (wid) => ({
     width: wid,
   }),
   height: (height) => ({
     height,
   }),
+  wrapperImage: {
+    borderRadius: 45,
+    borderWidth: 0.2,
+    borderColor: 'rgba(0,0,0,0.5)',
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+  },
 });
 
 export default Header;

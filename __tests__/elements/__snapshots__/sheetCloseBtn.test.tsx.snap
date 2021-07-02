@@ -135,11 +135,19 @@ exports[`component SheetCloseBtn SheetCloseBtn renders correctly 1`] = `
           style={
             Array [
               Object {
+<<<<<<< HEAD
                 "height": undefined,
                 "width": undefined,
               },
               Object {
                 "height": 30,
+=======
+                "height": 30,
+              },
+              Object {
+                "height": undefined,
+                "width": undefined,
+>>>>>>> 35de01e456279601a87341ab69c3a71df1569942
               },
             ]
           }
@@ -184,11 +192,19 @@ exports[`component SheetCloseBtn SheetCloseBtn renders correctly 1`] = `
           style={
             Array [
               Object {
+<<<<<<< HEAD
                 "height": undefined,
                 "width": undefined,
               },
               Object {
                 "height": 10,
+=======
+                "height": 10,
+              },
+              Object {
+                "height": undefined,
+                "width": undefined,
+>>>>>>> 35de01e456279601a87341ab69c3a71df1569942
               },
             ]
           }
