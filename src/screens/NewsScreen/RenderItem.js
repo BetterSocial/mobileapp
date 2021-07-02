@@ -88,6 +88,7 @@ const RenderItem = ({
                 domain: item.domain.name,
               });
               if (prev) {
+                setVoteStatus('downvote');
                 if (statusUpvote === true) {
                   setTotalVote((p) => p - 2);
                 } else {
@@ -95,6 +96,7 @@ const RenderItem = ({
                 }
                 setStatusUpvote(false);
               } else {
+                setVoteStatus('none');
                 setTotalVote((p) => p + 1);
               }
               return prev;
@@ -110,6 +112,7 @@ const RenderItem = ({
                 domain: item.domain.name,
               });
               if (prev) {
+                setVoteStatus('upvote');
                 if (statusDownvote === true) {
                   setTotalVote((p) => p + 2);
                 } else {
@@ -117,6 +120,7 @@ const RenderItem = ({
                 }
                 setStatusDowvote(false);
               } else {
+                setVoteStatus('none');
                 setTotalVote((p) => p - 1);
               }
               return prev;
