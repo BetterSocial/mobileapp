@@ -16,7 +16,7 @@ import ContainerComment from '../../components/Comments/ContainerComment';
 import {fonts} from '../../utils/fonts';
 import {getMyProfile} from '../../service/profile';
 import {blockUser} from '../../service/blocking';
-import {downVote, upVote} from '../../service/vote';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import {createCommentParent} from '../../service/comment';
 import {SIZES} from '../../utils/theme';
 import ContentLink from '../FeedScreen/ContentLink';
@@ -203,10 +203,10 @@ const DetailDomainScreen = (props) => {
     }
   };
   const setUpVote = async (post) => {
-    upVote(post);
+    upVoteDomain(post);
   };
   const setDownVote = async (post) => {
-    downVote(post);
+    downVoteDomain(post);
   };
 
   const onPressDomain = () => {
@@ -255,6 +255,7 @@ const DetailDomainScreen = (props) => {
                     activity_id: item.id,
                     status: prev,
                     feed_group: 'domain',
+                    domain: item.domain.name,
                   });
                   if (prev) {
                     setVoteStatus('downvote');
@@ -278,6 +279,7 @@ const DetailDomainScreen = (props) => {
                     activity_id: item.id,
                     status: prev,
                     feed_group: 'domain',
+                    domain: item.domain.name,
                   });
                   if (prev) {
                     setVoteStatus('upvote');

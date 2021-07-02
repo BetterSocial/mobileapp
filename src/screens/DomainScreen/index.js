@@ -4,7 +4,7 @@ import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
 import JWTDecode from 'jwt-decode';
 import {useRoute, useNavigation} from '@react-navigation/native';
 
-import {upVote, downVote} from '../../service/vote';
+import {upVoteDomain, downVoteDomain} from '../../service/vote';
 import {getAccessToken} from '../../utils/token';
 
 import Gap from '../../components/Gap';
@@ -68,7 +68,7 @@ const DomainScreen = () => {
 
   const upvoteNews = async (news) => {
     // console.log(news);
-    upVote(news);
+    upVoteDomain(news);
     // if (result.code === 200) {
     //   Toast.show('up vote was successful', Toast.LONG);
     // } else {
@@ -78,7 +78,7 @@ const DomainScreen = () => {
 
   const downvoteNews = async (news) => {
     console.log(news);
-    downVote(news);
+    downVoteDomain(news);
     // if (result.code === 200) {
     //   Toast.show('down vote success', Toast.LONG);
     // } else {

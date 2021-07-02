@@ -180,6 +180,7 @@ const RenderItem = ({
                   activity_id: item.id,
                   status: prev,
                   feed_group: 'domain',
+                  domain: item.domain.name,
                 });
                 if (prev) {
                   setVoteStatus('downvote');
@@ -203,6 +204,7 @@ const RenderItem = ({
                   activity_id: item.id,
                   status: prev,
                   feed_group: 'domain',
+                  domain: item.domain.name,
                 });
                 if (prev) {
                   setVoteStatus('upvote');

@@ -6,7 +6,7 @@ import Toast from 'react-native-simple-toast';
 import JWTDecode from 'jwt-decode';
 
 import {getDomains} from '../../service/domain';
-import {upVote, downVote} from '../../service/vote';
+import {upVoteDomain, downVoteDomain} from '../../service/vote';
 import RenderItem from './RenderItem';
 import {Loading} from '../../components';
 import theme, {COLORS, FONTS, SIZES} from '../../utils/theme';
@@ -61,7 +61,7 @@ const NewsScreen = ({navigation}) => {
 
   const upvoteNews = async (news) => {
     // console.log(news);
-    upVote(news);
+    upVoteDomain(news);
     // if (result.code === 200) {
     //   Toast.show('up vote was successful', Toast.LONG);
     // } else {
@@ -71,7 +71,7 @@ const NewsScreen = ({navigation}) => {
 
   const downvoteNews = async (news) => {
     console.log(news);
-    downVote(news);
+    downVoteDomain(news);
     // if (result.code === 200) {
     //   Toast.show('down vote success', Toast.LONG);
     // } else {

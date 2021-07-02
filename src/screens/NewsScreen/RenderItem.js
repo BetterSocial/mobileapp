@@ -32,17 +32,30 @@ const RenderItem = ({
 
   React.useEffect(() => {
     const validationStatusVote = () => {
-      if (statusDownvote === false && statusUpvote === false) {
-        setVoteStatus('none');
-      } else if (statusDownvote === true) {
-        setVoteStatus('downvote');
-      } else if (statusUpvote === true) {
-        setVoteStatus('upvote');
+      if (item.reaction_counts !== undefined || null) {
+        if (item.latest_reactions.upvotes !== undefined) {
+          let upvote = item.latest_reactions.upvotes.filter(
+            (vote) => vote.user_id === selfUserId,
+          );
+          if (upvote !== undefined) {
+            setVoteStatus('upvote');
+            setStatusUpvote(true);
+          }
+        }
+
+        if (item.latest_reactions.downvotes !== undefined) {
+          let downvotes = item.latest_reactions.downvotes.filter(
+            (vote) => vote.user_id === selfUserId,
+          );
+          if (downvotes !== undefined) {
+            setVoteStatus('downvote');
+            setStatusDowvote(true);
+          }
+        }
       }
     };
-
     validationStatusVote();
-  }, [item, selfUserId, statusDownvote, statusUpvote, voteStatus]);
+  }, [item, selfUserId]);
 
   return (
     <View style={styles.container}>
@@ -72,6 +85,7 @@ const RenderItem = ({
                 activity_id: item.id,
                 status: prev,
                 feed_group: 'domain',
+                domain: item.domain.name,
               });
               if (prev) {
                 if (statusUpvote === true) {
@@ -93,6 +107,7 @@ const RenderItem = ({
                 activity_id: item.id,
                 status: prev,
                 feed_group: 'domain',
+                domain: item.domain.name,
               });
               if (prev) {
                 if (statusDownvote === true) {
