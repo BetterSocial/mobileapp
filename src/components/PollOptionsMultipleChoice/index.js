@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import {StyleSheet, TouchableNativeFeedback, View, Text} from 'react-native';
+
 import CheckBox from '@react-native-community/checkbox';
+
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
@@ -32,7 +34,9 @@ let PollOptionsMultipleChoice = ({
   // console.log(isMyPoll());
 
   let onOptionsClicked = () => {
-    if (isPollDisabled()) return;
+    if (isPollDisabled()) {
+      return;
+    }
     if (selected) {
       let idx = selectedindex.indexOf(index);
       console.log('idx');
@@ -68,13 +72,6 @@ let PollOptionsMultipleChoice = ({
           )}
         />
         <View style={styles.pollOptionTextContainer}>
-          {/* <View
-                style={
-                    false
-                    ? styles.pollRadioButtonActive
-                    : styles.pollRadioButton
-                }
-                /> */}
           {isPollDisabled() ? (
             <></>
           ) : (
@@ -101,26 +98,20 @@ let PollOptionsMultipleChoice = ({
 
 let styles = StyleSheet.create({
   pollOptionsContainer: {
-    // borderColor : 'red',
-    // borderWidth : 4,
     width: '100%',
     padding: 0,
     marginTop: 16,
     marginBottom: 8,
   },
   pollOptionItemContainer: {
-    // borderColor : colors.holytosca,
     backgroundColor: colors.lightgrey,
-    // borderWidth : 1.25,
     marginBottom: 8,
     borderRadius: 8,
     display: 'flex',
     flexDirection: 'row',
   },
   pollOptionItemContainerActive: {
-    // borderColor : colors.holytosca,
     backgroundColor: colors.holytosca30percent,
-    // borderWidth : 1.25,
     marginBottom: 8,
     borderRadius: 8,
     display: 'flex',
@@ -142,18 +133,22 @@ let styles = StyleSheet.create({
       marginTop: isexpired ? 6 : 0,
       marginBottom: isexpired ? 6 : 0,
       marginLeft: isexpired ? 18 : 0,
-      // backgroundColor : 'red'
     };
   },
   pollOptionItemPercentage: {
-    // backgroundColor : 'red'
     alignSelf: 'center',
   },
   percentageBar: (percent, isMyPoll = false, isPollDisabled = false) => {
-    if (!percent) percent = 0;
-    if (percent > 100) percent = 100;
+    if (!percent) {
+      percent = 0;
+    }
+    if (percent > 100) {
+      percent = 100;
+    }
 
-    if (!isPollDisabled) percent = 0;
+    if (!isPollDisabled) {
+      percent = 0;
+    }
 
     return {
       width: `${percent}%`,

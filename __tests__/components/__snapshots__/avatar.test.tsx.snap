@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`component blocking Avatar renders correctly 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "center",
+        "borderColor": "rgba(0,0,0,0.5)",
+        "borderRadius": 45,
+        "borderWidth": 0.2,
+        "height": 46,
+        "justifyContent": "center",
+        "width": 46,
+      },
+      Object {},
+    ]
+  }
+>
+  <Image
+    source={
+      Object {
+        "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png",
+      }
+    }
+    style={
+      Array [
+        Object {
+          "borderRadius": 45,
+          "height": "100%",
+          "width": "100%",
+        },
+        undefined,
+      ]
+    }
+  />
+</View>
+`;
+
+exports[`component blocking Avatar snapshot 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "center",
+        "borderColor": "rgba(0,0,0,0.5)",
+        "borderRadius": 45,
+        "borderWidth": 0.2,
+        "height": 46,
+        "justifyContent": "center",
+        "width": 46,
+      },
+      Object {},
+    ]
+  }
+>
+  <Image
+    source={
+      Object {
+        "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png",
+      }
+    }
+    style={
+      Array [
+        Object {
+          "borderRadius": 45,
+          "height": "100%",
+          "width": "100%",
+        },
+        undefined,
+      ]
+    }
+  />
+</View>
+`;
