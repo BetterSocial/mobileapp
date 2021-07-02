@@ -7,9 +7,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import {BottomSheet} from '../../../components/BottomSheet';
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
+import {BottomSheet} from '../../../components/BottomSheet';
 import UserIcon from '../../../assets/icons/images/user.svg';
 import TrashIcon from '../../../assets/icons/images/trash.svg';
 import MediaIcon from '../../../assets/icons/images/media.svg';

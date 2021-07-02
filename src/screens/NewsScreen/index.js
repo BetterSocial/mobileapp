@@ -4,6 +4,7 @@ import {View, Text} from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 
 import {getDomains} from '../../service/domain';
+
 const NewsScreen = (props) => {
   React.useEffect(() => {
     analytics().logScreenView({

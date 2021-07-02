@@ -6,13 +6,9 @@ import {
   StyleSheet,
   Platform,
   TouchableNativeFeedback,
-  TouchableOpacity,
   TouchableHighlight,
   Dimensions,
-  FlatList,
-  Image,
   ActivityIndicator,
-  SectionList,
 } from 'react-native';
 
 import {showMessage} from 'react-native-flash-message';
@@ -27,14 +23,10 @@ import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
 import VirtualizedView from '../../components/VirtualizedView';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import CheckIcon from '../../../assets/icons/check.svg';
-import AddIcon from '../../../assets/icons/add.svg';
 import {registerUser} from '../../service/users';
 import {Context} from '../../context';
 import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
 import {colors} from '../../utils/colors';
-import ItemUser from './elements/ItemUser';
-import Label from './elements/Label';
 import ListUser from './elements/ListUser';
 
 const width = Dimensions.get('screen').width;
@@ -65,7 +57,6 @@ const WhotoFollow = () => {
       .then((res) => {
         setIsLoading(false);
         if (res.status === 200) {
-          // console.log(JSON.stringify(res.data.body));
           setUsers(res.data.body);
         }
       })
@@ -106,7 +97,6 @@ const WhotoFollow = () => {
   const memoHandleSelected = React.useCallback(handleSelected, [followed]);
 
   const onRefresh = React.useCallback(() => {
-    console.log('onRefresh ');
     setRefreshing(true);
     get({url: '/who-to-follow/list'})
       .then((res) => {
@@ -122,13 +112,6 @@ const WhotoFollow = () => {
   }, []);
 
   const register = () => {
-    // if (followed.length < 2) {
-    //   showMessage({
-    //     message: 'minimum follow 3 users',
-    //     type: 'danger',
-    //   });
-    //   return null;
-    // }
     setFetchRegister(true);
     analytics().logEvent('onb_select_follows_btn_add', {
       onb_whofollow_users_selected: followed,
@@ -156,7 +139,6 @@ const WhotoFollow = () => {
           setRefreshToken(res.refresh_token);
           showMessage({
             message: 'Welcome to Better Social',
-            // description: 'Choose where to get started',
             type: 'success',
             backgroundColor: colors.holytosca,
           });
@@ -182,13 +164,10 @@ const WhotoFollow = () => {
               backgroundColor: colors.red,
             });
           }
-          console.log('err 1 ', res.message[0].message);
-          // console.log('err 1 ', res[0].message);
         }
       })
       .catch((error) => {
         crashlytics().recordError(new Error(error.response));
-        console.log('e ', error.response);
         setFetchRegister(false);
         showMessage({
           message: 'please complete the data',

@@ -20,8 +20,6 @@ import ArrowUpIcon from '../../../assets/icons/images/arrow-up.svg';
 import ArrowDownRedIcon from '../../../assets/icons/images/arrow-down-red.svg';
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
-import {POST_VERB_POLL} from '../../../utils/constants';
-import PollOptions from '../../../components/PollOptions';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -39,20 +37,6 @@ const renderActivity = (props, data) => {
         />
       </View>
     );
-  };
-
-  const _renderPollOptions = () => {
-    if (!props.verb === POST_VERB_POLL) {
-      return <View />;
-    } else {
-      return (
-        <View style={styles.containerPoll}>
-          {props.polls.map((item, index) => (
-            <PollOptions item={item} index={index} total={0} />
-          ))}
-        </View>
-      );
-    }
   };
 
   return (
@@ -116,21 +100,6 @@ const renderActivity = (props, data) => {
           </View>
         </View>
       }
-      // Footer={
-      //   <View style={{flexDirection: 'column'}}>
-      //     <View style={{marginTop: 10}}>
-      //       <Text style={styles.textComment}>View all 3 comment</Text>
-      //     </View>
-      //     <View>
-      //       <Text style={styles.usernameComment}>
-      //         @geoffsmith{' '}
-      //         <Text style={styles.usernameTextComment}>
-      //           i don’t know about that
-      //         </Text>
-      //       </Text>
-      //     </View>
-      //   </View>
-      // }
     />
   );
 };

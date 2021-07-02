@@ -98,21 +98,6 @@ const renderActivity = (props, data) => {
           </View>
         </View>
       }
-      // Footer={
-      //   <View style={{flexDirection: 'column'}}>
-      //     <View style={{marginTop: 10}}>
-      //       <Text style={styles.textComment}>View all 3 comment</Text>
-      //     </View>
-      //     <View>
-      //       <Text style={styles.usernameComment}>
-      //         @geoffsmith{' '}
-      //         <Text style={styles.usernameTextComment}>
-      //           i don’t know about that
-      //         </Text>
-      //       </Text>
-      //     </View>
-      //   </View>
-      // }
     />
   );
 };

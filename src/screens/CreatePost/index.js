@@ -62,7 +62,6 @@ const CreatePost = () => {
 
   const [message, setMessage] = React.useState('');
   const [mediaStorage, setMediaStorage] = React.useState([]);
-  const [topic, setTopic] = React.useState('');
   const [listTopic, setListTopic] = React.useState([]);
   const [isPollShown, setIsPollShown] = React.useState(false);
   const [polls, setPolls] = React.useState([...defaultPollItem]);
@@ -108,11 +107,6 @@ const CreatePost = () => {
       },
     },
   ]);
-  // const [geoList, setGeoList] = React.useState([
-  //   'Everywhere',
-  //   'Massachusetts',
-  //   'Cambridge',
-  // ]);
   const [geoList, setGeoList] = React.useState([]);
   let location = [
     {
@@ -147,7 +141,6 @@ const CreatePost = () => {
     let token = await getAccessToken();
     if (token) {
       var decoded = await JWTDecode(token);
-      console.log(decoded);
       const result = await getMyProfile(decoded.user_id);
       if (result.code === 200) {
         setDataProfile(result.data);
@@ -159,10 +152,6 @@ const CreatePost = () => {
           });
         });
         setGeoList(location);
-
-        // setGeoList((val) => [...val, result.data.locations]);
-        // (val) => [...val, topic];
-        // console.log('isi result ', result.data.locations);
       }
 
       setLoading(false);
@@ -184,7 +173,6 @@ const CreatePost = () => {
   const getEstimationsAudience = async (privacy, location) => {
     const data = await ShowingAudience(privacy, location);
     setAudienceEstimations(data.data);
-    console.log('count ', data.data);
   };
   const uploadMediaFromLibrary = () => {
     launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
@@ -215,8 +203,6 @@ const CreatePost = () => {
         setMediaStorage((val) => [...val, newArr]);
         setDataImage((val) => [...val, res.base64]);
         sheetMediaRef.current.close();
-      } else {
-        console.log(res);
       }
     });
   };
@@ -228,10 +214,7 @@ const CreatePost = () => {
   const onRemoveAllMedia = () => {
     setMediaStorage([]);
   };
-  const submitTopic = () => {
-    setListTopic((val) => [...val, topic]);
-    setTopic('');
-  };
+
   const removeTopic = (v) => {
     let newArr = listTopic.filter((e) => e !== v);
     setListTopic(newArr);
@@ -266,12 +249,10 @@ const CreatePost = () => {
   };
 
   const onBack = () => {
-    console.log(message);
     if (message || getReducedPoll().length > 0 || mediaStorage.length > 0) {
       sheetBackRef.current.open();
       return true;
     }
-    console.log('back = ', message);
     navigation.goBack();
     return true;
   };
@@ -288,13 +269,7 @@ const CreatePost = () => {
         });
         return true;
       }
-      // if (listTopic.length === 0) {
-      //   showMessage({
-      //     message: 'topic cannot be empty',
-      //     type: 'danger',
-      //   });
-      //   return true;
-      // }
+
       setLoading(true);
       let data = {
         topics: listTopic,
@@ -317,10 +292,7 @@ const CreatePost = () => {
         anon: typeUser,
         predicted_audience: audienceEstimations,
       });
-      console.log(data);
       let res = await createPost(data);
-      console.log('res');
-      console.log(res);
       if (res.code === 200) {
         showMessage({
           message: 'success create a new post',
@@ -337,10 +309,7 @@ const CreatePost = () => {
           type: 'danger',
         });
       }
-      console.log(res);
     } catch (error) {
-      console.log('error response');
-      console.log(error.request);
       showMessage({
         message: 'failed to create new posts',
         type: 'danger',
@@ -443,11 +412,6 @@ const CreatePost = () => {
     console.log(data);
 
     try {
-      // let createTokenResponse = await createToken()
-      // if(createTokenResponse.hasOwnProperty("token")) {
-
-      //   console.log(response)
-      // }
       let response = await createPollPost(data);
       if (response.status) {
         navigation.goBack();

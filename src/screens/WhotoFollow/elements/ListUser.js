@@ -26,7 +26,6 @@ const ListUser = ({users, followed, onPress}) => {
                       <FlatList
                         style={styles.flatList}
                         data={val.users}
-                        // renderItem={renderItem}
                         renderItem={({item}) => (
                           <MemoItemUser
                             photo={item.profile_pic_path}

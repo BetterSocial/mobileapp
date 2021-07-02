@@ -47,7 +47,6 @@ const SignIn = () => {
   });
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
-      // await setToken(exchangeToken);
       setLoading(true);
       checkToken(exchangeToken)
         .then((res) => {
@@ -90,8 +89,6 @@ const SignIn = () => {
   }, []);
   const handleLogin = () => {
     logIn();
-    // dummyLogin()
-    // console.log("Dummy Login")
     analytics().logLogin({
       method: 'humanid',
     });
@@ -109,9 +106,6 @@ const SignIn = () => {
         if (response.data) {
           setAccessToken(response.token);
           setRefreshToken(response.refresh_token);
-          // let decodedToken = await jwtDecode(response.token)
-          // let profile = await getMyProfile(decodedToken.user_id)
-          // await dispatch({type : SET_DATA_IMAGE, payload : profile.data.profile_pic_path})
           setTimeout(() => {
             navigation.dispatch(StackActions.replace('HomeTabs'));
           }, 100);
@@ -151,9 +145,6 @@ const SignIn = () => {
           <ButtonSign />
         </TouchableOpacity>
         <Text style={S.desc}>
-          {/* <Text style={S.humanID}>{StringConstant.signInScreenHumanIdBrand}</Text> is an independent non-profit
-          guaranteeing your privacy and anonymity. BetterSocial will receive
-          absolutely zero personal information. */}
           <Text style={S.humanID}>
             {StringConstant.signInScreenHumanIdBrand}
           </Text>

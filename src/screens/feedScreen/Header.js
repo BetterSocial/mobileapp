@@ -13,8 +13,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {Avatar} from 'react-native-activity-feed';
 
-import moment from 'moment';
-
 import ElipsisIcon from '../../assets/icons/images/elipsis.svg';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -57,7 +55,6 @@ const validationTimer = (timer, duration_feed) => {
       return <MemoThirtySeven_fourtyNine height={17} width={17} />;
     case total < 88:
       return <MemoTwentyFive_thirtySix height={17} width={17} />;
-    // return <MemoOne height={17} width={17} />;
     default:
       return <MemoOne height={17} width={17} />;
   }

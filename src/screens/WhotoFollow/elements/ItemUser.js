@@ -5,7 +5,6 @@ import CheckIcon from '../../../../assets/icons/check.svg';
 import AddIcon from '../../../../assets/icons/add.svg';
 
 const ItemUser = ({photo, username, bio, followed, onPress}) => {
-  // console.log('render Item');
   return (
     <View style={styles.containerCard}>
       <View style={styles.cardLeft}>
@@ -13,7 +12,6 @@ const ItemUser = ({photo, username, bio, followed, onPress}) => {
           style={styles.tinyLogo}
           source={{
             uri: photo,
-            // uri: item.profile_pic_path,
           }}
         />
         <View style={styles.containerTextCard}>
