@@ -67,10 +67,6 @@ const RenderActivity = (props) => {
   let {username} = props.activity.actor.data;
   let {profile_pic_path, real_name} = JSON.parse(activity.object);
 
-  const getTime = (time) => {
-    let date = new Date(time);
-    return date.toLocaleDateString();
-  };
   const _renderItem = ({item, index}, parallaxProps) => {
     return (
       <View key={index} style={styles.item}>
@@ -188,18 +184,6 @@ const RenderActivity = (props) => {
             ) : null}
           </View>
         }
-        // Footer={
-        //   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        //     <LikeButton {...props} />
-        //     <ReactionIcon
-        //       icon={ReplyIcon}
-        //       labelSingle="comment"
-        //       labelPlural="comments"
-        //       counts={activity.reaction_counts}
-        //       kind="comment"
-        //     />
-        //   </View>
-        // }
         Footer={
           <View style={[styles.rowSpaceBeetwen, styles.container]}>
             <View style={[styles.rowSpaceBeetwen, styles.width(70)]}>

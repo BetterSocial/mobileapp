@@ -3,7 +3,7 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import SheetCloseBtn from '../../src/elements/Post/SheetCloseBtn';
+import SheetCloseBtn from '../../src/screens/CreatePost/elements/SheetCloseBtn';
 
 configure({adapter: new Adapter()});
 // jest.useFakeTimers();

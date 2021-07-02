@@ -1,26 +1,22 @@
-//
 import * as React from 'react';
 import {
   View,
   Text,
   Image,
-  TouchableOpacity,
   Linking,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
-import PropTypes from 'prop-types';
 
+import PropTypes from 'prop-types';
 import _ from 'lodash';
+
 import {sanitizeUrlForLinking} from '../../utils/Utils';
 import {colors} from '../../utils/colors';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import {fonts} from '../../utils/fonts';
 import Gap from '../Gap';
 
-/**
- * Card element
- * @example ./examples/Card.md
- */
 const Card = (props) => {
   const {
     title,
@@ -33,30 +29,6 @@ const Card = (props) => {
     onCardPress,
   } = props;
   // const styles = buildStylesheet('card', props.styles);
-
-  const Header = ({domain, image, date}) => (
-    <View style={styles.headerContainer}>
-      <View style={styles.headerImageContainer}>
-        <Image
-          style={[
-            {height: '100%', width: '100%', borderRadius: 45},
-            StyleSheet.absoluteFillObject,
-          ]}
-          source={{uri: image}}
-          resizeMode={'cover'}
-        />
-      </View>
-      <Gap style={{width: 8}} />
-      <View style={styles.headerDomainDateContainer}>
-        <View style={styles.headerDomainDateRowContainer}>
-          <Text style={styles.cardHeaderDomainName}>{domain}</Text>
-          <View style={styles.point} />
-          <Text style={styles.cardHeaderDate}>{date}</Text>
-        </View>
-        <MemoIc_rectangle_gradient height={10} width={180} />
-      </View>
-    </View>
-  );
 
   return (
     <TouchableOpacity onPress={onCardPress}>
@@ -74,10 +46,10 @@ const Card = (props) => {
           <Text style={styles.description}>
             {/* {_.truncate(description, {length: 120})} */}
             {description}
-            <Gap style={{width: 2}} />
+            <Gap style={styles.width(2)} />
             <Text
               onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
-              style={styles.openLinkText}>
+              style={styles.link}>
               Open Link
             </Text>
           </Text>
@@ -87,6 +59,29 @@ const Card = (props) => {
   );
 };
 
+const Header = ({domain, image, date}) => (
+  <View style={styles.headerContainer}>
+    <View style={styles.headerImageContainer}>
+      <Image
+        style={[
+          {height: '100%', width: '100%', borderRadius: 45},
+          StyleSheet.absoluteFillObject,
+        ]}
+        source={{uri: image}}
+        resizeMode={'cover'}
+      />
+    </View>
+    <Gap style={{width: 8}} />
+    <View style={styles.headerDomainDateContainer}>
+      <View style={styles.headerDomainDateRowContainer}>
+        <Text style={styles.cardHeaderDomainName}>{domain}</Text>
+        <View style={styles.point} />
+        <Text style={styles.cardHeaderDate}>{date}</Text>
+      </View>
+      <MemoIc_rectangle_gradient height={10} width={180} />
+    </View>
+  </View>
+);
 Card.propTypes = {
   domain: PropTypes.string,
   domainImage: PropTypes.string,
@@ -100,8 +95,41 @@ Card.propTypes = {
 };
 
 const styles = StyleSheet.create({
+  link: {
+    color: '#2f80ed',
+    textDecorationLine: 'underline',
+    marginStart: 8,
+    fontFamily: 'bold',
+    fontSize: 12,
+  },
+  contentDomain: {flexDirection: 'row', alignItems: 'center'},
+  containerDomain: {justifyContent: 'space-around'},
+  date: {fontSize: 12, color: '#828282'},
+  domain: {
+    fontSize: 16,
+    lineHeight: 16,
+    color: '#000000',
+    fontWeight: 'bold',
+    fontFamily: fonts.inter[600],
+  },
+  width: (width) => ({
+    width,
+  }),
+  imageHeader: {height: '100%', width: '100%', borderRadius: 45},
+  constainerHeader: {
+    flexDirection: 'row',
+    padding: 8,
+  },
+  contentHeader: {
+    borderRadius: 45,
+    borderWidth: 0.2,
+    borderColor: 'rgba(0,0,0,0.5)',
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
-    // flex: 1,
     borderWidth: 0.5,
     borderRadius: 8,
     borderColor: 'rgba(0,0,0, 0.5)',

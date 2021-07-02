@@ -54,12 +54,6 @@ const Followings = () => {
   };
 
   const goToOtherProfile = (value) => {
-    // let data = {
-    //   user_id,
-    //   other_id: value.user_id_followed,
-    //   username,
-    // };
-
     let data = {
       user_id,
       other_id: value.user_id_followed,
@@ -82,10 +76,6 @@ const Followings = () => {
     };
 
     const result = await setUnFollow(data);
-    // if (result.code == 200) {
-    // fetchOtherProfile(user_id, other_id, false);
-    // fetchFollowing()
-    // }
   };
 
   const handleSetFollow = async (index) => {
@@ -100,10 +90,6 @@ const Followings = () => {
       follow_source: 'other-profile',
     };
     const result = await setFollow(data);
-    // if (result.code == 200) {
-    // fetchOtherProfile(user_id, other_id, false);
-    // fetchFollowing()
-    // }
   };
 
   const renderItem = ({item, index}) => {
@@ -154,46 +140,26 @@ const Followings = () => {
   };
 
   return (
-    <>
-      {/* <StatusBar barStyle="dark-content" /> */}
-      <SafeAreaView style={styles.container}>
-        {/* <View style={styles.header}>
-          <View style={styles.floatLeft}>
-            <TouchableNativeFeedback onPress={() => navigation.goBack()}>
-              <View style={{padding : 12}}>
-                <ArrowLeftIcon width={20} height={12} fill="#000"/>
-              </View>
-            </TouchableNativeFeedback>
-          </View>
-          <Text style={styles.textUsername}>{username}</Text>
-        </View> */}
-        {/* <View style={styles.tabs}>
-          <View style={styles.wrapTextTabs}>
-            <Text style={styles.textTabs}>
-              Following ({dataFollowing.length})
-            </Text>
-          </View>
-        </View> */}
-        {dataFollowing.length > 0 ? (
-          <View style={styles.content}>
-            <FlatList
-              data={dataFollowing}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.follow_action_id}
-            />
-          </View>
-        ) : (
-          <View style={styles.nousercontent}>
-            <Text style={styles.nousertext}>
-              {
-                'You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.'
-              }
-            </Text>
-          </View>
-        )}
-        <Loading visible={isLoading} />
-      </SafeAreaView>
-    </>
+    <SafeAreaView style={styles.container}>
+      {dataFollowing.length > 0 ? (
+        <View style={styles.content}>
+          <FlatList
+            data={dataFollowing}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.follow_action_id}
+          />
+        </View>
+      ) : (
+        <View style={styles.nousercontent}>
+          <Text style={styles.nousertext}>
+            {
+              'You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.'
+            }
+          </Text>
+        </View>
+      )}
+      <Loading visible={isLoading} />
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

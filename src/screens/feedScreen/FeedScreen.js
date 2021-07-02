@@ -10,11 +10,11 @@ import RenderItem from './RenderItem';
 import Loading from '../../components/Loading';
 import CardStack from '../../components/CardStack';
 import {ButtonNewPost} from '../../components/Button';
-import BlockUser from '../../elements/Blocking/BlockUser';
-import BlockDomain from '../../elements/Blocking/BlockDomain';
-import ReportUser from '../../elements/Blocking/ReportUser';
-import ReportDomain from '../../elements/Blocking/ReportDomain';
-import SpecificIssue from '../../elements/Blocking/SpecificIssue';
+import BlockUser from '../../components/Blocking/BlockUser';
+import BlockDomain from '../../components/Blocking/BlockDomain';
+import ReportUser from '../../components/Blocking/ReportUser';
+import ReportDomain from '../../components/Blocking/ReportDomain';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {getAccessToken} from '../../utils/token';
 import {downVote, upVote} from '../../service/vote';
 import {blockUser} from '../../service/blocking';
@@ -22,7 +22,6 @@ import {getMainFeed} from '../../service/post';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
-  const [tokenParse, setTokenParse] = React.useState({});
   const [mainFeeds, setMainFeeds] = React.useState([]);
 
   const [initialLoading, setInitialLoading] = React.useState(true);
@@ -34,7 +33,6 @@ const FeedScreen = (props) => {
   const [userId, setUserId] = React.useState('');
   const [postId, setPostId] = React.useState('');
   const [lastId, setLastId] = React.useState('');
-  const [selectedPost, setSelectedPost] = React.useState({});
   const [yourselfId, setYourselfId] = React.useState('');
   const [rerender, setRerender] = React.useState(0);
 
@@ -173,7 +171,6 @@ const FeedScreen = (props) => {
       if (value) {
         const decoded = await JWTDecode(value);
         setYourselfId(decoded.user_id);
-        setTokenParse(decoded);
       }
     };
     parseToken();
@@ -239,11 +236,9 @@ const FeedScreen = (props) => {
                     props.navigation.navigate('PostDetailPage', {item: item});
                   }}
                   onPressUpvote={(value) => {
-                    setSelectedPost(value);
                     setUpVote(value.id);
                   }}
                   onPressDownVote={(value) => {
-                    setSelectedPost(value);
                     setDownVote(value.id);
                   }}
                   selfUserId={yourselfId}

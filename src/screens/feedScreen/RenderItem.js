@@ -11,7 +11,6 @@ import {
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
-import {isContainUrl, smartRender} from '../../utils/Utils';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
@@ -60,11 +59,6 @@ async function buildLink(username) {
       navigation: {
         forcedRedirectEnabled: false,
       },
-      // ios: {
-      //   bundleId: '',
-      //   // customScheme: 'giftit',
-      //   appStoreId: '',
-      // },
       android: {
         packageName: 'org.bettersocial.dev',
       },

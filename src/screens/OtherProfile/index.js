@@ -20,7 +20,7 @@ import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
 import {getOtherProfile, setUnFollow, setFollow} from '../../service/profile';
-import RenderActivity from './RenderActivity';
+import RenderActivity from './elements/RenderActivity';
 import Loading from '../Loading';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';

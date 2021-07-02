@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import {ChannelList, Chat} from 'stream-chat-react-native';
 import {STREAM_API_KEY} from '@env';
 import JWTDecode from 'jwt-decode';
-import analytics from '@react-native-firebase/analytics';
 import {StreamChat} from 'stream-chat';
+import {ChannelList, Chat} from 'stream-chat-react-native';
+import analytics from '@react-native-firebase/analytics';
 const chatClient = new StreamChat(STREAM_API_KEY);
 
 import {getAccessToken} from '../../utils/token';

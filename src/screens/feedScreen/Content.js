@@ -8,28 +8,26 @@ import {
   Image,
   FlatList,
 } from 'react-native';
+import {useRoute} from '@react-navigation/native';
+
+import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
-import {ParallaxImage} from 'react-native-snap-carousel';
-import {useNavigation, useRoute} from '@react-navigation/core';
 
 import Gap from '../../components/Gap';
-import Card from '../../components/Card/Card';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-import PropTypes from 'prop-types';
-import {isContainUrl, smartRender} from '../../utils/Utils';
-
 const Content = ({message, images_url, style, onPress}) => {
   const route = useRoute();
+  const cekImage = () => {
+    return images_url !== null && images_url !== '' && images_url !== undefined;
+  };
 
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{...styles.contentFeed, ...style}}>
-      {images_url !== null && images_url !== '' && images_url !== undefined ? (
+    <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
+      {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
             <SeeMore

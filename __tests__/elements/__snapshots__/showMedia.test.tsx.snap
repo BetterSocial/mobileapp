@@ -1,32 +1,76 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`component ShowMedia ShowMedia renders correctly 1`] = `
-<View>
+Array [
   <RCTScrollView
+    data={
+      Array [
+        "https://picsum.photos/id/1/200/300",
+        "https://picsum.photos/id/1036/200/300",
+        "https://picsum.photos/id/1048/200/300",
+      ]
+    }
+    disableVirtualization={false}
+    getItem={[Function]}
+    getItemCount={[Function]}
     horizontal={true}
+    initialNumToRender={1}
+    initialScrollIndex={2}
+    keyExtractor={[Function]}
+    maxToRenderPerBatch={10}
+    onContentSizeChange={[Function]}
+    onEndReachedThreshold={2}
+    onLayout={[Function]}
+    onMomentumScrollEnd={[Function]}
+    onScroll={[Function]}
+    onScrollBeginDrag={[Function]}
+    onScrollEndDrag={[Function]}
+    onScrollToIndexFailed={[Function]}
+    onViewableItemsChanged={[Function]}
+    pagingEnabled={true}
+    removeClippedSubviews={false}
+    renderItem={[Function]}
+    scrollEnabled={true}
+    scrollEventThrottle={50}
     showsHorizontalScrollIndicator={false}
+    showsVerticalScrollIndicator={false}
+    stickyHeaderIndices={Array []}
+    updateCellsBatchingPeriod={50}
+    viewabilityConfig={
+      Object {
+        "itemVisiblePercentThreshold": 60,
+        "minimumViewTime": 200,
+      }
+    }
+    viewabilityConfigCallbackPairs={
+      Array [
+        Object {
+          "onViewableItemsChanged": [Function],
+          "viewabilityConfig": Object {
+            "itemVisiblePercentThreshold": 60,
+            "minimumViewTime": 200,
+          },
+        },
+      ]
+    }
+    windowSize={21}
   >
     <View>
       <View
+        onLayout={[Function]}
         style={
-          Object {
-            "alignItems": "flex-end",
-            "flexDirection": "row",
-          }
+          Array [
+            Object {
+              "flexDirection": "row",
+            },
+            null,
+          ]
         }
       >
         <View
-          accessible={true}
-          focusable={true}
-          onClick={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
           style={
             Object {
+<<<<<<< HEAD
               "alignItems": "center",
               "borderColor": "#E0E0E0",
               "borderRadius": 8,
@@ -77,316 +121,208 @@ exports[`component ShowMedia ShowMedia renders correctly 1`] = `
               "marginRight": 12,
               "marginTop": 10,
               "width": 120,
+=======
+              "backgroundColor": "gray",
+              "flex": 1,
+              "width": 750,
+>>>>>>> 12d39802d188a192e8d24698fe19cc898bf44e2c
             }
           }
         >
           <Image
+            resizeMode="cover"
             source={
               Object {
-                "uri": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
+                "uri": "https://picsum.photos/id/1/200/300",
               }
             }
-            style={
-              Array [
-                Object {
-                  "bottom": 0,
-                  "left": 0,
-                  "position": "absolute",
-                  "right": 0,
-                  "top": 0,
-                },
-                Object {
-                  "height": 120,
-                  "width": 120,
-                },
-                Object {
-                  "borderRadius": 8,
-                },
-              ]
-            }
-          />
-          <View
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
             style={
               Object {
-                "marginRight": -8,
-                "marginTop": -8,
-                "opacity": 1,
+                "flex": 1,
               }
             }
-          >
-            <Icon
-              name="closecircle"
-              size={20}
-            />
-          </View>
+          />
         </View>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={
+          Array [
+            Object {
+              "flexDirection": "row",
+            },
+            null,
+          ]
+        }
+      >
         <View
-          accessibilityIgnoresInvertColors={true}
           style={
             Object {
-              "alignItems": "flex-end",
-              "height": 120,
-              "marginRight": 12,
-              "marginTop": 10,
-              "width": 120,
+              "backgroundColor": "gray",
+              "flex": 1,
+              "width": 750,
             }
           }
         >
           <Image
+            resizeMode="cover"
             source={
               Object {
-                "uri": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
+                "uri": "https://picsum.photos/id/1036/200/300",
               }
             }
-            style={
-              Array [
-                Object {
-                  "bottom": 0,
-                  "left": 0,
-                  "position": "absolute",
-                  "right": 0,
-                  "top": 0,
-                },
-                Object {
-                  "height": 120,
-                  "width": 120,
-                },
-                Object {
-                  "borderRadius": 8,
-                },
-              ]
-            }
-          />
-          <View
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
             style={
               Object {
-                "marginRight": -8,
-                "marginTop": -8,
-                "opacity": 1,
+                "flex": 1,
               }
             }
-          >
-            <Icon
-              name="closecircle"
-              size={20}
-            />
-          </View>
+          />
         </View>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={
+          Array [
+            Object {
+              "flexDirection": "row",
+            },
+            null,
+          ]
+        }
+      >
         <View
-          accessibilityIgnoresInvertColors={true}
           style={
             Object {
-              "alignItems": "flex-end",
-              "height": 120,
-              "marginRight": 12,
-              "marginTop": 10,
-              "width": 120,
+              "backgroundColor": "gray",
+              "flex": 1,
+              "width": 750,
             }
           }
         >
           <Image
+            resizeMode="cover"
             source={
               Object {
-                "uri": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
+                "uri": "https://picsum.photos/id/1048/200/300",
               }
             }
-            style={
-              Array [
-                Object {
-                  "bottom": 0,
-                  "left": 0,
-                  "position": "absolute",
-                  "right": 0,
-                  "top": 0,
-                },
-                Object {
-                  "height": 120,
-                  "width": 120,
-                },
-                Object {
-                  "borderRadius": 8,
-                },
-              ]
-            }
-          />
-          <View
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
             style={
               Object {
-                "marginRight": -8,
-                "marginTop": -8,
-                "opacity": 1,
+                "flex": 1,
               }
             }
-          >
-            <Icon
-              name="closecircle"
-              size={20}
-            />
-          </View>
+          />
         </View>
       </View>
     </View>
-  </RCTScrollView>
+  </RCTScrollView>,
   <View
-    accessible={true}
-    focusable={true}
-    onClick={[Function]}
-    onResponderGrant={[Function]}
-    onResponderMove={[Function]}
-    onResponderRelease={[Function]}
-    onResponderTerminate={[Function]}
-    onResponderTerminationRequest={[Function]}
-    onStartShouldSetResponder={[Function]}
     style={
-      Object {
-        "marginBottom": -14,
-        "marginTop": 12,
-        "opacity": 1,
-        "paddingVertical": 16,
-      }
+      Array [
+        Object {
+          "alignSelf": "center",
+          "bottom": 0,
+          "flexDirection": "row",
+          "height": 28.125,
+          "justifyContent": "center",
+          "marginVertical": 16.675,
+          "position": "absolute",
+        },
+        Object {},
+      ]
     }
   >
-    <Text
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "color": "#FF2E63",
-          "fontFamily": "Inter-Semi-bold",
-          "fontSize": 14,
-          "fontWeight": "bold",
-          "textAlign": "center",
+          "backgroundColor": "gray",
+          "borderRadius": 25,
+          "height": 8,
+          "marginHorizontal": 5,
+          "opacity": 1,
+          "width": 8,
         }
       }
-    >
-      Remove all photos
-    </Text>
-  </View>
-</View>
+      testID="_pagination_0"
+    />
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "backgroundColor": "gray",
+          "borderRadius": 25,
+          "height": 8,
+          "marginHorizontal": 5,
+          "opacity": 1,
+          "width": 8,
+        }
+      }
+      testID="_pagination_1"
+    />
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "backgroundColor": "#FFFFFF",
+          "borderRadius": 25,
+          "height": 8,
+          "marginHorizontal": 5,
+          "opacity": 1,
+          "width": 8,
+        }
+      }
+      testID="_pagination_2"
+    />
+  </View>,
+]
 `;
 
 exports[`component ShowMedia ShowMedia snapshot 1`] = `
-<View>
-  <ScrollView
-    horizontal={true}
-    showsHorizontalScrollIndicator={false}
-  >
-    <View
-      style={
-        Object {
-          "alignItems": "flex-end",
-          "flexDirection": "row",
-        }
-      }
-    >
-      <ButtonAddMedia
-        label="+add more photos"
-        labelStyle={
-          Object {
-            "color": "#000000",
-            "fontFamily": "Inter-Regular",
-            "fontSize": 12,
-            "textAlign": "center",
-            "width": 91,
-          }
-        }
-        onPress={[Function]}
-        style={
-          Object {
-            "height": 120,
-            "justifyContent": "center",
-            "width": 120,
-            "zIndex": 99,
-          }
-        }
-      />
-      <Gap
-        style={
-          Object {
-            "width": 8,
-          }
-        }
-      />
-      <ShowImage
-        data={
-          Object {
-            "data": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
-            "id": 1,
-          }
-        }
-        key="1"
-        onPress={[Function]}
-      />
-      <ShowImage
-        data={
-          Object {
-            "data": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
-            "id": 2,
-          }
-        }
-        key="2"
-        onPress={[Function]}
-      />
-      <ShowImage
-        data={
-          Object {
-            "data": "https://gravatar.com/avatar/f6b72e03802331ff150526be144d899e?s=400&d=robohash&r=x",
-            "id": 3,
-          }
-        }
-        key="3"
-        onPress={[Function]}
-      />
-    </View>
-  </ScrollView>
-  <ForwardRef
-    onPress={[Function]}
-    style={
-      Object {
-        "marginBottom": -14,
-        "marginTop": 12,
-        "paddingVertical": 16,
-      }
+<ForwardRef
+  autoplay={true}
+  autoplayDelay={3}
+  autoplayLoop={true}
+  data={
+    Array [
+      "https://picsum.photos/id/1/200/300",
+      "https://picsum.photos/id/1036/200/300",
+      "https://picsum.photos/id/1048/200/300",
+    ]
+  }
+  index={2}
+  paginationStyleItem={
+    Object {
+      "height": 8,
+      "marginHorizontal": 5,
+      "width": 8,
     }
-  >
-    <Text
-      style={
-        Object {
-          "color": "#FF2E63",
-          "fontFamily": "Inter-Semi-bold",
-          "fontSize": 14,
-          "fontWeight": "bold",
-          "textAlign": "center",
-        }
-      }
-    >
-      Remove all photos
-    </Text>
-  </ForwardRef>
-</View>
+  }
+  renderItem={[Function]}
+  showPagination={true}
+/>
 `;

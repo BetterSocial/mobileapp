@@ -21,7 +21,7 @@ exports[`component Comment Comment renders correctly 1`] = `
     <Image
       source={
         Object {
-          "testUri": "../../../src/assets/images/ProfileDefault.png",
+          "uri": "https://picsum.photos/200/300",
         }
       }
       style={
@@ -64,7 +64,6 @@ exports[`component Comment Comment renders correctly 1`] = `
         }
       >
          
-        
       </Text>
     </View>
   </View>
@@ -209,7 +208,7 @@ exports[`component Comment Comment snapshot 1`] = `
     <Image
       source={
         Object {
-          "testUri": "../../../src/assets/images/ProfileDefault.png",
+          "uri": "https://picsum.photos/200/300",
         }
       }
       style={
@@ -252,6 +251,7 @@ exports[`component Comment Comment snapshot 1`] = `
         }
       >
          
+        <Component />
       </Text>
     </View>
   </View>

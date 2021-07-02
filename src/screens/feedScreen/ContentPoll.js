@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 
 import SeeMore from 'react-native-see-more-inline';
-import {ParallaxImage} from 'react-native-snap-carousel';
 
 import {inputSingleChoicePoll} from '../../service/post';
 import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
@@ -22,20 +21,6 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
-
-const _renderItem = ({item, index}, parallaxProps) => {
-  return (
-    <View key={index} style={styles.item}>
-      <ParallaxImage
-        source={{uri: item}}
-        containerStyle={styles.imageContainer}
-        style={styles.image}
-        parallaxFactor={0.4}
-        {...parallaxProps}
-      />
-    </View>
-  );
-};
 
 const ContentPoll = ({
   message,
@@ -304,7 +289,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
+    marginBottom: Platform.select({ios: 0, android: 1}),
     backgroundColor: 'white',
     borderRadius: 8,
   },
@@ -320,26 +305,20 @@ const styles = StyleSheet.create({
     height: 32,
   },
   pollOptionsContainer: {
-    // borderColor : 'red',
-    // borderWidth : 4,
     width: '100%',
     padding: 0,
     marginTop: 16,
     marginBottom: 8,
   },
   pollOptionItemContainer: {
-    // borderColor : colors.holytosca,
     backgroundColor: colors.lightgrey,
-    // borderWidth : 1.25,
     marginBottom: 8,
     borderRadius: 8,
     display: 'flex',
     flexDirection: 'row',
   },
   pollOptionItemContainerActive: {
-    // borderColor : colors.holytosca,
     backgroundColor: colors.holytosca30percent,
-    // borderWidth : 1.25,
     marginBottom: 8,
     borderRadius: 8,
     display: 'flex',
@@ -356,10 +335,6 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.black,
     fontFamily: fonts.inter[400],
-    // backgroundColor : 'red'
-  },
-  pollOptionItemPercentage: {
-    // backgroundColor : 'red'
   },
   percentageBar: (percent) => {
     if (!percent) {

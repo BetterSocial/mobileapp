@@ -3,7 +3,7 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import SheetAddTopic from '../../src/elements/Post/SheetAddTopic';
+import SheetAddTopic from '../../src/screens/CreatePost/elements/SheetAddTopic';
 
 configure({adapter: new Adapter()});
 jest.useFakeTimers();

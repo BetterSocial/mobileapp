@@ -3,7 +3,7 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import SheetExpiredPost from '../../src/elements/Post/SheetExpiredPost';
+import SheetExpiredPost from '../../src/screens/CreatePost/elements/SheetExpiredPost';
 
 configure({adapter: new Adapter()});
 // jest.useFakeTimers();

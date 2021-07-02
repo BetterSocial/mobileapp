@@ -3,7 +3,7 @@ import {shallow, configure} from 'enzyme';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import WriteComment from '../../src/elements/PostDetail/WriteComment';
+import WriteComment from '../../src/components/Comments/WriteComment';
 
 configure({adapter: new Adapter()});
 

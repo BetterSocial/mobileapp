@@ -56,7 +56,6 @@ const validationTimer = (timer, duration_feed) => {
       return <MemoThirtySeven_fourtyNine height={17} width={17} />;
     case total < 88:
       return <MemoTwentyFive_thirtySix height={17} width={17} />;
-    // return <MemoOne height={17} width={17} />;
     default:
       return <MemoOne height={17} width={17} />;
   }
