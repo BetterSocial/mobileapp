@@ -52,7 +52,7 @@ const NewsScreen = ({navigation}) => {
     const initData = async () => {
       try {
         let res = await getDomains();
-        setData(res.data);
+        setData([{dummy: true}, ...res.data]);
         setLoading(false);
       } catch (error) {
         setLoading(false);

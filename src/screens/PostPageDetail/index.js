@@ -275,9 +275,6 @@ const PostPageDetail = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={{paddingHorizontal: 16}}>
-        <Header props={item} isBackButton={true} />
-      </View>
       <ScrollView
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
@@ -317,7 +314,7 @@ const PostPageDetail = (props) => {
           <Gap height={16} />
           <Footer
             item={item}
-            disableComment={true}
+            disableComment={false}
             totalComment={totalComment}
             totalVote={totalVote}
             onPressDownVote={() => {
@@ -452,7 +449,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       paddingHorizontal: 16,
       marginBottom: 16,
-      height: height - 100,
+      height: height - 120,
     };
   },
   gap: {height: 16},
