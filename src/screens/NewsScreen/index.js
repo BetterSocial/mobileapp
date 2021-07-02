@@ -37,31 +37,34 @@ const NewsScreen = (props) => {
     initData();
   }, []);
 
+  let handleScrollEvent = (event) => {
+    let y = event.nativeEvent.contentOffset.y;
+    let dy = y - lastDragY;
+    if (dy <= 0)
+      return Animated.timing(offset, {
+        toValue: 0,
+        duration: 50,
+        useNativeDriver: false,
+      }).start();
+    else if (dy > 0)
+      return Animated.timing(offset, {
+        toValue: -70,
+        duration: 50,
+        useNativeDriver: false,
+      }).start();
+  };
+
+  let handleOnScrollBeginDrag = (event) => {
+    lastDragY = event.nativeEvent.contentOffset.y;
+  };
+
   return (
     <View style={styles.container}>
       <Search animatedValue={offset} />
       <Animated.View>
         <FlatList
-          onScrollBeginDrag={(event) => {
-            lastDragY = event.nativeEvent.contentOffset.y;
-          }}
-          onScroll={(event) => {
-            let y = event.nativeEvent.contentOffset.y;
-            let dy = y - lastDragY;
-            console.log(`${y} - ${lastDragY} = ${dy}`);
-            if (dy <= 0)
-              return Animated.timing(offset, {
-                toValue: 0,
-                duration: 50,
-                useNativeDriver: false,
-              }).start();
-            else if (dy > 0)
-              return Animated.timing(offset, {
-                toValue: -70,
-                duration: 50,
-                useNativeDriver: false,
-              }).start();
-          }}
+          onScrollBeginDrag={handleOnScrollBeginDrag}
+          onScroll={handleScrollEvent}
           scrollEventThrottle={16}
           data={data}
           renderItem={({item, index}) => {

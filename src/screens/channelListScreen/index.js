@@ -9,6 +9,7 @@ import analytics from '@react-native-firebase/analytics';
 const chatClient = new StreamChat(STREAM_API_KEY);
 
 import {getAccessToken} from '../../utils/token';
+import Search from './elements/Search';
 const sort = {last_message_at: -1};
 
 const ChannelListScreen = ({navigation}) => {
@@ -43,17 +44,20 @@ const ChannelListScreen = ({navigation}) => {
   };
 
   return (
-    <Chat client={chatClient}>
-      <View style={StyleSheet.absoluteFill}>
-        <ChannelList
-          filters={memoizedFilters}
-          onSelect={(channel) => {
-            navigation.navigate('Channel', {channel: channel});
-          }}
-          sort={sort}
-        />
-      </View>
-    </Chat>
+    <View style={{backgroundColor: 'red', height: '100%'}}>
+      <Search animatedValue={0} />
+      <Chat client={chatClient}>
+        <View style={StyleSheet.absoluteFill}>
+          <ChannelList
+            filters={memoizedFilters}
+            onSelect={(channel) => {
+              navigation.navigate('Channel', {channel: channel});
+            }}
+            sort={sort}
+          />
+        </View>
+      </Chat>
+    </View>
   );
 };
 

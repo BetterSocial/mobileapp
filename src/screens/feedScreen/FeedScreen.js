@@ -41,7 +41,6 @@ const FeedScreen = (props) => {
   const refReportDomain = React.useRef();
   const refSpecificIssue = React.useRef();
 
-  console.log(props.route.params?.refresh);
   React.useEffect(() => {
     let isRefresh = props.route.params?.refresh;
     if (isRefresh) getDataFeeds(lastId);

@@ -47,8 +47,13 @@ let postDetailPageSeeReplies = (count) => {
   return `See ${count} ${count > 1 ? `replies` : 'reply'}`;
 };
 
+// Chat Tab
+let chatTabHeaderPlaceholder = 'Search Chat';
+let chatTabHeaderCreateChatButtonText = 'New Chat';
+
 // News Tab
 let newsTabHeaderPlaceholder = 'Search News';
+let newsTabHeaderCreatePostButtonText = 'New Post';
 
 // Component
 let headerIosSkip = 'Skip';
@@ -94,7 +99,11 @@ export default {
 
   postDetailPageSeeReplies,
 
+  chatTabHeaderPlaceholder,
+  chatTabHeaderCreateChatButtonText,
+
   newsTabHeaderPlaceholder,
+  newsTabHeaderCreatePostButtonText,
 
   headerIosSkip,
   searchModalTitle,
