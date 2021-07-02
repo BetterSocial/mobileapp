@@ -7,14 +7,14 @@ import {COLORS, FONTS, SIZES} from '../../utils/theme';
 
 const Header = ({image, domain, time}) => {
   return (
-    <View style={{flexDirection: 'row', paddingHorizontal: SIZES.base}}>
+    <View style={styles.container}>
       <Avatar image={image} />
       <Gap width={8} />
       <View style={{flex: 1, justifyContent: 'center'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={{...FONTS.h3}}>{domain}</Text>
+          <Text style={{...FONTS.h4}}>{domain}</Text>
           <View style={styles.point} />
-          <Text style={{color: COLORS.gray, ...FONTS.body3}}>
+          <Text style={{color: COLORS.gray, ...FONTS.body4}}>
             {new Date(time).toLocaleDateString()}
           </Text>
         </View>
@@ -25,6 +25,13 @@ const Header = ({image, domain, time}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    paddingHorizontal: SIZES.base,
+    marginLeft: 12,
+    marginRight: 12,
+    marginTop: 4,
+  },
   wrapperItem: {backgroundColor: 'white', marginBottom: 16},
   wrapperImage: {
     borderRadius: 45,
