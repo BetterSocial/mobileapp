@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   image: {
     width: 24,
     height: 24,
+    borderRadius: 12,
   },
   container: {
     borderLeftWidth: 1,
