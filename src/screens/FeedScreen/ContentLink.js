@@ -2,8 +2,9 @@ import {useRoute} from '@react-navigation/native';
 import * as React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 
-import Card from '../../components/Card/Card';
+import {COLORS} from '../../utils/theme';
 import {smartRender} from '../../utils/Utils';
+import Card from '../../components/Card/Card';
 
 const ContentLink = ({og, onPress, onCardPress}) => {
   let route = useRoute();
@@ -40,5 +41,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 6,
+    backgroundColor: COLORS.white,
   },
 });

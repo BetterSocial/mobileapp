@@ -103,6 +103,7 @@ const Item = ({
   onPressComment,
   selfUserId,
   onPressDomain,
+  onNewPollFetched,
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -177,7 +178,7 @@ const Item = ({
           pollexpiredat={item.polls_expired_at}
           multiplechoice={item.multiplechoice}
           isalreadypolling={item.isalreadypolling}
-          onnewpollfetched={() => {}}
+          onnewpollfetched={onNewPollFetched}
         />
       )}
 

@@ -16,6 +16,7 @@ import SeeMore from 'react-native-see-more-inline';
 import Gap from '../../components/Gap';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import { COLORS } from '../../utils/theme';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingLeft: 20,
     paddingRight: 20,
+    backgroundColor: COLORS.white,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],

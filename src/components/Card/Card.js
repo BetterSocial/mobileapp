@@ -16,7 +16,7 @@ import {colors} from '../../utils/colors';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import {fonts} from '../../utils/fonts';
 import Gap from '../Gap';
-import { COLORS } from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 
 const Card = (props) => {
   const {

@@ -19,6 +19,7 @@ import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -269,6 +270,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingLeft: 20,
     paddingRight: 20,
+    backgroundColor: COLORS.white,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
