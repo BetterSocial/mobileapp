@@ -51,8 +51,8 @@ const WriteComment = ({
         <View style={styles.content}>
           <TextInput
             placeholder={StringConstant.commentBoxDefaultPlaceholder}
-            multiline={false}
-            placeholderTextColor={colors.gray1}
+            multiline
+            placeholderTextColor={colors.gray}
             style={styles.text}
             onChangeText={onChangeText}
             value={value}
@@ -87,16 +87,18 @@ const styles = StyleSheet.create({
   replyToContainer: (inReplyCommentView) => {
     return {
       marginLeft: inReplyCommentView ? 90 : 60,
-      fontFamily: fonts.inter[500],
+      fontFamily: fonts.inter[600],
       marginBottom: 11,
       marginTop: 7,
-      lineHeight: 14.52,
-      color: colors.gray1,
+      lineHeight: 15,
+      fontSize: 12,
+      color: colors.gray,
     };
   },
   replyToTitle: {
-    fontFamily: fonts.inter[700],
-    lineHeight: 14.52,
+    fontFamily: fonts.inter[600],
+    lineHeight: 15,
+    fontSize: 12,
     color: colors.black,
   },
   container: (inReplyCommentView) => {
@@ -147,8 +149,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     color: colors.black,
     lineHeight: 14.52,
-    paddingTop: 0,
-    paddingBottom: 0,
+    paddingTop: 5,
+    paddingBottom: 5,
+    maxHeight: 90,
   },
   icSendButton: {
     alignSelf: 'center',

@@ -16,6 +16,7 @@ import {colors} from '../../utils/colors';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import {fonts} from '../../utils/fonts';
 import Gap from '../Gap';
+import { COLORS } from '../../utils/theme';
 
 const Card = (props) => {
   const {
@@ -36,7 +37,7 @@ const Card = (props) => {
         <Header domain={domain} image={domainImage} date={date} />
         <View style={styles.content}>
           <Text style={styles.title}>
-            {_.truncate(title, {length: 60, separator: ''})}
+            {_.truncate(`${title}`, {length: 80, separator: ''})}
           </Text>
           <Image
             style={styles.image}
@@ -44,8 +45,8 @@ const Card = (props) => {
             resizeMethod="resize"
           />
           <Text style={styles.description}>
-            {/* {_.truncate(description, {length: 120})} */}
-            {description}
+            {_.truncate(`${description}`, {length: 120})}
+            {/* {description} */}
             <Gap style={styles.width(2)} />
             <Text
               onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
@@ -168,19 +169,19 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#000000',
-    fontWeight: '700',
+    fontWeight: '600',
     fontSize: 14,
     lineHeight: 17,
     marginBottom: 8,
-    fontFamily: fonts.inter[700],
+    fontFamily: fonts.inter[600],
     paddingHorizontal: 8,
     paddingRight: 20,
     paddingLeft: 20,
   },
   description: {
-    color: '#364047',
+    color: COLORS.blackgrey,
     fontSize: 12,
-    fontFamily: fonts.inter[600],
+    fontFamily: fonts.inter[400],
     paddingRight: 20,
     paddingLeft: 20,
     marginTop: 5,
@@ -190,7 +191,8 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 4,
-    backgroundColor: colors.gray,
+    marginTop: 2,
+    backgroundColor: colors.gray1,
     marginLeft: 8,
     marginRight: 8,
   },
@@ -203,9 +205,10 @@ const styles = StyleSheet.create({
     // marginLeft: 8,
   },
   cardHeaderDate: {
-    fontSize: 12,
-    color: '#828282',
+    fontSize: 10,
+    color: COLORS.blackgrey,
     fontFamily: fonts.inter[200],
+    // lineHeight: 12.1,
   },
   openLinkText: {
     color: '#2f80ed',

@@ -182,7 +182,11 @@ const Item = ({
       )}
 
       {item.post_type === POST_TYPE_LINK && (
-        <ContentLink og={item.og} onPress={onPressDomain} />
+        <ContentLink
+          og={item.og}
+          onPress={onPress}
+          onCardPress={onPressDomain}
+        />
       )}
       {item.post_type === POST_TYPE_STANDARD && (
         <Content
@@ -250,7 +254,7 @@ const Item = ({
       />
 
       {isReaction && (
-        <View>
+        <View style={styles.paddingHorizontal}>
           <Gap height={8} />
           <PreviewComment
             username={previewComment.user.data.username}
@@ -285,9 +289,9 @@ const styles = StyleSheet.create({
     elevation: 8,
     shadowOpacity: 0.5,
     backgroundColor: 'white',
-    paddingHorizontal: 16,
     paddingVertical: width * 0.03,
     paddingBottom: 8,
     borderBottomColor: 'transparent',
   },
+  paddingHorizontal: {paddingHorizontal: 20},
 });

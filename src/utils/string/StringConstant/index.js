@@ -59,7 +59,7 @@ let newsTabHeaderCreatePostButtonText = 'New Post';
 let headerIosSkip = 'Skip';
 let searchModalTitle = 'Search';
 let searchModalPlaceholder = 'Search by ZIP, neighborhood or city';
-let commentBoxDefaultPlaceholder = 'Add a reply';
+let commentBoxDefaultPlaceholder = 'Add your reply';
 
 // Wording need to be discussed :
 // Splash Screen

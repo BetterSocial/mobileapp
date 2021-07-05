@@ -1,3 +1,4 @@
+import {useRoute} from '@react-navigation/native';
 import * as React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 
@@ -5,8 +6,14 @@ import Card from '../../components/Card/Card';
 import {smartRender} from '../../utils/Utils';
 
 const ContentLink = ({og, onPress, onCardPress}) => {
+  let route = useRoute();
+  let isTouchableDisabled = route?.name === 'PostDetailPage';
+
   return (
-    <TouchableOpacity onPress={onPress} style={styles.contentFeed}>
+    <TouchableOpacity
+      disabled={isTouchableDisabled}
+      onPress={onPress}
+      style={styles.contentFeed}>
       {smartRender(Card, {
         domain: og.domain,
         date: new Date(og.date).toLocaleDateString(),
@@ -32,5 +39,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 6,
   },
 });
