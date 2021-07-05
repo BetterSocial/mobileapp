@@ -19,6 +19,7 @@ import {
   ContactScreen,
   CreateGroupScreen,
   ProfileScreen,
+  DetailDomainScreen,
 } from '../screens';
 import ImageViewerScreen from '../screens/ImageViewer';
 import ReplyComment from '../screens/ReplyComment';
@@ -149,6 +150,11 @@ const RootStact = () => {
       <Stack.Screen
         name="ContactScreen"
         component={ContactScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DetailDomainScreen"
+        component={DetailDomainScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
