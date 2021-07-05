@@ -9,7 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-
+import {useRoute} from '@react-navigation/native';
 import SeeMore from 'react-native-see-more-inline';
 
 import {inputSingleChoicePoll} from '../../service/post';
@@ -19,6 +19,7 @@ import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -38,19 +39,28 @@ const ContentPoll = ({
     return acc + parseInt(current.counter);
   }, 0);
 
-  let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = React.useState(-1);
+  let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] =
+    React.useState(-1);
   let [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
   let [isFetchingResultPoll, setIsFetchingResultPoll] = React.useState(false);
-  let [isAlreadyPolling, setIsAlreadyPolling] = React.useState(isalreadypolling);
+  let [isAlreadyPolling, setIsAlreadyPolling] =
+    React.useState(isalreadypolling);
+  let route = useRoute();
+
+  let isTouchableDisabled = route.name === 'PostDetailPage';
 
   let onSeeResultsClicked = () => {
-    if (isFetchingResultPoll) return;
+    if (isFetchingResultPoll) {
+      return;
+    }
     // setIsFetchingResultPoll(true);
     let newPolls = [...polls];
     let newItem = {...item};
 
     if (multiplechoice) {
-      if (multipleChoiceSelected.length === 0) return;
+      if (multipleChoiceSelected.length === 0) {
+        return;
+      }
       setIsAlreadyPolling(true);
       let selectedPolls = [];
       for (let i = 0; i < multipleChoiceSelected.length; i++) {
@@ -70,9 +80,12 @@ const ContentPoll = ({
       onnewpollfetched(newItem, index);
       setIsAlreadyPolling(true);
     } else {
-      if (singleChoiceSelectedIndex === -1) return;
+      if (singleChoiceSelectedIndex === -1) {
+        return;
+      }
       let selectedPoll = polls[singleChoiceSelectedIndex];
-      newPolls[singleChoiceSelectedIndex].counter = parseInt(selectedPoll.counter) + 1;
+      newPolls[singleChoiceSelectedIndex].counter =
+        parseInt(selectedPoll.counter) + 1;
       newItem.isalreadypolling = true;
       newItem.refreshtoken = new Date().valueOf();
       newItem.pollOptions = newPolls;
@@ -91,7 +104,10 @@ const ContentPoll = ({
   };
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.contentFeed}>
+    <TouchableOpacity
+      disabled={isTouchableDisabled}
+      onPress={onPress}
+      style={styles.contentFeed}>
       {images_url !== null ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
@@ -252,8 +268,9 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginTop: 12,
-    paddingLeft: 4,
-    paddingRight: 4,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: COLORS.white,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],

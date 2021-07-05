@@ -295,7 +295,7 @@ const PostPageDetail = (props) => {
           )}
 
           {item.post_type === POST_TYPE_LINK && (
-            <ContentLink og={item.og} onPress={onPressDomain} />
+            <ContentLink og={item.og} onCardPress={onPressDomain} />
           )}
 
           {item.post_type === POST_TYPE_STANDARD && (
@@ -445,7 +445,6 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.5,
       backgroundColor: 'white',
-      paddingHorizontal: 16,
       marginBottom: 16,
       height: height - 120,
     };

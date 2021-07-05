@@ -56,7 +56,9 @@ let PollOptionsMultipleChoice = ({
   };
 
   return (
-    <TouchableNativeFeedback onPress={onOptionsClicked}>
+    <TouchableNativeFeedback
+      disabled={isPollDisabled()}
+      onPress={onOptionsClicked}>
       <View
         key={`poll-options-${index}`}
         style={

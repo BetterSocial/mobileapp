@@ -221,15 +221,8 @@ const _renderProfileNormal = ({
 };
 
 const Header = ({props, isBackButton = false}) => {
-  let {
-    anonimity,
-    time,
-    privacy,
-    duration_feed,
-    expired_at,
-    location,
-    actor,
-  } = props;
+  let {anonimity, time, privacy, duration_feed, expired_at, location, actor} =
+    props;
   if (anonimity) {
     return _renderAnonimity({
       time,
@@ -263,8 +256,6 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     paddingLeft: 20,
     paddingRight: 28,
-    marginLeft: -16,
-    marginRight: -16,
   },
   rowCenter: {
     flexDirection: 'row',
