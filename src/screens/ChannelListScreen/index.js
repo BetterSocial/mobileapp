@@ -6,6 +6,7 @@ import JWTDecode from 'jwt-decode';
 import {StreamChat} from 'stream-chat';
 import {ChannelList, Chat} from 'stream-chat-react-native';
 import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 const chatClient = new StreamChat(STREAM_API_KEY);
 
 import {getAccessToken} from '../../utils/token';
@@ -38,8 +39,8 @@ const ChannelListScreen = ({navigation}) => {
       setUserId(id);
       await chatClient.connectUser(user, token);
     } catch (err) {
-      console.log('Channel list screen');
       console.log(err);
+      crashlytics().recordError(err);
     }
   };
 
