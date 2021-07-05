@@ -6,6 +6,7 @@ import PreviewComment from './PreviewComment';
 import Dot from './Dot';
 import Gap from './Gap';
 import DomainHeader from './DomainHeader';
+import Header from './Header';
 
 export {
   Avatar,
@@ -16,4 +17,5 @@ export {
   Dot,
   Gap,
   DomainHeader,
+  Header,
 };

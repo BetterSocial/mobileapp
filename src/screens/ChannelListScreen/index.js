@@ -45,7 +45,10 @@ const ChannelListScreen = ({navigation}) => {
 
   return (
     <View style={{height: '100%'}}>
-      <Search animatedValue={0} />
+      <Search
+        animatedValue={0}
+        onPress={() => navigation.navigate('CreateGroupScreen')}
+      />
       <Chat client={chatClient}>
         <View style={StyleSheet.absoluteFill}>
           <ChannelList
