@@ -110,8 +110,6 @@ const styles = StyleSheet.create({
       paddingLeft: inReplyCommentView ? 50 : 20,
       flexDirection: 'row',
       zIndex: 100,
-      // backgroundColor: 'red',
-      alignItems: 'center',
     };
   },
   content: {
