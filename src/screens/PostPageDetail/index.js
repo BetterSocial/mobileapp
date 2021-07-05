@@ -21,7 +21,6 @@ import {blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
 import ContentPoll from '../FeedScreen/ContentPoll';
 import {
-  POST_VERB_POLL,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
@@ -29,6 +28,7 @@ import {
 import {createCommentParent} from '../../service/comment';
 import ContentLink from '../FeedScreen/ContentLink';
 import {getFeedDetail} from '../../service/post';
+import {getAccessToken} from '../../utils/token';
 
 const {width, height} = Dimensions.get('window');
 
@@ -80,8 +80,6 @@ const PostPageDetail = (props) => {
   newItemProp.latest_reactions.comment = sortedComment;
 
   const [item, setItem] = React.useState(newItemProp);
-
-  // console.log(item.latest_reactions.comment);
 
   React.useEffect(() => {
     const initial = () => {

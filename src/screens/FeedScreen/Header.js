@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Avatar} from 'react-native-activity-feed';
-import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import PropsTypes from 'prop-types';
 
@@ -133,7 +132,9 @@ const _renderProfileNormal = ({
   let navigateToProfile = async () => {
     let selfAccessToken = await getAccessToken();
     let selfUserId = await jwtDecode(selfAccessToken).user_id;
-    if (selfUserId === userId) return navigation.navigate('ProfileScreen');
+    if (selfUserId === userId) {
+      return navigation.navigate('ProfileScreen');
+    }
     return navigation.navigate('OtherProfile', {
       data: {
         user_id: selfUserId,
@@ -220,8 +221,15 @@ const _renderProfileNormal = ({
 };
 
 const Header = ({props, isBackButton = false}) => {
-  let {anonimity, time, privacy, duration_feed, expired_at, location, actor} =
-    props;
+  let {
+    anonimity,
+    time,
+    privacy,
+    duration_feed,
+    expired_at,
+    location,
+    actor,
+  } = props;
   if (anonimity) {
     return _renderAnonimity({
       time,
