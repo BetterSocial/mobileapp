@@ -8,7 +8,7 @@ let signInScreenHumanIdDetail =
 // Onboarding - Choose Username
 let onboardingChooseUsernameHeadline = 'Choose your username';
 let onboardingChooseUsernameSubHeadline =
-  'Ping does not require real names - just make sure your friends will find & recognize you';
+  'BetterSocial does not require real names - just make sure your friends will find & recognize you';
 let onboardingChooseUsernameBlueBoxHint =
   'Whatever your username, you will always be able to post anonymously.';
 let onboardingChooseUsernameButtonStateNext = 'NEXT';
