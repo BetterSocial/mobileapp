@@ -253,7 +253,7 @@ const Item = ({
           item.anonimity ? false : selfUserId === item.actor.id ? true : false
         }
       />
-
+      <View style={styles.lineAffterFooter} />
       {isReaction && (
         <View>
           <PreviewComment
@@ -294,4 +294,5 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   paddingHorizontal: {paddingHorizontal: 20},
+  lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
 });

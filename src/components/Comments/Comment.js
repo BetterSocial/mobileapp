@@ -2,10 +2,9 @@ import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import IconEn from 'react-native-vector-icons/Entypo';
-import IconAnt from 'react-native-vector-icons/AntDesign';
 
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
-import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_arrow_down_vote_off';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
+import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
@@ -56,14 +55,14 @@ const Comment = ({
             <Text style={styles.btnReplyText}>Reply</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity style={styles.btnBlock}>
+        <TouchableOpacity style={[styles.btnBlock, styles.btn]}>
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.arrowup}>
+        <TouchableOpacity style={[styles.arrowup, styles.btn]}>
           <MemoIc_arrow_down_vote_off width={18} height={18} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity style={styles.btn}>
           <MemoIc_arrow_upvote_off width={18} height={18} />
         </TouchableOpacity>
       </View>
@@ -74,6 +73,12 @@ const Comment = ({
 export default Comment;
 
 const styles = StyleSheet.create({
+  btn: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   image: {
     width: 24,
     height: 24,
@@ -125,11 +130,10 @@ const styles = StyleSheet.create({
     marginRight: 28.61,
   },
   btnBlock: {
-    // marginLeft: 28.61,
-    marginRight: 28.51,
+    marginRight: 16.51,
   },
   arrowup: {
-    marginRight: 33.04,
+    marginRight: 21.04,
   },
   gap: {marginBottom: 8},
   time: {

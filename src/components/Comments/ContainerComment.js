@@ -117,43 +117,6 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
     </ContainerReply>
   );
 };
-
-const ReplyCommentChild = ({
-  data,
-  countComment,
-  navigation,
-  isLast,
-  parent,
-}) => {
-  return (
-    <ContainerReply isGrandchild={countComment === 1}>
-      {data.map((item, index) => {
-        return (
-          <ConnectorWrapper index={index}>
-            <Comment
-              key={'c' + index}
-              photo={item.user.data.profile_pic_url}
-              comment={item.data.text}
-              time={item.created_at}
-              level={2}
-              username={item.user.data.username}
-              onPress={() => {
-                console.log(parent);
-                console.log('======');
-                navigation.navigate('ReplyComment', {
-                  item: item,
-                  parent: parent,
-                });
-              }}
-              isLast={index === countComment - 1}
-            />
-          </ConnectorWrapper>
-        );
-      })}
-    </ContainerReply>
-  );
-};
-
 const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
   return (
     <View
