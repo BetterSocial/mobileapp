@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
   },
-  content: (height) => {
+  content: (h) => {
     return {
       width: width,
       borderRadius: 5,
@@ -445,8 +445,8 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.5,
       backgroundColor: 'white',
-      marginBottom: 16,
-      height: height - 120,
+      marginBottom: -1,
+      height: h - 120,
     };
   },
   gap: {height: 16},

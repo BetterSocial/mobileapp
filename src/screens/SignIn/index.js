@@ -225,8 +225,6 @@ const S = StyleSheet.create({
     height: '70%',
   },
   containerBtnLogin: {
-    // backgroundColor: 'orange',
-    // backgroundColor: '#fff',
     flex: 1,
     alignItems: 'center',
     paddingTop: 26,

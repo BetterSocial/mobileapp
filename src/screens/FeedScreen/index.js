@@ -43,8 +43,10 @@ const FeedScreen = (props) => {
 
   React.useEffect(() => {
     let isRefresh = props.route.params?.refresh;
-    if (isRefresh) getDataFeeds(lastId);
-  },[props.route.params])
+    if (isRefresh) {
+      getDataFeeds(lastId);
+    }
+  }, [props.route.params]);
 
   const onSelectBlocking = (v) => {
     if (v !== 1) {

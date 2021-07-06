@@ -24,7 +24,7 @@ const Footer = ({
   disableComment = false,
 }) => {
   return (
-    <View style={{...styles.rowSpaceBeetwen}}>
+    <View style={[styles.rowSpaceBeetwen, styles.container]}>
       <View style={{...styles.rowSpaceBeetwen, width: SIZES.width * 0.25}}>
         <TouchableOpacity onPress={onPressShare}>
           <MemoIc_share height={20} width={20} />
@@ -57,14 +57,7 @@ const Footer = ({
           )}
         </TouchableOpacity>
 
-        <Text
-          style={{
-            ...FONTS.body2,
-            color:
-              totalVote > 0 ? '#00ADB5' : totalVote < 0 ? '#FF2E63' : '#C4C4C4',
-          }}>
-          {totalVote}
-        </Text>
+        <Text style={styles.vote(totalVote)}>{totalVote}</Text>
 
         <TouchableOpacity onPress={onPressUpvote}>
           {statusVote === 'upvote' ? (
@@ -79,17 +72,27 @@ const Footer = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#C4C4C4',
+    marginHorizontal: -16,
+    paddingHorizontal: 26,
+    paddingVertical: 16.83,
+  },
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginLeft: 10,
-    marginRight: 10,
+    marginHorizontal: 10,
   },
   text: {
     ...FONTS.body2,
     color: '#C4C4C4',
   },
+  vote: (count) => ({
+    ...FONTS.body2,
+    color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4',
+  }),
 });
 
 Footer.propTypes = {

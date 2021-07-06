@@ -27,6 +27,7 @@ const ContainerComment = ({comments}) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.lineBeforeProfile} />
       {comments.map((item, index) => {
         (item.latest_children.comment || []).sort((current, next) => {
           let currentMoment = moment(current.updated_at);
@@ -169,6 +170,11 @@ export default ContainerComment;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 30,
+  },
+  lineBeforeProfile: {
+    height: 8.5,
+    borderLeftWidth: 1,
+    borderLeftColor: '#C4C4C4',
   },
   containerReply: (hideLeftConnector) => ({
     borderLeftWidth: 1,

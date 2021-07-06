@@ -219,21 +219,18 @@ const OtherProfile = () => {
                       <ShareIcon width={20} height={20} fill="#000" />
                     </TouchableNativeFeedback>
                   </View>
-                  <View style={styles.wrapImageProfile}>
+
+                  <View style={styles.containerProfile}>
                     <View style={styles.wrapImageAndStatus}>
-                      <View style={styles.wrapImageProfile}>
-                        <Image
-                          style={styles.profileImage}
-                          source={{
-                            uri: dataMain.profile_pic_path
-                              ? dataMain.profile_pic_path
-                              : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-                          }}
-                        />
-                        <Text style={styles.nameProfile}>
-                          {dataMain.bio ? dataMain.bio : ''}
-                        </Text>
-                      </View>
+                      <Image
+                        style={styles.profileImage}
+                        source={{
+                          uri: dataMain.profile_pic_path
+                            ? dataMain.profile_pic_path
+                            : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
+                        }}
+                      />
+
                       <View style={styles.wrapButton}>
                         <TouchableNativeFeedback>
                           <BlockBlueIcon
@@ -242,13 +239,15 @@ const OtherProfile = () => {
                             fill={colors.bondi_blue}
                           />
                         </TouchableNativeFeedback>
-                        <TouchableNativeFeedback>
-                          <EnveloveBlueIcon
-                            width={20}
-                            height={16}
-                            fill={colors.bondi_blue}
-                          />
-                        </TouchableNativeFeedback>
+                        <View style={styles.btnMsg}>
+                          <TouchableNativeFeedback>
+                            <EnveloveBlueIcon
+                              width={20}
+                              height={16}
+                              fill={colors.bondi_blue}
+                            />
+                          </TouchableNativeFeedback>
+                        </View>
                         {dataMain.is_following ? (
                           <TouchableNativeFeedback
                             onPress={() => handleSetUnFollow()}>
@@ -270,10 +269,13 @@ const OtherProfile = () => {
                         )}
                       </View>
                     </View>
-                    <Text style={styles.nameProfile}>
-                      {params.data.full_name}
-                    </Text>
+                    {params.data.full_name && (
+                      <Text style={styles.nameProfile}>
+                        {params.data.full_name}
+                      </Text>
+                    )}
                   </View>
+
                   <View style={styles.wrapFollower}>
                     <View style={styles.wrapRow}>
                       <Text style={styles.textTotal}>
@@ -357,9 +359,13 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     marginBottom: 12,
   },
+  containerProfile: {
+    marginTop: 24,
+  },
   wrapImageProfile: {
     marginTop: 24,
     flexDirection: 'column',
+    backgroundColor: 'red',
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
@@ -423,12 +429,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: 'white',
   },
   wrapButton: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: 180,
+    justifyContent: 'flex-end',
   },
   buttonFollowing: {
     width: 88,
@@ -489,6 +496,10 @@ const styles = StyleSheet.create({
   containerFlatFeed: {
     padding: 20,
     flex: 1,
+  },
+  btnMsg: {
+    marginRight: 16,
+    marginLeft: 24,
   },
 });
 export default OtherProfile;
