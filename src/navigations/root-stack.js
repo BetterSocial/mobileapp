@@ -14,7 +14,13 @@ import WhotoFollow from '../screens/WhotoFollow';
 import OtherProfile from '../screens/OtherProfile';
 import CreatePost from '../screens/CreatePost';
 import LocalComunity from '../screens/LocalComunity';
-import {ChannelScreen, ProfileScreen} from '../screens';
+import {
+  ChannelScreen,
+  ContactScreen,
+  CreateGroupScreen,
+  ProfileScreen,
+  DetailDomainScreen,
+} from '../screens';
 import ImageViewerScreen from '../screens/ImageViewer';
 import ReplyComment from '../screens/ReplyComment';
 import PostDetailPage from '../screens/PostPageDetail';
@@ -134,6 +140,21 @@ const RootStact = () => {
       <Stack.Screen
         name="DomainScreen"
         component={DomainScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CreateGroupScreen"
+        component={CreateGroupScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ContactScreen"
+        component={ContactScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DetailDomainScreen"
+        component={DetailDomainScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

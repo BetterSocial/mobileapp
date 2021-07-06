@@ -215,6 +215,7 @@ const FeedScreen = (props) => {
                   item={item}
                   onNewPollFetched={onNewPollFetched}
                   onPress={() => {
+                    console.log("Render Item on press");
                     props.navigation.navigate('PostDetailPage', {
                       item: mainFeeds[index],
                       isalreadypolling: item.isalreadypolling,

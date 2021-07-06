@@ -103,6 +103,7 @@ const Item = ({
   onPressComment,
   selfUserId,
   onPressDomain,
+  onNewPollFetched,
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -172,17 +173,21 @@ const Item = ({
           message={item.message}
           images_url={item.images_url}
           polls={item.pollOptions}
-          onPress={() => {}}
+          onPress={onPress}
           item={item}
           pollexpiredat={item.polls_expired_at}
           multiplechoice={item.multiplechoice}
           isalreadypolling={item.isalreadypolling}
-          onnewpollfetched={() => {}}
+          onnewpollfetched={onNewPollFetched}
         />
       )}
 
       {item.post_type === POST_TYPE_LINK && (
-        <ContentLink og={item.og} onPress={onPressDomain} />
+        <ContentLink
+          og={item.og}
+          onPress={onPress}
+          onCardPress={onPressDomain}
+        />
       )}
       {item.post_type === POST_TYPE_STANDARD && (
         <Content
@@ -284,9 +289,9 @@ const styles = StyleSheet.create({
     elevation: 8,
     shadowOpacity: 0.5,
     backgroundColor: 'white',
-    paddingHorizontal: 16,
     paddingVertical: width * 0.03,
     paddingBottom: 8,
     borderBottomColor: 'transparent',
   },
+  paddingHorizontal: {paddingHorizontal: 20},
 });

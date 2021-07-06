@@ -295,7 +295,7 @@ const PostPageDetail = (props) => {
           )}
 
           {item.post_type === POST_TYPE_LINK && (
-            <ContentLink og={item.og} onPress={onPressDomain} />
+            <ContentLink og={item.og} onCardPress={onPressDomain} />
           )}
 
           {item.post_type === POST_TYPE_STANDARD && (

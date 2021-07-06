@@ -19,7 +19,9 @@ let PollOptions = ({
 
   let isPollDisabled = () => isexpired || isalreadypolling;
   let onPollPressed = () => {
-    if (isalreadypolling) return;
+    if (isalreadypolling) {
+      return;
+    }
     onselected(index);
   };
 
@@ -29,7 +31,10 @@ let PollOptions = ({
   // console.log(poll);
 
   return (
-    <TouchableNativeFeedback onPress={onPollPressed}>
+    <TouchableNativeFeedback
+      style={{backgroundColor: 'red'}}
+      disabled={isPollDisabled()}
+      onPress={onPollPressed}>
       <View
         key={`poll-options-${index}`}
         style={
@@ -101,8 +106,12 @@ let styles = StyleSheet.create({
   },
   pollOptionItemPercentage: {},
   percentageBar: (percent, isMyPoll = false) => {
-    if (!percent) percent = 0;
-    if (percent > 100) percent = 100;
+    if (!percent) {
+      percent = 0;
+    }
+    if (percent > 100) {
+      percent = 100;
+    }
 
     return {
       width: `${percent}%`,
