@@ -251,7 +251,6 @@ const Item = ({
 
       {isReaction && (
         <View>
-          <Gap height={8} />
           <PreviewComment
             username={previewComment.user.data.username}
             comment={previewComment.data.text}
