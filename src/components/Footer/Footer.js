@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#C4C4C4',
     marginHorizontal: -16,
-    paddingHorizontal: 10,
+    paddingHorizontal: 26,
     paddingVertical: 16.83,
   },
   rowSpaceBeetwen: {

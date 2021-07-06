@@ -445,7 +445,6 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.5,
       backgroundColor: 'white',
-      paddingHorizontal: 16,
       marginBottom: -1,
       height: h - 120,
     };

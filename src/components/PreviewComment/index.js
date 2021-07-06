@@ -17,7 +17,7 @@ const PreviewComment = ({
   onPress,
 }) => {
   return (
-    <View>
+    <View style={styles.containerPreview}>
       <View style={styles.lineBeforeProfile} />
       <View style={styles.container(totalComment)}>
         <View style={styles.profile}>
@@ -62,6 +62,7 @@ const PreviewComment = ({
 export default PreviewComment;
 
 const styles = StyleSheet.create({
+  containerPreview: {paddingHorizontal: 20},
   text: {
     marginStart: 20,
   },
