@@ -165,9 +165,6 @@ const ReplyComment = (props) => {
     </View>
   );
 };
-// const ContainerReply = ({children, isGrandchild}) => {
-//   return <View style={styles.containerReply(isGrandchild)}>{children}</View>;
-// };
 const ContainerReply = ({children, isGrandchild = true, hideLeftConnector}) => {
   return (
     <View

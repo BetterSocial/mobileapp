@@ -68,10 +68,14 @@ const ProfileScreen = () => {
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
   const [errorBio, setErrorBio] = React.useState('');
   let [rerender, setRerender] = React.useState(0);
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] =
-    React.useState(false);
-  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
-    React.useState(false);
+  const [
+    isLoadingUpdateImageGalery,
+    setIsLoadingUpdateImageGalery,
+  ] = React.useState(false);
+  const [
+    isLoadingUpdateImageCamera,
+    setIsLoadingUpdateImageCamera,
+  ] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
 
@@ -101,7 +105,7 @@ const ProfileScreen = () => {
       });
     };
   }, []);
-  
+
   const fetchMyProfile = async (withLoading) => {
     const value = await getAccessToken();
     if (value) {
@@ -472,7 +476,6 @@ const ProfileScreen = () => {
                   </View>
                 </View>
               ) : null}
-
               <BottomSheetBio
                 ref={bottomSheetBioRef}
                 value={tempBio}
