@@ -27,6 +27,7 @@ const ContainerComment = ({comments}) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.lineBeforeProfile} />
       {comments.map((item, index) => {
         (item.latest_children.comment || []).sort((current, next) => {
           let currentMoment = moment(current.updated_at);
@@ -116,43 +117,6 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
     </ContainerReply>
   );
 };
-
-const ReplyCommentChild = ({
-  data,
-  countComment,
-  navigation,
-  isLast,
-  parent,
-}) => {
-  return (
-    <ContainerReply isGrandchild={countComment === 1}>
-      {data.map((item, index) => {
-        return (
-          <ConnectorWrapper index={index}>
-            <Comment
-              key={'c' + index}
-              photo={item.user.data.profile_pic_url}
-              comment={item.data.text}
-              time={item.created_at}
-              level={2}
-              username={item.user.data.username}
-              onPress={() => {
-                console.log(parent);
-                console.log('======');
-                navigation.navigate('ReplyComment', {
-                  item: item,
-                  parent: parent,
-                });
-              }}
-              isLast={index === countComment - 1}
-            />
-          </ConnectorWrapper>
-        );
-      })}
-    </ContainerReply>
-  );
-};
-
 const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
   return (
     <View
@@ -169,6 +133,11 @@ export default ContainerComment;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 30,
+  },
+  lineBeforeProfile: {
+    height: 8.5,
+    borderLeftWidth: 1,
+    borderLeftColor: '#C4C4C4',
   },
   containerReply: (hideLeftConnector) => ({
     borderLeftWidth: 1,

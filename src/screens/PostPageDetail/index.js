@@ -308,7 +308,6 @@ const PostPageDetail = (props) => {
               )}
             />
           )}
-
           <Gap height={16} />
           <Footer
             item={item}
@@ -418,7 +417,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     flex: 1,
-    // marginBottom: 86,
   },
   containerText: {
     marginTop: 20,
@@ -434,10 +432,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
   },
-  content: (height) => {
+  content: (h) => {
     return {
       width: width,
-      borderRadius: 5,
       shadowColor: 'rgba(0,0,0,0.5)',
       shadowOffset: {
         width: 0,
@@ -445,15 +442,17 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.5,
       backgroundColor: 'white',
-      marginBottom: 16,
-      height: height - 120,
+      borderBottomWidth: 1,
+      borderBottomColor: '#C4C4C4',
+      marginBottom: -1,
+      height: h - 120,
     };
   },
   gap: {height: 16},
-  additionalContentStyle: (imageLength, height) => {
+  additionalContentStyle: (imageLength, h) => {
     if (imageLength > 0) {
       return {
-        height: height * 0.5,
+        height: h * 0.5,
       };
     } else {
       return {};

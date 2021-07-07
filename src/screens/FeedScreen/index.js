@@ -43,8 +43,10 @@ const FeedScreen = (props) => {
 
   React.useEffect(() => {
     let isRefresh = props.route.params?.refresh;
-    if (isRefresh) getDataFeeds(lastId);
-  },[props.route.params])
+    if (isRefresh) {
+      getDataFeeds(lastId);
+    }
+  }, [props.route.params]);
 
   const onSelectBlocking = (v) => {
     if (v !== 1) {
@@ -213,7 +215,6 @@ const FeedScreen = (props) => {
                   item={item}
                   onNewPollFetched={onNewPollFetched}
                   onPress={() => {
-                    console.log("Render Item on press");
                     props.navigation.navigate('PostDetailPage', {
                       item: mainFeeds[index],
                       isalreadypolling: item.isalreadypolling,
