@@ -18,7 +18,7 @@ import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {getAccessToken} from '../../utils/token';
 import {downVote, upVote} from '../../service/vote';
 import {blockUser} from '../../service/blocking';
-import {getMainFeed} from '../../service/post';
+import {getMainFeed, viewTimePost} from '../../service/post';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -34,6 +34,7 @@ const FeedScreen = (props) => {
   const [postId, setPostId] = React.useState('');
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+  const [time, setTime] = React.useState(new Date());
 
   const refBlockUser = React.useRef();
   const refBlockDomain = React.useRef();
@@ -46,7 +47,7 @@ const FeedScreen = (props) => {
     if (isRefresh) {
       getDataFeeds(lastId);
     }
-  }, [props.route.params]);
+  }, [props.route.params, lastId]);
 
   const onSelectBlocking = (v) => {
     if (v !== 1) {
@@ -112,6 +113,7 @@ const FeedScreen = (props) => {
         setMainFeeds(data);
       }
       setInitialLoading(false);
+      setTime(new Date());
     } catch (e) {
       console.log(e);
       setInitialLoading(false);
@@ -137,7 +139,7 @@ const FeedScreen = (props) => {
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, lastId]);
 
   React.useEffect(() => {
     getDataFeeds(lastId);
@@ -186,6 +188,12 @@ const FeedScreen = (props) => {
     );
   }
 
+  const sendViewPost = (id, viewTime) => {
+    // console.log(postId);
+    // console.log(id);
+    viewTimePost(id, time);
+  };
+
   return (
     <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
       {mainFeeds !== undefined && (
@@ -194,6 +202,7 @@ const FeedScreen = (props) => {
           renderNoMoreCards={() => {
             if (countStack === 0) {
               let id = mainFeeds[mainFeeds.length - 1].id;
+              console.log(id);
               setLastId(id);
             }
           }}
@@ -204,8 +213,12 @@ const FeedScreen = (props) => {
           verticalThreshold={1}
           horizontalSwipe={false}
           disableBottomSwipe={true}
-          onSwipedTop={() => {
+          onSwipedTop={(index) => {
             setCountStack(countStack - 1);
+            let now = new Date();
+            let diff = now.getTime() - time.getTime();
+            sendViewPost(mainFeeds[index].id, diff);
+            setTime(new Date());
           }}>
           {mainFeeds !== undefined
             ? mainFeeds.map((item, index) => (
