@@ -86,3 +86,17 @@ export const inputSingleChoicePoll = async (polling_id, polling_option_id) => {
     return error;
   }
 };
+
+export const viewTimePost = async (id, time) => {
+  try {
+    let resApi = api.post('/activity/viewpost', {
+      post_id: id,
+      view_time: time,
+    });
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(error.response.data);
+    // console.log(error);
+    return error;
+  }
+};
