@@ -21,7 +21,13 @@ const Comment = ({
   photo,
   level,
   showLeftConnector = true,
+  disableOnTextPress = false,
 }) => {
+  let onTextPress = () => {
+    if (level >= 2 || disableOnTextPress) return;
+    return onPress();
+  };
+
   return (
     <View
       style={styles.container({
@@ -45,9 +51,11 @@ const Comment = ({
           <Text style={styles.time}> {calculateTime(time)}</Text>
         </View>
       </View>
-      <Text style={styles.post}>{comment}</Text>
+      <TouchableOpacity onPress={onTextPress}>
+        <Text style={styles.post}>{comment}</Text>
+      </TouchableOpacity>
       <View style={styles.constainerFooter}>
-        {isLast && level === 2 ? (
+        {isLast && level >= 2 ? (
           <View style={styles.gap} />
         ) : (
           <TouchableOpacity style={styles.btnReply} onPress={onPress}>

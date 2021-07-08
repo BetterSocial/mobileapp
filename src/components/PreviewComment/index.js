@@ -52,7 +52,9 @@ const PreviewComment = ({
             style={{
               color: COLORS.blue,
               ...FONTS.body4,
-            }}>{`${totalComment} more replies`}</Text>
+            }}>{`${totalComment} more ${
+            totalComment > 1 ? 'replies' : 'reply'
+          }`}</Text>
         </TouchableOpacity>
       )}
     </View>
