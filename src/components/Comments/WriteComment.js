@@ -132,6 +132,8 @@ const styles = StyleSheet.create({
       height: 35,
       display: 'flex',
       justifyContent: 'center',
+      marginBottom: 1.5,
+      alignSelf: 'flex-end',
     };
   },
   btnText: {color: 'white', fontFamily: fonts.inter[400]},
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     paddingTop: 5,
     paddingBottom: 5,
-    maxHeight: 90,
+    maxHeight: 100,
   },
   icSendButton: {
     alignSelf: 'center',
