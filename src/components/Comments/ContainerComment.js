@@ -47,7 +47,7 @@ const ContainerComment = ({comments}) => {
                 isLast={isLast(index, item)}
                 isLastInParent={isLastInParent(index, item)}
                 onPress={() => {
-                  navigation.navigate('ReplyComment', {item: item});
+                  navigation.navigate('ReplyComment', {item: item, level: 0});
                 }}
               />
             </View>
@@ -80,7 +80,11 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
     <ContainerReply hideLeftConnector={hideLeftConnector}>
       {data.map((item, index) => {
         const showCommentView = () =>
-          navigation.navigate('ReplyComment', {item: item});
+          navigation.navigate('ReplyComment', {item: item, level: 1});
+
+        const showChildCommentView = () =>
+          // console.log("ASDASD");
+          navigation.navigate('ReplyComment', {item: item, level: 2});
 
         return (
           <ConnectorWrapper index={index}>
@@ -100,7 +104,7 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
                   <View
                     style={styles.seeRepliesContainer(isLastInParent(index))}>
                     <View style={styles.connector} />
-                    <TouchableOpacity onPress={showCommentView}>
+                    <TouchableOpacity onPress={showChildCommentView}>
                       <Text style={styles.seeRepliesText}>
                         {StringConstant.postDetailPageSeeReplies(
                           item.children_counts.comment || 0,

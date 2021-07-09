@@ -36,6 +36,7 @@ const ReplyComment = (props) => {
   let newItemProp = {...itemProp};
   newItemProp.latest_children.comment = sortedComment;
 
+  const level = props.route.params.level;
   const [item, setItem] = React.useState(newItemProp);
 
   // console.log(props.route.params.item);
@@ -94,13 +95,22 @@ const ReplyComment = (props) => {
             time={item.created_at}
             photo={item.user.data.profile_pic_url}
             isLast={(item.children_counts.comment || 0) === 0}
-            level={1}
+            level={level}
             onPress={() => {}}
           />
           {item.children_counts.comment > 0 &&
             item.latest_children.comment.map((itemReply, index) => {
               const showCommentView = () =>
-                navigation.push('ReplyComment', {item: itemReply});
+                navigation.push('ReplyComment', {
+                  item: itemReply,
+                  level: parseInt(level) + 1,
+                });
+
+              const showChildrenCommentView = () =>
+                navigation.push('ReplyComment', {
+                  item: itemReply,
+                  level: parseInt(level) + 2,
+                });
 
               let isLastInParent = (index) => {
                 return index === (item.children_counts.comment || 0) - 1;
@@ -126,6 +136,7 @@ const ReplyComment = (props) => {
                         username={itemReply.user.data.username}
                         comment={itemReply.data.text}
                         onPress={goToComment}
+                        level={parseInt(level) + 1}
                       />
                       {itemReply.children_counts.comment > 0 && (
                         <>
@@ -134,7 +145,7 @@ const ReplyComment = (props) => {
                               isLastInParent(index),
                             )}>
                             <View style={styles.connector} />
-                            <TouchableOpacity onPress={showCommentView}>
+                            <TouchableOpacity onPress={showChildrenCommentView}>
                               <Text style={styles.seeRepliesText}>
                                 {StringConstant.postDetailPageSeeReplies(
                                   itemReply.children_counts.comment || 0,

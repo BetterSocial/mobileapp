@@ -58,10 +58,14 @@ let PollOptions = ({
           <Text style={styles.pollOptionItemText(isexpired)}>
             {poll?.option}
           </Text>
-          <Text
-            style={
-              styles.pollOptionItemPercentage
-            }>{`${optionPercentage}%`}</Text>
+          {isPollDisabled() ? (
+            <Text
+              style={
+                styles.pollOptionItemPercentage
+              }>{`${optionPercentage}%`}</Text>
+          ) : (
+            <></>
+          )}
         </View>
       </View>
     </TouchableNativeFeedback>
