@@ -280,7 +280,7 @@ export default RenderItem;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height - height * 0.1,
+    height: height * 0.9 + 18,
     shadowColor: '#c4c4c4',
     shadowOffset: {
       width: 1,

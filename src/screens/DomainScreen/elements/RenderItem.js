@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   height: (height) => ({height}),
   width: (width) => ({width}),
   wrapperFooter: {
-    marginHorizontal: 16,
+    marginHorizontal: 0,
   },
 });
 

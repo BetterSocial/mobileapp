@@ -3,7 +3,7 @@ import Svg, { Path } from "react-native-svg";
 
 function Ic_block_inactive(props) {
   return (
-    <Svg width="1em" height="1em" viewBox="0 0 22 22" fill="none" {...props}>
+    <Svg width="22" height="22" viewBox="0 0 22 22" fill="none" {...props}>
       <Path
         fillRule="evenodd"
         clipRule="evenodd"
