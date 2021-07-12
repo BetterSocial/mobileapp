@@ -25,45 +25,58 @@ const Footer = ({
 }) => {
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
-      <View style={{...styles.rowSpaceBeetwen, width: SIZES.width * 0.25}}>
-        <TouchableOpacity style={styles.btn} onPress={onPressShare}>
-          <MemoIc_share height={20} width={20} />
+      <View style={styles.leftGroupContainer}>
+        <TouchableOpacity
+          style={{...styles.btn, ...styles.btnShare}}
+          onPress={onPressShare}>
+          <MemoIc_share height={20} width={22} />
         </TouchableOpacity>
         {disableComment ? (
-          <View onPress={onPressComment}>
+          <View
+            onPress={onPressComment}
+            style={{...styles.btn, ...styles.btnComment}}>
             <MemoIc_comment height={20} width={20} />
           </View>
         ) : (
-          <TouchableOpacity style={styles.btn} onPress={onPressComment}>
-            <MemoIc_comment height={20} width={20} />
+          <TouchableOpacity
+            style={{...styles.btn, ...styles.btnComment}}
+            onPress={onPressComment}>
+            <MemoIc_comment height={24} width={25} />
           </TouchableOpacity>
         )}
         <Text style={styles.text}>{totalComment}</Text>
       </View>
-      <View style={{...styles.rowSpaceBeetwen, width: SIZES.width * 0.3}}>
+      <View style={{flex: 1}} />
+      <View style={styles.rightGroupContainer}>
         {isSelf ? (
           <View />
         ) : (
-          <TouchableOpacity style={styles.btn} onPress={onPressBlock}>
-            <MemoIc_block_inactive height={18} width={18} />
+          <TouchableOpacity
+            style={{...styles.btn, ...styles.btnBlock}}
+            onPress={onPressBlock}>
+            <MemoIc_block_inactive height={22} width={22} />
           </TouchableOpacity>
         )}
 
-        <TouchableOpacity style={styles.btn} onPress={onPressDownVote}>
+        <TouchableOpacity
+          style={{...styles.btn, ...styles.btnDownvote}}
+          onPress={onPressDownVote}>
           {statusVote === 'downvote' ? (
-            <MemoIc_arrow_down_vote_on width={18} height={18} />
+            <MemoIc_arrow_down_vote_on width={20} height={18} />
           ) : (
-            <MemoIc_arrow_down_vote_off width={18} height={18} />
+            <MemoIc_arrow_down_vote_off width={20} height={18} />
           )}
         </TouchableOpacity>
 
         <Text style={styles.vote(totalVote)}>{totalVote}</Text>
 
-        <TouchableOpacity style={styles.btn} onPress={onPressUpvote}>
+        <TouchableOpacity
+          style={{...styles.btn, ...styles.btnUpvote}}
+          onPress={onPressUpvote}>
           {statusVote === 'upvote' ? (
-            <MemoIc_arrow_upvote_on width={18} height={18} />
+            <MemoIc_arrow_upvote_on width={20} height={18} />
           ) : (
-            <MemoIc_arrow_upvote_off width={18} height={18} />
+            <MemoIc_arrow_upvote_off width={20} height={18} />
           )}
         </TouchableOpacity>
       </View>
@@ -75,25 +88,56 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 16.83,
   },
+  leftGroupContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 8,
+  },
+  rightGroupContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 14,
+  },
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     marginHorizontal: 10,
   },
   text: {
-    ...FONTS.body2,
+    ...FONTS.body3,
     color: '#C4C4C4',
   },
   vote: (count) => ({
-    ...FONTS.body2,
+    ...FONTS.body3,
+    width: 26,
+    textAlign: 'center',
     color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4',
   }),
   btn: {
-    width: 30,
-    height: 30,
+    height: 20,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  btnShare: {
+    width: 22,
+    marginRight: 27,
+  },
+  btnComment: {
+    width: 25,
+    marginRight: 10,
+  },
+  btnBlock: {
+    width: 20,
+    marginRight: 21,
+  },
+  btnDownvote: {
+    width: 22,
+    marginRight: 11,
+  },
+  btnUpvote: {
+    width: 22,
+    marginLeft: 11,
   },
 });
 
