@@ -3,7 +3,7 @@ import Svg, { Path } from "react-native-svg";
 
 function Ic_comment(props) {
   return (
-    <Svg width="1em" height="1em" viewBox="0 0 25 25" fill="none" {...props}>
+    <Svg width="25" height="25" viewBox="0 0 25 25" fill="none" {...props}>
       <Path
         fillRule="evenodd"
         clipRule="evenodd"
