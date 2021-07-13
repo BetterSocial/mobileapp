@@ -21,7 +21,8 @@ const createChannel = async (
       name: channelName,
       //   image: null,
     });
-    let res = await channel.create();
+    // let res = await channel.create();
+    let res = await channel.watch();
     console.log(res);
     return res;
   } catch (error) {

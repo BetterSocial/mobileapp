@@ -71,7 +71,8 @@ const CreateGroupScreen = ({navigation}) => {
       let members = DUMMY.map((item) => item.id);
       members.push(userId);
       console.log(members);
-      createChannel('messaging', members, groupName);
+      let res = await createChannel('messaging', members, groupName);
+      alert('success create group');
     } catch (error) {
       console.log(error);
     }
