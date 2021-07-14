@@ -107,8 +107,10 @@ const RenderItem = ({
         <View
           style={{
             flexDirection: 'row',
-            paddingHorizontal: 16,
+            paddingHorizontal: 20,
             alignItems: 'center',
+            borderBottomWidth: 0.5,
+            borderBottomColor: COLORS.gray1,
           }}>
           <View style={styles.wrapperImage}>
             <Image
@@ -122,22 +124,22 @@ const RenderItem = ({
           </View>
           <Gap width={SIZES.base} />
           <View style={{flex: 1}}>
-            <Text style={{...FONTS.h3, color: '#000000'}}>{name}</Text>
+            <Text style={styles.headerDomainName}>{name}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{...FONTS.body3, color: '#828282'}}>
+              <Text style={styles.headerDomainDate}>
                 {new Date(time).toLocaleDateString()}
               </Text>
               <View style={styles.point} />
-              <Memoic_globe height={16} width={16} />
+              <Memoic_globe height={13} width={13} />
               <View style={styles.point} />
 
-              <MemoPeopleFollow height={16} width={16} />
+              <MemoPeopleFollow height={13} width={12} />
               <Gap style={{width: 4}} />
               <Text
                 style={{
                   color: '#828282',
+                  fontSize: 12,
                   fontFamily: fonts.inter[700],
-                  fontWeight: 'bold',
                 }}>
                 12k
               </Text>
@@ -152,20 +154,22 @@ const RenderItem = ({
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{paddingHorizontal: 16}}>
-          <Text style={{...FONTS.h3}}>{item.content.title}</Text>
+        <View style={{paddingHorizontal: 20, marginTop: 14, marginBottom: 14}}>
+          <Text style={styles.domainItemTitle}>{item.content.title}</Text>
         </View>
         <Gap height={SIZES.base} />
         <Image
           source={{uri: item.content.image}}
-          style={{height: SIZES.height * 0.3}}
+          style={{height: SIZES.height * 0.3, marginBottom: 14}}
         />
         <Gap />
         <Gap height={SIZES.base} />
-        <View style={{paddingHorizontal: 16}}>
-          <Text>{item.content.description}</Text>
+        <View style={{paddingHorizontal: 20}}>
+          <Text style={styles.domainItemDescription}>
+            {item.content.description}
+          </Text>
         </View>
-        <Gap height={16} />
+        <Gap height={14} />
         <View style={styles.wrapperFooter}>
           <Footer
             totalComment={getCountComment(item)}
@@ -248,14 +252,18 @@ const styles = StyleSheet.create({
   containerDetail: {flex: 1},
   contentDetail: {flexDirection: 'row', alignItems: 'center'},
   content: {flexDirection: 'row', paddingHorizontal: 16},
-  wrapperItem: {backgroundColor: 'white', marginBottom: 16},
-  wrapperItem: {backgroundColor: 'white'},
+  wrapperItem: {
+    backgroundColor: 'white',
+    borderBottomWidth: 4,
+    borderBottomColor: COLORS.gray6,
+  },
+  // wrapperItem: {backgroundColor: 'white'},
   wrapperImage: {
     borderRadius: 45,
     borderWidth: 0.2,
     borderColor: 'rgba(0,0,0,0.5)',
-    width: 36,
-    height: 36,
+    width: 48,
+    height: 48,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -275,8 +283,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
   },
   point: {
-    width: 4,
-    height: 4,
+    width: 3,
+    height: 3,
     borderRadius: 4,
     backgroundColor: colors.gray,
     marginLeft: 8,
@@ -285,7 +293,29 @@ const styles = StyleSheet.create({
   height: (height) => ({height}),
   width: (width) => ({width}),
   wrapperFooter: {
-    marginHorizontal: 0,
+    marginHorizontal: 8,
+    height: 52,
+  },
+  headerDomainName: {
+    fontSize: 14,
+    fontFamily: fonts.inter[600],
+    color: '#000000',
+  },
+  headerDomainDate: {
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#828282',
+  },
+  domainItemTitle: {
+    fontSize: 16,
+    fontFamily: fonts.inter[700],
+    lineHeight: 24,
+  },
+  domainItemDescription: {
+    fontFamily: fonts.inter[400],
+    fontSize: 16,
+    lineHeight: 24,
   },
 });
 

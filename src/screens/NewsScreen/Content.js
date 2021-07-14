@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import {SIZES, FONTS, COLORS} from '../../utils/theme';
 import {sanitizeUrlForLinking} from '../../utils/Utils';
 import Gap from '../../components/Gap';
+import { fonts } from '../../utils/fonts';
 
 const Content = (props) => {
   const navigation = useNavigation();
@@ -27,7 +28,7 @@ const Content = (props) => {
     <TouchableOpacity onPress={onContentPressed}>
       <View style={styles.container}>
         <View style={styles.base}>
-          <Text style={{...FONTS.h3, ...styles.title}}>{title}</Text>
+          <Text style={styles.title}>{title}</Text>
         </View>
         <Gap height={SIZES.base} />
         <View style={{paddingHorizontal: -SIZES.base}}>
@@ -40,7 +41,7 @@ const Content = (props) => {
           />
         </View>
         <View style={styles.base}>
-          <Text style={{...FONTS.body3, ...styles.content}}>
+          <Text style={styles.content}>
             {description}{' '}
             <Text
               onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
@@ -71,10 +72,17 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     marginRight: 12,
     marginTop: 5,
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.blackgrey,
   },
   title: {
     marginLeft: 12,
     marginRight: 12,
+    fontFamily: fonts.inter[600],
+    fontSize: 14,
+    lineHeight: 17,
   },
 });
 

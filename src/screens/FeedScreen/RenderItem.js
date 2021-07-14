@@ -196,63 +196,65 @@ const Item = ({
           onPress={onPress}
         />
       )}
-      <Footer
-        totalComment={getCountComment(item)}
-        totalVote={totalVote}
-        onPressShare={() => onShare(item)}
-        onPressComment={() => onPressComment(item)}
-        onPressBlock={() => onPressBlock(item)}
-        onPressDownVote={() => {
-          setStatusDowvote((prev) => {
-            prev = !prev;
-            onPressDownVote({
-              activity_id: item.id,
-              status: prev,
-              feed_group: 'main_feed',
-            });
-            if (prev) {
-              setVoteStatus('downvote');
-              if (statusUpvote === true) {
-                setTotalVote((p) => p - 2);
+      <View style={styles.footerWrapper}>
+        <Footer
+          totalComment={getCountComment(item)}
+          totalVote={totalVote}
+          onPressShare={() => onShare(item)}
+          onPressComment={() => onPressComment(item)}
+          onPressBlock={() => onPressBlock(item)}
+          onPressDownVote={() => {
+            setStatusDowvote((prev) => {
+              prev = !prev;
+              onPressDownVote({
+                activity_id: item.id,
+                status: prev,
+                feed_group: 'main_feed',
+              });
+              if (prev) {
+                setVoteStatus('downvote');
+                if (statusUpvote === true) {
+                  setTotalVote((p) => p - 2);
+                } else {
+                  setTotalVote((p) => p - 1);
+                }
+                setStatusUpvote(false);
               } else {
-                setTotalVote((p) => p - 1);
-              }
-              setStatusUpvote(false);
-            } else {
-              setVoteStatus('none');
-              setTotalVote((p) => p + 1);
-            }
-            return prev;
-          });
-        }}
-        onPressUpvote={() => {
-          setStatusUpvote((prev) => {
-            prev = !prev;
-            onPressUpvote({
-              activity_id: item.id,
-              status: prev,
-              feed_group: 'main_feed',
-            });
-            if (prev) {
-              setVoteStatus('upvote');
-              if (statusDownvote === true) {
-                setTotalVote((p) => p + 2);
-              } else {
+                setVoteStatus('none');
                 setTotalVote((p) => p + 1);
               }
-              setStatusDowvote(false);
-            } else {
-              setVoteStatus('none');
-              setTotalVote((p) => p - 1);
-            }
-            return prev;
-          });
-        }}
-        statusVote={voteStatus}
-        isSelf={
-          item.anonimity ? false : selfUserId === item.actor.id ? true : false
-        }
-      />
+              return prev;
+            });
+          }}
+          onPressUpvote={() => {
+            setStatusUpvote((prev) => {
+              prev = !prev;
+              onPressUpvote({
+                activity_id: item.id,
+                status: prev,
+                feed_group: 'main_feed',
+              });
+              if (prev) {
+                setVoteStatus('upvote');
+                if (statusDownvote === true) {
+                  setTotalVote((p) => p + 2);
+                } else {
+                  setTotalVote((p) => p + 1);
+                }
+                setStatusDowvote(false);
+              } else {
+                setVoteStatus('none');
+                setTotalVote((p) => p - 1);
+              }
+              return prev;
+            });
+          }}
+          statusVote={voteStatus}
+          isSelf={
+            item.anonimity ? false : selfUserId === item.actor.id ? true : false
+          }
+        />
+      </View>
       <View style={styles.lineAffterFooter} />
       {isReaction && (
         <View>
@@ -295,4 +297,5 @@ const styles = StyleSheet.create({
   },
   paddingHorizontal: {paddingHorizontal: 20},
   lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
+  footerWrapper: {height: 52, paddingHorizontal: 10},
 });

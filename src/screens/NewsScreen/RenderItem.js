@@ -142,11 +142,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     elevation: 0.5,
     borderColor: COLORS.gray,
-    paddingVertical: SIZES.base,
+    paddingTop: SIZES.base,
     marginHorizontal: SIZES.base,
   },
   wrapperFooter: {
     marginHorizontal: SIZES.base,
+    height: 52,
   },
 });
 
