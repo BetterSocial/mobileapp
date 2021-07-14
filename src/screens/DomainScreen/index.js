@@ -42,7 +42,7 @@ const DomainScreen = () => {
       setLoading(true);
       let res = await getDetailDomains(item.og.domain);
       if (res.code === 200) {
-        setData(res.data);
+        setData([{dummy: true}, ...res.data]);
         setLoading(false);
       }
       setLoading(false);
@@ -87,21 +87,27 @@ const DomainScreen = () => {
   return (
     <View style={styles.container}>
       <Navigation domain={item.og.domain} />
-      <Header
-        image={profile.logo}
-        description={profile.short_description}
-        domain={profile.domain_name}
-        followers={10}
-        onPress={(v) => {
-          console.log(v);
-        }}
-      />
-
-      <Gap height={SIZES.base} />
-
       <FlatList
         data={data}
         renderItem={({item, index}) => {
+          if (index === 0) {
+            return (
+              <View key={index}>
+                <Header
+                  image={profile.logo}
+                  description={profile.short_description}
+                  domain={profile.domain_name}
+                  followers={10}
+                  onPress={(v) => {
+                    console.log(v);
+                  }}
+                />
+
+                <Gap height={SIZES.base} />
+              </View>
+            );
+          }
+
           if (item.content) {
             return (
               <RenderItem
@@ -129,7 +135,6 @@ const styles = StyleSheet.create({
   list: {flex: 1},
   container: {
     flex: 1,
-    paddingTop: 8,
     backgroundColor: 'white',
   },
   height: (height) => ({

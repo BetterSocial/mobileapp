@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
@@ -5,22 +6,37 @@ import {Avatar} from '../../components';
 import Gap from '../../components/Gap';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 
-const Header = ({image, domain, time}) => {
+const Header = ({image, domain, time, item}) => {
+  const navigation = useNavigation();
+  const onHeaderPressed = () => {
+    navigation.push('DomainScreen', {
+      item: {
+        ...item,
+        og: {
+          domain: item.domain.name,
+        },
+      },
+    });
+    console.log(item);
+  };
+
   return (
-    <View style={styles.container}>
-      <Avatar image={image} style={{width: 36, height: 36}} />
-      <Gap width={8} />
-      <View style={{flex: 1, justifyContent: 'center'}}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={{...FONTS.h4}}>{domain}</Text>
-          <View style={styles.point} />
-          <Text style={{color: COLORS.gray, ...FONTS.body4}}>
-            {new Date(time).toLocaleDateString()}
-          </Text>
+    <TouchableOpacity onPress={onHeaderPressed}>
+      <View style={styles.container}>
+        <Avatar image={image} style={{width: 36, height: 36}} />
+        <Gap width={8} />
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={{...FONTS.h4}}>{domain}</Text>
+            <View style={styles.point} />
+            <Text style={{color: COLORS.gray, ...FONTS.body4}}>
+              {new Date(time).toLocaleDateString()}
+            </Text>
+          </View>
+          <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
         </View>
-        <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

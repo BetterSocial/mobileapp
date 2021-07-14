@@ -148,7 +148,7 @@ const NewsScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     paddingTop: SIZES.base,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.gray6,
   },
 });
 

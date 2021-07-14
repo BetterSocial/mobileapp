@@ -13,11 +13,13 @@ const Navigation = ({domain}) => {
   };
   return (
     <View style={styles.Header}>
-      <TouchableOpacity onPress={() => backScreen()}>
+      <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
         <MemoIc_arrow_back width={18} height={18} />
       </TouchableOpacity>
       <View style={styles.domain}>
-        <Text style={styles.domainText}>{domain}</Text>
+        <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
+          {domain}
+        </Text>
       </View>
     </View>
   );
@@ -26,11 +28,14 @@ const Navigation = ({domain}) => {
 const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
-    height: 35,
+    height: 48,
     paddingHorizontal: 16,
     alignItems: 'center',
-    marginBottom: 8,
     backgroundColor: 'white',
+  },
+  backbutton: {
+    position: 'absolute',
+    left: 20,
   },
   domain: {
     flex: 1,
@@ -40,8 +45,9 @@ const styles = StyleSheet.create({
   domainText: {
     fontSize: 16,
     fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
     lineHeight: 19,
+    paddingHorizontal: 50,
+    textAlign: 'center',
   },
 });
 

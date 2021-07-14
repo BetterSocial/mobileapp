@@ -27,14 +27,6 @@ const Search = ({onPress, animatedValue}) => {
           <MemoIc_search width={20} height={20} />
         </View>
       </View>
-      <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={styles.newPostText}>
-          {StringConstant.newsTabHeaderCreatePostButtonText}
-        </Text>
-        <View>
-          <MemoIc_pencil height={18} width={18} />
-        </View>
-      </TouchableOpacity>
     </Animated.View>
   );
 };

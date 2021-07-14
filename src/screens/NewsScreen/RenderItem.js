@@ -63,8 +63,10 @@ const RenderItem = ({
         image={item.domain.image}
         domain={item.domain.name}
         time={item.content.created_at}
+        item={item}
       />
       <Content
+        item={item}
         title={item.content.title}
         image={item.content.image}
         description={item.content.description}
@@ -135,7 +137,7 @@ const RenderItem = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: 10,
     borderRadius: SIZES.radius,
     backgroundColor: COLORS.white,
     elevation: 0.5,
