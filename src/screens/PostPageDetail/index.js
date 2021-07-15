@@ -309,70 +309,72 @@ const PostPageDetail = (props) => {
             />
           )}
           <Gap height={16} />
-          <Footer
-            item={item}
-            disableComment={false}
-            totalComment={totalComment}
-            totalVote={totalVote}
-            onPressDownVote={() => {
-              setStatusDowvote((prev) => {
-                prev = !prev;
-                setDownVote({
-                  activity_id: item.id,
-                  status: prev,
-                  feed_group: 'main_feed',
-                });
-                if (prev) {
-                  setVoteStatus('downvote');
-                  if (statusUpvote === true) {
-                    setTotalVote((p) => p - 2);
+          <View style={{height: 52, paddingHorizontal: 0}}>
+            <Footer
+              item={item}
+              disableComment={false}
+              totalComment={totalComment}
+              totalVote={totalVote}
+              onPressDownVote={() => {
+                setStatusDowvote((prev) => {
+                  prev = !prev;
+                  setDownVote({
+                    activity_id: item.id,
+                    status: prev,
+                    feed_group: 'main_feed',
+                  });
+                  if (prev) {
+                    setVoteStatus('downvote');
+                    if (statusUpvote === true) {
+                      setTotalVote((p) => p - 2);
+                    } else {
+                      setTotalVote((p) => p - 1);
+                    }
+                    setStatusUpvote(false);
                   } else {
-                    setTotalVote((p) => p - 1);
-                  }
-                  setStatusUpvote(false);
-                } else {
-                  setVoteStatus('none');
-                  setTotalVote((p) => p + 1);
-                }
-                return prev;
-              });
-            }}
-            onPressUpvote={() => {
-              setStatusUpvote((prev) => {
-                prev = !prev;
-                setUpVote({
-                  activity_id: item.id,
-                  status: prev,
-                  feed_group: 'main_feed',
-                });
-                if (prev) {
-                  setVoteStatus('upvote');
-                  if (statusDownvote === true) {
-                    setTotalVote((p) => p + 2);
-                  } else {
+                    setVoteStatus('none');
                     setTotalVote((p) => p + 1);
                   }
-                  setStatusDowvote(false);
+                  return prev;
+                });
+              }}
+              onPressUpvote={() => {
+                setStatusUpvote((prev) => {
+                  prev = !prev;
+                  setUpVote({
+                    activity_id: item.id,
+                    status: prev,
+                    feed_group: 'main_feed',
+                  });
+                  if (prev) {
+                    setVoteStatus('upvote');
+                    if (statusDownvote === true) {
+                      setTotalVote((p) => p + 2);
+                    } else {
+                      setTotalVote((p) => p + 1);
+                    }
+                    setStatusDowvote(false);
+                  } else {
+                    setVoteStatus('none');
+                    setTotalVote((p) => p - 1);
+                  }
+                  return prev;
+                });
+              }}
+              statusVote={voteStatus}
+              onPressShare={() => {}}
+              onPressComment={onCommentButtonClicked}
+              onPressBlock={(value) => {
+                if (value.actor.id === yourselfId) {
+                  Toast.show("Can't Block yourself", Toast.LONG);
                 } else {
-                  setVoteStatus('none');
-                  setTotalVote((p) => p - 1);
+                  setDataToState(value);
+                  refBlockUser.current.open();
                 }
-                return prev;
-              });
-            }}
-            statusVote={voteStatus}
-            onPressShare={() => {}}
-            onPressComment={onCommentButtonClicked}
-            onPressBlock={(value) => {
-              if (value.actor.id === yourselfId) {
-                Toast.show("Can't Block yourself", Toast.LONG);
-              } else {
-                setDataToState(value);
-                refBlockUser.current.open();
-              }
-            }}
-            isSelf={yourselfId === item.actor.id ? true : false}
-          />
+              }}
+              isSelf={yourselfId === item.actor.id ? true : false}
+            />
+          </View>
         </View>
         {isReaction && (
           <ContainerComment comments={item.latest_reactions.comment} />

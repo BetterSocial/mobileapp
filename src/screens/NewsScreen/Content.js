@@ -49,8 +49,9 @@ const Content = (props) => {
                 color: COLORS.blue,
                 textDecorationLine: 'underline',
                 marginStart: 8,
-                fontFamily: 'Inter-SemiBold',
-                fontSize: 14,
+                fontFamily: fonts.inter[600],
+                lineHeight: 18,
+                fontSize: 12,
               }}>
               Open Link
             </Text>

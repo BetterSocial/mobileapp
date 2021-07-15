@@ -132,7 +132,7 @@ const NewsScreen = ({}) => {
           scrollEventThrottle={16}
           data={data}
           renderItem={({item, index}) => {
-            if (item.dummy) return <View key={index} style={{height: 60}} />;
+            if (item.dummy) return <View key={index} style={{height: 68}} />;
             return (
               <RenderItem
                 key={item}
@@ -156,7 +156,7 @@ const NewsScreen = ({}) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: SIZES.base,
+    // paddingTop: SIZES.base,
     backgroundColor: COLORS.gray6,
   },
 });

@@ -243,60 +243,62 @@ const DetailDomainScreen = (props) => {
               }}
             />
             <Gap height={SIZES.base} />
-            <Footer
-              disableComment={true}
-              statusVote={voteStatus}
-              totalComment={totalComment}
-              totalVote={totalVote}
-              onPressDownVote={() => {
-                setStatusDowvote((prev) => {
-                  prev = !prev;
-                  setDownVote({
-                    activity_id: item.id,
-                    status: prev,
-                    feed_group: 'domain',
-                    domain: item.domain.name,
-                  });
-                  if (prev) {
-                    setVoteStatus('downvote');
-                    if (statusUpvote === true) {
-                      setTotalVote((p) => p - 2);
+            <View style={{height: 52, marginHorizontal: -8}}>
+              <Footer
+                disableComment={true}
+                statusVote={voteStatus}
+                totalComment={totalComment}
+                totalVote={totalVote}
+                onPressDownVote={() => {
+                  setStatusDowvote((prev) => {
+                    prev = !prev;
+                    setDownVote({
+                      activity_id: item.id,
+                      status: prev,
+                      feed_group: 'domain',
+                      domain: item.domain.name,
+                    });
+                    if (prev) {
+                      setVoteStatus('downvote');
+                      if (statusUpvote === true) {
+                        setTotalVote((p) => p - 2);
+                      } else {
+                        setTotalVote((p) => p - 1);
+                      }
+                      setStatusUpvote(false);
                     } else {
-                      setTotalVote((p) => p - 1);
-                    }
-                    setStatusUpvote(false);
-                  } else {
-                    setVoteStatus('none');
-                    setTotalVote((p) => p + 1);
-                  }
-                  return prev;
-                });
-              }}
-              onPressUpvote={() => {
-                setStatusUpvote((prev) => {
-                  prev = !prev;
-                  setUpVote({
-                    activity_id: item.id,
-                    status: prev,
-                    feed_group: 'domain',
-                    domain: item.domain.name,
-                  });
-                  if (prev) {
-                    setVoteStatus('upvote');
-                    if (statusDownvote === true) {
-                      setTotalVote((p) => p + 2);
-                    } else {
+                      setVoteStatus('none');
                       setTotalVote((p) => p + 1);
                     }
-                    setStatusDowvote(false);
-                  } else {
-                    setVoteStatus('none');
-                    setTotalVote((p) => p - 1);
-                  }
-                  return prev;
-                });
-              }}
-            />
+                    return prev;
+                  });
+                }}
+                onPressUpvote={() => {
+                  setStatusUpvote((prev) => {
+                    prev = !prev;
+                    setUpVote({
+                      activity_id: item.id,
+                      status: prev,
+                      feed_group: 'domain',
+                      domain: item.domain.name,
+                    });
+                    if (prev) {
+                      setVoteStatus('upvote');
+                      if (statusDownvote === true) {
+                        setTotalVote((p) => p + 2);
+                      } else {
+                        setTotalVote((p) => p + 1);
+                      }
+                      setStatusDowvote(false);
+                    } else {
+                      setVoteStatus('none');
+                      setTotalVote((p) => p - 1);
+                    }
+                    return prev;
+                  });
+                }}
+              />
+            </View>
           </View>
         </View>
         {isReaction && (

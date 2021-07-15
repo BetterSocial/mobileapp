@@ -297,5 +297,5 @@ const styles = StyleSheet.create({
   },
   paddingHorizontal: {paddingHorizontal: 20},
   lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
-  footerWrapper: {height: 52, paddingHorizontal: 10},
+  footerWrapper: {height: 52, paddingHorizontal: 0},
 });

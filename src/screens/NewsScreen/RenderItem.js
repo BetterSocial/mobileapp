@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: SIZES.radius,
     backgroundColor: COLORS.white,
-    elevation: 0.5,
+    elevation: 0.0,
     borderColor: COLORS.gray,
     paddingTop: SIZES.base,
     marginHorizontal: SIZES.base,
   },
   wrapperFooter: {
-    marginHorizontal: SIZES.base,
+    // marginHorizontal: SIZES.base,
     height: 52,
   },
 });

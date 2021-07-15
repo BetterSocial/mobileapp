@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   rightGroupContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 8,
+    // marginRight: 8,
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     paddingRight: 13.5,
-    paddingLeft: 10,
+    paddingLeft: 18,
     // backgroundColor: 'red',
   },
   btnComment: {
@@ -159,7 +159,8 @@ const styles = StyleSheet.create({
   btnUpvote: {
     height: '100%',
     justifyContent: 'center',
-    paddingHorizontal: 11,
+    paddingLeft: 11,
+    paddingRight: 22,
     // backgroundColor: 'brown',
   },
   totalCommentContainer: {
