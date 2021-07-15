@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import Tooltip from 'react-native-walkthrough-tooltip';
 
 import MemoIc_interface from '../../../assets/icons/Ic_interface';
 import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
@@ -20,64 +21,97 @@ const lorem =
 
 const {width} = Dimensions.get('window');
 
-const Header = ({image, domain, description, followers, onPress}) => (
-  <SingleSidedShadowBox style={styles.shadowBox}>
-    <View style={styles.headerDomain}>
-      <View style={styles.row}>
-        <View style={styles.wrapperImage}>
-          <Image
-            source={{
-              uri: image
-                ? image
-                : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-            }}
-            style={[
-              {height: '100%', width: '100%', borderRadius: 45},
-              StyleSheet.absoluteFillObject,
-            ]}
-          />
+const Header = ({image, domain, description, followers, onPress}) => {
+  let [isTooltipShown, setIsTooltipShown] = React.useState(true);
+
+  return (
+    <SingleSidedShadowBox style={styles.shadowBox}>
+      <View style={styles.headerDomain}>
+        <View style={styles.row}>
+          <View style={styles.wrapperImage}>
+            <Image
+              source={{
+                uri: image
+                  ? image
+                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
+              }}
+              style={[
+                {height: '100%', width: '100%', borderRadius: 45},
+                StyleSheet.absoluteFillObject,
+              ]}
+            />
+          </View>
+          <View style={styles.wrapperHeader}>
+            <TouchableOpacity
+              style={styles.buttonPrimary}
+              onPress={() => onPress(1)}>
+              <Text style={styles.followButtonText}>Follow</Text>
+            </TouchableOpacity>
+            <Gap width={SIZES.base} />
+            <TouchableOpacity
+              style={styles.buttonBlock}
+              onPress={() => onPress(0)}>
+              <Text style={styles.blockButtonText}>Block</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.wrapperHeader}>
-          <TouchableOpacity
-            style={styles.buttonPrimary}
-            onPress={() => onPress(1)}>
-            <Text style={styles.followButtonText}>Follow</Text>
-          </TouchableOpacity>
-          <Gap width={SIZES.base} />
-          <TouchableOpacity
-            style={styles.buttonBlock}
-            onPress={() => onPress(0)}>
-            <Text style={styles.blockButtonText}>Block</Text>
-          </TouchableOpacity>
+        <Gap height={12} />
+        <View style={styles.row}>
+          <Text style={styles.domainName}>{domain}</Text>
+          <View style={{marginStart: 10, justifyContent: 'center'}}>
+            <MemoIc_interface width={20} height={20} />
+          </View>
         </View>
-      </View>
-      <Gap height={12} />
-      <View style={styles.row}>
-        <Text style={styles.domainName}>{domain}</Text>
-        <View style={{marginStart: 8, justifyContent: 'center'}}>
-          <MemoIc_interface width={20} height={20} />
+        <Gap height={4} />
+        <View style={[styles.row, {alignItems: 'center'}]}>
+          <Text style={styles.followersNumber}>{followers}k</Text>
+          <Gap width={4} />
+          <Text style={styles.followersText}>Followers</Text>
         </View>
+        <Gap height={14} />
+        <Text style={styles.domainDescription}>
+          {description ? description : lorem}
+        </Text>
+        <Gap height={18} />
+        <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
+          <View style={{flex: 1, paddingBottom: 6}}>
+            <MemoIc_rectangle_gradient width={'100%'} height={20} />
+          </View>
+          <Tooltip
+            // allowChildInteraction={false}
+            isVisible={isTooltipShown}
+            placement={'bottom'}
+            backgroundColor={'rgba(0,0,0,0)'}
+            showChildInTooltip={false}
+            onClose={() => setIsTooltipShown(false)}
+            contentStyle={styles.tooltipShadowContainer}
+            arrowSize={{width: 0, height: 0}}
+            content={
+              <View>
+                <View style={styles.insideArrow} />
+                <Text style={styles.tooltipContent}>
+                  {description ? description : `${lorem} ${lorem} ${lorem}`}
+                </Text>
+              </View>
+            }>
+            {isTooltipShown ? <View style={styles.arrow} /> : <></>}
+            <TouchableOpacity
+              onPress={() => setIsTooltipShown(true)}
+              style={{
+                padding: 8,
+                paddingBottom: 8,
+                paddingTop: 0,
+                paddingRight: 12,
+              }}>
+              <MemoIc_question_mark width={16} height={16} />
+            </TouchableOpacity>
+          </Tooltip>
+        </View>
+        <Gap height={14} />
       </View>
-      <Gap height={4} />
-      <View style={[styles.row, {alignItems: 'center'}]}>
-        <Text style={styles.followersNumber}>{followers}k</Text>
-        <Gap width={4} />
-        <Text style={styles.followersText}>Followers</Text>
-      </View>
-      <Gap height={14} />
-      <Text style={styles.domainDescription}>
-        {description ? description : lorem}
-      </Text>
-      <Gap height={16} />
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <MemoIc_rectangle_gradient width={width * 0.75} height={20} />
-        <Gap width={8} />
-        <MemoIc_question_mark width={16} height={16} />
-      </View>
-      <Gap height={28} />
-    </View>
-  </SingleSidedShadowBox>
-);
+    </SingleSidedShadowBox>
+  );
+};
 
 const styles = StyleSheet.create({
   icon: {flexDirection: 'row', alignItems: 'center'},
@@ -196,6 +230,43 @@ const styles = StyleSheet.create({
     lineHeight: 17,
   },
   shadowBox: {paddingBottom: 8},
+  tooltipContent: {
+    fontFamily: fonts.inter[400],
+    fontSize: 14,
+    lineHeight: 17,
+    color: COLORS.blackgrey,
+  },
+  tooltipShadowContainer: {
+    paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  arrow: {
+    position: 'absolute',
+    width: 10,
+    height: 10,
+    backgroundColor: 'white',
+    top: 23,
+    zIndex: 10000000,
+    left: 10,
+    transform: [{rotate: '45deg'}],
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
 });
 
 export default Header;
