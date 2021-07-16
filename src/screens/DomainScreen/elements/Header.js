@@ -22,7 +22,7 @@ const lorem =
 const {width} = Dimensions.get('window');
 
 const Header = ({image, domain, description, followers, onPress}) => {
-  let [isTooltipShown, setIsTooltipShown] = React.useState(true);
+  let [isTooltipShown, setIsTooltipShown] = React.useState(false);
 
   return (
     <SingleSidedShadowBox style={styles.shadowBox}>
@@ -72,9 +72,9 @@ const Header = ({image, domain, description, followers, onPress}) => {
         <Text style={styles.domainDescription}>
           {description ? description : lorem}
         </Text>
-        <Gap height={18} />
+        <Gap height={10} />
         <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
-          <View style={{flex: 1, paddingBottom: 6}}>
+          <View style={{flex: 1, paddingBottom: 0}}>
             <MemoIc_rectangle_gradient width={'100%'} height={20} />
           </View>
           <Tooltip
@@ -88,26 +88,24 @@ const Header = ({image, domain, description, followers, onPress}) => {
             arrowSize={{width: 0, height: 0}}
             content={
               <View>
-                <View style={styles.insideArrow} />
                 <Text style={styles.tooltipContent}>
                   {description ? description : `${lorem} ${lorem} ${lorem}`}
                 </Text>
               </View>
             }>
-            {isTooltipShown ? <View style={styles.arrow} /> : <></>}
             <TouchableOpacity
               onPress={() => setIsTooltipShown(true)}
               style={{
                 padding: 8,
                 paddingBottom: 8,
-                paddingTop: 0,
+                paddingTop: 8,
                 paddingRight: 12,
               }}>
               <MemoIc_question_mark width={16} height={16} />
             </TouchableOpacity>
           </Tooltip>
         </View>
-        <Gap height={14} />
+        <Gap height={16} />
       </View>
     </SingleSidedShadowBox>
   );

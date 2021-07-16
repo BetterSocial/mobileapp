@@ -14,6 +14,7 @@ import {
   SingleSidedShadowBox,
 } from '../../../components';
 import {fonts} from '../../../utils/fonts';
+import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
 
 const RenderItem = ({
   item,
@@ -73,7 +74,8 @@ const RenderItem = ({
     validationStatusVote();
   }, [item, selfUserId]);
 
-  console.log(item);
+  // console.log("item");
+  // console.log(JSON.stringify(item));
   const name = getname(item);
   const time = getTime(item);
 
@@ -100,6 +102,10 @@ const RenderItem = ({
     };
     initialVote();
   }, [item]);
+
+  const onFollowDomainPressed = () => {
+    console.log('Follow Domain');
+  };
 
   return (
     <SingleSidedShadowBox>
@@ -147,29 +153,35 @@ const RenderItem = ({
             <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
           </View>
           <View style={{justifyContent: 'center'}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onFollowDomainPressed}>
               <View style={styles.wrapperText}>
-                <Text style={{fontSize: 36, color: COLORS.holyTosca}}>+</Text>
+                <MemoFollowDomain />
               </View>
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{paddingHorizontal: 20, marginTop: 14, marginBottom: 14}}>
-          <Text style={styles.domainItemTitle}>{item.content.title}</Text>
-        </View>
-        <Gap height={SIZES.base} />
-        <Image
-          source={{uri: item.content.image}}
-          style={{height: SIZES.height * 0.3, marginBottom: 14}}
-        />
-        <Gap />
-        <Gap height={SIZES.base} />
-        <View style={{paddingHorizontal: 20}}>
-          <Text style={styles.domainItemDescription}>
-            {item.content.description}
-          </Text>
-        </View>
-        <Gap height={14} />
+        <TouchableOpacity onPress={() => onPressComment(item)}>
+          <View>
+            <View
+              style={{paddingHorizontal: 20, marginTop: 14, marginBottom: 14}}>
+              <Text style={styles.domainItemTitle}>{item.content.title}</Text>
+            </View>
+            <Gap height={SIZES.base} />
+            <Image
+              source={{uri: item.content.image}}
+              style={{height: SIZES.height * 0.3, marginBottom: 14}}
+            />
+            <Gap />
+            <Gap height={SIZES.base} />
+            <View style={{paddingHorizontal: 20}}>
+              <Text style={styles.domainItemDescription}>
+                {item.content.description}
+              </Text>
+            </View>
+            <Gap height={14} />
+          </View>
+        </TouchableOpacity>
+
         <View style={styles.wrapperFooter}>
           <Footer
             totalComment={getCountComment(item)}
