@@ -20,6 +20,7 @@ import {
   CreateGroupScreen,
   ProfileScreen,
   DetailDomainScreen,
+  ChatDetailPage,
 } from '../screens';
 import ImageViewerScreen from '../screens/ImageViewer';
 import ReplyComment from '../screens/ReplyComment';
@@ -38,7 +39,12 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="ChatDetailPage">
+      <Stack.Screen
+        name="ChatDetailPage"
+        component={ChatDetailPage}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="ReplyComment"
         component={ReplyComment}
