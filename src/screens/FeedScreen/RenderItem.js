@@ -16,6 +16,7 @@ import ContentPoll from './ContentPoll';
 
 import ContentLink from './ContentLink';
 import {Gap, PreviewComment, Footer} from '../../components';
+import {getCountCommentWithChild} from '../../utils/getstream';
 
 const {width, height} = Dimensions.get('window');
 
@@ -198,7 +199,7 @@ const Item = ({
       )}
       <View style={styles.footerWrapper}>
         <Footer
-          totalComment={getCountComment(item)}
+          totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
           onPressShare={() => onShare(item)}
           onPressComment={() => onPressComment(item)}
@@ -263,7 +264,7 @@ const Item = ({
             comment={previewComment.data.text}
             image={previewComment.user.data.profile_pic_url}
             time={previewComment.created_at}
-            totalComment={item.latest_reactions.comment.length - 1}
+            totalComment={getCountCommentWithChild(item) - 1}
             onPress={onPressComment}
           />
           <Gap height={8} />

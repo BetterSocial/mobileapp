@@ -6,7 +6,11 @@ import Content from './Content';
 import {Footer} from '../../components';
 import {COLORS, SIZES} from '../../utils/theme';
 import Gap from '../../components/Gap';
-import {getCountComment, getCountVote} from '../../utils/getstream';
+import {
+  getCountComment,
+  getCountCommentWithChild,
+  getCountVote,
+} from '../../utils/getstream';
 
 const RenderItem = ({
   item,
@@ -75,7 +79,7 @@ const RenderItem = ({
       <Gap height={8} />
       <View style={styles.wrapperFooter}>
         <Footer
-          totalComment={getCountComment(item)}
+          totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
           onPressShare={() => onPressShare(item)}
           onPressComment={() => onPressComment(item)}

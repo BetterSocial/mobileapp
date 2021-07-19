@@ -29,6 +29,7 @@ import {createCommentParent} from '../../service/comment';
 import ContentLink from '../FeedScreen/ContentLink';
 import {getFeedDetail} from '../../service/post';
 import {getAccessToken} from '../../utils/token';
+import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
 
 const {width, height} = Dimensions.get('window');
 
@@ -90,7 +91,11 @@ const PostPageDetail = (props) => {
         if (comment !== undefined) {
           if (comment > 0) {
             setReaction(true);
-            setTotalComment(comment);
+            setTotalComment(
+              getCountCommentWithChildInDetailPage(
+                props.route.params.item.latest_reactions,
+              ),
+            );
           }
         }
         let upvote = reactionCount.upvotes;

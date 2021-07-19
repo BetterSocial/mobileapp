@@ -22,6 +22,10 @@ import {COLORS, SIZES} from '../../utils/theme';
 import ContentLink from '../FeedScreen/ContentLink';
 import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
 import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
+import {
+  getCountCommentWithChild,
+  getCountCommentWithChildInDetailPage,
+} from '../../utils/getstream';
 
 const {width, height} = Dimensions.get('window');
 
@@ -51,8 +55,8 @@ const DetailDomainScreen = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
 
-  console.log('item');
-  console.log(JSON.stringify(props.route.params.item));
+  // console.log('item');
+  // console.log(JSON.stringify(props.route.params.item));
 
   React.useEffect(() => {
     const initial = () => {
@@ -63,7 +67,11 @@ const DetailDomainScreen = (props) => {
         if (comment !== undefined) {
           if (comment > 0) {
             setReaction(true);
-            setTotalComment(comment);
+            setTotalComment(
+              getCountCommentWithChildInDetailPage(
+                props.route.params.item.latest_reactions,
+              ),
+            );
           }
         }
         let upvote = reactionCount.upvotes;
@@ -307,6 +315,7 @@ const DetailDomainScreen = (props) => {
       </ScrollView>
       <WriteComment
         value={textComment}
+        username={item.domain.name}
         onChangeText={(value) => setTextComment(value)}
         onPress={() => {
           onComment();

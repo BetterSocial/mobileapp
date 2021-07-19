@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
-import {getCountComment, getCountVote} from '../../../utils/getstream';
+import {getCountComment, getCountCommentWithChild, getCountVote} from '../../../utils/getstream';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
@@ -184,7 +184,7 @@ const RenderItem = ({
 
         <View style={styles.wrapperFooter}>
           <Footer
-            totalComment={getCountComment(item)}
+            totalComment={getCountCommentWithChild(item)}
             totalVote={totalVote}
             statusVote={voteStatus}
             onPressShare={() => onPressShare(item)}
