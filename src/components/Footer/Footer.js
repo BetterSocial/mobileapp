@@ -26,58 +26,67 @@ const Footer = ({
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
       <View style={styles.leftGroupContainer}>
-        <TouchableOpacity
-          style={{...styles.btn, ...styles.btnShare}}
-          onPress={onPressShare}>
-          <MemoIc_share height={20} width={22} />
+        <TouchableOpacity style={styles.btn} onPress={onPressShare}>
+          <View style={styles.btnShare}>
+            <MemoIc_share height={20} width={22} />
+          </View>
         </TouchableOpacity>
         {disableComment ? (
-          <View
-            onPress={onPressComment}
-            style={{...styles.btn, ...styles.btnComment}}>
-            <MemoIc_comment height={20} width={20} />
+          <View style={styles.btn}>
+            <View style={styles.btnComment}>
+              <MemoIc_comment height={24} width={25} />
+            </View>
           </View>
         ) : (
-          <TouchableOpacity
-            style={{...styles.btn, ...styles.btnComment}}
-            onPress={onPressComment}>
-            <MemoIc_comment height={24} width={25} />
+          <TouchableOpacity style={styles.btn} onPress={onPressComment}>
+            <View style={styles.btnComment}>
+              <MemoIc_comment height={24} width={25} />
+            </View>
           </TouchableOpacity>
         )}
-        <Text style={styles.text}>{totalComment}</Text>
       </View>
-      <View style={{flex: 1}} />
+      {disableComment ? (
+        <View style={styles.totalCommentContainer}>
+          <Text style={styles.text}>{totalComment}</Text>
+        </View>
+      ) : (
+        <TouchableOpacity style={{flex: 1}} onPress={onPressComment}>
+          <View style={styles.totalCommentContainer}>
+            <Text style={styles.text}>{totalComment}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
       <View style={styles.rightGroupContainer}>
         {isSelf ? (
           <View />
         ) : (
-          <TouchableOpacity
-            style={{...styles.btn, ...styles.btnBlock}}
-            onPress={onPressBlock}>
-            <MemoIc_block_inactive height={22} width={22} />
+          <TouchableOpacity style={styles.btn} onPress={onPressBlock}>
+            <View style={styles.btnBlock}>
+              <MemoIc_block_inactive height={22} width={22} />
+            </View>
           </TouchableOpacity>
         )}
 
-        <TouchableOpacity
-          style={{...styles.btn, ...styles.btnDownvote}}
-          onPress={onPressDownVote}>
-          {statusVote === 'downvote' ? (
-            <MemoIc_arrow_down_vote_on width={20} height={18} />
-          ) : (
-            <MemoIc_arrow_down_vote_off width={20} height={18} />
-          )}
+        <TouchableOpacity style={styles.btn} onPress={onPressDownVote}>
+          <View style={styles.btnDownvote}>
+            {statusVote === 'downvote' ? (
+              <MemoIc_arrow_down_vote_on width={20} height={18} />
+            ) : (
+              <MemoIc_arrow_down_vote_off width={20} height={18} />
+            )}
+          </View>
         </TouchableOpacity>
 
         <Text style={styles.vote(totalVote)}>{totalVote}</Text>
 
-        <TouchableOpacity
-          style={{...styles.btn, ...styles.btnUpvote}}
-          onPress={onPressUpvote}>
-          {statusVote === 'upvote' ? (
-            <MemoIc_arrow_upvote_on width={20} height={18} />
-          ) : (
-            <MemoIc_arrow_upvote_off width={20} height={18} />
-          )}
+        <TouchableOpacity style={styles.btn} onPress={onPressUpvote}>
+          <View style={styles.btnUpvote}>
+            {statusVote === 'upvote' ? (
+              <MemoIc_arrow_upvote_on width={20} height={18} />
+            ) : (
+              <MemoIc_arrow_upvote_off width={20} height={18} />
+            )}
+          </View>
         </TouchableOpacity>
       </View>
     </View>
@@ -86,23 +95,24 @@ const Footer = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 16.83,
+    alignItems: 'center',
+    height: '100%',
   },
   leftGroupContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 8,
+    // marginLeft: 8,
   },
   rightGroupContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 14,
+    // marginRight: 8,
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
     // justifyContent: 'space-between',
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
   },
   text: {
     ...FONTS.body3,
@@ -110,34 +120,54 @@ const styles = StyleSheet.create({
   },
   vote: (count) => ({
     ...FONTS.body3,
-    width: 26,
     textAlign: 'center',
+    width: 26,
     color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4',
   }),
   btn: {
-    height: 20,
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    display: 'flex',
   },
   btnShare: {
-    width: 22,
-    marginRight: 27,
+    height: '100%',
+    justifyContent: 'center',
+    paddingRight: 13.5,
+    paddingLeft: 18,
+    // backgroundColor: 'red',
   },
   btnComment: {
-    width: 25,
-    marginRight: 10,
+    height: '100%',
+    justifyContent: 'center',
+    paddingLeft: 13.5,
+    paddingRight: 10,
+    // backgroundColor: 'blue',
   },
   btnBlock: {
-    width: 20,
-    marginRight: 21,
+    height: '100%',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    // backgroundColor: 'gray',
   },
   btnDownvote: {
-    width: 22,
-    marginRight: 11,
+    height: '100%',
+    justifyContent: 'center',
+    paddingHorizontal: 11,
+    // backgroundColor: 'green',
   },
   btnUpvote: {
-    width: 22,
-    marginLeft: 11,
+    height: '100%',
+    justifyContent: 'center',
+    paddingLeft: 11,
+    paddingRight: 22,
+    // backgroundColor: 'brown',
+  },
+  totalCommentContainer: {
+    flex: 1,
+    // backgroundColor: 'blue',
+    height: '100%',
+    justifyContent: 'center',
   },
 });
 

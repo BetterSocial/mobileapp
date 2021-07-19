@@ -121,7 +121,7 @@ const ReplyComment = (props) => {
               };
 
               return (
-                <ContainerReply>
+                <ContainerReply key={index}>
                   <ConnectorWrapper index={index}>
                     <View style={styles.childCommentWrapper}>
                       <Comment

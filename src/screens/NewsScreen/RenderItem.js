@@ -6,7 +6,11 @@ import Content from './Content';
 import {Footer} from '../../components';
 import {COLORS, SIZES} from '../../utils/theme';
 import Gap from '../../components/Gap';
-import {getCountComment, getCountVote} from '../../utils/getstream';
+import {
+  getCountComment,
+  getCountCommentWithChild,
+  getCountVote,
+} from '../../utils/getstream';
 
 const RenderItem = ({
   item,
@@ -63,8 +67,10 @@ const RenderItem = ({
         image={item.domain.image}
         domain={item.domain.name}
         time={item.content.created_at}
+        item={item}
       />
       <Content
+        item={item}
         title={item.content.title}
         image={item.content.image}
         description={item.content.description}
@@ -73,7 +79,7 @@ const RenderItem = ({
       <Gap height={8} />
       <View style={styles.wrapperFooter}>
         <Footer
-          totalComment={getCountComment(item)}
+          totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
           onPressShare={() => onPressShare(item)}
           onPressComment={() => onPressComment(item)}
@@ -135,16 +141,17 @@ const RenderItem = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: 10,
     borderRadius: SIZES.radius,
     backgroundColor: COLORS.white,
-    elevation: 0.5,
+    elevation: 0.0,
     borderColor: COLORS.gray,
-    paddingVertical: SIZES.base,
+    paddingTop: SIZES.base,
     marginHorizontal: SIZES.base,
   },
   wrapperFooter: {
-    marginHorizontal: SIZES.base,
+    // marginHorizontal: SIZES.base,
+    height: 52,
   },
 });
 
