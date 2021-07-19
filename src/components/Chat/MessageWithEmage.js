@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  ImageBackground,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import MemoIc_read from '../../assets/chats/Ic_read';
 import {colors} from '../../utils/colors';
@@ -42,7 +49,6 @@ const MessageWithEmage = ({
 export default MessageWithEmage;
 
 const ShowImage = React.memo(({images}) => {
-  console.log('image render ');
   if (images.length <= 3) {
     return (
       <FlatList
@@ -62,7 +68,7 @@ const ShowImage = React.memo(({images}) => {
       />
     );
   }
-  if (images.length >= 4) {
+  if (images.length === 4) {
     return (
       <FlatList
         data={images}
@@ -83,11 +89,56 @@ const ShowImage = React.memo(({images}) => {
       />
     );
   }
-
+  if (images.length > 4) {
+    return (
+      <FlatList
+        data={images.slice(0, 4)}
+        style={styles.flexlist}
+        contentContainerStyle={styles.containerManyEmage}
+        numColumns={2}
+        keyExtractor={(i, key) => 'mn' + key}
+        renderItem={({item, index}) => (
+          <RanderImages item={item} index={index} count={images.length} />
+        )}
+      />
+    );
+  }
   return null;
+});
+const RanderImages = React.memo(({item, index, count}) => {
+  if (index === 3) {
+    return (
+      <ImageBackground
+        style={[styles.manyImage, styles.manyImageItem(index)]}
+        source={{uri: item.asset_url}}>
+        <View style={styles.moreImages}>
+          <Text style={styles.textMore}>{count - 4} +</Text>
+        </View>
+      </ImageBackground>
+    );
+  }
+  return (
+    <Image
+      key={'mn' + index}
+      style={[styles.manyImage, styles.manyImageItem(index)]}
+      source={{uri: item.asset_url}}
+      resizeMode="cover"
+    />
+  );
 });
 
 const styles = StyleSheet.create({
+  moreImages: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 173, 181, 0.75)',
+    flex: 1,
+  },
+  textMore: {
+    fontSize: 24,
+    fontFamily: fonts.inter[400],
+    color: '#fff',
+  },
   singleImage: {
     flex: 1,
     width: '100%',

@@ -21,9 +21,6 @@ const Header = ({username, profile}) => {
         <Text style={styles.name}>{username}</Text>
       </View>
       <View style={styles.row}>
-        <TouchableOpacity style={styles.btnSearch}>
-          <IconFI name="search" size={16.67} color={'#fff'} />
-        </TouchableOpacity>
         <TouchableOpacity style={styles.btnOptions}>
           <IconEP name="dots-three-vertical" size={12.87} color={'#fff'} />
         </TouchableOpacity>

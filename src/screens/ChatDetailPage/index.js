@@ -39,16 +39,18 @@ const channel = chatClient.channel('messaging', 'tight-queen-2', {
   members: ['tight-queen-2'],
 });
 const ChatDetailPage = () => {
+  console.log(JSON.stringify(channel.data));
   return (
     <SafeAreaView>
       <Chat client={chatClient} i18nInstance={streami18n}>
         <Channel channel={channel} keyboardVerticalOffset={50}>
           <View style={{flex: 1}}>
             <Header
-              username="eka test"
-              profile="https://picsum.photos/200/300"
+              username={channel?.data?.name}
+              profile={channel?.data?.image}
             />
             <MessageList Message={CostomListMessage} />
+
             <MessageInput Input={InputMessage} />
           </View>
         </Channel>

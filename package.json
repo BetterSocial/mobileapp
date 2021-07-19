@@ -44,6 +44,7 @@
     "react-devtools": "^4.10.1",
     "react-native": "0.63.4",
     "react-native-activity-feed": "^1.0.3",
+    "react-native-autolink": "^4.0.0",
     "react-native-card-stack-swiper": "^1.2.5",
     "react-native-config": "^1.4.2",
     "react-native-device-info": "^8.0.5",

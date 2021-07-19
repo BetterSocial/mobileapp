@@ -4,6 +4,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import MemoIc_read from '../../assets/chats/Ic_read';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {trimString} from '../../utils/string/TrimString';
 import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
 import ProfileMessage from './ProfileMessage';
@@ -77,7 +78,9 @@ const QuotedMessage = ({
         </View>
       </View>
       <View style={styles.quotedMessage}>
-        <Text style={styles.message(false)}>{messageReply}</Text>
+        <Text style={styles.message(false)}>
+          {trimString(messageReply, 26)}
+        </Text>
       </View>
     </View>
   );
