@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {TouchableOpacity} from 'react-native';
 import {
   ImageBackground,
   FlatList,
@@ -8,11 +9,14 @@ import {
   View,
 } from 'react-native';
 
+import {useNavigation} from '@react-navigation/native';
+
 import MemoIc_read from '../../assets/chats/Ic_read';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
+import ModalImageSingleDetail from './ModalImageSingleDetail';
 import ProfileMessage from './ProfileMessage';
 const MessageWithEmage = ({
   image,
@@ -40,7 +44,7 @@ const MessageWithEmage = ({
           />
         </View>
         <Text style={styles.message}>{message}</Text>
-        <ShowImage images={attachments} />
+        <ShowImage images={attachments} name={name} time={time} />
       </View>
     </View>
   );
@@ -48,24 +52,43 @@ const MessageWithEmage = ({
 
 export default MessageWithEmage;
 
-const ShowImage = React.memo(({images}) => {
+const ShowImage = React.memo(({images, name, time}) => {
+  const navigation = useNavigation();
+  const [activeModal, setActiveModal] = React.useState(false);
+  const [img, setImg] = React.useState('');
+  const openDetail = (url) => {
+    setImg(url);
+    setActiveModal(true);
+  };
+
   if (images.length <= 3) {
     return (
-      <FlatList
-        data={images}
-        renderItem={({item, index}) => {
-          return (
-            <Image
-              key={'sg' + index}
-              style={styles.singleImage}
-              source={{
-                uri: item.asset_url,
-              }}
-              resizeMode="cover"
-            />
-          );
-        }}
-      />
+      <>
+        <FlatList
+          data={images}
+          renderItem={({item, index}) => {
+            return (
+              <TouchableOpacity onPress={() => openDetail(item.asset_url)}>
+                <Image
+                  key={'sg' + index}
+                  style={styles.singleImage}
+                  source={{
+                    uri: item.asset_url,
+                  }}
+                  resizeMode="cover"
+                />
+              </TouchableOpacity>
+            );
+          }}
+        />
+        <ModalImageSingleDetail
+          visible={activeModal}
+          img={img}
+          onBack={() => setActiveModal(false)}
+          name={name}
+          time={time}
+        />
+      </>
     );
   }
   if (images.length === 4) {
@@ -78,12 +101,22 @@ const ShowImage = React.memo(({images}) => {
         keyExtractor={(i, key) => 'mn' + key}
         renderItem={({item, index}) => {
           return (
-            <Image
-              key={'mn' + index}
-              style={[styles.manyImage, styles.manyImageItem(index)]}
-              source={{uri: item.asset_url}}
-              resizeMode="cover"
-            />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('DetailGroupImage', {
+                  images,
+                  name,
+                  time,
+                  index,
+                })
+              }>
+              <Image
+                key={'mn' + index}
+                style={[styles.manyImage, styles.manyImageItem(index)]}
+                source={{uri: item.asset_url}}
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
           );
         }}
       />
@@ -98,7 +131,17 @@ const ShowImage = React.memo(({images}) => {
         numColumns={2}
         keyExtractor={(i, key) => 'mn' + key}
         renderItem={({item, index}) => (
-          <RanderImages item={item} index={index} count={images.length} />
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('DetailGroupImage', {
+                images,
+                name,
+                time,
+                index,
+              })
+            }>
+            <RanderImages item={item} index={index} count={images.length} />
+          </TouchableOpacity>
         )}
       />
     );

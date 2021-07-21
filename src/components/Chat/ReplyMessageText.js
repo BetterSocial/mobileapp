@@ -1,5 +1,7 @@
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import MemoIc_read from '../../assets/chats/Ic_read';
 import {colors} from '../../utils/colors';
@@ -21,6 +23,7 @@ const ReplyMessageText = ({
   replyTime,
   messageReply,
   isMyQuote,
+  attachments,
 }) => {
   return (
     <View style={styles.container}>
@@ -31,6 +34,7 @@ const ReplyMessageText = ({
           otherPhoto={otherPhoto}
           replyTime={replyTime}
           isMyQuote={isMyQuote}
+          attachments={attachments}
         />
         <View style={styles.user}>
           <View style={styles.userDetail}>
@@ -66,32 +70,75 @@ const QuotedMessage = ({
   replyTime,
   messageReply,
   isMyQuote,
+  attachments,
 }) => {
+  const imgExists = () => {
+    return (
+      attachments !== undefined &&
+      attachments.mime_type !== undefined &&
+      attachments.mime_type.includes('image')
+    );
+  };
+  const textMore = () => {
+    return imgExists() ? 21 : 27;
+  };
+  const textIsExists = () => {
+    return imgExists() && messageReply === '';
+  };
+
   return (
     <View style={styles.containerQuoted(isMyQuote)}>
-      <View style={styles.quotedProfile}>
-        <ProfileMessage image={otherPhoto} />
-        <View style={styles.quotedProfileName}>
-          <Text style={[styles.name(false), styles.gapReply]}>{otherName}</Text>
-          <Dot color={colors.elm} />
-          <Text style={styles.time(false)}>{calculateTime(replyTime)}</Text>
+      <View style={styles.quotedContent}>
+        <View style={styles.quotedProfile}>
+          <ProfileMessage image={otherPhoto} />
+          <View style={styles.quotedProfileName}>
+            <Text style={[styles.name(false), styles.gapReply]}>
+              {otherName}
+            </Text>
+            <Dot color={colors.elm} />
+            <Text style={styles.time(false)}>{calculateTime(replyTime)}</Text>
+          </View>
+        </View>
+        <View style={styles.quotedMessage}>
+          <Text style={styles.message(false)}>
+            {textIsExists() && (
+              <>
+                <Icon name="photo" color={colors.elm} size={15} /> Photo
+              </>
+            )}
+            {!textIsExists() && trimString(messageReply, textMore())}
+          </Text>
         </View>
       </View>
-      <View style={styles.quotedMessage}>
-        <Text style={styles.message(false)}>
-          {trimString(messageReply, 26)}
-        </Text>
-      </View>
+      {imgExists() && (
+        <Image
+          style={styles.assetImage}
+          source={{
+            uri: attachments.asset_url,
+          }}
+        />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  containerQuoted: (isMe) => ({
-    backgroundColor: isMe ? colors.tradewind : colors.alto,
+  quotedContent: {
+    flex: 1,
     paddingTop: 4,
     paddingLeft: 6,
-    paddingRight: 27,
+    borderRadius: 8,
+  },
+  assetImage: {
+    width: 48,
+    height: 48,
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  containerQuoted: (isMe) => ({
+    backgroundColor: isMe ? colors.tradewind : colors.alto,
+    flexDirection: 'row',
+    flex: 1,
     borderRadius: 8,
   }),
   quotedProfile: {
@@ -104,7 +151,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     paddingLeft: 28,
     paddingBottom: 6,
-    paddingTop: -3,
+    marginTop: -9,
   },
   gapReply: {
     marginLeft: 18,

@@ -61,6 +61,7 @@ const CostomListMessage = (props) => {
         isMyQuote={
           props.message.quoted_message.user.streamUserToken === undefined
         }
+        attachments={props.message.quoted_message.attachments[0]}
       />
     );
   }
