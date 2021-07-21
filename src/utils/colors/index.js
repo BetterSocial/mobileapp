@@ -21,4 +21,7 @@ export const colors = {
   holytosca30percent: '#00ADB54D',
   blackgrey: '#828282',
   redalert: '#FF2E63',
+  halfBaked: '#88CDD0',
+  tradewind: '#58B1B5',
+  elm: '#22878B',
 };
