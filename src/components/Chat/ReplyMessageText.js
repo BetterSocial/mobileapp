@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {TouchableWithoutFeedback} from 'react-native';
 import {Image, StyleSheet, Text, View} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -9,6 +10,7 @@ import {fonts} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
 import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
+import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
 
 const ReplyMessageText = ({
@@ -25,40 +27,47 @@ const ReplyMessageText = ({
   isMyQuote,
   attachments,
 }) => {
+  const [onAction, setOnAction] = React.useState(false);
   return (
-    <View style={styles.container}>
-      <View style={styles.containerChat(isMe)}>
-        <QuotedMessage
-          messageReply={messageReply}
-          otherName={otherName}
-          otherPhoto={otherPhoto}
-          replyTime={replyTime}
-          isMyQuote={isMyQuote}
-          attachments={attachments}
-        />
-        <View style={styles.user}>
-          <View style={styles.userDetail}>
-            <View style={styles.lineLeft} />
-            <View style={styles.userMargin}>
-              <ProfileMessage image={image} />
-              <View style={styles.userPosision}>
-                <Text style={styles.name(true)}>{name}</Text>
-                <Dot color="#000" />
-                <Text style={styles.time(true)}>{calculateTime(time)}</Text>
+    <ActionChat isMe={isMe} active={onAction}>
+      <View style={styles.container}>
+        <TouchableWithoutFeedback
+          onLongPress={() => setOnAction(true)}
+          onPress={() => setOnAction(false)}>
+          <View style={styles.containerChat(isMe)}>
+            <QuotedMessage
+              messageReply={messageReply}
+              otherName={otherName}
+              otherPhoto={otherPhoto}
+              replyTime={replyTime}
+              isMyQuote={isMyQuote}
+              attachments={attachments}
+            />
+            <View style={styles.user}>
+              <View style={styles.userDetail}>
+                <View style={styles.lineLeft} />
+                <View style={styles.userMargin}>
+                  <ProfileMessage image={image} />
+                  <View style={styles.userPosision}>
+                    <Text style={styles.name(true)}>{name}</Text>
+                    <Dot color="#000" />
+                    <Text style={styles.time(true)}>{calculateTime(time)}</Text>
+                  </View>
+                </View>
               </View>
+              <MemoIc_read
+                width={14.9}
+                height={8.13}
+                fill={read ? colors.bondi_blue : colors.gray}
+              />
             </View>
+            <Text style={[styles.message(true), styles.messageMargin]}>
+              {message}
+            </Text>
           </View>
-          <MemoIc_read
-            width={14.9}
-            height={8.13}
-            fill={read ? colors.bondi_blue : colors.gray}
-          />
-        </View>
-        <Text style={[styles.message(true), styles.messageMargin]}>
-          {message}
-        </Text>
+        </TouchableWithoutFeedback>
       </View>
-    </View>
+    </ActionChat>
   );
 };
 

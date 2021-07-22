@@ -43,7 +43,10 @@ const ChatDetailPage = () => {
   return (
     <SafeAreaView>
       <Chat client={chatClient} i18nInstance={streami18n}>
-        <Channel channel={channel} keyboardVerticalOffset={50}>
+        <Channel
+          channel={channel}
+          keyboardVerticalOffset={50}
+          hasFilePicker={false}>
           <View style={{flex: 1}}>
             <Header
               username={channel?.data?.name}

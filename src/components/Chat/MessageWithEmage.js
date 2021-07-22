@@ -18,6 +18,9 @@ import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
 import ModalImageSingleDetail from './ModalImageSingleDetail';
 import ProfileMessage from './ProfileMessage';
+import ActionChat from './ActionChat';
+import {TouchableWithoutFeedback} from 'react-native';
+
 const MessageWithEmage = ({
   image,
   name,
@@ -27,29 +30,35 @@ const MessageWithEmage = ({
   isMe,
   attachments,
 }) => {
+  const [onAction, setOnAction] = React.useState(false);
   return (
-    <View style={styles.container}>
-      <ProfileMessage image={image} />
-      <View style={styles.containerChat(isMe)}>
-        <View style={styles.user}>
-          <View style={styles.userDetail}>
-            <Text style={styles.name}>{name}</Text>
-            <Dot color="#000" />
-            <Text style={styles.time}>{calculateTime(time)}</Text>
+    <ActionChat isMe={isMe} active={onAction}>
+      <View style={styles.container}>
+        <ProfileMessage image={image} />
+        <TouchableWithoutFeedback
+          onLongPress={() => setOnAction(true)}
+          onPress={() => setOnAction(false)}>
+          <View style={styles.containerChat(isMe)}>
+            <View style={styles.user}>
+              <View style={styles.userDetail}>
+                <Text style={styles.name}>{name}</Text>
+                <Dot color="#000" />
+                <Text style={styles.time}>{calculateTime(time)}</Text>
+              </View>
+              <MemoIc_read
+                width={14.9}
+                height={8.13}
+                fill={read ? colors.bondi_blue : colors.gray}
+              />
+            </View>
+            <Text style={styles.message}>{message}</Text>
+            <ShowImage images={attachments} name={name} time={time} />
           </View>
-          <MemoIc_read
-            width={14.9}
-            height={8.13}
-            fill={read ? colors.bondi_blue : colors.gray}
-          />
-        </View>
-        <Text style={styles.message}>{message}</Text>
-        <ShowImage images={attachments} name={name} time={time} />
+        </TouchableWithoutFeedback>
       </View>
-    </View>
+    </ActionChat>
   );
 };
-
 export default MessageWithEmage;
 
 const ShowImage = React.memo(({images, name, time}) => {

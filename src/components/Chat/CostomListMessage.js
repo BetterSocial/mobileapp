@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {View} from 'react-native';
+
 import MessageText from './MessageText';
 import MessageWithEmage from './MessageWithEmage';
 import MessageWithLink from './MessageWithLink';
