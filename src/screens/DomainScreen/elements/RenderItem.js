@@ -1,7 +1,11 @@
 import * as React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
-import {getCountComment, getCountCommentWithChild, getCountVote} from '../../../utils/getstream';
+import {
+  getCountComment,
+  getCountCommentWithChild,
+  getCountVote,
+} from '../../../utils/getstream';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
@@ -238,20 +242,20 @@ const RenderItem = ({
               });
             }}
           />
-          {isReaction && (
-            <View>
-              <PreviewComment
-                username={previewComment.user.data.username}
-                comment={previewComment.data.text}
-                image={previewComment.user.data.profile_pic_url}
-                time={previewComment.created_at}
-                totalComment={item.latest_reactions.comment.length - 1}
-                onPress={() => onPressComment(item)}
-              />
-              <Gap height={16} />
-            </View>
-          )}
         </View>
+        {isReaction && (
+          <View style={{zIndex: 1000}}>
+            <PreviewComment
+              username={previewComment.user.data.username}
+              comment={previewComment.data.text}
+              image={previewComment.user.data.profile_pic_url}
+              time={previewComment.created_at}
+              totalComment={item.latest_reactions.comment.length - 1}
+              onPress={() => onPressComment(item)}
+            />
+            <Gap height={16} />
+          </View>
+        )}
       </View>
     </SingleSidedShadowBox>
   );
@@ -283,6 +287,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     borderRadius: 45,
+    backgroundColor: 'red',
   },
   wrapperText: {
     backgroundColor: 'white',
@@ -305,8 +310,10 @@ const styles = StyleSheet.create({
   height: (height) => ({height}),
   width: (width) => ({width}),
   wrapperFooter: {
-    marginHorizontal: 8,
+    paddingHorizontal: 8,
     height: 52,
+    borderBottomColor: COLORS.gray1,
+    borderBottomWidth: 1,
   },
   headerDomainName: {
     fontSize: 14,

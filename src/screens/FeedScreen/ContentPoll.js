@@ -39,6 +39,8 @@ const ContentPoll = ({
     return acc + parseInt(current.counter);
   }, 0);
 
+  console.log(polls);
+
   let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] =
     React.useState(-1);
   let [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);

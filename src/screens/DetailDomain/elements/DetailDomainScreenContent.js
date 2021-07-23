@@ -8,6 +8,7 @@ import {
   Linking,
 } from 'react-native';
 import {fonts} from '../../../utils/fonts';
+import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS} from '../../../utils/theme';
 
 const DetailDomainScreenContent = ({
@@ -35,7 +36,7 @@ const DetailDomainScreenContent = ({
       <Text style={styles.description}>
         {description}{' '}
         <Text onPress={onReadFullActiclePressed} style={styles.readFullText}>
-          Read full article
+          {StringConstant.linkDetailPageOpenInBrowser}
         </Text>
       </Text>
     </View>
@@ -65,6 +66,7 @@ let styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 24,
+    color: COLORS.black000,
   },
   readFullText: {
     marginTop: 8,

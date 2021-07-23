@@ -55,6 +55,9 @@ let chatTabHeaderCreateChatButtonText = 'New Chat';
 let newsTabHeaderPlaceholder = 'Search Better';
 let newsTabHeaderCreatePostButtonText = 'New Post';
 
+// Link Detail Page
+let linkDetailPageOpenInBrowser = 'Open in browser';
+
 // Component
 let headerIosSkip = 'Skip';
 let searchModalTitle = 'Search';
@@ -104,6 +107,8 @@ export default {
 
   newsTabHeaderPlaceholder,
   newsTabHeaderCreatePostButtonText,
+
+  linkDetailPageOpenInBrowser,
 
   headerIosSkip,
   searchModalTitle,

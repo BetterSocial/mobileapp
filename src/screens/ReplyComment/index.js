@@ -49,6 +49,7 @@ const ReplyComment = (props) => {
     };
     init();
   }, [item]);
+
   const createComment = async () => {
     try {
       if (textComment.trim() !== '') {
@@ -129,13 +130,14 @@ const ReplyComment = (props) => {
                         time={itemReply.created_at}
                         photo={itemReply.user.data.profile_pic_url}
                         isLast={
-                          index === item.children_counts.comment - 1 &&
-                          (itemReply.children_counts.comment || 0) === 0
+                          // index === item.children_counts.comment - 1 &&
+                          // (itemReply.children_counts.comment || 0) === 0
+                          level >= 2
                         }
                         key={'r' + index}
                         username={itemReply.user.data.username}
                         comment={itemReply.data.text}
-                        onPress={goToComment}
+                        onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}
                       />
                       {itemReply.children_counts.comment > 0 && (
@@ -194,6 +196,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     flex: 1,
     backgroundColor: '#fff',
+    // backgroundColor: 'blue',
   },
   containerComment: {
     marginTop: 8,
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     paddingLeft: 36,
-    paddingRight: 36,
+    paddingRight: 23,
   },
   header: {
     marginLeft: -20,
@@ -216,6 +219,7 @@ const styles = StyleSheet.create({
   containerReply: (hideLeftConnector) => ({
     borderLeftWidth: 1,
     width: '100%',
+    // backgroundColor: 'red',
     // flex: 1,
   }),
   seeRepliesContainer: (isLast) => ({

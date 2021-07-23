@@ -107,7 +107,10 @@ const SplashScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../assets/images/ping-icon.png')} />
+      <Image
+        style={styles.image}
+        source={require('../../assets/splash_screen.png')}
+      />
     </View>
   );
 };
@@ -120,5 +123,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
 });

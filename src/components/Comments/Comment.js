@@ -70,7 +70,7 @@ const Comment = ({
         <TouchableOpacity style={[styles.arrowup, styles.btn]}>
           <MemoIc_arrow_down_vote_off width={18} height={18} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={[styles.arrowdown, styles.btn]}>
           <MemoIc_arrow_upvote_off width={18} height={18} />
         </TouchableOpacity>
       </View>
@@ -82,7 +82,7 @@ export default Comment;
 
 const styles = StyleSheet.create({
   btn: {
-    width: 30,
+    // width: 30,
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',
@@ -129,19 +129,24 @@ const styles = StyleSheet.create({
   btnReply: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-end',
+    flex: 1,
   },
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
     color: '#C4C4C4',
     marginLeft: 8.98,
-    marginRight: 28.61,
+    marginRight: 14,
   },
   btnBlock: {
-    marginRight: 16.51,
+    paddingHorizontal: 14,
   },
   arrowup: {
-    marginRight: 21.04,
+    paddingHorizontal: 14,
+  },
+  arrowdown: {
+    paddingHorizontal: 14,
   },
   gap: {marginBottom: 8},
   time: {

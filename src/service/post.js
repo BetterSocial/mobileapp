@@ -68,7 +68,7 @@ export const getFeedDetail = async (id) => {
     let resApi = await api.get(`/feeds/detail-feed?id=${id}`);
     return resApi.data;
   } catch (error) {
-    crashlytics().recordError(error.response.data);
+    // crashlytics().recordError(error.response.data);
     return null;
   }
 };

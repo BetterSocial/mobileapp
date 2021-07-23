@@ -123,6 +123,7 @@ let styles = StyleSheet.create({
       position: 'absolute',
       top: 0,
       left: 0,
+      borderRadius: 6,
       backgroundColor: isMyPoll ? colors.bondi_blue : colors.gray1,
     };
   },

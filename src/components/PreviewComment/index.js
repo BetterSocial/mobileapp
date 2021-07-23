@@ -40,9 +40,19 @@ const PreviewComment = ({
           </View>
         </View>
         <View style={styles.text}>
-          <SeeMore seeMoreText={'More'} seeLessText={'Less'} numberOfLines={2}>
+          {/* <SeeMore seeMoreText={'More'} seeLessText={'Less'} numberOfLines={2}>
             {comment}
-          </SeeMore>
+          </SeeMore> */}
+          <TouchableOpacity onPress={onPress}>
+            <Text style={styles.commenttext}>
+              {`${comment.substring(0, 100).trim()} `}
+              {comment.length > 100 ? (
+                <Text style={styles.seemore}>more</Text>
+              ) : (
+                <></>
+              )}
+            </Text>
+          </TouchableOpacity>
         </View>
         <Gap height={SIZES.base} />
       </View>
@@ -103,6 +113,17 @@ const styles = StyleSheet.create({
   containerUsername: {
     alignItems: 'center',
     flexDirection: 'row',
+    // backgroundColor: 'blue',
+    // marginTop: -8.5,
   },
   btnMore: {marginStart: 8},
+  commenttext: {
+    fontFamily: fonts.inter[400],
+    fontSize: 16,
+    lineHeight: 19.36,
+    color: COLORS.greyseries,
+  },
+  seemore: {
+    color: COLORS.blue,
+  },
 });

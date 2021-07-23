@@ -18,7 +18,6 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 const Content = (props) => {
   const navigation = useNavigation();
   let {item, title, image, description, url} = props;
-  console.log(image);
 
   let onContentPressed = () => {
     navigation.push('DetailDomainScreen', {

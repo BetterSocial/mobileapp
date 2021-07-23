@@ -256,9 +256,9 @@ const Item = ({
           }
         />
       </View>
-      <View style={styles.lineAffterFooter} />
       {isReaction && (
         <View>
+          <View style={styles.lineAffterFooter} />
           <PreviewComment
             username={previewComment.user.data.username}
             comment={previewComment.data.text}
