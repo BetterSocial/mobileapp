@@ -121,6 +121,8 @@ const RenderItem = ({
             alignItems: 'center',
             borderBottomWidth: 0.5,
             borderBottomColor: COLORS.gray1,
+            paddingBottom: 8,
+            paddingTop: 8,
           }}>
           <View style={styles.wrapperImage}>
             <Image
@@ -154,7 +156,13 @@ const RenderItem = ({
                 12k
               </Text>
             </View>
-            <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
+            <Gap height={8} />
+            <View style={styles.domainIndicatorContainer}>
+              <MemoIc_rectangle_gradient
+                width={SIZES.width * 0.43}
+                height={4}
+              />
+            </View>
           </View>
           <View style={{justifyContent: 'center'}}>
             <TouchableOpacity onPress={onFollowDomainPressed}>
@@ -284,8 +292,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    height: '100%',
-    width: '100%',
+    height: 48,
+    width: 48,
     borderRadius: 45,
     backgroundColor: 'red',
   },
@@ -318,6 +326,7 @@ const styles = StyleSheet.create({
   headerDomainName: {
     fontSize: 14,
     fontFamily: fonts.inter[600],
+    lineHeight: 16.9,
     color: '#000000',
   },
   headerDomainDate: {
@@ -335,6 +344,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 24,
+  },
+  domainIndicatorContainer: {
+    marginLeft: -4,
   },
 });
 

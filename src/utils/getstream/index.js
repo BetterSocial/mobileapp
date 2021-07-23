@@ -32,6 +32,7 @@ const getCountCommentWithChild = (item) => {
   let count = 0;
   let reactionCountLevelOne = item.reaction_counts;
   let reactionLevelOne = item.latest_reactions.comment;
+
   if (JSON.stringify(reactionCountLevelOne) !== '{}') {
     let comment = reactionCountLevelOne.comment;
     if (comment !== undefined) {

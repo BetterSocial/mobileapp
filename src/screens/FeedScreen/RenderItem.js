@@ -105,6 +105,7 @@ const Item = ({
   selfUserId,
   onPressDomain,
   onNewPollFetched,
+  onCardContentPress,
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -187,7 +188,8 @@ const Item = ({
         <ContentLink
           og={item.og}
           onPress={onPress}
-          onCardPress={onPressDomain}
+          onHeaderPress={onPressDomain}
+          onCardContentPress={onCardContentPress}
         />
       )}
       {item.post_type === POST_TYPE_STANDARD && (

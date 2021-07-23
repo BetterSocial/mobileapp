@@ -55,8 +55,8 @@ const DetailDomainScreen = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
 
-  // console.log('item');
-  // console.log(JSON.stringify(props.route.params.item));
+  console.log('item');
+  console.log(JSON.stringify(props.route.params.item));
 
   React.useEffect(() => {
     const initial = () => {

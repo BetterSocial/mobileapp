@@ -252,6 +252,24 @@ const FeedScreen = (props) => {
                       item: item,
                     });
                   }}
+                  onCardContentPress={() => {
+                    props.navigation.navigate('DetailDomainScreen', {
+                      item: {
+                        domain: {
+                          name: item.og.domain,
+                          image: item.og.domainImage,
+                        },
+                        content: {
+                          image: item.og.image,
+                          title: item.og.title,
+                          url: item.og.url,
+                          created_at: item.og.date,
+                        },
+                        reaction_counts: item.reaction_counts,
+                        latest_reactions: item.latest_reactions,
+                      },
+                    });
+                  }}
                 />
               ))
             : null}
