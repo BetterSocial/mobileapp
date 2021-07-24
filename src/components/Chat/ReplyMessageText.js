@@ -1,5 +1,8 @@
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import MemoIc_read from '../../assets/chats/Ic_read';
 import {colors} from '../../utils/colors';
@@ -7,6 +10,7 @@ import {fonts} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
 import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
+import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
 
 const ReplyMessageText = ({
@@ -21,40 +25,49 @@ const ReplyMessageText = ({
   replyTime,
   messageReply,
   isMyQuote,
+  attachments,
 }) => {
+  const [onAction, setOnAction] = React.useState(false);
   return (
-    <View style={styles.container}>
-      <View style={styles.containerChat(isMe)}>
-        <QuotedMessage
-          messageReply={messageReply}
-          otherName={otherName}
-          otherPhoto={otherPhoto}
-          replyTime={replyTime}
-          isMyQuote={isMyQuote}
-        />
-        <View style={styles.user}>
-          <View style={styles.userDetail}>
-            <View style={styles.lineLeft} />
-            <View style={styles.userMargin}>
-              <ProfileMessage image={image} />
-              <View style={styles.userPosision}>
-                <Text style={styles.name(true)}>{name}</Text>
-                <Dot color="#000" />
-                <Text style={styles.time(true)}>{calculateTime(time)}</Text>
+    <ActionChat isMe={isMe} active={onAction}>
+      <View style={styles.container}>
+        <TouchableWithoutFeedback
+          onLongPress={() => setOnAction(true)}
+          onPress={() => setOnAction(false)}>
+          <View style={styles.containerChat(isMe)}>
+            <QuotedMessage
+              messageReply={messageReply}
+              otherName={otherName}
+              otherPhoto={otherPhoto}
+              replyTime={replyTime}
+              isMyQuote={isMyQuote}
+              attachments={attachments}
+            />
+            <View style={styles.user}>
+              <View style={styles.userDetail}>
+                <View style={styles.lineLeft} />
+                <View style={styles.userMargin}>
+                  <ProfileMessage image={image} />
+                  <View style={styles.userPosision}>
+                    <Text style={styles.name(true)}>{name}</Text>
+                    <Dot color="#000" />
+                    <Text style={styles.time(true)}>{calculateTime(time)}</Text>
+                  </View>
+                </View>
               </View>
+              <MemoIc_read
+                width={14.9}
+                height={8.13}
+                fill={read ? colors.bondi_blue : colors.gray}
+              />
             </View>
+            <Text style={[styles.message(true), styles.messageMargin]}>
+              {message}
+            </Text>
           </View>
-          <MemoIc_read
-            width={14.9}
-            height={8.13}
-            fill={read ? colors.bondi_blue : colors.gray}
-          />
-        </View>
-        <Text style={[styles.message(true), styles.messageMargin]}>
-          {message}
-        </Text>
+        </TouchableWithoutFeedback>
       </View>
-    </View>
+    </ActionChat>
   );
 };
 
@@ -66,32 +79,75 @@ const QuotedMessage = ({
   replyTime,
   messageReply,
   isMyQuote,
+  attachments,
 }) => {
+  const imgExists = () => {
+    return (
+      attachments !== undefined &&
+      attachments.mime_type !== undefined &&
+      attachments.mime_type.includes('image')
+    );
+  };
+  const textMore = () => {
+    return imgExists() ? 21 : 27;
+  };
+  const textIsExists = () => {
+    return imgExists() && messageReply === '';
+  };
+
   return (
     <View style={styles.containerQuoted(isMyQuote)}>
-      <View style={styles.quotedProfile}>
-        <ProfileMessage image={otherPhoto} />
-        <View style={styles.quotedProfileName}>
-          <Text style={[styles.name(false), styles.gapReply]}>{otherName}</Text>
-          <Dot color={colors.elm} />
-          <Text style={styles.time(false)}>{calculateTime(replyTime)}</Text>
+      <View style={styles.quotedContent}>
+        <View style={styles.quotedProfile}>
+          <ProfileMessage image={otherPhoto} />
+          <View style={styles.quotedProfileName}>
+            <Text style={[styles.name(false), styles.gapReply]}>
+              {otherName}
+            </Text>
+            <Dot color={colors.elm} />
+            <Text style={styles.time(false)}>{calculateTime(replyTime)}</Text>
+          </View>
+        </View>
+        <View style={styles.quotedMessage}>
+          <Text style={styles.message(false)}>
+            {textIsExists() && (
+              <>
+                <Icon name="photo" color={colors.elm} size={15} /> Photo
+              </>
+            )}
+            {!textIsExists() && trimString(messageReply, textMore())}
+          </Text>
         </View>
       </View>
-      <View style={styles.quotedMessage}>
-        <Text style={styles.message(false)}>
-          {trimString(messageReply, 26)}
-        </Text>
-      </View>
+      {imgExists() && (
+        <Image
+          style={styles.assetImage}
+          source={{
+            uri: attachments.asset_url,
+          }}
+        />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  containerQuoted: (isMe) => ({
-    backgroundColor: isMe ? colors.tradewind : colors.alto,
+  quotedContent: {
+    flex: 1,
     paddingTop: 4,
     paddingLeft: 6,
-    paddingRight: 27,
+    borderRadius: 8,
+  },
+  assetImage: {
+    width: 48,
+    height: 48,
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  containerQuoted: (isMe) => ({
+    backgroundColor: isMe ? colors.tradewind : colors.alto,
+    flexDirection: 'row',
+    flex: 1,
     borderRadius: 8,
   }),
   quotedProfile: {
@@ -104,7 +160,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     paddingLeft: 28,
     paddingBottom: 6,
-    paddingTop: -3,
+    marginTop: -9,
   },
   gapReply: {
     marginLeft: 18,

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {TouchableWithoutFeedback} from 'react-native';
 import {StyleSheet, Text, View, Image} from 'react-native';
 
 import Autolink from 'react-native-autolink';
@@ -9,6 +10,7 @@ import {fonts} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
 import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
+import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
 
 const MessageWithLink = ({
@@ -20,44 +22,50 @@ const MessageWithLink = ({
   isMe,
   attachments,
 }) => {
+  const [onAction, setOnAction] = React.useState(false);
   return (
-    <View style={styles.container}>
-      <View style={styles.containerImage}>
-        <ProfileMessage image={image} />
-      </View>
-      <View style={styles.containerChat(isMe)}>
-        <View style={styles.user}>
-          <View style={styles.userDetail}>
-            <Text style={styles.name}>{name}</Text>
-            <Dot color="#000" />
-            <Text style={styles.time}>{calculateTime(time)}</Text>
-          </View>
-          <MemoIc_read
-            width={14.9}
-            height={8.13}
-            fill={read ? colors.bondi_blue : colors.gray}
-          />
+    <ActionChat isMe={isMe} active={onAction}>
+      <View style={styles.container}>
+        <View style={styles.containerImage}>
+          <ProfileMessage image={image} />
         </View>
-        <View style={styles.containerPreview(isMe)}>
-          <View style={styles.previewText}>
-            <Text style={styles.title}>
-              {trimString(attachments[0].title, 40)}
-            </Text>
-            <Text style={styles.authorName(isMe)}>
-              {attachments[0].author_name}
-            </Text>
+        <TouchableWithoutFeedback
+          onLongPress={() => setOnAction(true)}
+          onPress={() => setOnAction(false)}>
+          <View style={styles.containerChat(isMe)}>
+            <View style={styles.user}>
+              <View style={styles.userDetail}>
+                <Text style={styles.name}>{name}</Text>
+                <Dot color="#000" />
+                <Text style={styles.time}>{calculateTime(time)}</Text>
+              </View>
+              <MemoIc_read
+                width={14.9}
+                height={8.13}
+                fill={read ? colors.bondi_blue : colors.gray}
+              />
+            </View>
+            <View style={styles.containerPreview(isMe)}>
+              <View style={styles.previewText}>
+                <Text style={styles.title}>
+                  {trimString(attachments[0].title, 40)}
+                </Text>
+                <Text style={styles.authorName(isMe)}>
+                  {attachments[0].author_name}
+                </Text>
+              </View>
+              <Image
+                width={70}
+                height={64}
+                style={styles.imageLink}
+                source={{uri: attachments[0].thumb_url}}
+              />
+            </View>
+            <Autolink text={message} style={styles.message} />
           </View>
-          <Image
-            width={70}
-            height={64}
-            style={styles.imageLink}
-            source={{uri: attachments[0].thumb_url}}
-          />
-        </View>
-        <Autolink text={message} style={styles.message} />
-        {/* <Text style={styles.message}>{message}</Text> */}
+        </TouchableWithoutFeedback>
       </View>
-    </View>
+    </ActionChat>
   );
 };
 

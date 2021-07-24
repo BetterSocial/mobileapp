@@ -21,6 +21,7 @@ import {
   ProfileScreen,
   DetailDomainScreen,
   ChatDetailPage,
+  DetailGroupImage,
 } from '../screens';
 import ImageViewerScreen from '../screens/ImageViewer';
 import ReplyComment from '../screens/ReplyComment';
@@ -40,6 +41,11 @@ const RootStact = () => {
   }, []);
   return (
     <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Screen
+        name="DetailGroupImage"
+        component={DetailGroupImage}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="ChatDetailPage"
         component={ChatDetailPage}

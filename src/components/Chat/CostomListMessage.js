@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {View} from 'react-native';
+
 import MessageText from './MessageText';
 import MessageWithEmage from './MessageWithEmage';
 import MessageWithLink from './MessageWithLink';
@@ -61,6 +62,7 @@ const CostomListMessage = (props) => {
         isMyQuote={
           props.message.quoted_message.user.streamUserToken === undefined
         }
+        attachments={props.message.quoted_message.attachments[0]}
       />
     );
   }

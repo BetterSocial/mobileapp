@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {TouchableWithoutFeedback} from 'react-native';
 import {StyleSheet, Text, View} from 'react-native';
 
 import MemoIc_read from '../../assets/chats/Ic_read';
@@ -6,30 +7,39 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
 import Dot from '../Dot';
+import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
 
 const MessageText = ({image, name, time, message, read, isMe}) => {
+  const [onAction, setOnAction] = React.useState(false);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.containerImage}>
-        <ProfileMessage image={image} />
-      </View>
-      <View style={styles.containerChat(isMe)}>
-        <View style={styles.user}>
-          <View style={styles.userDetail}>
-            <Text style={styles.name}>{name}</Text>
-            <Dot color="#000" />
-            <Text style={styles.time}>{calculateTime(time)}</Text>
-          </View>
-          <MemoIc_read
-            width={14.9}
-            height={8.13}
-            fill={read ? colors.bondi_blue : colors.gray}
-          />
+    <ActionChat isMe={isMe} active={onAction}>
+      <View style={styles.container}>
+        <View style={styles.containerImage}>
+          <ProfileMessage image={image} />
         </View>
-        <Text style={styles.message}>{message}</Text>
+        <TouchableWithoutFeedback
+          onLongPress={() => setOnAction(true)}
+          onPress={() => setOnAction(false)}>
+          <View style={styles.containerChat(isMe)}>
+            <View style={styles.user}>
+              <View style={styles.userDetail}>
+                <Text style={styles.name}>{name}</Text>
+                <Dot color="#000" />
+                <Text style={styles.time}>{calculateTime(time)}</Text>
+              </View>
+              <MemoIc_read
+                width={14.9}
+                height={8.13}
+                fill={read ? colors.bondi_blue : colors.gray}
+              />
+            </View>
+            <Text style={styles.message}>{message}</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
-    </View>
+    </ActionChat>
   );
 };
 
