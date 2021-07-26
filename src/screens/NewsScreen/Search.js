@@ -18,23 +18,15 @@ const Search = ({onPress, animatedValue}) => {
   return (
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
       <View style={styles.wrapperSearch}>
+        <View style={styles.wrapperIcon}>
+          <MemoIc_search width={20} height={20} />
+        </View>
         <TextInput
           multiline={false}
           placeholder={StringConstant.newsTabHeaderPlaceholder}
           style={styles.input}
         />
-        <View style={styles.wrapperIcon}>
-          <MemoIc_search width={20} height={20} />
-        </View>
       </View>
-      <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={styles.newPostText}>
-          {StringConstant.newsTabHeaderCreatePostButtonText}
-        </Text>
-        <View>
-          <MemoIc_pencil height={18} width={18} />
-        </View>
-      </TouchableOpacity>
     </Animated.View>
   );
 };
@@ -49,10 +41,11 @@ const styles = StyleSheet.create({
   wrapperSearch: {
     flex: 1,
     backgroundColor: '#F5F5F5',
-    marginLeft: 15,
-    marginRight: 15,
+    marginLeft: 20,
+    marginRight: 20,
     borderRadius: SIZES.radius,
     alignSelf: 'center',
+    flexDirection: 'row',
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -65,17 +58,18 @@ const styles = StyleSheet.create({
     paddingBottom: 9,
   },
   input: {
-    marginHorizontal: 16,
-    paddingStart: 16,
+    marginRight: 16,
+    paddingStart: 8,
     flex: 1,
     // paddingStart: 20,
     fontFamily: fonts.inter[400],
   },
   wrapperIcon: {
-    position: 'absolute',
-    left: 8,
-    top: 0,
-    bottom: 0,
+    // position: 'absolute',
+    width: 20,
+    height: 20,
+    marginLeft: 8,
+    alignSelf: 'center',
     justifyContent: 'center',
   },
   newPostText: {
@@ -93,9 +87,10 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
-    padding: 7,
+    paddingTop: 7,
+    paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray1,
+    borderBottomColor: COLORS.alto,
   }),
 });
 

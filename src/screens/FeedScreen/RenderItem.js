@@ -16,6 +16,7 @@ import ContentPoll from './ContentPoll';
 
 import ContentLink from './ContentLink';
 import {Gap, PreviewComment, Footer} from '../../components';
+import {getCountCommentWithChild} from '../../utils/getstream';
 
 const {width, height} = Dimensions.get('window');
 
@@ -196,63 +197,65 @@ const Item = ({
           onPress={onPress}
         />
       )}
-      <Footer
-        totalComment={getCountComment(item)}
-        totalVote={totalVote}
-        onPressShare={() => onShare(item)}
-        onPressComment={() => onPressComment(item)}
-        onPressBlock={() => onPressBlock(item)}
-        onPressDownVote={() => {
-          setStatusDowvote((prev) => {
-            prev = !prev;
-            onPressDownVote({
-              activity_id: item.id,
-              status: prev,
-              feed_group: 'main_feed',
-            });
-            if (prev) {
-              setVoteStatus('downvote');
-              if (statusUpvote === true) {
-                setTotalVote((p) => p - 2);
+      <View style={styles.footerWrapper}>
+        <Footer
+          totalComment={getCountCommentWithChild(item)}
+          totalVote={totalVote}
+          onPressShare={() => onShare(item)}
+          onPressComment={() => onPressComment(item)}
+          onPressBlock={() => onPressBlock(item)}
+          onPressDownVote={() => {
+            setStatusDowvote((prev) => {
+              prev = !prev;
+              onPressDownVote({
+                activity_id: item.id,
+                status: prev,
+                feed_group: 'main_feed',
+              });
+              if (prev) {
+                setVoteStatus('downvote');
+                if (statusUpvote === true) {
+                  setTotalVote((p) => p - 2);
+                } else {
+                  setTotalVote((p) => p - 1);
+                }
+                setStatusUpvote(false);
               } else {
-                setTotalVote((p) => p - 1);
-              }
-              setStatusUpvote(false);
-            } else {
-              setVoteStatus('none');
-              setTotalVote((p) => p + 1);
-            }
-            return prev;
-          });
-        }}
-        onPressUpvote={() => {
-          setStatusUpvote((prev) => {
-            prev = !prev;
-            onPressUpvote({
-              activity_id: item.id,
-              status: prev,
-              feed_group: 'main_feed',
-            });
-            if (prev) {
-              setVoteStatus('upvote');
-              if (statusDownvote === true) {
-                setTotalVote((p) => p + 2);
-              } else {
+                setVoteStatus('none');
                 setTotalVote((p) => p + 1);
               }
-              setStatusDowvote(false);
-            } else {
-              setVoteStatus('none');
-              setTotalVote((p) => p - 1);
-            }
-            return prev;
-          });
-        }}
-        statusVote={voteStatus}
-        isSelf={
-          item.anonimity ? false : selfUserId === item.actor.id ? true : false
-        }
-      />
+              return prev;
+            });
+          }}
+          onPressUpvote={() => {
+            setStatusUpvote((prev) => {
+              prev = !prev;
+              onPressUpvote({
+                activity_id: item.id,
+                status: prev,
+                feed_group: 'main_feed',
+              });
+              if (prev) {
+                setVoteStatus('upvote');
+                if (statusDownvote === true) {
+                  setTotalVote((p) => p + 2);
+                } else {
+                  setTotalVote((p) => p + 1);
+                }
+                setStatusDowvote(false);
+              } else {
+                setVoteStatus('none');
+                setTotalVote((p) => p - 1);
+              }
+              return prev;
+            });
+          }}
+          statusVote={voteStatus}
+          isSelf={
+            item.anonimity ? false : selfUserId === item.actor.id ? true : false
+          }
+        />
+      </View>
       <View style={styles.lineAffterFooter} />
       {isReaction && (
         <View>
@@ -261,7 +264,7 @@ const Item = ({
             comment={previewComment.data.text}
             image={previewComment.user.data.profile_pic_url}
             time={previewComment.created_at}
-            totalComment={item.latest_reactions.comment.length - 1}
+            totalComment={getCountCommentWithChild(item) - 1}
             onPress={onPressComment}
           />
           <Gap height={8} />
@@ -280,7 +283,7 @@ export default RenderItem;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height - height * 0.1,
+    height: height * 0.9 + 18,
     shadowColor: '#c4c4c4',
     shadowOffset: {
       width: 1,
@@ -295,4 +298,5 @@ const styles = StyleSheet.create({
   },
   paddingHorizontal: {paddingHorizontal: 20},
   lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
+  footerWrapper: {height: 52, paddingHorizontal: 0},
 });

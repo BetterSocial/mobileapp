@@ -3,7 +3,7 @@ import Svg, {Path} from 'react-native-svg';
 
 function Ic_downvote_off(props) {
   return (
-    <Svg width="1em" height="1em" viewBox="0 0 20 17" fill="none" {...props}>
+    <Svg width="20" height="17" viewBox="0 0 20 17" fill="none" {...props}>
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

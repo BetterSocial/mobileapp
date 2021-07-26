@@ -3,14 +3,16 @@ import {View, Text, FlatList} from 'react-native';
 
 import {launchImageLibrary} from 'react-native-image-picker';
 import analytics from '@react-native-firebase/analytics';
+import jwtDecode from 'jwt-decode';
 
-import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import {createChannel} from '../../service/chat';
 
 import {Avatar, Gap} from '../../components';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 import GroupName from './elements/GroupName';
 import StringConstant from '../../utils/string/StringConstant';
 import Header from './elements/Header';
+import {getAccessToken} from '../../utils/token';
 
 const DUMMY = [
   {
@@ -33,6 +35,17 @@ const DUMMY = [
 const CreateGroupScreen = ({navigation}) => {
   const [groupName, setGroupName] = React.useState(null);
   const [groupIcon, setGroupIcon] = React.useState(null);
+  const [userId, setUserId] = React.useState(null);
+
+  React.useEffect(() => {
+    const getUserId = async () => {
+      const token = await getAccessToken();
+      jwtDecode;
+      const id = await jwtDecode(token).user_id;
+      setUserId(id);
+    };
+    getUserId();
+  }, []);
 
   const handleImageLibrary = () => {
     analytics().logEvent('btn_take_photo_profile', {
@@ -53,6 +66,18 @@ const CreateGroupScreen = ({navigation}) => {
     });
   };
 
+  const createNewChannel = async () => {
+    try {
+      let members = DUMMY.map((item) => item.id);
+      members.push(userId);
+      console.log(members);
+      let res = await createChannel('messaging', members, groupName);
+      alert('success create group');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={{flex: 1}}>
       <Header
@@ -60,7 +85,7 @@ const CreateGroupScreen = ({navigation}) => {
         containerStyle={{marginHorizontal: 16}}
         subTitle={groupName ? 'Finish' : 'Skip'}
         subtitleStyle={{color: COLORS.holyTosca}}
-        onPressSub={() => alert('test')}
+        onPressSub={() => createNewChannel()}
         onPress={() => navigation.goBack()}
       />
       <GroupName

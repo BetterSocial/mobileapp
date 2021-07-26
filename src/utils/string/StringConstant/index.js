@@ -52,7 +52,7 @@ let chatTabHeaderPlaceholder = 'Search Chat';
 let chatTabHeaderCreateChatButtonText = 'New Chat';
 
 // News Tab
-let newsTabHeaderPlaceholder = 'Search News';
+let newsTabHeaderPlaceholder = 'Search Better';
 let newsTabHeaderCreatePostButtonText = 'New Post';
 
 // Component

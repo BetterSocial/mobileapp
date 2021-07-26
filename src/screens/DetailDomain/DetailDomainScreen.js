@@ -18,8 +18,14 @@ import {getMyProfile} from '../../service/profile';
 import {blockUser} from '../../service/blocking';
 import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import {createCommentParent} from '../../service/comment';
-import {SIZES} from '../../utils/theme';
+import {COLORS, SIZES} from '../../utils/theme';
 import ContentLink from '../FeedScreen/ContentLink';
+import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
+import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
+import {
+  getCountCommentWithChild,
+  getCountCommentWithChildInDetailPage,
+} from '../../utils/getstream';
 
 const {width, height} = Dimensions.get('window');
 
@@ -49,6 +55,9 @@ const DetailDomainScreen = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
 
+  // console.log('item');
+  // console.log(JSON.stringify(props.route.params.item));
+
   React.useEffect(() => {
     const initial = () => {
       let reactionCount = props.route.params.item.reaction_counts;
@@ -58,7 +67,11 @@ const DetailDomainScreen = (props) => {
         if (comment !== undefined) {
           if (comment > 0) {
             setReaction(true);
-            setTotalComment(comment);
+            setTotalComment(
+              getCountCommentWithChildInDetailPage(
+                props.route.params.item.latest_reactions,
+              ),
+            );
           }
         }
         let upvote = reactionCount.upvotes;
@@ -217,86 +230,83 @@ const DetailDomainScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{height: height * 0.9}}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{height: '100%'}}>
         <View style={styles.content}>
-          <View style={{paddingHorizontal: 16}}>
-            <DomainHeader
+          <View style={{paddingHorizontal: 0}}>
+            <DetailDomainScreenHeader
               domain={item.domain.name}
               time={item.content.created_at}
               image={item.domain.image}
+              onFollowDomainPressed={() => {}}
             />
           </View>
 
-          <Gap height={16} />
-          <View style={{marginHorizontal: SIZES.base}}>
-            <ContentLink
-              og={{
-                date: item.content.created_at,
-                description: item.content.description,
-                domain: item.domain.name,
-                domainImage: item.domain.image,
-                image: item.content.image,
-                title: item.content.title,
-                url: item.content.url,
-              }}
+          <View>
+            <DetailDomainScreenContent
+              date={item.content.created_at}
+              description={item.content.description}
+              domain={item.domain}
+              domainImage={item.domain.image}
+              image={item.content.image}
+              title={item.content.title}
+              url={item.content.url}
             />
-            <Gap height={SIZES.base} />
-            <Footer
-              disableComment={true}
-              statusVote={voteStatus}
-              totalComment={totalComment}
-              totalVote={totalVote}
-              onPressDownVote={() => {
-                setStatusDowvote((prev) => {
-                  prev = !prev;
-                  setDownVote({
-                    activity_id: item.id,
-                    status: prev,
-                    feed_group: 'domain',
-                    domain: item.domain.name,
-                  });
-                  if (prev) {
-                    setVoteStatus('downvote');
-                    if (statusUpvote === true) {
-                      setTotalVote((p) => p - 2);
+            <View style={styles.footerWrapper}>
+              <Footer
+                disableComment={true}
+                statusVote={voteStatus}
+                totalComment={totalComment}
+                totalVote={totalVote}
+                onPressDownVote={() => {
+                  setStatusDowvote((prev) => {
+                    prev = !prev;
+                    setDownVote({
+                      activity_id: item.id,
+                      status: prev,
+                      feed_group: 'domain',
+                      domain: item.domain.name,
+                    });
+                    if (prev) {
+                      setVoteStatus('downvote');
+                      if (statusUpvote === true) {
+                        setTotalVote((p) => p - 2);
+                      } else {
+                        setTotalVote((p) => p - 1);
+                      }
+                      setStatusUpvote(false);
                     } else {
-                      setTotalVote((p) => p - 1);
-                    }
-                    setStatusUpvote(false);
-                  } else {
-                    setVoteStatus('none');
-                    setTotalVote((p) => p + 1);
-                  }
-                  return prev;
-                });
-              }}
-              onPressUpvote={() => {
-                setStatusUpvote((prev) => {
-                  prev = !prev;
-                  setUpVote({
-                    activity_id: item.id,
-                    status: prev,
-                    feed_group: 'domain',
-                    domain: item.domain.name,
-                  });
-                  if (prev) {
-                    setVoteStatus('upvote');
-                    if (statusDownvote === true) {
-                      setTotalVote((p) => p + 2);
-                    } else {
+                      setVoteStatus('none');
                       setTotalVote((p) => p + 1);
                     }
-                    setStatusDowvote(false);
-                  } else {
-                    setVoteStatus('none');
-                    setTotalVote((p) => p - 1);
-                  }
-                  return prev;
-                });
-              }}
-            />
+                    return prev;
+                  });
+                }}
+                onPressUpvote={() => {
+                  setStatusUpvote((prev) => {
+                    prev = !prev;
+                    setUpVote({
+                      activity_id: item.id,
+                      status: prev,
+                      feed_group: 'domain',
+                      domain: item.domain.name,
+                    });
+                    if (prev) {
+                      setVoteStatus('upvote');
+                      if (statusDownvote === true) {
+                        setTotalVote((p) => p + 2);
+                      } else {
+                        setTotalVote((p) => p + 1);
+                      }
+                      setStatusDowvote(false);
+                    } else {
+                      setVoteStatus('none');
+                      setTotalVote((p) => p - 1);
+                    }
+                    return prev;
+                  });
+                }}
+              />
+            </View>
           </View>
         </View>
         {isReaction && (
@@ -305,6 +315,7 @@ const DetailDomainScreen = (props) => {
       </ScrollView>
       <WriteComment
         value={textComment}
+        username={item.domain.name}
         onChangeText={(value) => setTextComment(value)}
         onPress={() => {
           onComment();
@@ -342,7 +353,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
     paddingBottom: 75,
-    paddingTop: 8,
+    // paddingTop: 8,
   },
   containerText: {
     marginTop: 20,
@@ -371,4 +382,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   gap: {height: 16},
+  footerWrapper: {
+    height: 52,
+    borderBottomColor: COLORS.gray1,
+    borderBottomWidth: 0.5,
+    marginBottom: -16,
+  },
 });

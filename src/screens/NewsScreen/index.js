@@ -12,6 +12,7 @@ import {
 import analytics from '@react-native-firebase/analytics';
 import Toast from 'react-native-simple-toast';
 import JWTDecode from 'jwt-decode';
+import {useNavigation} from '@react-navigation/native';
 
 import {upVoteDomain, downVoteDomain} from '../../service/vote';
 import {Loading} from '../../components';
@@ -21,7 +22,8 @@ import theme, {COLORS, FONTS, SIZES} from '../../utils/theme';
 import RenderItem from './RenderItem';
 import Search from './Search';
 
-const NewsScreen = ({navigation}) => {
+const NewsScreen = ({}) => {
+  const navigation = useNavigation();
   const [data, setData] = React.useState([]);
   const offset = React.useRef(new Animated.Value(0)).current;
 
@@ -30,10 +32,16 @@ const NewsScreen = ({navigation}) => {
 
   let lastDragY = 0;
   React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
+      initData();
+    });
+
     analytics().logScreenView({
       screen_class: 'FeedScreen',
       screen_name: 'Feed',
     });
+
+    return unsubscribe;
   }, []);
 
   React.useEffect(() => {
@@ -48,18 +56,19 @@ const NewsScreen = ({navigation}) => {
   }, []);
 
   React.useEffect(() => {
-    setLoading(true);
-    const initData = async () => {
-      try {
-        let res = await getDomains();
-        setData([{dummy: true}, ...res.data]);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
     initData();
   }, []);
+
+  const initData = async () => {
+    setLoading(true);
+    try {
+      let res = await getDomains();
+      setData([{dummy: true}, ...res.data]);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
 
   let handleScrollEvent = (event) => {
     let y = event.nativeEvent.contentOffset.y;
@@ -123,7 +132,7 @@ const NewsScreen = ({navigation}) => {
           scrollEventThrottle={16}
           data={data}
           renderItem={({item, index}) => {
-            if (item.dummy) return <View key={index} style={{height: 60}} />;
+            if (item.dummy) return <View key={index} style={{height: 68}} />;
             return (
               <RenderItem
                 key={item}
@@ -147,8 +156,8 @@ const NewsScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: SIZES.base,
-    backgroundColor: 'white',
+    // paddingTop: SIZES.base,
+    backgroundColor: COLORS.gray6,
   },
 });
 
