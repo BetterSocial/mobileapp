@@ -81,6 +81,8 @@ const PostPageDetail = (props) => {
   newItemProp.latest_reactions.comment = sortedComment;
 
   const [item, setItem] = React.useState(newItemProp);
+  console.log('new item');
+  console.log(newItemProp);
 
   React.useEffect(() => {
     const initial = () => {
@@ -296,6 +298,7 @@ const PostPageDetail = (props) => {
               multiplechoice={item.multiplechoice}
               isalreadypolling={item.isalreadypolling}
               onnewpollfetched={() => {}}
+              voteCount={item.voteCount}
             />
           )}
 

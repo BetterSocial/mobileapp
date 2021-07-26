@@ -31,7 +31,7 @@ const getCountCommentWithChild = (item) => {
   // console.log(JSON.stringify(item));
   let count = 0;
   let reactionCountLevelOne = item.reaction_counts;
-  let reactionLevelOne = item.latest_reactions.comment;
+  let reactionLevelOne = item.latest_reactions.comment | [];
 
   if (JSON.stringify(reactionCountLevelOne) !== '{}') {
     let comment = reactionCountLevelOne.comment;
@@ -39,19 +39,21 @@ const getCountCommentWithChild = (item) => {
       count += comment;
     }
 
-    reactionLevelOne.forEach((itemLevelOne) => {
-      if (JSON.stringify(itemLevelOne.latest_children) !== '{}') {
-        let reactionLevelTwo = itemLevelOne.latest_children.comment;
-        reactionLevelTwo.forEach((itemLevelTwo, index) => {
-          count += reactionLevelTwo.length;
+    try {
+      reactionLevelOne.forEach((itemLevelOne) => {
+        if (JSON.stringify(itemLevelOne.latest_children) !== '{}') {
+          let reactionLevelTwo = itemLevelOne.latest_children.comment;
+          reactionLevelTwo.forEach((itemLevelTwo, index) => {
+            count += reactionLevelTwo.length;
 
-          let reactionLevelThree = itemLevelTwo.latest_children;
-          if (JSON.stringify(reactionLevelThree) !== '{}') {
-            count += reactionLevelThree.comment.length;
-          }
-        });
-      }
-    });
+            let reactionLevelThree = itemLevelTwo.latest_children;
+            if (JSON.stringify(reactionLevelThree) !== '{}') {
+              count += reactionLevelThree.comment.length;
+            }
+          });
+        }
+      });
+    } catch (e) {}
   }
 
   return count;

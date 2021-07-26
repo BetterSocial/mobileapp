@@ -264,6 +264,7 @@ const FeedScreen = (props) => {
                           title: item.og.title,
                           url: item.og.url,
                           created_at: item.og.date,
+                          description: item.og.description,
                         },
                         reaction_counts: item.reaction_counts,
                         latest_reactions: item.latest_reactions,

@@ -34,12 +34,13 @@ const ContentPoll = ({
   isalreadypolling,
   pollexpiredat,
   index = -1,
+  voteCount = 0,
 }) => {
   let totalPollCount = polls.reduce((acc, current) => {
     return acc + parseInt(current.counter);
   }, 0);
 
-  console.log(polls);
+  // console.log(polls);
 
   let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] =
     React.useState(-1);
@@ -79,6 +80,7 @@ const ContentPoll = ({
       newItem.refreshtoken = new Date().valueOf();
       newItem.pollOptions = newPolls;
       newItem.mypolling = selectedPolls;
+      newItem.voteCount = voteCount++;
       onnewpollfetched(newItem, index);
       setIsAlreadyPolling(true);
     } else {
@@ -92,6 +94,7 @@ const ContentPoll = ({
       newItem.refreshtoken = new Date().valueOf();
       newItem.pollOptions = newPolls;
       newItem.mypolling = selectedPoll;
+      newItem.voteCount = voteCount++;
       onnewpollfetched(newItem, index);
       setIsAlreadyPolling(true);
       inputSingleChoicePoll(
@@ -151,6 +154,7 @@ const ContentPoll = ({
 
                 return multiplechoice ? (
                   <PollOptionsMultipleChoice
+                    key={index}
                     item={pollItem}
                     index={index}
                     mypoll={item?.mypolling}
@@ -164,6 +168,7 @@ const ContentPoll = ({
                   />
                 ) : (
                   <PollOptions
+                    key={index}
                     poll={pollItem}
                     mypoll={item?.mypolling}
                     index={index}
@@ -178,8 +183,7 @@ const ContentPoll = ({
             </View>
 
             <View style={styles.totalVotesContainer}>
-              <Text
-                style={styles.totalpolltext}>{`${totalPollCount} votes `}</Text>
+              <Text style={styles.totalpolltext}>{`${voteCount} votes `}</Text>
               <View
                 style={{
                   width: 4,

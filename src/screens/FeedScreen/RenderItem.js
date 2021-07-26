@@ -181,6 +181,7 @@ const Item = ({
           multiplechoice={item.multiplechoice}
           isalreadypolling={item.isalreadypolling}
           onnewpollfetched={onNewPollFetched}
+          voteCount={item.voteCount}
         />
       )}
 

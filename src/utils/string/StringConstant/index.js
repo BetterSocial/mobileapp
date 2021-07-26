@@ -44,7 +44,7 @@ let onboardingTopicsButtonStateChooseMore = (count) => `CHOOSE ${count} MORE`;
 
 // Post Detail Page
 let postDetailPageSeeReplies = (count) => {
-  return `See ${count} ${count > 1 ? `replies` : 'reply'}`;
+  return `See ${count} ${count > 1 ? 'replies' : 'reply'}`;
 };
 
 // Chat Tab
@@ -68,6 +68,9 @@ let commentBoxDefaultPlaceholder = 'Add your reply';
 // Splash Screen
 let splashScreenDeeplinkGetProfileNotFound = (username) =>
   `${username}'s profile not found`;
+
+// Domain Page
+let domainCannotOpenURL = 'Cannot open URL';
 
 export default {
   signInScreenHumanIdBrand,
@@ -114,4 +117,6 @@ export default {
   searchModalTitle,
   searchModalPlaceholder,
   commentBoxDefaultPlaceholder,
+
+  domainCannotOpenURL,
 };
