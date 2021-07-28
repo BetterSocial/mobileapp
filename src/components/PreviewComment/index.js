@@ -1,5 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import jwtDecode from 'jwt-decode';
+import {useNavigation} from '@react-navigation/native';
 
 import SeeMore from 'react-native-see-more-inline';
 
@@ -7,38 +9,59 @@ import {calculateTime} from '../../utils/time';
 import {fonts} from '../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 import {Dot, Gap} from '../../components';
+import {getAccessToken} from '../../utils/token';
 
 const PreviewComment = ({
-  username,
   comment,
   time,
   image,
   totalComment,
   onPress,
+  user,
 }) => {
+  const navigation = useNavigation();
+
+  let openProfile = async () => {
+    let selfAccessToken = await getAccessToken();
+    let selfUserId = await jwtDecode(selfAccessToken).user_id;
+    if (selfUserId === user.id) {
+      return navigation.navigate('ProfileScreen');
+    }
+    return navigation.navigate('OtherProfile', {
+      data: {
+        user_id: selfUserId,
+        other_id: user.id,
+        username: user.data.username,
+      },
+    });
+  };
+
   return (
     <View style={styles.containerPreview}>
       <View style={styles.lineBeforeProfile} />
       <View style={styles.container(totalComment)}>
-        <View style={styles.profile}>
-          <Image
-            source={
-              image
-                ? {uri: image}
-                : require('../../assets/images/ProfileDefault.png')
-            }
-            style={styles.image}
-          />
-          <View style={styles.containerUsername}>
-            <Text style={styles.username}>{username}</Text>
-            <Gap width={4} />
-            <Dot size={4} color={'#828282'} />
-            <Gap width={4} />
-            <Text style={styles.time}>
-              {calculateTime(time).replace('ago', '')}
-            </Text>
+        <TouchableOpacity style={styles.profileTouchable} onPress={openProfile}>
+          <View style={{left: -16}} />
+          <View style={styles.profile}>
+            <Image
+              source={
+                image
+                  ? {uri: image}
+                  : require('../../assets/images/ProfileDefault.png')
+              }
+              style={styles.image}
+            />
+            <View style={styles.containerUsername}>
+              <Text style={styles.username}>{user.data.username}</Text>
+              <Gap width={4} />
+              <Dot size={4} color={'#828282'} />
+              <Gap width={4} />
+              <Text style={styles.time}>
+                {calculateTime(time).replace('ago', '')}
+              </Text>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={styles.text}>
           {/* <SeeMore seeMoreText={'More'} seeLessText={'Less'} numberOfLines={2}>
             {comment}
@@ -102,7 +125,7 @@ const styles = StyleSheet.create({
   },
   profile: {
     flexDirection: 'row',
-    marginLeft: -12,
+    // marginLeft: -12,
   },
   time: {
     fontFamily: fonts.inter[400],
@@ -113,7 +136,7 @@ const styles = StyleSheet.create({
   containerUsername: {
     alignItems: 'center',
     flexDirection: 'row',
-    // backgroundColor: 'blue',
+    flex: 1,
     // marginTop: -8.5,
   },
   btnMore: {marginStart: 8},
@@ -126,4 +149,5 @@ const styles = StyleSheet.create({
   seemore: {
     color: COLORS.blue,
   },
+  profileTouchable: {marginLeft: -12},
 });

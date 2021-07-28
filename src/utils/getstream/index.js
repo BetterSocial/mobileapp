@@ -31,7 +31,7 @@ const getCountCommentWithChild = (item) => {
   // console.log(JSON.stringify(item));
   let count = 0;
   let reactionCountLevelOne = item.reaction_counts;
-  let reactionLevelOne = item.latest_reactions.comment | [];
+  let reactionLevelOne = item.latest_reactions.comment || [];
 
   if (JSON.stringify(reactionCountLevelOne) !== '{}') {
     let comment = reactionCountLevelOne.comment;
@@ -41,6 +41,8 @@ const getCountCommentWithChild = (item) => {
 
     try {
       reactionLevelOne.forEach((itemLevelOne) => {
+        console.log('itemLevelOne');
+        console.log(itemLevelOne);
         if (JSON.stringify(itemLevelOne.latest_children) !== '{}') {
           let reactionLevelTwo = itemLevelOne.latest_children.comment;
           reactionLevelTwo.forEach((itemLevelTwo, index) => {
@@ -53,7 +55,10 @@ const getCountCommentWithChild = (item) => {
           });
         }
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log('item.latest_reactions');
+      console.log(JSON.stringify(reactionLevelOne));
+    }
   }
 
   return count;

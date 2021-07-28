@@ -91,7 +91,8 @@ const ReplyComment = (props) => {
           </View>
           {/* Header */}
           <Comment
-            username={item.user.data.username}
+            // username={item.user.data.username}
+            user={item.user}
             comment={item.data.text}
             time={item.created_at}
             photo={item.user.data.profile_pic_url}
@@ -135,7 +136,8 @@ const ReplyComment = (props) => {
                           level >= 2
                         }
                         key={'r' + index}
-                        username={itemReply.user.data.username}
+                        // username={itemReply.user.data.username}
+                        user={item.user}
                         comment={itemReply.data.text}
                         onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}

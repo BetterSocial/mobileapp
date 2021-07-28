@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
+import jwtDecode from 'jwt-decode';
 import IconEn from 'react-native-vector-icons/Entypo';
+import {useNavigation} from '@react-navigation/native';
 
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
@@ -9,9 +10,10 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
 import MemoCommentReply from '../../assets/icon/CommentReply';
+import {getAccessToken} from '../../utils/token';
 
 const Comment = ({
-  username,
+  user,
   comment,
   onPress,
   isLast = false,
@@ -23,9 +25,28 @@ const Comment = ({
   showLeftConnector = true,
   disableOnTextPress = false,
 }) => {
+  const navigation = useNavigation();
+
   let onTextPress = () => {
-    if (level >= 2 || disableOnTextPress) return;
+    if (level >= 2 || disableOnTextPress) {
+      return;
+    }
     return onPress();
+  };
+
+  let openProfile = async () => {
+    let selfAccessToken = await getAccessToken();
+    let selfUserId = await jwtDecode(selfAccessToken).user_id;
+    if (selfUserId === user.id) {
+      return navigation.navigate('ProfileScreen');
+    }
+    return navigation.navigate('OtherProfile', {
+      data: {
+        user_id: selfUserId,
+        other_id: user.id,
+        username: user.data.username,
+      },
+    });
   };
 
   return (
@@ -37,20 +58,22 @@ const Comment = ({
         isLastInParent,
         showLeftConnector,
       })}>
-      <View style={styles.profile}>
-        <Image
-          source={
-            photo
-              ? {uri: photo}
-              : require('../../assets/images/ProfileDefault.png')
-          }
-          style={styles.image}
-        />
-        <View style={styles.containerUsername}>
-          <Text style={styles.username}>{username} •</Text>
-          <Text style={styles.time}> {calculateTime(time)}</Text>
+      <TouchableOpacity onPress={openProfile}>
+        <View style={styles.profile}>
+          <Image
+            source={
+              photo
+                ? {uri: photo}
+                : require('../../assets/images/ProfileDefault.png')
+            }
+            style={styles.image}
+          />
+          <View style={styles.containerUsername}>
+            <Text style={styles.username}>{user.data.username} •</Text>
+            <Text style={styles.time}> {calculateTime(time)}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
       <TouchableOpacity onPress={onTextPress}>
         <Text style={styles.post}>{comment}</Text>
       </TouchableOpacity>

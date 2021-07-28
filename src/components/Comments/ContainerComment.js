@@ -34,13 +34,16 @@ const ContainerComment = ({comments}) => {
           let nextMoment = moment(next.updated_at);
           return currentMoment.diff(nextMoment);
         });
+
+        console.log(item.user);
         return (
           <View>
             <View key={'p' + index}>
               <Comment
                 key={'p' + index}
                 comment={item.data.text}
-                username={item.user.data.username}
+                // username={item.user.data.username}
+                user={item.user}
                 level={0}
                 time={item.created_at}
                 photo={item.user.data.profile_pic_url}
@@ -92,7 +95,8 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
               <Comment
                 key={'c' + index}
                 comment={item.data.text}
-                username={item.user.data.username}
+                // username={item.user.data.username}
+                user={item.user}
                 level={1}
                 photo={item.user.data.profile_pic_url}
                 time={item.created_at}

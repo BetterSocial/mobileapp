@@ -263,7 +263,7 @@ const Item = ({
         <View>
           <View style={styles.lineAffterFooter} />
           <PreviewComment
-            username={previewComment.user.data.username}
+            user={previewComment.user}
             comment={previewComment.data.text}
             image={previewComment.user.data.profile_pic_url}
             time={previewComment.created_at}
