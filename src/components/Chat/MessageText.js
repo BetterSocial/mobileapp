@@ -10,7 +10,7 @@ import Dot from '../Dot';
 import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
 
-const MessageText = ({image, name, time, message, read, isMe}) => {
+const MessageText = ({image, name, time, message, read, isMe, all}) => {
   const [onAction, setOnAction] = React.useState(false);
 
   return (

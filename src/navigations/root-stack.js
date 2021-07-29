@@ -40,7 +40,7 @@ const RootStact = () => {
     StatusBar.setBarStyle('dark-content', true);
   }, []);
   return (
-    <Stack.Navigator initialRouteName="ChatDetailPage">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="DetailGroupImage"
         component={DetailGroupImage}

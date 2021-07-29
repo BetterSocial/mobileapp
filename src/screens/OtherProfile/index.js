@@ -31,6 +31,8 @@ import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
+import {Context} from '../../context';
+import {setChannel} from '../../context/actions/setChannel';
 
 const width = Dimensions.get('screen').width;
 
@@ -51,8 +53,9 @@ const OtherProfile = () => {
   const [opacity, setOpacity] = React.useState(0);
   const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
   const [tokenJwt, setTokenJwt] = React.useState('');
+  const [client, setClient] = React.useContext(Context).client;
+  const [channel, dispatchChannel] = React.useContext(Context).channel;
 
-  console.log(route.params);
   const {params} = route;
 
   React.useEffect(() => {
@@ -189,6 +192,17 @@ const OtherProfile = () => {
       animated: true,
     });
   };
+  const createChannel = async () => {
+    const clientChat = await client.client;
+    const channelChat = await clientChat.channel('messaging', {
+      name: username,
+      members: [user_id, other_id],
+    });
+    await channelChat.watch();
+    setChannel(channelChat, dispatchChannel);
+
+    await navigation.navigate('ChatDetailPage');
+  };
 
   return (
     <>
@@ -240,7 +254,7 @@ const OtherProfile = () => {
                           />
                         </TouchableNativeFeedback>
                         <View style={styles.btnMsg}>
-                          <TouchableNativeFeedback>
+                          <TouchableNativeFeedback onPress={createChannel}>
                             <EnveloveBlueIcon
                               width={20}
                               height={16}

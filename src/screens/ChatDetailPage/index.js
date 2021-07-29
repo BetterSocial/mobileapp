@@ -7,59 +7,44 @@ import {
   MessageInput,
   MessageList,
   Streami18n,
-  useMessageInputContext,
 } from 'stream-chat-react-native';
-import {StreamChat} from 'stream-chat';
 
-import {STREAM_API_KEY} from '@env';
 import Header from '../../components/Chat/Header';
 import InputMessage from '../../components/Chat/InputMessage';
 import CostomListMessage from '../../components/Chat/CostomListMessage';
+import {Context} from '../../context';
 
-// const chatClient = new StreamChat(STREAM_API_KEY);
-const chatClient = StreamChat.getInstance('dz5f4d5kzrue');
 const streami18n = new Streami18n({
   language: 'en',
 });
-const userToken =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoidGlnaHQtcXVlZW4tMiIsImV4cCI6MTYyNTc1MDQwOH0.A57gFzULfv8slbtY-F1WIQ-hjsCTRk9452vvOZOZzs8';
 
-chatClient.connectUser(
-  {
-    id: 'tight-queen-2',
-    name: 'tight',
-    image: 'https://getstream.io/random_png/?id=tight-queen-2&name=tight',
-  },
-  userToken,
-);
-const channel = chatClient.channel('messaging', 'tight-queen-2', {
-  // add as many custom fields as you'd like
-  image: 'https://www.drupal.org/files/project-images/react.png',
-  name: 'Talk about React',
-  members: ['tight-queen-2'],
-});
 const ChatDetailPage = () => {
-  console.log(JSON.stringify(channel.data));
-  return (
-    <SafeAreaView>
-      <Chat client={chatClient} i18nInstance={streami18n}>
-        <Channel
-          channel={channel}
-          keyboardVerticalOffset={50}
-          hasFilePicker={false}>
-          <View style={{flex: 1}}>
-            <Header
-              username={channel?.data?.name}
-              profile={channel?.data?.image}
-            />
-            <MessageList Message={CostomListMessage} />
+  const [clients] = React.useContext(Context).client;
+  const [channelClient] = React.useContext(Context).channel;
+  if (clients.client && channelClient.channel) {
+    return (
+      <SafeAreaView>
+        <Chat client={clients.client} i18nInstance={streami18n}>
+          <Channel
+            channel={channelClient.channel}
+            keyboardVerticalOffset={50}
+            hasFilePicker={false}>
+            <View style={{flex: 1}}>
+              <Header
+                username={channelClient.channel?.data?.name}
+                profile={channelClient.channel?.data?.image}
+              />
+              <MessageList Message={CostomListMessage} />
 
-            <MessageInput Input={InputMessage} />
-          </View>
-        </Channel>
-      </Chat>
-    </SafeAreaView>
-  );
+              <MessageInput Input={InputMessage} />
+            </View>
+          </Channel>
+        </Chat>
+        {/* <Text>he</Text> */}
+      </SafeAreaView>
+    );
+  }
+  return <View />;
 };
 
 export default ChatDetailPage;

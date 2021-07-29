@@ -1,24 +1,31 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import {STREAM_API_KEY} from '@env';
 import JWTDecode from 'jwt-decode';
-import {StreamChat} from 'stream-chat';
-import {ChannelList, Chat} from 'stream-chat-react-native';
+import {ChannelList, Chat, Streami18n} from 'stream-chat-react-native';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
-const chatClient = new StreamChat(STREAM_API_KEY);
-
 import {getAccessToken} from '../../utils/token';
 import Search from './elements/Search';
-const sort = {last_message_at: -1};
+import {Context} from '../../context';
+import {setChannel} from '../../context/actions/setChannel';
+const streami18n = new Streami18n({
+  language: 'en',
+});
 
 const ChannelListScreen = ({navigation}) => {
   const [userId, setUserId] = React.useState('');
+  const [client] = React.useContext(Context).client;
+  const [, dispatch] = React.useContext(Context).channel;
   const filters = {
-    example: 'example-apps',
     members: {$in: [userId]},
     type: 'messaging',
+  };
+
+  const sort = {last_message_at: -1};
+  const options = {
+    state: true,
+    watch: true,
   };
   const memoizedFilters = React.useMemo(() => filters, []);
 
@@ -33,13 +40,8 @@ const ChannelListScreen = ({navigation}) => {
     try {
       const token = await getAccessToken();
       const id = await JWTDecode(token).user_id;
-      let user = {
-        id: id,
-      };
       setUserId(id);
-      await chatClient.connectUser(user, token);
     } catch (err) {
-      console.log(err);
       crashlytics().recordError(err);
     }
   };
@@ -50,17 +52,21 @@ const ChannelListScreen = ({navigation}) => {
         animatedValue={0}
         onPress={() => navigation.navigate('CreateGroupScreen')}
       />
-      <Chat client={chatClient}>
-        <View style={StyleSheet.absoluteFill}>
-          <ChannelList
-            filters={memoizedFilters}
-            onSelect={(channel) => {
-              navigation.navigate('Channel', {channel: channel});
-            }}
-            sort={sort}
-          />
-        </View>
-      </Chat>
+      {client.client && (
+        <Chat client={client.client} i18nInstance={streami18n}>
+          <View style={StyleSheet.absoluteFill}>
+            <ChannelList
+              filters={memoizedFilters}
+              onSelect={(channel) => {
+                navigation.navigate('ChatDetailPage');
+                setChannel(channel, dispatch);
+              }}
+              sort={sort}
+              options={options}
+            />
+          </View>
+        </Chat>
+      )}
     </View>
   );
 };

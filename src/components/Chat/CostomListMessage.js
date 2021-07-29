@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {View} from 'react-native';
 
+import {MessageSimple} from 'stream-chat-react-native';
+
 import MessageText from './MessageText';
 import MessageWithEmage from './MessageWithEmage';
 import MessageWithLink from './MessageWithLink';
@@ -88,17 +90,25 @@ const CostomListMessage = (props) => {
     <View>
       <MessageText />
     </View>
-    // <MessageSimple
-    //   {...props}
-
-    //   forceAlign="left"
-    // alignment="left"
-    // ReactionList={null}
-    // hasReactions={false}
-    // onLongPress={() => {}}
-    // textBeforeAttachments
-    // />
   );
+
+  // return (
+  //   <MessageSimple
+  //     {...props}
+  //     forceAlign="left"
+  //     ReactionList={null}
+  //     onLongPress={() => {}}
+  //     textBeforeAttachments
+  //     ActionSheet={() => <View />}
+  //     MessageAvatar={() => <View />}
+  //     MessageHeader={() => <View />}
+  //     MessageFooter={() => <View />}
+  //     MessageText={() => <View />}
+  //     UrlPreview={() => <View />}
+  //     Giphy={() => <View />}
+  //     supportedReactions={false}
+  //   />
+  // );
 };
 
 export default CostomListMessage;

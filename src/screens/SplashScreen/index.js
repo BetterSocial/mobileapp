@@ -9,12 +9,14 @@ import {verifyTokenGetstream} from '../../service/users';
 import {getProfileByUsername} from '../../service/profile';
 import {getAccessToken} from '../../utils/token';
 import StringConstant from '../../utils/string/StringConstant';
+import {createClient} from './../../context/actions/createClient';
+import {Context} from '../../context';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
   const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org';
   let [isModalShown, setIsModalShown] = React.useState(false);
-
+  const [, dispatch] = React.useContext(Context).client;
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'SplashScreen',
@@ -77,6 +79,8 @@ const SplashScreen = () => {
   let doVerifyUser = async () => {
     try {
       let token = await getAccessToken();
+      createClient(token, dispatch);
+      console.log('joken ', jwtDecode(token));
       console.log(token);
       if (token !== null && token !== '') {
         const verify = await verifyTokenGetstream();

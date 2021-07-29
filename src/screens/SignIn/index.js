@@ -29,6 +29,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import ButtonSign from '../../assets/icon-svg/button_sign.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
+import {createClient} from '../../context/actions/createClient';
 
 const ENABLE_DEV_ONLY_FEATURE = true;
 
@@ -57,6 +58,7 @@ const SignIn = () => {
               .then((response) => {
                 setLoading(false);
                 if (response.data) {
+                  createClient(response.token);
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
                   navigation.dispatch(StackActions.replace('HomeTabs'));
