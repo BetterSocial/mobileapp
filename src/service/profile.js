@@ -1,5 +1,4 @@
 import api from './config';
-import api2 from '../api/api';
 
 export const getMyProfile = async (userId) => {
   return new Promise((resolve, reject) => {

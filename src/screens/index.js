@@ -6,7 +6,8 @@ import ProfileScreen from './ProfileScreen';
 import CreateGroupScreen from './CreateGroupScreen';
 import ContactScreen from './ContactScreen';
 import DetailDomainScreen from './DetailDomain/DetailDomainScreen';
-
+import ChatDetailPage from './ChatDetailPage';
+import DetailGroupImage from './DetailGroupImage';
 export {
   ChannelScreen,
   ChannelListScreen,
@@ -16,4 +17,6 @@ export {
   CreateGroupScreen,
   ContactScreen,
   DetailDomainScreen,
+  ChatDetailPage,
+  DetailGroupImage,
 };

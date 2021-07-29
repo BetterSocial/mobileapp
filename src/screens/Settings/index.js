@@ -17,6 +17,7 @@ import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import Header from '../../components/Header';
 import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
+import {clearAccessToken} from '../../utils/token';
 
 const width = Dimensions.get('screen').width;
 
@@ -28,6 +29,13 @@ const Settings = () => {
       screen_name: 'Settings',
     });
   }, []);
+  const logout = () => {
+    clearAccessToken();
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'SignIn'}],
+    });
+  };
 
   return (
     <>
@@ -63,8 +71,7 @@ const Settings = () => {
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
           </TouchableNativeFeedback>
-          <TouchableNativeFeedback
-            onPress={() => navigation.navigate('SignIn')}>
+          <TouchableNativeFeedback onPress={logout}>
             <View style={styles.card}>
               <Text style={styles.textCard}>Logout</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />

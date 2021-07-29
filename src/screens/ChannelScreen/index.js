@@ -3,20 +3,22 @@ import {SafeAreaView, StyleSheet, View} from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';
 import {useHeaderHeight} from '@react-navigation/stack';
-import {StreamChat} from 'stream-chat';
 import {
   Channel,
   Chat,
   MessageInput,
   MessageList,
+  Streami18n,
   useAttachmentPickerContext,
 } from 'stream-chat-react-native';
+import {Context} from '../../context';
+const streami18n = new Streami18n({
+  language: 'en',
+});
 
-const chatClient = StreamChat.getInstance('q95x9hkbyd6p');
-
-const ChannelScreen = (props) => {
-  console.log(props);
-  const [channel, setChannel] = React.useState(props.route.params.channel);
+const ChannelScreen = () => {
+  const [channel] = React.useContext(Context).channel;
+  const [client] = React.useContext(Context).client;
   const headerHeight = useHeaderHeight();
   const {setTopInset} = useAttachmentPickerContext();
 
@@ -30,14 +32,18 @@ const ChannelScreen = (props) => {
 
   return (
     <SafeAreaView>
-      <Chat client={chatClient}>
-        <Channel channel={channel} keyboardVerticalOffset={headerHeight}>
-          <View style={StyleSheet.absoluteFill}>
-            <MessageList />
-            <MessageInput />
-          </View>
-        </Channel>
-      </Chat>
+      {client.client && channel.channel && (
+        <Chat client={client.client} i18nInstance={streami18n}>
+          <Channel
+            channel={channel.channel}
+            keyboardVerticalOffset={headerHeight}>
+            <View style={StyleSheet.absoluteFill}>
+              <MessageList />
+              <MessageInput />
+            </View>
+          </Channel>
+        </Chat>
+      )}
     </SafeAreaView>
   );
 };

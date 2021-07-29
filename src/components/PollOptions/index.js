@@ -26,9 +26,6 @@ let PollOptions = ({
   };
 
   let isMyPoll = () => mypoll?.polling_option_id === poll?.polling_option_id;
-  // console.log(mypoll);
-  // console.log("vs " + isMyPoll());
-  // console.log(poll);
 
   return (
     <TouchableNativeFeedback
