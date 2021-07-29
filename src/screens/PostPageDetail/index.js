@@ -372,11 +372,13 @@ const PostPageDetail = (props) => {
               statusVote={voteStatus}
               onPressShare={() => {}}
               onPressComment={onCommentButtonClicked}
-              onPressBlock={(value) => {
-                if (value.actor.id === yourselfId) {
+              onPressBlock={() => {
+                console.log('blocking');
+                console.log(item);
+                if (item.actor.id === yourselfId) {
                   Toast.show("Can't Block yourself", Toast.LONG);
                 } else {
-                  setDataToState(value);
+                  setDataToState(item);
                   refBlockUser.current.open();
                 }
               }}

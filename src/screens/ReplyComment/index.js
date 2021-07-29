@@ -93,7 +93,7 @@ const ReplyComment = (props) => {
           <Comment
             // username={item.user.data.username}
             user={item.user}
-            comment={item.data.text}
+            comment={item}
             time={item.created_at}
             photo={item.user.data.profile_pic_url}
             isLast={(item.children_counts.comment || 0) === 0}
@@ -138,7 +138,7 @@ const ReplyComment = (props) => {
                         key={'r' + index}
                         // username={itemReply.user.data.username}
                         user={item.user}
-                        comment={itemReply.data.text}
+                        comment={itemReply}
                         onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}
                       />

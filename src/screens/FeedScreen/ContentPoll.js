@@ -13,7 +13,11 @@ import {useRoute} from '@react-navigation/native';
 import SeeMore from 'react-native-see-more-inline';
 
 import {inputSingleChoicePoll} from '../../service/post';
-import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
+import {
+  getPollTime,
+  isPollExpired,
+  NO_POLL_UUID,
+} from '../../utils/string/StringUtils';
 import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
@@ -61,46 +65,52 @@ const ContentPoll = ({
     let newItem = {...item};
 
     if (multiplechoice) {
+      newItem.isalreadypolling = true;
+      newItem.refreshtoken = new Date().valueOf();
       if (multipleChoiceSelected.length === 0) {
-        return;
+        inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
+      } else {
+        setIsAlreadyPolling(true);
+        let selectedPolls = [];
+        for (let i = 0; i < multipleChoiceSelected.length; i++) {
+          let changedPollIndex = multipleChoiceSelected[i];
+          let selectedPoll = polls[changedPollIndex];
+          newPolls[changedPollIndex].counter =
+            parseInt(selectedPoll.counter) + 1;
+          selectedPolls.push(selectedPoll);
+          inputSingleChoicePoll(
+            selectedPoll.polling_id,
+            selectedPoll.polling_option_id,
+          );
+        }
+        newItem.pollOptions = newPolls;
+        newItem.mypolling = selectedPolls;
+        newItem.voteCount = voteCount++;
       }
+
+      onnewpollfetched(newItem, index);
       setIsAlreadyPolling(true);
-      let selectedPolls = [];
-      for (let i = 0; i < multipleChoiceSelected.length; i++) {
-        let changedPollIndex = multipleChoiceSelected[i];
-        let selectedPoll = polls[changedPollIndex];
-        newPolls[changedPollIndex].counter = parseInt(selectedPoll.counter) + 1;
-        selectedPolls.push(selectedPoll);
+    } else {
+      newItem.isalreadypolling = true;
+      newItem.refreshtoken = new Date().valueOf();
+
+      if (singleChoiceSelectedIndex === -1) {
+        inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
+      } else {
+        let selectedPoll = polls[singleChoiceSelectedIndex];
+        newPolls[singleChoiceSelectedIndex].counter =
+          parseInt(selectedPoll.counter) + 1;
+        newItem.pollOptions = newPolls;
+        newItem.mypolling = selectedPoll;
+        newItem.voteCount = voteCount++;
         inputSingleChoicePoll(
           selectedPoll.polling_id,
           selectedPoll.polling_option_id,
         );
       }
-      newItem.isalreadypolling = true;
-      newItem.refreshtoken = new Date().valueOf();
-      newItem.pollOptions = newPolls;
-      newItem.mypolling = selectedPolls;
-      newItem.voteCount = voteCount++;
+
       onnewpollfetched(newItem, index);
       setIsAlreadyPolling(true);
-    } else {
-      if (singleChoiceSelectedIndex === -1) {
-        return;
-      }
-      let selectedPoll = polls[singleChoiceSelectedIndex];
-      newPolls[singleChoiceSelectedIndex].counter =
-        parseInt(selectedPoll.counter) + 1;
-      newItem.isalreadypolling = true;
-      newItem.refreshtoken = new Date().valueOf();
-      newItem.pollOptions = newPolls;
-      newItem.mypolling = selectedPoll;
-      newItem.voteCount = voteCount++;
-      onnewpollfetched(newItem, index);
-      setIsAlreadyPolling(true);
-      inputSingleChoicePoll(
-        selectedPoll.polling_id,
-        selectedPoll.polling_option_id,
-      );
     }
   };
 

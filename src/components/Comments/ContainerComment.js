@@ -41,7 +41,7 @@ const ContainerComment = ({comments}) => {
             <View key={'p' + index}>
               <Comment
                 key={'p' + index}
-                comment={item.data.text}
+                comment={item}
                 // username={item.user.data.username}
                 user={item.user}
                 level={0}
@@ -94,7 +94,7 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
             <View key={'c' + index} style={styles.levelOneCommentWrapper}>
               <Comment
                 key={'c' + index}
-                comment={item.data.text}
+                comment={item}
                 // username={item.user.data.username}
                 user={item.user}
                 level={1}

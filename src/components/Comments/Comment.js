@@ -11,6 +11,12 @@ import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import {getAccessToken} from '../../utils/token';
+import BlockUser from '../Blocking/BlockUser';
+import ReportUser from '../Blocking/ReportUser';
+import SpecificIssue from '../Blocking/SpecificIssue';
+import {blockUser} from '../../service/blocking';
+import Toast from 'react-native-simple-toast';
+import JwtDecode from 'jwt-decode';
 
 const Comment = ({
   user,
@@ -26,6 +32,16 @@ const Comment = ({
   disableOnTextPress = false,
 }) => {
   const navigation = useNavigation();
+  const refBlockUser = React.useRef();
+  const refSpecificIssue = React.useRef();
+  const refReportUser = React.useRef();
+  const [userId, setUserId] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  const [postId, setPostId] = React.useState('');
+  const [dataProfile, setDataProfile] = React.useState({});
+  const [reportOption, setReportOption] = React.useState([]);
+  const [messageReport, setMessageReport] = React.useState('');
+  const [yourselfId, setYourselfId] = React.useState('');
 
   let onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
@@ -48,6 +64,70 @@ const Comment = ({
       },
     });
   };
+
+  const setDataToState = (value) => {
+    setUsername(value.user.data.username);
+    setPostId(value.id);
+    setUserId(value.user.id);
+  };
+
+  const onSkipOnlyBlock = () => {
+    refReportUser.current.close();
+    userBlock();
+  };
+
+  const onNextQuestion = (v) => {
+    setReportOption(v);
+    refReportUser.current.close();
+    refSpecificIssue.current.open();
+  };
+  const onIssue = (v) => {
+    refSpecificIssue.current.close();
+    setMessageReport(v);
+    setTimeout(() => {
+      userBlock();
+    }, 500);
+  };
+
+  const onSelectBlocking = (v) => {
+    if (v !== 1) {
+      refReportUser.current.open();
+    } else {
+      userBlock();
+    }
+    refBlockUser.current.close();
+  };
+
+  const userBlock = async () => {
+    const data = {
+      userId: userId,
+      postId: postId,
+      source: 'screen_post_detail',
+      reason: reportOption,
+      message: messageReport,
+    };
+    let result = await blockUser(data);
+    if (result.code === 200) {
+      Toast.show(
+        'The user was blocked successfully. \nThanks for making BetterSocial better!',
+        Toast.LONG,
+      );
+    } else {
+      Toast.show('Your report was filed & will be investigated', Toast.LONG);
+    }
+    console.log('result block user ', result);
+  };
+
+  React.useEffect(() => {
+    const parseToken = async () => {
+      const value = await getAccessToken();
+      if (value) {
+        const decoded = await JwtDecode(value);
+        setYourselfId(decoded.user_id);
+      }
+    };
+    parseToken();
+  }, []);
 
   return (
     <View
@@ -75,7 +155,7 @@ const Comment = ({
         </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={onTextPress}>
-        <Text style={styles.post}>{comment}</Text>
+        <Text style={styles.post}>{comment.data.text}</Text>
       </TouchableOpacity>
       <View style={styles.constainerFooter}>
         {isLast && level >= 2 ? (
@@ -86,7 +166,19 @@ const Comment = ({
             <Text style={styles.btnReplyText}>Reply</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity style={[styles.btnBlock, styles.btn]}>
+        <TouchableOpacity
+          style={[styles.btnBlock, styles.btn]}
+          onPress={() => {
+            // console.log('block comment');
+            // console.log(comment);
+            // return;
+            if (comment.user.id === yourselfId) {
+              Toast.show("Can't Block yourself", Toast.LONG);
+            } else {
+              setDataToState(comment);
+              refBlockUser.current.open();
+            }
+          }}>
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </TouchableOpacity>
 
@@ -97,6 +189,22 @@ const Comment = ({
           <MemoIc_arrow_upvote_off width={18} height={18} />
         </TouchableOpacity>
       </View>
+
+      <BlockUser
+        refBlockUser={refBlockUser}
+        onSelect={(v) => onSelectBlocking(v)}
+        username={username}
+      />
+      <ReportUser
+        refReportUser={refReportUser}
+        onSelect={onNextQuestion}
+        onSkip={onSkipOnlyBlock}
+      />
+      <SpecificIssue
+        refSpecificIssue={refSpecificIssue}
+        onPress={onIssue}
+        onSkip={onSkipOnlyBlock}
+      />
     </View>
   );
 };
