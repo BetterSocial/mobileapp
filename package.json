@@ -6,6 +6,7 @@
     "android": "ENVFILE=.env.development react-native run-android --variant=devDebug --appIdSuffix=dev",
     "android:dev": "react-native run-android --variant=devDebug --appIdSuffix=dev",
     "build:apk:android": "cd android && ENVFILE=.env.development ./gradlew assembleDevDebug",
+    "build:apk:android:release": "cd android && ENVFILE=.env.development ./gradlew assembleDevRelease",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest --verbose",

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
+import {NewsEmptyState} from '../../../assets/images';
 import {fonts} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS} from '../../../utils/theme';
@@ -21,18 +22,24 @@ const DetailDomainScreenContent = ({
   url,
 }) => {
   const onReadFullActiclePressed = () => {
-    if (Linking.canOpenURL(url)) Linking.openURL(url);
+    if (Linking.canOpenURL(url)) {
+      Linking.openURL(url);
+    }
   };
 
   return (
     <View styles={styles.contentContainer}>
       <Text style={styles.title}>{title}</Text>
-      <Image
-        source={{
-          uri: image,
-        }}
-        style={styles.contentImage}
-      />
+      {image ? (
+        <Image
+          source={{
+            uri: image,
+          }}
+          style={styles.contentImage}
+        />
+      ) : (
+        <Image source={NewsEmptyState} style={styles.contentImage} />
+      )}
       <Text style={styles.description}>
         {description}{' '}
         <Text onPress={onReadFullActiclePressed} style={styles.readFullText}>

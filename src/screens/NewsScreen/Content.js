@@ -13,7 +13,7 @@ import {SIZES, FONTS, COLORS} from '../../utils/theme';
 import {sanitizeUrlForLinking} from '../../utils/Utils';
 import Gap from '../../components/Gap';
 import {fonts} from '../../utils/fonts';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {NewsEmptyState} from '../../assets/images';
 
 const Content = (props) => {
   const navigation = useNavigation();
@@ -33,13 +33,23 @@ const Content = (props) => {
         </View>
         <Gap height={SIZES.base} />
         <View style={{paddingHorizontal: -SIZES.base}}>
-          <Image
-            source={{uri: image ? image : DEFAULT_PROFILE_PIC_PATH}}
-            style={{
-              width: '100%',
-              height: SIZES.height * 0.3,
-            }}
-          />
+          {image ? (
+            <Image
+              source={{uri: image}}
+              style={{
+                width: '100%',
+                height: 180,
+              }}
+            />
+          ) : (
+            <Image
+              source={NewsEmptyState}
+              style={{
+                width: '100%',
+                height: 180,
+              }}
+            />
+          )}
         </View>
         <View style={styles.base}>
           <Text style={styles.content}>

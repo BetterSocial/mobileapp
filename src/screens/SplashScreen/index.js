@@ -80,6 +80,7 @@ const SplashScreen = () => {
   let doVerifyUser = async () => {
     try {
       let token = await getAccessToken();
+      console.log('token');
       console.log(token);
       if (token !== null && token !== '') {
         const verify = await verifyTokenGetstream();

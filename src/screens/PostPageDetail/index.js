@@ -373,7 +373,6 @@ const PostPageDetail = (props) => {
               onPressShare={() => {}}
               onPressComment={onCommentButtonClicked}
               onPressBlock={() => {
-                console.log('blocking');
                 console.log(item);
                 if (item.actor.id === yourselfId) {
                   Toast.show("Can't Block yourself", Toast.LONG);

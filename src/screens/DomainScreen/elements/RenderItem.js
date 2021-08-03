@@ -6,9 +6,6 @@ import {
   getCountCommentWithChild,
   getCountVote,
 } from '../../../utils/getstream';
-import Memoic_globe from '../../../assets/icons/ic_globe';
-import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
-import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import theme, {COLORS, FONTS, SIZES} from '../../../utils/theme';
 import {colors} from '../../../utils/colors';
 import {
@@ -19,6 +16,10 @@ import {
 } from '../../../components';
 import {fonts} from '../../../utils/fonts';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
+import Memoic_globe from '../../../assets/icons/ic_globe';
+import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
+import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
+import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 
 const RenderItem = ({
   item,
@@ -179,10 +180,17 @@ const RenderItem = ({
               <Text style={styles.domainItemTitle}>{item.content.title}</Text>
             </View>
             <Gap height={SIZES.base} />
-            <Image
-              source={{uri: item.content.image}}
-              style={{height: SIZES.height * 0.3, marginBottom: 14}}
-            />
+            {item.content.image ? (
+              <Image
+                source={{uri: item.content.image}}
+                style={{height: 200, marginBottom: 14}}
+              />
+            ) : (
+              <Image
+                source={NewsEmptyState}
+                style={{height: 135, marginBottom: 14}}
+              />
+            )}
             <Gap />
             <Gap height={SIZES.base} />
             <View style={{paddingHorizontal: 20}}>
