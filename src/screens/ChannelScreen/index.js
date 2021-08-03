@@ -10,13 +10,16 @@ import {
   MessageList,
   Streami18n,
   useAttachmentPickerContext,
+  MessageSimple,
+  MessageContent,
 } from 'stream-chat-react-native';
 import {Context} from '../../context';
-const streami18n = new Streami18n({
-  language: 'en',
-});
+import {Text} from 'react-native';
 
 const ChannelScreen = () => {
+  const streami18n = new Streami18n({
+    language: 'en',
+  });
   const [channel] = React.useContext(Context).channel;
   const [client] = React.useContext(Context).client;
   const headerHeight = useHeaderHeight();
@@ -29,13 +32,35 @@ const ChannelScreen = () => {
     });
     setTopInset(headerHeight);
   }, [headerHeight]);
+  const theme = {
+    messageSimple: {
+      gallery: {
+        galleryContainer: {
+          backgroundColor: 'red',
+        },
+      },
+      content: {
+        container: {
+          backgroundColor: 'orange',
+          flex: 1,
+        },
+        containerInner: {
+          borderWidth: 2,
+          borderColor: 'red',
+          backgroundColor: 'blue',
+          width: 200,
+        },
+      },
+    },
+  };
 
   return (
     <SafeAreaView>
       {client.client && channel.channel && (
-        <Chat client={client.client} i18nInstance={streami18n}>
+        <Chat client={client.client} i18nInstance={streami18n} style={theme}>
           <Channel
             channel={channel.channel}
+            MessageSimple={CustomComponent}
             keyboardVerticalOffset={headerHeight}>
             <View style={StyleSheet.absoluteFill}>
               <MessageList />
@@ -49,3 +74,12 @@ const ChannelScreen = () => {
 };
 
 export default ChannelScreen;
+
+const CustomComponent = (props) => {
+  return <MessageSimple {...props} />;
+};
+
+const CardCustom = (props) => {
+  console.log('content ', JSON.stringify(props));
+  return <View />;
+};
