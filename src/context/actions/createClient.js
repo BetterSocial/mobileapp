@@ -16,7 +16,7 @@ export const createClient = async (token, dispatch) => {
     image: userData?.data.profile_pic_path ?? defaultImage,
   };
 
-  const chatClient = await new StreamChat(STREAM_API_KEY);
+  const chatClient = new StreamChat(STREAM_API_KEY);
   await chatClient.connectUser(user, token);
   await dispatch({
     type: SET_CLIENT,

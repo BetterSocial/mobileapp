@@ -68,3 +68,4 @@ android/app/google-services.json
 android/app/keystore.properties
 yarn.lock
 yarn.lock
+./yarn.lock

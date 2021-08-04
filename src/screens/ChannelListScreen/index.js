@@ -50,7 +50,7 @@ const ChannelListScreen = ({navigation}) => {
     <View style={{height: '100%'}}>
       <Search
         animatedValue={0}
-        onPress={() => navigation.navigate('CreateGroupScreen')}
+        onPress={() => navigation.navigate('ContactScreen')}
       />
       {client.client && (
         <Chat client={client.client} i18nInstance={streami18n}>
@@ -58,8 +58,9 @@ const ChannelListScreen = ({navigation}) => {
             <ChannelList
               filters={memoizedFilters}
               onSelect={(channel) => {
-                // navigation.navigate('ChatDetailPage');
                 setChannel(channel, dispatch);
+                // navigation.navigate('ChannelScreen');
+                navigation.navigate('ChatDetailPage');
               }}
               sort={sort}
               options={options}

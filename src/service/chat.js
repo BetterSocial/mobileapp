@@ -16,7 +16,7 @@ const createChannel = async (
       id: id,
     };
     await chatClient.connectUser(user, token);
-    const channel = await chatClient.channel(channelType, {
+    const channel = chatClient.channel(channelType, {
       members: members,
       name: channelName,
       //   image: null,
