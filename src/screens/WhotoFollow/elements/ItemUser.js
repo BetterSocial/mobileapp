@@ -4,7 +4,7 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import CheckIcon from '../../../../assets/icons/check.svg';
 import AddIcon from '../../../../assets/icons/add.svg';
 
-const ItemUser = ({photo, username, bio, followed, onPress}) => {
+const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
   return (
     <View style={styles.containerCard}>
       <View style={styles.cardLeft}>
@@ -20,32 +20,27 @@ const ItemUser = ({photo, username, bio, followed, onPress}) => {
         </View>
       </View>
       <View style={styles.containerButton}>
-        {followed ? (
-          <TouchableOpacity
-            onPress={onPress}
-            style={styles.followAction(32, 32)}>
+        <TouchableOpacity onPress={onPress} style={styles.followAction(32, 32)}>
+          {followed.includes(userid) ? (
             <CheckIcon width={32} height={32} fill="#23C5B6" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={onPress}
-            style={styles.followAction(32, 32)}>
+          ) : (
             <AddIcon width={20} height={20} fill="#000000" />
-          </TouchableOpacity>
-        )}
+          )}
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
+
+// const MemoItemUser = React.memo(ItemUser, isPropsEqual);
 export default ItemUser;
 const styles = StyleSheet.create({
   containerCard: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 4,
-    paddingBottom: 4,
-    marginBottom: 8,
+    height: 76,
+    paddingHorizontal: 20,
   },
   cardLeft: {
     flexDirection: 'row',

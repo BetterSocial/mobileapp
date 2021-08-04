@@ -13,8 +13,8 @@ function AppIcon() {
 
 const styles = StyleSheet.create({
   logo: {
-    width: 41,
-    height: 41,
+    width: 80,
+    height: 80,
   },
 });
 
