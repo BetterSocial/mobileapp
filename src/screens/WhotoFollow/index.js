@@ -41,6 +41,9 @@ function compire(prevProps, nextProps) {
 }
 const MemoListUser = React.memo(ListUser, compire);
 
+const VIEW_TYPE_LABEL = 1;
+const VIEW_TYPE_DATA = 2;
+
 const WhotoFollow = () => {
   const [users, setUsers] = React.useState([]);
   const [followed, setFollowed] = React.useState([]);
@@ -52,10 +55,9 @@ const WhotoFollow = () => {
   const [usersState] = React.useContext(Context).users;
   const [dataProvider, setDataProvider] = React.useState(null);
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
-  const navigation = useNavigation();
+  const [layoutProvider, setLayoutProvider] = React.useState(() => {});
 
-  const VIEW_TYPE_LABEL = 1;
-  const VIEW_TYPE_DATA = 2;
+  const navigation = useNavigation();
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -82,6 +84,36 @@ const WhotoFollow = () => {
   React.useEffect(() => {
     if (users.length > 0) {
       let dProvider = new DataProvider((row1, row2) => row1 !== row2);
+      setLayoutProvider(
+        new LayoutProvider(
+          (index) => {
+            if (users.length < 1) {
+              return 0;
+            }
+            if (users[index].viewtype === 'label') {
+              return VIEW_TYPE_LABEL;
+            }
+            return VIEW_TYPE_DATA;
+          },
+          (type, dim) => {
+            switch (type) {
+              case VIEW_TYPE_LABEL:
+                dim.width = width;
+                dim.height = 40;
+                break;
+
+              case VIEW_TYPE_DATA:
+                dim.width = width;
+                dim.height = 76;
+                break;
+
+              default:
+                dim.width = width;
+                dim.height = 40;
+            }
+          },
+        ),
+      );
       setDataProvider(dProvider.cloneWithRows(users));
     }
   }, [users]);
@@ -203,32 +235,7 @@ const WhotoFollow = () => {
       });
   };
 
-  const layoutProvider = new LayoutProvider(
-    (index) => {
-      if (users[index].viewtype === 'label') {
-        return VIEW_TYPE_LABEL;
-      }
-      return VIEW_TYPE_DATA;
-    },
-    (type, dim) => {
-      switch (type) {
-        case VIEW_TYPE_LABEL:
-          dim.width = width;
-          dim.height = 40;
-          break;
-
-        case VIEW_TYPE_DATA:
-          dim.width = width;
-          dim.height = 76;
-          break;
-
-        default:
-          dim.width = 0;
-          dim.height = 0;
-      }
-    },
-  );
-  const rowRenderer = (type, item) => {
+  const rowRenderer = (type, item, index, extendedState) => {
     switch (type) {
       case VIEW_TYPE_LABEL:
         return <Label label={item.name} />;
@@ -238,7 +245,7 @@ const WhotoFollow = () => {
             photo={item.profile_pic_path}
             bio={item.bio}
             username={item.username}
-            followed={followed}
+            followed={extendedState.followed}
             userid={item.user_id}
             onPress={() => handleSelected(item.user_id)}
           />
@@ -265,6 +272,9 @@ const WhotoFollow = () => {
           style={styles.recyclerview}
           layoutProvider={layoutProvider}
           dataProvider={dataProvider}
+          extendedState={{
+            followed,
+          }}
           rowRenderer={rowRenderer}
           scrollViewProps={{
             refreshControl: (

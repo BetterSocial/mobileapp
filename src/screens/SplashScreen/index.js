@@ -74,7 +74,7 @@ const SplashScreen = () => {
 
   let navigateWithoutDeeplink = (selfUserId) => {
     SplashScreenPackage.hide();
-    navigation.replace(selfUserId ? 'HomeTabs' : 'SignIn');
+    navigation.replace(selfUserId ? 'WhotoFollow' : 'SignIn');
   };
 
   let doVerifyUser = async () => {

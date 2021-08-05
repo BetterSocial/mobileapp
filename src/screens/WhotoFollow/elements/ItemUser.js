@@ -1,10 +1,43 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
 
 import CheckIcon from '../../../../assets/icons/check.svg';
 import AddIcon from '../../../../assets/icons/add.svg';
+import {Pressable} from 'react-native';
 
 const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
+  let followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
+
+  const onFollowButtonPressed = () => {
+    Animated.timing(followIconFadeAnimation, {
+      toValue: followed.includes(userid) ? 0 : 1,
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
+    onPress();
+  };
+
+  React.useEffect(() => {
+    if (followed.includes(userid)) {
+      Animated.timing(followIconFadeAnimation, {
+        toValue: 1,
+        duration: 250,
+      }).start();
+    } else {
+      Animated.timing(followIconFadeAnimation, {
+        toValue: 0,
+        duration: 250,
+      }).start();
+    }
+  }, [followed, userid]);
+
   return (
     <View style={styles.containerCard}>
       <View style={styles.cardLeft}>
@@ -20,13 +53,20 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
         </View>
       </View>
       <View style={styles.containerButton}>
-        <TouchableOpacity onPress={onPress} style={styles.followAction(32, 32)}>
-          {followed.includes(userid) ? (
+        <Pressable onPress={onPress} style={styles.followAction(32, 32)}>
+          {/* {followed.includes(userid) ? (
             <CheckIcon width={32} height={32} fill="#23C5B6" />
           ) : (
             <AddIcon width={20} height={20} fill="#000000" />
-          )}
-        </TouchableOpacity>
+          )} */}
+          <Animated.View style={{position: 'absolute', opacity: 1}}>
+            <AddIcon width={20} height={20} fill="#000000" />
+          </Animated.View>
+          <Animated.View
+            style={{position: 'absolute', opacity: followIconFadeAnimation}}>
+            <CheckIcon width={32} height={32} fill="#23C5B6" />
+          </Animated.View>
+        </Pressable>
       </View>
     </View>
   );
