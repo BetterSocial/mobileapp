@@ -16,11 +16,14 @@ import MemoNews from '../assets/icon/News';
 import {getAccessToken} from '../utils/token';
 import {getMyProfile} from '../service/profile';
 import MemoProfileIcon from '../assets/icon/Profile';
+import {Context} from '../context';
+import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs() {
   let [profilePic, setProfilePic] = React.useState(null);
+  const [myProfile, setMyProfileDispatch] = React.useContext(Context).myProfile;
 
   React.useEffect(() => {
     let getProfile = async () => {
@@ -28,6 +31,7 @@ function HomeBottomTabs() {
         let token = await getAccessToken();
         let selfUserId = await jwtDecode(token).user_id;
         let profile = await getMyProfile(selfUserId);
+        setMyProfileAction(profile.data, setMyProfileDispatch);
         setProfilePic(profile.data.profile_pic_path);
       } catch (e) {
         console.log(e);

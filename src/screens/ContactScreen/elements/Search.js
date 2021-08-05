@@ -19,7 +19,7 @@ const Search = ({onPress, animatedValue}) => {
       <View style={styles.wrapperSearch}>
         <TextInput
           multiline={false}
-          placeholder={StringConstant.chatTabHeaderPlaceholder}
+          placeholder={'Search Users'}
           style={styles.input}
         />
         <View style={styles.wrapperIcon}>

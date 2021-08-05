@@ -5,3 +5,4 @@ export const SET_LOCAL_COMUNITY = 'SET_LOCAL_COMUNITY';
 export const SET_TOPICS = 'SET_TOPICS';
 export const SET_CLIENT = 'SET_CLIENT';
 export const SET_CHANNEL = 'SET_CHANNEL';
+export const SET_MY_PROFILE = 'SET_MY_PROFILE';

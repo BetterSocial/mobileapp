@@ -8,6 +8,7 @@ import {topicsReducer, topicsState} from './reducers/topicsReducer';
 import {usersReducer, usersState} from './reducers/userReducer';
 import {channelReducer, channelState} from './reducers/channelReducer';
 import {clientReducer, clientState} from './reducers/clientReducer';
+import {myProfileReducer, myProfileState} from './reducers/myProfileReducer';
 
 const Store = ({children}) => {
   const rootReducer = {
@@ -19,6 +20,7 @@ const Store = ({children}) => {
     topics: React.useReducer(topicsReducer, topicsState),
     channel: React.useReducer(channelReducer, channelState),
     client: React.useReducer(clientReducer, clientState),
+    myProfile: React.useReducer(myProfileReducer, myProfileState),
   };
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };

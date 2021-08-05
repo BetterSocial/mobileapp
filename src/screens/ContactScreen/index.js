@@ -6,46 +6,26 @@ import analytics from '@react-native-firebase/analytics';
 import jwtDecode from 'jwt-decode';
 
 import {createChannel} from '../../service/chat';
+import {Context} from '../../context';
 
-import {Avatar, Gap} from '../../components';
+import {Avatar, Gap, Loading} from '../../components';
 import {COLORS, SIZES} from '../../utils/theme';
 import StringConstant from '../../utils/string/StringConstant';
 import Header from './elements/Header';
 import {getAccessToken} from '../../utils/token';
 import {Search, RenderItem} from './elements';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
-
-const DUMMY = [
-  {
-    id: '88353551-b9bd-4cf5-a89e-ce6197b880c0',
-    name: 'fajarism',
-    icon: 'https://res.cloudinary.com/hpjivutj2/image/upload/v1625213019/i3u9uptxnylfmfqevabf.jpg',
-  },
-  {
-    id: 'c8a7d99d-51b5-4bb4-b9c8-cf936156f887',
-    name: 'bas_v1-4',
-    icon: 'http://res.cloudinary.com/hpjivutj2/image/upload/v1623291797/t4girkwj1qfqxhr72rgn.jpg',
-  },
-  {
-    id: 'c8c39e52-5484-465c-b635-3c46384b6f2e',
-    name: 'eka',
-    icon: 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-  },
-  {
-    id: '5f3ac81e-bcde-490b-b82c-a37e138869bc',
-    name: 'bayu',
-    icon: 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-  },
-  {
-    id: 'ef6034d3-4b73-417b-81cb-47bd001816d5',
-    name: 'lukmanfrdass',
-    icon: 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-  },
-];
+import {userPopulate} from '../../service/users';
 
 const ContactScreen = ({navigation}) => {
+  const [groupName, setGroupName] = React.useState(null);
+  const [groupIcon, setGroupIcon] = React.useState(null);
   const [userId, setUserId] = React.useState(null);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
+  const [click, setClick] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const [users, setUsers] = React.useState([]);
+  const [myProfile] = React.useContext(Context).myProfile;
 
   React.useEffect(() => {
     const getUserId = async () => {
@@ -57,16 +37,53 @@ const ContactScreen = ({navigation}) => {
     getUserId();
   }, []);
 
+  React.useEffect(() => {
+    const getUserPopulate = async () => {
+      try {
+        setLoading(true);
+        const res = await userPopulate();
+        console.log(myProfile);
+        setUsers(res);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    };
+    getUserPopulate();
+  }, []);
+
+  const handleImageLibrary = () => {
+    analytics().logEvent('btn_take_photo_profile', {
+      id: 2,
+    });
+    launchImageLibrary({mediaType: 'photo'}, (res) => {
+      let image = {
+        uri: res.uri,
+        type: res.type, // or photo.type
+        name: res.fileName,
+      };
+      // console.log(image);
+      setGroupIcon(image);
+      // if (res.base64) {
+      //   // setImage(`${res.base64}`, dispatch);
+      //   setGroupIcon(`data:image/png;base64,${res.base64}`);
+      // }
+    });
+  };
+
   function isInArray(value, array) {
     return array.indexOf(value);
   }
 
   const handleCreateChannel = async (users) => {
     try {
-      let members = DUMMY.map((item) => item.id);
+      let members = users.map((item) => item.user_id);
       members.push(userId);
       console.log(members);
-      let res = await createChannel('messaging', members, '');
+      setSelectedUsers([]);
+      // let res = await createChannel('messaging', members, groupName);
+      // alert('success create group');
     } catch (error) {
       console.log(error);
     }
@@ -83,15 +100,19 @@ const ContactScreen = ({navigation}) => {
         onPress={() => navigation.goBack()}
       />
 
-      <Search style={{marginHorizontal: 16}} />
+      <Search
+        style={{marginHorizontal: 16}}
+        onPress={() => console.log('search users')}
+      />
 
       <View style={{marginTop: SIZES.base}}>
         <FlatList
-          data={DUMMY}
+          data={users}
+          keyExtractor={(item) => item.user_id}
           renderItem={({item, index}) => {
             return (
               <TouchableOpacity
-                key={index}
+                key={item.user_id}
                 onPress={() => {
                   let isAvailable = isInArray(item, selectedUsers);
                   if (isAvailable > -1) {
@@ -101,6 +122,8 @@ const ContactScreen = ({navigation}) => {
                     selectedUsers.push(item);
                     setSelectedUsers(selectedUsers);
                   }
+                  setClick(index);
+                  console.log(selectedUsers);
                 }}
                 style={{
                   paddingHorizontal: SIZES.base * 2,
@@ -111,10 +134,10 @@ const ContactScreen = ({navigation}) => {
                       ? 'rgba(0, 173, 181, 0.15)'
                       : '#FFFFFF',
                 }}>
-                <Avatar image={item.icon} />
+                <Avatar image={item.profile_pic_path} />
                 <Gap width={SIZES.base * 2} />
                 <View style={{justifyContent: 'center'}}>
-                  <Text>{item.name}</Text>
+                  <Text>{item.username}</Text>
                 </View>
                 <View
                   style={{
@@ -131,6 +154,8 @@ const ContactScreen = ({navigation}) => {
           }}
         />
       </View>
+
+      <Loading visible={loading} />
     </View>
   );
 };

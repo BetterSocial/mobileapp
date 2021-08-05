@@ -90,3 +90,13 @@ export const refreshToken = async () => {
   const resp = await fetch(BASE_URL + '/users/refresh-token', options);
   return await resp.json();
 };
+
+export const userPopulate = async () => {
+  try {
+    let resApi = await api.get('/users/populate');
+    return resApi.data.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    console.log(error);
+  }
+};
