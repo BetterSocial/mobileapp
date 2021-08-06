@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {Alert, Image, Linking, StyleSheet, View} from 'react-native';
+import {Alert, Image, Linking, StyleSheet, View, StatusBar} from 'react-native';
 
 import jwtDecode from 'jwt-decode';
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
+import SplashScreenPackage from 'react-native-splash-screen';
 
 import {verifyTokenGetstream} from '../../service/users';
 import {getProfileByUsername} from '../../service/profile';
@@ -57,6 +58,7 @@ const SplashScreen = () => {
           return setIsModalShown(false);
         }
 
+        SplashScreenPackage.hide();
         navigation.replace('OtherProfile', {
           data: {
             user_id: selfUserId,
@@ -73,6 +75,7 @@ const SplashScreen = () => {
   };
 
   let navigateWithoutDeeplink = (selfUserId) => {
+    SplashScreenPackage.hide();
     navigation.replace(selfUserId ? 'HomeTabs' : 'SignIn');
   };
 
@@ -111,7 +114,11 @@ const SplashScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../assets/images/ping-icon.png')} />
+      <StatusBar translucent backgroundColor="transparent" />
+      <Image
+        style={styles.image}
+        source={require('../../assets/splash_screen.png')}
+      />
     </View>
   );
 };
@@ -124,5 +131,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
 });

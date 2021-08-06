@@ -27,14 +27,17 @@ const Card = (props) => {
     domain,
     domainImage,
     date,
-    onCardPress,
+    onHeaderPress,
+    onCardContentPress,
   } = props;
   // const styles = buildStylesheet('card', props.styles);
 
   return (
-    <TouchableOpacity onPress={onCardPress}>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={onHeaderPress}>
         <Header domain={domain} image={domainImage} date={date} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={onCardContentPress}>
         <View style={styles.content}>
           <Text style={styles.title}>
             {_.truncate(`${title}`, {length: 80, separator: ''})}
@@ -55,8 +58,8 @@ const Card = (props) => {
             </Text>
           </Text>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 };
 

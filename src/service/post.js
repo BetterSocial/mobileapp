@@ -68,7 +68,7 @@ export const getFeedDetail = async (id) => {
     let resApi = await api.get(`/feeds/detail-feed?id=${id}`);
     return resApi.data;
   } catch (error) {
-    crashlytics().recordError(error.response.data);
+    // crashlytics().recordError(error.response.data);
     return null;
   }
 };
@@ -82,7 +82,8 @@ export const inputSingleChoicePoll = async (polling_id, polling_option_id) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(error.response.data);
-    // console.log(error);
+    console.log('vote error');
+    console.log(error);
     return error;
   }
 };

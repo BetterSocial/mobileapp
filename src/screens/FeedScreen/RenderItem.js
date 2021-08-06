@@ -105,6 +105,7 @@ const Item = ({
   selfUserId,
   onPressDomain,
   onNewPollFetched,
+  onCardContentPress,
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -180,6 +181,7 @@ const Item = ({
           multiplechoice={item.multiplechoice}
           isalreadypolling={item.isalreadypolling}
           onnewpollfetched={onNewPollFetched}
+          voteCount={item.voteCount}
         />
       )}
 
@@ -187,7 +189,8 @@ const Item = ({
         <ContentLink
           og={item.og}
           onPress={onPress}
-          onCardPress={onPressDomain}
+          onHeaderPress={onPressDomain}
+          onCardContentPress={onCardContentPress}
         />
       )}
       {item.post_type === POST_TYPE_STANDARD && (
@@ -256,11 +259,11 @@ const Item = ({
           }
         />
       </View>
-      <View style={styles.lineAffterFooter} />
       {isReaction && (
         <View>
+          <View style={styles.lineAffterFooter} />
           <PreviewComment
-            username={previewComment.user.data.username}
+            user={previewComment.user}
             comment={previewComment.data.text}
             image={previewComment.user.data.profile_pic_url}
             time={previewComment.created_at}

@@ -13,7 +13,7 @@ import Header from './elements/Header';
 import Navigation from './elements/Navigation';
 import RenderItem from './elements/RenderItem';
 import {getDetailDomains, getProfileDomain} from '../../service/domain';
-import {SIZES} from '../../utils/theme';
+import {SIZES, COLORS} from '../../utils/theme';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import ReportDomain from '../../components/Blocking/ReportDomain';
@@ -139,7 +139,7 @@ const DomainScreen = () => {
         renderItem={({item, index}) => {
           if (index === 0) {
             return (
-              <View key={index}>
+              <View key={index} style={{backgroundColor: 'transparent'}}>
                 <Header
                   image={profile.logo}
                   description={profile.short_description}
@@ -148,7 +148,7 @@ const DomainScreen = () => {
                   onPress={onReaction}
                 />
 
-                <Gap height={SIZES.base} />
+                {/* <Gap height={SIZES.base} style={{backgroundColor: COLORS.gray1}}/> */}
               </View>
             );
           }

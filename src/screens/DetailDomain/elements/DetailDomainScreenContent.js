@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
+import {NewsEmptyState} from '../../../assets/images';
 import {fonts} from '../../../utils/fonts';
+import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS} from '../../../utils/theme';
 
 const DetailDomainScreenContent = ({
@@ -20,22 +22,28 @@ const DetailDomainScreenContent = ({
   url,
 }) => {
   const onReadFullActiclePressed = () => {
-    if (Linking.canOpenURL(url)) Linking.openURL(url);
+    if (Linking.canOpenURL(url)) {
+      Linking.openURL(url);
+    }
   };
 
   return (
     <View styles={styles.contentContainer}>
       <Text style={styles.title}>{title}</Text>
-      <Image
-        source={{
-          uri: image,
-        }}
-        style={styles.contentImage}
-      />
+      {image ? (
+        <Image
+          source={{
+            uri: image,
+          }}
+          style={styles.contentImage}
+        />
+      ) : (
+        <Image source={NewsEmptyState} style={styles.contentImage} />
+      )}
       <Text style={styles.description}>
         {description}{' '}
         <Text onPress={onReadFullActiclePressed} style={styles.readFullText}>
-          Read full article
+          {StringConstant.linkDetailPageOpenInBrowser}
         </Text>
       </Text>
     </View>
@@ -65,6 +73,7 @@ let styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 24,
+    color: COLORS.black000,
   },
   readFullText: {
     marginTop: 8,

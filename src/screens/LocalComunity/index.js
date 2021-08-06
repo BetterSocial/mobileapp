@@ -103,7 +103,6 @@ const LocalComunity = () => {
     } else {
       tempLocation[index] = val;
     }
-    console.log('isi val ', tempLocation);
     setSearch(capitalizeFirstLetter(val.neighborhood));
     setOptionsSearch([]);
     let locLog = [];
