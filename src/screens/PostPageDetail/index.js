@@ -30,6 +30,7 @@ import ContentLink from '../FeedScreen/ContentLink';
 import {getFeedDetail} from '../../service/post';
 import {getAccessToken} from '../../utils/token';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
+import StringConstant from '../../utils/string/StringConstant';
 
 const {width, height} = Dimensions.get('window');
 
@@ -287,6 +288,7 @@ const PostPageDetail = (props) => {
               multiplechoice={item.multiplechoice}
               isalreadypolling={item.isalreadypolling}
               onnewpollfetched={() => {}}
+              voteCount={item.voteCount}
             />
           )}
 
@@ -360,11 +362,12 @@ const PostPageDetail = (props) => {
               statusVote={voteStatus}
               onPressShare={() => {}}
               onPressComment={onCommentButtonClicked}
-              onPressBlock={(value) => {
-                if (value.actor.id === yourselfId) {
+              onPressBlock={() => {
+                // console.log(item);
+                if (item.actor.id === yourselfId) {
                   Toast.show("Can't Block yourself", Toast.LONG);
                 } else {
-                  setDataToState(value);
+                  setDataToState(item);
                   refBlockUser.current.open();
                 }
               }}
@@ -379,7 +382,11 @@ const PostPageDetail = (props) => {
         )}
       </ScrollView>
       <WriteComment
-        username={item.actor.data.username}
+        username={
+          item.anonimity
+            ? StringConstant.generalAnonymousText
+            : item.actor.data.username
+        }
         value={textComment}
         onChangeText={(value) => setTextComment(value)}
         onPress={() => {

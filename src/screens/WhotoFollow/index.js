@@ -9,6 +9,9 @@ import {
   TouchableHighlight,
   Dimensions,
   ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  ScrollView,
 } from 'react-native';
 
 import {showMessage} from 'react-native-flash-message';
@@ -16,6 +19,7 @@ import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
+import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview';
 
 import Loading from '../Loading';
 import {get} from '../../api/server';
@@ -28,12 +32,17 @@ import {Context} from '../../context';
 import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
 import {colors} from '../../utils/colors';
 import ListUser from './elements/ListUser';
+import Label from './elements/Label';
+import ItemUser from './elements/ItemUser';
 
 const width = Dimensions.get('screen').width;
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
 const MemoListUser = React.memo(ListUser, compire);
+
+const VIEW_TYPE_LABEL = 1;
+const VIEW_TYPE_DATA = 2;
 
 const WhotoFollow = () => {
   const [users, setUsers] = React.useState([]);
@@ -44,6 +53,9 @@ const WhotoFollow = () => {
   const [topics] = React.useContext(Context).topics;
   const [localCommunity] = React.useContext(Context).localCommunity;
   const [usersState] = React.useContext(Context).users;
+  const [dataProvider, setDataProvider] = React.useState(null);
+  const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
+  const [layoutProvider, setLayoutProvider] = React.useState(() => {});
 
   const navigation = useNavigation();
 
@@ -53,6 +65,7 @@ const WhotoFollow = () => {
       screen_name: 'onb_select_follows',
     });
     setIsLoading(true);
+
     get({url: '/who-to-follow/list'})
       .then((res) => {
         setIsLoading(false);
@@ -65,6 +78,49 @@ const WhotoFollow = () => {
         setIsLoading(false);
       });
   }, []);
+
+  React.useEffect(() => {
+    if (users.length > 0) {
+      let dProvider = new DataProvider((row1, row2) => row1 !== row2);
+      setLayoutProvider(
+        new LayoutProvider(
+          (index) => {
+            if (users.length < 1) {
+              return 0;
+            }
+            if (users[index].viewtype === 'label') {
+              return VIEW_TYPE_LABEL;
+            }
+            return VIEW_TYPE_DATA;
+          },
+          (type, dim) => {
+            switch (type) {
+              case VIEW_TYPE_LABEL:
+                dim.width = width;
+                dim.height = 40;
+                break;
+
+              case VIEW_TYPE_DATA:
+                dim.width = width;
+                dim.height = 76;
+                break;
+
+              default:
+                dim.width = width;
+                dim.height = 40;
+            }
+          },
+        ),
+      );
+      setDataProvider(dProvider.cloneWithRows(users));
+    }
+  }, [users]);
+
+  React.useEffect(() => {
+    if (dataProvider) {
+      setIsRecyclerViewShown(true);
+    }
+  }, [dataProvider]);
 
   const renderHeader = () => {
     if (Platform.OS === 'android') {
@@ -86,7 +142,7 @@ const WhotoFollow = () => {
 
   const handleSelected = (value) => {
     let copyFollowed = [...followed];
-    let index = copyFollowed.indexOf(value);
+    let index = followed.indexOf(value);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
@@ -177,6 +233,24 @@ const WhotoFollow = () => {
       });
   };
 
+  const rowRenderer = (type, item, index, extendedState) => {
+    switch (type) {
+      case VIEW_TYPE_LABEL:
+        return <Label label={item.name} />;
+      case VIEW_TYPE_DATA:
+        return (
+          <ItemUser
+            photo={item.profile_pic_path}
+            bio={item.bio}
+            username={item.username}
+            followed={extendedState.followed}
+            userid={item.user_id}
+            onPress={() => handleSelected(item.user_id)}
+          />
+        );
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperHeader}>{renderHeader()}</View>
@@ -191,16 +265,24 @@ const WhotoFollow = () => {
         </Text>
       </View>
       {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
-      <VirtualizedView
-        style={styles.listUser}
-        onRefresh={onRefresh}
-        refreshing={refreshing}>
-        <MemoListUser
-          users={users}
-          followed={followed}
-          onPress={(item) => memoHandleSelected(item)}
+      {isRecyclerViewShown ? (
+        <RecyclerListView
+          style={styles.recyclerview}
+          layoutProvider={layoutProvider}
+          dataProvider={dataProvider}
+          extendedState={{
+            followed,
+          }}
+          rowRenderer={rowRenderer}
+          scrollViewProps={{
+            refreshControl: (
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            ),
+          }}
         />
-      </VirtualizedView>
+      ) : (
+        <></>
+      )}
       <View style={styles.footer}>
         <Button onPress={() => register()}>FINISH</Button>
       </View>
@@ -213,6 +295,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  recyclerview: {
+    marginBottom: 90,
   },
   content: {
     padding: 22,
@@ -318,7 +403,6 @@ const styles = StyleSheet.create({
     color: '#000000',
     lineHeight: 21,
     alignSelf: 'flex-start',
-    // textTransform: 'capitalize',
   },
   textUsername: {
     fontFamily: 'Inter',
@@ -359,7 +443,6 @@ const styles = StyleSheet.create({
   containerButton: {
     width: 32,
     height: 32,
-    // backgroundColor : 'red',
     borderRadius: 16,
     flexDirection: 'column',
     justifyContent: 'center',

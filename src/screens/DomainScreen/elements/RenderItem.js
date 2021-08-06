@@ -1,10 +1,11 @@
 import * as React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
-import {getCountComment, getCountCommentWithChild, getCountVote} from '../../../utils/getstream';
-import Memoic_globe from '../../../assets/icons/ic_globe';
-import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
-import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
+import {
+  getCountComment,
+  getCountCommentWithChild,
+  getCountVote,
+} from '../../../utils/getstream';
 import theme, {COLORS, FONTS, SIZES} from '../../../utils/theme';
 import {colors} from '../../../utils/colors';
 import {
@@ -15,6 +16,10 @@ import {
 } from '../../../components';
 import {fonts} from '../../../utils/fonts';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
+import Memoic_globe from '../../../assets/icons/ic_globe';
+import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
+import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
+import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 
 const RenderItem = ({
   item,
@@ -117,6 +122,8 @@ const RenderItem = ({
             alignItems: 'center',
             borderBottomWidth: 0.5,
             borderBottomColor: COLORS.gray1,
+            paddingBottom: 8,
+            paddingTop: 8,
           }}>
           <View style={styles.wrapperImage}>
             <Image
@@ -150,7 +157,13 @@ const RenderItem = ({
                 12k
               </Text>
             </View>
-            <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
+            <Gap height={8} />
+            <View style={styles.domainIndicatorContainer}>
+              <MemoIc_rectangle_gradient
+                width={SIZES.width * 0.43}
+                height={4}
+              />
+            </View>
           </View>
           <View style={{justifyContent: 'center'}}>
             <TouchableOpacity onPress={onFollowDomainPressed}>
@@ -167,10 +180,17 @@ const RenderItem = ({
               <Text style={styles.domainItemTitle}>{item.content.title}</Text>
             </View>
             <Gap height={SIZES.base} />
-            <Image
-              source={{uri: item.content.image}}
-              style={{height: SIZES.height * 0.3, marginBottom: 14}}
-            />
+            {item.content.image ? (
+              <Image
+                source={{uri: item.content.image}}
+                style={{height: 200, marginBottom: 14}}
+              />
+            ) : (
+              <Image
+                source={NewsEmptyState}
+                style={{height: 135, marginBottom: 14}}
+              />
+            )}
             <Gap />
             <Gap height={SIZES.base} />
             <View style={{paddingHorizontal: 20}}>
@@ -238,20 +258,20 @@ const RenderItem = ({
               });
             }}
           />
-          {isReaction && (
-            <View>
-              <PreviewComment
-                username={previewComment.user.data.username}
-                comment={previewComment.data.text}
-                image={previewComment.user.data.profile_pic_url}
-                time={previewComment.created_at}
-                totalComment={item.latest_reactions.comment.length - 1}
-                onPress={() => onPressComment(item)}
-              />
-              <Gap height={16} />
-            </View>
-          )}
         </View>
+        {isReaction && (
+          <View style={{zIndex: 1000}}>
+            <PreviewComment
+              user={previewComment.user}
+              comment={previewComment.data.text}
+              image={previewComment.user.data.profile_pic_url}
+              time={previewComment.created_at}
+              totalComment={item.latest_reactions.comment.length - 1}
+              onPress={() => onPressComment(item)}
+            />
+            <Gap height={16} />
+          </View>
+        )}
       </View>
     </SingleSidedShadowBox>
   );
@@ -280,9 +300,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    height: '100%',
-    width: '100%',
+    height: 48,
+    width: 48,
     borderRadius: 45,
+    backgroundColor: 'red',
   },
   wrapperText: {
     backgroundColor: 'white',
@@ -305,12 +326,15 @@ const styles = StyleSheet.create({
   height: (height) => ({height}),
   width: (width) => ({width}),
   wrapperFooter: {
-    marginHorizontal: 8,
+    paddingHorizontal: 8,
     height: 52,
+    borderBottomColor: COLORS.gray1,
+    borderBottomWidth: 1,
   },
   headerDomainName: {
     fontSize: 14,
     fontFamily: fonts.inter[600],
+    lineHeight: 16.9,
     color: '#000000',
   },
   headerDomainDate: {
@@ -328,6 +352,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 16,
     lineHeight: 24,
+  },
+  domainIndicatorContainer: {
+    marginLeft: -4,
   },
 });
 

@@ -3,6 +3,8 @@ import * as React from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import {fonts} from '../fonts';
 
+const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
+
 let getPollTime = (pollExpiredAtString) => {
   let currentMoment = moment();
   let pollExpiredMoment = moment(pollExpiredAtString);
@@ -14,16 +16,27 @@ let getPollTime = (pollExpiredAtString) => {
 
   // Poll still continues
   if (diff > 0) {
-    if (diffInDays > 0) return `${diffInDays}d left`;
-    if (diffInHours > 0) return `${diffInHours}h ${diffInMinutes % 60}m left`;
-    else return `${diffInMinutes % 60}m left`;
+    if (diffInDays > 0) {
+      return `${diffInDays}d left`;
+    }
+    if (diffInHours > 0) {
+      return `${diffInHours}h ${diffInMinutes % 60}m left`;
+    } else {
+      return `${diffInMinutes % 60}m left`;
+    }
   }
   // Poll ended
   else {
-    if (diffInDays < 0) return `Poll closed ${Math.abs(diffInDays)}d ago`;
-    if (diffInHours > 0)
-      return `Poll closed ${Math.abs(diffInHours)}h ${Math.abs(diffInMinutes % 60)}m ago`;
-    else return `Poll closed ${Math.abs(diffInMinutes % 60)}m ago`;
+    if (diffInDays < 0) {
+      return `Poll closed ${Math.abs(diffInDays)}d ago`;
+    }
+    if (diffInHours > 0) {
+      return `Poll closed ${Math.abs(diffInHours)}h ${Math.abs(
+        diffInMinutes % 60,
+      )}m ago`;
+    } else {
+      return `Poll closed ${Math.abs(diffInMinutes % 60)}m ago`;
+    }
   }
 };
 
@@ -100,4 +113,9 @@ let styles = StyleSheet.create({
   },
 });
 
-export {getPollTime, isPollExpired, displayFormattedSearchLocations};
+export {
+  getPollTime,
+  isPollExpired,
+  displayFormattedSearchLocations,
+  NO_POLL_UUID,
+};

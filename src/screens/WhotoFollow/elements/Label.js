@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F2',
     flexDirection: 'column',
     justifyContent: 'center',
-    marginBottom: 12,
-    marginTop: 12,
+    // marginBottom: 12,
+    // marginTop: 12,
   },
   titleHeader: {
     fontFamily: 'Poppins',

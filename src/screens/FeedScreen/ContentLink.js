@@ -6,7 +6,7 @@ import {COLORS} from '../../utils/theme';
 import {smartRender} from '../../utils/Utils';
 import Card from '../../components/Card/Card';
 
-const ContentLink = ({og, onPress, onCardPress}) => {
+const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress}) => {
   let route = useRoute();
   let isTouchableDisabled = route?.name === 'PostDetailPage';
 
@@ -26,7 +26,8 @@ const ContentLink = ({og, onPress, onCardPress}) => {
         description: og.description,
         image: og.image,
         url: og.url,
-        onCardPress,
+        onHeaderPress,
+        onCardContentPress,
       })}
     </TouchableOpacity>
   );

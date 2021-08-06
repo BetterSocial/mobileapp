@@ -4,7 +4,7 @@ import {Image, StyleSheet} from 'react-native';
 function AppIcon() {
   return (
     <Image
-      source={require('./../assets/ping.png')}
+      source={require('./../assets/better-icon.png')}
       style={styles.logo}
       resizeMode="cover"
     />
@@ -13,8 +13,9 @@ function AppIcon() {
 
 const styles = StyleSheet.create({
   logo: {
-    width: 41,
-    height: 52,
+    width: 80,
+    height: 80,
+    marginTop: -10,
   },
 });
 
