@@ -26,7 +26,6 @@ let PollOptions = ({
 }) => {
   let counter = poll?.counter || 10;
   let optionPercentage = total === 0 ? 0 : (counter / total) * 100;
-  // let optionPercentage = total === 0 ? 0 : 50;
 
   let isPollDisabled = () => isexpired || isalreadypolling;
   let onPollPressed = () => {
@@ -42,10 +41,6 @@ let PollOptions = ({
 
   let isPollNotEndedAndIsMine = isalreadypolling && isMyPoll();
   let isMax = maxpolls.includes(poll.polling_option_id);
-
-  // console.log(maxpolls);
-  // console.log(optionPercentage);
-  // console.log(poll.polling_option_id);
 
   let renderPercentageBar = () => {
     if (isexpired) {
@@ -87,7 +82,6 @@ let PollOptions = ({
             ? styles.pollOptionItemContainerActive
             : styles.pollOptionItemContainer
         }>
-        {/* <View style={styles.percentageBar(optionPercentage, isMyPoll())} /> */}
         {renderPercentageBar()}
         <View style={styles.pollOptionTextContainer}>
           {isPollDisabled() ? (

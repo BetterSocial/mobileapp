@@ -81,7 +81,8 @@
     "react-native-walkthrough-tooltip": "^1.2.0",
     "react-native-webview": "^11.4.0",
     "recyclerlistview": "^3.0.5",
-    "stream-chat-react-native": "^3.1.2",
+    "stream-chat": "^3.12.1",
+    "stream-chat-react-native": "^3.6.7",
     "toggle-switch-react-native": "^3.2.0",
     "ts-jest": "^27.0.2"
   },

@@ -8,7 +8,7 @@ import MemoIc_copy from '../../assets/chats/Ic_copy';
 import MemoIC_trash from '../../assets/chats/IC_trash';
 import {colors} from '../../utils/colors';
 
-const ActionChat = ({children, isMe, active}) => {
+const ActionChat = ({children, isMe, active, all}) => {
   return (
     <View style={styles.container(active)}>
       {children}

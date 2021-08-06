@@ -6,6 +6,8 @@ import {
 } from './reducers/localComunityReducer';
 import {topicsReducer, topicsState} from './reducers/topicsReducer';
 import {usersReducer, usersState} from './reducers/userReducer';
+import {channelReducer, channelState} from './reducers/channelReducer';
+import {clientReducer, clientState} from './reducers/clientReducer';
 
 const Store = ({children}) => {
   const rootReducer = {
@@ -15,6 +17,8 @@ const Store = ({children}) => {
       localCommunityState,
     ),
     topics: React.useReducer(topicsReducer, topicsState),
+    channel: React.useReducer(channelReducer, channelState),
+    client: React.useReducer(clientReducer, clientState),
   };
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };

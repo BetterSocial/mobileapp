@@ -86,7 +86,6 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
           navigation.navigate('ReplyComment', {item: item, level: 1});
 
         const showChildCommentView = () =>
-          // console.log("ASDASD");
           navigation.navigate('ReplyComment', {item: item, level: 2});
 
         return (
