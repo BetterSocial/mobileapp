@@ -327,7 +327,7 @@ const DetailDomainScreen = (props) => {
         username={username}
       />
       <BlockDomain
-        refBlockUser={refBlockDomain}
+        refBlockDomain={refBlockDomain}
         domain="guardian.com"
         onSelect={() => {}}
       />
