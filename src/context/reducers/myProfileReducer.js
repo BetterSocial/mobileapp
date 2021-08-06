@@ -7,8 +7,7 @@ const myProfileReducer = (state = myProfileState, action) => {
   switch (action.type) {
     case SET_MY_PROFILE:
       return {
-        ...state,
-        myProfile: action.payload,
+        ...action.payload,
       };
     default:
       return state;

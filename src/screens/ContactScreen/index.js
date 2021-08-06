@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 
 import {launchImageLibrary} from 'react-native-image-picker';
 import analytics from '@react-native-firebase/analytics';
@@ -7,6 +7,7 @@ import jwtDecode from 'jwt-decode';
 
 import {createChannel} from '../../service/chat';
 import {Context} from '../../context';
+import {setChannel} from '../../context/actions/setChannel';
 
 import {Avatar, Gap, Loading} from '../../components';
 import {COLORS, SIZES} from '../../utils/theme';
@@ -16,6 +17,7 @@ import {getAccessToken} from '../../utils/token';
 import {Search, RenderItem} from './elements';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {userPopulate} from '../../service/users';
+import {Alert} from 'react-native';
 
 const ContactScreen = ({navigation}) => {
   const [groupName, setGroupName] = React.useState(null);
@@ -26,6 +28,7 @@ const ContactScreen = ({navigation}) => {
   const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState([]);
   const [myProfile] = React.useContext(Context).myProfile;
+  const [channel, dispatchChannel] = React.useContext(Context).channel;
 
   React.useEffect(() => {
     const getUserId = async () => {
@@ -42,7 +45,6 @@ const ContactScreen = ({navigation}) => {
       try {
         setLoading(true);
         const res = await userPopulate();
-        console.log(myProfile);
         setUsers(res);
         setLoading(false);
       } catch (error) {
@@ -78,19 +80,37 @@ const ContactScreen = ({navigation}) => {
 
   const handleCreateChannel = async (users) => {
     try {
+      if (users.length < 1) {
+        Alert.alert('Warning', 'mohon pilih satu user');
+      }
+      setLoading(true);
       let members = users.map((item) => item.user_id);
-      members.push(userId);
-      console.log(members);
+      members.push(myProfile.user_id);
+      let channelName = users.map((item) => {
+        return item.username;
+      });
+      console.log(myProfile);
+      channelName.push(myProfile.username);
       setSelectedUsers([]);
-      // let res = await createChannel('messaging', members, groupName);
+      // console.log(channelName);
+      // console.log(channelName.toString());
+      let res = await createChannel(
+        'messaging',
+        members,
+        channelName.toString(),
+      );
       // alert('success create group');
+      setLoading(false);
+      setChannel(res, dispatchChannel);
+      navigation.navigate('ChannelScreen');
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
+    <View style={styles.container}>
       <Header
         title={StringConstant.chatTabHeaderCreateChatButtonText}
         containerStyle={{marginHorizontal: 16}}
@@ -123,7 +143,8 @@ const ContactScreen = ({navigation}) => {
                     setSelectedUsers(selectedUsers);
                   }
                   setClick(index);
-                  console.log(selectedUsers);
+                  setClick(index);
+                  console.log('test');
                 }}
                 style={{
                   paddingHorizontal: SIZES.base * 2,
@@ -159,5 +180,12 @@ const ContactScreen = ({navigation}) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+});
 
 export default ContactScreen;
