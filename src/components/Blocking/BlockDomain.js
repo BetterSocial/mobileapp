@@ -7,7 +7,7 @@ import ItemListLarge from './ItemListLarge';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const BlockDomain = ({refBlockUser, onSelect, domain}) => {
+const BlockDomain = ({refBlockDomain, onSelect, domain}) => {
   const data = [
     {
       id: 1,
@@ -28,7 +28,7 @@ const BlockDomain = ({refBlockUser, onSelect, domain}) => {
   return (
     <View>
       <RBSheet
-        ref={refBlockUser}
+        ref={refBlockDomain}
         closeOnDragDown={true}
         closeOnPressMask={true}
         customStyles={{
