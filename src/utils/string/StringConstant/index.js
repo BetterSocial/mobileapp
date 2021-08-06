@@ -64,6 +64,9 @@ let searchModalTitle = 'Search';
 let searchModalPlaceholder = 'Search by ZIP, neighborhood or city';
 let commentBoxDefaultPlaceholder = 'Add your reply';
 
+// General
+let generalAnonymousText = 'Anonymous';
+
 // Wording need to be discussed :
 // Splash Screen
 let splashScreenDeeplinkGetProfileNotFound = (username) =>
@@ -117,6 +120,8 @@ export default {
   searchModalTitle,
   searchModalPlaceholder,
   commentBoxDefaultPlaceholder,
+
+  generalAnonymousText,
 
   domainCannotOpenURL,
 };

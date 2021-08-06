@@ -40,11 +40,22 @@ const ContentPoll = ({
   index = -1,
   voteCount = 0,
 }) => {
-  let totalPollCount = polls.reduce((acc, current) => {
-    return acc + parseInt(current.counter);
-  }, 0);
+  let modifiedPoll = polls.reduce(
+    (acc, current) => {
+      acc.totalpoll = acc.totalpoll + parseInt(current.counter);
+      if (current.counter > acc.maxValue) {
+        acc.maxValue = current.counter;
+        acc.maxId = [];
+        acc.maxId.push(current.polling_option_id);
+      } else if (current.counter === acc.maxValue) {
+        let {maxId} = acc;
+        maxId.push(current.polling_option_id);
+      }
 
-  // console.log(polls);
+      return acc;
+    },
+    {totalpoll: 0, maxId: [], maxValue: 0},
+  );
 
   let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] =
     React.useState(-1);
@@ -78,14 +89,14 @@ const ContentPoll = ({
           newPolls[changedPollIndex].counter =
             parseInt(selectedPoll.counter) + 1;
           selectedPolls.push(selectedPoll);
-          inputSingleChoicePoll(
-            selectedPoll.polling_id,
-            selectedPoll.polling_option_id,
-          );
+          // inputSingleChoicePoll(
+          //   selectedPoll.polling_id,
+          //   selectedPoll.polling_option_id,
+          // );
         }
         newItem.pollOptions = newPolls;
         newItem.mypolling = selectedPolls;
-        newItem.voteCount = voteCount++;
+        newItem.voteCount++;
       }
 
       onnewpollfetched(newItem, index);
@@ -102,11 +113,11 @@ const ContentPoll = ({
           parseInt(selectedPoll.counter) + 1;
         newItem.pollOptions = newPolls;
         newItem.mypolling = selectedPoll;
-        newItem.voteCount = voteCount++;
-        inputSingleChoicePoll(
-          selectedPoll.polling_id,
-          selectedPoll.polling_option_id,
-        );
+        newItem.voteCount++;
+        // inputSingleChoicePoll(
+        //   selectedPoll.polling_id,
+        //   selectedPoll.polling_option_id,
+        // );
       }
 
       onnewpollfetched(newItem, index);
@@ -174,7 +185,8 @@ const ContentPoll = ({
                     }}
                     isexpired={isPollExpired(pollexpiredat)}
                     isalreadypolling={isAlreadyPolling}
-                    total={totalPollCount}
+                    maxpolls={modifiedPoll.maxId}
+                    total={modifiedPoll.totalpoll}
                   />
                 ) : (
                   <PollOptions
@@ -183,7 +195,8 @@ const ContentPoll = ({
                     mypoll={item?.mypolling}
                     index={index}
                     selectedindex={singleChoiceSelectedIndex}
-                    total={totalPollCount}
+                    total={modifiedPoll.totalpoll}
+                    maxpolls={modifiedPoll.maxId}
                     isexpired={isPollExpired(pollexpiredat)}
                     isalreadypolling={isAlreadyPolling}
                     onselected={(index) => setSingleChoiceSelectedIndex(index)}

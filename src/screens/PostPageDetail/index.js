@@ -30,6 +30,7 @@ import ContentLink from '../FeedScreen/ContentLink';
 import {getFeedDetail} from '../../service/post';
 import {getAccessToken} from '../../utils/token';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
+import StringConstant from '../../utils/string/StringConstant';
 
 const {width, height} = Dimensions.get('window');
 
@@ -81,7 +82,7 @@ const PostPageDetail = (props) => {
   newItemProp.latest_reactions.comment = sortedComment;
 
   const [item, setItem] = React.useState(newItemProp);
-  console.log('new item');
+  console.log('newItemProp');
   console.log(newItemProp);
 
   React.useEffect(() => {
@@ -373,7 +374,7 @@ const PostPageDetail = (props) => {
               onPressShare={() => {}}
               onPressComment={onCommentButtonClicked}
               onPressBlock={() => {
-                console.log(item);
+                // console.log(item);
                 if (item.actor.id === yourselfId) {
                   Toast.show("Can't Block yourself", Toast.LONG);
                 } else {
@@ -390,7 +391,11 @@ const PostPageDetail = (props) => {
         )}
       </ScrollView>
       <WriteComment
-        username={item.actor.data.username}
+        username={
+          item.anonimity
+            ? StringConstant.generalAnonymousText
+            : item.actor.data.username
+        }
         value={textComment}
         onChangeText={(value) => setTextComment(value)}
         onPress={() => {

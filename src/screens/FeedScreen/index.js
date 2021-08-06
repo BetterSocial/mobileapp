@@ -176,6 +176,7 @@ const FeedScreen = (props) => {
 
   let onNewPollFetched = (newPolls, index) => {
     let newMainFeeds = [...mainFeeds];
+    // console.log(newPolls);
     newMainFeeds[index] = newPolls;
     setMainFeeds(newMainFeeds);
   };

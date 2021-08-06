@@ -90,7 +90,9 @@ const _renderAnonimity = ({
           style={styles.imageAnonimity}
         />
         <View style={styles.containerFeedProfile}>
-          <Text style={styles.feedUsername}>Anonymous</Text>
+          <View style={styles.containerFeedName}>
+            <Text style={styles.feedUsername}>Anonymous</Text>
+          </View>
           <View style={styles.containerFeedText}>
             <Text style={styles.feedDate}>{getTime(time)}</Text>
             <View style={styles.point} />
@@ -269,8 +271,6 @@ const styles = StyleSheet.create({
   },
   containerFeedName: {
     flexDirection: 'row',
-    // backgroundColor : 'red',
-    // paddingTop : 8
   },
   btn: {marginEnd: 16},
   feedUsername: {
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   imageAnonimity: {
-    marginRight: 8,
+    marginRight: 0,
     width: 48,
     height: 48,
   },

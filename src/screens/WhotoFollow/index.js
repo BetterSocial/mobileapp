@@ -70,8 +70,6 @@ const WhotoFollow = () => {
       .then((res) => {
         setIsLoading(false);
         if (res.status === 200) {
-          console.log('asdadasd');
-          // console.log(JSON.stringify(res.data.body));
           setUsers(res.data.body);
         }
       })
@@ -405,7 +403,6 @@ const styles = StyleSheet.create({
     color: '#000000',
     lineHeight: 21,
     alignSelf: 'flex-start',
-    // textTransform: 'capitalize',
   },
   textUsername: {
     fontFamily: 'Inter',
@@ -446,7 +443,6 @@ const styles = StyleSheet.create({
   containerButton: {
     width: 32,
     height: 32,
-    // backgroundColor : 'red',
     borderRadius: 16,
     flexDirection: 'column',
     justifyContent: 'center',
