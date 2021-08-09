@@ -17,6 +17,7 @@ import ContentPoll from './ContentPoll';
 import ContentLink from './ContentLink';
 import {Gap, PreviewComment, Footer} from '../../components';
 import {getCountCommentWithChild} from '../../utils/getstream';
+import {Context} from '../../context';
 
 const {width, height} = Dimensions.get('window');
 
@@ -96,7 +97,7 @@ const onShare = async (username) => {
 };
 
 const Item = ({
-  item,
+  // item,
   onPress,
   onPressBlock,
   onPressUpvote,
@@ -106,6 +107,7 @@ const Item = ({
   onPressDomain,
   onNewPollFetched,
   onCardContentPress,
+  index = -1,
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -113,6 +115,8 @@ const Item = ({
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
+  const [feeds, dispatch] = React.useContext(Context).feeds;
+  const [item, setItem] = React.useState(feeds.feeds[index]);
 
   React.useEffect(() => {
     const initial = () => {
@@ -171,7 +175,7 @@ const Item = ({
 
       {item.post_type === POST_TYPE_POLL && (
         <ContentPoll
-          index={0}
+          index={index}
           message={item.message}
           images_url={item.images_url}
           polls={item.pollOptions}
@@ -187,6 +191,7 @@ const Item = ({
 
       {item.post_type === POST_TYPE_LINK && (
         <ContentLink
+          index={index}
           og={item.og}
           onPress={onPress}
           onHeaderPress={onPressDomain}
@@ -195,6 +200,7 @@ const Item = ({
       )}
       {item.post_type === POST_TYPE_STANDARD && (
         <Content
+          index={index}
           message={item.message}
           images_url={item.images_url}
           onPress={onPress}

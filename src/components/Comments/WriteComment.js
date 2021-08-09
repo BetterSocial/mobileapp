@@ -12,6 +12,7 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import StringConstant from '../../utils/string/StringConstant';
 import MemoSendComment from '../../assets/icon/IconSendComment';
+import {Context} from '../../context';
 
 const WriteComment = ({
   value = null,
@@ -21,6 +22,7 @@ const WriteComment = ({
   inReplyCommentView = false,
   showProfileConnector = true,
 }) => {
+  let [users] = React.useContext(Context).users;
   let isCommentEnabled = value.length > 0;
   let isSendButtonPressed = () => {
     if (isCommentEnabled) {
@@ -46,7 +48,9 @@ const WriteComment = ({
         />
         <Image
           style={styles.image}
-          source={require('../../assets/images/ProfileDefault.png')}
+          source={{
+            uri: users.photoUrl,
+          }}
         />
         <View style={styles.content}>
           <TextInput
@@ -142,6 +146,7 @@ const styles = StyleSheet.create({
     height: 36,
     marginLeft: -7,
     zIndex: -10,
+    borderRadius: 18,
   },
   text: {
     flex: 1,

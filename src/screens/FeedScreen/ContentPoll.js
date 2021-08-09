@@ -71,7 +71,6 @@ const ContentPoll = ({
     if (isFetchingResultPoll) {
       return;
     }
-    // setIsFetchingResultPoll(true);
     let newPolls = [...polls];
     let newItem = {...item};
 
@@ -89,10 +88,10 @@ const ContentPoll = ({
           newPolls[changedPollIndex].counter =
             parseInt(selectedPoll.counter) + 1;
           selectedPolls.push(selectedPoll);
-          // inputSingleChoicePoll(
-          //   selectedPoll.polling_id,
-          //   selectedPoll.polling_option_id,
-          // );
+          inputSingleChoicePoll(
+            selectedPoll.polling_id,
+            selectedPoll.polling_option_id,
+          );
         }
         newItem.pollOptions = newPolls;
         newItem.mypolling = selectedPolls;
@@ -114,10 +113,10 @@ const ContentPoll = ({
         newItem.pollOptions = newPolls;
         newItem.mypolling = selectedPoll;
         newItem.voteCount++;
-        // inputSingleChoicePoll(
-        //   selectedPoll.polling_id,
-        //   selectedPoll.polling_option_id,
-        // );
+        inputSingleChoicePoll(
+          selectedPoll.polling_id,
+          selectedPoll.polling_option_id,
+        );
       }
 
       onnewpollfetched(newItem, index);

@@ -56,15 +56,10 @@ let PollOptionsMultipleChoice = ({
   let isPollNotEndedAndIsMax =
     isalreadypolling && maxpolls.includes(item.polling_option_id);
 
-  let isPollNotEndedAndIsMine = isalreadypolling && isMyPoll();
+  let isPollNotEndedAndIsMine = isalreadypolling && isMyPoll() && !isexpired;
   let isMax = maxpolls.includes(item.polling_option_id);
 
-  // console.log(maxpolls);
-  // console.log(optionPercentage);
-  // console.log(poll.polling_option_id);
-
   let renderPercentageBar = () => {
-    // console.log(isexpi);
     if (isexpired) {
       return (
         <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
