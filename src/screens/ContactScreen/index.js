@@ -89,7 +89,6 @@ const ContactScreen = ({navigation}) => {
       let channelName = users.map((item) => {
         return item.username;
       });
-      console.log(myProfile);
       channelName.push(myProfile.username);
       setSelectedUsers([]);
       // console.log(channelName);
