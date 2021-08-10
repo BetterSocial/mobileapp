@@ -82,12 +82,11 @@ const SplashScreen = () => {
   let doVerifyUser = async () => {
     try {
       let token = await getAccessToken();
-      createClient(token, dispatch);
-      console.log('joken ', jwtDecode(token));
       console.log(token);
       if (token !== null && token !== '') {
         const verify = await verifyTokenGetstream();
         if (verify !== null && verify !== '') {
+          createClient(token, dispatch);
           return await jwtDecode(token).user_id;
         } else {
           return null;

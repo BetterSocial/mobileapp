@@ -28,7 +28,7 @@ const ChannelListScreen = ({navigation}) => {
     state: true,
     watch: true,
   };
-  const memoizedFilters = React.useMemo(() => filters, []);
+  const memoizedFilters = React.useMemo(() => filters, [userId]);
 
   React.useEffect(() => {
     analytics().logScreenView({
