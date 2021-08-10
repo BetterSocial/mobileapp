@@ -163,6 +163,7 @@ const DomainScreen = () => {
                 onPressUpvote={(news) => upvoteNews(news)}
                 onPressDownVote={(news) => downvoteNews(news)}
                 selfUserId={idFromToken}
+                onPressBlock={() => onReaction(0)}
               />
             );
           }
