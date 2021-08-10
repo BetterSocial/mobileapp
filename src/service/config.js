@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {getAccessToken} from '../utils/token';
-import {BASE_URL} from '@env';
+import {BASE_URL, BASE_URL_DEV} from '@env';
 
 const api = axios.create({
   baseURL: BASE_URL,

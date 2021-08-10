@@ -15,7 +15,7 @@ import ItemList from '../../components/Blocking/ItemList';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const ReportDomain = ({refReportDomain, onSelect}) => {
+const ReportDomain = ({refReportDomain, onSelect, onSkip}) => {
   const data = [
     {
       id: 1,
@@ -43,14 +43,23 @@ const ReportDomain = ({refReportDomain, onSelect}) => {
     },
   ];
   const [active, setActive] = React.useState([]);
-  const onChoice = (id, type) => {
+  const [activeLabel, setActiveLabel] = React.useState([]);
+
+  const onChoice = (id, value, type) => {
     if (type === 'add') {
       let newArr = [...active, id];
+      let newArrLabel = [...activeLabel, value];
+      setActiveLabel(newArrLabel);
       setActive(newArr);
     } else {
       let newArr = active.filter((e) => e !== id);
       setActive(newArr);
+      let newArrLabel = activeLabel.filter((e) => e !== value);
+      setActiveLabel(newArrLabel);
     }
+  };
+  const onNext = () => {
+    onSelect(activeLabel);
   };
 
   return (
@@ -65,7 +74,7 @@ const ReportDomain = ({refReportDomain, onSelect}) => {
         }}>
         <View style={styles.content}>
           <ScrollView nestedScrollEnabled={true}>
-            <TouchableOpacity style={styles.btnSkip}>
+            <TouchableOpacity style={styles.btnSkip} onPress={() => onSkip()}>
               <Text style={styles.btnSkipText}>
                 Skip & just block this account
               </Text>
@@ -85,7 +94,7 @@ const ReportDomain = ({refReportDomain, onSelect}) => {
               />
             ))}
             <View style={styles.btn}>
-              <Button>
+              <Button onPress={onNext}>
                 <Text>Provide info on next screen</Text>
               </Button>
             </View>

@@ -12,11 +12,12 @@ import {
   useAttachmentPickerContext,
 } from 'stream-chat-react-native';
 import {Context} from '../../context';
-const streami18n = new Streami18n({
-  language: 'en',
-});
+import {Text} from 'react-native';
 
 const ChannelScreen = () => {
+  const streami18n = new Streami18n({
+    language: 'en',
+  });
   const [channel] = React.useContext(Context).channel;
   const [client] = React.useContext(Context).client;
   const headerHeight = useHeaderHeight();
@@ -29,6 +30,27 @@ const ChannelScreen = () => {
     });
     setTopInset(headerHeight);
   }, [headerHeight]);
+  const theme = {
+    messageSimple: {
+      gallery: {
+        galleryContainer: {
+          backgroundColor: 'red',
+        },
+      },
+      content: {
+        container: {
+          backgroundColor: 'orange',
+          flex: 1,
+        },
+        containerInner: {
+          borderWidth: 2,
+          borderColor: 'red',
+          backgroundColor: 'blue',
+          width: 200,
+        },
+      },
+    },
+  };
 
   return (
     <SafeAreaView>
@@ -49,3 +71,13 @@ const ChannelScreen = () => {
 };
 
 export default ChannelScreen;
+
+const CustomComponent = (props) => {
+  console.log('content 1 ', props);
+  return <View />;
+  // return <MessageSimple {...props} />;
+};
+
+const CardCustom = (props) => {
+  return <View />;
+};

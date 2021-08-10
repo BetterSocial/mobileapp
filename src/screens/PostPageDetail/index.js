@@ -30,6 +30,7 @@ import ContentLink from '../FeedScreen/ContentLink';
 import {getFeedDetail} from '../../service/post';
 import {getAccessToken} from '../../utils/token';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
+import StringConstant from '../../utils/string/StringConstant';
 
 const {width, height} = Dimensions.get('window');
 
@@ -70,21 +71,20 @@ const PostPageDetail = (props) => {
   const scrollViewRef = React.useRef(null);
 
   let itemProp = props.route.params.item;
-  let comments = itemProp.latest_reactions.comment || [];
-  let sortedComment = comments.sort((current, next) => {
-    let currentMoment = moment(current.updated_at);
-    let nextMoment = moment(next.updated_at);
-    return currentMoment.diff(nextMoment);
-  });
+  const [item, setItem] = React.useState(itemProp);
 
-  let newItemProp = {...itemProp};
-  newItemProp.latest_reactions.comment = sortedComment;
-
-  const [item, setItem] = React.useState(newItemProp);
+  const sortComment = (comments) => {
+    let sortedComment = comments.sort((current, next) => {
+      let currentMoment = moment(current.updated_at);
+      let nextMoment = moment(next.updated_at);
+      return currentMoment.diff(nextMoment);
+    });
+    return sortedComment;
+  };
 
   React.useEffect(() => {
     const initial = () => {
-      let reactionCount = props.route.params.item.reaction_counts;
+      let reactionCount = item.reaction_counts;
       if (JSON.stringify(reactionCount) !== '{}') {
         let count = 0;
         let comment = reactionCount.comment;
@@ -92,9 +92,7 @@ const PostPageDetail = (props) => {
           if (comment > 0) {
             setReaction(true);
             setTotalComment(
-              getCountCommentWithChildInDetailPage(
-                props.route.params.item.latest_reactions,
-              ),
+              getCountCommentWithChildInDetailPage(item.latest_reactions),
             );
           }
         }
@@ -110,7 +108,7 @@ const PostPageDetail = (props) => {
       }
     };
     initial();
-  }, [props]);
+  }, [props, item]);
 
   React.useEffect(() => {
     const validationStatusVote = () => {
@@ -216,17 +214,12 @@ const PostPageDetail = (props) => {
   };
 
   const updateFeed = async () => {
-    console.log('update feed');
     try {
       let data = await getFeedDetail(item.id);
       if (data) {
-        console.log('reed', data.results[0]);
-        setItem(data.results[0]);
-      } else {
-        console.log('else if');
+        setItem(data.data);
       }
     } catch (e) {
-      console.log('error updating feed');
       console.log(e);
     }
   };
@@ -243,7 +236,7 @@ const PostPageDetail = (props) => {
         let data = await createCommentParent(textComment, item.id);
         if (data.code === 200) {
           setTextComment('');
-          // updateFeed();
+          updateFeed();
           Toast.show('Comment successful', Toast.LONG);
         } else {
           Toast.show('Failed Comment', Toast.LONG);
@@ -261,7 +254,6 @@ const PostPageDetail = (props) => {
     props.navigation.navigate('DomainScreen', {
       item: item,
     });
-    // scrollViewRef.current.scrollTo
   };
 
   const onCommentButtonClicked = () => {
@@ -296,6 +288,7 @@ const PostPageDetail = (props) => {
               multiplechoice={item.multiplechoice}
               isalreadypolling={item.isalreadypolling}
               onnewpollfetched={() => {}}
+              voteCount={item.voteCount}
             />
           )}
 
@@ -369,11 +362,12 @@ const PostPageDetail = (props) => {
               statusVote={voteStatus}
               onPressShare={() => {}}
               onPressComment={onCommentButtonClicked}
-              onPressBlock={(value) => {
-                if (value.actor.id === yourselfId) {
+              onPressBlock={() => {
+                // console.log(item);
+                if (item.actor.id === yourselfId) {
                   Toast.show("Can't Block yourself", Toast.LONG);
                 } else {
-                  setDataToState(value);
+                  setDataToState(item);
                   refBlockUser.current.open();
                 }
               }}
@@ -382,11 +376,17 @@ const PostPageDetail = (props) => {
           </View>
         </View>
         {isReaction && (
-          <ContainerComment comments={item.latest_reactions.comment} />
+          <ContainerComment
+            comments={sortComment(item.latest_reactions.comment)}
+          />
         )}
       </ScrollView>
       <WriteComment
-        username={item.actor.data.username}
+        username={
+          item.anonimity
+            ? StringConstant.generalAnonymousText
+            : item.actor.data.username
+        }
         value={textComment}
         onChangeText={(value) => setTextComment(value)}
         onPress={() => {
@@ -399,7 +399,7 @@ const PostPageDetail = (props) => {
         username={username}
       />
       <BlockDomain
-        refBlockUser={refBlockDomain}
+        refBlockDomain={refBlockDomain}
         domain="guardian.com"
         onSelect={() => {}}
       />

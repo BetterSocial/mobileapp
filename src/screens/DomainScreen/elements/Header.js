@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Linking,
 } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
+import SimpleToast from 'react-native-simple-toast';
 
 import MemoIc_interface from '../../../assets/icons/Ic_interface';
 import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
@@ -15,6 +17,7 @@ import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import {fonts} from '../../../utils/fonts';
 import {SIZES, COLORS, FONTS} from '../../../utils/theme';
 import {SingleSidedShadowBox, Gap} from '../../../components';
+import StringConstant from '../../../utils/string/StringConstant';
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis.';
@@ -23,6 +26,16 @@ const {width} = Dimensions.get('window');
 
 const Header = ({image, domain, description, followers, onPress}) => {
   let [isTooltipShown, setIsTooltipShown] = React.useState(false);
+
+  const openDomainLink = async () => {
+    let isURL = await Linking.canOpenURL(`https://${domain}`);
+    console.log(isURL);
+    if (isURL) {
+      Linking.openURL(`https://${domain}`);
+    } else {
+      SimpleToast.show(StringConstant.domainCannotOpenURL, SimpleToast.SHORT);
+    }
+  };
 
   return (
     <SingleSidedShadowBox style={styles.shadowBox}>
@@ -58,8 +71,12 @@ const Header = ({image, domain, description, followers, onPress}) => {
         <Gap height={12} />
         <View style={styles.row}>
           <Text style={styles.domainName}>{domain}</Text>
-          <View style={{marginStart: 10, justifyContent: 'center'}}>
-            <MemoIc_interface width={20} height={20} />
+          <View style={{justifyContent: 'center'}}>
+            <TouchableOpacity
+              style={styles.openInBrowserIcon}
+              onPress={openDomainLink}>
+              <MemoIc_interface width={20} height={20} />
+            </TouchableOpacity>
           </View>
         </View>
         <Gap height={4} />
@@ -241,7 +258,7 @@ const styles = StyleSheet.create({
       width: 2,
       height: 2,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 1,
     shadowRadius: 3.84,
 
     elevation: 5,
@@ -265,6 +282,7 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
+  openInBrowserIcon: {padding: 8, paddingHorizontal: 12, top: -3},
 });
 
 export default Header;

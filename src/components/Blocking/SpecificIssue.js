@@ -14,7 +14,7 @@ import {Button} from '../../components/Button';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const SpecificIssue = ({refSpecificIssue, onPress}) => {
+const SpecificIssue = ({refSpecificIssue, onPress, onSkip}) => {
   const [message, setMessage] = React.useState('');
   return (
     <RBSheet
@@ -36,7 +36,7 @@ const SpecificIssue = ({refSpecificIssue, onPress}) => {
             'Please provide more details to inform our\n team (min. 50 characters)'
           }
         />
-        <TouchableOpacity style={styles.btnSkip}>
+        <TouchableOpacity style={styles.btnSkip} onPress={() => onSkip()}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>
           <IconFA5 name="chevron-right" size={17} color={'#000'} />
         </TouchableOpacity>

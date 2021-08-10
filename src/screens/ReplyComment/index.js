@@ -49,6 +49,7 @@ const ReplyComment = (props) => {
     };
     init();
   }, [item]);
+
   const createComment = async () => {
     try {
       if (textComment.trim() !== '') {
@@ -90,8 +91,9 @@ const ReplyComment = (props) => {
           </View>
           {/* Header */}
           <Comment
-            username={item.user.data.username}
-            comment={item.data.text}
+            // username={item.user.data.username}
+            user={item.user}
+            comment={item}
             time={item.created_at}
             photo={item.user.data.profile_pic_url}
             isLast={(item.children_counts.comment || 0) === 0}
@@ -129,13 +131,15 @@ const ReplyComment = (props) => {
                         time={itemReply.created_at}
                         photo={itemReply.user.data.profile_pic_url}
                         isLast={
-                          index === item.children_counts.comment - 1 &&
-                          (itemReply.children_counts.comment || 0) === 0
+                          // index === item.children_counts.comment - 1 &&
+                          // (itemReply.children_counts.comment || 0) === 0
+                          level >= 2
                         }
                         key={'r' + index}
-                        username={itemReply.user.data.username}
-                        comment={itemReply.data.text}
-                        onPress={goToComment}
+                        // username={itemReply.user.data.username}
+                        user={item.user}
+                        comment={itemReply}
+                        onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}
                       />
                       {itemReply.children_counts.comment > 0 && (
@@ -194,6 +198,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     flex: 1,
     backgroundColor: '#fff',
+    // backgroundColor: 'blue',
   },
   containerComment: {
     marginTop: 8,
@@ -201,7 +206,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     paddingLeft: 36,
-    paddingRight: 36,
+    paddingRight: 23,
   },
   header: {
     marginLeft: -20,
@@ -216,6 +221,7 @@ const styles = StyleSheet.create({
   containerReply: (hideLeftConnector) => ({
     borderLeftWidth: 1,
     width: '100%',
+    // backgroundColor: 'red',
     // flex: 1,
   }),
   seeRepliesContainer: (isLast) => ({

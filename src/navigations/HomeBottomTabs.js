@@ -17,12 +17,15 @@ import {getAccessToken} from '../utils/token';
 import {getMyProfile} from '../service/profile';
 import MemoProfileIcon from '../assets/icon/Profile';
 import {Context} from '../context';
+import {setImageUrl} from '../context/actions/users';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs() {
-  let [profilePic, setProfilePic] = React.useState(null);
+  // let [profilePic, setProfilePic] = React.useState(null);
+  let [users, dispatch] = React.useContext(Context).users;
+  console.log(users.photoUrl);
   const [myProfile, setMyProfileDispatch] = React.useContext(Context).myProfile;
 
   React.useEffect(() => {
@@ -32,7 +35,10 @@ function HomeBottomTabs() {
         let selfUserId = await jwtDecode(token).user_id;
         let profile = await getMyProfile(selfUserId);
         setMyProfileAction(profile.data, setMyProfileDispatch);
-        setProfilePic(profile.data.profile_pic_path);
+        // setProfilePic(profile.data.profile_pic_path);
+        console.log('profile.data.profile_pic_path');
+        console.log(profile.data.profile_pic_path);
+        setImageUrl(profile.data.profile_pic_path, dispatch);
       } catch (e) {
         console.log(e);
       }
@@ -87,7 +93,7 @@ function HomeBottomTabs() {
         component={ProfileScreen}
         options={{
           activeTintColor: colors.holytosca,
-          tabBarIcon: ({focused}) => <MemoProfileIcon uri={profilePic} />,
+          tabBarIcon: ({focused}) => <MemoProfileIcon uri={users.photoUrl} />,
         }}
       />
     </Tab.Navigator>

@@ -44,7 +44,7 @@ let onboardingTopicsButtonStateChooseMore = (count) => `CHOOSE ${count} MORE`;
 
 // Post Detail Page
 let postDetailPageSeeReplies = (count) => {
-  return `See ${count} ${count > 1 ? `replies` : 'reply'}`;
+  return `See ${count} ${count > 1 ? 'replies' : 'reply'}`;
 };
 
 // Chat Tab
@@ -55,16 +55,25 @@ let chatTabHeaderCreateChatButtonText = 'New Chat';
 let newsTabHeaderPlaceholder = 'Search Better';
 let newsTabHeaderCreatePostButtonText = 'New Post';
 
+// Link Detail Page
+let linkDetailPageOpenInBrowser = 'Open in browser';
+
 // Component
 let headerIosSkip = 'Skip';
 let searchModalTitle = 'Search';
 let searchModalPlaceholder = 'Search by ZIP, neighborhood or city';
 let commentBoxDefaultPlaceholder = 'Add your reply';
 
+// General
+let generalAnonymousText = 'Anonymous';
+
 // Wording need to be discussed :
 // Splash Screen
 let splashScreenDeeplinkGetProfileNotFound = (username) =>
   `${username}'s profile not found`;
+
+// Domain Page
+let domainCannotOpenURL = 'Cannot open URL';
 
 export default {
   signInScreenHumanIdBrand,
@@ -105,8 +114,14 @@ export default {
   newsTabHeaderPlaceholder,
   newsTabHeaderCreatePostButtonText,
 
+  linkDetailPageOpenInBrowser,
+
   headerIosSkip,
   searchModalTitle,
   searchModalPlaceholder,
   commentBoxDefaultPlaceholder,
+
+  generalAnonymousText,
+
+  domainCannotOpenURL,
 };

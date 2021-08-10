@@ -9,11 +9,12 @@ import {getAccessToken} from '../../utils/token';
 import Search from './elements/Search';
 import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
-const streami18n = new Streami18n({
-  language: 'en',
-});
 
 const ChannelListScreen = ({navigation}) => {
+  const streami18n = new Streami18n({
+    language: 'en',
+  });
+
   const [userId, setUserId] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
@@ -27,7 +28,7 @@ const ChannelListScreen = ({navigation}) => {
     state: true,
     watch: true,
   };
-  const memoizedFilters = React.useMemo(() => filters, []);
+  const memoizedFilters = React.useMemo(() => filters, [userId]);
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -58,9 +59,10 @@ const ChannelListScreen = ({navigation}) => {
             <ChannelList
               filters={memoizedFilters}
               onSelect={(channel) => {
+                // console.log(channel);
+
+                navigation.navigate('ChannelScreen');
                 setChannel(channel, dispatch);
-                // navigation.navigate('ChannelScreen');
-                navigation.navigate('ChatDetailPage');
               }}
               sort={sort}
               options={options}

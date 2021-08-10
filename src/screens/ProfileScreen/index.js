@@ -43,6 +43,8 @@ import {trimString} from '../../utils/string/TrimString';
 import {getAccessToken} from '../../utils/token';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
+import {setImageUrl} from '../../context/actions/users';
+import {Context} from '../../context';
 
 const width = Dimensions.get('screen').width;
 
@@ -55,6 +57,7 @@ const ProfileScreen = () => {
   const scrollViewReff = React.useRef(null);
 
   let [token_JWT, setTokenJwt] = React.useState('');
+  let [users, dispatch] = React.useContext(Context).users;
   const [tokenParse, setTokenParse] = React.useState({});
   const [dataMain, setDataMain] = React.useState({});
   const [tempFullName, setTempFullName] = React.useState('');
@@ -67,15 +70,10 @@ const ProfileScreen = () => {
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
   const [errorBio, setErrorBio] = React.useState('');
-  let [rerender, setRerender] = React.useState(0);
-  const [
-    isLoadingUpdateImageGalery,
-    setIsLoadingUpdateImageGalery,
-  ] = React.useState(false);
-  const [
-    isLoadingUpdateImageCamera,
-    setIsLoadingUpdateImageCamera,
-  ] = React.useState(false);
+  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] =
+    React.useState(false);
+  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
+    React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
 
@@ -116,6 +114,7 @@ const ProfileScreen = () => {
       console.log(result);
       if (result.code === 200) {
         setDataMain(result.data);
+        setImageUrl(result.data.profile_pic_path, dispatch);
         withLoading ? setIsLoading(false) : null;
       }
     }
@@ -404,18 +403,9 @@ const ProfileScreen = () => {
                       <View style={styles.profileImageContainer}>
                         <Image
                           style={styles.profileImage}
-                          key={
-                            `${
-                              dataMain.profile_pic_path
-                            }?time=${new Date().valueOf()}` ||
-                            DEFAULT_PROFILE_PIC_PATH
-                          }
                           source={{
-                            cache: 'reload',
                             uri: dataMain.profile_pic_path
-                              ? `${
-                                  dataMain.profile_pic_path
-                                }?time=${new Date().valueOf()}`
+                              ? `${dataMain.profile_pic_path}`
                               : DEFAULT_PROFILE_PIC_PATH,
                           }}
                         />

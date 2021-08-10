@@ -16,7 +16,6 @@ const ListUser = ({users, followed, onPress}) => {
         users.length > 0 &&
         users.map((value, index) => {
           if (value.name === 'topic') {
-            console.log('render topic', followed);
             return (
               <View key={index}>
                 {value.data.map((val, idx) => {

@@ -4,7 +4,7 @@ import {getRefreshToken, setAccessToken, setRefreshToken} from '../utils/token';
 import {BASE_URL} from '@env';
 export const verifyUser = async (userId) => {
   try {
-    console.log(BASE_URL);
+    // console.log(BASE_URL);
     let resApi = await api.post('/users/verify-user', {
       user_id: userId,
     });
