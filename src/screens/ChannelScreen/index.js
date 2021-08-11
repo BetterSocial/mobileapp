@@ -10,8 +10,6 @@ import {
   MessageList,
   Streami18n,
   useAttachmentPickerContext,
-  MessageSimple,
-  MessageContent,
 } from 'stream-chat-react-native';
 import {Context} from '../../context';
 import {Text} from 'react-native';
@@ -57,10 +55,9 @@ const ChannelScreen = () => {
   return (
     <SafeAreaView>
       {client.client && channel.channel && (
-        <Chat client={client.client} i18nInstance={streami18n} style={theme}>
+        <Chat client={client.client} i18nInstance={streami18n}>
           <Channel
             channel={channel.channel}
-            MessageSimple={CustomComponent}
             keyboardVerticalOffset={headerHeight}>
             <View style={StyleSheet.absoluteFill}>
               <MessageList />
@@ -76,10 +73,11 @@ const ChannelScreen = () => {
 export default ChannelScreen;
 
 const CustomComponent = (props) => {
-  return <MessageSimple {...props} />;
+  console.log('content 1 ', props);
+  return <View />;
+  // return <MessageSimple {...props} />;
 };
 
 const CardCustom = (props) => {
-  console.log('content ', JSON.stringify(props));
   return <View />;
 };

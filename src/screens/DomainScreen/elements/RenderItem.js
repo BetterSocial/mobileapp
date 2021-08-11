@@ -29,6 +29,7 @@ const RenderItem = ({
   onPressUpvote,
   onPressShare,
   selfUserId,
+  onPressBlock,
 }) => {
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
@@ -207,6 +208,7 @@ const RenderItem = ({
             totalComment={getCountCommentWithChild(item)}
             totalVote={totalVote}
             statusVote={voteStatus}
+            onPressBlock={onPressBlock}
             onPressShare={() => onPressShare(item)}
             onPressComment={() => onPressComment(item)}
             onPressDownVote={() => {
@@ -289,7 +291,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderBottomColor: COLORS.gray6,
   },
-  // wrapperItem: {backgroundColor: 'white'},
   wrapperImage: {
     borderRadius: 45,
     borderWidth: 0.2,

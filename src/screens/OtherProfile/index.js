@@ -77,7 +77,8 @@ const OtherProfile = () => {
     setTokenParse(decoded);
     withLoading ? setIsLoading(true) : null;
     const result = await getOtherProfile(userId, otherId);
-    if (result.code == 200) {
+    console.log('other', result);
+    if (result.code === 200) {
       withLoading ? setIsLoading(false) : null;
       console.log(result.data);
       setDataMain(result.data);
@@ -201,7 +202,7 @@ const OtherProfile = () => {
     await channelChat.watch();
     setChannel(channelChat, dispatchChannel);
 
-    await navigation.navigate('ChatDetailPage');
+    await navigation.navigate('ChannelScreen');
   };
 
   return (
@@ -253,15 +254,15 @@ const OtherProfile = () => {
                             fill={colors.bondi_blue}
                           />
                         </TouchableNativeFeedback>
-                        <View style={styles.btnMsg}>
-                          <TouchableNativeFeedback onPress={createChannel}>
+                        <TouchableNativeFeedback onPress={createChannel}>
+                          <View style={styles.btnMsg}>
                             <EnveloveBlueIcon
                               width={20}
                               height={16}
                               fill={colors.bondi_blue}
                             />
-                          </TouchableNativeFeedback>
-                        </View>
+                          </View>
+                        </TouchableNativeFeedback>
                         {dataMain.is_following ? (
                           <TouchableNativeFeedback
                             onPress={() => handleSetUnFollow()}>
@@ -512,8 +513,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   btnMsg: {
-    marginRight: 16,
-    marginLeft: 24,
+    paddingVertical: 10,
+    paddingRight: 16,
+    paddingLeft: 24,
   },
 });
 export default OtherProfile;
