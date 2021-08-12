@@ -64,10 +64,10 @@ let PollOptionsMultipleChoice = ({
       return (
         <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
       );
-    } else if (isPollNotEndedAndIsMax) {
-      return (
-        <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
-      );
+      // } else if (isPollNotEndedAndIsMax) {
+      //   return (
+      //     <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
+      //   );
     } else if (isalreadypolling) {
       return (
         <View style={styles.percentageBar(optionPercentage, isMyPoll())} />
@@ -76,7 +76,7 @@ let PollOptionsMultipleChoice = ({
   };
 
   let renderPollBadge = () => {
-    if (isMax) {
+    if (isMax && isexpired) {
       return (
         <IconPollWinnerBadge style={{marginRight: 9, alignSelf: 'center'}} />
       );

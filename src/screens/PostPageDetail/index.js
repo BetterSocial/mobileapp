@@ -79,7 +79,7 @@ const PostPageDetail = (props) => {
 
   const scrollViewRef = React.useRef(null);
 
-  let itemProp = props.route.params.item;
+  // let itemProp = props.route.params.item;
   let {index} = props.route.params;
 
   const [item, setItem] = React.useState(feeds.feeds[index]);
@@ -222,12 +222,18 @@ const PostPageDetail = (props) => {
   };
 
   const updateFeed = async () => {
-    console.log('asdasdadad');
     try {
       let data = await getFeedDetail(item.id);
       console.log(data.data);
       if (data) {
         setItem(data.data);
+        setFeedById(
+          {
+            singleFeed: data.data,
+            index,
+          },
+          dispatch,
+        );
       }
     } catch (e) {
       console.log(e);
@@ -272,16 +278,15 @@ const PostPageDetail = (props) => {
   };
 
   const setUpVote = async (post) => {
-    upVote(post);
+    await upVote(post);
+    updateFeed();
   };
   const setDownVote = async (post) => {
-    downVote(post);
+    await downVote(post);
+    updateFeed();
   };
 
   const onNewPollFetched = (newPolls, index) => {
-    // console.log('index new onpoll');
-    // console.log(index);
-    // console.log(newPolls);
     setFeedById(
       {
         index,

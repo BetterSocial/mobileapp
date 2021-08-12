@@ -46,7 +46,6 @@ function HomeBottomTabs() {
         activeTintColor: colors.holytosca,
         inactiveTintColor: colors.gray1,
       }}
-      initialRouteName="Feed"
       screenOptions={({route, navigation}) => {
         return {
           activeTintColor: colors.holytosca,

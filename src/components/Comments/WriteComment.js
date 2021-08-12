@@ -23,9 +23,12 @@ const WriteComment = ({
   showProfileConnector = true,
 }) => {
   let [users] = React.useContext(Context).users;
+  let commentInputRef = React.useRef(null);
+
   let isCommentEnabled = value.length > 0;
   let isSendButtonPressed = () => {
     if (isCommentEnabled) {
+      commentInputRef.current.blur();
       return onPress();
     }
   };
@@ -54,6 +57,7 @@ const WriteComment = ({
         />
         <View style={styles.content}>
           <TextInput
+            ref={commentInputRef}
             placeholder={StringConstant.commentBoxDefaultPlaceholder}
             multiline
             placeholderTextColor={colors.gray}
