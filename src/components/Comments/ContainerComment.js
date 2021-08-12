@@ -139,7 +139,8 @@ export default ContainerComment;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 30,
+    paddingLeft: 30,
+    paddingRight: 8,
   },
   lineBeforeProfile: {
     height: 8.5,

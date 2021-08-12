@@ -31,6 +31,8 @@ import {getFeedDetail} from '../../service/post';
 import {getAccessToken} from '../../utils/token';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
 import StringConstant from '../../utils/string/StringConstant';
+import {setFeedById} from '../../context/actions/feeds';
+import {Context} from '../../context';
 
 const {width, height} = Dimensions.get('window');
 
@@ -57,6 +59,8 @@ const PostPageDetail = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
 
+  let [feeds, dispatch] = React.useContext(Context).feeds;
+
   React.useEffect(() => {
     const parseToken = async () => {
       const value = await getAccessToken();
@@ -68,10 +72,17 @@ const PostPageDetail = (props) => {
     parseToken();
   }, []);
 
+  React.useEffect(() => {
+    // updateFeed();
+    fetchMyProfile();
+  }, [yourselfId]);
+
   const scrollViewRef = React.useRef(null);
 
-  let itemProp = props.route.params.item;
-  const [item, setItem] = React.useState(itemProp);
+  // let itemProp = props.route.params.item;
+  let {index} = props.route.params;
+
+  const [item, setItem] = React.useState(feeds.feeds[index]);
 
   const sortComment = (comments) => {
     let sortedComment = comments.sort((current, next) => {
@@ -110,6 +121,11 @@ const PostPageDetail = (props) => {
     initial();
   }, [props, item]);
 
+  // React.useEffect(() => {
+  //   console.log('item');
+  //   console.log(item.id);
+  // }, [item]);
+
   React.useEffect(() => {
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
@@ -137,14 +153,6 @@ const PostPageDetail = (props) => {
     validationStatusVote();
   }, [item, yourselfId]);
 
-  React.useEffect(() => {
-    navigation.addListener('focus', () => {
-      if (item) {
-        updateFeed();
-      }
-    });
-    fetchMyProfile();
-  }, []);
   const onSelectBlocking = (v) => {
     if (v !== 1) {
       refReportUser.current.open();
@@ -216,8 +224,16 @@ const PostPageDetail = (props) => {
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(item.id);
+      console.log(data.data);
       if (data) {
         setItem(data.data);
+        setFeedById(
+          {
+            singleFeed: data.data,
+            index,
+          },
+          dispatch,
+        );
       }
     } catch (e) {
       console.log(e);
@@ -262,10 +278,22 @@ const PostPageDetail = (props) => {
   };
 
   const setUpVote = async (post) => {
-    upVote(post);
+    await upVote(post);
+    updateFeed();
   };
   const setDownVote = async (post) => {
-    downVote(post);
+    await downVote(post);
+    updateFeed();
+  };
+
+  const onNewPollFetched = (newPolls, index) => {
+    setFeedById(
+      {
+        index,
+        singleFeed: newPolls,
+      },
+      dispatch,
+    );
   };
 
   return (
@@ -278,7 +306,7 @@ const PostPageDetail = (props) => {
           <Header props={item} isBackButton={true} />
           {item.post_type === POST_TYPE_POLL && (
             <ContentPoll
-              index={0}
+              index={index}
               message={item.message}
               images_url={item.images_url}
               polls={item.pollOptions}
@@ -287,7 +315,7 @@ const PostPageDetail = (props) => {
               pollexpiredat={item.polls_expired_at}
               multiplechoice={item.multiplechoice}
               isalreadypolling={item.isalreadypolling}
-              onnewpollfetched={() => {}}
+              onnewpollfetched={onNewPollFetched}
               voteCount={item.voteCount}
             />
           )}

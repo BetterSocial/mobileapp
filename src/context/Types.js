@@ -6,3 +6,5 @@ export const SET_TOPICS = 'SET_TOPICS';
 export const SET_DATA_IMAGE_URL = 'SET_DATA_IMAGE_URL';
 export const SET_CLIENT = 'SET_CLIENT';
 export const SET_CHANNEL = 'SET_CHANNEL';
+export const SET_FEED = 'SET_FEED';
+export const SET_FEED_BY_ID = 'SET_FEED_BY_ID';

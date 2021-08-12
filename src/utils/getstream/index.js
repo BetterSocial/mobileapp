@@ -41,8 +41,6 @@ const getCountCommentWithChild = (item) => {
 
     try {
       reactionLevelOne.forEach((itemLevelOne) => {
-        console.log('itemLevelOne');
-        console.log(itemLevelOne);
         if (JSON.stringify(itemLevelOne.latest_children) !== '{}') {
           let reactionLevelTwo = itemLevelOne.latest_children.comment;
           reactionLevelTwo.forEach((itemLevelTwo, index) => {

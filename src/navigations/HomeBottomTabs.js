@@ -22,9 +22,7 @@ import {setImageUrl} from '../context/actions/users';
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs() {
-  // let [profilePic, setProfilePic] = React.useState(null);
   let [users, dispatch] = React.useContext(Context).users;
-  console.log(users.photoUrl);
 
   React.useEffect(() => {
     let getProfile = async () => {
@@ -32,9 +30,6 @@ function HomeBottomTabs() {
         let token = await getAccessToken();
         let selfUserId = await jwtDecode(token).user_id;
         let profile = await getMyProfile(selfUserId);
-        // setProfilePic(profile.data.profile_pic_path);
-        console.log('profile.data.profile_pic_path');
-        console.log(profile.data.profile_pic_path);
         setImageUrl(profile.data.profile_pic_path, dispatch);
       } catch (e) {
         console.log(e);
