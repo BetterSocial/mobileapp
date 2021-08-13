@@ -33,3 +33,12 @@ export const getProfileDomain = async (name) => {
     throw new Error(error);
   }
 };
+export const followDomain = async (data) => {
+  try {
+    const res = await api.post('/domain/follow', data);
+    return res.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};

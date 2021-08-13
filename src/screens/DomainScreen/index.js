@@ -12,14 +12,16 @@ import Gap from '../../components/Gap';
 import Header from './elements/Header';
 import Navigation from './elements/Navigation';
 import RenderItem from './elements/RenderItem';
-import {getDetailDomains, getProfileDomain} from '../../service/domain';
+import {
+  followDomain,
+  getDetailDomains,
+  getProfileDomain,
+} from '../../service/domain';
 import {SIZES, COLORS} from '../../utils/theme';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import {blockDomain} from '../../service/blocking';
-
-const {width, height} = Dimensions.get('window');
 
 const DomainScreen = () => {
   const route = useRoute();
@@ -65,6 +67,9 @@ const DomainScreen = () => {
       let res = await getProfileDomain(domain);
       if (res.code === 200) {
         setProfile(res.data);
+      } else {
+        Toast.show('Domain Not Found', Toast.LONG);
+        navigation.goBack();
       }
     };
     getProfile();
@@ -81,9 +86,22 @@ const DomainScreen = () => {
   const downvoteNews = async (news) => {
     downVoteDomain(news);
   };
-  const onReaction = (v) => {
+  const onReaction = async (v) => {
     if (v === 0) {
       blockDomainRef.current.open();
+    } else {
+      console.log(domain);
+
+      // let dataFollow = {
+      //   domainId: 'c8c39e52-5484-465c-b635-3c46384b6f24',
+      //   source: 'domain_page',
+      // };
+      // const res = await followDomain(dataFollow);
+      // if (res.code === 200) {
+      //   console.log('sukses');
+      // } else {
+      //   console.log('error');
+      // }
     }
   };
   const selectBlock = (v) => {
@@ -130,7 +148,6 @@ const DomainScreen = () => {
     }
     console.log('result block user ', result);
   };
-
   return (
     <View style={styles.container}>
       <Navigation domain={item.og.domain} />

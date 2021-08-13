@@ -102,7 +102,6 @@ const NewsScreen = ({}) => {
 
   const blockNews = (news) => {
     blockDomainRef.current.open();
-    console.log('news ', news);
     setIdBlock(news.content.domain_page_id);
     setDomain(news.domain.name);
   };
