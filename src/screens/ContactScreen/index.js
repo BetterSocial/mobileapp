@@ -29,6 +29,7 @@ const ContactScreen = ({navigation}) => {
   const [users, setUsers] = React.useState([]);
   const [myProfile] = React.useContext(Context).myProfile;
   const [channel, dispatchChannel] = React.useContext(Context).channel;
+  const [client, setClient] = React.useContext(Context).client;
 
   React.useEffect(() => {
     const getUserId = async () => {
@@ -90,18 +91,28 @@ const ContactScreen = ({navigation}) => {
         return item.username;
       });
       channelName.push(myProfile.username);
-      setSelectedUsers([]);
-      // console.log(channelName);
-      // console.log(channelName.toString());
-      let res = await createChannel(
-        'messaging',
-        members,
-        channelName.toString(),
-      );
-      // alert('success create group');
-      setLoading(false);
-      setChannel(res, dispatchChannel);
-      navigation.navigate('ChannelScreen');
+
+      const clientChat = await client.client;
+      const channelChat = await clientChat.channel('messaging', {
+        name: channelName,
+        members: members,
+      });
+      await channelChat.watch();
+      setChannel(channelChat, dispatchChannel);
+
+      await navigation.navigate('ChannelScreen');
+      // setSelectedUsers([]);
+      // // console.log(channelName);
+      // // console.log(channelName.toString());
+      // let res = await createChannel(
+      //   'messaging',
+      //   members,
+      //   channelName.toString(),
+      // );
+      // // alert('success create group');
+      // setLoading(false);
+      // setChannel(res, dispatchChannel);
+      // navigation.navigate('ChannelScreen');
     } catch (error) {
       console.log(error);
       setLoading(false);
