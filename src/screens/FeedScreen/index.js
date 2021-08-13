@@ -18,8 +18,8 @@ import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {getAccessToken} from '../../utils/token';
 import {downVote, upVote} from '../../service/vote';
 import {blockUser} from '../../service/blocking';
-import {getMainFeed, viewTimePost} from '../../service/post';
-import {setFeedById, setMainFeeds} from '../../context/actions/feeds';
+import {getFeedDetail, getMainFeed, viewTimePost} from '../../service/post';
+import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
 import {Context} from '../../context';
 
 const FeedScreen = (props) => {
@@ -158,11 +158,35 @@ const FeedScreen = (props) => {
       setUserId(value.actor.id);
     }
   };
-  const setUpVote = async (post) => {
-    upVote(post);
+  const updateFeed = async (post, index) => {
+    try {
+      let data = await getFeedDetail(post.activity_id);
+      console.log('data.data');
+      console.log(data);
+      if (data) {
+        setFeedByIndex(
+          {
+            singleFeed: data.data,
+            index,
+          },
+          dispatch,
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
-  const setDownVote = async (post) => {
-    downVote(post);
+  const setUpVote = async (post, index) => {
+    await upVote(post);
+    // console.log('post');
+    // console.log(post);
+    updateFeed(post, index);
+  };
+  const setDownVote = async (post, index) => {
+    await downVote(post);
+    // console.log('post');
+    // console.log(post);
+    updateFeed(post, index);
   };
 
   React.useEffect(() => {
@@ -177,7 +201,7 @@ const FeedScreen = (props) => {
   }, []);
 
   let onNewPollFetched = (newPolls, index) => {
-    setFeedById(
+    setFeedByIndex(
       {
         index: index,
         singleFeed: newPolls,
@@ -248,10 +272,13 @@ const FeedScreen = (props) => {
                     }
                   }}
                   onPressComment={() => {
-                    props.navigation.navigate('PostDetailPage', {item: item});
+                    props.navigation.navigate('PostDetailPage', {
+                      item: feeds[index],
+                      index: index,
+                    });
                   }}
-                  onPressUpvote={(post) => setUpVote(post)}
-                  onPressDownVote={(post) => setDownVote(post)}
+                  onPressUpvote={(post) => setUpVote(post, index)}
+                  onPressDownVote={(post) => setDownVote(post, index)}
                   selfUserId={yourselfId}
                   onPressDomain={() => {
                     props.navigation.navigate('DomainScreen', {

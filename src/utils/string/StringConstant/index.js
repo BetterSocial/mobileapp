@@ -47,6 +47,11 @@ let postDetailPageSeeReplies = (count) => {
   return `See ${count} ${count > 1 ? 'replies' : 'reply'}`;
 };
 
+// Create Post
+let createPostDone = 'Your post was shared.';
+let createPostFailedNoMessage = 'Post messages cannot be empty.';
+let createPostFailedGeneralError = 'Failed to create new post.';
+
 // Chat Tab
 let chatTabHeaderPlaceholder = 'Search Chat';
 let chatTabHeaderCreateChatButtonText = 'New Chat';
@@ -107,6 +112,10 @@ export default {
   onboardingTopicsButtonStateChooseMore,
 
   postDetailPageSeeReplies,
+
+  createPostDone,
+  createPostFailedNoMessage,
+  createPostFailedGeneralError,
 
   chatTabHeaderPlaceholder,
   chatTabHeaderCreateChatButtonText,

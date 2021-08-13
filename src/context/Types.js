@@ -8,3 +8,4 @@ export const SET_CLIENT = 'SET_CLIENT';
 export const SET_CHANNEL = 'SET_CHANNEL';
 export const SET_FEED = 'SET_FEED';
 export const SET_FEED_BY_ID = 'SET_FEED_BY_ID';
+export const SET_FEED_BY_INDEX = 'SET_FEED_BY_INDEX';
