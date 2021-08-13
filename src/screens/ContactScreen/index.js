@@ -43,6 +43,7 @@ const ContactScreen = ({navigation}) => {
 
   React.useEffect(() => {
     const getUserPopulate = async () => {
+      console.log(client);
       try {
         setLoading(true);
         const res = await userPopulate();
@@ -93,26 +94,15 @@ const ContactScreen = ({navigation}) => {
       channelName.push(myProfile.username);
 
       const clientChat = await client.client;
+      console.log(clientChat);
       const channelChat = await clientChat.channel('messaging', {
         name: channelName,
         members: members,
       });
       await channelChat.watch();
       setChannel(channelChat, dispatchChannel);
-
+      setLoading(false);
       await navigation.navigate('ChannelScreen');
-      // setSelectedUsers([]);
-      // // console.log(channelName);
-      // // console.log(channelName.toString());
-      // let res = await createChannel(
-      //   'messaging',
-      //   members,
-      //   channelName.toString(),
-      // );
-      // // alert('success create group');
-      // setLoading(false);
-      // setChannel(res, dispatchChannel);
-      // navigation.navigate('ChannelScreen');
     } catch (error) {
       console.log(error);
       setLoading(false);
