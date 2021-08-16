@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
+import {View, StyleSheet, FlatList} from 'react-native';
 
 import JWTDecode from 'jwt-decode';
 import {useRoute, useNavigation} from '@react-navigation/native';
@@ -8,16 +8,10 @@ import Toast from 'react-native-simple-toast';
 import {upVoteDomain, downVoteDomain} from '../../service/vote';
 import {getAccessToken} from '../../utils/token';
 import Loading from '../Loading';
-import Gap from '../../components/Gap';
 import Header from './elements/Header';
 import Navigation from './elements/Navigation';
 import RenderItem from './elements/RenderItem';
-import {
-  followDomain,
-  getDetailDomains,
-  getProfileDomain,
-} from '../../service/domain';
-import {SIZES, COLORS} from '../../utils/theme';
+import {getDetailDomains, getProfileDomain} from '../../service/domain';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import ReportDomain from '../../components/Blocking/ReportDomain';
@@ -29,7 +23,7 @@ const DomainScreen = () => {
   const blockDomainRef = React.useRef(null);
   const refSpecificIssue = React.useRef(null);
   const refReportDomain = React.useRef(null);
-  const [item, setItem] = React.useState(route.params.item);
+  const [dataDomain, setDataDomain] = React.useState(route.params.item);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [profile, setProfile] = React.useState({});
@@ -52,7 +46,7 @@ const DomainScreen = () => {
   React.useEffect(() => {
     const init = async () => {
       setLoading(true);
-      let res = await getDetailDomains(item.og.domain);
+      let res = await getDetailDomains(dataDomain.og.domain);
       if (res.code === 200) {
         setData([{dummy: true}, ...res.data]);
         setLoading(false);
@@ -60,7 +54,7 @@ const DomainScreen = () => {
       setLoading(false);
     };
     init();
-  }, [item]);
+  }, [dataDomain]);
 
   React.useEffect(() => {
     const getProfile = async () => {
@@ -73,10 +67,10 @@ const DomainScreen = () => {
       }
     };
     getProfile();
-  }, [domain]);
+  }, [dataDomain]);
 
-  const handleOnPressComment = (item) => {
-    navigation.navigate('DetailDomainScreen', {item: item});
+  const handleOnPressComment = (itemNews) => {
+    navigation.navigate('DetailDomainScreen', {item: itemNews});
   };
 
   const upvoteNews = async (news) => {
@@ -87,22 +81,7 @@ const DomainScreen = () => {
     downVoteDomain(news);
   };
   const onReaction = async (v) => {
-    if (v === 0) {
-      blockDomainRef.current.open();
-    } else {
-      console.log(domain);
-
-      // let dataFollow = {
-      //   domainId: 'c8c39e52-5484-465c-b635-3c46384b6f24',
-      //   source: 'domain_page',
-      // };
-      // const res = await followDomain(dataFollow);
-      // if (res.code === 200) {
-      //   console.log('sukses');
-      // } else {
-      //   console.log('error');
-      // }
-    }
+    blockDomainRef.current.open();
   };
   const selectBlock = (v) => {
     if (v === 1) {
@@ -132,7 +111,7 @@ const DomainScreen = () => {
 
   const onBlockDomain = async () => {
     const dataBlock = {
-      domainId: item.id,
+      domainId: dataDomain.content.domain_page_id,
       reason: reportOption,
       message: messageReport,
       source: 'domain_screen',
@@ -150,7 +129,7 @@ const DomainScreen = () => {
   };
   return (
     <View style={styles.container}>
-      <Navigation domain={item.og.domain} />
+      <Navigation domain={dataDomain.og.domain} />
       <FlatList
         data={data}
         renderItem={({item, index}) => {
@@ -163,9 +142,8 @@ const DomainScreen = () => {
                   domain={profile.domain_name}
                   followers={10}
                   onPress={onReaction}
+                  iddomain={dataDomain.content.domain_page_id}
                 />
-
-                {/* <Gap height={SIZES.base} style={{backgroundColor: COLORS.gray1}}/> */}
               </View>
             );
           }
@@ -176,7 +154,7 @@ const DomainScreen = () => {
                 key={index}
                 item={item}
                 image={profile.logo}
-                onPressComment={(item) => handleOnPressComment(item)}
+                onPressComment={(itemNews) => handleOnPressComment(itemNews)}
                 onPressUpvote={(news) => upvoteNews(news)}
                 onPressDownVote={(news) => downvoteNews(news)}
                 selfUserId={idFromToken}

@@ -42,3 +42,21 @@ export const followDomain = async (data) => {
     throw new Error(error);
   }
 };
+export const unfollowDomain = async (data) => {
+  try {
+    const res = await api.post('/domain/unfollow', data);
+    return res.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+export const getDomainIdIFollow = async () => {
+  try {
+    const res = await api.get('/domain/ifollow');
+    return res.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};

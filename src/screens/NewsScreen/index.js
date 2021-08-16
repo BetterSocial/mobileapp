@@ -9,7 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {upVoteDomain, downVoteDomain} from '../../service/vote';
 import {Loading} from '../../components';
 import {getAccessToken} from '../../utils/token';
-import {getDomains} from '../../service/domain';
+import {getDomainIdIFollow, getDomains} from '../../service/domain';
 import theme, {COLORS, FONTS, SIZES} from '../../utils/theme';
 import RenderItem from './RenderItem';
 import Search from './Search';
@@ -17,13 +17,14 @@ import BlockDomain from '../../components/Blocking/BlockDomain';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import {blockDomain} from '../../service/blocking';
+import {Context} from '../../context';
+import {setIFollow, setNews} from '../../context/actions/news';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
   const blockDomainRef = React.useRef(null);
   const refSpecificIssue = React.useRef(null);
   const refReportDomain = React.useRef(null);
-  const [data, setData] = React.useState([]);
   const offset = React.useRef(new Animated.Value(0)).current;
 
   const [loading, setLoading] = React.useState(false);
@@ -32,6 +33,8 @@ const NewsScreen = ({}) => {
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
   const [idBlock, setIdBlock] = React.useState('');
+  const [newslist, dispatch] = React.useContext(Context).news;
+  let {news} = newslist;
   let lastDragY = 0;
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
@@ -59,17 +62,22 @@ const NewsScreen = ({}) => {
 
   React.useEffect(() => {
     initData();
+    getNewsIfollow();
   }, []);
 
   const initData = async () => {
     setLoading(true);
     try {
       let res = await getDomains();
-      setData([{dummy: true}, ...res.data]);
+      setNews([{dummy: true}, ...res.data], dispatch);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
+  };
+  const getNewsIfollow = async () => {
+    let res = await getDomainIdIFollow();
+    setIFollow(res.data, dispatch);
   };
 
   let handleScrollEvent = (event) => {
@@ -94,16 +102,16 @@ const NewsScreen = ({}) => {
     lastDragY = event.nativeEvent.contentOffset.y;
   };
 
-  const shareNews = (news) => {};
+  const shareNews = (value) => {};
 
-  const comment = (news) => {
-    navigation.navigate('DetailDomainScreen', {item: news});
+  const comment = (item) => {
+    navigation.navigate('DetailDomainScreen', {item});
   };
 
-  const blockNews = (news) => {
+  const blockNews = (itemNews) => {
     blockDomainRef.current.open();
-    setIdBlock(news.content.domain_page_id);
-    setDomain(news.domain.name);
+    setIdBlock(itemNews.content.domain_page_id);
+    setDomain(itemNews.domain.name);
   };
   const selectBlock = (v) => {
     if (v === 1) {
@@ -150,14 +158,13 @@ const NewsScreen = ({}) => {
     console.log('result block user ', result);
   };
 
-  const upvoteNews = async (news) => {
-    upVoteDomain(news);
+  const upvoteNews = async (itemNews) => {
+    upVoteDomain(itemNews);
   };
 
-  const downvoteNews = async (news) => {
-    downVoteDomain(news);
+  const downvoteNews = async (itemNews) => {
+    downVoteDomain(itemNews);
   };
-
   return (
     <View style={styles.container}>
       <Search animatedValue={offset} />
@@ -166,7 +173,7 @@ const NewsScreen = ({}) => {
           onScrollBeginDrag={handleOnScrollBeginDrag}
           onScroll={handleScrollEvent}
           scrollEventThrottle={16}
-          data={data}
+          data={news}
           renderItem={({item, index}) => {
             if (item.dummy) {
               return <View key={index} style={{height: 68}} />;
@@ -175,11 +182,11 @@ const NewsScreen = ({}) => {
               <RenderItem
                 key={item}
                 item={item}
-                onPressShare={(news) => shareNews(news)}
-                onPressComment={(news) => comment(news)}
-                onPressBlock={(news) => blockNews(news)}
-                onPressUpvote={(news) => upvoteNews(news)}
-                onPressDownVote={(news) => downvoteNews(news)}
+                onPressShare={(itemNews) => shareNews(itemNews)}
+                onPressComment={(itemNews) => comment(itemNews)}
+                onPressBlock={(itemNews) => blockNews(itemNews)}
+                onPressUpvote={(itemNews) => upvoteNews(itemNews)}
+                onPressDownVote={(itemNews) => downvoteNews(itemNews)}
                 selfUserId={yourselfId}
               />
             );

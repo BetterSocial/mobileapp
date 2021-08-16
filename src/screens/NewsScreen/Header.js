@@ -17,7 +17,6 @@ const Header = ({image, domain, time, item}) => {
         },
       },
     });
-    console.log(item);
   };
 
   return (
