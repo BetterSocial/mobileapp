@@ -8,7 +8,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
@@ -16,14 +16,28 @@ import SeeMore from 'react-native-see-more-inline';
 import Gap from '../../components/Gap';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import { COLORS } from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
+import ImageLayouter from './elements/ImageLayouter';
 
 const {width: screenWidth} = Dimensions.get('window');
 
 const Content = ({message, images_url, style, onPress}) => {
   const route = useRoute();
+  const navigation = useNavigation();
   const cekImage = () => {
     return images_url !== null && images_url !== '' && images_url !== undefined;
+  };
+
+  const onImageClickedByIndex = (index) => {
+    console.log(index);
+    navigation.push('ImageViewer', {
+      title: 'Photo',
+      index,
+      images: images_url.reduce((acc, current) => {
+        acc.push({url: current});
+        return acc;
+      }, []),
+    });
   };
 
   return (
@@ -38,21 +52,9 @@ const Content = ({message, images_url, style, onPress}) => {
               {message}
             </SeeMore>
             <Gap height={16} />
-            <FlatList
-              style={styles.fletlist}
-              horizontal={true}
-              pagingEnabled={true}
-              data={images_url}
-              renderItem={({item, index}) => {
-                return (
-                  <Image
-                    source={{uri: item}}
-                    style={styles.imageList}
-                    resizeMode={'cover'}
-                  />
-                );
-              }}
-              keyExtractor={({item, index}) => index}
+            <ImageLayouter
+              images={images_url}
+              onimageclick={onImageClickedByIndex}
             />
           </View>
         ) : (
