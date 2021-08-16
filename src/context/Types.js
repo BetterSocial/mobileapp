@@ -9,3 +9,5 @@ export const SET_CHANNEL = 'SET_CHANNEL';
 export const SET_NEWS = 'SET_NEWS';
 export const SET_NEWS_I_FOLLOW = 'SET_NEWS_I_FOLLOW';
 export const ADD_NEWS_I_FOLLOW = 'ADD_NEWS_I_FOLLOW';
+export const SET_FEED = 'SET_FEED';
+export const SET_FEED_BY_ID = 'SET_FEED_BY_ID';

@@ -23,7 +23,6 @@ const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs() {
   let [users, dispatch] = React.useContext(Context).users;
-  console.log(users.photoUrl);
 
   React.useEffect(() => {
     let getProfile = async () => {

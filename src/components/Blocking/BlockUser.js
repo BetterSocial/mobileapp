@@ -13,16 +13,14 @@ const BlockUser = ({refBlockUser, onSelect, username}) => {
       id: 1,
       icon: 'block',
       label: `Block ${username} indefinitely`,
-      desc:
-        'You will not be able to see each other’s posts, or message each other. The user’s reach will be reduced across BetterSocial, in particular for this post.',
+      desc: 'You will not be able to see each other’s posts, or message each other. The user’s reach will be reduced across BetterSocial, in particular for this post.',
       iconReght: false,
     },
     {
       id: 2,
       icon: 'handcuffs',
       label: `Block & report ${username}`,
-      desc:
-        'This account is fake, hacked, or involved in criminal activity. You will need to provide additional information to help us take consequences.',
+      desc: 'This account is fake, hacked, or involved in criminal activity. You will need to provide additional information to help us take consequences.',
       iconReght: true,
     },
   ];
