@@ -79,9 +79,6 @@ const RenderItem = ({
     };
     validationStatusVote();
   }, [item, selfUserId]);
-
-  // console.log("item");
-  // console.log(JSON.stringify(item));
   const name = getname(item);
   const time = getTime(item);
 
@@ -205,6 +202,7 @@ const RenderItem = ({
 
         <View style={styles.wrapperFooter}>
           <Footer
+            key={item.id}
             totalComment={getCountCommentWithChild(item)}
             totalVote={totalVote}
             statusVote={voteStatus}
