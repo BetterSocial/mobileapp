@@ -5,7 +5,6 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
   Linking,
 } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
@@ -15,17 +14,31 @@ import MemoIc_interface from '../../../assets/icons/Ic_interface';
 import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import {fonts} from '../../../utils/fonts';
-import {SIZES, COLORS, FONTS} from '../../../utils/theme';
+import {SIZES, COLORS} from '../../../utils/theme';
 import {SingleSidedShadowBox, Gap} from '../../../components';
 import StringConstant from '../../../utils/string/StringConstant';
+import {Context} from '../../../context';
+import {
+  followDomain,
+  getDomainIdIFollow,
+  unfollowDomain,
+} from '../../../service/domain';
+import {addIFollowByID, setIFollow} from '../../../context/actions/news';
+import {TouchableNativeFeedback} from 'react-native';
+import {colors} from '../../../utils/colors';
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis.';
 
-const {width} = Dimensions.get('window');
-
-const Header = ({image, domain, description, followers, onPress}) => {
+const Header = ({image, domain, description, followers, onPress, iddomain}) => {
   let [isTooltipShown, setIsTooltipShown] = React.useState(false);
+  const [follow, setFollow] = React.useState(false);
+  const [news, dispatch] = React.useContext(Context).news;
+  const [dataFollow] = React.useState({
+    domainId: iddomain,
+    source: 'domain_page',
+  });
+  let {ifollow} = news;
 
   const openDomainLink = async () => {
     let isURL = await Linking.canOpenURL(`https://${domain}`);
@@ -34,6 +47,43 @@ const Header = ({image, domain, description, followers, onPress}) => {
       Linking.openURL(`https://${domain}`);
     } else {
       SimpleToast.show(StringConstant.domainCannotOpenURL, SimpleToast.SHORT);
+    }
+  };
+  React.useEffect(() => {
+    getIFollow();
+  }, [iddomain, ifollow]);
+  const getIFollow = async () => {
+    if (ifollow.length === 0) {
+      let res = await getDomainIdIFollow();
+      setIFollow(res.data, dispatch);
+    } else {
+      setFollow(JSON.stringify(ifollow).includes(iddomain));
+    }
+  };
+  const handleFollow = async () => {
+    setFollow(true);
+    const res = await followDomain(dataFollow);
+    if (res.code === 200) {
+      addIFollowByID(
+        {
+          domain_id_followed: iddomain,
+        },
+        dispatch,
+      );
+    } else {
+      console.log('error follow domain');
+    }
+  };
+  const handleUnFollow = async () => {
+    setFollow(false);
+    const res = await unfollowDomain(dataFollow);
+    if (res.code === 200) {
+      let newListFollow = await ifollow.filter(function (obj) {
+        return obj.domain_id_followed !== iddomain;
+      });
+      setIFollow(newListFollow, dispatch);
+    } else {
+      console.log('error unfollow domain');
     }
   };
 
@@ -55,15 +105,23 @@ const Header = ({image, domain, description, followers, onPress}) => {
             />
           </View>
           <View style={styles.wrapperHeader}>
-            <TouchableOpacity
-              style={styles.buttonPrimary}
-              onPress={() => onPress(1)}>
-              <Text style={styles.followButtonText}>Follow</Text>
-            </TouchableOpacity>
+            {follow ? (
+              <TouchableNativeFeedback onPress={() => handleUnFollow()}>
+                <View style={styles.buttonFollowing}>
+                  <Text style={styles.textButtonFollowing}>Following</Text>
+                </View>
+              </TouchableNativeFeedback>
+            ) : (
+              <TouchableNativeFeedback onPress={() => handleFollow()}>
+                <View style={styles.buttonFollow}>
+                  <Text style={styles.textButtonFollow}>Follow</Text>
+                </View>
+              </TouchableNativeFeedback>
+            )}
             <Gap width={SIZES.base} />
             <TouchableOpacity
               style={styles.buttonBlock}
-              onPress={() => onPress(0)}>
+              onPress={() => onPress()}>
               <Text style={styles.blockButtonText}>Block</Text>
             </TouchableOpacity>
           </View>
@@ -283,6 +341,38 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   openInBrowserIcon: {padding: 8, paddingHorizontal: 12, top: -3},
+  buttonFollowing: {
+    width: 88,
+    height: 36,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.bondi_blue,
+    borderRadius: 8,
+  },
+  textButtonFollowing: {
+    fontFamily: fonts.inter[600],
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: colors.bondi_blue,
+  },
+  buttonFollow: {
+    width: 88,
+    height: 36,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    backgroundColor: colors.bondi_blue,
+    color: colors.white,
+  },
+  textButtonFollow: {
+    fontFamily: fonts.inter[600],
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: colors.white,
+  },
 });
 
 export default Header;

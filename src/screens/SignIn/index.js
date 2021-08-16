@@ -30,6 +30,7 @@ import ButtonSign from '../../assets/icon-svg/button_sign.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
 import {createClient} from '../../context/actions/createClient';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
 const ENABLE_DEV_ONLY_FEATURE = true;
 
@@ -37,6 +38,7 @@ const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = React.useContext(Context).users;
   const [loading, setLoading] = React.useState(false);
+  const create = useClientGetstream();
 
   let dummyLoginRbSheetRef = React.useRef(null);
 
@@ -58,7 +60,7 @@ const SignIn = () => {
               .then((response) => {
                 setLoading(false);
                 if (response.data) {
-                  createClient(response.token);
+                  create();
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
                   navigation.dispatch(StackActions.replace('HomeTabs'));

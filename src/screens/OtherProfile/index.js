@@ -33,6 +33,7 @@ import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
 const width = Dimensions.get('screen').width;
 
@@ -55,10 +56,12 @@ const OtherProfile = () => {
   const [tokenJwt, setTokenJwt] = React.useState('');
   const [client, setClient] = React.useContext(Context).client;
   const [channel, dispatchChannel] = React.useContext(Context).channel;
+  const create = useClientGetstream();
 
   const {params} = route;
 
   React.useEffect(() => {
+    create();
     let getJwtToken = async () => {
       setTokenJwt(await getAccessToken());
     };
@@ -194,6 +197,7 @@ const OtherProfile = () => {
     });
   };
   const createChannel = async () => {
+    setIsLoading(true);
     const clientChat = await client.client;
     const channelChat = await clientChat.channel('messaging', {
       name: username,
@@ -201,6 +205,7 @@ const OtherProfile = () => {
     });
     await channelChat.watch();
     setChannel(channelChat, dispatchChannel);
+    setIsLoading(false);
 
     await navigation.navigate('ChannelScreen');
   };
