@@ -153,7 +153,7 @@ const DetailDomainScreen = (props) => {
     let result = await blockUser(data);
     if (result.code === 200) {
       Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
+        'The domain was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
       );
     } else {

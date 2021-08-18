@@ -119,7 +119,7 @@ const DomainScreen = () => {
     const result = await blockDomain(dataBlock);
     if (result.code === 200) {
       Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
+        'The domain was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
       );
     } else {
@@ -127,6 +127,7 @@ const DomainScreen = () => {
     }
     console.log('result block user ', result);
   };
+  console.log('data domain ', dataDomain);
   return (
     <View style={styles.container}>
       <Navigation domain={dataDomain.og.domain} />
@@ -137,9 +138,9 @@ const DomainScreen = () => {
             return (
               <View key={index} style={{backgroundColor: 'transparent'}}>
                 <Header
-                  image={profile.logo}
-                  description={profile.short_description}
-                  domain={profile.domain_name}
+                  image={dataDomain.domain.image}
+                  description={dataDomain.domain.info}
+                  domain={dataDomain.og.domain}
                   followers={10}
                   onPress={onReaction}
                   iddomain={dataDomain.content.domain_page_id}
