@@ -19,10 +19,11 @@ import {getAccessToken} from '../../utils/token';
 import {downVote, upVote} from '../../service/vote';
 import {blockUser} from '../../service/blocking';
 import {getMainFeed, viewTimePost} from '../../service/post';
+import {setFeedById, setMainFeeds} from '../../context/actions/feeds';
+import {Context} from '../../context';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
-  const [mainFeeds, setMainFeeds] = React.useState([]);
 
   const [initialLoading, setInitialLoading] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
@@ -41,6 +42,9 @@ const FeedScreen = (props) => {
   const refReportUser = React.useRef();
   const refReportDomain = React.useRef();
   const refSpecificIssue = React.useRef();
+
+  const [feedsContext, dispatch] = React.useContext(Context).feeds;
+  let {feeds} = feedsContext;
 
   React.useEffect(() => {
     let isRefresh = props.route.params?.refresh;
@@ -105,12 +109,10 @@ const FeedScreen = (props) => {
         query = '?id_lt=' + id;
       }
       const dataFeeds = await getMainFeed(query);
-      // console.log('dataFeeds');
-      // console.log(JSON.stringify(dataFeeds));
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         setCountStack(data.length);
-        setMainFeeds(data);
+        setMainFeeds(data, dispatch);
       }
       setInitialLoading(false);
       setTime(new Date());
@@ -175,10 +177,13 @@ const FeedScreen = (props) => {
   }, []);
 
   let onNewPollFetched = (newPolls, index) => {
-    let newMainFeeds = [...mainFeeds];
-    // console.log(newPolls);
-    newMainFeeds[index] = newPolls;
-    setMainFeeds(newMainFeeds);
+    setFeedById(
+      {
+        index: index,
+        singleFeed: newPolls,
+      },
+      dispatch,
+    );
   };
 
   if (initialLoading === true) {
@@ -190,19 +195,18 @@ const FeedScreen = (props) => {
   }
 
   const sendViewPost = (id, viewTime) => {
-    // console.log(postId);
-    // console.log(id);
     viewTimePost(id, time);
   };
 
   return (
     <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
-      {mainFeeds !== undefined && (
+      {feeds.length > 0 && (
         <CardStack
           style={styles.content}
           renderNoMoreCards={() => {
             if (countStack === 0) {
-              let id = mainFeeds[mainFeeds.length - 1].id;
+              // let id = mainFeeds[mainFeeds.length - 1].id;
+              let id = feeds[feeds.length - 1].id;
               console.log(id);
               setLastId(id);
             }
@@ -218,19 +222,20 @@ const FeedScreen = (props) => {
             setCountStack(countStack - 1);
             let now = new Date();
             let diff = now.getTime() - time.getTime();
-            sendViewPost(mainFeeds[index].id, diff);
+            sendViewPost(feeds[index].id, diff);
             setTime(new Date());
           }}>
-          {mainFeeds !== undefined
-            ? mainFeeds.map((item, index) => (
+          {feeds.length > 0
+            ? feeds.map((item, index) => (
                 <RenderItem
                   index={index}
-                  key={`${index}${item.refreshtoken ? item.refreshtoken : ''}`}
+                  key={`${index}${item?.refreshtoken || new Date().valueOf()}`}
                   item={item}
                   onNewPollFetched={onNewPollFetched}
                   onPress={() => {
                     props.navigation.navigate('PostDetailPage', {
-                      item: mainFeeds[index],
+                      item: feeds[index],
+                      index: index,
                       isalreadypolling: item.isalreadypolling,
                     });
                   }}

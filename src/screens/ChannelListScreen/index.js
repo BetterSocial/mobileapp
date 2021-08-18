@@ -9,6 +9,7 @@ import {getAccessToken} from '../../utils/token';
 import Search from './elements/Search';
 import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
 const ChannelListScreen = ({navigation}) => {
   const streami18n = new Streami18n({
@@ -18,6 +19,7 @@ const ChannelListScreen = ({navigation}) => {
   const [userId, setUserId] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
+  let co = useClientGetstream();
   const filters = {
     members: {$in: [userId]},
     type: 'messaging',
@@ -36,6 +38,7 @@ const ChannelListScreen = ({navigation}) => {
       screen_name: 'Channel List',
     });
     setupClient();
+    co();
   }, []);
   const setupClient = async () => {
     try {
@@ -59,8 +62,6 @@ const ChannelListScreen = ({navigation}) => {
             <ChannelList
               filters={memoizedFilters}
               onSelect={(channel) => {
-                // console.log(channel);
-
                 navigation.navigate('ChannelScreen');
                 setChannel(channel, dispatch);
               }}

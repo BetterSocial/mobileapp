@@ -8,7 +8,8 @@ import {topicsReducer, topicsState} from './reducers/topicsReducer';
 import {usersReducer, usersState} from './reducers/userReducer';
 import {channelReducer, channelState} from './reducers/channelReducer';
 import {clientReducer, clientState} from './reducers/clientReducer';
-import {myProfileReducer, myProfileState} from './reducers/myProfileReducer';
+import {newsReducer, newsState} from './reducers/newsReducer';
+import {feedsReducer, feedsState} from './reducers/FeedReducer';
 
 const Store = ({children}) => {
   const rootReducer = {
@@ -20,7 +21,8 @@ const Store = ({children}) => {
     topics: React.useReducer(topicsReducer, topicsState),
     channel: React.useReducer(channelReducer, channelState),
     client: React.useReducer(clientReducer, clientState),
-    myProfile: React.useReducer(myProfileReducer, myProfileState),
+    news: React.useReducer(newsReducer, newsState),
+    feeds: React.useReducer(feedsReducer, feedsState),
   };
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };

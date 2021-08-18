@@ -167,11 +167,8 @@ const Comment = ({
           </TouchableOpacity>
         )}
         <TouchableOpacity
-          style={[styles.btnBlock, styles.btn]}
+          style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => {
-            // console.log('block comment');
-            // console.log(comment);
-            // return;
             if (comment.user.id === yourselfId) {
               Toast.show("Can't Block yourself", Toast.LONG);
             } else {
@@ -270,9 +267,10 @@ const styles = StyleSheet.create({
     marginLeft: 8.98,
     marginRight: 14,
   },
-  btnBlock: {
+  btnBlock: (isMySelf) => ({
     paddingHorizontal: 14,
-  },
+    display: isMySelf ? 'none' : 'flex',
+  }),
   arrowup: {
     paddingHorizontal: 14,
   },

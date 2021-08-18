@@ -71,7 +71,6 @@ const ContentPoll = ({
     if (isFetchingResultPoll) {
       return;
     }
-    // setIsFetchingResultPoll(true);
     let newPolls = [...polls];
     let newItem = {...item};
 
