@@ -62,8 +62,8 @@ const ChannelListScreen = ({navigation}) => {
             <ChannelList
               filters={memoizedFilters}
               onSelect={(channel) => {
-                navigation.navigate('ChannelScreen');
                 setChannel(channel, dispatch);
+                navigation.navigate('ChatDetailPage');
               }}
               sort={sort}
               options={options}

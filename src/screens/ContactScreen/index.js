@@ -104,7 +104,7 @@ const ContactScreen = ({navigation}) => {
       await channelChat.create();
       setChannel(channelChat, dispatchChannel);
       setLoading(false);
-      await navigation.navigate('ChannelScreen');
+      await navigation.navigate('ChatDetailPage');
     } catch (error) {
       console.log(error);
       setLoading(false);
