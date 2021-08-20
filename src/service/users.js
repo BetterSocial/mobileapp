@@ -4,6 +4,7 @@ import {getRefreshToken, setAccessToken, setRefreshToken} from '../utils/token';
 import {BASE_URL} from '@env';
 export const verifyUser = async (userId) => {
   try {
+    console.log(BASE_URL);
     let resApi = await api.post('/users/verify-user', {
       user_id: userId,
     });
@@ -88,4 +89,14 @@ export const refreshToken = async () => {
   // const resp = await fetchWithTimeout(this.url, options, 10000);
   const resp = await fetch(BASE_URL + '/users/refresh-token', options);
   return await resp.json();
+};
+
+export const userPopulate = async () => {
+  try {
+    let resApi = await api.get('/users/populate');
+    return resApi.data.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    console.log(error);
+  }
 };

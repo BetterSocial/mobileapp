@@ -16,15 +16,15 @@ const createChannel = async (
       id: id,
     };
     await chatClient.connectUser(user, token);
-    const channel = await chatClient.channel(channelType, {
+    const channel = chatClient.channel(channelType, {
       members: members,
       name: channelName,
       //   image: null,
     });
-    // let res = await channel.create();
-    let res = await channel.watch();
+    let res = await channel.create();
+    // let res = await channel.watch();
     console.log(res);
-    return res;
+    return res.channel;
   } catch (error) {
     throw error;
   }
