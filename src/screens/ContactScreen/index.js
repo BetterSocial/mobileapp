@@ -18,6 +18,7 @@ import {Search, RenderItem} from './elements';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {userPopulate} from '../../service/users';
 import {Alert} from 'react-native';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
 const ContactScreen = ({navigation}) => {
   const [groupName, setGroupName] = React.useState(null);
@@ -27,9 +28,10 @@ const ContactScreen = ({navigation}) => {
   const [click, setClick] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState([]);
-  const [myProfile] = React.useContext(Context).myProfile;
+  const [profile] = React.useContext(Context).profile;
   const [channel, dispatchChannel] = React.useContext(Context).channel;
   const [client, setClient] = React.useContext(Context).client;
+  const create = useClientGetstream();
 
   React.useEffect(() => {
     const getUserId = async () => {
@@ -37,13 +39,14 @@ const ContactScreen = ({navigation}) => {
       jwtDecode;
       const id = await jwtDecode(token).user_id;
       setUserId(id);
+      console.log(profile);
     };
+    create();
     getUserId();
   }, []);
 
   React.useEffect(() => {
     const getUserPopulate = async () => {
-      console.log(client);
       try {
         setLoading(true);
         const res = await userPopulate();
@@ -83,23 +86,22 @@ const ContactScreen = ({navigation}) => {
   const handleCreateChannel = async (users) => {
     try {
       if (users.length < 1) {
-        Alert.alert('Warning', 'mohon pilih satu user');
+        Alert.alert('Warning', 'Please choose min one user');
       }
       setLoading(true);
       let members = users.map((item) => item.user_id);
-      members.push(myProfile.user_id);
+      members.push(profile.user_id);
       let channelName = users.map((item) => {
         return item.username;
       });
-      channelName.push(myProfile.username);
+      channelName.push(profile.username);
 
       const clientChat = await client.client;
-      console.log(clientChat);
       const channelChat = await clientChat.channel('messaging', {
         name: channelName,
         members: members,
       });
-      await channelChat.watch();
+      await channelChat.create();
       setChannel(channelChat, dispatchChannel);
       setLoading(false);
       await navigation.navigate('ChannelScreen');
