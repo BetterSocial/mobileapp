@@ -20,3 +20,13 @@ export const blockDomain = async (data) => {
     return error.response.data;
   }
 };
+
+export const blockAnonymous = async (data) => {
+  try {
+    let resApi = await api.post('/users/block-post-anonymous', data);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};

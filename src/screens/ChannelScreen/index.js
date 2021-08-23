@@ -78,6 +78,6 @@ const CustomComponent = (props) => {
   return <MessageSimple {...props} />;
 };
 
-const CardCustom = (props) => {
-  return <View />;
-};
+// const CardCustom = (props) => {
+//   return <View />;
+// };

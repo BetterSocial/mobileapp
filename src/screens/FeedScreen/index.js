@@ -13,14 +13,16 @@ import {ButtonNewPost} from '../../components/Button';
 import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import ReportUser from '../../components/Blocking/ReportUser';
+import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {getAccessToken} from '../../utils/token';
 import {downVote, upVote} from '../../service/vote';
-import {blockUser} from '../../service/blocking';
+import {blockAnonymous, blockUser} from '../../service/blocking';
 import {getMainFeed, viewTimePost} from '../../service/post';
 import {setFeedById, setMainFeeds} from '../../context/actions/feeds';
 import {Context} from '../../context';
+import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -42,6 +44,8 @@ const FeedScreen = (props) => {
   const refReportUser = React.useRef();
   const refReportDomain = React.useRef();
   const refSpecificIssue = React.useRef();
+  const refBlockPostAnonymous = React.useRef();
+  const refReportPostAnonymous = React.useRef();
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   let {feeds} = feedsContext;
@@ -62,6 +66,15 @@ const FeedScreen = (props) => {
     refBlockUser.current.close();
   };
 
+  const onSelectBlockingPostAnonymous = (v) => {
+    if (v !== 1) {
+      refReportPostAnonymous.current.open();
+    } else {
+      blockPostAnonymous();
+    }
+    refBlockPostAnonymous.current.close();
+  };
+
   const onNextQuestion = (v) => {
     setReportOption(v);
     refReportUser.current.close();
@@ -78,6 +91,25 @@ const FeedScreen = (props) => {
     };
     let result = await blockUser(data);
     if (result.code === 200) {
+      Toast.show(
+        'The user was blocked successfully. \nThanks for making BetterSocial better!',
+        Toast.LONG,
+      );
+    } else {
+      Toast.show('Your report was filed & will be investigated', Toast.LONG);
+    }
+    console.log('result block user ', result);
+  };
+
+  const blockPostAnonymous = async () => {
+    const data = {
+      postId: postId,
+      source: 'screen_feed',
+      reason: reportOption,
+      message: messageReport,
+    };
+    let result = await blockAnonymous(data);
+    if (result.code === 201) {
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -244,7 +276,11 @@ const FeedScreen = (props) => {
                       Toast.show("Can't Block yourself", Toast.LONG);
                     } else {
                       setDataToState(value);
-                      refBlockUser.current.open();
+                      if (value.anonimity) {
+                        refBlockPostAnonymous.current.open();
+                      } else {
+                        refBlockUser.current.open();
+                      }
                     }
                   }}
                   onPressComment={() => {
@@ -287,6 +323,11 @@ const FeedScreen = (props) => {
 
       <ButtonNewPost />
 
+      <BlockPostAnonymous
+        refBlockPostAnonymous={refBlockPostAnonymous}
+        onSelect={(i) => onSelectBlockingPostAnonymous(i)}
+      />
+
       <BlockUser
         refBlockUser={refBlockUser}
         onSelect={(v) => onSelectBlocking(v)}
@@ -299,6 +340,11 @@ const FeedScreen = (props) => {
       />
       <ReportUser
         refReportUser={refReportUser}
+        onSelect={onNextQuestion}
+        onSkip={onSkipOnlyBlock}
+      />
+      <ReportPostAnonymous
+        refReportPostAnonymous={refReportPostAnonymous}
         onSelect={onNextQuestion}
         onSkip={onSkipOnlyBlock}
       />

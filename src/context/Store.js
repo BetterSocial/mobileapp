@@ -10,6 +10,7 @@ import {channelReducer, channelState} from './reducers/channelReducer';
 import {clientReducer, clientState} from './reducers/clientReducer';
 import {newsReducer, newsState} from './reducers/newsReducer';
 import {feedsReducer, feedsState} from './reducers/FeedReducer';
+import {myProfileReducer, myProfileState} from './reducers/myProfileReducer';
 
 const Store = ({children}) => {
   const rootReducer = {
@@ -23,6 +24,7 @@ const Store = ({children}) => {
     client: React.useReducer(clientReducer, clientState),
     news: React.useReducer(newsReducer, newsState),
     feeds: React.useReducer(feedsReducer, feedsState),
+    profile: React.useReducer(myProfileReducer, myProfileState),
   };
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };
