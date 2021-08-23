@@ -8,11 +8,11 @@ import {
   Chat,
   MessageInput,
   MessageList,
+  MessageSimple,
   Streami18n,
   useAttachmentPickerContext,
 } from 'stream-chat-react-native';
 import {Context} from '../../context';
-import {Text} from 'react-native';
 
 const ChannelScreen = () => {
   const streami18n = new Streami18n({
@@ -58,6 +58,7 @@ const ChannelScreen = () => {
         <Chat client={client.client} i18nInstance={streami18n}>
           <Channel
             channel={channel.channel}
+            MessageSimple={CustomComponent}
             keyboardVerticalOffset={headerHeight}>
             <View style={StyleSheet.absoluteFill}>
               <MessageList />
@@ -74,8 +75,7 @@ export default ChannelScreen;
 
 const CustomComponent = (props) => {
   console.log('content 1 ', props);
-  return <View />;
-  // return <MessageSimple {...props} />;
+  return <MessageSimple {...props} />;
 };
 
 const CardCustom = (props) => {
