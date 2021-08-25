@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native';
 
 import {
   getCountComment,
@@ -172,7 +179,7 @@ const RenderItem = ({
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity onPress={() => onPressComment(item)}>
+        <Pressable onPress={() => onPressComment(item)}>
           <View>
             <View
               style={{paddingHorizontal: 20, marginTop: 14, marginBottom: 14}}>
@@ -199,7 +206,7 @@ const RenderItem = ({
             </View>
             <Gap height={14} />
           </View>
-        </TouchableOpacity>
+        </Pressable>
 
         <View style={styles.wrapperFooter}>
           <Footer

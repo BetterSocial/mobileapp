@@ -7,6 +7,7 @@ import {
   Dimensions,
   Image,
   FlatList,
+  Pressable,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -18,6 +19,7 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import ImageLayouter from './elements/ImageLayouter';
+import {TouchableWithoutFeedback} from 'react-native';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -41,7 +43,7 @@ const Content = ({message, images_url, style, onPress}) => {
   };
 
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.contentFeed, style]}>
+    <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
@@ -65,7 +67,7 @@ const Content = ({message, images_url, style, onPress}) => {
           </View>
         )
       ) : null}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
