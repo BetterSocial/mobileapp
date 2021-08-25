@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    marginBottom: SIZES.base,
   },
   wrapperSearch: {
     flex: 1,
@@ -75,15 +74,16 @@ const styles = StyleSheet.create({
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
     backgroundColor: 'white',
-    marginBottom: SIZES.base,
     marginTop: animatedValue,
     top: 0,
     left: 0,
     right: 0,
     zIndex: 10,
     padding: 7,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: COLORS.gray1,
+    borderTopWidth: 0.5,
+    borderTopColor: COLORS.gray1,
   }),
 });
 
