@@ -18,19 +18,27 @@ import {getMyProfile} from '../service/profile';
 import MemoProfileIcon from '../assets/icon/Profile';
 import {Context} from '../context';
 import {setImageUrl} from '../context/actions/users';
+import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs() {
   let [users, dispatch] = React.useContext(Context).users;
+  let [, dispatchProfile] = React.useContext(Context).profile;
 
   React.useEffect(() => {
     let getProfile = async () => {
       try {
+        console.log('test');
         let token = await getAccessToken();
         let selfUserId = await jwtDecode(token).user_id;
         let profile = await getMyProfile(selfUserId);
         setImageUrl(profile.data.profile_pic_path, dispatch);
+        let data = {
+          user_id: profile.data.user_id,
+          username: profile.data.username,
+        };
+        setMyProfileAction(data, dispatchProfile);
       } catch (e) {
         console.log(e);
       }

@@ -72,12 +72,12 @@ const ChannelScreen = () => {
 
 export default ChannelScreen;
 
-const CustomComponent = (props) => {
-  console.log('content 1 ', props);
-  return <View />;
-  // return <MessageSimple {...props} />;
-};
+// const CustomComponent = (props) => {
+//   console.log('content 1 ', props);
+//   return <View />;
+//   // return <MessageSimple {...props} />;
+// };
 
-const CardCustom = (props) => {
-  return <View />;
-};
+// const CardCustom = (props) => {
+//   return <View />;
+// };
