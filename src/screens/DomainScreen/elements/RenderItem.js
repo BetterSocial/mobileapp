@@ -20,6 +20,7 @@ import Memoic_globe from '../../../assets/icons/ic_globe';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
+import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 
 const RenderItem = ({
   item,
@@ -124,14 +125,14 @@ const RenderItem = ({
             paddingTop: 8,
           }}>
           <View style={styles.wrapperImage}>
-            <Image
-              source={{
-                uri: image
-                  ? image
-                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-              }}
-              style={[styles.image, StyleSheet.absoluteFillObject]}
-            />
+            {image ? (
+              <Image
+                source={{uri: image}}
+                style={[styles.image, StyleSheet.absoluteFillObject]}
+              />
+            ) : (
+              <MemoDomainProfilePicture width="47" height="47" />
+            )}
           </View>
           <Gap width={SIZES.base} />
           <View style={{flex: 1}}>
