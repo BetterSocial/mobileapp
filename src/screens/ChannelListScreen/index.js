@@ -19,7 +19,7 @@ const ChannelListScreen = ({navigation}) => {
   const [userId, setUserId] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
-  let co = useClientGetstream();
+  let connect = useClientGetstream();
   const filters = {
     members: {$in: [userId]},
     type: 'messaging',
@@ -38,7 +38,7 @@ const ChannelListScreen = ({navigation}) => {
       screen_name: 'Channel List',
     });
     setupClient();
-    co();
+    connect();
   }, []);
   const setupClient = async () => {
     try {

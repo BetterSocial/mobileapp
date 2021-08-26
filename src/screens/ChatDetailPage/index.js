@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 
 import {
   Chat,
@@ -13,6 +13,7 @@ import Header from '../../components/Chat/Header';
 import InputMessage from '../../components/Chat/InputMessage';
 import CostomListMessage from '../../components/Chat/CostomListMessage';
 import {Context} from '../../context';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
 const streami18n = new Streami18n({
   language: 'en',
@@ -21,6 +22,10 @@ const streami18n = new Streami18n({
 const ChatDetailPage = () => {
   const [clients] = React.useContext(Context).client;
   const [channelClient] = React.useContext(Context).channel;
+  let connect = useClientGetstream();
+  React.useEffect(() => {
+    connect();
+  }, []);
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
@@ -32,7 +37,7 @@ const ChatDetailPage = () => {
             <View style={{flex: 1}}>
               <Header
                 username={channelClient.channel?.data?.name}
-                profile={channelClient.channel?.data?.image}
+                profile={channelClient.channel?.data?.created_by?.image}
               />
               <MessageList Message={CostomListMessage} />
 
