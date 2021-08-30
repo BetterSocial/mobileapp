@@ -46,8 +46,18 @@ const PreviewComment = ({
             <Image
               source={
                 image
-                  ? {uri: image}
+                  ? {uri: image, cache: 'reload'}
                   : require('../../assets/images/ProfileDefault.png')
+              }
+              loadingIndicatorSource={
+                <Image
+                  style={{
+                    width: 24,
+                    height: 24,
+                    backgroundColor: 'white',
+                    borderRadius: 12,
+                  }}
+                />
               }
               style={styles.image}
             />
@@ -107,10 +117,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   lineBeforeProfile: {
-    height: 8.5,
+    height: 9,
     borderLeftWidth: 1,
     borderLeftColor: '#C4C4C4',
-    marginLeft: 9,
+    marginLeft: 8,
   },
   container: (totalComment) => ({
     borderLeftWidth: 1,

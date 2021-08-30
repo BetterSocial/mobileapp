@@ -292,7 +292,7 @@ export default RenderItem;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height * 0.9 + 18,
+    height: height - 74,
     shadowColor: '#c4c4c4',
     shadowOffset: {
       width: 1,
@@ -301,8 +301,7 @@ const styles = StyleSheet.create({
     elevation: 8,
     shadowOpacity: 0.5,
     backgroundColor: 'white',
-    paddingVertical: width * 0.03,
-    paddingBottom: 8,
+    paddingBottom: 0,
     borderBottomColor: 'transparent',
   },
   paddingHorizontal: {paddingHorizontal: 20},

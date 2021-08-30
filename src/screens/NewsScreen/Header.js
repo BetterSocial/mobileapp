@@ -1,6 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Pressable,
+} from 'react-native';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import {Avatar} from '../../components';
 import Gap from '../../components/Gap';
@@ -20,7 +27,7 @@ const Header = ({image, domain, time, item}) => {
   };
 
   return (
-    <TouchableOpacity onPress={onHeaderPressed}>
+    <Pressable onPress={onHeaderPressed}>
       <View style={styles.container}>
         <Avatar image={image} style={{width: 36, height: 36}} />
         <Gap width={8} />
@@ -35,7 +42,7 @@ const Header = ({image, domain, time, item}) => {
           <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

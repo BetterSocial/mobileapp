@@ -66,7 +66,13 @@ const WhotoFollow = () => {
     });
     setIsLoading(true);
 
-    get({url: '/who-to-follow/list'})
+    let getWhoToFollowListUrl = `/who-to-follow/list?topics=${encodeURI(
+      JSON.stringify(topics.topics),
+    )}&locations=${encodeURI(JSON.stringify(localCommunity.local_community))}`;
+    console.log('topics.topics');
+    console.log(getWhoToFollowListUrl);
+
+    get({url: getWhoToFollowListUrl})
       .then((res) => {
         setIsLoading(false);
         if (res.status === 200) {

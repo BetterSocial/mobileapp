@@ -26,6 +26,7 @@ import {
 import {addIFollowByID, setIFollow} from '../../../context/actions/news';
 import {TouchableNativeFeedback} from 'react-native';
 import {colors} from '../../../utils/colors';
+import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis.';
@@ -92,17 +93,17 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
       <View style={styles.headerDomain}>
         <View style={styles.row}>
           <View style={styles.wrapperImage}>
-            <Image
-              source={{
-                uri: image
-                  ? image
-                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-              }}
-              style={[
-                {height: '100%', width: '100%', borderRadius: 45},
-                StyleSheet.absoluteFillObject,
-              ]}
-            />
+            {image ? (
+              <Image
+                source={{uri: image}}
+                style={[
+                  {height: '100%', width: '100%', borderRadius: 45},
+                  StyleSheet.absoluteFillObject,
+                ]}
+              />
+            ) : (
+              <MemoDomainProfilePicture />
+            )}
           </View>
           <View style={styles.wrapperHeader}>
             {follow ? (

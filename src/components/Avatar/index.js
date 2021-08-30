@@ -1,17 +1,18 @@
 import * as React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
+import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
 
 const index = ({image, style}) => {
   return (
     <View style={[styles.wrapperImage, style]}>
-      <Image
-        source={{
-          uri: image
-            ? image
-            : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-        }}
-        style={[styles.image, StyleSheet.absoluteFillObject]}
-      />
+      {image ? (
+        <Image
+          source={{uri: image}}
+          style={[styles.image, StyleSheet.absoluteFillObject]}
+        />
+      ) : (
+        <MemoDomainProfilePicture width="36" height="36" />
+      )}
     </View>
   );
 };

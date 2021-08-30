@@ -31,7 +31,7 @@ import {getFeedDetail} from '../../service/post';
 import {getAccessToken} from '../../utils/token';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
 import StringConstant from '../../utils/string/StringConstant';
-import {setFeedById} from '../../context/actions/feeds';
+import {setFeedByIndex} from '../../context/actions/feeds';
 import {Context} from '../../context';
 
 const {width, height} = Dimensions.get('window');
@@ -224,10 +224,11 @@ const PostPageDetail = (props) => {
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(item.id);
+      console.log('data.data');
       console.log(data.data);
       if (data) {
         setItem(data.data);
-        setFeedById(
+        setFeedByIndex(
           {
             singleFeed: data.data,
             index,
@@ -287,7 +288,7 @@ const PostPageDetail = (props) => {
   };
 
   const onNewPollFetched = (newPolls, index) => {
-    setFeedById(
+    setFeedByIndex(
       {
         index,
         singleFeed: newPolls,
