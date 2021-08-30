@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TextInput,
   Animated,
+  Alert,
 } from 'react-native';
 
 import MemoIcNewChat from '../../../assets/icons/ic_new_chat';
@@ -13,14 +14,19 @@ import MemoIc_search from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
-const Search = ({onPress, animatedValue}) => {
+const Search = ({onPress, animatedValue, onChangeText, text}) => {
   return (
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
       <View style={styles.wrapperSearch}>
         <TextInput
+          value={text}
           multiline={false}
           placeholder={'Search Users'}
           style={styles.input}
+          onChangeText={(text) => {
+            onChangeText(text);
+          }}
+          onSubmitEditing={(event) => onPress()}
         />
         <View style={styles.wrapperIcon}>
           <MemoIc_search width={20} height={20} />
