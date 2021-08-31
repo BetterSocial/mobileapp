@@ -14,6 +14,7 @@ import {sanitizeUrlForLinking} from '../../utils/Utils';
 import Gap from '../../components/Gap';
 import {fonts} from '../../utils/fonts';
 import {NewsEmptyState} from '../../assets/images';
+import {Pressable} from 'react-native';
 
 const Content = (props) => {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ const Content = (props) => {
   };
 
   return (
-    <TouchableOpacity onPress={onContentPressed}>
+    <Pressable onPress={onContentPressed}>
       <View style={styles.container}>
         <View style={styles.base}>
           <Text style={styles.title}>{title}</Text>
@@ -69,7 +70,7 @@ const Content = (props) => {
           </Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
