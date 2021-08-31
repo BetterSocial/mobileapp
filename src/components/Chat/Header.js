@@ -1,15 +1,15 @@
 import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import IconFI from 'react-native-vector-icons/Fontisto';
 import IconEP from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
 
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {TouchableWithoutFeedback} from 'react-native';
 
-const Header = ({username, profile}) => {
+const Header = ({username, profile, createChat}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -17,8 +17,19 @@ const Header = ({username, profile}) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MemoIc_arrow_back_white width={20} height={12} />
         </TouchableOpacity>
-        <Image source={{uri: profile}} style={styles.image} />
-        <Text style={styles.name}>{username}</Text>
+        <TouchableWithoutFeedback
+          onPress={() =>
+            navigation.navigate('GroupInfo', {
+              username,
+              createChat,
+              profile,
+            })
+          }>
+          <View style={styles.touchable}>
+            <Image source={{uri: profile}} style={styles.image} />
+            <Text style={styles.name}>{username}</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
       <View style={styles.row}>
         <TouchableOpacity style={styles.btnOptions}>
@@ -63,5 +74,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     color: '#fff',
     fontSize: 14,
+  },
+  touchable: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
 });

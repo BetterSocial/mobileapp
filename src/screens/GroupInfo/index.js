@@ -10,66 +10,65 @@ import {
   Image,
   FlatList,
 } from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
+import moment from 'moment';
 import Header from './elements/Header';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import ItemUser from './elements/ItemUser';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-
-const dummyUser = [
-  {
-    fullname: 'usup',
-    photo:
-      'https://i.picsum.photos/id/218/200/200.jpg?hmac=pIx-HTJBJRheNaHmhgqsQRX8JbTGvag_zic9NTNWFJU',
-  },
-  {
-    fullname: 'fajar',
-    photo:
-      'https://i.picsum.photos/id/218/200/200.jpg?hmac=pIx-HTJBJRheNaHmhgqsQRX8JbTGvag_zic9NTNWFJU',
-  },
-  {
-    fullname: 'usupUsup Suparma',
-    photo:
-      'https://i.picsum.photos/id/218/200/200.jpg?hmac=pIx-HTJBJRheNaHmhgqsQRX8JbTGvag_zic9NTNWFJU',
-  },
-];
+import {Context} from '../../context';
 
 const GroupInfo = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const [groupChatState] = React.useContext(Context).groupChat;
+  const {participants, asset} = groupChatState;
+  const [countUser] = React.useState(Object.entries(participants).length);
   return (
     <View style={styles.container}>
-      <Header title={'group name'} />
+      <Header title={route.params?.username} />
       <View style={styles.lineTop} />
       <ScrollView>
         <SafeAreaView>
           <View style={styles.containerPhoto}>
-            <TouchableOpacity style={styles.btnUpdatePhoto}>
-              <MemoIc_pencil width={50} height={50} color={colors.gray1} />
-            </TouchableOpacity>
+            {route.params?.profile ? (
+              <Image
+                source={{uri: route.params?.profile}}
+                style={styles.btnUpdatePhoto}
+              />
+            ) : (
+              <TouchableOpacity style={styles.btnUpdatePhoto}>
+                <MemoIc_pencil width={50} height={50} color={colors.gray1} />
+              </TouchableOpacity>
+            )}
           </View>
           <View style={styles.containerGroupName}>
-            <Text style={styles.groupName}>Group Name</Text>
-            <TouchableWithoutFeedback>
+            <Text style={styles.groupName}>{route.params?.username}</Text>
+            {/* <TouchableWithoutFeedback>
               <MemoIc_pencil width={20} height={20} color={colors.gray1} />
-            </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback> */}
           </View>
-          <Text style={styles.dateCreate}>Created 7/7/21</Text>
+          <Text style={styles.dateCreate}>
+            Created {moment(route.params?.createChat).format('DD/MM/YY')}
+          </Text>
           <View style={styles.lineTop} />
           <View style={styles.containerMedia}>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate('GroupMedia')}>
               <Text style={styles.btnToMediaGroup}>Media & Links ></Text>
             </TouchableWithoutFeedback>
             <FlatList
-              data={[1, 2, 3, 4]}
+              data={asset}
+              keyExtractor={(item, index) => index.toString()}
               style={styles.listImage}
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({item, index}) => (
                 <Image
-                  key={String(index)}
                   source={{
-                    uri:
-                      'https://i.picsum.photos/id/218/200/200.jpg?hmac=pIx-HTJBJRheNaHmhgqsQRX8JbTGvag_zic9NTNWFJU',
+                    uri: item.message.attachments[0].image_url,
                   }}
                   width={80}
                   height={80}
@@ -79,26 +78,29 @@ const GroupInfo = () => {
             />
           </View>
           <View style={styles.lineTop} />
-          <View style={styles.users}>
-            <Text style={styles.countUser}>Participant (3)</Text>
-            <FlatList
-              data={dummyUser}
-              renderItem={({item, index}) => (
-                <ItemUser
-                  fullname={item.fullname}
-                  photo={item.photo}
-                  key={String(index)}
-                />
-              )}
-            />
-          </View>
-          <View style={styles.btnAdd}>
-            <TouchableWithoutFeedback>
-              <Text style={styles.btnAddText}>+ Add Participants</Text>
-            </TouchableWithoutFeedback>
-          </View>
+          {countUser !== 2 && (
+            <View style={styles.users}>
+              <Text style={styles.countUser}>Participants {countUser}</Text>
+              {Object.keys(participants).map((key) => {
+                return (
+                  <ItemUser
+                    fullname={participants[key].user.name}
+                    photo={participants[key].user.image}
+                    key={String(key)}
+                  />
+                );
+              })}
+            </View>
+          )}
         </SafeAreaView>
       </ScrollView>
+      {countUser !== 2 && (
+        <View style={styles.btnAdd}>
+          <TouchableWithoutFeedback>
+            <Text style={styles.btnAddText}>+ Add Participants</Text>
+          </TouchableWithoutFeedback>
+        </View>
+      )}
     </View>
   );
 };
@@ -106,9 +108,13 @@ const GroupInfo = () => {
 export default GroupInfo;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
+  container: {flex: 1, backgroundColor: '#fff', paddingBottom: 30},
   users: {
     paddingTop: 12,
+  },
+  photoProfile: {
+    height: 50,
+    width: 50,
   },
   listImage: {
     marginTop: 12,
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: 8,
     alignSelf: 'center',
-    bottom: 0,
+    bottom: 5,
   },
   countUser: {
     fontFamily: fonts.inter[600],

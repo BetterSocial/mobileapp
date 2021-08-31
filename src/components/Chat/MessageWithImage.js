@@ -21,7 +21,7 @@ import ProfileMessage from './ProfileMessage';
 import ActionChat from './ActionChat';
 import {TouchableWithoutFeedback} from 'react-native';
 
-const MessageWithEmage = ({
+const MessageWithImage = ({
   image,
   name,
   time,
@@ -59,7 +59,7 @@ const MessageWithEmage = ({
     </ActionChat>
   );
 };
-export default MessageWithEmage;
+export default MessageWithImage;
 
 const ShowImage = React.memo(({images, name, time}) => {
   const navigation = useNavigation();
@@ -75,14 +75,15 @@ const ShowImage = React.memo(({images, name, time}) => {
       <>
         <FlatList
           data={images}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => {
             return (
-              <TouchableOpacity onPress={() => openDetail(item.asset_url)}>
+              <TouchableOpacity onPress={() => openDetail(item.image_url)}>
                 <Image
                   key={'sg' + index}
                   style={styles.singleImage}
                   source={{
-                    uri: item.asset_url,
+                    uri: item.image_url,
                   }}
                   resizeMode="cover"
                 />
@@ -107,7 +108,7 @@ const ShowImage = React.memo(({images, name, time}) => {
         style={styles.flexlist}
         contentContainerStyle={styles.containerManyEmage}
         numColumns={2}
-        keyExtractor={(i, key) => 'mn' + key}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
           return (
             <TouchableOpacity
@@ -138,7 +139,7 @@ const ShowImage = React.memo(({images, name, time}) => {
         style={styles.flexlist}
         contentContainerStyle={styles.containerManyEmage}
         numColumns={2}
-        keyExtractor={(i, key) => 'mn' + key}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => (
           <TouchableOpacity
             onPress={() =>

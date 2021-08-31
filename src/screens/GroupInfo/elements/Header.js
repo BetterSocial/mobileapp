@@ -10,9 +10,7 @@ const Header = ({title}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback
-      //   onPress={() => navigation.goBack()}
-      >
+      <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
         <MemoIc_arrow_back width={20} height={12} />
       </TouchableWithoutFeedback>
       <Text style={styles.title}>{title}</Text>

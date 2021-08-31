@@ -26,10 +26,7 @@ const ChannelListScreen = ({navigation}) => {
   };
 
   const sort = {last_message_at: -1};
-  const options = {
-    state: true,
-    watch: true,
-  };
+  const options = {};
   const memoizedFilters = React.useMemo(() => filters, [userId]);
 
   React.useEffect(() => {
@@ -63,10 +60,12 @@ const ChannelListScreen = ({navigation}) => {
               filters={memoizedFilters}
               onSelect={(channel) => {
                 setChannel(channel, dispatch);
+                // ChannelScreen | ChatDetailPage
                 navigation.navigate('ChatDetailPage');
               }}
               sort={sort}
               options={options}
+              maxUnreadCount={99}
             />
           </View>
         </Chat>

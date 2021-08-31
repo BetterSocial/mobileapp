@@ -2,8 +2,11 @@ import React from 'react';
 import {Image} from 'react-native';
 import {FlatList} from 'react-native';
 import {StyleSheet, View} from 'react-native';
+import {Context} from '../../../context';
 
 const Media = () => {
+  const [groupChatState] = React.useContext(Context).groupChat;
+  let {asset} = groupChatState;
   const [count, setCount] = React.useState(5);
   const getSpace = (index) => {
     if (index === 0 && index + 1 === count) {
@@ -17,15 +20,14 @@ const Media = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}
+        data={asset}
         numColumns={4}
+        keyExtractor={(item, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         renderItem={({item, index}) => (
           <Image
-            key={String(index)}
             source={{
-              uri:
-                'https://i.picsum.photos/id/218/200/200.jpg?hmac=pIx-HTJBJRheNaHmhgqsQRX8JbTGvag_zic9NTNWFJU',
+              uri: item.message.attachments[0].image_url,
             }}
             width={80}
             height={80}

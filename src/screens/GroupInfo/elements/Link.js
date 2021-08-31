@@ -1,47 +1,30 @@
 import React from 'react';
 import {FlatList} from 'react-native';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import {Context} from '../../../context';
 
 import ItemLink from './ItemLink';
 
-let dummyLink = [
-  {
-    domain: 'https://dev.to',
-    link: 'https://dev.to/cassiocappellari/basic-concepts-of-node-js-pch',
-    image:
-      'https://i.picsum.photos/id/218/200/200.jpg?hmac=pIx-HTJBJRheNaHmhgqsQRX8JbTGvag_zic9NTNWFJU',
-    title: 'Basic Concepts of Node.js',
-  },
-  {
-    domain: 'https://dev.to',
-    link: 'https://dev.to/cassiocappellari/basic-concepts-of-node-js-pch',
-    image:
-      'https://i.picsum.photos/id/218/200/200.jpg?hmac=pIx-HTJBJRheNaHmhgqsQRX8JbTGvag_zic9NTNWFJU',
-    title:
-      'animation-wrapper-view, declarative animations with imperative controls',
-  },
-  {
-    domain: 'https://dev.to',
-    link: 'https://dev.to/cassiocappellari/basic-concepts-of-node-js-pch',
-    image:
-      'https://i.picsum.photos/id/218/200/200.jpg?hmac=pIx-HTJBJRheNaHmhgqsQRX8JbTGvag_zic9NTNWFJU',
-    title: 'Basic Concepts of Node.js',
-  },
-];
 const Link = () => {
+  const [groupChatState] = React.useContext(Context).groupChat;
+  let {asset} = groupChatState;
   return (
     <View style={styles.container}>
       <FlatList
-        data={dummyLink}
-        renderItem={({item, index}) => (
-          <ItemLink
-            key={String(index)}
-            domain={item.domain}
-            link={item.link}
-            image={item.image}
-            title={item.title}
-          />
-        )}
+        data={asset}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item, index}) => {
+          if (item.message.attachments[0].title_link !== undefined) {
+            return (
+              <ItemLink
+                domain={item.message.attachments[0].author_name}
+                link={item.message.attachments[0].title_link}
+                image={item.message.attachments[0].image_url}
+                title={item.message.attachments[0].title}
+              />
+            );
+          }
+        }}
       />
     </View>
   );

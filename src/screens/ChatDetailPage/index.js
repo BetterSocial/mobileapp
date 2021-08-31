@@ -14,6 +14,7 @@ import InputMessage from '../../components/Chat/InputMessage';
 import CostomListMessage from '../../components/Chat/CostomListMessage';
 import {Context} from '../../context';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {setAsset, setParticipants} from '../../context/actions/groupChat';
 
 const streami18n = new Streami18n({
   language: 'en',
@@ -22,10 +23,24 @@ const streami18n = new Streami18n({
 const ChatDetailPage = () => {
   const [clients] = React.useContext(Context).client;
   const [channelClient] = React.useContext(Context).channel;
+  const [, dispatch] = React.useContext(Context).groupChat;
   let connect = useClientGetstream();
   React.useEffect(() => {
     connect();
   }, []);
+  React.useEffect(() => {
+    searchUserMessages(channelClient.channel?.cid);
+    setParticipants(channelClient.channel?.state?.members, dispatch);
+  }, [clients.client]);
+  const searchUserMessages = async (channelID) => {
+    const messages = await clients.client.search(
+      {
+        cid: channelID,
+      },
+      {'attachments.type': {$in: ['image']}},
+    );
+    setAsset(messages.results, dispatch);
+  };
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
@@ -38,6 +53,7 @@ const ChatDetailPage = () => {
               <Header
                 username={channelClient.channel?.data?.name}
                 profile={channelClient.channel?.data?.created_by?.image}
+                createChat={channelClient.channel?.data?.created_at}
               />
               <MessageList Message={CostomListMessage} />
 
