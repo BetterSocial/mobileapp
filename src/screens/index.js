@@ -8,6 +8,9 @@ import ContactScreen from './ContactScreen';
 import DetailDomainScreen from './DetailDomain/DetailDomainScreen';
 import ChatDetailPage from './ChatDetailPage';
 import DetailGroupImage from './DetailGroupImage';
+import GroupInfo from './GroupInfo';
+import GroupMedia from './GroupInfo/GroupMedia';
+
 export {
   ChannelScreen,
   ChannelListScreen,
@@ -19,4 +22,6 @@ export {
   DetailDomainScreen,
   ChatDetailPage,
   DetailGroupImage,
+  GroupInfo,
+  GroupMedia,
 };

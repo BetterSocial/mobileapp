@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {View} from 'react-native';
 
-import {MessageSimple} from 'stream-chat-react-native';
-
 import MessageText from './MessageText';
-import MessageWithEmage from './MessageWithEmage';
+import MessageWithImage from './MessageWithImage';
 import MessageWithLink from './MessageWithLink';
 import ReplyMessageText from './ReplyMessageText';
 
 const CostomListMessage = (props) => {
+  // console.log(JSON.stringify(props));
   if (props.message.deleted_at) {
     return null;
   }
@@ -18,6 +17,7 @@ const CostomListMessage = (props) => {
   ) {
     return (
       <MessageText
+        key={props.message.id}
         image={props.message.user.image}
         name={props.message.user.name}
         time={props.message.created_at}
@@ -30,11 +30,12 @@ const CostomListMessage = (props) => {
   if (
     props.message.attachments.length !== 0 &&
     props.message.quoted_message === undefined &&
-    props.message.attachments[0].mime_type !== undefined &&
-    props.message.attachments[0].mime_type.includes('image')
+    props.message.attachments[0].type === 'image' &&
+    props.message.attachments[0].title_link === undefined
   ) {
     return (
-      <MessageWithEmage
+      <MessageWithImage
+        key={props.message.id}
         attachments={props.message.attachments}
         image={props.message.user.image}
         name={props.message.user.name}
@@ -51,6 +52,7 @@ const CostomListMessage = (props) => {
   ) {
     return (
       <ReplyMessageText
+        key={props.message.id}
         image={props.message.user.image}
         name={props.message.user.name}
         time={props.message.created_at}
@@ -75,6 +77,7 @@ const CostomListMessage = (props) => {
   ) {
     return (
       <MessageWithLink
+        key={props.message.id}
         image={props.message.user.image}
         name={props.message.user.name}
         time={props.message.created_at}
@@ -88,7 +91,7 @@ const CostomListMessage = (props) => {
 
   return (
     <View>
-      <MessageText />
+      <MessageText key={props.message.id} />
     </View>
   );
 

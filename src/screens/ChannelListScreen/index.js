@@ -19,17 +19,14 @@ const ChannelListScreen = ({navigation}) => {
   const [userId, setUserId] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
-  let co = useClientGetstream();
+  let connect = useClientGetstream();
   const filters = {
     members: {$in: [userId]},
     type: 'messaging',
   };
 
   const sort = {last_message_at: -1};
-  const options = {
-    state: true,
-    watch: true,
-  };
+  const options = {};
   const memoizedFilters = React.useMemo(() => filters, [userId]);
 
   React.useEffect(() => {
@@ -38,7 +35,7 @@ const ChannelListScreen = ({navigation}) => {
       screen_name: 'Channel List',
     });
     setupClient();
-    co();
+    connect();
   }, []);
   const setupClient = async () => {
     try {
@@ -63,10 +60,12 @@ const ChannelListScreen = ({navigation}) => {
               filters={memoizedFilters}
               onSelect={(channel) => {
                 setChannel(channel, dispatch);
+                // ChannelScreen | ChatDetailPage
                 navigation.navigate('ChatDetailPage');
               }}
               sort={sort}
               options={options}
+              maxUnreadCount={99}
             />
           </View>
         </Chat>

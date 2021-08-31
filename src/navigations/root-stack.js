@@ -22,6 +22,8 @@ import {
   DetailDomainScreen,
   ChatDetailPage,
   DetailGroupImage,
+  GroupInfo,
+  GroupMedia,
 } from '../screens';
 import ImageViewerScreen from '../screens/ImageViewer';
 import ReplyComment from '../screens/ReplyComment';
@@ -41,6 +43,16 @@ const RootStact = () => {
   }, []);
   return (
     <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Screen
+        name="GroupMedia"
+        component={GroupMedia}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="GroupInfo"
+        component={GroupInfo}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="DetailGroupImage"
         component={DetailGroupImage}
