@@ -16,7 +16,7 @@ const InputMessage = () => {
     text,
     appendText,
     sendMessage,
-    pickFile,
+    toggleAttachmentPicker,
   } = useMessageInputContext();
 
   const onChangeInput = (v) => {
@@ -45,7 +45,9 @@ const InputMessage = () => {
             onPress={() => onShowPickerEmoji()}>
             <MemoIc_emoji width={20} height={20} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnPicture} onPress={pickFile}>
+          <TouchableOpacity
+            style={styles.btnPicture}
+            onPress={toggleAttachmentPicker}>
             <MemoIc_Picture width={20} height={20} />
           </TouchableOpacity>
         </View>

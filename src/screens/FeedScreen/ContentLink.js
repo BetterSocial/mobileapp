@@ -1,6 +1,6 @@
 import {useRoute} from '@react-navigation/native';
 import * as React from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {Pressable, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {COLORS} from '../../utils/theme';
 import {smartRender} from '../../utils/Utils';
@@ -11,7 +11,7 @@ const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress}) => {
   let isTouchableDisabled = route?.name === 'PostDetailPage';
 
   return (
-    <TouchableOpacity
+    <Pressable
       disabled={isTouchableDisabled}
       onPress={onPress}
       style={styles.contentFeed}>
@@ -29,7 +29,7 @@ const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress}) => {
         onHeaderPress,
         onCardContentPress,
       })}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

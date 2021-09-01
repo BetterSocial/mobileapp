@@ -54,11 +54,9 @@ const ReplyComment = (props) => {
     try {
       if (textComment.trim() !== '') {
         let data = await createChildComment(textComment, item.id);
-        console.log(data);
         if (data.code === 200) {
           setTextComment('');
           Toast.show('Comment successful', Toast.LONG);
-          navigation.goBack();
         } else {
           Toast.show('Failed Comment', Toast.LONG);
         }

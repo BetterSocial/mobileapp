@@ -11,6 +11,7 @@ import {clientReducer, clientState} from './reducers/clientReducer';
 import {newsReducer, newsState} from './reducers/newsReducer';
 import {feedsReducer, feedsState} from './reducers/FeedReducer';
 import {myProfileReducer, myProfileState} from './reducers/myProfileReducer';
+import {groupChatReducer, groupChatState} from './reducers/groupChat';
 
 const Store = ({children}) => {
   const rootReducer = {
@@ -25,6 +26,7 @@ const Store = ({children}) => {
     news: React.useReducer(newsReducer, newsState),
     feeds: React.useReducer(feedsReducer, feedsState),
     profile: React.useReducer(myProfileReducer, myProfileState),
+    groupChat: React.useReducer(groupChatReducer, groupChatState),
   };
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };

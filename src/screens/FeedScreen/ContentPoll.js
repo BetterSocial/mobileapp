@@ -8,6 +8,8 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Pressable,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import SeeMore from 'react-native-see-more-inline';
@@ -129,7 +131,7 @@ const ContentPoll = ({
   };
 
   return (
-    <TouchableOpacity
+    <Pressable
       disabled={isTouchableDisabled}
       onPress={onPress}
       style={styles.contentFeed}>
@@ -232,7 +234,7 @@ const ContentPoll = ({
           </View>
         )
       ) : null}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

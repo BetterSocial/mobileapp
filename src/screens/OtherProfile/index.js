@@ -206,8 +206,7 @@ const OtherProfile = () => {
     await channelChat.watch();
     setChannel(channelChat, dispatchChannel);
     setIsLoading(false);
-
-    await navigation.navigate('ChannelScreen');
+    await navigation.navigate('ChatDetailPage');
   };
 
   return (

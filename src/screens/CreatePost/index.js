@@ -45,6 +45,7 @@ import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import {createPollPost} from '../../service/post';
 import {getAccessToken} from '../../utils/token';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
+import StringConstant from '../../utils/string/StringConstant';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -157,6 +158,7 @@ const CreatePost = () => {
       setLoading(false);
     }
   };
+
   React.useEffect(() => {
     fetchMyProfile();
     analytics().logScreenView({
@@ -164,16 +166,19 @@ const CreatePost = () => {
       screen_name: 'ChooseUsername',
     });
   }, []);
+
   React.useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', onBack);
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', onBack);
     };
   }, [message]);
+
   const getEstimationsAudience = async (privacy, location) => {
     const data = await ShowingAudience(privacy, location);
     setAudienceEstimations(data.data);
   };
+
   const uploadMediaFromLibrary = () => {
     launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
       if (res.didCancel) {
@@ -191,6 +196,7 @@ const CreatePost = () => {
       }
     });
   };
+
   const takePhoto = () => {
     launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
       if (res.didCancel) {
@@ -206,6 +212,7 @@ const CreatePost = () => {
       }
     });
   };
+
   const onRemoveItem = (v) => {
     let deleteItem = mediaStorage.filter((item) => item.id !== v);
     setMediaStorage(deleteItem);
@@ -256,15 +263,17 @@ const CreatePost = () => {
     navigation.goBack();
     return true;
   };
+
   const onSaveTopic = (v) => {
     setListTopic(v);
     sheetTopicRef.current.close();
   };
+
   const postTopic = async () => {
     try {
       if (message === '') {
         showMessage({
-          message: 'Post messages cannot be empty',
+          message: StringConstant.createPostFailedNoMessage,
           type: 'danger',
         });
         return true;
@@ -296,7 +305,7 @@ const CreatePost = () => {
       let res = await createPost(data);
       if (res.code === 200) {
         showMessage({
-          message: 'success create a new post',
+          message: StringConstant.createPostDone,
           type: 'success',
         });
         setLoading(false);
@@ -311,18 +320,19 @@ const CreatePost = () => {
       } else {
         setLoading(false);
         showMessage({
-          message: 'failed to create new posts',
+          message: StringConstant.createPostFailedGeneralError,
           type: 'danger',
         });
       }
     } catch (error) {
       showMessage({
-        message: 'failed to create new posts',
+        message: StringConstant.createPostFailedGeneralError,
         type: 'danger',
       });
       setLoading(false);
     }
   };
+
   const randerComponentMedia = () => {
     if (isPollShown) {
       return <View />;
@@ -415,22 +425,36 @@ const CreatePost = () => {
       pollsduration: selectedTime,
       multiplechoice: isPollMultipleChoice,
     };
-    console.log(data);
 
     try {
       let response = await createPollPost(data);
       if (response.status) {
-        navigation.navigate('HomeTabs', {
-          screen: 'Feed',
-          params: {
-            refresh: true,
-          },
+        showMessage({
+          message: StringConstant.createPostDone,
+          type: 'success',
         });
+        setTimeout(() => {
+          navigation.navigate('HomeTabs', {
+            screen: 'Feed',
+            params: {
+              refresh: true,
+            },
+          });
+        }, 1000);
         setLoading(false);
+      } else {
+        setLoading(false);
+        showMessage({
+          message: StringConstant.createPostFailedGeneralError,
+          type: 'danger',
+        });
       }
     } catch (e) {
       console.log('Error');
-      Alert.alert('Error', 'error');
+      showMessage({
+        message: StringConstant.createPostFailedGeneralError,
+        type: 'danger',
+      });
       setLoading(false);
     }
     analytics().logEvent('create_post', {
