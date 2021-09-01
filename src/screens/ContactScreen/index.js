@@ -1,44 +1,25 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  StyleSheet,
-  RefreshControl,
-  Dimensions,
-} from 'react-native';
+import {View, StyleSheet, RefreshControl, Dimensions} from 'react-native';
 
-import {launchImageLibrary} from 'react-native-image-picker';
-import analytics from '@react-native-firebase/analytics';
-import crashlytics from '@react-native-firebase/crashlytics';
-import jwtDecode from 'jwt-decode';
 import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview';
 
-import {createChannel} from '../../service/chat';
 import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
-
-import {Avatar, Gap, Loading} from '../../components';
-import {COLORS, SIZES} from '../../utils/theme';
-import StringConstant from '../../utils/string/StringConstant';
-import Header from './elements/Header';
-import {getAccessToken} from '../../utils/token';
-import {Search, RenderItem} from './elements';
-import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {userPopulate} from '../../service/users';
-import {Alert} from 'react-native';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+
+import StringConstant from '../../utils/string/StringConstant';
+import {COLORS} from '../../utils/theme';
+import Header from './elements/Header';
+import {Search} from './elements';
+import {Alert} from 'react-native';
 import Label from './elements/Label';
 import ItemUser from './elements/ItemUser';
+import {Loading} from '../../components';
 
 const width = Dimensions.get('screen').width;
 
 const ContactScreen = ({navigation}) => {
-  const [groupName, setGroupName] = React.useState(null);
-  const [groupIcon, setGroupIcon] = React.useState(null);
-  const [userId, setUserId] = React.useState(null);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [click, setClick] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -65,17 +46,6 @@ const ContactScreen = ({navigation}) => {
 
   const VIEW_TYPE_LABEL = 1;
   const VIEW_TYPE_DATA = 2;
-
-  React.useEffect(() => {
-    const getUserId = async () => {
-      const token = await getAccessToken();
-      jwtDecode;
-      const id = await jwtDecode(token).user_id;
-      setUserId(id);
-    };
-    create();
-    getUserId();
-  }, [create, profile]);
 
   React.useEffect(() => {
     const getUserPopulate = async () => {
@@ -136,10 +106,6 @@ const ContactScreen = ({navigation}) => {
     }
   }, [dataProvider]);
 
-  function isInArray(value, array) {
-    return array.indexOf(value);
-  }
-
   const handleCreateChannel = async () => {
     try {
       console.log(followed[0]);
@@ -148,9 +114,7 @@ const ContactScreen = ({navigation}) => {
       }
       setLoading(true);
       let members = followed;
-      console.log(members);
       members.push(profile.user_id);
-      console.log(members);
       let channelName = usernames;
       channelName.push(profile.username);
       let typeChannel = 0;
@@ -159,21 +123,19 @@ const ContactScreen = ({navigation}) => {
         typeChannel = 1;
       }
 
-      // let name = ...channelName;
       const clientChat = await client.client;
       const channelChat = await clientChat.channel('messaging', {
-        name: channelName,
+        name: channelName.toString(),
         members: members,
         typeChannel,
       });
       await channelChat.create();
       setChannel(channelChat, dispatchChannel);
-      setLoading(false);
       setFollowed([]);
       setUsernames([]);
+      setLoading(false);
       await navigation.navigate('ChatDetailPage');
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
@@ -197,9 +159,6 @@ const ContactScreen = ({navigation}) => {
   };
 
   const handleSelected = (value) => {
-    console.log(value.username);
-    console.log(usernames);
-    console.log(followed);
     let copyFollowed = [...followed];
     let copyUsername = [...usernames];
     let index = followed.indexOf(value.user_id);
@@ -219,10 +178,19 @@ const ContactScreen = ({navigation}) => {
     setUsernames(copyUsername);
   };
 
-  const _onRefresh = React.useCallback(() => {}, []);
+  const _onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const res = await userPopulate();
+      setUsers(res);
+      setCacheUser(res);
+      setRefreshing(false);
+    } catch (error) {
+      setRefreshing(false);
+    }
+  }, []);
 
   const _handleSearch = () => {
-    console.log(cacheUsers);
     const newUsers = cacheUsers.filter(
       (item) => item.username.toLowerCase().indexOf(text) > -1,
     );
@@ -234,7 +202,7 @@ const ContactScreen = ({navigation}) => {
     <View style={styles.container}>
       <Header
         title={StringConstant.chatTabHeaderCreateChatButtonText}
-        containerStyle={{marginHorizontal: 16}}
+        containerStyle={styles.containerStyle}
         subTitle={'Next'}
         subtitleStyle={{color: COLORS.holyTosca, marginEnd: 8}}
         onPressSub={() => handleCreateChannel(selectedUsers)}
@@ -243,7 +211,7 @@ const ContactScreen = ({navigation}) => {
 
       <Search
         text={text}
-        style={{marginHorizontal: 16}}
+        style={styles.containerStyle}
         onChangeText={(t) => {
           setText(t);
         }}
@@ -266,7 +234,6 @@ const ContactScreen = ({navigation}) => {
           }}
         />
       )}
-
       <Loading visible={loading} />
     </View>
   );
@@ -279,6 +246,9 @@ const styles = StyleSheet.create({
   },
   recyclerview: {
     marginBottom: 30,
+  },
+  containerStyle: {
+    marginHorizontal: 16,
   },
 });
 
