@@ -31,11 +31,13 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
       Animated.timing(followIconFadeAnimation, {
         toValue: 1,
         duration: 250,
+        useNativeDriver: true,
       }).start();
     } else {
       Animated.timing(followIconFadeAnimation, {
         toValue: 0,
         duration: 250,
+        useNativeDriver: true,
       }).start();
     }
   }, [followed, userid]);

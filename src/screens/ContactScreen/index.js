@@ -53,6 +53,7 @@ const ContactScreen = ({navigation}) => {
   const [followed, setFollowed] = React.useState([]);
   const [cacheUsers, setCacheUser] = React.useState([]);
   const [text, setText] = React.useState(null);
+  const [usernames, setUsernames] = React.useState([]);
 
   const create = useClientGetstream();
   const filterItems = (needle, items) => {
@@ -141,17 +142,16 @@ const ContactScreen = ({navigation}) => {
 
   const handleCreateChannel = async () => {
     try {
-      if (users.length < 1) {
+      console.log(followed[0]);
+      if (followed.length < 1) {
         Alert.alert('Warning', 'Please choose min one user');
       }
       setLoading(true);
-      let members = selectedUsers;
+      let members = followed;
       console.log(members);
       members.push(profile.user_id);
       console.log(members);
-      let channelName = users.map((item) => {
-        return item.username;
-      });
+      let channelName = usernames;
       channelName.push(profile.username);
       let typeChannel = 0;
 
@@ -159,6 +159,7 @@ const ContactScreen = ({navigation}) => {
         typeChannel = 1;
       }
 
+      // let name = ...channelName;
       const clientChat = await client.client;
       const channelChat = await clientChat.channel('messaging', {
         name: channelName,
@@ -168,6 +169,8 @@ const ContactScreen = ({navigation}) => {
       await channelChat.create();
       setChannel(channelChat, dispatchChannel);
       setLoading(false);
+      setFollowed([]);
+      setUsernames([]);
       await navigation.navigate('ChatDetailPage');
     } catch (error) {
       console.log(error);
@@ -187,21 +190,33 @@ const ContactScreen = ({navigation}) => {
             username={item.username}
             followed={extendedState.followed}
             userid={item.user_id}
-            onPress={() => handleSelected(item.user_id)}
+            onPress={() => handleSelected(item)}
           />
         );
     }
   };
 
   const handleSelected = (value) => {
+    console.log(value.username);
+    console.log(usernames);
+    console.log(followed);
     let copyFollowed = [...followed];
-    let index = followed.indexOf(value);
+    let copyUsername = [...usernames];
+    let index = followed.indexOf(value.user_id);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
-      copyFollowed.push(value);
+      copyFollowed.push(value.user_id);
+    }
+
+    let indexName = usernames.indexOf(value.username);
+    if (indexName > -1) {
+      copyUsername.splice(index, 1);
+    } else {
+      copyUsername.push(value.username);
     }
     setFollowed(copyFollowed);
+    setUsernames(copyUsername);
   };
 
   const _onRefresh = React.useCallback(() => {}, []);
