@@ -1,5 +1,5 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import React from 'react';
+import * as React from 'react';
 import {SafeAreaView} from 'react-native';
 import {ScrollView} from 'react-native';
 import {Dimensions} from 'react-native';

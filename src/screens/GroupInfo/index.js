@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   TouchableWithoutFeedback,
   ScrollView,
@@ -96,7 +96,8 @@ const GroupInfo = () => {
       </ScrollView>
       {countUser !== 2 && (
         <View style={styles.btnAdd}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate('AddParticipant')}>
             <Text style={styles.btnAddText}>+ Add Participants</Text>
           </TouchableWithoutFeedback>
         </View>

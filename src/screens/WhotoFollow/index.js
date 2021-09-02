@@ -9,9 +9,7 @@ import {
   TouchableHighlight,
   Dimensions,
   ActivityIndicator,
-  FlatList,
   RefreshControl,
-  ScrollView,
 } from 'react-native';
 
 import {showMessage} from 'react-native-flash-message';
@@ -25,21 +23,15 @@ import Loading from '../Loading';
 import {get} from '../../api/server';
 import {Button} from '../../components/Button';
 import {ProgressBar} from '../../components/ProgressBar';
-import VirtualizedView from '../../components/VirtualizedView';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {registerUser} from '../../service/users';
 import {Context} from '../../context';
 import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
 import {colors} from '../../utils/colors';
-import ListUser from './elements/ListUser';
 import Label from './elements/Label';
 import ItemUser from './elements/ItemUser';
 
 const width = Dimensions.get('screen').width;
-function compire(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-}
-const MemoListUser = React.memo(ListUser, compire);
 
 const VIEW_TYPE_LABEL = 1;
 const VIEW_TYPE_DATA = 2;
@@ -156,7 +148,6 @@ const WhotoFollow = () => {
     }
     setFollowed(copyFollowed);
   };
-  const memoHandleSelected = React.useCallback(handleSelected, [followed]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);

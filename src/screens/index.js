@@ -10,6 +10,7 @@ import ChatDetailPage from './ChatDetailPage';
 import DetailGroupImage from './DetailGroupImage';
 import GroupInfo from './GroupInfo';
 import GroupMedia from './GroupInfo/GroupMedia';
+import AddParticipant from './AddParticipant';
 
 export {
   ChannelScreen,
@@ -24,4 +25,5 @@ export {
   DetailGroupImage,
   GroupInfo,
   GroupMedia,
+  AddParticipant,
 };

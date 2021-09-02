@@ -55,11 +55,6 @@ const ReplyMessageText = ({
                   </View>
                 </View>
               </View>
-              <MemoIc_read
-                width={14.9}
-                height={8.13}
-                fill={read ? colors.bondi_blue : colors.gray}
-              />
             </View>
             <Text style={[styles.message(true), styles.messageMargin]}>
               {message}
