@@ -24,6 +24,7 @@ import {
   DetailGroupImage,
   GroupInfo,
   GroupMedia,
+  AddParticipant,
 } from '../screens';
 import ImageViewerScreen from '../screens/ImageViewer';
 import ReplyComment from '../screens/ReplyComment';
@@ -43,6 +44,11 @@ const RootStact = () => {
   }, []);
   return (
     <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Screen
+        name="AddParticipant"
+        component={AddParticipant}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="GroupMedia"
         component={GroupMedia}

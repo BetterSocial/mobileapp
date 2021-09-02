@@ -5,7 +5,6 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import analytics from '@react-native-firebase/analytics';
 import jwtDecode from 'jwt-decode';
 
-import {createChannel} from '../../service/chat';
 import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
 
@@ -14,7 +13,7 @@ import {COLORS, SIZES} from '../../utils/theme';
 import StringConstant from '../../utils/string/StringConstant';
 import Header from './elements/Header';
 import {getAccessToken} from '../../utils/token';
-import {Search, RenderItem} from './elements';
+import {Search} from './elements';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {userPopulate} from '../../service/users';
 import {Alert} from 'react-native';

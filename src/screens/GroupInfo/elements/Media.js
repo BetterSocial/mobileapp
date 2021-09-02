@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {Image} from 'react-native';
 import {FlatList} from 'react-native';
 import {StyleSheet, View} from 'react-native';

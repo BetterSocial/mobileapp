@@ -44,8 +44,8 @@ export const removeLocalStorege = async (value) => {
 const getAccessToken = async () => {
   return await AsyncStorage.getItem(KEY_ACCESS_TOKEN);
 };
-const clearAccessToken = async () => {
-  return await AsyncStorage.removeItem(KEY_ACCESS_TOKEN);
+const clearLocalStorege = async () => {
+  return await AsyncStorage.clear();
 };
 
 const setAccessToken = async (token) => {
@@ -73,5 +73,5 @@ export {
   setAccessToken,
   setRefreshToken,
   getRefreshToken,
-  clearAccessToken,
+  clearLocalStorege,
 };

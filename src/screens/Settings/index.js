@@ -17,7 +17,7 @@ import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import Header from '../../components/Header';
 import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
-import {clearAccessToken} from '../../utils/token';
+import {clearLocalStorege} from '../../utils/token';
 
 const width = Dimensions.get('screen').width;
 
@@ -30,7 +30,7 @@ const Settings = () => {
     });
   }, []);
   const logout = () => {
-    clearAccessToken();
+    clearLocalStorege();
     navigation.reset({
       index: 0,
       routes: [{name: 'SignIn'}],
