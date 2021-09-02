@@ -127,7 +127,7 @@ const DomainScreen = () => {
     }
     console.log('result block user ', result);
   };
-  console.log('data domain ', dataDomain);
+  // console.log('data domain ', dataDomain);
   return (
     <View style={styles.container}>
       <Navigation domain={dataDomain.og.domain} />
