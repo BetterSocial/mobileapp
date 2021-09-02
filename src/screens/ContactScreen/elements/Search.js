@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TextInput,
   Animated,
+  Alert,
 } from 'react-native';
 
 import MemoIcNewChat from '../../../assets/icons/ic_new_chat';
@@ -13,14 +14,19 @@ import MemoIc_search from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
-const Search = ({onPress, animatedValue}) => {
+const Search = ({onPress, animatedValue, onChangeText, text}) => {
   return (
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
       <View style={styles.wrapperSearch}>
         <TextInput
+          value={text}
           multiline={false}
           placeholder={'Search Users'}
           style={styles.input}
+          onChangeText={(text) => {
+            onChangeText(text);
+          }}
+          onSubmitEditing={(event) => onPress()}
         />
         <View style={styles.wrapperIcon}>
           <MemoIc_search width={20} height={20} />
@@ -34,7 +40,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    marginBottom: SIZES.base,
   },
   wrapperSearch: {
     flex: 1,
@@ -75,15 +80,16 @@ const styles = StyleSheet.create({
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
     backgroundColor: 'white',
-    marginBottom: SIZES.base,
     marginTop: animatedValue,
     top: 0,
     left: 0,
     right: 0,
     zIndex: 10,
     padding: 7,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: COLORS.gray1,
+    borderTopWidth: 0.5,
+    borderTopColor: COLORS.gray1,
   }),
 });
 

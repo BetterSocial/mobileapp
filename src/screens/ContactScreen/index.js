@@ -1,28 +1,25 @@
 import * as React from 'react';
-import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, StyleSheet, RefreshControl, Dimensions} from 'react-native';
 
-import {launchImageLibrary} from 'react-native-image-picker';
-import analytics from '@react-native-firebase/analytics';
-import jwtDecode from 'jwt-decode';
+import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview';
 
 import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
-
-import {Avatar, Gap, Loading} from '../../components';
-import {COLORS, SIZES} from '../../utils/theme';
-import StringConstant from '../../utils/string/StringConstant';
-import Header from './elements/Header';
-import {getAccessToken} from '../../utils/token';
-import {Search} from './elements';
-import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {userPopulate} from '../../service/users';
-import {Alert} from 'react-native';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
+import StringConstant from '../../utils/string/StringConstant';
+import {COLORS} from '../../utils/theme';
+import Header from './elements/Header';
+import {Search} from './elements';
+import {Alert} from 'react-native';
+import Label from './elements/Label';
+import ItemUser from './elements/ItemUser';
+import {Loading} from '../../components';
+
+const width = Dimensions.get('screen').width;
+
 const ContactScreen = ({navigation}) => {
-  const [groupName, setGroupName] = React.useState(null);
-  const [groupIcon, setGroupIcon] = React.useState(null);
-  const [userId, setUserId] = React.useState(null);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [click, setClick] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -30,19 +27,25 @@ const ContactScreen = ({navigation}) => {
   const [profile] = React.useContext(Context).profile;
   const [channel, dispatchChannel] = React.useContext(Context).channel;
   const [client, setClient] = React.useContext(Context).client;
-  const create = useClientGetstream();
+  const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
+  const [layoutProvider, setLayoutProvider] = React.useState(() => {});
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [dataProvider, setDataProvider] = React.useState(null);
+  const [followed, setFollowed] = React.useState([]);
+  const [cacheUsers, setCacheUser] = React.useState([]);
+  const [text, setText] = React.useState(null);
+  const [usernames, setUsernames] = React.useState([]);
 
-  React.useEffect(() => {
-    const getUserId = async () => {
-      const token = await getAccessToken();
-      jwtDecode;
-      const id = await jwtDecode(token).user_id;
-      setUserId(id);
-      console.log(profile);
-    };
-    create();
-    getUserId();
-  }, []);
+  const create = useClientGetstream();
+  const filterItems = (needle, items) => {
+    let query = needle.toLowerCase();
+    let result = items.filter((item) => item.toLowerCase().indexOf(query) > -1);
+    console.log(result.length);
+    return result;
+  };
+
+  const VIEW_TYPE_LABEL = 1;
+  const VIEW_TYPE_DATA = 2;
 
   React.useEffect(() => {
     const getUserPopulate = async () => {
@@ -50,6 +53,7 @@ const ContactScreen = ({navigation}) => {
         setLoading(true);
         const res = await userPopulate();
         setUsers(res);
+        setCacheUser(res);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -59,124 +63,177 @@ const ContactScreen = ({navigation}) => {
     getUserPopulate();
   }, []);
 
-  const handleImageLibrary = () => {
-    analytics().logEvent('btn_take_photo_profile', {
-      id: 2,
-    });
-    launchImageLibrary({mediaType: 'photo'}, (res) => {
-      let image = {
-        uri: res.uri,
-        type: res.type, // or photo.type
-        name: res.fileName,
-      };
-      // console.log(image);
-      setGroupIcon(image);
-      // if (res.base64) {
-      //   // setImage(`${res.base64}`, dispatch);
-      //   setGroupIcon(`data:image/png;base64,${res.base64}`);
-      // }
-    });
-  };
+  React.useEffect(() => {
+    if (users.length > 0) {
+      let dProvider = new DataProvider((row1, row2) => row1 !== row2);
+      setLayoutProvider(
+        new LayoutProvider(
+          (index) => {
+            if (users.length < 1) {
+              return 0;
+            }
+            if (users[index].viewtype === 'label') {
+              return VIEW_TYPE_LABEL;
+            }
+            return VIEW_TYPE_DATA;
+          },
+          (type, dim) => {
+            switch (type) {
+              case VIEW_TYPE_LABEL:
+                dim.width = width;
+                dim.height = 40;
+                break;
 
-  function isInArray(value, array) {
-    return array.indexOf(value);
-  }
+              case VIEW_TYPE_DATA:
+                dim.width = width;
+                dim.height = 76;
+                break;
 
-  const handleCreateChannel = async (users) => {
+              default:
+                dim.width = width;
+                dim.height = 40;
+            }
+          },
+        ),
+      );
+      setDataProvider(dProvider.cloneWithRows(users));
+    }
+  }, [users]);
+
+  React.useEffect(() => {
+    if (dataProvider) {
+      setIsRecyclerViewShown(true);
+    }
+  }, [dataProvider]);
+
+  const handleCreateChannel = async () => {
     try {
-      if (users.length < 1) {
+      console.log(followed[0]);
+      if (followed.length < 1) {
         Alert.alert('Warning', 'Please choose min one user');
       }
       setLoading(true);
-      let members = users.map((item) => item.user_id);
+      let members = followed;
       members.push(profile.user_id);
-      let channelName = users.map((item) => {
-        return item.username;
-      });
+      let channelName = usernames;
       channelName.push(profile.username);
+      let typeChannel = 0;
+
+      if (members.length > 2) {
+        typeChannel = 1;
+      }
 
       const clientChat = await client.client;
       const channelChat = await clientChat.channel('messaging', {
-        name: channelName,
+        name: channelName.toString(),
         members: members,
+        typeChannel,
       });
       await channelChat.create();
       setChannel(channelChat, dispatchChannel);
+      setFollowed([]);
+      setUsernames([]);
       setLoading(false);
       await navigation.navigate('ChatDetailPage');
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
+  };
+
+  const rowRenderer = (type, item, index, extendedState) => {
+    switch (type) {
+      case VIEW_TYPE_LABEL:
+        return <Label label={item.name} />;
+      case VIEW_TYPE_DATA:
+        return (
+          <ItemUser
+            photo={item.profile_pic_path}
+            bio={item.bio}
+            username={item.username}
+            followed={extendedState.followed}
+            userid={item.user_id}
+            onPress={() => handleSelected(item)}
+          />
+        );
+    }
+  };
+
+  const handleSelected = (value) => {
+    let copyFollowed = [...followed];
+    let copyUsername = [...usernames];
+    let index = followed.indexOf(value.user_id);
+    if (index > -1) {
+      copyFollowed.splice(index, 1);
+    } else {
+      copyFollowed.push(value.user_id);
+    }
+
+    let indexName = usernames.indexOf(value.username);
+    if (indexName > -1) {
+      copyUsername.splice(index, 1);
+    } else {
+      copyUsername.push(value.username);
+    }
+    setFollowed(copyFollowed);
+    setUsernames(copyUsername);
+  };
+
+  const _onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const res = await userPopulate();
+      setUsers(res);
+      setCacheUser(res);
+      setRefreshing(false);
+    } catch (error) {
+      setRefreshing(false);
+    }
+  }, []);
+
+  const _handleSearch = () => {
+    const newUsers = cacheUsers.filter(
+      (item) => item.username.toLowerCase().indexOf(text) > -1,
+    );
+    setUsers(newUsers);
+    setText(null);
   };
 
   return (
     <View style={styles.container}>
       <Header
         title={StringConstant.chatTabHeaderCreateChatButtonText}
-        containerStyle={{marginHorizontal: 16}}
+        containerStyle={styles.containerStyle}
         subTitle={'Next'}
-        subtitleStyle={{color: COLORS.holyTosca}}
+        subtitleStyle={{color: COLORS.holyTosca, marginEnd: 8}}
         onPressSub={() => handleCreateChannel(selectedUsers)}
         onPress={() => navigation.goBack()}
       />
 
       <Search
-        style={{marginHorizontal: 16}}
-        onPress={() => console.log('search users')}
+        text={text}
+        style={styles.containerStyle}
+        onChangeText={(t) => {
+          setText(t);
+        }}
+        onPress={() => _handleSearch()}
       />
 
-      <View style={{marginTop: SIZES.base}}>
-        <FlatList
-          data={users}
-          keyExtractor={(item) => item.user_id}
-          renderItem={({item, index}) => {
-            return (
-              <TouchableOpacity
-                key={item.user_id}
-                onPress={() => {
-                  let isAvailable = isInArray(item, selectedUsers);
-                  if (isAvailable > -1) {
-                    selectedUsers.splice(isAvailable, 1);
-                    setSelectedUsers(selectedUsers);
-                  } else {
-                    selectedUsers.push(item);
-                    setSelectedUsers(selectedUsers);
-                  }
-                  setClick(index);
-                  setClick(index);
-                  console.log('test');
-                }}
-                style={{
-                  paddingHorizontal: SIZES.base * 2,
-                  flexDirection: 'row',
-                  paddingVertical: SIZES.base,
-                  backgroundColor:
-                    isInArray(item, selectedUsers) > -1
-                      ? 'rgba(0, 173, 181, 0.15)'
-                      : '#FFFFFF',
-                }}>
-                <Avatar image={item.profile_pic_path} />
-                <Gap width={SIZES.base * 2} />
-                <View style={{justifyContent: 'center'}}>
-                  <Text>{item.username}</Text>
-                </View>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
-                    flex: 1,
-                  }}>
-                  {isInArray(item, selectedUsers) > -1 ? (
-                    <MemoIc_Checklist />
-                  ) : null}
-                </View>
-              </TouchableOpacity>
-            );
+      {isRecyclerViewShown && (
+        <RecyclerListView
+          style={styles.recyclerview}
+          layoutProvider={layoutProvider}
+          dataProvider={dataProvider}
+          extendedState={{
+            followed,
+          }}
+          rowRenderer={rowRenderer}
+          scrollViewProps={{
+            refreshControl: (
+              <RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
+            ),
           }}
         />
-      </View>
-
+      )}
       <Loading visible={loading} />
     </View>
   );
@@ -186,6 +243,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  recyclerview: {
+    marginBottom: 30,
+  },
+  containerStyle: {
+    marginHorizontal: 16,
   },
 });
 

@@ -42,7 +42,9 @@ const Header = ({
   return (
     <View style={{...styles.container, ...containerStyle}}>
       {renderHeader()}
-      <Text style={{...styles.text, ...titleStyle}}>{title}</Text>
+      <View style={styles.containerTitle}>
+        <Text style={{...styles.text, ...titleStyle}}>{title}</Text>
+      </View>
       <View style={styles.gap} />
       <TouchableNativeFeedback onPress={onPressSub}>
         <Text style={{...styles.text, ...subtitleStyle}}>{subTitle}</Text>
@@ -68,8 +70,12 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontFamily: fonts.inter[600],
     fontSize: 14,
-    marginLeft: -20,
     fontWeight: 'bold',
   },
   gap: {width: 20, height: 12},
+  containerTitle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
