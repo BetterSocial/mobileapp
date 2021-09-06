@@ -3,7 +3,6 @@ import {View, Text, FlatList} from 'react-native';
 
 import {launchImageLibrary} from 'react-native-image-picker';
 import analytics from '@react-native-firebase/analytics';
-import jwtDecode from 'jwt-decode';
 
 import {createChannel} from '../../service/chat';
 
@@ -12,23 +11,26 @@ import {COLORS, FONTS, SIZES} from '../../utils/theme';
 import GroupName from './elements/GroupName';
 import StringConstant from '../../utils/string/StringConstant';
 import Header from './elements/Header';
-import {getAccessToken} from '../../utils/token';
+import {getUserId} from '../../utils/users';
 
 const DUMMY = [
   {
     id: '88353551-b9bd-4cf5-a89e-ce6197b880c0',
     name: 'fajarism',
-    icon: 'https://res.cloudinary.com/hpjivutj2/image/upload/v1625213019/i3u9uptxnylfmfqevabf.jpg',
+    icon:
+      'https://res.cloudinary.com/hpjivutj2/image/upload/v1625213019/i3u9uptxnylfmfqevabf.jpg',
   },
   {
     id: 'c8a7d99d-51b5-4bb4-b9c8-cf936156f887',
     name: 'bas_v1-4',
-    icon: 'http://res.cloudinary.com/hpjivutj2/image/upload/v1623291797/t4girkwj1qfqxhr72rgn.jpg',
+    icon:
+      'http://res.cloudinary.com/hpjivutj2/image/upload/v1623291797/t4girkwj1qfqxhr72rgn.jpg',
   },
   {
     id: 'c8c39e52-5484-465c-b635-3c46384b6f2e',
     name: 'eka',
-    icon: 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
+    icon:
+      'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
   },
 ];
 
@@ -38,13 +40,11 @@ const CreateGroupScreen = ({navigation}) => {
   const [userId, setUserId] = React.useState(null);
 
   React.useEffect(() => {
-    const getUserId = async () => {
-      const token = await getAccessToken();
-      jwtDecode;
-      const id = await jwtDecode(token).user_id;
+    const getUser = async () => {
+      const id = await getUserId();
       setUserId(id);
     };
-    getUserId();
+    getUser();
   }, []);
 
   const handleImageLibrary = () => {

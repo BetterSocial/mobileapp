@@ -11,13 +11,11 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Avatar} from 'react-native-activity-feed';
-import jwtDecode from 'jwt-decode';
 import PropsTypes from 'prop-types';
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
-import {getAccessToken} from '../../utils/token';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import Memoic_globe from '../../assets/icons/ic_globe';
@@ -31,6 +29,7 @@ import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
 import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
+import {getUserId} from '../../utils/users';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -132,8 +131,7 @@ const _renderProfileNormal = ({
   let {profile_pic_url, username} = actor.data;
 
   let navigateToProfile = async () => {
-    let selfAccessToken = await getAccessToken();
-    let selfUserId = await jwtDecode(selfAccessToken).user_id;
+    let selfUserId = await getUserId();
     if (selfUserId === userId) {
       return navigation.navigate('ProfileScreen');
     }
@@ -223,8 +221,15 @@ const _renderProfileNormal = ({
 };
 
 const Header = ({props, isBackButton = false}) => {
-  let {anonimity, time, privacy, duration_feed, expired_at, location, actor} =
-    props;
+  let {
+    anonimity,
+    time,
+    privacy,
+    duration_feed,
+    expired_at,
+    location,
+    actor,
+  } = props;
   if (anonimity) {
     return _renderAnonimity({
       time,

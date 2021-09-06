@@ -13,7 +13,6 @@ import {
   LogBox,
 } from 'react-native';
 
-import JWTDecode from 'jwt-decode';
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
 import {useNavigation} from '@react-navigation/core';
 import {showMessage} from 'react-native-flash-message';
@@ -45,6 +44,7 @@ import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import {setImageUrl} from '../../context/actions/users';
 import {Context} from '../../context';
+import {getUserId} from '../../utils/users';
 
 const width = Dimensions.get('screen').width;
 
@@ -58,7 +58,7 @@ const ProfileScreen = () => {
 
   let [token_JWT, setTokenJwt] = React.useState('');
   let [users, dispatch] = React.useContext(Context).users;
-  const [tokenParse, setTokenParse] = React.useState({});
+  const [userId, setUserId] = React.useState(null);
   const [dataMain, setDataMain] = React.useState({});
   const [tempFullName, setTempFullName] = React.useState('');
   const [tempBio, setTempBio] = React.useState('');
@@ -70,10 +70,14 @@ const ProfileScreen = () => {
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
   const [errorBio, setErrorBio] = React.useState('');
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] =
-    React.useState(false);
-  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
-    React.useState(false);
+  const [
+    isLoadingUpdateImageGalery,
+    setIsLoadingUpdateImageGalery,
+  ] = React.useState(false);
+  const [
+    isLoadingUpdateImageCamera,
+    setIsLoadingUpdateImageCamera,
+  ] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
 
@@ -105,12 +109,11 @@ const ProfileScreen = () => {
   }, []);
 
   const fetchMyProfile = async (withLoading) => {
-    const value = await getAccessToken();
-    if (value) {
-      var decoded = await JWTDecode(value);
-      setTokenParse(decoded);
+    const id = await getUserId();
+    if (id) {
+      setUserId(id);
       withLoading ? setIsLoading(true) : null;
-      const result = await getMyProfile(decoded.user_id);
+      const result = await getMyProfile(id);
       console.log(result);
       if (result.code === 200) {
         setDataMain(result.data);
@@ -457,7 +460,7 @@ const ProfileScreen = () => {
                   <View style={styles.containerFlatFeed}>
                     <FlatFeed
                       feedGroup="user"
-                      userId={tokenParse.user_id}
+                      userId={userId}
                       Activity={(props, index) => {
                         return RenderActivity(props, dataMain);
                       }}

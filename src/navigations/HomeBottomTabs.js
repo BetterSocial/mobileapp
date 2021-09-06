@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {StyleSheet, Text} from 'react-native';
 
-import jwtDecode from 'jwt-decode';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   ChannelListScreen,
@@ -13,12 +12,12 @@ import {colors} from '../utils/colors';
 import MemoHome from '../assets/icon/Home';
 import MemoFeed from '../assets/icon/Feed';
 import MemoNews from '../assets/icon/News';
-import {getAccessToken} from '../utils/token';
 import {getMyProfile} from '../service/profile';
 import MemoProfileIcon from '../assets/icon/Profile';
 import {Context} from '../context';
 import {setImageUrl} from '../context/actions/users';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
+import {getUserId} from '../utils/users';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,9 +28,7 @@ function HomeBottomTabs() {
   React.useEffect(() => {
     let getProfile = async () => {
       try {
-        console.log('test');
-        let token = await getAccessToken();
-        let selfUserId = await jwtDecode(token).user_id;
+        let selfUserId = await getUserId();
         let profile = await getMyProfile(selfUserId);
         setImageUrl(profile.data.profile_pic_path, dispatch);
         let data = {

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Alert, Image, Linking, StyleSheet, View, StatusBar} from 'react-native';
 
-import jwtDecode from 'jwt-decode';
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
 import SplashScreenPackage from 'react-native-splash-screen';
@@ -11,6 +10,7 @@ import {getProfileByUsername} from '../../service/profile';
 import {getAccessToken} from '../../utils/token';
 import StringConstant from '../../utils/string/StringConstant';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {getUserId} from '../../utils/users';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
@@ -81,12 +81,13 @@ const SplashScreen = () => {
   let doVerifyUser = async () => {
     try {
       let token = await getAccessToken();
+      let id = await getUserId();
       console.log(token);
-      if (token !== null && token !== '') {
+      if (id !== null && id !== '') {
         const verify = await verifyTokenGetstream();
         if (verify !== null && verify !== '') {
           create();
-          return await jwtDecode(token).user_id;
+          return id;
         } else {
           return null;
         }
