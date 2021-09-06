@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {View, StyleSheet, FlatList, Animated} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Animated,
+  RefreshControl,
+} from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';
 import Toast from 'react-native-simple-toast';
@@ -28,12 +34,14 @@ const NewsScreen = ({}) => {
   const offset = React.useRef(new Animated.Value(0)).current;
 
   const [loading, setLoading] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [yourselfId, setYourselfId] = React.useState('');
   const [domain, setDomain] = React.useState('');
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
   const [idBlock, setIdBlock] = React.useState('');
   const [newslist, dispatch] = React.useContext(Context).news;
+  const scrollRef = React.createRef();
   let {news} = newslist;
   let lastDragY = 0;
   React.useEffect(() => {
@@ -165,22 +173,51 @@ const NewsScreen = ({}) => {
   const downvoteNews = async (itemNews) => {
     downVoteDomain(itemNews);
   };
+
+  const loadMoreData = async (lastId) => {
+    setLoading(true);
+    try {
+      let res = await getDomains(lastId);
+      let newNews = [...news, ...res.data];
+      setNews([{dummy: true}, ...newNews], dispatch);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
+  const setSelectedIndex = (event) => {
+    // width of the view size
+    const viewSize = event.nativeEvent.layoutMeasurement.height / 2;
+    // get current position of the scroll view
+    const contentOffSet = event.nativeEvent.contentOffset.y;
+    const selectedIndex = Math.floor(contentOffSet / viewSize);
+    const last = news.length - 1;
+    if (selectedIndex === last) {
+      const lastId = news[news.length - 1].id;
+      loadMoreData(lastId);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Search animatedValue={offset} />
       <Animated.View>
         <FlatList
+          ref={scrollRef}
+          keyExtractor={(item, index) => item.id}
           onScrollBeginDrag={handleOnScrollBeginDrag}
           onScroll={handleScrollEvent}
           scrollEventThrottle={16}
           data={news}
+          onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
             if (item.dummy) {
               return <View key={index} style={{height: 68}} />;
             }
             return (
               <RenderItem
-                key={item}
+                key={item.id}
                 item={item}
                 onPressShare={(itemNews) => shareNews(itemNews)}
                 onPressComment={(itemNews) => comment(itemNews)}
