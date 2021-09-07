@@ -63,7 +63,6 @@ const ChatDetailPage = () => {
             </View>
           </Channel>
         </Chat>
-        {/* <Text>he</Text> */}
       </SafeAreaView>
     );
   }
