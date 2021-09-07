@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
 
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import JWTDecode from 'jwt-decode';
+import {useNavigation} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import Toast from 'react-native-simple-toast';
 
@@ -16,13 +15,13 @@ import ReportUser from '../../components/Blocking/ReportUser';
 import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import {getAccessToken} from '../../utils/token';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail, getMainFeed, viewTimePost} from '../../service/post';
 import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
 import {blockAnonymous, blockUser} from '../../service/blocking';
 import {Context} from '../../context';
 import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
+import {getUserId} from '../../utils/users';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -223,10 +222,9 @@ const FeedScreen = (props) => {
 
   React.useEffect(() => {
     const parseToken = async () => {
-      const value = await getAccessToken();
-      if (value) {
-        const decoded = await JWTDecode(value);
-        setYourselfId(decoded.user_id);
+      const id = await getUserId();
+      if (id) {
+        setYourselfId(id);
       }
     };
     parseToken();

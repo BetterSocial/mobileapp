@@ -1,7 +1,7 @@
 import {StreamChat} from 'stream-chat';
 import {STREAM_API_KEY} from '@env';
 import {getAccessToken} from '../utils/token';
-import jwtDecode from 'jwt-decode';
+import {getUserId} from '../utils/users';
 const chatClient = new StreamChat(STREAM_API_KEY);
 const createChannel = async (
   channelType,
@@ -11,7 +11,7 @@ const createChannel = async (
 ) => {
   try {
     const token = await getAccessToken();
-    const id = await jwtDecode(token).user_id;
+    const id = await getUserId();
     let user = {
       id: id,
     };

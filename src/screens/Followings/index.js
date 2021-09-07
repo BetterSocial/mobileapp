@@ -12,13 +12,12 @@ import {
 
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
-import jwtDecode from 'jwt-decode';
 
-import {getAccessToken} from '../../utils/token';
 import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
 import Loading from '../Loading';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {getUserId} from '../../utils/users';
 
 const width = Dimensions.get('screen').width;
 
@@ -40,8 +39,7 @@ const Followings = () => {
 
   const fetchFollowing = async (withLoading) => {
     withLoading ? setIsLoading(true) : null;
-    const token = await getAccessToken();
-    const userId = await jwtDecode(token).user_id;
+    const userId = await getUserId();
     const result = await getFollowing(userId);
     console.log(result);
     if (result.code === 200) {

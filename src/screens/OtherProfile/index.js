@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
-import JWTDecode from 'jwt-decode';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
 import {useNavigation} from '@react-navigation/core';
@@ -44,7 +43,6 @@ const OtherProfile = () => {
   const scrollViewReff = React.useRef(null);
   const postRef = React.useRef(null);
 
-  const [tokenParse, setTokenParse] = React.useState({});
   const [dataMain, setDataMain] = React.useState({});
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
@@ -75,9 +73,6 @@ const OtherProfile = () => {
   }, [params.data]);
 
   const fetchOtherProfile = async (userId, otherId, withLoading) => {
-    const value = await getAccessToken();
-    var decoded = await JWTDecode(value);
-    setTokenParse(decoded);
     withLoading ? setIsLoading(true) : null;
     const result = await getOtherProfile(userId, otherId);
     console.log('other', result);

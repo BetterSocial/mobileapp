@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
-import JWTDecode from 'jwt-decode';
+
 import Toast from 'react-native-simple-toast';
-import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 
 import {Gap, Footer} from '../../components';
@@ -28,16 +27,15 @@ import {
 import {createCommentParent} from '../../service/comment';
 import ContentLink from '../FeedScreen/ContentLink';
 import {getFeedDetail} from '../../service/post';
-import {getAccessToken} from '../../utils/token';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
 import StringConstant from '../../utils/string/StringConstant';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {Context} from '../../context';
+import {getUserId} from '../../utils/users';
 
 const {width, height} = Dimensions.get('window');
 
 const PostPageDetail = (props) => {
-  const navigation = useNavigation();
   const [dataProfile, setDataProfile] = React.useState({});
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
@@ -63,17 +61,15 @@ const PostPageDetail = (props) => {
 
   React.useEffect(() => {
     const parseToken = async () => {
-      const value = await getAccessToken();
-      if (value) {
-        const decoded = await JWTDecode(value);
-        setYourselfId(decoded.user_id);
+      const id = await getUserId();
+      if (id) {
+        setYourselfId(id);
       }
     };
     parseToken();
   }, []);
 
   React.useEffect(() => {
-    // updateFeed();
     fetchMyProfile();
   }, [yourselfId]);
 
@@ -199,10 +195,9 @@ const PostPageDetail = (props) => {
     }, 500);
   };
   const fetchMyProfile = async () => {
-    let token = await getAccessToken();
-    if (token) {
-      var decoded = await JWTDecode(token);
-      const result = await getMyProfile(decoded.user_id);
+    let id = await getUserId();
+    if (id) {
+      const result = await getMyProfile(id);
       if (result.code === 200) {
         setDataProfile(result.data);
       }

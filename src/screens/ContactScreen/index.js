@@ -108,7 +108,6 @@ const ContactScreen = ({navigation}) => {
 
   const handleCreateChannel = async () => {
     try {
-      console.log(followed[0]);
       if (followed.length < 1) {
         Alert.alert('Warning', 'Please choose min one user');
       }

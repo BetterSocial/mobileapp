@@ -9,12 +9,10 @@ import {
 
 import analytics from '@react-native-firebase/analytics';
 import Toast from 'react-native-simple-toast';
-import JWTDecode from 'jwt-decode';
 import {useNavigation} from '@react-navigation/native';
 
 import {upVoteDomain, downVoteDomain} from '../../service/vote';
 import {Loading} from '../../components';
-import {getAccessToken} from '../../utils/token';
 import {getDomainIdIFollow, getDomains} from '../../service/domain';
 import theme, {COLORS, FONTS, SIZES} from '../../utils/theme';
 import RenderItem from './RenderItem';
@@ -25,6 +23,7 @@ import ReportDomain from '../../components/Blocking/ReportDomain';
 import {blockDomain} from '../../service/blocking';
 import {Context} from '../../context';
 import {setIFollow, setNews} from '../../context/actions/news';
+import {getUserId} from '../../utils/users';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
@@ -59,10 +58,9 @@ const NewsScreen = ({}) => {
 
   React.useEffect(() => {
     const parseToken = async () => {
-      const value = await getAccessToken();
-      if (value) {
-        const decoded = await JWTDecode(value);
-        setYourselfId(decoded.user_id);
+      const id = await getUserId();
+      if (id) {
+        setYourselfId(id);
       }
     };
     parseToken();

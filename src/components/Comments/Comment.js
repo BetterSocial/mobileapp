@@ -1,22 +1,20 @@
 import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import jwtDecode from 'jwt-decode';
-import IconEn from 'react-native-vector-icons/Entypo';
-import {useNavigation} from '@react-navigation/native';
 
+import {useNavigation} from '@react-navigation/native';
+import IconEn from 'react-native-vector-icons/Entypo';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
 import MemoCommentReply from '../../assets/icon/CommentReply';
-import {getAccessToken} from '../../utils/token';
 import BlockUser from '../Blocking/BlockUser';
 import ReportUser from '../Blocking/ReportUser';
 import SpecificIssue from '../Blocking/SpecificIssue';
 import {blockUser} from '../../service/blocking';
 import Toast from 'react-native-simple-toast';
-import JwtDecode from 'jwt-decode';
+import {getUserId} from '../../utils/users';
 
 const Comment = ({
   user,
@@ -38,7 +36,6 @@ const Comment = ({
   const [userId, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [postId, setPostId] = React.useState('');
-  const [dataProfile, setDataProfile] = React.useState({});
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
@@ -51,8 +48,7 @@ const Comment = ({
   };
 
   let openProfile = async () => {
-    let selfAccessToken = await getAccessToken();
-    let selfUserId = await jwtDecode(selfAccessToken).user_id;
+    let selfUserId = await getUserId();
     if (selfUserId === user.id) {
       return navigation.navigate('ProfileScreen');
     }
@@ -120,10 +116,9 @@ const Comment = ({
 
   React.useEffect(() => {
     const parseToken = async () => {
-      const value = await getAccessToken();
-      if (value) {
-        const decoded = await JwtDecode(value);
-        setYourselfId(decoded.user_id);
+      const id = await getUserId();
+      if (id) {
+        setYourselfId(id);
       }
     };
     parseToken();

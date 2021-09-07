@@ -1,15 +1,14 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import JWTDecode from 'jwt-decode';
 import {ChannelList, Chat, Streami18n} from 'stream-chat-react-native';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {getAccessToken} from '../../utils/token';
 import Search from './elements/Search';
 import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {getUserId} from '../../utils/users';
 
 const ChannelListScreen = ({navigation}) => {
   const streami18n = new Streami18n({
@@ -39,8 +38,8 @@ const ChannelListScreen = ({navigation}) => {
   }, []);
   const setupClient = async () => {
     try {
-      const token = await getAccessToken();
-      const id = await JWTDecode(token).user_id;
+      const id = await getUserId();
+      console.log('user id ', id);
       setUserId(id);
     } catch (err) {
       crashlytics().recordError(err);
