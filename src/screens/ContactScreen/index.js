@@ -2,12 +2,11 @@ import * as React from 'react';
 import {View, StyleSheet, RefreshControl, Dimensions} from 'react-native';
 
 import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview';
-
+import uuid from 'react-native-uuid';
 import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
 import {userPopulate} from '../../service/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-
 import StringConstant from '../../utils/string/StringConstant';
 import {COLORS} from '../../utils/theme';
 import Header from './elements/Header';
@@ -121,15 +120,25 @@ const ContactScreen = ({navigation}) => {
       if (members.length > 2) {
         typeChannel = 1;
       }
-
+      const id = uuid.v4();
       const clientChat = await client.client;
-      const channelChat = await clientChat.channel('messaging', {
-        name: channelName.toString(),
-        members: members,
-        typeChannel,
-      });
-      await channelChat.create();
-      setChannel(channelChat, dispatchChannel);
+      if (typeChannel === 0) {
+        const channelChat = await clientChat.channel('messaging', {
+          name: channelName.toString(),
+          members: members,
+          typeChannel,
+        });
+        await channelChat.create();
+        setChannel(channelChat, dispatchChannel);
+      } else {
+        const channelChat = await clientChat.channel('messaging', id, {
+          name: channelName.toString(),
+          members: members,
+          typeChannel,
+        });
+        await channelChat.create();
+        setChannel(channelChat, dispatchChannel);
+      }
       setFollowed([]);
       setUsernames([]);
       setLoading(false);
