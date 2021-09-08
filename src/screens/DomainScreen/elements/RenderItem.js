@@ -121,16 +121,7 @@ const RenderItem = ({
   return (
     <SingleSidedShadowBox>
       <View style={styles.wrapperItem}>
-        <View
-          style={{
-            flexDirection: 'row',
-            paddingHorizontal: 20,
-            alignItems: 'center',
-            borderBottomWidth: 0.5,
-            borderBottomColor: COLORS.gray1,
-            paddingBottom: 8,
-            paddingTop: 8,
-          }}>
+        <View style={styles.container}>
           <View style={styles.wrapperImage}>
             {image ? (
               <Image
@@ -310,7 +301,6 @@ const styles = StyleSheet.create({
     height: 48,
     width: 48,
     borderRadius: 45,
-    backgroundColor: 'red',
   },
   wrapperText: {
     backgroundColor: 'white',
@@ -362,6 +352,15 @@ const styles = StyleSheet.create({
   },
   domainIndicatorContainer: {
     marginLeft: -4,
+  },
+  container: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    borderBottomWidth: 0.5,
+    borderBottomColor: COLORS.gray1,
+    paddingBottom: 8,
+    paddingTop: 8,
   },
 });
 
