@@ -67,10 +67,13 @@ const styles = StyleSheet.create({
     marginLeft: marginLeft,
   }),
   text: {
-    color: COLORS.black,
-    fontFamily: fonts.inter[600],
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 16,
+    color: '#000000',
+    lineHeight: 20,
+    alignSelf: 'center',
   },
   gap: {width: 20, height: 12},
   containerTitle: {
