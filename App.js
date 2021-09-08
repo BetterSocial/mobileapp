@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {PermissionsAndroid} from 'react-native';
 
 import {
   SafeAreaProvider,
@@ -19,7 +20,23 @@ const App = () => {
   const streami18n = new Streami18n({
     language: 'en',
   });
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
   React.useEffect(() => {
+    requestCameraPermission();
     const init = async () => {
       try {
         fetchRemoteConfig();

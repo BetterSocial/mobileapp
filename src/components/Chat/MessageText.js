@@ -2,7 +2,6 @@ import * as React from 'react';
 import {TouchableWithoutFeedback} from 'react-native';
 import {StyleSheet, Text, View} from 'react-native';
 
-import MemoIc_read from '../../assets/chats/Ic_read';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';

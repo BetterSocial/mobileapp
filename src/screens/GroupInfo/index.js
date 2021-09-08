@@ -25,6 +25,8 @@ const GroupInfo = () => {
   const route = useRoute();
   const [groupChatState] = React.useContext(Context).groupChat;
   const {participants, asset} = groupChatState;
+  const [channelState] = React.useContext(Context).channel;
+  const {channel} = channelState;
   const [countUser] = React.useState(Object.entries(participants).length);
   return (
     <View style={styles.container}>
@@ -78,23 +80,21 @@ const GroupInfo = () => {
             />
           </View>
           <View style={styles.lineTop} />
-          {countUser !== 2 && (
-            <View style={styles.users}>
-              <Text style={styles.countUser}>Participants {countUser}</Text>
-              {Object.keys(participants).map((key) => {
-                return (
-                  <ItemUser
-                    fullname={participants[key].user.name}
-                    photo={participants[key].user.image}
-                    key={String(key)}
-                  />
-                );
-              })}
-            </View>
-          )}
+          <View style={styles.users}>
+            <Text style={styles.countUser}>Participants {countUser}</Text>
+            {Object.keys(participants).map((key) => {
+              return (
+                <ItemUser
+                  fullname={participants[key].user.name}
+                  photo={participants[key].user.image}
+                  key={String(key)}
+                />
+              );
+            })}
+          </View>
         </SafeAreaView>
       </ScrollView>
-      {countUser !== 2 && (
+      {!channel?.cid.includes('!members') && (
         <View style={styles.btnAdd}>
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate('AddParticipant')}>
