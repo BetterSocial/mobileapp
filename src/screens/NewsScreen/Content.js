@@ -21,7 +21,7 @@ const Content = (props) => {
   let {item, title, image, description, url} = props;
 
   let onContentPressed = () => {
-    navigation.push('DetailDomainScreen', {
+    navigation.push('LinkContextScreen', {
       item,
     });
   };
