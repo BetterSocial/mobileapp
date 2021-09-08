@@ -122,23 +122,13 @@ const ContactScreen = ({navigation}) => {
       }
       const id = uuid.v4();
       const clientChat = await client.client;
-      if (typeChannel === 0) {
-        const channelChat = await clientChat.channel('messaging', {
-          name: channelName.toString(),
-          members: members,
-          typeChannel,
-        });
-        await channelChat.create();
-        setChannel(channelChat, dispatchChannel);
-      } else {
-        const channelChat = await clientChat.channel('messaging', id, {
-          name: channelName.toString(),
-          members: members,
-          typeChannel,
-        });
-        await channelChat.create();
-        setChannel(channelChat, dispatchChannel);
-      }
+      const channelChat = await clientChat.channel('messaging', id, {
+        name: channelName.toString(),
+        members: members,
+        typeChannel,
+      });
+      await channelChat.create();
+      setChannel(channelChat, dispatchChannel);
       setFollowed([]);
       setUsernames([]);
       setLoading(false);
