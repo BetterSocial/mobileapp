@@ -53,7 +53,7 @@ const Header = ({
             <MemoIc_arrow_back width={18} height={18} />
           </TouchableOpacity>
         )}
-        <View style={styles.wrapperImage}>
+        <View style={styles.wrapperImage(showBackButton)}>
           {image ? (
             <Image
               source={{uri: image}}
@@ -113,14 +113,17 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     backgroundColor: COLORS.white,
   },
-  wrapperImage: {
-    borderRadius: 45,
-    borderWidth: 0.2,
-    borderColor: 'rgba(0,0,0,0.5)',
-    width: 48,
-    height: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
+  wrapperImage: (showBackButton = true) => {
+    return {
+      borderRadius: 45,
+      borderWidth: 0.2,
+      borderColor: 'rgba(0,0,0,0.5)',
+      width: 48,
+      height: 48,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginLeft: showBackButton ? 0 : 20,
+    };
   },
   image: {
     height: 48,

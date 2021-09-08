@@ -46,6 +46,8 @@ const DomainScreen = () => {
   React.useEffect(() => {
     const init = async () => {
       setLoading(true);
+      console.log('dataDomain.og.domain');
+      console.log(dataDomain.og.domain);
       let res = await getDetailDomains(dataDomain.og.domain);
       if (res.code === 200) {
         setData([{dummy: true}, ...res.data]);

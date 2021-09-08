@@ -1,39 +1,108 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import Toast from 'react-native-simple-toast';
-import JWTDecode from 'jwt-decode';
+import {View, StyleSheet, FlatList, Image, Text, Animated} from 'react-native';
 
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import {Header, Content, LinkContextScreenFooter} from './elements';
-import {COLORS} from '../../utils/theme';
-import {blockDomain} from '../../service/blocking';
+import JWTDecode from 'jwt-decode';
+import {useRoute, useNavigation} from '@react-navigation/native';
+import Toast from 'react-native-simple-toast';
+
 import {upVoteDomain, downVoteDomain} from '../../service/vote';
 import {getAccessToken} from '../../utils/token';
-import {fonts} from '../../utils/fonts';
+import Loading from '../Loading';
+import {getDetailDomains, getProfileDomain} from '../../service/domain';
+import {blockDomain} from '../../service/blocking';
+import LinkContextItem from './elements/Item';
 import PostArrowUp from '../../assets/images/post-arrow-up.png';
+import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
+import RenderItem from '../DomainScreen/elements/RenderItem';
 
-const LinkContextScreen = ({route}) => {
-  const navigation = useNavigation();
-  // console.log('JSON.stringify(route.params)');
-  // console.log(JSON.stringify(route.params.item));
+const DomainScreen = () => {
+  const route = useRoute();
+
   let {item} = route.params;
-  console.log('item.id');
-  console.log(item.id);
   let domainImage = item.domain.image;
   let domainName = item.domain.name;
   let postTime = item.time;
 
+  const navigation = useNavigation();
   const blockDomainRef = React.useRef(null);
   const refSpecificIssue = React.useRef(null);
   const refReportDomain = React.useRef(null);
+  const [dataDomain, setDataDomain] = React.useState(route.params.item);
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [profile, setProfile] = React.useState({});
+  const [domain, setDomain] = React.useState(item.domainId);
+  const [idFromToken, setIdFromToken] = React.useState('');
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
-  const [dataDomain, setDataDomain] = React.useState(item.domain);
-  const [idFromToken, setIdFromToken] = React.useState('');
 
+  const animatedBottomAnchorContainerValue = React.useRef(
+    new Animated.Value(0),
+  ).current;
+
+  React.useEffect(() => {
+    const parseToken = async () => {
+      const value = await getAccessToken();
+      if (value) {
+        const decoded = await JWTDecode(value);
+        setIdFromToken(decoded.user_id);
+      }
+    };
+    parseToken();
+  }, []);
+
+  React.useEffect(() => {
+    const init = async () => {
+      setLoading(true);
+      let res = await getDetailDomains(domainName);
+      if (res.code === 200) {
+        let reducedData = res.data.reduce((acc, currentItem) => {
+          if (currentItem.foreign_id !== item.foreign_id) {
+            acc.push(currentItem);
+          }
+          return acc;
+        }, []);
+        setData([{dummy: true}, ...reducedData]);
+        setLoading(false);
+      }
+      setLoading(false);
+    };
+    init();
+  }, [dataDomain]);
+
+  // React.useEffect(() => {
+  //   const getProfile = async () => {
+  //     let res = await getProfileDomain(domain);
+  //     if (res.code === 200) {
+  //       setProfile(res.data);
+  //     } else {
+  //       Toast.show('Domain Not Found', Toast.LONG);
+  //       navigation.goBack();
+  //     }
+  //   };
+  //   getProfile();
+  // }, [dataDomain]);
+
+  React.useEffect(() => {
+    // console.log('data');
+    // console.log(JSON.stringify(data));
+  }, [data]);
+
+  const handleOnPressComment = (itemNews) => {
+    navigation.navigate('DetailDomainScreen', {item: itemNews});
+  };
+
+  const upvoteNews = async (news) => {
+    upVoteDomain(news);
+  };
+
+  const downvoteNews = async (news) => {
+    downVoteDomain(news);
+  };
+  const onReaction = async (v) => {
+    blockDomainRef.current.open();
+  };
   const selectBlock = (v) => {
     if (v === 1) {
       onBlockDomain();
@@ -42,7 +111,6 @@ const LinkContextScreen = ({route}) => {
     }
     blockDomainRef.current.close();
   };
-
   const getSpecificIssue = (v) => {
     setMessageReport(v);
     refSpecificIssue.current.close();
@@ -50,17 +118,15 @@ const LinkContextScreen = ({route}) => {
       onBlockDomain();
     }, 500);
   };
-
-  const onNextQuestion = (v) => {
-    setReportOption(v);
-    refReportDomain.current.close();
-    refSpecificIssue.current.open();
-  };
-
   const onSkipOnlyBlock = () => {
     refReportDomain.current.close();
     refSpecificIssue.current.close();
     onBlockDomain();
+  };
+  const onNextQuestion = (v) => {
+    setReportOption(v);
+    refReportDomain.current.close();
+    refSpecificIssue.current.open();
   };
 
   const onBlockDomain = async () => {
@@ -82,89 +148,77 @@ const LinkContextScreen = ({route}) => {
     console.log('result block user ', result);
   };
 
-  const onReaction = async (v) => {
-    blockDomainRef.current.open();
+  const handleOnScroll = (event) => {
+    let y = event.nativeEvent.contentOffset.y;
+    if (y > 50) {
+      Animated.timing(animatedBottomAnchorContainerValue, {
+        toValue: -(y - 50),
+        duration: 50,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(animatedBottomAnchorContainerValue, {
+        toValue: 0,
+        duration: 50,
+        useNativeDriver: false,
+      }).start();
+    }
   };
-
-  const handleOnPressComment = (itemNews) => {
-    navigation.navigate('DetailDomainScreen', {item: itemNews});
-  };
-
-  const upvoteNews = async (news) => {
-    upVoteDomain(news);
-  };
-
-  const downvoteNews = async (news) => {
-    downVoteDomain(news);
-  };
-
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const value = await getAccessToken();
-      if (value) {
-        const decoded = await JWTDecode(value);
-        setIdFromToken(decoded.user_id);
-      }
-    };
-    parseToken();
-  }, []);
-
+  // console.log('data domain ', dataDomain);
   return (
     <View style={styles.container}>
-      <Header
-        item={item}
-        name={domainName}
-        image={domainImage}
-        time={postTime}
-        onFollowDomainPressed={() => {}}
-        showBackButton
+      <FlatList
+        data={data}
+        onScroll={handleOnScroll}
+        renderItem={(props) => {
+          let singleItem = props.item;
+          let {index} = props;
+
+          if (index === 0) {
+            return <LinkContextItem item={item} />;
+          }
+
+          if (singleItem.content) {
+            return <LinkContextItem item={singleItem} showBackButton={false} />;
+          }
+        }}
+        style={styles.list}
+        keyExtractor={(i) => i.id}
       />
-      <Content item={item} onContentPressed={() => {}} />
-      <LinkContextScreenFooter
-        item={item}
-        itemId={item.id}
-        onPressBlock={() => onReaction(0)}
-        onPressComment={(itemNews) => handleOnPressComment(itemNews)}
-        onPressUpvote={(news) => upvoteNews(news)}
-        onPressDownVote={(news) => downvoteNews(news)}
-        selfUserId={idFromToken}
-      />
-      <BlockDomain
-        refBlockDomain={blockDomainRef}
-        onSelect={selectBlock}
-        domain={item.domain}
-      />
-      <SpecificIssue
-        refSpecificIssue={refSpecificIssue}
-        onPress={getSpecificIssue}
-        onSkip={onSkipOnlyBlock}
-      />
-      <ReportDomain
-        refReportDomain={refReportDomain}
-        onSkip={onSkipOnlyBlock}
-        onSelect={onNextQuestion}
-      />
-      <View style={styles.bottomAnchorContainer}>
-        <Image source={PostArrowUp} style={styles.postArrowUpImage} />
-        <View style={styles.bottomAnchorTextContainer}>
-          <Text style={styles.bottomAnchorSwipeText}>
-            Swipe for related articles
-          </Text>
-        </View>
-      </View>
+      {data.length > 1 && (
+        <Animated.View
+          style={styles.bottomAnchorContainer(
+            animatedBottomAnchorContainerValue,
+          )}>
+          <Image source={PostArrowUp} style={styles.postArrowUpImage} />
+          <View style={styles.bottomAnchorTextContainer}>
+            <Text style={styles.bottomAnchorSwipeText}>
+              Swipe for related articles
+            </Text>
+          </View>
+        </Animated.View>
+      )}
+
+      <Loading visible={false} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  list: {flex: 1},
   container: {
-    backgroundColor: COLORS.white,
     flex: 1,
+    backgroundColor: 'white',
   },
-  bottomAnchorContainer: {
-    position: 'absolute',
-    bottom: 0,
-    alignSelf: 'center',
+  height: (h) => ({
+    height: h,
+  }),
+  bottomAnchorContainer: (animatedValue) => {
+    return {
+      position: 'absolute',
+      bottom: animatedValue,
+      alignSelf: 'center',
+    };
   },
   postArrowUpImage: {
     width: 48,
@@ -185,4 +239,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LinkContextScreen;
+export default DomainScreen;
