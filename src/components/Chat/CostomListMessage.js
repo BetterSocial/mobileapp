@@ -17,6 +17,7 @@ const CostomListMessage = (props) => {
   ) {
     return (
       <MessageText
+        forceAlign="left"
         key={props.message.id}
         image={props.message.user.image}
         name={props.message.user.name}
@@ -35,6 +36,7 @@ const CostomListMessage = (props) => {
   ) {
     return (
       <MessageWithImage
+        forceAlign="left"
         key={props.message.id}
         attachments={props.message.attachments}
         image={props.message.user.image}
@@ -52,6 +54,7 @@ const CostomListMessage = (props) => {
   ) {
     return (
       <ReplyMessageText
+        forceAlign="left"
         key={props.message.id}
         image={props.message.user.image}
         name={props.message.user.name}
@@ -77,6 +80,7 @@ const CostomListMessage = (props) => {
   ) {
     return (
       <MessageWithLink
+        forceAlign="left"
         key={props.message.id}
         image={props.message.user.image}
         name={props.message.user.name}
