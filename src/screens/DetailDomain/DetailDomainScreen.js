@@ -1,8 +1,6 @@
 import * as React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
 
-import JWTDecode from 'jwt-decode';
-import {getAccessToken} from '../../utils/token';
 import Toast from 'react-native-simple-toast';
 
 import {DomainHeader, Gap, Footer} from '../../components';
@@ -26,6 +24,7 @@ import {
   getCountCommentWithChild,
   getCountCommentWithChildInDetailPage,
 } from '../../utils/getstream';
+import {getUserId} from '../../utils/users';
 
 const {width, height} = Dimensions.get('window');
 
@@ -106,10 +105,9 @@ const DetailDomainScreen = (props) => {
 
   React.useEffect(() => {
     const parseToken = async () => {
-      const value = await getAccessToken();
-      if (value) {
-        const decoded = await JWTDecode(value);
-        setYourselfId(decoded.user_id);
+      const id = await getUserId();
+      if (id) {
+        setYourselfId(id);
       }
     };
     parseToken();
@@ -179,10 +177,9 @@ const DetailDomainScreen = (props) => {
     }, 500);
   };
   const fetchMyProfile = async () => {
-    let token = await getAccessToken();
-    if (token) {
-      var decoded = await JWTDecode(token);
-      const result = await getMyProfile(decoded.user_id);
+    var id = getUserId();
+    if (id) {
+      const result = await getMyProfile(id);
       if (result.code === 200) {
         setDataProfile(result.data);
         setLoading(false);

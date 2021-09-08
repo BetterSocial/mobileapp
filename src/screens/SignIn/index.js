@@ -29,7 +29,6 @@ import StringConstant from '../../utils/string/StringConstant';
 import ButtonSign from '../../assets/icon-svg/button_sign.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
-import {createClient} from '../../context/actions/createClient';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
 const ENABLE_DEV_ONLY_FEATURE = true;

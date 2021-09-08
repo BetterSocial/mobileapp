@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import {Gap} from '../../../components';

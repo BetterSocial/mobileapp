@@ -1,15 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import jwtDecode from 'jwt-decode';
+
 import {useNavigation} from '@react-navigation/native';
-
-import SeeMore from 'react-native-see-more-inline';
-
 import {calculateTime} from '../../utils/time';
 import {fonts} from '../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 import {Dot, Gap} from '../../components';
-import {getAccessToken} from '../../utils/token';
+import {getUserId} from '../../utils/users';
 
 const PreviewComment = ({
   comment,
@@ -22,8 +19,7 @@ const PreviewComment = ({
   const navigation = useNavigation();
 
   let openProfile = async () => {
-    let selfAccessToken = await getAccessToken();
-    let selfUserId = await jwtDecode(selfAccessToken).user_id;
+    let selfUserId = await getUserId();
     if (selfUserId === user.id) {
       return navigation.navigate('ProfileScreen');
     }

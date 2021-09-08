@@ -42,6 +42,8 @@ const ChatDetailPage = () => {
     setAsset(messages.results, dispatch);
   };
   if (clients.client && channelClient.channel) {
+    // console.log('channel full ', channelClient.channel);
+    // console.log('channel ', channelClient.channel?.data?.created_by);
     return (
       <SafeAreaView>
         <Chat client={clients.client} i18nInstance={streami18n}>
@@ -61,7 +63,6 @@ const ChatDetailPage = () => {
             </View>
           </Channel>
         </Chat>
-        {/* <Text>he</Text> */}
       </SafeAreaView>
     );
   }

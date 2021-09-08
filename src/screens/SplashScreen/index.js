@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Alert, Image, Linking, StyleSheet, View, StatusBar} from 'react-native';
 
-import jwtDecode from 'jwt-decode';
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
 import SplashScreenPackage from 'react-native-splash-screen';
@@ -10,15 +9,13 @@ import {verifyTokenGetstream} from '../../service/users';
 import {getProfileByUsername} from '../../service/profile';
 import {getAccessToken} from '../../utils/token';
 import StringConstant from '../../utils/string/StringConstant';
-import {createClient} from './../../context/actions/createClient';
-import {Context} from '../../context';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {getUserId} from '../../utils/users';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
   const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org';
   let [isModalShown, setIsModalShown] = React.useState(false);
-  // const [, dispatch] = React.useContext(Context).client;
   const create = useClientGetstream();
   React.useEffect(() => {
     analytics().logScreenView({
@@ -84,20 +81,20 @@ const SplashScreen = () => {
   let doVerifyUser = async () => {
     try {
       let token = await getAccessToken();
+      let id = await getUserId();
       console.log(token);
-      if (token !== null && token !== '') {
+      if (id !== null && id !== '') {
         const verify = await verifyTokenGetstream();
         if (verify !== null && verify !== '') {
-          // createClient(token, dispatch);
           create();
-          return await jwtDecode(token).user_id;
+          return id;
         } else {
           return null;
         }
       }
       return null;
     } catch (e) {
-      console.log(e);
+      console.log('doVerifyUser ', e);
       return null;
     }
   };

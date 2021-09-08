@@ -29,11 +29,6 @@ const MessageText = ({image, name, time, message, read, isMe, all}) => {
                 <Dot color="#000" />
                 <Text style={styles.time}>{calculateTime(time)}</Text>
               </View>
-              <MemoIc_read
-                width={14.9}
-                height={8.13}
-                fill={read ? colors.bondi_blue : colors.gray}
-              />
             </View>
             <Text style={styles.message}>{message}</Text>
           </View>

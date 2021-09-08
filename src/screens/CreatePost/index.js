@@ -10,7 +10,6 @@ import {
   View,
 } from 'react-native';
 
-import JWTDecode from 'jwt-decode';
 import {useNavigation} from '@react-navigation/core';
 import {showMessage} from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
@@ -43,9 +42,9 @@ import {fonts} from '../../utils/fonts';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import {createPollPost} from '../../service/post';
-import {getAccessToken} from '../../utils/token';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import StringConstant from '../../utils/string/StringConstant';
+import {getUserId} from '../../utils/users';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -139,10 +138,9 @@ const CreatePost = () => {
 
   const fetchMyProfile = async () => {
     setLoading(true);
-    let token = await getAccessToken();
-    if (token) {
-      var decoded = await JWTDecode(token);
-      const result = await getMyProfile(decoded.user_id);
+    let userId = await getUserId();
+    if (userId) {
+      const result = await getMyProfile(userId);
       if (result.code === 200) {
         setDataProfile(result.data);
         setLoading(false);

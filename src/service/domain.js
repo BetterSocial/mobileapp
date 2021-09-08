@@ -1,9 +1,15 @@
 import api from './config';
 import crashlytics from '@react-native-firebase/crashlytics';
 
-export const getDomains = async () => {
+export const getDomains = async (lastId = null) => {
   try {
-    let res = await api.get('/domain');
+    let url = '';
+    if (lastId) {
+      url = `/domain?id_lt=${lastId}`;
+    } else {
+      url = '/domain';
+    }
+    let res = await api.get(url);
     return res.data;
   } catch (error) {
     console.log(error);

@@ -1,12 +1,10 @@
 import * as React from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
 
-import JWTDecode from 'jwt-decode';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 
 import {upVoteDomain, downVoteDomain} from '../../service/vote';
-import {getAccessToken} from '../../utils/token';
 import Loading from '../Loading';
 import Header from './elements/Header';
 import Navigation from './elements/Navigation';
@@ -16,6 +14,7 @@ import BlockDomain from '../../components/Blocking/BlockDomain';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import {blockDomain} from '../../service/blocking';
+import {getUserId} from '../../utils/users';
 
 const DomainScreen = () => {
   const route = useRoute();
@@ -34,10 +33,9 @@ const DomainScreen = () => {
 
   React.useEffect(() => {
     const parseToken = async () => {
-      const value = await getAccessToken();
-      if (value) {
-        const decoded = await JWTDecode(value);
-        setIdFromToken(decoded.user_id);
+      const id = await getUserId();
+      if (id) {
+        setIdFromToken(id);
       }
     };
     parseToken();
