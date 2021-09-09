@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
 
 import {
   Chat,
@@ -72,7 +72,7 @@ const ChatDetailPage = () => {
     setAsset(messages.results, dispatch);
   };
   if (clients.client && channelClient.channel) {
-    // console.log('channel full ', channelClient.channel);
+    // console.log('channel full ', channelClient.channel.cid);
     // console.log('channel ', channelClient.channel?.data?.created_by);
     return (
       <SafeAreaView>
@@ -84,6 +84,7 @@ const ChatDetailPage = () => {
             mutesEnabled={false}
             threadRepliesEnabled={false}
             reactionsEnabled={false}
+            readEventsEnabled={false}
             messageActions={(props) => {
               return defaultActionsAllowed(props)
             }}
@@ -107,5 +108,3 @@ const ChatDetailPage = () => {
 };
 
 export default ChatDetailPage;
-
-const styles = StyleSheet.create({});

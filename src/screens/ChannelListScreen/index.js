@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import {ChannelList, Chat, Streami18n} from 'stream-chat-react-native';
+import {ChannelList, ChannelPreviewStatus, ChannelPreviewUnreadCount, Chat, Streami18n} from 'stream-chat-react-native';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Search from './elements/Search';
@@ -46,6 +46,14 @@ const ChannelListScreen = ({navigation}) => {
     }
   };
 
+  const customPreviewStatus = (props) => {
+    let newLatestMessagePreview = {...props.latestMessagePreview}
+    if(props.latestMessagePreview.status > 1) {
+      newLatestMessagePreview.status = 1
+    }
+    return <ChannelPreviewStatus latestMessagePreview={newLatestMessagePreview}/>
+  }
+
   return (
     <View style={{height: '100%'}}>
       <Search
@@ -57,6 +65,7 @@ const ChannelListScreen = ({navigation}) => {
           <View style={StyleSheet.absoluteFill}>
             <ChannelList
               filters={memoizedFilters}
+              PreviewStatus={customPreviewStatus}
               onSelect={(channel) => {
                 setChannel(channel, dispatch);
                 // ChannelScreen | ChatDetailPage

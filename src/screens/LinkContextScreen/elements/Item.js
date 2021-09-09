@@ -15,7 +15,7 @@ import {getAccessToken} from '../../../utils/token';
 import {fonts} from '../../../utils/fonts';
 import PostArrowUp from '../../../assets/images/post-arrow-up.png';
 
-const LinkContextItem = ({item, showBackButton = true}) => {
+const LinkContextItem = ({item, showBackButton = true, setFollow, follow = false,}) => {
   const navigation = useNavigation();
   // console.log('JSON.stringify(route.params)');
   // console.log(JSON.stringify(route.params.item));
@@ -118,6 +118,8 @@ const LinkContextItem = ({item, showBackButton = true}) => {
         image={domainImage}
         time={postTime}
         onFollowDomainPressed={() => {}}
+        setFollow={setFollow}
+        follow={follow}
         showBackButton={showBackButton}
       />
       <Content item={item} onContentPressed={onContentPressed} />

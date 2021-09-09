@@ -11,10 +11,13 @@ import {
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
+import MemoUnfollowDomain from '../../../assets/icon/IconUnfollowDomain';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import {Gap} from '../../../components';
+import { addIFollowByID, setIFollow } from '../../../context/actions/news';
+import { followDomain, getDomainIdIFollow, unfollowDomain } from '../../../service/domain';
 import {fonts} from '../../../utils/fonts';
 import {COLORS, SIZES} from '../../../utils/theme';
 
@@ -23,10 +26,16 @@ const Header = ({
   image,
   name,
   time,
-  onFollowDomainPressed,
   showBackButton,
+  follow,
+  setFollow
 }) => {
+  let iddomain = item.content.domain_page_id;
   const navigation = useNavigation();
+  const [dataFollow] = React.useState({
+    domainId: iddomain,
+    source: 'domain_page',
+  });
 
   let onHeaderClicked = () => {
     navigation.push('DomainScreen', {
@@ -42,6 +51,54 @@ const Header = ({
   let onNavigationBack = () => {
     navigation.goBack();
   };
+
+  const getIFollow = async () => {
+    if (ifollow.length === 0) {
+      let res = await getDomainIdIFollow();
+      setIFollow(res.data, dispatch);
+    } else {
+      setFollow(JSON.stringify(ifollow).includes(iddomain));
+    }
+  };
+
+  const handleFollow = async () => {
+    setFollow(true);
+    console.log('handle follow');
+    const res = await followDomain(dataFollow);
+    if (res.code === 200) {
+      addIFollowByID(
+        {
+          domain_id_followed: iddomain,
+        },
+        dispatch,
+      );
+
+      console.log('res follow');
+    } else {
+      console.log('error follow domain');
+      setFollow(false)
+    }
+  };
+  const handleUnFollow = async () => {
+    setFollow(false);
+    console.log('handle unfollow');
+    const res = await unfollowDomain(dataFollow);
+    if (res.code === 200) {
+      let newListFollow = await ifollow.filter(function (obj) {
+        return obj.domain_id_followed !== iddomain;
+      });
+      console.log('res unfollow');
+      setIFollow(newListFollow, dispatch);
+    } else {
+      console.log('error unfollow domain');
+      setFollow(true)
+    }
+  };
+
+  const onFollowDomainPressed = () => {
+    console.log('asdasdasd');
+    follow ? handleUnFollow() : handleFollow();
+  }
 
   return (
     <View style={styles.headerContainer}>
@@ -93,9 +150,13 @@ const Header = ({
       </Pressable>
       <View style={{justifyContent: 'center'}}>
         <TouchableOpacity onPress={onFollowDomainPressed}>
+          {follow ? 
+          <View style={styles.wrapperTextUnFollow}>
+            <MemoUnfollowDomain />
+          </View>:
           <View style={styles.wrapperText}>
             <MemoFollowDomain />
-          </View>
+          </View>}
         </TouchableOpacity>
       </View>
     </View>
@@ -160,6 +221,16 @@ const styles = StyleSheet.create({
   },
   wrapperText: {
     backgroundColor: 'white',
+    borderRadius: 8,
+    borderColor: '#00ADB5',
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 0.5,
+  },
+  wrapperTextUnFollow: {
+    backgroundColor: '#00ADB5',
     borderRadius: 8,
     borderColor: '#00ADB5',
     width: 36,

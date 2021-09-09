@@ -7,7 +7,7 @@ import MessageWithLink from './MessageWithLink';
 import ReplyMessageText from './ReplyMessageText';
 
 const CostomListMessage = (props) => {
-  // console.log(JSON.stringify(props));
+  // console.log(props);
   if (props.message.deleted_at) {
     return null;
   }
