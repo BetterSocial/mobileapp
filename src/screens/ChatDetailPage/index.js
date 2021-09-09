@@ -50,7 +50,6 @@ const ChatDetailPage = () => {
           <Channel
             channel={channelClient.channel}
             keyboardVerticalOffset={50}
-            onPressMessage={() => console.log('haha')}
             hasFilePicker={false}>
             <View style={{flex: 1}}>
               <Header
@@ -58,7 +57,8 @@ const ChatDetailPage = () => {
                 profile={channelClient.channel?.data?.created_by?.image}
                 createChat={channelClient.channel?.data?.created_at}
               />
-              <MessageList Message={CostomListMessage} />
+              <MessageList />
+              {/* <MessageList Message={CostomListMessage} /> */}
 
               <MessageInput Input={InputMessage} />
             </View>
