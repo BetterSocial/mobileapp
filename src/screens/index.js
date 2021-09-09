@@ -11,6 +11,7 @@ import DetailGroupImage from './DetailGroupImage';
 import GroupInfo from './GroupInfo';
 import GroupMedia from './GroupInfo/GroupMedia';
 import AddParticipant from './AddParticipant';
+import GroupSetting from './GroupSetting';
 
 export {
   ChannelScreen,
@@ -26,4 +27,5 @@ export {
   GroupInfo,
   GroupMedia,
   AddParticipant,
+  GroupSetting,
 };

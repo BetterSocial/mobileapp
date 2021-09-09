@@ -32,7 +32,9 @@ const Header = ({username, profile, createChat}) => {
         </TouchableWithoutFeedback>
       </View>
       <View style={styles.row}>
-        <TouchableOpacity style={styles.btnOptions}>
+        <TouchableOpacity
+          style={styles.btnOptions}
+          onPress={() => navigation.navigate('GroupSetting')}>
           <IconEP name="dots-three-vertical" size={12.87} color={'#fff'} />
         </TouchableOpacity>
       </View>
