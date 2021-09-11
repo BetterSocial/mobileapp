@@ -10,7 +10,6 @@ import {SearchContact} from '../../components/Search';
 import {Loading} from '../../components';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
-import {getUserId} from '../../utils/users';
 
 const width = Dimensions.get('screen').width;
 const VIEW_TYPE_DATA = 2;
@@ -100,9 +99,7 @@ const AddParticipant = ({navigation}) => {
     if (followed.length !== 0 && channel.channel) {
       try {
         setLoading(true);
-        const id = await getUserId();
-        await channel.channel.addModerators([id]);
-        // await channel.channel.addMembers(followed);
+        await channel.channel.addMembers(followed);
         setLoading(false);
         navigation.goBack();
       } catch (error) {
