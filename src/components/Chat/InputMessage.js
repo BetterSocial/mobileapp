@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     flexWrap: 'wrap',
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     zIndex: 99,
   },
   container: {

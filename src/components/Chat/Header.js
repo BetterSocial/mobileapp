@@ -13,7 +13,7 @@ const Header = ({username, profile, createChat}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
+      <View style={[styles.row, {flex: 1}]}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MemoIc_arrow_back_white width={20} height={12} />
         </TouchableOpacity>
@@ -34,7 +34,11 @@ const Header = ({username, profile, createChat}) => {
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.btnOptions}
-          onPress={() => navigation.navigate('GroupSetting')}>
+          onPress={() =>
+            navigation.navigate('GroupSetting', {
+              username,
+            })
+          }>
           <IconEP name="dots-three-vertical" size={12.87} color={'#fff'} />
         </TouchableOpacity>
       </View>

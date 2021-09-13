@@ -11,7 +11,6 @@ import {
 
 import Header from '../../components/Chat/Header';
 import InputMessage from '../../components/Chat/InputMessage';
-import CostomListMessage from '../../components/Chat/CostomListMessage';
 import {Context} from '../../context';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {setAsset, setParticipants} from '../../context/actions/groupChat';
@@ -42,7 +41,7 @@ const ChatDetailPage = () => {
     setAsset(messages.results, dispatch);
   };
   if (clients.client && channelClient.channel) {
-    // console.log('channel full ', channelClient.channel.cid);
+    console.log('channel full ', channelClient.channel?.data);
     // console.log('channel ', channelClient.channel?.data?.created_by);
     return (
       <SafeAreaView>

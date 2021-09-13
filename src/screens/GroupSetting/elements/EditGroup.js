@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -10,12 +11,16 @@ import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
-const EditGroup = ({editName, setEditName}) => {
+const EditGroup = ({editName, setEditName, onUpdateImage, imageUri}) => {
   return (
     <View style={styles.container}>
       <View style={styles.itemEdit}>
-        <TouchableOpacity style={styles.btnUpdatePhoto}>
-          <MemoIc_pencil width={25} height={25} color={COLORS.gray1} />
+        <TouchableOpacity style={styles.btnUpdatePhoto} onPress={onUpdateImage}>
+          {imageUri ? (
+            <Image source={{uri: imageUri}} style={styles.image} />
+          ) : (
+            <MemoIc_pencil width={25} height={25} color={COLORS.gray1} />
+          )}
         </TouchableOpacity>
         <TextInput
           style={styles.editName}
@@ -31,6 +36,11 @@ const EditGroup = ({editName, setEditName}) => {
 export default EditGroup;
 
 const styles = StyleSheet.create({
+  image: {
+    width: 48,
+    height: 48,
+    borderRadius: 48 / 2,
+  },
   editName: {
     color: COLORS.white,
     fontFamily: fonts.inter[400],
