@@ -66,11 +66,12 @@ const _renderAnonimity = ({
   expired_at,
   location,
   isBackButton,
+  height,
 }) => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.rowSpaceBeetwen}>
+    <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
       <View style={styles.rowCenter}>
         {isBackButton ? (
           <View style={{marginEnd: 16}}>
@@ -125,6 +126,7 @@ const _renderProfileNormal = ({
   expired_at,
   location,
   isBackButton,
+  height,
 }) => {
   const navigation = useNavigation();
   let userId = actor.id;
@@ -145,7 +147,7 @@ const _renderProfileNormal = ({
   };
 
   return (
-    <View style={styles.rowSpaceBeetwen}>
+    <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
       <View style={styles.rowCenter}>
         {isBackButton ? (
           <View style={styles.btn}>
@@ -220,16 +222,9 @@ const _renderProfileNormal = ({
   );
 };
 
-const Header = ({props, isBackButton = false}) => {
-  let {
-    anonimity,
-    time,
-    privacy,
-    duration_feed,
-    expired_at,
-    location,
-    actor,
-  } = props;
+const Header = ({props, isBackButton = false, height}) => {
+  let {anonimity, time, privacy, duration_feed, expired_at, location, actor} =
+    props;
   if (anonimity) {
     return _renderAnonimity({
       time,
@@ -238,6 +233,7 @@ const Header = ({props, isBackButton = false}) => {
       expired_at,
       location,
       isBackButton,
+      height,
     });
   } else {
     return _renderProfileNormal({
@@ -248,11 +244,15 @@ const Header = ({props, isBackButton = false}) => {
       expired_at,
       location,
       isBackButton,
+      height,
     });
   }
 };
 
 const styles = StyleSheet.create({
+  heightHeader: (height) => ({
+    height: height,
+  }),
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
