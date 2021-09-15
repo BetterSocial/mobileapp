@@ -15,7 +15,12 @@ import {getAccessToken} from '../../../utils/token';
 import {fonts} from '../../../utils/fonts';
 import PostArrowUp from '../../../assets/images/post-arrow-up.png';
 
-const LinkContextItem = ({item, showBackButton = true, setFollow, follow = false,}) => {
+const LinkContextItem = ({
+  item,
+  showBackButton = true,
+  setFollow,
+  follow = false,
+}) => {
   const navigation = useNavigation();
   // console.log('JSON.stringify(route.params)');
   // console.log(JSON.stringify(route.params.item));

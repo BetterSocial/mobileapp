@@ -32,6 +32,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {Context} from '../../context';
 import {getUserId} from '../../utils/users';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 
 const {width, height} = Dimensions.get('window');
 
@@ -263,9 +264,13 @@ const PostPageDetail = (props) => {
   };
 
   const onPressDomain = () => {
-    props.navigation.navigate('DomainScreen', {
-      item: item,
-    });
+    let param = linkContextScreenParamBuilder(
+      item,
+      item.og.domain,
+      item.og.domainImage,
+      item.og.domain_page_id,
+    );
+    props.navigation.navigate('DomainScreen', param);
   };
 
   const onCommentButtonClicked = () => {
@@ -290,6 +295,18 @@ const PostPageDetail = (props) => {
       },
       dispatch,
     );
+  };
+
+  const navigateToLinkContextPage = (item) => {
+    let param = linkContextScreenParamBuilder(
+      item,
+      item.og.domain,
+      item.og.domainImage,
+      item.og.domain_page_id,
+    );
+    console.log('param');
+    console.log(param);
+    props.navigation.push('LinkContextScreen', param);
   };
 
   return (
@@ -317,7 +334,12 @@ const PostPageDetail = (props) => {
           )}
 
           {item.post_type === POST_TYPE_LINK && (
-            <ContentLink og={item.og} onCardPress={onPressDomain} />
+            <ContentLink
+              og={item.og}
+              onCardPress={onPressDomain}
+              onHeaderPress={onPressDomain}
+              onCardContentPress={() => navigateToLinkContextPage(item)}
+            />
           )}
 
           {item.post_type === POST_TYPE_STANDARD && (

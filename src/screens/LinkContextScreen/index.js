@@ -8,24 +8,30 @@ import Toast from 'react-native-simple-toast';
 import {upVoteDomain, downVoteDomain} from '../../service/vote';
 import {getAccessToken, getUserId} from '../../utils/token';
 import Loading from '../Loading';
-import {getDetailDomains, getDomainIdIFollow, getProfileDomain} from '../../service/domain';
+import {
+  getDetailDomains,
+  getDomainIdIFollow,
+  getProfileDomain,
+} from '../../service/domain';
 import {blockDomain} from '../../service/blocking';
 import LinkContextItem from './elements/Item';
 import PostArrowUp from '../../assets/images/post-arrow-up.png';
 import {COLORS} from '../../utils/theme';
 import {fonts} from '../../utils/fonts';
 import RenderItem from '../DomainScreen/elements/RenderItem';
-import { Context } from '../../context';
-import { createIconSetFromFontello } from 'react-native-vector-icons';
+import {Context} from '../../context';
+import {createIconSetFromFontello} from 'react-native-vector-icons';
 
 const LinkContextScreen = () => {
   const route = useRoute();
 
   let {item} = route.params;
+  console.log('itemsssss');
+  console.log(route.params);
   let domainImage = item.domain.image;
   let domainName = item.domain.name;
-  let postTime = item.time;
   let iddomain = item.content.domain_page_id;
+  let postTime = item.time;
 
   const navigation = useNavigation();
   const blockDomainRef = React.useRef(null);
@@ -59,7 +65,7 @@ const LinkContextScreen = () => {
       }
 
       let selfUserId = await getUserId();
-      console.log(selfUserId)
+      console.log(selfUserId);
     };
     parseToken();
   }, []);
@@ -70,7 +76,7 @@ const LinkContextScreen = () => {
       let res = await getDetailDomains(domainName);
       if (res.code === 200) {
         let reducedData = res.data.reduce((acc, currentItem) => {
-          if (currentItem.foreign_id !== item.foreign_id) {
+          if (currentItem.content.news_link_id !== item.content.news_link_id) {
             acc.push(currentItem);
           }
           return acc;
@@ -101,16 +107,16 @@ const LinkContextScreen = () => {
   }, [iddomain, ifollow]);
 
   const getIFollow = async () => {
-    console.log('reszxczxczc')
+    console.log('reszxczxczc');
     // console.log(res.data)
     if (ifollow.length === 0) {
       let res = await getDomainIdIFollow();
-      console.log('res123')
-      console.log(res.data)
+      console.log('res123');
+      console.log(res.data);
       setIFollow(res.data, dispatch);
     } else {
-      console.log('resqeqwe')
-      console.log(JSON.stringify(ifollow).includes(iddomain))
+      console.log('resqeqwe');
+      console.log(JSON.stringify(ifollow).includes(iddomain));
       setFollow(JSON.stringify(ifollow).includes(iddomain));
     }
   };
@@ -201,11 +207,24 @@ const LinkContextScreen = () => {
           let {index} = props;
 
           if (index === 0) {
-            return <LinkContextItem item={item} follow={follow} setFollow={(follow) => setFollow(follow)}/>;
+            return (
+              <LinkContextItem
+                item={item}
+                follow={follow}
+                setFollow={(follow) => setFollow(follow)}
+              />
+            );
           }
 
           if (singleItem.content) {
-            return <LinkContextItem item={singleItem} showBackButton={false} follow={follow} setFollow={(follow) => setFollow(follow)}/>;
+            return (
+              <LinkContextItem
+                item={singleItem}
+                showBackButton={false}
+                follow={follow}
+                setFollow={(follow) => setFollow(follow)}
+              />
+            );
           }
         }}
         style={styles.list}
