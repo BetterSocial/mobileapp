@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: '600',
+    fontWeight: 'bold',
     fontSize: 16,
     color: '#000000',
     lineHeight: 20,
