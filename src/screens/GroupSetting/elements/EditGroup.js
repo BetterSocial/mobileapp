@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   Image,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';

@@ -21,20 +21,22 @@ const GroupSetting = ({navigation, route}) => {
     route.params.username || 'Set Group Name',
   );
   const [countUser] = React.useState(Object.entries(participants).length);
-  const [anyUpdate, setAnyUpdate] = React.useState(false);
+  const [changeName, setChangeName] = React.useState(false);
+  const [changeImage, setChangeImage] = React.useState(false);
   const [base64Profile, setBase64Profile] = React.useState('');
   const [urlImage, setUrlImage] = React.useState('');
 
   const updateName = (text) => {
     setGroupName(text);
-    setAnyUpdate(true);
+    setChangeName(true);
   };
   const submitData = async () => {
-    if (anyUpdate) {
-      await channel.update({
+    if (changeName || changeImage) {
+      let dataEdit = {
         name: groupName,
-        image: base64Profile,
-      });
+        ...(changeImage && {image: base64Profile}),
+      };
+      await channel.update(dataEdit);
       await navigation.navigate('ChannelList');
     } else {
       navigation.goBack();
@@ -49,10 +51,9 @@ const GroupSetting = ({navigation, route}) => {
         includeBase64: true,
       },
       (res) => {
-        setAnyUpdate(true);
+        setChangeImage(true);
         setBase64Profile(res.base64);
         setUrlImage(res.uri);
-        console.log('res image ', res.uri);
       },
     );
   };
@@ -62,7 +63,7 @@ const GroupSetting = ({navigation, route}) => {
       <HeaderContact
         title={'Settings'}
         containerStyle={styles.containerHeader}
-        subTitle={anyUpdate ? 'Finish' : 'Skip'}
+        subTitle={changeImage || changeName ? 'Finish' : 'Skip'}
         subtitleStyle={styles.subtitleStyle}
         onPressSub={submitData}
         onPress={() => navigation.goBack()}
