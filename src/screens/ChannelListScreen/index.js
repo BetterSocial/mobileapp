@@ -1,7 +1,12 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import {ChannelList, Chat, Streami18n} from 'stream-chat-react-native';
+import {
+  ChannelList,
+  Chat,
+  Streami18n,
+  ChannelAvatar,
+} from 'stream-chat-react-native';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Search from './elements/Search';
@@ -9,6 +14,7 @@ import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {getUserId} from '../../utils/users';
+import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 
 const ChannelListScreen = ({navigation}) => {
   const streami18n = new Streami18n({
@@ -33,8 +39,8 @@ const ChannelListScreen = ({navigation}) => {
       screen_class: 'ChannelListScreen',
       screen_name: 'Channel List',
     });
-    setupClient();
     connect();
+    setupClient();
   }, []);
   const setupClient = async () => {
     try {
@@ -56,6 +62,7 @@ const ChannelListScreen = ({navigation}) => {
         <Chat client={client.client} i18nInstance={streami18n}>
           <View style={StyleSheet.absoluteFill}>
             <ChannelList
+              PreviewAvatar={CustomPreviewAvatar}
               filters={memoizedFilters}
               onSelect={(channel) => {
                 setChannel(channel, dispatch);
