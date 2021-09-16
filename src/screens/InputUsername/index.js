@@ -14,8 +14,9 @@ import {
 import {useNavigation} from '@react-navigation/core';
 import {showMessage} from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Toast from 'react-native-simple-toast';
 
 import {ProgressBar} from '../../components/ProgressBar';
 import {Button} from '../../components/Button';
@@ -25,14 +26,20 @@ import {setImage, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
+import {
+  requestCameraPermission,
+  requestExternalStoragePermission,
+} from '../../utils/permission';
 import StringConstant from '../../utils/string/StringConstant';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
+import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 
 const width = Dimensions.get('screen').width;
 
 const ChooseUsername = () => {
   const navigation = useNavigation();
+  const bottomSheetChooseImageRef = React.useRef();
   const [users, dispatch] = React.useContext(Context).users;
   const [username, setUsernameState] = React.useState('');
   const [typeFetch, setTypeFetch] = React.useState('');
@@ -48,11 +55,42 @@ const ChooseUsername = () => {
     analytics().logEvent('btn_take_photo_profile', {
       id: 2,
     });
-    launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-      if (res.base64) {
-        setImage(`${res.base64}`, dispatch);
-      }
-    });
+    bottomSheetChooseImageRef.current.open();
+  };
+
+  const handleOpenCamera = async () => {
+    let {success, message} = await requestCameraPermission();
+    if (success) {
+      launchCamera(
+        {
+          mediaType: 'photo',
+          includeBase64: true,
+          selectionLimit: 1,
+        },
+        (res) => {
+          if (res.base64) {
+            setImage(`${res.base64}`, dispatch);
+            bottomSheetChooseImageRef.current.close();
+          }
+        },
+      );
+    } else {
+      Toast.show(message, Toast.SHORT);
+    }
+  };
+
+  const handleOpenGallery = async () => {
+    let {success, message} = await requestExternalStoragePermission();
+    if (success) {
+      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+        if (res.base64) {
+          setImage(`${res.base64}`, dispatch);
+          bottomSheetChooseImageRef.current.close();
+        }
+      });
+    } else {
+      Toast.show(message, Toast.SHORT);
+    }
   };
 
   const checkUsername = async (v) => {
@@ -235,6 +273,11 @@ const ChooseUsername = () => {
           {StringConstant.onboardingChooseUsernameButtonStateNext}
         </Button>
       </KeyboardAvoidingView>
+      <BottomSheetChooseImage
+        ref={bottomSheetChooseImageRef}
+        onOpenCamera={handleOpenCamera}
+        onOpenImageGalery={handleOpenGallery}
+      />
     </SafeAreaView>
   );
 };

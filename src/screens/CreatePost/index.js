@@ -14,6 +14,7 @@ import {useNavigation} from '@react-navigation/core';
 import {showMessage} from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Toast from 'react-native-simple-toast';
 
 import Header from '../../components/Header';
 import {Button, ButtonAddMedia} from '../../components/Button';
@@ -45,6 +46,10 @@ import {createPollPost} from '../../service/post';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import StringConstant from '../../utils/string/StringConstant';
 import {getUserId} from '../../utils/users';
+import {
+  requestExternalStoragePermission,
+  requestCameraPermission,
+} from '../../utils/permission';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -177,38 +182,48 @@ const CreatePost = () => {
     setAudienceEstimations(data.data);
   };
 
-  const uploadMediaFromLibrary = () => {
-    launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-      if (res.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (res.uri) {
-        let newArr = {
-          id: mediaStorage.length,
-          data: res.uri,
-        };
-        setMediaStorage((val) => [...val, newArr]);
-        setDataImage((val) => [...val, res.base64]);
-        sheetMediaRef.current.close();
-      } else {
-        console.log(res);
-      }
-    });
+  const uploadMediaFromLibrary = async () => {
+    let {success, message} = await requestExternalStoragePermission();
+    if (success) {
+      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+        if (res.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (res.uri) {
+          let newArr = {
+            id: mediaStorage.length,
+            data: res.uri,
+          };
+          setMediaStorage((val) => [...val, newArr]);
+          setDataImage((val) => [...val, res.base64]);
+          sheetMediaRef.current.close();
+        } else {
+          console.log(res);
+        }
+      });
+    } else {
+      Toast.show(message, Toast.SHORT);
+    }
   };
 
-  const takePhoto = () => {
-    launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
-      if (res.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (res.uri) {
-        let newArr = {
-          id: mediaStorage.length,
-          data: res.uri,
-        };
-        setMediaStorage((val) => [...val, newArr]);
-        setDataImage((val) => [...val, res.base64]);
-        sheetMediaRef.current.close();
-      }
-    });
+  const takePhoto = async () => {
+    let {success, message} = await requestCameraPermission();
+    if (success) {
+      launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
+        if (res.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (res.uri) {
+          let newArr = {
+            id: mediaStorage.length,
+            data: res.uri,
+          };
+          setMediaStorage((val) => [...val, newArr]);
+          setDataImage((val) => [...val, res.base64]);
+          sheetMediaRef.current.close();
+        }
+      });
+    } else {
+      Toast.show(message, Toast.SHORT);
+    }
   };
 
   const onRemoveItem = (v) => {
