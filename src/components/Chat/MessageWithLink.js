@@ -22,6 +22,7 @@ const MessageWithLink = ({
   isMe,
   attachments,
 }) => {
+  // console.log(attachments);
   const [onAction, setOnAction] = React.useState(false);
   return (
     <ActionChat isMe={isMe} active={onAction}>

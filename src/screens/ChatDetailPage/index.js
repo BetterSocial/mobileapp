@@ -7,6 +7,7 @@ import {
   MessageInput,
   MessageList,
   Streami18n,
+  useMessageContext,
 } from 'stream-chat-react-native';
 
 import Header from '../../components/Chat/Header';
@@ -23,6 +24,41 @@ const ChatDetailPage = () => {
   const [clients] = React.useContext(Context).client;
   const [channelClient] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
+  const messageContext = useMessageContext();
+
+  const defaultActionsAllowed = (messageActionsProp) => {
+    let {
+      blockUser,
+      canModifyMessage,
+      copyMessage,
+      deleteMessage,
+      editMessage,
+      error,
+      isMyMessage,
+      quotedReply,
+      retry,
+    } = messageActionsProp;
+
+    let options = [];
+
+    options.push(quotedReply);
+    options.push(copyMessage);
+    if (canModifyMessage && isMyMessage) {
+      options.push(editMessage);
+    }
+    if (!isMyMessage) {
+      options.push(blockUser);
+    }
+    options.push(deleteMessage);
+    if (error) {
+      options.push(retry);
+    }
+
+    return options;
+  };
+
+  // console.log('messageContext')
+  // console.log(messageContext)
   let connect = useClientGetstream();
   React.useEffect(() => {
     connect();
@@ -49,7 +85,15 @@ const ChatDetailPage = () => {
           <Channel
             channel={channelClient.channel}
             keyboardVerticalOffset={50}
-            hasFilePicker={false}>
+            hasFilePicker={false}
+            mutesEnabled={false}
+            threadRepliesEnabled={false}
+            reactionsEnabled={false}
+            readEventsEnabled={false}
+            messageActions={(props) => {
+              return defaultActionsAllowed(props);
+            }}
+            ReactionList={() => null}>
             <View style={{flex: 1}}>
               <Header
                 username={channelClient.channel?.data?.name}
@@ -57,7 +101,6 @@ const ChatDetailPage = () => {
                 createChat={channelClient.channel?.data?.created_at}
               />
               <MessageList />
-              {/* <MessageList Message={CostomListMessage} /> */}
 
               <MessageInput Input={InputMessage} />
             </View>

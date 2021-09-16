@@ -15,6 +15,7 @@ import AddIcon from '../../../../assets/icons/add.svg';
 import MemoIc_Checklist from '../../../assets/icons/Ic_Checklist';
 
 const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
+  const [isSelect, setIsSelect] = React.useState(false);
   let followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
 
   const onFollowButtonPressed = () => {
@@ -28,23 +29,32 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
 
   React.useEffect(() => {
     if (followed.includes(userid)) {
+      setIsSelect(true);
       Animated.timing(followIconFadeAnimation, {
         toValue: 1,
         duration: 250,
         useNativeDriver: true,
       }).start();
     } else {
+      setIsSelect(false);
       Animated.timing(followIconFadeAnimation, {
         toValue: 0,
         duration: 250,
         useNativeDriver: true,
       }).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [followed, userid]);
 
   return (
     <Pressable onPress={onPress}>
-      <View style={styles.containerCard}>
+      <View
+        style={[
+          styles.containerCard,
+          {
+            backgroundColor: isSelect ? '#00ADB526' : 'white',
+          },
+        ]}>
         <View style={styles.cardLeft}>
           <Image
             style={styles.tinyLogo}
@@ -83,8 +93,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 76,
     paddingHorizontal: 20,
+    height: 60,
   },
   cardLeft: {
     flexDirection: 'row',
@@ -101,12 +111,12 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   textFullName: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Inter',
     fontStyle: 'normal',
-    fontWeight: '400',
+    fontWeight: '500',
     fontSize: 14,
     color: '#000000',
-    lineHeight: 21,
+    lineHeight: 17,
     alignSelf: 'flex-start',
   },
   containerButton: {

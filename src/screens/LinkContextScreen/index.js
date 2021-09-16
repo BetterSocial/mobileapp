@@ -6,22 +6,31 @@ import {useRoute, useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 
 import {upVoteDomain, downVoteDomain} from '../../service/vote';
-import {getAccessToken} from '../../utils/token';
+import {getAccessToken, getUserId} from '../../utils/token';
 import Loading from '../Loading';
-import {getDetailDomains, getProfileDomain} from '../../service/domain';
+import {
+  getDetailDomains,
+  getDomainIdIFollow,
+  getProfileDomain,
+} from '../../service/domain';
 import {blockDomain} from '../../service/blocking';
 import LinkContextItem from './elements/Item';
 import PostArrowUp from '../../assets/images/post-arrow-up.png';
 import {COLORS} from '../../utils/theme';
 import {fonts} from '../../utils/fonts';
 import RenderItem from '../DomainScreen/elements/RenderItem';
+import {Context} from '../../context';
+import {createIconSetFromFontello} from 'react-native-vector-icons';
 
-const DomainScreen = () => {
+const LinkContextScreen = () => {
   const route = useRoute();
 
   let {item} = route.params;
+  console.log('itemsssss');
+  console.log(route.params);
   let domainImage = item.domain.image;
   let domainName = item.domain.name;
+  let iddomain = item.content.domain_page_id;
   let postTime = item.time;
 
   const navigation = useNavigation();
@@ -36,6 +45,12 @@ const DomainScreen = () => {
   const [idFromToken, setIdFromToken] = React.useState('');
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
+  const [follow, setFollow] = React.useState(false);
+  const [news, dispatch] = React.useContext(Context).news;
+
+  let {ifollow} = news;
+  console.log('ifollow ');
+  console.log(ifollow);
 
   const animatedBottomAnchorContainerValue = React.useRef(
     new Animated.Value(0),
@@ -48,6 +63,9 @@ const DomainScreen = () => {
         const decoded = await JWTDecode(value);
         setIdFromToken(decoded.user_id);
       }
+
+      let selfUserId = await getUserId();
+      console.log(selfUserId);
     };
     parseToken();
   }, []);
@@ -58,7 +76,7 @@ const DomainScreen = () => {
       let res = await getDetailDomains(domainName);
       if (res.code === 200) {
         let reducedData = res.data.reduce((acc, currentItem) => {
-          if (currentItem.foreign_id !== item.foreign_id) {
+          if (currentItem.content.news_link_id !== item.content.news_link_id) {
             acc.push(currentItem);
           }
           return acc;
@@ -85,9 +103,23 @@ const DomainScreen = () => {
   // }, [dataDomain]);
 
   React.useEffect(() => {
-    // console.log('data');
-    // console.log(JSON.stringify(data));
-  }, [data]);
+    getIFollow();
+  }, [iddomain, ifollow]);
+
+  const getIFollow = async () => {
+    console.log('reszxczxczc');
+    // console.log(res.data)
+    if (ifollow.length === 0) {
+      let res = await getDomainIdIFollow();
+      console.log('res123');
+      console.log(res.data);
+      setIFollow(res.data, dispatch);
+    } else {
+      console.log('resqeqwe');
+      console.log(JSON.stringify(ifollow).includes(iddomain));
+      setFollow(JSON.stringify(ifollow).includes(iddomain));
+    }
+  };
 
   const handleOnPressComment = (itemNews) => {
     navigation.navigate('DetailDomainScreen', {item: itemNews});
@@ -175,11 +207,24 @@ const DomainScreen = () => {
           let {index} = props;
 
           if (index === 0) {
-            return <LinkContextItem item={item} />;
+            return (
+              <LinkContextItem
+                item={item}
+                follow={follow}
+                setFollow={(follow) => setFollow(follow)}
+              />
+            );
           }
 
           if (singleItem.content) {
-            return <LinkContextItem item={singleItem} showBackButton={false} />;
+            return (
+              <LinkContextItem
+                item={singleItem}
+                showBackButton={false}
+                follow={follow}
+                setFollow={(follow) => setFollow(follow)}
+              />
+            );
           }
         }}
         style={styles.list}
@@ -239,4 +284,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DomainScreen;
+export default LinkContextScreen;

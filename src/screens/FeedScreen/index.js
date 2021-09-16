@@ -22,6 +22,7 @@ import {blockAnonymous, blockUser} from '../../service/blocking';
 import {Context} from '../../context';
 import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
 import {getUserId} from '../../utils/users';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -315,9 +316,13 @@ const FeedScreen = (props) => {
                   onPressDownVote={(post) => setDownVote(post, index)}
                   selfUserId={yourselfId}
                   onPressDomain={() => {
-                    props.navigation.navigate('DomainScreen', {
-                      item: item,
-                    });
+                    let param = linkContextScreenParamBuilder(
+                      item,
+                      item.og.domain,
+                      item.og.domainImage,
+                      item.og.domain_page_id,
+                    );
+                    props.navigation.navigate('DomainScreen', param);
                   }}
                   onCardContentPress={() => {
                     props.navigation.navigate('DetailDomainScreen', {

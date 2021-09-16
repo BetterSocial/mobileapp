@@ -8,13 +8,15 @@ import {setChannel} from '../../context/actions/setChannel';
 import {userPopulate} from '../../service/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import StringConstant from '../../utils/string/StringConstant';
-import {COLORS} from '../../utils/theme';
+import {COLORS, SIZES} from '../../utils/theme';
 import Header from './elements/Header';
 import {Search} from './elements';
 import {Alert} from 'react-native';
 import Label from './elements/Label';
 import ItemUser from './elements/ItemUser';
 import {Loading} from '../../components';
+import ContactPreview from './elements/ContactPreview';
+import MemoContactPreview from './elements/ContactPreview';
 
 const width = Dimensions.get('screen').width;
 
@@ -39,7 +41,6 @@ const ContactScreen = ({navigation}) => {
   const filterItems = (needle, items) => {
     let query = needle.toLowerCase();
     let result = items.filter((item) => item.toLowerCase().indexOf(query) > -1);
-    console.log(result.length);
     return result;
   };
 
@@ -85,7 +86,7 @@ const ContactScreen = ({navigation}) => {
 
               case VIEW_TYPE_DATA:
                 dim.width = width;
-                dim.height = 76;
+                dim.height = 60;
                 break;
 
               default:
@@ -141,39 +142,49 @@ const ContactScreen = ({navigation}) => {
   };
 
   const rowRenderer = (type, item, index, extendedState) => {
-    switch (type) {
-      case VIEW_TYPE_LABEL:
-        return <Label label={item.name} />;
-      case VIEW_TYPE_DATA:
-        return (
-          <ItemUser
-            photo={item.profile_pic_path}
-            bio={item.bio}
-            username={item.username}
-            followed={extendedState.followed}
-            userid={item.user_id}
-            onPress={() => handleSelected(item)}
-          />
-        );
-    }
+    // switch (type) {
+    // case VIEW_TYPE_LABEL:
+    //   return <Label label={item.name} />;
+    // case VIEW_TYPE_DATA:
+    return (
+      <ItemUser
+        photo={item.profile_pic_path}
+        bio={item.bio}
+        username={item.username}
+        followed={extendedState.followed}
+        userid={item.user_id}
+        onPress={() => handleSelected(item)}
+      />
+    );
+    // }
   };
 
   const handleSelected = (value) => {
     let copyFollowed = [...followed];
     let copyUsername = [...usernames];
-    let index = followed.indexOf(value.user_id);
+    let copyUsers = [...selectedUsers];
+    let index = copyFollowed.indexOf(value.user_id);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
       copyFollowed.push(value.user_id);
     }
 
-    let indexName = usernames.indexOf(value.username);
+    let indexName = copyUsername.indexOf(value.username);
     if (indexName > -1) {
       copyUsername.splice(index, 1);
     } else {
       copyUsername.push(value.username);
     }
+
+    let indexSelectedUser = copyUsers.indexOf(value);
+    if (indexSelectedUser > -1) {
+      copyUsers.splice(indexSelectedUser, 1);
+    } else {
+      copyUsers.push(value);
+    }
+
+    setSelectedUsers(copyUsers);
     setFollowed(copyFollowed);
     setUsernames(copyUsername);
   };
@@ -218,6 +229,13 @@ const ContactScreen = ({navigation}) => {
         onPress={() => _handleSearch()}
       />
 
+      {selectedUsers && (
+        <ContactPreview
+          users={selectedUsers}
+          onPress={(user) => handleSelected(user)}
+        />
+      )}
+
       {isRecyclerViewShown && (
         <RecyclerListView
           style={styles.recyclerview}
@@ -245,7 +263,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   recyclerview: {
-    marginBottom: 30,
+    paddingBottom: 80,
   },
   containerStyle: {
     marginHorizontal: 16,

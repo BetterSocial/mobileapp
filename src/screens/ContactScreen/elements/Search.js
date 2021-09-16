@@ -23,8 +23,8 @@ const Search = ({onPress, animatedValue, onChangeText, text}) => {
           multiline={false}
           placeholder={'Search Users'}
           style={styles.input}
-          onChangeText={(text) => {
-            onChangeText(text);
+          onChangeText={(t) => {
+            onChangeText(t);
           }}
           onSubmitEditing={(event) => onPress()}
         />
@@ -64,6 +64,11 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     paddingStart: 16,
     lineHeight: 24,
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 14,
+    color: '#000000',
   },
   wrapperIcon: {
     position: 'absolute',
