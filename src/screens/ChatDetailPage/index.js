@@ -12,7 +12,6 @@ import {
 
 import Header from '../../components/Chat/Header';
 import InputMessage from '../../components/Chat/InputMessage';
-import CostomListMessage from '../../components/Chat/CostomListMessage';
 import {Context} from '../../context';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {setAsset, setParticipants} from '../../context/actions/groupChat';
@@ -38,19 +37,25 @@ const ChatDetailPage = () => {
       isMyMessage,
       quotedReply,
       retry,
-    } = messageActionsProp
+    } = messageActionsProp;
 
-    let options = []
-    
-    options.push(quotedReply)
-    options.push(copyMessage)
-    if(canModifyMessage && isMyMessage) options.push(editMessage)
-    if(!isMyMessage) options.push(blockUser)
-    options.push(deleteMessage)
-    if(error) options.push(retry)
-    
-    return options
-  }
+    let options = [];
+
+    options.push(quotedReply);
+    options.push(copyMessage);
+    if (canModifyMessage && isMyMessage) {
+      options.push(editMessage);
+    }
+    if (!isMyMessage) {
+      options.push(blockUser);
+    }
+    options.push(deleteMessage);
+    if (error) {
+      options.push(retry);
+    }
+
+    return options;
+  };
 
   // console.log('messageContext')
   // console.log(messageContext)
@@ -72,7 +77,7 @@ const ChatDetailPage = () => {
     setAsset(messages.results, dispatch);
   };
   if (clients.client && channelClient.channel) {
-    // console.log('channel full ', channelClient.channel.cid);
+    // console.log('channel full ', channelClient.channel);
     // console.log('channel ', channelClient.channel?.data?.created_by);
     return (
       <SafeAreaView>
@@ -86,7 +91,7 @@ const ChatDetailPage = () => {
             reactionsEnabled={false}
             readEventsEnabled={false}
             messageActions={(props) => {
-              return defaultActionsAllowed(props)
+              return defaultActionsAllowed(props);
             }}
             ReactionList={() => null}>
             <View style={{flex: 1}}>
@@ -95,7 +100,7 @@ const ChatDetailPage = () => {
                 profile={channelClient.channel?.data?.created_by?.image}
                 createChat={channelClient.channel?.data?.created_at}
               />
-              <MessageList MessageSimple={CostomListMessage}/>
+              <MessageList />
 
               <MessageInput Input={InputMessage} />
             </View>

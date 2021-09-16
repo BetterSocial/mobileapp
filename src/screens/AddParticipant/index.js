@@ -73,7 +73,6 @@ const AddParticipant = ({navigation}) => {
                 dim.width = width;
                 dim.height = 76;
                 break;
-
               default:
                 dim.width = width;
                 dim.height = 0;

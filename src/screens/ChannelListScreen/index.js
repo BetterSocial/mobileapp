@@ -4,7 +4,6 @@ import {StyleSheet, View} from 'react-native';
 import {
   ChannelList,
   ChannelPreviewStatus,
-  ChannelPreviewUnreadCount,
   Chat,
   Streami18n,
 } from 'stream-chat-react-native';
@@ -15,6 +14,7 @@ import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {getUserId} from '../../utils/users';
+import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 
 const ChannelListScreen = ({navigation}) => {
   const streami18n = new Streami18n({
@@ -39,8 +39,8 @@ const ChannelListScreen = ({navigation}) => {
       screen_class: 'ChannelListScreen',
       screen_name: 'Channel List',
     });
-    setupClient();
     connect();
+    setupClient();
   }, []);
   const setupClient = async () => {
     try {
@@ -73,6 +73,7 @@ const ChannelListScreen = ({navigation}) => {
         <Chat client={client.client} i18nInstance={streami18n}>
           <View style={StyleSheet.absoluteFill}>
             <ChannelList
+              PreviewAvatar={CustomPreviewAvatar}
               filters={memoizedFilters}
               PreviewStatus={customPreviewStatus}
               onSelect={(channel) => {

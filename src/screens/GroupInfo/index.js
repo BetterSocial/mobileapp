@@ -12,13 +12,20 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import {
+  GroupAvatar,
+  useChannelPreviewDisplayAvatar,
+  ThemeProvider,
+} from 'stream-chat-react-native';
+
 import moment from 'moment';
 import Header from './elements/Header';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import ItemUser from './elements/ItemUser';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import {Context} from '../../context';
+import {ProfileContact} from '../../components/Items';
+import {trimString} from '../../utils/string/TrimString';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -26,8 +33,33 @@ const GroupInfo = () => {
   const [groupChatState] = React.useContext(Context).groupChat;
   const {participants, asset} = groupChatState;
   const [channelState] = React.useContext(Context).channel;
-  const {channel} = channelState;
+  const {channel, profileChannel} = channelState;
   const [countUser] = React.useState(Object.entries(participants).length);
+
+  const showImageProfile = () => {
+    if (profileChannel || channel?.data?.image) {
+      if (channel?.data?.image) {
+        return (
+          <Image
+            style={styles.btnUpdatePhoto}
+            source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
+          />
+        );
+      } else {
+        return (
+          <ThemeProvider>
+            <GroupAvatar size={100} images={profileChannel} />
+          </ThemeProvider>
+        );
+      }
+    }
+    return (
+      <TouchableOpacity style={styles.btnUpdatePhoto}>
+        <MemoIc_pencil width={50} height={50} color={colors.gray1} />
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Header title={route.params?.username} />
@@ -35,7 +67,8 @@ const GroupInfo = () => {
       <ScrollView>
         <SafeAreaView>
           <View style={styles.containerPhoto}>
-            {route.params?.profile ? (
+            {showImageProfile()}
+            {/* {route.params?.profile ? (
               <Image
                 source={{uri: route.params?.profile}}
                 style={styles.btnUpdatePhoto}
@@ -44,10 +77,12 @@ const GroupInfo = () => {
               <TouchableOpacity style={styles.btnUpdatePhoto}>
                 <MemoIc_pencil width={50} height={50} color={colors.gray1} />
               </TouchableOpacity>
-            )}
+            )} */}
           </View>
           <View style={styles.containerGroupName}>
-            <Text style={styles.groupName}>{route.params?.username}</Text>
+            <Text style={styles.groupName}>
+              {trimString(route.params?.username, 20)}
+            </Text>
             {/* <TouchableWithoutFeedback>
               <MemoIc_pencil width={20} height={20} color={colors.gray1} />
             </TouchableWithoutFeedback> */}
@@ -82,15 +117,17 @@ const GroupInfo = () => {
           <View style={styles.lineTop} />
           <View style={styles.users}>
             <Text style={styles.countUser}>Participants {countUser}</Text>
-            {Object.keys(participants).map((key) => {
-              return (
-                <ItemUser
-                  fullname={participants[key].user.name}
-                  photo={participants[key].user.image}
-                  key={String(key)}
+            <FlatList
+              data={Object.keys(participants)}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => (
+                <ProfileContact
+                  key={item}
+                  fullname={participants[item].user.name}
+                  photo={participants[item].user.image}
                 />
-              );
-            })}
+              )}
+            />
           </View>
         </SafeAreaView>
       </ScrollView>

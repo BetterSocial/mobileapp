@@ -17,6 +17,8 @@ const InputMessage = () => {
     appendText,
     sendMessage,
     toggleAttachmentPicker,
+    ImageUploadPreview,
+    imageUploads,
   } = useMessageInputContext();
 
   const onChangeInput = (v) => {
@@ -51,7 +53,9 @@ const InputMessage = () => {
             <MemoIc_Picture width={20} height={20} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.btn(text)} onPress={sendMessage}>
+        <TouchableOpacity
+          style={styles.btn(text || imageUploads.length !== 0)}
+          onPress={sendMessage}>
           <IconSend style={styles.icSendButton} />
         </TouchableOpacity>
       </View>
@@ -59,6 +63,11 @@ const InputMessage = () => {
         ref={refEmoji}
         selectEmoji={(emoji) => onSelectImoji(emoji)}
       />
+      <View style={styles.imagePreview}>
+        <ImageUploadPreview
+          removeImage={(index) => console.log('press ', index)}
+        />
+      </View>
     </>
   );
 };
@@ -66,6 +75,15 @@ const InputMessage = () => {
 export default InputMessage;
 
 const styles = StyleSheet.create({
+  imagePreview: {
+    position: 'absolute',
+    top: -120,
+    flexDirection: 'row',
+    flex: 1,
+    flexWrap: 'wrap',
+    // backgroundColor: 'red',
+    zIndex: 99,
+  },
   container: {
     flex: 1,
     flexDirection: 'row',
