@@ -120,6 +120,7 @@ const ContactScreen = ({navigation}) => {
       if (members.length > 2) {
         typeChannel = 1;
       }
+      console.log('create channel 1 ', members);
       const id = uuid.v4();
       const clientChat = await client.client;
       const channelChat = await clientChat.channel('messaging', id, {
@@ -127,7 +128,8 @@ const ContactScreen = ({navigation}) => {
         members: members,
         typeChannel,
       });
-      await channelChat.create();
+      let err = await channelChat.create();
+      console.log('create channel ', err);
       setChannel(channelChat, dispatchChannel);
       setFollowed([]);
       setUsernames([]);
