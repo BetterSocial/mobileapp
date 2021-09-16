@@ -1,16 +1,27 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 import IconEP from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
+import {ChannelAvatar} from 'stream-chat-react-native';
 
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {TouchableWithoutFeedback} from 'react-native';
+import {Context} from '../../context';
+import {trimString} from '../../utils/string/TrimString';
 
 const Header = ({username, profile, createChat}) => {
   const navigation = useNavigation();
+  const [channelClient] = React.useContext(Context).channel;
+  const {channel} = channelClient;
   return (
     <View style={styles.container}>
       <View style={[styles.row, {flex: 1}]}>
@@ -26,8 +37,17 @@ const Header = ({username, profile, createChat}) => {
             })
           }>
           <View style={styles.touchable}>
-            <Image source={{uri: profile}} style={styles.image} />
-            <Text style={styles.name}>{username}</Text>
+            {channel?.data?.image ? (
+              <Image
+                source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
+                style={styles.image}
+              />
+            ) : (
+              <View style={styles.containerAvatar}>
+                <ChannelAvatar channel={channel} />
+              </View>
+            )}
+            <Text style={styles.name}>{trimString(username, 21)}</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -56,6 +76,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 22,
     justifyContent: 'space-between',
+  },
+  containerAvatar: {
+    marginLeft: 18,
   },
   btnOptions: {
     paddingLeft: 9.165,
