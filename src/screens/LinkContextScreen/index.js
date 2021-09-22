@@ -52,9 +52,8 @@ const LinkContextScreen = () => {
   console.log('ifollow ');
   console.log(ifollow);
 
-  const animatedBottomAnchorContainerValue = React.useRef(
-    new Animated.Value(0),
-  ).current;
+  const animatedBottomAnchorContainerValue = React.useRef(new Animated.Value(0))
+    .current;
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -68,6 +67,7 @@ const LinkContextScreen = () => {
       console.log(selfUserId);
     };
     parseToken();
+    console.log('ini LinkContextScreen');
   }, []);
 
   React.useEffect(() => {
