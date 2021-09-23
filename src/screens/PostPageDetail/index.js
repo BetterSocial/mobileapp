@@ -76,11 +76,9 @@ const PostPageDetail = (props) => {
 
   const scrollViewRef = React.useRef(null);
 
-  // let itemProp = props.route.params.item;
   let {index} = props.route.params;
 
   const [item, setItem] = React.useState(feeds.feeds[index]);
-
   const sortComment = (comments) => {
     let sortedComment = comments.sort((current, next) => {
       let currentMoment = moment(current.updated_at);
@@ -89,6 +87,9 @@ const PostPageDetail = (props) => {
     });
     return sortedComment;
   };
+  React.useEffect(() => {
+    setItem(feeds.feeds[index]);
+  }, [feeds.feeds[index]]);
 
   React.useEffect(() => {
     const initial = () => {
@@ -117,11 +118,6 @@ const PostPageDetail = (props) => {
     };
     initial();
   }, [props, item]);
-
-  // React.useEffect(() => {
-  //   console.log('item');
-  //   console.log(item.id);
-  // }, [item]);
 
   React.useEffect(() => {
     const validationStatusVote = () => {
@@ -220,8 +216,7 @@ const PostPageDetail = (props) => {
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(item.id);
-      console.log('data.data');
-      console.log(data.data);
+      console.log('update feed');
       if (data) {
         setItem(data.data);
         setFeedByIndex(
@@ -304,8 +299,6 @@ const PostPageDetail = (props) => {
       item.og.domainImage,
       item.og.domain_page_id,
     );
-    console.log('param');
-    console.log(param);
     props.navigation.push('LinkContextScreen', param);
   };
 
@@ -424,6 +417,7 @@ const PostPageDetail = (props) => {
         {isReaction && (
           <ContainerComment
             comments={sortComment(item.latest_reactions.comment)}
+            indexFeed={index}
           />
         )}
       </ScrollView>

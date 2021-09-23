@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SafeAreaView, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 
 import {
   Chat,
@@ -7,7 +7,6 @@ import {
   MessageInput,
   MessageList,
   Streami18n,
-  useMessageContext,
 } from 'stream-chat-react-native';
 
 import Header from '../../components/Chat/Header';
@@ -15,6 +14,9 @@ import InputMessage from '../../components/Chat/InputMessage';
 import {Context} from '../../context';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {setAsset, setParticipants} from '../../context/actions/groupChat';
+import moment from 'moment';
+import {COLORS} from '../../utils/theme';
+import {fonts} from '../../utils/fonts';
 
 const streami18n = new Streami18n({
   language: 'en',
@@ -24,7 +26,6 @@ const ChatDetailPage = () => {
   const [clients] = React.useContext(Context).client;
   const [channelClient] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
-  const messageContext = useMessageContext();
 
   const defaultActionsAllowed = (messageActionsProp) => {
     let {
@@ -56,9 +57,6 @@ const ChatDetailPage = () => {
 
     return options;
   };
-
-  // console.log('messageContext')
-  // console.log(messageContext)
   let connect = useClientGetstream();
   React.useEffect(() => {
     connect();
@@ -76,6 +74,10 @@ const ChatDetailPage = () => {
     );
     setAsset(messages.results, dispatch);
   };
+  const testDate = (v) => {
+    return v;
+  };
+
   if (clients.client && channelClient.channel) {
     // console.log('channel full ', channelClient.channel);
     // console.log('channel ', channelClient.channel?.data?.created_by);
@@ -84,6 +86,7 @@ const ChatDetailPage = () => {
         <Chat client={clients.client} i18nInstance={streami18n}>
           <Channel
             channel={channelClient.channel}
+            DateHeader={CustomDateHeader}
             keyboardVerticalOffset={50}
             hasFilePicker={false}
             mutesEnabled={false}
@@ -100,7 +103,10 @@ const ChatDetailPage = () => {
                 profile={channelClient.channel?.data?.created_by?.image}
                 createChat={channelClient.channel?.data?.created_at}
               />
-              <MessageList />
+              <MessageList
+                tDateTimeParser={testDate}
+                InlineDateSeparator={CustomInlineDateSeparator}
+              />
 
               <MessageInput Input={InputMessage} />
             </View>
@@ -112,4 +118,31 @@ const ChatDetailPage = () => {
   return <View />;
 };
 
+const CustomInlineDateSeparator = ({date}) => {
+  let newDate = moment(date).locale('en').format('MMMM DD, YYYY');
+  return <Text style={[styles.date, styles.inlineDate]}>{newDate}</Text>;
+};
+
+const CustomDateHeader = () => {
+  return null;
+};
+
 export default ChatDetailPage;
+const styles = StyleSheet.create({
+  date: {
+    backgroundColor: COLORS.blackgrey,
+    color: '#fff',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 19,
+    fontFamily: fonts.inter[500],
+    fontSize: 14,
+    lineHeight: 16.94,
+  },
+  dateHeader: {
+    marginTop: 14,
+  },
+  inlineDate: {
+    alignSelf: 'center',
+  },
+});

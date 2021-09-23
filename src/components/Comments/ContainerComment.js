@@ -8,7 +8,7 @@ import {colors} from '../../utils/colors';
 import ConnectorWrapper from './ConnectorWrapper';
 import Comment from '../../components/Comments/Comment';
 
-const ContainerComment = ({comments}) => {
+const ContainerComment = ({comments, indexFeed}) => {
   const navigation = useNavigation();
   let isLast = (index, item) => {
     return (
@@ -22,7 +22,6 @@ const ContainerComment = ({comments}) => {
 
   let hideLeftConnector = (index, item) => {
     return index === comments.length - 1;
-    // return false;
   };
 
   return (
@@ -35,7 +34,6 @@ const ContainerComment = ({comments}) => {
           return currentMoment.diff(nextMoment);
         });
 
-        console.log(item.user);
         return (
           <View>
             <View key={'p' + index}>
@@ -50,7 +48,11 @@ const ContainerComment = ({comments}) => {
                 isLast={isLast(index, item)}
                 isLastInParent={isLastInParent(index, item)}
                 onPress={() => {
-                  navigation.navigate('ReplyComment', {item: item, level: 0});
+                  navigation.navigate('ReplyComment', {
+                    item: item,
+                    level: 0,
+                    indexFeed: indexFeed,
+                  });
                 }}
               />
             </View>
@@ -60,6 +62,7 @@ const ContainerComment = ({comments}) => {
                 data={item.latest_children.comment}
                 countComment={item.children_counts.comment}
                 navigation={navigation}
+                indexFeed={indexFeed}
               />
             )}
           </View>
@@ -68,7 +71,13 @@ const ContainerComment = ({comments}) => {
     </View>
   );
 };
-const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
+const ReplyComment = ({
+  indexFeed,
+  data,
+  countComment,
+  navigation,
+  hideLeftConnector,
+}) => {
   let isLast = (item, index) => {
     return (
       index === countComment - 1 && (item.children_counts.comment || 0) === 0
@@ -83,10 +92,18 @@ const ReplyComment = ({data, countComment, navigation, hideLeftConnector}) => {
     <ContainerReply hideLeftConnector={hideLeftConnector}>
       {data.map((item, index) => {
         const showCommentView = () =>
-          navigation.navigate('ReplyComment', {item: item, level: 1});
+          navigation.navigate('ReplyComment', {
+            item: item,
+            level: 1,
+            indexFeed: indexFeed,
+          });
 
         const showChildCommentView = () =>
-          navigation.navigate('ReplyComment', {item: item, level: 2});
+          navigation.navigate('ReplyComment', {
+            item: item,
+            level: 2,
+            indexFeed: indexFeed,
+          });
 
         return (
           <ConnectorWrapper index={index}>

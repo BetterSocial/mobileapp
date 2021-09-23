@@ -66,19 +66,7 @@ const GroupInfo = () => {
       <View style={styles.lineTop} />
       <ScrollView>
         <SafeAreaView>
-          <View style={styles.containerPhoto}>
-            {showImageProfile()}
-            {/* {route.params?.profile ? (
-              <Image
-                source={{uri: route.params?.profile}}
-                style={styles.btnUpdatePhoto}
-              />
-            ) : (
-              <TouchableOpacity style={styles.btnUpdatePhoto}>
-                <MemoIc_pencil width={50} height={50} color={colors.gray1} />
-              </TouchableOpacity>
-            )} */}
-          </View>
+          <View style={styles.containerPhoto}>{showImageProfile()}</View>
           <View style={styles.containerGroupName}>
             <Text style={styles.groupName}>
               {trimString(route.params?.username, 20)}
@@ -91,7 +79,7 @@ const GroupInfo = () => {
             Created {moment(route.params?.createChat).format('DD/MM/YY')}
           </Text>
           <View style={styles.lineTop} />
-          <View style={styles.containerMedia}>
+          <View style={styles.containerMedia(asset.length === 0)}>
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate('GroupMedia')}>
               <Text style={styles.btnToMediaGroup}>Media & Links ></Text>
@@ -99,7 +87,7 @@ const GroupInfo = () => {
             <FlatList
               data={asset}
               keyExtractor={(item, index) => index.toString()}
-              style={styles.listImage}
+              style={styles.listImage(asset.length === 0)}
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({item, index}) => (
@@ -116,7 +104,7 @@ const GroupInfo = () => {
           </View>
           <View style={styles.lineTop} />
           <View style={styles.users}>
-            <Text style={styles.countUser}>Participants {countUser}</Text>
+            <Text style={styles.countUser}>Participants ({countUser})</Text>
             <FlatList
               data={Object.keys(participants)}
               keyExtractor={(item, index) => index.toString()}
@@ -154,9 +142,9 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
   },
-  listImage: {
-    marginTop: 12,
-  },
+  listImage: (isIsset) => ({
+    marginTop: isIsset ? 0 : 12,
+  }),
   btnAddText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
@@ -194,11 +182,11 @@ const styles = StyleSheet.create({
     lineHeight: 16.94,
     color: colors.holytosca,
   },
-  containerMedia: {
+  containerMedia: (isIsset) => ({
     paddingHorizontal: 20,
     paddingTop: 12,
-    paddingBottom: 8,
-  },
+    paddingBottom: isIsset ? 12 : 8,
+  }),
   dateCreate: {
     marginLeft: 20,
     fontSize: 14,
