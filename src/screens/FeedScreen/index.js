@@ -289,7 +289,6 @@ const FeedScreen = (props) => {
                   onNewPollFetched={onNewPollFetched}
                   onPress={() => {
                     props.navigation.navigate('PostDetailPage', {
-                      item: feeds[index],
                       index: index,
                       isalreadypolling: item.isalreadypolling,
                     });
@@ -308,7 +307,6 @@ const FeedScreen = (props) => {
                   }}
                   onPressComment={() => {
                     props.navigation.navigate('PostDetailPage', {
-                      item: feeds[index],
                       index: index,
                     });
                   }}
