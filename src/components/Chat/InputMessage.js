@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 
 import {useMessageInputContext} from 'stream-chat-react-native';
 
@@ -63,11 +69,6 @@ const InputMessage = () => {
         ref={refEmoji}
         selectEmoji={(emoji) => onSelectImoji(emoji)}
       />
-      <View style={styles.imagePreview}>
-        <ImageUploadPreview
-          removeImage={(index) => console.log('press ', index)}
-        />
-      </View>
     </>
   );
 };
@@ -75,19 +76,11 @@ const InputMessage = () => {
 export default InputMessage;
 
 const styles = StyleSheet.create({
-  imagePreview: {
-    position: 'absolute',
-    top: -120,
-    flexDirection: 'row',
-    flex: 1,
-    flexWrap: 'wrap',
-    // backgroundColor: 'red',
-    zIndex: 99,
-  },
   container: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    zIndex: 4,
   },
   btnEmoji: {
     paddingVertical: 7,

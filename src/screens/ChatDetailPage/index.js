@@ -7,6 +7,7 @@ import {
   MessageInput,
   MessageList,
   Streami18n,
+  useMessageInputContext,
 } from 'stream-chat-react-native';
 
 import Header from '../../components/Chat/Header';
@@ -17,6 +18,7 @@ import {setAsset, setParticipants} from '../../context/actions/groupChat';
 import moment from 'moment';
 import {COLORS} from '../../utils/theme';
 import {fonts} from '../../utils/fonts';
+import ImageSendPreview from './elements/ImageSendPreview';
 
 const streami18n = new Streami18n({
   language: 'en',
@@ -97,17 +99,19 @@ const ChatDetailPage = () => {
               return defaultActionsAllowed(props);
             }}
             ReactionList={() => null}>
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, zIndex: 0}}>
               <Header
                 username={channelClient.channel?.data?.name}
                 profile={channelClient.channel?.data?.created_by?.image}
                 createChat={channelClient.channel?.data?.created_at}
               />
-              <MessageList
-                tDateTimeParser={testDate}
-                InlineDateSeparator={CustomInlineDateSeparator}
-              />
-
+              <View style={{flex: 1, zIndex: 1}}>
+                <MessageList
+                  tDateTimeParser={testDate}
+                  InlineDateSeparator={CustomInlineDateSeparator}
+                />
+              </View>
+              <ImageSendPreview />
               <MessageInput Input={InputMessage} />
             </View>
           </Channel>
