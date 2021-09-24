@@ -84,8 +84,7 @@ const LinkContextScreenFooter = ({
       <View style={styles.wrapperFooter}>
         <Footer
           key={itemId}
-          //   totalComment={getCountCommentWithChild(item)}
-          totalComment={0}
+          totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
           statusVote={voteStatus}
           onPressBlock={onPressBlock}
