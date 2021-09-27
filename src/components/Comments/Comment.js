@@ -123,7 +123,6 @@ const Comment = ({
     };
     parseToken();
   }, []);
-
   return (
     <View
       style={styles.container({

@@ -7,6 +7,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import {colors} from '../../utils/colors';
 import ConnectorWrapper from './ConnectorWrapper';
 import Comment from '../../components/Comments/Comment';
+import {DATALOADING} from '../../utils/string/LoadingComment';
 
 const ContainerComment = ({comments, indexFeed}) => {
   const navigation = useNavigation();
