@@ -256,6 +256,7 @@ const Item = ({
                 setVoteStatus('none');
                 setTotalVote((p) => p - 1);
               }
+              console.log('vote ', prev);
               return prev;
             });
           }}

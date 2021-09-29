@@ -67,7 +67,7 @@ const getCountCommentWithChildInDetailPage = (item) => {
   let reactionCountLevelOne = item.comment;
   count += item.comment.length;
   reactionCountLevelOne.forEach((itemLevelOne, index) => {
-    if (JSON.stringify(itemLevelOne.children_counts) !== '{}') {
+    if (itemLevelOne.latest_children.comment !== undefined) {
       let reactionLevelTwo = itemLevelOne.latest_children.comment;
       count += reactionLevelTwo.length;
       reactionLevelTwo.forEach((itemLevelTwo, index) => {
