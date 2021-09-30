@@ -18,7 +18,7 @@ import SeeMore from 'react-native-see-more-inline';
 import Gap from '../../components/Gap';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
+import {COLORS, SIZES} from '../../utils/theme';
 import ImageLayouter from './elements/ImageLayouter';
 import {TouchableWithoutFeedback} from 'react-native';
 
@@ -57,13 +57,30 @@ const Content = ({message, images_url, style, onPress}) => {
     }
   };
 
+  const handleTextMedia = (text, onPress) => {
+    return (
+      <Text numberOfLines={4} style={styles.textMedia(text)}>
+        {text.length < 180 ? (
+          `${text}`
+        ) : (
+          <Text>
+            {`${text.substring(0, 165)}...`}
+            <Text onPress={onPress} style={styles.seemore}>
+              more
+            </Text>
+          </Text>
+        )}
+      </Text>
+    );
+  };
+
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
-            {handleText(message, onPress)}
-            <Gap height={16} />
+            {handleTextMedia(message, onPress)}
+            <Gap height={SIZES.base} />
             <ImageLayouter
               images={images_url}
               onimageclick={onImageClickedByIndex}
@@ -91,7 +108,7 @@ export default Content;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 16,
+    paddingBottom: SIZES.base,
   },
   fletlist: {flex: 1},
   imageList: {
@@ -124,6 +141,16 @@ const styles = StyleSheet.create({
       fontSize: 16,
       color: colors.black,
       lineHeight: 24,
+    };
+  },
+  textMedia: (text) => {
+    return {
+      fontFamily: fonts.inter[400],
+      fontWeight: 'normal',
+      fontSize: 16,
+      color: colors.black,
+      lineHeight: 24,
+      maxHeight: 80,
     };
   },
 
