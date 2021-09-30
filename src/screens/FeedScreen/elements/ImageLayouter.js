@@ -3,8 +3,7 @@ import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
-const ImageLayouter = ({images = [], onimageclick}) => {
-  console.log(images);
+const ImageLayouter = ({images = [], onimageclick, height}) => {
   if (images.length === 1) {
     return (
       <Pressable onPress={() => onimageclick(0)}>
@@ -12,7 +11,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
           source={{uri: images[0]}}
           style={styles.imagelayout1}
           width={'100%'}
-          height={305}
+          height={'100%'}
         />
       </Pressable>
     );
@@ -200,9 +199,10 @@ const ImageLayouter = ({images = [], onimageclick}) => {
 
 const styles = StyleSheet.create({
   imagelayout1: {
-    maxHeight: 305,
+    maxHeight: 410,
     width: '100%',
     resizeMode: 'cover',
+    backgroundColor: 'green',
   },
 
   imagelayout2: {

@@ -81,10 +81,12 @@ const Content = ({message, images_url, style, onPress}) => {
           <View style={styles.container}>
             {handleTextMedia(message, onPress)}
             <Gap height={SIZES.base} />
-            <ImageLayouter
-              images={images_url}
-              onimageclick={onImageClickedByIndex}
-            />
+            <View style={styles.container}>
+              <ImageLayouter
+                images={images_url}
+                onimageclick={onImageClickedByIndex}
+              />
+            </View>
           </View>
         ) : (
           <View style={styles.containerShowMessage(route.name)}>
@@ -108,7 +110,6 @@ export default Content;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: SIZES.base,
   },
   fletlist: {flex: 1},
   imageList: {
