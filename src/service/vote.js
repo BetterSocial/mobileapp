@@ -39,3 +39,13 @@ export const downVoteDomain = async (data) => {
     return error.response.data;
   }
 };
+export const voteComment = async (data) => {
+  try {
+    let resApi = await api.post('/activity/vote_comment', data);
+    return resApi.data;
+  } catch (error) {
+    console.log('error ', error);
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};

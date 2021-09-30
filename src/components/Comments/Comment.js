@@ -18,6 +18,7 @@ import {getUserId} from '../../utils/users';
 import {FONTS} from '../../utils/theme';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
+import {voteComment} from '../../service/vote';
 
 const Comment = ({
   user,
@@ -42,8 +43,12 @@ const Comment = ({
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
-  const [totalVote, setTotalVote] = React.useState(0);
+  const [totalVote, setTotalVote] = React.useState(
+    comment.data.count_upvote - comment.data.count_downvote,
+  );
   const [statusVote, setStatusVote] = React.useState('');
+  const [upvote, setUpVote] = React.useState(comment.data.count_upvote);
+  const [downvote, setDownVote] = React.useState(comment.data.count_downvote);
 
   let onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
@@ -118,7 +123,15 @@ const Comment = ({
     }
     console.log('result block user ', result);
   };
-  const onUpVote = () => {
+  const onUpVote = async () => {
+    let dataVote = {
+      activity_id: comment.id,
+      count_downvote: downvote,
+      count_upvote: upvote,
+      text: comment.data.text,
+      status: 'upvote',
+    };
+
     setStatusVote('up');
     if (statusVote === 'up') {
       setStatusVote('none');
@@ -130,8 +143,16 @@ const Comment = ({
         setTotalVote(totalVote + 1);
       }
     }
+    onVote(dataVote);
   };
-  const onDownVote = () => {
+  const onDownVote = async () => {
+    let dataVote = {
+      activity_id: comment.id,
+      count_downvote: downvote,
+      count_upvote: upvote,
+      text: comment.data.text,
+      status: 'downvote',
+    };
     setStatusVote('down');
     if (statusVote === 'down') {
       setStatusVote('none');
@@ -143,6 +164,17 @@ const Comment = ({
         setTotalVote(totalVote - 1);
       }
     }
+    onVote(dataVote);
+  };
+  const onVote = async (dataVote) => {
+    console.log('click vote');
+    let result = await voteComment(dataVote);
+    setUpVote(result.data.data.count_upvote);
+    setDownVote(result.data.data.count_downvote);
+    setTotalVote(
+      result.data.data.count_upvote - result.data.data.count_downvote,
+    );
+    console.log('result up ', result);
   };
 
   React.useEffect(() => {

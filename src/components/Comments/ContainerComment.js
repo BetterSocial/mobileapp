@@ -39,6 +39,7 @@ const ContainerComment = ({comments, indexFeed}) => {
           <View>
             <View key={'p' + index}>
               <Comment
+                indexFeed={indexFeed}
                 key={'p' + index}
                 comment={item}
                 // username={item.user.data.username}
@@ -110,6 +111,7 @@ const ReplyComment = ({
           <ConnectorWrapper index={index}>
             <View key={'c' + index} style={styles.levelOneCommentWrapper}>
               <Comment
+                indexFeed={indexFeed}
                 key={'c' + index}
                 comment={item}
                 // username={item.user.data.username}

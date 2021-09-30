@@ -78,7 +78,6 @@ const ReplyComment = (props) => {
       let data = await getFeedDetail(feeds.feeds[indexFeed].id);
       if (data) {
         getThisComment(data.data);
-        console.log('index updae ', indexFeed, 'with ', data.data);
         setFeedByIndex(
           {
             singleFeed: data.data,
@@ -132,6 +131,7 @@ const ReplyComment = (props) => {
           </View>
           {/* Header */}
           <Comment
+            indexFeed={indexFeed}
             user={item.user}
             comment={item}
             time={item.created_at}
@@ -145,6 +145,7 @@ const ReplyComment = (props) => {
               <ConnectorWrapper index={0}>
                 <View style={styles.childCommentWrapper}>
                   <Comment
+                    indexFeed={indexFeed}
                     user={item.user}
                     comment={temporaryComment(temporaryCMD)}
                     time={temporaryComment(temporaryCMD).created_at}
@@ -176,6 +177,7 @@ const ReplyComment = (props) => {
                   <ConnectorWrapper index={loadingCMD ? index + 1 : index}>
                     <View style={styles.childCommentWrapper}>
                       <Comment
+                        indexFeed={indexFeed}
                         showLeftConnector={false}
                         time={itemReply.created_at}
                         photo={itemReply.user.data.profile_pic_url}
