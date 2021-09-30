@@ -32,7 +32,6 @@ const Content = ({message, images_url, style, onPress}) => {
   };
 
   const onImageClickedByIndex = (index) => {
-    console.log(index);
     navigation.push('ImageViewer', {
       title: 'Photo',
       index,
@@ -110,7 +109,6 @@ const styles = StyleSheet.create({
     };
   },
   text: (text) => {
-    console.log(text.length);
     if (text.length < 270) {
       return {
         fontFamily: fonts.inter[400],

@@ -23,19 +23,16 @@ const {width, height} = Dimensions.get('window');
 
 const getHeightReaction = () => {
   let h = Math.floor((height * 16) / 100);
-  console.log(`height reaction: ${h}`);
   return h;
 };
 
 const getHeightHeader = () => {
   let h = Math.floor((height * 8.3) / 100);
-  console.log(`height header: ${h}`);
   return h;
 };
 
 const getHeightFooter = () => {
   let h = Math.floor((height * 6.8) / 100);
-  console.log(`height footer: ${h}`);
   return h;
 };
 
@@ -139,8 +136,6 @@ const Item = ({
 
   React.useEffect(() => {
     const initial = () => {
-      let heightForContent = 0;
-      heightForContent = getHeightHeader() + getHeightFooter() + 48;
       let reactionCount = item.reaction_counts;
       if (JSON.stringify(reactionCount) !== '{}') {
         let comment = reactionCount.comment;
@@ -148,11 +143,9 @@ const Item = ({
           if (comment > 0) {
             setReaction(true);
             setPreviewComment(item.latest_reactions.comment[0]);
-            heightForContent += getHeightReaction();
           }
         }
       }
-      console.log(`height conten: ${heightForContent}`);
     };
     initial();
   }, [item]);
@@ -231,6 +224,7 @@ const Item = ({
       )}
       <View style={styles.footerWrapper(getHeightFooter())}>
         <Footer
+          item={item}
           totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
           onPressShare={() => onShare(item)}
