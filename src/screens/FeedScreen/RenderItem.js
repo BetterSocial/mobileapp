@@ -127,8 +127,6 @@ const Item = ({
   onCardContentPress,
   index = -1,
 }) => {
-  console.log('============');
-  console.log(height);
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
   const [totalVote, setTotalVote] = React.useState(0);

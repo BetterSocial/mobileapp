@@ -8,6 +8,7 @@ import {
   Image,
   FlatList,
   Pressable,
+  Text,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -42,17 +43,27 @@ const Content = ({message, images_url, style, onPress}) => {
     });
   };
 
+  const handleText = (text, onPress) => {
+    if (text.length > 750) {
+      return (
+        <Text style={styles.text(text)}>
+          {`${text.substring(0, 750).trim()} `}
+          <Text onPress={onPress} style={styles.seemore}>
+            ...more
+          </Text>
+        </Text>
+      );
+    } else {
+      return <Text style={styles.text(text)}>{text}</Text>;
+    }
+  };
+
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
-            <SeeMore
-              seeLessText={' '}
-              numberOfLines={4}
-              linkStyle={styles.textContentFeed}>
-              {message}
-            </SeeMore>
+            {handleText(message, onPress)}
             <Gap height={16} />
             <ImageLayouter
               images={images_url}
@@ -61,9 +72,7 @@ const Content = ({message, images_url, style, onPress}) => {
           </View>
         ) : (
           <View style={styles.containerShowMessage(route.name)}>
-            <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
-              {message}
-            </SeeMore>
+            {handleText(message, onPress)}
           </View>
         )
       ) : null}
@@ -99,6 +108,29 @@ const styles = StyleSheet.create({
       paddingBottom: 10,
       minHeight: 100,
     };
+  },
+  text: (text) => {
+    console.log(text.length);
+    if (text.length < 270) {
+      return {
+        fontFamily: fonts.inter[400],
+        fontWeight: 'normal',
+        fontSize: 24,
+        color: colors.black,
+        lineHeight: 44,
+      };
+    }
+    return {
+      fontFamily: fonts.inter[400],
+      fontWeight: 'normal',
+      fontSize: 16,
+      color: colors.black,
+      lineHeight: 24,
+    };
+  },
+
+  seemore: {
+    color: COLORS.blue,
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',
