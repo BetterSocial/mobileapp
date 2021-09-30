@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 
 import {useMessageInputContext} from 'stream-chat-react-native';
 
@@ -17,6 +23,8 @@ const InputMessage = () => {
     appendText,
     sendMessage,
     toggleAttachmentPicker,
+    ImageUploadPreview,
+    imageUploads,
   } = useMessageInputContext();
 
   const onChangeInput = (v) => {
@@ -51,7 +59,9 @@ const InputMessage = () => {
             <MemoIc_Picture width={20} height={20} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.btn(text)} onPress={sendMessage}>
+        <TouchableOpacity
+          style={styles.btn(text || imageUploads.length !== 0)}
+          onPress={sendMessage}>
           <IconSend style={styles.icSendButton} />
         </TouchableOpacity>
       </View>
@@ -70,6 +80,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    zIndex: 4,
   },
   btnEmoji: {
     paddingVertical: 7,

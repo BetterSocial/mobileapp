@@ -18,6 +18,7 @@ import {getUserId} from '../../utils/users';
 
 const DomainScreen = () => {
   const route = useRoute();
+  console.log(route.params.item);
   const navigation = useNavigation();
   const blockDomainRef = React.useRef(null);
   const refSpecificIssue = React.useRef(null);
@@ -44,10 +45,10 @@ const DomainScreen = () => {
   React.useEffect(() => {
     const init = async () => {
       setLoading(true);
-      console.log('dataDomain.og.domain');
-      console.log(dataDomain.og.domain);
       let res = await getDetailDomains(dataDomain.og.domain);
       if (res.code === 200) {
+        console.log('dataDomain.og.domain');
+        console.log(res.data);
         setData([{dummy: true}, ...res.data]);
         setLoading(false);
       }
@@ -127,6 +128,10 @@ const DomainScreen = () => {
     }
     console.log('result block user ', result);
   };
+
+  const domainImage = dataDomain.domain
+    ? dataDomain.domain.image
+    : dataDomain.og.domainImage;
   // console.log('data domain ', dataDomain);
   return (
     <View style={styles.container}>
@@ -138,8 +143,8 @@ const DomainScreen = () => {
             return (
               <View key={index} style={{backgroundColor: 'transparent'}}>
                 <Header
-                  image={dataDomain.domain.image}
-                  description={dataDomain.domain.info}
+                  image={domainImage}
+                  description={dataDomain.domain ? dataDomain.domain.info : ''}
                   domain={dataDomain.og.domain}
                   followers={10}
                   onPress={onReaction}

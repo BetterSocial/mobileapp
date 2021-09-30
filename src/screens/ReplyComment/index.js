@@ -19,13 +19,18 @@ import ConnectorWrapper from '../../components/Comments/ConnectorWrapper';
 import Comment from '../../components/Comments/Comment';
 import WriteComment from '../../components/Comments/WriteComment';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import {setFeedByIndex} from '../../context/actions/feeds';
+import {Context} from '../../context';
+import {getComment} from '../../utils/getstream/getComment';
 
 const ReplyComment = (props) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const [isReaction, setReaction] = React.useState(false);
+  let [feeds, dispatch] = React.useContext(Context).feeds;
 
   let itemProp = props.route.params.item;
+  let indexFeed = props.route.params.indexFeed;
   let comments = itemProp.latest_children.comment || [];
   let sortedComment = comments.sort((current, next) => {
     let currentMoment = moment(current.updated_at);
@@ -39,8 +44,6 @@ const ReplyComment = (props) => {
   const level = props.route.params.level;
   const [item, setItem] = React.useState(newItemProp);
 
-  // console.log(props.route.params.item);
-
   React.useEffect(() => {
     const init = () => {
       if (JSON.stringify(item.children_counts) !== {}) {
@@ -49,12 +52,43 @@ const ReplyComment = (props) => {
     };
     init();
   }, [item]);
+  const getThisComment = async (newFeed) => {
+    let newItem = await getComment({
+      feed: newFeed,
+      level: level,
+      idlevel1: item.id,
+      idlevel2: item.parent,
+    });
+    setItem(newItem);
+  };
+  React.useEffect(() => {
+    getThisComment(feeds.feeds[indexFeed]);
+  }, [feeds.feeds[indexFeed]]);
 
+  const updateFeed = async () => {
+    try {
+      let data = await getFeedDetail(feeds.feeds[indexFeed].id);
+      if (data) {
+        getThisComment(data.data);
+        console.log('index updae ', indexFeed, 'with ', data.data);
+        setFeedByIndex(
+          {
+            singleFeed: data.data,
+            index: indexFeed,
+          },
+          dispatch,
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const createComment = async () => {
     try {
       if (textComment.trim() !== '') {
         let data = await createChildComment(textComment, item.id);
         if (data.code === 200) {
+          updateFeed();
           setTextComment('');
           Toast.show('Comment successful', Toast.LONG);
         } else {
@@ -89,7 +123,6 @@ const ReplyComment = (props) => {
           </View>
           {/* Header */}
           <Comment
-            // username={item.user.data.username}
             user={item.user}
             comment={item}
             time={item.created_at}
@@ -100,24 +133,16 @@ const ReplyComment = (props) => {
           />
           {item.children_counts.comment > 0 &&
             item.latest_children.comment.map((itemReply, index) => {
-              const showCommentView = () =>
-                navigation.push('ReplyComment', {
-                  item: itemReply,
-                  level: parseInt(level) + 1,
-                });
-
-              const showChildrenCommentView = () =>
+              const showChildrenCommentView = () => {
                 navigation.push('ReplyComment', {
                   item: itemReply,
                   level: parseInt(level) + 2,
+                  indexFeed,
                 });
+              };
 
               let isLastInParent = (index) => {
                 return index === (item.children_counts.comment || 0) - 1;
-              };
-
-              const goToComment = () => {
-                navigation.push('ReplyComment', {item: itemReply});
               };
 
               return (
@@ -134,7 +159,6 @@ const ReplyComment = (props) => {
                           level >= 2
                         }
                         key={'r' + index}
-                        // username={itemReply.user.data.username}
                         user={item.user}
                         comment={itemReply}
                         onPress={showChildrenCommentView}
@@ -173,6 +197,7 @@ const ReplyComment = (props) => {
         username={item.user.data.username}
         onChangeText={(v) => setTextComment(v)}
         onPress={() => createComment()}
+        // onPress={() => console.log('level ', level)}
         value={textComment}
       />
     </View>
