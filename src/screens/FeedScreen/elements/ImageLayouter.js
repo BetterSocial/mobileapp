@@ -19,7 +19,6 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
     return (
       <View style={styles.twoPhotoLayout}>
         {images.map((item, index) => {
-          console.log(`item ${item}`);
           return (
             <View style={styles.twoPhotoItemLayout}>
               <Pressable onPress={() => onimageclick(index)}>
@@ -205,7 +204,7 @@ const styles = StyleSheet.create({
   },
 
   imagelayout2: {
-    maxHeight: 305,
+    maxHeight: 405,
     width: '100%',
     resizeMode: 'cover',
   },
@@ -215,10 +214,12 @@ const styles = StyleSheet.create({
   },
 
   twoPhotoLayout: {
+    flex: 1,
     width: '100%',
-    height: 305,
+    height: '100%',
     display: 'flex',
     flexDirection: 'row',
+    maxHeight: 405,
   },
 
   threePhotoLayout: {
@@ -245,7 +246,6 @@ const styles = StyleSheet.create({
 
   twoPhotoItemLayout: {
     flex: 1,
-    height: 305,
     marginHorizontal: 1,
   },
 });
