@@ -27,7 +27,7 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
                   style={styles.imagelayout2}
                   source={{uri: item}}
                   width={'100%'}
-                  height={305}
+                  height={'100%'}
                 />
               </Pressable>
             </View>
@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
     maxHeight: 410,
     width: '100%',
     resizeMode: 'cover',
-    backgroundColor: 'green',
   },
 
   imagelayout2: {
