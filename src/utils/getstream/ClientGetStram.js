@@ -24,7 +24,6 @@ export const useClientGetstream = () => {
           name: userData?.data.username,
           image: userData?.data.profile_pic_path ?? defaultImage,
         };
-        console.log('user connect ', user);
         const chatClient = await new StreamChat(STREAM_API_KEY);
         await chatClient.connectUser(user, token);
         setMessage(chatClient);
