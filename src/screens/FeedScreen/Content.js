@@ -20,7 +20,6 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {COLORS, SIZES} from '../../utils/theme';
 import ImageLayouter from './elements/ImageLayouter';
-import {TouchableWithoutFeedback} from 'react-native';
 
 const {width: screenWidth} = Dimensions.get('window');
 
