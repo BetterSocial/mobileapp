@@ -8,18 +8,18 @@ import {
   Image,
   FlatList,
   Pressable,
-  Text,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
 
-import Gap from '../../components/Gap';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {COLORS, SIZES} from '../../utils/theme';
-import ImageLayouter from './elements/ImageLayouter';
+import {TouchableWithoutFeedback} from 'react-native';
+import ImageLayouter from './ImageLayouter';
+import {Gap} from '../../../components';
+import {fonts} from '../../../utils/fonts';
+import {colors} from '../../../utils/colors';
+import {COLORS} from '../../../utils/theme';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -31,6 +31,7 @@ const Content = ({message, images_url, style, onPress}) => {
   };
 
   const onImageClickedByIndex = (index) => {
+    console.log(index);
     navigation.push('ImageViewer', {
       title: 'Photo',
       index,
@@ -41,55 +42,28 @@ const Content = ({message, images_url, style, onPress}) => {
     });
   };
 
-  const handleText = (text, onPress) => {
-    if (text.length > 750) {
-      return (
-        <Text style={styles.text(text)}>
-          {`${text.substring(0, 750).trim()} `}
-          <Text onPress={onPress} style={styles.seemore}>
-            ...more
-          </Text>
-        </Text>
-      );
-    } else {
-      return <Text style={styles.text(text)}>{text}</Text>;
-    }
-  };
-
-  const handleTextMedia = (text, onPress) => {
-    return (
-      <Text numberOfLines={4} style={styles.textMedia(text)}>
-        {text.length < 180 ? (
-          `${text}`
-        ) : (
-          <Text>
-            {`${text.substring(0, 165)}...`}
-            <Text onPress={onPress} style={styles.seemore}>
-              more
-            </Text>
-          </Text>
-        )}
-      </Text>
-    );
-  };
-
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
-            {handleTextMedia(message, onPress)}
-            <Gap height={SIZES.base} />
-            <View style={styles.container}>
-              <ImageLayouter
-                images={images_url}
-                onimageclick={onImageClickedByIndex}
-              />
-            </View>
+            <SeeMore
+              seeLessText={' '}
+              numberOfLines={4}
+              linkStyle={styles.textContentFeed}>
+              {message}
+            </SeeMore>
+            <Gap height={16} />
+            <ImageLayouter
+              images={images_url}
+              onimageclick={onImageClickedByIndex}
+            />
           </View>
         ) : (
           <View style={styles.containerShowMessage(route.name)}>
-            {handleText(message, onPress)}
+            <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
+              {message}
+            </SeeMore>
           </View>
         )
       ) : null}
@@ -109,6 +83,7 @@ export default Content;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingBottom: 16,
   },
   fletlist: {flex: 1},
   imageList: {
@@ -124,38 +99,6 @@ const styles = StyleSheet.create({
       paddingBottom: 10,
       minHeight: 100,
     };
-  },
-  text: (text) => {
-    if (text.length < 270) {
-      return {
-        fontFamily: fonts.inter[400],
-        fontWeight: 'normal',
-        fontSize: 24,
-        color: colors.black,
-        lineHeight: 44,
-      };
-    }
-    return {
-      fontFamily: fonts.inter[400],
-      fontWeight: 'normal',
-      fontSize: 16,
-      color: colors.black,
-      lineHeight: 24,
-    };
-  },
-  textMedia: (text) => {
-    return {
-      fontFamily: fonts.inter[400],
-      fontWeight: 'normal',
-      fontSize: 16,
-      color: colors.black,
-      lineHeight: 24,
-      maxHeight: 80,
-    };
-  },
-
-  seemore: {
-    color: COLORS.blue,
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',
