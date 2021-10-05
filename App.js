@@ -10,6 +10,7 @@ import FlashMessage from 'react-native-flash-message';
 import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {HumanIDProvider} from '@human-id/react-native-humanid';
+import messaging from '@react-native-firebase/messaging';
 
 import Store from './src/context/Store';
 import RootStack from './src/navigations/root-stack';
@@ -34,9 +35,23 @@ const App = () => {
       console.warn(err);
     }
   };
+  const requestPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  };
 
   React.useEffect(() => {
+    // Register FCM token with stream chat server.
     requestCameraPermission();
+    requestPermission();
+
+    // initFCM();
     const init = async () => {
       try {
         fetchRemoteConfig();
