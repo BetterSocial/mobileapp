@@ -26,6 +26,7 @@ export const useClientGetstream = () => {
         };
         const chatClient = await new StreamChat(STREAM_API_KEY);
         await chatClient.connectUser(user, token);
+        console.log(`chat client: ${chatClient}`);
         setMessage(chatClient);
         createClient(chatClient, dispatch);
       }
