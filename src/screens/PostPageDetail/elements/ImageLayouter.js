@@ -3,7 +3,8 @@ import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
-const ImageLayouter = ({images = [], onimageclick, height}) => {
+const ImageLayouter = ({images = [], onimageclick}) => {
+  console.log(images);
   if (images.length === 1) {
     return (
       <Pressable onPress={() => onimageclick(0)}>
@@ -11,7 +12,7 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           source={{uri: images[0]}}
           style={styles.imagelayout1}
           width={'100%'}
-          height={'100%'}
+          height={305}
         />
       </Pressable>
     );
@@ -19,6 +20,7 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
     return (
       <View style={styles.twoPhotoLayout}>
         {images.map((item, index) => {
+          console.log(`item ${item}`);
           return (
             <View style={styles.twoPhotoItemLayout}>
               <Pressable onPress={() => onimageclick(index)}>
@@ -26,7 +28,7 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
                   style={styles.imagelayout2}
                   source={{uri: item}}
                   width={'100%'}
-                  height={'100%'}
+                  height={305}
                 />
               </Pressable>
             </View>
@@ -198,13 +200,13 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
 
 const styles = StyleSheet.create({
   imagelayout1: {
-    maxHeight: 410,
+    maxHeight: 305,
     width: '100%',
     resizeMode: 'cover',
   },
 
   imagelayout2: {
-    maxHeight: 405,
+    maxHeight: 305,
     width: '100%',
     resizeMode: 'cover',
   },
@@ -214,12 +216,10 @@ const styles = StyleSheet.create({
   },
 
   twoPhotoLayout: {
-    flex: 1,
     width: '100%',
-    height: '100%',
+    height: 305,
     display: 'flex',
     flexDirection: 'row',
-    maxHeight: 405,
   },
 
   threePhotoLayout: {
@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
 
   twoPhotoItemLayout: {
     flex: 1,
+    height: 305,
     marginHorizontal: 1,
   },
 });

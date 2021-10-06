@@ -37,12 +37,19 @@ import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import DomainScreen from '../screens/DomainScreen';
 import LinkContextScreen from '../screens/LinkContextScreen';
+import {Context} from '../context';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
+  const [clientState] = React.useContext(Context).client;
+  const {client} = clientState;
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
+
+    return async () => {
+      await client?.disconnectUser();
+    };
   }, []);
   return (
     <Stack.Navigator initialRouteName="SplashScreen">
