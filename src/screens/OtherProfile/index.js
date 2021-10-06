@@ -17,6 +17,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
+import {generateRandomId} from 'stream-chat-react-native';
 
 import {getOtherProfile, setUnFollow, setFollow} from '../../service/profile';
 import RenderActivity from './elements/RenderActivity';
@@ -192,14 +193,29 @@ const OtherProfile = () => {
     });
   };
   const createChannel = async () => {
+    let members = [user_id, other_id];
+    console.log('member ', members);
     setIsLoading(true);
     const clientChat = await client.client;
-    const channelChat = await clientChat.channel('messaging', {
-      name: username,
-      members: [user_id, other_id],
+    const channels = await clientChat.queryChannels({
+      // distinct: true,
+      members,
     });
-    await channelChat.watch();
-    setChannel(channelChat, dispatchChannel);
+    if (channels.length > 1) {
+      setChannel(channels[0], dispatchChannel);
+    } else {
+      console.log('channe ', channels.length);
+      const channelChat = await clientChat.channel(
+        'messaging',
+        generateRandomId(),
+        {
+          name: username,
+          members: [user_id, other_id],
+        },
+      );
+      await channelChat.watch();
+      setChannel(channelChat, dispatchChannel);
+    }
     setIsLoading(false);
     await navigation.navigate('ChatDetailPage');
   };
