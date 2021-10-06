@@ -23,6 +23,21 @@ import {useNavigation} from '@react-navigation/core';
 
 const {width, height} = Dimensions.get('window');
 
+const getHeightReaction = () => {
+  let h = Math.floor((height * 16) / 100);
+  return h;
+};
+
+const getHeightHeader = () => {
+  let h = Math.floor((height * 8.3) / 100);
+  return h;
+};
+
+const getHeightFooter = () => {
+  let h = Math.floor((height * 6.8) / 100);
+  return h;
+};
+
 const getCountVote = (item) => {
   let reactionCount = item.reaction_counts;
   let count = 0;
@@ -120,6 +135,7 @@ const Item = ({
   const [feeds, dispatch] = React.useContext(Context).feeds;
   const [item, setItem] = React.useState(feeds.feeds[index]);
   const navigation = useNavigation();
+  const [contentHeight, setContentHeight] = React.useState(0);
 
   React.useEffect(() => {
     const initial = () => {
@@ -184,7 +200,7 @@ const Item = ({
 
   return (
     <Card style={styles.container}>
-      <Header props={item} />
+      <Header props={item} height={getHeightHeader()} />
 
       {item.post_type === POST_TYPE_POLL && (
         <ContentPoll
@@ -219,8 +235,9 @@ const Item = ({
           onPress={onPress}
         />
       )}
-      <View style={styles.footerWrapper}>
+      <View style={styles.footerWrapper(getHeightFooter())}>
         <Footer
+          item={item}
           totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
           onPressShare={() => onShare(item)}
@@ -279,7 +296,7 @@ const Item = ({
         />
       </View>
       {isReaction && (
-        <View>
+        <View style={styles.contentReaction(getHeightReaction())}>
           <View style={styles.lineAffterFooter} />
           <PreviewComment
             user={previewComment.user}
@@ -319,5 +336,8 @@ const styles = StyleSheet.create({
   },
   paddingHorizontal: {paddingHorizontal: 20},
   lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
-  footerWrapper: {height: 52, paddingHorizontal: 0},
+  footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
+  contentReaction: (heightReaction) => ({
+    height: heightReaction,
+  }),
 });

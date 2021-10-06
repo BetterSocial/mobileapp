@@ -7,6 +7,7 @@ import {getAccessToken} from '../token';
 import {STREAM_API_KEY} from '@env';
 import {getMyProfile} from '../../service/profile';
 import {createClient} from '../../context/actions/createClient';
+import {setMessage} from '../firebase/setMessaging';
 const defaultImage =
   'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png';
 
@@ -25,6 +26,7 @@ export const useClientGetstream = () => {
         };
         const chatClient = await new StreamChat(STREAM_API_KEY);
         await chatClient.connectUser(user, token);
+        setMessage(chatClient);
         createClient(chatClient, dispatch);
       }
     }
