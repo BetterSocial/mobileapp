@@ -123,7 +123,7 @@ const ChatDetailPage = () => {
 };
 
 const CustomInlineDateSeparator = ({date}) => {
-  let newDate = moment(date).locale('en').format('MMMM DD, YYYY');
+  let newDate = moment(date).locale('en').format('MMMM D, YYYY');
   return <Text style={[styles.date, styles.inlineDate]}>{newDate}</Text>;
 };
 
@@ -148,5 +148,6 @@ const styles = StyleSheet.create({
   },
   inlineDate: {
     alignSelf: 'center',
+    marginBottom: 12,
   },
 });
