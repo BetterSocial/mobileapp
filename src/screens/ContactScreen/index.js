@@ -6,23 +6,20 @@ import uuid from 'react-native-uuid';
 import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
 import {userPopulate} from '../../service/users';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import StringConstant from '../../utils/string/StringConstant';
 import {COLORS, SIZES} from '../../utils/theme';
 import Header from './elements/Header';
 import {Search} from './elements';
 import {Alert} from 'react-native';
-import Label from './elements/Label';
 import ItemUser from './elements/ItemUser';
 import {Loading} from '../../components';
 import ContactPreview from './elements/ContactPreview';
-import MemoContactPreview from './elements/ContactPreview';
+import {generateRandomId} from 'stream-chat-react-native-core';
 
 const width = Dimensions.get('screen').width;
 
 const ContactScreen = ({navigation}) => {
   const [selectedUsers, setSelectedUsers] = React.useState([]);
-  const [click, setClick] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState([]);
   const [profile] = React.useContext(Context).profile;
@@ -32,17 +29,10 @@ const ContactScreen = ({navigation}) => {
   const [layoutProvider, setLayoutProvider] = React.useState(() => {});
   const [refreshing, setRefreshing] = React.useState(false);
   const [dataProvider, setDataProvider] = React.useState(null);
-  const [followed, setFollowed] = React.useState([]);
+  const [followed, setFollowed] = React.useState([profile.user_id]);
   const [cacheUsers, setCacheUser] = React.useState([]);
   const [text, setText] = React.useState(null);
-  const [usernames, setUsernames] = React.useState([]);
-
-  const create = useClientGetstream();
-  const filterItems = (needle, items) => {
-    let query = needle.toLowerCase();
-    let result = items.filter((item) => item.toLowerCase().indexOf(query) > -1);
-    return result;
-  };
+  const [usernames, setUsernames] = React.useState([profile.username]);
 
   const VIEW_TYPE_LABEL = 1;
   const VIEW_TYPE_DATA = 2;
@@ -113,27 +103,40 @@ const ContactScreen = ({navigation}) => {
       }
       setLoading(true);
       let members = followed;
-      members.push(profile.user_id);
       let channelName = usernames;
-      channelName.push(profile.username);
       let typeChannel = 0;
 
       if (members.length > 2) {
         typeChannel = 1;
       }
-      console.log('create channel 1 ', members);
-      const id = uuid.v4();
       const clientChat = await client.client;
-      const channelChat = await clientChat.channel('messaging', id, {
-        name: channelName.toString(),
-        members: members,
-        typeChannel,
+      const filter = {type: 'messaging', members: {$eq: members}};
+      const sort = [{last_message_at: -1}];
+      const findChannels = await clientChat.queryChannels(filter, sort, {
+        watch: true,
+        state: true,
       });
-      let err = await channelChat.create();
-      console.log('create channel ', err);
-      setChannel(channelChat, dispatchChannel);
-      setFollowed([]);
-      setUsernames([]);
+      console.log('channe leng ', findChannels.length);
+      console.log('channe member ', members);
+
+      if (findChannels.length > 0) {
+        setChannel(findChannels[0], dispatchChannel);
+      } else {
+        const channelChat = await clientChat.channel(
+          'messaging',
+          generateRandomId(),
+          {
+            name: channelName.join(', '),
+            members: members,
+            typeChannel,
+          },
+        );
+        let err = await channelChat.create();
+        console.log('create channel ', err);
+        setChannel(channelChat, dispatchChannel);
+      }
+      setFollowed([profile.user_id]);
+      setUsernames([profile.username]);
       setLoading(false);
       await navigation.navigate('ChatDetailPage');
     } catch (error) {
