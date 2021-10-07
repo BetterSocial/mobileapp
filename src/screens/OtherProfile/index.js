@@ -195,18 +195,17 @@ const OtherProfile = () => {
   };
   const createChannel = async () => {
     let members = [other_id, user_id];
-    const filter = {type: 'messaging', members: {$eq: members}};
-    const sort = [{last_message_at: -1}];
     setIsLoading(true);
     const clientChat = await client.client;
+    const filter = {type: 'messaging', members: {$eq: members}};
+    const sort = [{last_message_at: -1}];
     const channels = await clientChat.queryChannels(filter, sort, {
-      watch: true, // this is the default
+      watch: true,
       state: true,
     });
     if (channels.length > 0) {
       setChannel(channels[0], dispatchChannel);
     } else {
-      console.log('channe ', channels.length);
       const channelChat = await clientChat.channel(
         'messaging',
         generateRandomId(),

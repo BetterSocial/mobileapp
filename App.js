@@ -66,9 +66,9 @@ const App = () => {
     requestCameraPermission();
     requestPermission();
     createChannel();
-    messaging().onMessage((remoteMessage) => {
+    const unsubscribe = messaging().onMessage((remoteMessage) => {
       console.log('NOtifICAtion');
-      console.log(remoteMessage);
+      console.log('messag ', remoteMessage);
       PushNotification.localNotification({
         id: '123',
         title: remoteMessage.notification.title,
@@ -85,6 +85,7 @@ const App = () => {
       }
     };
     init();
+    return unsubscribe;
   }, []);
   return (
     <>
