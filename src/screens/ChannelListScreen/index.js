@@ -30,8 +30,12 @@ const ChannelListScreen = ({navigation}) => {
     type: 'messaging',
   };
 
-  const sort = {last_message_at: -1};
-  const options = {};
+  const sort = [{last_message_at: -1}, {cid: -1}];
+  const options = {
+    state: true,
+    watch: true,
+    presence: true,
+  };
   const memoizedFilters = React.useMemo(() => filters, [userId]);
 
   React.useEffect(() => {

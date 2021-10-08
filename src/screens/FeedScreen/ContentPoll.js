@@ -130,6 +130,23 @@ const ContentPoll = ({
     return !isPollExpired(pollexpiredat) && !isAlreadyPolling;
   };
 
+  const handleTextCaption = (text, onPress) => {
+    return (
+      <Text numberOfLines={4} style={styles.textMedia(text)}>
+        {text.length < 180 ? (
+          `${text}`
+        ) : (
+          <Text>
+            {`${text.substring(0, 165)}...`}
+            <Text onPress={onPress} style={styles.seemore}>
+              more
+            </Text>
+          </Text>
+        )}
+      </Text>
+    );
+  };
+
   return (
     <Pressable
       disabled={isTouchableDisabled}
@@ -164,9 +181,7 @@ const ContentPoll = ({
           </View>
         ) : (
           <View style={styles.containerShowMessage}>
-            <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
-              {`${message}`}
-            </SeeMore>
+            {handleTextCaption(message, onPress)}
 
             <View style={styles.pollOptionsContainer}>
               {polls.map((pollItem, index) => {
@@ -444,5 +459,19 @@ const styles = StyleSheet.create({
   seeresultstext: {
     color: colors.holytosca,
     fontFamily: fonts.inter[500],
+  },
+  textMedia: (text) => {
+    return {
+      fontFamily: fonts.inter[400],
+      fontWeight: 'normal',
+      fontSize: 16,
+      color: colors.black,
+      lineHeight: 24,
+      maxHeight: 80,
+    };
+  },
+
+  seemore: {
+    color: COLORS.blue,
   },
 });

@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import {Gap, Footer} from '../../components';
 import Header from '../FeedScreen/Header';
-import Content from '../FeedScreen/Content';
+import Content from './elements/Content';
 import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import ReportUser from '../../components/Blocking/ReportUser';

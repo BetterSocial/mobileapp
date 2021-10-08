@@ -262,7 +262,6 @@ const FeedScreen = (props) => {
             if (countStack === 0) {
               // let id = mainFeeds[mainFeeds.length - 1].id;
               let id = feeds[feeds.length - 1].id;
-              console.log(id);
               setLastId(id);
             }
           }}

@@ -17,6 +17,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
+import {generateRandomId} from 'stream-chat-react-native';
 
 import {getOtherProfile, setUnFollow, setFollow} from '../../service/profile';
 import RenderActivity from './elements/RenderActivity';
@@ -52,8 +53,9 @@ const OtherProfile = () => {
   const [opacity, setOpacity] = React.useState(0);
   const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
   const [tokenJwt, setTokenJwt] = React.useState('');
-  const [client, setClient] = React.useContext(Context).client;
+  const [client] = React.useContext(Context).client;
   const [channel, dispatchChannel] = React.useContext(Context).channel;
+  const [profile] = React.useContext(Context).profile;
   const create = useClientGetstream();
 
   const {params} = route;
@@ -141,7 +143,7 @@ const OtherProfile = () => {
       follow_source: 'other-profile',
     };
     const result = await setFollow(data);
-    if (result.code == 200) {
+    if (result.code === 200) {
       fetchOtherProfile(user_id, other_id, false);
     }
   };
@@ -192,14 +194,29 @@ const OtherProfile = () => {
     });
   };
   const createChannel = async () => {
+    let members = [other_id, user_id];
     setIsLoading(true);
     const clientChat = await client.client;
-    const channelChat = await clientChat.channel('messaging', {
-      name: username,
-      members: [user_id, other_id],
+    const filter = {type: 'messaging', members: {$eq: members}};
+    const sort = [{last_message_at: -1}];
+    const channels = await clientChat.queryChannels(filter, sort, {
+      watch: true,
+      state: true,
     });
-    await channelChat.watch();
-    setChannel(channelChat, dispatchChannel);
+    if (channels.length > 0) {
+      setChannel(channels[0], dispatchChannel);
+    } else {
+      const channelChat = await clientChat.channel(
+        'messaging',
+        generateRandomId(),
+        {
+          name: [profile.username, username].join(', '),
+          members: members,
+        },
+      );
+      await channelChat.watch();
+      setChannel(channelChat, dispatchChannel);
+    }
     setIsLoading(false);
     await navigation.navigate('ChatDetailPage');
   };
