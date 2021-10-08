@@ -7,6 +7,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import {colors} from '../../utils/colors';
 import ConnectorWrapper from './ConnectorWrapper';
 import Comment from '../../components/Comments/Comment';
+import {DATALOADING} from '../../utils/string/LoadingComment';
 
 const ContainerComment = ({comments, indexFeed}) => {
   const navigation = useNavigation();
@@ -38,6 +39,7 @@ const ContainerComment = ({comments, indexFeed}) => {
           <View>
             <View key={'p' + index}>
               <Comment
+                indexFeed={indexFeed}
                 key={'p' + index}
                 comment={item}
                 // username={item.user.data.username}
@@ -109,6 +111,7 @@ const ReplyComment = ({
           <ConnectorWrapper index={index}>
             <View key={'c' + index} style={styles.levelOneCommentWrapper}>
               <Comment
+                indexFeed={indexFeed}
                 key={'c' + index}
                 comment={item}
                 // username={item.user.data.username}
