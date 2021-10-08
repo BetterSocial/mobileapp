@@ -49,3 +49,13 @@ export const voteComment = async (data) => {
     return error.response.data;
   }
 };
+export const iVoteComment = async (id) => {
+  try {
+    let resApi = await api.get(`/activity/i_vote_comment?id=${id}`);
+    return resApi.data;
+  } catch (error) {
+    console.log('error ', error);
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+};

@@ -18,7 +18,7 @@ import {getUserId} from '../../utils/users';
 import {FONTS} from '../../utils/theme';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import {voteComment} from '../../service/vote';
+import {iVoteComment, voteComment} from '../../service/vote';
 
 const Comment = ({
   user,
@@ -126,14 +126,12 @@ const Comment = ({
   const onUpVote = async () => {
     let dataVote = {
       activity_id: comment.id,
-      count_downvote: downvote,
-      count_upvote: upvote,
       text: comment.data.text,
       status: 'upvote',
     };
 
-    setStatusVote('up');
-    if (statusVote === 'up') {
+    setStatusVote('upvote');
+    if (statusVote === 'upvote') {
       setStatusVote('none');
       setTotalVote(totalVote - 1);
     } else {
@@ -148,13 +146,11 @@ const Comment = ({
   const onDownVote = async () => {
     let dataVote = {
       activity_id: comment.id,
-      count_downvote: downvote,
-      count_upvote: upvote,
       text: comment.data.text,
       status: 'downvote',
     };
-    setStatusVote('down');
-    if (statusVote === 'down') {
+    setStatusVote('downvote');
+    if (statusVote === 'downvote') {
       setStatusVote('none');
       setTotalVote(totalVote + 1);
     } else {
@@ -167,7 +163,7 @@ const Comment = ({
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    console.log('click vote');
+    console.log('click vote ', comment);
     let result = await voteComment(dataVote);
     setUpVote(result.data.data.count_upvote);
     setDownVote(result.data.data.count_downvote);
@@ -175,6 +171,12 @@ const Comment = ({
       result.data.data.count_upvote - result.data.data.count_downvote,
     );
     console.log('result up ', result);
+  };
+  const iVote = async () => {
+    let result = await iVoteComment(comment.id);
+    if (result.code === 200) {
+      setStatusVote(result.data.action);
+    }
   };
 
   React.useEffect(() => {
@@ -185,6 +187,7 @@ const Comment = ({
       }
     };
     parseToken();
+    iVote();
   }, []);
   return (
     <View
@@ -239,7 +242,7 @@ const Comment = ({
         <TouchableOpacity
           style={[styles.arrowup, styles.btn]}
           onPress={onDownVote}>
-          {statusVote === 'down' ? (
+          {statusVote === 'downvote' ? (
             <MemoIc_downvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_down_vote_off width={20} height={18} />
@@ -249,7 +252,7 @@ const Comment = ({
         <TouchableOpacity
           style={[styles.arrowdown, styles.btn]}
           onPress={onUpVote}>
-          {statusVote === 'up' ? (
+          {statusVote === 'upvote' ? (
             <MemoIc_upvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_upvote_off width={20} height={18} />
