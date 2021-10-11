@@ -101,6 +101,29 @@ let displayFormattedSearchLocations = (searchQuery, locationObject) => {
   );
 };
 
+let getChatName = (username) => {
+  if (!username) {
+    return 'No Name';
+  }
+
+  let userArrays = username.split(',');
+  let userArraysWithoutMe = userArrays.reduce((acc, currentItem) => {
+    let me = 'fajarism';
+    if (currentItem.trim() !== me) {
+      acc.push(currentItem.trim());
+    }
+    return acc;
+  }, []);
+  if (userArraysWithoutMe.length > 1) {
+    return userArraysWithoutMe.join(', ');
+  }
+  if (userArraysWithoutMe.length === 1) {
+    return userArraysWithoutMe[0].trim();
+  } else {
+    return 'No name';
+  }
+};
+
 let styles = StyleSheet.create({
   bold: {
     fontFamily: 'Inter',
@@ -117,5 +140,6 @@ export {
   getPollTime,
   isPollExpired,
   displayFormattedSearchLocations,
+  getChatName,
   NO_POLL_UUID,
 };

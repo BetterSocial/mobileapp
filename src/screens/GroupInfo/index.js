@@ -26,6 +26,7 @@ import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import {Context} from '../../context';
 import {ProfileContact} from '../../components/Items';
 import {trimString} from '../../utils/string/TrimString';
+import {getChatName} from '../../utils/string/StringUtils';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -60,17 +61,16 @@ const GroupInfo = () => {
     );
   };
 
+  let chatName = getChatName(route.params?.username);
   return (
     <View style={styles.container}>
-      <Header title={route.params?.username} />
+      <Header title={chatName} />
       <View style={styles.lineTop} />
       <ScrollView>
         <SafeAreaView>
           <View style={styles.containerPhoto}>{showImageProfile()}</View>
           <View style={styles.containerGroupName}>
-            <Text style={styles.groupName}>
-              {trimString(route.params?.username, 20)}
-            </Text>
+            <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
             {/* <TouchableWithoutFeedback>
               <MemoIc_pencil width={20} height={20} color={colors.gray1} />
             </TouchableWithoutFeedback> */}

@@ -17,11 +17,18 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {Context} from '../../context';
 import {trimString} from '../../utils/string/TrimString';
+import {getChatName} from '../../utils/string/StringUtils';
 
 const Header = ({username, profile, createChat}) => {
   const navigation = useNavigation();
   const [channelClient] = React.useContext(Context).channel;
   const {channel} = channelClient;
+
+  console.log('username');
+  console.log(username);
+
+  let chatName = getChatName(username);
+
   return (
     <View style={styles.container}>
       <View style={[styles.row, {flex: 1}]}>
@@ -47,7 +54,7 @@ const Header = ({username, profile, createChat}) => {
                 <ChannelAvatar channel={channel} />
               </View>
             )}
-            <Text style={styles.name}>{trimString(username, 21)}</Text>
+            <Text style={styles.name}>{trimString(chatName, 21)}</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
