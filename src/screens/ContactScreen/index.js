@@ -116,23 +116,20 @@ const ContactScreen = ({navigation}) => {
         watch: true,
         state: true,
       });
-      console.log('channe leng ', findChannels.length);
-      console.log('channe member ', members);
 
       if (findChannels.length > 0) {
         setChannel(findChannels[0], dispatchChannel);
       } else {
         const channelChat = await clientChat.channel(
           'messaging',
-          generateRandomId(),
+          members.length > 2 ? generateRandomId() : null,
           {
             name: channelName.join(', '),
             members: members,
-            typeChannel,
+            type_channel: typeChannel,
           },
         );
         let err = await channelChat.create();
-        console.log('create channel ', err);
         setChannel(channelChat, dispatchChannel);
       }
       setFollowed([profile.user_id]);
@@ -140,6 +137,7 @@ const ContactScreen = ({navigation}) => {
       setLoading(false);
       await navigation.navigate('ChatDetailPage');
     } catch (error) {
+      console.log(error);
       setLoading(false);
     }
   };
