@@ -22,11 +22,14 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {Context} from '../../context';
 import {getComment} from '../../utils/getstream/getComment';
+import {temporaryComment} from '../../utils/string/LoadingComment';
 
 const ReplyComment = (props) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
+  const [temporaryCMD, setTemporaryCMD] = React.useState('');
   const [isReaction, setReaction] = React.useState(false);
+  const [loadingCMD, setLoadingCMD] = React.useState(false);
   let [feeds, dispatch] = React.useContext(Context).feeds;
 
   let itemProp = props.route.params.item;
@@ -43,6 +46,10 @@ const ReplyComment = (props) => {
 
   const level = props.route.params.level;
   const [item, setItem] = React.useState(newItemProp);
+  const setComment = (text) => {
+    setTextComment(text);
+    setTemporaryCMD(text);
+  };
 
   React.useEffect(() => {
     const init = () => {
@@ -59,6 +66,7 @@ const ReplyComment = (props) => {
       idlevel1: item.id,
       idlevel2: item.parent,
     });
+    setLoadingCMD(false);
     setItem(newItem);
   };
   React.useEffect(() => {
@@ -70,7 +78,6 @@ const ReplyComment = (props) => {
       let data = await getFeedDetail(feeds.feeds[indexFeed].id);
       if (data) {
         getThisComment(data.data);
-        console.log('index updae ', indexFeed, 'with ', data.data);
         setFeedByIndex(
           {
             singleFeed: data.data,
@@ -84,6 +91,7 @@ const ReplyComment = (props) => {
     }
   };
   const createComment = async () => {
+    setLoadingCMD(true);
     try {
       if (textComment.trim() !== '') {
         let data = await createChildComment(textComment, item.id);
@@ -123,6 +131,7 @@ const ReplyComment = (props) => {
           </View>
           {/* Header */}
           <Comment
+            indexFeed={indexFeed}
             user={item.user}
             comment={item}
             time={item.created_at}
@@ -131,6 +140,24 @@ const ReplyComment = (props) => {
             level={level}
             onPress={() => {}}
           />
+          {loadingCMD && (
+            <ContainerReply key={'dummy1'}>
+              <ConnectorWrapper index={0}>
+                <View style={styles.childCommentWrapper}>
+                  <Comment
+                    indexFeed={indexFeed}
+                    user={item.user}
+                    comment={temporaryComment(temporaryCMD)}
+                    time={temporaryComment(temporaryCMD).created_at}
+                    photo={item.user.data.profile_pic_url}
+                    isLast={true}
+                    level={level >= 2}
+                    onPress={() => {}}
+                  />
+                </View>
+              </ConnectorWrapper>
+            </ContainerReply>
+          )}
           {item.children_counts.comment > 0 &&
             item.latest_children.comment.map((itemReply, index) => {
               const showChildrenCommentView = () => {
@@ -147,9 +174,10 @@ const ReplyComment = (props) => {
 
               return (
                 <ContainerReply key={index}>
-                  <ConnectorWrapper index={index}>
+                  <ConnectorWrapper index={loadingCMD ? index + 1 : index}>
                     <View style={styles.childCommentWrapper}>
                       <Comment
+                        indexFeed={indexFeed}
                         showLeftConnector={false}
                         time={itemReply.created_at}
                         photo={itemReply.user.data.profile_pic_url}
@@ -195,7 +223,7 @@ const ReplyComment = (props) => {
         inReplyCommentView={true}
         showProfileConnector={(item.children_counts.comment || 0) !== 0}
         username={item.user.data.username}
-        onChangeText={(v) => setTextComment(v)}
+        onChangeText={(v) => setComment(v)}
         onPress={() => createComment()}
         // onPress={() => console.log('level ', level)}
         value={textComment}

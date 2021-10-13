@@ -53,8 +53,9 @@ const OtherProfile = () => {
   const [opacity, setOpacity] = React.useState(0);
   const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
   const [tokenJwt, setTokenJwt] = React.useState('');
-  const [client, setClient] = React.useContext(Context).client;
+  const [client] = React.useContext(Context).client;
   const [channel, dispatchChannel] = React.useContext(Context).channel;
+  const [profile] = React.useContext(Context).profile;
   const create = useClientGetstream();
 
   const {params} = route;
@@ -142,7 +143,7 @@ const OtherProfile = () => {
       follow_source: 'other-profile',
     };
     const result = await setFollow(data);
-    if (result.code == 200) {
+    if (result.code === 200) {
       fetchOtherProfile(user_id, other_id, false);
     }
   };
@@ -193,24 +194,24 @@ const OtherProfile = () => {
     });
   };
   const createChannel = async () => {
-    let members = [user_id, other_id];
-    console.log('member ', members);
+    let members = [other_id, user_id];
     setIsLoading(true);
     const clientChat = await client.client;
-    const channels = await clientChat.queryChannels({
-      // distinct: true,
-      members,
+    const filter = {type: 'messaging', members: {$eq: members}};
+    const sort = [{last_message_at: -1}];
+    const channels = await clientChat.queryChannels(filter, sort, {
+      watch: true,
+      state: true,
     });
-    if (channels.length > 1) {
+    if (channels.length > 0) {
       setChannel(channels[0], dispatchChannel);
     } else {
-      console.log('channe ', channels.length);
       const channelChat = await clientChat.channel(
         'messaging',
         generateRandomId(),
         {
-          name: username,
-          members: [user_id, other_id],
+          name: [profile.username, username].join(', '),
+          members: members,
         },
       );
       await channelChat.watch();
