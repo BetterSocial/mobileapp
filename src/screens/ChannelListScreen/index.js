@@ -30,11 +30,13 @@ const ChannelListScreen = ({navigation}) => {
     type: 'messaging',
   };
 
-  const sort = {last_message_at: -1};
+  const sort = [{last_message_at: -1}, {cid: -1}];
   const options = {
     state: true,
     watch: true,
+    presence: true,
   };
+
   const memoizedFilters = React.useMemo(() => filters, [userId]);
 
   React.useEffect(() => {
@@ -68,13 +70,15 @@ const ChannelListScreen = ({navigation}) => {
 
   return (
     <View style={{height: '100%'}}>
-      <Search
-        animatedValue={0}
-        onPress={() => navigation.navigate('ContactScreen')}
-      />
       {client.client && (
         <Chat client={client.client} i18nInstance={streami18n}>
-          <View style={StyleSheet.absoluteFill}>
+          <View style={{height: '100%'}}>
+            <View style={{height: 58}}>
+              <Search
+                animatedValue={0}
+                onPress={() => navigation.navigate('ContactScreen')}
+              />
+            </View>
             <ChannelList
               PreviewAvatar={CustomPreviewAvatar}
               filters={memoizedFilters}
@@ -87,6 +91,10 @@ const ChannelListScreen = ({navigation}) => {
               sort={sort}
               options={options}
               maxUnreadCount={99}
+              additionalFlatListProps={{
+                onEndReached: () => null,
+                refreshControl: null,
+              }}
             />
           </View>
         </Chat>
