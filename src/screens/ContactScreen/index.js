@@ -122,7 +122,7 @@ const ContactScreen = ({navigation}) => {
       } else {
         const channelChat = await clientChat.channel(
           'messaging',
-          members.length > 2 ? generateRandomId() : null,
+          generateRandomId(),
           {
             name: channelName.join(', '),
             members: members,
