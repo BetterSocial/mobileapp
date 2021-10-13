@@ -1,18 +1,27 @@
 import * as React from 'react';
 import {
-  TouchableWithoutFeedback,
   Image,
   StyleSheet,
   Text,
   View,
+  TouchableNativeFeedback,
+  Pressable,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 
 import {fonts} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const ProfileContact = ({photo, fullname, onPress, select}) => {
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
+    <Pressable
+      onPress={onPress}
+      android_ripple={{
+        color: COLORS.gray1,
+        borderless: false,
+        borderRadius: 10,
+      }}>
       <View style={styles.container}>
         <View style={styles.profile}>
           <Image style={styles.image} source={{uri: photo}} />
@@ -20,7 +29,7 @@ const ProfileContact = ({photo, fullname, onPress, select}) => {
         </View>
         {select && <MemoIc_Checklist />}
       </View>
-    </TouchableWithoutFeedback>
+    </Pressable>
   );
 };
 

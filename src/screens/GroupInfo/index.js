@@ -63,6 +63,24 @@ const GroupInfo = () => {
   };
 
   let chatName = getChatName(route.params?.username, profile.username);
+
+  const onProfilePressed = (data) => {
+    console.log('group info profile pressed');
+    console.log(profile);
+    console.log(participants[data]);
+    if (profile.user_id === participants[data].user_id) {
+      navigation.navigate('ProfileScreen');
+      return;
+    }
+
+    navigation.navigate('OtherProfile', {
+      data: {
+        user_id: profile.user_id,
+        other_id: participants[data].user_id,
+        username: participants[data].user.name,
+      },
+    });
+  };
   return (
     <View style={styles.container}>
       <Header title={chatName} />
@@ -83,7 +101,7 @@ const GroupInfo = () => {
           <View style={styles.containerMedia(asset.length === 0)}>
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate('GroupMedia')}>
-              <Text style={styles.btnToMediaGroup}>Media & Links ></Text>
+              <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
             </TouchableWithoutFeedback>
             <FlatList
               data={asset}
@@ -112,6 +130,7 @@ const GroupInfo = () => {
               renderItem={({item}) => (
                 <ProfileContact
                   key={item}
+                  onPress={() => onProfilePressed(item)}
                   fullname={participants[item].user.name}
                   photo={participants[item].user.image}
                 />
