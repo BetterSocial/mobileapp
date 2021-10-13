@@ -108,6 +108,7 @@ const ContactScreen = ({navigation}) => {
 
   const handleCreateChannel = async () => {
     try {
+      console.log('create channel');
       if (followed.length < 1) {
         Alert.alert('Warning', 'Please choose min one user');
       }
@@ -121,14 +122,17 @@ const ContactScreen = ({navigation}) => {
       if (members.length > 2) {
         typeChannel = 1;
       }
-      console.log('create channel 1 ', members);
       const id = uuid.v4();
       const clientChat = await client.client;
-      const channelChat = await clientChat.channel('messaging', id, {
-        name: channelName.toString(),
-        members: members,
-        typeChannel,
-      });
+      const channelChat = await clientChat.channel(
+        'messaging',
+        members.length <= 2 ? null : id,
+        {
+          name: channelName.toString(),
+          members: members,
+          typeChannel,
+        },
+      );
       let err = await channelChat.create();
       console.log('create channel ', err);
       setChannel(channelChat, dispatchChannel);
@@ -138,6 +142,7 @@ const ContactScreen = ({navigation}) => {
       await navigation.navigate('ChatDetailPage');
     } catch (error) {
       setLoading(false);
+      console.log(error);
     }
   };
 
