@@ -101,14 +101,13 @@ let displayFormattedSearchLocations = (searchQuery, locationObject) => {
   );
 };
 
-let getChatName = (username) => {
-  if (!username) {
+let getChatName = (usernames, me) => {
+  if (!usernames) {
     return 'No Name';
   }
 
-  let userArrays = username.split(',');
+  let userArrays = usernames.split(',');
   let userArraysWithoutMe = userArrays.reduce((acc, currentItem) => {
-    let me = 'fajarism';
     if (currentItem.trim() !== me) {
       acc.push(currentItem.trim());
     }

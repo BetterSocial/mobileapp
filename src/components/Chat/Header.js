@@ -22,12 +22,13 @@ import {getChatName} from '../../utils/string/StringUtils';
 const Header = ({username, profile, createChat}) => {
   const navigation = useNavigation();
   const [channelClient] = React.useContext(Context).channel;
+  const [profileContext] = React.useContext(Context).profile;
   const {channel} = channelClient;
 
   console.log('username');
   console.log(username);
 
-  let chatName = getChatName(username);
+  let chatName = getChatName(username, profileContext.username);
 
   return (
     <View style={styles.container}>

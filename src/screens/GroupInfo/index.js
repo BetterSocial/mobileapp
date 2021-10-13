@@ -34,6 +34,7 @@ const GroupInfo = () => {
   const [groupChatState] = React.useContext(Context).groupChat;
   const {participants, asset} = groupChatState;
   const [channelState] = React.useContext(Context).channel;
+  const [profile] = React.useContext(Context).profile;
   const {channel, profileChannel} = channelState;
   const [countUser] = React.useState(Object.entries(participants).length);
 
@@ -61,7 +62,7 @@ const GroupInfo = () => {
     );
   };
 
-  let chatName = getChatName(route.params?.username);
+  let chatName = getChatName(route.params?.username, profile.username);
   return (
     <View style={styles.container}>
       <Header title={chatName} />
