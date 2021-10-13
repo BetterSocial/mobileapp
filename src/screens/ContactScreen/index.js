@@ -130,7 +130,7 @@ const ContactScreen = ({navigation}) => {
         {
           name: channelName.toString(),
           members: members,
-          typeChannel,
+          type_channel: typeChannel,
         },
       );
       let err = await channelChat.create();
