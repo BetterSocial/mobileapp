@@ -89,6 +89,7 @@ const PostPageDetail = (props) => {
   };
   React.useEffect(() => {
     setItem(feeds.feeds[index]);
+    console.log(JSON.stringify(feeds.feeds[index]));
   }, [feeds.feeds[index]]);
 
   React.useEffect(() => {
@@ -269,7 +270,6 @@ const PostPageDetail = (props) => {
   };
 
   const onCommentButtonClicked = () => {
-    console.log('Comment Button Clicked');
     scrollViewRef.current.scrollToEnd();
   };
 

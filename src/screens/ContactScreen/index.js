@@ -98,6 +98,7 @@ const ContactScreen = ({navigation}) => {
 
   const handleCreateChannel = async () => {
     try {
+      console.log('create channel');
       if (followed.length < 1) {
         Alert.alert('Warning', 'Please choose min one user');
       }
@@ -109,38 +110,27 @@ const ContactScreen = ({navigation}) => {
       if (members.length > 2) {
         typeChannel = 1;
       }
+      const id = uuid.v4();
       const clientChat = await client.client;
-      const filter = {type: 'messaging', members: {$eq: members}};
-      const sort = [{last_message_at: -1}];
-      const findChannels = await clientChat.queryChannels(filter, sort, {
-        watch: true,
-        state: true,
-      });
-      console.log('channe leng ', findChannels.length);
-      console.log('channe member ', members);
-
-      if (findChannels.length > 0) {
-        setChannel(findChannels[0], dispatchChannel);
-      } else {
-        const channelChat = await clientChat.channel(
-          'messaging',
-          generateRandomId(),
-          {
-            name: channelName.join(', '),
-            members: members,
-            typeChannel,
-          },
-        );
-        let err = await channelChat.create();
-        console.log('create channel ', err);
-        setChannel(channelChat, dispatchChannel);
-      }
-      setFollowed([profile.user_id]);
-      setUsernames([profile.username]);
+      const channelChat = await clientChat.channel(
+        'messaging',
+        members.length <= 2 ? null : id,
+        {
+          name: channelName.toString(),
+          members: members,
+          type_channel: typeChannel,
+        },
+      );
+      let err = await channelChat.create();
+      console.log('create channel ', err);
+      setChannel(channelChat, dispatchChannel);
+      setFollowed([]);
+      setUsernames([]);
       setLoading(false);
       await navigation.navigate('ChatDetailPage');
     } catch (error) {
       setLoading(false);
+      console.log(error);
     }
   };
 
