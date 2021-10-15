@@ -62,7 +62,7 @@ const ChannelListScreen = ({navigation}) => {
 
   const customPreviewStatus = (props) => {
     let newLatestMessagePreview = {...props.latestMessagePreview};
-    // console.log(newLatestMessagePreview);
+    // console.log(props);
     // if (props.latestMessagePreview.status > 1) {
     //   newLatestMessagePreview.status = 3;
     // }
