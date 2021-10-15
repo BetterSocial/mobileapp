@@ -31,6 +31,8 @@
 		F861156F270740AC005DA7CA /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F86115652707409B005DA7CA /* Inter-SemiBold.ttf */; };
 		F8611570270740AC005DA7CA /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F86115642707409B005DA7CA /* Inter-Thin.ttf */; };
 		F8611571270740AC005DA7CA /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F86115672707409B005DA7CA /* Inter.ttf */; };
+		F87F35822717E4C9003F1E09 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F87F35802717E4C8003F1E09 /* Poppins-SemiBold.ttf */; };
+		F87F35832717E4C9003F1E09 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F87F35812717E4C8003F1E09 /* Poppins-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +107,8 @@
 		F86115662707409B005DA7CA /* Inter-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraLight.ttf"; path = "../assets/fonts/Inter-ExtraLight.ttf"; sourceTree = "<group>"; };
 		F86115672707409B005DA7CA /* Inter.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Inter.ttf; path = ../assets/fonts/Inter.ttf; sourceTree = "<group>"; };
 		F87F33DF270D789D003F1E09 /* BetterSocial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BetterSocial.entitlements; path = BetterSocial/BetterSocial.entitlements; sourceTree = "<group>"; };
+		F87F35802717E4C8003F1E09 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
+		F87F35812717E4C8003F1E09 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		FDF7E8F998FB7F87125A6A83 /* Pods-BetterSocial.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial/Pods-BetterSocial.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -232,6 +236,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				F87F35812717E4C8003F1E09 /* Poppins-Regular.ttf */,
+				F87F35802717E4C8003F1E09 /* Poppins-SemiBold.ttf */,
 				F86114D62704BFB7005DA7CA /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* BetterSocial */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -418,6 +424,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F87F35822717E4C9003F1E09 /* Poppins-SemiBold.ttf in Resources */,
+				F87F35832717E4C9003F1E09 /* Poppins-Regular.ttf in Resources */,
 				F8611568270740AC005DA7CA /* Inter-Black.ttf in Resources */,
 				F8611569270740AC005DA7CA /* Inter-Bold.ttf in Resources */,
 				F861156A270740AC005DA7CA /* Inter-ExtraBold.ttf in Resources */,

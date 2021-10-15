@@ -82,7 +82,7 @@ const GroupInfo = () => {
     });
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header title={chatName} />
       <View style={styles.lineTop} />
       <ScrollView>
@@ -147,7 +147,7 @@ const GroupInfo = () => {
           </TouchableWithoutFeedback>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
