@@ -60,6 +60,7 @@ const ChooseUsername = () => {
 
   const handleOpenCamera = async () => {
     let {success, message} = await requestCameraPermission();
+    console.log(success);
     if (success) {
       launchCamera(
         {
