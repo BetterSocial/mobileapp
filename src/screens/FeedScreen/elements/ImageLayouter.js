@@ -198,7 +198,7 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
 
 const styles = StyleSheet.create({
   imagelayout1: {
-    maxHeight: 410,
+    maxHeight: 427,
     width: '100%',
     resizeMode: 'cover',
   },
