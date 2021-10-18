@@ -6,6 +6,7 @@ import {
   Linking,
   StyleSheet,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 
 import PropTypes from 'prop-types';
@@ -34,31 +35,41 @@ const Card = (props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onHeaderPress}>
-        <Header domain={domain} image={domainImage} date={date} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={onCardContentPress}>
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            {_.truncate(`${title}`, {length: 80, separator: ''})}
-          </Text>
-          <Image
-            style={styles.image}
-            source={image ? {uri: image} : null}
-            resizeMethod="resize"
-          />
-          <Text style={styles.description}>
-            {_.truncate(`${description}`, {length: 120})}
-            {/* {description} */}
-            <Gap style={styles.width(2)} />
-            <Text
-              onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
-              style={styles.link}>
-              Open Link
-            </Text>
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity onPress={onHeaderPress}>
+          <Header domain={domain} image={domainImage} date={date} />
+        </TouchableOpacity>
+      </View>
+      <View style={{flex: 1}}>
+        <Pressable onPress={onCardContentPress} style={{flex: 1}}>
+          <View style={styles.content}>
+            <View>
+              <Text style={styles.title}>
+                {_.truncate(`${title}`, {length: 80, separator: ''})}
+              </Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Image
+                style={styles.image}
+                source={image ? {uri: image} : null}
+                resizeMethod="resize"
+              />
+            </View>
+            <View>
+              <Text style={styles.description}>
+                {_.truncate(`${description}`, {length: 120})}
+                {/* {description} */}
+                <Gap style={styles.width(2)} />
+                <Text
+                  onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
+                  style={styles.link}>
+                  Open Link
+                </Text>
+              </Text>
+            </View>
+          </View>
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -139,6 +150,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0, 0.5)',
     overflow: 'hidden',
     paddingBottom: 8,
+    flex: 1,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -165,10 +177,12 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 135,
+    height: '100%',
   },
   content: {
     paddingTop: 8,
+    justifyContent: 'space-between',
+    flex: 1,
   },
   title: {
     color: '#000000',

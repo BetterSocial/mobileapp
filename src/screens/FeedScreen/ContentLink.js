@@ -2,7 +2,7 @@ import {useRoute} from '@react-navigation/native';
 import * as React from 'react';
 import {Pressable, StyleSheet, TouchableOpacity} from 'react-native';
 
-import {COLORS} from '../../utils/theme';
+import {COLORS, SIZES} from '../../utils/theme';
 import {smartRender} from '../../utils/Utils';
 import Card from '../../components/Card/Card';
 
@@ -38,10 +38,9 @@ export default ContentLink;
 const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
-    marginTop: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: SIZES.base,
     marginHorizontal: 6,
     backgroundColor: COLORS.white,
+    maxHeight: 460,
   },
 });
