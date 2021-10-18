@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    paddingBottom: 150,
+    // paddingBottom: 150,
   },
   nousercontent: {
     flexDirection: 'column',

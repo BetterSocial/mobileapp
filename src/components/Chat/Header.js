@@ -28,8 +28,6 @@ const Header = ({username, profile, createChat}) => {
 
   let chatName = getChatName(username, profileContext.username);
   let count = Object.keys(channel.state.members).length;
-  console.log('channel member count');
-  console.log(count);
 
   const renderHeaderImage = () => {
     if (channel?.data?.image) {
