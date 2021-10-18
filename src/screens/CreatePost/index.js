@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   View,
+  Platform,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
@@ -547,7 +548,8 @@ const CreatePost = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="always">
+        keyboardShouldPersistTaps="always"
+        style={{paddingHorizontal: Platform.OS === 'ios' ? 20 : 0}}>
         <Header title="Create a post" onPress={() => onBack()} />
         <UserProfile
           typeUser={typeUser}

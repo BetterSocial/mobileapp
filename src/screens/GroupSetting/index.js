@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
 
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -66,7 +73,7 @@ const GroupSetting = ({navigation, route}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <HeaderContact
         title={'Settings'}
         containerStyle={styles.containerHeader}
@@ -96,7 +103,7 @@ const GroupSetting = ({navigation, route}) => {
         />
       </View>
       <ButtonAddParticipants />
-    </View>
+    </SafeAreaView>
   );
 };
 

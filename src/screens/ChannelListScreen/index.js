@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, SafeAreaView} from 'react-native';
 
 import {
   ChannelList,
@@ -80,7 +80,7 @@ const ChannelListScreen = ({navigation}) => {
   };
 
   return (
-    <View style={{height: '100%'}}>
+    <SafeAreaView style={{height: '100%'}}>
       {client.client && (
         <Chat client={client.client} i18nInstance={streami18n}>
           <View style={{height: '100%'}}>
@@ -111,7 +111,7 @@ const ChannelListScreen = ({navigation}) => {
           </View>
         </Chat>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
