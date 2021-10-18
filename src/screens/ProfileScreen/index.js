@@ -20,6 +20,7 @@ import analytics from '@react-native-firebase/analytics';
 import {StreamApp, FlatFeed} from 'react-native-activity-feed';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import Toast from 'react-native-simple-toast';
 
 import {
   getMyProfile,
@@ -45,6 +46,10 @@ import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import {setImageUrl} from '../../context/actions/users';
 import {Context} from '../../context';
 import {getUserId} from '../../utils/users';
+import {
+  requestCameraPermission,
+  requestExternalStoragePermission,
+} from '../../utils/permission';
 
 const width = Dimensions.get('screen').width;
 
@@ -70,14 +75,10 @@ const ProfileScreen = () => {
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
   const [errorBio, setErrorBio] = React.useState('');
-  const [
-    isLoadingUpdateImageGalery,
-    setIsLoadingUpdateImageGalery,
-  ] = React.useState(false);
-  const [
-    isLoadingUpdateImageCamera,
-    setIsLoadingUpdateImageCamera,
-  ] = React.useState(false);
+  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] =
+    React.useState(false);
+  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
+    React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
 
@@ -221,24 +222,34 @@ const ProfileScreen = () => {
     });
   };
 
-  const onOpenImageGalery = () => {
-    launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-      if (res.didCancel) {
-      } else {
-        setImage(res.base64);
-        handleUpdateImage('data:image/jpeg;base64,' + res.base64, 'gallery');
-      }
-    });
+  const onOpenImageGalery = async () => {
+    let {success, message} = await requestExternalStoragePermission();
+    if (success) {
+      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+        if (res.didCancel) {
+        } else {
+          setImage(res.base64);
+          handleUpdateImage('data:image/jpeg;base64,' + res.base64, 'gallery');
+        }
+      });
+    } else {
+      Toast.show(message, Toast.SHORT);
+    }
   };
 
-  const onOpenCamera = () => {
-    launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
-      if (res.didCancel) {
-      } else {
-        setImage(res.base64);
-        handleUpdateImage('data:image/jpeg;base64,' + res.base64, 'camera');
-      }
-    });
+  const onOpenCamera = async () => {
+    let {success, message} = await requestCameraPermission();
+    if (success) {
+      launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
+        if (res.didCancel) {
+        } else {
+          setImage(res.base64);
+          handleUpdateImage('data:image/jpeg;base64,' + res.base64, 'camera');
+        }
+      });
+    } else {
+      Toast.show(message, Toast.SHORT);
+    }
   };
 
   const onViewProfilePicture = () => {

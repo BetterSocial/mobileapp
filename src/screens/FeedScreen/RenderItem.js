@@ -18,6 +18,8 @@ import ContentLink from './ContentLink';
 import {Gap, PreviewComment, Footer} from '../../components';
 import {getCountCommentWithChild} from '../../utils/getstream';
 import {Context} from '../../context';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {useNavigation} from '@react-navigation/core';
 
 const {width, height} = Dimensions.get('window');
 
@@ -132,6 +134,7 @@ const Item = ({
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [feeds, dispatch] = React.useContext(Context).feeds;
   const [item, setItem] = React.useState(feeds.feeds[index]);
+  const navigation = useNavigation();
   const [contentHeight, setContentHeight] = React.useState(0);
 
   React.useEffect(() => {
@@ -149,6 +152,16 @@ const Item = ({
     };
     initial();
   }, [item]);
+
+  const navigateToLinkContextPage = (item) => {
+    let param = linkContextScreenParamBuilder(
+      item,
+      item.og.domain,
+      item.og.domainImage,
+      item.og.domain_page_id,
+    );
+    navigation.push('LinkContextScreen', param);
+  };
 
   React.useEffect(() => {
     const validationStatusVote = () => {
@@ -211,7 +224,7 @@ const Item = ({
           og={item.og}
           onPress={onPress}
           onHeaderPress={onPressDomain}
-          onCardContentPress={onCardContentPress}
+          onCardContentPress={() => navigateToLinkContextPage(item)}
         />
       )}
       {item.post_type === POST_TYPE_STANDARD && (

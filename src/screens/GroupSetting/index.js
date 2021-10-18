@@ -1,5 +1,13 @@
 import * as React from 'react';
-import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+} from 'react-native';
+import Toast from 'react-native-simple-toast';
 
 import {launchImageLibrary} from 'react-native-image-picker';
 import ButtonAddParticipants from '../../components/Button/ButtonAddParticipants';
@@ -8,6 +16,7 @@ import {ProfileContact} from '../../components/Items';
 import {Context} from '../../context';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
+import {requestExternalStoragePermission} from '../../utils/permission';
 import EditGroup from './elements/EditGroup';
 
 const width = Dimensions.get('screen').width;
@@ -42,24 +51,29 @@ const GroupSetting = ({navigation, route}) => {
       navigation.goBack();
     }
   };
-  const lounchGalery = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-        maxHeight: 55,
-        maxWidth: 55,
-        includeBase64: true,
-      },
-      (res) => {
-        setChangeImage(true);
-        setBase64Profile(res.base64);
-        setUrlImage(res.uri);
-      },
-    );
+  const lounchGalery = async () => {
+    let {success, message} = await requestExternalStoragePermission();
+    if (success) {
+      launchImageLibrary(
+        {
+          mediaType: 'photo',
+          maxHeight: 55,
+          maxWidth: 55,
+          includeBase64: true,
+        },
+        (res) => {
+          setChangeImage(true);
+          setBase64Profile(res.base64);
+          setUrlImage(res.uri);
+        },
+      );
+    } else {
+      Toast.show(message, Toast.SHORT);
+    }
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <HeaderContact
         title={'Settings'}
         containerStyle={styles.containerHeader}
@@ -89,7 +103,7 @@ const GroupSetting = ({navigation, route}) => {
         />
       </View>
       <ButtonAddParticipants />
-    </View>
+    </SafeAreaView>
   );
 };
 

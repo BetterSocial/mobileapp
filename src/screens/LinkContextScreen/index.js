@@ -21,17 +21,14 @@ import {fonts} from '../../utils/fonts';
 import RenderItem from '../DomainScreen/elements/RenderItem';
 import {Context} from '../../context';
 import {createIconSetFromFontello} from 'react-native-vector-icons';
+import {setIFollow} from '../../context/actions/news';
 
 const LinkContextScreen = () => {
   const route = useRoute();
 
   let {item} = route.params;
-  console.log('itemsssss');
-  console.log(route.params);
-  let domainImage = item.domain.image;
   let domainName = item.domain.name;
   let iddomain = item.content.domain_page_id;
-  let postTime = item.time;
 
   const navigation = useNavigation();
   const blockDomainRef = React.useRef(null);
@@ -47,13 +44,13 @@ const LinkContextScreen = () => {
   const [messageReport, setMessageReport] = React.useState('');
   const [follow, setFollow] = React.useState(false);
   const [news, dispatch] = React.useContext(Context).news;
+  const [featuredNewsFromFeed, setFeaturedNewsFromFeed] = React.useState(item);
 
   let {ifollow} = news;
-  console.log('ifollow ');
-  console.log(ifollow);
 
-  const animatedBottomAnchorContainerValue = React.useRef(new Animated.Value(0))
-    .current;
+  const animatedBottomAnchorContainerValue = React.useRef(
+    new Animated.Value(0),
+  ).current;
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -78,6 +75,8 @@ const LinkContextScreen = () => {
         let reducedData = res.data.reduce((acc, currentItem) => {
           if (currentItem.content.news_link_id !== item.content.news_link_id) {
             acc.push(currentItem);
+          } else {
+            setFeaturedNewsFromFeed(currentItem);
           }
           return acc;
         }, []);
@@ -111,8 +110,6 @@ const LinkContextScreen = () => {
     // console.log(res.data)
     if (ifollow.length === 0) {
       let res = await getDomainIdIFollow();
-      console.log('res123');
-      console.log(res.data);
       setIFollow(res.data, dispatch);
     } else {
       console.log('resqeqwe');
@@ -209,7 +206,7 @@ const LinkContextScreen = () => {
           if (index === 0) {
             return (
               <LinkContextItem
-                item={item}
+                item={featuredNewsFromFeed}
                 follow={follow}
                 setFollow={(follow) => setFollow(follow)}
               />

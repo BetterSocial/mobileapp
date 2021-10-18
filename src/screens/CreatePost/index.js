@@ -8,12 +8,15 @@ import {
   Text,
   TextInput,
   View,
+  Platform,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
 import {showMessage} from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Toast from 'react-native-simple-toast';
+import {getLinkPreview} from 'link-preview-js';
 
 import Header from '../../components/Header';
 import {Button, ButtonAddMedia} from '../../components/Button';
@@ -31,6 +34,8 @@ import SheetExpiredPost from './elements/SheetExpiredPost';
 import SheetGeographic from './elements/SheetGeographic';
 import SheetPrivacy from './elements/SheetPrivacy';
 import CreatePollContainer from './elements/CreatePollContainer';
+import ContentLink from './elements/ContentLink';
+
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
 import {getMyProfile} from '../../service/profile';
 import {colors} from '../../utils/colors';
@@ -45,6 +50,11 @@ import {createPollPost} from '../../service/post';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import StringConstant from '../../utils/string/StringConstant';
 import {getUserId} from '../../utils/users';
+import {
+  requestExternalStoragePermission,
+  requestCameraPermission,
+} from '../../utils/permission';
+import {getUrl, isContainUrl} from '../../utils/Utils';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -66,6 +76,8 @@ const CreatePost = () => {
   const [isPollShown, setIsPollShown] = React.useState(false);
   const [polls, setPolls] = React.useState([...defaultPollItem]);
   const [isPollMultipleChoice, setIsPollMultipleChoice] = React.useState(false);
+  const [linkPreviewMeta, setLinkPreviewMeta] = React.useState(null);
+  const [isLinkPreviewShown, setIsLinkPreviewShown] = React.useState(false);
   const [selectedTime, setSelectedTime] = React.useState({
     day: 1,
     hour: 0,
@@ -107,6 +119,42 @@ const CreatePost = () => {
       },
     },
   ]);
+
+  React.useEffect(() => {
+    let getPreview = async (link) => {
+      let newLink = link;
+      if (link.indexOf('https://') < 0) {
+        newLink = `https://${link}`;
+      }
+
+      console.log('getting preview ' + newLink);
+
+      let data = await getLinkPreview(newLink);
+      console.log(data);
+      if (data) {
+        setLinkPreviewMeta({
+          domain: data.siteName,
+          domainImage: data.favicons[0],
+          title: data.title,
+          description: data.description,
+          image: data.images[0],
+          url: data.url,
+        });
+      } else {
+        setLinkPreviewMeta(null);
+      }
+      setIsLinkPreviewShown(data ? true : false);
+    };
+
+    // let link =
+    //   'https://tekno.kompas.com/read/2021/10/11/09160027/penjualan-smartphone-5g-di-indonesia-tembus-500.000-unit';
+    if (isContainUrl(message)) {
+      getPreview(getUrl(message));
+    } else {
+      setIsLinkPreviewShown(false);
+    }
+  }, [message]);
+
   const [geoList, setGeoList] = React.useState([]);
   let location = [
     {
@@ -177,38 +225,48 @@ const CreatePost = () => {
     setAudienceEstimations(data.data);
   };
 
-  const uploadMediaFromLibrary = () => {
-    launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
-      if (res.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (res.uri) {
-        let newArr = {
-          id: mediaStorage.length,
-          data: res.uri,
-        };
-        setMediaStorage((val) => [...val, newArr]);
-        setDataImage((val) => [...val, res.base64]);
-        sheetMediaRef.current.close();
-      } else {
-        console.log(res);
-      }
-    });
+  const uploadMediaFromLibrary = async () => {
+    let {success, message} = await requestExternalStoragePermission();
+    if (success) {
+      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+        if (res.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (res.uri) {
+          let newArr = {
+            id: mediaStorage.length,
+            data: res.uri,
+          };
+          setMediaStorage((val) => [...val, newArr]);
+          setDataImage((val) => [...val, res.base64]);
+          sheetMediaRef.current.close();
+        } else {
+          console.log(res);
+        }
+      });
+    } else {
+      Toast.show(message, Toast.SHORT);
+    }
   };
 
-  const takePhoto = () => {
-    launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
-      if (res.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (res.uri) {
-        let newArr = {
-          id: mediaStorage.length,
-          data: res.uri,
-        };
-        setMediaStorage((val) => [...val, newArr]);
-        setDataImage((val) => [...val, res.base64]);
-        sheetMediaRef.current.close();
-      }
-    });
+  const takePhoto = async () => {
+    let {success, message} = await requestCameraPermission();
+    if (success) {
+      launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
+        if (res.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (res.uri) {
+          let newArr = {
+            id: mediaStorage.length,
+            data: res.uri,
+          };
+          setMediaStorage((val) => [...val, newArr]);
+          setDataImage((val) => [...val, res.base64]);
+          sheetMediaRef.current.close();
+        }
+      });
+    } else {
+      Toast.show(message, Toast.SHORT);
+    }
   };
 
   const onRemoveItem = (v) => {
@@ -332,9 +390,10 @@ const CreatePost = () => {
   };
 
   const randerComponentMedia = () => {
-    if (isPollShown) {
+    if (isPollShown || isLinkPreviewShown) {
       return <View />;
     }
+
     if (mediaStorage.length > 0) {
       return (
         <MemoShowMedia
@@ -489,7 +548,8 @@ const CreatePost = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="always">
+        keyboardShouldPersistTaps="always"
+        style={{paddingHorizontal: Platform.OS === 'ios' ? 20 : 0}}>
         <Header title="Create a post" onPress={() => onBack()} />
         <UserProfile
           typeUser={typeUser}
@@ -517,7 +577,25 @@ const CreatePost = () => {
           placeholder={
             'What’s on your mind?\nRemember to be respectful .\nDownvotes  & Blocks harm all your posts’ visibility.'
           }
+          autoCapitalize={'none'}
         />
+
+        {isLinkPreviewShown && (
+          <ContentLink
+            og={
+              linkPreviewMeta
+                ? linkPreviewMeta
+                : {
+                    domain: '',
+                    domainImage: '',
+                    title: '',
+                    description: '',
+                    image: '',
+                    url: '',
+                  }
+            }
+          />
+        )}
 
         {isPollShown && (
           <CreatePollContainer

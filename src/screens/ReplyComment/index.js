@@ -22,6 +22,7 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {Context} from '../../context';
 import {getComment} from '../../utils/getstream/getComment';
+import ReplyCommentItem from '../../components/Comments/ReplyCommentItem';
 import {temporaryComment} from '../../utils/string/LoadingComment';
 
 const ReplyComment = (props) => {
@@ -125,7 +126,7 @@ const ReplyComment = (props) => {
               <ArrowLeftIcon width={20} height={12} fill="#000" />
             </TouchableOpacity>
             <Text style={styles.headerText}>
-              Reply to {item.user.data.username}
+              Reply to {itemProp.user.data.username}
             </Text>
             <View style={styles.btn} />
           </View>
@@ -134,8 +135,8 @@ const ReplyComment = (props) => {
             indexFeed={indexFeed}
             user={item.user}
             comment={item}
-            time={item.created_at}
-            photo={item.user.data.profile_pic_url}
+            time={itemProp.created_at}
+            photo={itemProp.user.data.profile_pic_url}
             isLast={(item.children_counts.comment || 0) === 0}
             level={level}
             onPress={() => {}}
@@ -187,7 +188,7 @@ const ReplyComment = (props) => {
                           level >= 2
                         }
                         key={'r' + index}
-                        user={item.user}
+                        user={itemProp.user}
                         comment={itemReply}
                         onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}

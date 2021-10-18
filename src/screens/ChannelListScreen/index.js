@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, SafeAreaView} from 'react-native';
 
 import {
   ChannelList,
   ChannelPreviewStatus,
+  ChannelPreviewTitle,
   Chat,
   Streami18n,
 } from 'stream-chat-react-native';
@@ -15,6 +16,7 @@ import {setChannel} from '../../context/actions/setChannel';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {getUserId} from '../../utils/users';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
+import {getChatName} from '../../utils/string/StringUtils';
 
 const ChannelListScreen = ({navigation}) => {
   const streami18n = new Streami18n({
@@ -24,6 +26,7 @@ const ChannelListScreen = ({navigation}) => {
   const [userId, setUserId] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
+  const [profile] = React.useContext(Context).profile;
   let connect = useClientGetstream();
   const filters = {
     members: {$in: [userId]},
@@ -59,7 +62,7 @@ const ChannelListScreen = ({navigation}) => {
 
   const customPreviewStatus = (props) => {
     let newLatestMessagePreview = {...props.latestMessagePreview};
-    // console.log(newLatestMessagePreview);
+    // console.log(props);
     // if (props.latestMessagePreview.status > 1) {
     //   newLatestMessagePreview.status = 3;
     // }
@@ -68,8 +71,16 @@ const ChannelListScreen = ({navigation}) => {
     );
   };
 
+  const customPreviewTitle = (props) => {
+    let {name} = props.channel?.data;
+
+    return (
+      <ChannelPreviewTitle displayName={getChatName(name, profile.username)} />
+    );
+  };
+
   return (
-    <View style={{height: '100%'}}>
+    <SafeAreaView style={{height: '100%'}}>
       {client.client && (
         <Chat client={client.client} i18nInstance={streami18n}>
           <View style={{height: '100%'}}>
@@ -83,6 +94,7 @@ const ChannelListScreen = ({navigation}) => {
               PreviewAvatar={CustomPreviewAvatar}
               filters={memoizedFilters}
               PreviewStatus={customPreviewStatus}
+              PreviewTitle={customPreviewTitle}
               onSelect={(channel) => {
                 setChannel(channel, dispatch);
                 // ChannelScreen | ChatDetailPage
@@ -99,7 +111,7 @@ const ChannelListScreen = ({navigation}) => {
           </View>
         </Chat>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

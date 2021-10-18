@@ -80,6 +80,16 @@ let splashScreenDeeplinkGetProfileNotFound = (username) =>
 // Domain Page
 let domainCannotOpenURL = 'Cannot open URL';
 
+// Permission
+let cameraPermissionGranted = 'You can use camera';
+let cameraPermissionDenied = 'Camera permission denied';
+let cameraPermissionUnavailable =
+  'The camera feature is not available on this device';
+let externalStoragePermissionGranted = 'External storage permission denied';
+let externalStoragePermissionDenied = 'External storage permission denied';
+let externalStoragePermissionUnavailable =
+  'The external storage feature is not available on this device';
+
 export default {
   signInScreenHumanIdBrand,
   signInScreenHumanIdDetail,
@@ -133,4 +143,11 @@ export default {
   generalAnonymousText,
 
   domainCannotOpenURL,
+
+  cameraPermissionGranted,
+  cameraPermissionDenied,
+  cameraPermissionUnavailable,
+  externalStoragePermissionDenied,
+  externalStoragePermissionGranted,
+  externalStoragePermissionUnavailable,
 };

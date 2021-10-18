@@ -26,6 +26,7 @@ import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import {Context} from '../../context';
 import {ProfileContact} from '../../components/Items';
 import {trimString} from '../../utils/string/TrimString';
+import {getChatName} from '../../utils/string/StringUtils';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -33,6 +34,7 @@ const GroupInfo = () => {
   const [groupChatState] = React.useContext(Context).groupChat;
   const {participants, asset} = groupChatState;
   const [channelState] = React.useContext(Context).channel;
+  const [profile] = React.useContext(Context).profile;
   const {channel, profileChannel} = channelState;
   const [countUser] = React.useState(Object.entries(participants).length);
 
@@ -60,17 +62,34 @@ const GroupInfo = () => {
     );
   };
 
+  let chatName = getChatName(route.params?.username, profile.username);
+
+  const onProfilePressed = (data) => {
+    console.log('group info profile pressed');
+    console.log(profile);
+    console.log(participants[data]);
+    if (profile.user_id === participants[data].user_id) {
+      navigation.navigate('ProfileScreen');
+      return;
+    }
+
+    navigation.navigate('OtherProfile', {
+      data: {
+        user_id: profile.user_id,
+        other_id: participants[data].user_id,
+        username: participants[data].user.name,
+      },
+    });
+  };
   return (
-    <View style={styles.container}>
-      <Header title={route.params?.username} />
+    <SafeAreaView style={styles.container}>
+      <Header title={chatName} />
       <View style={styles.lineTop} />
       <ScrollView>
         <SafeAreaView>
           <View style={styles.containerPhoto}>{showImageProfile()}</View>
           <View style={styles.containerGroupName}>
-            <Text style={styles.groupName}>
-              {trimString(route.params?.username, 20)}
-            </Text>
+            <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
             {/* <TouchableWithoutFeedback>
               <MemoIc_pencil width={20} height={20} color={colors.gray1} />
             </TouchableWithoutFeedback> */}
@@ -82,7 +101,7 @@ const GroupInfo = () => {
           <View style={styles.containerMedia(asset.length === 0)}>
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate('GroupMedia')}>
-              <Text style={styles.btnToMediaGroup}>Media & Links ></Text>
+              <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
             </TouchableWithoutFeedback>
             <FlatList
               data={asset}
@@ -111,6 +130,7 @@ const GroupInfo = () => {
               renderItem={({item}) => (
                 <ProfileContact
                   key={item}
+                  onPress={() => onProfilePressed(item)}
                   fullname={participants[item].user.name}
                   photo={participants[item].user.image}
                 />
@@ -127,7 +147,7 @@ const GroupInfo = () => {
           </TouchableWithoutFeedback>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

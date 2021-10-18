@@ -23,20 +23,7 @@ const App = () => {
   const streami18n = new Streami18n({
     language: 'en',
   });
-  const requestCameraPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the camera');
-      } else {
-        console.log('Camera permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+
   const requestPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -63,7 +50,6 @@ const App = () => {
 
   React.useEffect(() => {
     // Register FCM token with stream chat server.
-    requestCameraPermission();
     requestPermission();
     createChannel();
     const unsubscribe = messaging().onMessage((remoteMessage) => {

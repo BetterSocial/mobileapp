@@ -78,9 +78,15 @@ const Content = ({message, images_url, style, onPress}) => {
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
-            {handleTextMedia(message, onPress)}
+            <View
+              style={{
+                paddingLeft: 20,
+                paddingRight: 20,
+              }}>
+              {handleTextMedia(message, onPress)}
+            </View>
             <Gap height={SIZES.base} />
-            <View style={styles.container}>
+            <View style={styles.containerImage}>
               <ImageLayouter
                 images={images_url}
                 onimageclick={onImageClickedByIndex}
@@ -110,6 +116,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  containerImage: {
+    flex: 1,
+  },
   fletlist: {flex: 1},
   imageList: {
     flex: 1,
@@ -123,6 +132,8 @@ const styles = StyleSheet.create({
       flex: 1,
       paddingBottom: 10,
       minHeight: 100,
+      paddingLeft: 20,
+      paddingRight: 20,
     };
   },
   text: (text) => {
@@ -200,8 +211,6 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginTop: 12,
-    paddingLeft: 20,
-    paddingRight: 20,
     backgroundColor: COLORS.white,
   },
   textContentFeed: {

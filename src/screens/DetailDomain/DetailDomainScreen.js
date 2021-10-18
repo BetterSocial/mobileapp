@@ -25,6 +25,7 @@ import {
   getCountCommentWithChildInDetailPage,
 } from '../../utils/getstream';
 import {getUserId} from '../../utils/users';
+import DetailDomainScreenContainerComment from '../../components/Comments/DetailDomainScreenContainerComment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -307,7 +308,9 @@ const DetailDomainScreen = (props) => {
           </View>
         </View>
         {isReaction && (
-          <ContainerComment comments={item.latest_reactions.comment} />
+          <DetailDomainScreenContainerComment
+            comments={item.latest_reactions.comment}
+          />
         )}
       </ScrollView>
       <WriteComment

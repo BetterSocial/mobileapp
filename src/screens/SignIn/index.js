@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  SafeAreaView,
+} from 'react-native';
 
 import {
   logIn,
@@ -124,7 +131,7 @@ const SignIn = () => {
       });
   };
   return (
-    <View style={S.container}>
+    <SafeAreaView style={S.container}>
       {ENABLE_DEV_ONLY_FEATURE ? (
         <View style={S.devTrialView}>
           <Button
@@ -197,7 +204,7 @@ const SignIn = () => {
       ) : (
         <></>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
