@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, View, SafeAreaView} from 'react-native';
+import {StyleSheet, View, SafeAreaView, StatusBar} from 'react-native';
 
 import {
   ChannelList,
@@ -81,6 +81,7 @@ const ChannelListScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={{height: '100%'}}>
+      <StatusBar backgroundColor="transparent" />
       {client.client && (
         <Chat client={client.client} i18nInstance={streami18n}>
           <View style={{height: '100%'}}>

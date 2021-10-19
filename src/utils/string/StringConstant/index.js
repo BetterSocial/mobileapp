@@ -48,7 +48,7 @@ let postDetailPageSeeReplies = (count) => {
 };
 
 // Create Post
-let createPostDone = 'Your post was shared.';
+let createPostDone = 'Your post was successfully published.';
 let createPostFailedNoMessage = 'Post messages cannot be empty.';
 let createPostFailedGeneralError = 'Failed to create new post.';
 
