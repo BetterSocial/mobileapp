@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
 
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
@@ -304,6 +310,7 @@ const PostPageDetail = (props) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar translucent={false} />
       <ScrollView
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}

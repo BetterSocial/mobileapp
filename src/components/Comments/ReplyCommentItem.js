@@ -15,6 +15,10 @@ import SpecificIssue from '../Blocking/SpecificIssue';
 import {blockUser} from '../../service/blocking';
 import Toast from 'react-native-simple-toast';
 import {getUserId} from '../../utils/users';
+import {iVoteComment, voteComment} from '../../service/vote';
+import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
+import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
+import {FONTS} from '../../utils/theme';
 
 const ReplyCommentItem = ({
   user,
@@ -39,6 +43,13 @@ const ReplyCommentItem = ({
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+
+  const [totalVote, setTotalVote] = React.useState(
+    comment.data.count_upvote - comment.data.count_downvote,
+  );
+  const [statusVote, setStatusVote] = React.useState('');
+  const [upvote, setUpVote] = React.useState(comment.data.count_upvote);
+  const [downvote, setDownVote] = React.useState(comment.data.count_downvote);
 
   console.log(`isLast ${isLast}`);
 
@@ -116,6 +127,62 @@ const ReplyCommentItem = ({
     console.log('result block user ', result);
   };
 
+  const onUpVote = async () => {
+    let dataVote = {
+      activity_id: comment.id,
+      text: comment.data.text,
+      status: 'upvote',
+    };
+
+    setStatusVote('upvote');
+    if (statusVote === 'upvote') {
+      setStatusVote('none');
+      setTotalVote(totalVote - 1);
+    } else {
+      if (totalVote === -1) {
+        setTotalVote(totalVote + 2);
+      } else {
+        setTotalVote(totalVote + 1);
+      }
+    }
+    onVote(dataVote);
+  };
+  const onDownVote = async () => {
+    let dataVote = {
+      activity_id: comment.id,
+      text: comment.data.text,
+      status: 'downvote',
+    };
+    setStatusVote('downvote');
+    if (statusVote === 'downvote') {
+      setStatusVote('none');
+      setTotalVote(totalVote + 1);
+    } else {
+      if (totalVote === 1) {
+        setTotalVote(totalVote - 2);
+      } else {
+        setTotalVote(totalVote - 1);
+      }
+    }
+    onVote(dataVote);
+  };
+  const onVote = async (dataVote) => {
+    console.log('click vote ', comment);
+    let result = await voteComment(dataVote);
+    setUpVote(result.data.data.count_upvote);
+    setDownVote(result.data.data.count_downvote);
+    setTotalVote(
+      result.data.data.count_upvote - result.data.data.count_downvote,
+    );
+    console.log('result up ', result);
+  };
+  const iVote = async () => {
+    let result = await iVoteComment(comment.id);
+    if (result.code === 200) {
+      setStatusVote(result.data.action);
+    }
+  };
+
   React.useEffect(() => {
     const parseToken = async () => {
       const id = await getUserId();
@@ -176,11 +243,24 @@ const ReplyCommentItem = ({
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.arrowup, styles.btn]}>
-          <MemoIc_arrow_down_vote_off width={18} height={18} />
+        <TouchableOpacity
+          style={[styles.arrowup, styles.btn]}
+          onPress={onDownVote}>
+          {statusVote === 'downvote' ? (
+            <MemoIc_downvote_on width={20} height={18} />
+          ) : (
+            <MemoIc_arrow_down_vote_off width={20} height={18} />
+          )}
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.arrowdown, styles.btn]}>
-          <MemoIc_arrow_upvote_off width={18} height={18} />
+        <Text style={styles.vote(totalVote)}>{totalVote}</Text>
+        <TouchableOpacity
+          style={[styles.arrowdown, styles.btn]}
+          onPress={onUpVote}>
+          {statusVote === 'upvote' ? (
+            <MemoIc_upvote_on width={20} height={18} />
+          ) : (
+            <MemoIc_arrow_upvote_off width={20} height={18} />
+          )}
         </TouchableOpacity>
       </View>
 
@@ -206,6 +286,12 @@ const ReplyCommentItem = ({
 export default ReplyCommentItem;
 
 const styles = StyleSheet.create({
+  vote: (count) => ({
+    ...FONTS.body3,
+    textAlign: 'center',
+    width: 26,
+    color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4',
+  }),
   btn: {
     // width: 30,
     height: 30,

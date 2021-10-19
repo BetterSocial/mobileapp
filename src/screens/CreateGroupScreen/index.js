@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, StatusBar} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {launchImageLibrary} from 'react-native-image-picker';
 import analytics from '@react-native-firebase/analytics';
@@ -83,6 +83,7 @@ const CreateGroupScreen = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
+      <StatusBar translucent={false} />
       <Header
         title={StringConstant.chatTabHeaderCreateChatButtonText}
         containerStyle={{marginHorizontal: 16}}

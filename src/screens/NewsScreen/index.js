@@ -5,6 +5,7 @@ import {
   FlatList,
   Animated,
   RefreshControl,
+  StatusBar,
 } from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';

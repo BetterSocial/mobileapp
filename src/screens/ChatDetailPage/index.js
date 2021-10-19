@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 
 import {
   Chat,
@@ -85,6 +85,7 @@ const ChatDetailPage = () => {
     // console.log('channel ', channelClient.channel?.data?.created_by);
     return (
       <SafeAreaView>
+        <StatusBar backgroundColor="white" translucent={false} />
         <Chat client={clients.client} i18nInstance={streami18n}>
           <Channel
             channel={channelClient.channel}

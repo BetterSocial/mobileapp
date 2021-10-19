@@ -7,6 +7,7 @@ import {
   Text,
   View,
   ImageBackground,
+  StatusBar,
 } from 'react-native';
 
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
@@ -34,6 +35,7 @@ const ShowDetailGroupImage = (props) => {
   };
   return (
     <View style={styles.container}>
+      <StatusBar translucent={false} />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MemoIc_arrow_back_white width={20} height={12} />

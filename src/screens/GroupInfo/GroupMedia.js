@@ -1,6 +1,6 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import * as React from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, StatusBar} from 'react-native';
 import {ScrollView} from 'react-native';
 import {Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native';
@@ -65,6 +65,7 @@ const GroupMedia = () => {
   };
   return (
     <SafeAreaView style={{flex: 1}}>
+      <StatusBar translucent={false} />
       <View style={styles.container}>
         <Header title="Group Media" />
         <Tab.Navigator

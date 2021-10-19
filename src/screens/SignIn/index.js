@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   SafeAreaView,
+  StatusBar,
 } from 'react-native';
 
 import {
@@ -132,6 +133,7 @@ const SignIn = () => {
   };
   return (
     <SafeAreaView style={S.container}>
+      <StatusBar translucent={false} />
       {ENABLE_DEV_ONLY_FEATURE ? (
         <View style={S.devTrialView}>
           <Button

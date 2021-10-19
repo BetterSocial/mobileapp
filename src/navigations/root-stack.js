@@ -49,6 +49,7 @@ const Stack = createStackNavigator();
 const RootStact = () => {
   const [clientState] = React.useContext(Context).client;
   const {client} = clientState;
+
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
@@ -57,10 +58,21 @@ const RootStact = () => {
       await client?.disconnectUser();
     };
   }, []);
+
   return (
-    <View style={{height: '100%'}}>
+    <View
+      style={{
+        height: '100%',
+      }}>
       <StatusBar translucent backgroundColor="white" />
-      <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Navigator
+        initialRouteName="SplashScreen"
+        screenOptions={{
+          headerStyle: {
+            height: Platform.OS === 'ios' ? 64 : 56 + StatusBar.currentHeight,
+            paddingTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight,
+          },
+        }}>
         <Stack.Screen
           name="GroupSetting"
           component={GroupSetting}
@@ -224,6 +236,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.white,
     padding: 20,
+    paddingTop: 10,
     paddingBottom: 10,
   },
   title: {fontSize: 16, fontFamily: fonts.inter[600]},

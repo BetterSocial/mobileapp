@@ -245,7 +245,7 @@ const FeedScreen = (props) => {
   if (initialLoading === true) {
     return (
       <View style={styles.containerLoading}>
-        {/* <LoadingWithoutModal visible={initialLoading} /> */}
+        <LoadingWithoutModal visible={initialLoading} />
       </View>
     );
   }
@@ -256,6 +256,7 @@ const FeedScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
+      <ButtonNewPost />
       {feeds.length > 0 && (
         <CardStack
           style={styles.content}
@@ -348,8 +349,6 @@ const FeedScreen = (props) => {
       )}
 
       <Loading visible={loading} />
-
-      <ButtonNewPost />
 
       <BlockPostAnonymous
         refBlockPostAnonymous={refBlockPostAnonymous}

@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {View, StyleSheet, RefreshControl, Dimensions} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  RefreshControl,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
 
 import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview';
 import uuid from 'react-native-uuid';
@@ -212,6 +218,7 @@ const ContactScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar translucent={false} />
       <Header
         title={StringConstant.chatTabHeaderCreateChatButtonText}
         containerStyle={styles.containerStyle}

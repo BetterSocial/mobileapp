@@ -33,8 +33,9 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     position: 'absolute',
     flexDirection: 'row',
-    bottom: 60,
+    bottom: 100,
     right: 20,
+    zIndex: 10000,
   },
   text: {
     fontFamily: fonts.inter[500],

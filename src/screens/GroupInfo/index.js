@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  StatusBar,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -83,6 +84,7 @@ const GroupInfo = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar translucent={false} />
       <Header title={chatName} />
       <View style={styles.lineTop} />
       <ScrollView>
