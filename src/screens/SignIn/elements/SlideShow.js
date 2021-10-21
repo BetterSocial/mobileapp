@@ -7,20 +7,22 @@ const data = [
   'https://picsum.photos/id/1/200/300',
   'https://picsum.photos/id/1036/200/300',
   'https://picsum.photos/id/1048/200/300',
+  'https://picsum.photos/id/1018/200/300',
 ];
 const {width: screenWidth} = Dimensions.get('window');
 
-const SlideShow = () => {
+const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
   return (
     <SwiperFlatList
       autoplay
-      autoplayDelay={3}
-      autoplayLoop
-      index={2}
+      autoplayDelay={5}
+      autoplayLoop={false}
+      index={0}
       showPagination
       paginationStyleItem={styles.dot}
       data={data}
       renderItem={({item}) => <Card image={item} />}
+      onChangeIndex={onChangeNewIndex}
     />
   );
 };
