@@ -56,6 +56,14 @@ import {
   requestCameraPermission,
 } from '../../utils/permission';
 import {getUrl, isContainUrl} from '../../utils/Utils';
+import {
+  getDurationId,
+  getLocationId,
+  getPrivacyId,
+  setDurationId,
+  setLocationId,
+  setPrivacyId,
+} from '../../utils/setting';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -84,7 +92,6 @@ const CreatePost = () => {
     hour: 0,
     minute: 0,
   });
-
   const [expiredSelect, setExpiredSelect] = React.useState(1);
   const [postExpired, setPostExpired] = React.useState([
     {
@@ -121,6 +128,34 @@ const CreatePost = () => {
     },
   ]);
 
+  const [audienceEstimations, setAudienceEstimations] = React.useState(0);
+  const [privacySelect, setPrivacySelect] = React.useState(1);
+  const [dataImage, setDataImage] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [typeUser, setTypeUser] = React.useState(false);
+  const [dataProfile, setDataProfile] = React.useState({});
+  const [geoList, setGeoList] = React.useState([]);
+  const [geoSelect, setGeoSelect] = React.useState(0);
+
+  React.useEffect(() => {
+    init();
+  }, []);
+
+  const init = async () => {
+    let privacyId = await getPrivacyId();
+    if (privacyId) {
+      setPrivacySelect(privacyId);
+    }
+    let durationId = await getDurationId();
+    if (durationId) {
+      setExpiredSelect(durationId);
+    }
+    let locationId = await getLocationId();
+    if (locationId) {
+      setGeoSelect(locationId);
+    }
+  };
+
   React.useEffect(() => {
     let getPreview = async (link) => {
       let newLink = link;
@@ -156,14 +191,12 @@ const CreatePost = () => {
     }
   }, [message]);
 
-  const [geoList, setGeoList] = React.useState([]);
   let location = [
     {
       location_id: 'everywhere',
       neighborhood: 'Everywhere',
     },
   ];
-  const [geoSelect, setGeoSelect] = React.useState(0);
   let listPrivacy = [
     {
       icon: <MemoIc_world height={16.67} width={16.67} />,
@@ -178,13 +211,6 @@ const CreatePost = () => {
       key: 'people_i_follow',
     },
   ];
-  const [audienceEstimations, setAudienceEstimations] = React.useState(0);
-  const [privacySelect, setPrivacySelect] = React.useState(0);
-  const [dataImage, setDataImage] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [typeUser, setTypeUser] = React.useState(false);
-  const [dataProfile, setDataProfile] = React.useState({});
-
   const fetchMyProfile = async () => {
     setLoading(true);
     let userId = await getUserId();
@@ -349,6 +375,10 @@ const CreatePost = () => {
         images_url: dataImage,
       };
 
+      setLocationId(JSON.stringify(geoSelect));
+      setDurationId(JSON.stringify(expiredSelect));
+      setPrivacyId(JSON.stringify(privacySelect));
+
       analytics().logEvent('create_post', {
         id: 6,
         newpost_reach: geoList[geoSelect].neighborhood,
@@ -382,6 +412,7 @@ const CreatePost = () => {
         });
       }
     } catch (error) {
+      console.log(error);
       showMessage({
         message: StringConstant.createPostFailedGeneralError,
         type: 'danger',
@@ -483,6 +514,10 @@ const CreatePost = () => {
       pollsduration: selectedTime,
       multiplechoice: isPollMultipleChoice,
     };
+
+    setLocationId(JSON.stringify(geoSelect));
+    setDurationId(JSON.stringify(expiredSelect));
+    setPrivacyId(JSON.stringify(privacySelect));
 
     try {
       let response = await createPollPost(data);

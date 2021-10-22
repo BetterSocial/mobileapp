@@ -90,6 +90,9 @@ let externalStoragePermissionDenied = 'External storage permission denied';
 let externalStoragePermissionUnavailable =
   'The external storage feature is not available on this device';
 
+// Contact screen
+let failedCreateChannel = 'Couldn’t create chat. Please try again.';
+
 export default {
   signInScreenHumanIdBrand,
   signInScreenHumanIdDetail,
@@ -150,4 +153,6 @@ export default {
   externalStoragePermissionDenied,
   externalStoragePermissionGranted,
   externalStoragePermissionUnavailable,
+
+  failedCreateChannel,
 };
