@@ -97,7 +97,7 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
               <Image
                 source={{uri: image}}
                 style={[
-                  {height: '100%', width: '100%', borderRadius: 45},
+                  {height: '100%', width: '100%', borderRadius: 50},
                   StyleSheet.absoluteFillObject,
                 ]}
               />
@@ -134,11 +134,11 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
             <TouchableOpacity
               style={styles.openInBrowserIcon}
               onPress={openDomainLink}>
-              <MemoIc_interface width={20} height={20} />
+              <MemoIc_interface width={17} height={17} />
             </TouchableOpacity>
           </View>
         </View>
-        <Gap height={4} />
+        <Gap height={0} />
         <View style={[styles.row, {alignItems: 'center'}]}>
           <Text style={styles.followersNumber}>{followers}k</Text>
           <Gap width={4} />
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
-  openInBrowserIcon: {padding: 8, paddingHorizontal: 12, top: -3},
+  openInBrowserIcon: {padding: 4, paddingHorizontal: 12, top: 0},
   buttonFollowing: {
     width: 88,
     height: 36,

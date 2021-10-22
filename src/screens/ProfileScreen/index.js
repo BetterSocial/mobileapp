@@ -50,6 +50,7 @@ import {
   requestCameraPermission,
   requestExternalStoragePermission,
 } from '../../utils/permission';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 
 const width = Dimensions.get('screen').width;
 
@@ -375,11 +376,18 @@ const ProfileScreen = () => {
         {isOffsetScroll ? (
           <View style={styles.tabsFixed}>
             <Text style={styles.postText}>
-              Post{/* Change this to post size*/}
+              Posts{/* Change this to post size*/}
             </Text>
           </View>
         ) : null}
 
+        {isLoading ? (
+          <View style={styles.containerLoading}>
+            <LoadingWithoutModal />
+          </View>
+        ) : (
+          <></>
+        )}
         <ScrollView
           onScroll={handleScroll}
           ref={scrollViewReff}
@@ -465,7 +473,7 @@ const ProfileScreen = () => {
                 <View>
                   <View style={styles.tabs} ref={postRef}>
                     <Text style={styles.postText}>
-                      Post{/* Please change this to post size*/}
+                      Posts{/* Please change this to post size*/}
                     </Text>
                   </View>
                   <View style={styles.containerFlatFeed}>
@@ -518,7 +526,6 @@ const ProfileScreen = () => {
             </View>
           </TouchableNativeFeedback>
         ) : null}
-        <Loading visible={isLoading} />
       </SafeAreaView>
     </>
   );
@@ -545,13 +552,13 @@ const styles = StyleSheet.create({
     width: 50,
   },
   postText: {
-    fontFamily: fonts.inter[800],
-    fontWeight: 'bold',
+    fontFamily: fonts.inter[600],
     fontSize: 14,
-    color: colors.black,
+    lineHeight: 17,
+    color: colors.bondi_blue,
     paddingBottom: 12,
-    borderBottomWidth: 2,
-    borderBottomColor: colors.bondi_blue,
+    // borderBottomWidth: 2,
+    // borderBottomColor: colors.bondi_blue,
   },
   containerFlatFeed: {
     padding: 20,
@@ -653,5 +660,10 @@ const styles = StyleSheet.create({
   btnShare: {marginRight: 20},
   addCircle: {position: 'absolute', top: 25, left: 25},
   following: {marginLeft: 18},
+  containerLoading: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 export default ProfileScreen;
