@@ -93,6 +93,7 @@ const ChatDetailPage = () => {
             hasFilePicker={false}
             mutesEnabled={false}
             threadRepliesEnabled={false}
+            ImageUploadPreview={<ImageSendPreview />}
             reactionsEnabled={false}
             readEventsEnabled={false}
             messageActions={(props) => {
@@ -111,7 +112,6 @@ const ChatDetailPage = () => {
                   InlineDateSeparator={CustomInlineDateSeparator}
                 />
               </View>
-              <ImageSendPreview />
               <MessageInput Input={InputMessage} />
             </View>
           </Channel>
