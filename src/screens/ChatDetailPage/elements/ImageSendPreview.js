@@ -4,11 +4,7 @@ import {useMessageInputContext} from 'stream-chat-react-native-core';
 
 const ImageSendPreview = () => {
   const {ImageUploadPreview} = useMessageInputContext();
-  return (
-    <View style={styles.container}>
-      <ImageUploadPreview />
-    </View>
-  );
+  return <View style={styles.container}>{<ImageUploadPreview />}</View>;
 };
 
 export default ImageSendPreview;

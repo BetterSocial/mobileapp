@@ -15,6 +15,7 @@ import ItemUser from './elements/ItemUser';
 import {Loading} from '../../components';
 import ContactPreview from './elements/ContactPreview';
 import {generateRandomId} from 'stream-chat-react-native-core';
+import {showMessage} from 'react-native-flash-message';
 
 const width = Dimensions.get('screen').width;
 
@@ -138,6 +139,10 @@ const ContactScreen = ({navigation}) => {
       await navigation.navigate('ChatDetailPage');
     } catch (error) {
       console.log(error);
+      showMessage({
+        message: StringConstant.createPostFailedGeneralError,
+        type: 'danger',
+      });
       setLoading(false);
     }
   };
