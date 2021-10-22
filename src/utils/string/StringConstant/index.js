@@ -53,7 +53,7 @@ let createPostFailedNoMessage = 'Post messages cannot be empty.';
 let createPostFailedGeneralError = 'Failed to create new post.';
 
 // Chat Tab
-let chatTabHeaderPlaceholder = 'Search Chat';
+let chatTabHeaderPlaceholder = 'Search Chats';
 let chatTabHeaderCreateChatButtonText = 'New Chat';
 
 // News Tab

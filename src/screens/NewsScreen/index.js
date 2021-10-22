@@ -221,7 +221,7 @@ const NewsScreen = ({}) => {
           onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
             if (item.dummy) {
-              return <View key={index} style={{height: 68}} />;
+              return <View key={index} style={{height: 55}} />;
             }
             return (
               <RenderItem

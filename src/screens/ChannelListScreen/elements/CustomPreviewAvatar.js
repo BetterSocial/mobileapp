@@ -26,7 +26,9 @@ const CustomPreviewAvatar = ({channel}) => {
     );
   } else if (getGroupMemberCount(channel) > 2) {
     return (
-      <Image source={DefaultChatGroupProfilePicture} style={styles.image} />
+      <View style={styles.containerAvatar}>
+        <Image source={DefaultChatGroupProfilePicture} style={styles.image} />
+      </View>
     );
   } else {
     return (
@@ -40,5 +42,8 @@ const CustomPreviewAvatar = ({channel}) => {
 export default CustomPreviewAvatar;
 
 const styles = StyleSheet.create({
-  image: {width: 40, height: 40, borderRadius: 20},
+  image: {width: 40, height: 40, borderRadius: 20, paddingLeft: 8},
+  containerAvatar: {
+    paddingLeft: 8,
+  },
 });
