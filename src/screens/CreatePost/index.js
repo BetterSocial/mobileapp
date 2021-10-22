@@ -9,6 +9,7 @@ import {
   TextInput,
   View,
   Platform,
+  StatusBar,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
@@ -581,6 +582,7 @@ const CreatePost = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar translucent={false} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"

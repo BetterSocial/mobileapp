@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, StyleSheet} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 
 import {
   ChannelAvatar,
@@ -7,25 +7,43 @@ import {
 } from 'stream-chat-react-native';
 import {Context} from '../../../context';
 import {setProfileChannel} from '../../../context/actions/setChannel';
+import {getGroupMemberCount} from '../../../utils/string/StringUtils';
+import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
+
 const CustomPreviewAvatar = ({channel}) => {
   const [, dispatch] = React.useContext(Context).channel;
   const dataChannel = useChannelPreviewDisplayAvatar(channel);
   React.useEffect(() => {
     setProfileChannel(dataChannel.images, dispatch);
   }, [dataChannel]);
+
   if (channel?.data?.image) {
     return (
       <Image
-        style={styles.image}
         source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
+        style={styles.image}
       />
     );
+  } else if (getGroupMemberCount(channel) > 2) {
+    return (
+      <View style={styles.containerAvatar}>
+        <Image source={DefaultChatGroupProfilePicture} style={styles.image} />
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.containerAvatar}>
+        <ChannelAvatar channel={channel} />
+      </View>
+    );
   }
-  return <ChannelAvatar channel={channel} />;
 };
 
 export default CustomPreviewAvatar;
 
 const styles = StyleSheet.create({
-  image: {width: 40, height: 40, borderRadius: 20},
+  image: {width: 40, height: 40, borderRadius: 20, paddingLeft: 8},
+  containerAvatar: {
+    paddingLeft: 8,
+  },
 });

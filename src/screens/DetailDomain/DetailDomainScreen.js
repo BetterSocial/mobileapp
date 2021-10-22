@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
 
 import Toast from 'react-native-simple-toast';
 
@@ -228,6 +234,7 @@ const DetailDomainScreen = (props) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar translucent={false} />
       <ScrollView showsVerticalScrollIndicator={false} style={{height: '100%'}}>
         <View style={styles.content}>
           <View style={{paddingHorizontal: 0}}>

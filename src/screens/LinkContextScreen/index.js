@@ -1,5 +1,13 @@
 import * as React from 'react';
-import {View, StyleSheet, FlatList, Image, Text, Animated} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Image,
+  Text,
+  Animated,
+  StatusBar,
+} from 'react-native';
 
 import JWTDecode from 'jwt-decode';
 import {useRoute, useNavigation} from '@react-navigation/native';
@@ -196,6 +204,7 @@ const LinkContextScreen = () => {
   // console.log('data domain ', dataDomain);
   return (
     <View style={styles.container}>
+      <StatusBar translucent={false} />
       <FlatList
         data={data}
         onScroll={handleOnScroll}

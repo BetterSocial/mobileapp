@@ -1,5 +1,13 @@
 import * as React from 'react';
-import {Alert, Image, Linking, StyleSheet, View, StatusBar} from 'react-native';
+import {
+  Alert,
+  Image,
+  Linking,
+  StyleSheet,
+  View,
+  StatusBar,
+  SafeAreaView,
+} from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
@@ -73,8 +81,8 @@ const SplashScreen = () => {
     }
   };
 
-  let navigateWithoutDeeplink = (selfUserId) => {
-    SplashScreenPackage.hide();
+  let navigateWithoutDeeplink = async (selfUserId) => {
+    await SplashScreenPackage.hide();
     navigation.replace(selfUserId ? 'HomeTabs' : 'SignIn');
   };
 
@@ -112,13 +120,13 @@ const SplashScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" />
       <Image
         style={styles.image}
         source={require('../../assets/splash_screen.png')}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

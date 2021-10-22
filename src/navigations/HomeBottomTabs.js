@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, View, StatusBar} from 'react-native';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
@@ -18,6 +18,7 @@ import {Context} from '../context';
 import {setImageUrl} from '../context/actions/users';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 import {getUserId} from '../utils/users';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,60 +46,68 @@ function HomeBottomTabs() {
   }, []);
 
   return (
-    <Tab.Navigator
-      tabBarOptions={{
-        showLabel: true,
-        activeTintColor: colors.holytosca,
-        inactiveTintColor: colors.gray1,
-      }}
-      screenOptions={({route, navigation}) => {
-        return {
+    <SafeAreaView style={styles.container}>
+      <StatusBar />
+      <Tab.Navigator
+        initialRouteName="ChannelList"
+        tabBarOptions={{
+          // showLabel: true,
           activeTintColor: colors.holytosca,
-          tabBarLabel: () => (
-            <Text style={styles.label}>
-              {navigation.isFocused() ? '\u2B24' : ''}
-            </Text>
-          ),
-        };
-      }}>
-      <Tab.Screen
-        name="ChannelList"
-        component={ChannelListScreen}
-        options={{
-          activeTintColor: colors.holytosca,
-          tabBarIcon: ({color}) => <MemoHome fill={color} />,
+          inactiveTintColor: colors.gray1,
         }}
-      />
-      <Tab.Screen
-        name="Feed"
-        component={FeedScreen}
-        options={{
-          activeTintColor: colors.holytosca,
-          tabBarIcon: ({color}) => <MemoFeed fill={color} />,
-        }}
-      />
-      <Tab.Screen
-        name="News"
-        component={NewsScreen}
-        options={{
-          activeTintColor: colors.holytosca,
-          tabBarIcon: ({focused, color}) => <MemoNews fill={color} />,
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          activeTintColor: colors.holytosca,
-          tabBarIcon: ({focused}) => <MemoProfileIcon uri={users.photoUrl} />,
-        }}
-      />
-    </Tab.Navigator>
+        screenOptions={({route, navigation}) => {
+          return {
+            activeTintColor: colors.holytosca,
+            tabBarLabel: () => (
+              <Text style={styles.label}>
+                {navigation.isFocused() ? '\u2B24' : ''}
+              </Text>
+            ),
+          };
+        }}>
+        <Tab.Screen
+          name="ChannelList"
+          component={ChannelListScreen}
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: ({color}) => <MemoHome fill={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="Feed"
+          component={FeedScreen}
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: ({color}) => <MemoFeed fill={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="News"
+          component={NewsScreen}
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: ({focused, color}) => <MemoNews fill={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: ({focused}) => <MemoProfileIcon uri={users.photoUrl} />,
+          }}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 }
 
 export default HomeBottomTabs;
 const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    width: '100%',
+  },
   label: {
     fontSize: 6,
     color: colors.holytosca,

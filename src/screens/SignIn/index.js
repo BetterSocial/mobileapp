@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   SafeAreaView,
+  StatusBar,
 } from 'react-native';
 
 import {
@@ -34,9 +35,11 @@ import {verifyUser} from '../../service/users';
 import {setDataHumenId} from '../../context/actions/users';
 import StringConstant from '../../utils/string/StringConstant';
 import ButtonSign from '../../assets/icon-svg/button_sign.svg';
+import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {COLORS} from '../../utils/theme';
 
 const ENABLE_DEV_ONLY_FEATURE = true;
 
@@ -44,6 +47,7 @@ const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = React.useContext(Context).users;
   const [loading, setLoading] = React.useState(false);
+  const [slideShowIndex, setSlideShowIndex] = React.useState(0);
   const create = useClientGetstream();
 
   let dummyLoginRbSheetRef = React.useRef(null);
@@ -132,6 +136,7 @@ const SignIn = () => {
   };
   return (
     <SafeAreaView style={S.container}>
+      <StatusBar translucent={false} />
       {ENABLE_DEV_ONLY_FEATURE ? (
         <View style={S.devTrialView}>
           <Button
@@ -147,12 +152,12 @@ const SignIn = () => {
         <></>
       )}
       <View style={S.containerSlideShow}>
-        <SlideShow />
+        <SlideShow onChangeNewIndex={({index}) => setSlideShowIndex(index)} />
       </View>
       <View style={S.containerBtnLogin}>
         <TouchableOpacity onPress={() => handleLogin()} style={S.btnSign}>
           {/* <Image source={BtnHumanID} width={321} height={48} style={S.image} /> */}
-          <ButtonSign />
+          {slideShowIndex === 3 ? <ButtonSign /> : <ButtonSignDisabled />}
         </TouchableOpacity>
         <Text style={S.desc}>
           <Text style={S.humanID}>
