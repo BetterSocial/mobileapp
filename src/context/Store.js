@@ -12,6 +12,10 @@ import {newsReducer, newsState} from './reducers/newsReducer';
 import {feedsReducer, feedsState} from './reducers/FeedReducer';
 import {myProfileReducer, myProfileState} from './reducers/myProfileReducer';
 import {groupChatReducer, groupChatState} from './reducers/groupChat';
+import {
+  unReadMessageReducer,
+  unReadMessageState,
+} from './reducers/unReadMessageReducer';
 
 const Store = ({children}) => {
   const rootReducer = {
@@ -27,6 +31,7 @@ const Store = ({children}) => {
     feeds: React.useReducer(feedsReducer, feedsState),
     profile: React.useReducer(myProfileReducer, myProfileState),
     groupChat: React.useReducer(groupChatReducer, groupChatState),
+    unReadMessage: React.useReducer(unReadMessageReducer, unReadMessageState),
   };
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };

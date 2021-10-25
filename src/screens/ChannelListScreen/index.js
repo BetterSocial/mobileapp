@@ -19,6 +19,7 @@ import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {getUserId} from '../../utils/users';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import {getChatName} from '../../utils/string/StringUtils';
+import {unReadMessageState} from '../../context/reducers/unReadMessageReducer';
 
 const ChannelListScreen = ({navigation}) => {
   const streami18n = new Streami18n({
@@ -29,11 +30,19 @@ const ChannelListScreen = ({navigation}) => {
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
+  const [unReadMessage, dispatchUnReadMessage] =
+    React.useContext(Context).unReadMessage;
   let connect = useClientGetstream();
   const filters = {
     members: {$in: [userId]},
     type: 'messaging',
   };
+
+  React.useEffect(() => {
+    if (client.client) {
+      console.log(unReadMessage);
+    }
+  }, [client.client]);
 
   const sort = [{last_message_at: -1}, {cid: -1}];
   const options = {

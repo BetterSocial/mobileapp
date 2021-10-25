@@ -13,6 +13,8 @@ const defaultImage =
 
 export const useClientGetstream = () => {
   const [client, dispatch] = React.useContext(Context).client;
+  const [unReadMessage, dispatchUnReadMessage] =
+    React.useContext(Context).unReadMessage;
   const create = async () => {
     if (!client.client) {
       const token = await getAccessToken();
@@ -26,7 +28,16 @@ export const useClientGetstream = () => {
           invisible: true,
         };
         const chatClient = await new StreamChat(STREAM_API_KEY);
-        await chatClient.connectUser(user, token);
+        let res = await chatClient.connectUser(user, token);
+        let unRead = {
+          total_unread_count: res.me.total_unread_count,
+          unread_channels: res.me.unread_channels,
+          unread_count: res.me.unread_count,
+        };
+        dispatchUnReadMessage(unRead);
+        console.log('=========================');
+        console.log(res);
+        console.log('*****************************');
         console.log('client connect');
         setMessage(chatClient);
         createClient(chatClient, dispatch);
