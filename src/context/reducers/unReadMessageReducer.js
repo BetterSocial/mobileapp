@@ -9,9 +9,10 @@ export const unReadMessageState = {
 export const unReadMessageReducer = (state = unReadMessageState, action) => {
   switch (action.type) {
     case SET_UN_READ_MESSAGE:
-      return {
-        ...state,
+      let data = {
+        ...action.payload,
       };
+      return data;
     default:
       return state;
   }

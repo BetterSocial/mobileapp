@@ -38,11 +38,7 @@ const ChannelListScreen = ({navigation}) => {
     type: 'messaging',
   };
 
-  React.useEffect(() => {
-    if (client.client) {
-      console.log(unReadMessage);
-    }
-  }, [client.client]);
+  React.useEffect(() => {}, [unReadMessage]);
 
   const sort = [{last_message_at: -1}, {cid: -1}];
   const options = {
