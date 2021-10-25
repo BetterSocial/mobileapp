@@ -7,7 +7,10 @@ import {getAccessToken} from '../token';
 import {STREAM_API_KEY} from '@env';
 import {getMyProfile} from '../../service/profile';
 import {createClient} from '../../context/actions/createClient';
-import {setUnReadMessage} from '../../context/actions/unReadMessageAction';
+import {
+  setUnReadMessage,
+  setTotalUnReadMessage,
+} from '../../context/actions/unReadMessageAction';
 import {setMessage} from '../firebase/setMessaging';
 const defaultImage =
   'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png';
@@ -35,6 +38,20 @@ export const useClientGetstream = () => {
           unread_channels: res.me.unread_channels,
           unread_count: res.me.unread_count,
         };
+        chatClient.on((event) => {
+          console.log('*********event***********');
+          console.log(event);
+          if (event.total_unread_count !== undefined) {
+            console.log(event.total_unread_count);
+            dispatchUnReadMessage(
+              setTotalUnReadMessage(event.total_unread_count),
+            );
+          }
+
+          if (event.unread_channels !== undefined) {
+            console.log(event.unread_channels);
+          }
+        });
         dispatchUnReadMessage(setUnReadMessage(unRead));
         setMessage(chatClient);
         createClient(chatClient, dispatch);
