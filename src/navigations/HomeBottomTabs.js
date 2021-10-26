@@ -25,6 +25,7 @@ const Tab = createBottomTabNavigator();
 function HomeBottomTabs() {
   let [users, dispatch] = React.useContext(Context).users;
   let [, dispatchProfile] = React.useContext(Context).profile;
+  const [unReadMessage] = React.useContext(Context).unReadMessage;
 
   React.useEffect(() => {
     let getProfile = async () => {
@@ -71,6 +72,9 @@ function HomeBottomTabs() {
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: ({color}) => <MemoHome fill={color} />,
+            tabBarBadge: unReadMessage.total_unread_count
+              ? unReadMessage.total_unread_count
+              : null,
           }}
         />
         <Tab.Screen
