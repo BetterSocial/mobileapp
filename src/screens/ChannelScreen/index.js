@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';
 import {useHeaderHeight} from '@react-navigation/stack';
@@ -54,6 +54,7 @@ const ChannelScreen = () => {
 
   return (
     <SafeAreaView>
+      <StatusBar translucent={false} />
       {client.client && channel.channel && (
         <Chat client={client.client} i18nInstance={streami18n}>
           <Channel

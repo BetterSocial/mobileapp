@@ -6,6 +6,7 @@ import {
   Text,
   View,
   SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
 
@@ -74,6 +75,7 @@ const GroupSetting = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar translucent={false} />
       <HeaderContact
         title={'Settings'}
         containerStyle={styles.containerHeader}

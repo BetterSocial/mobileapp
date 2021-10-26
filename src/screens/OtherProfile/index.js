@@ -223,7 +223,7 @@ const OtherProfile = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" translucent={false} />
       <SafeAreaView style={styles.container}>
         {isOffsetScroll ? (
           <View style={styles.tabsFixed}>

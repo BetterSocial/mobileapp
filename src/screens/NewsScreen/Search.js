@@ -19,11 +19,12 @@ const Search = ({onPress, animatedValue}) => {
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
       <View style={styles.wrapperSearch}>
         <View style={styles.wrapperIcon}>
-          <MemoIc_search width={20} height={20} />
+          <MemoIc_search width={17} height={17} />
         </View>
         <TextInput
           multiline={false}
           placeholder={StringConstant.newsTabHeaderPlaceholder}
+          placeholderTextColor={COLORS.gray1}
           style={styles.input}
         />
       </View>
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     marginLeft: 20,
     marginRight: 20,
-    borderRadius: SIZES.radius,
+    borderRadius: 8,
     alignSelf: 'center',
     flexDirection: 'row',
   },
@@ -62,7 +63,9 @@ const styles = StyleSheet.create({
     paddingStart: 8,
     flex: 1,
     // paddingStart: 20,
+    fontSize: 14,
     fontFamily: fonts.inter[400],
+    height: 36,
   },
   wrapperIcon: {
     // position: 'absolute',

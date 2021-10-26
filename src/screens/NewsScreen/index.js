@@ -5,6 +5,7 @@ import {
   FlatList,
   Animated,
   RefreshControl,
+  StatusBar,
 } from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';
@@ -24,6 +25,7 @@ import {blockDomain} from '../../service/blocking';
 import {Context} from '../../context';
 import {setIFollow, setNews} from '../../context/actions/news';
 import {getUserId} from '../../utils/users';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
@@ -197,6 +199,14 @@ const NewsScreen = ({}) => {
     }
   };
 
+  if (loading) {
+    return (
+      <View style={styles.containerLoading}>
+        <LoadingWithoutModal visible={loading} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Search animatedValue={offset} />
@@ -211,7 +221,7 @@ const NewsScreen = ({}) => {
           onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
             if (item.dummy) {
-              return <View key={index} style={{height: 68}} />;
+              return <View key={index} style={{height: 55}} />;
             }
             return (
               <RenderItem
@@ -243,7 +253,6 @@ const NewsScreen = ({}) => {
           onSkip={onSkipOnlyBlock}
           onSelect={onNextQuestion}
         />
-        <Loading visible={loading} />
       </Animated.View>
     </View>
   );
@@ -253,6 +262,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.gray6,
   },
+  containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
 });
 
 export default NewsScreen;

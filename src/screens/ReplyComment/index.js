@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import moment from 'moment';
 import Toast from 'react-native-simple-toast';
@@ -116,6 +117,7 @@ const ReplyComment = (props) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar translucent={false} />
       <ScrollView contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
           {/* Header */}
@@ -131,7 +133,7 @@ const ReplyComment = (props) => {
             <View style={styles.btn} />
           </View>
           {/* Header */}
-          <Comment
+          <ReplyCommentItem
             indexFeed={indexFeed}
             user={item.user}
             comment={item}
@@ -145,7 +147,7 @@ const ReplyComment = (props) => {
             <ContainerReply key={'dummy1'}>
               <ConnectorWrapper index={0}>
                 <View style={styles.childCommentWrapper}>
-                  <Comment
+                  <ReplyCommentItem
                     indexFeed={indexFeed}
                     user={item.user}
                     comment={temporaryComment(temporaryCMD)}

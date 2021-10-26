@@ -123,6 +123,10 @@ let getChatName = (usernames, me) => {
   }
 };
 
+let getGroupMemberCount = (channel) => {
+  return Object.keys(channel?.state?.members).length;
+};
+
 let styles = StyleSheet.create({
   bold: {
     fontFamily: 'Inter',
@@ -140,5 +144,6 @@ export {
   isPollExpired,
   displayFormattedSearchLocations,
   getChatName,
+  getGroupMemberCount,
   NO_POLL_UUID,
 };

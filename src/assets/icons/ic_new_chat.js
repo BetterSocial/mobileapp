@@ -3,7 +3,7 @@ import Svg, {Path} from 'react-native-svg';
 
 function IcNewChat(props) {
   return (
-    <Svg width="1em" height="1em" viewBox="0 0 20 20" fill="none" {...props}>
+    <Svg width="17" height="15" viewBox="0 0 17 15" fill="none" {...props}>
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

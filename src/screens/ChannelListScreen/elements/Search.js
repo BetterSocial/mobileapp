@@ -20,10 +20,11 @@ const Search = ({onPress, animatedValue}) => {
         <TextInput
           multiline={false}
           placeholder={StringConstant.chatTabHeaderPlaceholder}
+          placeholderTextColor={COLORS.gray1}
           style={styles.input}
         />
         <View style={styles.wrapperIcon}>
-          <MemoIc_search width={20} height={20} />
+          <MemoIc_search width={17} height={17} />
         </View>
       </View>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
@@ -31,7 +32,7 @@ const Search = ({onPress, animatedValue}) => {
           {StringConstant.chatTabHeaderCreateChatButtonText}
         </Text>
         <View>
-          <MemoIcNewChat height={17} width={15} style={{marginTop: 4}} />
+          <MemoIcNewChat height={17} width={15} style={{marginTop: 0}} />
         </View>
       </TouchableOpacity>
     </Animated.View>
@@ -47,10 +48,11 @@ const styles = StyleSheet.create({
   wrapperSearch: {
     flex: 1,
     backgroundColor: '#F5F5F5',
-    marginLeft: 15,
-    marginRight: 15,
-    borderRadius: SIZES.radius,
+    marginLeft: 14,
+    marginRight: 12,
+    borderRadius: 8,
     alignSelf: 'center',
+    height: 36,
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginEnd: SIZES.base,
     paddingLeft: 8,
-    paddingRight: 8,
+    paddingRight: 4,
     paddingTop: 9,
     paddingBottom: 9,
     // backgroundColor: 'red',
@@ -66,11 +68,11 @@ const styles = StyleSheet.create({
   input: {
     marginLeft: 24,
     paddingStart: 16,
-    lineHeight: 24,
+    lineHeight: 36,
   },
   wrapperIcon: {
     position: 'absolute',
-    left: 8,
+    left: 10,
     top: 0,
     bottom: 0,
     justifyContent: 'center',
@@ -78,7 +80,9 @@ const styles = StyleSheet.create({
   newPostText: {
     color: COLORS.holyTosca,
     marginRight: 11,
-    ...FONTS.h4,
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 12,
+    lineHeight: 14.52,
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',

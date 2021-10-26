@@ -15,12 +15,13 @@ import ReportUser from '../../components/Blocking/ReportUser';
 import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
+import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail, getMainFeed, viewTimePost} from '../../service/post';
 import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
 import {blockAnonymous, blockUser} from '../../service/blocking';
 import {Context} from '../../context';
-import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 
@@ -244,7 +245,7 @@ const FeedScreen = (props) => {
   if (initialLoading === true) {
     return (
       <View style={styles.containerLoading}>
-        <Loading visible={initialLoading} />
+        <LoadingWithoutModal visible={initialLoading} />
       </View>
     );
   }
@@ -255,6 +256,7 @@ const FeedScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
+      <ButtonNewPost />
       {feeds.length > 0 && (
         <CardStack
           style={styles.content}
@@ -348,8 +350,6 @@ const FeedScreen = (props) => {
 
       <Loading visible={loading} />
 
-      <ButtonNewPost />
-
       <BlockPostAnonymous
         refBlockPostAnonymous={refBlockPostAnonymous}
         onSelect={(i) => onSelectBlockingPostAnonymous(i)}
@@ -392,7 +392,10 @@ const styles = StyleSheet.create({
     flex: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
   },
-  containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  containerLoading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

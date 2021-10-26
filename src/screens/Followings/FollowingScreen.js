@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Animated from 'react-native-reanimated';
@@ -64,33 +64,36 @@ export default function FollowingScreen({}) {
   }
 
   return (
-    <Tabs.Navigator
-      initialRouteName="TabFollowing"
-      tabBar={(props) => {
-        return <MyTabBar {...props} />;
-      }}>
-      <Tabs.Screen
-        name="TabFollowing"
-        component={Followings}
-        options={{
-          title: 'User',
-        }}
-      />
-      <Tabs.Screen
-        name="TabDomain"
-        component={DomainFragmentScreen}
-        options={{
-          title: 'Domains',
-        }}
-      />
-      <Tabs.Screen
-        name="TabTopic"
-        component={TopicFragmentScreen}
-        options={{
-          title: 'Topic',
-        }}
-      />
-    </Tabs.Navigator>
+    <View style={{height: '100%'}}>
+      <StatusBar translucent={false} />
+      <Tabs.Navigator
+        initialRouteName="TabFollowing"
+        tabBar={(props) => {
+          return <MyTabBar {...props} />;
+        }}>
+        <Tabs.Screen
+          name="TabFollowing"
+          component={Followings}
+          options={{
+            title: 'User',
+          }}
+        />
+        <Tabs.Screen
+          name="TabDomain"
+          component={DomainFragmentScreen}
+          options={{
+            title: 'Domains',
+          }}
+        />
+        <Tabs.Screen
+          name="TabTopic"
+          component={TopicFragmentScreen}
+          options={{
+            title: 'Topic',
+          }}
+        />
+      </Tabs.Navigator>
+    </View>
   );
 }
 

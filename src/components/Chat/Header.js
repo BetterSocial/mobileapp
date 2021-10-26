@@ -13,11 +13,12 @@ import {useNavigation} from '@react-navigation/native';
 import {ChannelAvatar} from 'stream-chat-react-native';
 
 import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
+import DefaultGroupProfilePicture from '../../assets/images/default-group-picture.png';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {Context} from '../../context';
 import {trimString} from '../../utils/string/TrimString';
-import {getChatName} from '../../utils/string/StringUtils';
+import {getChatName, getGroupMemberCount} from '../../utils/string/StringUtils';
 
 const Header = ({username, profile, createChat}) => {
   const navigation = useNavigation();
@@ -26,6 +27,26 @@ const Header = ({username, profile, createChat}) => {
   const {channel} = channelClient;
 
   let chatName = getChatName(username, profileContext.username);
+  let count = Object.keys(channel.state.members).length;
+
+  const renderHeaderImage = () => {
+    if (channel?.data?.image) {
+      return (
+        <Image
+          source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
+          style={styles.image}
+        />
+      );
+    } else if (getGroupMemberCount(channel) > 2) {
+      return <Image source={DefaultGroupProfilePicture} style={styles.image} />;
+    } else {
+      return (
+        <View style={styles.containerAvatar}>
+          <ChannelAvatar channel={channel} />
+        </View>
+      );
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -42,16 +63,7 @@ const Header = ({username, profile, createChat}) => {
             })
           }>
           <View style={styles.touchable}>
-            {channel?.data?.image ? (
-              <Image
-                source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
-                style={styles.image}
-              />
-            ) : (
-              <View style={styles.containerAvatar}>
-                <ChannelAvatar channel={channel} />
-              </View>
-            )}
+            {renderHeaderImage()}
             <Text style={styles.name}>{trimString(chatName, 21)}</Text>
           </View>
         </TouchableWithoutFeedback>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
+import {View, StyleSheet, FlatList, StatusBar} from 'react-native';
 
 import {useRoute, useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
@@ -135,6 +135,7 @@ const DomainScreen = () => {
   // console.log('data domain ', dataDomain);
   return (
     <View style={styles.container}>
+      <StatusBar translucent={false} />
       <Navigation domain={dataDomain.og.domain} />
       <FlatList
         data={data}

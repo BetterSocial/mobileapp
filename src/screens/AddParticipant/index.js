@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {Dimensions, StyleSheet, View, SafeAreaView} from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  View,
+  SafeAreaView,
+  StatusBar,
+} from 'react-native';
 
 import {RecyclerListView, LayoutProvider, DataProvider} from 'recyclerlistview';
 
@@ -131,6 +137,7 @@ const AddParticipant = ({navigation}) => {
   };
   return (
     <View style={styles.container}>
+      <StatusBar translucent={false} />
       <SafeAreaView style={styles.container}>
         <HeaderContact
           title={'Add new participant'}
