@@ -255,8 +255,7 @@ const FeedScreen = (props) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
-      <ButtonNewPost />
+    <View style={styles.container} forceInset={{top: 'always'}}>
       {feeds.length > 0 && (
         <CardStack
           style={styles.content}
@@ -349,7 +348,7 @@ const FeedScreen = (props) => {
       )}
 
       <Loading visible={loading} />
-
+      <ButtonNewPost />
       <BlockPostAnonymous
         refBlockPostAnonymous={refBlockPostAnonymous}
         onSelect={(i) => onSelectBlockingPostAnonymous(i)}
@@ -381,7 +380,7 @@ const FeedScreen = (props) => {
         onPress={onIssue}
         onSkip={onSkipOnlyBlock}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -392,6 +391,7 @@ const styles = StyleSheet.create({
     flex: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: -1,
   },
   containerLoading: {
     flex: 1,
