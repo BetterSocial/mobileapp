@@ -43,6 +43,7 @@ import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import DomainScreen from '../screens/DomainScreen';
 import LinkContextScreen from '../screens/LinkContextScreen';
+import TopicPageScreen from '../screens/TopicPageScreen';
 import {Context} from '../context';
 
 const Stack = createStackNavigator();
@@ -224,6 +225,11 @@ const RootStact = () => {
         <Stack.Screen
           name="LinkContextScreen"
           component={LinkContextScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="TopicPageScreen"
+          component={TopicPageScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

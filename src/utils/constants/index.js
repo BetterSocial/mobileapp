@@ -11,6 +11,11 @@ const DEFAULT_PROFILE_PIC_PATH =
   'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png';
 const KEY_ACCESS_TOKEN = 'access_token';
 const KEY_REFRESH_TOKEN = 'refresh_token';
+const CHANNEL_TYPE_PERSONAL = 0;
+const CHANNEL_TYPE_GROUP = 1;
+const CHANNEL_TYPE_GROUP_LOCATION = 2;
+const CHANNEL_TYPE_TOPIC = 3;
+
 export {
   POST_VERB_POLL,
   POST_VERB_STANDARD,
@@ -24,4 +29,8 @@ export {
   DEFAULT_PROFILE_PIC_PATH,
   KEY_ACCESS_TOKEN,
   KEY_REFRESH_TOKEN,
+  CHANNEL_TYPE_PERSONAL,
+  CHANNEL_TYPE_GROUP,
+  CHANNEL_TYPE_GROUP_LOCATION,
+  CHANNEL_TYPE_TOPIC,
 };
