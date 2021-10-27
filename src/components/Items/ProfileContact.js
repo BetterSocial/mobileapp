@@ -21,7 +21,8 @@ const ProfileContact = ({photo, fullname, onPress, select}) => {
         color: COLORS.gray1,
         borderless: false,
         borderRadius: 10,
-      }}>
+      }}
+      style={styles.pressable}>
       <View style={styles.container}>
         <View style={styles.profile}>
           <Image style={styles.image} source={{uri: photo}} />
@@ -59,5 +60,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     color: '#000',
     lineHeight: 16.94,
+  },
+  pressable: {
+    height: '100%',
   },
 });

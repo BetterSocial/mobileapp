@@ -96,11 +96,13 @@ const GroupSetting = ({navigation, route}) => {
           data={Object.keys(participants)}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) => (
-            <ProfileContact
-              key={item}
-              fullname={participants[item].user.name}
-              photo={participants[item].user.image}
-            />
+            <View style={{height: 72}}>
+              <ProfileContact
+                key={item}
+                fullname={participants[item].user.name}
+                photo={participants[item].user.image}
+              />
+            </View>
           )}
         />
       </View>

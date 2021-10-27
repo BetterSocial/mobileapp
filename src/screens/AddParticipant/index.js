@@ -46,6 +46,7 @@ const AddParticipant = ({navigation}) => {
       setLoading(true);
       const res = await userPopulate();
       const result = await filterDataUser(res);
+      console.log(result);
       setUsers(result);
       setCacheUser(result);
       setLoading(false);
@@ -77,7 +78,7 @@ const AddParticipant = ({navigation}) => {
             switch (type) {
               case VIEW_TYPE_DATA:
                 dim.width = width;
-                dim.height = 76;
+                dim.height = 72;
                 break;
               default:
                 dim.width = width;
@@ -136,9 +137,9 @@ const AddParticipant = ({navigation}) => {
     );
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <HeaderContact
           title={'Add new participant'}
           containerStyle={styles.containerHeader}
@@ -159,8 +160,8 @@ const AddParticipant = ({navigation}) => {
           />
         )}
         <Loading visible={loading} />
-      </SafeAreaView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 

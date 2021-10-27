@@ -130,12 +130,14 @@ const GroupInfo = () => {
               data={Object.keys(participants)}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
-                <ProfileContact
-                  key={item}
-                  onPress={() => onProfilePressed(item)}
-                  fullname={participants[item].user.name}
-                  photo={participants[item].user.image}
-                />
+                <View style={{height: 72}}>
+                  <ProfileContact
+                    key={item}
+                    onPress={() => onProfilePressed(item)}
+                    fullname={participants[item].user.name}
+                    photo={participants[item].user.image}
+                  />
+                </View>
               )}
             />
           </View>

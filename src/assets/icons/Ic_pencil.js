@@ -2,15 +2,15 @@ import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
 function Ic_pencil(props) {
-  let width = props.width || 19;
-  let height = props.height || 19;
+  let width = props.width || 21;
+  let height = props.height || 21;
   console.log(width);
   console.log(height);
   return (
     <Svg
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
+      width={30}
+      height={30}
+      viewBox={`0 0 ${19} ${19}`}
       fill="none"
       {...props}>
       <Path
