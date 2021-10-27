@@ -141,7 +141,6 @@ const ChannelListScreen = ({navigation}) => {
                 additionalFlatListProps={{
                   onEndReached: () => null,
                   refreshControl: null,
-                  contentContainerStyle: {},
                 }}
               />
             </View>

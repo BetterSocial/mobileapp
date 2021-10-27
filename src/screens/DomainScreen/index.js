@@ -47,8 +47,8 @@ const DomainScreen = () => {
       setLoading(true);
       let res = await getDetailDomains(dataDomain.og.domain);
       if (res.code === 200) {
-        console.log('dataDomain.og.domain');
-        console.log(res.data);
+        // console.log('dataDomain.og.domain');
+        // console.log(res.data);
         setData([{dummy: true}, ...res.data]);
         setLoading(false);
       }
@@ -132,7 +132,7 @@ const DomainScreen = () => {
   const domainImage = dataDomain.domain
     ? dataDomain.domain.image
     : dataDomain.og.domainImage;
-  // console.log('data domain ', dataDomain);
+  // console.log('data domain ', domainImage);
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />

@@ -4,12 +4,11 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-import {fonts, normalize} from '../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
 const ButtonAddPost = () => {
   const navigator = useNavigation();
-  let ratio = normalize(19);
   return (
     <TouchableOpacity
       style={styles.container}
@@ -34,14 +33,10 @@ export default ButtonAddPost;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#23C5B6',
-    // paddingVertical: 13,
-    // paddingRight: 12,
-    // paddingLeft: 13.67,
     width: normalize(50),
     height: normalize(50),
     borderRadius: normalize(50),
     justifyContent: 'center',
-    // alignSelf: 'flex-end',
     position: 'absolute',
     flexDirection: 'row',
     bottom: normalize(61),

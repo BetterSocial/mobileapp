@@ -25,10 +25,17 @@ export const fonts = {
   },
 };
 
-export const normalize = (fontSize) => {
+export const normalize = (size) => {
+  // let referenceWidth = 326;
   let referenceWidth = 375;
-  let currentScreenWidth = Dimensions.get('window').width;
-  let normalizedSize = (currentScreenWidth / referenceWidth) * fontSize;
-  console.log(normalizedSize);
+  let currentScreenWidth = Dimensions.get('screen').width;
+  let normalizedSize = (currentScreenWidth / referenceWidth) * size;
   return normalizedSize;
+};
+
+export const normalizeFontSize = (fontSize) => {
+  let referenceHeight = 771;
+  let currentScreenHeight = Dimensions.get('screen').height;
+  let normalizedFontSize = (currentScreenHeight / referenceHeight) * fontSize;
+  return normalizedFontSize;
 };
