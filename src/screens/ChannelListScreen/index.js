@@ -141,16 +141,13 @@ const ChannelListScreen = ({navigation}) => {
                 PreviewTitle={customPreviewTitle}
                 onSelect={(channel) => {
                   console.log(channel.data);
-                if (
-                  channel.data.channel_type === CHANNEL_TYPE_GROUP_LOCATION ||
-                  channel.data.channel_type === CHANNEL_TYPE_TOPIC
-                ) {
-                  navigation.navigate('Topics');
-                } else {
-                  setChannel(channel, dispatch);
-                  // ChannelScreen | ChatDetailPage
-                  navigation.navigate('ChatDetailPage');
-                }
+                  if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
+                    navigation.navigate('TopicPageScreen');
+                  } else {
+                    setChannel(channel, dispatch);
+                    // ChannelScreen | ChatDetailPage
+                    navigation.navigate('ChatDetailPage');
+                  }
                 }}
                 sort={sort}
                 options={options}
