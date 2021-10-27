@@ -13,7 +13,7 @@ import SimpleToast from 'react-native-simple-toast';
 import MemoIc_interface from '../../../assets/icons/Ic_interface';
 import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {SIZES, COLORS} from '../../../utils/theme';
 import {SingleSidedShadowBox, Gap} from '../../../components';
 import StringConstant from '../../../utils/string/StringConstant';
@@ -94,13 +94,13 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
         <View style={styles.row}>
           <View style={styles.wrapperImage}>
             {image ? (
-              <Image
-                source={{uri: image}}
-                style={[
-                  {height: '100%', width: '100%', borderRadius: 45},
-                  StyleSheet.absoluteFillObject,
-                ]}
-              />
+              <>
+                <View style={styles.circleImageWrapper} />
+                <Image
+                  source={{uri: image}}
+                  style={[styles.circleImage, StyleSheet.absoluteFillObject]}
+                />
+              </>
             ) : (
               <MemoDomainProfilePicture />
             )}
@@ -119,7 +119,7 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
                 </View>
               </TouchableNativeFeedback>
             )}
-            <Gap width={SIZES.base} />
+            <Gap width={normalize(SIZES.base)} />
             <TouchableOpacity
               style={styles.buttonBlock}
               onPress={() => onPress()}>
@@ -127,31 +127,31 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
             </TouchableOpacity>
           </View>
         </View>
-        <Gap height={12} />
+        <Gap height={normalize(12)} />
         <View style={styles.row}>
           <Text style={styles.domainName}>{domain}</Text>
           <View style={{justifyContent: 'center'}}>
             <TouchableOpacity
               style={styles.openInBrowserIcon}
               onPress={openDomainLink}>
-              <MemoIc_interface width={20} height={20} />
+              <MemoIc_interface width={17} height={17} />
             </TouchableOpacity>
           </View>
         </View>
-        <Gap height={4} />
+        <Gap height={normalize(2)} />
         <View style={[styles.row, {alignItems: 'center'}]}>
           <Text style={styles.followersNumber}>{followers}k</Text>
-          <Gap width={4} />
+          <Gap width={normalize(4)} />
           <Text style={styles.followersText}>Followers</Text>
         </View>
-        <Gap height={14} />
+        <Gap height={normalize(14)} />
         <Text style={styles.domainDescription}>
           {description ? description : lorem}
         </Text>
-        <Gap height={10} />
+        <Gap height={normalize(10)} />
         <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
           <View style={{flex: 1, paddingBottom: 0}}>
-            <MemoIc_rectangle_gradient width={'100%'} height={20} />
+            <MemoIc_rectangle_gradient width={'100%'} height={normalize(18)} />
           </View>
           <Tooltip
             // allowChildInteraction={false}
@@ -177,11 +177,14 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
                 paddingTop: 8,
                 paddingRight: 12,
               }}>
-              <MemoIc_question_mark width={16} height={16} />
+              <MemoIc_question_mark
+                width={normalize(17)}
+                height={normalize(17)}
+              />
             </TouchableOpacity>
           </Tooltip>
         </View>
-        <Gap height={16} />
+        <Gap height={normalize(16)} />
       </View>
     </SingleSidedShadowBox>
   );
@@ -189,23 +192,27 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
 
 const styles = StyleSheet.create({
   icon: {flexDirection: 'row', alignItems: 'center'},
-  desc: {fontSize: 14, fontFamily: fonts.inter[400], lineHeight: 16},
+  desc: {
+    fontSize: normalizeFontSize(14),
+    fontFamily: fonts.inter[400],
+    lineHeight: normalizeFontSize(16),
+  },
   containerFollowers: {flexDirection: 'row'},
   followers: {
     color: '#00ADB5',
     fontFamily: fonts.inter[400],
-    fontSize: 16,
+    fontSize: normalizeFontSize(16),
     fontWeight: '700',
   },
   wrapperDomain: {flexDirection: 'row', marginTop: 8},
   iconDomain: {marginStart: 8, justifyContent: 'center'},
   domain: {
-    fontSize: 24,
+    fontSize: normalizeFontSize(24),
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
   },
   actionText: (color) => ({
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     color,
   }),
   headerDomain: {
@@ -237,7 +244,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonPrimary: {
-    height: 36,
+    height: normalize(36),
     backgroundColor: '#00ADB5',
     // flex: 1,
     justifyContent: 'center',
@@ -246,7 +253,8 @@ const styles = StyleSheet.create({
   },
   buttonBlock: {
     // flex: 1,
-    height: 36,
+    height: normalize(36),
+    width: normalize(88),
     borderWidth: 0.5,
     borderRadius: 8,
     borderColor: '#FF2E63',
@@ -254,6 +262,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
+  },
+  blockButtonText: {
+    fontSize: normalizeFontSize(12),
+    color: '#FF2E63',
+    paddingHorizontal: 25,
   },
   wrapperHeader: {
     flex: 1,
@@ -268,46 +281,50 @@ const styles = StyleSheet.create({
     height,
   }),
   wrapperImage: {
-    borderRadius: 45,
-    borderWidth: 0.2,
+    borderRadius: normalize(50),
     borderColor: 'rgba(0,0,0,0.5)',
-    width: 100,
-    height: 100,
+    width: normalize(100),
+    height: normalize(100),
     justifyContent: 'center',
     alignItems: 'center',
   },
   row: {
     flexDirection: 'row',
   },
-  followButtonText: {fontSize: 14, color: 'white', paddingHorizontal: 25},
-  blockButtonText: {fontSize: 14, color: '#FF2E63', paddingHorizontal: 25},
+  followButtonText: {
+    fontSize: normalizeFontSize(14),
+    color: 'white',
+    paddingHorizontal: 25,
+  },
   domainName: {
-    fontSize: 24,
+    fontSize: normalizeFontSize(24),
     fontFamily: fonts.inter[500],
-    lineHeight: 29,
+    lineHeight: normalizeFontSize(29),
     color: '#000000',
   },
   followersNumber: {
     color: '#00ADB5',
     fontFamily: fonts.inter[700],
-    fontSize: 14,
-    lineHeight: 17,
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(17),
   },
   followersText: {
     color: COLORS.black,
     fontFamily: fonts.inter[400],
-    fontSize: 14,
-    lineHeight: 17,
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(17),
   },
   domainDescription: {
     fontFamily: fonts.inter[400],
-    lineHeight: 17,
+    lineHeight: normalizeFontSize(17),
+    fontSize: normalizeFontSize(14),
+    // lineHeight: 17,
   },
   shadowBox: {paddingBottom: 8},
   tooltipContent: {
     fontFamily: fonts.inter[400],
-    fontSize: 14,
-    lineHeight: 17,
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(17),
     color: COLORS.blackgrey,
   },
   tooltipShadowContainer: {
@@ -341,10 +358,14 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
-  openInBrowserIcon: {padding: 8, paddingHorizontal: 12, top: -3},
+  openInBrowserIcon: {
+    padding: normalize(4),
+    paddingHorizontal: normalize(12),
+    top: 0,
+  },
   buttonFollowing: {
-    width: 88,
-    height: 36,
+    width: normalize(88),
+    height: normalize(36),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -355,12 +376,13 @@ const styles = StyleSheet.create({
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
+    lineHeight: normalizeFontSize(24),
     color: colors.bondi_blue,
   },
   buttonFollow: {
-    width: 88,
-    height: 36,
+    width: normalize(88),
+    height: normalize(36),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -371,8 +393,24 @@ const styles = StyleSheet.create({
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
+    lineHeight: normalizeFontSize(24),
     color: colors.white,
+  },
+  circleImage: {
+    height: normalize(100),
+    width: normalize(100),
+    alignSelf: 'center',
+    borderRadius: normalize(100),
+    resizeMode: 'cover',
+    zIndex: -10000,
+  },
+  circleImageWrapper: {
+    height: normalize(100),
+    width: normalize(100),
+    borderRadius: normalize(50),
+    borderWidth: 0.2,
+    borderColor: 'rgba(0,0,0,0.5)',
   },
 });
 

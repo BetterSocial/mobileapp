@@ -4,23 +4,22 @@ import {StyleSheet, Dimensions, Share, View} from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
 import {useNavigation} from '@react-navigation/core';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
-import Content from './Content';
-import Header from './Header';
-import {Card} from '../../components/CardStack';
+import Content from '../../FeedScreen/Content';
+import Header from '../../FeedScreen/Header';
+import {Card} from '../../../components/CardStack';
 import {
   POST_TYPE_POLL,
   POST_TYPE_LINK,
   POST_TYPE_STANDARD,
-} from '../../utils/constants';
-import ContentPoll from './ContentPoll';
+} from '../../../utils/constants';
+import ContentPoll from '../../FeedScreen/ContentPoll';
+import ContentLink from '../../FeedScreen/ContentLink';
 
-import ContentLink from './ContentLink';
-import {Gap, PreviewComment, Footer} from '../../components';
-import {getCountCommentWithChild} from '../../utils/getstream';
-import {Context} from '../../context';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {Gap, PreviewComment, Footer} from '../../../components';
+import {getCountCommentWithChild} from '../../../utils/getstream';
+import {Context} from '../../../context';
+import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 
 const {width, height} = Dimensions.get('window');
 
@@ -115,7 +114,7 @@ const onShare = async (username) => {
 };
 
 const Item = ({
-  // item,
+  item,
   onPress,
   onPressBlock,
   onPressUpvote,
@@ -134,12 +133,12 @@ const Item = ({
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [feeds, dispatch] = React.useContext(Context).feeds;
-  const [item, setItem] = React.useState(feeds.feeds[index]);
+  // const [item, setItem] = React.useState(feeds.feeds[index]);
   const navigation = useNavigation();
   const [contentHeight, setContentHeight] = React.useState(0);
-  const bottomBarHeight = useBottomTabBarHeight();
-  console.log('bottomBarHeight');
-  console.log(bottomBarHeight);
+
+  console.log('item');
+  console.log(item);
 
   React.useEffect(() => {
     const initial = () => {
@@ -203,7 +202,7 @@ const Item = ({
   }, [item]);
 
   return (
-    <Card style={styles.container(bottomBarHeight)}>
+    <Card style={styles.container}>
       <Header props={item} height={getHeightHeader()} />
 
       {item.post_type === POST_TYPE_POLL && (
@@ -325,9 +324,9 @@ const RenderItem = React.memo(Item, compare);
 export default RenderItem;
 
 const styles = StyleSheet.create({
-  container: (bottomBarHeight) => ({
+  container: {
     width: width,
-    height: height - bottomBarHeight,
+    height: height - 74,
     shadowColor: '#c4c4c4',
     shadowOffset: {
       width: 1,
@@ -338,7 +337,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingBottom: 0,
     borderBottomColor: 'transparent',
-  }),
+  },
   paddingHorizontal: {paddingHorizontal: 20},
   lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
   footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),

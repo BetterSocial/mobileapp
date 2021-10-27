@@ -1,3 +1,5 @@
+import {PixelRatio, Dimensions} from 'react-native';
+
 export const fonts = {
   inter: {
     100: 'Inter-Thin',
@@ -21,4 +23,19 @@ export const fonts = {
     800: 'Poppins-ExtraBold',
     900: 'Poppins-Black',
   },
+};
+
+export const normalize = (size) => {
+  // let referenceWidth = 326;
+  let referenceWidth = 375;
+  let currentScreenWidth = Dimensions.get('screen').width;
+  let normalizedSize = (currentScreenWidth / referenceWidth) * size;
+  return normalizedSize;
+};
+
+export const normalizeFontSize = (fontSize) => {
+  let referenceHeight = 771;
+  let currentScreenHeight = Dimensions.get('screen').height;
+  let normalizedFontSize = (currentScreenHeight / referenceHeight) * fontSize;
+  return normalizedFontSize;
 };

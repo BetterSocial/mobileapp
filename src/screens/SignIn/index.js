@@ -44,6 +44,7 @@ import {COLORS} from '../../utils/theme';
 const ENABLE_DEV_ONLY_FEATURE = true;
 
 const SignIn = () => {
+  const MAX_SLIDE_SHOW_INDEX = 3;
   const navigation = useNavigation();
   const [, dispatch] = React.useContext(Context).users;
   const [loading, setLoading] = React.useState(false);
@@ -102,6 +103,9 @@ const SignIn = () => {
     });
   }, []);
   const handleLogin = () => {
+    if (slideShowIndex !== MAX_SLIDE_SHOW_INDEX) {
+      return;
+    }
     logIn();
     analytics().logLogin({
       method: 'humanid',
@@ -155,10 +159,13 @@ const SignIn = () => {
         <SlideShow onChangeNewIndex={({index}) => setSlideShowIndex(index)} />
       </View>
       <View style={S.containerBtnLogin}>
-        <TouchableOpacity onPress={() => handleLogin()} style={S.btnSign}>
-          {/* <Image source={BtnHumanID} width={321} height={48} style={S.image} /> */}
-          {slideShowIndex === 3 ? <ButtonSign /> : <ButtonSignDisabled />}
-        </TouchableOpacity>
+        {slideShowIndex === MAX_SLIDE_SHOW_INDEX ? (
+          <TouchableOpacity onPress={() => handleLogin()} style={S.btnSign}>
+            <ButtonSign />
+          </TouchableOpacity>
+        ) : (
+          <ButtonSignDisabled />
+        )}
         <Text style={S.desc}>
           <Text style={S.humanID}>
             {StringConstant.signInScreenHumanIdBrand}

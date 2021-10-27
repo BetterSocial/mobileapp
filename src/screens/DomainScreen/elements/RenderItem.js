@@ -21,11 +21,11 @@ import {
   Gap,
   SingleSidedShadowBox,
 } from '../../../components';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
-import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
+import MemoIc_rectangle_gradient_mini from '../../../assets/Ic_rectangle_gradient_mini';
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 
@@ -140,24 +140,24 @@ const RenderItem = ({
                 {new Date(time).toLocaleDateString()}
               </Text>
               <View style={styles.point} />
-              <Memoic_globe height={13} width={13} />
+              <Memoic_globe height={normalize(13)} width={normalize(13)} />
               <View style={styles.point} />
 
-              <MemoPeopleFollow height={13} width={12} />
+              <MemoPeopleFollow height={normalize(13)} width={normalize(12)} />
               <Gap style={{width: 4}} />
               <Text
                 style={{
                   color: '#828282',
-                  fontSize: 12,
+                  fontSize: normalizeFontSize(12),
                   fontFamily: fonts.inter[700],
                 }}>
                 12k
               </Text>
             </View>
-            <Gap height={8} />
+            <Gap height={normalize(8)} />
             <View style={styles.domainIndicatorContainer}>
-              <MemoIc_rectangle_gradient
-                width={SIZES.width * 0.43}
+              <MemoIc_rectangle_gradient_mini
+                width={normalize(SIZES.width * 0.43)}
                 height={4}
               />
             </View>
@@ -180,12 +180,12 @@ const RenderItem = ({
             {item.content.image ? (
               <Image
                 source={{uri: item.content.image}}
-                style={{height: 200, marginBottom: 14}}
+                style={{height: normalize(200), marginBottom: 14}}
               />
             ) : (
               <Image
                 source={NewsEmptyState}
-                style={{height: 135, marginBottom: 14}}
+                style={{height: normalize(135), marginBottom: 14}}
               />
             )}
             <Gap />
@@ -195,7 +195,7 @@ const RenderItem = ({
                 {item.content.description}
               </Text>
             </View>
-            <Gap height={14} />
+            <Gap height={normalize(14)} />
           </View>
         </Pressable>
 
@@ -278,7 +278,7 @@ const RenderItem = ({
 
 const styles = StyleSheet.create({
   containerText: {paddingHorizontal: 16},
-  iconPlush: {fontSize: 24, color: '#00ADB5'},
+  iconPlush: {fontSize: normalizeFontSize(24), color: '#00ADB5'},
   views: {color: '#828282'},
   containerDetail: {flex: 1},
   contentDetail: {flexDirection: 'row', alignItems: 'center'},
@@ -289,28 +289,28 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.gray6,
   },
   wrapperImage: {
-    borderRadius: 45,
+    borderRadius: normalize(45),
     borderWidth: 0.2,
     borderColor: 'rgba(0,0,0,0.5)',
-    width: 48,
-    height: 48,
+    width: normalize(48),
+    height: normalize(48),
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    height: 48,
-    width: 48,
-    borderRadius: 45,
+    height: normalize(48),
+    width: normalize(48),
+    borderRadius: normalize(45),
   },
   wrapperText: {
     backgroundColor: 'white',
     borderRadius: 8,
     borderColor: '#00ADB5',
-    width: 36,
-    height: 36,
+    width: normalize(36),
+    height: normalize(36),
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.5,
+    borderWidth: normalize(0.5),
   },
   point: {
     width: 3,
@@ -324,34 +324,35 @@ const styles = StyleSheet.create({
   width: (width) => ({width}),
   wrapperFooter: {
     paddingHorizontal: 8,
-    height: 52,
+    height: normalize(52),
     borderBottomColor: COLORS.gray1,
     borderBottomWidth: 1,
   },
   headerDomainName: {
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[600],
-    lineHeight: 16.9,
+    lineHeight: normalizeFontSize(16.9),
     color: '#000000',
   },
   headerDomainDate: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
-    lineHeight: 18,
+    fontSize: normalizeFontSize(12),
+    lineHeight: normalizeFontSize(18),
     color: '#828282',
   },
   domainItemTitle: {
-    fontSize: 16,
+    fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[700],
-    lineHeight: 24,
+    lineHeight: normalizeFontSize(24),
   },
   domainItemDescription: {
     fontFamily: fonts.inter[400],
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: normalizeFontSize(16),
+    lineHeight: normalizeFontSize(24),
   },
   domainIndicatorContainer: {
     marginLeft: -4,
+    justifyContent: 'flex-start',
   },
   container: {
     flexDirection: 'row',

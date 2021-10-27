@@ -4,7 +4,8 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import {COLORS} from '../../utils/theme';
 
 const ButtonAddPost = () => {
   const navigator = useNavigation();
@@ -14,8 +15,15 @@ const ButtonAddPost = () => {
       onPress={() => {
         navigator.navigate('CreatePost');
       }}>
-      <MemoIc_pencil width={16.67} height={16.67} />
-      <Text style={styles.text}>New post</Text>
+      <MemoIc_pencil
+        width={normalize(19)}
+        height={normalize(19)}
+        color={COLORS.white}
+        style={{
+          alignSelf: 'center',
+        }}
+      />
+      {/* <Text style={styles.text}>New post</Text> */}
     </TouchableOpacity>
   );
 };
@@ -25,17 +33,15 @@ export default ButtonAddPost;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#23C5B6',
-    paddingVertical: 13,
-    paddingRight: 12,
-    paddingLeft: 13.67,
-    width: 109,
-    borderRadius: 30,
-    alignSelf: 'flex-end',
+    width: normalize(50),
+    height: normalize(50),
+    borderRadius: normalize(50),
+    justifyContent: 'center',
     position: 'absolute',
     flexDirection: 'row',
-    bottom: 100,
-    right: 20,
-    zIndex: 10000,
+    bottom: normalize(61),
+    right: normalize(20),
+    zIndex: 1,
   },
   text: {
     fontFamily: fonts.inter[500],
