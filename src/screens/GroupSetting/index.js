@@ -19,16 +19,18 @@ import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import {requestExternalStoragePermission} from '../../utils/permission';
 import EditGroup from './elements/EditGroup';
+import {getChatName} from '../../utils/string/StringUtils';
 
 const width = Dimensions.get('screen').width;
 
 const GroupSetting = ({navigation, route}) => {
   const [groupChatState] = React.useContext(Context).groupChat;
   const [channelState] = React.useContext(Context).channel;
+  const [profile] = React.useContext(Context).profile;
   const {participants} = groupChatState;
   const {channel} = channelState;
   const [groupName, setGroupName] = React.useState(
-    route.params.username || 'Set Group Name',
+    getChatName(route.params.username, profile.username) || 'Set Group Name',
   );
   const [countUser] = React.useState(Object.entries(participants).length);
   const [changeName, setChangeName] = React.useState(false);
@@ -53,6 +55,9 @@ const GroupSetting = ({navigation, route}) => {
     }
   };
   const lounchGalery = async () => {
+    if (countUser === 2) {
+      return;
+    }
     let {success, message} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary(
@@ -73,13 +78,24 @@ const GroupSetting = ({navigation, route}) => {
     }
   };
 
+  const renderHeaderSubtitleText = () => {
+    if (countUser === 2) {
+      return '        ';
+    }
+
+    if (changeImage || changeName) {
+      return 'Finish';
+    }
+    return 'Skip';
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       <HeaderContact
         title={'Settings'}
         containerStyle={styles.containerHeader}
-        subTitle={changeImage || changeName ? 'Finish' : 'Skip'}
+        subTitle={renderHeaderSubtitleText()}
         subtitleStyle={styles.subtitleStyle}
         onPressSub={submitData}
         onPress={() => navigation.goBack()}

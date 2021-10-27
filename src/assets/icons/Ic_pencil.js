@@ -10,7 +10,7 @@ function Ic_pencil(props) {
     <Svg
       width={30}
       height={30}
-      viewBox={`0 0 ${19} ${19}`}
+      viewBox={`0 0 ${20} ${20}`}
       fill="none"
       {...props}>
       <Path

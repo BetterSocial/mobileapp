@@ -5,6 +5,7 @@ import {
   RefreshControl,
   Dimensions,
   StatusBar,
+  SafeAreaView,
 } from 'react-native';
 
 import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview';
@@ -83,7 +84,7 @@ const ContactScreen = ({navigation}) => {
 
               case VIEW_TYPE_DATA:
                 dim.width = width;
-                dim.height = 60;
+                dim.height = 72;
                 break;
 
               default:
@@ -222,7 +223,7 @@ const ContactScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       <Header
         title={StringConstant.chatTabHeaderCreateChatButtonText}
@@ -242,12 +243,14 @@ const ContactScreen = ({navigation}) => {
         onPress={() => _handleSearch()}
       />
 
-      {selectedUsers && (
-        <ContactPreview
-          users={selectedUsers}
-          onPress={(user) => handleSelected(user)}
-        />
-      )}
+      <View>
+        {selectedUsers && (
+          <ContactPreview
+            users={selectedUsers}
+            onPress={(user) => handleSelected(user)}
+          />
+        )}
+      </View>
 
       {isRecyclerViewShown && (
         <RecyclerListView
@@ -266,17 +269,19 @@ const ContactScreen = ({navigation}) => {
         />
       )}
       <Loading visible={loading} />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
     backgroundColor: '#FFFFFF',
   },
   recyclerview: {
     paddingBottom: 80,
+    height: '100%',
   },
   containerStyle: {
     marginHorizontal: 16,

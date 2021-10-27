@@ -12,19 +12,25 @@ import {SIZES} from '../../../utils/theme';
 import MemoIconClose from './IconClose';
 
 const ContactPreview = ({users = [], onPress}) => {
-  if (users.length < 2) {
+  if (users.length < 1) {
     return null;
   }
   return (
     <ScrollView
       horizontal={true}
-      style={{paddingHorizontal: SIZES.base, marginVertical: SIZES.base}}>
+      style={{
+        paddingHorizontal: 4,
+        paddingVertical: 20,
+      }}>
       {users.map((item, index) => {
         if (item) {
           return (
             <View
               key={item.user_id}
-              style={{marginHorizontal: 8, width: 50, height: 110}}>
+              style={{
+                marginHorizontal: 15,
+                width: 50,
+              }}>
               <View style={styles.tinyLogo}>
                 <Image
                   style={styles.tinyLogo}
@@ -45,7 +51,12 @@ const ContactPreview = ({users = [], onPress}) => {
               </View>
               <Text
                 numberOfLines={1}
-                style={{alignItems: 'center', justifyContent: 'center'}}>
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  marginTop: 6,
+                }}>
                 {item.username.length < 8
                   ? `${item.username}`
                   : `${item.username.substring(0, 8)}...`}

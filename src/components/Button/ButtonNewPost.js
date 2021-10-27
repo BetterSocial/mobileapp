@@ -16,8 +16,8 @@ const ButtonAddPost = () => {
         navigator.navigate('CreatePost');
       }}>
       <MemoIc_pencil
-        width={normalize(20)}
-        height={normalize(20)}
+        width={normalize(21)}
+        height={normalize(21)}
         color={COLORS.white}
         style={{
           alignSelf: 'center',
