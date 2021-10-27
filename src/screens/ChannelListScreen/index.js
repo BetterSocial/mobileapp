@@ -19,6 +19,10 @@ import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {getUserId} from '../../utils/users';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import {getChatName} from '../../utils/string/StringUtils';
+import {
+  CHANNEL_TYPE_GROUP_LOCATION,
+  CHANNEL_TYPE_TOPIC,
+} from '../../utils/constants';
 import {unReadMessageState} from '../../context/reducers/unReadMessageReducer';
 
 const ChannelListScreen = ({navigation}) => {
@@ -136,9 +140,14 @@ const ChannelListScreen = ({navigation}) => {
                 PreviewStatus={customPreviewStatus}
                 PreviewTitle={customPreviewTitle}
                 onSelect={(channel) => {
-                  setChannel(channel, dispatch);
-                  // ChannelScreen | ChatDetailPage
-                  navigation.navigate('ChatDetailPage');
+                  console.log(channel.data);
+                  if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
+                    navigation.navigate('TopicPageScreen');
+                  } else {
+                    setChannel(channel, dispatch);
+                    // ChannelScreen | ChatDetailPage
+                    navigation.navigate('ChatDetailPage');
+                  }
                 }}
                 sort={sort}
                 options={options}
