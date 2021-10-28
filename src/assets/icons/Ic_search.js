@@ -3,7 +3,12 @@ import Svg, {Path} from 'react-native-svg';
 
 function Ic_search(props) {
   return (
-    <Svg width="1em" height="1em" viewBox="0 0 20 20" fill="none" {...props}>
+    <Svg
+      width="1em"
+      height="1em"
+      viewBox="0 0 16.67 16.67"
+      fill="none"
+      {...props}>
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

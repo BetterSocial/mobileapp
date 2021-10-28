@@ -19,7 +19,7 @@ const Search = ({onPress, animatedValue}) => {
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
       <View style={styles.wrapperSearch}>
         <View style={styles.wrapperIcon}>
-          <MemoIc_search width={17} height={17} />
+          <MemoIc_search width={16.67} height={16.67} />
         </View>
         <TextInput
           multiline={false}
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignSelf: 'center',
     flexDirection: 'row',
+    height: 36,
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -60,17 +61,15 @@ const styles = StyleSheet.create({
   },
   input: {
     marginRight: 16,
-    paddingStart: 8,
+    paddingStart: 10,
     flex: 1,
-    // paddingStart: 20,
     fontSize: 14,
     fontFamily: fonts.inter[400],
     height: 36,
+    paddingTop: 0,
+    paddingBottom: 0,
   },
   wrapperIcon: {
-    // position: 'absolute',
-    width: 20,
-    height: 20,
     marginLeft: 8,
     alignSelf: 'center',
     justifyContent: 'center',

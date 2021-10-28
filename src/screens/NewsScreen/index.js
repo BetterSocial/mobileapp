@@ -199,13 +199,13 @@ const NewsScreen = ({}) => {
     }
   };
 
-  if (loading) {
-    return (
-      <View style={styles.containerLoading}>
-        <LoadingWithoutModal visible={loading} />
-      </View>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <View style={styles.containerLoading}>
+  //       <LoadingWithoutModal visible={loading} />
+  //     </View>
+  //   );
+  // }
 
   return (
     <View style={styles.container}>

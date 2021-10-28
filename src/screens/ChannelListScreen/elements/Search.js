@@ -10,6 +10,7 @@ import {
 
 import MemoIcNewChat from '../../../assets/icons/ic_new_chat';
 import MemoIc_search from '../../../assets/icons/Ic_search';
+import {fonts} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
@@ -17,22 +18,22 @@ const Search = ({onPress, animatedValue}) => {
   return (
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
       <View style={styles.wrapperSearch}>
+        <View style={styles.wrapperIcon}>
+          <MemoIc_search width={16.67} height={16.67} />
+        </View>
         <TextInput
           multiline={false}
           placeholder={StringConstant.chatTabHeaderPlaceholder}
           placeholderTextColor={COLORS.gray1}
           style={styles.input}
         />
-        <View style={styles.wrapperIcon}>
-          <MemoIc_search width={17} height={17} />
-        </View>
       </View>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
         <Text style={styles.newPostText}>
           {StringConstant.chatTabHeaderCreateChatButtonText}
         </Text>
         <View>
-          <MemoIcNewChat height={17} width={15} style={{marginTop: 0}} />
+          <MemoIcNewChat height={17} width={15} style={styles.newChatIcon} />
         </View>
       </TouchableOpacity>
     </Animated.View>
@@ -47,8 +48,9 @@ const styles = StyleSheet.create({
   },
   wrapperSearch: {
     flex: 1,
+    flexDirection: 'row',
     backgroundColor: '#F5F5F5',
-    marginLeft: 14,
+    marginLeft: 20,
     marginRight: 12,
     borderRadius: 8,
     alignSelf: 'center',
@@ -60,21 +62,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginEnd: SIZES.base,
     paddingLeft: 8,
-    paddingRight: 4,
+    paddingRight: 12,
     paddingTop: 9,
     paddingBottom: 9,
-    // backgroundColor: 'red',
   },
   input: {
-    marginLeft: 24,
-    paddingStart: 16,
+    paddingStart: 10,
     lineHeight: 36,
+    flex: 1,
+    paddingBottom: 0,
+    paddingTop: 0,
+    fontFamily: fonts.inter[400],
+    fontSize: 14,
   },
   wrapperIcon: {
-    position: 'absolute',
-    left: 10,
-    top: 0,
-    bottom: 0,
+    marginLeft: 8,
+    alignSelf: 'center',
     justifyContent: 'center',
   },
   newPostText: {
@@ -83,6 +86,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-SemiBold',
     fontSize: 12,
     lineHeight: 14.52,
+  },
+  newChatIcon: {
+    marginTop: 0,
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
@@ -94,7 +100,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
-    padding: 7,
+    paddingTop: 7,
+    paddingBottom: 7,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.gray1,
   }),
