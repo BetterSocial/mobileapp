@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS, SIZES} from '../../utils/theme';
 const HeaderContact = ({
   title,
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   text: {
     color: COLORS.black,
     fontFamily: fonts.inter[600],
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     fontWeight: 'bold',
     padding: 10,
   },

@@ -143,7 +143,7 @@ const ContactScreen = ({navigation}) => {
       setFollowed([profile.user_id]);
       setUsernames([profile.username]);
       setLoading(false);
-      await navigation.navigate('ChatDetailPage');
+      await navigation.replace('ChatDetailPage');
     } catch (error) {
       console.log(error);
       showMessage({

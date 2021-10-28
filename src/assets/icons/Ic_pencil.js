@@ -2,10 +2,6 @@ import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
 function Ic_pencil(props) {
-  let width = props.width || 21;
-  let height = props.height || 21;
-  console.log(width);
-  console.log(height);
   return (
     <Svg
       width={30}

@@ -10,7 +10,7 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 
-import {fonts} from '../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
 const ProfileContact = ({photo, fullname, onPress, select}) => {
@@ -43,9 +43,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    height: 48,
-    width: 48,
-    borderRadius: 24,
+    height: normalize(48),
+    width: normalize(48),
+    borderRadius: normalize(24),
     marginRight: 17,
   },
   container: {
@@ -56,10 +56,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   fullname: {
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[500],
     color: '#000',
-    lineHeight: 16.94,
+    lineHeight: normalizeFontSize(16.94),
   },
   pressable: {
     height: '100%',

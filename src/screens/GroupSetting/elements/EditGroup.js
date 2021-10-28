@@ -10,7 +10,7 @@ import {
 
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import {Context} from '../../../context';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
 const EditGroup = ({editName, setEditName, onUpdateImage, imageUri}) => {
@@ -22,7 +22,7 @@ const EditGroup = ({editName, setEditName, onUpdateImage, imageUri}) => {
   return (
     <View style={styles.container}>
       <View style={styles.itemEdit}>
-        {countUser > 2 ? (
+        {true ? (
           <TouchableOpacity
             style={styles.btnUpdatePhoto}
             onPress={onUpdateImage}>
@@ -41,7 +41,7 @@ const EditGroup = ({editName, setEditName, onUpdateImage, imageUri}) => {
             )}
           </View>
         )}
-        {countUser > 2 ? (
+        {true ? (
           <TextInput
             style={styles.editName}
             value={editName}
@@ -60,15 +60,15 @@ export default EditGroup;
 
 const styles = StyleSheet.create({
   image: {
-    width: 48,
-    height: 48,
-    borderRadius: 48 / 2,
+    width: normalize(48),
+    height: normalize(48),
+    borderRadius: normalize(48 / 2),
   },
   editName: {
     color: COLORS.white,
     fontFamily: fonts.inter[400],
-    fontSize: 14,
-    lineHeight: 24,
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(24),
     flex: 1,
   },
   itemEdit: {
@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
   textDesc: {
     color: COLORS.white,
     fontFamily: fonts.inter[400],
-    fontSize: 12,
-    lineHeight: 18,
+    fontSize: normalizeFontSize(12),
+    lineHeight: normalizeFontSize(18),
   },
   container: {
     backgroundColor: COLORS.holyTosca,
@@ -90,9 +90,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   btnUpdatePhoto: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: normalize(48),
+    height: normalize(48),
+    borderRadius: normalize(24),
     backgroundColor: COLORS.alto,
     justifyContent: 'center',
     alignItems: 'center',

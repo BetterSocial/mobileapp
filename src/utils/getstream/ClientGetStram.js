@@ -39,8 +39,8 @@ export const useClientGetstream = () => {
           unread_count: res.me.unread_count,
         };
         chatClient.on((event) => {
-          console.log('*********event***********');
-          console.log(event);
+          // console.log('*********event***********');
+          // console.log(event);
           if (event.total_unread_count !== undefined) {
             console.log(event.total_unread_count);
             dispatchUnReadMessage(
