@@ -16,8 +16,8 @@ const ButtonAddPost = () => {
         navigator.navigate('CreatePost');
       }}>
       <MemoIc_pencil
-        width={normalize(19)}
-        height={normalize(19)}
+        width={normalize(21)}
+        height={normalize(21)}
         color={COLORS.white}
         style={{
           alignSelf: 'center',
@@ -38,10 +38,14 @@ const styles = StyleSheet.create({
     borderRadius: normalize(50),
     justifyContent: 'center',
     position: 'absolute',
-    flexDirection: 'row',
     bottom: normalize(61),
     right: normalize(20),
     zIndex: 1,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.8,
+    shadowRadius: 1,
   },
   text: {
     fontFamily: fonts.inter[500],

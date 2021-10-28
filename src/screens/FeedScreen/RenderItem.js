@@ -138,8 +138,6 @@ const Item = ({
   const navigation = useNavigation();
   const [contentHeight, setContentHeight] = React.useState(0);
   const bottomBarHeight = useBottomTabBarHeight();
-  console.log('bottomBarHeight');
-  console.log(bottomBarHeight);
 
   React.useEffect(() => {
     const initial = () => {

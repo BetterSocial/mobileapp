@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    height: 60,
+    height: 72,
   },
   cardLeft: {
     flexDirection: 'row',
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   containerTextCard: {
     flexDirection: 'column',
     alignItems: 'center',
-    marginLeft: 8,
+    marginLeft: 17,
   },
   textFullName: {
     fontFamily: 'Inter',

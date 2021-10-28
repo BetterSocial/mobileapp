@@ -9,25 +9,47 @@ import {
 } from 'react-native';
 
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
+import {Context} from '../../../context';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
 const EditGroup = ({editName, setEditName, onUpdateImage, imageUri}) => {
+  const [groupChat] = React.useContext(Context).groupChat;
+  let countUser = Object.entries(groupChat.participants).length;
+  console.log('countUser');
+  console.log(countUser);
+
   return (
     <View style={styles.container}>
       <View style={styles.itemEdit}>
-        <TouchableOpacity style={styles.btnUpdatePhoto} onPress={onUpdateImage}>
-          {imageUri ? (
-            <Image source={{uri: imageUri}} style={styles.image} />
-          ) : (
-            <MemoIc_pencil width={25} height={25} color={COLORS.gray1} />
-          )}
-        </TouchableOpacity>
-        <TextInput
-          style={styles.editName}
-          value={editName}
-          onChangeText={setEditName}
-        />
+        {countUser > 2 ? (
+          <TouchableOpacity
+            style={styles.btnUpdatePhoto}
+            onPress={onUpdateImage}>
+            {imageUri ? (
+              <Image source={{uri: imageUri}} style={styles.image} />
+            ) : (
+              <MemoIc_pencil width={25} height={25} color={COLORS.gray1} />
+            )}
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.btnUpdatePhoto}>
+            {imageUri ? (
+              <Image source={{uri: imageUri}} style={styles.image} />
+            ) : (
+              <MemoIc_pencil width={25} height={25} color={COLORS.gray1} />
+            )}
+          </View>
+        )}
+        {countUser > 2 ? (
+          <TextInput
+            style={styles.editName}
+            value={editName}
+            onChangeText={setEditName}
+          />
+        ) : (
+          <Text style={styles.editName}>{editName}</Text>
+        )}
       </View>
       <Text style={styles.textDesc}>Provide a group name and group icon</Text>
     </View>
