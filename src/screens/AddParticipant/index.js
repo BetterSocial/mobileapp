@@ -107,7 +107,9 @@ const AddParticipant = ({navigation}) => {
         setLoading(true);
         await channel.channel.addMembers(followed);
         setLoading(false);
-        navigation.goBack();
+        navigation.navigate('GroupInfo', {
+          from: 'AddParticipant',
+        });
       } catch (error) {
         console.log('add member ', error);
         setLoading(false);

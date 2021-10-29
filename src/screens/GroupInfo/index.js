@@ -14,12 +14,14 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import moment from 'moment';
 
+import {Loading} from '../../components';
+import {ProfileContact} from '../../components/Items';
 import Header from './elements/Header';
-import {colors} from '../../utils/colors';
-import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import {Context} from '../../context';
-import {ProfileContact} from '../../components/Items';
+import {setParticipants} from '../../context/actions/groupChat';
+import {colors} from '../../utils/colors';
+import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
 import {getChatName} from '../../utils/string/StringUtils';
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
@@ -27,16 +29,49 @@ import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-gro
 const GroupInfo = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [groupChatState] = React.useContext(Context).groupChat;
+  const [groupChatState, groupPatchDispatch] =
+    React.useContext(Context).groupChat;
   const {participants, asset} = groupChatState;
-  const [channelState] = React.useContext(Context).channel;
+  const [channelState, dispatch] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
   const {channel, profileChannel} = channelState;
   const [countUser] = React.useState(Object.entries(participants).length);
+  const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
+
+  let username = channelState.channel?.data?.name;
+  let createChat = channelState.channel?.data?.created_at;
+
+  const serializeMembersList = (result = []) => {
+    if (typeof result !== 'object') {
+      return {};
+    }
+
+    if (result.length === 0) {
+      return {};
+    }
+
+    let membersObject = {};
+    result.forEach((item, index) => {
+      membersObject[item.user_id] = item;
+    });
+    return membersObject;
+  };
+
+  const getMembersList = async () => {
+    let result = await channel.queryMembers({});
+    let serializedMember = serializeMembersList(result.members);
+    setParticipants(serializedMember, groupPatchDispatch);
+    setIsLoadingMembers(false);
+  };
+
+  React.useEffect(() => {
+    if (route?.params?.from === 'AddParticipant') {
+      setIsLoadingMembers(true);
+      getMembersList();
+    }
+  }, [route?.params?.from]);
 
   const showImageProfile = () => {
-    console.log('profileChannel');
-    console.log(profileChannel);
     if (profileChannel || channel?.data?.image) {
       if (channel?.data?.image) {
         return (
@@ -63,7 +98,7 @@ const GroupInfo = () => {
     );
   };
 
-  let chatName = getChatName(route.params?.username, profile.username);
+  let chatName = getChatName(username, profile.username);
 
   const onProfilePressed = (data) => {
     console.log('group info profile pressed');
@@ -97,7 +132,7 @@ const GroupInfo = () => {
             </TouchableWithoutFeedback> */}
           </View>
           <Text style={styles.dateCreate}>
-            Created {moment(route.params?.createChat).format('DD/MM/YY')}
+            Created {moment(createChat).format('DD/MM/YY')}
           </Text>
           <View style={styles.lineTop} />
           <View style={styles.containerMedia(asset.length === 0)}>
@@ -146,11 +181,14 @@ const GroupInfo = () => {
       {!channel?.cid.includes('!members') && (
         <View style={styles.btnAdd}>
           <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('AddParticipant')}>
+            onPress={() => navigation.push('AddParticipant')}>
             <Text style={styles.btnAddText}>+ Add Participants</Text>
           </TouchableWithoutFeedback>
         </View>
       )}
+      <View style={styles.containerLoading}>
+        <Loading visible={isLoadingMembers} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -255,5 +293,9 @@ const styles = StyleSheet.create({
     height: normalize(100),
     borderRadius: normalize(50),
     paddingLeft: 8,
+  },
+  containerLoading: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

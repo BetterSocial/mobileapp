@@ -20,14 +20,15 @@ import {Context} from '../../context';
 import {trimString} from '../../utils/string/TrimString';
 import {getChatName, getGroupMemberCount} from '../../utils/string/StringUtils';
 
-const Header = ({username, profile, createChat}) => {
+const Header = ({}) => {
   const navigation = useNavigation();
   const [channelClient] = React.useContext(Context).channel;
   const [profileContext] = React.useContext(Context).profile;
   const {channel} = channelClient;
 
+  let username = channelClient.channel?.data?.name;
+
   let chatName = getChatName(username, profileContext.username);
-  let count = Object.keys(channel.state.members).length;
 
   const renderHeaderImage = () => {
     if (channel?.data?.image) {
@@ -55,13 +56,7 @@ const Header = ({username, profile, createChat}) => {
           <MemoIc_arrow_back_white width={20} height={12} />
         </TouchableOpacity>
         <TouchableWithoutFeedback
-          onPress={() =>
-            navigation.navigate('GroupInfo', {
-              username,
-              createChat,
-              profile,
-            })
-          }>
+          onPress={() => navigation.navigate('GroupInfo')}>
           <View style={styles.touchable}>
             {renderHeaderImage()}
             <Text style={styles.name}>{trimString(chatName, 21)}</Text>

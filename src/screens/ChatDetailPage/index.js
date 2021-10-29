@@ -102,11 +102,7 @@ const ChatDetailPage = () => {
             }}
             ReactionList={() => null}>
             <View style={{flex: 1, zIndex: 0}}>
-              <Header
-                username={channelClient.channel?.data?.name}
-                profile={channelClient.channel?.data?.created_by?.image}
-                createChat={channelClient.channel?.data?.created_at}
-              />
+              <Header />
               <View style={{flex: 1, zIndex: 1}}>
                 <MessageList
                   tDateTimeParser={testDate}
