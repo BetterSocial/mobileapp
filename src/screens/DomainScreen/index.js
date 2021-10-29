@@ -3,6 +3,7 @@ import {View, StyleSheet, FlatList, StatusBar} from 'react-native';
 
 import {useRoute, useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {upVoteDomain, downVoteDomain} from '../../service/vote';
 import Loading from '../Loading';
@@ -15,6 +16,7 @@ import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import {blockDomain} from '../../service/blocking';
 import {getUserId} from '../../utils/users';
+import {COLORS} from '../../utils/theme';
 
 const DomainScreen = () => {
   const route = useRoute();
@@ -151,6 +153,10 @@ const DomainScreen = () => {
                   onPress={onReaction}
                   iddomain={dataDomain.content.domain_page_id}
                 />
+                <LinearGradient
+                  colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']}
+                  style={styles.linearGradient}
+                />
               </View>
             );
           }
@@ -198,11 +204,15 @@ const styles = StyleSheet.create({
   list: {flex: 1},
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    // backgroundColor: COLORS.gray1,
+    backgroundColor: COLORS.white,
   },
   height: (h) => ({
     height: h,
   }),
+  linearGradient: {
+    height: 8,
+  },
 });
 
 export default DomainScreen;
