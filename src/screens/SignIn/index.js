@@ -39,19 +39,23 @@ import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import {COLORS} from '../../utils/theme';
 
 const ENABLE_DEV_ONLY_FEATURE = true;
 
 const SignIn = () => {
-  const MAX_SLIDE_SHOW_INDEX = 3;
   const navigation = useNavigation();
   const [, dispatch] = React.useContext(Context).users;
   const [loading, setLoading] = React.useState(false);
-  const [slideShowIndex, setSlideShowIndex] = React.useState(0);
+  const [isCompleteSliding, setIsCompleteSliding] = React.useState(false);
   const create = useClientGetstream();
 
   let dummyLoginRbSheetRef = React.useRef(null);
+
+  const handleSlideShow = ({index}, length) => {
+    if (index === length - 1) {
+      setIsCompleteSliding(true);
+    }
+  };
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -103,7 +107,7 @@ const SignIn = () => {
     });
   }, []);
   const handleLogin = () => {
-    if (slideShowIndex !== MAX_SLIDE_SHOW_INDEX) {
+    if (!isCompleteSliding) {
       return;
     }
     logIn();
@@ -156,10 +160,10 @@ const SignIn = () => {
         <></>
       )}
       <View style={S.containerSlideShow}>
-        <SlideShow onChangeNewIndex={({index}) => setSlideShowIndex(index)} />
+        <SlideShow onChangeNewIndex={handleSlideShow} />
       </View>
       <View style={S.containerBtnLogin}>
-        {slideShowIndex === MAX_SLIDE_SHOW_INDEX ? (
+        {isCompleteSliding ? (
           <TouchableOpacity onPress={() => handleLogin()} style={S.btnSign}>
             <ButtonSign />
           </TouchableOpacity>
