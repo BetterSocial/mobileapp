@@ -143,7 +143,7 @@ const ContactScreen = ({navigation}) => {
       setFollowed([profile.user_id]);
       setUsernames([profile.username]);
       setLoading(false);
-      await navigation.navigate('ChatDetailPage');
+      await navigation.replace('ChatDetailPage');
     } catch (error) {
       console.log(error);
       showMessage({
@@ -229,7 +229,7 @@ const ContactScreen = ({navigation}) => {
         title={StringConstant.chatTabHeaderCreateChatButtonText}
         containerStyle={styles.containerStyle}
         subTitle={'Next'}
-        subtitleStyle={{color: COLORS.holyTosca, marginEnd: 8}}
+        subtitleStyle={styles.subtitleStyle}
         onPressSub={() => handleCreateChannel(selectedUsers)}
         onPress={() => navigation.goBack()}
       />
@@ -285,6 +285,10 @@ const styles = StyleSheet.create({
   },
   containerStyle: {
     marginHorizontal: 16,
+  },
+  subtitleStyle: {
+    color: COLORS.holyTosca,
+    marginEnd: 8,
   },
 });
 

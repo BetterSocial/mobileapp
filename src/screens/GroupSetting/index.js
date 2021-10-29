@@ -36,7 +36,7 @@ const GroupSetting = ({navigation, route}) => {
   const [changeName, setChangeName] = React.useState(false);
   const [changeImage, setChangeImage] = React.useState(false);
   const [base64Profile, setBase64Profile] = React.useState('');
-  const [urlImage, setUrlImage] = React.useState('');
+  const [urlImage, setUrlImage] = React.useState(channel?.data?.image);
 
   const updateName = (text) => {
     setGroupName(text);
@@ -46,8 +46,16 @@ const GroupSetting = ({navigation, route}) => {
     if (changeName || changeImage) {
       let dataEdit = {
         name: groupName,
-        ...(changeImage && {image: base64Profile}),
+        // ...(changeImage && {image: base64Profile}),
       };
+      if (changeImage) {
+        dataEdit.image = base64Profile;
+      } else {
+        if (channel?.data?.image) {
+          dataEdit.image = channel?.data?.image;
+        }
+      }
+
       await channel.update(dataEdit);
       await navigation.navigate('ChannelList');
     } else {
@@ -55,9 +63,6 @@ const GroupSetting = ({navigation, route}) => {
     }
   };
   const lounchGalery = async () => {
-    if (countUser === 2) {
-      return;
-    }
     let {success, message} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary(
@@ -79,10 +84,6 @@ const GroupSetting = ({navigation, route}) => {
   };
 
   const renderHeaderSubtitleText = () => {
-    if (countUser === 2) {
-      return '        ';
-    }
-
     if (changeImage || changeName) {
       return 'Finish';
     }

@@ -89,104 +89,102 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
   };
 
   return (
-    <SingleSidedShadowBox style={styles.shadowBox}>
-      <View style={styles.headerDomain}>
-        <View style={styles.row}>
-          <View style={styles.wrapperImage}>
-            {image ? (
-              <>
-                <View style={styles.circleImageWrapper} />
-                <Image
-                  source={{uri: image}}
-                  style={[styles.circleImage, StyleSheet.absoluteFillObject]}
-                />
-              </>
-            ) : (
-              <MemoDomainProfilePicture />
-            )}
-          </View>
-          <View style={styles.wrapperHeader}>
-            {follow ? (
-              <TouchableNativeFeedback onPress={() => handleUnFollow()}>
-                <View style={styles.buttonFollowing}>
-                  <Text style={styles.textButtonFollowing}>Following</Text>
-                </View>
-              </TouchableNativeFeedback>
-            ) : (
-              <TouchableNativeFeedback onPress={() => handleFollow()}>
-                <View style={styles.buttonFollow}>
-                  <Text style={styles.textButtonFollow}>Follow</Text>
-                </View>
-              </TouchableNativeFeedback>
-            )}
-            <Gap width={normalize(SIZES.base)} />
-            <TouchableOpacity
-              style={styles.buttonBlock}
-              onPress={() => onPress()}>
-              <Text style={styles.blockButtonText}>Block</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <Gap height={normalize(12)} />
-        <View style={styles.row}>
-          <Text style={styles.domainName}>{domain}</Text>
-          <View style={{justifyContent: 'center'}}>
-            <TouchableOpacity
-              style={styles.openInBrowserIcon}
-              onPress={openDomainLink}>
-              <MemoIc_interface width={17} height={17} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <Gap height={normalize(2)} />
-        <View style={[styles.row, {alignItems: 'center'}]}>
-          <Text style={styles.followersNumber}>{followers}k</Text>
-          <Gap width={normalize(4)} />
-          <Text style={styles.followersText}>Followers</Text>
-        </View>
-        <Gap height={normalize(14)} />
-        <Text style={styles.domainDescription}>
-          {description ? description : lorem}
-        </Text>
-        <Gap height={normalize(10)} />
-        <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
-          <View style={{flex: 1, paddingBottom: 0}}>
-            <MemoIc_rectangle_gradient width={'100%'} height={normalize(18)} />
-          </View>
-          <Tooltip
-            // allowChildInteraction={false}
-            isVisible={isTooltipShown}
-            placement={'bottom'}
-            backgroundColor={'rgba(0,0,0,0)'}
-            showChildInTooltip={false}
-            onClose={() => setIsTooltipShown(false)}
-            contentStyle={styles.tooltipShadowContainer}
-            arrowSize={{width: 0, height: 0}}
-            content={
-              <View>
-                <Text style={styles.tooltipContent}>
-                  {description ? description : `${lorem} ${lorem} ${lorem}`}
-                </Text>
-              </View>
-            }>
-            <TouchableOpacity
-              onPress={() => setIsTooltipShown(true)}
-              style={{
-                padding: 8,
-                paddingBottom: 8,
-                paddingTop: 8,
-                paddingRight: 12,
-              }}>
-              <MemoIc_question_mark
-                width={normalize(17)}
-                height={normalize(17)}
+    <View style={styles.headerDomain}>
+      <View style={styles.row}>
+        <View style={styles.wrapperImage}>
+          {image ? (
+            <>
+              <View style={styles.circleImageWrapper} />
+              <Image
+                source={{uri: image}}
+                style={[styles.circleImage, StyleSheet.absoluteFillObject]}
               />
-            </TouchableOpacity>
-          </Tooltip>
+            </>
+          ) : (
+            <MemoDomainProfilePicture />
+          )}
         </View>
-        <Gap height={normalize(16)} />
+        <View style={styles.wrapperHeader}>
+          {follow ? (
+            <TouchableNativeFeedback onPress={() => handleUnFollow()}>
+              <View style={styles.buttonFollowing}>
+                <Text style={styles.textButtonFollowing}>Following</Text>
+              </View>
+            </TouchableNativeFeedback>
+          ) : (
+            <TouchableNativeFeedback onPress={() => handleFollow()}>
+              <View style={styles.buttonFollow}>
+                <Text style={styles.textButtonFollow}>Follow</Text>
+              </View>
+            </TouchableNativeFeedback>
+          )}
+          <Gap width={normalize(SIZES.base)} />
+          <TouchableOpacity
+            style={styles.buttonBlock}
+            onPress={() => onPress()}>
+            <Text style={styles.blockButtonText}>Block</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </SingleSidedShadowBox>
+      <Gap height={normalize(12)} />
+      <View style={styles.row}>
+        <Text style={styles.domainName}>{domain}</Text>
+        <View style={{justifyContent: 'center'}}>
+          <TouchableOpacity
+            style={styles.openInBrowserIcon}
+            onPress={openDomainLink}>
+            <MemoIc_interface width={17} height={17} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <Gap height={normalize(2)} />
+      <View style={[styles.row, {alignItems: 'center'}]}>
+        <Text style={styles.followersNumber}>{followers}k</Text>
+        <Gap width={normalize(4)} />
+        <Text style={styles.followersText}>Followers</Text>
+      </View>
+      <Gap height={normalize(14)} />
+      <Text style={styles.domainDescription}>
+        {description ? description : lorem}
+      </Text>
+      <Gap height={normalize(10)} />
+      <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
+        <View style={{flex: 1, paddingBottom: 0}}>
+          <MemoIc_rectangle_gradient width={'100%'} height={normalize(18)} />
+        </View>
+        <Tooltip
+          // allowChildInteraction={false}
+          isVisible={isTooltipShown}
+          placement={'bottom'}
+          backgroundColor={'rgba(0,0,0,0)'}
+          showChildInTooltip={false}
+          onClose={() => setIsTooltipShown(false)}
+          contentStyle={styles.tooltipShadowContainer}
+          arrowSize={{width: 0, height: 0}}
+          content={
+            <View>
+              <Text style={styles.tooltipContent}>
+                {description ? description : `${lorem} ${lorem} ${lorem}`}
+              </Text>
+            </View>
+          }>
+          <TouchableOpacity
+            onPress={() => setIsTooltipShown(true)}
+            style={{
+              padding: 8,
+              paddingBottom: 8,
+              paddingTop: 8,
+              paddingRight: 12,
+            }}>
+            <MemoIc_question_mark
+              width={normalize(17)}
+              height={normalize(17)}
+            />
+          </TouchableOpacity>
+        </Tooltip>
+      </View>
+      <Gap height={normalize(16)} />
+    </View>
   );
 };
 
@@ -220,14 +218,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 20,
     borderTopColor: 'transparent',
-    borderBottomColor: COLORS.gray,
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.8,
-    shadowRadius: 1,
+    // shadowColor: '#000',
+    // shadowOffset: {width: 0, height: 1},
+    // shadowOpacity: 0.8,
+    // shadowRadius: 1,
     paddingTop: 15,
-    // borderBottomWidth: 16,
   },
   container: {
     flexDirection: 'row',
@@ -320,7 +315,9 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     // lineHeight: 17,
   },
-  shadowBox: {paddingBottom: 8},
+  shadowBox: {
+    paddingBottom: 8,
+  },
   tooltipContent: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
@@ -336,7 +333,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   arrow: {

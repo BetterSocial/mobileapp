@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import {Gap} from '../../../components';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
-import {fonts} from '../../../utils/fonts';
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {trimString} from '../../../utils/string/TrimString';
 
 const Header = ({title}) => {
@@ -24,7 +24,7 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    height: 48,
+    height: normalize(48),
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   title: {
-    fontSize: 16,
+    fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
-    lineHeight: 19.36,
+    lineHeight: normalizeFontSize(19.36),
     color: '#000',
   },
 });

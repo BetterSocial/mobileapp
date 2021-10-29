@@ -39,17 +39,17 @@ export const useClientGetstream = () => {
           unread_count: res.me.unread_count,
         };
         chatClient.on((event) => {
-          console.log('*********event***********');
-          console.log(event);
+          // console.log('*********event***********');
+          // console.log(event);
           if (event.total_unread_count !== undefined) {
-            console.log(event.total_unread_count);
+            // console.log(event.total_unread_count);
             dispatchUnReadMessage(
               setTotalUnReadMessage(event.total_unread_count),
             );
           }
 
           if (event.unread_channels !== undefined) {
-            console.log(event.unread_channels);
+            // console.log(event.unread_channels);
           }
         });
         dispatchUnReadMessage(setUnReadMessage(unRead));

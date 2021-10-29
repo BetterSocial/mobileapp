@@ -95,7 +95,7 @@ const PostPageDetail = (props) => {
   };
   React.useEffect(() => {
     setItem(feeds.feeds[index]);
-    console.log(JSON.stringify(feeds.feeds[index]));
+    // console.log(JSON.stringify(feeds.feeds[index]));
   }, [feeds.feeds[index]]);
 
   React.useEffect(() => {
