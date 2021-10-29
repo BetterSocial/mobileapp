@@ -36,7 +36,7 @@ const GroupSetting = ({navigation, route}) => {
   const [changeName, setChangeName] = React.useState(false);
   const [changeImage, setChangeImage] = React.useState(false);
   const [base64Profile, setBase64Profile] = React.useState('');
-  const [urlImage, setUrlImage] = React.useState('');
+  const [urlImage, setUrlImage] = React.useState(channel?.data?.image);
 
   const updateName = (text) => {
     setGroupName(text);
