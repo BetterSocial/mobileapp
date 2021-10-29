@@ -7,6 +7,7 @@ import {
   View,
   SafeAreaView,
   StatusBar,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import {
@@ -39,6 +40,7 @@ import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import { openUrl } from '../../utils/Utils';
 
 const ENABLE_DEV_ONLY_FEATURE = true;
 
@@ -48,6 +50,7 @@ const SignIn = () => {
   const [loading, setLoading] = React.useState(false);
   const [isCompleteSliding, setIsCompleteSliding] = React.useState(false);
   const create = useClientGetstream();
+  const HUMAN_ID_URL = 'https://www.human-id.org/';
 
   let dummyLoginRbSheetRef = React.useRef(null);
 
@@ -55,6 +58,10 @@ const SignIn = () => {
     if (index === length - 1) {
       setIsCompleteSliding(true);
     }
+  };
+
+  const goToHumanIdWeb = () => {
+    openUrl(HUMAN_ID_URL);
   };
 
   React.useEffect(() => {
@@ -171,7 +178,7 @@ const SignIn = () => {
           <ButtonSignDisabled />
         )}
         <Text style={S.desc}>
-          <Text style={S.humanID}>
+          <Text onPress={goToHumanIdWeb} style={S.humanID}>
             {StringConstant.signInScreenHumanIdBrand}
           </Text>
           {` ${StringConstant.signInScreenHumanIdDetail}`}

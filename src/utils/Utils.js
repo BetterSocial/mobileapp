@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {Linking} from 'react-native';
+import SimpleToast from 'react-native-simple-toast';
 export const sanitizeUrlForLinking = (url) => {
   if (!/^https?:\/\//.test(url)) {
     url = `https://${url}`;
@@ -55,4 +57,16 @@ export const getUrl = (str) => {
 export const isContainUrl = (str) => {
   let url = getUrl(str);
   return validationURL(url);
+};
+
+export const openUrl = (url) => {
+  if (url && typeof url === 'string') {
+    Linking.canOpenURL(url).then((supported) => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        SimpleToast.show('Url is not supported', SimpleToast.SHORT);
+      }
+    });
+  }
 };
