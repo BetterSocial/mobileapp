@@ -12,6 +12,10 @@ const data = [
 const {width: screenWidth} = Dimensions.get('window');
 
 const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
+  const handleChangeIndex = (swiperData) => {
+    onChangeNewIndex(swiperData, data.length);
+  };
+
   return (
     <SwiperFlatList
       autoplay
@@ -22,7 +26,7 @@ const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
       paginationStyleItem={styles.dot}
       data={data}
       renderItem={({item}) => <Card image={item} />}
-      onChangeIndex={onChangeNewIndex}
+      onChangeIndex={handleChangeIndex}
     />
   );
 };
