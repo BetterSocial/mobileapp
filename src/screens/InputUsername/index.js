@@ -35,6 +35,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
+import {setCapitalFirstLetter} from '../../utils/Utils';
 
 const width = Dimensions.get('screen').width;
 
@@ -97,6 +98,7 @@ const ChooseUsername = () => {
 
   const checkUsername = async (v) => {
     let value = v.toLowerCase().replace(/[^a-z0-9-_]/g, '');
+    value = setCapitalFirstLetter(value);
     setTypeFetch('typing');
     setUsernameState(value);
     if (value.length <= 15) {
@@ -256,7 +258,7 @@ const ChooseUsername = () => {
                 value={username}
                 autoCompleteType="username"
                 textContentType="username"
-                autoCapitalize="none"
+                autoCapitalize
                 autoCorrect={false}
               />
               {messageTypeFetch(typeFetch, username)}
