@@ -62,7 +62,6 @@ const ChooseUsername = () => {
 
   const handleOpenCamera = async () => {
     let {success, message} = await requestCameraPermission();
-    console.log(success);
     if (success) {
       launchCamera(
         {
@@ -258,7 +257,7 @@ const ChooseUsername = () => {
                 value={username}
                 autoCompleteType="username"
                 textContentType="username"
-                autoCapitalize
+                autoCapitalize="sentences"
                 autoCorrect={false}
               />
               {messageTypeFetch(typeFetch, username)}
