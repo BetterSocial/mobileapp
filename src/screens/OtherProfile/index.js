@@ -88,7 +88,6 @@ const OtherProfile = () => {
         user_id: params.data.user_id,
       };
       const processGetBlock = await checkUserBlock(sendData);
-      console.log(processGetBlock, 'kanui');
       if (processGetBlock.status === 200) {
         setBlockStatus(processGetBlock.data.data);
         setIsLoading(false);
@@ -98,13 +97,10 @@ const OtherProfile = () => {
 
   const fetchOtherProfile = async (userId, otherId) => {
     const result = await getOtherProfile(userId, otherId);
-    console.log('other', result);
     if (result.code === 200) {
       setDataMain(result.data);
     }
   };
-
-  console.log(blockStatus, 'kalak');
 
   async function buildLink() {
     const link = await dynamicLinks().buildLink(
