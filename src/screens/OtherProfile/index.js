@@ -19,7 +19,12 @@ import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 import {generateRandomId} from 'stream-chat-react-native';
 
-import {getOtherProfile, setUnFollow, setFollow} from '../../service/profile';
+import {
+  getOtherProfile,
+  setUnFollow,
+  setFollow,
+  checkUserBlock,
+} from '../../service/profile';
 import RenderActivity from './elements/RenderActivity';
 import Loading from '../Loading';
 import {colors} from '../../utils/colors';
@@ -55,6 +60,7 @@ const OtherProfile = () => {
   const [tokenJwt, setTokenJwt] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [channel, dispatchChannel] = React.useContext(Context).channel;
+  const [blockStatus, setBlockStatus] = React.useState(null);
   const [profile] = React.useContext(Context).profile;
   const create = useClientGetstream();
 
@@ -62,28 +68,44 @@ const OtherProfile = () => {
 
   React.useEffect(() => {
     create();
+    setIsLoading(true);
     let getJwtToken = async () => {
       setTokenJwt(await getAccessToken());
     };
 
     getJwtToken();
-
+    console.log(params, 'hunpi');
     setUserId(params.data.user_id);
     setOtherId(params.data.other_id);
     setUsername(params.data.username);
-    fetchOtherProfile(params.data.user_id, params.data.other_id, true);
+
+    checkUserBlockHandle();
   }, [params.data]);
 
-  const fetchOtherProfile = async (userId, otherId, withLoading) => {
-    withLoading ? setIsLoading(true) : null;
+  const checkUserBlockHandle = async () => {
+    if (params.data) {
+      const sendData = {
+        user_id: params.data.user_id,
+      };
+      const processGetBlock = await checkUserBlock(sendData);
+      if (processGetBlock.status === 200) {
+        setBlockStatus(processGetBlock.data.data);
+        fetchOtherProfile(params.data.user_id, params.data.other_id);
+      }
+    }
+  };
+
+  const fetchOtherProfile = async (userId, otherId) => {
     const result = await getOtherProfile(userId, otherId);
     console.log('other', result);
     if (result.code === 200) {
-      withLoading ? setIsLoading(false) : null;
+      setIsLoading(false);
       console.log(result.data);
       setDataMain(result.data);
     }
   };
+
+  console.log(blockStatus, 'kalak');
 
   async function buildLink() {
     const link = await dynamicLinks().buildLink(
@@ -221,6 +243,8 @@ const OtherProfile = () => {
     await navigation.navigate('ChatDetailPage');
   };
 
+  console.log(blockStatus, 'kamui');
+
   return (
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
@@ -250,100 +274,110 @@ const OtherProfile = () => {
                       <ShareIcon width={20} height={20} fill="#000" />
                     </TouchableNativeFeedback>
                   </View>
-
-                  <View style={styles.containerProfile}>
-                    <View style={styles.wrapImageAndStatus}>
-                      <Image
-                        style={styles.profileImage}
-                        source={{
-                          uri: dataMain.profile_pic_path
-                            ? dataMain.profile_pic_path
-                            : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-                        }}
-                      />
-
-                      <View style={styles.wrapButton}>
-                        <TouchableNativeFeedback>
-                          <BlockBlueIcon
-                            width={20}
-                            height={20}
-                            fill={colors.bondi_blue}
+                  {blockStatus.blocked ? null : (
+                    <React.Fragment>
+                      <View style={styles.containerProfile}>
+                        <View style={styles.wrapImageAndStatus}>
+                          <Image
+                            style={styles.profileImage}
+                            source={{
+                              uri: dataMain.profile_pic_path
+                                ? dataMain.profile_pic_path
+                                : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
+                            }}
                           />
-                        </TouchableNativeFeedback>
-                        <TouchableNativeFeedback onPress={createChannel}>
-                          <View style={styles.btnMsg}>
-                            <EnveloveBlueIcon
-                              width={20}
-                              height={16}
-                              fill={colors.bondi_blue}
-                            />
+
+                          <View style={styles.wrapButton}>
+                            <TouchableNativeFeedback>
+                              <BlockBlueIcon
+                                width={20}
+                                height={20}
+                                fill={colors.bondi_blue}
+                              />
+                            </TouchableNativeFeedback>
+                            <TouchableNativeFeedback onPress={createChannel}>
+                              <View style={styles.btnMsg}>
+                                <EnveloveBlueIcon
+                                  width={20}
+                                  height={16}
+                                  fill={colors.bondi_blue}
+                                />
+                              </View>
+                            </TouchableNativeFeedback>
+                            {dataMain.is_following ? (
+                              <TouchableNativeFeedback
+                                onPress={() => handleSetUnFollow()}>
+                                <View style={styles.buttonFollowing}>
+                                  <Text style={styles.textButtonFollowing}>
+                                    Following
+                                  </Text>
+                                </View>
+                              </TouchableNativeFeedback>
+                            ) : (
+                              <TouchableNativeFeedback
+                                onPress={() => handleSetFollow()}>
+                                <View style={styles.buttonFollow}>
+                                  <Text style={styles.textButtonFollow}>
+                                    Follow
+                                  </Text>
+                                </View>
+                              </TouchableNativeFeedback>
+                            )}
                           </View>
-                        </TouchableNativeFeedback>
-                        {dataMain.is_following ? (
-                          <TouchableNativeFeedback
-                            onPress={() => handleSetUnFollow()}>
-                            <View style={styles.buttonFollowing}>
-                              <Text style={styles.textButtonFollowing}>
-                                Following
-                              </Text>
-                            </View>
-                          </TouchableNativeFeedback>
-                        ) : (
-                          <TouchableNativeFeedback
-                            onPress={() => handleSetFollow()}>
-                            <View style={styles.buttonFollow}>
-                              <Text style={styles.textButtonFollow}>
-                                Follow
-                              </Text>
-                            </View>
-                          </TouchableNativeFeedback>
+                        </View>
+                        {params.data.full_name && (
+                          <Text style={styles.nameProfile}>
+                            {params.data.full_name}
+                          </Text>
                         )}
                       </View>
-                    </View>
-                    {params.data.full_name && (
-                      <Text style={styles.nameProfile}>
-                        {params.data.full_name}
-                      </Text>
-                    )}
-                  </View>
-
-                  <View style={styles.wrapFollower}>
-                    <View style={styles.wrapRow}>
-                      <Text style={styles.textTotal}>
-                        {dataMain.follower_symbol}
-                      </Text>
-                      <Text style={styles.textFollow}>Followers</Text>
-                    </View>
-                    <View style={styles.following}>
-                      <View style={styles.wrapRow}>
-                        <Text style={styles.textTotal}>
-                          {dataMain.following_symbol}
-                        </Text>
-                        <Text style={styles.textFollow}>Following</Text>
-                      </View>
-                    </View>
-                  </View>
-                  {renderBio(dataMain.bio)}
+                      {blockStatus.blocker ? null : (
+                        <React.Fragment>
+                          <View style={styles.wrapFollower}>
+                            <View style={styles.wrapRow}>
+                              <Text style={styles.textTotal}>
+                                {dataMain.follower_symbol}
+                              </Text>
+                              <Text style={styles.textFollow}>Followers</Text>
+                            </View>
+                            <View style={styles.following}>
+                              <View style={styles.wrapRow}>
+                                <Text style={styles.textTotal}>
+                                  {dataMain.following_symbol}
+                                </Text>
+                                <Text style={styles.textFollow}>Following</Text>
+                              </View>
+                            </View>
+                          </View>
+                          {renderBio(dataMain.bio)}
+                        </React.Fragment>
+                      )}
+                    </React.Fragment>
+                  )}
                 </View>
               ) : null}
               {!isLoading ? (
-                <View>
-                  <View style={styles.tabs} ref={postRef}>
-                    <Text style={styles.postText}>
-                      Post{/* Please change this to post size */}
-                    </Text>
-                  </View>
-                  <View style={styles.containerFlatFeed}>
-                    <FlatFeed
-                      feedGroup="user"
-                      userId={other_id}
-                      Activity={(props, index) => {
-                        return RenderActivity(props, dataMain);
-                      }}
-                      notify
-                    />
-                  </View>
-                </View>
+                <React.Fragment>
+                  {blockStatus.blocked || blockStatus.blocker ? null : (
+                    <View>
+                      <View style={styles.tabs} ref={postRef}>
+                        <Text style={styles.postText}>
+                          Post{/* Please change this to post size */}
+                        </Text>
+                      </View>
+                      <View style={styles.containerFlatFeed}>
+                        <FlatFeed
+                          feedGroup="user"
+                          userId={other_id}
+                          Activity={(props, index) => {
+                            return RenderActivity(props, dataMain);
+                          }}
+                          notify
+                        />
+                      </View>
+                    </View>
+                  )}
+                </React.Fragment>
               ) : null}
             </StreamApp>
           )}
