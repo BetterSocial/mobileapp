@@ -78,7 +78,7 @@ const OtherProfile = () => {
     setUserId(params.data.user_id);
     setOtherId(params.data.other_id);
     setUsername(params.data.username);
-
+    fetchOtherProfile(params.data.user_id, params.data.other_id);
     checkUserBlockHandle();
   }, [params.data]);
 
@@ -88,9 +88,10 @@ const OtherProfile = () => {
         user_id: params.data.user_id,
       };
       const processGetBlock = await checkUserBlock(sendData);
+      console.log(processGetBlock, 'kanui');
       if (processGetBlock.status === 200) {
         setBlockStatus(processGetBlock.data.data);
-        fetchOtherProfile(params.data.user_id, params.data.other_id);
+        setIsLoading(false);
       }
     }
   };
@@ -99,8 +100,6 @@ const OtherProfile = () => {
     const result = await getOtherProfile(userId, otherId);
     console.log('other', result);
     if (result.code === 200) {
-      setIsLoading(false);
-      console.log(result.data);
       setDataMain(result.data);
     }
   };
