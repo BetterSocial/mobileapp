@@ -32,6 +32,11 @@ const Header = ({}) => {
 
   const renderHeaderImage = () => {
     if (channel?.data?.image) {
+      if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
+        return (
+          <Image source={{uri: channel?.data?.image}} style={styles.image} />
+        );
+      }
       return (
         <Image
           source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}

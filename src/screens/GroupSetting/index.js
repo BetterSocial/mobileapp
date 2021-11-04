@@ -20,6 +20,8 @@ import {COLORS} from '../../utils/theme';
 import {requestExternalStoragePermission} from '../../utils/permission';
 import EditGroup from './elements/EditGroup';
 import {getChatName} from '../../utils/string/StringUtils';
+import {uploadFile} from '../../service/file';
+import Loading from '../Loading';
 
 const width = Dimensions.get('screen').width;
 
@@ -37,19 +39,33 @@ const GroupSetting = ({navigation, route}) => {
   const [changeImage, setChangeImage] = React.useState(false);
   const [base64Profile, setBase64Profile] = React.useState('');
   const [urlImage, setUrlImage] = React.useState(channel?.data?.image);
+  const [isUploadingImage, setIsUploadingImage] = React.useState(false);
 
   const updateName = (text) => {
     setGroupName(text);
     setChangeName(true);
   };
   const submitData = async () => {
+    let changeImageUrl = '';
+    if (changeImage) {
+      try {
+        setIsUploadingImage(true);
+        let res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
+        changeImageUrl = res.data.url;
+        setIsUploadingImage(false);
+      } catch (e) {
+        setIsUploadingImage(false);
+        return;
+      }
+    }
+
     if (changeName || changeImage) {
       let dataEdit = {
         name: groupName,
         // ...(changeImage && {image: base64Profile}),
       };
       if (changeImage) {
-        dataEdit.image = base64Profile;
+        dataEdit.image = changeImageUrl;
       } else {
         if (channel?.data?.image) {
           dataEdit.image = channel?.data?.image;
@@ -57,7 +73,7 @@ const GroupSetting = ({navigation, route}) => {
       }
 
       await channel.update(dataEdit);
-      await navigation.navigate('ChannelList');
+      navigation.navigate('ChannelList');
     } else {
       navigation.goBack();
     }
@@ -68,14 +84,16 @@ const GroupSetting = ({navigation, route}) => {
       launchImageLibrary(
         {
           mediaType: 'photo',
-          maxHeight: 55,
-          maxWidth: 55,
+          maxHeight: 500,
+          maxWidth: 500,
           includeBase64: true,
         },
         (res) => {
-          setChangeImage(true);
-          setBase64Profile(res.base64);
-          setUrlImage(res.uri);
+          if (!res.didCancel) {
+            setChangeImage(true);
+            setBase64Profile(res.base64);
+            setUrlImage(res.uri);
+          }
         },
       );
     } else {
@@ -107,6 +125,7 @@ const GroupSetting = ({navigation, route}) => {
         setEditName={updateName}
         onUpdateImage={lounchGalery}
       />
+      <Loading visible={isUploadingImage} />
       <View style={styles.users}>
         <Text style={styles.countUser}>Participants {countUser}</Text>
         <FlatList

@@ -73,6 +73,15 @@ const GroupInfo = () => {
 
   const showImageProfile = () => {
     if (profileChannel || channel?.data?.image) {
+      if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
+        return (
+          <Image
+            style={styles.btnUpdatePhoto}
+            source={{uri: channel?.data?.image}}
+          />
+        );
+      }
+
       if (channel?.data?.image) {
         return (
           <Image

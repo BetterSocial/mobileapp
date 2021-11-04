@@ -23,6 +23,10 @@ const EditGroup = ({editName, setEditName, onUpdateImage, imageUri}) => {
       if (source && source.indexOf('file:///') > -1) {
         return <Image source={{uri: source}} style={styles.image} />;
       } else if (source && source.length > 0) {
+        if (source.indexOf('res.cloudinary.com') > -1) {
+          return <Image source={{uri: source}} style={styles.image} />;
+        }
+
         return (
           <Image
             source={{uri: `data:image/jpg;base64,${source}`}}

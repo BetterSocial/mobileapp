@@ -190,7 +190,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     marginTop: 12,
-    paddingTop: 16,
     paddingLeft: 14,
     paddingRight: 11,
     paddingBottom: 11,
@@ -204,8 +203,11 @@ const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(24),
     marginLeft: 12,
     flex: 1,
+    paddingTop: 13,
   },
-  newParticipantIcon: {},
+  newParticipantIcon: {
+    marginTop: 16,
+  },
   subtitleStyle: (isIsset) => ({
     color: isIsset ? COLORS.holyTosca : '#C4C4C4',
   }),
