@@ -60,7 +60,10 @@ const OtherProfile = () => {
   const [tokenJwt, setTokenJwt] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [channel, dispatchChannel] = React.useContext(Context).channel;
-  const [blockStatus, setBlockStatus] = React.useState(null);
+  const [blockStatus, setBlockStatus] = React.useState({
+    blocked: false,
+    blocker: false,
+  });
   const [profile] = React.useContext(Context).profile;
   const create = useClientGetstream();
 
@@ -74,31 +77,40 @@ const OtherProfile = () => {
     };
 
     getJwtToken();
-    console.log(params, 'hunpi');
     setUserId(params.data.user_id);
     setOtherId(params.data.other_id);
     setUsername(params.data.username);
     fetchOtherProfile(params.data.user_id, params.data.other_id);
-    checkUserBlockHandle();
   }, [params.data]);
 
-  const checkUserBlockHandle = async () => {
-    if (params.data) {
+  const checkUserBlockHandle = async (user_id) => {
+    try {
       const sendData = {
-        user_id: params.data.user_id,
+        user_id,
       };
       const processGetBlock = await checkUserBlock(sendData);
       if (processGetBlock.status === 200) {
         setBlockStatus(processGetBlock.data.data);
         setIsLoading(false);
       }
+    } catch (e) {
+      setIsLoading(false);
     }
   };
 
   const fetchOtherProfile = async (userId, otherId) => {
-    const result = await getOtherProfile(userId, otherId);
-    if (result.code === 200) {
-      setDataMain(result.data);
+    try {
+      const result = await getOtherProfile(userId, otherId);
+      if (result.code === 200) {
+        setDataMain(result.data);
+        checkUserBlockHandle(result.data.user_id);
+      }
+    } catch (e) {
+      setBlockStatus({
+        ...blockStatus,
+        blocked: true,
+      });
+      setIsLoading(false);
     }
   };
 
@@ -237,8 +249,6 @@ const OtherProfile = () => {
     setIsLoading(false);
     await navigation.navigate('ChatDetailPage');
   };
-
-  console.log(blockStatus, 'kamui');
 
   return (
     <>
