@@ -28,6 +28,7 @@ import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient_mini from '../../../assets/Ic_rectangle_gradient_mini';
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
+import MemoUnfollowDomain from '../../../assets/icon/IconUnfollowDomain';
 
 const RenderItem = ({
   item,
@@ -38,6 +39,9 @@ const RenderItem = ({
   onPressShare,
   selfUserId,
   onPressBlock,
+  handleFollow,
+  handleUnfollow,
+  follow = false,
 }) => {
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
@@ -163,11 +167,19 @@ const RenderItem = ({
             </View>
           </View>
           <View style={{justifyContent: 'center'}}>
-            <TouchableOpacity onPress={onFollowDomainPressed}>
-              <View style={styles.wrapperText}>
-                <MemoFollowDomain />
-              </View>
-            </TouchableOpacity>
+            {follow ? (
+              <TouchableOpacity onPress={handleUnfollow}>
+                <View style={styles.wrapperTextUnFollow}>
+                  <MemoUnfollowDomain />
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={handleFollow}>
+                <View style={styles.wrapperText}>
+                  <MemoFollowDomain />
+                </View>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <Pressable onPress={() => onPressComment(item)}>
@@ -362,6 +374,16 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.gray1,
     paddingBottom: 8,
     paddingTop: 8,
+  },
+  wrapperTextUnFollow: {
+    backgroundColor: '#00ADB5',
+    borderRadius: 8,
+    borderColor: '#00ADB5',
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 0.5,
   },
 });
 
