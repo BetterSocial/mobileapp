@@ -39,6 +39,12 @@ import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import BlockDomain from '../../components/Blocking/BlockDomain';
+import BlockUser from '../../components/Blocking/BlockUser';
+import ReportUser from '../../components/Blocking/ReportUser';
+import BlockProfile from '../../components/Blocking/BlockProfile';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import {blockUser, unblockUserApi} from '../../service/blocking';
 
 const width = Dimensions.get('screen').width;
 
@@ -48,7 +54,9 @@ const OtherProfile = () => {
 
   const scrollViewReff = React.useRef(null);
   const postRef = React.useRef(null);
-
+  const blockUserRef = React.useRef();
+  const reportUserRef = React.useRef();
+  const specificIssueRef = React.useRef();
   const [dataMain, setDataMain] = React.useState({});
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
@@ -60,10 +68,12 @@ const OtherProfile = () => {
   const [tokenJwt, setTokenJwt] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [channel, dispatchChannel] = React.useContext(Context).channel;
+  const [reason, setReason] = React.useState([]);
   const [blockStatus, setBlockStatus] = React.useState({
     blocked: false,
     blocker: false,
   });
+  const [loadingBlocking, setLoadingBlocking] = React.useState(false);
   const [profile] = React.useContext(Context).profile;
   const create = useClientGetstream();
 
@@ -89,11 +99,13 @@ const OtherProfile = () => {
         user_id,
       };
       const processGetBlock = await checkUserBlock(sendData);
+      console.log(processGetBlock, 'kumala');
       if (processGetBlock.status === 200) {
         setBlockStatus(processGetBlock.data.data);
         setIsLoading(false);
       }
     } catch (e) {
+      console.log(e, 'eman');
       setIsLoading(false);
     }
   };
@@ -250,6 +262,74 @@ const OtherProfile = () => {
     await navigation.navigate('ChatDetailPage');
   };
 
+  const onBlockReaction = () => {
+    blockUserRef.current.open();
+  };
+
+  //blocking
+
+  const handleBlocking = async (message) => {
+    setLoadingBlocking(true);
+    console.log('blocking');
+    let data = {
+      userId: dataMain.user_id,
+      source: 'screen_profile',
+      reason,
+    };
+    if (message) {
+      data = {...data, message};
+    }
+    const blockingUser = await blockUser(data);
+    if (blockingUser.code == 200) {
+      console.log(data, 'kakamna');
+      blockUserRef.current.close();
+      specificIssueRef.current.close();
+      reportUserRef.current.close();
+      checkUserBlockHandle(dataMain.user_id);
+      setLoadingBlocking(false);
+    } else {
+      setLoadingBlocking(false);
+    }
+  };
+
+  const unblockUser = async () => {
+    console.log('hanim');
+    try {
+      const processPostApi = await unblockUserApi({user_id: dataMain.user_id});
+      console.log('unblock user', processPostApi);
+    } catch (e) {
+      console.log(e, 'eman');
+    }
+  };
+
+  const onBlocking = (reason) => {
+    if (reason === 1) {
+      handleBlocking();
+    } else if (reason === 2) {
+      blockUserRef.current.close();
+      reportUserRef.current.open();
+    } else {
+      unblockUser();
+    }
+  };
+
+  const onNextQuestion = (question) => {
+    console.log(question, 'hanhan');
+    setReason(question);
+    reportUserRef.current.close();
+    specificIssueRef.current.open();
+  };
+
+  const skipQuestion = () => {
+    reportUserRef.current.close();
+    handleBlocking();
+  };
+
+  const onReportIssue = async (message) => {
+    specificIssueRef.current.close();
+    handleBlocking(message);
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
@@ -267,20 +347,20 @@ const OtherProfile = () => {
               token={tokenJwt}>
               {!isLoading ? (
                 <View style={styles.content}>
-                  <View style={styles.header}>
-                    <View style={styles.wrapNameAndbackButton}>
-                      <TouchableNativeFeedback
-                        onPress={() => navigation.goBack()}>
-                        <ArrowLeftIcon width={20} height={12} fill="#000" />
-                      </TouchableNativeFeedback>
-                      <Text style={styles.textUsername}>{username}</Text>
-                    </View>
-                    <TouchableNativeFeedback onPress={onShare}>
-                      <ShareIcon width={20} height={20} fill="#000" />
-                    </TouchableNativeFeedback>
-                  </View>
                   {blockStatus.blocked ? null : (
                     <React.Fragment>
+                      <View style={styles.header}>
+                        <View style={styles.wrapNameAndbackButton}>
+                          <TouchableNativeFeedback
+                            onPress={() => navigation.goBack()}>
+                            <ArrowLeftIcon width={20} height={12} fill="#000" />
+                          </TouchableNativeFeedback>
+                          <Text style={styles.textUsername}>{username}</Text>
+                        </View>
+                        <TouchableNativeFeedback onPress={onShare}>
+                          <ShareIcon width={20} height={20} fill="#000" />
+                        </TouchableNativeFeedback>
+                      </View>
                       <View style={styles.containerProfile}>
                         <View style={styles.wrapImageAndStatus}>
                           <Image
@@ -293,7 +373,7 @@ const OtherProfile = () => {
                           />
 
                           <View style={styles.wrapButton}>
-                            <TouchableNativeFeedback>
+                            <TouchableNativeFeedback onPress={onBlockReaction}>
                               <BlockBlueIcon
                                 width={20}
                                 height={20}
@@ -392,6 +472,22 @@ const OtherProfile = () => {
               ) : null}
             </StreamApp>
           )}
+          <BlockProfile
+            onSelect={onBlocking}
+            refBlockUser={blockUserRef}
+            username={username}
+            isBlocker={blockStatus.blocker}
+          />
+          <ReportUser
+            refReportUser={reportUserRef}
+            onSelect={onNextQuestion}
+            onSkip={skipQuestion}
+          />
+          <SpecificIssue
+            refSpecificIssue={specificIssueRef}
+            onSkip={skipQuestion}
+            onPress={onReportIssue}
+          />
         </ScrollView>
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>

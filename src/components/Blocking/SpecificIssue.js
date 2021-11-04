@@ -5,6 +5,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -14,7 +15,7 @@ import {Button} from '../../components/Button';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const SpecificIssue = ({refSpecificIssue, onPress, onSkip}) => {
+const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
   const [message, setMessage] = React.useState('');
   return (
     <RBSheet
@@ -42,7 +43,7 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip}) => {
         </TouchableOpacity>
         <View style={styles.containerBtn}>
           <Button onPress={() => onPress(message)}>
-            <Text>File Report</Text>
+            {loading ? <ActivityIndicator /> : <Text>File Report</Text>}
           </Button>
         </View>
       </View>
