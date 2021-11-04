@@ -99,13 +99,11 @@ const OtherProfile = () => {
         user_id,
       };
       const processGetBlock = await checkUserBlock(sendData);
-      console.log(processGetBlock, 'kumala');
       if (processGetBlock.status === 200) {
         setBlockStatus(processGetBlock.data.data);
         setIsLoading(false);
       }
     } catch (e) {
-      console.log(e, 'eman');
       setIsLoading(false);
     }
   };
@@ -266,11 +264,8 @@ const OtherProfile = () => {
     blockUserRef.current.open();
   };
 
-  //blocking
-
   const handleBlocking = async (message) => {
     setLoadingBlocking(true);
-    console.log('blocking');
     let data = {
       userId: dataMain.user_id,
       source: 'screen_profile',
@@ -281,7 +276,6 @@ const OtherProfile = () => {
     }
     const blockingUser = await blockUser(data);
     if (blockingUser.code == 200) {
-      console.log(data, 'kakamna');
       blockUserRef.current.close();
       specificIssueRef.current.close();
       reportUserRef.current.close();
@@ -293,10 +287,14 @@ const OtherProfile = () => {
   };
 
   const unblockUser = async () => {
-    console.log('hanim');
     try {
-      const processPostApi = await unblockUserApi({user_id: dataMain.user_id});
-      console.log('unblock user', processPostApi);
+      const processPostApi = await unblockUserApi({userId: dataMain.user_id});
+      if (processPostApi.code == 200) {
+        checkUserBlockHandle(dataMain.user_id);
+        blockUserRef.current.close();
+        specificIssueRef.current.close();
+        reportUserRef.current.close();
+      }
     } catch (e) {
       console.log(e, 'eman');
     }
@@ -314,7 +312,6 @@ const OtherProfile = () => {
   };
 
   const onNextQuestion = (question) => {
-    console.log(question, 'hanhan');
     setReason(question);
     reportUserRef.current.close();
     specificIssueRef.current.open();
@@ -374,11 +371,19 @@ const OtherProfile = () => {
 
                           <View style={styles.wrapButton}>
                             <TouchableNativeFeedback onPress={onBlockReaction}>
-                              <BlockBlueIcon
-                                width={20}
-                                height={20}
-                                fill={colors.bondi_blue}
-                              />
+                              {blockStatus.blocker ? (
+                                <View style={styles.buttonFollowing}>
+                                  <Text style={styles.textButtonFollowing}>
+                                    Blocked
+                                  </Text>
+                                </View>
+                              ) : (
+                                <BlockBlueIcon
+                                  width={20}
+                                  height={20}
+                                  fill={colors.bondi_blue}
+                                />
+                              )}
                             </TouchableNativeFeedback>
 
                             {blockStatus.blocker ? null : (
@@ -487,6 +492,7 @@ const OtherProfile = () => {
             refSpecificIssue={specificIssueRef}
             onSkip={skipQuestion}
             onPress={onReportIssue}
+            loading={loadingBlocking}
           />
         </ScrollView>
         {isShowButton ? (

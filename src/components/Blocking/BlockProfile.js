@@ -29,7 +29,7 @@ const BlockProfile = ({refBlockUser, onSelect, username, isBlocker}) => {
       id: 3,
       icon: 'handcuffs',
       label: `Unblock ${username}`,
-      desc: 'Unblock this user',
+      desc: '',
       iconReght: false,
       blocker: true,
     },
