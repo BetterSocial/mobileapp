@@ -300,39 +300,45 @@ const OtherProfile = () => {
                                 fill={colors.bondi_blue}
                               />
                             </TouchableNativeFeedback>
-                            <TouchableNativeFeedback onPress={createChannel}>
-                              <View style={styles.btnMsg}>
-                                <EnveloveBlueIcon
-                                  width={20}
-                                  height={16}
-                                  fill={colors.bondi_blue}
-                                />
-                              </View>
-                            </TouchableNativeFeedback>
-                            {dataMain.is_following ? (
-                              <TouchableNativeFeedback
-                                onPress={() => handleSetUnFollow()}>
-                                <View style={styles.buttonFollowing}>
-                                  <Text style={styles.textButtonFollowing}>
-                                    Following
-                                  </Text>
-                                </View>
-                              </TouchableNativeFeedback>
-                            ) : (
-                              <TouchableNativeFeedback
-                                onPress={() => handleSetFollow()}>
-                                <View style={styles.buttonFollow}>
-                                  <Text style={styles.textButtonFollow}>
-                                    Follow
-                                  </Text>
-                                </View>
-                              </TouchableNativeFeedback>
+
+                            {blockStatus.blocker ? null : (
+                              <React.Fragment>
+                                <TouchableNativeFeedback
+                                  onPress={createChannel}>
+                                  <View style={styles.btnMsg}>
+                                    <EnveloveBlueIcon
+                                      width={20}
+                                      height={16}
+                                      fill={colors.bondi_blue}
+                                    />
+                                  </View>
+                                </TouchableNativeFeedback>
+                                {dataMain.is_following ? (
+                                  <TouchableNativeFeedback
+                                    onPress={() => handleSetUnFollow()}>
+                                    <View style={styles.buttonFollowing}>
+                                      <Text style={styles.textButtonFollowing}>
+                                        Following
+                                      </Text>
+                                    </View>
+                                  </TouchableNativeFeedback>
+                                ) : (
+                                  <TouchableNativeFeedback
+                                    onPress={() => handleSetFollow()}>
+                                    <View style={styles.buttonFollow}>
+                                      <Text style={styles.textButtonFollow}>
+                                        Follow
+                                      </Text>
+                                    </View>
+                                  </TouchableNativeFeedback>
+                                )}
+                              </React.Fragment>
                             )}
                           </View>
                         </View>
-                        {params.data.full_name && (
+                        {dataMain.real_name && (
                           <Text style={styles.nameProfile}>
-                            {params.data.full_name}
+                            {dataMain.real_name}
                           </Text>
                         )}
                       </View>
