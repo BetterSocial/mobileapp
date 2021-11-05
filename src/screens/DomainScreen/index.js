@@ -40,6 +40,7 @@ const DomainScreen = () => {
   const [idFromToken, setIdFromToken] = React.useState('');
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
+  const [domainFollowers, setDomainFollowers] = React.useState(0);
   const [follow, setFollow] = React.useState(false);
 
   let iddomain = dataDomain.content.domain_page_id;
@@ -66,8 +67,6 @@ const DomainScreen = () => {
   }, [iddomain, ifollow]);
 
   const getIFollow = async () => {
-    console.log('do i follow');
-    console.log(JSON.stringify(ifollow).includes(iddomain));
     if (ifollow.length === 0) {
       let res = await getDomainIdIFollow();
       setIFollow(res.data, dispatch);
@@ -76,23 +75,30 @@ const DomainScreen = () => {
     }
   };
 
-  React.useEffect(() => {
-    const init = async () => {
+  const init = async (withLoading = false) => {
+    if (withLoading) {
       setLoading(true);
-      let res = await getDetailDomains(dataDomain.og.domain);
-      if (res.code === 200) {
-        // console.log('dataDomain.og.domain');
-        // console.log(res.data);
-        setData([{dummy: true}, ...res.data]);
-        setLoading(false);
-      }
+    }
+    let res = await getDetailDomains(dataDomain.og.domain);
+    if (res.code === 200) {
+      // console.log('dataDomain.og.domain');
+      setDomainFollowers(res.followers);
+      setData([{dummy: true}, ...res.data]);
       setLoading(false);
-    };
-    init();
+    }
+    if (withLoading) {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    init(true);
   }, [dataDomain]);
 
   React.useEffect(() => {
     const getProfile = async () => {
+      console.log('domain');
+      console.log(domain);
       let res = await getProfileDomain(domain);
       if (res.code === 200) {
         setProfile(res.data);
@@ -169,6 +175,9 @@ const DomainScreen = () => {
 
   const handleFollow = async () => {
     setFollow(true);
+
+    let newDomainFollowers = domainFollowers + 1;
+    setDomainFollowers(newDomainFollowers);
     const res = await followDomain(dataFollow);
     if (res.code === 200) {
       addIFollowByID(
@@ -177,14 +186,19 @@ const DomainScreen = () => {
         },
         dispatch,
       );
+      init();
       console.log('res follow');
     } else {
+      setDomainFollowers(domainFollowers);
       console.log('error follow domain');
     }
   };
 
   const handleUnfollow = async () => {
     setFollow(false);
+
+    let newDomainFollowers = domainFollowers - 1;
+    setDomainFollowers(newDomainFollowers);
     const res = await unfollowDomain(dataFollow);
     if (res.code === 200) {
       let newListFollow = await ifollow.filter(function (obj) {
@@ -193,7 +207,9 @@ const DomainScreen = () => {
 
       console.log('res unfollow');
       setIFollow(newListFollow, dispatch);
+      init();
     } else {
+      setDomainFollowers(domainFollowers);
       console.log('error unfollow domain');
     }
   };
@@ -212,7 +228,7 @@ const DomainScreen = () => {
                   image={domainImage}
                   description={dataDomain.domain ? dataDomain.domain.info : ''}
                   domain={dataDomain.og.domain}
-                  followers={10}
+                  followers={domainFollowers}
                   onPress={onReaction}
                   follow={follow}
                   handleFollow={handleFollow}

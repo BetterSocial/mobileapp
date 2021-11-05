@@ -104,9 +104,11 @@ const Header = ({
       </View>
       <Gap height={normalize(2)} />
       <View style={[styles.row, {alignItems: 'center'}]}>
-        <Text style={styles.followersNumber}>{followers}k</Text>
+        <Text style={styles.followersNumber}>{followers}</Text>
         <Gap width={normalize(4)} />
-        <Text style={styles.followersText}>Followers</Text>
+        <Text style={styles.followersText}>
+          {followers < 2 ? 'Follower' : 'Followers'}
+        </Text>
       </View>
       <Gap height={normalize(14)} />
       <Text style={styles.domainDescription}>
