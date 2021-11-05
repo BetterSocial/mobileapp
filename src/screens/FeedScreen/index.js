@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, SafeAreaView, StyleSheet} from 'react-native';
+import {View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
@@ -24,6 +24,7 @@ import {blockAnonymous, blockUser} from '../../service/blocking';
 import {Context} from '../../context';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import RenderListFeed from './RenderList';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -254,9 +255,26 @@ const FeedScreen = (props) => {
     viewTimePost(id, time);
   };
 
+  const renderList = ({item, index}) => <RenderListFeed item={item} />;
+
+  console.log(feeds, 'jamalu');
+
   return (
     <View style={styles.container} forceInset={{top: 'always'}}>
-      {feeds.length > 0 && (
+      <FlatList
+        data={feeds}
+        renderItem={renderList}
+        keyExtractor={(item, index) => {
+          return item.id;
+        }}
+        showsVerticalScrollIndicator={false}
+        snapToInterval={20}
+        snapToAlignment="center"
+        decelerationRate="fast"
+        contentContainerStyle={styles.flatlistContainer}
+        style={styles.scrollContainer}
+      />
+      {/* {feeds.length > 0 && (
         <CardStack
           style={styles.content}
           renderNoMoreCards={() => {
@@ -345,7 +363,7 @@ const FeedScreen = (props) => {
               ))
             : null}
         </CardStack>
-      )}
+      )} */}
 
       <Loading visible={loading} />
       <ButtonNewPost />
@@ -397,5 +415,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  flatlistContainer: {
+    paddingBottom: 20,
+  },
+  scrollContainer: {
+    paddingHorizontal: 10,
   },
 });
