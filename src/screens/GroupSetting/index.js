@@ -41,6 +41,8 @@ const GroupSetting = ({navigation, route}) => {
   const [urlImage, setUrlImage] = React.useState(channel?.data?.image);
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
 
+  let isFocusChatName = route?.params?.focusChatName;
+
   const updateName = (text) => {
     setGroupName(text);
     setChangeName(true);
@@ -124,6 +126,7 @@ const GroupSetting = ({navigation, route}) => {
         editName={groupName}
         setEditName={updateName}
         onUpdateImage={lounchGalery}
+        isFocusChatName={isFocusChatName}
       />
       <Loading visible={isUploadingImage} />
       <View style={styles.users}>
