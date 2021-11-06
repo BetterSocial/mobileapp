@@ -24,6 +24,7 @@ import {blockAnonymous, blockUser} from '../../service/blocking';
 import {Context} from '../../context';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {checkUserBlock} from '../../service/profile';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -39,7 +40,9 @@ const FeedScreen = (props) => {
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
   const [time, setTime] = React.useState(new Date());
-
+  const [blockStatus, setBlockStatus] = React.useState(false);
+  const [activeFedd, setActiveFeed] = React.useState(0);
+  const [loadingBlock, setLoadingBlock] = React.useState(false);
   const refBlockUser = React.useRef();
   const refBlockDomain = React.useRef();
   const refReportUser = React.useRef();
@@ -92,6 +95,7 @@ const FeedScreen = (props) => {
     };
     let result = await blockUser(data);
     if (result.code === 200) {
+      checkUserBlockHandle(feeds[activeFedd].actor.id);
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -146,7 +150,11 @@ const FeedScreen = (props) => {
         let data = dataFeeds.data;
         setCountStack(data.length);
         setMainFeeds(data, dispatch);
+        if (data && data[activeFedd]) {
+          checkUserBlockHandle(data[activeFedd].actor.id);
+        }
       }
+      setLoading(false);
       setInitialLoading(false);
       setTime(new Date());
     } catch (e) {
@@ -154,12 +162,6 @@ const FeedScreen = (props) => {
       setInitialLoading(false);
     }
   };
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     getDataFeeds(lastId);
-  //   }, [lastId]),
-  // );
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -177,8 +179,33 @@ const FeedScreen = (props) => {
   }, [navigation, lastId]);
 
   React.useEffect(() => {
+    setLoading(true);
     getDataFeeds(lastId);
+    console.log('sakti');
   }, [lastId]);
+
+  React.useEffect(() => {
+    if (activeFedd && feeds[activeFedd] && feeds[activeFedd].actor) {
+      checkUserBlockHandle(feeds[activeFedd].actor.id);
+    }
+  }, [activeFedd]);
+
+  console.log(feeds[activeFedd], 'lalak');
+
+  const checkUserBlockHandle = async (user_id) => {
+    try {
+      const sendData = {
+        user_id,
+      };
+      const processGetBlock = await checkUserBlock(sendData);
+      if (processGetBlock.status === 200) {
+        setBlockStatus(processGetBlock.data.data);
+        setLoadingBlock(false);
+      }
+    } catch (e) {
+      setLoadingBlock(false);
+    }
+  };
 
   const setDataToState = (value) => {
     if (value.anonimity === true) {
@@ -194,8 +221,6 @@ const FeedScreen = (props) => {
   const updateFeed = async (post, index) => {
     try {
       let data = await getFeedDetail(post.activity_id);
-      console.log('data.data');
-      console.log(data);
       if (data) {
         setFeedByIndex(
           {
@@ -250,6 +275,19 @@ const FeedScreen = (props) => {
     );
   }
 
+  const onSwipeHandle = (index) => {
+    if (index >= feeds.length) {
+      setActiveFeed(0);
+    } else {
+      setActiveFeed(index + 1);
+    }
+    setCountStack(countStack - 1);
+    let now = new Date();
+    let diff = now.getTime() - time.getTime();
+    sendViewPost(feeds[index].id, diff);
+    setTime(new Date());
+  };
+
   const sendViewPost = (id, viewTime) => {
     viewTimePost(id, time);
   };
@@ -264,6 +302,7 @@ const FeedScreen = (props) => {
               // let id = mainFeeds[mainFeeds.length - 1].id;
               let id = feeds[feeds.length - 1].id;
               setLastId(id);
+              setActiveFeed(0);
             }
           }}
           disableTopSwipe={false}
@@ -273,19 +312,14 @@ const FeedScreen = (props) => {
           verticalThreshold={1}
           horizontalSwipe={false}
           disableBottomSwipe={true}
-          onSwipedTop={(index) => {
-            setCountStack(countStack - 1);
-            let now = new Date();
-            let diff = now.getTime() - time.getTime();
-            sendViewPost(feeds[index].id, diff);
-            setTime(new Date());
-          }}>
+          onSwipedTop={onSwipeHandle}>
           {feeds.length > 0
             ? feeds.map((item, index) => (
                 <RenderItem
                   index={index}
                   key={`${index}${item?.refreshtoken || new Date().valueOf()}`}
                   item={item}
+                  blockStatus={blockStatus}
                   onNewPollFetched={onNewPollFetched}
                   onPress={() => {
                     props.navigation.navigate('PostDetailPage', {
