@@ -95,7 +95,7 @@ const FeedScreen = (props) => {
     };
     let result = await blockUser(data);
     if (result.code === 200) {
-      checkUserBlockHandle(feeds[activeFedd].actor.id);
+      getDataFeeds(lastId);
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -181,7 +181,6 @@ const FeedScreen = (props) => {
   React.useEffect(() => {
     setLoading(true);
     getDataFeeds(lastId);
-    console.log('sakti');
   }, [lastId]);
 
   React.useEffect(() => {
@@ -189,8 +188,6 @@ const FeedScreen = (props) => {
       checkUserBlockHandle(feeds[activeFedd].actor.id);
     }
   }, [activeFedd]);
-
-  console.log(feeds[activeFedd], 'lalak');
 
   const checkUserBlockHandle = async (user_id) => {
     try {
