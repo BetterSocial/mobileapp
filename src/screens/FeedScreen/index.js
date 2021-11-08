@@ -49,11 +49,6 @@ const FeedScreen = (props) => {
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
   const [time, setTime] = React.useState(new Date());
-  const [blockStatus, setBlockStatus] = React.useState(false);
-  const [activeFedd, setActiveFeed] = React.useState(0);
-  const [loadingBlock, setLoadingBlock] = React.useState(false);
-  const [offsetDrag, setOffsetDrag] = React.useState(0);
-  const [totalLayout, setTotalLayout] = React.useState(0);
 
   const refBlockUser = React.useRef();
   const refBlockDomain = React.useRef();
@@ -127,7 +122,7 @@ const FeedScreen = (props) => {
     };
     let result = await blockAnonymous(data);
     if (result.code === 201) {
-      getDataFeeds(lastId);
+      getDataFeeds('');
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -163,8 +158,12 @@ const FeedScreen = (props) => {
       const dataFeeds = await getMainFeed(query);
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
+        if (id === '') {
+          setMainFeeds(data, dispatch);
+        } else {
+          setMainFeeds([...feeds, ...data], dispatch);
+        }
         setCountStack(data.length);
-        setMainFeeds([...feeds, ...data], dispatch);
       }
       setLoading(false);
       setInitialLoading(false);
@@ -195,27 +194,6 @@ const FeedScreen = (props) => {
   React.useEffect(() => {
     getDataFeeds(lastId);
   }, []);
-
-  // React.useEffect(() => {
-  //   if (activeFedd && feeds[activeFedd] && feeds[activeFedd].actor) {
-  //     checkUserBlockHandle(feeds[activeFedd].actor.id);
-  //   }
-  // }, [activeFedd]);
-
-  // const checkUserBlockHandle = async (user_id) => {
-  //   try {
-  //     const sendData = {
-  //       user_id,
-  //     };
-  //     const processGetBlock = await checkUserBlock(sendData);
-  //     if (processGetBlock.status === 200) {
-  //       setBlockStatus(processGetBlock.data.data);
-  //       setLoadingBlock(false);
-  //     }
-  //   } catch (e) {
-  //     setLoadingBlock(false);
-  //   }
-  // };
 
   const setDataToState = (value) => {
     if (value.anonimity === true) {
@@ -286,23 +264,6 @@ const FeedScreen = (props) => {
     );
   }
 
-  const onSwipeHandle = (index) => {
-    if (index >= feeds.length) {
-      setActiveFeed(0);
-    } else {
-      setActiveFeed(index + 1);
-    }
-    setCountStack(countStack - 1);
-    let now = new Date();
-    let diff = now.getTime() - time.getTime();
-    sendViewPost(feeds[index].id, diff);
-    setTime(new Date());
-  };
-
-  const sendViewPost = (id, viewTime) => {
-    viewTimePost(id, time);
-  };
-
   const renderList = ({item, index}) => (
     <RenderListFeed
       item={item}
@@ -318,15 +279,10 @@ const FeedScreen = (props) => {
     />
   );
 
-  console.log(Dimensions.get('window').height, 'samina2');
-
-  console.log(offsetDrag, 'sakil');
-
   const endDrag = ({nativeEvent}) => {
     const index =
       nativeEvent.contentOffset.y / nativeEvent.layoutMeasurement.height;
     const round = Math.round(index);
-    console.log(round, 'nanim');
     if (round === feeds.length - (feeds.length - (feeds.length - 1))) {
       onEndReach();
     }
@@ -380,10 +336,10 @@ const FeedScreen = (props) => {
   };
 
   const onRefresh = () => {
-    getDataFeeds('')
-  }
+    getDataFeeds('');
+  };
 
-  console.log(feeds, 'hihi')
+  console.log(feeds, 'hihi');
 
   return (
     <View style={styles.container} forceInset={{top: 'always'}}>
