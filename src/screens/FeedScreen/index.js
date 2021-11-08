@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  FlatList,
+  PixelRatio,
+  Dimensions,
+} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
@@ -28,7 +35,7 @@ import RenderListFeed from './RenderList';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
-
+  const flatListRef = React.useRef();
   const [initialLoading, setInitialLoading] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const [countStack, setCountStack] = React.useState(null);
@@ -40,6 +47,8 @@ const FeedScreen = (props) => {
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
   const [time, setTime] = React.useState(new Date());
+  const [offsetDrag, setOffsetDrag] = React.useState(0);
+  const [totalLayout, setTotalLayout] = React.useState(0);
 
   const refBlockUser = React.useRef();
   const refBlockDomain = React.useRef();
@@ -52,12 +61,12 @@ const FeedScreen = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   let {feeds} = feedsContext;
 
-  React.useEffect(() => {
-    let isRefresh = props.route.params?.refresh;
-    if (isRefresh) {
-      getDataFeeds(lastId);
-    }
-  }, [props.route.params, lastId]);
+  // React.useEffect(() => {
+  //   let isRefresh = props.route.params?.refresh;
+  //   if (isRefresh) {
+  //     getDataFeeds(lastId);
+  //   }
+  // }, [props.route.params, lastId]);
 
   const onSelectBlocking = (v) => {
     if (v !== 1) {
@@ -134,33 +143,36 @@ const FeedScreen = (props) => {
     userBlock();
   };
 
-  const getDataFeeds = async (id = '') => {
+  const getDataFeeds = async (id = '', index) => {
     setCountStack(null);
-    setInitialLoading(true);
+    console.log(id, 'saman');
+    setLoading(true);
     try {
       let query = '';
       if (id !== '') {
         query = '?id_lt=' + id;
       }
+      if (index && typeof index === 'number') {
+        flatListRef.current.scrollToIndex({
+          index,
+        });
+      }
+
       const dataFeeds = await getMainFeed(query);
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         setCountStack(data.length);
-        setMainFeeds(data, dispatch);
+        setMainFeeds([...feeds, ...data], dispatch);
       }
       setInitialLoading(false);
       setTime(new Date());
+      setLoading(false);
     } catch (e) {
-      console.log(e);
       setInitialLoading(false);
+      setLoading(false);
+      console.log(e);
     }
   };
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     getDataFeeds(lastId);
-  //   }, [lastId]),
-  // );
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -211,6 +223,7 @@ const FeedScreen = (props) => {
     }
   };
   const setUpVote = async (post, index) => {
+    console.log(post, 'post')
     await upVote(post);
     // console.log('post');
     // console.log(post);
@@ -255,9 +268,82 @@ const FeedScreen = (props) => {
     viewTimePost(id, time);
   };
 
-  const renderList = ({item, index}) => <RenderListFeed item={item} />;
+  const renderList = ({item, index}) => (
+    <RenderListFeed
+      item={item}
+      onNewPollFetched={onNewPollFetched}
+      index={index}
+      onPressDomain={onPressDomain}
+      onPress={() => onPress(item, index)}
+      onPressComment={() => onPressComment(index)}
+      onPressBlock={() => onPressBlock(item)}
+      onPressUpvote={(post) => setUpVote(post, index)}
+      selfUserId={yourselfId}
+      onPressDownVote={(post) => setDownVote(post, index)}
+    />
+  );
 
-  console.log(feeds, 'jamalu');
+  console.log(Dimensions.get('window').height, 'samina2');
+
+  console.log(offsetDrag, 'sakil');
+
+  const endDrag = ({nativeEvent}) => {
+    const index =
+      nativeEvent.contentOffset.y / nativeEvent.layoutMeasurement.height;
+    const round = Math.round(index);
+    console.log(round, 'nanim');
+    if (round < feeds.length - 1) {
+      flatListRef.current.scrollToIndex({
+        index: round,
+      });
+    } else {
+      onEndReach(round);
+    }
+
+    // console.log(index, 'rupaman')
+    //  if(nativeEvent.contentOffset.y / nativeEvent.layoutMeasurement.height)
+  };
+
+  const onPressDomain = (item) => {
+    let param = linkContextScreenParamBuilder(
+      item,
+      item.og.domain,
+      item.og.domainImage,
+      item.og.domain_page_id,
+    );
+    props.navigation.navigate('DomainScreen', param);
+  };
+
+  const onEndReach = (index) => {
+    getDataFeeds(feeds[feeds.length - 1].id, index);
+    console.log('kampret', index);
+  };
+
+  const onPress = (item, index) => {
+    props.navigation.navigate('PostDetailPage', {
+      index: index,
+      isalreadypolling: item.isalreadypolling,
+    });
+  }
+
+  const onPressComment = (index) => {
+    props.navigation.navigate('PostDetailPage', {
+      index: index,
+    });
+  }
+
+  const onPressBlock = (value) => {
+    if (value.actor.id === yourselfId) {
+      Toast.show("Can't Block yourself", Toast.LONG);
+    } else {
+      setDataToState(value);
+      if (value.anonimity) {
+        refBlockPostAnonymous.current.open();
+      } else {
+        refBlockUser.current.open();
+      }
+    }
+  }
 
   return (
     <View style={styles.container} forceInset={{top: 'always'}}>
@@ -272,7 +358,10 @@ const FeedScreen = (props) => {
         snapToAlignment="center"
         decelerationRate="fast"
         contentContainerStyle={styles.flatlistContainer}
-        style={styles.scrollContainer}
+        ref={flatListRef}
+        // onScrollEndDrag={endDrag}
+        onMomentumScrollEnd={endDrag}
+        refreshing={loading}
       />
       {/* {feeds.length > 0 && (
         <CardStack
@@ -365,7 +454,7 @@ const FeedScreen = (props) => {
         </CardStack>
       )} */}
 
-      <Loading visible={loading} />
+      {/* <Loading visible={loading} /> */}
       <ButtonNewPost />
       <BlockPostAnonymous
         refBlockPostAnonymous={refBlockPostAnonymous}
@@ -417,9 +506,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   flatlistContainer: {
-    paddingBottom: 20,
-  },
-  scrollContainer: {
-    paddingHorizontal: 10,
+    paddingBottom: 0,
   },
 });
