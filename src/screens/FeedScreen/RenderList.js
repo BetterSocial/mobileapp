@@ -46,6 +46,8 @@ const styles = StyleSheet.create({
     height: FULL_HEIGHT - bottomHeight - tabBarHeight,
     width: FULL_WIDTH,
     backgroundColor: colors.white,
+    borderBottomWidth: 0.4,
+    borderBottomColor: colors.gray1,
   }),
   cardMain: {
     height: '100%',
@@ -227,7 +229,6 @@ const RenderListFeed = (props) => {
     initial();
   }, [item]);
 
-  console.log(item);
   return (
     <View style={[styles.cardContainer(bottomHeight)]}>
       <View style={styles.cardMain}>
