@@ -106,7 +106,7 @@ const FeedScreen = (props) => {
     };
     let result = await blockUser(data);
     if (result.code === 200) {
-      getDataFeeds(lastId);
+      getDataFeeds('');
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -201,7 +201,7 @@ const FeedScreen = (props) => {
 
   React.useEffect(() => {
     getDataFeeds(lastId);
-  }, []);
+  }, [lastId]);
 
   // React.useEffect(() => {
   //   if (activeFedd && feeds[activeFedd] && feeds[activeFedd].actor) {
