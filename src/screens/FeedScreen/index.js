@@ -6,6 +6,7 @@ import {
   FlatList,
   PixelRatio,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -149,7 +150,7 @@ const FeedScreen = (props) => {
     userBlock();
   };
 
-  const getDataFeeds = async (id = '', index) => {
+  const getDataFeeds = async (id = '') => {
     setCountStack(null);
     console.log(id, 'saman');
     setLoading(true);
@@ -157,11 +158,6 @@ const FeedScreen = (props) => {
       let query = '';
       if (id !== '') {
         query = '?id_lt=' + id;
-      }
-      if (index && typeof index === 'number') {
-        flatListRef.current.scrollToIndex({
-          index,
-        });
       }
 
       const dataFeeds = await getMainFeed(query);
@@ -249,7 +245,7 @@ const FeedScreen = (props) => {
     }
   };
   const setUpVote = async (post, index) => {
-    console.log(post, 'post')
+    console.log(post, 'post');
     await upVote(post);
     // console.log('post');
     // console.log(post);
@@ -331,13 +327,12 @@ const FeedScreen = (props) => {
       nativeEvent.contentOffset.y / nativeEvent.layoutMeasurement.height;
     const round = Math.round(index);
     console.log(round, 'nanim');
-    if (round < feeds.length - 1) {
-      flatListRef.current.scrollToIndex({
-        index: round,
-      });
-    } else {
-      onEndReach(round);
+    if (round === feeds.length - (feeds.length - (feeds.length - 1))) {
+      onEndReach();
     }
+    flatListRef.current.scrollToIndex({
+      index: round,
+    });
 
     // console.log(index, 'rupaman')
     //  if(nativeEvent.contentOffset.y / nativeEvent.layoutMeasurement.height)
@@ -353,9 +348,9 @@ const FeedScreen = (props) => {
     props.navigation.navigate('DomainScreen', param);
   };
 
-  const onEndReach = (index) => {
-    getDataFeeds(feeds[feeds.length - 1].id, index);
-    console.log('kampret', index);
+  const onEndReach = () => {
+    getDataFeeds(feeds[feeds.length - 1].id);
+    console.log('kampret');
   };
 
   const onPress = (item, index) => {
@@ -363,13 +358,13 @@ const FeedScreen = (props) => {
       index: index,
       isalreadypolling: item.isalreadypolling,
     });
-  }
+  };
 
   const onPressComment = (index) => {
     props.navigation.navigate('PostDetailPage', {
       index: index,
     });
-  }
+  };
 
   const onPressBlock = (value) => {
     if (value.actor.id === yourselfId) {
@@ -382,6 +377,10 @@ const FeedScreen = (props) => {
         refBlockUser.current.open();
       }
     }
+  };
+
+  const onRefresh = () => {
+    getDataFeeds('')
   }
 
   return (
@@ -401,6 +400,7 @@ const FeedScreen = (props) => {
         // onScrollEndDrag={endDrag}
         onMomentumScrollEnd={endDrag}
         refreshing={loading}
+        onRefresh={onRefresh}
       />
       {/* {feeds.length > 0 && (
         <CardStack
