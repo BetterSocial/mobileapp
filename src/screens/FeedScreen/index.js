@@ -168,9 +168,6 @@ const FeedScreen = (props) => {
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         setCountStack(data.length);
-        // if (data && data[activeFedd]) {
-        //   checkUserBlockHandle(data[activeFedd].actor.id);
-        // }
         setMainFeeds([...feeds, ...data], dispatch);
       }
       setLoading(false);
