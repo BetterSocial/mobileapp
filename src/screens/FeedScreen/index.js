@@ -194,7 +194,7 @@ const FeedScreen = (props) => {
 
   React.useEffect(() => {
     getDataFeeds(lastId);
-  }, [lastId]);
+  }, []);
 
   // React.useEffect(() => {
   //   if (activeFedd && feeds[activeFedd] && feeds[activeFedd].actor) {
@@ -382,6 +382,8 @@ const FeedScreen = (props) => {
   const onRefresh = () => {
     getDataFeeds('')
   }
+
+  console.log(feeds, 'hihi')
 
   return (
     <View style={styles.container} forceInset={{top: 'always'}}>
