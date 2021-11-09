@@ -175,6 +175,16 @@ const LocalComunity = () => {
     }
   };
 
+  const onPressFirstLocation = (status) => {
+    setIsVisibleFirstLocation(status);
+    setSearch('');
+  };
+
+  const onPressSecondLocation = (status) => {
+    setIsVisibleSecondLocation(status);
+    setSearch('');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {renderHeader()}
@@ -191,16 +201,12 @@ const LocalComunity = () => {
         <FlatList
           data={location}
           renderItem={renderItem}
-          keyExtractor={(item) => item.location_id}
+          keyExtractor={(item, index) => index.toString()}
         />
 
         {/* First Location */}
         {location.length <= 0 ? (
-          <TouchableNativeFeedback
-            onPress={() => {
-              setIsVisibleFirstLocation(true);
-              setSearch('');
-            }}>
+          <TouchableNativeFeedback onPress={() => onPressFirstLocation(true)}>
             <View style={styles.card}>
               <PlusIcon width={18} height={18} fill="#000000" />
               <View style={styles.columnButton}>
@@ -219,11 +225,7 @@ const LocalComunity = () => {
 
         {/* second Location*/}
         {location.length === 1 ? (
-          <TouchableNativeFeedback
-            onPress={() => {
-              setIsVisibleSecondLocation(true);
-              setSearch('');
-            }}>
+          <TouchableNativeFeedback onPress={() => onPressSecondLocation(true)}>
             <View style={styles.card}>
               <PlusIcon width={18} height={18} fill="#000000" />
               <View style={styles.columnButton}>
@@ -245,10 +247,7 @@ const LocalComunity = () => {
       {/* First Location */}
       <SearchModal
         isVisible={isVisibleFirstLocation}
-        onClose={() => {
-          setIsVisibleFirstLocation(false);
-          setSearch('');
-        }}
+        onClose={() => onPressFirstLocation(false)}
         value={search}
         onChangeText={(text) => handleSearch(text)}
         placeholder={StringConstant.searchModalPlaceholder}
@@ -264,10 +263,7 @@ const LocalComunity = () => {
       {/* Second Location */}
       <SearchModal
         isVisible={isVisibleSecondLocation}
-        onClose={() => {
-          setIsVisibleSecondLocation(false);
-          setSearch('');
-        }}
+        onClose={() => onPressSecondLocation(false)}
         value={search}
         onChangeText={(text) => handleSearch(text)}
         placeholder={StringConstant.searchModalPlaceholder}
