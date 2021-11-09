@@ -30,3 +30,17 @@ export const blockAnonymous = async (data) => {
     return error.response.data;
   }
 };
+
+export const unblockUserApi = async (data) => {
+  return new Promise((resolve, reject) => {
+    api
+      .post('/users/unblock', data)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((e) => {
+        console.log(e.response, 'suman');
+        reject(e.response.data);
+      });
+  });
+};

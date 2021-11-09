@@ -41,6 +41,19 @@ export const getOtherProfile = async (userId, otherId) => {
   });
 };
 
+export const checkUserBlock = (data) => {
+  return new Promise((resolve, reject) => {
+    api
+      .post('/users/check-block-status', data)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 export const changeRealName = async (userId, real_name) => {
   return new Promise((resolve, reject) => {
     api
