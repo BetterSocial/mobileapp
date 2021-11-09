@@ -1,21 +1,10 @@
 import * as React from 'react';
-import {
-  View,
-  SafeAreaView,
-  StyleSheet,
-  FlatList,
-  PixelRatio,
-  Dimensions,
-  ActivityIndicator,
-} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import Toast from 'react-native-simple-toast';
 
-import RenderItem from './RenderItem';
-import Loading from '../../components/Loading';
-import CardStack from '../../components/CardStack';
 import {ButtonNewPost} from '../../components/Button';
 import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
@@ -26,14 +15,14 @@ import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
 import {downVote, upVote} from '../../service/vote';
-import {getFeedDetail, getMainFeed, viewTimePost} from '../../service/post';
+import {getFeedDetail, getMainFeed} from '../../service/post';
 import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
 import {blockAnonymous, blockUser} from '../../service/blocking';
 import {Context} from '../../context';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {checkUserBlock} from '../../service/profile';
 import RenderListFeed from './RenderList';
+import TiktokScroll from '../../components/TiktokScroll';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -60,13 +49,6 @@ const FeedScreen = (props) => {
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   let {feeds} = feedsContext;
-
-  // React.useEffect(() => {
-  //   let isRefresh = props.route.params?.refresh;
-  //   if (isRefresh) {
-  //     getDataFeeds(lastId);
-  //   }
-  // }, [props.route.params, lastId]);
 
   const onSelectBlocking = (v) => {
     if (v !== 1) {
@@ -147,7 +129,6 @@ const FeedScreen = (props) => {
 
   const getDataFeeds = async (id = '') => {
     setCountStack(null);
-    console.log(id, 'saman');
     setLoading(true);
     try {
       let query = '';
@@ -172,7 +153,6 @@ const FeedScreen = (props) => {
     } catch (e) {
       setInitialLoading(false);
       setLoading(false);
-      console.log(e);
     }
   };
 
@@ -223,16 +203,11 @@ const FeedScreen = (props) => {
     }
   };
   const setUpVote = async (post, index) => {
-    console.log(post, 'post');
     await upVote(post);
-    // console.log('post');
-    // console.log(post);
     updateFeed(post, index);
   };
   const setDownVote = async (post, index) => {
     await downVote(post);
-    // console.log('post');
-    // console.log(post);
     updateFeed(post, index);
   };
 
@@ -264,36 +239,6 @@ const FeedScreen = (props) => {
     );
   }
 
-  const renderList = ({item, index}) => (
-    <RenderListFeed
-      item={item}
-      onNewPollFetched={onNewPollFetched}
-      index={index}
-      onPressDomain={onPressDomain}
-      onPress={() => onPress(item, index)}
-      onPressComment={() => onPressComment(index)}
-      onPressBlock={() => onPressBlock(item)}
-      onPressUpvote={(post) => setUpVote(post, index)}
-      selfUserId={yourselfId}
-      onPressDownVote={(post) => setDownVote(post, index)}
-    />
-  );
-
-  const endDrag = ({nativeEvent}) => {
-    const index =
-      nativeEvent.contentOffset.y / nativeEvent.layoutMeasurement.height;
-    const round = Math.round(index);
-    if (round === feeds.length - (feeds.length - (feeds.length - 1))) {
-      onEndReach();
-    }
-    flatListRef.current.scrollToIndex({
-      index: round,
-    });
-
-    // console.log(index, 'rupaman')
-    //  if(nativeEvent.contentOffset.y / nativeEvent.layoutMeasurement.height)
-  };
-
   const onPressDomain = (item) => {
     let param = linkContextScreenParamBuilder(
       item,
@@ -306,7 +251,6 @@ const FeedScreen = (props) => {
 
   const onEndReach = () => {
     getDataFeeds(feeds[feeds.length - 1].id);
-    console.log('kampret');
   };
 
   const onPress = (item, index) => {
@@ -339,115 +283,28 @@ const FeedScreen = (props) => {
     getDataFeeds('');
   };
 
-  console.log(feeds, 'hihi');
-
   return (
     <View style={styles.container} forceInset={{top: 'always'}}>
-      <FlatList
+      <TiktokScroll
         data={feeds}
-        renderItem={renderList}
-        keyExtractor={(item, index) => {
-          return item.id;
-        }}
-        showsVerticalScrollIndicator={false}
-        snapToInterval={20}
-        snapToAlignment="center"
-        decelerationRate="fast"
-        contentContainerStyle={styles.flatlistContainer}
-        ref={flatListRef}
-        // onScrollEndDrag={endDrag}
-        onMomentumScrollEnd={endDrag}
-        refreshing={loading}
+        onEndReach={onEndReach}
         onRefresh={onRefresh}
-      />
-      {/* {feeds.length > 0 && (
-        <CardStack
-          style={styles.content}
-          renderNoMoreCards={() => {
-            if (countStack === 0) {
-              // let id = mainFeeds[mainFeeds.length - 1].id;
-              let id = feeds[feeds.length - 1].id;
-              setLastId(id);
-              setActiveFeed(0);
-            }
-          }}
-          disableTopSwipe={false}
-          disableLeftSwipe={true}
-          disableRightSwipe={true}
-          verticalSwipe={true}
-          verticalThreshold={1}
-          horizontalSwipe={false}
-          disableBottomSwipe={true}
-          onSwipedTop={onSwipeHandle}>
-          {feeds.length > 0
-            ? feeds.map((item, index) => (
-                <RenderItem
-                  index={index}
-                  key={`${index}${item?.refreshtoken || new Date().valueOf()}`}
-                  item={item}
-                  blockStatus={blockStatus}
-                  onNewPollFetched={onNewPollFetched}
-                  onPress={() => {
-                    props.navigation.navigate('PostDetailPage', {
-                      index: index,
-                      isalreadypolling: item.isalreadypolling,
-                    });
-                  }}
-                  onPressBlock={(value) => {
-                    if (value.actor.id === yourselfId) {
-                      Toast.show("Can't Block yourself", Toast.LONG);
-                    } else {
-                      setDataToState(value);
-                      if (value.anonimity) {
-                        refBlockPostAnonymous.current.open();
-                      } else {
-                        refBlockUser.current.open();
-                      }
-                    }
-                  }}
-                  onPressComment={() => {
-                    props.navigation.navigate('PostDetailPage', {
-                      index: index,
-                    });
-                  }}
-                  onPressUpvote={(post) => setUpVote(post, index)}
-                  onPressDownVote={(post) => setDownVote(post, index)}
-                  selfUserId={yourselfId}
-                  onPressDomain={() => {
-                    let param = linkContextScreenParamBuilder(
-                      item,
-                      item.og.domain,
-                      item.og.domainImage,
-                      item.og.domain_page_id,
-                    );
-                    props.navigation.navigate('DomainScreen', param);
-                  }}
-                  onCardContentPress={() => {
-                    props.navigation.navigate('DetailDomainScreen', {
-                      item: {
-                        domain: {
-                          name: item.og.domain,
-                          image: item.og.domainImage,
-                        },
-                        content: {
-                          image: item.og.image,
-                          title: item.og.title,
-                          url: item.og.url,
-                          created_at: item.og.date,
-                          description: item.og.description,
-                        },
-                        reaction_counts: item.reaction_counts,
-                        latest_reactions: item.latest_reactions,
-                      },
-                    });
-                  }}
-                />
-              ))
-            : null}
-        </CardStack>
-      )} */}
-
-      {/* <Loading visible={loading} /> */}
+        refreshing={loading}>
+        {({item, index}) => (
+          <RenderListFeed
+            item={item}
+            onNewPollFetched={onNewPollFetched}
+            index={index}
+            onPressDomain={onPressDomain}
+            onPress={() => onPress(item, index)}
+            onPressComment={() => onPressComment(index)}
+            onPressBlock={() => onPressBlock(item)}
+            onPressUpvote={(post) => setUpVote(post, index)}
+            selfUserId={yourselfId}
+            onPressDownVote={(post) => setDownVote(post, index)}
+          />
+        )}
+      </TiktokScroll>
       <ButtonNewPost />
       <BlockPostAnonymous
         refBlockPostAnonymous={refBlockPostAnonymous}
