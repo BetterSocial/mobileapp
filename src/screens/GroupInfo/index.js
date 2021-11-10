@@ -139,6 +139,7 @@ const GroupInfo = () => {
 
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
+      username: chatName,
       focusChatName: true,
     });
   };

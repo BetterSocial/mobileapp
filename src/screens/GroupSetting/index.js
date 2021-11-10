@@ -39,7 +39,7 @@ const GroupSetting = ({navigation, route}) => {
   const [changeImage, setChangeImage] = React.useState(false);
   const [base64Profile, setBase64Profile] = React.useState('');
   const [urlImage, setUrlImage] = React.useState(channel?.data?.image);
-  const [isUploadingImage, setIsUploadingImage] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   let isFocusChatName = route?.params?.focusChatName;
 
@@ -50,18 +50,18 @@ const GroupSetting = ({navigation, route}) => {
   const submitData = async () => {
     let changeImageUrl = '';
     if (changeImage) {
+      setIsLoading(true);
       try {
-        setIsUploadingImage(true);
         let res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
         changeImageUrl = res.data.url;
-        setIsUploadingImage(false);
       } catch (e) {
-        setIsUploadingImage(false);
+        setIsLoading(false);
         return;
       }
     }
 
     if (changeName || changeImage) {
+      setIsLoading(true);
       let dataEdit = {
         name: groupName,
         // ...(changeImage && {image: base64Profile}),
@@ -76,6 +76,7 @@ const GroupSetting = ({navigation, route}) => {
 
       await channel.update(dataEdit);
       navigation.navigate('ChannelList');
+      setIsLoading(false);
     } else {
       navigation.goBack();
     }
@@ -128,7 +129,7 @@ const GroupSetting = ({navigation, route}) => {
         onUpdateImage={lounchGalery}
         isFocusChatName={isFocusChatName}
       />
-      <Loading visible={isUploadingImage} />
+      <Loading visible={isLoading} />
       <View style={styles.users}>
         <Text style={styles.countUser}>Participants {countUser}</Text>
         <FlatList

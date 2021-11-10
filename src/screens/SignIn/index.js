@@ -40,7 +40,7 @@ import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import { openUrl } from '../../utils/Utils';
+import {openUrl} from '../../utils/Utils';
 
 const ENABLE_DEV_ONLY_FEATURE = true;
 
@@ -192,6 +192,18 @@ const SignIn = () => {
             <View style={S.divider} />
             <Text style={S.dummyAccountItem}>
               fajarism : HQEGNQCHA8J1OIX4G2CP
+            </Text>
+            <View style={S.divider} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CQ')}>
+            <Text style={S.dummyAccountItem}>
+              Fajar_alter : HQEGNQCHA8J1OIX4G2CQ
+            </Text>
+            <View style={S.divider} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CR')}>
+            <Text style={S.dummyAccountItem}>
+              Fajar_alter2 : HQEGNQCHA8J1OIX4G2CR
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>
