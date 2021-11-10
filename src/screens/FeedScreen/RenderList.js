@@ -21,6 +21,7 @@ import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder
 import {colors} from '../../utils/colors';
 import {Gap, PreviewComment, Footer} from '../../components';
 import {getCountCommentWithChild} from '../../utils/getstream';
+import SimpleToast from 'react-native-simple-toast';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
@@ -46,8 +47,8 @@ const styles = StyleSheet.create({
     height: FULL_HEIGHT - bottomHeight - tabBarHeight,
     width: FULL_WIDTH,
     backgroundColor: colors.white,
-    borderBottomWidth: 0.4,
-    borderBottomColor: colors.gray1,
+    borderBottomWidth: 5,
+    borderBottomColor: colors.lightgrey,
   }),
   cardMain: {
     height: '100%',
@@ -70,7 +71,7 @@ const RenderListFeed = (props) => {
     onPressBlock,
     onPressUpvote,
     selfUserId,
-    onPressDownVote
+    onPressDownVote,
   } = props;
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
@@ -79,7 +80,7 @@ const RenderListFeed = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
-
+  const [loadingVote, setLoadingVote] = React.useState(false);
   const bottomHeight = useBottomTabBarHeight();
   const navigateToLinkContextPage = (item) => {
     let param = linkContextScreenParamBuilder(
@@ -137,6 +138,91 @@ const RenderListFeed = (props) => {
     return link;
   }
 
+  const onPressDownVoteHandle = async () => {
+    setStatusDowvote((prev) => !prev);
+    setLoadingVote(true);
+    if (totalVote === -1) {
+      setVoteStatus('none');
+      setTotalVote((prevState) => prevState + 1);
+    } else if (totalVote === 0) {
+      setVoteStatus('downvote');
+      setTotalVote((prevState) => prevState - 1);
+    } else {
+      setVoteStatus('downvote');
+      setTotalVote(-1);
+      return postApiDownvote(true);
+    }
+    await postApiDownvote(!statusDownvote);
+  };
+
+  const onPressUpvoteHandle = async () => {
+    setLoadingVote(true);
+    setStatusUpvote((prev) => !prev);
+    if (totalVote === 1) {
+      setVoteStatus('none');
+      setTotalVote((prevState) => prevState - 1);
+    } else if (totalVote === 0) {
+      setVoteStatus('upvote');
+      setTotalVote((prevState) => prevState + 1);
+    } else {
+      setVoteStatus('upvote');
+      setTotalVote(1);
+      return await postApiUpvote(true)
+    }
+    await postApiUpvote(!statusUpvote);
+  };
+
+  const handleVote = (data = {}) => {
+    if (data.downvotes > 0) {
+      setVoteStatus('downvote');
+      return setTotalVote(data.downvotes * -1);
+    } else if (data.upvotes > 0) {
+      setVoteStatus('upvote');
+      return setTotalVote(data.upvotes);
+    }
+    setVoteStatus('none');
+    return setTotalVote(0);
+  };
+
+  const postApiUpvote = async (status) => {
+    const processData = await onPressUpvote({
+      activity_id: item.id,
+      status: status,
+      feed_group: 'main_feed',
+    });
+    if (processData.code == 200) {
+      setLoadingVote(false);
+      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+    }
+    setLoadingVote(false);
+  };
+  const postApiDownvote = async (status) => {
+    const processData = await onPressDownVote({
+      activity_id: item.id,
+      status: status,
+      feed_group: 'main_feed',
+    });
+    if (processData.code == 200) {
+      setLoadingVote(false);
+      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+    }
+    setLoadingVote(false);
+  };
+
+  const initial = () => {
+    let reactionCount = item.reaction_counts;
+    if (JSON.stringify(reactionCount) !== '{}') {
+      let comment = reactionCount.comment;
+      handleVote(reactionCount);
+      if (comment !== undefined) {
+        if (comment > 0) {
+          setReaction(true);
+          setPreviewComment(item.latest_reactions.comment[0]);
+        }
+      }
+    }
+  };
+
   React.useEffect(() => {
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
@@ -164,71 +250,9 @@ const RenderListFeed = (props) => {
     validationStatusVote();
   }, [item, selfUserId]);
 
-  const onPressDownVoteHandle = () => {
-    setStatusDowvote((prev) => {
-      prev = !prev;
-      onPressDownVote({
-        activity_id: item.id,
-        status: prev,
-        feed_group: 'main_feed',
-      });
-      if (prev) {
-        setVoteStatus('downvote');
-        if (statusUpvote === true) {
-          setTotalVote((p) => p - 2);
-        } else {
-          setTotalVote((p) => p - 1);
-        }
-        setStatusUpvote(false);
-      } else {
-        setVoteStatus('none');
-        setTotalVote((p) => p + 1);
-      }
-      return prev;
-    });
-  };
-
-  const onPressUpvoteHandle = () => {
-    setStatusUpvote((prev) => {
-      prev = !prev;
-      onPressUpvote({
-        activity_id: item.id,
-        status: prev,
-        feed_group: 'main_feed',
-      });
-      if (prev) {
-        setVoteStatus('upvote');
-        if (statusDownvote === true) {
-          setTotalVote((p) => p + 2);
-        } else {
-          setTotalVote((p) => p + 1);
-        }
-        setStatusDowvote(false);
-      } else {
-        setVoteStatus('none');
-        setTotalVote((p) => p - 1);
-      }
-      console.log('vote ', prev);
-      return prev;
-    });
-  };
-
   React.useEffect(() => {
-    const initial = () => {
-      let reactionCount = item.reaction_counts;
-      if (JSON.stringify(reactionCount) !== '{}') {
-        let comment = reactionCount.comment;
-        if (comment !== undefined) {
-          if (comment > 0) {
-            setReaction(true);
-            setPreviewComment(item.latest_reactions.comment[0]);
-          }
-        }
-      }
-    };
     initial();
   }, [item]);
-
   return (
     <View style={[styles.cardContainer(bottomHeight)]}>
       <View style={styles.cardMain}>
@@ -277,6 +301,7 @@ const RenderListFeed = (props) => {
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}
             statusVote={voteStatus}
+            loadingVote={loadingVote}
             isSelf={
               item.anonimity
                 ? false
@@ -317,6 +342,7 @@ RenderListFeed.propTypes = {
   selfUserId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onPressUpvote: PropTypes.func,
   onPressDownVote: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 export default RenderListFeed;

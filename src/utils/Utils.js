@@ -70,3 +70,9 @@ export const openUrl = (url) => {
     });
   }
 };
+
+export const removeWhiteSpace = (txt) => {
+  if (txt && typeof txt === 'string') {
+    return txt.trim();
+  }
+};

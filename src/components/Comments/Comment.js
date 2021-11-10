@@ -19,6 +19,7 @@ import {FONTS} from '../../utils/theme';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import {iVoteComment, voteComment} from '../../service/vote';
+import { removeWhiteSpace } from '../../utils/Utils';
 
 const Comment = ({
   user,
@@ -189,6 +190,7 @@ const Comment = ({
     parseToken();
     iVote();
   }, []);
+
   return (
     <View
       style={styles.container({
@@ -203,7 +205,7 @@ const Comment = ({
           <Image
             source={
               photo
-                ? {uri: photo}
+                ? {uri: removeWhiteSpace(photo)}
                 : require('../../assets/images/ProfileDefault.png')
             }
             style={styles.image}
