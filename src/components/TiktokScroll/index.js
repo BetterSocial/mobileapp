@@ -1,6 +1,10 @@
 import * as React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, StyleSheet, Dimensions, StatusBar} from 'react-native';
 import PropTypes from 'prop-types';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+
+const FULL_HEIGHT = Dimensions.get('screen').height;
+const tabBarHeight = StatusBar.currentHeight;
 
 const styles = StyleSheet.create({
   flatlistContainer: {
@@ -11,28 +15,8 @@ const styles = StyleSheet.create({
 const TiktokScroll = (props) => {
   const {data, children, onRefresh, refreshing, onEndReach} = props;
   const flatListRef = React.useRef();
-  const [beginScroll, setBeginScroll] = React.useState(0);
+  const deviceHeight = FULL_HEIGHT - tabBarHeight - useBottomTabBarHeight()
 
-  const endDrag = ({nativeEvent}) => {
-    let index =
-      nativeEvent.contentOffset.y / nativeEvent.layoutMeasurement.height;
-    if (beginScroll < nativeEvent.contentOffset.y) {
-      index = index + 0.1;
-    } else {
-      index = index - 0.1;
-    }
-    const round = Math.round(index);
-    if (round === data.length - (data.length - (data.length - 1))) {
-      onEndReach();
-    }
-    flatListRef.current.scrollToIndex({
-      index: round,
-    });
-  };
-
-  const handleBeginDragScroll = ({nativeEvent}) => {
-    setBeginScroll(nativeEvent.contentOffset.y);
-  };
 
   return (
     <FlatList
@@ -42,16 +26,15 @@ const TiktokScroll = (props) => {
         return item.id;
       }}
       showsVerticalScrollIndicator={false}
-      snapToInterval={20}
+      snapToInterval={deviceHeight}
       snapToAlignment="center"
       decelerationRate="fast"
       contentContainerStyle={styles.flatlistContainer}
       ref={flatListRef}
-      onMomentumScrollEnd={endDrag}
       refreshing={refreshing}
       onRefresh={onRefresh}
       scrollEventThrottle={1}
-      onScrollBeginDrag={handleBeginDragScroll}
+      onEndReached={onEndReach}
     />
   );
 };
