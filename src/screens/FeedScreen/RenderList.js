@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     height: FULL_HEIGHT - bottomHeight - tabBarHeight,
     width: FULL_WIDTH,
     backgroundColor: colors.white,
-    borderBottomWidth: 5,
+    borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
   }),
   cardMain: {

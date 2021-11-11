@@ -7,7 +7,7 @@ import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {calculateTime} from '../../utils/time';
+import {calculateTime, diffDate} from '../../utils/time';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import BlockUser from '../Blocking/BlockUser';
 import ReportUser from '../Blocking/ReportUser';
@@ -164,7 +164,6 @@ const Comment = ({
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    console.log('click vote ', comment);
     let result = await voteComment(dataVote);
     setUpVote(result.data.data.count_upvote);
     setDownVote(result.data.data.count_downvote);
