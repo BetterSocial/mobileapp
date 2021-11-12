@@ -50,7 +50,7 @@ const Comment = ({
   const [statusVote, setStatusVote] = React.useState('');
   const [upvote, setUpVote] = React.useState(comment.data.count_upvote);
   const [downvote, setDownVote] = React.useState(comment.data.count_downvote);
-
+    console.log(user, comment, 'mina')
   let onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;

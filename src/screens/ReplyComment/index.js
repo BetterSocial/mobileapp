@@ -53,7 +53,6 @@ const ReplyComment = (props) => {
     init();
   }, [item]);
   const getThisComment = async (newFeed) => {
-    console.log(newFeed, 'sultan')
     let newItem = await getComment({
       feed: newFeed,
       level: level,
@@ -67,7 +66,7 @@ const ReplyComment = (props) => {
       Array.isArray(newItem.latest_children.comment)
     ) {
       comments = newItem.latest_children.comment.sort(
-        (a, b) => moment(b.updated_at).unix() - moment(a.updated_at).unix(),
+        (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix(),
       );
     }
     setLoadingCMD(false);
@@ -76,8 +75,6 @@ const ReplyComment = (props) => {
   React.useEffect(() => {
     getThisComment(feeds.feeds[indexFeed]);
   }, [JSON.stringify(feeds)]);
-
-  console.log(item, 'rupawan')
 
   const updateFeed = async () => {
     try {
@@ -115,7 +112,6 @@ const ReplyComment = (props) => {
       }
     } catch (error) {
       Toast.show('Failed Comment', Toast.LONG);
-      console.log(error);
     }
   };
 
@@ -195,7 +191,7 @@ const ReplyComment = (props) => {
                           level >= 2
                         }
                         key={'r' + index}
-                        user={itemProp.user}
+                        user={itemReply.user}
                         comment={itemReply}
                         onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}
