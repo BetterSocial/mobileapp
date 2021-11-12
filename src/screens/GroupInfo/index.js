@@ -10,9 +10,11 @@ import {
   Image,
   FlatList,
   StatusBar,
+  Pressable,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import moment from 'moment';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
@@ -25,6 +27,9 @@ import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
 import {getChatName} from '../../utils/string/StringUtils';
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
+import {COLORS} from '../../utils/theme';
+import {requestExternalStoragePermission} from '../../utils/permission';
+import {uploadFile} from '../../service/file';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -37,6 +42,8 @@ const GroupInfo = () => {
   const {channel, profileChannel} = channelState;
   const [countUser] = React.useState(Object.entries(participants).length);
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
+  const [uploadedImage, setUploadedImage] = React.useState('');
+  const [isUploadingImage, setIsUploadingImage] = React.useState(false);
 
   let username = channelState.channel?.data?.name;
   let createChat = channelState.channel?.data?.created_at;
@@ -73,6 +80,21 @@ const GroupInfo = () => {
 
   const showImageProfile = () => {
     if (profileChannel || channel?.data?.image) {
+      if (uploadedImage !== '') {
+        return (
+          <Image style={styles.btnUpdatePhoto} source={{uri: uploadedImage}} />
+        );
+      }
+
+      if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
+        return (
+          <Image
+            style={styles.btnUpdatePhoto}
+            source={{uri: channel?.data?.image}}
+          />
+        );
+      }
+
       if (channel?.data?.image) {
         return (
           <Image
@@ -101,9 +123,6 @@ const GroupInfo = () => {
   let chatName = getChatName(username, profile.username);
 
   const onProfilePressed = (data) => {
-    console.log('group info profile pressed');
-    console.log(profile);
-    console.log(participants[data]);
     if (profile.user_id === participants[data].user_id) {
       navigation.navigate('ProfileScreen');
       return;
@@ -117,6 +136,54 @@ const GroupInfo = () => {
       },
     });
   };
+
+  const handleOnNameChange = () => {
+    navigation.push('GroupSetting', {
+      username: chatName,
+      focusChatName: true,
+    });
+  };
+
+  const handleOnImageClicked = () => {
+    launchGallery();
+  };
+
+  const uploadImageBase64 = async (res) => {
+    try {
+      setIsUploadingImage(true);
+      let result = await uploadFile(`data:image/jpeg;base64,${res.base64}`);
+      setUploadedImage(result.data.url);
+      let dataEdit = {
+        name: chatName,
+        image: result.data.url,
+      };
+
+      await channel.update(dataEdit);
+      setIsUploadingImage(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const launchGallery = async () => {
+    let {success, message} = await requestExternalStoragePermission();
+    if (success) {
+      launchImageLibrary(
+        {
+          mediaType: 'photo',
+          maxHeight: 500,
+          maxWidth: 500,
+          includeBase64: true,
+        },
+        (res) => {
+          if (!res.didCancel) {
+            uploadImageBase64(res);
+          }
+        },
+      );
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -124,16 +191,24 @@ const GroupInfo = () => {
       <View style={styles.lineTop} />
       <ScrollView>
         <SafeAreaView>
-          <View style={styles.containerPhoto}>{showImageProfile()}</View>
-          <View style={styles.containerGroupName}>
-            <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
-            {/* <TouchableWithoutFeedback>
+          <TouchableOpacity onPress={handleOnImageClicked}>
+            <View style={styles.containerPhoto}>{showImageProfile()}</View>
+          </TouchableOpacity>
+          <View style={styles.row}>
+            <View style={styles.column}>
+              <View style={styles.containerGroupName}>
+                <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
+              </View>
+              <Text style={styles.dateCreate}>
+                Created {moment(createChat).format('DD/MM/YY')}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={handleOnNameChange}
+              style={styles.pencilIconTouchable}>
               <MemoIc_pencil width={20} height={20} color={colors.gray1} />
-            </TouchableWithoutFeedback> */}
+            </TouchableOpacity>
           </View>
-          <Text style={styles.dateCreate}>
-            Created {moment(createChat).format('DD/MM/YY')}
-          </Text>
           <View style={styles.lineTop} />
           <View style={styles.containerMedia(asset.length === 0)}>
             <TouchableWithoutFeedback
@@ -189,6 +264,7 @@ const GroupInfo = () => {
       <View style={styles.containerLoading}>
         <Loading visible={isLoadingMembers} />
       </View>
+      <Loading visible={isUploadingImage} />
     </SafeAreaView>
   );
 };
@@ -272,7 +348,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingLeft: 20,
-    paddingRight: 28,
   },
   containerPhoto: {
     justifyContent: 'center',
@@ -297,5 +372,21 @@ const styles = StyleSheet.create({
   containerLoading: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+  },
+  pencilIconTouchable: {
+    padding: 4,
+    marginRight: 28,
+    alignContent: 'center',
+    alignItems: 'center',
+    height: 28,
   },
 });

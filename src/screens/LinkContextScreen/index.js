@@ -67,12 +67,8 @@ const LinkContextScreen = () => {
         const decoded = await JWTDecode(value);
         setIdFromToken(decoded.user_id);
       }
-
-      let selfUserId = await getUserId();
-      console.log(selfUserId);
     };
     parseToken();
-    console.log('ini LinkContextScreen');
   }, []);
 
   React.useEffect(() => {
@@ -114,13 +110,11 @@ const LinkContextScreen = () => {
   }, [iddomain, ifollow]);
 
   const getIFollow = async () => {
-    console.log('reszxczxczc');
     // console.log(res.data)
     if (ifollow.length === 0) {
       let res = await getDomainIdIFollow();
       setIFollow(res.data, dispatch);
     } else {
-      console.log('resqeqwe');
       console.log(JSON.stringify(ifollow).includes(iddomain));
       setFollow(JSON.stringify(ifollow).includes(iddomain));
     }

@@ -1,46 +1,45 @@
 import * as React from 'react';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 import {
   Button,
+  SafeAreaView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  SafeAreaView,
-  StatusBar,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-
+import { StackActions } from '@react-navigation/native';
+import { colors } from 'react-native-swiper-flatlist/src/themes';
 import {
   logIn,
-  onSuccess,
   onCancel,
   onError,
+  onSuccess,
 } from '@human-id/react-native-humanid';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import { useNavigation } from '@react-navigation/core';
-import { StackActions } from '@react-navigation/native';
-import analytics from '@react-native-firebase/analytics';
-import crashlytics from '@react-native-firebase/crashlytics';
-import { colors } from 'react-native-swiper-flatlist/src/themes';
 
-import {
-  setUserId,
-  setAccessToken,
-  setRefreshToken,
-  removeLocalStorege,
-} from '../../utils/token';
-import { Context } from '../../context';
-import { fonts } from '../../utils/fonts';
-import { checkToken } from '../../service/outh';
-import { verifyUser } from '../../service/users';
-import { setDataHumenId } from '../../context/actions/users';
-import StringConstant from '../../utils/string/StringConstant';
 import ButtonSign from '../../assets/icon-svg/button_sign.svg';
 import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
-import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import StringConstant from '../../utils/string/StringConstant';
+import { Context } from '../../context';
+import { checkToken } from '../../service/outh';
+import { fonts } from '../../utils/fonts';
 import { openUrl } from '../../utils/Utils';
+import {
+  removeLocalStorege,
+  setAccessToken,
+  setRefreshToken,
+  setUserId,
+} from '../../utils/token';
+import { setDataHumenId } from '../../context/actions/users';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import { verifyUser } from '../../service/users';
 
 const ENABLE_DEV_ONLY_FEATURE = true;
 
@@ -193,6 +192,18 @@ const SignIn = () => {
             <View style={S.divider} />
             <Text style={S.dummyAccountItem}>
               fajarism : HQEGNQCHA8J1OIX4G2CP
+            </Text>
+            <View style={S.divider} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CQ')}>
+            <Text style={S.dummyAccountItem}>
+              Fajar_alter : HQEGNQCHA8J1OIX4G2CQ
+            </Text>
+            <View style={S.divider} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CR')}>
+            <Text style={S.dummyAccountItem}>
+              Fajar_alter2 : HQEGNQCHA8J1OIX4G2CR
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>

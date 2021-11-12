@@ -4,7 +4,7 @@ export const setToken = async (value) => {
   try {
     await AsyncStorage.setItem('tkn-getstream', value);
   } catch (e) {
-    console.log(e);
+    // console.log(e);
   }
 };
 export const getToken = async () => {
@@ -12,7 +12,7 @@ export const getToken = async () => {
     const value = await AsyncStorage.getItem('tkn-getstream');
     return value;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return null;
   }
 };
@@ -20,7 +20,7 @@ export const setUserId = async (value) => {
   try {
     await AsyncStorage.setItem('userId', value);
   } catch (e) {
-    console.log(e);
+    // console.log(e);
   }
 };
 export const getUserId = async () => {
@@ -28,7 +28,7 @@ export const getUserId = async () => {
     const value = await AsyncStorage.getItem('userId');
     return value;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return null;
   }
 };

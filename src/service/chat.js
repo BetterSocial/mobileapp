@@ -23,7 +23,7 @@ const createChannel = async (
     });
     let res = await channel.create();
     // let res = await channel.watch();
-    console.log(res);
+    // console.log(res);
     return res.channel;
   } catch (error) {
     throw error;

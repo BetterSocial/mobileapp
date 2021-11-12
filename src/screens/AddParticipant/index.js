@@ -5,6 +5,7 @@ import {
   View,
   SafeAreaView,
   StatusBar,
+  Text,
 } from 'react-native';
 
 import {RecyclerListView, LayoutProvider, DataProvider} from 'recyclerlistview';
@@ -14,8 +15,10 @@ import {ProfileContact} from '../../components/Items';
 import {userPopulate} from '../../service/users';
 import {SearchContact} from '../../components/Search';
 import {Loading} from '../../components';
-import {COLORS} from '../../utils/theme';
+import {COLORS, FONTS} from '../../utils/theme';
 import {Context} from '../../context';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import Memo_ic_info from '../../assets/icons/ic_info';
 
 const width = Dimensions.get('screen').width;
 const VIEW_TYPE_DATA = 2;
@@ -151,6 +154,12 @@ const AddParticipant = ({navigation}) => {
           onPress={() => navigation.goBack()}
         />
         <SearchContact setText={filterText} text={filterParams} />
+        <View style={styles.newParticipantWarningContainer}>
+          <Memo_ic_info style={styles.newParticipantIcon} />
+          <Text style={styles.newParticipantWarningText}>
+            New participants will be able to see chat history
+          </Text>
+        </View>
         {isRecyclerViewShown && (
           <RecyclerListView
             layoutProvider={layoutProvider}
@@ -175,6 +184,30 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   containerHeader: {marginHorizontal: 22},
+  newParticipantWarningContainer: {
+    backgroundColor: 'rgba(47,128,237,0.2)',
+    borderRadius: 4,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 12,
+    paddingLeft: 14,
+    paddingRight: 11,
+    paddingBottom: 11,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  newParticipantWarningText: {
+    color: COLORS.blue,
+    fontFamily: fonts.inter[400],
+    fontSize: normalizeFontSize(14),
+    lineHeight: normalizeFontSize(24),
+    marginLeft: 12,
+    flex: 1,
+    paddingTop: 13,
+  },
+  newParticipantIcon: {
+    marginTop: 16,
+  },
   subtitleStyle: (isIsset) => ({
     color: isIsset ? COLORS.holyTosca : '#C4C4C4',
   }),

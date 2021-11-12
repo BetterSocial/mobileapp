@@ -10,6 +10,8 @@ import MemoIc_share from '../../assets/icons/Ic_share';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_upvote_on';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
 const Footer = ({
   onPressShare,
@@ -22,7 +24,28 @@ const Footer = ({
   onPressUpvote,
   totalVote,
   disableComment = false,
+  blockStatus,
+  loadingVote,
 }) => {
+  console.log(loadingVote, 'loading vote');
+  const handleBlockUi = () => {
+    if (isSelf) {
+      return null;
+    } else {
+      if (blockStatus && blockStatus.blocker) {
+        return null;
+      } else {
+        return (
+          <TouchableOpacity style={styles.btn} onPress={onPressBlock}>
+            <View style={styles.btnBlock}>
+              <MemoIc_block_inactive height={22} width={22} />
+            </View>
+          </TouchableOpacity>
+        );
+      }
+    }
+  };
+
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
       <View style={styles.leftGroupContainer}>
@@ -57,17 +80,11 @@ const Footer = ({
         </TouchableOpacity>
       )}
       <View style={styles.rightGroupContainer}>
-        {isSelf ? (
-          <View />
-        ) : (
-          <TouchableOpacity style={styles.btn} onPress={onPressBlock}>
-            <View style={styles.btnBlock}>
-              <MemoIc_block_inactive height={22} width={22} />
-            </View>
-          </TouchableOpacity>
-        )}
-
-        <TouchableOpacity style={styles.btn} onPress={onPressDownVote}>
+        {handleBlockUi()}
+        <TouchableOpacity
+          disabled={loadingVote}
+          style={styles.btn}
+          onPress={onPressDownVote}>
           <View style={styles.btnDownvote}>
             {statusVote === 'downvote' ? (
               <MemoIc_arrow_down_vote_on width={20} height={18} />
@@ -79,7 +96,10 @@ const Footer = ({
 
         <Text style={styles.vote(totalVote)}>{totalVote}</Text>
 
-        <TouchableOpacity style={styles.btn} onPress={onPressUpvote}>
+        <TouchableOpacity
+          disabled={loadingVote}
+          style={styles.btn}
+          onPress={onPressUpvote}>
           <View style={styles.btnUpvote}>
             {statusVote === 'upvote' ? (
               <MemoIc_arrow_upvote_on width={20} height={18} />
@@ -168,6 +188,22 @@ const styles = StyleSheet.create({
     // backgroundColor: 'blue',
     height: '100%',
     justifyContent: 'center',
+  },
+  buttonFollowing: {
+    width: 88,
+    height: 36,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.bondi_blue,
+    borderRadius: 8,
+  },
+  textButtonFollowing: {
+    fontFamily: fonts.inter[600],
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: colors.bondi_blue,
   },
 });
 

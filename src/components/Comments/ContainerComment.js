@@ -25,6 +25,8 @@ const ContainerComment = ({comments, indexFeed}) => {
     return index === comments.length - 1;
   };
 
+  console.log(comments, 'jilak')
+
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />

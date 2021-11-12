@@ -14,15 +14,33 @@ import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-group-picture.png';
 
-const EditGroup = ({editName, setEditName, onUpdateImage, imageUri}) => {
+const EditGroup = ({
+  editName,
+  setEditName,
+  onUpdateImage,
+  imageUri,
+  isFocusChatName = false,
+}) => {
   const [groupChat] = React.useContext(Context).groupChat;
   let countUser = Object.entries(groupChat.participants).length;
+
+  const inputChatNameRef = React.useRef();
+
+  React.useEffect(() => {
+    if (inputChatNameRef && isFocusChatName) {
+      inputChatNameRef.current.focus();
+    }
+  }, [inputChatNameRef, isFocusChatName]);
 
   const renderImage = (source) => {
     try {
       if (source && source.indexOf('file:///') > -1) {
         return <Image source={{uri: source}} style={styles.image} />;
       } else if (source && source.length > 0) {
+        if (source.indexOf('res.cloudinary.com') > -1) {
+          return <Image source={{uri: source}} style={styles.image} />;
+        }
+
         return (
           <Image
             source={{uri: `data:image/jpg;base64,${source}`}}
@@ -61,6 +79,7 @@ const EditGroup = ({editName, setEditName, onUpdateImage, imageUri}) => {
         )}
         {true ? (
           <TextInput
+            ref={inputChatNameRef}
             style={styles.editName}
             value={editName}
             onChangeText={setEditName}

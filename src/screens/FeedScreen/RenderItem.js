@@ -126,6 +126,7 @@ const Item = ({
   onNewPollFetched,
   onCardContentPress,
   index = -1,
+  blockStatus,
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -244,6 +245,7 @@ const Item = ({
           totalVote={totalVote}
           onPressShare={() => onShare(item)}
           onPressComment={() => onPressComment(item)}
+          blockStatus={blockStatus}
           onPressBlock={() => onPressBlock(item)}
           onPressDownVote={() => {
             setStatusDowvote((prev) => {
