@@ -22,6 +22,8 @@ import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BlockDomain from '../../components/Blocking/BlockDomain';
+import BlockUser from '../../components/Blocking/BlockUser';
 import BottomSheetBio from './elements/BottomSheetBio';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
@@ -30,10 +32,15 @@ import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import RenderActivity from './elements/RenderActivity';
 import RenderItem from './elements/RenderItem';
+import ReportDomain from '../../components/Blocking/ReportDomain';
+import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
+import ReportUser from '../../components/Blocking/ReportUser';
 import SettingIcon from '../../assets/icons/images/setting.svg';
 import ShareIcon from '../../assets/icons/images/share.svg';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {blockAnonymous, blockUser} from '../../service/blocking';
 import {
   changeRealName,
   getMyProfile,
@@ -43,27 +50,20 @@ import {
   updateImageProfile,
 } from '../../service/profile';
 import {colors} from '../../utils/colors';
+import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../utils/token';
+import {getFeedDetail, getMainFeed} from '../../service/post';
 import {getUserId} from '../../utils/users';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {
   requestCameraPermission,
   requestExternalStoragePermission,
 } from '../../utils/permission';
+import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
 import {setImageUrl} from '../../context/actions/users';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import BlockUser from '../../components/Blocking/BlockUser';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import ReportUser from '../../components/Blocking/ReportUser';
-import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
-import {downVote, upVote} from '../../service/vote';
-import {getFeedDetail, getMainFeed} from '../../service/post';
-import {blockAnonymous, blockUser} from '../../service/blocking';
 
 const width = Dimensions.get('screen').width;
 
