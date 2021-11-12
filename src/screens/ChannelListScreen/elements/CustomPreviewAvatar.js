@@ -1,21 +1,30 @@
 import * as React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 import {
   ChannelAvatar,
   useChannelPreviewDisplayAvatar,
 } from 'stream-chat-react-native';
-import {Context} from '../../../context';
-import {setProfileChannel} from '../../../context/actions/setChannel';
-import {getGroupMemberCount} from '../../../utils/string/StringUtils';
+import { Context } from '../../../context';
+import { setProfileChannel } from '../../../context/actions/setChannel';
+import { getGroupMemberCount } from '../../../utils/string/StringUtils';
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
 
-const CustomPreviewAvatar = ({channel}) => {
+const CustomPreviewAvatar = ({ channel }) => {
   const [, dispatch] = React.useContext(Context).channel;
   const dataChannel = useChannelPreviewDisplayAvatar(channel);
   React.useEffect(() => {
     setProfileChannel(dataChannel.images, dispatch);
   }, [dataChannel]);
+
+  if (channel.data.channel_type === 2 || channel.data.channel_type === 3) {
+    return (
+      <Image
+        source={{ uri: channel.data.image }}
+        style={styles.image}
+      />
+    );
+  }
 
   if (channel?.data?.image) {
     if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
@@ -25,7 +34,7 @@ const CustomPreviewAvatar = ({channel}) => {
     }
     return (
       <Image
-        source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
+        source={{ uri: `data:image/jpg;base64,${channel?.data?.image}` }}
         style={styles.image}
       />
     );

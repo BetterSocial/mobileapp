@@ -12,24 +12,25 @@ import {
   RefreshControl,
 } from 'react-native';
 
-import {showMessage} from 'react-native-flash-message';
-import {useNavigation} from '@react-navigation/core';
-import {StackActions} from '@react-navigation/native';
+import { showMessage } from 'react-native-flash-message';
+import { useNavigation } from '@react-navigation/core';
+import { StackActions } from '@react-navigation/native';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
-import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview';
+import { RecyclerListView, DataProvider, LayoutProvider } from 'recyclerlistview';
 
 import Loading from '../Loading';
-import {get} from '../../api/server';
-import {Button} from '../../components/Button';
-import {ProgressBar} from '../../components/ProgressBar';
+import { get } from '../../api/server';
+import { Button } from '../../components/Button';
+import { ProgressBar } from '../../components/ProgressBar';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import {registerUser} from '../../service/users';
-import {Context} from '../../context';
-import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
-import {colors} from '../../utils/colors';
+import { registerUser } from '../../service/users';
+import { Context } from '../../context';
+import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
+import { colors } from '../../utils/colors';
 import Label from './elements/Label';
 import ItemUser from './elements/ItemUser';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
 const width = Dimensions.get('screen').width;
 
@@ -47,7 +48,8 @@ const WhotoFollow = () => {
   const [usersState] = React.useContext(Context).users;
   const [dataProvider, setDataProvider] = React.useState(null);
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
-  const [layoutProvider, setLayoutProvider] = React.useState(() => {});
+  const [layoutProvider, setLayoutProvider] = React.useState(() => { });
+  const create = useClientGetstream();
 
   const navigation = useNavigation();
 
@@ -64,7 +66,7 @@ const WhotoFollow = () => {
     console.log('topics.topics');
     console.log(getWhoToFollowListUrl);
 
-    get({url: getWhoToFollowListUrl})
+    get({ url: getWhoToFollowListUrl })
       .then((res) => {
         setIsLoading(false);
         if (res.status === 200) {
@@ -151,7 +153,7 @@ const WhotoFollow = () => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    get({url: '/who-to-follow/list'})
+    get({ url: '/who-to-follow/list' })
       .then((res) => {
         setRefreshing(false);
         if (res.status === 200) {
@@ -198,6 +200,7 @@ const WhotoFollow = () => {
             backgroundColor: colors.holytosca,
           });
           setTimeout(() => {
+            create();
             navigation.dispatch(StackActions.replace('HomeTabs'));
           }, 2000);
         } else {
