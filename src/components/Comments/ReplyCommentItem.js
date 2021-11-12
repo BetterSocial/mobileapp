@@ -19,6 +19,7 @@ import {iVoteComment, voteComment} from '../../service/vote';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import {FONTS} from '../../utils/theme';
+import { removeWhiteSpace } from '../../utils/Utils';
 
 const ReplyCommentItem = ({
   user,
@@ -192,7 +193,7 @@ const ReplyCommentItem = ({
     };
     parseToken();
   }, []);
-
+  console.log(photo, 'kuis')
   return (
     <View
       style={styles.container({
@@ -207,7 +208,7 @@ const ReplyCommentItem = ({
           <Image
             source={
               photo
-                ? {uri: photo}
+                ? {uri: removeWhiteSpace(photo)}
                 : require('../../assets/images/ProfileDefault.png')
             }
             style={styles.image}

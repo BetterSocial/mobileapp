@@ -13,6 +13,7 @@ import {fonts} from '../../utils/fonts';
 import StringConstant from '../../utils/string/StringConstant';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import {Context} from '../../context';
+import {ActivityIndicator} from 'react-native';
 
 const WriteComment = ({
   value = null,
@@ -21,6 +22,7 @@ const WriteComment = ({
   username,
   inReplyCommentView = false,
   showProfileConnector = true,
+  loadingComment,
 }) => {
   let [users] = React.useContext(Context).users;
   let commentInputRef = React.useRef(null);
@@ -68,8 +70,13 @@ const WriteComment = ({
         </View>
         <TouchableOpacity
           onPress={isSendButtonPressed}
-          style={styles.btn(isCommentEnabled)}>
-          <MemoSendComment style={styles.icSendButton} />
+          style={styles.btn(isCommentEnabled)}
+          disabled={loadingComment}>
+          {loadingComment ? (
+            <ActivityIndicator color="white" size="small" />
+          ) : (
+            <MemoSendComment style={styles.icSendButton} />
+          )}
         </TouchableOpacity>
       </View>
     </View>

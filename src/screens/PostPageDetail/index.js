@@ -39,6 +39,7 @@ import {setFeedByIndex} from '../../context/actions/feeds';
 import {Context} from '../../context';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import SimpleToast from 'react-native-simple-toast';
 
 const {width, height} = Dimensions.get('window');
 
@@ -63,6 +64,7 @@ const PostPageDetail = (props) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
+  const [loadingVote, setLoadingVote] = React.useState(false);
 
   let [feeds, dispatch] = React.useContext(Context).feeds;
 
@@ -93,38 +95,6 @@ const PostPageDetail = (props) => {
     });
     return sortedComment;
   };
-  React.useEffect(() => {
-    setItem(feeds.feeds[index]);
-    // console.log(JSON.stringify(feeds.feeds[index]));
-  }, [feeds.feeds[index]]);
-
-  React.useEffect(() => {
-    const initial = () => {
-      let reactionCount = item.reaction_counts;
-      if (JSON.stringify(reactionCount) !== '{}') {
-        let count = 0;
-        let comment = reactionCount.comment;
-        if (comment !== undefined) {
-          if (comment > 0) {
-            setReaction(true);
-            setTotalComment(
-              getCountCommentWithChildInDetailPage(item.latest_reactions),
-            );
-          }
-        }
-        let upvote = reactionCount.upvotes;
-        if (upvote !== undefined) {
-          count = count + upvote;
-        }
-        let downvote = reactionCount.downvotes;
-        if (downvote !== undefined) {
-          count = count - downvote;
-        }
-        setTotalVote(count);
-      }
-    };
-    initial();
-  }, [props, item]);
 
   React.useEffect(() => {
     const validationStatusVote = () => {
@@ -152,6 +122,52 @@ const PostPageDetail = (props) => {
     };
     validationStatusVote();
   }, [item, yourselfId]);
+
+  React.useEffect(() => {
+    setItem(feeds.feeds[index]);
+  }, [JSON.stringify(feeds)]);
+
+  const handleVote = (data = {}) => {
+    if (data.downvotes > 0) {
+      setVoteStatus('downvote');
+      return setTotalVote(data.downvotes * -1);
+    } else if (data.upvotes > 0) {
+      setVoteStatus('upvote');
+      return setTotalVote(data.upvotes);
+    }
+    setVoteStatus('none');
+    return setTotalVote(0);
+  };
+
+  const initial = () => {
+    let reactionCount = item.reaction_counts;
+    if (JSON.stringify(reactionCount) !== '{}') {
+      let count = 0;
+      let comment = reactionCount.comment;
+      handleVote(reactionCount);
+      if (comment !== undefined) {
+        if (comment > 0) {
+          setReaction(true);
+          setTotalComment(
+            getCountCommentWithChildInDetailPage(item.latest_reactions),
+          );
+        }
+      }
+      let upvote = reactionCount.upvotes;
+      if (upvote !== undefined) {
+        count = count + upvote;
+      }
+      let downvote = reactionCount.downvotes;
+      if (downvote !== undefined) {
+        count = count - downvote;
+      }
+      setTotalVote(count);
+    }
+  };
+
+  React.useEffect(() => {
+    initial();
+  }, [props, item]);
 
   const onSelectBlocking = (v) => {
     if (v !== 1) {
@@ -223,7 +239,6 @@ const PostPageDetail = (props) => {
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(item.id);
-      console.log('update feed');
       if (data) {
         setItem(data.data);
         setFeedByIndex(
@@ -279,13 +294,33 @@ const PostPageDetail = (props) => {
     scrollViewRef.current.scrollToEnd();
   };
 
-  const setUpVote = async (post) => {
-    await upVote(post);
+  const setUpVote = async (status) => {
+    const data = {
+      activity_id: item.id,
+      status: status,
+      feed_group: 'main_feed',
+    };
+    const processData = await upVote(data);
     updateFeed();
+    if (processData.code == 200) {
+      setLoadingVote(false);
+      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+    }
+    setLoadingVote(false);
   };
-  const setDownVote = async (post) => {
-    await downVote(post);
+  const setDownVote = async (status) => {
+    const data = {
+      activity_id: item.id,
+      status: status,
+      feed_group: 'main_feed',
+    };
+    const processData = await downVote(data);
     updateFeed();
+    if (processData.code == 200) {
+      setLoadingVote(false);
+      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+    }
+    setLoadingVote(false);
   };
 
   const onNewPollFetched = (newPolls, index) => {
@@ -306,6 +341,40 @@ const PostPageDetail = (props) => {
       item.og.domain_page_id,
     );
     props.navigation.push('LinkContextScreen', param);
+  };
+
+  const onPressDownVoteHandle = async () => {
+    setStatusDowvote((prev) => !prev);
+    setLoadingVote(true);
+    if (totalVote === -1) {
+      setVoteStatus('none');
+      setTotalVote((prevState) => prevState + 1);
+    } else if (totalVote === 0) {
+      setVoteStatus('downvote');
+      setTotalVote((prevState) => prevState - 1);
+    } else {
+      setVoteStatus('downvote');
+      setTotalVote(-1);
+      return setDownVote(true);
+    }
+    await setDownVote(!statusDownvote);
+  };
+
+  const onPressUpvoteHandle = async () => {
+    setLoadingVote(true);
+    setStatusUpvote((prev) => !prev);
+    if (totalVote === 1) {
+      setVoteStatus('none');
+      setTotalVote((prevState) => prevState - 1);
+    } else if (totalVote === 0) {
+      setVoteStatus('upvote');
+      setTotalVote((prevState) => prevState + 1);
+    } else {
+      setVoteStatus('upvote');
+      setTotalVote(1);
+      return await setUpVote(true);
+    }
+    await setUpVote(!statusUpvote);
   };
 
   return (
@@ -359,55 +428,12 @@ const PostPageDetail = (props) => {
               disableComment={false}
               totalComment={totalComment}
               totalVote={totalVote}
-              onPressDownVote={() => {
-                setStatusDowvote((prev) => {
-                  prev = !prev;
-                  setDownVote({
-                    activity_id: item.id,
-                    status: prev,
-                    feed_group: 'main_feed',
-                  });
-                  if (prev) {
-                    setVoteStatus('downvote');
-                    if (statusUpvote === true) {
-                      setTotalVote((p) => p - 2);
-                    } else {
-                      setTotalVote((p) => p - 1);
-                    }
-                    setStatusUpvote(false);
-                  } else {
-                    setVoteStatus('none');
-                    setTotalVote((p) => p + 1);
-                  }
-                  return prev;
-                });
-              }}
-              onPressUpvote={() => {
-                setStatusUpvote((prev) => {
-                  prev = !prev;
-                  setUpVote({
-                    activity_id: item.id,
-                    status: prev,
-                    feed_group: 'main_feed',
-                  });
-                  if (prev) {
-                    setVoteStatus('upvote');
-                    if (statusDownvote === true) {
-                      setTotalVote((p) => p + 2);
-                    } else {
-                      setTotalVote((p) => p + 1);
-                    }
-                    setStatusDowvote(false);
-                  } else {
-                    setVoteStatus('none');
-                    setTotalVote((p) => p - 1);
-                  }
-                  return prev;
-                });
-              }}
+              onPressDownVote={onPressDownVoteHandle}
+              onPressUpvote={onPressUpvoteHandle}
               statusVote={voteStatus}
               onPressShare={() => {}}
               onPressComment={onCommentButtonClicked}
+              loadingVote={loadingVote}
               onPressBlock={() => {
                 // console.log(item);
                 if (item.actor.id === yourselfId) {

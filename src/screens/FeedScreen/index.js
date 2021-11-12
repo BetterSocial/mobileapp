@@ -203,12 +203,14 @@ const FeedScreen = (props) => {
     }
   };
   const setUpVote = async (post, index) => {
-    await upVote(post);
+    const processVote = await upVote(post);
     updateFeed(post, index);
+    return processVote;
   };
   const setDownVote = async (post, index) => {
-    await downVote(post);
+    const processVote = await downVote(post);
     updateFeed(post, index);
+    return processVote
   };
 
   React.useEffect(() => {
@@ -302,6 +304,7 @@ const FeedScreen = (props) => {
             onPressUpvote={(post) => setUpVote(post, index)}
             selfUserId={yourselfId}
             onPressDownVote={(post) => setDownVote(post, index)}
+            loading={loading}
           />
         )}
       </TiktokScroll>

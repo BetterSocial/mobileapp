@@ -7,7 +7,7 @@ import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {calculateTime} from '../../utils/time';
+import {calculateTime, diffDate} from '../../utils/time';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import BlockUser from '../Blocking/BlockUser';
 import ReportUser from '../Blocking/ReportUser';
@@ -19,6 +19,7 @@ import {FONTS} from '../../utils/theme';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import {iVoteComment, voteComment} from '../../service/vote';
+import { removeWhiteSpace } from '../../utils/Utils';
 
 const Comment = ({
   user,
@@ -49,7 +50,7 @@ const Comment = ({
   const [statusVote, setStatusVote] = React.useState('');
   const [upvote, setUpVote] = React.useState(comment.data.count_upvote);
   const [downvote, setDownVote] = React.useState(comment.data.count_downvote);
-
+    console.log(user, comment, 'mina')
   let onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
@@ -163,7 +164,6 @@ const Comment = ({
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    console.log('click vote ', comment);
     let result = await voteComment(dataVote);
     setUpVote(result.data.data.count_upvote);
     setDownVote(result.data.data.count_downvote);
@@ -189,6 +189,7 @@ const Comment = ({
     parseToken();
     iVote();
   }, []);
+
   return (
     <View
       style={styles.container({
@@ -203,7 +204,7 @@ const Comment = ({
           <Image
             source={
               photo
-                ? {uri: photo}
+                ? {uri: removeWhiteSpace(photo)}
                 : require('../../assets/images/ProfileDefault.png')
             }
             style={styles.image}

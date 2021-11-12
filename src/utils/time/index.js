@@ -4,7 +4,7 @@ export const calculateTime = (time) => {
   if (time) {
     let now = moment();
     let utc = now;
-    let date = moment(new Date(time).toISOString());
+    let date = moment(time).toISOString();
     let minutes = utc.diff(date, 'minutes');
     let hours = utc.diff(date, 'hours');
     let days = utc.diff(date, 'days');

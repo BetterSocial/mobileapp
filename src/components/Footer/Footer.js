@@ -25,8 +25,9 @@ const Footer = ({
   totalVote,
   disableComment = false,
   blockStatus,
+  loadingVote,
 }) => {
-  console.log(blockStatus, 'di block');
+  console.log(loadingVote, 'loading vote');
   const handleBlockUi = () => {
     if (isSelf) {
       return null;
@@ -80,7 +81,10 @@ const Footer = ({
       )}
       <View style={styles.rightGroupContainer}>
         {handleBlockUi()}
-        <TouchableOpacity style={styles.btn} onPress={onPressDownVote}>
+        <TouchableOpacity
+          disabled={loadingVote}
+          style={styles.btn}
+          onPress={onPressDownVote}>
           <View style={styles.btnDownvote}>
             {statusVote === 'downvote' ? (
               <MemoIc_arrow_down_vote_on width={20} height={18} />
@@ -92,7 +96,10 @@ const Footer = ({
 
         <Text style={styles.vote(totalVote)}>{totalVote}</Text>
 
-        <TouchableOpacity style={styles.btn} onPress={onPressUpvote}>
+        <TouchableOpacity
+          disabled={loadingVote}
+          style={styles.btn}
+          onPress={onPressUpvote}>
           <View style={styles.btnUpvote}>
             {statusVote === 'upvote' ? (
               <MemoIc_arrow_upvote_on width={20} height={18} />
