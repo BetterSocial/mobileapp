@@ -163,3 +163,15 @@ export const getProfileByUsername = async (username) => {
       });
   });
 };
+
+export const getSelfFeedsInProfile = async () => {
+  return new Promise((resolve, reject) => {
+    api
+      .get('/activity/feeds')
+      .then((res) => resolve(res.data))
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+};
