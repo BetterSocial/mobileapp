@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {PermissionsAndroid} from 'react-native';
 
 import {
   SafeAreaProvider,
@@ -7,18 +6,18 @@ import {
 } from 'react-native-safe-area-context';
 import 'react-native-gesture-handler';
 import FlashMessage from 'react-native-flash-message';
-import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {HumanIDProvider} from '@human-id/react-native-humanid';
+import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { HumanIDProvider } from '@human-id/react-native-humanid';
 import messaging from '@react-native-firebase/messaging';
 
+import PushNotification from 'react-native-push-notification';
 import Store from './src/context/Store';
 import RootStack from './src/navigations/root-stack';
-import fetchRemoteConfig from './src/utils/FirebaseUtil';
-import PushNotification from 'react-native-push-notification';
+import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
 
 const App = () => {
-  const {bottom} = useSafeAreaInsets();
+  const { bottom } = useSafeAreaInsets();
 
   const streami18n = new Streami18n({
     language: 'en',
@@ -26,9 +25,8 @@ const App = () => {
 
   const requestPermission = async () => {
     const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED
+      || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
       console.log('Authorization status:', authStatus);
@@ -73,7 +71,7 @@ const App = () => {
     init();
     return unsubscribe;
   }, []);
-  return (
+  const newLocal = (
     <>
       <HumanIDProvider />
       <Store>
@@ -86,12 +84,13 @@ const App = () => {
       <FlashMessage position="top" />
     </>
   );
-};
-
-export default () => {
   return (
-    <SafeAreaProvider>
-      <App />
-    </SafeAreaProvider>
+    newLocal
   );
 };
+
+export default () => (
+  <SafeAreaProvider>
+    <App />
+  </SafeAreaProvider>
+);

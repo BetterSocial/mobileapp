@@ -17,11 +17,11 @@ import {
   onError,
 } from '@human-id/react-native-humanid';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useNavigation} from '@react-navigation/core';
-import {StackActions} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/core';
+import { StackActions } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {colors} from 'react-native-swiper-flatlist/src/themes';
+import { colors } from 'react-native-swiper-flatlist/src/themes';
 
 import {
   setUserId,
@@ -29,17 +29,17 @@ import {
   setRefreshToken,
   removeLocalStorege,
 } from '../../utils/token';
-import {Context} from '../../context';
-import {fonts} from '../../utils/fonts';
-import {checkToken} from '../../service/outh';
-import {verifyUser} from '../../service/users';
-import {setDataHumenId} from '../../context/actions/users';
+import { Context } from '../../context';
+import { fonts } from '../../utils/fonts';
+import { checkToken } from '../../service/outh';
+import { verifyUser } from '../../service/users';
+import { setDataHumenId } from '../../context/actions/users';
 import StringConstant from '../../utils/string/StringConstant';
 import ButtonSign from '../../assets/icon-svg/button_sign.svg';
 import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { openUrl } from '../../utils/Utils';
 
 const ENABLE_DEV_ONLY_FEATURE = true;
@@ -52,9 +52,9 @@ const SignIn = () => {
   const create = useClientGetstream();
   const HUMAN_ID_URL = 'https://www.human-id.org/';
 
-  let dummyLoginRbSheetRef = React.useRef(null);
+  const dummyLoginRbSheetRef = React.useRef(null);
 
-  const handleSlideShow = ({index}, length) => {
+  const handleSlideShow = ({ index }, length) => {
     if (index === length - 1) {
       setIsCompleteSliding(true);
     }
@@ -76,7 +76,7 @@ const SignIn = () => {
       checkToken(exchangeToken)
         .then((res) => {
           if (res.data) {
-            let {appUserId, countryCode} = res.data;
+            const { appUserId, countryCode } = res.data;
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
               .then((response) => {
@@ -128,7 +128,8 @@ const SignIn = () => {
       dummyLoginRbSheetRef.current.close();
     }
     setLoading(true);
-    setDataHumenId(appUserId, dispatch);
+    let data = { appUserId, countryCode: 'ID' }
+    setDataHumenId(data, dispatch);
     verifyUser(appUserId)
       .then(async (response) => {
         setLoading(false);
@@ -155,11 +156,11 @@ const SignIn = () => {
       {ENABLE_DEV_ONLY_FEATURE ? (
         <View style={S.devTrialView}>
           <Button
-            title={'Dev Dummy Onboarding'}
+            title="Dev Dummy Onboarding"
             onPress={() => navigation.navigate('ChooseUsername')}
           />
           <Button
-            title={'Dev Dummy Login'}
+            title="Dev Dummy Login"
             onPress={() => dummyLoginRbSheetRef.current.open()}
           />
         </View>
@@ -195,7 +196,7 @@ const SignIn = () => {
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('KVL1JKD8VG6KMHUZ0RY5')}>
+          <TouchableOpacity onPress={() => dummyLogin('KVL1JKD8VG6KMHUZ0RY8')}>
             <Text style={S.dummyAccountItem}>
               bas_v1-4 : KVL1JKD8VG6KMHUZ0RY5
             </Text>
@@ -217,9 +218,9 @@ const SignIn = () => {
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CR09')}>
+          <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CR53')}>
             <Text style={S.dummyAccountItem}>
-              akudankamu: WFGJR5G7GJMHJL166JMY
+              akudankamu: TVGBYD1BI9YMXMAA6CR48
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>
@@ -292,8 +293,8 @@ const S = StyleSheet.create({
     // fontWeight: 'bold',
     textDecorationLine: 'underline',
   },
-  btnText: {fontSize: 17, color: '#fff', fontWeight: 'bold'},
-  humen: {fontSize: 17, color: '#fff', fontWeight: '100'},
+  btnText: { fontSize: 17, color: '#fff', fontWeight: 'bold' },
+  humen: { fontSize: 17, color: '#fff', fontWeight: '100' },
   btnSign: {
     borderRadius: 10,
   },
