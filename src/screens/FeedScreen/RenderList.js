@@ -32,15 +32,9 @@ const getHeightHeader = () => {
   return h;
 };
 
-const getHeightFooter = () => {
-  let h = Math.floor((FULL_HEIGHT * 6.8) / 100);
-  return h;
-};
 
-const getHeightReaction = () => {
-  let h = Math.floor((FULL_HEIGHT * 16) / 100);
-  return h;
-};
+
+
 
 const styles = StyleSheet.create({
   cardContainer: (bottomHeight) => ({
@@ -57,6 +51,7 @@ const styles = StyleSheet.create({
   footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
   contentReaction: (heightReaction) => ({
     height: heightReaction,
+    marginBottom: tabBarHeight
   }),
 });
 
@@ -90,6 +85,16 @@ const RenderListFeed = (props) => {
       item.og.domain_page_id,
     );
     navigation.push('LinkContextScreen', param);
+  };
+
+  const getHeightFooter = () => {
+    let h = Math.floor(((FULL_HEIGHT - tabBarHeight -bottomHeight ) * 6.8) / 100);
+    return h;
+  };
+
+  const getHeightReaction = () => {
+    let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
+    return h;
   };
 
   const onShare = async (username) => {
@@ -313,7 +318,7 @@ const RenderListFeed = (props) => {
         </View>
         {isReaction && (
           <View style={styles.contentReaction(getHeightReaction())}>
-            <View style={styles.lineAffterFooter} />
+            <View />
             <PreviewComment
               user={previewComment.user}
               comment={previewComment.data.text}

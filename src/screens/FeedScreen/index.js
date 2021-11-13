@@ -23,6 +23,7 @@ import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import RenderListFeed from './RenderList';
 import TiktokScroll from '../../components/TiktokScroll';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -286,7 +287,7 @@ const FeedScreen = (props) => {
   };
 
   return (
-    <View style={styles.container} forceInset={{top: 'always'}}>
+      <View style={styles.container} forceInset={{top: 'always'}}>
       <TiktokScroll
         data={feeds}
         onEndReach={onEndReach}
@@ -341,6 +342,7 @@ const FeedScreen = (props) => {
         onSkip={onSkipOnlyBlock}
       />
     </View>
+    
   );
 };
 
