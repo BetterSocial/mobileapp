@@ -29,10 +29,7 @@ const WriteComment = ({
 
   let isCommentEnabled = value.length > 0;
   let isSendButtonPressed = () => {
-    if (isCommentEnabled) {
-      commentInputRef.current.blur();
-      return onPress();
-    }
+    return onPress();
   };
 
   return (
@@ -71,12 +68,8 @@ const WriteComment = ({
         <TouchableOpacity
           onPress={isSendButtonPressed}
           style={styles.btn(isCommentEnabled)}
-          disabled={loadingComment}>
-          {loadingComment ? (
-            <ActivityIndicator color="white" size="small" />
-          ) : (
-            <MemoSendComment style={styles.icSendButton} />
-          )}
+          >
+         <MemoSendComment style={styles.icSendButton} />
         </TouchableOpacity>
       </View>
     </View>
@@ -141,7 +134,7 @@ const styles = StyleSheet.create({
   },
   btn: (isCommentEnabled) => {
     return {
-      backgroundColor: isCommentEnabled ? colors.bondi_blue : colors.gray1,
+      backgroundColor: colors.bondi_blue,
       borderRadius: 18,
       width: 35,
       height: 35,

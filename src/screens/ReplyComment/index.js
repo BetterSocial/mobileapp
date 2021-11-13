@@ -24,6 +24,7 @@ import {setFeedByIndex} from '../../context/actions/feeds';
 import {Context} from '../../context';
 import {getComment} from '../../utils/getstream/getComment';
 import ReplyCommentItem from '../../components/Comments/ReplyCommentItem';
+import LoadingComment from '../../components/LoadingComment';
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
 const ReplyComment = (props) => {
@@ -145,24 +146,6 @@ const ReplyComment = (props) => {
             level={level}
             onPress={() => {}}
           />
-          {/* {loadingCMD && (
-            <ContainerReply key={'dummy1'}>
-              <ConnectorWrapper index={0}>
-                <View style={styles.childCommentWrapper}>
-                  <ReplyCommentItem
-                    indexFeed={indexFeed}
-                    user={item.user}
-                    comment={temporaryComment(temporaryCMD)}
-                    time={moment().format()}
-                    photo={item.user.data.profile_pic_url}
-                    isLast={true}
-                    level={parseInt(level) + 1}
-                    onPress={() => {}}
-                  />
-                </View>
-              </ConnectorWrapper>
-            </ContainerReply>
-          )} */}
           {item.children_counts.comment > 0 &&
             item.latest_children.comment.map((itemReply, index) => {
               const showChildrenCommentView = () => {
@@ -195,6 +178,7 @@ const ReplyComment = (props) => {
                         comment={itemReply}
                         onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}
+                        loading={loadingCMD}
                       />
                       {itemReply.children_counts.comment > 0 && (
                         <>
@@ -218,6 +202,15 @@ const ReplyComment = (props) => {
                 </ContainerReply>
               );
             })}
+            {loadingCMD && (
+                           <ContainerReply>
+                             <ConnectorWrapper>
+                             <View style={styles.childCommentWrapperLoading}>
+                              <LoadingComment commentText={textComment} user={itemProp.user}  />
+                              </View>
+                             </ConnectorWrapper>    
+                           </ContainerReply>
+            )}
           {(item.children_counts.comment || 0) !== 0 && (
             <View style={styles.childLevelMainConnector} />
           )}
@@ -231,7 +224,7 @@ const ReplyComment = (props) => {
         onPress={() => createComment()}
         // onPress={() => console.log('level ', level)}
         value={textComment}
-        loadingComment={loadingCMD}
+        // loadingComment={loadingCMD}
       />
     </View>
   );
@@ -364,5 +357,8 @@ const styles = StyleSheet.create({
   commentScrollView: {
     minHeight: '100%',
     paddingBottom: 83,
+  },
+  childCommentWrapperLoading: {
+    flex: 1,
   },
 });
