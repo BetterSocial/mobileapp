@@ -48,10 +48,10 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
+  footerWrapper: (h) => ({height: h}),
   contentReaction: (heightReaction) => ({
     height: heightReaction,
-    marginBottom: tabBarHeight
+    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
   }),
 });
 
@@ -316,9 +316,9 @@ const RenderListFeed = (props) => {
             }
           />
         </View>
+        <View style={styles.contentReaction(isReaction ? getHeightReaction() : 0)}>
         {isReaction && (
-          <View style={styles.contentReaction(getHeightReaction())}>
-            <View />
+          <React.Fragment>
             <PreviewComment
               user={previewComment.user}
               comment={previewComment.data.text}
@@ -328,8 +328,10 @@ const RenderListFeed = (props) => {
               onPress={onPressComment}
             />
             <Gap height={8} />
-          </View>
+          </React.Fragment>
         )}
+        </View>
+        
       </View>
     </View>
   );
