@@ -125,12 +125,15 @@ const ReplyComment = (props) => {
           setTextComment('');
         } else {
           Toast.show('Failed Comment', Toast.LONG);
+          setLoadingCMD(false);
         }
       } else {
         Toast.show('Comments are not empty', Toast.LONG);
+        setLoadingCMD(false);
       }
     } catch (error) {
       Toast.show('Failed Comment', Toast.LONG);
+      setLoadingCMD(false);
     }
   };
 
