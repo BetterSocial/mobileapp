@@ -164,7 +164,7 @@ const ReplyComment = (props) => {
             comment={item}
             time={itemProp.created_at}
             photo={itemProp.user.data.profile_pic_url}
-            isLast={(item.children_counts.comment || 0) === 0}
+            isLast={newCommentList.length <= 0}
             level={level}
             onPress={() => {}}
           />
@@ -201,9 +201,9 @@ const ReplyComment = (props) => {
                         onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}
                         loading={loadingCMD}
-                        showLeftConnector
+                        // showLeftConnector
                       />
-                      {itemReply.children_counts.comment > 0 && (
+                      {/* {itemReply.children_counts.comment > 0 && (
                         <>
                           <View
                             style={styles.seeRepliesContainer(
@@ -219,7 +219,7 @@ const ReplyComment = (props) => {
                             </TouchableOpacity>
                           </View>
                         </>
-                      )}
+                      )} */}
                     </View>
                   </ConnectorWrapper>
                 </ContainerReply>
@@ -234,14 +234,12 @@ const ReplyComment = (props) => {
                              </ConnectorWrapper>    
                            </ContainerReply>
             )}
-          {(item.children_counts.comment || 0) !== 0 && (
-            <View style={styles.childLevelMainConnector} />
-          )}
+          {newCommentList.length > 0 ? <View style={styles.childLevelMainConnector} /> : null}
         </View>
       </ScrollView>
       <WriteComment
         inReplyCommentView={true}
-        showProfileConnector={(item.children_counts.comment || 0) !== 0}
+        showProfileConnector={newCommentList.length > 0}
         username={item.user.data.username}
         onChangeText={(v) => setComment(v)}
         onPress={() => createComment()}
