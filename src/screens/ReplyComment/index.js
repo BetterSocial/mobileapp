@@ -112,6 +112,7 @@ const ReplyComment = (props) => {
       updateFeed()
     }
   }, [])
+  console.log(newCommentList, 'jikalau')
 
   const createComment = async () => {
     setLoadingCMD(true);
@@ -120,7 +121,7 @@ const ReplyComment = (props) => {
       if (textComment.trim() !== '') {
         let data = await createChildComment(textComment, item.id);
         if (data.code === 200) {
-          setNewCommentList([...newCommentList, defaultData])
+          setNewCommentList([...newCommentList, {...defaultData, id: data.data.id, activity_id: data.data.activity_id}])
           setLoadingCMD(false);
           setTextComment('');
         } else {
