@@ -30,16 +30,23 @@ import LoadingComment from '../../components/LoadingComment';
 const ReplyComment = (props) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
-  // const [temporaryCMD, setTemporaryCMD] = React.useState('');
   const [, setReaction] = React.useState(false);
   const [loadingCMD, setLoadingCMD] = React.useState(false);
   let [feeds, dispatch] = React.useContext(Context).feeds;
-
   let itemProp = props.route.params.item;
   let indexFeed = props.route.params.indexFeed;
 
   const level = props.route.params.level;
   const [item, setItem] = React.useState(itemProp);
+  const [idComment, setIdComment] = React.useState(0)
+  const [newCommentList, setNewCommentList] = React.useState([])
+  const defaultData = {
+    data: {count_downvote: 0, count_upvote: 0, text: textComment}, 
+    id: newCommentList.length + 1, kind: "comment", updated_at: moment(), 
+    children_counts: {comment: 0}, 
+    latest_children: {}, 
+    user: {data: itemProp.user.data, id: itemProp.user.id}
+  }
   const setComment = (text) => {
     setTextComment(text);
     // setTemporaryCMD(text);
@@ -52,6 +59,9 @@ const ReplyComment = (props) => {
       }
     };
     init();
+    if(item.latest_children && item.latest_children.comment) {
+      setIdComment(item.latest_children.comment.length)
+    }
   }, [item]);
   const getThisComment = async (newFeed) => {
     let newItem = await getComment({
@@ -70,18 +80,18 @@ const ReplyComment = (props) => {
         (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix(),
       );
     }
-    setLoadingCMD(false);
     setItem({...newItem, latest_children: {comment: comments}});
+    setNewCommentList(comments)
   };
   React.useEffect(() => {
     getThisComment(feeds.feeds[indexFeed]);
   }, [JSON.stringify(feeds)]);
 
+
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(feeds.feeds[indexFeed].id);
       if (data) {
-        console.log(data, 'mantap');
         getThisComment(data.data);
         setFeedByIndex(
           {
@@ -96,15 +106,23 @@ const ReplyComment = (props) => {
     }
   };
 
+  React.useEffect(() => {
+    updateFeed()
+    return () => {
+      updateFeed()
+    }
+  }, [])
+
   const createComment = async () => {
     setLoadingCMD(true);
+    setIdComment((prev) => prev + 1)
     try {
       if (textComment.trim() !== '') {
         let data = await createChildComment(textComment, item.id);
         if (data.code === 200) {
-          updateFeed();
+          setNewCommentList([...newCommentList, defaultData])
+          setLoadingCMD(false);
           setTextComment('');
-          // Toast.show('Comment successful', Toast.LONG);
         } else {
           Toast.show('Failed Comment', Toast.LONG);
         }
@@ -146,8 +164,8 @@ const ReplyComment = (props) => {
             level={level}
             onPress={() => {}}
           />
-          {item.children_counts.comment > 0 &&
-            item.latest_children.comment.map((itemReply, index) => {
+          {newCommentList.length > 0 &&
+            newCommentList.map((itemReply, index) => {
               const showChildrenCommentView = () => {
                 navigation.push('ReplyComment', {
                   item: itemReply,
@@ -229,9 +247,10 @@ const ReplyComment = (props) => {
     </View>
   );
 };
-const ContainerReply = ({children, isGrandchild = true, hideLeftConnector}) => {
+const ContainerReply = ({children, isGrandchild = true, hideLeftConnector, key}) => {
   return (
     <View
+      key={key}
       style={[
         styles.containerReply(hideLeftConnector),
         {borderColor: isGrandchild ? 'transparent' : colors.gray1},
