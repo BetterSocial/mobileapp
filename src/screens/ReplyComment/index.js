@@ -201,6 +201,7 @@ const ReplyComment = (props) => {
                         onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}
                         loading={loadingCMD}
+                        showLeftConnector
                       />
                       {itemReply.children_counts.comment > 0 && (
                         <>
