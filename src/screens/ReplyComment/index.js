@@ -203,7 +203,7 @@ const ReplyComment = (props) => {
                         loading={loadingCMD}
                         // showLeftConnector
                       />
-                      {/* {itemReply.children_counts.comment > 0 && (
+                      {itemReply.children_counts.comment > 0 && (
                         <>
                           <View
                             style={styles.seeRepliesContainer(
@@ -219,7 +219,7 @@ const ReplyComment = (props) => {
                             </TouchableOpacity>
                           </View>
                         </>
-                      )} */}
+                      )}
                     </View>
                   </ConnectorWrapper>
                 </ContainerReply>
