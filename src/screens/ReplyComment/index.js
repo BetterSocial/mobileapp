@@ -30,6 +30,7 @@ import LoadingComment from '../../components/LoadingComment';
 const ReplyComment = (props) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
+  const [temporaryText, setTemporaryText] = React.useState('')
   const [, setReaction] = React.useState(false);
   const [loadingCMD, setLoadingCMD] = React.useState(false);
   let [feeds, dispatch] = React.useContext(Context).feeds;
@@ -48,9 +49,15 @@ const ReplyComment = (props) => {
     user: {data: itemProp.user.data, id: itemProp.user.id}
   }
   const setComment = (text) => {
-    setTextComment(text);
+    setTemporaryText(text)
     // setTemporaryCMD(text);
   };
+
+  React.useEffect(() => {
+    if(!loadingCMD) {
+      setTextComment(temporaryText)
+    }
+  }, [temporaryText, loadingCMD])
 
   React.useEffect(() => {
     const init = () => {
@@ -112,10 +119,10 @@ const ReplyComment = (props) => {
       updateFeed()
     }
   }, [])
-  console.log(newCommentList, 'jikalau')
 
   const createComment = async () => {
     setLoadingCMD(true);
+    setTemporaryText('')
     setIdComment((prev) => prev + 1)
     try {
       if (textComment.trim() !== '') {
@@ -123,7 +130,6 @@ const ReplyComment = (props) => {
         if (data.code === 200) {
           setNewCommentList([...newCommentList, {...defaultData, id: data.data.id, activity_id: data.data.activity_id}])
           setLoadingCMD(false);
-          setTextComment('');
         } else {
           Toast.show('Failed Comment', Toast.LONG);
           setLoadingCMD(false);
@@ -244,7 +250,7 @@ const ReplyComment = (props) => {
         onChangeText={(v) => setComment(v)}
         onPress={() => createComment()}
         // onPress={() => console.log('level ', level)}
-        value={textComment}
+        value={temporaryText}
         // loadingComment={loadingCMD}
       />
     </View>

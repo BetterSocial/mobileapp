@@ -8,8 +8,9 @@ import {colors} from '../../utils/colors';
 import ConnectorWrapper from './ConnectorWrapper';
 import Comment from '../../components/Comments/Comment';
 import {DATALOADING} from '../../utils/string/LoadingComment';
+import LoadingComment from '../LoadingComment';
 
-const ContainerComment = ({comments, indexFeed}) => {
+const ContainerComment = ({comments, indexFeed, isLoading}) => {
   const navigation = useNavigation();
   let isLast = (index, item) => {
     return (
@@ -72,6 +73,7 @@ const ContainerComment = ({comments, indexFeed}) => {
           </View>
         );
       })}
+      {isLoading ? <LoadingComment /> : null}
     </View>
   );
 };

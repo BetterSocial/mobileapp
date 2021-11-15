@@ -65,7 +65,8 @@ const PostPageDetail = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingVote, setLoadingVote] = React.useState(false);
-
+  const [loadingPost, setLoadingPost] = React.useState(false)
+  
   let [feeds, dispatch] = React.useContext(Context).feeds;
 
   React.useEffect(() => {
@@ -239,6 +240,8 @@ const PostPageDetail = (props) => {
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(item.id);
+      setLoadingPost(false)
+      Toast.show('Comment successful', Toast.LONG);
       if (data) {
         setItem(data.data);
         setFeedByIndex(
@@ -261,21 +264,25 @@ const PostPageDetail = (props) => {
   };
 
   const commentParent = async () => {
+    setLoadingPost(true)
     try {
       if (textComment.trim() !== '') {
         let data = await createCommentParent(textComment, item.id);
         if (data.code === 200) {
           setTextComment('');
           updateFeed();
-          Toast.show('Comment successful', Toast.LONG);
+          
         } else {
           Toast.show('Failed Comment', Toast.LONG);
+          setLoadingPost(false)
         }
       } else {
         Toast.show('Comments are not empty', Toast.LONG);
+        setLoadingPost(false)
       }
     } catch (e) {
       console.log(e);
+      setLoadingPost(false)
       Toast.show('Failed Comment', Toast.LONG);
     }
   };
@@ -451,6 +458,7 @@ const PostPageDetail = (props) => {
           <ContainerComment
             comments={sortComment(item.latest_reactions.comment)}
             indexFeed={index}
+            isLoading={loadingPost}
           />
         )}
       </ScrollView>
