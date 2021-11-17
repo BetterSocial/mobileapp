@@ -241,7 +241,6 @@ const PostPageDetail = (props) => {
     try {
       let data = await getFeedDetail(item.id);
       setLoadingPost(false)
-      Toast.show('Comment successful', Toast.LONG);
       if (data) {
         setItem(data.data);
         setFeedByIndex(
@@ -271,6 +270,7 @@ const PostPageDetail = (props) => {
         if (data.code === 200) {
           setTextComment('');
           updateFeed();
+          Toast.show('Comment successful', Toast.LONG);
           
         } else {
           Toast.show('Failed Comment', Toast.LONG);
