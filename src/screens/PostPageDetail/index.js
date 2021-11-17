@@ -66,6 +66,7 @@ const PostPageDetail = (props) => {
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingVote, setLoadingVote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false)
+  const [commentList, setCommentList] = React.useState([])
   
   let [feeds, dispatch] = React.useContext(Context).feeds;
 
@@ -126,6 +127,9 @@ const PostPageDetail = (props) => {
 
   React.useEffect(() => {
     setItem(feeds.feeds[index]);
+    if(feeds.feeds[index] && feeds.feeds[index].latest_reactions) {
+      setCommentList(feeds.feeds[index].latest_reactions.comment)
+    }
   }, [JSON.stringify(feeds)]);
 
   const handleVote = (data = {}) => {
@@ -281,7 +285,6 @@ const PostPageDetail = (props) => {
         setLoadingPost(false)
       }
     } catch (e) {
-      console.log(e);
       setLoadingPost(false)
       Toast.show('Failed Comment', Toast.LONG);
     }
@@ -384,6 +387,39 @@ const PostPageDetail = (props) => {
     await setUpVote(!statusUpvote);
   };
 
+
+  const handleRefreshComment = ({data}) => {
+    // setItem({...item, data: data.data})
+    const newCommentList = commentList.map((comment) => {
+      if(comment.id === data.id) {
+        return {...comment, data: data.data}
+      } else {
+        return {...comment}
+      }
+    })
+    setCommentList(newCommentList)
+  }
+
+  const handleRefreshChildComment = ({parent, children}) => {
+    const newCommentList = commentList.map((comment) => {
+      if(comment.id === parent.id) {
+         const commentMap = comment.latest_children.comment.map((comChild) => {
+        if(comChild.id === children.id) {
+          return {...comChild, data: children.data, latest_children: children.latest_children}
+        } else {
+          return {...comChild}
+        }
+      })
+      return {...comment, latest_children: {comment: commentMap}}
+      } else {
+        return {...comment}
+      }
+     
+    })
+    setCommentList(newCommentList)
+  }
+
+
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
@@ -456,9 +492,11 @@ const PostPageDetail = (props) => {
         </View>
         {isReaction && (
           <ContainerComment
-            comments={sortComment(item.latest_reactions.comment)}
+            comments={sortComment(commentList)}
             indexFeed={index}
             isLoading={loadingPost}
+            refreshComment={handleRefreshComment}
+            refreshChildComment={handleRefreshChildComment}
           />
         )}
       </ScrollView>

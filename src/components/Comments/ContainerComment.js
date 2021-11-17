@@ -10,7 +10,7 @@ import Comment from '../../components/Comments/Comment';
 import {DATALOADING} from '../../utils/string/LoadingComment';
 import LoadingComment from '../LoadingComment';
 
-const ContainerComment = ({comments, indexFeed, isLoading}) => {
+const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment}) => {
   const navigation = useNavigation();
   let isLast = (index, item) => {
     return (
@@ -57,6 +57,7 @@ const ContainerComment = ({comments, indexFeed, isLoading}) => {
                     indexFeed: indexFeed,
                   });
                 }}
+                refreshComment={refreshComment}
               />
             </View>
             {item.children_counts.comment > 0 && (
@@ -66,6 +67,7 @@ const ContainerComment = ({comments, indexFeed, isLoading}) => {
                 countComment={item.children_counts.comment}
                 navigation={navigation}
                 indexFeed={indexFeed}
+                refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
               />
             )}
           </View>
@@ -81,6 +83,7 @@ const ReplyComment = ({
   countComment,
   navigation,
   hideLeftConnector,
+  refreshComment
 }) => {
   let isLast = (item, index) => {
     return (
@@ -123,6 +126,7 @@ const ReplyComment = ({
                 time={item.created_at}
                 onPress={showCommentView}
                 isLast={isLast(item, index)}
+                refreshComment={refreshComment}
               />
               {item.children_counts.comment > 0 && (
                 <>
