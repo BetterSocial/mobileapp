@@ -146,6 +146,23 @@ const ReplyComment = (props) => {
 
   const navigationGoBack = () => navigation.goBack();
 
+  const saveNewComment = ({data}) => {
+    const updateData = newCommentList.map((comment) => {
+      if(comment.id === data.id) {
+        return {...comment, data: data.data}
+      } else {
+        return {...comment}
+      }
+    })
+    setNewCommentList(updateData)
+    setItem({...item, latest_children: {comment: updateData}})
+  }
+
+  const saveParentComment = ({data}) => {
+    setItem({...item, data:data.data})
+    console.log(data, 'haman')
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
@@ -173,6 +190,7 @@ const ReplyComment = (props) => {
             isLast={newCommentList.length <= 0}
             level={level}
             onPress={() => {}}
+            refreshComment={saveParentComment}
           />
           {newCommentList.length > 0 &&
             newCommentList.map((itemReply, index) => {
@@ -207,6 +225,8 @@ const ReplyComment = (props) => {
                         onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}
                         loading={loadingCMD}
+                        refreshComment={saveNewComment}
+
                         // showLeftConnector
                       />
                       {itemReply.children_counts.comment > 0 && (
