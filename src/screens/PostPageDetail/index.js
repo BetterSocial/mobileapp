@@ -240,6 +240,8 @@ const PostPageDetail = (props) => {
       setLoadingPost(false)
       if (data) {
         setItem(data.data);
+        const sorting = data.data.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix())
+        setCommentList()
         setFeedByIndex(
           {
             singleFeed: data.data,
