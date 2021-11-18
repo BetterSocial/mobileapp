@@ -1,27 +1,25 @@
-import React from 'react';
-import {View, Dimensions, StyleSheet, StatusBar, Share} from 'react-native';
 import PropTypes from 'prop-types';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import {useNavigation} from '@react-navigation/core';
+import React from 'react';
+import SimpleToast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {Dimensions, Share, StatusBar, StyleSheet, View} from 'react-native';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {useNavigation} from '@react-navigation/core';
 
-// const bottomHeight = useBottomTabBarHeight();
+import Content from './Content';
+import ContentLink from './ContentLink';
+import ContentPoll from './ContentPoll';
 import Header from './Header';
+import {Footer, Gap, PreviewComment} from '../../components';
 import {
-  POST_TYPE_POLL,
   POST_TYPE_LINK,
+  POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
-import ContentPoll from './ContentPoll';
-import Content from './Content';
-
-import ContentLink from './ContentLink';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {colors} from '../../utils/colors';
-import {Gap, PreviewComment, Footer} from '../../components';
 import {getCountCommentWithChild} from '../../utils/getstream';
-import SimpleToast from 'react-native-simple-toast';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
@@ -31,10 +29,6 @@ const getHeightHeader = () => {
   let h = Math.floor((FULL_HEIGHT * 8.3) / 100);
   return h;
 };
-
-
-
-
 
 const styles = StyleSheet.create({
   cardContainer: (bottomHeight) => ({
@@ -197,7 +191,7 @@ const RenderListFeed = (props) => {
     });
     if (processData.code == 200) {
       setLoadingVote(false);
-      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
     }
     setLoadingVote(false);
   };
@@ -209,7 +203,7 @@ const RenderListFeed = (props) => {
     });
     if (processData.code == 200) {
       setLoadingVote(false);
-      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
     }
     setLoadingVote(false);
   };

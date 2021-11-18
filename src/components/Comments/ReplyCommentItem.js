@@ -1,24 +1,24 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
-import {useNavigation} from '@react-navigation/native';
 import IconEn from 'react-native-vector-icons/Entypo';
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
-import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {calculateTime} from '../../utils/time';
-import MemoCommentReply from '../../assets/icon/CommentReply';
-import BlockUser from '../Blocking/BlockUser';
-import ReportUser from '../Blocking/ReportUser';
-import SpecificIssue from '../Blocking/SpecificIssue';
-import {blockUser} from '../../service/blocking';
 import Toast from 'react-native-simple-toast';
-import {getUserId} from '../../utils/users';
-import {iVoteComment, voteComment} from '../../service/vote';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+
+import BlockUser from '../Blocking/BlockUser';
+import MemoCommentReply from '../../assets/icon/CommentReply';
+import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
+import ReportUser from '../Blocking/ReportUser';
+import SpecificIssue from '../Blocking/SpecificIssue';
 import {FONTS} from '../../utils/theme';
+import {blockUser} from '../../service/blocking';
+import {calculateTime} from '../../utils/time';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
+import {getUserId} from '../../utils/users';
+import {iVoteComment, voteComment} from '../../service/vote';
 import { removeWhiteSpace } from '../../utils/Utils';
 
 const ReplyCommentItem = ({
@@ -51,8 +51,6 @@ const ReplyCommentItem = ({
   const [statusVote, setStatusVote] = React.useState('');
   const [upvote, setUpVote] = React.useState(comment.data.count_upvote);
   const [downvote, setDownVote] = React.useState(comment.data.count_downvote);
-
-  console.log(`isLast ${isLast}`);
 
   let onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
@@ -193,7 +191,6 @@ const ReplyCommentItem = ({
     };
     parseToken();
   }, []);
-  console.log(photo, 'kuis')
   return (
     <View
       style={styles.container({

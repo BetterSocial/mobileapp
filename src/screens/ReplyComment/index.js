@@ -1,30 +1,31 @@
 import * as React from 'react';
+import Toast from 'react-native-simple-toast';
+import moment from 'moment';
 import {
+  ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
-  StatusBar,
 } from 'react-native';
-import moment from 'moment';
-import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
 
+import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import Comment from '../../components/Comments/Comment';
+import ConnectorWrapper from '../../components/Comments/ConnectorWrapper';
+import LoadingComment from '../../components/LoadingComment';
+import ReplyCommentItem from '../../components/Comments/ReplyCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
+import WriteComment from '../../components/Comments/WriteComment';
+import {Context} from '../../context';
+import {colors} from '../../utils/colors';
 import {createChildComment} from '../../service/comment';
 import {fonts} from '../../utils/fonts';
-import {colors} from '../../utils/colors';
-import {getFeedDetail} from '../../service/post';
-import ConnectorWrapper from '../../components/Comments/ConnectorWrapper';
-import Comment from '../../components/Comments/Comment';
-import WriteComment from '../../components/Comments/WriteComment';
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import {setFeedByIndex} from '../../context/actions/feeds';
-import {Context} from '../../context';
 import {getComment} from '../../utils/getstream/getComment';
-import ReplyCommentItem from '../../components/Comments/ReplyCommentItem';
-import LoadingComment from '../../components/LoadingComment';
+import {getFeedDetail} from '../../service/post';
+import {setFeedByIndex} from '../../context/actions/feeds';
+
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
 const ReplyComment = (props) => {
@@ -38,6 +39,7 @@ const ReplyComment = (props) => {
   let indexFeed = props.route.params.indexFeed;
 
   const level = props.route.params.level;
+  console.log(`level : ${level}`)
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])

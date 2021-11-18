@@ -6,7 +6,6 @@ export const setMainFeeds = async (data, dispatch) => {
   });
 };
 export const setFeedByIndex = (data, dispatch) => {
-  console.log('send data ', JSON.stringify(data));
   dispatch({
     type: SET_FEED_BY_INDEX,
     payload: data,
