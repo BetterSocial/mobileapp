@@ -1,3 +1,4 @@
+import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
 
 import StringConstant from '../utils/string/StringConstant';
