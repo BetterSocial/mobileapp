@@ -1,4 +1,6 @@
 import crashlytics from '@react-native-firebase/crashlytics';
+
+import StringConstant from '../utils/string/StringConstant';
 import api from './config';
 
 export const upVote = async (data) => {
@@ -7,6 +9,7 @@ export const upVote = async (data) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
+    SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     return error.response.data;
   }
 };
@@ -17,6 +20,7 @@ export const downVote = async (data) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
+    SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     return error.response.data;
   }
 };
@@ -26,6 +30,7 @@ export const upVoteDomain = async (data) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
+    SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     return error.response.data;
   }
 };
@@ -36,6 +41,7 @@ export const downVoteDomain = async (data) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
+    SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     return error.response.data;
   }
 };

@@ -11,6 +11,7 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import ContentPoll from './ContentPoll';
 import Header from './Header';
+import StringConstant from '../../utils/string/StringConstant';
 import {Footer, Gap, PreviewComment} from '../../components';
 import {
   POST_TYPE_LINK,
@@ -184,28 +185,42 @@ const RenderListFeed = (props) => {
   };
 
   const postApiUpvote = async (status) => {
-    const processData = await onPressUpvote({
-      activity_id: item.id,
-      status: status,
-      feed_group: 'main_feed',
-    });
-    if (processData.code == 200) {
+    try {
+      const processData = await onPressUpvote({
+        activity_id: item.id,
+        status: status,
+        feed_group: 'main_feed',
+      });
+      if (processData.code == 200) {
+        setLoadingVote(false);
+        return;
+        // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      }
       setLoadingVote(false);
-      // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
+    } catch(e) {
+      setLoadingVote(false);
+      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     }
-    setLoadingVote(false);
   };
   const postApiDownvote = async (status) => {
-    const processData = await onPressDownVote({
-      activity_id: item.id,
-      status: status,
-      feed_group: 'main_feed',
-    });
-    if (processData.code == 200) {
+    try {
+      const processData = await onPressDownVote({
+        activity_id: item.id,
+        status: status,
+        feed_group: 'main_feed',
+      });
+      if (processData.code == 200) {
+        setLoadingVote(false);
+        return;
+        // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      }
       setLoadingVote(false);
-      // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
+    } catch (e) {
+      setLoadingVote(false);
+      return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     }
-    setLoadingVote(false);
   };
 
   const initial = () => {

@@ -154,8 +154,6 @@ const ProfileScreen = () => {
       setUserId(id);
       withLoading ? setIsLoading(true) : null;
       const result = await getMyProfile(id);
-      // console.log('result');
-      // console.log(result);
       if (result.code === 200) {
         setDataMain(result.data);
         setImageUrl(result.data.profile_pic_path, dispatch);
