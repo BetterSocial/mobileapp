@@ -89,14 +89,6 @@ const PostPageDetail = (props) => {
   let {index} = props.route.params;
 
   const [item, setItem] = React.useState(feeds.feeds[index]);
-  const sortComment = (comments) => {
-    let sortedComment = comments.sort((current, next) => {
-      let currentMoment = moment(current.updated_at);
-      let nextMoment = moment(next.updated_at);
-      return currentMoment.diff(nextMoment);
-    });
-    return sortedComment;
-  };
 
   React.useEffect(() => {
     const validationStatusVote = () => {
@@ -244,6 +236,7 @@ const PostPageDetail = (props) => {
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(item.id);
+      console.log(data, item, 'sunat')
       setLoadingPost(false)
       if (data) {
         setItem(data.data);
@@ -416,8 +409,12 @@ const PostPageDetail = (props) => {
       }
      
     })
-    setCommentList(newCommentList)
+    if(newCommentList) {
+      setCommentList(newCommentList)
+    }
   }
+
+  console.log(commentList, 'kurama')
 
 
   return (
@@ -490,9 +487,9 @@ const PostPageDetail = (props) => {
             />
           </View>
         </View>
-        {isReaction && (
+        {isReaction && commentList && (
           <ContainerComment
-            comments={sortComment(commentList)}
+            comments={commentList}
             indexFeed={index}
             isLoading={loadingPost}
             refreshComment={handleRefreshComment}
