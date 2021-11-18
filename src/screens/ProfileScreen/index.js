@@ -117,8 +117,6 @@ const ProfileScreen = () => {
   const refReportPostAnonymous = React.useRef();
 
   let {feeds} = myProfileFeed;
-  console.log('myProfile');
-  console.log(feeds);
 
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);

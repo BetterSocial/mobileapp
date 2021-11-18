@@ -151,10 +151,8 @@ const ReplyComment = (props) => {
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
-      <ScrollView contentContainerStyle={styles.commentScrollView}>
-        <View style={styles.containerComment}>
-          {/* Header */}
-          <View style={styles.header}>
+       {/* Header */}
+       <View style={styles.header}>
             <TouchableOpacity
               onPress={navigationGoBack}
               style={styles.backArrow}>
@@ -166,6 +164,8 @@ const ReplyComment = (props) => {
             <View style={styles.btn} />
           </View>
           {/* Header */}
+      <ScrollView contentContainerStyle={styles.commentScrollView}>
+        <View style={styles.containerComment}>
           <ReplyCommentItem
             indexFeed={indexFeed}
             user={item.user}
@@ -288,13 +288,10 @@ const styles = StyleSheet.create({
     paddingRight: 23,
   },
   header: {
-    marginLeft: -20,
     marginRight: -20,
     marginBottom: 8,
-    paddingVertical: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // paddingHorizontal: 22,
     alignItems: 'center',
   },
   containerReply: (hideLeftConnector) => ({
@@ -323,6 +320,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
+    marginLeft: -24,
     color: '#000',
     alignSelf: 'center',
   },
@@ -382,6 +380,8 @@ const styles = StyleSheet.create({
   },
   backArrow: {
     padding: 10,
+    paddingLeft: 24,
+    paddingVertical: 18,
     alignSelf: 'center',
   },
   commentScrollView: {
