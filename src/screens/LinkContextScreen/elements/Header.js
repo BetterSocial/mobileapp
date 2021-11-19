@@ -16,8 +16,13 @@ import Memoic_globe from '../../../assets/icons/ic_globe';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import {Gap} from '../../../components';
-import { addIFollowByID, setIFollow } from '../../../context/actions/news';
-import { followDomain, getDomainIdIFollow, unfollowDomain } from '../../../service/domain';
+import {Context} from '../../../context';
+import {addIFollowByID, setIFollow} from '../../../context/actions/news';
+import {
+  followDomain,
+  getDomainIdIFollow,
+  unfollowDomain,
+} from '../../../service/domain';
 import {fonts} from '../../../utils/fonts';
 import {COLORS, SIZES} from '../../../utils/theme';
 
@@ -28,7 +33,7 @@ const Header = ({
   time,
   showBackButton,
   follow,
-  setFollow
+  setFollow,
 }) => {
   let iddomain = item.content.domain_page_id;
   const navigation = useNavigation();
@@ -36,6 +41,9 @@ const Header = ({
     domainId: iddomain,
     source: 'domain_page',
   });
+
+  const [news, dispatch] = React.useContext(Context).news;
+  let {ifollow} = news;
 
   let onHeaderClicked = () => {
     navigation.push('DomainScreen', {
@@ -76,7 +84,7 @@ const Header = ({
       console.log('res follow');
     } else {
       console.log('error follow domain');
-      setFollow(false)
+      setFollow(false);
     }
   };
   const handleUnFollow = async () => {
@@ -91,14 +99,13 @@ const Header = ({
       setIFollow(newListFollow, dispatch);
     } else {
       console.log('error unfollow domain');
-      setFollow(true)
+      setFollow(true);
     }
   };
 
   const onFollowDomainPressed = () => {
-    console.log('asdasdasd');
     follow ? handleUnFollow() : handleFollow();
-  }
+  };
 
   return (
     <View style={styles.headerContainer}>
@@ -150,13 +157,15 @@ const Header = ({
       </Pressable>
       <View style={{justifyContent: 'center'}}>
         <TouchableOpacity onPress={onFollowDomainPressed}>
-          {follow ? 
-          <View style={styles.wrapperTextUnFollow}>
-            <MemoUnfollowDomain />
-          </View>:
-          <View style={styles.wrapperText}>
-            <MemoFollowDomain />
-          </View>}
+          {follow ? (
+            <View style={styles.wrapperTextUnFollow}>
+              <MemoUnfollowDomain />
+            </View>
+          ) : (
+            <View style={styles.wrapperText}>
+              <MemoFollowDomain />
+            </View>
+          )}
         </TouchableOpacity>
       </View>
     </View>

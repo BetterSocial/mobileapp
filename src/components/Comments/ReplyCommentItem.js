@@ -15,10 +15,11 @@ import SpecificIssue from '../Blocking/SpecificIssue';
 import {blockUser} from '../../service/blocking';
 import Toast from 'react-native-simple-toast';
 import {getUserId} from '../../utils/users';
-import {iVoteComment, voteComment} from '../../service/vote';
+import {downVote, iVoteComment, voteComment} from '../../service/vote';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import {FONTS} from '../../utils/theme';
+import { removeWhiteSpace } from '../../utils/Utils';
 
 const ReplyCommentItem = ({
   user,
@@ -32,6 +33,7 @@ const ReplyCommentItem = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
+  refreshComment
 }) => {
   const navigation = useNavigation();
   const refBlockUser = React.useRef();
@@ -43,6 +45,7 @@ const ReplyCommentItem = ({
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+  const [vote, setVote] = React.useState(0)
 
   const [totalVote, setTotalVote] = React.useState(
     comment.data.count_upvote - comment.data.count_downvote,
@@ -167,14 +170,10 @@ const ReplyCommentItem = ({
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
+    console.log(dataVote, 'lipan1')
     console.log('click vote ', comment);
     let result = await voteComment(dataVote);
-    setUpVote(result.data.data.count_upvote);
-    setDownVote(result.data.data.count_downvote);
-    setTotalVote(
-      result.data.data.count_upvote - result.data.data.count_downvote,
-    );
-    console.log('result up ', result);
+    if(refreshComment) refreshComment(result)
   };
   const iVote = async () => {
     let result = await iVoteComment(comment.id);
@@ -193,6 +192,14 @@ const ReplyCommentItem = ({
     parseToken();
   }, []);
 
+  React.useEffect(() => {
+    if(comment.data.count_downvote > 0) {
+      return setVote(comment.data.count_downvote * -1)
+    }
+    return setVote(comment.data.count_upvote)
+  }, [JSON.stringify(comment)])
+
+
   return (
     <View
       style={styles.container({
@@ -207,7 +214,7 @@ const ReplyCommentItem = ({
           <Image
             source={
               photo
-                ? {uri: photo}
+                ? {uri: removeWhiteSpace(photo)}
                 : require('../../assets/images/ProfileDefault.png')
             }
             style={styles.image}
@@ -246,17 +253,17 @@ const ReplyCommentItem = ({
         <TouchableOpacity
           style={[styles.arrowup, styles.btn]}
           onPress={onDownVote}>
-          {statusVote === 'downvote' ? (
+          {vote < 0 ? (
             <MemoIc_downvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_down_vote_off width={20} height={18} />
           )}
         </TouchableOpacity>
-        <Text style={styles.vote(totalVote)}>{totalVote}</Text>
+        <Text style={styles.vote(vote)}>{vote}</Text>
         <TouchableOpacity
           style={[styles.arrowdown, styles.btn]}
           onPress={onUpVote}>
-          {statusVote === 'upvote' ? (
+          {vote > 0 ? (
             <MemoIc_upvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_upvote_off width={20} height={18} />

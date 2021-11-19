@@ -1,37 +1,42 @@
 import * as React from 'react';
 
+import {feedsReducer, feedsState} from './reducers/FeedReducer';
+import {channelReducer, channelState} from './reducers/channelReducer';
+import {clientReducer, clientState} from './reducers/clientReducer';
+import {groupChatReducer, groupChatState} from './reducers/groupChat';
 import {
   localCommunityReducer,
   localCommunityState,
 } from './reducers/localComunityReducer';
-import {topicsReducer, topicsState} from './reducers/topicsReducer';
-import {usersReducer, usersState} from './reducers/userReducer';
-import {channelReducer, channelState} from './reducers/channelReducer';
-import {clientReducer, clientState} from './reducers/clientReducer';
-import {newsReducer, newsState} from './reducers/newsReducer';
-import {feedsReducer, feedsState} from './reducers/FeedReducer';
+import {
+  myProfileFeedReducer,
+  myProfileFeedState,
+} from './reducers/myProfileFeedReducer';
 import {myProfileReducer, myProfileState} from './reducers/myProfileReducer';
-import {groupChatReducer, groupChatState} from './reducers/groupChat';
+import {newsReducer, newsState} from './reducers/newsReducer';
+import {topicsReducer, topicsState} from './reducers/topicsReducer';
 import {
   unReadMessageReducer,
   unReadMessageState,
 } from './reducers/unReadMessageReducer';
+import {usersReducer, usersState} from './reducers/userReducer';
 
 const Store = ({children}) => {
   const rootReducer = {
-    users: React.useReducer(usersReducer, usersState),
+    channel: React.useReducer(channelReducer, channelState),
+    client: React.useReducer(clientReducer, clientState),
+    feeds: React.useReducer(feedsReducer, feedsState),
+    groupChat: React.useReducer(groupChatReducer, groupChatState),
     localCommunity: React.useReducer(
       localCommunityReducer,
       localCommunityState,
     ),
-    topics: React.useReducer(topicsReducer, topicsState),
-    channel: React.useReducer(channelReducer, channelState),
-    client: React.useReducer(clientReducer, clientState),
+    myProfileFeed: React.useReducer(myProfileFeedReducer, myProfileFeedState),
     news: React.useReducer(newsReducer, newsState),
-    feeds: React.useReducer(feedsReducer, feedsState),
     profile: React.useReducer(myProfileReducer, myProfileState),
-    groupChat: React.useReducer(groupChatReducer, groupChatState),
+    topics: React.useReducer(topicsReducer, topicsState),
     unReadMessage: React.useReducer(unReadMessageReducer, unReadMessageState),
+    users: React.useReducer(usersReducer, usersState),
   };
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };

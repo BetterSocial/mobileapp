@@ -1,24 +1,22 @@
 import * as React from 'react';
-import {StyleSheet, Dimensions, Share, View} from 'react-native';
-
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {Dimensions, Share, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import Content from '../../FeedScreen/Content';
+import ContentLink from '../../FeedScreen/ContentLink';
+import ContentPoll from '../../FeedScreen/ContentPoll';
 import Header from '../../FeedScreen/Header';
 import {Card} from '../../../components/CardStack';
+import {Context} from '../../../context';
+import {Footer, Gap, PreviewComment} from '../../../components';
 import {
-  POST_TYPE_POLL,
   POST_TYPE_LINK,
+  POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../../utils/constants';
-import ContentPoll from '../../FeedScreen/ContentPoll';
-import ContentLink from '../../FeedScreen/ContentLink';
-
-import {Gap, PreviewComment, Footer} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
-import {Context} from '../../../context';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 
 const {width, height} = Dimensions.get('window');
@@ -137,8 +135,8 @@ const Item = ({
   const navigation = useNavigation();
   const [contentHeight, setContentHeight] = React.useState(0);
 
-  console.log('item');
-  console.log(item);
+  // console.log('item');
+  // console.log(item);
 
   React.useEffect(() => {
     const initial = () => {
@@ -202,7 +200,7 @@ const Item = ({
   }, [item]);
 
   return (
-    <Card style={styles.container}>
+    <View style={styles.container}>
       <Header props={item} height={getHeightHeader()} />
 
       {item.post_type === POST_TYPE_POLL && (
@@ -313,7 +311,7 @@ const Item = ({
           <Gap height={8} />
         </View>
       )}
-    </Card>
+    </View>
   );
 };
 function compare(prevProps, nextProps) {
@@ -325,14 +323,13 @@ export default RenderItem;
 
 const styles = StyleSheet.create({
   container: {
-    width: width,
+    width: '100%',
     height: height - 74,
     shadowColor: '#c4c4c4',
     shadowOffset: {
       width: 1,
       height: 8,
     },
-    elevation: 8,
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     paddingBottom: 0,

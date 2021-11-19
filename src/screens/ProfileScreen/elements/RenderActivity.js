@@ -1,25 +1,24 @@
+import moment from 'moment';
 import * as React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableNativeFeedback,
   Dimensions,
   Platform,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
 } from 'react-native';
-
-import moment from 'moment';
-import SeeMore from 'react-native-see-more-inline';
 import {Activity, Avatar} from 'react-native-activity-feed';
+import SeeMore from 'react-native-see-more-inline';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 
-import ShareIcon from '../../../assets/icons/images/share.svg';
-import ElipsisIcon from '../../../assets/icons/images/elipsis.svg';
-import CommentIcon from '../../../assets/icons/images/comment.svg';
-import ArrowUpIcon from '../../../assets/icons/images/arrow-up.svg';
 import ArrowDownRedIcon from '../../../assets/icons/images/arrow-down-red.svg';
-import {fonts} from '../../../utils/fonts';
+import ArrowUpIcon from '../../../assets/icons/images/arrow-up.svg';
+import CommentIcon from '../../../assets/icons/images/comment.svg';
+import ElipsisIcon from '../../../assets/icons/images/elipsis.svg';
+import ShareIcon from '../../../assets/icons/images/share.svg';
 import {colors} from '../../../utils/colors';
+import {fonts} from '../../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 

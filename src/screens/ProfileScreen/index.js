@@ -1,56 +1,69 @@
 import * as React from 'react';
-import {
-  StatusBar,
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Dimensions,
-  TouchableNativeFeedback,
-  Share,
-  ScrollView,
-  LogBox,
-} from 'react-native';
-
-import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
-import {useNavigation} from '@react-navigation/core';
-import {showMessage} from 'react-native-flash-message';
-import analytics from '@react-native-firebase/analytics';
-import {StreamApp, FlatFeed} from 'react-native-activity-feed';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
-
+import analytics from '@react-native-firebase/analytics';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {
-  getMyProfile,
-  changeRealName,
-  updateImageProfile,
-  removeImageProfile,
-  updateBioProfile,
-} from '../../service/profile';
-import Loading from '../Loading';
+  Dimensions,
+  Image,
+  LogBox,
+  SafeAreaView,
+  ScrollView,
+  Share,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
+} from 'react-native';
+import {FlatFeed, StreamApp} from 'react-native-activity-feed';
+import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {showMessage} from 'react-native-flash-message';
+import {useNavigation} from '@react-navigation/core';
+
+import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BlockDomain from '../../components/Blocking/BlockDomain';
+import BlockUser from '../../components/Blocking/BlockUser';
 import BottomSheetBio from './elements/BottomSheetBio';
-import RenderActivity from './elements/RenderActivity';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
-import ShareIcon from '../../assets/icons/images/share.svg';
-import SettingIcon from '../../assets/icons/images/setting.svg';
-import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
-import {fonts} from '../../utils/fonts';
-import {colors} from '../../utils/colors';
-import {trimString} from '../../utils/string/TrimString';
-import {getAccessToken} from '../../utils/token';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import Loading from '../Loading';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
-import {setImageUrl} from '../../context/actions/users';
+import RenderActivity from './elements/RenderActivity';
+import RenderItem from './elements/RenderItem';
+import ReportDomain from '../../components/Blocking/ReportDomain';
+import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
+import ReportUser from '../../components/Blocking/ReportUser';
+import SettingIcon from '../../assets/icons/images/setting.svg';
+import ShareIcon from '../../assets/icons/images/share.svg';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {blockAnonymous, blockUser} from '../../service/blocking';
+import {
+  changeRealName,
+  getMyProfile,
+  getSelfFeedsInProfile,
+  removeImageProfile,
+  updateBioProfile,
+  updateImageProfile,
+} from '../../service/profile';
+import {colors} from '../../utils/colors';
+import {downVote, upVote} from '../../service/vote';
+import {fonts} from '../../utils/fonts';
+import {getAccessToken} from '../../utils/token';
+import {getFeedDetail, getMainFeed} from '../../service/post';
 import {getUserId} from '../../utils/users';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {
   requestCameraPermission,
   requestExternalStoragePermission,
 } from '../../utils/permission';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
+import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
+import {setImageUrl} from '../../context/actions/users';
+import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
+import {trimString} from '../../utils/string/TrimString';
 
 const width = Dimensions.get('screen').width;
 
@@ -64,18 +77,20 @@ const ProfileScreen = () => {
 
   let [token_JWT, setTokenJwt] = React.useState('');
   let [users, dispatch] = React.useContext(Context).users;
-  const [userId, setUserId] = React.useState(null);
+  let [myProfileFeed, myProfileDispatch] =
+    React.useContext(Context).myProfileFeed;
   const [dataMain, setDataMain] = React.useState({});
-  const [tempFullName, setTempFullName] = React.useState('');
-  const [tempBio, setTempBio] = React.useState('');
-  const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
-  const [isShowButton, setIsShowButton] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [opacity, setOpacity] = React.useState(0);
+  const [errorBio, setErrorBio] = React.useState('');
   const [isChangeRealName, setIsChangeRealName] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
-  const [errorBio, setErrorBio] = React.useState('');
+  const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
+  const [isShowButton, setIsShowButton] = React.useState(false);
+  const [opacity, setOpacity] = React.useState(0);
+  const [tempBio, setTempBio] = React.useState('');
+  const [tempFullName, setTempFullName] = React.useState('');
+  const [userId, setUserId] = React.useState(null);
   const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] =
     React.useState(false);
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
@@ -83,9 +98,32 @@ const ProfileScreen = () => {
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
 
+  const [postId, setPostId] = React.useState('');
+  const [lastId, setLastId] = React.useState('');
+  const [yourselfId, setYourselfId] = React.useState('');
+  const [time, setTime] = React.useState(new Date());
+  const [username, setUsername] = React.useState('');
+  const [reportOption, setReportOption] = React.useState([]);
+  const [messageReport, setMessageReport] = React.useState('');
+  const [initialLoading, setInitialLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
+
+  const refBlockUser = React.useRef();
+  const refBlockDomain = React.useRef();
+  const refReportUser = React.useRef();
+  const refReportDomain = React.useRef();
+  const refSpecificIssue = React.useRef();
+  const refBlockPostAnonymous = React.useRef();
+  const refReportPostAnonymous = React.useRef();
+
+  let {feeds} = myProfileFeed;
+  console.log('myProfile');
+  console.log(feeds);
+
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     fetchMyProfile(true);
+    getMyFeeds();
 
     getAccessToken().then((val) => {
       setTokenJwt(val);
@@ -116,13 +154,19 @@ const ProfileScreen = () => {
       setUserId(id);
       withLoading ? setIsLoading(true) : null;
       const result = await getMyProfile(id);
-      console.log(result);
+      // console.log('result');
+      // console.log(result);
       if (result.code === 200) {
         setDataMain(result.data);
         setImageUrl(result.data.profile_pic_path, dispatch);
         withLoading ? setIsLoading(false) : null;
       }
     }
+  };
+
+  const getMyFeeds = async () => {
+    let result = await getSelfFeedsInProfile();
+    setMyProfileFeed(result.data, myProfileDispatch);
   };
 
   async function buildLink() {
@@ -369,6 +413,193 @@ const ProfileScreen = () => {
     );
   };
 
+  const onPressDomain = (item) => {
+    let param = linkContextScreenParamBuilder(
+      item,
+      item.og.domain,
+      item.og.domainImage,
+      item.og.domain_page_id,
+    );
+    navigation.navigate('DomainScreen', param);
+  };
+
+  const onPress = (item, index) => {
+    navigation.navigate('PostDetailPage', {
+      index: index,
+      isalreadypolling: item.isalreadypolling,
+    });
+  };
+
+  const onPressComment = (index) => {
+    navigation.navigate('PostDetailPage', {
+      index: index,
+    });
+  };
+
+  const onPressBlock = (value) => {
+    if (value.actor.id === yourselfId) {
+      Toast.show("Can't Block yourself", Toast.LONG);
+    } else {
+      setDataToState(value);
+      if (value.anonimity) {
+        refBlockPostAnonymous.current.open();
+      } else {
+        refBlockUser.current.open();
+      }
+    }
+  };
+
+  const setDataToState = (value) => {
+    if (value.anonimity === true) {
+      setUsername('Anonymous');
+      setPostId(value.id);
+      setUserId(value.actor.id + '-anonymous');
+    } else {
+      setUsername(value.actor.data.username);
+      setPostId(value.id);
+      setUserId(value.actor.id);
+    }
+  };
+
+  let onNewPollFetched = (newPolls, index) => {
+    setFeedByIndex(
+      {
+        index: index,
+        singleFeed: newPolls,
+      },
+      dispatch,
+    );
+  };
+
+  const setUpVote = async (post, index) => {
+    await upVote(post);
+    updateFeed(post, index);
+  };
+  const setDownVote = async (post, index) => {
+    await downVote(post);
+    updateFeed(post, index);
+  };
+
+  const updateFeed = async (post, index) => {
+    try {
+      let data = await getFeedDetail(post.activity_id);
+      if (data) {
+        setFeedByIndex(
+          {
+            singleFeed: data.data,
+            index,
+          },
+          dispatch,
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onSelectBlocking = (v) => {
+    if (v !== 1) {
+      refReportUser.current.open();
+    } else {
+      userBlock();
+    }
+    refBlockUser.current.close();
+  };
+
+  const onSelectBlockingPostAnonymous = (v) => {
+    if (v !== 1) {
+      refReportPostAnonymous.current.open();
+    } else {
+      blockPostAnonymous();
+    }
+    refBlockPostAnonymous.current.close();
+  };
+
+  const userBlock = async () => {
+    const data = {
+      userId: userId,
+      postId: postId,
+      source: 'screen_feed',
+      reason: reportOption,
+      message: messageReport,
+    };
+    let result = await blockUser(data);
+    if (result.code === 200) {
+      getDataFeeds('');
+      Toast.show(
+        'The user was blocked successfully. \nThanks for making BetterSocial better!',
+        Toast.LONG,
+      );
+    } else {
+      Toast.show('Your report was filed & will be investigated', Toast.LONG);
+    }
+    console.log('result block user ', result);
+  };
+
+  const blockPostAnonymous = async () => {
+    const data = {
+      postId: postId,
+      source: 'screen_feed',
+      reason: reportOption,
+      message: messageReport,
+    };
+    let result = await blockAnonymous(data);
+    if (result.code === 201) {
+      getDataFeeds('');
+      Toast.show(
+        'The user was blocked successfully. \nThanks for making BetterSocial better!',
+        Toast.LONG,
+      );
+    } else {
+      Toast.show('Your report was filed & will be investigated', Toast.LONG);
+    }
+    console.log('result block user ', result);
+  };
+
+  const getDataFeeds = async (id = '') => {
+    setLoading(true);
+    try {
+      let query = '';
+      if (id !== '') {
+        query = '?id_lt=' + id;
+      }
+
+      const dataFeeds = await getMainFeed(query);
+      if (dataFeeds.data.length > 0) {
+        let data = dataFeeds.data;
+        if (id === '') {
+          setMainFeeds(data, dispatch);
+        } else {
+          setMainFeeds([...feeds, ...data], dispatch);
+        }
+      }
+      setLoading(false);
+      setInitialLoading(false);
+      setTime(new Date());
+      setLoading(false);
+    } catch (e) {
+      setInitialLoading(false);
+      setLoading(false);
+    }
+  };
+
+  const onIssue = (v) => {
+    refSpecificIssue.current.close();
+    setMessageReport(v);
+    setTimeout(() => {
+      userBlock();
+    }, 500);
+  };
+  const onSkipOnlyBlock = () => {
+    refReportUser.current.close();
+    userBlock();
+  };
+  const onNextQuestion = (v) => {
+    setReportOption(v);
+    refReportUser.current.close();
+    refSpecificIssue.current.open();
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -477,14 +708,27 @@ const ProfileScreen = () => {
                     </Text>
                   </View>
                   <View style={styles.containerFlatFeed}>
-                    <FlatFeed
-                      feedGroup="user"
-                      userId={userId}
-                      Activity={(props, index) => {
-                        return RenderActivity(props, dataMain);
-                      }}
-                      notify
-                    />
+                    {feeds &&
+                      feeds.map((item, index) => {
+                        return (
+                          <View style={{width: '100%'}}>
+                            <RenderItem
+                              item={item}
+                              index={index}
+                              onNewPollFetched={onNewPollFetched}
+                              onPressDomain={onPressDomain}
+                              onPress={() => onPress(item, index)}
+                              onPressComment={() => onPressComment(index)}
+                              onPressBlock={() => onPressBlock(item)}
+                              onPressUpvote={(post) => setUpVote(post, index)}
+                              selfUserId={yourselfId}
+                              onPressDownVote={(post) =>
+                                setDownVote(post, index)
+                              }
+                            />
+                          </View>
+                        );
+                      })}
                   </View>
                 </View>
               ) : null}
@@ -526,6 +770,33 @@ const ProfileScreen = () => {
             </View>
           </TouchableNativeFeedback>
         ) : null}
+
+        <BlockUser
+          refBlockUser={refBlockUser}
+          onSelect={(v) => onSelectBlocking(v)}
+          username={username}
+        />
+        <BlockDomain
+          refBlockUser={refBlockDomain}
+          domain="guardian.com"
+          onSelect={() => {}}
+        />
+        <ReportUser
+          refReportUser={refReportUser}
+          onSelect={onNextQuestion}
+          onSkip={onSkipOnlyBlock}
+        />
+        <ReportPostAnonymous
+          refReportPostAnonymous={refReportPostAnonymous}
+          onSelect={onNextQuestion}
+          onSkip={onSkipOnlyBlock}
+        />
+        <ReportDomain refReportDomain={refReportDomain} />
+        <SpecificIssue
+          refSpecificIssue={refSpecificIssue}
+          onPress={onIssue}
+          onSkip={onSkipOnlyBlock}
+        />
       </SafeAreaView>
     </>
   );
@@ -561,7 +832,7 @@ const styles = StyleSheet.create({
     // borderBottomColor: colors.bondi_blue,
   },
   containerFlatFeed: {
-    padding: 20,
+    padding: 0,
     flex: 1,
   },
   btnBottom: {

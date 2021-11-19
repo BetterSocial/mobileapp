@@ -13,6 +13,7 @@ import {fonts} from '../../utils/fonts';
 import StringConstant from '../../utils/string/StringConstant';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import {Context} from '../../context';
+import {ActivityIndicator} from 'react-native';
 
 const WriteComment = ({
   value = null,
@@ -21,16 +22,14 @@ const WriteComment = ({
   username,
   inReplyCommentView = false,
   showProfileConnector = true,
+  loadingComment,
 }) => {
   let [users] = React.useContext(Context).users;
   let commentInputRef = React.useRef(null);
 
   let isCommentEnabled = value.length > 0;
   let isSendButtonPressed = () => {
-    if (isCommentEnabled) {
-      commentInputRef.current.blur();
-      return onPress();
-    }
+    return onPress();
   };
 
   return (
@@ -68,8 +67,9 @@ const WriteComment = ({
         </View>
         <TouchableOpacity
           onPress={isSendButtonPressed}
-          style={styles.btn(isCommentEnabled)}>
-          <MemoSendComment style={styles.icSendButton} />
+          style={styles.btn(isCommentEnabled)}
+          >
+         <MemoSendComment style={styles.icSendButton} />
         </TouchableOpacity>
       </View>
     </View>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   btn: (isCommentEnabled) => {
     return {
-      backgroundColor: isCommentEnabled ? colors.bondi_blue : colors.gray1,
+      backgroundColor: colors.bondi_blue,
       borderRadius: 18,
       width: 35,
       height: 35,

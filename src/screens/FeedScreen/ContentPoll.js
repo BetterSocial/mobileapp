@@ -467,7 +467,6 @@ const styles = StyleSheet.create({
       fontSize: 16,
       color: colors.black,
       lineHeight: 24,
-      maxHeight: 80,
     };
   },
 

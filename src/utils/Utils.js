@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {Linking} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
+import {Linking} from 'react-native';
 export const sanitizeUrlForLinking = (url) => {
   if (!/^https?:\/\//.test(url)) {
     url = `https://${url}`;
@@ -68,5 +68,19 @@ export const openUrl = (url) => {
         SimpleToast.show('Url is not supported', SimpleToast.SHORT);
       }
     });
+  }
+};
+
+export const setCapitalFirstLetter = (text) => {
+  if (text && typeof text === 'string') {
+    const capital = text.charAt(0).toUpperCase();
+    const notCapital = text.slice(1);
+    return `${capital}${notCapital}`;
+  }
+};
+
+export const removeWhiteSpace = (txt) => {
+  if (txt && typeof txt === 'string') {
+    return txt.trim();
   }
 };

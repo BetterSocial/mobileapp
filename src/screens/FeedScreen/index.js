@@ -1,13 +1,10 @@
 import * as React from 'react';
-import {View, SafeAreaView, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import Toast from 'react-native-simple-toast';
 
-import RenderItem from './RenderItem';
-import Loading from '../../components/Loading';
-import CardStack from '../../components/CardStack';
 import {ButtonNewPost} from '../../components/Button';
 import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
@@ -18,16 +15,19 @@ import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
 import {downVote, upVote} from '../../service/vote';
-import {getFeedDetail, getMainFeed, viewTimePost} from '../../service/post';
+import {getFeedDetail, getMainFeed} from '../../service/post';
 import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
 import {blockAnonymous, blockUser} from '../../service/blocking';
 import {Context} from '../../context';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import RenderListFeed from './RenderList';
+import TiktokScroll from '../../components/TiktokScroll';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
-
+  const flatListRef = React.useRef();
   const [initialLoading, setInitialLoading] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const [countStack, setCountStack] = React.useState(null);
@@ -50,13 +50,6 @@ const FeedScreen = (props) => {
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   let {feeds} = feedsContext;
-
-  React.useEffect(() => {
-    let isRefresh = props.route.params?.refresh;
-    if (isRefresh) {
-      getDataFeeds(lastId);
-    }
-  }, [props.route.params, lastId]);
 
   const onSelectBlocking = (v) => {
     if (v !== 1) {
@@ -92,6 +85,7 @@ const FeedScreen = (props) => {
     };
     let result = await blockUser(data);
     if (result.code === 200) {
+      getDataFeeds('');
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -111,6 +105,7 @@ const FeedScreen = (props) => {
     };
     let result = await blockAnonymous(data);
     if (result.code === 201) {
+      getDataFeeds('');
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
         Toast.LONG,
@@ -135,31 +130,32 @@ const FeedScreen = (props) => {
 
   const getDataFeeds = async (id = '') => {
     setCountStack(null);
-    setInitialLoading(true);
+    setLoading(true);
     try {
       let query = '';
       if (id !== '') {
         query = '?id_lt=' + id;
       }
+
       const dataFeeds = await getMainFeed(query);
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
+        if (id === '') {
+          setMainFeeds(data, dispatch);
+        } else {
+          setMainFeeds([...feeds, ...data], dispatch);
+        }
         setCountStack(data.length);
-        setMainFeeds(data, dispatch);
       }
+      setLoading(false);
       setInitialLoading(false);
       setTime(new Date());
+      setLoading(false);
     } catch (e) {
-      console.log(e);
       setInitialLoading(false);
+      setLoading(false);
     }
   };
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     getDataFeeds(lastId);
-  //   }, [lastId]),
-  // );
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -178,7 +174,7 @@ const FeedScreen = (props) => {
 
   React.useEffect(() => {
     getDataFeeds(lastId);
-  }, [lastId]);
+  }, []);
 
   const setDataToState = (value) => {
     if (value.anonimity === true) {
@@ -194,8 +190,6 @@ const FeedScreen = (props) => {
   const updateFeed = async (post, index) => {
     try {
       let data = await getFeedDetail(post.activity_id);
-      console.log('data.data');
-      console.log(data);
       if (data) {
         setFeedByIndex(
           {
@@ -210,16 +204,14 @@ const FeedScreen = (props) => {
     }
   };
   const setUpVote = async (post, index) => {
-    await upVote(post);
-    // console.log('post');
-    // console.log(post);
+    const processVote = await upVote(post);
     updateFeed(post, index);
+    return processVote;
   };
   const setDownVote = async (post, index) => {
-    await downVote(post);
-    // console.log('post');
-    // console.log(post);
+    const processVote = await downVote(post);
     updateFeed(post, index);
+    return processVote
   };
 
   React.useEffect(() => {
@@ -250,104 +242,73 @@ const FeedScreen = (props) => {
     );
   }
 
-  const sendViewPost = (id, viewTime) => {
-    viewTimePost(id, time);
+  const onPressDomain = (item) => {
+    let param = linkContextScreenParamBuilder(
+      item,
+      item.og.domain,
+      item.og.domainImage,
+      item.og.domain_page_id,
+    );
+    props.navigation.navigate('DomainScreen', param);
+  };
+
+  const onEndReach = () => {
+    getDataFeeds(feeds[feeds.length - 1].id);
+  };
+
+  const onPress = (item, index) => {
+    props.navigation.navigate('PostDetailPage', {
+      index: index,
+      isalreadypolling: item.isalreadypolling,
+    });
+  };
+
+  const onPressComment = (index) => {
+    props.navigation.navigate('PostDetailPage', {
+      index: index,
+    });
+  };
+
+  const onPressBlock = (value) => {
+    if (value.actor.id === yourselfId) {
+      Toast.show("Can't Block yourself", Toast.LONG);
+    } else {
+      setDataToState(value);
+      if (value.anonimity) {
+        refBlockPostAnonymous.current.open();
+      } else {
+        refBlockUser.current.open();
+      }
+    }
+  };
+
+  const onRefresh = () => {
+    getDataFeeds('');
   };
 
   return (
-    <View style={styles.container} forceInset={{top: 'always'}}>
-      {feeds.length > 0 && (
-        <CardStack
-          style={styles.content}
-          renderNoMoreCards={() => {
-            if (countStack === 0) {
-              // let id = mainFeeds[mainFeeds.length - 1].id;
-              let id = feeds[feeds.length - 1].id;
-              setLastId(id);
-            }
-          }}
-          disableTopSwipe={false}
-          disableLeftSwipe={true}
-          disableRightSwipe={true}
-          verticalSwipe={true}
-          verticalThreshold={1}
-          horizontalSwipe={false}
-          disableBottomSwipe={true}
-          onSwipedTop={(index) => {
-            setCountStack(countStack - 1);
-            let now = new Date();
-            let diff = now.getTime() - time.getTime();
-            sendViewPost(feeds[index].id, diff);
-            setTime(new Date());
-          }}>
-          {feeds.length > 0
-            ? feeds.map((item, index) => (
-                <RenderItem
-                  index={index}
-                  key={`${index}${item?.refreshtoken || new Date().valueOf()}`}
-                  item={item}
-                  onNewPollFetched={onNewPollFetched}
-                  onPress={() => {
-                    props.navigation.navigate('PostDetailPage', {
-                      index: index,
-                      isalreadypolling: item.isalreadypolling,
-                    });
-                  }}
-                  onPressBlock={(value) => {
-                    if (value.actor.id === yourselfId) {
-                      Toast.show("Can't Block yourself", Toast.LONG);
-                    } else {
-                      setDataToState(value);
-                      if (value.anonimity) {
-                        refBlockPostAnonymous.current.open();
-                      } else {
-                        refBlockUser.current.open();
-                      }
-                    }
-                  }}
-                  onPressComment={() => {
-                    props.navigation.navigate('PostDetailPage', {
-                      index: index,
-                    });
-                  }}
-                  onPressUpvote={(post) => setUpVote(post, index)}
-                  onPressDownVote={(post) => setDownVote(post, index)}
-                  selfUserId={yourselfId}
-                  onPressDomain={() => {
-                    let param = linkContextScreenParamBuilder(
-                      item,
-                      item.og.domain,
-                      item.og.domainImage,
-                      item.og.domain_page_id,
-                    );
-                    props.navigation.navigate('DomainScreen', param);
-                  }}
-                  onCardContentPress={() => {
-                    props.navigation.navigate('DetailDomainScreen', {
-                      item: {
-                        domain: {
-                          name: item.og.domain,
-                          image: item.og.domainImage,
-                        },
-                        content: {
-                          image: item.og.image,
-                          title: item.og.title,
-                          url: item.og.url,
-                          created_at: item.og.date,
-                          description: item.og.description,
-                        },
-                        reaction_counts: item.reaction_counts,
-                        latest_reactions: item.latest_reactions,
-                      },
-                    });
-                  }}
-                />
-              ))
-            : null}
-        </CardStack>
-      )}
-
-      <Loading visible={loading} />
+      <View style={styles.container} forceInset={{top: 'always'}}>
+      <TiktokScroll
+        data={feeds}
+        onEndReach={onEndReach}
+        onRefresh={onRefresh}
+        refreshing={loading}>
+        {({item, index}) => (
+          <RenderListFeed
+            item={item}
+            onNewPollFetched={onNewPollFetched}
+            index={index}
+            onPressDomain={onPressDomain}
+            onPress={() => onPress(item, index)}
+            onPressComment={() => onPressComment(index)}
+            onPressBlock={() => onPressBlock(item)}
+            onPressUpvote={(post) => setUpVote(post, index)}
+            selfUserId={yourselfId}
+            onPressDownVote={(post) => setDownVote(post, index)}
+            loading={loading}
+          />
+        )}
+      </TiktokScroll>
       <ButtonNewPost />
       <BlockPostAnonymous
         refBlockPostAnonymous={refBlockPostAnonymous}
@@ -381,6 +342,7 @@ const FeedScreen = (props) => {
         onSkip={onSkipOnlyBlock}
       />
     </View>
+    
   );
 };
 
@@ -397,5 +359,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  flatlistContainer: {
+    paddingBottom: 0,
   },
 });

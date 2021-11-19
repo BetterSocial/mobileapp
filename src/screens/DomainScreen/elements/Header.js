@@ -31,15 +31,17 @@ import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureE
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis.';
 
-const Header = ({image, domain, description, followers, onPress, iddomain}) => {
+const Header = ({
+  image,
+  domain,
+  description,
+  followers,
+  onPress,
+  handleFollow,
+  handleUnfollow,
+  follow = false,
+}) => {
   let [isTooltipShown, setIsTooltipShown] = React.useState(false);
-  const [follow, setFollow] = React.useState(false);
-  const [news, dispatch] = React.useContext(Context).news;
-  const [dataFollow] = React.useState({
-    domainId: iddomain,
-    source: 'domain_page',
-  });
-  let {ifollow} = news;
 
   const openDomainLink = async () => {
     let isURL = await Linking.canOpenURL(`https://${domain}`);
@@ -48,43 +50,6 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
       Linking.openURL(`https://${domain}`);
     } else {
       SimpleToast.show(StringConstant.domainCannotOpenURL, SimpleToast.SHORT);
-    }
-  };
-  React.useEffect(() => {
-    getIFollow();
-  }, [iddomain, ifollow]);
-  const getIFollow = async () => {
-    if (ifollow.length === 0) {
-      let res = await getDomainIdIFollow();
-      setIFollow(res.data, dispatch);
-    } else {
-      setFollow(JSON.stringify(ifollow).includes(iddomain));
-    }
-  };
-  const handleFollow = async () => {
-    setFollow(true);
-    const res = await followDomain(dataFollow);
-    if (res.code === 200) {
-      addIFollowByID(
-        {
-          domain_id_followed: iddomain,
-        },
-        dispatch,
-      );
-    } else {
-      console.log('error follow domain');
-    }
-  };
-  const handleUnFollow = async () => {
-    setFollow(false);
-    const res = await unfollowDomain(dataFollow);
-    if (res.code === 200) {
-      let newListFollow = await ifollow.filter(function (obj) {
-        return obj.domain_id_followed !== iddomain;
-      });
-      setIFollow(newListFollow, dispatch);
-    } else {
-      console.log('error unfollow domain');
     }
   };
 
@@ -106,7 +71,7 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
         </View>
         <View style={styles.wrapperHeader}>
           {follow ? (
-            <TouchableNativeFeedback onPress={() => handleUnFollow()}>
+            <TouchableNativeFeedback onPress={() => handleUnfollow()}>
               <View style={styles.buttonFollowing}>
                 <Text style={styles.textButtonFollowing}>Following</Text>
               </View>
@@ -139,9 +104,11 @@ const Header = ({image, domain, description, followers, onPress, iddomain}) => {
       </View>
       <Gap height={normalize(2)} />
       <View style={[styles.row, {alignItems: 'center'}]}>
-        <Text style={styles.followersNumber}>{followers}k</Text>
+        <Text style={styles.followersNumber}>{followers}</Text>
         <Gap width={normalize(4)} />
-        <Text style={styles.followersText}>Followers</Text>
+        <Text style={styles.followersText}>
+          {followers < 2 ? 'Follower' : 'Followers'}
+        </Text>
       </View>
       <Gap height={normalize(14)} />
       <Text style={styles.domainDescription}>

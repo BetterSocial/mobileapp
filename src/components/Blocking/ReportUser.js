@@ -15,7 +15,7 @@ import {Button} from '../../components/Button';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const ReportUser = ({refReportUser, onSelect, onSkip}) => {
+const ReportUser = ({refReportUser, onSelect, onSkip, loading}) => {
   const data = [
     {
       id: 1,
