@@ -26,15 +26,13 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
     return index === comments.length - 1;
   };
 
+  {console.log(comments ,'sania')}
+
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />
-      {comments.map((item, index) => {
-        (item.latest_children.comment || []).sort((current, next) => {
-          let currentMoment = moment(current.updated_at);
-          let nextMoment = moment(next.updated_at);
-          return currentMoment.diff(nextMoment);
-        });
+      {comments.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()).map((item, index) => {
+    
 
         return (
           <View>
