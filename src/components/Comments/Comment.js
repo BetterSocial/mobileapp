@@ -131,18 +131,6 @@ const Comment = ({
       text: comment.data.text,
       status: 'upvote',
     };
-
-    setStatusVote('upvote');
-    if (statusVote === 'upvote') {
-      setStatusVote('none');
-      setTotalVote(totalVote - 1);
-    } else {
-      if (totalVote === -1) {
-        setTotalVote(totalVote + 2);
-      } else {
-        setTotalVote(totalVote + 1);
-      }
-    }
     onVote(dataVote);
   };
   const onDownVote = async () => {
@@ -151,22 +139,10 @@ const Comment = ({
       text: comment.data.text,
       status: 'downvote',
     };
-    setStatusVote('downvote');
-    if (statusVote === 'downvote') {
-      setStatusVote('none');
-      setTotalVote(totalVote + 1);
-    } else {
-      if (totalVote === 1) {
-        setTotalVote(totalVote - 2);
-      } else {
-        setTotalVote(totalVote - 1);
-      }
-    }
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
-    console.log(result, 'sultanisme')
     setUpVote(result.data.data.count_upvote);
     setDownVote(result.data.data.count_downvote);
     setTotalVote(
