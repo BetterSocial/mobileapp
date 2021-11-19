@@ -1,24 +1,24 @@
 import * as React from 'react';
+import moment from 'moment';
+import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {
   Dimensions,
-  StyleSheet,
-  View,
   SafeAreaView,
   StatusBar,
+  StyleSheet,
   Text,
+  View,
 } from 'react-native';
 
-import {RecyclerListView, LayoutProvider, DataProvider} from 'recyclerlistview';
-
 import HeaderContact from '../../components/Header/HeaderContact';
-import {ProfileContact} from '../../components/Items';
-import {userPopulate} from '../../service/users';
-import {SearchContact} from '../../components/Search';
-import {Loading} from '../../components';
+import Memo_ic_info from '../../assets/icons/ic_info';
 import {COLORS, FONTS} from '../../utils/theme';
 import {Context} from '../../context';
+import {Loading} from '../../components';
+import {ProfileContact} from '../../components/Items';
+import {SearchContact} from '../../components/Search';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import Memo_ic_info from '../../assets/icons/ic_info';
+import {userPopulate} from '../../service/users';
 
 const width = Dimensions.get('screen').width;
 const VIEW_TYPE_DATA = 2;
@@ -94,6 +94,10 @@ const AddParticipant = ({navigation}) => {
     }
   }, [users]);
 
+  React.useEffect(() => {
+    console.log(followed);
+  }, [followed])
+
   const handleSelected = (value) => {
     let copyFollowed = [...followed];
     let index = followed.indexOf(value);
@@ -104,14 +108,22 @@ const AddParticipant = ({navigation}) => {
     }
     setFollowed(copyFollowed);
   };
+
   const updateChannel = async () => {
     if (followed.length !== 0 && channel.channel) {
       try {
         setLoading(true);
-        await channel.channel.addMembers(followed);
+        let followedWithRoles = followed.map((item, index) => {
+          return {
+            user_id : item,
+            channel_role : 'channel_moderator'
+          }
+        })
+        await channel.channel.addMembers(followedWithRoles);
         setLoading(false);
         navigation.navigate('GroupInfo', {
           from: 'AddParticipant',
+          timestamp : moment().unix(),
         });
       } catch (error) {
         console.log('add member ', error);

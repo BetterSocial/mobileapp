@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 12,
-        paddingHorizontal: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
     },
     textUsername: {
       fontFamily: fonts.inter[800],
