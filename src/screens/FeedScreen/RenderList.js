@@ -32,15 +32,9 @@ const getHeightHeader = () => {
   return h;
 };
 
-const getHeightFooter = () => {
-  let h = Math.floor((FULL_HEIGHT * 6.8) / 100);
-  return h;
-};
 
-const getHeightReaction = () => {
-  let h = Math.floor((FULL_HEIGHT * 16) / 100);
-  return h;
-};
+
+
 
 const styles = StyleSheet.create({
   cardContainer: (bottomHeight) => ({
@@ -54,9 +48,10 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
+  footerWrapper: (h) => ({height: h}),
   contentReaction: (heightReaction) => ({
     height: heightReaction,
+    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
   }),
 });
 
@@ -90,6 +85,16 @@ const RenderListFeed = (props) => {
       item.og.domain_page_id,
     );
     navigation.push('LinkContextScreen', param);
+  };
+
+  const getHeightFooter = () => {
+    let h = Math.floor(((FULL_HEIGHT - tabBarHeight -bottomHeight ) * 6.8) / 100);
+    return h;
+  };
+
+  const getHeightReaction = () => {
+    let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
+    return h;
   };
 
   const onShare = async (username) => {
@@ -311,9 +316,9 @@ const RenderListFeed = (props) => {
             }
           />
         </View>
+        <View style={styles.contentReaction(isReaction ? getHeightReaction() : 0)}>
         {isReaction && (
-          <View style={styles.contentReaction(getHeightReaction())}>
-            <View style={styles.lineAffterFooter} />
+          <React.Fragment>
             <PreviewComment
               user={previewComment.user}
               comment={previewComment.data.text}
@@ -323,8 +328,10 @@ const RenderListFeed = (props) => {
               onPress={onPressComment}
             />
             <Gap height={8} />
-          </View>
+          </React.Fragment>
         )}
+        </View>
+        
       </View>
     </View>
   );

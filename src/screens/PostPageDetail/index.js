@@ -65,7 +65,9 @@ const PostPageDetail = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingVote, setLoadingVote] = React.useState(false);
-
+  const [loadingPost, setLoadingPost] = React.useState(false)
+  const [commentList, setCommentList] = React.useState([])
+  
   let [feeds, dispatch] = React.useContext(Context).feeds;
 
   React.useEffect(() => {
@@ -87,14 +89,6 @@ const PostPageDetail = (props) => {
   let {index} = props.route.params;
 
   const [item, setItem] = React.useState(feeds.feeds[index]);
-  const sortComment = (comments) => {
-    let sortedComment = comments.sort((current, next) => {
-      let currentMoment = moment(current.updated_at);
-      let nextMoment = moment(next.updated_at);
-      return currentMoment.diff(nextMoment);
-    });
-    return sortedComment;
-  };
 
   React.useEffect(() => {
     const validationStatusVote = () => {
@@ -125,6 +119,9 @@ const PostPageDetail = (props) => {
 
   React.useEffect(() => {
     setItem(feeds.feeds[index]);
+    if(feeds.feeds[index] && feeds.feeds[index].latest_reactions) {
+      setCommentList(feeds.feeds[index].latest_reactions.comment)
+    }
   }, [JSON.stringify(feeds)]);
 
   const handleVote = (data = {}) => {
@@ -239,8 +236,12 @@ const PostPageDetail = (props) => {
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(item.id);
+      console.log(data, item, 'sunat')
+      setLoadingPost(false)
       if (data) {
         setItem(data.data);
+        const sorting = data.data.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix())
+        setCommentList()
         setFeedByIndex(
           {
             singleFeed: data.data,
@@ -261,6 +262,7 @@ const PostPageDetail = (props) => {
   };
 
   const commentParent = async () => {
+    setLoadingPost(true)
     try {
       if (textComment.trim() !== '') {
         let data = await createCommentParent(textComment, item.id);
@@ -268,14 +270,17 @@ const PostPageDetail = (props) => {
           setTextComment('');
           updateFeed();
           Toast.show('Comment successful', Toast.LONG);
+          
         } else {
           Toast.show('Failed Comment', Toast.LONG);
+          setLoadingPost(false)
         }
       } else {
         Toast.show('Comments are not empty', Toast.LONG);
+        setLoadingPost(false)
       }
     } catch (e) {
-      console.log(e);
+      setLoadingPost(false)
       Toast.show('Failed Comment', Toast.LONG);
     }
   };
@@ -377,6 +382,43 @@ const PostPageDetail = (props) => {
     await setUpVote(!statusUpvote);
   };
 
+
+  const handleRefreshComment = ({data}) => {
+    // setItem({...item, data: data.data})
+    const newCommentList = commentList.map((comment) => {
+      if(comment.id === data.id) {
+        return {...comment, data: data.data}
+      } else {
+        return {...comment}
+      }
+    })
+    setCommentList(newCommentList)
+  }
+
+  const handleRefreshChildComment = ({parent, children}) => {
+    const newCommentList = commentList.map((comment) => {
+      if(comment.id === parent.id) {
+         const commentMap = comment.latest_children.comment.map((comChild) => {
+        if(comChild.id === children.id) {
+          return {...comChild, data: children.data, latest_children: children.latest_children}
+        } else {
+          return {...comChild}
+        }
+      })
+      return {...comment, latest_children: {comment: commentMap}}
+      } else {
+        return {...comment}
+      }
+     
+    })
+    if(newCommentList) {
+      setCommentList(newCommentList)
+    }
+  }
+
+  console.log(commentList, 'kurama')
+
+
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
@@ -447,10 +489,13 @@ const PostPageDetail = (props) => {
             />
           </View>
         </View>
-        {isReaction && (
+        {isReaction && commentList && (
           <ContainerComment
-            comments={sortComment(item.latest_reactions.comment)}
+            comments={commentList}
             indexFeed={index}
+            isLoading={loadingPost}
+            refreshComment={handleRefreshComment}
+            refreshChildComment={handleRefreshChildComment}
           />
         )}
       </ScrollView>

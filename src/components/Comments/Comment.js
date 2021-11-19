@@ -33,6 +33,7 @@ const Comment = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
+  refreshComment
 }) => {
   const navigation = useNavigation();
   const refBlockUser = React.useRef();
@@ -50,7 +51,7 @@ const Comment = ({
   const [statusVote, setStatusVote] = React.useState('');
   const [upvote, setUpVote] = React.useState(comment.data.count_upvote);
   const [downvote, setDownVote] = React.useState(comment.data.count_downvote);
-    console.log(user, comment, 'mina')
+  const [vote, setVote] = React.useState(0)
   let onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
@@ -165,11 +166,13 @@ const Comment = ({
   };
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
+    console.log(result, 'sultanisme')
     setUpVote(result.data.data.count_upvote);
     setDownVote(result.data.data.count_downvote);
     setTotalVote(
       result.data.data.count_upvote - result.data.data.count_downvote,
     );
+    if(refreshComment) refreshComment(result)
     console.log('result up ', result);
   };
   const iVote = async () => {
@@ -189,6 +192,13 @@ const Comment = ({
     parseToken();
     iVote();
   }, []);
+
+  React.useEffect(() => {
+    if(comment.data.count_downvote > 0) {
+      return setVote(comment.data.count_downvote * -1)
+    }
+    return setVote(comment.data.count_upvote)
+  }, [JSON.stringify(comment)])
 
   return (
     <View
@@ -243,17 +253,17 @@ const Comment = ({
         <TouchableOpacity
           style={[styles.arrowup, styles.btn]}
           onPress={onDownVote}>
-          {statusVote === 'downvote' ? (
+          {comment.data.count_downvote > 0 ? (
             <MemoIc_downvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_down_vote_off width={20} height={18} />
           )}
         </TouchableOpacity>
-        <Text style={styles.vote(totalVote)}>{totalVote}</Text>
+        <Text style={styles.vote(vote)}>{vote}</Text>
         <TouchableOpacity
           style={[styles.arrowdown, styles.btn]}
           onPress={onUpVote}>
-          {statusVote === 'upvote' ? (
+          {comment.data.count_upvote > 0 ? (
             <MemoIc_upvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_upvote_off width={20} height={18} />

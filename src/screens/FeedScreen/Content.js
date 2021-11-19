@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
   containerImage: {
     flex: 1,
   },
-  fletlist: {flex: 1},
   imageList: {
     flex: 1,
     width: screenWidth - 32,
@@ -210,7 +209,6 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginTop: 12,
-    backgroundColor: COLORS.white,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
