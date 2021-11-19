@@ -194,10 +194,7 @@ const Comment = ({
   }, []);
 
   React.useEffect(() => {
-    if(comment.data.count_downvote > 0) {
-      return setVote(comment.data.count_downvote * -1)
-    }
-    return setVote(comment.data.count_upvote)
+    setVote(comment.data.count_upvote  - comment.data.count_downvote)
   }, [JSON.stringify(comment)])
 
   return (
