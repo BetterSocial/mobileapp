@@ -143,6 +143,7 @@ const Comment = ({
   };
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
+    console.log(result, 'sanim')
     setUpVote(result.data.data.count_upvote);
     setDownVote(result.data.data.count_downvote);
     setTotalVote(
@@ -226,7 +227,7 @@ const Comment = ({
         <TouchableOpacity
           style={[styles.arrowup, styles.btn]}
           onPress={onDownVote}>
-          {comment.data.count_downvote > 0 ? (
+          {vote < 0 ? (
             <MemoIc_downvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_down_vote_off width={20} height={18} />
@@ -236,7 +237,7 @@ const Comment = ({
         <TouchableOpacity
           style={[styles.arrowdown, styles.btn]}
           onPress={onUpVote}>
-          {comment.data.count_upvote > 0 ? (
+          {vote > 0 ? (
             <MemoIc_upvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_upvote_off width={20} height={18} />
