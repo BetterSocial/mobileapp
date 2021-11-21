@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {FlatList, StyleSheet, Dimensions, StatusBar} from 'react-native';
+import { FlatList, StyleSheet, Dimensions, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
@@ -13,9 +13,9 @@ const styles = StyleSheet.create({
 });
 
 const TiktokScroll = (props) => {
-  const {data, children, onRefresh, refreshing, onEndReach} = props;
+  const { data, children, onRefresh, refreshing, onEndReach, isBottomTabBar = true } = props;
   const flatListRef = React.useRef();
-  const deviceHeight = FULL_HEIGHT - tabBarHeight - useBottomTabBarHeight()
+  const deviceHeight = FULL_HEIGHT - isBottomTabBar ? tabBarHeight : null - useBottomTabBarHeight()
 
 
   return (
@@ -46,6 +46,7 @@ TiktokScroll.propTypes = {
   refreshing: PropTypes.bool,
   onScrollBeginDrag: PropTypes.func,
   onEndReach: PropTypes.func,
+  isBottomTabBar: PropTypes.bool,
 };
 
 TiktokScroll.defaultProps = {
