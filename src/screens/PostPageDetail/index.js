@@ -91,33 +91,6 @@ const PostPageDetail = (props) => {
   const [item, setItem] = React.useState(feeds.feeds[index]);
 
   React.useEffect(() => {
-    const validationStatusVote = () => {
-      if (item.reaction_counts !== undefined || null) {
-        if (item.latest_reactions.upvotes !== undefined) {
-          let upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === yourselfId,
-          );
-          if (upvote !== undefined) {
-            setVoteStatus('upvote');
-            setStatusUpvote(true);
-          }
-        }
-
-        if (item.latest_reactions.downvotes !== undefined) {
-          let downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === yourselfId,
-          );
-          if (downvotes !== undefined) {
-            setVoteStatus('downvote');
-            setStatusDowvote(true);
-          }
-        }
-      }
-    };
-    validationStatusVote();
-  }, [item, yourselfId]);
-
-  React.useEffect(() => {
     setItem(feeds.feeds[index]);
     if(feeds.feeds[index] && feeds.feeds[index].latest_reactions) {
       setCommentList(feeds.feeds[index].latest_reactions.comment)
@@ -125,17 +98,11 @@ const PostPageDetail = (props) => {
   }, [JSON.stringify(feeds)]);
 
   const handleVote = (data = {}) => {
-    if (data.downvotes > 0) {
-      setVoteStatus('downvote');
-      return setTotalVote(data.downvotes * -1);
-    } else if (data.upvotes > 0) {
-      setVoteStatus('upvote');
-      return setTotalVote(data.upvotes);
-    }
-    setVoteStatus('none');
-    return setTotalVote(0);
+    const upvote = data.upvotes ? data.upvotes : 0
+    const downvotes = data.downvotes ? data.downvotes : 0
+    setTotalVote(upvote - downvotes)
   };
-
+  console.log(feeds, 'sulak')
   const initial = () => {
     let reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
@@ -348,36 +315,14 @@ const PostPageDetail = (props) => {
   };
 
   const onPressDownVoteHandle = async () => {
-    setStatusDowvote((prev) => !prev);
     setLoadingVote(true);
-    if (totalVote === -1) {
-      setVoteStatus('none');
-      setTotalVote((prevState) => prevState + 1);
-    } else if (totalVote === 0) {
-      setVoteStatus('downvote');
-      setTotalVote((prevState) => prevState - 1);
-    } else {
-      setVoteStatus('downvote');
-      setTotalVote(-1);
-      return setDownVote(true);
-    }
+    setStatusDowvote((prev) => !prev);
     await setDownVote(!statusDownvote);
   };
 
   const onPressUpvoteHandle = async () => {
     setLoadingVote(true);
     setStatusUpvote((prev) => !prev);
-    if (totalVote === 1) {
-      setVoteStatus('none');
-      setTotalVote((prevState) => prevState - 1);
-    } else if (totalVote === 0) {
-      setVoteStatus('upvote');
-      setTotalVote((prevState) => prevState + 1);
-    } else {
-      setVoteStatus('upvote');
-      setTotalVote(1);
-      return await setUpVote(true);
-    }
     await setUpVote(!statusUpvote);
   };
 
@@ -414,6 +359,22 @@ const PostPageDetail = (props) => {
     }
   }
 
+  const checkVotes = () => {
+    const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === yourselfId)
+    const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && item.own_reactions.downvotes.find((vote) => vote.user_id === yourselfId)
+    if(findUpvote) {
+      setVoteStatus('upvote')
+    } else if(findDownvote) {
+      setVoteStatus('downvote')
+    } else {
+      setVoteStatus('none')
+    }
+  }
+
+
+  React.useEffect(() => {
+    checkVotes()
+  }, [item, yourselfId])
 
   return (
     <View style={styles.container}>
@@ -424,7 +385,7 @@ const PostPageDetail = (props) => {
         style={styles.contentScrollView(totalComment)}>
         <View style={styles.content(height)}>
           <Header props={item} isBackButton={true} />
-          {item.post_type === POST_TYPE_POLL && (
+          {item && item.post_type === POST_TYPE_POLL && (
             <ContentPoll
               index={index}
               message={item.message}
@@ -440,7 +401,7 @@ const PostPageDetail = (props) => {
             />
           )}
 
-          {item.post_type === POST_TYPE_LINK && (
+          {item && item.post_type === POST_TYPE_LINK && (
             <ContentLink
               og={item.og}
               onCardPress={onPressDomain}
@@ -449,7 +410,7 @@ const PostPageDetail = (props) => {
             />
           )}
 
-          {item.post_type === POST_TYPE_STANDARD && (
+          {item && item.post_type === POST_TYPE_STANDARD && (
             <Content
               message={item.message}
               images_url={item.images_url}
