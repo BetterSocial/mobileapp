@@ -364,8 +364,10 @@ const PostPageDetail = (props) => {
     const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && item.own_reactions.downvotes.find((vote) => vote.user_id === yourselfId)
     if(findUpvote) {
       setVoteStatus('upvote')
+      setStatusUpvote(true)
     } else if(findDownvote) {
       setVoteStatus('downvote')
+      setStatusDowvote(true)
     } else {
       setVoteStatus('none')
     }
