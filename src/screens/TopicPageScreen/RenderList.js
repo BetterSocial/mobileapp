@@ -235,6 +235,7 @@ const RenderListFeed = (props) => {
   React.useEffect(() => {
     initial();
   }, [item]);
+
   return (
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
@@ -350,4 +351,10 @@ RenderListFeed.propTypes = {
   loading: PropTypes.bool,
 };
 
-export default RenderListFeed;
+function compare(prevProps, nextProps) {
+
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+}
+
+const MemoizedListComponent = React.memo(RenderListFeed, compare);
+export default MemoizedListComponent

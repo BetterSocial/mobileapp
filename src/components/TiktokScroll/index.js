@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const TiktokScroll = (props) => {
+const Tiktok = (props) => {
   const { data, children, onRefresh, refreshing, onEndReach, isBottomTabBar = true } = props;
   const flatListRef = React.useRef();
   const deviceHeight = FULL_HEIGHT - isBottomTabBar ? tabBarHeight : null - useBottomTabBarHeight()
@@ -39,7 +39,7 @@ const TiktokScroll = (props) => {
   );
 };
 
-TiktokScroll.propTypes = {
+Tiktok.propTypes = {
   data: PropTypes.array.isRequired,
   children: PropTypes.node.isRequired,
   onRefresh: PropTypes.func,
@@ -49,9 +49,16 @@ TiktokScroll.propTypes = {
   isBottomTabBar: PropTypes.bool,
 };
 
-TiktokScroll.defaultProps = {
+Tiktok.defaultProps = {
   data: [],
   onEndReach: () => null,
 };
+
+function compare(prevProps, nextProps) {
+
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+}
+
+const TiktokScroll = React.memo(Tiktok, compare);
 
 export default TiktokScroll;

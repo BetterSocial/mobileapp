@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
-import {FONTS, SIZES} from '../../utils/theme';
+import { FONTS, SIZES } from '../../utils/theme';
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
@@ -10,8 +10,8 @@ import MemoIc_share from '../../assets/icons/Ic_share';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
 
 const Footer = ({
   onPressShare,
@@ -27,7 +27,6 @@ const Footer = ({
   blockStatus,
   loadingVote,
 }) => {
-  console.log(loadingVote, 'loading vote');
   const handleBlockUi = () => {
     if (isSelf) {
       return null;
@@ -73,7 +72,7 @@ const Footer = ({
           <Text style={styles.text}>{totalComment}</Text>
         </View>
       ) : (
-        <TouchableOpacity style={{flex: 1}} onPress={onPressComment}>
+        <TouchableOpacity style={{ flex: 1 }} onPress={onPressComment}>
           <View style={styles.totalCommentContainer}>
             <Text style={styles.text}>{totalComment}</Text>
           </View>

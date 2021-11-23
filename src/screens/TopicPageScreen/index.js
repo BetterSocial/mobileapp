@@ -5,12 +5,13 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { getTopicPages } from '../../service/topicPages';
 import { convertString, capitalizeFirstText } from '../../utils/string/StringUtils';
 import TiktokScroll from '../../components/TiktokScroll';
-import RenderListFeed from './RenderList';
 import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { Context } from '../../context';
 import useFollow from '../../utils/customHook/useFollow';
 import { Gap } from '../../components';
+import MemoizedListComponent from './RenderList';
+import { getUserTopic, putUserTopic } from '../../service/topics';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -21,14 +22,7 @@ const TopicPageScreen = (props) => {
   const [topicId, setTopicId] = React.useState('');
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   let { feeds } = feedsContext;
-  const [follow, handleFollow] = useFollow(false);
-
-  React.useEffect(() => {
-    const getDataFollow = () => {
-      console.log(`get data follow ${follow}`);
-    }
-    getDataFollow();
-  }, [follow])
+  const [isFollow, setIsFollow] = React.useState(false);
 
 
   React.useEffect(() => {
@@ -50,6 +44,7 @@ const TopicPageScreen = (props) => {
         const result = await getTopicPages(id);
         setTopicId(id);
         setMainFeeds(result.data, dispatch);
+
         setLoading(false)
       } catch (error) {
         console.log(error);
@@ -59,6 +54,33 @@ const TopicPageScreen = (props) => {
 
     initData();
   }, []);
+
+  React.useEffect(() => {
+    const init = async () => {
+
+      let name = 'Bali'
+      let query = `?name=${name}`;
+      let result = await getUserTopic(query);
+
+      if (result.data) {
+        setIsFollow(true);
+      }
+    }
+    init()
+  }, [])
+
+  const handleFollowTopic = async () => {
+    try {
+      let data = {
+        name: 'Bali'
+      }
+      let result = await putUserTopic(data);
+      console.log(result);
+      setIsFollow(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const refreshingData = async (postId) => {
     try {
@@ -130,7 +152,7 @@ const TopicPageScreen = (props) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
       <Gap height={8} />
-      <Navigation domain={capitalizeFirstText(topicName)} onPress={() => handleFollow()} isFollow={follow} />
+      <Navigation domain={capitalizeFirstText(topicName)} onPress={() => handleFollowTopic()} isFollow={isFollow} />
       <View style={{ flex: 1 }}>
         <TiktokScroll
           data={feeds}
@@ -138,7 +160,7 @@ const TopicPageScreen = (props) => {
           onRefresh={onRefresh}
           refreshing={loading}>
           {({ item, index }) => (
-            <RenderListFeed
+            <MemoizedListComponent
               item={item}
               onNewPollFetched={onNewPollFetched}
               index={index}
