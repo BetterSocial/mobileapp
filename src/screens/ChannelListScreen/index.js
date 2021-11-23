@@ -24,6 +24,7 @@ import {
   CHANNEL_TYPE_TOPIC,
 } from '../../utils/constants';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
+import { setMainFeeds } from '../../context/actions/feeds';
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -33,6 +34,7 @@ const ChannelListScreen = ({ navigation }) => {
   const [userId, setUserId] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
+  const [, dispatchFeed] = React.useContext(Context).feeds;
   const [profile] = React.useContext(Context).profile;
   const [unReadMessage, dispatchUnReadMessage] =
     React.useContext(Context).unReadMessage;
@@ -140,8 +142,9 @@ const ChannelListScreen = ({ navigation }) => {
                 PreviewStatus={customPreviewStatus}
                 PreviewTitle={customPreviewTitle}
                 onSelect={(channel) => {
-                  console.log(channel.data);
                   if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
+                    // toDo reset main feeds
+                    setMainFeeds(null, dispatchFeed)
                     navigation.navigate('TopicPageScreen', { id: channel.data.id });
                   } else {
                     setChannel(channel, dispatch);
