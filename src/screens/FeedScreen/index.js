@@ -190,6 +190,7 @@ const FeedScreen = (props) => {
   const updateFeed = async (post, index) => {
     try {
       let data = await getFeedDetail(post.activity_id);
+      console.log(data, 'suakik')
       if (data) {
         setFeedByIndex(
           {

@@ -136,18 +136,6 @@ const ReplyCommentItem = ({
       text: comment.data.text,
       status: 'upvote',
     };
-
-    setStatusVote('upvote');
-    if (statusVote === 'upvote') {
-      setStatusVote('none');
-      setTotalVote(totalVote - 1);
-    } else {
-      if (totalVote === -1) {
-        setTotalVote(totalVote + 2);
-      } else {
-        setTotalVote(totalVote + 1);
-      }
-    }
     onVote(dataVote);
   };
   const onDownVote = async () => {
@@ -156,23 +144,13 @@ const ReplyCommentItem = ({
       text: comment.data.text,
       status: 'downvote',
     };
-    setStatusVote('downvote');
-    if (statusVote === 'downvote') {
-      setStatusVote('none');
-      setTotalVote(totalVote + 1);
-    } else {
-      if (totalVote === 1) {
-        setTotalVote(totalVote - 2);
-      } else {
-        setTotalVote(totalVote - 1);
-      }
-    }
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    console.log(dataVote, 'lipan1')
-    console.log('click vote ', comment);
     let result = await voteComment(dataVote);
+    console.log(result.data.data.count_upvote - result.data.data.count_downvote, 'sanam')
+    setTotalVote(result.data.data.count_upvote - result.data.data.count_downvote)
+    iVote()
     if(refreshComment) refreshComment(result)
   };
   const iVote = async () => {
@@ -190,14 +168,14 @@ const ReplyCommentItem = ({
       }
     };
     parseToken();
+    iVote()
   }, []);
 
   React.useEffect(() => {
-    if(comment.data.count_downvote > 0) {
-      return setVote(comment.data.count_downvote * -1)
-    }
-    return setVote(comment.data.count_upvote)
+    setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
   }, [JSON.stringify(comment)])
+
+  console.log(totalVote, 'sunan')
 
 
   return (
@@ -253,17 +231,17 @@ const ReplyCommentItem = ({
         <TouchableOpacity
           style={[styles.arrowup, styles.btn]}
           onPress={onDownVote}>
-          {vote < 0 ? (
+          {statusVote === 'downvote' ? (
             <MemoIc_downvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_down_vote_off width={20} height={18} />
           )}
         </TouchableOpacity>
-        <Text style={styles.vote(vote)}>{vote}</Text>
+        <Text style={styles.vote(totalVote)}>{totalVote}</Text>
         <TouchableOpacity
           style={[styles.arrowdown, styles.btn]}
           onPress={onUpVote}>
-          {vote > 0 ? (
+          {statusVote === 'upvote' ? (
             <MemoIc_upvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_upvote_off width={20} height={18} />

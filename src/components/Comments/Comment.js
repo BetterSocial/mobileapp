@@ -51,7 +51,6 @@ const Comment = ({
   const [statusVote, setStatusVote] = React.useState('');
   const [upvote, setUpVote] = React.useState(comment.data.count_upvote);
   const [downvote, setDownVote] = React.useState(comment.data.count_downvote);
-  const [vote, setVote] = React.useState(0)
   let onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
@@ -131,18 +130,6 @@ const Comment = ({
       text: comment.data.text,
       status: 'upvote',
     };
-
-    setStatusVote('upvote');
-    if (statusVote === 'upvote') {
-      setStatusVote('none');
-      setTotalVote(totalVote - 1);
-    } else {
-      if (totalVote === -1) {
-        setTotalVote(totalVote + 2);
-      } else {
-        setTotalVote(totalVote + 1);
-      }
-    }
     onVote(dataVote);
   };
   const onDownVote = async () => {
@@ -151,29 +138,15 @@ const Comment = ({
       text: comment.data.text,
       status: 'downvote',
     };
-    setStatusVote('downvote');
-    if (statusVote === 'downvote') {
-      setStatusVote('none');
-      setTotalVote(totalVote + 1);
-    } else {
-      if (totalVote === 1) {
-        setTotalVote(totalVote - 2);
-      } else {
-        setTotalVote(totalVote - 1);
-      }
-    }
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
-    console.log(result, 'sultanisme')
-    setUpVote(result.data.data.count_upvote);
-    setDownVote(result.data.data.count_downvote);
     setTotalVote(
       result.data.data.count_upvote - result.data.data.count_downvote,
     );
+    iVote();
     if(refreshComment) refreshComment(result)
-    console.log('result up ', result);
   };
   const iVote = async () => {
     let result = await iVoteComment(comment.id);
@@ -193,12 +166,15 @@ const Comment = ({
     iVote();
   }, []);
 
+
   React.useEffect(() => {
-    if(comment.data.count_downvote > 0) {
-      return setVote(comment.data.count_downvote * -1)
-    }
-    return setVote(comment.data.count_upvote)
+    setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
+    console.log('mamaki')
+    iVote()
   }, [JSON.stringify(comment)])
+
+  console.log(statusVote, 'jilak')
+
 
   return (
     <View
@@ -253,17 +229,17 @@ const Comment = ({
         <TouchableOpacity
           style={[styles.arrowup, styles.btn]}
           onPress={onDownVote}>
-          {comment.data.count_downvote > 0 ? (
+          {statusVote === 'downvote' ? (
             <MemoIc_downvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_down_vote_off width={20} height={18} />
           )}
         </TouchableOpacity>
-        <Text style={styles.vote(vote)}>{vote}</Text>
+        <Text style={styles.vote(totalVote)}>{totalVote}</Text>
         <TouchableOpacity
           style={[styles.arrowdown, styles.btn]}
           onPress={onUpVote}>
-          {comment.data.count_upvote > 0 ? (
+          {statusVote === 'upvote'  ? (
             <MemoIc_upvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_upvote_off width={20} height={18} />
