@@ -266,7 +266,9 @@ const Comment = ({
   );
 };
 
-export default Comment;
+export default React.memo (Comment, (prevProps, nextProps) => {
+  return prevProps.comment === nextProps.comment
+});
 
 const styles = StyleSheet.create({
   vote: (count) => ({

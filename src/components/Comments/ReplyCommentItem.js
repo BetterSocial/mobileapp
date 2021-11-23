@@ -268,7 +268,9 @@ const ReplyCommentItem = ({
   );
 };
 
-export default ReplyCommentItem;
+export default React.memo (ReplyCommentItem, (prevProps, nextProps) => {
+  return prevProps === nextProps
+});
 
 const styles = StyleSheet.create({
   vote: (count) => ({

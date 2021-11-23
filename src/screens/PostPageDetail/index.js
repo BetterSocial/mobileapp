@@ -272,8 +272,8 @@ const PostPageDetail = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await upVote(data);
-    updateFeed();
     if (processData.code == 200) {
+      updateFeed()
       setLoadingVote(false);
       return SimpleToast.show('Success Vote', SimpleToast.SHORT);
     }
@@ -286,8 +286,8 @@ const PostPageDetail = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await downVote(data);
-    updateFeed();
     if (processData.code == 200) {
+      updateFeed()
       setLoadingVote(false);
       return SimpleToast.show('Success Vote', SimpleToast.SHORT);
     }
@@ -377,6 +377,12 @@ const PostPageDetail = (props) => {
   React.useEffect(() => {
     checkVotes()
   }, [item, yourselfId])
+
+  React.useEffect(() => {
+    return () => {
+      updateFeed()
+    }
+  }, [])
 
   return (
     <View style={styles.container}>
