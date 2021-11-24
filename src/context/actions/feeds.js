@@ -1,4 +1,4 @@
-import {SET_FEED, SET_FEED_BY_ID, SET_FEED_BY_INDEX} from '../Types';
+import { SET_FEED, SET_FEED_BY_ID, SET_FEED_BY_INDEX } from '../Types';
 export const setMainFeeds = async (data, dispatch) => {
   dispatch({
     type: SET_FEED,

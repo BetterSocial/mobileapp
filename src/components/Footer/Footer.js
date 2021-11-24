@@ -72,7 +72,7 @@ const Footer = ({
           <Text style={styles.text}>{totalComment}</Text>
         </View>
       ) : (
-        <TouchableOpacity style={{flex: 1}} onPress={onPressComment}>
+        <TouchableOpacity style={{ flex: 1 }} onPress={onPressComment}>
           <View style={styles.totalCommentContainer}>
             <Text style={styles.text}>{totalComment}</Text>
           </View>
