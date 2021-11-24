@@ -18,7 +18,10 @@ import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
-import {iVoteComment, voteComment} from '../../service/vote';
+import {downVote, iVoteComment, voteComment} from '../../service/vote';
+import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
+import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
+import {FONTS} from '../../utils/theme'
 import { removeWhiteSpace } from '../../utils/Utils';
 
 const ReplyCommentItem = ({
@@ -33,6 +36,7 @@ const ReplyCommentItem = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
+  refreshComment
 }) => {
   const navigation = useNavigation();
   const refBlockUser = React.useRef();
@@ -44,6 +48,7 @@ const ReplyCommentItem = ({
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+  const [vote, setVote] = React.useState(0)
 
   const [totalVote, setTotalVote] = React.useState(
     comment.data.count_upvote - comment.data.count_downvote,
@@ -132,18 +137,6 @@ const ReplyCommentItem = ({
       text: comment.data.text,
       status: 'upvote',
     };
-
-    setStatusVote('upvote');
-    if (statusVote === 'upvote') {
-      setStatusVote('none');
-      setTotalVote(totalVote - 1);
-    } else {
-      if (totalVote === -1) {
-        setTotalVote(totalVote + 2);
-      } else {
-        setTotalVote(totalVote + 1);
-      }
-    }
     onVote(dataVote);
   };
   const onDownVote = async () => {
@@ -152,28 +145,14 @@ const ReplyCommentItem = ({
       text: comment.data.text,
       status: 'downvote',
     };
-    setStatusVote('downvote');
-    if (statusVote === 'downvote') {
-      setStatusVote('none');
-      setTotalVote(totalVote + 1);
-    } else {
-      if (totalVote === 1) {
-        setTotalVote(totalVote - 2);
-      } else {
-        setTotalVote(totalVote - 1);
-      }
-    }
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    console.log('click vote ', comment);
     let result = await voteComment(dataVote);
-    setUpVote(result.data.data.count_upvote);
-    setDownVote(result.data.data.count_downvote);
-    setTotalVote(
-      result.data.data.count_upvote - result.data.data.count_downvote,
-    );
-    console.log('result up ', result);
+    console.log(result.data.data.count_upvote - result.data.data.count_downvote, 'sanam')
+    setTotalVote(result.data.data.count_upvote - result.data.data.count_downvote)
+    iVote()
+    if(refreshComment) refreshComment(result)
   };
   const iVote = async () => {
     let result = await iVoteComment(comment.id);
@@ -190,7 +169,13 @@ const ReplyCommentItem = ({
       }
     };
     parseToken();
+    iVote()
   }, []);
+
+  React.useEffect(() => {
+    setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
+  }, [JSON.stringify(comment)])
+
   return (
     <View
       style={styles.container({
@@ -281,7 +266,9 @@ const ReplyCommentItem = ({
   );
 };
 
-export default ReplyCommentItem;
+export default React.memo (ReplyCommentItem, (prevProps, nextProps) => {
+  return prevProps === nextProps
+});
 
 const styles = StyleSheet.create({
   vote: (count) => ({

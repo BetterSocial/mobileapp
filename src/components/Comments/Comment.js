@@ -33,6 +33,7 @@ const Comment = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
+  refreshComment
 }) => {
   const navigation = useNavigation();
   const refBlockUser = React.useRef();
@@ -50,7 +51,6 @@ const Comment = ({
   const [statusVote, setStatusVote] = React.useState('');
   const [upvote, setUpVote] = React.useState(comment.data.count_upvote);
   const [downvote, setDownVote] = React.useState(comment.data.count_downvote);
-
   let onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
@@ -130,18 +130,6 @@ const Comment = ({
       text: comment.data.text,
       status: 'upvote',
     };
-
-    setStatusVote('upvote');
-    if (statusVote === 'upvote') {
-      setStatusVote('none');
-      setTotalVote(totalVote - 1);
-    } else {
-      if (totalVote === -1) {
-        setTotalVote(totalVote + 2);
-      } else {
-        setTotalVote(totalVote + 1);
-      }
-    }
     onVote(dataVote);
   };
   const onDownVote = async () => {
@@ -150,27 +138,15 @@ const Comment = ({
       text: comment.data.text,
       status: 'downvote',
     };
-    setStatusVote('downvote');
-    if (statusVote === 'downvote') {
-      setStatusVote('none');
-      setTotalVote(totalVote + 1);
-    } else {
-      if (totalVote === 1) {
-        setTotalVote(totalVote - 2);
-      } else {
-        setTotalVote(totalVote - 1);
-      }
-    }
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
-    setUpVote(result.data.data.count_upvote);
-    setDownVote(result.data.data.count_downvote);
     setTotalVote(
       result.data.data.count_upvote - result.data.data.count_downvote,
     );
-    console.log('result up ', result);
+    iVote();
+    if(refreshComment) refreshComment(result)
   };
   const iVote = async () => {
     let result = await iVoteComment(comment.id);
@@ -189,6 +165,16 @@ const Comment = ({
     parseToken();
     iVote();
   }, []);
+
+
+  React.useEffect(() => {
+    setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
+    console.log('mamaki')
+    iVote()
+  }, [JSON.stringify(comment)])
+
+  console.log(statusVote, 'jilak')
+
 
   return (
     <View
@@ -253,7 +239,7 @@ const Comment = ({
         <TouchableOpacity
           style={[styles.arrowdown, styles.btn]}
           onPress={onUpVote}>
-          {statusVote === 'upvote' ? (
+          {statusVote === 'upvote'  ? (
             <MemoIc_upvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_upvote_off width={20} height={18} />
@@ -280,7 +266,9 @@ const Comment = ({
   );
 };
 
-export default Comment;
+export default React.memo (Comment, (prevProps, nextProps) => {
+  return prevProps.comment === nextProps.comment
+});
 
 const styles = StyleSheet.create({
   vote: (count) => ({

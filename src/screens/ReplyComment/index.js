@@ -34,6 +34,7 @@ const ReplyComment = (props) => {
   const [temporaryText, setTemporaryText] = React.useState('')
   const [, setReaction] = React.useState(false);
   const [loadingCMD, setLoadingCMD] = React.useState(false);
+  let [users] = React.useContext(Context).users;
   let [feeds, dispatch] = React.useContext(Context).feeds;
   let itemProp = props.route.params.item;
   let indexFeed = props.route.params.indexFeed;
@@ -43,13 +44,14 @@ const ReplyComment = (props) => {
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
-  const defaultData = {
+  const [defaultData, setDefaultData] = React.useState({
     data: {count_downvote: 0, count_upvote: 0, text: textComment}, 
     id: newCommentList.length + 1, kind: "comment", updated_at: moment(), 
     children_counts: {comment: 0}, 
     latest_children: {}, 
-    user: {data: itemProp.user.data, id: itemProp.user.id}
-  }
+    user: {data: {...itemProp.user.data, profile_pic_url: users.photoUrl}, id: itemProp.user.id}
+  })
+
   const setComment = (text) => {
     setTemporaryText(text)
     // setTemporaryCMD(text);
@@ -129,8 +131,9 @@ const ReplyComment = (props) => {
     try {
       if (textComment.trim() !== '') {
         let data = await createChildComment(textComment, item.id);
+        console.log(data, 'kakak')
         if (data.code === 200) {
-          setNewCommentList([...newCommentList, {...defaultData, id: data.data.id, activity_id: data.data.activity_id}])
+          setNewCommentList([...newCommentList, {...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data}])
           setLoadingCMD(false);
         } else {
           Toast.show('Failed Comment', Toast.LONG);
@@ -147,6 +150,22 @@ const ReplyComment = (props) => {
   };
 
   const navigationGoBack = () => navigation.goBack();
+
+  const saveNewComment = ({data}) => {
+    const updateData = newCommentList.map((comment) => {
+      if(comment.id === data.id) {
+        return {...comment, data: data.data}
+      } else {
+        return {...comment}
+      }
+    })
+    setNewCommentList(updateData)
+    setItem({...item, latest_children: {comment: updateData}})
+  }
+
+  const saveParentComment = ({data}) => {
+    setItem({...item, data:data.data})
+  }
 
   return (
     <View style={styles.container}>
@@ -175,6 +194,7 @@ const ReplyComment = (props) => {
             isLast={newCommentList.length <= 0}
             level={level}
             onPress={() => {}}
+            refreshComment={saveParentComment}
           />
           {newCommentList.length > 0 &&
             newCommentList.map((itemReply, index) => {
@@ -209,6 +229,8 @@ const ReplyComment = (props) => {
                         onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}
                         loading={loadingCMD}
+                        refreshComment={saveNewComment}
+
                         // showLeftConnector
                       />
                       {itemReply.children_counts.comment > 0 && (

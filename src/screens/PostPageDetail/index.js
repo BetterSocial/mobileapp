@@ -66,6 +66,7 @@ const PostPageDetail = (props) => {
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingVote, setLoadingVote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false)
+  const [commentList, setCommentList] = React.useState([])
   
   let [feeds, dispatch] = React.useContext(Context).feeds;
 
@@ -88,58 +89,20 @@ const PostPageDetail = (props) => {
   let {index} = props.route.params;
 
   const [item, setItem] = React.useState(feeds.feeds[index]);
-  const sortComment = (comments) => {
-    let sortedComment = comments.sort((current, next) => {
-      let currentMoment = moment(current.updated_at);
-      let nextMoment = moment(next.updated_at);
-      return currentMoment.diff(nextMoment);
-    });
-    return sortedComment;
-  };
-
-  React.useEffect(() => {
-    const validationStatusVote = () => {
-      if (item.reaction_counts !== undefined || null) {
-        if (item.latest_reactions.upvotes !== undefined) {
-          let upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === yourselfId,
-          );
-          if (upvote !== undefined) {
-            setVoteStatus('upvote');
-            setStatusUpvote(true);
-          }
-        }
-
-        if (item.latest_reactions.downvotes !== undefined) {
-          let downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === yourselfId,
-          );
-          if (downvotes !== undefined) {
-            setVoteStatus('downvote');
-            setStatusDowvote(true);
-          }
-        }
-      }
-    };
-    validationStatusVote();
-  }, [item, yourselfId]);
 
   React.useEffect(() => {
     setItem(feeds.feeds[index]);
+    if(feeds.feeds[index] && feeds.feeds[index].latest_reactions) {
+      setCommentList(feeds.feeds[index].latest_reactions.comment)
+    }
   }, [JSON.stringify(feeds)]);
 
   const handleVote = (data = {}) => {
-    if (data.downvotes > 0) {
-      setVoteStatus('downvote');
-      return setTotalVote(data.downvotes * -1);
-    } else if (data.upvotes > 0) {
-      setVoteStatus('upvote');
-      return setTotalVote(data.upvotes);
-    }
-    setVoteStatus('none');
-    return setTotalVote(0);
+    const upvote = data.upvotes ? data.upvotes : 0
+    const downvotes = data.downvotes ? data.downvotes : 0
+    setTotalVote(upvote - downvotes)
   };
-
+  console.log(feeds, 'sulak')
   const initial = () => {
     let reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
@@ -240,8 +203,8 @@ const PostPageDetail = (props) => {
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(item.id);
+      console.log(data, item, 'sunat')
       setLoadingPost(false)
-      Toast.show('Comment successful', Toast.LONG);
       if (data) {
         setItem(data.data);
         setFeedByIndex(
@@ -257,6 +220,7 @@ const PostPageDetail = (props) => {
     }
   };
 
+
   const onComment = () => {
     if (typeComment === 'parent') {
       commentParent();
@@ -271,6 +235,7 @@ const PostPageDetail = (props) => {
         if (data.code === 200) {
           setTextComment('');
           updateFeed();
+          Toast.show('Comment successful', Toast.LONG);
           
         } else {
           Toast.show('Failed Comment', Toast.LONG);
@@ -281,7 +246,6 @@ const PostPageDetail = (props) => {
         setLoadingPost(false)
       }
     } catch (e) {
-      console.log(e);
       setLoadingPost(false)
       Toast.show('Failed Comment', Toast.LONG);
     }
@@ -308,8 +272,8 @@ const PostPageDetail = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await upVote(data);
-    updateFeed();
     if (processData.code == 200) {
+      updateFeed()
       setLoadingVote(false);
       return SimpleToast.show('Success Vote', SimpleToast.SHORT);
     }
@@ -322,8 +286,8 @@ const PostPageDetail = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await downVote(data);
-    updateFeed();
     if (processData.code == 200) {
+      updateFeed()
       setLoadingVote(false);
       return SimpleToast.show('Success Vote', SimpleToast.SHORT);
     }
@@ -351,38 +315,74 @@ const PostPageDetail = (props) => {
   };
 
   const onPressDownVoteHandle = async () => {
-    setStatusDowvote((prev) => !prev);
     setLoadingVote(true);
-    if (totalVote === -1) {
-      setVoteStatus('none');
-      setTotalVote((prevState) => prevState + 1);
-    } else if (totalVote === 0) {
-      setVoteStatus('downvote');
-      setTotalVote((prevState) => prevState - 1);
-    } else {
-      setVoteStatus('downvote');
-      setTotalVote(-1);
-      return setDownVote(true);
-    }
+    setStatusDowvote((prev) => !prev);
     await setDownVote(!statusDownvote);
   };
 
   const onPressUpvoteHandle = async () => {
     setLoadingVote(true);
     setStatusUpvote((prev) => !prev);
-    if (totalVote === 1) {
-      setVoteStatus('none');
-      setTotalVote((prevState) => prevState - 1);
-    } else if (totalVote === 0) {
-      setVoteStatus('upvote');
-      setTotalVote((prevState) => prevState + 1);
-    } else {
-      setVoteStatus('upvote');
-      setTotalVote(1);
-      return await setUpVote(true);
-    }
     await setUpVote(!statusUpvote);
   };
+
+
+  const handleRefreshComment = ({data}) => {
+    const newCommentList = commentList.map((comment) => {
+      if(comment.id === data.id) {
+        return {...comment, data: data.data}
+      } else {
+        return {...comment}
+      }
+    })
+    setCommentList(newCommentList)
+  }
+
+  const handleRefreshChildComment = ({parent, children}) => {
+    const newCommentList = commentList.map((comment) => {
+      if(comment.id === parent.id) {
+         const commentMap = comment.latest_children.comment.map((comChild) => {
+        if(comChild.id === children.id) {
+          return {...comChild, data: children.data, latest_children: children.latest_children}
+        } else {
+          return {...comChild}
+        }
+      })
+      return {...comment, latest_children: {comment: commentMap}}
+      } else {
+        return {...comment}
+      }
+     
+    })
+    if(newCommentList) {
+      setCommentList(newCommentList)
+    }
+  }
+
+  const checkVotes = () => {
+    const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === yourselfId)
+    const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && item.own_reactions.downvotes.find((vote) => vote.user_id === yourselfId)
+    if(findUpvote) {
+      setVoteStatus('upvote')
+      setStatusUpvote(true)
+    } else if(findDownvote) {
+      setVoteStatus('downvote')
+      setStatusDowvote(true)
+    } else {
+      setVoteStatus('none')
+    }
+  }
+
+
+  React.useEffect(() => {
+    checkVotes()
+  }, [item, yourselfId])
+
+  React.useEffect(() => {
+    return () => {
+      updateFeed()
+    }
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -393,7 +393,7 @@ const PostPageDetail = (props) => {
         style={styles.contentScrollView(totalComment)}>
         <View style={styles.content(height)}>
           <Header props={item} isBackButton={true} />
-          {item.post_type === POST_TYPE_POLL && (
+          {item && item.post_type === POST_TYPE_POLL && (
             <ContentPoll
               index={index}
               message={item.message}
@@ -409,7 +409,7 @@ const PostPageDetail = (props) => {
             />
           )}
 
-          {item.post_type === POST_TYPE_LINK && (
+          {item && item.post_type === POST_TYPE_LINK && (
             <ContentLink
               og={item.og}
               onCardPress={onPressDomain}
@@ -418,7 +418,7 @@ const PostPageDetail = (props) => {
             />
           )}
 
-          {item.post_type === POST_TYPE_STANDARD && (
+          {item && item.post_type === POST_TYPE_STANDARD && (
             <Content
               message={item.message}
               images_url={item.images_url}
@@ -454,11 +454,13 @@ const PostPageDetail = (props) => {
             />
           </View>
         </View>
-        {isReaction && (
+        {isReaction && commentList && (
           <ContainerComment
-            comments={sortComment(item.latest_reactions.comment)}
+            comments={commentList}
             indexFeed={index}
             isLoading={loadingPost}
+            refreshComment={handleRefreshComment}
+            refreshChildComment={handleRefreshChildComment}
           />
         )}
       </ScrollView>

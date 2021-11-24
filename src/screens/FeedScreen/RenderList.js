@@ -139,49 +139,20 @@ const RenderListFeed = (props) => {
   }
 
   const onPressDownVoteHandle = async () => {
-    setStatusDowvote((prev) => !prev);
     setLoadingVote(true);
-    if (totalVote === -1) {
-      setVoteStatus('none');
-      setTotalVote((prevState) => prevState + 1);
-    } else if (totalVote === 0) {
-      setVoteStatus('downvote');
-      setTotalVote((prevState) => prevState - 1);
-    } else {
-      setVoteStatus('downvote');
-      setTotalVote(-1);
-      return postApiDownvote(true);
-    }
+    setStatusDowvote((prev) => !prev);
     await postApiDownvote(!statusDownvote);
   };
 
   const onPressUpvoteHandle = async () => {
     setLoadingVote(true);
     setStatusUpvote((prev) => !prev);
-    if (totalVote === 1) {
-      setVoteStatus('none');
-      setTotalVote((prevState) => prevState - 1);
-    } else if (totalVote === 0) {
-      setVoteStatus('upvote');
-      setTotalVote((prevState) => prevState + 1);
-    } else {
-      setVoteStatus('upvote');
-      setTotalVote(1);
-      return await postApiUpvote(true)
-    }
     await postApiUpvote(!statusUpvote);
   };
-
   const handleVote = (data = {}) => {
-    if (data.downvotes > 0) {
-      setVoteStatus('downvote');
-      return setTotalVote(data.downvotes * -1);
-    } else if (data.upvotes > 0) {
-      setVoteStatus('upvote');
-      return setTotalVote(data.upvotes);
-    }
-    setVoteStatus('none');
-    return setTotalVote(0);
+    const upvote = data.upvotes ? data.upvotes : 0
+    const downvotes = data.downvotes ? data.downvotes : 0
+    setTotalVote(upvote - downvotes)
   };
 
   const postApiUpvote = async (status) => {
@@ -237,32 +208,27 @@ const RenderListFeed = (props) => {
     }
   };
 
-  React.useEffect(() => {
-    const validationStatusVote = () => {
-      if (item.reaction_counts !== undefined || null) {
-        if (item.latest_reactions.upvotes !== undefined) {
-          let upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === selfUserId,
-          );
-          if (upvote !== undefined) {
-            setVoteStatus('upvote');
-            setStatusUpvote(true);
-          }
-        }
+  console.log(item.reaction_counts, 'killan')
 
-        if (item.latest_reactions.downvotes !== undefined) {
-          let downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === selfUserId,
-          );
-          if (downvotes !== undefined) {
-            setVoteStatus('downvote');
-            setStatusDowvote(true);
-          }
-        }
-      }
-    };
-    validationStatusVote();
-  }, [item, selfUserId]);
+  const checkVotes = () => {
+    const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === selfUserId)
+    const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && item.own_reactions.downvotes.find((vote) => vote.user_id === selfUserId)
+    if(findUpvote) {
+      setVoteStatus('upvote')
+      setStatusUpvote(true)
+    } else if(findDownvote) {
+      setVoteStatus('downvote')
+      setStatusDowvote(true)
+    } else {
+      setVoteStatus('none')
+    }
+  }
+
+  React.useEffect(() => {
+    checkVotes()
+  }, [item]);
+
+  console.log(item, 'nuhi')
 
   React.useEffect(() => {
     initial();
