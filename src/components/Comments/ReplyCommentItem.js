@@ -16,12 +16,9 @@ import {FONTS} from '../../utils/theme';
 import {blockUser} from '../../service/blocking';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
+import {downVote, iVoteComment, voteComment} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
-import {downVote, iVoteComment, voteComment} from '../../service/vote';
-import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
-import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import {FONTS} from '../../utils/theme'
 import { removeWhiteSpace } from '../../utils/Utils';
 
 const ReplyCommentItem = ({
