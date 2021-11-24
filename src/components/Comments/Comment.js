@@ -169,11 +169,9 @@ const Comment = ({
 
   React.useEffect(() => {
     setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
-    console.log('mamaki')
     iVote()
   }, [JSON.stringify(comment)])
 
-  console.log(statusVote, 'jilak')
 
 
   return (

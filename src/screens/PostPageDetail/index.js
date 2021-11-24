@@ -220,6 +220,18 @@ const PostPageDetail = (props) => {
     }
   };
 
+  const updateCommentRaw = (comment) => {
+    const updateData = {...item, latest_reactions: {...item.latest_reactions, comment}}
+    setItem(updateData)
+    setFeedByIndex(
+      {
+        singleFeed: updateData,
+        index,
+      },
+      dispatch,
+    );
+
+  }
 
   const onComment = () => {
     if (typeComment === 'parent') {
@@ -328,6 +340,7 @@ const PostPageDetail = (props) => {
 
 
   const handleRefreshComment = ({data}) => {
+    // updateFeed()
     const newCommentList = commentList.map((comment) => {
       if(comment.id === data.id) {
         return {...comment, data: data.data}
@@ -336,9 +349,11 @@ const PostPageDetail = (props) => {
       }
     })
     setCommentList(newCommentList)
+    updateCommentRaw(newCommentList)
   }
 
   const handleRefreshChildComment = ({parent, children}) => {
+    // updateFeed()
     const newCommentList = commentList.map((comment) => {
       if(comment.id === parent.id) {
          const commentMap = comment.latest_children.comment.map((comChild) => {
@@ -354,8 +369,10 @@ const PostPageDetail = (props) => {
       }
      
     })
+    console.log(newCommentList, 'sirat123')
     if(newCommentList) {
       setCommentList(newCommentList)
+      updateCommentRaw(newCommentList)
     }
   }
 
@@ -378,11 +395,6 @@ const PostPageDetail = (props) => {
     checkVotes()
   }, [item, yourselfId])
 
-  React.useEffect(() => {
-    return () => {
-      updateFeed()
-    }
-  }, [])
 
   return (
     <View style={styles.container}>

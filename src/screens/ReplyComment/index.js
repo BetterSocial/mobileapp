@@ -52,7 +52,6 @@ const ReplyComment = (props) => {
 
   const setComment = (text) => {
     setTemporaryText(text)
-    // setTemporaryCMD(text);
   };
 
   React.useEffect(() => {
@@ -115,12 +114,7 @@ const ReplyComment = (props) => {
     }
   };
 
-  React.useEffect(() => {
-    updateFeed()
-    return () => {
-      updateFeed()
-    }
-  }, [])
+  console.log(itemProp, 'kurama')
 
   const createComment = async () => {
     setLoadingCMD(true);
@@ -158,12 +152,30 @@ const ReplyComment = (props) => {
       }
     })
     setNewCommentList(updateData)
-    setItem({...item, latest_children: {comment: updateData}})
+    const updateDataNew = {...item, latest_children: {comment: updateData}}
+    setItem(updateDataNew)
+    updateFeed()
   }
 
   const saveParentComment = ({data}) => {
-    setItem({...item, data:data.data})
+    const updateData = {...item, data:data.data}
+    setItem(updateData)
+    updateFeed()
   }
+
+  // const updateCommentRaw = (updateData) => {
+  //   console.log(updateData, 'surat')
+  //   setItem(updateData)
+  //   setFeedByIndex(
+  //     {
+  //       singleFeed: updateData,
+  //       index,
+  //     },
+  //     dispatch,
+  //   );
+
+  // }
+
 
   return (
     <View style={styles.container}>
@@ -185,13 +197,12 @@ const ReplyComment = (props) => {
           {/* Header */}
           <ReplyCommentItem
             indexFeed={indexFeed}
-            user={item.user}
-            comment={item}
+            user={itemProp.user}
+            comment={itemProp}
             time={itemProp.created_at}
             photo={itemProp.user.data.profile_pic_url}
             isLast={newCommentList.length <= 0}
             level={level}
-            onPress={() => {}}
             refreshComment={saveParentComment}
           />
           {newCommentList.length > 0 &&

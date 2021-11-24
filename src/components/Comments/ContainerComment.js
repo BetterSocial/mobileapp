@@ -26,8 +26,6 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
     return index === comments.length - 1;
   };
 
-  {console.log(comments ,'sania')}
-
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />

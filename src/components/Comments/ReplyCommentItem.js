@@ -175,7 +175,7 @@ const ReplyCommentItem = ({
     setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
   }, [JSON.stringify(comment)])
 
-  console.log(totalVote, 'sunan')
+  console.log(comment, 'sunan')
 
 
   return (
