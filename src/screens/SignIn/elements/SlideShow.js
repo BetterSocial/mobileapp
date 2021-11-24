@@ -1,14 +1,10 @@
 import * as React from 'react';
 import {Dimensions, Image, StyleSheet, View} from 'react-native';
-
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
 
-const data = [
-  'https://picsum.photos/id/1/200/300',
-  'https://picsum.photos/id/1036/200/300',
-  'https://picsum.photos/id/1048/200/300',
-  'https://picsum.photos/id/1018/200/300',
-];
+import { SlideShowItem } from './SlideShowItem';
+
+const data = ['','','',''];
 const {width: screenWidth} = Dimensions.get('window');
 
 const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
@@ -16,6 +12,8 @@ const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
     onChangeNewIndex(swiperData, data.length);
   };
 
+  let {width, height} = Dimensions.get('screen')
+  console.log(width)
   return (
     <SwiperFlatList
       autoplay
@@ -24,20 +22,13 @@ const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
       index={0}
       showPagination
       paginationStyleItem={styles.dot}
+      paginationStyle={styles.dotContainer}
       data={data}
-      renderItem={({item}) => <Card image={item} />}
+      renderItem={({item, index}) => {
+          return <SlideShowItem index={index} />
+      } }
       onChangeIndex={handleChangeIndex}
     />
-  );
-};
-
-const Card = ({image}) => {
-  return (
-    <View style={styles.containerCard}>
-      {image && (
-        <Image resizeMode="cover" source={{uri: image}} style={styles.image} />
-      )}
-    </View>
   );
 };
 
@@ -55,4 +46,7 @@ const styles = StyleSheet.create({
     height: 8,
     marginHorizontal: 5,
   },
+  dotContainer: {
+    marginBottom: 6,
+  }
 });
