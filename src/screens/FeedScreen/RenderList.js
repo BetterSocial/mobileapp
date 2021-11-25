@@ -228,8 +228,6 @@ const RenderListFeed = (props) => {
     checkVotes()
   }, [item]);
 
-  console.log(item, 'nuhi')
-
   React.useEffect(() => {
     initial();
   }, [item]);

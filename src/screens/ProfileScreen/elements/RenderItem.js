@@ -1,4 +1,5 @@
 import * as React from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 import analytics from '@react-native-firebase/analytics';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {Dimensions, Share, StyleSheet, View} from 'react-native';
@@ -22,7 +23,7 @@ import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuil
 const {width, height} = Dimensions.get('window');
 
 const getHeightReaction = () => {
-  let h = Math.floor((height * 16) / 100);
+  let h = Math.floor((height * 12) / 100);
   return h;
 };
 
@@ -241,6 +242,7 @@ const Item = ({
           item={item}
           totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
+          isSelf={true}
           onPressShare={() => onShare(item)}
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
@@ -292,9 +294,6 @@ const Item = ({
             });
           }}
           statusVote={voteStatus}
-          isSelf={
-            item.anonimity ? false : selfUserId === item.actor.id ? true : false
-          }
         />
       </View>
       {isReaction && (
@@ -308,9 +307,12 @@ const Item = ({
             totalComment={getCountCommentWithChild(item) - 1}
             onPress={onPressComment}
           />
-          <Gap height={8} />
         </View>
       )}
+      <LinearGradient
+        colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']}
+        style={styles.linearGradient}
+      />
     </View>
   );
 };
@@ -339,6 +341,9 @@ const styles = StyleSheet.create({
   lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
   footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
   contentReaction: (heightReaction) => ({
-    height: heightReaction,
+    height: heightReaction
   }),
+  linearGradient: {
+    height: 8,
+  },
 });

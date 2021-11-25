@@ -145,6 +145,16 @@ const ProfileScreen = () => {
     };
   }, []);
 
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
+      fetchMyProfile(true);
+      getMyFeeds();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const fetchMyProfile = async (withLoading) => {
     const id = await getUserId();
     if (id) {

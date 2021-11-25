@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
 import {useNavigation} from '@react-navigation/native';
-import {calculateTime} from '../../utils/time';
-import {fonts} from '../../utils/fonts';
+
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 import {Dot, Gap} from '../../components';
+import {calculateTime} from '../../utils/time';
+import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 
 const PreviewComment = ({
