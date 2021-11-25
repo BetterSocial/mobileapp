@@ -140,13 +140,38 @@ const RenderListFeed = (props) => {
 
   const onPressDownVoteHandle = async () => {
     setLoadingVote(true);
-    setStatusDowvote((prev) => !prev);
+    if(voteStatus === 'upvote') {
+      setTotalVote((prevState) => prevState - 2)
+      setVoteStatus('downvote')
+    }
+    if(voteStatus === 'downvote') {
+      setTotalVote((prevState) => prevState + 1)
+      setVoteStatus('none')
+    }
+    if(voteStatus === 'none') {
+      setTotalVote((prevState) => prevState - 1)
+      setVoteStatus('downvote')
+    }
+    setStatusDowvote((prev) => !prev); 
     await postApiDownvote(!statusDownvote);
   };
 
   const onPressUpvoteHandle = async () => {
     setLoadingVote(true);
-    setStatusUpvote((prev) => !prev);
+  
+    if(voteStatus === 'upvote') {
+      setTotalVote((prevState) => prevState - 1)
+      setVoteStatus('none')
+    }
+    if(voteStatus === 'downvote') {
+      setTotalVote((prevState) => prevState +2)
+      setVoteStatus('upvote')
+    }
+    if(voteStatus === 'none') {
+      setTotalVote((prevState) => prevState + 1)
+      setVoteStatus('upvote')
+    }
+    setStatusUpvote((prev) => !prev); 
     await postApiUpvote(!statusUpvote);
   };
   const handleVote = (data = {}) => {
@@ -154,6 +179,8 @@ const RenderListFeed = (props) => {
     const downvotes = data.downvotes ? data.downvotes : 0
     setTotalVote(upvote - downvotes)
   };
+
+  console.log(voteStatus, index, 'sukil')
 
   const postApiUpvote = async (status) => {
     try {
@@ -184,7 +211,6 @@ const RenderListFeed = (props) => {
       if (processData.code == 200) {
         setLoadingVote(false);
         return;
-        // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
       }
       setLoadingVote(false);
       return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
