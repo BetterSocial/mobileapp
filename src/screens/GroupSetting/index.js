@@ -1,27 +1,27 @@
 import * as React from 'react';
+import Toast from 'react-native-simple-toast';
 import {
   Dimensions,
   FlatList,
+  SafeAreaView,
+  StatusBar,
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
-  StatusBar,
 } from 'react-native';
-import Toast from 'react-native-simple-toast';
-
 import {launchImageLibrary} from 'react-native-image-picker';
+
 import ButtonAddParticipants from '../../components/Button/ButtonAddParticipants';
-import HeaderContact from '../../components/Header/HeaderContact';
-import {ProfileContact} from '../../components/Items';
-import {Context} from '../../context';
-import {fonts} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
-import {requestExternalStoragePermission} from '../../utils/permission';
 import EditGroup from './elements/EditGroup';
-import {getChatName} from '../../utils/string/StringUtils';
-import {uploadFile} from '../../service/file';
+import HeaderContact from '../../components/Header/HeaderContact';
 import Loading from '../Loading';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {ProfileContact} from '../../components/Items';
+import {fonts} from '../../utils/fonts';
+import {getChatName} from '../../utils/string/StringUtils';
+import {requestExternalStoragePermission} from '../../utils/permission';
+import {uploadFile} from '../../service/file';
 
 const width = Dimensions.get('screen').width;
 
@@ -74,8 +74,12 @@ const GroupSetting = ({navigation, route}) => {
         }
       }
 
-      await channel.update(dataEdit);
-      navigation.navigate('ChannelList');
+      try {
+        await channel.update(dataEdit);
+        navigation.navigate('ChannelList');  
+      } catch (e) {
+        console.log(`error : ${e}`)
+      }
       setIsLoading(false);
     } else {
       navigation.goBack();

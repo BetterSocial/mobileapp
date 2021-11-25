@@ -1,29 +1,27 @@
 import * as React from 'react';
-import {View, StyleSheet} from 'react-native';
-
-import {useNavigation} from '@react-navigation/native';
-import analytics from '@react-native-firebase/analytics';
 import Toast from 'react-native-simple-toast';
+import analytics from '@react-native-firebase/analytics';
+import {StyleSheet, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-import {ButtonNewPost} from '../../components/Button';
-import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
-import ReportUser from '../../components/Blocking/ReportUser';
-import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
+import BlockUser from '../../components/Blocking/BlockUser';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
+import RenderListFeed from './RenderList';
+import ReportDomain from '../../components/Blocking/ReportDomain';
+import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
+import ReportUser from '../../components/Blocking/ReportUser';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import TiktokScroll from '../../components/TiktokScroll';
+import {ButtonNewPost} from '../../components/Button';
+import {Context} from '../../context';
+import {blockAnonymous, blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail, getMainFeed} from '../../service/post';
-import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
-import {blockAnonymous, blockUser} from '../../service/blocking';
-import {Context} from '../../context';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import RenderListFeed from './RenderList';
-import TiktokScroll from '../../components/TiktokScroll';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();

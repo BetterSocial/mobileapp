@@ -1,34 +1,34 @@
 import * as React from 'react';
+import moment from 'moment';
 import {
-  TouchableWithoutFeedback,
-  ScrollView,
+  FlatList,
+  Image,
+  Pressable,
   SafeAreaView,
+  ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
-  Image,
-  FlatList,
-  StatusBar,
-  Pressable,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import moment from 'moment';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-import {Loading} from '../../components';
-import {ProfileContact} from '../../components/Items';
+import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
 import Header from './elements/Header';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
-import {setParticipants} from '../../context/actions/groupChat';
+import {Loading} from '../../components';
+import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {trimString} from '../../utils/string/TrimString';
 import {getChatName} from '../../utils/string/StringUtils';
-import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
-import {COLORS} from '../../utils/theme';
 import {requestExternalStoragePermission} from '../../utils/permission';
+import {setParticipants} from '../../context/actions/groupChat';
+import {trimString} from '../../utils/string/TrimString';
 import {uploadFile} from '../../service/file';
 
 const GroupInfo = () => {
@@ -76,7 +76,7 @@ const GroupInfo = () => {
       setIsLoadingMembers(true);
       getMembersList();
     }
-  }, [route?.params?.from]);
+  }, [route?.params?.from, route?.params?.timestamp]);
 
   const showImageProfile = () => {
     if (profileChannel || channel?.data?.image) {
@@ -86,7 +86,7 @@ const GroupInfo = () => {
         );
       }
 
-      if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
+      if (channel?.data?.image?.indexOf('res.cloudinary.com') > -1) {
         return (
           <Image
             style={styles.btnUpdatePhoto}
@@ -114,9 +114,9 @@ const GroupInfo = () => {
       }
     }
     return (
-      <TouchableOpacity style={styles.btnUpdatePhoto}>
+      <View style={styles.btnUpdatePhoto}>
         <MemoIc_pencil width={50} height={50} color={colors.gray1} />
-      </TouchableOpacity>
+      </View>
     );
   };
 

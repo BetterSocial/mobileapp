@@ -1,26 +1,27 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import SimpleToast from 'react-native-simple-toast';
+import { View, Dimensions, StyleSheet, StatusBar, Share } from 'react-native';
+import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {Dimensions, Share, StatusBar, StyleSheet, View} from 'react-native';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import {useNavigation} from '@react-navigation/core';
 
-import Content from './Content';
-import ContentLink from './ContentLink';
-import ContentPoll from './ContentPoll';
-import Header from './Header';
-import StringConstant from '../../utils/string/StringConstant';
-import {Footer, Gap, PreviewComment} from '../../components';
 import {
-  POST_TYPE_LINK,
   POST_TYPE_POLL,
+  POST_TYPE_LINK,
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
-import {colors} from '../../utils/colors';
-import {getCountCommentWithChild} from '../../utils/getstream';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+
+import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
+import { colors } from '../../utils/colors';
+import { Gap, PreviewComment, Footer } from '../../components';
+import { getCountCommentWithChild } from '../../utils/getstream';
+import SimpleToast from 'react-native-simple-toast';
+
+
+import Header from '../FeedScreen/Header';
+import ContentLink from '../FeedScreen/ContentLink';
+import ContentPoll from '../FeedScreen/ContentPoll';
+import Content from '../FeedScreen/Content';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
@@ -31,24 +32,6 @@ const getHeightHeader = () => {
   return h;
 };
 
-const styles = StyleSheet.create({
-  cardContainer: (bottomHeight) => ({
-    height: FULL_HEIGHT - bottomHeight - tabBarHeight,
-    width: FULL_WIDTH,
-    backgroundColor: colors.white,
-    borderBottomWidth: 7,
-    borderBottomColor: colors.lightgrey,
-  }),
-  cardMain: {
-    height: '100%',
-    width: '100%',
-  },
-  footerWrapper: (h) => ({height: h}),
-  contentReaction: (heightReaction) => ({
-    height: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
-  }),
-});
 
 const RenderListFeed = (props) => {
   const {
@@ -60,7 +43,7 @@ const RenderListFeed = (props) => {
     onPressComment,
     onPressBlock,
     onPressUpvote,
-    selfUserId,
+    userId,
     onPressDownVote,
   } = props;
   const navigation = useNavigation();
@@ -71,7 +54,6 @@ const RenderListFeed = (props) => {
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
   const [loadingVote, setLoadingVote] = React.useState(false);
-  const bottomHeight = useBottomTabBarHeight();
   const navigateToLinkContextPage = (item) => {
     let param = linkContextScreenParamBuilder(
       item,
@@ -83,7 +65,7 @@ const RenderListFeed = (props) => {
   };
 
   const getHeightFooter = () => {
-    let h = Math.floor(((FULL_HEIGHT - tabBarHeight -bottomHeight ) * 6.8) / 100);
+    let h = Math.floor(((FULL_HEIGHT) * 6.8) / 100);
     return h;
   };
 
@@ -139,59 +121,74 @@ const RenderListFeed = (props) => {
   }
 
   const onPressDownVoteHandle = async () => {
-    setLoadingVote(true);
     setStatusDowvote((prev) => !prev);
+    setLoadingVote(true);
+    if (totalVote === -1) {
+      setVoteStatus('none');
+      setTotalVote((prevState) => prevState + 1);
+    } else if (totalVote === 0) {
+      setVoteStatus('downvote');
+      setTotalVote((prevState) => prevState - 1);
+    } else {
+      setVoteStatus('downvote');
+      setTotalVote(-1);
+      return postApiDownvote(true);
+    }
     await postApiDownvote(!statusDownvote);
   };
 
   const onPressUpvoteHandle = async () => {
     setLoadingVote(true);
     setStatusUpvote((prev) => !prev);
+    if (totalVote === 1) {
+      setVoteStatus('none');
+      setTotalVote((prevState) => prevState - 1);
+    } else if (totalVote === 0) {
+      setVoteStatus('upvote');
+      setTotalVote((prevState) => prevState + 1);
+    } else {
+      setVoteStatus('upvote');
+      setTotalVote(1);
+      return await postApiUpvote(true)
+    }
     await postApiUpvote(!statusUpvote);
   };
+
   const handleVote = (data = {}) => {
-    const upvote = data.upvotes ? data.upvotes : 0
-    const downvotes = data.downvotes ? data.downvotes : 0
-    setTotalVote(upvote - downvotes)
+    if (data.downvotes > 0) {
+      setVoteStatus('downvote');
+      return setTotalVote(data.downvotes * -1);
+    } else if (data.upvotes > 0) {
+      setVoteStatus('upvote');
+      return setTotalVote(data.upvotes);
+    }
+    setVoteStatus('none');
+    return setTotalVote(0);
   };
 
   const postApiUpvote = async (status) => {
-    try {
-      const processData = await onPressUpvote({
-        activity_id: item.id,
-        status: status,
-        feed_group: 'main_feed',
-      });
-      if (processData.code == 200) {
-        setLoadingVote(false);
-        return;
-        // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
-      }
+    const processData = await onPressUpvote({
+      activity_id: item.id,
+      status: status,
+      feed_group: 'main_feed',
+    });
+    if (processData.code == 200) {
       setLoadingVote(false);
-      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
-    } catch(e) {
-      setLoadingVote(false);
-      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
+      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
     }
+    setLoadingVote(false);
   };
   const postApiDownvote = async (status) => {
-    try {
-      const processData = await onPressDownVote({
-        activity_id: item.id,
-        status: status,
-        feed_group: 'main_feed',
-      });
-      if (processData.code == 200) {
-        setLoadingVote(false);
-        return;
-        // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
-      }
+    const processData = await onPressDownVote({
+      activity_id: item.id,
+      status: status,
+      feed_group: 'main_feed',
+    });
+    if (processData.code == 200) {
       setLoadingVote(false);
-      return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
-    } catch (e) {
-      setLoadingVote(false);
-      return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
+      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
     }
+    setLoadingVote(false);
   };
 
   const initial = () => {
@@ -208,31 +205,39 @@ const RenderListFeed = (props) => {
     }
   };
 
-  console.log(item.reaction_counts, 'killan')
-
-  const checkVotes = () => {
-    const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === selfUserId)
-    const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && item.own_reactions.downvotes.find((vote) => vote.user_id === selfUserId)
-    if(findUpvote) {
-      setVoteStatus('upvote')
-      setStatusUpvote(true)
-    } else if(findDownvote) {
-      setVoteStatus('downvote')
-      setStatusDowvote(true)
-    } else {
-      setVoteStatus('none')
-    }
-  }
-
   React.useEffect(() => {
-    checkVotes()
-  }, [item]);
+    const validationStatusVote = () => {
+      if (item.reaction_counts !== undefined || null) {
+        if (item.latest_reactions.upvotes !== undefined) {
+          let upvote = item.latest_reactions.upvotes.filter(
+            (vote) => vote.user_id === userId,
+          );
+          if (upvote !== undefined) {
+            setVoteStatus('upvote');
+            setStatusUpvote(true);
+          }
+        }
+
+        if (item.latest_reactions.downvotes !== undefined) {
+          let downvotes = item.latest_reactions.downvotes.filter(
+            (vote) => vote.user_id === userId,
+          );
+          if (downvotes !== undefined) {
+            setVoteStatus('downvote');
+            setStatusDowvote(true);
+          }
+        }
+      }
+    };
+    validationStatusVote();
+  }, [item, userId]);
 
   React.useEffect(() => {
     initial();
   }, [item]);
+
   return (
-    <View style={[styles.cardContainer(bottomHeight)]}>
+    <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
         <Header props={item} height={getHeightHeader()} />
         {item.post_type === POST_TYPE_POLL && (
@@ -283,32 +288,53 @@ const RenderListFeed = (props) => {
             isSelf={
               item.anonimity
                 ? false
-                : selfUserId === item.actor.id
-                ? true
-                : false
+                : userId === item.actor.id
+                  ? true
+                  : false
             }
           />
         </View>
         <View style={styles.contentReaction(isReaction ? getHeightReaction() : 0)}>
-        {isReaction && (
-          <React.Fragment>
-            <PreviewComment
-              user={previewComment.user}
-              comment={previewComment.data.text}
-              image={previewComment.user.data.profile_pic_url}
-              time={previewComment.created_at}
-              totalComment={getCountCommentWithChild(item) - 1}
-              onPress={onPressComment}
-            />
-            <Gap height={8} />
-          </React.Fragment>
-        )}
+          {isReaction && (
+            <React.Fragment>
+              <PreviewComment
+                user={previewComment.user}
+                comment={previewComment.data.text}
+                image={previewComment.user.data.profile_pic_url}
+                time={previewComment.created_at}
+                totalComment={getCountCommentWithChild(item) - 1}
+                onPress={onPressComment}
+              />
+              <Gap height={8} />
+            </React.Fragment>
+          )}
         </View>
-        
+
       </View>
     </View>
   );
 };
+
+
+
+const styles = StyleSheet.create({
+  cardContainer: (bottomHeight) => ({
+    height: FULL_HEIGHT - tabBarHeight,
+    width: FULL_WIDTH,
+    backgroundColor: colors.white,
+    borderBottomWidth: 7,
+    borderBottomColor: colors.lightgrey,
+  }),
+  cardMain: {
+    height: '100%',
+    width: '100%',
+  },
+  footerWrapper: (h) => ({ height: h }),
+  contentReaction: (heightReaction) => ({
+    height: heightReaction,
+    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
+  }),
+});
 
 RenderListFeed.propTypes = {
   item: PropTypes.object,
@@ -319,10 +345,16 @@ RenderListFeed.propTypes = {
   onPressComment: PropTypes.func,
   onPressBlock: PropTypes.func,
   Handle: PropTypes.func,
-  selfUserId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onPressUpvote: PropTypes.func,
   onPressDownVote: PropTypes.func,
   loading: PropTypes.bool,
 };
 
-export default RenderListFeed;
+function compare(prevProps, nextProps) {
+
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+}
+
+const MemoizedListComponent = React.memo(RenderListFeed, compare);
+export default MemoizedListComponent

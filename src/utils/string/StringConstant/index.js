@@ -93,6 +93,10 @@ let externalStoragePermissionUnavailable =
 // Contact screen
 let failedCreateChannel = 'Couldn’t create chat. Please try again.';
 
+// Feed Footer
+let downvoteFailedText = 'Downvote failed - please try again';
+let upvoteFailedText = 'Upvote failed - please try again';
+
 export default {
   signInScreenHumanIdBrand,
   signInScreenHumanIdDetail,
@@ -155,4 +159,7 @@ export default {
   externalStoragePermissionUnavailable,
 
   failedCreateChannel,
+
+  downvoteFailedText,
+  upvoteFailedText
 };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, View, SafeAreaView, StatusBar} from 'react-native';
+import { StyleSheet, View, SafeAreaView, StatusBar } from 'react-native';
 
 import {
   ChannelList,
@@ -13,19 +13,20 @@ import {
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Search from './elements/Search';
-import {Context} from '../../context';
-import {setChannel} from '../../context/actions/setChannel';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import {getUserId} from '../../utils/users';
+import { Context } from '../../context';
+import { setChannel } from '../../context/actions/setChannel';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import { getUserId } from '../../utils/users';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
-import {getChatName} from '../../utils/string/StringUtils';
+import { getChatName } from '../../utils/string/StringUtils';
 import {
   CHANNEL_TYPE_GROUP_LOCATION,
   CHANNEL_TYPE_TOPIC,
 } from '../../utils/constants';
-import {unReadMessageState} from '../../context/reducers/unReadMessageReducer';
+import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
+import { setMainFeeds } from '../../context/actions/feeds';
 
-const ChannelListScreen = ({navigation}) => {
+const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
     language: 'en',
   });
@@ -33,18 +34,19 @@ const ChannelListScreen = ({navigation}) => {
   const [userId, setUserId] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
+  const [, dispatchFeed] = React.useContext(Context).feeds;
   const [profile] = React.useContext(Context).profile;
   const [unReadMessage, dispatchUnReadMessage] =
     React.useContext(Context).unReadMessage;
   let connect = useClientGetstream();
   const filters = {
-    members: {$in: [userId]},
+    members: { $in: [userId] },
     type: 'messaging',
   };
 
-  React.useEffect(() => {}, [unReadMessage]);
+  React.useEffect(() => { }, [unReadMessage]);
 
-  const sort = [{last_message_at: -1}, {cid: -1}];
+  const sort = [{ last_message_at: -1 }, { cid: -1 }];
   const options = {
     state: true,
     watch: true,
@@ -72,23 +74,23 @@ const ChannelListScreen = ({navigation}) => {
   };
 
   const customPreviewStatus = (props) => {
-    let newLatestMessagePreview = {...props.latestMessagePreview};
+    let newLatestMessagePreview = { ...props.latestMessagePreview };
     // console.log(props);
     // if (props.latestMessagePreview.status > 1) {
     //   newLatestMessagePreview.status = 3;
     // }
     return (
-      <View style={{paddingRight: 12}}>
+      <View style={{ paddingRight: 12 }}>
         <ChannelPreviewStatus latestMessagePreview={newLatestMessagePreview} />
       </View>
     );
   };
 
   const customPreviewTitle = (props) => {
-    let {name} = props.channel?.data;
+    let { name } = props.channel?.data;
 
     return (
-      <View style={{paddingRight: 12}}>
+      <View style={{ paddingRight: 12 }}>
         <ChannelPreviewTitle
           displayName={getChatName(name, profile.username)}
         />
@@ -101,14 +103,14 @@ const ChannelListScreen = ({navigation}) => {
     console.log(props);
     return (
       <ChannelPreviewMessage
-        latestMessagePreview={{...props.latestMessagePreview}}
+        latestMessagePreview={{ ...props.latestMessagePreview }}
       />
     );
   };
 
   const CustomPreview = (props) => {
     return (
-      <View style={{paddingHorizontal: 15}}>
+      <View style={{ paddingHorizontal: 15 }}>
         <ChannelPreviewMessenger
           channel={props.channel}
           PreviewStatus={customPreviewStatus}
@@ -121,18 +123,18 @@ const ChannelListScreen = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={{height: '100%'}}>
+    <SafeAreaView style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
       {client.client && (
         <Chat client={client.client} i18nInstance={streami18n}>
-          <View style={{height: '100%'}}>
-            <View style={{height: 52}}>
+          <View style={{ height: '100%' }}>
+            <View style={{ height: 52 }}>
               <Search
                 animatedValue={0}
                 onPress={() => navigation.navigate('ContactScreen')}
               />
             </View>
-            <View style={{paddingHorizontal: 0, flex: 1}}>
+            <View style={{ paddingHorizontal: 0, flex: 1 }}>
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
@@ -140,9 +142,10 @@ const ChannelListScreen = ({navigation}) => {
                 PreviewStatus={customPreviewStatus}
                 PreviewTitle={customPreviewTitle}
                 onSelect={(channel) => {
-                  console.log(channel.data);
                   if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
-                    navigation.navigate('TopicPageScreen');
+                    // toDo reset main feeds
+                    setMainFeeds(null, dispatchFeed)
+                    navigation.navigate('TopicPageScreen', { id: channel.data.id });
                   } else {
                     setChannel(channel, dispatch);
                     // ChannelScreen | ChatDetailPage

@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-import StringConstant from '../../utils/string/StringConstant';
-import {colors} from '../../utils/colors';
-import ConnectorWrapper from './ConnectorWrapper';
 import Comment from '../../components/Comments/Comment';
-import {DATALOADING} from '../../utils/string/LoadingComment';
+import ConnectorWrapper from './ConnectorWrapper';
 import LoadingComment from '../LoadingComment';
+import StringConstant from '../../utils/string/StringConstant';
+import {DATALOADING} from '../../utils/string/LoadingComment';
+import {colors} from '../../utils/colors';
 
 const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment}) => {
   const navigation = useNavigation();
@@ -25,8 +25,6 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
   let hideLeftConnector = (index, item) => {
     return index === comments.length - 1;
   };
-
-  {console.log(comments ,'sania')}
 
   return (
     <View style={styles.container}>

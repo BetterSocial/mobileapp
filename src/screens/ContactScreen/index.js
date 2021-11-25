@@ -1,28 +1,28 @@
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  RefreshControl,
-  Dimensions,
-  StatusBar,
-  SafeAreaView,
-} from 'react-native';
-
-import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview';
 import uuid from 'react-native-uuid';
-import {Context} from '../../context';
-import {setChannel} from '../../context/actions/setChannel';
-import {userPopulate} from '../../service/users';
-import StringConstant from '../../utils/string/StringConstant';
-import {COLORS, SIZES} from '../../utils/theme';
-import Header from './elements/Header';
-import {Search} from './elements';
 import {Alert} from 'react-native';
-import ItemUser from './elements/ItemUser';
-import {Loading} from '../../components';
-import ContactPreview from './elements/ContactPreview';
+import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
+import {
+  Dimensions,
+  RefreshControl,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
 import {showMessage} from 'react-native-flash-message';
+
+import ContactPreview from './elements/ContactPreview';
+import Header from './elements/Header';
+import ItemUser from './elements/ItemUser';
+import StringConstant from '../../utils/string/StringConstant';
+import {COLORS, SIZES} from '../../utils/theme';
+import {Context} from '../../context';
+import {Loading} from '../../components';
+import {Search} from './elements';
+import {setChannel} from '../../context/actions/setChannel';
+import {userPopulate} from '../../service/users';
 
 const width = Dimensions.get('screen').width;
 
@@ -125,15 +125,23 @@ const ContactScreen = ({navigation}) => {
         state: true,
       });
 
+      let generatedChannelId = generateRandomId();
+      let memberWithRoles = members.map((item, index) => {
+        return {
+          user_id : item,
+          channel_role : "owner",
+        }
+      });
+
       if (findChannels.length > 0) {
         setChannel(findChannels[0], dispatchChannel);
       } else {
         const channelChat = await clientChat.channel(
           'messaging',
-          generateRandomId(),
+          generatedChannelId,
           {
             name: channelName.join(', '),
-            members: members,
+            members: memberWithRoles,
             type_channel: typeChannel,
           },
         );
