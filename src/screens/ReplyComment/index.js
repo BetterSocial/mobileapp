@@ -154,27 +154,19 @@ const ReplyComment = (props) => {
     setNewCommentList(updateData)
     const updateDataNew = {...item, latest_children: {comment: updateData}}
     setItem(updateDataNew)
-    updateFeed()
   }
 
   const saveParentComment = ({data}) => {
     const updateData = {...item, data:data.data}
     setItem(updateData)
-    updateFeed()
   }
 
-  // const updateCommentRaw = (updateData) => {
-  //   console.log(updateData, 'surat')
-  //   setItem(updateData)
-  //   setFeedByIndex(
-  //     {
-  //       singleFeed: updateData,
-  //       index,
-  //     },
-  //     dispatch,
-  //   );
+  React.useEffect(() => {
+    return () => {
+      updateFeed()
+    }
+  }, [])
 
-  // }
 
 
   return (

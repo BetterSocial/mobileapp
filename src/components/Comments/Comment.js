@@ -48,9 +48,8 @@ const Comment = ({
   const [totalVote, setTotalVote] = React.useState(
     comment.data.count_upvote - comment.data.count_downvote,
   );
-  const [statusVote, setStatusVote] = React.useState('');
-  const [upvote, setUpVote] = React.useState(comment.data.count_upvote);
-  const [downvote, setDownVote] = React.useState(comment.data.count_downvote);
+  const [statusVote, setStatusVote] = React.useState('none');
+
   let onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
@@ -125,6 +124,18 @@ const Comment = ({
     console.log('result block user ', result);
   };
   const onUpVote = async () => {
+    if(statusVote === 'upvote') {
+      setTotalVote((prevState) => prevState - 1)
+      setStatusVote('none')
+    }
+    if(statusVote === 'downvote') {
+      setTotalVote((prevState) => prevState +2)
+      setStatusVote('upvote')
+    }
+    if(statusVote === 'none') {
+      setTotalVote((prevState) => prevState + 1)
+      setStatusVote('upvote')
+    } 
     let dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
@@ -133,6 +144,18 @@ const Comment = ({
     onVote(dataVote);
   };
   const onDownVote = async () => {
+    if(statusVote === 'upvote') {
+      setTotalVote((prevState) => prevState - 2)
+      setStatusVote('downvote')
+    }
+    if(statusVote === 'downvote') {
+      setTotalVote((prevState) => prevState + 1)
+      setStatusVote('none')
+    }
+    if(statusVote === 'none') {
+      setTotalVote((prevState) => prevState - 1)
+      setStatusVote('downvote')
+    } 
     let dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
@@ -142,20 +165,22 @@ const Comment = ({
   };
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
-    setTotalVote(
-      result.data.data.count_upvote - result.data.data.count_downvote,
-    );
+    // setTotalVote(
+    //   result.data.data.count_upvote - result.data.data.count_downvote,
+    // );
     iVote();
     if(refreshComment) refreshComment(result)
   };
   const iVote = async () => {
     let result = await iVoteComment(comment.id);
+    console.log(result, 'salak')
     if (result.code === 200) {
       setStatusVote(result.data.action);
     }
   };
 
   React.useEffect(() => {
+    iVote();
     const parseToken = async () => {
       const id = await getUserId();
       if (id) {
@@ -163,8 +188,8 @@ const Comment = ({
       }
     };
     parseToken();
-    iVote();
   }, []);
+  
 
 
   React.useEffect(() => {
@@ -172,7 +197,7 @@ const Comment = ({
     iVote()
   }, [JSON.stringify(comment)])
 
-
+  console.log(statusVote, 'suik')
 
   return (
     <View

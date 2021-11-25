@@ -329,18 +329,41 @@ const PostPageDetail = (props) => {
   const onPressDownVoteHandle = async () => {
     setLoadingVote(true);
     setStatusDowvote((prev) => !prev);
+    if(voteStatus === 'upvote') {
+      setTotalVote((prevState) => prevState - 2)
+      setVoteStatus('downvote')
+    }
+    if(voteStatus === 'downvote') {
+      setTotalVote((prevState) => prevState + 1)
+      setVoteStatus('none')
+    }
+    if(voteStatus === 'none') {
+      setTotalVote((prevState) => prevState - 1)
+      setVoteStatus('downvote')
+    } 
     await setDownVote(!statusDownvote);
   };
 
   const onPressUpvoteHandle = async () => {
     setLoadingVote(true);
     setStatusUpvote((prev) => !prev);
+    if(voteStatus === 'upvote') {
+      setTotalVote((prevState) => prevState - 1)
+      setVoteStatus('none')
+    }
+    if(voteStatus === 'downvote') {
+      setTotalVote((prevState) => prevState +2)
+      setVoteStatus('upvote')
+    }
+    if(voteStatus === 'none') {
+      setTotalVote((prevState) => prevState + 1)
+      setVoteStatus('upvote')
+    } 
     await setUpVote(!statusUpvote);
   };
 
 
   const handleRefreshComment = ({data}) => {
-    // updateFeed()
     const newCommentList = commentList.map((comment) => {
       if(comment.id === data.id) {
         return {...comment, data: data.data}
@@ -353,7 +376,6 @@ const PostPageDetail = (props) => {
   }
 
   const handleRefreshChildComment = ({parent, children}) => {
-    // updateFeed()
     const newCommentList = commentList.map((comment) => {
       if(comment.id === parent.id) {
          const commentMap = comment.latest_children.comment.map((comChild) => {
