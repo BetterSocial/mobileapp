@@ -168,8 +168,8 @@ const Comment = ({
     // setTotalVote(
     //   result.data.data.count_upvote - result.data.data.count_downvote,
     // );
-    iVote();
-    if(refreshComment) refreshComment(result)
+    // iVote();
+    // if(refreshComment) refreshComment(result)
   };
   const iVote = async () => {
     let result = await iVoteComment(comment.id);
