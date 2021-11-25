@@ -1,17 +1,26 @@
 import * as React from 'react';
-import {Dimensions, Image, StyleSheet, View} from 'react-native';
-
+import {Dimensions, StyleSheet} from 'react-native';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
 
-const data = [
-  'https://picsum.photos/id/1/200/300',
-  'https://picsum.photos/id/1036/200/300',
-  'https://picsum.photos/id/1048/200/300',
-  'https://picsum.photos/id/1018/200/300',
-];
+import Onboarding1 from '../../../assets/images/onboarding1';
+import Onboarding2 from '../../../assets/images/onboarding2';
+import Onboarding3 from '../../../assets/images/onboarding3';
+import Onboarding4 from '../../../assets/images/onboarding4';
+import { SlideShowItem } from './SlideShowItem';
+
 const {width: screenWidth} = Dimensions.get('window');
 
 const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
+
+  const onboardingWidth = Dimensions.get('screen').width
+  const onboardingHeight = Dimensions.get('screen').height
+
+  const data = [
+    <Onboarding1 width={onboardingWidth} height={onboardingHeight / 375 * 509} style={styles.onboardingItem('#FFDFA0')}/>,
+    <Onboarding2 width={onboardingWidth} height={onboardingHeight / 375 * 509} style={styles.onboardingItem('#76DDFD')}/>,
+    <Onboarding3 width={onboardingWidth} height={onboardingHeight / 375 * 509} style={styles.onboardingItem('#54E4B9')}/>,
+    <Onboarding4 width={onboardingWidth} height={onboardingHeight / 375 * 509} style={styles.onboardingItem('#B7EC9E')}/>,
+  ];
   const handleChangeIndex = (swiperData) => {
     onChangeNewIndex(swiperData, data.length);
   };
@@ -24,20 +33,11 @@ const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
       index={0}
       showPagination
       paginationStyleItem={styles.dot}
+      paginationStyle={styles.dotContainer}
       data={data}
-      renderItem={({item}) => <Card image={item} />}
+      renderItem={({item}) => <SlideShowItem>{item}</SlideShowItem>}
       onChangeIndex={handleChangeIndex}
     />
-  );
-};
-
-const Card = ({image}) => {
-  return (
-    <View style={styles.containerCard}>
-      {image && (
-        <Image resizeMode="cover" source={{uri: image}} style={styles.image} />
-      )}
-    </View>
   );
 };
 
@@ -55,4 +55,12 @@ const styles = StyleSheet.create({
     height: 8,
     marginHorizontal: 5,
   },
+  dotContainer: {
+    marginBottom: 6,
+  },
+  onboardingItem: (backgroundColor) => {
+    return {
+        backgroundColor: backgroundColor,
+    }
+}
 });

@@ -30,13 +30,12 @@ import BottomSheetRealname from './elements/BottomSheetRealname';
 import Loading from '../Loading';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
+import ProfileHeader from './elements/ProfileHeader';
 import RenderActivity from './elements/RenderActivity';
 import RenderItem from './elements/RenderItem';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
 import ReportUser from '../../components/Blocking/ReportUser';
-import SettingIcon from '../../assets/icons/images/setting.svg';
-import ShareIcon from '../../assets/icons/images/share.svg';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
@@ -117,8 +116,6 @@ const ProfileScreen = () => {
   const refReportPostAnonymous = React.useRef();
 
   let {feeds} = myProfileFeed;
-  console.log('myProfile');
-  console.log(feeds);
 
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -148,14 +145,22 @@ const ProfileScreen = () => {
     };
   }, []);
 
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
+      fetchMyProfile(true);
+      getMyFeeds();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const fetchMyProfile = async (withLoading) => {
     const id = await getUserId();
     if (id) {
       setUserId(id);
       withLoading ? setIsLoading(true) : null;
       const result = await getMyProfile(id);
-      // console.log('result');
-      // console.log(result);
       if (result.code === 200) {
         setDataMain(result.data);
         setImageUrl(result.data.profile_pic_path, dispatch);
@@ -240,7 +245,7 @@ const ProfileScreen = () => {
 
   const handleScroll = (event) => {
     postRef.current.measure((x, y, width, height, pagex, pagey) => {
-      if (pagey < 0) {
+      if (pagey < 40) {
         setIsOffsetScroll(true);
       } else {
         setIsOffsetScroll(false);
@@ -604,6 +609,7 @@ const ProfileScreen = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
+        <ProfileHeader onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username}/>  
         {isOffsetScroll ? (
           <View style={styles.tabsFixed}>
             <Text style={styles.postText}>
@@ -630,27 +636,6 @@ const ProfileScreen = () => {
               token={token_JWT}>
               {!isLoading ? (
                 <View style={styles.content}>
-                  <View style={styles.header}>
-                    <Text style={styles.textUsername}>{dataMain.username}</Text>
-                    <View style={styles.wrapHeaderButton}>
-                      <View style={styles.btnShare}>
-                        <TouchableNativeFeedback onPress={onShare}>
-                          <ShareIcon
-                            width={20}
-                            height={20}
-                            fill={colors.black}
-                          />
-                        </TouchableNativeFeedback>
-                      </View>
-                      <TouchableNativeFeedback onPress={goToSettings}>
-                        <SettingIcon
-                          width={20}
-                          height={20}
-                          fill={colors.black}
-                        />
-                      </TouchableNativeFeedback>
-                    </View>
-                  </View>
                   <View style={styles.wrapImageProfile}>
                     <TouchableNativeFeedback onPress={changeImage}>
                       <View style={styles.profileImageContainer}>
@@ -809,18 +794,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
-    padding: 20,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  wrapHeaderButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: 50,
+    paddingHorizontal: 20,
   },
   postText: {
     fontFamily: fonts.inter[600],
@@ -871,18 +845,11 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     flexDirection: 'row',
     position: 'absolute',
-    top: 0,
+    top: 42,
     zIndex: 2000,
     backgroundColor: colors.white,
   },
 
-  textUsername: {
-    fontFamily: fonts.inter[800],
-    fontWeight: 'bold',
-    fontSize: 18,
-    lineHeight: 22,
-    color: colors.black,
-  },
   profileImage: {
     width: 100,
     height: 100,
@@ -890,7 +857,7 @@ const styles = StyleSheet.create({
     // marginBottom: 12
   },
   wrapImageProfile: {
-    marginTop: 24,
+    marginTop: 14,
     flexDirection: 'column',
   },
   nameProfile: {
@@ -928,7 +895,6 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 100,
   },
-  btnShare: {marginRight: 20},
   addCircle: {position: 'absolute', top: 25, left: 25},
   following: {marginLeft: 18},
   containerLoading: {

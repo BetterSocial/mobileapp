@@ -1,7 +1,7 @@
 import moment from 'moment';
 import * as React from 'react';
-import {Text, StyleSheet, View} from 'react-native';
-import {fonts} from '../fonts';
+import { Text, StyleSheet, View } from 'react-native';
+import { fonts } from '../fonts';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 
@@ -139,6 +139,31 @@ let styles = StyleSheet.create({
   },
 });
 
+
+const convertString = (str, from, to) => {
+  return str.split(from).join(to);
+};
+
+const capitalizeFirstText = (str) => {
+  //split the above string into an array of strings 
+  //whenever a blank space is encountered
+
+  const arr = str.split(" ");
+
+  //loop through each element of the array and capitalize the first letter.
+
+
+  for (var i = 0; i < arr.length; i++) {
+    arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+
+  }
+
+  //Join all the elements of the array back into a string 
+  //using a blankspace as a separator 
+  const str2 = arr.join(" ");
+  return str2;
+}
+
 export {
   getPollTime,
   isPollExpired,
@@ -146,4 +171,6 @@ export {
   getChatName,
   getGroupMemberCount,
   NO_POLL_UUID,
+  convertString,
+  capitalizeFirstText,
 };
