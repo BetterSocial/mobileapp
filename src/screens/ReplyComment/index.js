@@ -154,19 +154,17 @@ const ReplyComment = (props) => {
     // setNewCommentList(updateData)
     // const updateDataNew = {...item, latest_children: {comment: updateData}}
     // setItem(updateDataNew)
-    // updateFeed()
+    updateFeed()
   }
 
   const saveParentComment = ({data}) => {
     // const updateData = {...item, data:data.data}
     // setItem(updateData)
-    // updateFeed()
+    updateFeed()
   }
 
   React.useEffect(() => {
-    return () => {
-      updateFeed()
-    }
+    updateFeed()
   }, [])
 
 
@@ -192,7 +190,7 @@ const ReplyComment = (props) => {
           <ReplyCommentItem
             indexFeed={indexFeed}
             user={itemProp.user}
-            comment={itemProp}
+            comment={item}
             time={itemProp.created_at}
             photo={itemProp.user.data.profile_pic_url}
             isLast={newCommentList.length <= 0}

@@ -145,7 +145,6 @@ const RenderListFeed = (props) => {
 
   const onPressDownVoteHandle = async () => {
     setLoadingVote(true);
-    setStatusDowvote((prev) => !prev);
     if(voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 2)
       setVoteStatus('downvote')
@@ -157,13 +156,14 @@ const RenderListFeed = (props) => {
     if(voteStatus === 'none') {
       setTotalVote((prevState) => prevState - 1)
       setVoteStatus('downvote')
-    } 
+    }
+    setStatusDowvote((prev) => !prev); 
     await postApiDownvote(!statusDownvote);
   };
 
   const onPressUpvoteHandle = async () => {
     setLoadingVote(true);
-    setStatusUpvote((prev) => !prev);
+  
     if(voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 1)
       setVoteStatus('none')
@@ -175,7 +175,8 @@ const RenderListFeed = (props) => {
     if(voteStatus === 'none') {
       setTotalVote((prevState) => prevState + 1)
       setVoteStatus('upvote')
-    } 
+    }
+    setStatusUpvote((prev) => !prev); 
     await postApiUpvote(!statusUpvote);
   };
   const handleVote = (data = {}) => {
@@ -193,8 +194,8 @@ const RenderListFeed = (props) => {
       feed_group: 'main_feed',
     });
     if (processData.code == 200) {
-      setLoadingVote(false);
-      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      return setLoadingVote(false);
+     
     }
     setLoadingVote(false);
   };
@@ -205,8 +206,8 @@ const RenderListFeed = (props) => {
       feed_group: 'main_feed',
     });
     if (processData.code == 200) {
-      setLoadingVote(false);
-      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      return setLoadingVote(false);
+      
     }
     setLoadingVote(false);
   };

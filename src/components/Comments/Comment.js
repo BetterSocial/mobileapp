@@ -190,12 +190,13 @@ const Comment = ({
     parseToken();
   }, []);
   
-
+  console.log(comment, 'minak', comment.data.text)
 
   React.useEffect(() => {
+    console.log('masuk sini')
     setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
     iVote()
-  }, [JSON.stringify(comment)])
+  }, [JSON.stringify(comment.data)])
 
 
   return (
