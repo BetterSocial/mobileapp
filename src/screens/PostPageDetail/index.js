@@ -200,16 +200,20 @@ const PostPageDetail = (props) => {
     }
   };
 
-  const updateFeed = async () => {
+  const updateFeed = async (isSort) => {
     try {
       let data = await getFeedDetail(item.id);
-      console.log(data, item, 'sunat')
+      let oldData = data.data
+      if(isSort) {
+        oldData = {...oldData, latest_reactions: {...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix())} }
+      }
+      console.log(oldData, 'sunat')
       setLoadingPost(false)
       if (data) {
-        setItem(data.data);
+        setItem(oldData);
         setFeedByIndex(
           {
-            singleFeed: data.data,
+            singleFeed: oldData,
             index,
           },
           dispatch,
@@ -220,18 +224,6 @@ const PostPageDetail = (props) => {
     }
   };
 
-  const updateCommentRaw = (comment) => {
-    const updateData = {...item, latest_reactions: {...item.latest_reactions, comment}}
-    setItem(updateData)
-    setFeedByIndex(
-      {
-        singleFeed: updateData,
-        index,
-      },
-      dispatch,
-    );
-
-  }
 
   const onComment = () => {
     if (typeComment === 'parent') {
@@ -246,7 +238,7 @@ const PostPageDetail = (props) => {
         let data = await createCommentParent(textComment, item.id);
         if (data.code === 200) {
           setTextComment('');
-          updateFeed();
+          updateFeed(true);
           Toast.show('Comment successful', Toast.LONG);
           
         } else {
@@ -362,39 +354,10 @@ const PostPageDetail = (props) => {
 
 
   const handleRefreshComment = ({data}) => {
-    // const newCommentList = commentList.map((comment) => {
-    //   if(comment.id === data.id) {
-    //     return {...comment, data: data.data}
-    //   } else {
-    //     return {...comment}
-    //   }
-    // })
-    // setCommentList(newCommentList)
-    // updateCommentRaw(newCommentList)
     updateFeed()
   }
 
   const handleRefreshChildComment = ({parent, children}) => {
-    // const newCommentList = commentList.map((comment) => {
-    //   if(comment.id === parent.id) {
-    //      const commentMap = comment.latest_children.comment.map((comChild) => {
-    //     if(comChild.id === children.id) {
-    //       return {...comChild, data: children.data, latest_children: children.latest_children}
-    //     } else {
-    //       return {...comChild}
-    //     }
-    //   })
-    //   return {...comment, latest_children: {comment: commentMap}}
-    //   } else {
-    //     return {...comment}
-    //   }
-     
-    // })
-    // console.log(newCommentList, 'sirat123')
-    // if(newCommentList) {
-    //   setCommentList(newCommentList)
-    //   updateCommentRaw(newCommentList)
-    // }
     updateFeed()
   }
 
@@ -419,7 +382,7 @@ const PostPageDetail = (props) => {
 
   React.useEffect(() => {
     return () => {
-      updateFeed()
+      updateFeed(true)
     }
   }, [])
 

@@ -96,14 +96,18 @@ const ReplyComment = (props) => {
   }, [JSON.stringify(feeds)]);
 
 
-  const updateFeed = async () => {
+  const updateFeed = async (isSort) => {
     try {
       let data = await getFeedDetail(feeds.feeds[indexFeed].id);
       if (data) {
-        getThisComment(data.data);
+        let oldData = data.data
+        if(isSort) {
+          oldData = {...oldData, latest_reactions: {...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix())} }
+        }
+        getThisComment(oldData);
         setFeedByIndex(
           {
-            singleFeed: data.data,
+            singleFeed: oldData,
             index: indexFeed,
           },
           dispatch,
@@ -144,27 +148,15 @@ const ReplyComment = (props) => {
   const navigationGoBack = () => navigation.goBack();
 
   const saveNewComment = ({data}) => {
-    // const updateData = newCommentList.map((comment) => {
-    //   if(comment.id === data.id) {
-    //     return {...comment, data: data.data}
-    //   } else {
-    //     return {...comment}
-    //   }
-    // })
-    // setNewCommentList(updateData)
-    // const updateDataNew = {...item, latest_children: {comment: updateData}}
-    // setItem(updateDataNew)
     updateFeed()
   }
 
   const saveParentComment = ({data}) => {
-    // const updateData = {...item, data:data.data}
-    // setItem(updateData)
     updateFeed()
   }
 
   React.useEffect(() => {
-    updateFeed()
+    updateFeed(true)
   }, [])
 
 
