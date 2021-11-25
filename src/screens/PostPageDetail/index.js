@@ -1,45 +1,44 @@
 import * as React from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  Dimensions,
-  StatusBar,
-} from 'react-native';
-
+import SimpleToast from 'react-native-simple-toast';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
+import {
+  Dimensions,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 
-import {Gap, Footer} from '../../components';
-import Header from '../FeedScreen/Header';
-import Content from './elements/Content';
-import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
-import ReportUser from '../../components/Blocking/ReportUser';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import WriteComment from '../../components/Comments/WriteComment';
+import BlockUser from '../../components/Blocking/BlockUser';
 import ContainerComment from '../../components/Comments/ContainerComment';
-import {fonts} from '../../utils/fonts';
-import {getMyProfile} from '../../service/profile';
-import {blockUser} from '../../service/blocking';
-import {downVote, upVote} from '../../service/vote';
+import Content from './elements/Content';
+import ContentLink from '../FeedScreen/ContentLink';
 import ContentPoll from '../FeedScreen/ContentPoll';
+import Header from '../FeedScreen/Header';
+import ReportDomain from '../../components/Blocking/ReportDomain';
+import ReportUser from '../../components/Blocking/ReportUser';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import StringConstant from '../../utils/string/StringConstant';
+import WriteComment from '../../components/Comments/WriteComment';
+import {Context} from '../../context';
+import {Footer, Gap} from '../../components';
 import {
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
+import {blockUser} from '../../service/blocking';
 import {createCommentParent} from '../../service/comment';
-import ContentLink from '../FeedScreen/ContentLink';
-import {getFeedDetail} from '../../service/post';
+import {downVote, upVote} from '../../service/vote';
+import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
-import StringConstant from '../../utils/string/StringConstant';
-import {setFeedByIndex} from '../../context/actions/feeds';
-import {Context} from '../../context';
+import {getFeedDetail} from '../../service/post';
+import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import SimpleToast from 'react-native-simple-toast';
+import {setFeedByIndex} from '../../context/actions/feeds';
 
 const {width, height} = Dimensions.get('window');
 
@@ -102,7 +101,6 @@ const PostPageDetail = (props) => {
     const downvotes = data.downvotes ? data.downvotes : 0
     setTotalVote(upvote - downvotes)
   };
-  console.log(feeds, 'sulak')
   const initial = () => {
     let reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
@@ -203,7 +201,6 @@ const PostPageDetail = (props) => {
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(item.id);
-      console.log(data, item, 'sunat')
       setLoadingPost(false)
       if (data) {
         setItem(data.data);

@@ -180,8 +180,6 @@ const RenderListFeed = (props) => {
     setTotalVote(upvote - downvotes)
   };
 
-  console.log(voteStatus, index, 'sukil')
-
   const postApiUpvote = async (status) => {
     try {
       const processData = await onPressUpvote({
@@ -195,9 +193,9 @@ const RenderListFeed = (props) => {
         // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
       }
       setLoadingVote(false);
-      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     } catch(e) {
       setLoadingVote(false);
+      console.log(e)
       return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     }
   };
@@ -213,9 +211,9 @@ const RenderListFeed = (props) => {
         return;
       }
       setLoadingVote(false);
-      return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     } catch (e) {
       setLoadingVote(false);
+      console.log(e)
       return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     }
   };
@@ -233,8 +231,6 @@ const RenderListFeed = (props) => {
       }
     }
   };
-
-  console.log(item.reaction_counts, 'killan')
 
   const checkVotes = () => {
     const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === selfUserId)

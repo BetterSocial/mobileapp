@@ -10,6 +10,7 @@ export const upVote = async (data) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
+    console.log(e)
     SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     return error.response.data;
   }
@@ -21,6 +22,7 @@ export const downVote = async (data) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
+    console.log(e)
     SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     return error.response.data;
   }

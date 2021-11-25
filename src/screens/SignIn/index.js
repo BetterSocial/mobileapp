@@ -47,6 +47,7 @@ const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = React.useContext(Context).users;
   const [loading, setLoading] = React.useState(false);
+  const [slideShowIndex, setSlideShowIndex] = React.useState(0)
   const [isCompleteSliding, setIsCompleteSliding] = React.useState(false);
   const create = useClientGetstream();
   const HUMAN_ID_URL = 'https://www.human-id.org/';
@@ -54,6 +55,7 @@ const SignIn = () => {
   const dummyLoginRbSheetRef = React.useRef(null);
 
   const handleSlideShow = ({ index }, length) => {
+    setSlideShowIndex(index)
     if (index === length - 1) {
       setIsCompleteSliding(true);
     }

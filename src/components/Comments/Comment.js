@@ -189,8 +189,7 @@ const Comment = ({
     };
     parseToken();
   }, []);
-  
-  console.log(comment, 'minak', comment.data.text)
+
 
   React.useEffect(() => {
     console.log('masuk sini')

@@ -21,7 +21,7 @@ export const SlideShowItem = ({index, children}) => {
 
 const styles = StyleSheet.create({
     slideShowItemContainer : {
+        justifyContent:'center',
         flex: 1,
-        justifyContent: 'center',
     },
 });
