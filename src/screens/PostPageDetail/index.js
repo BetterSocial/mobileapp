@@ -285,9 +285,8 @@ const PostPageDetail = (props) => {
     };
     const processData = await upVote(data);
     if (processData.code == 200) {
-      updateFeed()
-      setLoadingVote(false);
-      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      updateFeed()    
+      return setLoadingVote(false);
     }
     setLoadingVote(false);
   };
@@ -300,8 +299,7 @@ const PostPageDetail = (props) => {
     const processData = await downVote(data);
     if (processData.code == 200) {
       updateFeed()
-      setLoadingVote(false);
-      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      return setLoadingVote(false);;
     }
     setLoadingVote(false);
   };
@@ -364,38 +362,40 @@ const PostPageDetail = (props) => {
 
 
   const handleRefreshComment = ({data}) => {
-    const newCommentList = commentList.map((comment) => {
-      if(comment.id === data.id) {
-        return {...comment, data: data.data}
-      } else {
-        return {...comment}
-      }
-    })
-    setCommentList(newCommentList)
-    updateCommentRaw(newCommentList)
+    // const newCommentList = commentList.map((comment) => {
+    //   if(comment.id === data.id) {
+    //     return {...comment, data: data.data}
+    //   } else {
+    //     return {...comment}
+    //   }
+    // })
+    // setCommentList(newCommentList)
+    // updateCommentRaw(newCommentList)
+    updateFeed()
   }
 
   const handleRefreshChildComment = ({parent, children}) => {
-    const newCommentList = commentList.map((comment) => {
-      if(comment.id === parent.id) {
-         const commentMap = comment.latest_children.comment.map((comChild) => {
-        if(comChild.id === children.id) {
-          return {...comChild, data: children.data, latest_children: children.latest_children}
-        } else {
-          return {...comChild}
-        }
-      })
-      return {...comment, latest_children: {comment: commentMap}}
-      } else {
-        return {...comment}
-      }
+    // const newCommentList = commentList.map((comment) => {
+    //   if(comment.id === parent.id) {
+    //      const commentMap = comment.latest_children.comment.map((comChild) => {
+    //     if(comChild.id === children.id) {
+    //       return {...comChild, data: children.data, latest_children: children.latest_children}
+    //     } else {
+    //       return {...comChild}
+    //     }
+    //   })
+    //   return {...comment, latest_children: {comment: commentMap}}
+    //   } else {
+    //     return {...comment}
+    //   }
      
-    })
-    console.log(newCommentList, 'sirat123')
-    if(newCommentList) {
-      setCommentList(newCommentList)
-      updateCommentRaw(newCommentList)
-    }
+    // })
+    // console.log(newCommentList, 'sirat123')
+    // if(newCommentList) {
+    //   setCommentList(newCommentList)
+    //   updateCommentRaw(newCommentList)
+    // }
+    updateFeed()
   }
 
   const checkVotes = () => {
@@ -416,6 +416,12 @@ const PostPageDetail = (props) => {
   React.useEffect(() => {
     checkVotes()
   }, [item, yourselfId])
+
+  React.useEffect(() => {
+    return () => {
+      updateFeed()
+    }
+  }, [])
 
 
   return (

@@ -144,21 +144,23 @@ const ReplyComment = (props) => {
   const navigationGoBack = () => navigation.goBack();
 
   const saveNewComment = ({data}) => {
-    const updateData = newCommentList.map((comment) => {
-      if(comment.id === data.id) {
-        return {...comment, data: data.data}
-      } else {
-        return {...comment}
-      }
-    })
-    setNewCommentList(updateData)
-    const updateDataNew = {...item, latest_children: {comment: updateData}}
-    setItem(updateDataNew)
+    // const updateData = newCommentList.map((comment) => {
+    //   if(comment.id === data.id) {
+    //     return {...comment, data: data.data}
+    //   } else {
+    //     return {...comment}
+    //   }
+    // })
+    // setNewCommentList(updateData)
+    // const updateDataNew = {...item, latest_children: {comment: updateData}}
+    // setItem(updateDataNew)
+    // updateFeed()
   }
 
   const saveParentComment = ({data}) => {
-    const updateData = {...item, data:data.data}
-    setItem(updateData)
+    // const updateData = {...item, data:data.data}
+    // setItem(updateData)
+    // updateFeed()
   }
 
   React.useEffect(() => {

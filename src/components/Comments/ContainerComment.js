@@ -29,7 +29,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />
-      {comments.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()).map((item, index) => {
+      {comments.map((item, index) => {
     
 
         return (

@@ -168,14 +168,14 @@ const Comment = ({
     // setTotalVote(
     //   result.data.data.count_upvote - result.data.data.count_downvote,
     // );
-    // iVote();
-    // if(refreshComment) refreshComment(result)
+    iVote();
   };
   const iVote = async () => {
     let result = await iVoteComment(comment.id);
     console.log(result, 'salak')
     if (result.code === 200) {
       setStatusVote(result.data.action);
+      // if(refreshComment) refreshComment(result)
     }
   };
 
@@ -197,7 +197,6 @@ const Comment = ({
     iVote()
   }, [JSON.stringify(comment)])
 
-  console.log(statusVote, 'suik')
 
   return (
     <View
