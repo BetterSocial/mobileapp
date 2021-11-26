@@ -1,27 +1,24 @@
-import React from 'react';
-import { View, Dimensions, StyleSheet, StatusBar, Share } from 'react-native';
 import PropTypes from 'prop-types';
-import { useNavigation } from '@react-navigation/core';
+import React from 'react';
+import SimpleToast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import { Dimensions, Share, StatusBar, StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 
-import {
-  POST_TYPE_POLL,
-  POST_TYPE_LINK,
-  POST_TYPE_STANDARD,
-} from '../../utils/constants';
-
-import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { colors } from '../../utils/colors';
-import { Gap, PreviewComment, Footer } from '../../components';
-import { getCountCommentWithChild } from '../../utils/getstream';
-import SimpleToast from 'react-native-simple-toast';
-
-
-import Header from '../FeedScreen/Header';
+import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
 import ContentPoll from '../FeedScreen/ContentPoll';
-import Content from '../FeedScreen/Content';
+import Header from '../FeedScreen/Header';
+import { Footer, Gap, PreviewComment } from '../../components';
+import {
+  POST_TYPE_LINK,
+  POST_TYPE_POLL,
+  POST_TYPE_STANDARD,
+} from '../../utils/constants';
+import { colors } from '../../utils/colors';
+import { getCountCommentWithChild } from '../../utils/getstream';
+import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
@@ -167,28 +164,38 @@ const RenderListFeed = (props) => {
   };
 
   const postApiUpvote = async (status) => {
-    const processData = await onPressUpvote({
-      activity_id: item.id,
-      status: status,
-      feed_group: 'main_feed',
-    });
-    if (processData.code == 200) {
+    try {
+      const processData = await onPressUpvote({
+        activity_id: item.id,
+        status: status,
+        feed_group: 'main_feed',
+      });
+      if (processData.code == 200) {
+        setLoadingVote(false);
+      }
       setLoadingVote(false);
-      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+    } catch (e) {
+      setLoadingVote(false);
+      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     }
-    setLoadingVote(false);
   };
+  
   const postApiDownvote = async (status) => {
-    const processData = await onPressDownVote({
-      activity_id: item.id,
-      status: status,
-      feed_group: 'main_feed',
-    });
-    if (processData.code == 200) {
+    try {
+      const processData = await onPressDownVote({
+        activity_id: item.id,
+        status: status,
+        feed_group: 'main_feed',
+      });
+      if (processData.code == 200) {
+        setLoadingVote(false);
+      } else {
+        setLoadingVote(false);
+      }  
+    } catch(e) {
       setLoadingVote(false);
-      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);  
     }
-    setLoadingVote(false);
   };
 
   const initial = () => {

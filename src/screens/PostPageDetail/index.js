@@ -1,45 +1,44 @@
 import * as React from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  Dimensions,
-  StatusBar,
-} from 'react-native';
-
+import SimpleToast from 'react-native-simple-toast';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
+import {
+  Dimensions,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 
-import {Gap, Footer} from '../../components';
-import Header from '../FeedScreen/Header';
-import Content from './elements/Content';
-import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
-import ReportUser from '../../components/Blocking/ReportUser';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import WriteComment from '../../components/Comments/WriteComment';
+import BlockUser from '../../components/Blocking/BlockUser';
 import ContainerComment from '../../components/Comments/ContainerComment';
-import {fonts} from '../../utils/fonts';
-import {getMyProfile} from '../../service/profile';
-import {blockUser} from '../../service/blocking';
-import {downVote, upVote} from '../../service/vote';
+import Content from './elements/Content';
+import ContentLink from '../FeedScreen/ContentLink';
 import ContentPoll from '../FeedScreen/ContentPoll';
+import Header from '../FeedScreen/Header';
+import ReportDomain from '../../components/Blocking/ReportDomain';
+import ReportUser from '../../components/Blocking/ReportUser';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import StringConstant from '../../utils/string/StringConstant';
+import WriteComment from '../../components/Comments/WriteComment';
+import {Context} from '../../context';
+import {Footer, Gap} from '../../components';
 import {
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
+import {blockUser} from '../../service/blocking';
 import {createCommentParent} from '../../service/comment';
-import ContentLink from '../FeedScreen/ContentLink';
-import {getFeedDetail} from '../../service/post';
+import {downVote, upVote} from '../../service/vote';
+import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
-import StringConstant from '../../utils/string/StringConstant';
-import {setFeedByIndex} from '../../context/actions/feeds';
-import {Context} from '../../context';
+import {getFeedDetail} from '../../service/post';
+import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import SimpleToast from 'react-native-simple-toast';
+import {setFeedByIndex} from '../../context/actions/feeds';
 
 const {width, height} = Dimensions.get('window');
 
@@ -102,7 +101,6 @@ const PostPageDetail = (props) => {
     const downvotes = data.downvotes ? data.downvotes : 0
     setTotalVote(upvote - downvotes)
   };
-  console.log(feeds, 'sulak')
   const initial = () => {
     let reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
@@ -203,7 +201,6 @@ const PostPageDetail = (props) => {
   const updateFeed = async () => {
     try {
       let data = await getFeedDetail(item.id);
-      console.log(data, item, 'sunat')
       setLoadingPost(false)
       if (data) {
         setItem(data.data);
@@ -220,6 +217,18 @@ const PostPageDetail = (props) => {
     }
   };
 
+  const updateCommentRaw = (comment) => {
+    const updateData = {...item, latest_reactions: {...item.latest_reactions, comment}}
+    setItem(updateData)
+    setFeedByIndex(
+      {
+        singleFeed: updateData,
+        index,
+      },
+      dispatch,
+    );
+
+  }
 
   const onComment = () => {
     if (typeComment === 'parent') {
@@ -273,9 +282,8 @@ const PostPageDetail = (props) => {
     };
     const processData = await upVote(data);
     if (processData.code == 200) {
-      updateFeed()
-      setLoadingVote(false);
-      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      updateFeed()    
+      return setLoadingVote(false);
     }
     setLoadingVote(false);
   };
@@ -288,8 +296,7 @@ const PostPageDetail = (props) => {
     const processData = await downVote(data);
     if (processData.code == 200) {
       updateFeed()
-      setLoadingVote(false);
-      return SimpleToast.show('Success Vote', SimpleToast.SHORT);
+      return setLoadingVote(false);;
     }
     setLoadingVote(false);
   };
@@ -317,46 +324,75 @@ const PostPageDetail = (props) => {
   const onPressDownVoteHandle = async () => {
     setLoadingVote(true);
     setStatusDowvote((prev) => !prev);
+    if(voteStatus === 'upvote') {
+      setTotalVote((prevState) => prevState - 2)
+      setVoteStatus('downvote')
+    }
+    if(voteStatus === 'downvote') {
+      setTotalVote((prevState) => prevState + 1)
+      setVoteStatus('none')
+    }
+    if(voteStatus === 'none') {
+      setTotalVote((prevState) => prevState - 1)
+      setVoteStatus('downvote')
+    } 
     await setDownVote(!statusDownvote);
   };
 
   const onPressUpvoteHandle = async () => {
     setLoadingVote(true);
     setStatusUpvote((prev) => !prev);
+    if(voteStatus === 'upvote') {
+      setTotalVote((prevState) => prevState - 1)
+      setVoteStatus('none')
+    }
+    if(voteStatus === 'downvote') {
+      setTotalVote((prevState) => prevState +2)
+      setVoteStatus('upvote')
+    }
+    if(voteStatus === 'none') {
+      setTotalVote((prevState) => prevState + 1)
+      setVoteStatus('upvote')
+    } 
     await setUpVote(!statusUpvote);
   };
 
 
   const handleRefreshComment = ({data}) => {
-    const newCommentList = commentList.map((comment) => {
-      if(comment.id === data.id) {
-        return {...comment, data: data.data}
-      } else {
-        return {...comment}
-      }
-    })
-    setCommentList(newCommentList)
+    // const newCommentList = commentList.map((comment) => {
+    //   if(comment.id === data.id) {
+    //     return {...comment, data: data.data}
+    //   } else {
+    //     return {...comment}
+    //   }
+    // })
+    // setCommentList(newCommentList)
+    // updateCommentRaw(newCommentList)
+    updateFeed()
   }
 
   const handleRefreshChildComment = ({parent, children}) => {
-    const newCommentList = commentList.map((comment) => {
-      if(comment.id === parent.id) {
-         const commentMap = comment.latest_children.comment.map((comChild) => {
-        if(comChild.id === children.id) {
-          return {...comChild, data: children.data, latest_children: children.latest_children}
-        } else {
-          return {...comChild}
-        }
-      })
-      return {...comment, latest_children: {comment: commentMap}}
-      } else {
-        return {...comment}
-      }
+    // const newCommentList = commentList.map((comment) => {
+    //   if(comment.id === parent.id) {
+    //      const commentMap = comment.latest_children.comment.map((comChild) => {
+    //     if(comChild.id === children.id) {
+    //       return {...comChild, data: children.data, latest_children: children.latest_children}
+    //     } else {
+    //       return {...comChild}
+    //     }
+    //   })
+    //   return {...comment, latest_children: {comment: commentMap}}
+    //   } else {
+    //     return {...comment}
+    //   }
      
-    })
-    if(newCommentList) {
-      setCommentList(newCommentList)
-    }
+    // })
+    // console.log(newCommentList, 'sirat123')
+    // if(newCommentList) {
+    //   setCommentList(newCommentList)
+    //   updateCommentRaw(newCommentList)
+    // }
+    updateFeed()
   }
 
   const checkVotes = () => {
@@ -383,6 +419,7 @@ const PostPageDetail = (props) => {
       updateFeed()
     }
   }, [])
+
 
   return (
     <View style={styles.container}>

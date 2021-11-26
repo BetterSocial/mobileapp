@@ -37,6 +37,11 @@ const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
       data={data}
       renderItem={({item}) => <SlideShowItem>{item}</SlideShowItem>}
       onChangeIndex={handleChangeIndex}
+      centerContent={true}
+      viewabilityConfig={{
+        itemVisiblePercentThreshold : 50,
+        minimumViewTime: 10
+      }}
     />
   );
 };
