@@ -243,14 +243,14 @@ const PostPageDetail = (props) => {
         if (data.code === 200) {
           setTextComment('');
           updateFeed(true);
-          Toast.show('Comment successful', Toast.LONG);
+          // Toast.show('Comment successful', Toast.LONG);
           
         } else {
           Toast.show('Failed Comment', Toast.LONG);
           setLoadingPost(false)
         }
       } else {
-        Toast.show('Comments are not empty', Toast.LONG);
+        Toast.show('Comments are empty', Toast.LONG);
         setLoadingPost(false)
       }
     } catch (e) {
