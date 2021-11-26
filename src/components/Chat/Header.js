@@ -1,24 +1,23 @@
 import * as React from 'react';
+import IconEP from 'react-native-vector-icons/Entypo';
+import {ChannelAvatar} from 'stream-chat-react-native';
 import {
   Image,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-
-import IconEP from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
-import {ChannelAvatar} from 'stream-chat-react-native';
 
-import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
 import DefaultGroupProfilePicture from '../../assets/images/default-group-picture.png';
+import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
+import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {Context} from '../../context';
-import {trimString} from '../../utils/string/TrimString';
 import {getChatName, getGroupMemberCount} from '../../utils/string/StringUtils';
+import {trimString} from '../../utils/string/TrimString';
 
 const Header = ({}) => {
   const navigation = useNavigation();
@@ -74,6 +73,7 @@ const Header = ({}) => {
           onPress={() =>
             navigation.navigate('GroupSetting', {
               username,
+              focusChatName : true,
             })
           }>
           <IconEP name="dots-three-vertical" size={12.87} color={'#fff'} />

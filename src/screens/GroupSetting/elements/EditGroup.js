@@ -8,11 +8,11 @@ import {
   View,
 } from 'react-native';
 
+import DefaultChatGroupProfilePicture from '../../../assets/images/default-group-picture.png';
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
+import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
-import DefaultChatGroupProfilePicture from '../../../assets/images/default-group-picture.png';
 
 const EditGroup = ({
   editName,
@@ -83,6 +83,7 @@ const EditGroup = ({
             style={styles.editName}
             value={editName}
             onChangeText={setEditName}
+            selectTextOnFocus
           />
         ) : (
           <Text style={styles.editName}>{editName}</Text>
