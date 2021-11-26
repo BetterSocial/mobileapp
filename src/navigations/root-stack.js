@@ -21,6 +21,7 @@ import OtherProfile from '../screens/OtherProfile';
 import PostDetailPage from '../screens/PostPageDetail';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
+import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignIn';
@@ -107,6 +108,11 @@ const RootStact = () => {
         <Stack.Screen
           name="ReplyComment"
           component={ReplyComment}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ProfileReplyComment"
+          component={ProfileReplyComment}
           options={{headerShown: false}}
         />
         <Stack.Screen

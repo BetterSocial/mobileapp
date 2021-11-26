@@ -159,6 +159,9 @@ const ReplyComment = (props) => {
 
   React.useEffect(() => {
     updateFeed(true)
+    return () => {
+      updateFeed(true)
+    }
   }, [])
 
 
