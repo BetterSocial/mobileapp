@@ -92,7 +92,7 @@ const PostPageDetail = (props) => {
 
   React.useEffect(() => {
     setItem(feeds.feeds[index]);
-    if(feeds.feeds[index] && feeds.feeds[index].latest_reactions) {
+    if(feeds.feeds[index] && feeds.feeds[index].latest_reactions && feeds.feeds[index].latest_reactions.comment) {
       setCommentList(feeds.feeds[index].latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
     }
   }, [JSON.stringify(feeds)]);
