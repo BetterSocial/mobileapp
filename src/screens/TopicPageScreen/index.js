@@ -4,7 +4,6 @@ import Navigation from './elements/Navigation';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { getTopicPages } from '../../service/topicPages';
 import { convertString, capitalizeFirstText } from '../../utils/string/StringUtils';
-import TiktokScroll from '../../components/TiktokScroll';
 import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { Context } from '../../context';
@@ -22,6 +21,7 @@ import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import { blockAnonymous, blockUser } from '../../service/blocking';
+import TiktokScroll from './TiktokScroll';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
