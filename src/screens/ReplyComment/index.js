@@ -133,6 +133,7 @@ const ReplyComment = (props) => {
         if (data.code === 200) {
           setNewCommentList([...newCommentList, {...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data}])
           setLoadingCMD(false);
+          await updateFeed(true)
         } else {
           Toast.show('Failed Comment', Toast.LONG);
           setLoadingCMD(false);
@@ -159,9 +160,6 @@ const ReplyComment = (props) => {
 
   React.useEffect(() => {
     updateFeed(true)
-    return () => {
-      updateFeed(true)
-    }
   }, [])
 
 
