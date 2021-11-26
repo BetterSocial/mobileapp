@@ -129,7 +129,7 @@ const ContactScreen = ({navigation}) => {
       let memberWithRoles = members.map((item, index) => {
         return {
           user_id : item,
-          channel_role : "owner",
+          channel_role : "channel_moderator",
         }
       });
 
@@ -141,11 +141,11 @@ const ContactScreen = ({navigation}) => {
           generatedChannelId,
           {
             name: channelName.join(', '),
-            members: memberWithRoles,
             type_channel: typeChannel,
           },
         );
         let err = await channelChat.create();
+        await channelChat.addMembers(memberWithRoles)
         setChannel(channelChat, dispatchChannel);
       }
       setFollowed([profile.user_id]);
@@ -155,7 +155,7 @@ const ContactScreen = ({navigation}) => {
     } catch (error) {
       console.log(error);
       showMessage({
-        message: StringConstant.createPostFailedGeneralError,
+        message: 'Failed creating new chat',
         type: 'danger',
       });
       setLoading(false);
