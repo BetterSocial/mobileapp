@@ -28,14 +28,19 @@ import {setFeedByIndex} from '../../context/actions/feeds';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
-const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, setFeedByIndexProps}) => {
+const ReplyComment = (props) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const [temporaryText, setTemporaryText] = React.useState('')
   const [, setReaction] = React.useState(false);
   const [loadingCMD, setLoadingCMD] = React.useState(false);
   let [users] = React.useContext(Context).users;
+  let [feeds, dispatch] = React.useContext(Context).feeds;
+  let itemProp = props.route.params.item;
+  let indexFeed = props.route.params.indexFeed;
 
+  const level = props.route.params.level;
+  console.log(`level : ${level}`)
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
@@ -89,20 +94,20 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
     setNewCommentList(comments)
   };
   React.useEffect(() => {
-    getThisComment(feeds[indexFeed]);
+    getThisComment(feeds.feeds[indexFeed]);
   }, [JSON.stringify(feeds)]);
 
 
   const updateFeed = async (isSort) => {
     try {
-      let data = await getFeedDetail(feeds[indexFeed].id);
+      let data = await getFeedDetail(feeds.feeds[indexFeed].id);
       if (data) {
         let oldData = data.data
         if(isSort) {
           oldData = {...oldData, latest_reactions: {...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix())} }
         }
         getThisComment(oldData);
-        setFeedByIndexProps(
+        setFeedByIndex(
           {
             singleFeed: oldData,
             index: indexFeed,
@@ -152,11 +157,7 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
   }
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      updateFeed(true)
-    })
-
-    return unsubscribe
+    updateFeed(true)
   }, [])
 
 
@@ -165,7 +166,7 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
     <View style={styles.container}>
       <StatusBar translucent={false} />
        {/* Header */}
-      <View style={styles.header}>
+       <View style={styles.header}>
             <TouchableOpacity
               onPress={navigationGoBack}
               style={styles.backArrow}>
@@ -249,13 +250,13 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
               );
             })}
             {loadingCMD && (
-              <ContainerReply>
-                <ConnectorWrapper>
-                <View style={styles.childCommentWrapperLoading}>
-                <LoadingComment commentText={textComment} user={itemProp.user}  />
-                </View>
-                </ConnectorWrapper>    
-              </ContainerReply>
+                           <ContainerReply>
+                             <ConnectorWrapper>
+                             <View style={styles.childCommentWrapperLoading}>
+                              <LoadingComment commentText={textComment} user={itemProp.user}  />
+                              </View>
+                             </ConnectorWrapper>    
+                           </ContainerReply>
             )}
           {newCommentList.length > 0 ? <View style={styles.childLevelMainConnector} /> : null}
         </View>
@@ -285,7 +286,7 @@ const ContainerReply = ({children, isGrandchild = true, hideLeftConnector, key})
     </View>
   );
 };
-export default ReplyCommentComponent;
+export default ReplyComment;
 
 const styles = StyleSheet.create({
   container: {
