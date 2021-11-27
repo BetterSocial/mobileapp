@@ -128,6 +128,7 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
         if (data.code === 200) {
           setNewCommentList([...newCommentList, {...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data}])
           setLoadingCMD(false);
+          await updateFeed(true)
         } else {
           Toast.show('Failed Comment', Toast.LONG);
           setLoadingCMD(false);
