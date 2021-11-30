@@ -9,8 +9,14 @@ import TopicFragmentScreen from './elements/TopicFragmentScreen';
 import Followings from '.';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {Context} from '../../context';
+import {setNavbarTitle} from '../../context/actions/setMyProfileAction'
 
-export default function FollowingScreen({}) {
+export default function FollowingScreen() {
+  const [, dispatchNavbar] = React.useContext(Context).profile
+  const TAB_TOPIC = 'TabTopic'
+  const TAB_FOLLOWING = 'TabFollowing'
+  const TAB_DOMAIN = 'TabDomain'
   let Tabs = createMaterialTopTabNavigator();
   function MyTabBar({state, descriptors, navigation, position}) {
     return (
@@ -63,39 +69,61 @@ export default function FollowingScreen({}) {
     );
   }
 
+
+  const tabComponent = (tabProps) => {
+    return <MyTabBar {...tabProps} />
+  }
+
+  const listenTab = (tabProps) => {
+    const {route} = tabProps
+    if(route.name === TAB_FOLLOWING) {
+      setNavbarTitle("Who you're following", dispatchNavbar)
+    }
+    if(route.name === TAB_DOMAIN) {
+      setNavbarTitle("Your Domain", dispatchNavbar)
+    }
+    if(route.name === TAB_TOPIC) {
+      setNavbarTitle("Your Topic", dispatchNavbar)
+    }
+  }
+
   return (
     <View style={{height: '100%'}}>
       <StatusBar translucent={false} />
       <Tabs.Navigator
-        initialRouteName="TabFollowing"
-        tabBar={(props) => {
-          return <MyTabBar {...props} />;
-        }}>
+        initialRouteName={TAB_FOLLOWING}
+        tabBar={tabComponent}
+        
+        >
         <Tabs.Screen
-          name="TabFollowing"
+          name={TAB_FOLLOWING}
           component={Followings}
           options={{
             title: 'User',
           }}
+          listeners={listenTab}
         />
         <Tabs.Screen
-          name="TabDomain"
+          name={TAB_DOMAIN}
           component={DomainFragmentScreen}
           options={{
             title: 'Domains',
           }}
+          listeners={listenTab}
         />
         <Tabs.Screen
-          name="TabTopic"
+          name={TAB_TOPIC}
           component={TopicFragmentScreen}
           options={{
             title: 'Topic',
           }}
+          listeners={listenTab}
         />
       </Tabs.Navigator>
     </View>
   );
 }
+
 
 const S = StyleSheet.create({
   container: {

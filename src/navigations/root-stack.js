@@ -49,8 +49,9 @@ import {Context} from '../context';
 const Stack = createStackNavigator();
 const RootStact = () => {
   const [clientState] = React.useContext(Context).client;
+  const [profileState] = React.useContext(Context).profile
   const {client} = clientState;
-
+  console.log(profileState, 'sikat')
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
@@ -59,6 +60,8 @@ const RootStact = () => {
       await client?.disconnectUser();
     };
   }, []);
+
+  console.log(profileState, 'saka')
 
   return (
     <View
@@ -165,9 +168,10 @@ const RootStact = () => {
           options={{
             headerShown: true,
             header: ({navigation}) => {
+              console.log(navigation, profileState, 'jalan')
               return (
                 <Header
-                  title="Who you're following"
+                  title={profileState.navbarTitle}
                   containerStyle={styles.header}
                   titleStyle={styles.title}
                   onPress={() => navigation.goBack()}

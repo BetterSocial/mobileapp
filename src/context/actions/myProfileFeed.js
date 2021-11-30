@@ -6,3 +6,4 @@ export const setMyProfileFeed = (data, dispatch) => {
     payload: data,
   });
 };
+
