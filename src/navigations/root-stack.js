@@ -168,7 +168,6 @@ const RootStact = () => {
           options={{
             headerShown: true,
             header: ({navigation}) => {
-              console.log(navigation, profileState, 'jalan')
               return (
                 <Header
                   title={profileState.navbarTitle}

@@ -80,10 +80,10 @@ export default function FollowingScreen() {
       setNavbarTitle("Who you're following", dispatchNavbar)
     }
     if(route.name === TAB_DOMAIN) {
-      setNavbarTitle("Your Domain", dispatchNavbar)
+      setNavbarTitle("Your Domains", dispatchNavbar)
     }
     if(route.name === TAB_TOPIC) {
-      setNavbarTitle("Your Topic", dispatchNavbar)
+      setNavbarTitle("Your Topics", dispatchNavbar)
     }
   }
 

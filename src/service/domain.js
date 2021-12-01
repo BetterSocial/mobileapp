@@ -66,3 +66,13 @@ export const getDomainIdIFollow = async () => {
     throw new Error(error);
   }
 };
+
+export const getFollowedDomain = async (body) => {
+  try {
+    const processGetFollowDomain = await api.get('/domain/followed')
+    return processGetFollowDomain
+  } catch(e) {
+    crashlytics().recordError(new Error(e))
+    throw new Error(e)
+  }
+}

@@ -24,7 +24,17 @@ const putUserTopic = async (data) => {
 
 }
 
+const getFollowingTopic = async () => {
+  try {
+    const processGetFollowTopic = await api.get('/topics/followed')
+    return processGetFollowTopic.data
+  } catch(e) {
+    throw new Error(e)
+  }
+}
+
 export {
   getUserTopic,
   putUserTopic,
+  getFollowingTopic
 }
