@@ -1,0 +1,184 @@
+import * as React from 'react';
+import Toast from 'react-native-simple-toast';
+import {View} from 'react-native';
+
+import BlockPostAnonymous from '../Blocking/BlockPostAnonymous';
+import BlockUser from '../Blocking/BlockUser';
+import ReportPostAnonymous from '../Blocking/ReportPostAnonymous';
+import ReportUser from '../Blocking/ReportUser';
+import SpecificIssue from '../Blocking/SpecificIssue';
+import blockUtils from '../../service/utils/blockUtils';
+import {getUserId} from '../../utils/users';
+
+class BlockComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            messageReport: '',
+            myId : '',
+            postId: '',
+            reportOption: -1,
+            userId: '',
+            username: '',
+        };
+
+        this.refBlockPostAnonymous = React.createRef();
+        this.refBlockUser = React.createRef();
+        this.refReportPostAnonymous = React.createRef();
+        this.refReportUser = React.createRef();
+        this.refSpecificIssue = React.createRef();
+
+        this.__blockPostAnonymous = this.__blockPostAnonymous.bind(this)
+        this.__blockUser = this.__blockUser.bind(this)
+        this.__onIssue = this.__onIssue.bind(this)
+        this.__onNextQuestion = this.__onNextQuestion.bind(this);
+        this.__onSelectBlocking = this.__onSelectBlocking.bind(this);
+        this.__onSelectBlockingPostAnonymous = this.__onSelectBlockingPostAnonymous.bind(this)
+        this.__onSkipOnlyBlock = this.__onSkipOnlyBlock.bind(this)
+    }
+
+    componentDidMount() {
+        this.__parseToken()
+    }
+
+    setDataToState(value){
+        if (value.anonimity === true) {
+            this.setState({
+                postId: value.id,
+                userId: `${value.actor.id}-anonymous`,
+                username: 'Anonymous'
+            })
+        } else {
+            this.setState({
+                postId: value.id,
+                userId: value.actor.id,
+                username: value.actor.data.username,
+            })
+        }
+    };
+
+    openBlockComponent(value) {
+        if (value.actor.id === this.state.myId) {
+            Toast.show("Can't Block yourself", Toast.LONG);
+        } else {
+            this.setDataToState(value);
+            if (value.anonimity) {
+                this.refBlockPostAnonymous.current.open();
+            } else {
+                this.refBlockUser.current.open();
+            }
+        }
+    }
+
+    openReportAnonymousPost() {
+        this.refBlockPostAnonymous().current.open()
+    }
+    
+    async __parseToken() {
+        const id = await getUserId();
+        if (id) {
+            this.setState({
+                myId : id
+            })
+        }
+    };
+
+    __onSelectBlocking(v) {
+        if (v !== 1) {
+            this.refReportUser.current.open();
+        } else {
+            this.__blockUser();
+        }
+        this.refBlockUser.current.close();
+    }
+
+    __onSelectBlockingPostAnonymous(v) {
+        if (v !== 1) {
+            this.refReportPostAnonymous.current.open();
+        } else {
+            this.__blockPostAnonymous();
+        }
+        this.refBlockPostAnonymous.current.close();
+    }
+
+    __onNextQuestion(v) {
+        this.setState({
+            reportOption: v
+        });
+        this.refReportUser.current.close();
+        this.refReportPostAnonymous.current.close();
+        this.refSpecificIssue.current.open();
+    }
+
+    __onSkipOnlyBlock() {
+        this.refReportUser.current.close();
+        userBlock();
+    }
+
+    __onIssue(v) {
+        this.refSpecificIssue.current.close();
+
+        this.setState({
+            messageReport: v
+        })
+
+        setTimeout(() => {
+            this.__blockUser();
+        }, 500);
+    }
+
+    __blockUser() {
+        let {postId, reportOption, userId, messageReport} = this.state
+        blockUtils.uiBlockUser(
+            postId,
+            userId,
+            'screen_feed',
+            reportOption,
+            messageReport,
+            () => this.props.refresh('')
+        )
+    }
+
+    __blockPostAnonymous() {
+        let {postId, reportOption, messageReport} = this.state
+        blockUtils.uiBlockPostAnonymous(
+            postId,
+            'screen_feed',
+            reportOption,
+            messageReport,
+            () => this.props.refresh('')
+        )
+    }
+
+    render() {
+        return <View>
+            <BlockPostAnonymous
+                refBlockPostAnonymous={this.refBlockPostAnonymous}
+                onSelect={this.__onSelectBlockingPostAnonymous}
+            />
+
+            <BlockUser
+                refBlockUser={this.refBlockUser}
+                onSelect={this.__onSelectBlocking}
+                username={this.state.username}
+            />
+            <ReportUser
+                refReportUser={this.refReportUser}
+                onSelect={this.__onNextQuestion}
+                onSkip={this.__onSkipOnlyBlock}
+            />
+            <ReportPostAnonymous
+                refReportPostAnonymous={this.refReportPostAnonymous}
+                onSelect={this.__onNextQuestion}
+                onSkip={this.__onSkipOnlyBlock}
+            />
+            <SpecificIssue
+                refSpecificIssue={this.refSpecificIssue}
+                onPress={this.__onIssue}
+                onSkip={this.__onSkipOnlyBlock}
+            />
+        </View>
+    }
+}
+
+export default BlockComponent

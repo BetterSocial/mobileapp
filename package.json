@@ -90,6 +90,7 @@
     "react-native-version-number": "^0.3.6",
     "react-native-walkthrough-tooltip": "^1.2.0",
     "react-native-webview": "^11.4.0",
+    "recoil": "^0.5.2",
     "recyclerlistview": "^3.0.5",
     "stream-chat": "^4.2.0",
     "stream-chat-react-native": "^3.8.3",

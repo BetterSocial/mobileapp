@@ -4,6 +4,7 @@ import analytics from '@react-native-firebase/analytics';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import BlockComponent from '../../components/BlockComponent';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
 import BlockUser from '../../components/Blocking/BlockUser';
@@ -25,106 +26,19 @@ import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
-  const flatListRef = React.useRef();
   const [initialLoading, setInitialLoading] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const [countStack, setCountStack] = React.useState(null);
-  const [username, setUsername] = React.useState('');
-  const [reportOption, setReportOption] = React.useState([]);
-  const [messageReport, setMessageReport] = React.useState('');
-  const [userId, setUserId] = React.useState('');
-  const [postId, setPostId] = React.useState('');
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
   const [time, setTime] = React.useState(new Date());
 
-  const refBlockUser = React.useRef();
+  const refBlockComponent = React.useRef();
   const refBlockDomain = React.useRef();
-  const refReportUser = React.useRef();
   const refReportDomain = React.useRef();
-  const refSpecificIssue = React.useRef();
-  const refBlockPostAnonymous = React.useRef();
-  const refReportPostAnonymous = React.useRef();
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   let {feeds} = feedsContext;
-
-  const onSelectBlocking = (v) => {
-    if (v !== 1) {
-      refReportUser.current.open();
-    } else {
-      userBlock();
-    }
-    refBlockUser.current.close();
-  };
-
-  const onSelectBlockingPostAnonymous = (v) => {
-    if (v !== 1) {
-      refReportPostAnonymous.current.open();
-    } else {
-      blockPostAnonymous();
-    }
-    refBlockPostAnonymous.current.close();
-  };
-
-  const onNextQuestion = (v) => {
-    setReportOption(v);
-    refReportUser.current.close();
-    refSpecificIssue.current.open();
-  };
-
-  const userBlock = async () => {
-    const data = {
-      userId: userId,
-      postId: postId,
-      source: 'screen_feed',
-      reason: reportOption,
-      message: messageReport,
-    };
-    let result = await blockUser(data);
-    if (result.code === 200) {
-      getDataFeeds('');
-      Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
-  };
-
-  const blockPostAnonymous = async () => {
-    const data = {
-      postId: postId,
-      source: 'screen_feed',
-      reason: reportOption,
-      message: messageReport,
-    };
-    let result = await blockAnonymous(data);
-    if (result.code === 201) {
-      getDataFeeds('');
-      Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
-  };
-
-  const onIssue = (v) => {
-    refSpecificIssue.current.close();
-    setMessageReport(v);
-    setTimeout(() => {
-      userBlock();
-    }, 500);
-  };
-  const onSkipOnlyBlock = () => {
-    refReportUser.current.close();
-    userBlock();
-  };
 
   const getDataFeeds = async (id = '') => {
     setCountStack(null);
@@ -174,17 +88,6 @@ const FeedScreen = (props) => {
     getDataFeeds(lastId);
   }, []);
 
-  const setDataToState = (value) => {
-    if (value.anonimity === true) {
-      setUsername('Anonymous');
-      setPostId(value.id);
-      setUserId(value.actor.id + '-anonymous');
-    } else {
-      setUsername(value.actor.data.username);
-      setPostId(value.id);
-      setUserId(value.actor.id);
-    }
-  };
   const updateFeed = async (post, index) => {
     try {
       let data = await getFeedDetail(post.activity_id);
@@ -269,16 +172,7 @@ const FeedScreen = (props) => {
   };
 
   const onPressBlock = (value) => {
-    if (value.actor.id === yourselfId) {
-      Toast.show("Can't Block yourself", Toast.LONG);
-    } else {
-      setDataToState(value);
-      if (value.anonimity) {
-        refBlockPostAnonymous.current.open();
-      } else {
-        refBlockUser.current.open();
-      }
-    }
+    refBlockComponent.current.openBlockComponent(value);
   };
 
   const onRefresh = () => {
@@ -309,37 +203,15 @@ const FeedScreen = (props) => {
         )}
       </TiktokScroll>
       <ButtonNewPost />
-      <BlockPostAnonymous
-        refBlockPostAnonymous={refBlockPostAnonymous}
-        onSelect={(i) => onSelectBlockingPostAnonymous(i)}
-      />
-
-      <BlockUser
-        refBlockUser={refBlockUser}
-        onSelect={(v) => onSelectBlocking(v)}
-        username={username}
-      />
+      <BlockComponent ref={refBlockComponent} refresh={getDataFeeds}/>
+      {/* 
       <BlockDomain
         refBlockUser={refBlockDomain}
         domain="guardian.com"
         onSelect={() => {}}
       />
-      <ReportUser
-        refReportUser={refReportUser}
-        onSelect={onNextQuestion}
-        onSkip={onSkipOnlyBlock}
-      />
-      <ReportPostAnonymous
-        refReportPostAnonymous={refReportPostAnonymous}
-        onSelect={onNextQuestion}
-        onSkip={onSkipOnlyBlock}
-      />
       <ReportDomain refReportDomain={refReportDomain} />
-      <SpecificIssue
-        refSpecificIssue={refSpecificIssue}
-        onPress={onIssue}
-        onSkip={onSkipOnlyBlock}
-      />
+      /> */}
     </View>
     
   );
