@@ -20,6 +20,7 @@ const EditGroup = ({
   onUpdateImage,
   imageUri,
   isFocusChatName = false,
+  saveGroupName,
 }) => {
   const [groupChat] = React.useContext(Context).groupChat;
   let countUser = Object.entries(groupChat.participants).length;
@@ -84,6 +85,7 @@ const EditGroup = ({
             value={editName}
             onChangeText={setEditName}
             selectTextOnFocus
+            onBlur={saveGroupName}
           />
         ) : (
           <Text style={styles.editName}>{editName}</Text>
