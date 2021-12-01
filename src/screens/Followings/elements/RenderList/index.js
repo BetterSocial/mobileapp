@@ -97,14 +97,16 @@ const DomainList = (props) => {
         onPress={handlePress}>
         <View style={styles.card}>
           <View style={styles.wrapProfile}>
-            {!isHashtag ? <Image
+            {!isHashtag ? <React.Fragment>
+              {item.image ? <Image
               source={{
                 uri: item.image,
               }}
               style={styles.profilepicture}
               width={48}
               height={48}
-            /> : null}
+            />  : null}
+            </React.Fragment> : null}
             
             <View style={styles.wrapTextProfile}>
               <Text style={styles.textProfileUsername}>
@@ -140,6 +142,10 @@ DomainList.propTypes = {
     item: PropTypes.object,
     onPressList: PropTypes.func,
     isHashtag: PropTypes.bool
+}
+
+DomainList.defaultProps = {
+  onPressList: () => null
 }
 
 export default DomainList

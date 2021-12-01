@@ -1,8 +1,16 @@
 import * as React from 'react';
-import {Text, FlatList} from 'react-native';
-import Container from '../../../components/Container';
-import { getFollowingTopic } from '../../../service/topics';
-import DomainList from './RenderList';
+import {Text, FlatList, StyleSheet} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Container from '../../../../components/Container';
+import { getFollowingTopic } from '../../../../service/topics';
+import DomainList from '../RenderList';
+import SuggestionTopic from './SuggestionTopic';
+
+const styles = StyleSheet.create({
+  flatlistContainer: {
+    paddingBottom: 20
+  }
+})
 
 const TopicFragmentScreen = ({navigation}) => {
   const [listTopics, setListTopics] = React.useState([])
@@ -31,6 +39,8 @@ const TopicFragmentScreen = ({navigation}) => {
         data={listTopics}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => <DomainList isHashtag item={item} />}
+        ListFooterComponent={<SuggestionTopic />}
+        contentContainerStyle={styles.flatlistContainer}
       />
     </Container>
   ) ;

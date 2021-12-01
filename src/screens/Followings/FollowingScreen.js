@@ -5,7 +5,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import Animated from 'react-native-reanimated';
 
 import DomainFragmentScreen from './elements/DomainFragmentScreen';
-import TopicFragmentScreen from './elements/TopicFragmentScreen';
+import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
 import Followings from '.';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
