@@ -6,45 +6,46 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-
 import {createStackNavigator} from '@react-navigation/stack';
 
-import {fonts} from '../utils/fonts';
-import Topics from '../screens/Topics';
-import {colors} from '../utils/colors';
-import Header from '../components/Header';
-import Settings from '../screens/Settings';
-import HomeBottomTabs from './HomeBottomTabs';
-import SignIn from '../screens/SignIn';
-import WhotoFollow from '../screens/WhotoFollow';
-import OtherProfile from '../screens/OtherProfile';
+import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
+import DomainScreen from '../screens/DomainScreen';
+import FollowingScreen from '../screens/Followings/FollowingScreen';
+import Header from '../components/Header';
+import HomeBottomTabs from './HomeBottomTabs';
+import ImageViewerScreen from '../screens/ImageViewer';
+import LinkContextScreen from '../screens/LinkContextScreen';
 import LocalComunity from '../screens/LocalComunity';
+import OtherProfile from '../screens/OtherProfile';
+import PostDetailPage from '../screens/PostPageDetail';
+import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
+import ProfilePostDetail from '../screens/ProfilePostDetail';
+import ProfileReplyComment from '../screens/ProfileReplyComment';
+import ReplyComment from '../screens/ReplyComment';
+import Settings from '../screens/Settings';
+import SignIn from '../screens/SignIn';
+import SplashScreen from '../screens/SplashScreen';
+import TermsAndCondition from '../screens/WebView/TermsAndCondition';
+import TopicPageScreen from '../screens/TopicPageScreen';
+import Topics from '../screens/Topics';
+import WhotoFollow from '../screens/WhotoFollow';
 import {
+  AddParticipant,
   ChannelScreen,
+  ChatDetailPage,
   ContactScreen,
   CreateGroupScreen,
-  ProfileScreen,
   DetailDomainScreen,
-  ChatDetailPage,
   DetailGroupImage,
   GroupInfo,
   GroupMedia,
-  AddParticipant,
   GroupSetting,
+  ProfileScreen,
 } from '../screens';
-import ImageViewerScreen from '../screens/ImageViewer';
-import ReplyComment from '../screens/ReplyComment';
-import PostDetailPage from '../screens/PostPageDetail';
-import SplashScreen from '../screens/SplashScreen';
-import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
-import ChooseUsername from '../screens/InputUsername';
-import TermsAndCondition from '../screens/WebView/TermsAndCondition';
-import FollowingScreen from '../screens/Followings/FollowingScreen';
-import DomainScreen from '../screens/DomainScreen';
-import LinkContextScreen from '../screens/LinkContextScreen';
-import TopicPageScreen from '../screens/TopicPageScreen';
 import {Context} from '../context';
+import {colors} from '../utils/colors';
+import {fonts} from '../utils/fonts';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
@@ -110,8 +111,18 @@ const RootStact = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="ProfileReplyComment"
+          component={ProfileReplyComment}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="PostDetailPage"
           component={PostDetailPage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ProfilePostDetailPage"
+          component={ProfilePostDetail}
           options={{headerShown: false}}
         />
         <Stack.Screen

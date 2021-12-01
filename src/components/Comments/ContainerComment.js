@@ -10,7 +10,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import {DATALOADING} from '../../utils/string/LoadingComment';
 import {colors} from '../../utils/colors';
 
-const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment}) => {
+const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView}) => {
   const navigation = useNavigation();
   let isLast = (index, item) => {
     return (
@@ -30,8 +30,6 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />
       {comments.map((item, index) => {
-    
-
         return (
           <View key={index} >
             <View key={'p' + index}>
@@ -46,13 +44,11 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                 photo={item.user.data.profile_pic_url}
                 isLast={isLast(index, item)}
                 isLastInParent={isLastInParent(index, item)}
-                onPress={() => {
-                  navigation.navigate('ReplyComment', {
-                    item: item,
-                    level: 0,
-                    indexFeed: indexFeed,
-                  });
-                }}
+                onPress={() => navigateToReplyView({
+                  item: item,
+                  level: 0,
+                  indexFeed: indexFeed,
+                })}
                 refreshComment={refreshComment}
               />
             </View>
@@ -63,6 +59,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                 countComment={item.children_counts.comment}
                 navigation={navigation}
                 indexFeed={indexFeed}
+                navigateToReplyView={navigateToReplyView}
                 refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
               />
             )}
@@ -73,13 +70,15 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
     </View>
   );
 };
+
 const ReplyComment = ({
   indexFeed,
   data,
   countComment,
   navigation,
   hideLeftConnector,
-  refreshComment
+  refreshComment,
+  navigateToReplyView
 }) => {
   let isLast = (item, index) => {
     return (
@@ -95,14 +94,14 @@ const ReplyComment = ({
     <ContainerReply hideLeftConnector={hideLeftConnector}>
       {data.map((item, index) => {
         const showCommentView = () =>
-          navigation.navigate('ReplyComment', {
+          navigateToReplyView({
             item: item,
             level: 1,
             indexFeed: indexFeed,
           });
 
         const showChildCommentView = () =>
-          navigation.navigate('ReplyComment', {
+          navigateToReplyView({
             item: item,
             level: 2,
             indexFeed: indexFeed,

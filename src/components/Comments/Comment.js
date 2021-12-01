@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
     ...FONTS.body3,
     textAlign: 'center',
     width: 26,
+    alignSelf: 'center',
     color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4',
   }),
   btn: {

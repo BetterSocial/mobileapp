@@ -1,9 +1,11 @@
 import * as React from 'react';
+import SimpleToast from 'react-native-simple-toast';
 import Toast from 'react-native-simple-toast';
 import {
   Dimensions,
   FlatList,
   SafeAreaView,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -47,10 +49,10 @@ const GroupSetting = ({navigation, route}) => {
     setGroupName(text);
     setChangeName(true);
   };
-  const submitData = async () => {
+  const submitData = async (withNavigation = true, withLoading = true) => {
     let changeImageUrl = '';
     if (changeImage) {
-      setIsLoading(true);
+      if(withLoading) setIsLoading(true);
       try {
         let res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
         changeImageUrl = res.data.url;
@@ -61,7 +63,7 @@ const GroupSetting = ({navigation, route}) => {
     }
 
     if (changeName || changeImage) {
-      setIsLoading(true);
+      if(withLoading) setIsLoading(true);
       let dataEdit = {
         name: groupName,
         // ...(changeImage && {image: base64Profile}),
@@ -76,13 +78,14 @@ const GroupSetting = ({navigation, route}) => {
 
       try {
         await channel.update(dataEdit);
-        navigation.navigate('ChannelList');  
+        if(withNavigation) navigation.navigate('ChannelList');  
       } catch (e) {
         console.log(`error : ${e}`)
+        SimpleToast.show('Update chat information failed, please try again.')
       }
       setIsLoading(false);
     } else {
-      navigation.goBack();
+      if(withNavigation) navigation.goBack();
     }
   };
   const lounchGalery = async () => {
@@ -118,39 +121,42 @@ const GroupSetting = ({navigation, route}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
-      <HeaderContact
-        title={'Settings'}
-        containerStyle={styles.containerHeader}
-        subTitle={renderHeaderSubtitleText()}
-        subtitleStyle={styles.subtitleStyle}
-        onPressSub={submitData}
-        onPress={() => navigation.goBack()}
-      />
-      <EditGroup
-        imageUri={urlImage}
-        editName={groupName}
-        setEditName={updateName}
-        onUpdateImage={lounchGalery}
-        isFocusChatName={isFocusChatName}
-      />
-      <Loading visible={isLoading} />
-      <View style={styles.users}>
-        <Text style={styles.countUser}>Participants {countUser}</Text>
-        <FlatList
-          data={Object.keys(participants)}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => (
-            <View style={{height: 72}}>
-              <ProfileContact
-                key={item}
-                fullname={participants[item].user.name}
-                photo={participants[item].user.image}
-              />
-            </View>
-          )}
+      <ScrollView>
+        <HeaderContact
+          title={'Settings'}
+          containerStyle={styles.containerHeader}
+          subTitle={renderHeaderSubtitleText()}
+          subtitleStyle={styles.subtitleStyle}
+          onPressSub={submitData}
+          onPress={() => navigation.goBack()}
         />
-      </View>
-      <ButtonAddParticipants />
+        <EditGroup
+          imageUri={urlImage}
+          editName={groupName}
+          setEditName={updateName}
+          onUpdateImage={lounchGalery}
+          isFocusChatName={isFocusChatName}
+          saveGroupName={() => submitData(false, false)}
+        />
+        <Loading visible={isLoading} />
+        <View style={styles.users}>
+          <Text style={styles.countUser}>Participants {countUser}</Text>
+          <FlatList
+            data={Object.keys(participants)}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => (
+              <View style={{height: 72}}>
+                <ProfileContact
+                  key={item}
+                  fullname={participants[item].user.name}
+                  photo={participants[item].user.image}
+                />
+              </View>
+            )}
+          />
+        </View>
+        <ButtonAddParticipants />
+      </ScrollView>
     </SafeAreaView>
   );
 };

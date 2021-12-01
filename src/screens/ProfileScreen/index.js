@@ -244,13 +244,15 @@ const ProfileScreen = () => {
   };
 
   const handleScroll = (event) => {
-    postRef.current.measure((x, y, width, height, pagex, pagey) => {
-      if (pagey < 40) {
-        setIsOffsetScroll(true);
-      } else {
-        setIsOffsetScroll(false);
-      }
-    });
+    if(postRef && postRef.current) {
+      postRef.current.measure((x, y, width, height, pagex, pagey) => {
+        if (pagey < 40) {
+          setIsOffsetScroll(true);
+        } else {
+          setIsOffsetScroll(false);
+        }
+      });
+    }
 
     const currentOffset = event.nativeEvent.contentOffset.y;
     if (currentOffset < 70) {
@@ -429,14 +431,14 @@ const ProfileScreen = () => {
   };
 
   const onPress = (item, index) => {
-    navigation.navigate('PostDetailPage', {
+    navigation.navigate('ProfilePostDetailPage', {
       index: index,
       isalreadypolling: item.isalreadypolling,
     });
   };
 
   const onPressComment = (index) => {
-    navigation.navigate('PostDetailPage', {
+    navigation.navigate('ProfilePostDetailPage', {
       index: index,
     });
   };

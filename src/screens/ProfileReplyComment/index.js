@@ -3,14 +3,14 @@ import { StyleSheet, View } from 'react-native';
 
 import ReplyCommentComponent from '../../components/ReplyComment';
 import { Context } from '../../context';
-import { setFeedByIndex } from '../../context/actions/feeds';
+import { setFeedByIndex } from '../../context/actions/myProfileFeed';
 
 const ProfileReplyComment = (props) => {
   let itemProp = props.route.params.item;
   let indexFeed = props.route.params.indexFeed;
   const level = props.route.params.level;
   
-  let [feeds, dispatch] = React.useContext(Context).feeds
+  let [feeds, dispatch] = React.useContext(Context).myProfileFeed
 
   return (
     <View style={styles.container}>
