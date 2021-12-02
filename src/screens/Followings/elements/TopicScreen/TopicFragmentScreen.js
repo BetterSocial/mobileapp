@@ -14,15 +14,39 @@ const styles = StyleSheet.create({
 
 const TopicFragmentScreen = ({navigation}) => {
   const [listTopics, setListTopics] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
 
   const handleGetTopic = async () => {
+    setLoading(true)
     const response = await getFollowingTopic()
-    if(response.code == 200) {
-      if(Array.isArray(response.data)) {
-        const newData = response.data.map((topic) => ({name: topic.name, description: null, image: null}))
-        setListTopics(newData)
-      }
+    if(response.code == 200 && Array.isArray(response.data)) {
+      const newData = response.data.map((topic) => ({name: topic.name, description: null, image: null}))
+      setListTopics(newData)
+      return setLoading(false)
     }
+    setLoading(false)
+  }
+
+  const handleUnfollow = (index) => {
+    const mappingData = listTopics.map((list, listIndex) => {
+      if(index === listIndex) {
+        return {...list, isunfollowed: true}
+      } else {
+        return {...list}
+      }
+    })
+    setListTopics(mappingData)
+  }
+
+  const handleFollow = (index) => {
+    const mappingData = listTopics.map((list, listIndex) => {
+      if(index === listIndex) {
+        return {...list, isunfollowed: false}
+      } else {
+        return {...list}
+      }
+    })
+    setListTopics(mappingData)
   }
 
   React.useEffect(() => {
@@ -45,9 +69,11 @@ const TopicFragmentScreen = ({navigation}) => {
       <FlatList 
         data={listTopics}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => <DomainList isHashtag item={item} />}
+        renderItem={({item, index}) => <DomainList handleSetFollow={() => handleFollow(index)} handleSetUnFollow={() => handleUnfollow(index)} isHashtag item={item} />}
         // ListFooterComponent={<SuggestionTopic />}
         contentContainerStyle={styles.flatlistContainer}
+        refreshing={loading}
+        onRefresh={handleGetTopic}
       />
     </Container>
   ) ;

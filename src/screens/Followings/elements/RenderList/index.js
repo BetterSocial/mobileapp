@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
 })
 
 const DomainList = (props) => {
-    const {onPressList, item, isHashtag} = props
+    const {onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow} = props
 
     const handlePress = (event) => {
         event.preventDefault();
@@ -120,14 +120,14 @@ const DomainList = (props) => {
               </Text>
             </View>
           </View>
-          {item.hasOwnProperty('isunfollowed') ? (
-            <TouchableNativeFeedback onPress={() => handleSetFollow(index)}>
+          {item.isunfollowed ? (
+            <TouchableNativeFeedback onPress={handleSetFollow}>
               <View style={styles.buttonFollow}>
                 <Text style={styles.textButtonFollow}>Follow</Text>
               </View>
             </TouchableNativeFeedback>
           ) : (
-            <TouchableNativeFeedback onPress={() => handleSetUnFollow(index)}>
+            <TouchableNativeFeedback onPress={handleSetUnFollow}>
               <View style={styles.buttonFollowing}>
                 <Text style={styles.textButtonFollowing}>Following</Text>
               </View>
@@ -145,7 +145,9 @@ DomainList.propTypes = {
 }
 
 DomainList.defaultProps = {
-  onPressList: () => null
+  onPressList: () => null,
+  handleSetFollow: () => null,
+  handleSetUnFollow: () => null
 }
 
 export default DomainList
