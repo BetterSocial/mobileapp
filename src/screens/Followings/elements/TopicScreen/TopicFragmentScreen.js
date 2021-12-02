@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Text, FlatList, StyleSheet} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Container from '../../../../components/Container';
-import { getFollowingTopic } from '../../../../service/topics';
+import { getFollowingTopic, putUserTopic } from '../../../../service/topics';
 import DomainList from '../RenderList';
 import SuggestionTopic from './SuggestionTopic';
 
@@ -27,7 +27,8 @@ const TopicFragmentScreen = ({navigation}) => {
     setLoading(false)
   }
 
-  const handleUnfollow = (index) => {
+  const handleUnfollow = (index, data) => {
+    console.log(data, 'unfollow')
     const mappingData = listTopics.map((list, listIndex) => {
       if(index === listIndex) {
         return {...list, isunfollowed: true}
@@ -36,9 +37,11 @@ const TopicFragmentScreen = ({navigation}) => {
       }
     })
     setListTopics(mappingData)
+    updateFollow(data)
   }
 
-  const handleFollow = (index) => {
+  const handleFollow = (index, data) => {
+    console.log(data, 'follow')
     const mappingData = listTopics.map((list, listIndex) => {
       if(index === listIndex) {
         return {...list, isunfollowed: false}
@@ -47,6 +50,15 @@ const TopicFragmentScreen = ({navigation}) => {
       }
     })
     setListTopics(mappingData)
+    updateFollow(data)
+  }
+
+  const updateFollow = async (data) => {
+    const dataSend = {
+      name: data.name
+    }
+    const response = await putUserTopic(dataSend)
+    console.log(response, 'sikatman')
   }
 
   React.useEffect(() => {
@@ -68,7 +80,7 @@ const TopicFragmentScreen = ({navigation}) => {
       <FlatList 
         data={listTopics}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => <DomainList handleSetFollow={() => handleFollow(index)} handleSetUnFollow={() => handleUnfollow(index)} isHashtag item={item} />}
+        renderItem={({item, index}) => <DomainList handleSetFollow={() => handleFollow(index, item)} handleSetUnFollow={() => handleUnfollow(index, item)} isHashtag item={item} />}
         // ListFooterComponent={<SuggestionTopic />}
         contentContainerStyle={styles.flatlistContainer}
         refreshing={loading}
