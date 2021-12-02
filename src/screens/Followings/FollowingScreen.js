@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StatusBar, StyleSheet, TouchableOpacity, View, SafeAreaView} from 'react-native';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Animated from 'react-native-reanimated';
@@ -88,8 +88,7 @@ export default function FollowingScreen() {
   }
 
   return (
-    <View style={{height: '100%'}}>
-      <StatusBar translucent={false} />
+    <View style={{flex: 1}} >
       <Tabs.Navigator
         initialRouteName={TAB_FOLLOWING}
         tabBar={tabComponent}

@@ -76,7 +76,6 @@ const DomainFragmentScreen = ({navigation}) => {
   }, [listFollowDomain.length])
 
   return (
-    <Container>
       <FlatList 
       data={listFollowDomain}
       keyExtractor={(item, index) => index.toString()}
@@ -86,7 +85,6 @@ const DomainFragmentScreen = ({navigation}) => {
       />
 
      
-    </Container>
   )
 };
 

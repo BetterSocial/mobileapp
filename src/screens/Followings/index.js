@@ -138,7 +138,7 @@ const Followings = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {dataFollowing.length > 0 ? (
         <View style={styles.content}>
           <FlatList
@@ -157,7 +157,7 @@ const Followings = () => {
         </View>
       )}
       <Loading visible={isLoading} />
-    </SafeAreaView>
+    </View>
   );
 };
 const styles = StyleSheet.create({

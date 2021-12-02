@@ -65,7 +65,6 @@ const TopicFragmentScreen = ({navigation}) => {
     handleGetTopic()
   }, [])
   return (
-    <Container>
       <FlatList 
         data={listTopics}
         keyExtractor={(item, index) => index.toString()}
@@ -75,7 +74,6 @@ const TopicFragmentScreen = ({navigation}) => {
         refreshing={loading}
         onRefresh={handleGetTopic}
       />
-    </Container>
   ) ;
 };
 

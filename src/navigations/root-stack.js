@@ -180,12 +180,15 @@ const RootStact = () => {
             headerShown: true,
             header: ({navigation}) => {
               return (
-                <Header
+                <SafeAreaView>
+                  <Header
                   title={profileState.navbarTitle}
                   containerStyle={styles.header}
                   titleStyle={styles.title}
                   onPress={() => navigation.goBack()}
                 />
+                </SafeAreaView>
+               
               );
             },
           }}
