@@ -4,15 +4,15 @@ import { useNavigation } from '@react-navigation/core';
 
 import PostPageDetailComponent from '../../components/PostPageDetail'
 import {Context} from '../../context';
-import { setFeedByIndex } from '../../context/actions/feeds';
+import { setFeedByIndex } from '../../context/actions/myProfileFeed';
 
-const FeedsPostDetail = (props) => {
-    let [feeds, dispatch] = React.useContext(Context).feeds
+const ProfilePostDetail = (props) => {
+    let [feeds, dispatch] = React.useContext(Context).myProfileFeed
     let {index} = props.route.params
     let navigation = useNavigation()
 
     let navigateToReplyView = (data) => {
-        navigation.navigate('ReplyComment', data);
+        navigation.navigate('ProfileReplyComment', data);
     }
     
     return(
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default FeedsPostDetail
+export default ProfilePostDetail

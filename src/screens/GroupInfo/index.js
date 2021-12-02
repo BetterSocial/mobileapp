@@ -40,13 +40,13 @@ const GroupInfo = () => {
   const [channelState, dispatch] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
   const {channel, profileChannel} = channelState;
-  const [countUser] = React.useState(Object.entries(participants).length);
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
 
   let username = channelState.channel?.data?.name;
   let createChat = channelState.channel?.data?.created_at;
+  let countUser = Object.entries(participants).length;
 
   const serializeMembersList = (result = []) => {
     if (typeof result !== 'object') {
@@ -65,18 +65,27 @@ const GroupInfo = () => {
   };
 
   const getMembersList = async () => {
-    let result = await channel.queryMembers({});
-    let serializedMember = serializeMembersList(result.members);
-    setParticipants(serializedMember, groupPatchDispatch);
-    setIsLoadingMembers(false);
+    try {
+      let result = await channel.queryMembers({});
+      let serializedMember = serializeMembersList(result.members);
+      setParticipants(serializedMember, groupPatchDispatch);
+      setIsLoadingMembers(false);  
+    } catch(e) {
+      console.log(e)
+      setIsLoadingMembers(false)
+    }
   };
 
   React.useEffect(() => {
-    if (route?.params?.from === 'AddParticipant') {
-      setIsLoadingMembers(true);
-      getMembersList();
-    }
-  }, [route?.params?.from, route?.params?.timestamp]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (route?.params?.from === 'AddParticipant') {
+        setIsLoadingMembers(true);
+        getMembersList();
+      }  
+    })
+
+    return unsubscribe;
+  },[navigation]);
 
   const showImageProfile = () => {
     if (profileChannel || channel?.data?.image) {
@@ -272,7 +281,7 @@ const GroupInfo = () => {
 export default GroupInfo;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff', paddingBottom: 30},
+  container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
   users: {
     paddingTop: 12,
   },

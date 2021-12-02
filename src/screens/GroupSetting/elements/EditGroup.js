@@ -8,11 +8,11 @@ import {
   View,
 } from 'react-native';
 
+import DefaultChatGroupProfilePicture from '../../../assets/images/default-group-picture.png';
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
+import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/theme';
-import DefaultChatGroupProfilePicture from '../../../assets/images/default-group-picture.png';
 
 const EditGroup = ({
   editName,
@@ -20,6 +20,7 @@ const EditGroup = ({
   onUpdateImage,
   imageUri,
   isFocusChatName = false,
+  saveGroupName,
 }) => {
   const [groupChat] = React.useContext(Context).groupChat;
   let countUser = Object.entries(groupChat.participants).length;
@@ -83,6 +84,8 @@ const EditGroup = ({
             style={styles.editName}
             value={editName}
             onChangeText={setEditName}
+            selectTextOnFocus
+            onBlur={saveGroupName}
           />
         ) : (
           <Text style={styles.editName}>{editName}</Text>

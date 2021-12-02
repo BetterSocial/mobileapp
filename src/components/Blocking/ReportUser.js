@@ -1,14 +1,13 @@
 import * as React from 'react';
+import IconFA5 from 'react-native-vector-icons/FontAwesome5';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {
   ScrollView,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
+  View,
 } from 'react-native';
-
-import RBSheet from 'react-native-raw-bottom-sheet';
-import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 
 import ItemList from '../../components/Blocking/ItemList';
 import {Button} from '../../components/Button';

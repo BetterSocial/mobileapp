@@ -22,6 +22,7 @@ import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BlockComponent from '../../components/BlockComponent';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import BlockUser from '../../components/Blocking/BlockUser';
 import BottomSheetBio from './elements/BottomSheetBio';
@@ -107,13 +108,9 @@ const ProfileScreen = () => {
   const [initialLoading, setInitialLoading] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
 
-  const refBlockUser = React.useRef();
+  const refBlockComponent = React.useRef();
   const refBlockDomain = React.useRef();
-  const refReportUser = React.useRef();
   const refReportDomain = React.useRef();
-  const refSpecificIssue = React.useRef();
-  const refBlockPostAnonymous = React.useRef();
-  const refReportPostAnonymous = React.useRef();
 
   let {feeds} = myProfileFeed;
 
@@ -244,13 +241,15 @@ const ProfileScreen = () => {
   };
 
   const handleScroll = (event) => {
-    postRef.current.measure((x, y, width, height, pagex, pagey) => {
-      if (pagey < 40) {
-        setIsOffsetScroll(true);
-      } else {
-        setIsOffsetScroll(false);
-      }
-    });
+    if(postRef && postRef.current) {
+      postRef.current.measure((x, y, width, height, pagex, pagey) => {
+        if (pagey < 40) {
+          setIsOffsetScroll(true);
+        } else {
+          setIsOffsetScroll(false);
+        }
+      });
+    }
 
     const currentOffset = event.nativeEvent.contentOffset.y;
     if (currentOffset < 70) {
@@ -429,41 +428,16 @@ const ProfileScreen = () => {
   };
 
   const onPress = (item, index) => {
-    navigation.navigate('PostDetailPage', {
+    navigation.navigate('ProfilePostDetailPage', {
       index: index,
       isalreadypolling: item.isalreadypolling,
     });
   };
 
   const onPressComment = (index) => {
-    navigation.navigate('PostDetailPage', {
+    navigation.navigate('ProfilePostDetailPage', {
       index: index,
     });
-  };
-
-  const onPressBlock = (value) => {
-    if (value.actor.id === yourselfId) {
-      Toast.show("Can't Block yourself", Toast.LONG);
-    } else {
-      setDataToState(value);
-      if (value.anonimity) {
-        refBlockPostAnonymous.current.open();
-      } else {
-        refBlockUser.current.open();
-      }
-    }
-  };
-
-  const setDataToState = (value) => {
-    if (value.anonimity === true) {
-      setUsername('Anonymous');
-      setPostId(value.id);
-      setUserId(value.actor.id + '-anonymous');
-    } else {
-      setUsername(value.actor.data.username);
-      setPostId(value.id);
-      setUserId(value.actor.id);
-    }
   };
 
   let onNewPollFetched = (newPolls, index) => {
@@ -502,108 +476,9 @@ const ProfileScreen = () => {
     }
   };
 
-  const onSelectBlocking = (v) => {
-    if (v !== 1) {
-      refReportUser.current.open();
-    } else {
-      userBlock();
-    }
-    refBlockUser.current.close();
-  };
-
-  const onSelectBlockingPostAnonymous = (v) => {
-    if (v !== 1) {
-      refReportPostAnonymous.current.open();
-    } else {
-      blockPostAnonymous();
-    }
-    refBlockPostAnonymous.current.close();
-  };
-
-  const userBlock = async () => {
-    const data = {
-      userId: userId,
-      postId: postId,
-      source: 'screen_feed',
-      reason: reportOption,
-      message: messageReport,
-    };
-    let result = await blockUser(data);
-    if (result.code === 200) {
-      getDataFeeds('');
-      Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
-  };
-
-  const blockPostAnonymous = async () => {
-    const data = {
-      postId: postId,
-      source: 'screen_feed',
-      reason: reportOption,
-      message: messageReport,
-    };
-    let result = await blockAnonymous(data);
-    if (result.code === 201) {
-      getDataFeeds('');
-      Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
-  };
-
-  const getDataFeeds = async (id = '') => {
-    setLoading(true);
-    try {
-      let query = '';
-      if (id !== '') {
-        query = '?id_lt=' + id;
-      }
-
-      const dataFeeds = await getMainFeed(query);
-      if (dataFeeds.data.length > 0) {
-        let data = dataFeeds.data;
-        if (id === '') {
-          setMainFeeds(data, dispatch);
-        } else {
-          setMainFeeds([...feeds, ...data], dispatch);
-        }
-      }
-      setLoading(false);
-      setInitialLoading(false);
-      setTime(new Date());
-      setLoading(false);
-    } catch (e) {
-      setInitialLoading(false);
-      setLoading(false);
-    }
-  };
-
-  const onIssue = (v) => {
-    refSpecificIssue.current.close();
-    setMessageReport(v);
-    setTimeout(() => {
-      userBlock();
-    }, 500);
-  };
-  const onSkipOnlyBlock = () => {
-    refReportUser.current.close();
-    userBlock();
-  };
-  const onNextQuestion = (v) => {
-    setReportOption(v);
-    refReportUser.current.close();
-    refSpecificIssue.current.open();
-  };
+  const onPressBlock = (value) => {
+    refBlockComponet.current.openBlockComponent(value);
+  }
 
   return (
     <>
@@ -756,32 +631,13 @@ const ProfileScreen = () => {
           </TouchableNativeFeedback>
         ) : null}
 
-        <BlockUser
-          refBlockUser={refBlockUser}
-          onSelect={(v) => onSelectBlocking(v)}
-          username={username}
-        />
+        <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} />
         <BlockDomain
           refBlockUser={refBlockDomain}
           domain="guardian.com"
           onSelect={() => {}}
         />
-        <ReportUser
-          refReportUser={refReportUser}
-          onSelect={onNextQuestion}
-          onSkip={onSkipOnlyBlock}
-        />
-        <ReportPostAnonymous
-          refReportPostAnonymous={refReportPostAnonymous}
-          onSelect={onNextQuestion}
-          onSkip={onSkipOnlyBlock}
-        />
         <ReportDomain refReportDomain={refReportDomain} />
-        <SpecificIssue
-          refSpecificIssue={refSpecificIssue}
-          onPress={onIssue}
-          onSkip={onSkipOnlyBlock}
-        />
       </SafeAreaView>
     </>
   );

@@ -1,27 +1,29 @@
 import * as  React from 'react';
-import { View, Text } from 'react-native';
-import Navigation from './elements/Navigation';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { getTopicPages } from '../../service/topicPages';
-import { convertString, capitalizeFirstText } from '../../utils/string/StringUtils';
-import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
-import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { Context } from '../../context';
-import { Gap } from '../../components';
-import MemoizedListComponent from './MemoizedListComponent';
-import { getUserTopic, putUserTopic } from '../../service/topics';
-import { getUserId } from '../../utils/users';
-import { downVote, upVote } from '../../service/vote';
-import { getFeedDetail } from '../../service/post';
+import { Text, View } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+
+import BlockComponent from '../../components/BlockComponent';
+import BlockDomain from '../../components/Blocking/BlockDomain';
 import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
 import BlockUser from '../../components/Blocking/BlockUser';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import ReportUser from '../../components/Blocking/ReportUser';
-import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
+import MemoizedListComponent from './MemoizedListComponent';
+import Navigation from './elements/Navigation';
 import ReportDomain from '../../components/Blocking/ReportDomain';
+import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
+import ReportUser from '../../components/Blocking/ReportUser';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import { blockAnonymous, blockUser } from '../../service/blocking';
 import TiktokScroll from './TiktokScroll';
+import { Context } from '../../context';
+import { Gap } from '../../components';
+import { blockAnonymous, blockUser } from '../../service/blocking';
+import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
+import { downVote, upVote } from '../../service/vote';
+import { getFeedDetail } from '../../service/post';
+import { getTopicPages } from '../../service/topicPages';
+import { getUserId } from '../../utils/users';
+import { getUserTopic, putUserTopic } from '../../service/topics';
+import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
+import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -37,7 +39,7 @@ const TopicPageScreen = (props) => {
   const [username, setUsername] = React.useState('');
   const [postId, setPostId] = React.useState('');
 
-
+  const refBlockComponent = React.useRef();
   const refBlockUser = React.useRef();
   const refBlockDomain = React.useRef();
   const refReportUser = React.useRef();
@@ -164,16 +166,7 @@ const TopicPageScreen = (props) => {
   };
 
   const onPressBlock = (value) => {
-    if (value.actor.id === userId) {
-      Toast.show("Can't Block yourself", Toast.LONG);
-    } else {
-      setDataToState(value);
-      if (value.anonimity) {
-        refBlockPostAnonymous.current.open();
-      } else {
-        refBlockUser.current.open();
-      }
-    }
+    refBlockComponent.current.openBlockComponent(value)
   };
 
   const onRefresh = () => {
@@ -211,92 +204,6 @@ const TopicPageScreen = (props) => {
   };
 
 
-  const setDataToState = (value) => {
-    if (value.anonimity === true) {
-      setUsername('Anonymous');
-      setPostId(value.id);
-      setUserId(value.actor.id + '-anonymous');
-    } else {
-      setUsername(value.actor.data.username);
-      setPostId(value.id);
-      setUserId(value.actor.id);
-    }
-  };
-
-
-  const onNextQuestion = (v) => {
-    setReportOption(v);
-    refReportUser.current.close();
-    refSpecificIssue.current.open();
-  };
-
-
-  const onSkipOnlyBlock = () => {
-    refReportUser.current.close();
-    userBlock();
-  };
-
-
-  const onIssue = (v) => {
-    refSpecificIssue.current.close();
-    setMessageReport(v);
-    setTimeout(() => {
-      userBlock();
-    }, 500);
-  };
-
-
-  const userBlock = async () => {
-    const data = {
-      userId: userId,
-      postId: postId,
-      source: 'screen_feed',
-      reason: reportOption,
-      message: messageReport,
-    };
-    let result = await blockUser(data);
-    if (result.code === 200) {
-      getDataFeeds('');
-      Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
-  };
-
-  const blockPostAnonymous = async () => {
-    const data = {
-      postId: postId,
-      source: 'screen_feed',
-      reason: reportOption,
-      message: messageReport,
-    };
-    let result = await blockAnonymous(data);
-    if (result.code === 201) {
-      getDataFeeds('');
-      Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
-  };
-
-
-  const onSelectBlockingPostAnonymous = (v) => {
-    if (v !== 1) {
-      refReportPostAnonymous.current.open();
-    } else {
-      blockPostAnonymous();
-    }
-    refBlockPostAnonymous.current.close();
-  };
-
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
       <Gap height={8} />
@@ -324,16 +231,7 @@ const TopicPageScreen = (props) => {
           )}
         </TiktokScroll>
       </View>
-      <BlockPostAnonymous
-        refBlockPostAnonymous={refBlockPostAnonymous}
-        onSelect={(i) => onSelectBlockingPostAnonymous(i)}
-      />
-
-      <BlockUser
-        refBlockUser={refBlockUser}
-        onSelect={(v) => onSelectBlocking(v)}
-        username={username}
-      />
+      <BlockComponent ref={refBlockComponent} refresh={refreshingData} />
 
       <BlockDomain
         refBlockUser={refBlockDomain}
@@ -341,25 +239,7 @@ const TopicPageScreen = (props) => {
         onSelect={() => { }}
       />
 
-      <ReportUser
-        refReportUser={refReportUser}
-        onSelect={onNextQuestion}
-        onSkip={onSkipOnlyBlock}
-      />
-
-      <ReportPostAnonymous
-        refReportPostAnonymous={refReportPostAnonymous}
-        onSelect={onNextQuestion}
-        onSkip={onSkipOnlyBlock}
-      />
-
       <ReportDomain refReportDomain={refReportDomain} />
-
-      <SpecificIssue
-        refSpecificIssue={refSpecificIssue}
-        onPress={onIssue}
-        onSkip={onSkipOnlyBlock}
-      />
     </View>
   );
 };

@@ -1,37 +1,36 @@
 import * as React from 'react';
+import Toast from 'react-native-simple-toast';
 import {
+  Dimensions,
   ScrollView,
+  StatusBar,
   StyleSheet,
   View,
-  Dimensions,
-  StatusBar,
 } from 'react-native';
 
-import Toast from 'react-native-simple-toast';
-
-import {DomainHeader, Gap, Footer} from '../../components';
-import BlockUser from '../../components/Blocking/BlockUser';
 import BlockDomain from '../../components/Blocking/BlockDomain';
-import ReportUser from '../../components/Blocking/ReportUser';
+import BlockUser from '../../components/Blocking/BlockUser';
+import ContainerComment from '../../components/Comments/ContainerComment';
+import ContentLink from '../FeedScreen/ContentLink';
+import DetailDomainScreenContainerComment from '../../components/Comments/DetailDomainScreenContainerComment';
+import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
+import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
 import ReportDomain from '../../components/Blocking/ReportDomain';
+import ReportUser from '../../components/Blocking/ReportUser';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import WriteComment from '../../components/Comments/WriteComment';
-import ContainerComment from '../../components/Comments/ContainerComment';
-import {fonts} from '../../utils/fonts';
-import {getMyProfile} from '../../service/profile';
-import {blockUser} from '../../service/blocking';
-import {downVoteDomain, upVoteDomain} from '../../service/vote';
-import {createCommentParent} from '../../service/comment';
 import {COLORS, SIZES} from '../../utils/theme';
-import ContentLink from '../FeedScreen/ContentLink';
-import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
-import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
+import {DomainHeader, Footer, Gap} from '../../components';
+import {blockUser} from '../../service/blocking';
+import {createCommentParent} from '../../service/comment';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
+import {fonts} from '../../utils/fonts';
 import {
   getCountCommentWithChild,
   getCountCommentWithChildInDetailPage,
 } from '../../utils/getstream';
+import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
-import DetailDomainScreenContainerComment from '../../components/Comments/DetailDomainScreenContainerComment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -207,7 +206,7 @@ const DetailDomainScreen = (props) => {
         let data = await createCommentParent(textComment, item.id);
         if (data.code === 200) {
           setTextComment('');
-          Toast.show('Comment successful', Toast.LONG);
+          // Toast.show('Comment successful', Toast.LONG);
         } else {
           Toast.show('Failed Comment', Toast.LONG);
         }

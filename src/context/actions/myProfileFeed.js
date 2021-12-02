@@ -1,4 +1,4 @@
-import {SET_MY_PROFILE_FEED} from '../Types';
+import {SET_MY_PROFILE_FEED, SET_MY_PROFILE_FEED_BY_INDEX} from '../Types';
 
 export const setMyProfileFeed = (data, dispatch) => {
   dispatch({
@@ -7,3 +7,9 @@ export const setMyProfileFeed = (data, dispatch) => {
   });
 };
 
+export const setFeedByIndex = (data, dispatch) => {
+  dispatch({
+    type: SET_MY_PROFILE_FEED_BY_INDEX,
+    payload: data,
+  });
+};
