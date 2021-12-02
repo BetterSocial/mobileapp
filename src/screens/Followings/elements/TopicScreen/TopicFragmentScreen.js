@@ -26,8 +26,15 @@ const TopicFragmentScreen = ({navigation}) => {
   }
 
   React.useEffect(() => {
+    let title = "Topic"
+    if(listTopics.length === 1) {
+      title += ` (${listTopics.length})`
+    }
+    if(listTopics.length > 1) {
+      title = `Topics (${listTopics.length})`
+    }
     navigation.setOptions({
-      title: `Topics (${listTopics.length})`,
+      title,
     });
   }, [listTopics.length]);
   React.useEffect(() => {
@@ -39,7 +46,7 @@ const TopicFragmentScreen = ({navigation}) => {
         data={listTopics}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => <DomainList isHashtag item={item} />}
-        ListFooterComponent={<SuggestionTopic />}
+        // ListFooterComponent={<SuggestionTopic />}
         contentContainerStyle={styles.flatlistContainer}
       />
     </Container>

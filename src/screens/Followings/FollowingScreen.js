@@ -115,7 +115,7 @@ export default function FollowingScreen() {
           name={TAB_TOPIC}
           component={TopicFragmentScreen}
           options={{
-            title: 'Topic',
+            title: 'Topics',
           }}
           listeners={listenTab}
         />

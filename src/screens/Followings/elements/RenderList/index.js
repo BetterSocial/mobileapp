@@ -98,14 +98,14 @@ const DomainList = (props) => {
         <View style={styles.card}>
           <View style={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
-              {item.image ? <Image
+              {item.image  ? <Image
               source={{
                 uri: item.image,
               }}
               style={styles.profilepicture}
               width={48}
               height={48}
-            />  : null}
+            />  :  <View style={styles.profilepicture} />}
             </React.Fragment> : null}
             
             <View style={styles.wrapTextProfile}>

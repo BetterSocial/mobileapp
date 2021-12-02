@@ -27,8 +27,15 @@ const DomainFragmentScreen = ({navigation}) => {
   }, []);
 
   React.useEffect(() => {
+    let title = "Domain"
+    if(listFollowDomain.length === 1) {
+      title += ` (${listFollowDomain.length})`
+    }
+    if(listFollowDomain.length > 1) {
+      title = `Domains (${listFollowDomain.length})`
+    }
     navigation.setOptions({
-      title: `Domains (${listFollowDomain.length})`,
+      title,
     });
   }, [listFollowDomain.length])
 
