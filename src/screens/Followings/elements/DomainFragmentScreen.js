@@ -7,6 +7,9 @@ import DomainList from './RenderList';
 const styles = StyleSheet.create({
   mainContainser: {
     flexDirection: 'column',
+  },
+  containerStyle: {
+    flex: 1, backgroundColor: 'white'
   }
 })
 
@@ -82,6 +85,7 @@ const DomainFragmentScreen = ({navigation}) => {
       renderItem={({item, index}) => <DomainList handleSetFollow={() => handleFollow(index, item)} handleSetUnFollow={() => handleUnfollow(index, item)} item={item} />}
       refreshing={loading}
       onRefresh={getDomainData}
+      style={styles.containerStyle}
       />
 
      

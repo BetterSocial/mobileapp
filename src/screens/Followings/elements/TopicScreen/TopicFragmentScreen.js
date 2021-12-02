@@ -9,6 +9,9 @@ import SuggestionTopic from './SuggestionTopic';
 const styles = StyleSheet.create({
   flatlistContainer: {
     paddingBottom: 20
+  },
+  containerStyle: {
+    flex: 1, backgroundColor: 'white'
   }
 })
 
@@ -85,6 +88,7 @@ const TopicFragmentScreen = ({navigation}) => {
         contentContainerStyle={styles.flatlistContainer}
         refreshing={loading}
         onRefresh={handleGetTopic}
+        style={styles.containerStyle}
       />
   ) ;
 };
