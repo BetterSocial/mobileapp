@@ -89,6 +89,7 @@ export default function FollowingScreen() {
 
   return (
     <View style={{flex: 1}} >
+      <StatusBar translucent={false} />
       <Tabs.Navigator
         initialRouteName={TAB_FOLLOWING}
         tabBar={tabComponent}
