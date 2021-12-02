@@ -25,6 +25,7 @@ import {
 } from '../../utils/constants';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { setMainFeeds } from '../../context/actions/feeds';
+import Loading from '../Loading';
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -125,16 +126,16 @@ const ChannelListScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
-      {client.client && (
-        <Chat client={client.client} i18nInstance={streami18n}>
-          <View style={{ height: '100%' }}>
-            <View style={{ height: 52 }}>
-              <Search
-                animatedValue={0}
-                onPress={() => navigation.navigate('ContactScreen')}
-              />
-            </View>
-            <View style={{ paddingHorizontal: 0, flex: 1 }}>
+      <View style={{ height: '100%' }}>
+        <View style={{ height: 52 }}>
+          <Search
+            animatedValue={0}
+            onPress={() => navigation.navigate('ContactScreen')}
+          />
+        </View>
+        <View style={{ paddingHorizontal: 0, flex: 1 }}>
+          {client.client ? (
+            <Chat client={client.client} i18nInstance={streami18n}>
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
@@ -160,10 +161,12 @@ const ChannelListScreen = ({ navigation }) => {
                   refreshControl: null,
                 }}
               />
-            </View>
-          </View>
-        </Chat>
-      )}
+            </Chat>
+          ) : (
+            <Loading visible={true} />
+          )}
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
