@@ -110,7 +110,6 @@ const Comment = ({
   };
   const iVote = async () => {
     let result = await iVoteComment(comment.id);
-    console.log(result, 'salak')
     if (result.code === 200) {
       setStatusVote(result.data.action);
       // if(refreshComment) refreshComment(result)
@@ -138,7 +137,6 @@ const Comment = ({
 
 
   React.useEffect(() => {
-    console.log('masuk sini')
     setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
     iVote()
   }, [JSON.stringify(comment.data)])
@@ -208,7 +206,7 @@ const Comment = ({
         </TouchableOpacity>
       </View>
 
-      <BlockComponent ref={refBlockComponent} refresh={() => {}} />
+      <BlockComponent ref={refBlockComponent} refresh={() => {}} screen={"feed_comment_item"}/>
 
     </View>
   );

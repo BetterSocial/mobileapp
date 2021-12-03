@@ -181,7 +181,7 @@ const ReplyCommentItem = ({
         </TouchableOpacity>
       </View>
 
-      <BlockComponent ref={refBlockComponent} refresh={() => {} }/>
+      <BlockComponent ref={refBlockComponent} refresh={() => {} } screen="reply_screen"/>
     </View>
   );
 };

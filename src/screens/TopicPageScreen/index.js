@@ -231,7 +231,7 @@ const TopicPageScreen = (props) => {
           )}
         </TiktokScroll>
       </View>
-      <BlockComponent ref={refBlockComponent} refresh={refreshingData} />
+      <BlockComponent ref={refBlockComponent} refresh={refreshingData} screen="topic_screen"/>
 
       <BlockDomain
         refBlockUser={refBlockDomain}

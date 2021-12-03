@@ -119,7 +119,7 @@ const DetailDomainScreenCommentItem = ({
         </TouchableOpacity>
       </View>
 
-      <BlockComponent ref={refBlockComponent} refresh={() => {}} />
+      <BlockComponent ref={refBlockComponent} refresh={() => {}} screen="detail_domain_comment_item"/>
     </View>
   );
 };

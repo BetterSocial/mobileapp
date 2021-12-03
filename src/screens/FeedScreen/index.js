@@ -203,7 +203,7 @@ const FeedScreen = (props) => {
         )}
       </TiktokScroll>
       <ButtonNewPost />
-      <BlockComponent ref={refBlockComponent} refresh={getDataFeeds}/>
+      <BlockComponent ref={refBlockComponent} refresh={getDataFeeds} screen="screen_feed"/>
       {/* 
       <BlockDomain
         refBlockUser={refBlockDomain}

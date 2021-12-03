@@ -417,7 +417,7 @@ const PostPageDetailComponent = (props) => {
         }}
       />
 
-      <BlockComponent ref={refBlockComponent} refresh={updateFeed}/>
+      <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page"/>
       <BlockDomain
         refBlockDomain={refBlockDomain}
         domain="guardian.com"

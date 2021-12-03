@@ -631,7 +631,7 @@ const ProfileScreen = () => {
           </TouchableNativeFeedback>
         ) : null}
 
-        <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} />
+        <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
         <BlockDomain
           refBlockUser={refBlockDomain}
           domain="guardian.com"
