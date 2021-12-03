@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
+import BlockComponent from '../../components/BlockComponent';
 import BlockDomain from '../../components/Blocking/BlockDomain';
 import BlockUser from '../../components/Blocking/BlockUser';
 import ContainerComment from '../../components/Comments/ContainerComment';
@@ -47,11 +48,6 @@ const PostPageDetailComponent = (props) => {
   const [dataProfile, setDataProfile] = React.useState({});
   const [reportOption, setReportOption] = React.useState([]);
   const [messageReport, setMessageReport] = React.useState('');
-  const refBlockUser = React.useRef();
-  const refBlockDomain = React.useRef();
-  const refReportUser = React.useRef();
-  const refReportDomain = React.useRef();
-  const refSpecificIssue = React.useRef();
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
   const [typeComment, setTypeComment] = React.useState('parent');
@@ -69,6 +65,10 @@ const PostPageDetailComponent = (props) => {
   const [commentList, setCommentList] = React.useState([])
   let navigation = useNavigation()
   
+  const refBlockComponent = React.useRef();
+  const refBlockDomain = React.useRef();
+  const refReportDomain = React.useRef();
+
   // let [feeds, dispatch] = React.useContext(Context).feeds;
   let {feeds, dispatch, setFeedByIndexProps, 
     navigateToReplyView = () => {}} = props
@@ -135,51 +135,6 @@ const PostPageDetailComponent = (props) => {
     initial();
   }, [props, item]);
 
-  const onSelectBlocking = (v) => {
-    if (v !== 1) {
-      refReportUser.current.open();
-    } else {
-      userBlock();
-    }
-    refBlockUser.current.close();
-  };
-
-  const userBlock = async () => {
-    const data = {
-      userId: userId,
-      postId: postId,
-      source: 'screen_post_detail',
-      reason: reportOption,
-      message: messageReport,
-    };
-    let result = await blockUser(data);
-    if (result.code === 200) {
-      Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
-  };
-  const onSkipOnlyBlock = () => {
-    refReportUser.current.close();
-    userBlock();
-  };
-
-  const onNextQuestion = (v) => {
-    setReportOption(v);
-    refReportUser.current.close();
-    refSpecificIssue.current.open();
-  };
-  const onIssue = (v) => {
-    refSpecificIssue.current.close();
-    setMessageReport(v);
-    setTimeout(() => {
-      userBlock();
-    }, 500);
-  };
   const fetchMyProfile = async () => {
     let id = await getUserId();
     if (id) {
@@ -187,18 +142,6 @@ const PostPageDetailComponent = (props) => {
       if (result.code === 200) {
         setDataProfile(result.data);
       }
-    }
-  };
-
-  const setDataToState = (value) => {
-    if (value.anonimity === true) {
-      setUsername('Anonymous');
-      setPostId(value.id);
-      setUserId(value.actor.id + '-anonymous');
-    } else {
-      setUsername(value.actor.data.username);
-      setPostId(value.id);
-      setUserId(value.actor.id);
     }
   };
 
@@ -445,15 +388,7 @@ const PostPageDetailComponent = (props) => {
               onPressShare={() => {}}
               onPressComment={onCommentButtonClicked}
               loadingVote={loadingVote}
-              onPressBlock={() => {
-                console.log(item);
-                if (item.actor.id === yourselfId) {
-                  Toast.show("Can't Block yourself", Toast.LONG);
-                } else {
-                  setDataToState(item);
-                  refBlockUser.current.open();
-                }
-              }}
+              onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
               isSelf={yourselfId === item.actor.id ? true : false}
             />
           </View>
@@ -481,27 +416,14 @@ const PostPageDetailComponent = (props) => {
           onComment();
         }}
       />
-      <BlockUser
-        refBlockUser={refBlockUser}
-        onSelect={(v) => onSelectBlocking(v)}
-        username={username}
-      />
+
+      <BlockComponent ref={refBlockComponent} refresh={updateFeed}/>
       <BlockDomain
         refBlockDomain={refBlockDomain}
         domain="guardian.com"
         onSelect={() => {}}
       />
-      <ReportUser
-        refReportUser={refReportUser}
-        onSelect={onNextQuestion}
-        onSkip={onSkipOnlyBlock}
-      />
       <ReportDomain refReportDomain={refReportDomain} />
-      <SpecificIssue
-        refSpecificIssue={refSpecificIssue}
-        onPress={onIssue}
-        onSkip={onSkipOnlyBlock}
-      />
     </View>
   );
 };

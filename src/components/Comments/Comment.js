@@ -4,16 +4,13 @@ import Toast from 'react-native-simple-toast';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import BlockUser from '../Blocking/BlockUser';
+import BlockComponent from '../BlockComponent';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import ReportUser from '../Blocking/ReportUser';
-import SpecificIssue from '../Blocking/SpecificIssue';
 import {FONTS} from '../../utils/theme';
-import {blockUser} from '../../service/blocking';
 import {calculateTime, diffDate} from '../../utils/time';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -36,14 +33,7 @@ const Comment = ({
   refreshComment
 }) => {
   const navigation = useNavigation();
-  const refBlockUser = React.useRef();
-  const refSpecificIssue = React.useRef();
-  const refReportUser = React.useRef();
-  const [userId, setUserId] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [postId, setPostId] = React.useState('');
-  const [reportOption, setReportOption] = React.useState([]);
-  const [messageReport, setMessageReport] = React.useState('');
+  const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
   const [totalVote, setTotalVote] = React.useState(
     comment.data.count_upvote - comment.data.count_downvote,
@@ -71,58 +61,6 @@ const Comment = ({
     });
   };
 
-  const setDataToState = (value) => {
-    setUsername(value.user.data.username);
-    setPostId(value.id);
-    setUserId(value.user.id);
-  };
-
-  const onSkipOnlyBlock = () => {
-    refReportUser.current.close();
-    userBlock();
-  };
-
-  const onNextQuestion = (v) => {
-    setReportOption(v);
-    refReportUser.current.close();
-    refSpecificIssue.current.open();
-  };
-  const onIssue = (v) => {
-    refSpecificIssue.current.close();
-    setMessageReport(v);
-    setTimeout(() => {
-      userBlock();
-    }, 500);
-  };
-
-  const onSelectBlocking = (v) => {
-    if (v !== 1) {
-      refReportUser.current.open();
-    } else {
-      userBlock();
-    }
-    refBlockUser.current.close();
-  };
-
-  const userBlock = async () => {
-    const data = {
-      userId: userId,
-      postId: postId,
-      source: 'screen_post_detail',
-      reason: reportOption,
-      message: messageReport,
-    };
-    let result = await blockUser(data);
-    if (result.code === 200) {
-      Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
-  };
   const onUpVote = async () => {
     if(statusVote === 'upvote') {
       setTotalVote((prevState) => prevState - 1)
@@ -178,6 +116,14 @@ const Comment = ({
       // if(refreshComment) refreshComment(result)
     }
   };
+
+  const onBlockComponent = (comment) => {
+    refBlockComponent.current.openBlockComponent({
+      anonimity : false,
+      actor : comment.user,
+      id : comment.id,
+    })
+  }
 
   React.useEffect(() => {
     iVote();
@@ -237,14 +183,7 @@ const Comment = ({
         )}
         <TouchableOpacity
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
-          onPress={() => {
-            if (comment.user.id === yourselfId) {
-              Toast.show("Can't Block yourself", Toast.LONG);
-            } else {
-              setDataToState(comment);
-              refBlockUser.current.open();
-            }
-          }}>
+          onPress={() => onBlockComponent(comment)}>
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </TouchableOpacity>
 
@@ -269,21 +208,8 @@ const Comment = ({
         </TouchableOpacity>
       </View>
 
-      <BlockUser
-        refBlockUser={refBlockUser}
-        onSelect={(v) => onSelectBlocking(v)}
-        username={username}
-      />
-      <ReportUser
-        refReportUser={refReportUser}
-        onSelect={onNextQuestion}
-        onSkip={onSkipOnlyBlock}
-      />
-      <SpecificIssue
-        refSpecificIssue={refSpecificIssue}
-        onPress={onIssue}
-        onSkip={onSkipOnlyBlock}
-      />
+      <BlockComponent ref={refBlockComponent} refresh={() => {}} />
+
     </View>
   );
 };
