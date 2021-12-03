@@ -12,26 +12,19 @@ import {
 import { useNavigation } from '@react-navigation/core';
 
 import BlockComponent from '../../components/BlockComponent';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import BlockUser from '../../components/Blocking/BlockUser';
 import ContainerComment from '../../components/Comments/ContainerComment';
 import Content from './elements/Content';
 import ContentLink from '../../screens/FeedScreen/ContentLink';
 import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import ReportUser from '../../components/Blocking/ReportUser';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
-import {Context} from '../../context';
 import {Footer, Gap} from '../../components';
 import {
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
-import {blockUser} from '../../service/blocking';
 import {createCommentParent} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
@@ -40,22 +33,16 @@ import {getFeedDetail} from '../../service/post';
 import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {setFeedByIndex} from '../../context/actions/feeds';
 
 const {width, height} = Dimensions.get('window');
 
 const PostPageDetailComponent = (props) => {
   const [dataProfile, setDataProfile] = React.useState({});
-  const [reportOption, setReportOption] = React.useState([]);
-  const [messageReport, setMessageReport] = React.useState('');
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
   const [typeComment, setTypeComment] = React.useState('parent');
   const [totalComment, setTotalComment] = React.useState(0);
   const [totalVote, setTotalVote] = React.useState(0);
-  const [userId, setUserId] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [postId, setPostId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
@@ -66,8 +53,6 @@ const PostPageDetailComponent = (props) => {
   let navigation = useNavigation()
   
   const refBlockComponent = React.useRef();
-  const refBlockDomain = React.useRef();
-  const refReportDomain = React.useRef();
 
   // let [feeds, dispatch] = React.useContext(Context).feeds;
   let {feeds, dispatch, setFeedByIndexProps, 
@@ -418,12 +403,6 @@ const PostPageDetailComponent = (props) => {
       />
 
       <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page"/>
-      <BlockDomain
-        refBlockDomain={refBlockDomain}
-        domain="guardian.com"
-        onSelect={() => {}}
-      />
-      <ReportDomain refReportDomain={refReportDomain} />
     </View>
   );
 };

@@ -1,23 +1,14 @@
 import * as React from 'react';
-import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
-import BlockUser from '../../components/Blocking/BlockUser';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import RenderListFeed from './RenderList';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
-import ReportUser from '../../components/Blocking/ReportUser';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import TiktokScroll from '../../components/TiktokScroll';
 import {ButtonNewPost} from '../../components/Button';
 import {Context} from '../../context';
-import {blockAnonymous, blockUser} from '../../service/blocking';
 import {downVote, upVote} from '../../service/vote';
 import {getFeedDetail, getMainFeed} from '../../service/post';
 import {getUserId} from '../../utils/users';
@@ -34,8 +25,6 @@ const FeedScreen = (props) => {
   const [time, setTime] = React.useState(new Date());
 
   const refBlockComponent = React.useRef();
-  const refBlockDomain = React.useRef();
-  const refReportDomain = React.useRef();
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   let {feeds} = feedsContext;
@@ -204,14 +193,6 @@ const FeedScreen = (props) => {
       </TiktokScroll>
       <ButtonNewPost />
       <BlockComponent ref={refBlockComponent} refresh={getDataFeeds} screen="screen_feed"/>
-      {/* 
-      <BlockDomain
-        refBlockUser={refBlockDomain}
-        domain="guardian.com"
-        onSelect={() => {}}
-      />
-      <ReportDomain refReportDomain={refReportDomain} />
-      /> */}
     </View>
     
   );

@@ -8,20 +8,12 @@ import {
   View,
 } from 'react-native';
 
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import BlockUser from '../../components/Blocking/BlockUser';
-import ContainerComment from '../../components/Comments/ContainerComment';
-import ContentLink from '../FeedScreen/ContentLink';
 import DetailDomainScreenContainerComment from '../../components/Comments/DetailDomainScreenContainerComment';
 import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
 import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import ReportUser from '../../components/Blocking/ReportUser';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import WriteComment from '../../components/Comments/WriteComment';
 import {COLORS, SIZES} from '../../utils/theme';
 import {DomainHeader, Footer, Gap} from '../../components';
-import {blockUser} from '../../service/blocking';
 import {createCommentParent} from '../../service/comment';
 import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
@@ -35,14 +27,8 @@ import {getUserId} from '../../utils/users';
 const {width, height} = Dimensions.get('window');
 
 const DetailDomainScreen = (props) => {
-  const [more, setMore] = React.useState(10);
-  const [totalLine, setTotalLine] = React.useState(0);
-  const [loading, setLoading] = React.useState(false);
+
   const [dataProfile, setDataProfile] = React.useState({});
-  const [reportOption, setReportOption] = React.useState([]);
-  const [messageReport, setMessageReport] = React.useState('');
-  const refBlockDomain = React.useRef();
-  const refReportDomain = React.useRef();
   const [item, setItem] = React.useState(props.route.params.item);
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
@@ -273,13 +259,6 @@ const DetailDomainScreen = (props) => {
           onComment();
         }}
       />
-
-      <BlockDomain
-        refBlockDomain={refBlockDomain}
-        domain="guardian.com"
-        onSelect={() => {}}
-      />
-      <ReportDomain refReportDomain={refReportDomain} />
     </View>
   );
 };
