@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, SafeAreaView, StatusBar } from 'react-native';
+import { StyleSheet, View, SafeAreaView, StatusBar, ActivityIndicator } from 'react-native';
 
 import {
   ChannelList,
@@ -26,6 +26,7 @@ import {
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { setMainFeeds } from '../../context/actions/feeds';
 import Loading from '../Loading';
+import { COLORS } from '../../utils/theme';
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -163,12 +164,20 @@ const ChannelListScreen = ({ navigation }) => {
               />
             </Chat>
           ) : (
-            <Loading visible={true} />
+            <View style={styles.content}>
+              <ActivityIndicator size="small" color={COLORS.holyTosca} />
+            </View>
           )}
         </View>
       </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  content: {
+    backgroundColor: 'transparent',
+  },
+})
 
 export default ChannelListScreen;
