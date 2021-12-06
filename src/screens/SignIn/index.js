@@ -41,7 +41,7 @@ import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 
-const ENABLE_DEV_ONLY_FEATURE = true;
+const ENABLE_DEV_ONLY_FEATURE = false;
 
 const SignIn = () => {
   const navigation = useNavigation();

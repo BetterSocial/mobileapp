@@ -65,11 +65,20 @@ const PostPageDetailComponent = (props) => {
         setYourselfId(id);
       }
     };
-    parseToken();
+
+    const unsubscribe = () => {
+      parseToken();
+    }
+
+    return unsubscribe;
   }, []);
 
   React.useEffect(() => {
-    fetchMyProfile();
+    const unsubscribe = () => {
+      fetchMyProfile();
+    }
+
+    return unsubscribe;
   }, [yourselfId]);
 
   const scrollViewRef = React.useRef(null);
