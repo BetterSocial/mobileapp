@@ -164,7 +164,6 @@ const CreatePost = () => {
     },
   ]
 
-
   const listPrivacy = [
     {
       icon: <MemoIc_world height={16.67} width={16.67} />,
