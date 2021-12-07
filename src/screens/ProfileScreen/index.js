@@ -171,7 +171,6 @@ const ProfileScreen = () => {
     setMyProfileFeed(result.data, myProfileDispatch);
   };
 
-  console.log(dataMain, 'kalak')
 
   async function buildLink() {
     const link = await dynamicLinks().buildLink(
