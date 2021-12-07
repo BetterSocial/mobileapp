@@ -176,7 +176,7 @@ const ProfileScreen = () => {
   async function buildLink() {
     const link = await dynamicLinks().buildLink(
       {
-        link: `https://dev.bettersocial.org/${dataMain.username}/${dataMain.user_id}`,
+        link: `https://dev.bettersocial.org/user/username=${dataMain.username}&other_id=${dataMain.user_id}`,
         domainUriPrefix: 'https://bettersocialapp.page.link',
         analytics: {
           campaign: 'banner',
