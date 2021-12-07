@@ -4,12 +4,15 @@ const KEY_LOCATION_ID = 'KEY_LOCATION_ID';
 const KEY_PRIVACY_ID = 'KEY_PRIVACY_ID';
 const KEY_DURATION = 'KEY_DURATION';
 
+const converStringToInt = (str) => parseInt(str, 2);
+
 const setLocationId = async (locatioId) => {
   await AsyncStorage.setItem(KEY_LOCATION_ID, locatioId);
 };
 
 const getLocationId = async () => {
-  return await AsyncStorage.getItem(KEY_LOCATION_ID);
+  const res = await AsyncStorage.getItem(KEY_LOCATION_ID);
+  return converStringToInt(res);
 };
 
 const setPrivacyId = async (privacyId) => {
@@ -17,7 +20,8 @@ const setPrivacyId = async (privacyId) => {
 };
 
 const getPrivacyId = async () => {
-  return AsyncStorage.getItem(KEY_PRIVACY_ID);
+  const res = await AsyncStorage.getItem(KEY_PRIVACY_ID);
+  return converStringToInt(res);
 };
 
 const setDurationId = async (id) => {
@@ -25,7 +29,8 @@ const setDurationId = async (id) => {
 };
 
 const getDurationId = async () => {
-  return AsyncStorage.getItem(KEY_DURATION);
+  const res = await AsyncStorage.getItem(KEY_DURATION);
+  return converStringToInt(res);
 };
 
 export {
