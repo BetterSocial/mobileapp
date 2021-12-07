@@ -436,14 +436,6 @@ const OtherProfile = () => {
                               </Text>
                               <Text style={styles.textFollow}>Followers</Text>
                             </View>
-                            <View style={styles.following}>
-                              <View style={styles.wrapRow}>
-                                <Text style={styles.textTotal}>
-                                  {dataMain.following_symbol}
-                                </Text>
-                                <Text style={styles.textFollow}>Following</Text>
-                              </View>
-                            </View>
                           </View>
                           {renderBio(dataMain.bio)}
                         </React.Fragment>
