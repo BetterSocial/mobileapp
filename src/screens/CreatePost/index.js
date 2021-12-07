@@ -12,18 +12,18 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {useNavigation} from '@react-navigation/core';
-import {showMessage} from 'react-native-flash-message';
+import { useNavigation } from '@react-navigation/core';
+import { showMessage } from 'react-native-flash-message';
 import analytics from '@react-native-firebase/analytics';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
-import {getLinkPreview} from 'link-preview-js';
+import { getLinkPreview } from 'link-preview-js';
 
 import Header from '../../components/Header';
-import {Button, ButtonAddMedia} from '../../components/Button';
+import { Button, ButtonAddMedia } from '../../components/Button';
 import UserProfile from './elements/UserProfile';
 import SheetCloseBtn from './elements/SheetCloseBtn';
-import {createPost, ShowingAudience} from '../../service/post';
+import { createPost, ShowingAudience } from '../../service/post';
 import Gap from '../../components/Gap';
 import ListItem from '../../components/MenuPostItem';
 import Loading from '../Loading';
@@ -37,25 +37,25 @@ import SheetPrivacy from './elements/SheetPrivacy';
 import CreatePollContainer from './elements/CreatePollContainer';
 import ContentLink from './elements/ContentLink';
 
-import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
-import {getMyProfile} from '../../service/profile';
-import {colors} from '../../utils/colors';
+import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
+import { getMyProfile } from '../../service/profile';
+import { colors } from '../../utils/colors';
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
 import Timer from '../../assets/icons/Ic_timer';
 import Location from '../../assets/icons/Ic_location';
 import World from '../../assets/icons/Ic_world';
-import {fonts} from '../../utils/fonts';
+import { fonts } from '../../utils/fonts';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
-import {createPollPost} from '../../service/post';
+import { createPollPost } from '../../service/post';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import StringConstant from '../../utils/string/StringConstant';
-import {getUserId} from '../../utils/users';
+import { getUserId } from '../../utils/users';
 import {
   requestExternalStoragePermission,
   requestCameraPermission,
 } from '../../utils/permission';
-import {getUrl, isContainUrl} from '../../utils/Utils';
+import { getUrl, isContainUrl } from '../../utils/Utils';
 import {
   getDurationId,
   getLocationId,
@@ -64,13 +64,14 @@ import {
   setLocationId,
   setPrivacyId,
 } from '../../utils/setting';
+import { instanceOf } from 'prop-types';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
 const CreatePost = () => {
-  let defaultPollItem = [{text: ''}, {text: ''}];
+  let defaultPollItem = [{ text: '' }, { text: '' }];
   const navigation = useNavigation();
   const sheetMediaRef = React.useRef();
   const sheetTopicRef = React.useRef();
@@ -92,7 +93,7 @@ const CreatePost = () => {
     hour: 0,
     minute: 0,
   });
-  const [expiredSelect, setExpiredSelect] = React.useState(1);
+  const [expiredSelect, setExpiredSelect] = React.useState(0);
   const [postExpired, setPostExpired] = React.useState([
     {
       label: '24 hours',
@@ -128,8 +129,59 @@ const CreatePost = () => {
     },
   ]);
 
+  const listPostExpired = [
+    {
+      label: '24 hours',
+      value: '1',
+      expiredobject: {
+        hour: 24,
+        day: 1,
+      },
+    },
+    {
+      label: '7 days',
+      value: '7',
+      expiredobject: {
+        hour: 24,
+        day: 7,
+      },
+    },
+    {
+      label: '30 days',
+      value: '30',
+      expiredobject: {
+        hour: 24,
+        day: 30,
+      },
+    },
+    {
+      label: 'Never',
+      value: 'never',
+      expiredobject: {
+        hour: 24,
+        day: 30,
+      },
+    },
+  ]
+
+
+  const listPrivacy = [
+    {
+      icon: <MemoIc_world height={16.67} width={16.67} />,
+      label: 'Public',
+      desc: 'Anyone in your geographic target area can see your post',
+      key: 'public',
+    },
+    {
+      icon: <MemoIc_user_group height={16.67} width={16.67} />,
+      label: 'People I follow',
+      desc: 'Only those you follow can see your post',
+      key: 'people_i_follow',
+    },
+  ];
+
   const [audienceEstimations, setAudienceEstimations] = React.useState(0);
-  const [privacySelect, setPrivacySelect] = React.useState(1);
+  const [privacySelect, setPrivacySelect] = React.useState(0);
   const [dataImage, setDataImage] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [typeUser, setTypeUser] = React.useState(false);
@@ -197,20 +249,7 @@ const CreatePost = () => {
       neighborhood: 'Everywhere',
     },
   ];
-  let listPrivacy = [
-    {
-      icon: <MemoIc_world height={16.67} width={16.67} />,
-      label: 'Public',
-      desc: 'Anyone in your geographic target area can see your post',
-      key: 'public',
-    },
-    {
-      icon: <MemoIc_user_group height={16.67} width={16.67} />,
-      label: 'People I follow',
-      desc: 'Only those you follow can see your post',
-      key: 'people_i_follow',
-    },
-  ];
+
   const fetchMyProfile = async () => {
     setLoading(true);
     let userId = await getUserId();
@@ -253,9 +292,9 @@ const CreatePost = () => {
   };
 
   const uploadMediaFromLibrary = async () => {
-    let {success, message} = await requestExternalStoragePermission();
+    let { success, message } = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+      launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (res) => {
         if (res.didCancel) {
           console.log('User cancelled image picker');
         } else if (res.uri) {
@@ -276,9 +315,9 @@ const CreatePost = () => {
   };
 
   const takePhoto = async () => {
-    let {success, message} = await requestCameraPermission();
+    let { success, message } = await requestCameraPermission();
     if (success) {
-      launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
+      launchCamera({ mediaType: 'photo', includeBase64: true }, (res) => {
         if (res.didCancel) {
           console.log('User cancelled image picker');
         } else if (res.uri) {
@@ -458,7 +497,7 @@ const CreatePost = () => {
     );
     if (isPollNotEmpty) {
       return Alert.alert('Are you sure?', 'This cannot be undone', [
-        {text: 'Cancel', style: 'cancel'},
+        { text: 'Cancel', style: 'cancel' },
         {
           text: 'Remove',
           onPress: () => {
@@ -477,7 +516,7 @@ const CreatePost = () => {
     if (polls.length >= MAX_POLLING_ALLOWED) {
       return;
     }
-    setPolls([...polls, {text: ''}]);
+    setPolls([...polls, { text: '' }]);
   };
 
   const removeSinglePollByIndex = (index) => {
@@ -586,7 +625,7 @@ const CreatePost = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
-        style={{paddingHorizontal: Platform.OS === 'ios' ? 20 : 0}}>
+        style={{ paddingHorizontal: Platform.OS === 'ios' ? 20 : 0 }}>
         <Header title="Create a post" onPress={() => onBack()} />
         <UserProfile
           typeUser={typeUser}
@@ -596,7 +635,7 @@ const CreatePost = () => {
           }
           photo={
             dataProfile.profile_pic_path
-              ? {uri: dataProfile.profile_pic_path}
+              ? { uri: dataProfile.profile_pic_path }
               : ProfileDefault
           }
           onPress={() => {
@@ -623,13 +662,13 @@ const CreatePost = () => {
               linkPreviewMeta
                 ? linkPreviewMeta
                 : {
-                    domain: '',
-                    domainImage: '',
-                    title: '',
-                    description: '',
-                    image: '',
-                    url: '',
-                  }
+                  domain: '',
+                  domainImage: '',
+                  title: '',
+                  description: '',
+                  image: '',
+                  url: '',
+                }
             }
           />
         )}
@@ -668,7 +707,9 @@ const CreatePost = () => {
         <Gap style={styles.height(16)} />
         <ListItem
           icon={<Timer width={16.67} height={16.67} />}
-          label={postExpired[expiredSelect].label}
+          label={postExpired.length === 0
+            ? 'Loading...'
+            : listPostExpired[expiredSelect].label}
           labelStyle={styles.listText}
           onPress={() => sheetExpiredRef.current.open()}
         />
@@ -686,7 +727,9 @@ const CreatePost = () => {
         <Gap style={styles.height(16)} />
         <ListItem
           icon={<World width={16.67} height={16.67} />}
-          label={listPrivacy[privacySelect].label}
+          label={listPrivacy.length === 0
+            ? 'Loading...'
+            : listPrivacy[privacySelect].label}
           labelStyle={styles.listText}
           onPress={() => sheetPrivacyRef.current.open()}
         />
@@ -781,7 +824,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
   },
-  desc: {fontSize: 14, fontFamily: fonts.poppins[400]},
+  desc: { fontSize: 14, fontFamily: fonts.poppins[400] },
   labelButtonAddMedia: {
     color: colors.black,
     fontFamily: fonts.inter[600],
