@@ -171,10 +171,12 @@ const ProfileScreen = () => {
     setMyProfileFeed(result.data, myProfileDispatch);
   };
 
+  console.log(dataMain, 'kalak')
+
   async function buildLink() {
     const link = await dynamicLinks().buildLink(
       {
-        link: `https://dev.bettersocial.org/${dataMain.username}`,
+        link: `https://dev.bettersocial.org/${dataMain.username}/${dataMain.user_id}`,
         domainUriPrefix: 'https://bettersocialapp.page.link',
         analytics: {
           campaign: 'banner',
