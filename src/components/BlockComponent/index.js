@@ -132,7 +132,7 @@ class BlockComponent extends React.Component {
         blockUtils.uiBlockUser(
             postId,
             userId,
-            'screen_feed',
+            this.props.screen || "screen_feed",
             reportOption,
             messageReport,
             () => this.props.refresh('')
@@ -143,7 +143,7 @@ class BlockComponent extends React.Component {
         let {postId, reportOption, messageReport} = this.state
         blockUtils.uiBlockPostAnonymous(
             postId,
-            'screen_feed',
+            this.props.screen || "screen_feed",
             reportOption,
             messageReport,
             () => this.props.refresh('')

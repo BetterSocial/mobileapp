@@ -1,19 +1,15 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
-import {useNavigation} from '@react-navigation/native';
 import IconEn from 'react-native-vector-icons/Entypo';
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+
+import BlockComponent from '../BlockComponent';
+import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
+import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
+import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {calculateTime} from '../../utils/time';
-import MemoCommentReply from '../../assets/icon/CommentReply';
-import BlockUser from '../Blocking/BlockUser';
-import ReportUser from '../Blocking/ReportUser';
-import SpecificIssue from '../Blocking/SpecificIssue';
-import {blockUser} from '../../service/blocking';
-import Toast from 'react-native-simple-toast';
 import {getUserId} from '../../utils/users';
 
 const DetailDomainScreenCommentItem = ({
@@ -30,14 +26,7 @@ const DetailDomainScreenCommentItem = ({
   disableOnTextPress = false,
 }) => {
   const navigation = useNavigation();
-  const refBlockUser = React.useRef();
-  const refSpecificIssue = React.useRef();
-  const refReportUser = React.useRef();
-  const [userId, setUserId] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [postId, setPostId] = React.useState('');
-  const [reportOption, setReportOption] = React.useState([]);
-  const [messageReport, setMessageReport] = React.useState('');
+  const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
 
   let onTextPress = () => {
@@ -61,58 +50,13 @@ const DetailDomainScreenCommentItem = ({
     });
   };
 
-  const setDataToState = (value) => {
-    setUsername(value.user.data.username);
-    setPostId(value.id);
-    setUserId(value.user.id);
-  };
-
-  const onSkipOnlyBlock = () => {
-    refReportUser.current.close();
-    userBlock();
-  };
-
-  const onNextQuestion = (v) => {
-    setReportOption(v);
-    refReportUser.current.close();
-    refSpecificIssue.current.open();
-  };
-  const onIssue = (v) => {
-    refSpecificIssue.current.close();
-    setMessageReport(v);
-    setTimeout(() => {
-      userBlock();
-    }, 500);
-  };
-
-  const onSelectBlocking = (v) => {
-    if (v !== 1) {
-      refReportUser.current.open();
-    } else {
-      userBlock();
-    }
-    refBlockUser.current.close();
-  };
-
-  const userBlock = async () => {
-    const data = {
-      userId: userId,
-      postId: postId,
-      source: 'screen_post_detail',
-      reason: reportOption,
-      message: messageReport,
-    };
-    let result = await blockUser(data);
-    if (result.code === 200) {
-      Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
-  };
+  const onBlock = (comment) => {
+    refBlockComponent.current.openBlockComponent({
+      anonimity : false,
+      actor : comment.user,
+      id : comment.id,
+    })
+  }
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -163,14 +107,7 @@ const DetailDomainScreenCommentItem = ({
         )}
         <TouchableOpacity
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
-          onPress={() => {
-            if (comment.user.id === yourselfId) {
-              Toast.show("Can't Block yourself", Toast.LONG);
-            } else {
-              setDataToState(comment);
-              refBlockUser.current.open();
-            }
-          }}>
+          onPress={() => onBlock(comment)}>
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </TouchableOpacity>
 
@@ -182,21 +119,7 @@ const DetailDomainScreenCommentItem = ({
         </TouchableOpacity>
       </View>
 
-      <BlockUser
-        refBlockUser={refBlockUser}
-        onSelect={(v) => onSelectBlocking(v)}
-        username={username}
-      />
-      <ReportUser
-        refReportUser={refReportUser}
-        onSelect={onNextQuestion}
-        onSkip={onSkipOnlyBlock}
-      />
-      <SpecificIssue
-        refSpecificIssue={refSpecificIssue}
-        onPress={onIssue}
-        onSkip={onSkipOnlyBlock}
-      />
+      <BlockComponent ref={refBlockComponent} refresh={() => {}} screen="detail_domain_comment_item"/>
     </View>
   );
 };
