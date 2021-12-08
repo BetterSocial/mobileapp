@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
     color: '#2f80ed',
     textDecorationLine: 'underline',
     marginStart: 8,
-    fontFamily: 'bold',
     fontSize: 12,
   },
   contentDomain: {flexDirection: 'row', alignItems: 'center'},
@@ -218,7 +217,6 @@ const styles = StyleSheet.create({
     color: '#2f80ed',
     textDecorationLine: 'underline',
     marginStart: 8,
-    fontFamily: 'bold',
     fontSize: 12,
   },
 });
