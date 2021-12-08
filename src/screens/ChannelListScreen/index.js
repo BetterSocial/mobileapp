@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, SafeAreaView, StatusBar } from 'react-native';
+import { StyleSheet, View, SafeAreaView, StatusBar, ActivityIndicator } from 'react-native';
 
 import {
   ChannelList,
@@ -25,6 +25,8 @@ import {
 } from '../../utils/constants';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { setMainFeeds } from '../../context/actions/feeds';
+import Loading from '../Loading';
+import { COLORS } from '../../utils/theme';
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -125,16 +127,16 @@ const ChannelListScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
-      {client.client && (
-        <Chat client={client.client} i18nInstance={streami18n}>
-          <View style={{ height: '100%' }}>
-            <View style={{ height: 52 }}>
-              <Search
-                animatedValue={0}
-                onPress={() => navigation.navigate('ContactScreen')}
-              />
-            </View>
-            <View style={{ paddingHorizontal: 0, flex: 1 }}>
+      <View style={{ height: '100%' }}>
+        <View style={{ height: 52 }}>
+          <Search
+            animatedValue={0}
+            onPress={() => navigation.navigate('ContactScreen')}
+          />
+        </View>
+        <View style={{ paddingHorizontal: 0, flex: 1 }}>
+          {client.client ? (
+            <Chat client={client.client} i18nInstance={streami18n}>
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
@@ -160,12 +162,22 @@ const ChannelListScreen = ({ navigation }) => {
                   refreshControl: null,
                 }}
               />
+            </Chat>
+          ) : (
+            <View style={styles.content}>
+              <ActivityIndicator size="small" color={COLORS.holyTosca} />
             </View>
-          </View>
-        </Chat>
-      )}
+          )}
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  content: {
+    backgroundColor: 'transparent',
+  },
+})
 
 export default ChannelListScreen;
