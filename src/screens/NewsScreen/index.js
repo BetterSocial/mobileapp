@@ -1,45 +1,33 @@
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Animated,
-  RefreshControl,
-  StatusBar,
-} from 'react-native';
-
 import analytics from '@react-native-firebase/analytics';
-import Toast from 'react-native-simple-toast';
+import {
+  Animated,
+  FlatList,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {upVoteDomain, downVoteDomain} from '../../service/vote';
-import {Loading} from '../../components';
-import {getDomainIdIFollow, getDomains} from '../../service/domain';
-import theme, {COLORS, FONTS, SIZES} from '../../utils/theme';
+import BlockDomainComponent from '../../components/BlockDomain';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import RenderItem from './RenderItem';
 import Search from './Search';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import {blockDomain} from '../../service/blocking';
+import {COLORS,} from '../../utils/theme';
 import {Context} from '../../context';
-import {setIFollow, setNews} from '../../context/actions/news';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
+import {getDomainIdIFollow, getDomains} from '../../service/domain';
 import {getUserId} from '../../utils/users';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
+import {setIFollow, setNews} from '../../context/actions/news';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
-  const blockDomainRef = React.useRef(null);
-  const refSpecificIssue = React.useRef(null);
-  const refReportDomain = React.useRef(null);
+  const refBlockDomainComponent = React.useRef(null);
   const offset = React.useRef(new Animated.Value(0)).current;
 
   const [loading, setLoading] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [yourselfId, setYourselfId] = React.useState('');
   const [domain, setDomain] = React.useState('');
-  const [reportOption, setReportOption] = React.useState([]);
-  const [messageReport, setMessageReport] = React.useState('');
   const [idBlock, setIdBlock] = React.useState('');
   const [newslist, dispatch] = React.useContext(Context).news;
   const scrollRef = React.createRef();
@@ -72,6 +60,12 @@ const NewsScreen = ({}) => {
     initData();
     getNewsIfollow();
   }, []);
+
+  React.useEffect(() => {
+    if(domain !== '' && idBlock !== '') {
+      refBlockDomainComponent.current.openBlockDomain();
+    }
+  },[domain, idBlock])
 
   const initData = async () => {
     setLoading(true);
@@ -117,53 +111,8 @@ const NewsScreen = ({}) => {
   };
 
   const blockNews = (itemNews) => {
-    blockDomainRef.current.open();
     setIdBlock(itemNews.content.domain_page_id);
     setDomain(itemNews.domain.name);
-  };
-  const selectBlock = (v) => {
-    if (v === 1) {
-      onBlockDomain();
-    } else {
-      refReportDomain.current.open();
-    }
-    blockDomainRef.current.close();
-  };
-  const getSpecificIssue = (v) => {
-    setMessageReport(v);
-    refSpecificIssue.current.close();
-    setTimeout(() => {
-      onBlockDomain();
-    }, 500);
-  };
-  const onSkipOnlyBlock = () => {
-    refReportDomain.current.close();
-    refSpecificIssue.current.close();
-    onBlockDomain();
-  };
-  const onNextQuestion = (v) => {
-    setReportOption(v);
-    refReportDomain.current.close();
-    refSpecificIssue.current.open();
-  };
-
-  const onBlockDomain = async () => {
-    const dataBlock = {
-      domainId: idBlock,
-      reason: reportOption,
-      message: messageReport,
-      source: 'domain_screen',
-    };
-    const result = await blockDomain(dataBlock);
-    if (result.code === 200) {
-      Toast.show(
-        'The user was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
   };
 
   const upvoteNews = async (itemNews) => {
@@ -238,21 +187,12 @@ const NewsScreen = ({}) => {
           }}
         />
 
-        <BlockDomain
-          refBlockDomain={blockDomainRef}
-          onSelect={selectBlock}
+        <BlockDomainComponent
+          ref={refBlockDomainComponent}
           domain={domain}
-        />
-        <SpecificIssue
-          refSpecificIssue={refSpecificIssue}
-          onPress={getSpecificIssue}
-          onSkip={onSkipOnlyBlock}
-        />
-        <ReportDomain
-          refReportDomain={refReportDomain}
-          onSkip={onSkipOnlyBlock}
-          onSelect={onNextQuestion}
-        />
+          domainId={idBlock}
+          screen="news_screen" />
+        
       </Animated.View>
     </View>
   );

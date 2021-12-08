@@ -3,8 +3,7 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TouchableHighlight,
-  TouchableNativeFeedback,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -15,19 +14,19 @@ const Header = ({title, onPress, titleStyle = {}, containerStyle = {}}) => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableNativeFeedback onPress={onPress}>
+        <TouchableOpacity onPress={onPress}>
           <View style={styles.content(-4)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
-        </TouchableNativeFeedback>
+        </TouchableOpacity>
       );
     } else {
       return (
-        <TouchableHighlight onPress={onPress}>
+        <TouchableOpacity onPress={onPress}>
           <View style={styles.content(-8)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       );
     }
   };

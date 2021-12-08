@@ -23,24 +23,15 @@ import {useNavigation} from '@react-navigation/core';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import BlockUser from '../../components/Blocking/BlockUser';
 import BottomSheetBio from './elements/BottomSheetBio';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
-import Loading from '../Loading';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import ProfileHeader from './elements/ProfileHeader';
-import RenderActivity from './elements/RenderActivity';
 import RenderItem from './elements/RenderItem';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
-import ReportUser from '../../components/Blocking/ReportUser';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import {blockAnonymous, blockUser} from '../../service/blocking';
 import {
   changeRealName,
   getMyProfile,
@@ -98,19 +89,10 @@ const ProfileScreen = () => {
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
 
-  const [postId, setPostId] = React.useState('');
-  const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
-  const [time, setTime] = React.useState(new Date());
-  const [username, setUsername] = React.useState('');
-  const [reportOption, setReportOption] = React.useState([]);
-  const [messageReport, setMessageReport] = React.useState('');
-  const [initialLoading, setInitialLoading] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
 
   const refBlockComponent = React.useRef();
-  const refBlockDomain = React.useRef();
-  const refReportDomain = React.useRef();
 
   let {feeds} = myProfileFeed;
 
@@ -632,13 +614,7 @@ const ProfileScreen = () => {
           </TouchableNativeFeedback>
         ) : null}
 
-        <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} />
-        <BlockDomain
-          refBlockUser={refBlockDomain}
-          domain="guardian.com"
-          onSelect={() => {}}
-        />
-        <ReportDomain refReportDomain={refReportDomain} />
+        <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
       </SafeAreaView>
     </>
   );

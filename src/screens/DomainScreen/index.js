@@ -1,15 +1,18 @@
 import * as React from 'react';
-import {View, StyleSheet, FlatList, StatusBar} from 'react-native';
-
-import {useRoute, useNavigation} from '@react-navigation/native';
-import Toast from 'react-native-simple-toast';
 import LinearGradient from 'react-native-linear-gradient';
+import Toast from 'react-native-simple-toast';
+import {FlatList, StatusBar, StyleSheet, View} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-import {upVoteDomain, downVoteDomain} from '../../service/vote';
-import Loading from '../Loading';
+import BlockDomainComponent from '../../components/BlockDomain';
 import Header from './elements/Header';
+import Loading from '../Loading';
 import Navigation from './elements/Navigation';
 import RenderItem from './elements/RenderItem';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {addIFollowByID, setIFollow} from '../../context/actions/news';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import {
   followDomain,
   getDetailDomains,
@@ -17,29 +20,18 @@ import {
   getProfileDomain,
   unfollowDomain,
 } from '../../service/domain';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import {blockDomain} from '../../service/blocking';
 import {getUserId} from '../../utils/users';
-import {COLORS} from '../../utils/theme';
-import {Context} from '../../context';
-import {addIFollowByID, setIFollow} from '../../context/actions/news';
 
 const DomainScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const blockDomainRef = React.useRef(null);
-  const refSpecificIssue = React.useRef(null);
-  const refReportDomain = React.useRef(null);
+  const refBlockDomainComponent = React.useRef(null);
   const [dataDomain, setDataDomain] = React.useState(route.params.item);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [profile, setProfile] = React.useState({});
   const [domain, setDomain] = React.useState(route.params.item.og.domain);
   const [idFromToken, setIdFromToken] = React.useState('');
-  const [reportOption, setReportOption] = React.useState([]);
-  const [messageReport, setMessageReport] = React.useState('');
   const [domainFollowers, setDomainFollowers] = React.useState(0);
   const [follow, setFollow] = React.useState(false);
 
@@ -122,51 +114,7 @@ const DomainScreen = () => {
     downVoteDomain(news);
   };
   const onReaction = async (v) => {
-    blockDomainRef.current.open();
-  };
-  const selectBlock = (v) => {
-    if (v === 1) {
-      onBlockDomain();
-    } else {
-      refReportDomain.current.open();
-    }
-    blockDomainRef.current.close();
-  };
-  const getSpecificIssue = (v) => {
-    setMessageReport(v);
-    refSpecificIssue.current.close();
-    setTimeout(() => {
-      onBlockDomain();
-    }, 500);
-  };
-  const onSkipOnlyBlock = () => {
-    refReportDomain.current.close();
-    refSpecificIssue.current.close();
-    onBlockDomain();
-  };
-  const onNextQuestion = (v) => {
-    setReportOption(v);
-    refReportDomain.current.close();
-    refSpecificIssue.current.open();
-  };
-
-  const onBlockDomain = async () => {
-    const dataBlock = {
-      domainId: dataDomain.content.domain_page_id,
-      reason: reportOption,
-      message: messageReport,
-      source: 'domain_screen',
-    };
-    const result = await blockDomain(dataBlock);
-    if (result.code === 200) {
-      Toast.show(
-        'The domain was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
+    refBlockDomainComponent.current.openBlockDomain()
   };
 
   const domainImage = dataDomain.domain
@@ -265,21 +213,11 @@ const DomainScreen = () => {
       />
 
       <Loading visible={loading} />
-      <BlockDomain
-        refBlockDomain={blockDomainRef}
-        onSelect={selectBlock}
-        domain={domain}
-      />
-      <SpecificIssue
-        refSpecificIssue={refSpecificIssue}
-        onPress={getSpecificIssue}
-        onSkip={onSkipOnlyBlock}
-      />
-      <ReportDomain
-        refReportDomain={refReportDomain}
-        onSkip={onSkipOnlyBlock}
-        onSelect={onNextQuestion}
-      />
+      <BlockDomainComponent 
+        ref={refBlockDomainComponent} 
+        domain={domain} 
+        domainId={dataDomain.content.domain_page_id}
+        screen="domain_screen" />
     </View>
   );
 };

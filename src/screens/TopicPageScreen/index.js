@@ -4,18 +4,12 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
 import BlockDomain from '../../components/Blocking/BlockDomain';
-import BlockPostAnonymous from '../../components/Blocking/BlockPostAnonymous';
-import BlockUser from '../../components/Blocking/BlockUser';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
 import ReportDomain from '../../components/Blocking/ReportDomain';
-import ReportPostAnonymous from '../../components/Blocking/ReportPostAnonymous';
-import ReportUser from '../../components/Blocking/ReportUser';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import TiktokScroll from './TiktokScroll';
 import { Context } from '../../context';
 import { Gap } from '../../components';
-import { blockAnonymous, blockUser } from '../../service/blocking';
 import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
 import { downVote, upVote } from '../../service/vote';
 import { getFeedDetail } from '../../service/post';
@@ -36,17 +30,10 @@ const TopicPageScreen = (props) => {
   let { feeds } = feedsContext;
   const [isFollow, setIsFollow] = React.useState(false);
   const [userTopicName, setUserTopicName] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [postId, setPostId] = React.useState('');
 
   const refBlockComponent = React.useRef();
-  const refBlockUser = React.useRef();
   const refBlockDomain = React.useRef();
-  const refReportUser = React.useRef();
   const refReportDomain = React.useRef();
-  const refSpecificIssue = React.useRef();
-  const refBlockPostAnonymous = React.useRef();
-  const refReportPostAnonymous = React.useRef();
 
 
   React.useEffect(() => {
@@ -231,15 +218,7 @@ const TopicPageScreen = (props) => {
           )}
         </TiktokScroll>
       </View>
-      <BlockComponent ref={refBlockComponent} refresh={refreshingData} />
-
-      <BlockDomain
-        refBlockUser={refBlockDomain}
-        domain="guardian.com"
-        onSelect={() => { }}
-      />
-
-      <ReportDomain refReportDomain={refReportDomain} />
+      <BlockComponent ref={refBlockComponent} refresh={refreshingData} screen="topic_screen"/>
     </View>
   );
 };

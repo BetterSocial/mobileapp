@@ -50,8 +50,9 @@ import {fonts} from '../utils/fonts';
 const Stack = createStackNavigator();
 const RootStact = () => {
   const [clientState] = React.useContext(Context).client;
+  const [profileState] = React.useContext(Context).profile
   const {client} = clientState;
-
+  console.log(profileState, 'sikat')
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
@@ -60,6 +61,8 @@ const RootStact = () => {
       await client?.disconnectUser();
     };
   }, []);
+
+  console.log(profileState, 'saka')
 
   return (
     <View
@@ -177,12 +180,15 @@ const RootStact = () => {
             headerShown: true,
             header: ({navigation}) => {
               return (
-                <Header
-                  title="Who you're following"
+                <SafeAreaView>
+                  <Header
+                  title={profileState.navbarTitle}
                   containerStyle={styles.header}
                   titleStyle={styles.title}
                   onPress={() => navigation.goBack()}
                 />
+                </SafeAreaView>
+               
               );
             },
           }}
