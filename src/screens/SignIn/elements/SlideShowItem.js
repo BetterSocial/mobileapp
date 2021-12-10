@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
-import { fonts } from '../../../utils/fonts';
+import { fonts, normalizeFontSize } from '../../../utils/fonts';
 
-export const SlideShowItem = ({index, children, title, text, lineHeight = 24}) => {
+export const SlideShowItem = ({index, children, title, text, lineHeight}) => {
     const width = Dimensions.get('screen').width
     const getBackgroundColor = () => {
         switch(index) {
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
             flex: 1,
             backgroundColor : backgroundColor,
             maxWidth: width,
+            marginTop: -32,
         }
     },
     title: {
@@ -38,18 +39,21 @@ const styles = StyleSheet.create({
         lineHeight:12.5,
         fontFamily: fonts.inter[600],
         zIndex: 1000,
-        paddingTop: 18,
-        textAlign: 'center'
+        paddingTop: 5,
+        marginTop: 18,
+        textAlign: 'center',
+        alignSelf: 'center'
     },
     text: (lineHeight) => {
         return {
-            fontSize: 15,
+            fontSize: 14.0,
             lineHeight:lineHeight,
-            marginHorizontal: 25,
-            marginTop: 20,
+            marginLeft: 12,
+            marginRight: 12,
+            marginTop: 16,
             fontFamily: fonts.inter[500],
             zIndex: 1000,
-            textAlign: 'center'
+            textAlign: 'center',
         }
     }
 });

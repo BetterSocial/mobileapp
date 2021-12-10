@@ -25,7 +25,8 @@ const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
     {
       illustrations: <Onboarding2 width={onboardingWidth} style={styles.onboardingItem('#76DDFD')}/>,
       title: 'Promoting Respect & Free Speech',
-      text: `BETTER's algorithms favor moderation, not\npolarization. Block offenders in 2 clicks to reduce\ntheir visibility for everyone - without censorship.`
+      text: `BETTER's algorithms favor moderation, not\npolarization. Block offenders in 2 clicks to reduce\ntheir visibility for everyone - without censorship.`,
+      lineHeight: 24,
     },
     {
       illustrations: <Onboarding3 width={onboardingWidth} style={styles.onboardingItem('#54E4B9')}/>,
@@ -46,8 +47,8 @@ const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
 
   return (
     <SwiperFlatList
-      autoplay
-      autoplayDelay={5}
+      // autoplay
+      // autoplayDelay={5}
       autoplayLoop={false}
       index={0}
       showPagination
