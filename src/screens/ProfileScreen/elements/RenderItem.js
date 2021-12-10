@@ -1,7 +1,5 @@
 import * as React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import analytics from '@react-native-firebase/analytics';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {Dimensions, Share, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
@@ -9,14 +7,16 @@ import Content from '../../FeedScreen/Content';
 import ContentLink from '../../FeedScreen/ContentLink';
 import ContentPoll from '../../FeedScreen/ContentPoll';
 import Header from '../../FeedScreen/Header';
-import {Card} from '../../../components/CardStack';
-import {Context} from '../../../context';
-import {Footer, Gap, PreviewComment} from '../../../components';
+import ShareUtils from '../../../utils/share';
 import {
+  ANALYTICS_SHARE_POST_PROFILE_ID,
+  ANALYTICS_SHARE_POST_PROFILE_SCREEN,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../../utils/constants';
+import {Context} from '../../../context';
+import {Footer, Gap, PreviewComment} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 
@@ -63,53 +63,6 @@ const getCountComment = (item) => {
     }
   }
   return count;
-};
-
-async function buildLink(username) {
-  const link = await dynamicLinks().buildLink(
-    {
-      link: `https://dev.bettersocial.org/${username}`,
-      domainUriPrefix: 'https://bettersocialapp.page.link',
-      analytics: {
-        campaign: 'banner',
-      },
-      navigation: {
-        forcedRedirectEnabled: false,
-      },
-      // ios: {
-      //   bundleId: '',
-      //   // customScheme: 'giftit',
-      //   appStoreId: '',
-      // },
-      android: {
-        packageName: 'org.bettersocial.dev',
-      },
-    },
-    'SHORT',
-  );
-  return link;
-}
-
-const onShare = async (username) => {
-  analytics().logEvent('feed_screen_btn_share', {
-    id: 'btn_share',
-  });
-  try {
-    const result = await Share.share({
-      message: await buildLink(username),
-    });
-    if (result.action === Share.sharedAction) {
-      if (result.activityType) {
-        // shared with activity type of result.activityType
-      } else {
-        // shared
-      }
-    } else if (result.action === Share.dismissedAction) {
-      // dismissed
-    }
-  } catch (error) {
-    alert(error.message);
-  }
 };
 
 const Item = ({
@@ -243,7 +196,10 @@ const Item = ({
           totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
           isSelf={true}
-          onPressShare={() => onShare(item)}
+          onPressShare={() => ShareUtils.sharePostInProfile(item, 
+              ANALYTICS_SHARE_POST_PROFILE_SCREEN,  
+              ANALYTICS_SHARE_POST_PROFILE_ID
+          )}
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
           onPressDownVote={() => {

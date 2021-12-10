@@ -9,6 +9,7 @@ import Header from './elements/Header';
 import Loading from '../Loading';
 import Navigation from './elements/Navigation';
 import RenderItem from './elements/RenderItem';
+import ShareUtils from '../../utils/share';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {addIFollowByID, setIFollow} from '../../context/actions/news';
@@ -204,6 +205,7 @@ const DomainScreen = () => {
                 follow={follow}
                 handleFollow={handleFollow}
                 handleUnfollow={handleUnfollow}
+                onPressShare={ShareUtils.shareDomain}
               />
             );
           }

@@ -47,8 +47,8 @@ const SlideShow = ({onChangeNewIndex = (newIndex) => {}}) => {
 
   return (
     <SwiperFlatList
-      // autoplay
-      // autoplayDelay={5}
+      autoplay
+      autoplayDelay={5}
       autoplayLoop={false}
       index={0}
       showPagination

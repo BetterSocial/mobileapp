@@ -12,6 +12,7 @@ import BlockDomainComponent from '../../components/BlockDomain';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import RenderItem from './RenderItem';
 import Search from './Search';
+import ShareUtils from '../../utils/share'
 import {COLORS,} from '../../utils/theme';
 import {Context} from '../../context';
 import {downVoteDomain, upVoteDomain} from '../../service/vote';
@@ -104,8 +105,6 @@ const NewsScreen = ({}) => {
     lastDragY = event.nativeEvent.contentOffset.y;
   };
 
-  const shareNews = (value) => {};
-
   const comment = (item) => {
     navigation.navigate('DetailDomainScreen', {item});
   };
@@ -176,7 +175,7 @@ const NewsScreen = ({}) => {
               <RenderItem
                 key={item.id}
                 item={item}
-                onPressShare={(itemNews) => shareNews(itemNews)}
+                onPressShare={ShareUtils.shareNews}
                 onPressComment={(itemNews) => comment(itemNews)}
                 onPressBlock={(itemNews) => blockNews(itemNews)}
                 onPressUpvote={(itemNews) => upvoteNews(itemNews)}

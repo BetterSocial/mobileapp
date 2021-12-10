@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import analytics from '@react-native-firebase/analytics';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import { Dimensions, Share, StatusBar, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
@@ -10,6 +8,8 @@ import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
 import ContentPoll from '../FeedScreen/ContentPoll';
 import Header from '../FeedScreen/Header';
+import ShareUtils from '../../utils/share'
+import {ANALYTICS_SHARE_POST_TOPIC_ID, ANALYTICS_SHARE_POST_TOPIC_SCREEN} from '../../utils/constants';
 import { Footer, Gap, PreviewComment } from '../../components';
 import {
   POST_TYPE_LINK,
@@ -70,52 +70,6 @@ const RenderListFeed = (props) => {
     let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     return h;
   };
-
-  const onShare = async (username) => {
-    analytics().logEvent('feed_screen_btn_share', {
-      id: 'btn_share',
-    });
-    try {
-      const result = await Share.share({
-        message: await buildLink(username),
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-  async function buildLink(username) {
-    const link = await dynamicLinks().buildLink(
-      {
-        link: `https://dev.bettersocial.org/${username}`,
-        domainUriPrefix: 'https://bettersocialapp.page.link',
-        analytics: {
-          campaign: 'banner',
-        },
-        navigation: {
-          forcedRedirectEnabled: false,
-        },
-        // ios: {
-        //   bundleId: '',
-        //   // customScheme: 'giftit',
-        //   appStoreId: '',
-        // },
-        android: {
-          packageName: 'org.bettersocial.dev',
-        },
-      },
-      'SHORT',
-    );
-    return link;
-  }
 
   const onPressDownVoteHandle = async () => {
     setStatusDowvote((prev) => !prev);
@@ -285,7 +239,10 @@ const RenderListFeed = (props) => {
             item={item}
             totalComment={getCountCommentWithChild(item)}
             totalVote={totalVote}
-            onPressShare={() => onShare(item)}
+            onPressShare={() => ShareUtils.sharePostInTopic(item, 
+                ANALYTICS_SHARE_POST_TOPIC_SCREEN,
+                ANALYTICS_SHARE_POST_TOPIC_ID
+            )}
             onPressComment={() => onPressComment(item)}
             onPressBlock={() => onPressBlock(item)}
             onPressDownVote={onPressDownVoteHandle}
