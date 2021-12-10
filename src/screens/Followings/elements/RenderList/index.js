@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableNativeFeedback, View, Image, Text, StyleSheet } from 'react-native'
+import { TouchableNativeFeedback, View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types';
 import { colors } from '../../../../utils/colors';
 import { fonts } from '../../../../utils/fonts';
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
 })
 
 const DomainList = (props) => {
-    const {onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow} = props
+    const {onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody} = props
 
     const handlePress = (event) => {
         event.preventDefault();
@@ -96,7 +96,7 @@ const DomainList = (props) => {
         <TouchableNativeFeedback
         onPress={handlePress}>
         <View style={styles.card}>
-          <View style={styles.wrapProfile}>
+          <TouchableOpacity style={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
               {item.image  ? <Image
               source={{
@@ -119,7 +119,7 @@ const DomainList = (props) => {
                 {item.description ? item.description : ''}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
           {item.isunfollowed ? (
             <TouchableNativeFeedback onPress={handleSetFollow}>
               <View style={styles.buttonFollow}>
@@ -141,13 +141,15 @@ const DomainList = (props) => {
 DomainList.propTypes = {
     item: PropTypes.object,
     onPressList: PropTypes.func,
-    isHashtag: PropTypes.bool
+    isHashtag: PropTypes.bool,
+    onPressBody: PropTypes.func
 }
 
 DomainList.defaultProps = {
   onPressList: () => null,
   handleSetFollow: () => null,
-  handleSetUnFollow: () => null
+  handleSetUnFollow: () => null,
+  onPressBody: () => null
 }
 
 export default DomainList
