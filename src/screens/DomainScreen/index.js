@@ -34,7 +34,6 @@ const DomainScreen = () => {
   const [idFromToken, setIdFromToken] = React.useState('');
   const [domainFollowers, setDomainFollowers] = React.useState(0);
   const [follow, setFollow] = React.useState(false);
-
   let iddomain = dataDomain.content.domain_page_id;
   const [dataFollow] = React.useState({
     domainId: iddomain,
@@ -57,7 +56,6 @@ const DomainScreen = () => {
   React.useEffect(() => {
     getIFollow();
   }, [iddomain, ifollow]);
-
   const getIFollow = async () => {
     if (ifollow.length === 0) {
       let res = await getDomainIdIFollow();

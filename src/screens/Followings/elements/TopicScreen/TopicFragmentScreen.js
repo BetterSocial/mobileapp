@@ -79,11 +79,16 @@ const TopicFragmentScreen = ({navigation}) => {
   React.useEffect(() => {
     handleGetTopic()
   }, [])
+
+  const onPressBody = (item) => {
+    navigation.navigate('TopicPageScreen', { id: item.name });
+  }
+
   return (
       <FlatList 
         data={listTopics}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => <DomainList handleSetFollow={() => handleFollow(index, item)} handleSetUnFollow={() => handleUnfollow(index, item)} isHashtag item={item} />}
+        renderItem={({item, index}) => <DomainList onPressBody={onPressBody} handleSetFollow={() => handleFollow(index, item)} handleSetUnFollow={() => handleUnfollow(index, item)} isHashtag item={item} />}
         // ListFooterComponent={<SuggestionTopic />}
         contentContainerStyle={styles.flatlistContainer}
         refreshing={loading}

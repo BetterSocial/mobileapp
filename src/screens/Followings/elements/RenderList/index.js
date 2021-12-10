@@ -96,7 +96,7 @@ const DomainList = (props) => {
         <TouchableNativeFeedback
         onPress={handlePress}>
         <View style={styles.card}>
-          <TouchableOpacity style={styles.wrapProfile}>
+          <TouchableOpacity onPress={() => onPressBody(item)} style={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
               {item.image  ? <Image
               source={{
