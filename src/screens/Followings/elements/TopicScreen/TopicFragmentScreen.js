@@ -1,10 +1,9 @@
 import * as React from 'react';
-import {Text, FlatList, StyleSheet} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Container from '../../../../components/Container';
+import { FlatList, StyleSheet, View} from 'react-native';
 import { getFollowingTopic, putUserTopic } from '../../../../service/topics';
 import DomainList from '../RenderList';
 import SuggestionTopic from './SuggestionTopic';
+import TopicHeader from './TopicHeader';
 
 const styles = StyleSheet.create({
   flatlistContainer: {
@@ -85,16 +84,18 @@ const TopicFragmentScreen = ({navigation}) => {
   }
 
   return (
-      <FlatList 
-        data={listTopics}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => <DomainList onPressBody={onPressBody} handleSetFollow={() => handleFollow(index, item)} handleSetUnFollow={() => handleUnfollow(index, item)} isHashtag item={item} />}
-        // ListFooterComponent={<SuggestionTopic />}
-        contentContainerStyle={styles.flatlistContainer}
-        refreshing={loading}
-        onRefresh={handleGetTopic}
-        style={styles.containerStyle}
-      />
+    <FlatList 
+    data={listTopics}
+    keyExtractor={(item, index) => index.toString()}
+    renderItem={({item, index}) => <DomainList onPressBody={onPressBody} handleSetFollow={() => handleFollow(index, item)} handleSetUnFollow={() => handleUnfollow(index, item)} isHashtag item={item} />}
+    // ListFooterComponent={<SuggestionTopic />}
+    contentContainerStyle={styles.flatlistContainer}
+    refreshing={loading}
+    onRefresh={handleGetTopic}
+    style={styles.containerStyle}
+    ListHeaderComponent={<TopicHeader />}
+  />
+      
   ) ;
 };
 
