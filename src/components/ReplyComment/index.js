@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  SafeAreaView
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -165,7 +166,8 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
     <View style={styles.container}>
       <StatusBar translucent={false} />
        {/* Header */}
-      <View style={styles.header}>
+       <SafeAreaView>
+       <View style={styles.header}>
             <TouchableOpacity
               onPress={navigationGoBack}
               style={styles.backArrow}>
@@ -176,6 +178,8 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
             </Text>
             <View style={styles.btn} />
           </View>
+       </SafeAreaView>
+   
           {/* Header */}
       <ScrollView contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>

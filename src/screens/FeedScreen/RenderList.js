@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {Dimensions, Share, StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, Platform, Share, StatusBar, StyleSheet, View} from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
@@ -31,6 +31,8 @@ const getHeightHeader = () => {
   return h;
 };
 
+const majorVersion = parseInt(Platform.Version, 10)
+
 const styles = StyleSheet.create({
   cardContainer: (bottomHeight) => ({
     height: FULL_HEIGHT - bottomHeight - tabBarHeight,
@@ -42,6 +44,7 @@ const styles = StyleSheet.create({
   cardMain: {
     height: '100%',
     width: '100%',
+    paddingVertical : Platform.OS === 'ios' && majorVersion >=10 ? 30 : 0,
   },
   footerWrapper: (h) => ({height: h}),
   contentReaction: (heightReaction) => ({

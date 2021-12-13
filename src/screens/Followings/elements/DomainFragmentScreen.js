@@ -3,6 +3,7 @@ import {FlatList, StyleSheet} from 'react-native';
 import Container from '../../../components/Container';
 import { followDomain, getFollowedDomain, unfollowDomain } from '../../../service/domain';
 import DomainList from './RenderList';
+import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 
 const styles = StyleSheet.create({
   mainContainser: {
@@ -78,11 +79,30 @@ const DomainFragmentScreen = ({navigation}) => {
     });
   }, [listFollowDomain.length])
 
+  const goToDomainPage = (item) => {
+    item = {
+      ...item,
+      og: {
+        ...item,
+        domain: item.name,
+        domain_page_id: item.isunfollowed ? null : item.domainId
+      }
+    }
+    let param = linkContextScreenParamBuilder(
+      item,
+      item.name,
+      item.image,
+      item.domainId
+    )
+    console.log(param, 'hijack')
+    navigation.navigate('DomainScreen', param)
+  }
+
   return (
       <FlatList 
       data={listFollowDomain}
       keyExtractor={(item, index) => index.toString()}
-      renderItem={({item, index}) => <DomainList handleSetFollow={() => handleFollow(index, item)} handleSetUnFollow={() => handleUnfollow(index, item)} item={item} />}
+      renderItem={({item, index}) => <DomainList onPressBody={goToDomainPage} handleSetFollow={() => handleFollow(index, item)} handleSetUnFollow={() => handleUnfollow(index, item)} item={item} />}
       refreshing={loading}
       onRefresh={getDomainData}
       style={styles.containerStyle}

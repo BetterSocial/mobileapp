@@ -8,6 +8,7 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  SafeAreaView
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Avatar} from 'react-native-activity-feed';
@@ -71,7 +72,8 @@ const _renderAnonimity = ({
   const navigation = useNavigation();
 
   return (
-    <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
+    <SafeAreaView>
+      <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
       <View style={styles.rowCenter}>
         {isBackButton ? (
           <View style={{marginEnd: 16}}>
@@ -115,6 +117,8 @@ const _renderAnonimity = ({
         <ElipsisIcon width={18} height={3.94} fill={colors.black} />
       </TouchableNativeFeedback>
     </View>
+    </SafeAreaView>
+    
   );
 };
 
@@ -147,7 +151,8 @@ const _renderProfileNormal = ({
   };
 
   return (
-    <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
+    <SafeAreaView>
+      <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
       <View style={styles.rowCenter}>
         {isBackButton ? (
           <View style={styles.btn}>
@@ -219,6 +224,8 @@ const _renderProfileNormal = ({
         </View>
       </View>
     </View>
+    </SafeAreaView>
+    
   );
 };
 
