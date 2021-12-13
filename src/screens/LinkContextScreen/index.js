@@ -1,34 +1,28 @@
 import * as React from 'react';
+import JWTDecode from 'jwt-decode';
 import {
-  View,
-  StyleSheet,
+  Animated,
   FlatList,
   Image,
-  Text,
-  Animated,
   StatusBar,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-import JWTDecode from 'jwt-decode';
-import {useRoute, useNavigation} from '@react-navigation/native';
-import Toast from 'react-native-simple-toast';
-
-import {upVoteDomain, downVoteDomain} from '../../service/vote';
-import {getAccessToken, getUserId} from '../../utils/token';
+import LinkContextItem from './elements/Item';
 import Loading from '../Loading';
+import PostArrowUp from '../../assets/images/post-arrow-up.png';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
+import {fonts} from '../../utils/fonts';
+import {getAccessToken} from '../../utils/token';
 import {
   getDetailDomains,
   getDomainIdIFollow,
-  getProfileDomain,
 } from '../../service/domain';
-import {blockDomain} from '../../service/blocking';
-import LinkContextItem from './elements/Item';
-import PostArrowUp from '../../assets/images/post-arrow-up.png';
-import {COLORS} from '../../utils/theme';
-import {fonts} from '../../utils/fonts';
-import RenderItem from '../DomainScreen/elements/RenderItem';
-import {Context} from '../../context';
-import {createIconSetFromFontello} from 'react-native-vector-icons';
 import {setIFollow} from '../../context/actions/news';
 
 const LinkContextScreen = () => {
@@ -39,17 +33,12 @@ const LinkContextScreen = () => {
   let iddomain = item.content.domain_page_id;
 
   const navigation = useNavigation();
-  const blockDomainRef = React.useRef(null);
-  const refSpecificIssue = React.useRef(null);
-  const refReportDomain = React.useRef(null);
   const [dataDomain, setDataDomain] = React.useState(route.params.item);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [profile, setProfile] = React.useState({});
   const [domain, setDomain] = React.useState(item.domainId);
   const [idFromToken, setIdFromToken] = React.useState('');
-  const [reportOption, setReportOption] = React.useState([]);
-  const [messageReport, setMessageReport] = React.useState('');
   const [follow, setFollow] = React.useState(false);
   const [news, dispatch] = React.useContext(Context).news;
   const [featuredNewsFromFeed, setFeaturedNewsFromFeed] = React.useState(item);
@@ -110,7 +99,6 @@ const LinkContextScreen = () => {
   }, [iddomain, ifollow]);
 
   const getIFollow = async () => {
-    // console.log(res.data)
     if (ifollow.length === 0) {
       let res = await getDomainIdIFollow();
       setIFollow(res.data, dispatch);
@@ -131,53 +119,6 @@ const LinkContextScreen = () => {
   const downvoteNews = async (news) => {
     downVoteDomain(news);
   };
-  const onReaction = async (v) => {
-    blockDomainRef.current.open();
-  };
-  const selectBlock = (v) => {
-    if (v === 1) {
-      onBlockDomain();
-    } else {
-      refReportDomain.current.open();
-    }
-    blockDomainRef.current.close();
-  };
-  const getSpecificIssue = (v) => {
-    setMessageReport(v);
-    refSpecificIssue.current.close();
-    setTimeout(() => {
-      onBlockDomain();
-    }, 500);
-  };
-  const onSkipOnlyBlock = () => {
-    refReportDomain.current.close();
-    refSpecificIssue.current.close();
-    onBlockDomain();
-  };
-  const onNextQuestion = (v) => {
-    setReportOption(v);
-    refReportDomain.current.close();
-    refSpecificIssue.current.open();
-  };
-
-  const onBlockDomain = async () => {
-    const dataBlock = {
-      domainId: dataDomain.content.domain_page_id,
-      reason: reportOption,
-      message: messageReport,
-      source: 'domain_screen',
-    };
-    const result = await blockDomain(dataBlock);
-    if (result.code === 200) {
-      Toast.show(
-        'The domain was blocked successfully. \nThanks for making BetterSocial better!',
-        Toast.LONG,
-      );
-    } else {
-      Toast.show('Your report was filed & will be investigated', Toast.LONG);
-    }
-    console.log('result block user ', result);
-  };
 
   const handleOnScroll = (event) => {
     let y = event.nativeEvent.contentOffset.y;
@@ -195,7 +136,7 @@ const LinkContextScreen = () => {
       }).start();
     }
   };
-  // console.log('data domain ', dataDomain);
+  
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
