@@ -3,7 +3,7 @@ import { TouchableNativeFeedback, View, Image, Text, StyleSheet, TouchableOpacit
 import PropTypes from 'prop-types';
 import { colors } from '../../../../utils/colors';
 import { fonts } from '../../../../utils/fonts';
-
+// data needed name, description, image
 const styles = StyleSheet.create({
     buttonFollow: {
         width: 88,
@@ -29,9 +29,11 @@ const styles = StyleSheet.create({
       profilepicture: {
         width: 48,
         height: 48,
-        backgroundColor: colors.bondi_blue,
+        // backgroundColor: colors.bondi_blue,
         borderRadius: 24,
         resizeMode: 'cover',
+        borderColor: colors.lightgrey,
+        borderWidth: 1
       },
       wrapProfile: {
         flexDirection: 'row',
@@ -91,6 +93,8 @@ const DomainList = (props) => {
         event.preventDefault();
         onPressList(item)
     }
+
+    console.log(item.name, 'nanak')
 
     return (
         <TouchableNativeFeedback
