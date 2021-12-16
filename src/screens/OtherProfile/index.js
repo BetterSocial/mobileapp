@@ -90,8 +90,10 @@ const OtherProfile = () => {
     setUserId(params.data.user_id);
     setOtherId(params.data.other_id);
     setUsername(params.data.username);
-    fetchOtherProfile(params.data.user_id, params.data.other_id);
+    fetchOtherProfile(params.data.username); 
+    
   }, [params.data]);
+
 
   const checkUserBlockHandle = async (user_id) => {
     try {
@@ -108,9 +110,10 @@ const OtherProfile = () => {
     }
   };
 
-  const fetchOtherProfile = async (userId, otherId) => {
+  const fetchOtherProfile = async (username) => {
     try {
-      const result = await getOtherProfile(userId, otherId);
+      const result = await getOtherProfile(username);
+      console.log(result, 'namai')
       if (result.code === 200) {
         setDataMain(result.data);
         checkUserBlockHandle(result.data.user_id);

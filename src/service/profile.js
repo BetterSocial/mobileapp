@@ -28,10 +28,10 @@ export const getPost = async (userId) => {
   });
 };
 
-export const getOtherProfile = async (userId, otherId) => {
+export const getOtherProfile = async (username) => {
   return new Promise((resolve, reject) => {
     api
-      .get(`/profiles/get-other-profile/${userId}?other_user_id=${otherId}`)
+      .get(`/profiles/get-other-profile-by-username/${username}`)
       .then((res) => {
         resolve(res.data);
       })
