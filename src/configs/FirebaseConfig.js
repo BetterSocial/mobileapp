@@ -4,15 +4,16 @@ import PropTypes from 'prop-types';
 import {getUserId} from '../utils/users';
 const FirebaseConfig = (props) => {
     const {navigation} = props
-    const USER = 'user'
+    const USER = 'users'
     const getUserProfile = async (url) => {
         if(url && typeof url === 'string') {
             const userId =  await getUserId()
             const splitUser = url.split('/')
             let data = {}
-            const type = splitUser[splitUser.length - 2]
             const params = splitUser[splitUser.length - 1]
-            const splitting = params.split('&')
+            const splitParams = params.split('?')
+            const type = splitParams[0]
+            const splitting = splitParams[splitParams.length - 1].split('&')
             if(Array.isArray(splitting) && splitting.length > 0) {
                 splitting.map((value) => {
                     const mapSplit = value.split('=')
@@ -20,6 +21,7 @@ const FirebaseConfig = (props) => {
                 })
             }
             data = {...data, user_id: userId}
+            console.log(data, 'natal')
             handleMovePage(type, data)
         }
     }
@@ -37,13 +39,17 @@ const FirebaseConfig = (props) => {
     const handleBgDynamicLink = () => {
         dynamicLinks().getInitialLink().then((data) => {
             console.log(data, 'dynamic link')
-            getUserProfile(data.url)
+            if(data) {
+                getUserProfile(data.url)
+            }
         })
     }
 
     const handleFgDynamicLink = () => {
         dynamicLinks().onLink((link) => {
-            getUserProfile(link.url)
+            if(link) {
+                getUserProfile(link.url)
+            }
             console.log(link, 'dynamic link1')
         })
     }
