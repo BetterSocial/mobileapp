@@ -328,12 +328,13 @@ const PostPageDetailComponent = (props) => {
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
+      <Header props={item} isBackButton={true} />
+
       <ScrollView
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
         style={styles.contentScrollView(totalComment)}>
         <View style={styles.content(height)}>
-          <Header props={item} isBackButton={true} />
           {item && item.post_type === POST_TYPE_POLL && (
             <ContentPoll
               index={index}
