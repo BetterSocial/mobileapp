@@ -178,7 +178,7 @@ const RootStact = () => {
           component={FollowingScreen}
           options={{
             headerShown: true,
-            header: ({navigation}) => {
+            header: ({navigation}) => {             
               return (
                 <SafeAreaView>
                   <Header
