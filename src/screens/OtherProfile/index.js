@@ -78,7 +78,6 @@ const OtherProfile = () => {
   const create = useClientGetstream();
 
   const {params} = route;
-
   React.useEffect(() => {
     create();
     setIsLoading(true);
@@ -113,7 +112,6 @@ const OtherProfile = () => {
   const fetchOtherProfile = async (username) => {
     try {
       const result = await getOtherProfile(username);
-      console.log(result, 'namai')
       if (result.code === 200) {
         setDataMain(result.data);
         checkUserBlockHandle(result.data.user_id);
@@ -174,7 +172,7 @@ const OtherProfile = () => {
     };
     const result = await setUnFollow(data);
     if (result.code == 200) {
-      fetchOtherProfile(user_id, other_id, false);
+      fetchOtherProfile(username);
     }
   };
 
@@ -185,8 +183,9 @@ const OtherProfile = () => {
       follow_source: 'other-profile',
     };
     const result = await setFollow(data);
+
     if (result.code === 200) {
-      fetchOtherProfile(user_id, other_id, false);
+      fetchOtherProfile(username);
     }
   };
 
@@ -401,7 +400,7 @@ const OtherProfile = () => {
                                     />
                                   </View>
                                 </TouchableNativeFeedback>
-                                {dataMain.is_following ? (
+                                {user_id === other_id ? null : <React.Fragment>{dataMain.is_following ? (
                                   <TouchableNativeFeedback
                                     onPress={() => handleSetUnFollow()}>
                                     <View style={styles.buttonFollowing}>
@@ -419,7 +418,8 @@ const OtherProfile = () => {
                                       </Text>
                                     </View>
                                   </TouchableNativeFeedback>
-                                )}
+                                )}</React.Fragment>}
+                                
                               </React.Fragment>
                             )}
                           </View>
