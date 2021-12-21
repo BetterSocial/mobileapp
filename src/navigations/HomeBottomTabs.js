@@ -19,14 +19,15 @@ import {setImageUrl} from '../context/actions/users';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 import {getUserId} from '../utils/users';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import FirebaseConfig from '../configs/FirebaseConfig';
 
 const Tab = createBottomTabNavigator();
 
-function HomeBottomTabs() {
+function HomeBottomTabs(props) {
+  const {navigation} = props
   let [users, dispatch] = React.useContext(Context).users;
   let [, dispatchProfile] = React.useContext(Context).profile;
   const [unReadMessage] = React.useContext(Context).unReadMessage;
-
   React.useEffect(() => {
     let getProfile = async () => {
       try {
@@ -102,6 +103,7 @@ function HomeBottomTabs() {
           }}
         />
       </Tab.Navigator>
+      <FirebaseConfig navigation={navigation} />
     </SafeAreaView>
   );
 }

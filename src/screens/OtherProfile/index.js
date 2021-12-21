@@ -45,6 +45,7 @@ import ReportUser from '../../components/Blocking/ReportUser';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {blockUser, unblockUserApi} from '../../service/blocking';
+import SimpleToast from 'react-native-simple-toast';
 
 const width = Dimensions.get('screen').width;
 
@@ -78,7 +79,6 @@ const OtherProfile = () => {
   const create = useClientGetstream();
 
   const {params} = route;
-
   React.useEffect(() => {
     create();
     setIsLoading(true);
@@ -90,9 +90,11 @@ const OtherProfile = () => {
     setUserId(params.data.user_id);
     setOtherId(params.data.other_id);
     setUsername(params.data.username);
-    fetchOtherProfile(params.data.user_id, params.data.other_id);
+    fetchOtherProfile(params.data.username); 
+    
   }, [params.data]);
 
+  console.log(tokenJwt, 'sulima')
   const checkUserBlockHandle = async (user_id) => {
     try {
       const sendData = {
@@ -108,14 +110,17 @@ const OtherProfile = () => {
     }
   };
 
-  const fetchOtherProfile = async (userId, otherId) => {
+  const fetchOtherProfile = async (username) => {
     try {
-      const result = await getOtherProfile(userId, otherId);
+      const result = await getOtherProfile(username);
       if (result.code === 200) {
         setDataMain(result.data);
         checkUserBlockHandle(result.data.user_id);
       }
     } catch (e) {
+      if(e.response && e.response.data && e.response.data.message) {
+          SimpleToast.show(e.response.data.message, SimpleToast.SHORT)
+      }
       setBlockStatus({
         ...blockStatus,
         blocked: true,
@@ -169,9 +174,10 @@ const OtherProfile = () => {
       user_id_followed: other_id,
       follow_source: 'other-profile',
     };
+    console.log('nanima', data)
     const result = await setUnFollow(data);
     if (result.code == 200) {
-      fetchOtherProfile(user_id, other_id, false);
+      fetchOtherProfile(username);
     }
   };
 
@@ -181,9 +187,12 @@ const OtherProfile = () => {
       user_id_followed: other_id,
       follow_source: 'other-profile',
     };
+    console.log('nanima1', data)
+
     const result = await setFollow(data);
+
     if (result.code === 200) {
-      fetchOtherProfile(user_id, other_id, false);
+      fetchOtherProfile(username);
     }
   };
 
@@ -300,6 +309,8 @@ const OtherProfile = () => {
     }
   };
 
+  console.log(dataMain, 'kalak')
+
   const onBlocking = (reason) => {
     if (reason === 1) {
       handleBlocking();
@@ -398,7 +409,7 @@ const OtherProfile = () => {
                                     />
                                   </View>
                                 </TouchableNativeFeedback>
-                                {dataMain.is_following ? (
+                                {user_id === other_id ? null : <React.Fragment>{dataMain.is_following ? (
                                   <TouchableNativeFeedback
                                     onPress={() => handleSetUnFollow()}>
                                     <View style={styles.buttonFollowing}>
@@ -416,7 +427,8 @@ const OtherProfile = () => {
                                       </Text>
                                     </View>
                                   </TouchableNativeFeedback>
-                                )}
+                                )}</React.Fragment>}
+                                
                               </React.Fragment>
                             )}
                           </View>

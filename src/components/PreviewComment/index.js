@@ -20,9 +20,9 @@ const PreviewComment = ({
 
   let openProfile = async () => {
     let selfUserId = await getUserId();
-    if (selfUserId === user.id) {
-      return navigation.navigate('ProfileScreen');
-    }
+    // if (selfUserId === user.id) {
+    //   return navigation.navigate('ProfileScreen');
+    // }
     return navigation.navigate('OtherProfile', {
       data: {
         user_id: selfUserId,

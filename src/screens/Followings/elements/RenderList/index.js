@@ -1,9 +1,9 @@
 import React from 'react'
-import { TouchableNativeFeedback, View, Image, Text, StyleSheet } from 'react-native'
+import { TouchableNativeFeedback, View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types';
 import { colors } from '../../../../utils/colors';
 import { fonts } from '../../../../utils/fonts';
-
+// data needed name, description, image
 const styles = StyleSheet.create({
     buttonFollow: {
         width: 88,
@@ -29,9 +29,11 @@ const styles = StyleSheet.create({
       profilepicture: {
         width: 48,
         height: 48,
-        backgroundColor: colors.bondi_blue,
+        // backgroundColor: colors.bondi_blue,
         borderRadius: 24,
         resizeMode: 'cover',
+        borderColor: colors.lightgrey,
+        borderWidth: 1
       },
       wrapProfile: {
         flexDirection: 'row',
@@ -85,18 +87,20 @@ const styles = StyleSheet.create({
 })
 
 const DomainList = (props) => {
-    const {onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow} = props
+    const {onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody} = props
 
     const handlePress = (event) => {
         event.preventDefault();
         onPressList(item)
     }
 
+    console.log(item.name, 'nanak')
+
     return (
         <TouchableNativeFeedback
         onPress={handlePress}>
         <View style={styles.card}>
-          <View style={styles.wrapProfile}>
+          <TouchableOpacity onPress={() => onPressBody(item)} style={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
               {item.image  ? <Image
               source={{
@@ -119,7 +123,7 @@ const DomainList = (props) => {
                 {item.description ? item.description : ''}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
           {item.isunfollowed ? (
             <TouchableNativeFeedback onPress={handleSetFollow}>
               <View style={styles.buttonFollow}>
@@ -141,13 +145,15 @@ const DomainList = (props) => {
 DomainList.propTypes = {
     item: PropTypes.object,
     onPressList: PropTypes.func,
-    isHashtag: PropTypes.bool
+    isHashtag: PropTypes.bool,
+    onPressBody: PropTypes.func
 }
 
 DomainList.defaultProps = {
   onPressList: () => null,
   handleSetFollow: () => null,
-  handleSetUnFollow: () => null
+  handleSetUnFollow: () => null,
+  onPressBody: () => null
 }
 
 export default DomainList
