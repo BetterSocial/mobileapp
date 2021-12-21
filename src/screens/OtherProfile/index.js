@@ -45,6 +45,7 @@ import ReportUser from '../../components/Blocking/ReportUser';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {blockUser, unblockUserApi} from '../../service/blocking';
+import SimpleToast from 'react-native-simple-toast';
 
 const width = Dimensions.get('screen').width;
 
@@ -93,7 +94,7 @@ const OtherProfile = () => {
     
   }, [params.data]);
 
-
+  console.log(tokenJwt, 'sulima')
   const checkUserBlockHandle = async (user_id) => {
     try {
       const sendData = {
@@ -117,6 +118,9 @@ const OtherProfile = () => {
         checkUserBlockHandle(result.data.user_id);
       }
     } catch (e) {
+      if(e.response && e.response.data && e.response.data.message) {
+          SimpleToast.show(e.response.data.message, SimpleToast.SHORT)
+      }
       setBlockStatus({
         ...blockStatus,
         blocked: true,
@@ -170,6 +174,7 @@ const OtherProfile = () => {
       user_id_followed: other_id,
       follow_source: 'other-profile',
     };
+    console.log('nanima', data)
     const result = await setUnFollow(data);
     if (result.code == 200) {
       fetchOtherProfile(username);
@@ -182,6 +187,8 @@ const OtherProfile = () => {
       user_id_followed: other_id,
       follow_source: 'other-profile',
     };
+    console.log('nanima1', data)
+
     const result = await setFollow(data);
 
     if (result.code === 200) {
@@ -301,6 +308,8 @@ const OtherProfile = () => {
       console.log(e, 'eman');
     }
   };
+
+  console.log(dataMain, 'kalak')
 
   const onBlocking = (reason) => {
     if (reason === 1) {
