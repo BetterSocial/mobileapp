@@ -84,3 +84,7 @@ export const removeWhiteSpace = (txt) => {
     return txt.trim();
   }
 };
+
+export const shareUserLink = (username) => {
+  return `https://bettersocial-dev-user-api.herokuapp.com/api/v1/links/${username}`
+}

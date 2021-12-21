@@ -46,6 +46,7 @@ import BlockProfile from '../../components/Blocking/BlockProfile';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import {blockUser, unblockUserApi} from '../../service/blocking';
 import SimpleToast from 'react-native-simple-toast';
+import { shareUserLink } from '../../utils/Utils';
 
 const width = Dimensions.get('screen').width;
 
@@ -152,7 +153,7 @@ const OtherProfile = () => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: await buildLink(),
+        message: shareUserLink(username),
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
