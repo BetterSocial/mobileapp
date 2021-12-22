@@ -1,25 +1,23 @@
 import * as React from 'react';
-import {StyleSheet, Dimensions, Share, View} from 'react-native';
-
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import analytics from '@react-native-firebase/analytics';
-import {useNavigation} from '@react-navigation/core';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {Dimensions, Share, StyleSheet, View} from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {useNavigation} from '@react-navigation/core';
 
 import Content from './Content';
+import ContentLink from './ContentLink';
+import ContentPoll from './ContentPoll';
 import Header from './Header';
 import {Card} from '../../components/CardStack';
+import {Context} from '../../context';
+import {Footer, Gap, PreviewComment} from '../../components';
 import {
-  POST_TYPE_POLL,
   POST_TYPE_LINK,
+  POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
-import ContentPoll from './ContentPoll';
-
-import ContentLink from './ContentLink';
-import {Gap, PreviewComment, Footer} from '../../components';
 import {getCountCommentWithChild} from '../../utils/getstream';
-import {Context} from '../../context';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 
 const {width, height} = Dimensions.get('window');
@@ -93,6 +91,7 @@ async function buildLink(username) {
 }
 
 const onShare = async (username) => {
+  console.log(username)
   analytics().logEvent('feed_screen_btn_share', {
     id: 'btn_share',
   });

@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
-export const SlideShowItem = ({index, children}) => {
+import { fonts, normalizeFontSize } from '../../../utils/fonts';
+
+export const SlideShowItem = ({index, children, title, text, lineHeight}) => {
+    const width = Dimensions.get('screen').width
     const getBackgroundColor = () => {
         switch(index) {
             case 0 : return '#FFDFA0'
@@ -14,14 +17,43 @@ export const SlideShowItem = ({index, children}) => {
 
     let backgroundColor = getBackgroundColor()
 
-    return <View style={styles.slideShowItemContainer}>
+    return <View style={styles.slideShowItemContainer(backgroundColor, width)}>
         {children}
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.text(lineHeight)}>{text}</Text>
     </View>
 }
 
 const styles = StyleSheet.create({
-    slideShowItemContainer : {
-        justifyContent:'center',
-        flex: 1,
+    slideShowItemContainer : (backgroundColor, width) => {
+        return {
+            justifyContent:'center',
+            flex: 1,
+            backgroundColor : backgroundColor,
+            maxWidth: width,
+            marginTop: -32,
+        }
     },
+    title: {
+        fontSize: 18,
+        lineHeight:12.5,
+        fontFamily: fonts.inter[600],
+        zIndex: 1000,
+        paddingTop: 5,
+        marginTop: 18,
+        textAlign: 'center',
+        alignSelf: 'center'
+    },
+    text: (lineHeight) => {
+        return {
+            fontSize: 14.0,
+            lineHeight:lineHeight,
+            marginLeft: 12,
+            marginRight: 12,
+            marginTop: 16,
+            fontFamily: fonts.inter[500],
+            zIndex: 1000,
+            textAlign: 'center',
+        }
+    }
 });

@@ -25,7 +25,7 @@ let clientId = __DEV__
   : HUMAN_ID_CLIENT_ID_PRODUCTION;
 
 configureHumanID({
-  appName: 'BetterSocial',
+  appName: 'Better Social',
   clientSecret: clientSecret,
   clientId: clientId,
   Icon: AppIcon,

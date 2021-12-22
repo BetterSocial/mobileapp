@@ -1,52 +1,51 @@
 import * as React from 'react';
-import {
-  StatusBar,
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Dimensions,
-  TouchableNativeFeedback,
-  Share,
-  ScrollView,
-} from 'react-native';
-
-import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
+import SimpleToast from 'react-native-simple-toast';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {StreamApp, FlatFeed} from 'react-native-activity-feed';
+import {
+  Dimensions,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Share,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
+} from 'react-native';
+import {FlatFeed, StreamApp} from 'react-native-activity-feed';
+import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
+import {generateRandomId} from 'stream-chat-react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
-import {generateRandomId} from 'stream-chat-react-native';
 
-import {
-  getOtherProfile,
-  setUnFollow,
-  setFollow,
-  checkUserBlock,
-} from '../../service/profile';
-import RenderActivity from './elements/RenderActivity';
+import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
+import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
+import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
+import BlockDomain from '../../components/Blocking/BlockDomain';
+import BlockProfile from '../../components/Blocking/BlockProfile';
+import BlockUser from '../../components/Blocking/BlockUser';
+import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import Loading from '../Loading';
+import RenderActivity from './elements/RenderActivity';
+import ReportUser from '../../components/Blocking/ReportUser';
+import ShareIcon from '../../assets/icons/images/share.svg';
+import SpecificIssue from '../../components/Blocking/SpecificIssue';
+import {Context} from '../../context';
+import {blockUser, unblockUserApi} from '../../service/blocking';
+import {
+  checkUserBlock,
+  getOtherProfile,
+  setFollow,
+  setUnFollow,
+} from '../../service/profile';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {trimString} from '../../utils/string/TrimString';
 import {getAccessToken} from '../../utils/token';
-import ShareIcon from '../../assets/icons/images/share.svg';
-import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
-import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
-import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
-import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
-import {Context} from '../../context';
 import {setChannel} from '../../context/actions/setChannel';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import BlockUser from '../../components/Blocking/BlockUser';
-import ReportUser from '../../components/Blocking/ReportUser';
-import BlockProfile from '../../components/Blocking/BlockProfile';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import {blockUser, unblockUserApi} from '../../service/blocking';
-import SimpleToast from 'react-native-simple-toast';
 import { shareUserLink } from '../../utils/Utils';
+import {trimString} from '../../utils/string/TrimString';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
 const width = Dimensions.get('screen').width;
 
