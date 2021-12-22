@@ -1,4 +1,5 @@
 import * as React from 'react';
+import SimpleToast from 'react-native-simple-toast';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {
   Dimensions,
@@ -42,16 +43,9 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../utils/token';
 import {setChannel} from '../../context/actions/setChannel';
+import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import BlockUser from '../../components/Blocking/BlockUser';
-import ReportUser from '../../components/Blocking/ReportUser';
-import BlockProfile from '../../components/Blocking/BlockProfile';
-import SpecificIssue from '../../components/Blocking/SpecificIssue';
-import {blockUser, unblockUserApi} from '../../service/blocking';
-import SimpleToast from 'react-native-simple-toast';
-import { shareUserLink } from '../../utils/Utils';
 
 const width = Dimensions.get('screen').width;
 
