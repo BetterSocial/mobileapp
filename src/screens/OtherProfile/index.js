@@ -392,6 +392,14 @@ const OtherProfile = () => {
       console.log(e);
     }
   };
+  
+  const goToFollowings = (user_id, username) => {
+    navigation.navigate('Followings', {
+      screen: 'TabFollowing',
+      params: {user_id, username},
+    });
+  };
+
 
   return (
     <>
@@ -464,7 +472,7 @@ const OtherProfile = () => {
                                     />
                                   </View>
                                 </TouchableNativeFeedback>
-                                {user_id === other_id ? null : <React.Fragment>{dataMain.is_following ? (
+                                {user_id === dataMain.user_id ? null : <React.Fragment>{dataMain.is_following ? (
                                   <TouchableNativeFeedback
                                     onPress={() => handleSetUnFollow()}>
                                     <View style={styles.buttonFollowing}>
@@ -503,6 +511,19 @@ const OtherProfile = () => {
                               </Text>
                               <Text style={styles.textFollow}>Followers</Text>
                             </View>
+                            {user_id === dataMain.user_id ?           <View style={styles.following}>
+                            <TouchableNativeFeedback
+                              onPress={() =>
+                                goToFollowings(dataMain.user_id, dataMain.username)
+                              }>
+                              <View style={styles.wrapRow}>
+                                <Text style={styles.textTotal}>
+                                  {dataMain.following_symbol}
+                                </Text>
+                                <Text style={styles.textFollow}>Following</Text>
+                              </View>
+                            </TouchableNativeFeedback>
+                          </View> : null}
                           </View>
                           {renderBio(dataMain.bio)}
                         </React.Fragment>

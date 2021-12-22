@@ -155,26 +155,6 @@ const ProfileScreen = () => {
   };
 
 
-  async function buildLink() {
-    const link = await dynamicLinks().buildLink(
-      {
-        link: `https://dev.bettersocial.org/user/username=${dataMain.username}&other_id=${dataMain.user_id}`,
-        domainUriPrefix: 'https://bettersocialapp.page.link',
-        analytics: {
-          campaign: 'banner',
-        },
-        navigation: {
-          forcedRedirectEnabled: false,
-        },
-        android: {
-          packageName: 'org.bettersocial.dev',
-        },
-      },
-      'SHORT',
-    );
-    return link;
-  }
-
   const onShare = async () => {
     analytics().logEvent('profile_screen_btn_share', {
       id: 'btn_share',
