@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import {feedsReducer, feedsState} from './reducers/FeedReducer';
 import {channelReducer, channelState} from './reducers/channelReducer';
 import {clientReducer, clientState} from './reducers/clientReducer';
+import {feedsReducer, feedsState} from './reducers/FeedReducer';
 import {groupChatReducer, groupChatState} from './reducers/groupChat';
 import {
   localCommunityReducer,
@@ -14,6 +14,7 @@ import {
 } from './reducers/myProfileFeedReducer';
 import {myProfileReducer, myProfileState} from './reducers/myProfileReducer';
 import {newsReducer, newsState} from './reducers/newsReducer';
+import { otherProfileFeedReducer, otherProfileFeedState } from './reducers/OtherProfileFeedReducer';
 import {topicsReducer, topicsState} from './reducers/topicsReducer';
 import {
   unReadMessageReducer,
@@ -32,6 +33,7 @@ const Store = ({children}) => {
       localCommunityState,
     ),
     myProfileFeed: React.useReducer(myProfileFeedReducer, myProfileFeedState),
+    otherProfileFeed: React.useReducer(otherProfileFeedReducer, otherProfileFeedState),
     news: React.useReducer(newsReducer, newsState),
     profile: React.useReducer(myProfileReducer, myProfileState),
     topics: React.useReducer(topicsReducer, topicsState),

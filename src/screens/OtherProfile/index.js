@@ -28,6 +28,7 @@ import BlockUser from '../../components/Blocking/BlockUser';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import Loading from '../Loading';
 import RenderActivity from './elements/RenderActivity';
+import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
 import ShareIcon from '../../assets/icons/images/share.svg';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
@@ -35,14 +36,20 @@ import {Context} from '../../context';
 import {blockUser, unblockUserApi} from '../../service/blocking';
 import {
   checkUserBlock,
+  getOtherFeedsInProfile,
   getOtherProfile,
+  getSelfFeedsInProfile,
   setFollow,
   setUnFollow,
 } from '../../service/profile';
 import {colors} from '../../utils/colors';
+import { downVote, upVote } from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../utils/token';
+import { getFeedDetail } from '../../service/post';
+import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import {setChannel} from '../../context/actions/setChannel';
+import { setFeedByIndex, setOtherProfileFeed } from '../../context/actions/otherProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
@@ -69,7 +76,9 @@ const OtherProfile = () => {
   const [tokenJwt, setTokenJwt] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [channel, dispatchChannel] = React.useContext(Context).channel;
+  const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [reason, setReason] = React.useState([]);
+  const [yourselfId, setYourselfId] = React.useState('');
   const [blockStatus, setBlockStatus] = React.useState({
     blocked: false,
     blocker: false,
@@ -79,6 +88,13 @@ const OtherProfile = () => {
   const create = useClientGetstream();
 
   const {params} = route;
+  const {feeds} = otherProfileFeeds
+
+  const getOtherFeeds = async (userId) => {
+    let result = await getOtherFeedsInProfile(userId)
+    setOtherProfileFeed(result.data, dispatchOtherProfile)
+  }
+
   React.useEffect(() => {
     create();
     setIsLoading(true);
@@ -90,8 +106,7 @@ const OtherProfile = () => {
     setUserId(params.data.user_id);
     setOtherId(params.data.other_id);
     setUsername(params.data.username);
-    fetchOtherProfile(params.data.username); 
-    
+    fetchOtherProfile(params.data.username);
   }, [params.data]);
 
   console.log(tokenJwt, 'sulima')
@@ -116,6 +131,7 @@ const OtherProfile = () => {
       if (result.code === 200) {
         setDataMain(result.data);
         checkUserBlockHandle(result.data.user_id);
+        getOtherFeeds(result.data.user_id)
       }
     } catch (e) {
       if(e.response && e.response.data && e.response.data.message) {
@@ -128,26 +144,6 @@ const OtherProfile = () => {
       setIsLoading(false);
     }
   };
-
-  async function buildLink() {
-    const link = await dynamicLinks().buildLink(
-      {
-        link: `https://dev.bettersocial.org/${dataMain.username}`,
-        domainUriPrefix: 'https://bettersocialapp.page.link',
-        analytics: {
-          campaign: 'banner',
-        },
-        navigation: {
-          forcedRedirectEnabled: false,
-        },
-        android: {
-          packageName: 'org.bettersocial.dev',
-        },
-      },
-      'SHORT',
-    );
-    return link;
-  }
 
   const onShare = async () => {
     try {
@@ -338,6 +334,65 @@ const OtherProfile = () => {
     handleBlocking(message);
   };
 
+  let onNewPollFetched = (newPolls, index) => {
+    setFeedByIndex(
+      {
+        index: index,
+        singleFeed: newPolls,
+      },
+      dispatch,
+    );
+  };
+
+  const onPressDomain = (item) => {
+    let param = linkContextScreenParamBuilder(
+      item,
+      item.og.domain,
+      item.og.domainImage,
+      item.og.domain_page_id,
+    );
+    navigation.navigate('DomainScreen', param);
+  };
+
+  const onPress = (item, index) => {
+    navigation.navigate('OtherProfilePostDetailPage', {
+      index: index,
+      isalreadypolling: item.isalreadypolling,
+    });
+  };
+
+  const onPressComment = (index) => {
+    navigation.navigate('OtherProfilePostDetailPage', {
+      index: index,
+    });
+  };
+
+  const setUpVote = async (post, index) => {
+    await upVote(post);
+    updateFeed(post, index);
+  };
+  const setDownVote = async (post, index) => {
+    await downVote(post);
+    updateFeed(post, index);
+  };
+
+  const updateFeed = async (post, index) => {
+    try {
+      let data = await getFeedDetail(post.activity_id);
+      if (data) {
+        setFeedByIndex(
+          {
+            singleFeed: data.data,
+            index,
+          },
+          dispatch,
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
@@ -459,6 +514,7 @@ const OtherProfile = () => {
               {!isLoading ? (
                 <React.Fragment>
                   {blockStatus.blocked || blockStatus.blocker ? null : (
+                  // {true ? null : (
                     <View>
                       <View style={styles.tabs} ref={postRef}>
                         <Text style={styles.postText}>
@@ -466,14 +522,23 @@ const OtherProfile = () => {
                         </Text>
                       </View>
                       <View style={styles.containerFlatFeed}>
-                        <FlatFeed
-                          feedGroup="user"
-                          userId={other_id}
-                          Activity={(props, index) => {
-                            return RenderActivity(props, dataMain);
-                          }}
-                          notify
-                        />
+                        {feeds.map((item, index) => {
+                          return (
+                            <RenderItem 
+                              item={item} 
+                              index={index} 
+                              onNewPollFetched={onNewPollFetched}
+                              onPressDomain={onPressDomain}
+                              onPress={() => onPress(item, index)}
+                              onPressComment={() => onPressComment(index)}
+                              onPressBlock={onBlockReaction}
+                              onPressUpvote={(post) => setUpVote(post, index)}
+                              selfUserId={user_id}
+                              onPressDownVote={(post) =>
+                                setDownVote(post, index)
+                              }/>
+                          )
+                        })}
                       </View>
                     </View>
                   )}
@@ -676,7 +741,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   containerFlatFeed: {
-    padding: 20,
+    // padding: 20,
     flex: 1,
   },
   btnMsg: {

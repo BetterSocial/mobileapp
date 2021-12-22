@@ -175,3 +175,15 @@ export const getSelfFeedsInProfile = async () => {
       });
   });
 };
+
+export const getOtherFeedsInProfile = async (userId) => {
+  return new Promise((resolve, reject) => {
+    api
+      .get(`/profiles/feeds/${userId}`)
+      .then((res) => resolve(res.data))
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+};

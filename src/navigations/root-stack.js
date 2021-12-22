@@ -18,6 +18,8 @@ import ImageViewerScreen from '../screens/ImageViewer';
 import LinkContextScreen from '../screens/LinkContextScreen';
 import LocalComunity from '../screens/LocalComunity';
 import OtherProfile from '../screens/OtherProfile';
+import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
+import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
 import PostDetailPage from '../screens/PostPageDetail';
 import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
@@ -117,6 +119,11 @@ const RootStact = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="OtherProfileReplyComment"
+          component={OtherProfileReplyComment}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="PostDetailPage"
           component={PostDetailPage}
           options={{headerShown: false}}
@@ -124,6 +131,11 @@ const RootStact = () => {
         <Stack.Screen
           name="ProfilePostDetailPage"
           component={ProfilePostDetail}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OtherProfilePostDetailPage"
+          component={OtherProfilePostDetail}
           options={{headerShown: false}}
         />
         <Stack.Screen
