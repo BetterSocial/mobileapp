@@ -2,11 +2,8 @@ import * as React from 'react';
 import {
   Dimensions,
   FlatList,
-  Image,
-  SafeAreaView,
   StyleSheet,
   Text,
-  TouchableNativeFeedback,
   View,
 } from 'react-native';
 
@@ -18,6 +15,7 @@ import Loading from '../Loading';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
+import DomainList from './elements/RenderList';
 
 const width = Dimensions.get('screen').width;
 
@@ -41,12 +39,12 @@ const Followings = () => {
     withLoading ? setIsLoading(true) : null;
     const userId = await getUserId();
     const result = await getFollowing(userId);
-    console.log(result);
     if (result.code === 200) {
       withLoading ? setIsLoading(false) : null;
-      setDataFollowing(result.data);
+      const newData = result.data.map((data) => ({ ...data, name: data.user.username, image: data.user.profile_pic_path, description: null}))
+      setDataFollowing(newData);
       navigation.setOptions({
-        title: `Users (${result.data.length})`,
+        title: `Users (${newData.length})`,
       });
     }
   };
@@ -92,48 +90,7 @@ const Followings = () => {
 
   const renderItem = ({item, index}) => {
     return (
-      <TouchableNativeFeedback
-        onPress={(event) => {
-          event.preventDefault();
-          goToOtherProfile(item);
-        }}>
-        <View style={styles.card}>
-          <View style={styles.wrapProfile}>
-            <Image
-              source={{
-                uri: item.user.profile_pic_path,
-              }}
-              style={styles.profilepicture}
-              width={48}
-              height={48}
-            />
-            <View style={styles.wrapTextProfile}>
-              <Text style={styles.textProfileUsername}>
-                {item.user.username}
-              </Text>
-              <Text
-                style={styles.textProfileFullName}
-                numberOfLines={1}
-                ellipsizeMode={'tail'}>
-                {item.user.bio ? item.user.bio : ''}
-              </Text>
-            </View>
-          </View>
-          {item.hasOwnProperty('isunfollowed') ? (
-            <TouchableNativeFeedback onPress={() => handleSetFollow(index)}>
-              <View style={styles.buttonFollow}>
-                <Text style={styles.textButtonFollow}>Follow</Text>
-              </View>
-            </TouchableNativeFeedback>
-          ) : (
-            <TouchableNativeFeedback onPress={() => handleSetUnFollow(index)}>
-              <View style={styles.buttonFollowing}>
-                <Text style={styles.textButtonFollowing}>Following</Text>
-              </View>
-            </TouchableNativeFeedback>
-          )}
-        </View>
-      </TouchableNativeFeedback>
+      <DomainList item={item} onPressBody={() => goToOtherProfile(item)} handleSetFollow={() => handleSetFollow(index)} handleSetUnFollow={() => handleSetUnFollow(index)} />
     );
   };
 
@@ -145,6 +102,8 @@ const Followings = () => {
             data={dataFollowing}
             renderItem={renderItem}
             keyExtractor={(item) => item.follow_action_id}
+            refreshing={isLoading}
+            onRefresh={fetchFollowing}
           />
         </View>
       ) : (
@@ -295,9 +254,11 @@ const styles = StyleSheet.create({
   profilepicture: {
     width: 48,
     height: 48,
-    backgroundColor: colors.bondi_blue,
+    // backgroundColor: colors.bondi_blue,
     borderRadius: 24,
     resizeMode: 'cover',
+    borderColor: colors.lightgrey,
+    borderWidth: 1
   },
 });
 export default Followings;

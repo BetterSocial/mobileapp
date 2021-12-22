@@ -55,6 +55,7 @@ import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
 import {setImageUrl} from '../../context/actions/users';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
+import { shareUserLink } from '../../utils/Utils';
 
 const width = Dimensions.get('screen').width;
 
@@ -180,7 +181,7 @@ const ProfileScreen = () => {
     });
     try {
       const result = await Share.share({
-        message: await buildLink(),
+        message: shareUserLink(dataMain.username),
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

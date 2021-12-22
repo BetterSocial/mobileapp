@@ -52,7 +52,6 @@ const RootStact = () => {
   const [clientState] = React.useContext(Context).client;
   const [profileState] = React.useContext(Context).profile
   const {client} = clientState;
-  console.log(profileState, 'sikat')
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
@@ -62,7 +61,6 @@ const RootStact = () => {
     };
   }, []);
 
-  console.log(profileState, 'saka')
 
   return (
     <View
@@ -178,7 +176,7 @@ const RootStact = () => {
           component={FollowingScreen}
           options={{
             headerShown: true,
-            header: ({navigation}) => {
+            header: ({navigation}) => {  
               return (
                 <SafeAreaView>
                   <Header

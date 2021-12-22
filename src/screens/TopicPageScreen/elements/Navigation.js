@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback, SafeAreaView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/core';
 
@@ -12,7 +12,7 @@ const Navigation = ({ domain, onPress, isFollow = false }) => {
     navigation.goBack();
   };
   return (
-    <View style={styles.Header}>
+    <SafeAreaView style={styles.Header}>
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
         <MemoIc_arrow_back width={normalize(18)} height={normalize(18)} />
       </TouchableOpacity>
@@ -21,14 +21,14 @@ const Navigation = ({ domain, onPress, isFollow = false }) => {
           {domain}
         </Text>
       </View>
-      <View >
+      <View style={{marginRight: 10}} >
         {isFollow ? (
-          <TouchableNativeFeedback onPress={onPress}>
+          <TouchableNativeFeedback  onPress={onPress}>
             <View style={{
               backgroundColor: 'transparent',
               borderRadius: normalize(8),
               paddingHorizontal: normalize(12),
-              paddingVertical: normalize(4),
+              paddingVertical: normalize(1),
               borderColor: '#00ADB5',
               borderWidth: 0.5,
             }}>
@@ -36,19 +36,19 @@ const Navigation = ({ domain, onPress, isFollow = false }) => {
                 color: '#00ADB5',
                 fontSize: normalizeFontSize(14),
                 fontFamily: fonts.inter[500],
-                lineHeight: normalize(24),
+                // lineHeight: normalize(24),
                 textAlign: 'center',
               }}>Following</Text>
             </View>
           </TouchableNativeFeedback>
         ) : (
           <TouchableNativeFeedback onPress={onPress}>
-            <View style={{ backgroundColor: '#00ADB5', borderRadius: normalize(8), paddingHorizontal: normalize(12), paddingVertical: normalize(4) }}>
+            <View style={{ backgroundColor: '#00ADB5', borderRadius: normalize(8), paddingHorizontal: normalize(12), paddingVertical: normalize(1) }}>
               <Text style={{
                 color: 'white',
                 fontSize: normalizeFontSize(14),
                 fontFamily: fonts.inter[500],
-                lineHeight: normalize(24),
+                // lineHeight: normalize(24),
                 textAlign: 'center',
               }}>Follow</Text>
             </View>
@@ -56,7 +56,7 @@ const Navigation = ({ domain, onPress, isFollow = false }) => {
         )}
 
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -71,8 +71,7 @@ const styles = StyleSheet.create({
     marginTop: normalize(16),
   },
   backbutton: {
-    position: 'absolute',
-    left: 20,
+    paddingLeft: 20
   },
   domain: {
     flex: 1,
@@ -87,6 +86,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  buttonFollow: {
+    paddingHorizontal: 5,
+    paddingVertical: 10
+  }
 });
 
 export default Navigation;

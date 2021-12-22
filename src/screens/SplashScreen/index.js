@@ -49,11 +49,6 @@ const SplashScreen = () => {
         let otherProfile = await doGetProfileByUsername(username);
 
         if (!selfUserId || !otherProfile) {
-          if (!otherProfile) {
-            Alert.alert(
-              StringConstant.splashScreenDeeplinkGetProfileNotFound(username),
-            );
-          }
           return navigateWithoutDeeplink(selfUserId);
         }
 
