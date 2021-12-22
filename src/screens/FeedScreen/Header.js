@@ -138,9 +138,9 @@ const _renderProfileNormal = ({
 
   let navigateToProfile = async () => {
     let selfUserId = await getUserId();
-    // if (selfUserId === userId) {
-    //   return navigation.navigate('ProfileScreen');
-    // }
+    if (selfUserId === userId) {
+      return navigation.navigate('ProfileScreen');
+    }
     return navigation.navigate('OtherProfile', {
       data: {
         user_id: selfUserId,
