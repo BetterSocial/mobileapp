@@ -9,7 +9,6 @@ import Card from '../../components/Card/Card';
 const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress}) => {
   let route = useRoute();
   let isTouchableDisabled = route?.name === 'PostDetailPage';
-
   return (
     <Pressable
       disabled={isTouchableDisabled}
