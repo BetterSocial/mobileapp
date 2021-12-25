@@ -1,32 +1,32 @@
 import * as React from 'react';
-import { StyleSheet, View, SafeAreaView, StatusBar, ActivityIndicator } from 'react-native';
-
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
+import { ActivityIndicator, SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
 import {
   ChannelList,
+  ChannelPreviewMessage,
+  ChannelPreviewMessenger,
   ChannelPreviewStatus,
   ChannelPreviewTitle,
-  ChannelPreviewMessenger,
-  ChannelPreviewMessage,
   Chat,
   Streami18n,
 } from 'stream-chat-react-native';
-import analytics from '@react-native-firebase/analytics';
-import crashlytics from '@react-native-firebase/crashlytics';
-import Search from './elements/Search';
-import { Context } from '../../context';
-import { setChannel } from '../../context/actions/setChannel';
-import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { getUserId } from '../../utils/users';
+
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
-import { getChatName } from '../../utils/string/StringUtils';
+import Loading from '../Loading';
+import Search from './elements/Search';
 import {
   CHANNEL_TYPE_GROUP_LOCATION,
   CHANNEL_TYPE_TOPIC,
 } from '../../utils/constants';
-import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
-import { setMainFeeds } from '../../context/actions/feeds';
-import Loading from '../Loading';
 import { COLORS } from '../../utils/theme';
+import { Context } from '../../context';
+import { getChatName } from '../../utils/string/StringUtils';
+import { getUserId } from '../../utils/users';
+import { setChannel } from '../../context/actions/setChannel';
+import { setMainFeeds } from '../../context/actions/feeds';
+import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -94,7 +94,7 @@ const ChannelListScreen = ({ navigation }) => {
     return (
       <View style={{ paddingRight: 12 }}>
         <ChannelPreviewTitle
-          displayName={getChatName(name, profile.username)}
+          displayName={getChatName(name, profile.myProfile.username)}
         />
       </View>
     );

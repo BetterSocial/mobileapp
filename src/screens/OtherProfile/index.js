@@ -254,7 +254,7 @@ const OtherProfile = () => {
         'messaging',
         generateRandomId(),
         {
-          name: [profile.username, username].join(', '),
+          name: [profile.myProfile.username, username].join(', '),
           members: members,
         },
       );
