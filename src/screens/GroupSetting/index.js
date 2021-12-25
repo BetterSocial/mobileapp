@@ -34,7 +34,7 @@ const GroupSetting = ({navigation, route}) => {
   const {participants} = groupChatState;
   const {channel} = channelState;
   const [groupName, setGroupName] = React.useState(
-    getChatName(route.params.username, profile.username) || 'Set Group Name',
+    getChatName(route.params.username, profile.myProfile.username) || 'Set Group Name',
   );
   const [countUser] = React.useState(Object.entries(participants).length);
   const [changeName, setChangeName] = React.useState(false);

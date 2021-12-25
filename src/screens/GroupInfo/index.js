@@ -129,17 +129,17 @@ const GroupInfo = () => {
     );
   };
 
-  let chatName = getChatName(username, profile.username);
+  let chatName = getChatName(username, profile.myProfile.username);
 
   const onProfilePressed = (data) => {
-    if (profile.user_id === participants[data].user_id) {
+    if (profile.myProfile.user_id === participants[data].user_id) {
       navigation.navigate('ProfileScreen');
       return;
     }
 
     navigation.navigate('OtherProfile', {
       data: {
-        user_id: profile.user_id,
+        user_id: profile.myProfile.user_id,
         other_id: participants[data].user_id,
         username: participants[data].user.name,
       },

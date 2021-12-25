@@ -1,7 +1,7 @@
 import * as React from 'react';
 import uuid from 'react-native-uuid';
-import {Alert} from 'react-native';
-import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
+import { Alert } from 'react-native';
+import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
 import {
   Dimensions,
   RefreshControl,
@@ -10,23 +10,23 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {generateRandomId} from 'stream-chat-react-native-core';
-import {showMessage} from 'react-native-flash-message';
+import { generateRandomId } from 'stream-chat-react-native-core';
+import { showMessage } from 'react-native-flash-message';
 
 import ContactPreview from './elements/ContactPreview';
 import Header from './elements/Header';
 import ItemUser from './elements/ItemUser';
 import StringConstant from '../../utils/string/StringConstant';
-import {COLORS, SIZES} from '../../utils/theme';
-import {Context} from '../../context';
-import {Loading} from '../../components';
-import {Search} from './elements';
-import {setChannel} from '../../context/actions/setChannel';
-import {userPopulate} from '../../service/users';
+import { COLORS, SIZES } from '../../utils/theme';
+import { Context } from '../../context';
+import { Loading } from '../../components';
+import { Search } from './elements';
+import { setChannel } from '../../context/actions/setChannel';
+import { userPopulate } from '../../service/users';
 
 const width = Dimensions.get('screen').width;
 
-const ContactScreen = ({navigation}) => {
+const ContactScreen = ({ navigation }) => {
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState([]);
@@ -34,13 +34,13 @@ const ContactScreen = ({navigation}) => {
   const [channel, dispatchChannel] = React.useContext(Context).channel;
   const [client, setClient] = React.useContext(Context).client;
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
-  const [layoutProvider, setLayoutProvider] = React.useState(() => {});
+  const [layoutProvider, setLayoutProvider] = React.useState(() => { });
   const [refreshing, setRefreshing] = React.useState(false);
   const [dataProvider, setDataProvider] = React.useState(null);
-  const [followed, setFollowed] = React.useState([profile.user_id]);
+  const [followed, setFollowed] = React.useState([profile.myProfile.user_id]);
   const [cacheUsers, setCacheUser] = React.useState([]);
   const [text, setText] = React.useState(null);
-  const [usernames, setUsernames] = React.useState([profile.username]);
+  const [usernames, setUsernames] = React.useState([profile.myProfile.username]);
 
   const VIEW_TYPE_LABEL = 1;
   const VIEW_TYPE_DATA = 2;
@@ -118,18 +118,21 @@ const ContactScreen = ({navigation}) => {
         typeChannel = 1;
       }
       const clientChat = await client.client;
-      const filter = {type: 'messaging', members: {$eq: members}};
-      const sort = [{last_message_at: -1}];
+      const filter = { type: 'messaging', members: { $eq: members } };
+      const sort = [{ last_message_at: -1 }];
+      console.log(filter)
       const findChannels = await clientChat.queryChannels(filter, sort, {
         watch: true,
         state: true,
       });
 
+      console.log('query channel done')
+
       let generatedChannelId = generateRandomId();
       let memberWithRoles = members.map((item, index) => {
         return {
-          user_id : item,
-          channel_role : "channel_moderator",
+          user_id: item,
+          channel_role: "channel_moderator",
         }
       });
 
@@ -153,7 +156,7 @@ const ContactScreen = ({navigation}) => {
       setLoading(false);
       await navigation.replace('ChatDetailPage');
     } catch (error) {
-      console.log(error);
+      console.log('errror create chat', error);
       showMessage({
         message: 'Failed creating new chat',
         type: 'danger',

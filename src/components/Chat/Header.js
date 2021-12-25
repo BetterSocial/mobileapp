@@ -27,7 +27,7 @@ const Header = ({}) => {
 
   let username = channelClient.channel?.data?.name;
 
-  let chatName = getChatName(username, profileContext.username);
+  let chatName = getChatName(username, profileContext.myProfile.username);
 
   const renderHeaderImage = () => {
     if (channel?.data?.image) {

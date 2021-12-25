@@ -192,7 +192,7 @@ const RootStact = () => {
               return (
                 <SafeAreaView>
                   <Header
-                  title={profileState.navbarTitle}
+                  title={profileState.myProfile.navbarTitle}
                   containerStyle={styles.header}
                   titleStyle={styles.title}
                   onPress={() => navigation.goBack()}
