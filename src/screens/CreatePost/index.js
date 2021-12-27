@@ -207,36 +207,31 @@ const CreatePost = () => {
     }
   };
 
+  const getPreviewUrl = async (link) => {
+    let newLink = link;
+    if (link.indexOf('https://') < 0) {
+      newLink = `https://${link}`;
+    }
+
+    let data = await getLinkPreview(newLink);
+    if (data) {
+      setLinkPreviewMeta({
+        domain: data.siteName,
+        domainImage: data.favicons[0],
+        title: data.title,
+        description: data.description,
+        image: data.images[0],
+        url: data.url,
+      });
+    } else {
+      setLinkPreviewMeta(null);
+    }
+    setIsLinkPreviewShown(data ? true : false);
+  }
+
   React.useEffect(() => {
-    let getPreview = async (link) => {
-      let newLink = link;
-      if (link.indexOf('https://') < 0) {
-        newLink = `https://${link}`;
-      }
-
-      console.log('getting preview ' + newLink);
-
-      let data = await getLinkPreview(newLink);
-      console.log(data);
-      if (data) {
-        setLinkPreviewMeta({
-          domain: data.siteName,
-          domainImage: data.favicons[0],
-          title: data.title,
-          description: data.description,
-          image: data.images[0],
-          url: data.url,
-        });
-      } else {
-        setLinkPreviewMeta(null);
-      }
-      setIsLinkPreviewShown(data ? true : false);
-    };
-
-    // let link =
-    //   'https://tekno.kompas.com/read/2021/10/11/09160027/penjualan-smartphone-5g-di-indonesia-tembus-500.000-unit';
     if (isContainUrl(message)) {
-      getPreview(getUrl(message));
+      getPreviewUrl(getUrl(message));
     } else {
       setIsLinkPreviewShown(false);
     }
@@ -743,7 +738,7 @@ const CreatePost = () => {
             disabled={isPollButtonDisabled()}
             onPress={() => sendPollPost()}>
             Post
-          </Button> /* Poll Button */
+          </Button>
         ) : (
           <Button onPress={() => postTopic()}>Post</Button>
         )}

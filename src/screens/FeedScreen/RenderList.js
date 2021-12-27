@@ -210,6 +210,7 @@ const RenderListFeed = (props) => {
   React.useEffect(() => {
     initial();
   }, [item]);
+  {console.log(item, 'samanina')}
   return (
     <View style={[styles.cardContainer(bottomHeight)]}>
       <View style={styles.cardMain}>
