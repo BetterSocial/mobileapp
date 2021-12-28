@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StatusBar, StyleSheet, TouchableOpacity, View, SafeAreaView} from 'react-native';
+import {StatusBar, StyleSheet, TouchableOpacity, View, SafeAreaView, Platform} from 'react-native';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Animated from 'react-native-reanimated';
@@ -17,6 +17,7 @@ export default function FollowingScreen() {
   const TAB_TOPIC = 'TabTopic'
   const TAB_FOLLOWING = 'TabFollowing'
   const TAB_DOMAIN = 'TabDomain'
+  const isAndroid = Platform.OS === 'android'
   let Tabs = createMaterialTopTabNavigator();
   function MyTabBar({state, descriptors, navigation, position}) {
     return (
@@ -89,6 +90,7 @@ export default function FollowingScreen() {
 
   return (
     <View style={{flex: 1}} >
+      {isAndroid ? <StatusBar translucent={false} /> : null}
       {/* <StatusBar translucent={false} /> */}
       <Tabs.Navigator
         initialRouteName={TAB_FOLLOWING}
