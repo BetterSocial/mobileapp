@@ -48,6 +48,7 @@ import {
 import {Context} from '../context';
 import {colors} from '../utils/colors';
 import {fonts} from '../utils/fonts';
+import Blocked from '../screens/Blocked';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
@@ -258,6 +259,26 @@ const RootStact = () => {
           name="TopicPageScreen"
           component={TopicPageScreen}
           options={{headerShown: false}}
+        />
+        <Stack.Screen 
+          name='BlockScreen'
+          component={Blocked}
+          options={{
+            headerShown: true,
+            header: ({navigation}) => {  
+              return (
+                <SafeAreaView>
+                  <Header
+                  title={"Blocked"}
+                  containerStyle={styles.header}
+                  titleStyle={styles.title}
+                  onPress={() => navigation.goBack()}
+                />
+                </SafeAreaView>
+               
+              );
+            },
+          }}
         />
       </Stack.Navigator>
     </View>
