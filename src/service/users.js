@@ -100,3 +100,13 @@ export const userPopulate = async () => {
     console.log(error);
   }
 };
+
+
+export const getBlockedUserList = async () => {
+  try {
+    const getBlockList = await api.get('/profiles/block')
+    return getBlockList.data
+  } catch(e) {
+    crashlytics().recordError(new Error(e))
+  }
+}

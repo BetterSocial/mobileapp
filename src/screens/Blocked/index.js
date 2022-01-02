@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
     }
 })
 
-const Blocked = () => {
+const Blocked = (props) => {
+    const {navigation} = props
     const TAB_BLOCKED_USER = 'tabBlockedUser'
     const TAB_BLOCKED_DOMAIN = 'tabBlockedDomain'
     const TAB_BLOCKED_TOPIC = 'tabBlockedTopic'
