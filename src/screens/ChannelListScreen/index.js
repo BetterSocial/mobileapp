@@ -1,7 +1,8 @@
 import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
-import { ActivityIndicator, SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
+import moment from 'moment'
+import { ActivityIndicator, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import {
   ChannelList,
   ChannelPreviewMessage,
@@ -13,6 +14,7 @@ import {
 } from 'stream-chat-react-native';
 
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
+import IconChatCheckMark from '../../assets/icon/IconChatCheckMark'
 import Loading from '../Loading';
 import Search from './elements/Search';
 import {
@@ -21,6 +23,7 @@ import {
 } from '../../utils/constants';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
+import { calculateTime } from '../../utils/time';
 import { getChatName } from '../../utils/string/StringUtils';
 import { getUserId } from '../../utils/users';
 import { setChannel } from '../../context/actions/setChannel';
@@ -77,13 +80,39 @@ const ChannelListScreen = ({ navigation }) => {
 
   const customPreviewStatus = (props) => {
     let newLatestMessagePreview = { ...props.latestMessagePreview };
-    // console.log(props);
+    console.log('props.latestMessagePreview');
+    console.log(props.latestMessagePreview);
     // if (props.latestMessagePreview.status > 1) {
     //   newLatestMessagePreview.status = 3;
     // }
+
+
+    let renderCheckMark = () => {
+      let showCheckMark = props?.latestMessagePreview?.messageObject?.id?.indexOf(userId) > -1
+      let checkMarkStatus = props?.latestMessagePreview?.status
+      if(!showCheckMark) return <></>
+      
+      // Not sent yet
+      if(checkMarkStatus === 0) {
+        // TODO: Change to clock icon
+        return <Text>p</Text>
+      } else {
+        return <IconChatCheckMark height={16} width={16}/>
+      }
+    }
+
+    let renderDate = () => {
+      let updatedAt = props?.latestMessagePreview?.messageObject?.updated_at 
+      if(!updatedAt) return <></>
+
+      let diffTime = calculateTime(moment(updatedAt))
+      return <Text style={{fontSize: 12, marginLeft: 4}}>{diffTime}</Text>
+    }
     return (
-      <View style={{ paddingRight: 12 }}>
-        <ChannelPreviewStatus latestMessagePreview={newLatestMessagePreview} />
+      <View style={{ paddingRight: 12, display:'flex', flexDirection:'row'}}>
+        {/* <ChannelPreviewStatus latestMessagePreview={newLatestMessagePreview} /> */}
+        { renderCheckMark() }
+        { renderDate() }
       </View>
     );
   };
