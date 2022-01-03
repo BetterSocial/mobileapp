@@ -36,7 +36,7 @@ class BlockDomainComponent extends React.Component {
         })
         this.refSpecificIssue.current.close();
         setTimeout(() => {
-            __onBlockDomain();
+            this.__onBlockDomain();
         }, 500);
     }
 
@@ -50,7 +50,7 @@ class BlockDomainComponent extends React.Component {
 
     __onSelectBlock(v) {
         if (v === 1) {
-            __onBlockDomain();
+            this.__onBlockDomain();
         } else {
             this.refReportDomain.current.open();
         }
@@ -60,18 +60,19 @@ class BlockDomainComponent extends React.Component {
     __onSkipOnlyBlock() {
         this.refReportDomain.current.close();
         this.refSpecificIssue.current.close();
-        __onBlockDomain();
+        this.__onBlockDomain();
     }
 
     __onBlockDomain() {
         blockUtils.uiBlockDomain(
             this.props.domainId,
-            messageReport,
-            reportOption,
+            this.state.reportOption,
+            this.state.messageReport,
             this.props.screen || "domain_screen",
             () => {}
         )
     }
+
 
     render() {
         return (

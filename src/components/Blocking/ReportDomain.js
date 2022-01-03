@@ -15,7 +15,7 @@ import ItemList from '../../components/Blocking/ItemList';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const ReportDomain = ({refReportDomain, onSelect, onSkip}) => {
+const ReportDomain = React.forwardRef((props, ref) => {
   const data = [
     {
       id: 1,
@@ -65,7 +65,7 @@ const ReportDomain = ({refReportDomain, onSelect, onSkip}) => {
   return (
     <View>
       <RBSheet
-        ref={refReportDomain}
+        ref={ref}
         closeOnDragDown={false}
         closeOnPressMask={true}
         customStyles={{
@@ -103,7 +103,7 @@ const ReportDomain = ({refReportDomain, onSelect, onSkip}) => {
       </RBSheet>
     </View>
   );
-};
+})
 
 export default ReportDomain;
 

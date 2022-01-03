@@ -1,6 +1,6 @@
 import Toast from 'react-native-simple-toast';
 
-import {blockAnonymous, blockUser} from '../../service/blocking';
+import {blockAnonymous, blockUser, blockDomain} from '../../service/blocking';
 
 const uiBlockPostAnonymous = async(postId, source, reason, message, callback) => {
     const data = {
@@ -48,7 +48,9 @@ const uiBlockDomain = async(domainId, reason, message, source, callback) => {
         message,
         source,
     };
+    console.log(dataBlock, 'datablock')
     const result = await blockDomain(dataBlock);
+    console.log(result, 'mantap')
     if (result.code === 200) {
         callback();
         Toast.show(

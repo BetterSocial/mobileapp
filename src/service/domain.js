@@ -78,3 +78,13 @@ export const getFollowedDomain = async (body) => {
     throw new Error(e)
   }
 }
+
+export const getBlockedDomain = async () => {
+  try {
+    const processGetFollowDomain = await api.get('/domain/blocked')
+    return processGetFollowDomain.data
+  } catch(e) {
+    crashlytics().recordError(new Error(e))
+    throw new Error(e)
+  }
+}
