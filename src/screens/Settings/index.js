@@ -37,6 +37,10 @@ const Settings = () => {
     });
   };
 
+  const goToPage = (pageName) => {
+    navigation.navigate(pageName)
+  }
+
   return (
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
@@ -45,7 +49,7 @@ const Settings = () => {
           <Header title="Settings" onPress={() => navigation.goBack()} />
         </View>
         <View style={styles.content}>
-          <TouchableNativeFeedback>
+          <TouchableNativeFeedback onPress={() => goToPage('BlockScreen')} >
             <View style={styles.card}>
               <Text style={styles.textCard}>Blocked list</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
