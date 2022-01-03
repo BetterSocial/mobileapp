@@ -221,7 +221,7 @@ const SignIn = () => {
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('KVL1JKD8VG6KMHUZ0RY0')}>
+          <TouchableOpacity onPress={() => dummyLogin('JO2ZNRBDWS3DMD7HASWL')}>
             <Text style={S.dummyAccountItem}>unass : KVL1JKD8VG6KMHUZ0RY0</Text>
             <View style={S.divider} />
           </TouchableOpacity>
