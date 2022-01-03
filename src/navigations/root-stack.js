@@ -53,6 +53,7 @@ const Stack = createStackNavigator();
 const RootStact = () => {
   const [clientState] = React.useContext(Context).client;
   const [profileState] = React.useContext(Context).profile
+  console.log(profileState, 'suman')
   const {client} = clientState;
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
@@ -192,7 +193,7 @@ const RootStact = () => {
               return (
                 <SafeAreaView>
                   <Header
-                  title={profileState.myProfile.navbarTitle}
+                  title={profileState.navbarTitle}
                   containerStyle={styles.header}
                   titleStyle={styles.title}
                   onPress={() => navigation.goBack()}
