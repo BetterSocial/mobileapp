@@ -16,11 +16,11 @@ import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
-import {COLORS} from '../../utils/theme';
-import {Context} from '../../context';
-import {fonts} from '../../utils/fonts';
-import {setAsset, setParticipants} from '../../context/actions/groupChat';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import { COLORS } from '../../utils/theme';
+import { Context } from '../../context';
+import { fonts } from '../../utils/fonts';
+import { setAsset, setParticipants } from '../../context/actions/groupChat';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
 const streami18n = new Streami18n({
   language: 'en',
@@ -74,7 +74,7 @@ const ChatDetailPage = () => {
       {
         cid: channelID,
       },
-      {'attachments.type': {$in: ['image']}},
+      { 'attachments.type': { $in: ['image'] } },
     );
     setAsset(messages.results, dispatch);
   };
@@ -99,15 +99,14 @@ const ChatDetailPage = () => {
             reactionsEnabled={false}
             readEventsEnabled={true}
             threadRepliesEnabled={false}
-            // MessageContent={CustomMessageContent}
             MessageStatus={ChatStatusIcon}
             messageActions={(props) => {
               return defaultActionsAllowed(props);
             }}
             ReactionList={() => null}>
-            <View style={{flex: 1, zIndex: 0}}>
+            <View style={{ flex: 1, zIndex: 0 }}>
               <Header />
-              <View style={{flex: 1, zIndex: 1}}>
+              <View style={{ flex: 1, zIndex: 1 }}>
                 <MessageList
                   tDateTimeParser={testDate}
                   InlineDateSeparator={CustomInlineDateSeparator}
@@ -123,7 +122,7 @@ const ChatDetailPage = () => {
   return <View />;
 };
 
-const CustomInlineDateSeparator = ({date}) => {
+const CustomInlineDateSeparator = ({ date }) => {
   let newDate = moment(date).locale('en').format('MMMM D, YYYY');
   return <Text style={[styles.date, styles.inlineDate]}>{newDate}</Text>;
 };
@@ -131,14 +130,6 @@ const CustomInlineDateSeparator = ({date}) => {
 const CustomDateHeader = () => {
   return null;
 };
-
-const CustomMessageContent = (props) => {
-  return <MessageContent {...props } MessageFooter={CustomMessageStatus}/>
-}
-
-const CustomMessageStatus = (props) => {
-  return <ChatStatusIcon {...props} />
-}
 
 export default ChatDetailPage;
 const styles = StyleSheet.create({
