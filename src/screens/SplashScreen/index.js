@@ -1,24 +1,23 @@
 import * as React from 'react';
+import SplashScreenPackage from 'react-native-splash-screen';
+import analytics from '@react-native-firebase/analytics';
 import {
   Alert,
   Image,
   Linking,
+  SafeAreaView,
+  StatusBar,
   StyleSheet,
   View,
-  StatusBar,
-  SafeAreaView,
 } from 'react-native';
-
 import {useNavigation} from '@react-navigation/core';
-import analytics from '@react-native-firebase/analytics';
-import SplashScreenPackage from 'react-native-splash-screen';
 
-import {verifyTokenGetstream} from '../../service/users';
-import {getProfileByUsername} from '../../service/profile';
-import {getAccessToken} from '../../utils/token';
 import StringConstant from '../../utils/string/StringConstant';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {getAccessToken} from '../../utils/token';
+import {getProfileByUsername} from '../../service/profile';
 import {getUserId} from '../../utils/users';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {verifyTokenGetstream} from '../../service/users';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
@@ -61,13 +60,13 @@ const SplashScreen = () => {
         }
 
         SplashScreenPackage.hide();
-        navigation.replace('OtherProfile', {
-          data: {
-            user_id: selfUserId,
-            other_id: otherProfile.user_id,
-            username: otherProfile.username,
-          },
-        });
+        // navigation.replace('OtherProfile', {
+        //   data: {
+        //     user_id: selfUserId,
+        //     other_id: otherProfile.user_id,
+        //     username: otherProfile.username,
+        //   },
+        // });
 
         return setIsModalShown(false);
       }
@@ -85,11 +84,12 @@ const SplashScreen = () => {
     try {
       let token = await getAccessToken();
       let id = await getUserId();
-      console.log(token);
       if (id !== null && id !== '') {
         const verify = await verifyTokenGetstream();
         if (verify !== null && verify !== '') {
           create();
+          console.log('user id');
+          console.log(id);
           return id;
         } else {
           return null;
@@ -105,7 +105,11 @@ const SplashScreen = () => {
   let doGetProfileByUsername = async (username) => {
     try {
       let response = await getProfileByUsername(username);
+      console.log('response.data')
+      console.log(response.data)
       if (response.code === 200) {
+        console.log('response.data')
+        console.log(response.data)
         return response.data;
       }
       return false;
