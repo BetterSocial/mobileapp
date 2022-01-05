@@ -48,11 +48,13 @@ import {
 import {Context} from '../context';
 import {colors} from '../utils/colors';
 import {fonts} from '../utils/fonts';
+import Blocked from '../screens/Blocked';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
   const [clientState] = React.useContext(Context).client;
   const [profileState] = React.useContext(Context).profile
+  console.log(profileState, 'suman')
   const {client} = clientState;
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
@@ -192,7 +194,7 @@ const RootStact = () => {
               return (
                 <SafeAreaView>
                   <Header
-                  title={profileState.myProfile.navbarTitle}
+                  title={profileState.navbarTitle}
                   containerStyle={styles.header}
                   titleStyle={styles.title}
                   onPress={() => navigation.goBack()}
@@ -258,6 +260,26 @@ const RootStact = () => {
           name="TopicPageScreen"
           component={TopicPageScreen}
           options={{headerShown: false}}
+        />
+        <Stack.Screen 
+          name='BlockScreen'
+          component={Blocked}
+          options={{
+            headerShown: true,
+            header: ({navigation}) => {  
+              return (
+                <SafeAreaView>
+                  <Header
+                  title={"Blocked"}
+                  containerStyle={styles.header}
+                  titleStyle={styles.title}
+                  onPress={() => navigation.goBack()}
+                />
+                </SafeAreaView>
+               
+              );
+            },
+          }}
         />
       </Stack.Navigator>
     </View>
