@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/core';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 import { ButtonFollow, ButtonFollowing } from '../../../components/Button';
+import { convertString } from '../../../utils/string/StringUtils';
 
 const Navigation = ({ domain, onPress, isFollow = false }) => {
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ const Navigation = ({ domain, onPress, isFollow = false }) => {
       </TouchableOpacity>
       <View style={styles.domain}>
         <Text style={styles.domainText} numberOfLines={1} ellipsizeMode="tail">
-          {`#${domain}`}
+          {`#${convertString(domain, ' ', '')}`}
         </Text>
       </View>
       <View style={{ marginRight: 10 }} >
