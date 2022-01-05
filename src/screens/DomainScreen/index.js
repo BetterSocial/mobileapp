@@ -1,8 +1,8 @@
 import * as React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Toast from 'react-native-simple-toast';
-import {FlatList, StatusBar, StyleSheet, View} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import { FlatList, StatusBar, StyleSheet, View } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
 import Header from './elements/Header';
@@ -10,18 +10,20 @@ import Loading from '../Loading';
 import Navigation from './elements/Navigation';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
-import {COLORS} from '../../utils/theme';
-import {Context} from '../../context';
-import {addIFollowByID, setIFollow} from '../../context/actions/news';
-import {downVoteDomain, upVoteDomain} from '../../service/vote';
+import { COLORS } from '../../utils/theme';
+import { Context } from '../../context';
+import { addIFollowByID, setIFollow } from '../../context/actions/news';
+import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import {
+  checkBlockDomainPage,
   followDomain,
   getDetailDomains,
   getDomainIdIFollow,
   getProfileDomain,
   unfollowDomain,
 } from '../../service/domain';
-import {getUserId} from '../../utils/users';
+import { getUserId } from '../../utils/users';
+import { unblokDomain } from '../../service/blocking';
 
 const DomainScreen = () => {
   const route = useRoute();
@@ -34,6 +36,7 @@ const DomainScreen = () => {
   const [domain, setDomain] = React.useState(route.params.item.og.domain);
   const [idFromToken, setIdFromToken] = React.useState('');
   const [domainFollowers, setDomainFollowers] = React.useState(0);
+  const [isBlocked, setIsBlocked] = React.useState(false)
   const [follow, setFollow] = React.useState(false);
   let iddomain = dataDomain.content.domain_page_id;
   const [dataFollow] = React.useState({
@@ -42,7 +45,7 @@ const DomainScreen = () => {
   });
 
   const [news, dispatch] = React.useContext(Context).news;
-  let {ifollow} = news;
+  let { ifollow } = news;
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -56,7 +59,21 @@ const DomainScreen = () => {
 
   React.useEffect(() => {
     getIFollow();
-  }, [iddomain, ifollow]);
+  }, []);
+
+  React.useEffect(() => {
+    checkBlockDomain()
+  }, [])
+
+  const checkBlockDomain = async () => {
+   const processCheckBlock = await checkBlockDomainPage(iddomain)
+   if(processCheckBlock.data) {
+    setIsBlocked(true)
+   } else {
+     setIsBlocked(false)
+   }
+  }
+
   const getIFollow = async () => {
     if (ifollow.length === 0) {
       let res = await getDomainIdIFollow();
@@ -72,9 +89,8 @@ const DomainScreen = () => {
     }
     let res = await getDetailDomains(dataDomain.og.domain);
     if (res.code === 200) {
-      // console.log('dataDomain.og.domain');
       setDomainFollowers(res.followers);
-      setData([{dummy: true}, ...res.data]);
+      setData([{ dummy: true }, ...res.data]);
       setLoading(false);
     }
     if (withLoading) {
@@ -88,8 +104,6 @@ const DomainScreen = () => {
 
   React.useEffect(() => {
     const getProfile = async () => {
-      console.log('domain');
-      console.log(domain);
       let res = await getProfileDomain(domain);
       if (res.code === 200) {
         setProfile(res.data);
@@ -102,7 +116,7 @@ const DomainScreen = () => {
   }, [dataDomain]);
 
   const handleOnPressComment = (itemNews) => {
-    navigation.navigate('DetailDomainScreen', {item: itemNews});
+    navigation.navigate('DetailDomainScreen', { item: itemNews });
   };
 
   const upvoteNews = async (news) => {
@@ -134,10 +148,8 @@ const DomainScreen = () => {
         dispatch,
       );
       init();
-      console.log('res follow');
     } else {
       setDomainFollowers(domainFollowers);
-      console.log('error follow domain');
     }
   };
 
@@ -152,14 +164,29 @@ const DomainScreen = () => {
         return obj.domain_id_followed !== iddomain;
       });
 
-      console.log('res unfollow');
       setIFollow(newListFollow, dispatch);
       init();
     } else {
       setDomainFollowers(domainFollowers);
-      console.log('error unfollow domain');
     }
   };
+
+  const checkBlock = (data) => {
+    if(!data) {
+      setIsBlocked(false)
+    } else {
+      setIsBlocked(true)
+    }
+  }
+
+ const onUnblockDomain = async () => {
+    await unblokDomain({domain_page_id: iddomain}).then(() => {
+        checkBlockDomain()
+    })
+
+}
+
+  console.log(dataDomain, 'kakam')
 
   return (
     <View style={styles.container}>
@@ -167,19 +194,21 @@ const DomainScreen = () => {
       <Navigation domain={dataDomain.og.domain} />
       <FlatList
         data={data}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           if (index === 0) {
             return (
-              <View key={index} style={{backgroundColor: 'transparent'}}>
+              <View key={index} style={{ backgroundColor: 'transparent' }}>
                 <Header
                   image={domainImage}
-                  description={dataDomain.domain ? dataDomain.domain.info : ''}
+                  description={profile.short_description}
                   domain={dataDomain.og.domain}
                   followers={domainFollowers}
-                  onPress={onReaction}
+                  onPressBlock={onReaction}
+                  onPressUnblock={onUnblockDomain}
                   follow={follow}
                   handleFollow={handleFollow}
                   handleUnfollow={handleUnfollow}
+                  isBlocked={isBlocked}
                 />
                 <LinearGradient
                   colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']}
@@ -213,17 +242,19 @@ const DomainScreen = () => {
       />
 
       <Loading visible={loading} />
-      <BlockDomainComponent 
-        ref={refBlockDomainComponent} 
-        domain={domain} 
+      <BlockDomainComponent
+        ref={refBlockDomainComponent}
+        domain={domain}
         domainId={dataDomain.content.domain_page_id}
-        screen="domain_screen" />
+        screen="domain_screen" 
+        getValueBlock={(data) => checkBlock(data)}
+        />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  list: {flex: 1},
+  list: { flex: 1 },
   container: {
     flex: 1,
     // backgroundColor: COLORS.gray1,

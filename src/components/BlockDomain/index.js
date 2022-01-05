@@ -6,6 +6,7 @@ import BlockDomain from '../Blocking/BlockDomain';
 import ReportDomain from '../Blocking/ReportDomain';
 import SpecificIssue from '../Blocking/SpecificIssue';
 import blockUtils from '../../service/utils/blockUtils';
+import { getBlockedDomain } from '../../service/domain';
 
 class BlockDomainComponent extends React.Component {
     constructor(props) {
@@ -69,7 +70,11 @@ class BlockDomainComponent extends React.Component {
             this.state.reportOption,
             this.state.messageReport,
             this.props.screen || "domain_screen",
-            () => {}
+            () => {
+                getBlockedDomain(this.props.domainId).then((res) => {
+                    this.props.getValueBlock(res.data)
+                })
+            }
         )
     }
 
