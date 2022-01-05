@@ -39,7 +39,6 @@ const FirebaseConfig = (props) => {
 
     const handleBgDynamicLink = () => {
         dynamicLinks().getInitialLink().then((data) => {
-            console.log(data, 'dynamic link')
             if(data) {
                 getUserProfile(data.url)
             }
@@ -51,7 +50,6 @@ const FirebaseConfig = (props) => {
             if(link) {
                 getUserProfile(link.url)
             }
-            console.log(link, 'dynamic link1')
         })
     }
 
