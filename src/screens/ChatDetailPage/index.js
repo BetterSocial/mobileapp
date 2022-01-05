@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 
 import {
   Chat,
@@ -12,12 +12,12 @@ import {
 
 import Header from '../../components/Chat/Header';
 import InputMessage from '../../components/Chat/InputMessage';
-import {Context} from '../../context';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import {setAsset, setParticipants} from '../../context/actions/groupChat';
+import { Context } from '../../context';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import { setAsset, setParticipants } from '../../context/actions/groupChat';
 import moment from 'moment';
-import {COLORS} from '../../utils/theme';
-import {fonts} from '../../utils/fonts';
+import { COLORS } from '../../utils/theme';
+import { fonts } from '../../utils/fonts';
 import ImageSendPreview from './elements/ImageSendPreview';
 
 const streami18n = new Streami18n({
@@ -72,7 +72,7 @@ const ChatDetailPage = () => {
       {
         cid: channelID,
       },
-      {'attachments.type': {$in: ['image']}},
+      { 'attachments.type': { $in: ['image'] } },
     );
     setAsset(messages.results, dispatch);
   };
@@ -101,9 +101,9 @@ const ChatDetailPage = () => {
               return defaultActionsAllowed(props);
             }}
             ReactionList={() => null}>
-            <View style={{flex: 1, zIndex: 0}}>
+            <View style={{ flex: 1, zIndex: 0 }}>
               <Header />
-              <View style={{flex: 1, zIndex: 1}}>
+              <View style={{ flex: 1, zIndex: 1 }}>
                 <MessageList
                   tDateTimeParser={testDate}
                   InlineDateSeparator={CustomInlineDateSeparator}
@@ -119,7 +119,7 @@ const ChatDetailPage = () => {
   return <View />;
 };
 
-const CustomInlineDateSeparator = ({date}) => {
+const CustomInlineDateSeparator = ({ date }) => {
   let newDate = moment(date).locale('en').format('MMMM D, YYYY');
   return <Text style={[styles.date, styles.inlineDate]}>{newDate}</Text>;
 };
