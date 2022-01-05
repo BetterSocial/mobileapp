@@ -13,6 +13,7 @@ import {
   Streami18n,
 } from 'stream-chat-react-native';
 
+import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import IconChatCheckMark from '../../assets/icon/IconChatCheckMark'
 import Loading from '../Loading';
@@ -78,45 +79,6 @@ const ChannelListScreen = ({ navigation }) => {
     }
   };
 
-  const customPreviewStatus = (props) => {
-    let newLatestMessagePreview = { ...props.latestMessagePreview };
-    console.log('props.latestMessagePreview');
-    console.log(props.latestMessagePreview);
-    // if (props.latestMessagePreview.status > 1) {
-    //   newLatestMessagePreview.status = 3;
-    // }
-
-
-    let renderCheckMark = () => {
-      let showCheckMark = props?.latestMessagePreview?.messageObject?.id?.indexOf(userId) > -1
-      let checkMarkStatus = props?.latestMessagePreview?.status
-      if(!showCheckMark) return <></>
-      
-      // Not sent yet
-      if(checkMarkStatus === 0) {
-        // TODO: Change to clock icon
-        return <Text>p</Text>
-      } else {
-        return <IconChatCheckMark height={16} width={16}/>
-      }
-    }
-
-    let renderDate = () => {
-      let updatedAt = props?.latestMessagePreview?.messageObject?.updated_at 
-      if(!updatedAt) return <></>
-
-      let diffTime = calculateTime(moment(updatedAt))
-      return <Text style={{fontSize: 12, marginLeft: 4}}>{diffTime}</Text>
-    }
-    return (
-      <View style={{ paddingRight: 12, display:'flex', flexDirection:'row'}}>
-        {/* <ChannelPreviewStatus latestMessagePreview={newLatestMessagePreview} /> */}
-        { renderCheckMark() }
-        { renderDate() }
-      </View>
-    );
-  };
-
   const customPreviewTitle = (props) => {
     let { name } = props.channel?.data;
 
@@ -139,20 +101,6 @@ const ChannelListScreen = ({ navigation }) => {
     );
   };
 
-  const CustomPreview = (props) => {
-    return (
-      <View style={{ paddingHorizontal: 15 }}>
-        <ChannelPreviewMessenger
-          channel={props.channel}
-          PreviewStatus={customPreviewStatus}
-          PreviewAvatar={CustomPreviewAvatar}
-          PreviewTitle={customPreviewTitle}
-          PreviewMessage={CustomPreviewMessage}
-        />
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
@@ -170,7 +118,7 @@ const ChannelListScreen = ({ navigation }) => {
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
                 // Preview={CustomPreview}
-                PreviewStatus={customPreviewStatus}
+                PreviewStatus={ChannelStatusIcon}
                 PreviewTitle={customPreviewTitle}
                 onSelect={(channel) => {
                   if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
