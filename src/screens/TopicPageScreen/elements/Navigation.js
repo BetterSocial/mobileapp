@@ -24,9 +24,9 @@ const Navigation = ({ domain, onPress, isFollow = false }) => {
       </View>
       <View style={{ marginRight: 10 }} >
         {isFollow ? (
-          <ButtonFollowing />
+          <ButtonFollowing handleSetUnFollow={onPress} />
         ) : (
-          <ButtonFollow />
+          <ButtonFollow handleSetFollow={onPress} />
         )}
 
       </View>

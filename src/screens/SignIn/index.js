@@ -221,19 +221,15 @@ const SignIn = () => {
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('JO2ZNRBDWS3DMD7HASWL')}>
-            <Text style={S.dummyAccountItem}>unass : KVL1JKD8VG6KMHUZ0RY0</Text>
-            <View style={S.divider} />
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CQS')}>
             <Text style={S.dummyAccountItem}>
               busanid : TVGBYD1BI9YMXMAA6CQS
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('KVL1JKD8VG6KMHUZ0RY0')}>
+          <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CU53')}>
             <Text style={S.dummyAccountItem}>
-              akudankamu: TVGBYD1BI9YMXMAA6CR48
+              usupsu: TVGBYD1BI9YMXMAA6CU53
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>
