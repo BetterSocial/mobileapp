@@ -38,11 +38,11 @@ const Navigation = ({ domain, onPress, isFollow = false }) => {
 const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
-    height: normalize(40),
+    height: normalize(48),
     paddingHorizontal: normalize(16),
     paddingVertical: normalize(8),
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: 'white',
     marginTop: normalize(16),
   },
