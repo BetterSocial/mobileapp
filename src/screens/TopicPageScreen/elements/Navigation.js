@@ -7,6 +7,7 @@ import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 import { ButtonFollow, ButtonFollowing } from '../../../components/Button';
 import { convertString } from '../../../utils/string/StringUtils';
+import { Gap } from '../../../components';
 
 const Navigation = ({ domain, onPress, isFollow = false }) => {
   const navigation = useNavigation();
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
     height: normalize(48),
-    paddingHorizontal: normalize(16),
+    paddingEnd: normalize(16),
     paddingVertical: normalize(8),
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -47,19 +48,23 @@ const styles = StyleSheet.create({
     marginTop: normalize(16),
   },
   backbutton: {
-    paddingLeft: 20
+    paddingLeft: 24,
+    paddingEnd: 16,
+    height: '100%',
+    justifyContent: 'center'
   },
   domain: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'flex-start',
+    marginRight: 14,
   },
   domainText: {
     fontSize: normalizeFontSize(18),
     fontFamily: fonts.inter[600],
     lineHeight: normalize(19),
-    paddingHorizontal: 50,
     fontWeight: 'bold',
+    textAlign: 'left'
   },
   buttonFollow: {
     paddingHorizontal: 5,
