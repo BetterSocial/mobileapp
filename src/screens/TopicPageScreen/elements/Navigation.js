@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/core';
 
@@ -7,7 +7,6 @@ import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 import { ButtonFollow, ButtonFollowing } from '../../../components/Button';
 import { convertString } from '../../../utils/string/StringUtils';
-import { Gap } from '../../../components';
 
 const Navigation = ({ domain, onPress, isFollow = false }) => {
   const navigation = useNavigation();
