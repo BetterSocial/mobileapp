@@ -4,6 +4,7 @@ import { ChannelPreviewStatus } from 'stream-chat-react-native-core';
 import { StyleSheet, Text, View } from 'react-native';
 
 import IconChatCheckMark from '../../assets/icon/IconChatCheckMark'
+import IconChatClock from '../../assets/icon/IconChatClock';
 import { calculateTime } from '../../utils/time';
 import { getUserId } from '../../utils/users';
 
@@ -29,9 +30,9 @@ const ChannelStatusIcon = (props) => {
         // Not sent yet
         if(checkMarkStatus === 0) {
             // TODO: Change to clock icon
-            return <Text>p</Text>
+            return <IconChatClock height={14} width={14} />
         } else {
-            return <IconChatCheckMark height={16} width={16}/>
+            return <IconChatCheckMark height={14} width={14}/>
         }
     }
 

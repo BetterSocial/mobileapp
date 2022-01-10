@@ -267,7 +267,8 @@ const OtherProfile = () => {
         setChannel(channelChat, dispatchChannel);
       }
       await navigation.navigate('ChatDetailPage');
-      setIsLoading(false)
+      setTimeout(() => setIsLoading(false), 400)
+      // setIsLoading(false)
     } catch(e) {
       console.log(e)
     }
