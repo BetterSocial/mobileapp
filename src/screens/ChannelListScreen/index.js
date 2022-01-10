@@ -1,7 +1,8 @@
 import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
-import { ActivityIndicator, SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
+import moment from 'moment'
+import { ActivityIndicator, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import {
   ChannelList,
   ChannelPreviewMessage,
@@ -12,7 +13,9 @@ import {
   Streami18n,
 } from 'stream-chat-react-native';
 
+import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
+import IconChatCheckMark from '../../assets/icon/IconChatCheckMark'
 import Loading from '../Loading';
 import Search from './elements/Search';
 import {
@@ -21,6 +24,7 @@ import {
 } from '../../utils/constants';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
+import { calculateTime } from '../../utils/time';
 import { getChatName } from '../../utils/string/StringUtils';
 import { getUserId } from '../../utils/users';
 import { setChannel } from '../../context/actions/setChannel';
@@ -75,19 +79,6 @@ const ChannelListScreen = ({ navigation }) => {
     }
   };
 
-  const customPreviewStatus = (props) => {
-    let newLatestMessagePreview = { ...props.latestMessagePreview };
-    // console.log(props);
-    // if (props.latestMessagePreview.status > 1) {
-    //   newLatestMessagePreview.status = 3;
-    // }
-    return (
-      <View style={{ paddingRight: 12 }}>
-        <ChannelPreviewStatus latestMessagePreview={newLatestMessagePreview} />
-      </View>
-    );
-  };
-
   const customPreviewTitle = (props) => {
     let { name } = props.channel?.data;
 
@@ -110,20 +101,6 @@ const ChannelListScreen = ({ navigation }) => {
     );
   };
 
-  const CustomPreview = (props) => {
-    return (
-      <View style={{ paddingHorizontal: 15 }}>
-        <ChannelPreviewMessenger
-          channel={props.channel}
-          PreviewStatus={customPreviewStatus}
-          PreviewAvatar={CustomPreviewAvatar}
-          PreviewTitle={customPreviewTitle}
-          PreviewMessage={CustomPreviewMessage}
-        />
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
@@ -141,7 +118,7 @@ const ChannelListScreen = ({ navigation }) => {
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
                 // Preview={CustomPreview}
-                PreviewStatus={customPreviewStatus}
+                PreviewStatus={ChannelStatusIcon}
                 PreviewTitle={customPreviewTitle}
                 onSelect={(channel) => {
                   if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
