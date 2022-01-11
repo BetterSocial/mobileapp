@@ -1,5 +1,6 @@
 import JWTDecode from 'jwt-decode';
-import {getAccessToken} from '../token';
+
+import { getAccessToken } from '../token';
 
 export const getUserId = async () => {
   const token = await getAccessToken();

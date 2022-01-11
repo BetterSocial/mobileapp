@@ -1,6 +1,7 @@
-import React from 'react'
-import { TouchableNativeFeedback, View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types';
+import React from 'react'
+import { Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native'
+
 import { colors } from '../../../../utils/colors';
 import { fonts } from '../../../../utils/fonts';
 // data needed name, description, image
@@ -95,8 +96,6 @@ const BlockedList = (props) => {
         event.preventDefault();
         onPressList(item)
     }
-
-    console.log(item.name, 'nanak')
 
     return (
         <TouchableNativeFeedback

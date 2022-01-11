@@ -1,24 +1,26 @@
 import * as React from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
-
+import moment from 'moment';
 import {
-  Chat,
   Channel,
+  Chat,
+  MessageContent,
   MessageInput,
   MessageList,
-  Streami18n,
-  useMessageInputContext,
+  MessageSimple,
+  MessageStatus,
+  Streami18n
 } from 'stream-chat-react-native';
+import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 
+import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
-import InputMessage from '../../components/Chat/InputMessage';
-import { Context } from '../../context';
-import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { setAsset, setParticipants } from '../../context/actions/groupChat';
-import moment from 'moment';
-import { COLORS } from '../../utils/theme';
-import { fonts } from '../../utils/fonts';
 import ImageSendPreview from './elements/ImageSendPreview';
+import InputMessage from '../../components/Chat/InputMessage';
+import { COLORS } from '../../utils/theme';
+import { Context } from '../../context';
+import { fonts } from '../../utils/fonts';
+import { setAsset, setParticipants } from '../../context/actions/groupChat';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
 const streami18n = new Streami18n({
   language: 'en',
@@ -90,13 +92,14 @@ const ChatDetailPage = () => {
           <Channel
             channel={channelClient.channel}
             DateHeader={CustomDateHeader}
-            keyboardVerticalOffset={50}
             hasFilePicker={false}
-            mutesEnabled={false}
-            threadRepliesEnabled={false}
             ImageUploadPreview={<ImageSendPreview />}
+            keyboardVerticalOffset={50}
+            mutesEnabled={false}
             reactionsEnabled={false}
-            readEventsEnabled={false}
+            readEventsEnabled={true}
+            threadRepliesEnabled={false}
+            MessageStatus={ChatStatusIcon}
             messageActions={(props) => {
               return defaultActionsAllowed(props);
             }}
