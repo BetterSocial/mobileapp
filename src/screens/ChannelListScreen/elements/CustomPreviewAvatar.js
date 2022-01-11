@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-
 import {
   ChannelAvatar,
   useChannelPreviewDisplayAvatar,
 } from 'stream-chat-react-native';
-import { Context } from '../../../context';
-import { setProfileChannel } from '../../../context/actions/setChannel';
-import { getGroupMemberCount } from '../../../utils/string/StringUtils';
+import { Image, StyleSheet, View } from 'react-native';
+
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
+import { Context } from '../../../context';
+import { getGroupMemberCount } from '../../../utils/string/StringUtils';
+import { setProfileChannel } from '../../../context/actions/setChannel';
 
 const CustomPreviewAvatar = ({ channel }) => {
   const [, dispatch] = React.useContext(Context).channel;
@@ -32,6 +32,7 @@ const CustomPreviewAvatar = ({ channel }) => {
         <Image source={{uri: channel?.data?.image}} style={styles.image} />
       );
     }
+
     return (
       <Image
         source={{ uri: `data:image/jpg;base64,${channel?.data?.image}` }}

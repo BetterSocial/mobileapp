@@ -10,13 +10,13 @@ import {
   TouchableOpacity,
   SafeAreaView
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {Avatar} from 'react-native-activity-feed';
+import { useNavigation } from '@react-navigation/native';
+import { Avatar } from 'react-native-activity-feed';
 import PropsTypes from 'prop-types';
 
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {calculateTime} from '../../utils/time';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
+import { calculateTime } from '../../utils/time';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import Memoic_globe from '../../assets/icons/ic_globe';
@@ -30,9 +30,9 @@ import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
 import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
-import {getUserId} from '../../utils/users';
+import { getUserId } from '../../utils/users';
 
-const {width: screenWidth} = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
 const getTime = (date) => calculateTime(date);
 
@@ -74,51 +74,51 @@ const _renderAnonimity = ({
   return (
     <SafeAreaView>
       <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
-      <View style={styles.rowCenter}>
-        {isBackButton ? (
-          <View style={{marginEnd: 16}}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-              }}>
-              <MemoIc_arrow_back height={20} width={20} />
-            </TouchableOpacity>
-          </View>
-        ) : null}
-        <Image
-          source={AnonymousProfile}
-          width={48}
-          height={48}
-          style={styles.imageAnonimity}
-        />
-        <View style={styles.containerFeedProfile}>
-          <View style={styles.containerFeedName}>
-            <Text style={styles.feedUsername}>Anonymous</Text>
-          </View>
-          <View style={styles.containerFeedText}>
-            <Text style={styles.feedDate}>{getTime(time)}</Text>
-            <View style={styles.point} />
-            {privacy === 'Public' ? (
-              <Memoic_globe height={16} width={16} />
-            ) : (
-              <MemoPeopleFollow height={16} width={16} />
-            )}
+        <View style={styles.rowCenter}>
+          {isBackButton ? (
+            <View style={{ marginEnd: 16 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}>
+                <MemoIc_arrow_back height={20} width={20} />
+              </TouchableOpacity>
+            </View>
+          ) : null}
+          <Image
+            source={AnonymousProfile}
+            width={48}
+            height={48}
+            style={styles.imageAnonimity}
+          />
+          <View style={styles.containerFeedProfile}>
+            <View style={styles.containerFeedName}>
+              <Text style={styles.feedUsername}>Anonymous</Text>
+            </View>
+            <View style={styles.containerFeedText}>
+              <Text style={styles.feedDate}>{getTime(time)}</Text>
+              <View style={styles.point} />
+              {privacy === 'Public' ? (
+                <Memoic_globe height={16} width={16} />
+              ) : (
+                <MemoPeopleFollow height={16} width={16} />
+              )}
 
-            {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-            {duration_feed !== 'never'
-              ? validationTimer(expired_at, duration_feed)
-              : null}
-            <View style={styles.point} />
-            <Text style={styles.feedDate}>{location}</Text>
+              {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+              {duration_feed !== 'never'
+                ? validationTimer(expired_at, duration_feed)
+                : null}
+              <View style={styles.point} />
+              <Text style={styles.feedDate}>{location}</Text>
+            </View>
           </View>
         </View>
+        <TouchableNativeFeedback>
+          <ElipsisIcon width={18} height={3.94} fill={colors.black} />
+        </TouchableNativeFeedback>
       </View>
-      <TouchableNativeFeedback>
-        <ElipsisIcon width={18} height={3.94} fill={colors.black} />
-      </TouchableNativeFeedback>
-    </View>
     </SafeAreaView>
-    
+
   );
 };
 
@@ -134,7 +134,7 @@ const _renderProfileNormal = ({
 }) => {
   const navigation = useNavigation();
   let userId = actor.id;
-  let {profile_pic_url, username} = actor.data;
+  let { profile_pic_url, username } = actor.data;
 
   let navigateToProfile = async () => {
     let selfUserId = await getUserId();
@@ -153,84 +153,84 @@ const _renderProfileNormal = ({
   return (
     <SafeAreaView>
       <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
-      <View style={styles.rowCenter}>
-        {isBackButton ? (
-          <View style={styles.btn}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-              }}>
-              <MemoIc_arrow_back height={20} width={20} />
-            </TouchableOpacity>
-          </View>
-        ) : null}
-        <TouchableNativeFeedback
-          onPress={() => navigateToProfile()}
-          background={TouchableNativeFeedback.Ripple(colors.gray1, true, 28)}>
-          <View style={{}}>
-            <Avatar
-              source={
-                profile_pic_url
-                  ? profile_pic_url
-                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
-              }
-              size={48}
-              noShadow
-            />
-          </View>
-        </TouchableNativeFeedback>
-        <View style={styles.containerFeedProfile}>
-          <View style={styles.containerFeedName}>
-            <TouchableNativeFeedback
-              onPress={() => navigateToProfile()}
-              background={TouchableNativeFeedback.Ripple(
-                colors.gray1,
-                false,
-                30,
-              )}>
-              <Text style={styles.feedUsername}>
-                {username ? username : 'no name specifics'}
-              </Text>
-            </TouchableNativeFeedback>
-            <TouchableNativeFeedback
-              background={TouchableNativeFeedback.Ripple(
-                colors.gray1,
-                true,
-                8,
-              )}>
-              <View style={{alignSelf: 'center', zIndex: 1000}}>
-                <ElipsisIcon width={3.94} height={18} fill={colors.black} />
-              </View>
-            </TouchableNativeFeedback>
-          </View>
-          <View style={styles.containerFeedText}>
-            <Text style={styles.feedDate}>{getTime(time)}</Text>
-            <View style={styles.point} />
-            {privacy === 'Public' ? (
-              <Memoic_globe height={16} width={16} />
-            ) : (
-              <MemoPeopleFollow height={16} width={16} />
-            )}
+        <View style={styles.rowCenter}>
+          {isBackButton ? (
+            <View style={styles.btn}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}>
+                <MemoIc_arrow_back height={20} width={20} />
+              </TouchableOpacity>
+            </View>
+          ) : null}
+          <TouchableNativeFeedback
+            onPress={() => navigateToProfile()}
+            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 28)}>
+            <View style={{}}>
+              <Avatar
+                source={
+                  profile_pic_url
+                    ? profile_pic_url
+                    : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+                }
+                size={48}
+                noShadow
+              />
+            </View>
+          </TouchableNativeFeedback>
+          <View style={styles.containerFeedProfile}>
+            <View style={styles.containerFeedName}>
+              <TouchableNativeFeedback
+                onPress={() => navigateToProfile()}
+                background={TouchableNativeFeedback.Ripple(
+                  colors.gray1,
+                  false,
+                  30,
+                )}>
+                <Text style={styles.feedUsername}>
+                  {username ? username : 'no name specifics'}
+                </Text>
+              </TouchableNativeFeedback>
+              <TouchableNativeFeedback
+                background={TouchableNativeFeedback.Ripple(
+                  colors.gray1,
+                  true,
+                  8,
+                )}>
+                <View style={{ alignSelf: 'center', zIndex: 1000 }}>
+                  <ElipsisIcon width={3.94} height={18} fill={colors.black} />
+                </View>
+              </TouchableNativeFeedback>
+            </View>
+            <View style={styles.containerFeedText}>
+              <Text style={styles.feedDate}>{getTime(time)}</Text>
+              <View style={styles.point} />
+              {privacy === 'Public' ? (
+                <Memoic_globe height={16} width={16} />
+              ) : (
+                <MemoPeopleFollow height={16} width={16} />
+              )}
 
-            {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-            {duration_feed !== 'never'
-              ? validationTimer(expired_at, duration_feed)
-              : null}
-            <View style={styles.point} />
-            <Text style={styles.feedDateLocation} numberOfLines={1}>
-              {location}
-            </Text>
+              {duration_feed !== 'never' ? <View style={styles.point} /> : null}
+              {duration_feed !== 'never'
+                ? validationTimer(expired_at, duration_feed)
+                : null}
+              <View style={styles.point} />
+              <Text style={styles.feedDateLocation} numberOfLines={1}>
+                {location}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
     </SafeAreaView>
-    
+
   );
 };
 
-const Header = ({props, isBackButton = false, height}) => {
-  let {anonimity, time, privacy, duration_feed, expired_at, location, actor} =
+const Header = ({ props, isBackButton = false, height }) => {
+  let { anonimity, time, privacy, duration_feed, expired_at, location, actor } =
     props;
   if (anonimity) {
     return _renderAnonimity({
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   containerFeedName: {
     flexDirection: 'row',
   },
-  btn: {marginEnd: 16},
+  btn: { marginEnd: 16 },
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
+    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
     backgroundColor: 'white',
     borderRadius: 8,
   },

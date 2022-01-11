@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/core';
 
@@ -38,28 +38,32 @@ const Navigation = ({ domain, onPress, isFollow = false }) => {
 const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
-    height: normalize(40),
-    paddingHorizontal: normalize(16),
+    height: normalize(48),
+    paddingEnd: normalize(16),
     paddingVertical: normalize(8),
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: 'white',
     marginTop: normalize(16),
   },
   backbutton: {
-    paddingLeft: 20
+    paddingLeft: 24,
+    paddingEnd: 16,
+    height: '100%',
+    justifyContent: 'center'
   },
   domain: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'flex-start',
+    marginRight: 14,
   },
   domainText: {
     fontSize: normalizeFontSize(18),
     fontFamily: fonts.inter[600],
     lineHeight: normalize(19),
-    paddingHorizontal: 50,
     fontWeight: 'bold',
+    textAlign: 'left'
   },
   buttonFollow: {
     paddingHorizontal: 5,

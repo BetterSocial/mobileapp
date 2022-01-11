@@ -103,8 +103,9 @@ const OtherProfile = () => {
     };
 
     getJwtToken();
+    console.log('params')
+    console.log(params)
     setUserId(params.data.user_id);
-    setOtherId(params.data.other_id);
     setUsername(params.data.username);
     fetchOtherProfile(params.data.username);
   }, [params.data]);
@@ -131,6 +132,7 @@ const OtherProfile = () => {
       if (result.code === 200) {
         setDataMain(result.data);
         checkUserBlockHandle(result.data.user_id);
+        setOtherId(result.data.user_id);
         getOtherFeeds(result.data.user_id)
       }
     } catch (e) {
@@ -238,31 +240,38 @@ const OtherProfile = () => {
     });
   };
   const createChannel = async () => {
-    let members = [other_id, user_id];
-    setIsLoading(true);
-    const clientChat = await client.client;
-    const filter = {type: 'messaging', members: {$eq: members}};
-    const sort = [{last_message_at: -1}];
-    const channels = await clientChat.queryChannels(filter, sort, {
-      watch: true,
-      state: true,
-    });
-    if (channels.length > 0) {
-      setChannel(channels[0], dispatchChannel);
-    } else {
-      const channelChat = await clientChat.channel(
-        'messaging',
-        generateRandomId(),
-        {
-          name: [profile.myProfile.username, username].join(', '),
-          members: members,
-        },
-      );
-      await channelChat.watch();
-      setChannel(channelChat, dispatchChannel);
+    try {
+      let members = [other_id, user_id];
+      console.log('members')
+      console.log(members)
+      setIsLoading(true);
+      const clientChat = await client.client;
+      const filter = {type: 'messaging', members: {$eq: members}};
+      const sort = [{last_message_at: -1}];
+      const channels = await clientChat.queryChannels(filter, sort, {
+        watch: true,
+        state: true,
+      });
+      if (channels.length > 0) {
+        setChannel(channels[0], dispatchChannel);
+      } else {
+        const channelChat = await clientChat.channel(
+          'messaging',
+          generateRandomId(),
+          {
+            name: [profile.myProfile.username, username].join(', '),
+            members: members,
+          },
+        );
+        await channelChat.watch();
+        setChannel(channelChat, dispatchChannel);
+      }
+      await navigation.navigate('ChatDetailPage');
+      setTimeout(() => setIsLoading(false), 400)
+      // setIsLoading(false)
+    } catch(e) {
+      console.log(e)
     }
-    setIsLoading(false);
-    await navigation.navigate('ChatDetailPage');
   };
 
   const onBlockReaction = () => {
