@@ -72,10 +72,6 @@ const App = () => {
   React.useEffect(() => {
     // Register FCM token with stream chat server.
     !isIos ?     requestPermission() : requestPermissionIos()
-
-    if(!isIos) {
-      createChannel()
-    }
     createChannel();
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       console.log('NOtifICAtion');
