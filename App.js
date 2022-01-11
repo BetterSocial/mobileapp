@@ -73,6 +73,7 @@ const App = () => {
     // Register FCM token with stream chat server.
     !isIos ?     requestPermission() : requestPermissionIos()
     createChannel();
+    
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       console.log('NOtifICAtion');
       console.log('messag ', remoteMessage);
