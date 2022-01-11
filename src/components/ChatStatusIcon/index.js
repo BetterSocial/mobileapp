@@ -25,7 +25,7 @@ const ChatStatusIcon = (props) => {
         let { status } = message
         
         // Not sent yet
-        if(status === 'sending') {
+        if(status === 'sending' || status === 'failed') {
             // TODO: Change to clock icon
             return <IconChatClock height={14} width={14} />
         } else {

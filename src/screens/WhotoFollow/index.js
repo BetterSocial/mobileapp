@@ -1,35 +1,34 @@
 import * as React from 'react';
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  TouchableNativeFeedback,
-  TouchableHighlight,
-  Dimensions,
   ActivityIndicator,
+  Dimensions,
+  Platform,
   RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  TouchableNativeFeedback,
+  View,
 } from 'react-native';
-
+import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
+import { StackActions } from '@react-navigation/native';
 import { showMessage } from 'react-native-flash-message';
 import { useNavigation } from '@react-navigation/core';
-import { StackActions } from '@react-navigation/native';
-import crashlytics from '@react-native-firebase/crashlytics';
-import analytics from '@react-native-firebase/analytics';
-import { RecyclerListView, DataProvider, LayoutProvider } from 'recyclerlistview';
 
-import Loading from '../Loading';
-import { get } from '../../api/server';
-import { Button } from '../../components/Button';
-import { ProgressBar } from '../../components/ProgressBar';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import { registerUser } from '../../service/users';
-import { Context } from '../../context';
-import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
-import { colors } from '../../utils/colors';
-import Label from './elements/Label';
 import ItemUser from './elements/ItemUser';
+import Label from './elements/Label';
+import Loading from '../Loading';
+import { Button } from '../../components/Button';
+import { Context } from '../../context';
+import { ProgressBar } from '../../components/ProgressBar';
+import { colors } from '../../utils/colors';
+import { get } from '../../api/server';
+import { registerUser } from '../../service/users';
+import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
 const width = Dimensions.get('screen').width;
@@ -175,9 +174,9 @@ const WhotoFollow = () => {
       users: {
         username: usersState.username,
         human_id: usersState.userId,
-        // human_id: 'HQEGNQCHA8J1OIX4G2CR',
+        human_id: 'TVGBYD1BI9YMXMAA6CQS',
         country_code: usersState.countryCode,
-        // country_code: 'ID',
+        country_code: 'ID',
         profile_pic_path: usersState.photo,
         status: 'A',
       },

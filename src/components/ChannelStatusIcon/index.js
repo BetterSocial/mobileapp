@@ -25,10 +25,12 @@ const ChannelStatusIcon = (props) => {
     let __renderCheckMark = () => {
         let showCheckMark = props?.latestMessagePreview?.messageObject?.id?.indexOf(userId) > -1
         let checkMarkStatus = props?.latestMessagePreview?.status
+        let sendMessageStatus = props?.latestMessagePreview?.messageObject?.status
+
         if(!showCheckMark) return <></>
         
         // Not sent yet
-        if(checkMarkStatus === 0) {
+        if(checkMarkStatus === 0 || sendMessageStatus === 'failed') {
             // TODO: Change to clock icon
             return <IconChatClock height={14} width={14} />
         } else {
