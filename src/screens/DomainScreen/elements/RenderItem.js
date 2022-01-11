@@ -13,15 +13,15 @@ import {
   getCountCommentWithChild,
   getCountVote,
 } from '../../../utils/getstream';
-import theme, {COLORS, FONTS, SIZES} from '../../../utils/theme';
-import {colors} from '../../../utils/colors';
+import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
+import { colors } from '../../../utils/colors';
 import {
   Footer,
   PreviewComment,
   Gap,
   SingleSidedShadowBox,
 } from '../../../components';
-import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
@@ -119,7 +119,6 @@ const RenderItem = ({
   }, [item]);
 
   const onFollowDomainPressed = () => {
-    console.log('Follow Domain');
   };
 
   return (
@@ -129,7 +128,7 @@ const RenderItem = ({
           <View style={styles.wrapperImage}>
             {image ? (
               <Image
-                source={{uri: image}}
+                source={{ uri: image }}
                 style={[styles.image, StyleSheet.absoluteFillObject]}
               />
             ) : (
@@ -137,9 +136,9 @@ const RenderItem = ({
             )}
           </View>
           <Gap width={SIZES.base} />
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <Text style={styles.headerDomainName}>{name}</Text>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={styles.headerDomainDate}>
                 {new Date(time).toLocaleDateString()}
               </Text>
@@ -148,7 +147,7 @@ const RenderItem = ({
               <View style={styles.point} />
 
               <MemoPeopleFollow height={normalize(13)} width={normalize(12)} />
-              <Gap style={{width: 4}} />
+              <Gap style={{ width: 4 }} />
               <Text
                 style={{
                   color: '#828282',
@@ -166,7 +165,7 @@ const RenderItem = ({
               />
             </View>
           </View>
-          <View style={{justifyContent: 'center'}}>
+          <View style={{ justifyContent: 'center' }}>
             {follow ? (
               <TouchableOpacity onPress={handleUnfollow}>
                 <View style={styles.wrapperTextUnFollow}>
@@ -185,24 +184,24 @@ const RenderItem = ({
         <Pressable onPress={() => onPressComment(item)}>
           <View>
             <View
-              style={{paddingHorizontal: 20, marginTop: 14, marginBottom: 14}}>
+              style={{ paddingHorizontal: 20, marginTop: 14, marginBottom: 14 }}>
               <Text style={styles.domainItemTitle}>{item.content.title}</Text>
             </View>
             <Gap height={SIZES.base} />
             {item.content.image ? (
               <Image
-                source={{uri: item.content.image}}
-                style={{height: normalize(200), marginBottom: 14}}
+                source={{ uri: item.content.image }}
+                style={{ height: normalize(200), marginBottom: 14 }}
               />
             ) : (
               <Image
                 source={NewsEmptyState}
-                style={{height: normalize(135), marginBottom: 14}}
+                style={{ height: normalize(135), marginBottom: 14 }}
               />
             )}
             <Gap />
             <Gap height={SIZES.base} />
-            <View style={{paddingHorizontal: 20}}>
+            <View style={{ paddingHorizontal: 20 }}>
               <Text style={styles.domainItemDescription}>
                 {item.content.description}
               </Text>
@@ -271,7 +270,7 @@ const RenderItem = ({
           />
         </View>
         {isReaction && (
-          <View style={{zIndex: 1000}}>
+          <View style={{ zIndex: 1000 }}>
             <PreviewComment
               user={previewComment.user}
               comment={previewComment.data.text}
@@ -289,12 +288,12 @@ const RenderItem = ({
 };
 
 const styles = StyleSheet.create({
-  containerText: {paddingHorizontal: 16},
-  iconPlush: {fontSize: normalizeFontSize(24), color: '#00ADB5'},
-  views: {color: '#828282'},
-  containerDetail: {flex: 1},
-  contentDetail: {flexDirection: 'row', alignItems: 'center'},
-  content: {flexDirection: 'row', paddingHorizontal: 16},
+  containerText: { paddingHorizontal: 16 },
+  iconPlush: { fontSize: normalizeFontSize(24), color: '#00ADB5' },
+  views: { color: '#828282' },
+  containerDetail: { flex: 1 },
+  contentDetail: { flexDirection: 'row', alignItems: 'center' },
+  content: { flexDirection: 'row', paddingHorizontal: 16 },
   wrapperItem: {
     backgroundColor: 'white',
     borderBottomWidth: 4,
@@ -332,8 +331,8 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
   },
-  height: (height) => ({height}),
-  width: (width) => ({width}),
+  height: (height) => ({ height }),
+  width: (width) => ({ width }),
   wrapperFooter: {
     paddingHorizontal: 8,
     height: normalize(52),

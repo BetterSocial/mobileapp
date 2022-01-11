@@ -1,14 +1,15 @@
 import moment from 'moment';
 
+// eslint-disable-next-line import/prefer-default-export
 export const calculateTime = (time) => {
   if (time) {
-    let now = moment();
-    let utc = now;
-    let date = moment(time).toISOString();
-    let minutes = utc.diff(date, 'minutes');
-    let hours = utc.diff(date, 'hours');
-    let days = utc.diff(date, 'days');
-    let weeks = utc.diff(date, 'weeks');
+    const now = moment();
+    const utc = now;
+    const date = moment(time).toISOString();
+    const minutes = utc.diff(date, 'minutes');
+    const hours = utc.diff(date, 'hours');
+    const days = utc.diff(date, 'days');
+    const weeks = utc.diff(date, 'weeks');
 
     if (days >= 30) {
       return new Date(date).toLocaleDateString();

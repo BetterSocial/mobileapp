@@ -81,8 +81,6 @@ const ChatDetailPage = () => {
   };
 
   if (clients.client && channelClient.channel) {
-    // console.log('channel full ', channelClient.channel);
-    // console.log('channel ', channelClient.channel?.data?.created_by);
     return (
       <SafeAreaView>
         <StatusBar backgroundColor="white" translucent={false} />

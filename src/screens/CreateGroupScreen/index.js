@@ -1,18 +1,18 @@
 import * as React from 'react';
-import {View, Text, FlatList, StatusBar} from 'react-native';
+import { View, Text, FlatList, StatusBar } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import analytics from '@react-native-firebase/analytics';
 
-import {createChannel} from '../../service/chat';
+import { createChannel } from '../../service/chat';
 
-import {Avatar, Gap} from '../../components';
-import {COLORS, FONTS, SIZES} from '../../utils/theme';
+import { Avatar, Gap } from '../../components';
+import { COLORS, FONTS, SIZES } from '../../utils/theme';
 import GroupName from './elements/GroupName';
 import StringConstant from '../../utils/string/StringConstant';
 import Header from './elements/Header';
-import {getUserId} from '../../utils/users';
-import {requestExternalStoragePermission} from '../../utils/permission';
+import { getUserId } from '../../utils/users';
+import { requestExternalStoragePermission } from '../../utils/permission';
 
 const DUMMY = [
   {
@@ -32,7 +32,7 @@ const DUMMY = [
   },
 ];
 
-const CreateGroupScreen = ({navigation}) => {
+const CreateGroupScreen = ({ navigation }) => {
   const [groupName, setGroupName] = React.useState(null);
   const [groupIcon, setGroupIcon] = React.useState(null);
   const [userId, setUserId] = React.useState(null);
@@ -49,15 +49,14 @@ const CreateGroupScreen = ({navigation}) => {
     analytics().logEvent('btn_take_photo_profile', {
       id: 2,
     });
-    let {success, message} = await requestExternalStoragePermission();
+    let { success, message } = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo'}, (res) => {
+      launchImageLibrary({ mediaType: 'photo' }, (res) => {
         let image = {
           uri: res.uri,
           type: res.type, // or photo.type
           name: res.fileName,
         };
-        // console.log(image);
         setGroupIcon(image);
         // if (res.base64) {
         //   // setImage(`${res.base64}`, dispatch);
@@ -73,22 +72,20 @@ const CreateGroupScreen = ({navigation}) => {
     try {
       let members = DUMMY.map((item) => item.id);
       members.push(userId);
-      console.log(members);
       let res = await createChannel('messaging', members, groupName);
       alert('success create group');
     } catch (error) {
-      console.log(error);
     }
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <StatusBar translucent={false} />
       <Header
         title={StringConstant.chatTabHeaderCreateChatButtonText}
-        containerStyle={{marginHorizontal: 16}}
+        containerStyle={{ marginHorizontal: 16 }}
         subTitle={groupName ? 'Finish' : 'Skip'}
-        subtitleStyle={{color: COLORS.holyTosca}}
+        subtitleStyle={{ color: COLORS.holyTosca }}
         onPressSub={() => createNewChannel()}
         onPress={() => navigation.goBack()}
       />
@@ -98,21 +95,21 @@ const CreateGroupScreen = ({navigation}) => {
         groupIcon={groupIcon}
       />
 
-      <View style={{marginHorizontal: 16, marginTop: SIZES.base}}>
-        <Text style={{...FONTS.h2, color: COLORS.holyTosca}}>Participants</Text>
+      <View style={{ marginHorizontal: 16, marginTop: SIZES.base }}>
+        <Text style={{ ...FONTS.h2, color: COLORS.holyTosca }}>Participants</Text>
       </View>
 
-      <View style={{marginHorizontal: 16, marginTop: SIZES.base}}>
+      <View style={{ marginHorizontal: 16, marginTop: SIZES.base }}>
         <FlatList
           data={DUMMY}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <View
                 key={index}
-                style={{flexDirection: 'row', marginBottom: SIZES.base * 2}}>
+                style={{ flexDirection: 'row', marginBottom: SIZES.base * 2 }}>
                 <Avatar image={item.icon} />
                 <Gap width={SIZES.base} />
-                <View style={{justifyContent: 'center'}}>
+                <View style={{ justifyContent: 'center' }}>
                   <Text>{item.name}</Text>
                 </View>
               </View>

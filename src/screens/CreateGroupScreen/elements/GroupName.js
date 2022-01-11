@@ -1,14 +1,12 @@
 import * as React from 'react';
-import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
-import {Gap} from '../../../components';
-import {COLORS, SIZES, FONTS} from '../../../utils/theme';
+import { Gap } from '../../../components';
+import { COLORS, SIZES, FONTS } from '../../../utils/theme';
 
-const GroupName = ({onChangeText, onPress, groupIcon = null}) => {
-  console.log(groupIcon);
+const GroupName = ({ onChangeText, onPress, groupIcon = null }) => {
   const renderImage = (icon) => {
     if (icon) {
-      console.log(icon);
       return (
         <TouchableOpacity
           onPress={onPress}
@@ -23,8 +21,8 @@ const GroupName = ({onChangeText, onPress, groupIcon = null}) => {
           <Image
             width={40}
             height={40}
-            source={{uri: icon.uri}}
-            style={{width: 40, height: 40, borderRadius: 45}}
+            source={{ uri: icon.uri }}
+            style={{ width: 40, height: 40, borderRadius: 45 }}
             resizeMode={'cover'}
           />
         </TouchableOpacity>
@@ -53,7 +51,7 @@ const GroupName = ({onChangeText, onPress, groupIcon = null}) => {
         paddingHorizontal: 16,
         paddingVertical: SIZES.base,
       }}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {renderImage(groupIcon)}
         <Gap width={SIZES.base} />
         <View
@@ -64,12 +62,12 @@ const GroupName = ({onChangeText, onPress, groupIcon = null}) => {
           <TextInput
             placeholder={'Type group name...'}
             placeholderTextColor={'white'}
-            style={{color: 'white', ...FONTS.body2}}
+            style={{ color: 'white', ...FONTS.body2 }}
             onChangeText={onChangeText}
           />
         </View>
       </View>
-      <Text style={{...FONTS.body3, color: 'white'}}>
+      <Text style={{ ...FONTS.body3, color: 'white' }}>
         Provide a group name and group icon
       </Text>
     </View>

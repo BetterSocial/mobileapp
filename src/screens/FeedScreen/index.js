@@ -1,19 +1,19 @@
 import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
-import {StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import RenderListFeed from './RenderList';
 import TiktokScroll from '../../components/TiktokScroll';
-import {ButtonNewPost} from '../../components/Button';
-import {Context} from '../../context';
-import {downVote, upVote} from '../../service/vote';
-import {getFeedDetail, getMainFeed} from '../../service/post';
-import {getUserId} from '../../utils/users';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
+import { ButtonNewPost } from '../../components/Button';
+import { Context } from '../../context';
+import { downVote, upVote } from '../../service/vote';
+import { getFeedDetail, getMainFeed } from '../../service/post';
+import { getUserId } from '../../utils/users';
+import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
+import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -27,7 +27,7 @@ const FeedScreen = (props) => {
   const refBlockComponent = React.useRef();
 
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  let {feeds} = feedsContext;
+  let { feeds } = feedsContext;
 
   const getDataFeeds = async (id = '') => {
     setCountStack(null);
@@ -80,7 +80,6 @@ const FeedScreen = (props) => {
   const updateFeed = async (post, index) => {
     try {
       let data = await getFeedDetail(post.activity_id);
-      console.log(data, 'suakik')
       if (data) {
         setFeedByIndex(
           {
@@ -91,7 +90,6 @@ const FeedScreen = (props) => {
         );
       }
     } catch (e) {
-      console.log(e);
     }
   };
   const setUpVote = async (post, index) => {
@@ -169,13 +167,13 @@ const FeedScreen = (props) => {
   };
 
   return (
-      <View style={styles.container} forceInset={{top: 'always'}}>
+    <View style={styles.container} forceInset={{ top: 'always' }}>
       <TiktokScroll
         data={feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}
         refreshing={loading}>
-        {({item, index}) => (
+        {({ item, index }) => (
           <RenderListFeed
             item={item}
             onNewPollFetched={onNewPollFetched}
@@ -192,15 +190,15 @@ const FeedScreen = (props) => {
         )}
       </TiktokScroll>
       <ButtonNewPost />
-      <BlockComponent ref={refBlockComponent} refresh={getDataFeeds} screen="screen_feed"/>
+      <BlockComponent ref={refBlockComponent} refresh={getDataFeeds} screen="screen_feed" />
     </View>
-    
+
   );
 };
 
 export default FeedScreen;
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: { flex: 1 },
   content: {
     flex: 5,
     alignItems: 'center',

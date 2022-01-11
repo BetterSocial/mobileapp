@@ -68,7 +68,6 @@ const ChannelListScreen = ({ navigation }) => {
   const setupClient = async () => {
     try {
       const id = await getUserId();
-      console.log('user id ', id);
       setUserId(id);
     } catch (err) {
       crashlytics().recordError(err);
@@ -77,7 +76,6 @@ const ChannelListScreen = ({ navigation }) => {
 
   const customPreviewStatus = (props) => {
     let newLatestMessagePreview = { ...props.latestMessagePreview };
-    // console.log(props);
     // if (props.latestMessagePreview.status > 1) {
     //   newLatestMessagePreview.status = 3;
     // }
@@ -101,8 +99,6 @@ const ChannelListScreen = ({ navigation }) => {
   };
 
   const CustomPreviewMessage = (props) => {
-    console.log('props');
-    console.log(props);
     return (
       <ChannelPreviewMessage
         latestMessagePreview={{ ...props.latestMessagePreview }}

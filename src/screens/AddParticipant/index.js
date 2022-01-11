@@ -1,6 +1,6 @@
 import * as React from 'react';
 import moment from 'moment';
-import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
+import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
 import {
   Dimensions,
   SafeAreaView,
@@ -12,27 +12,27 @@ import {
 
 import HeaderContact from '../../components/Header/HeaderContact';
 import Memo_ic_info from '../../assets/icons/ic_info';
-import {COLORS, FONTS} from '../../utils/theme';
-import {Context} from '../../context';
-import {Loading} from '../../components';
-import {ProfileContact} from '../../components/Items';
-import {SearchContact} from '../../components/Search';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {userPopulate} from '../../service/users';
+import { COLORS, FONTS } from '../../utils/theme';
+import { Context } from '../../context';
+import { Loading } from '../../components';
+import { ProfileContact } from '../../components/Items';
+import { SearchContact } from '../../components/Search';
+import { fonts, normalizeFontSize } from '../../utils/fonts';
+import { userPopulate } from '../../service/users';
 
 const width = Dimensions.get('screen').width;
 const VIEW_TYPE_DATA = 2;
 
-const AddParticipant = ({navigation}) => {
+const AddParticipant = ({ navigation }) => {
   const [channel] = React.useContext(Context).channel;
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
   const [followed, setFollowed] = React.useState([]);
-  const [layoutProvider, setLayoutProvider] = React.useState(() => {});
+  const [layoutProvider, setLayoutProvider] = React.useState(() => { });
   const [dataProvider, setDataProvider] = React.useState(null);
   const [users, setUsers] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [groupChatState] = React.useContext(Context).groupChat;
-  const {participants} = groupChatState;
+  const { participants } = groupChatState;
   const [filterParams, setFilterParams] = React.useState('');
   const [cacheUser, setCacheUser] = React.useState([]);
   React.useEffect(() => {
@@ -49,13 +49,11 @@ const AddParticipant = ({navigation}) => {
       setLoading(true);
       const res = await userPopulate();
       const result = await filterDataUser(res);
-      console.log(result);
       setUsers(result);
       setCacheUser(result);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
     }
   };
   const filterDataUser = (dataUsers) => {
@@ -95,7 +93,6 @@ const AddParticipant = ({navigation}) => {
   }, [users]);
 
   React.useEffect(() => {
-    console.log(followed);
   }, [followed])
 
   const handleSelected = (value) => {
@@ -115,18 +112,17 @@ const AddParticipant = ({navigation}) => {
         setLoading(true);
         let followedWithRoles = followed.map((item, index) => {
           return {
-            user_id : item,
-            channel_role : 'channel_moderator'
+            user_id: item,
+            channel_role: 'channel_moderator'
           }
         })
         await channel.channel.addMembers(followedWithRoles);
         setLoading(false);
         navigation.navigate('GroupInfo', {
           from: 'AddParticipant',
-          timestamp : moment().unix(),
+          timestamp: moment().unix(),
         });
       } catch (error) {
-        console.log('add member ', error);
         setLoading(false);
       }
     }
@@ -195,7 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  containerHeader: {marginHorizontal: 22},
+  containerHeader: { marginHorizontal: 22 },
   newParticipantWarningContainer: {
     backgroundColor: 'rgba(47,128,237,0.2)',
     borderRadius: 4,

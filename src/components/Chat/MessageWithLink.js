@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {TouchableWithoutFeedback} from 'react-native';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 
 import Autolink from 'react-native-autolink';
 
 import MemoIc_read from '../../assets/chats/Ic_read';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {trimString} from '../../utils/string/TrimString';
-import {calculateTime} from '../../utils/time';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
+import { trimString } from '../../utils/string/TrimString';
+import { calculateTime } from '../../utils/time';
 import Dot from '../Dot';
 import ActionChat from './ActionChat';
 import ProfileMessage from './ProfileMessage';
@@ -22,7 +22,6 @@ const MessageWithLink = ({
   isMe,
   attachments,
 }) => {
-  // console.log(attachments);
   const [onAction, setOnAction] = React.useState(false);
   return (
     <ActionChat isMe={isMe} active={onAction}>
@@ -54,7 +53,7 @@ const MessageWithLink = ({
                 width={70}
                 height={64}
                 style={styles.imageLink}
-                source={{uri: attachments[0].thumb_url}}
+                source={{ uri: attachments[0].thumb_url }}
               />
             </View>
             <Autolink text={message} style={styles.message} />
@@ -144,5 +143,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  userDetail: {flexDirection: 'row', alignItems: 'center'},
+  userDetail: { flexDirection: 'row', alignItems: 'center' },
 });

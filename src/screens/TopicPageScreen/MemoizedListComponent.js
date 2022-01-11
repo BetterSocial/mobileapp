@@ -26,7 +26,6 @@ const tabBarHeight = StatusBar.currentHeight;
 
 const getHeightHeader = () => {
   let h = Math.floor((FULL_HEIGHT * 10) / 100);
-  console.log('result: ', h);
   return h;
 };
 

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';
-import {useHeaderHeight} from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/stack';
 import {
   Channel,
   Chat,
@@ -12,7 +12,7 @@ import {
   Streami18n,
   useAttachmentPickerContext,
 } from 'stream-chat-react-native';
-import {Context} from '../../context';
+import { Context } from '../../context';
 
 const ChannelScreen = () => {
   const streami18n = new Streami18n({
@@ -21,7 +21,7 @@ const ChannelScreen = () => {
   const [channel] = React.useContext(Context).channel;
   const [client] = React.useContext(Context).client;
   const headerHeight = useHeaderHeight();
-  const {setTopInset} = useAttachmentPickerContext();
+  const { setTopInset } = useAttachmentPickerContext();
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -75,7 +75,6 @@ const ChannelScreen = () => {
 export default ChannelScreen;
 
 const CustomComponent = (props) => {
-  console.log('content 1 ', props);
   return <MessageSimple {...props} />;
 };
 
