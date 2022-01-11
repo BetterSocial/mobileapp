@@ -15,6 +15,7 @@ import { Context } from '../../context';
 import { addIFollowByID, setIFollow } from '../../context/actions/news';
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import {
+  checkBlockDomainPage,
   followDomain,
   getDetailDomains,
   getDomainIdIFollow,
@@ -22,6 +23,7 @@ import {
   unfollowDomain,
 } from '../../service/domain';
 import { getUserId } from '../../utils/users';
+import { unblokDomain } from '../../service/blocking';
 
 const DomainScreen = () => {
   const route = useRoute();
@@ -34,6 +36,7 @@ const DomainScreen = () => {
   const [domain, setDomain] = React.useState(route.params.item.og.domain);
   const [idFromToken, setIdFromToken] = React.useState('');
   const [domainFollowers, setDomainFollowers] = React.useState(0);
+  const [isBlocked, setIsBlocked] = React.useState(false)
   const [follow, setFollow] = React.useState(false);
   let iddomain = dataDomain.content.domain_page_id;
   const [dataFollow] = React.useState({
@@ -58,6 +61,18 @@ const DomainScreen = () => {
     getIFollow();
   }, []);
 
+  React.useEffect(() => {
+    checkBlockDomain()
+  }, [])
+
+  const checkBlockDomain = async () => {
+   const processCheckBlock = await checkBlockDomainPage(iddomain)
+   if(processCheckBlock.data) {
+    setIsBlocked(true)
+   } else {
+     setIsBlocked(false)
+   }
+  }
 
   const getIFollow = async () => {
     if (ifollow.length === 0) {
@@ -156,6 +171,23 @@ const DomainScreen = () => {
     }
   };
 
+  const checkBlock = (data) => {
+    if(!data) {
+      setIsBlocked(false)
+    } else {
+      setIsBlocked(true)
+    }
+  }
+
+ const onUnblockDomain = async () => {
+    await unblokDomain({domain_page_id: iddomain}).then(() => {
+        checkBlockDomain()
+    })
+
+}
+
+  console.log(dataDomain, 'kakam')
+
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
@@ -171,10 +203,12 @@ const DomainScreen = () => {
                   description={profile.short_description}
                   domain={dataDomain.og.domain}
                   followers={domainFollowers}
-                  onPress={onReaction}
+                  onPressBlock={onReaction}
+                  onPressUnblock={onUnblockDomain}
                   follow={follow}
                   handleFollow={handleFollow}
                   handleUnfollow={handleUnfollow}
+                  isBlocked={isBlocked}
                 />
                 <LinearGradient
                   colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']}
@@ -212,7 +246,9 @@ const DomainScreen = () => {
         ref={refBlockDomainComponent}
         domain={domain}
         domainId={dataDomain.content.domain_page_id}
-        screen="domain_screen" />
+        screen="domain_screen" 
+        getValueBlock={(data) => checkBlock(data)}
+        />
     </View>
   );
 };

@@ -15,6 +15,7 @@ import {COLORS, FONTS, SIZES} from '../../utils/theme';
 
 const Header = ({image, domain, time, item}) => {
   const navigation = useNavigation();
+  console.log(item, 'maman')
   const onHeaderPressed = () => {
     navigation.push('DomainScreen', {
       item: {
