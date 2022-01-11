@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 
+import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
 import DomainScreen from '../screens/DomainScreen';
@@ -48,13 +49,11 @@ import {
 import {Context} from '../context';
 import {colors} from '../utils/colors';
 import {fonts} from '../utils/fonts';
-import Blocked from '../screens/Blocked';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
   const [clientState] = React.useContext(Context).client;
   const [profileState] = React.useContext(Context).profile
-  console.log(profileState, 'suman')
   const {client} = clientState;
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');

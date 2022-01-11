@@ -9,7 +9,7 @@ import ContentLink from '../FeedScreen/ContentLink';
 import ContentPoll from '../FeedScreen/ContentPoll';
 import Header from '../FeedScreen/Header';
 import ShareUtils from '../../utils/share'
-import {ANALYTICS_SHARE_POST_TOPIC_ID, ANALYTICS_SHARE_POST_TOPIC_SCREEN} from '../../utils/constants';
+import { ANALYTICS_SHARE_POST_TOPIC_ID, ANALYTICS_SHARE_POST_TOPIC_SCREEN } from '../../utils/constants';
 import { Footer, Gap, PreviewComment } from '../../components';
 import {
   POST_TYPE_LINK,
@@ -25,7 +25,8 @@ const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
 const getHeightHeader = () => {
-  let h = Math.floor((FULL_HEIGHT * 8.3) / 100);
+  let h = Math.floor((FULL_HEIGHT * 10) / 100);
+  console.log('result: ', h);
   return h;
 };
 
@@ -133,7 +134,7 @@ const RenderListFeed = (props) => {
       return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     }
   };
-  
+
   const postApiDownvote = async (status) => {
     try {
       const processData = await onPressDownVote({
@@ -145,10 +146,10 @@ const RenderListFeed = (props) => {
         setLoadingVote(false);
       } else {
         setLoadingVote(false);
-      }  
-    } catch(e) {
+      }
+    } catch (e) {
       setLoadingVote(false);
-      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);  
+      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     }
   };
 
@@ -239,9 +240,9 @@ const RenderListFeed = (props) => {
             item={item}
             totalComment={getCountCommentWithChild(item)}
             totalVote={totalVote}
-            onPressShare={() => ShareUtils.sharePostInTopic(item, 
-                ANALYTICS_SHARE_POST_TOPIC_SCREEN,
-                ANALYTICS_SHARE_POST_TOPIC_ID
+            onPressShare={() => ShareUtils.sharePostInTopic(item,
+              ANALYTICS_SHARE_POST_TOPIC_SCREEN,
+              ANALYTICS_SHARE_POST_TOPIC_ID
             )}
             onPressComment={() => onPressComment(item)}
             onPressBlock={() => onPressBlock(item)}
