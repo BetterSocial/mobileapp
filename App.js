@@ -35,10 +35,6 @@ const App = () => {
     }
   };
 
-  const requestPermissionIos = () => {
-    PushNotificationIOS.requestPermissions().then((res) => console.log(res)).catch((e) => console.log(e, 'eman'))
-  }
-
   const createChannel = () => {
     PushNotification.createChannel(
       {
@@ -71,7 +67,7 @@ const App = () => {
 
   React.useEffect(() => {
     // Register FCM token with stream chat server.
-    !isIos ?     requestPermission() : requestPermissionIos()
+    requestPermission()
     createChannel();
     
     const unsubscribe = messaging().onMessage((remoteMessage) => {
