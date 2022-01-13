@@ -11,7 +11,6 @@ import { getUserId } from '../../utils/users';
 const ChatStatusIcon = (props) => {
     const { message } = useMessageContext()
     let [userId, setUserId] = React.useState("")
-    console.log(message)
 
     React.useEffect(() => {
         __getUserId()

@@ -19,6 +19,7 @@ import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
+import dimen from '../../utils/dimen';
 import {Footer, Gap} from '../../components';
 import {
   POST_TYPE_LINK,
@@ -371,7 +372,7 @@ const PostPageDetailComponent = (props) => {
             />
           )}
           <Gap height={16} />
-          <View style={{height: 52, paddingHorizontal: 0}}>
+          <View style={{height: 52, paddingHorizontal: 0, position: 'absolute', bottom : 0, width: '100%'}}>
             <Footer
               item={item}
               disableComment={false}
@@ -451,7 +452,7 @@ const styles = StyleSheet.create({
       borderBottomWidth: 1,
       borderBottomColor: '#C4C4C4',
       marginBottom: -1,
-      height: h - 120,
+      height: h - 145,
     };
   },
   gap: {height: 16},
