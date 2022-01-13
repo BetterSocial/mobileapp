@@ -78,6 +78,18 @@ const NewsScreen = ({}) => {
       setLoading(false);
     }
   };
+
+  const onRefresh = async () => {
+    setRefreshing(true)
+    try {
+      let res = await getDomains();
+      setNews([{dummy: true}, ...res.data], dispatch);
+      setRefreshing(false);
+    } catch (error) {
+      setRefreshing(false);
+    }
+  }
+
   const getNewsIfollow = async () => {
     let res = await getDomainIdIFollow();
     setIFollow(res.data, dispatch);
@@ -166,6 +178,8 @@ const NewsScreen = ({}) => {
           onScroll={handleScrollEvent}
           scrollEventThrottle={16}
           data={news}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
           onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
             if (item.dummy) {
