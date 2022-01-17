@@ -36,10 +36,12 @@ const Header = ({
   domain,
   description,
   followers,
-  onPress,
+  onPressBlock,
+  onPressUnblock,
   handleFollow,
   handleUnfollow,
   follow = false,
+  isBlocked
 }) => {
   let [isTooltipShown, setIsTooltipShown] = React.useState(false);
 
@@ -84,11 +86,16 @@ const Header = ({
             </TouchableNativeFeedback>
           )}
           <Gap width={normalize(SIZES.base)} />
-          <TouchableOpacity
+          {!isBlocked ?     <TouchableOpacity
             style={styles.buttonBlock}
-            onPress={() => onPress()}>
+            onPress={() => onPressBlock()}>
             <Text style={styles.blockButtonText}>Block</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> :     <TouchableOpacity
+            style={styles.buttonUnblock}
+            onPress={() => onPressUnblock()}>
+            <Text style={styles.unblockButtonText}>Blocked</Text>
+          </TouchableOpacity>}
+      
         </View>
       </View>
       <Gap height={normalize(12)} />
@@ -225,10 +232,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
+  buttonUnblock: {
+    height: normalize(36),
+    width: normalize(88),
+    borderWidth: 0.5,
+    borderRadius: 8,
+    borderColor: '#FF2E63',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FF2E63',
+  },
   blockButtonText: {
     fontSize: normalizeFontSize(12),
     color: '#FF2E63',
-    paddingHorizontal: 25,
+    paddingHorizontal: 0,
+  },
+  unblockButtonText: {
+    fontSize: normalizeFontSize(12),
+    color: 'white',
+    paddingHorizontal: 0,
   },
   wrapperHeader: {
     flex: 1,

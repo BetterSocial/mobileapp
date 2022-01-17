@@ -32,6 +32,15 @@ export const blockAnonymous = async (data) => {
   }
 };
 
+export const unblokDomain = async (data) => {
+  try {
+    let resApi = await api.post('/domain/unblock', data);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return error.response.data;
+  }
+}
 export const unblockUserApi = async (data) => new Promise((resolve, reject) => {
   api
     .post('/users/unblock', data)

@@ -38,7 +38,11 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Requires user location for better experience</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This lets you upload photos from your device securely.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This lets you upload photos from your device securely.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-SemiBold.ttf</string>
