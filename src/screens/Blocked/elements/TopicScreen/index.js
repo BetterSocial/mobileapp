@@ -1,11 +1,24 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, FlatList } from 'react-native'
+import BlockedList from '../RenderList'
+
+const dummyData = [
+    {
+        name: "detik.com", image: null, description: null
+    },
+    {
+        name: "cnn.com", image: null, description: null
+    }
+]
 
 const BlockedTopicList = () => {
     return (
-        <View>
-            <Text>Topic</Text>
-        </View>
+        <FlatList 
+        data={dummyData}
+        renderItem={({item ,index}) => <BlockedList isHashtag item={item}  />}
+        keyExtractor={(item, index) => index.toString()}
+
+        />
     )
 }
 
