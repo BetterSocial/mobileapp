@@ -87,8 +87,7 @@ const ChatDetailPage = () => {
   if (clients.client && channelClient.channel) {
     // console.log('channel full ', channelClient.channel);
     // console.log('channel ', channelClient.channel?.data?.created_by);
-    return (
-      <SafeAreaView>
+    return (<SafeAreaView>
         <StatusBar backgroundColor="white" translucent={false} />
         <Chat client={clients.client} i18nInstance={streami18n}>
           <Channel
@@ -101,8 +100,8 @@ const ChatDetailPage = () => {
             reactionsEnabled={false}
             readEventsEnabled={true}
             threadRepliesEnabled={false}
-            // MessageStatus={ChatStatusIcon}
-            MessageContent={(props) => <CustomMessageContent {...props} />}
+            MessageStatus={ChatStatusIcon}
+            // MessageContent={(props) => <CustomMessageContent {...props} />}
             messageActions={(props) => {
               return defaultActionsAllowed(props);
             }}

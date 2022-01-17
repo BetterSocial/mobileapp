@@ -26,9 +26,10 @@ const ChatStatusIcon = (props) => {
         let showStatus = message?.groupStyles?.includes("bottom")
         let isMe = message?.user?.id === userId
 
-        if(!showStatus || !isMe) return <></>
+        if(!showStatus || !isMe || status === 'failed') return <></>
         // Not sent yet
-        if(status === 'sending' || status === 'failed') {
+        // if(status === 'sending' || status === 'failed') {
+        if(status === 'sending') {
             // TODO: Change to clock icon
             return <IconChatClock height={14} width={14} />
         } else {
