@@ -1,35 +1,34 @@
 import * as React from 'react';
+import PropsTypes from 'prop-types';
+import { Avatar } from 'react-native-activity-feed';
 import {
-  View,
-  StyleSheet,
-  TouchableNativeFeedback,
-  Text,
-  Platform,
   Dimensions,
   Image,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
   TouchableOpacity,
-  SafeAreaView
+  View
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Avatar } from 'react-native-activity-feed';
-import PropsTypes from 'prop-types';
-
-import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
-import { calculateTime } from '../../utils/time';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
-import Memoic_globe from '../../assets/icons/ic_globe';
-import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
-import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
-import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
-import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
-import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
-import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
+import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
+import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
-import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
+import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
+import MemoSeventyFive_eightySeven from '../../assets/timer/SeventyFive_eightySeven';
+import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFour';
+import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
+import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
+import Memoic_globe from '../../assets/icons/ic_globe';
+import { calculateTime } from '../../utils/time';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
 import { getUserId } from '../../utils/users';
 
 const { width: screenWidth } = Dimensions.get('window');

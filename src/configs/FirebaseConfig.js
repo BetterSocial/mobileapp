@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import PropTypes from 'prop-types';
+
 import { getUserId } from '../utils/users';
 const FirebaseConfig = (props) => {
     const { navigation } = props

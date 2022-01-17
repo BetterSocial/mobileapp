@@ -1,24 +1,28 @@
 import * as React from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
-
+import moment from 'moment';
 import {
-  Chat,
   Channel,
+  Chat,
+  MessageContent,
+  MessageFooter,
   MessageInput,
   MessageList,
-  Streami18n,
-  useMessageInputContext,
+  MessageSimple,
+  MessageStatus,
+  Streami18n
 } from 'stream-chat-react-native';
+import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {useMessageContext} from 'stream-chat-react-native-core'
 
+import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
-import InputMessage from '../../components/Chat/InputMessage';
-import { Context } from '../../context';
-import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { setAsset, setParticipants } from '../../context/actions/groupChat';
-import moment from 'moment';
-import { COLORS } from '../../utils/theme';
-import { fonts } from '../../utils/fonts';
 import ImageSendPreview from './elements/ImageSendPreview';
+import InputMessage from '../../components/Chat/InputMessage';
+import { COLORS } from '../../utils/theme';
+import { Context } from '../../context';
+import { fonts } from '../../utils/fonts';
+import { setAsset, setParticipants } from '../../context/actions/groupChat';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
 const streami18n = new Streami18n({
   language: 'en',
@@ -81,20 +85,21 @@ const ChatDetailPage = () => {
   };
 
   if (clients.client && channelClient.channel) {
-    return (
-      <SafeAreaView>
+    return (<SafeAreaView>
         <StatusBar backgroundColor="white" translucent={false} />
         <Chat client={clients.client} i18nInstance={streami18n}>
           <Channel
             channel={channelClient.channel}
             DateHeader={CustomDateHeader}
-            keyboardVerticalOffset={50}
             hasFilePicker={false}
-            mutesEnabled={false}
-            threadRepliesEnabled={false}
             ImageUploadPreview={<ImageSendPreview />}
+            keyboardVerticalOffset={50}
+            mutesEnabled={false}
             reactionsEnabled={false}
-            readEventsEnabled={false}
+            readEventsEnabled={true}
+            threadRepliesEnabled={false}
+            MessageStatus={ChatStatusIcon}
+            // MessageContent={(props) => <CustomMessageContent {...props} />}
             messageActions={(props) => {
               return defaultActionsAllowed(props);
             }}
@@ -116,6 +121,13 @@ const ChatDetailPage = () => {
   }
   return <View />;
 };
+
+const CustomMessageContent = (props) => {
+  const message = useMessageContext()
+  return <MessageContent {...props} message={message}
+    MessageFooter={(props) => <ChatStatusIcon {...props} />}
+    />
+}
 
 const CustomInlineDateSeparator = ({ date }) => {
   let newDate = moment(date).locale('en').format('MMMM D, YYYY');

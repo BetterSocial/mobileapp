@@ -73,7 +73,7 @@ const PreviewComment = ({
             {comment}
           </SeeMore> */}
           <TouchableOpacity onPress={onPress}>
-            <Text style={styles.commenttext}>
+            <Text style={styles.commenttext} numberOfLines={3} ellipsizeMode='tail'>
               {`${comment.substring(0, 100).trim()} `}
               {comment.length > 100 ? (
                 <Text style={styles.seemore}>more</Text>

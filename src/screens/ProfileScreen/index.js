@@ -54,8 +54,8 @@ import {
 import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
 import {setImageUrl} from '../../context/actions/users';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
-import {trimString} from '../../utils/string/TrimString';
 import { shareUserLink } from '../../utils/Utils';
+import {trimString} from '../../utils/string/TrimString';
 
 const width = Dimensions.get('screen').width;
 
@@ -72,6 +72,7 @@ const ProfileScreen = () => {
   let [myProfileFeed, myProfileDispatch] =
     React.useContext(Context).myProfileFeed;
   const [dataMain, setDataMain] = React.useState({});
+  const [dataMainBio, setDataMainBio] = React.useState("");
   const [errorBio, setErrorBio] = React.useState('');
   const [isChangeRealName, setIsChangeRealName] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -143,6 +144,7 @@ const ProfileScreen = () => {
       const result = await getMyProfile(id);
       if (result.code === 200) {
         setDataMain(result.data);
+        setDataMainBio(result.data.bio)
         setImageUrl(result.data.profile_pic_path, dispatch);
         withLoading ? setIsLoading(false) : null;
       }
@@ -336,6 +338,7 @@ const ProfileScreen = () => {
     let data = {
       bio: tempBio,
     };
+    setDataMainBio(tempBio)
     updateBioProfile(dataMain.user_id, data)
       .then((res) => {
         setIsLoadingUpdateBio(false);
@@ -346,6 +349,7 @@ const ProfileScreen = () => {
       })
       .catch(() => {
         setIsLoadingUpdateBio(false);
+        setDataMainBio(dataMain.bio)
         showMessage({
           message: 'Update bio profile error',
           type: 'danger',
@@ -369,7 +373,7 @@ const ProfileScreen = () => {
           {string === null || string === undefined ? (
             <Text style={{color: colors.blue}}>Add Bio</Text>
           ) : (
-            <Text linkStyle={styles.seeMore}>
+            <Text style={styles.seeMore}>
               {trimString(string, 121)}{' '}
               {string.length > 121 ? (
                 <Text style={{color: colors.blue}}>see more</Text>
@@ -469,10 +473,7 @@ const ProfileScreen = () => {
           ref={scrollViewReff}
           keyboardShouldPersistTaps="always">
           {token_JWT !== '' && (
-            <StreamApp
-              apiKey={STREAM_API_KEY}
-              appId={STREAM_APP_ID}
-              token={token_JWT}>
+              <>
               {!isLoading ? (
                 <View style={styles.content}>
                   <View style={styles.wrapImageProfile}>
@@ -520,7 +521,7 @@ const ProfileScreen = () => {
                     </View>
                   </View>
 
-                  {renderBio(dataMain.bio)}
+                  {renderBio(dataMainBio)}
                 </View>
               ) : null}
 
@@ -583,7 +584,7 @@ const ProfileScreen = () => {
                 isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
                 isLoadingRemoveImage={isLoadingRemoveImage}
               />
-            </StreamApp>
+            </>
           )}
         </ScrollView>
 

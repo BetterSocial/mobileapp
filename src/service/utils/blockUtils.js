@@ -48,9 +48,7 @@ const uiBlockDomain = async(domainId, reason, message, source, callback) => {
         message,
         source,
     };
-    console.log(dataBlock, 'datablock')
     const result = await blockDomain(dataBlock);
-    console.log(result, 'mantap')
     if (result.code === 200) {
         callback();
         Toast.show(

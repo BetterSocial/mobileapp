@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-
 import {useNavigation} from '@react-navigation/core';
 
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import dimen from '../../utils/dimen';
 import {COLORS} from '../../utils/theme';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 
 const ButtonAddPost = () => {
   const navigator = useNavigation();
@@ -16,8 +16,8 @@ const ButtonAddPost = () => {
         navigator.navigate('CreatePost');
       }}>
       <MemoIc_pencil
-        width={normalize(21)}
-        height={normalize(21)}
+        width={dimen.normalizeDimen(21)}
+        height={dimen.normalizeDimen(21)}
         color={COLORS.white}
         style={{
           alignSelf: 'center',
@@ -33,13 +33,13 @@ export default ButtonAddPost;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#23C5B6',
-    width: normalize(50),
-    height: normalize(50),
-    borderRadius: normalize(50),
+    width: dimen.size.FEED_ACTION_BUTTON_RADIUS,
+    height: dimen.size.FEED_ACTION_BUTTON_RADIUS,
+    borderRadius: dimen.size.FEED_ACTION_BUTTON_RADIUS,
     justifyContent: 'center',
     position: 'absolute',
-    bottom: normalize(61),
-    right: normalize(20),
+    bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
+    right: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_RIGHT,
     zIndex: 1,
     elevation: 3,
     shadowColor: '#000',

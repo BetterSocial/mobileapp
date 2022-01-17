@@ -6,16 +6,15 @@ import {
   Text,
   View,
 } from 'react-native';
-
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
-import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
+import DomainList from './elements/RenderList';
 import Loading from '../Loading';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
 import {getUserId} from '../../utils/users';
-import DomainList from './elements/RenderList';
 
 const width = Dimensions.get('screen').width;
 
@@ -42,6 +41,8 @@ const Followings = () => {
     if (result.code === 200) {
       withLoading ? setIsLoading(false) : null;
       const newData = result.data.map((data) => ({ ...data, name: data.user.username, image: data.user.profile_pic_path, description: null}))
+      console.log('newData')
+      console.log(newData)
       setDataFollowing(newData);
       navigation.setOptions({
         title: `Users (${newData.length})`,
@@ -106,11 +107,10 @@ const Followings = () => {
             onRefresh={fetchFollowing}
           />
         </View>
-      ) : (
-        <View style={styles.nousercontent}>
+      ) : (<View style={styles.nousercontent}>
           <Text style={styles.nousertext}>
             {
-              'You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.'
+              isLoading ? "" : 'You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.'
             }
           </Text>
         </View>
