@@ -1,24 +1,24 @@
 const getCountVote = (item) => {
-  let reactionCount = item.reaction_counts;
+  const reactionCount = item.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
-    let upvote = reactionCount.upvotes;
+    const upvote = reactionCount.upvotes;
     if (upvote !== undefined) {
-      count = count + upvote;
+      count += upvote;
     }
-    let downvote = reactionCount.downvotes;
+    const downvote = reactionCount.downvotes;
     if (downvote !== undefined) {
-      count = count - downvote;
+      count -= downvote;
     }
   }
   return count;
 };
 
 const getCountComment = (item) => {
-  let reactionCount = item.reaction_counts;
+  const reactionCount = item.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
-    let comment = reactionCount.comment;
+    const { comment } = reactionCount;
     if (comment !== undefined) {
       count = comment;
     }
@@ -28,11 +28,11 @@ const getCountComment = (item) => {
 
 const getCountCommentWithChild = (item) => {
   let count = 0;
-  let reactionCountLevelOne = item.reaction_counts;
-  let reactionLevelOne = item.latest_reactions.comment || [];
+  const reactionCountLevelOne = item?.reaction_counts;
+  const reactionLevelOne = item?.latest_reactions.comment || [];
 
   if (JSON.stringify(reactionCountLevelOne) !== '{}') {
-    let comment = reactionCountLevelOne.comment;
+    const { comment } = reactionCountLevelOne;
     if (comment !== undefined) {
       count += comment;
     }
@@ -40,11 +40,11 @@ const getCountCommentWithChild = (item) => {
     try {
       reactionLevelOne.forEach((itemLevelOne) => {
         if (JSON.stringify(itemLevelOne.latest_children) !== '{}') {
-          let reactionLevelTwo = itemLevelOne.latest_children.comment;
+          const reactionLevelTwo = itemLevelOne.latest_children.comment;
           reactionLevelTwo.forEach((itemLevelTwo, index) => {
             count += reactionLevelTwo.length;
 
-            let reactionLevelThree = itemLevelTwo.latest_children;
+            const reactionLevelThree = itemLevelTwo.latest_children;
             if (JSON.stringify(reactionLevelThree) !== '{}') {
               count += reactionLevelThree.comment.length;
             }
@@ -62,14 +62,14 @@ const getCountCommentWithChild = (item) => {
 
 const getCountCommentWithChildInDetailPage = (item) => {
   let count = 0;
-  let reactionCountLevelOne = item.comment;
+  const reactionCountLevelOne = item.comment;
   count += item.comment.length;
   reactionCountLevelOne.forEach((itemLevelOne, index) => {
     if (itemLevelOne.latest_children.comment !== undefined) {
-      let reactionLevelTwo = itemLevelOne.latest_children.comment;
+      const reactionLevelTwo = itemLevelOne.latest_children.comment;
       count += reactionLevelTwo.length;
       reactionLevelTwo.forEach((itemLevelTwo, index) => {
-        let reactionLevelThree = itemLevelTwo.latest_children;
+        const reactionLevelThree = itemLevelTwo.latest_children;
         if (JSON.stringify(reactionLevelThree) !== '{}') {
           count += reactionLevelThree.comment.length;
         }

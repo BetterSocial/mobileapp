@@ -56,8 +56,13 @@ import {setImageUrl} from '../../context/actions/users';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
+import ProfilePicture from './elements/ProfilePicture';
+import FollowInfoRow from './elements/FollowInfoRow';
+import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
-const width = Dimensions.get('screen').width;
+const { height, width } = Dimensions.get('screen');
+let headerHeight = 0;
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -65,7 +70,7 @@ const ProfileScreen = () => {
   const bottomSheetBioRef = React.useRef();
   const bottomSheetProfilePictureRef = React.useRef();
   const postRef = React.useRef(null);
-  const scrollViewReff = React.useRef(null);
+  const flatListScrollRef = React.useRef(null);
 
   let [token_JWT, setTokenJwt] = React.useState('');
   let [users, dispatch] = React.useContext(Context).users;
@@ -95,6 +100,7 @@ const ProfileScreen = () => {
   const [loading, setLoading] = React.useState(false);
 
   const refBlockComponent = React.useRef();
+  const bottomBarHeight = useBottomTabBarHeight()
 
   let {feeds} = myProfileFeed;
 
@@ -153,7 +159,11 @@ const ProfileScreen = () => {
 
   const getMyFeeds = async () => {
     let result = await getSelfFeedsInProfile();
-    setMyProfileFeed(result.data, myProfileDispatch);
+    // setMyProfileFeed([
+    //   {dummy: true, component: 'Profile'}, 
+    //   {dummy: true, component: 'PostStickyHeader'},
+    //   ...result.data], myProfileDispatch);
+    setMyProfileFeed(result.data, myProfileDispatch)
   };
 
 
@@ -207,34 +217,22 @@ const ProfileScreen = () => {
   };
 
   const handleScroll = (event) => {
-    if(postRef && postRef.current) {
-      postRef.current.measure((x, y, width, height, pagex, pagey) => {
-        if (pagey < 40) {
-          setIsOffsetScroll(true);
-        } else {
-          setIsOffsetScroll(false);
-        }
-      });
-    }
-
     const currentOffset = event.nativeEvent.contentOffset.y;
     if (currentOffset < 70) {
       setOpacity(0);
       setIsShowButton(false);
-    } else if (currentOffset >= 70 && currentOffset <= 270) {
+    } else if (currentOffset >= 70 && currentOffset <= headerHeight) {
       setIsShowButton(true);
       setOpacity((currentOffset - 70) * (1 / 100));
-    } else if (currentOffset > 270) {
+    } else if (currentOffset > headerHeight) {
       setOpacity(1);
       setIsShowButton(true);
     }
   };
 
   const toTop = () => {
-    scrollViewReff.current?.scrollTo({
-      y: 0,
-      animated: true,
-    });
+    console.log('asdadasdasd')
+    flatListScrollRef.current.scrollToTop()
   };
 
   const onOpenImageGalery = async () => {
@@ -453,14 +451,6 @@ const ProfileScreen = () => {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
         <ProfileHeader onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username}/>  
-        {isOffsetScroll ? (
-          <View style={styles.tabsFixed}>
-            <Text style={styles.postText}>
-              Posts{/* Change this to post size*/}
-            </Text>
-          </View>
-        ) : null}
-
         {isLoading ? (
           <View style={styles.containerLoading}>
             <LoadingWithoutModal />
@@ -468,126 +458,86 @@ const ProfileScreen = () => {
         ) : (
           <></>
         )}
-        <ScrollView
+        <ProfileTiktokScroll
+          ref={flatListScrollRef}
+          data={feeds}
           onScroll={handleScroll}
-          ref={scrollViewReff}
-          keyboardShouldPersistTaps="always">
-          {token_JWT !== '' && (
-              <>
-              {!isLoading ? (
-                <View style={styles.content}>
-                  <View style={styles.wrapImageProfile}>
-                    <TouchableNativeFeedback onPress={changeImage}>
-                      <View style={styles.profileImageContainer}>
-                        <Image
-                          style={styles.profileImage}
-                          source={{
-                            uri: dataMain.profile_pic_path
-                              ? `${dataMain.profile_pic_path}`
-                              : DEFAULT_PROFILE_PIC_PATH,
-                          }}
-                        />
-                        {!dataMain.profile_pic_path ? (
-                          <MemoIcAddCircle
-                            width={48}
-                            height={48}
-                            style={styles.addCircle}
-                          />
-                        ) : (
-                          <></>
-                        )}
-                      </View>
-                    </TouchableNativeFeedback>
-                  </View>
-                  <View style={styles.wrapFollower}>
-                    <View style={styles.wrapRow}>
-                      <Text style={styles.textTotal}>
-                        {dataMain.follower_symbol}
-                      </Text>
-                      <Text style={styles.textFollow}>Followers</Text>
-                    </View>
-                    <View style={styles.following}>
-                      <TouchableNativeFeedback
-                        onPress={() =>
-                          goToFollowings(dataMain.user_id, dataMain.username)
-                        }>
-                        <View style={styles.wrapRow}>
-                          <Text style={styles.textTotal}>
-                            {dataMain.following_symbol}
-                          </Text>
-                          <Text style={styles.textFollow}>Following</Text>
-                        </View>
-                      </TouchableNativeFeedback>
-                    </View>
-                  </View>
+          snapToOffsets={(() => {
+            let posts = feeds.map((item, index) => {
+              return headerHeight + (index * (height - 42 - StatusBar.currentHeight - bottomBarHeight - 164))
+            })
+            console.log('scroll height')
+            console.log([headerHeight, ...posts])
+            return [headerHeight, ...posts]
+          })()}
+          ListHeaderComponent={
+            <View onLayout={(event) => {
+              let headerHeightLayout = event.nativeEvent.layout.height
+              headerHeight = headerHeightLayout
+            }}>
+              <View style={styles.content}>
+                <ProfilePicture onImageContainerClick={changeImage} profilePicPath={dataMain.profile_pic_path} />
+                <FollowInfoRow 
+                  follower={dataMain.follower_symbol}
+                  following={dataMain.following_symbol}
+                  onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)} />
 
-                  {renderBio(dataMainBio)}
+                {renderBio(dataMainBio)}
+              </View>
+              <View>
+                <View style={styles.tabs} ref={postRef}>
+                  <Text style={styles.postText}>
+                    Posts
+                  </Text>
                 </View>
-              ) : null}
+              </View>
+            </View>
+          }>
+            {({item, index}) => {
+              return <View style={{width: '100%'}}>
+                  <RenderItem
+                    item={item}
+                    index={index}
+                    onNewPollFetched={onNewPollFetched}
+                    onPressDomain={onPressDomain}
+                    onPress={() => onPress(item, index)}
+                    onPressComment={() => onPressComment(index)}
+                    onPressBlock={() => onPressBlock(item)}
+                    onPressUpvote={(post) => setUpVote(post, index)}
+                    selfUserId={yourselfId}
+                    onPressDownVote={(post) =>
+                      setDownVote(post, index)
+                    } />
+              </View>
+        }}
+        </ProfileTiktokScroll>
+        <BottomSheetBio
+          ref={bottomSheetBioRef}
+          value={tempBio}
+          onChangeText={(text) => onChangeTempBio(text)}
+          handleSave={() => handleSaveBio()}
+          isLoadingUpdateBio={isLoadingUpdateBio}
+          error={errorBio}
+        />
 
-              {!isLoading ? (
-                <View>
-                  <View style={styles.tabs} ref={postRef}>
-                    <Text style={styles.postText}>
-                      Posts{/* Please change this to post size*/}
-                    </Text>
-                  </View>
-                  <View style={styles.containerFlatFeed}>
-                    {feeds &&
-                      feeds.map((item, index) => {
-                        return (
-                          <View style={{width: '100%'}}>
-                            <RenderItem
-                              item={item}
-                              index={index}
-                              onNewPollFetched={onNewPollFetched}
-                              onPressDomain={onPressDomain}
-                              onPress={() => onPress(item, index)}
-                              onPressComment={() => onPressComment(index)}
-                              onPressBlock={() => onPressBlock(item)}
-                              onPressUpvote={(post) => setUpVote(post, index)}
-                              selfUserId={yourselfId}
-                              onPressDownVote={(post) =>
-                                setDownVote(post, index)
-                              }
-                            />
-                          </View>
-                        );
-                      })}
-                  </View>
-                </View>
-              ) : null}
-              <BottomSheetBio
-                ref={bottomSheetBioRef}
-                value={tempBio}
-                onChangeText={(text) => onChangeTempBio(text)}
-                handleSave={() => handleSaveBio()}
-                isLoadingUpdateBio={isLoadingUpdateBio}
-                error={errorBio}
-              />
-
-              <BottomSheetRealname
-                ref={bottomSheetNameRef}
-                setTempFullName={(text) => setTempFullName(text)}
-                tempFullName={tempFullName}
-                errorChangeRealName={errorChangeRealName}
-                isChangeRealName={isChangeRealName}
-                handleSave={() => handleSave()}
-              />
-              <BottomSheetImage
-                ref={bottomSheetProfilePictureRef}
-                onViewProfilePicture={() => onViewProfilePicture()}
-                onOpenImageGalery={() => onOpenImageGalery()}
-                onOpenCamera={() => onOpenCamera()}
-                handleRemoveImageProfile={() => handleRemoveImageProfile()}
-                isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
-                isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
-                isLoadingRemoveImage={isLoadingRemoveImage}
-              />
-            </>
-          )}
-        </ScrollView>
-
+        <BottomSheetRealname
+          ref={bottomSheetNameRef}
+          setTempFullName={(text) => setTempFullName(text)}
+          tempFullName={tempFullName}
+          errorChangeRealName={errorChangeRealName}
+          isChangeRealName={isChangeRealName}
+          handleSave={() => handleSave()}
+        />
+        <BottomSheetImage
+          ref={bottomSheetProfilePictureRef}
+          onViewProfilePicture={() => onViewProfilePicture()}
+          onOpenImageGalery={() => onOpenImageGalery()}
+          onOpenCamera={() => onOpenCamera()}
+          handleRemoveImageProfile={() => handleRemoveImageProfile()}
+          isLoadingUpdateImageGalery={isLoadingUpdateImageGalery}
+          isLoadingUpdateImageCamera={isLoadingUpdateImageCamera}
+          isLoadingRemoveImage={isLoadingRemoveImage}
+        />
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
@@ -606,6 +556,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
+    height: '100%'
   },
   content: {
     flexDirection: 'column',
@@ -635,6 +586,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1000,
   },
   containerBio: {
     paddingVertical: 8,
@@ -664,17 +616,6 @@ const styles = StyleSheet.create({
     zIndex: 2000,
     backgroundColor: colors.white,
   },
-
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 100,
-    // marginBottom: 12
-  },
-  wrapImageProfile: {
-    marginTop: 14,
-    flexDirection: 'column',
-  },
   nameProfile: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
@@ -683,35 +624,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     color: colors.black,
   },
-  wrapFollower: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 12,
-  },
-  wrapRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  textTotal: {
-    fontFamily: fonts.inter[800],
-    fontWeight: 'bold',
-    fontSize: 14,
-    color: colors.bondi_blue,
-    paddingRight: 4,
-  },
-  textFollow: {
-    fontFamily: fonts.inter[800],
-    fontSize: 14,
-    color: colors.black,
-    paddingRight: 4,
-  },
-  profileImageContainer: {
-    width: 100,
-    borderRadius: 100,
-  },
-  addCircle: {position: 'absolute', top: 25, left: 25},
-  following: {marginLeft: 18},
+  
   containerLoading: {
     height: '100%',
     justifyContent: 'center',

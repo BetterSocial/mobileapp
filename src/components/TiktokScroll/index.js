@@ -23,21 +23,19 @@ const TiktokScroll = (props) => {
 
   return (
     <FlatList
-      data={data}
-      renderItem={children}
-      keyExtractor={(item) => {
-        return item.id;
-      }}
-      showsVerticalScrollIndicator={false}
-      snapToInterval={deviceHeight}
-      snapToAlignment="center"
-      decelerationRate="fast"
       contentContainerStyle={styles.flatlistContainer}
+      data={data}
+      decelerationRate="fast"
+      keyExtractor={(item) => item.id}
+      onEndReached={onEndReach}
+      onRefresh={onRefresh}
       ref={flatListRef}
       refreshing={refreshing}
-      onRefresh={onRefresh}
+      renderItem={children}
       scrollEventThrottle={1}
-      onEndReached={onEndReach}
+      showsVerticalScrollIndicator={false}
+      snapToAlignment="center"
+      snapToInterval={deviceHeight}
     />
   );
 };
