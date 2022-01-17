@@ -11,6 +11,7 @@ import ContentPoll from './ContentPoll';
 import Header from './Header';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
+import dimen from '../../utils/dimen';
 import { ANALYTICS_SHARE_POST_FEED_ID, ANALYTICS_SHARE_POST_FEED_SCREEN } from '../../utils/constants';
 import { Footer, Gap, PreviewComment } from '../../components';
 import {
@@ -27,31 +28,12 @@ const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
 const getHeightHeader = () => {
-  let h = Math.floor((FULL_HEIGHT * 10) / 100);
-  return h;
+  // let h = Math.floor((FULL_HEIGHT * 10) / 100);
+  // return h;
+  return dimen.size.FEED_HEADER_HEIGHT
 };
 
 const majorVersion = parseInt(Platform.Version, 10)
-
-const styles = StyleSheet.create({
-  cardContainer: (bottomHeight) => ({
-    height: FULL_HEIGHT - bottomHeight - tabBarHeight,
-    width: FULL_WIDTH,
-    backgroundColor: colors.white,
-    borderBottomWidth: 7,
-    borderBottomColor: colors.lightgrey,
-  }),
-  cardMain: {
-    height: '100%',
-    width: '100%',
-    paddingVertical: Platform.OS === 'ios' && majorVersion >= 10 ? 30 : 0,
-  },
-  footerWrapper: (h) => ({ height: h }),
-  contentReaction: (heightReaction) => ({
-    height: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
-  }),
-});
 
 const RenderListFeed = (props) => {
   const {
@@ -91,8 +73,9 @@ const RenderListFeed = (props) => {
   };
 
   const getHeightReaction = () => {
-    let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
-    return h;
+    // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
+    // return h;
+    return dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
   };
 
   const onPressDownVoteHandle = async () => {
@@ -177,6 +160,7 @@ const RenderListFeed = (props) => {
 
   const initial = () => {
     let reactionCount = item.reaction_counts;
+    console.log(reactionCount)
     if (JSON.stringify(reactionCount) !== '{}') {
       let comment = reactionCount.comment;
       handleVote(reactionCount);
@@ -210,7 +194,6 @@ const RenderListFeed = (props) => {
   React.useEffect(() => {
     initial();
   }, [item]);
-  { console.log(item, 'samanina') }
   return (
     <View style={[styles.cardContainer(bottomHeight)]}>
       <View style={styles.cardMain}>
@@ -272,8 +255,8 @@ const RenderListFeed = (props) => {
             }
           />
         </View>
-        <View style={styles.contentReaction(isReaction ? getHeightReaction() : 0)}>
-          {isReaction && (
+        { isReaction && (
+          <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
                 user={previewComment.user}
@@ -285,13 +268,35 @@ const RenderListFeed = (props) => {
               />
               <Gap height={8} />
             </React.Fragment>
-          )}
         </View>
+        )}
+        
 
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  cardContainer: (bottomHeight) => ({
+    // height: FULL_HEIGHT - bottomHeight - tabBarHeight,
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT(bottomHeight),
+    width: FULL_WIDTH,
+    backgroundColor: colors.white,
+    borderBottomWidth: 7,
+    borderBottomColor: colors.lightgrey,
+  }),
+  cardMain: {
+    height: '100%',
+    width: '100%',
+    paddingVertical: Platform.OS === 'ios' && majorVersion >= 10 ? 30 : 0,
+  },
+  footerWrapper: (h) => ({ height: h, bottom: 0, }),
+  contentReaction: (heightReaction) => ({
+    maxHeight: heightReaction,
+    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
+  }),
+});
 
 RenderListFeed.propTypes = {
   item: PropTypes.object,

@@ -23,8 +23,12 @@ const ChatStatusIcon = (props) => {
 
     let __renderCheckMark = () => {
         let { status } = message
-        
+        let showStatus = message?.groupStyles?.includes("bottom")
+        let isMe = message?.user?.id === userId
+
+        if(!showStatus || !isMe || status === 'failed') return <></>
         // Not sent yet
+        // if(status === 'sending' || status === 'failed') {
         if(status === 'sending') {
             // TODO: Change to clock icon
             return <IconChatClock height={14} width={14} />
@@ -34,16 +38,21 @@ const ChatStatusIcon = (props) => {
     }
 
     let __renderDate = () => {
-        let updatedAt = props?.latestMessagePreview?.messageObject?.updated_at 
+        let updatedAt = message?.created_at
+        let showStatus = message?.groupStyles?.includes("bottom")
+        let isMe = message?.user?.id === userId
+        
+        if(!showStatus || !isMe) return <></>
         if(!updatedAt) return <></>
 
-        let diffTime = calculateTime(moment(updatedAt))
+        let diffTime = moment(updatedAt).format('hh:mm A')
         return <Text style={styles.time}>{diffTime}</Text>
     }
     
     return (
         <View style={styles.dateContainer}>
             { __renderCheckMark() }
+            { __renderDate() }
         </View>
     );
 }
@@ -53,7 +62,7 @@ const styles = StyleSheet.create({
         fontSize: 12, marginLeft: 4
     },
 
-    dateContainer: { paddingRight: 4, display:'flex', flexDirection:'row'}
+    dateContainer: { paddingRight: 4, display:'flex', flexDirection:'row', marginTop: 2,}
 })
 
 export default ChatStatusIcon

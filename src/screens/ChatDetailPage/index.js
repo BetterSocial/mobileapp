@@ -4,6 +4,7 @@ import {
   Channel,
   Chat,
   MessageContent,
+  MessageFooter,
   MessageInput,
   MessageList,
   MessageSimple,
@@ -11,6 +12,7 @@ import {
   Streami18n
 } from 'stream-chat-react-native';
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {useMessageContext} from 'stream-chat-react-native-core'
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
@@ -85,8 +87,7 @@ const ChatDetailPage = () => {
   if (clients.client && channelClient.channel) {
     // console.log('channel full ', channelClient.channel);
     // console.log('channel ', channelClient.channel?.data?.created_by);
-    return (
-      <SafeAreaView>
+    return (<SafeAreaView>
         <StatusBar backgroundColor="white" translucent={false} />
         <Chat client={clients.client} i18nInstance={streami18n}>
           <Channel
@@ -100,6 +101,7 @@ const ChatDetailPage = () => {
             readEventsEnabled={true}
             threadRepliesEnabled={false}
             MessageStatus={ChatStatusIcon}
+            // MessageContent={(props) => <CustomMessageContent {...props} />}
             messageActions={(props) => {
               return defaultActionsAllowed(props);
             }}
@@ -121,6 +123,13 @@ const ChatDetailPage = () => {
   }
   return <View />;
 };
+
+const CustomMessageContent = (props) => {
+  const message = useMessageContext()
+  return <MessageContent {...props} message={message} 
+    MessageFooter={(props) => <ChatStatusIcon {...props} />}
+    />
+}
 
 const CustomInlineDateSeparator = ({ date }) => {
   let newDate = moment(date).locale('en').format('MMMM D, YYYY');

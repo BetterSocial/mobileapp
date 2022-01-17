@@ -1,10 +1,11 @@
-import {useRoute} from '@react-navigation/native';
 import * as React from 'react';
 import {Pressable, StyleSheet, TouchableOpacity} from 'react-native';
+import {useRoute} from '@react-navigation/native';
 
+import Card from '../../components/Card/Card';
+import dimen from '../../utils/dimen';
 import {COLORS, SIZES} from '../../utils/theme';
 import {smartRender} from '../../utils/Utils';
-import Card from '../../components/Card/Card';
 
 const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress}) => {
   let route = useRoute();
@@ -40,6 +41,6 @@ const styles = StyleSheet.create({
     marginTop: SIZES.base,
     marginHorizontal: 6,
     backgroundColor: COLORS.white,
-    maxHeight: 460,
+    maxHeight: dimen.size.FEED_CONTENT_LINK_MAX_HEIGHT,
   },
 });
