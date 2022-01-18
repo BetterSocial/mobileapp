@@ -12,8 +12,6 @@ import {
   Streami18n,
   useAttachmentPickerContext,
 } from 'stream-chat-react-native';
-import {SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
-import {useHeaderHeight} from '@react-navigation/stack';
 
 import { Context } from '../../context';
 
@@ -78,7 +76,7 @@ const ChannelScreen = () => {
 export default ChannelScreen;
 
 const CustomComponent = (props) => {
-  return <MessageSimple {...props}/>;
+  return <MessageSimple {...props} />;
 };
 
 // const CardCustom = (props) => {
