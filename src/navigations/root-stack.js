@@ -55,6 +55,7 @@ const RootStact = () => {
   const [clientState] = React.useContext(Context).client;
   const [profileState] = React.useContext(Context).profile
   const {client} = clientState;
+  const isIos = Platform.OS === 'ios'
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
@@ -63,7 +64,6 @@ const RootStact = () => {
       await client?.disconnectUser();
     };
   }, []);
-
 
   return (
     <View
@@ -188,7 +188,7 @@ const RootStact = () => {
           name="Followings"
           component={FollowingScreen}
           options={{
-            headerShown: true,
+            headerShown: isIos ? profileState.isShowHeader : true,
             header: ({navigation}) => {  
               return (
                 <SafeAreaView>
@@ -264,7 +264,7 @@ const RootStact = () => {
           name='BlockScreen'
           component={Blocked}
           options={{
-            headerShown: true,
+            headerShown:  isIos ? profileState.isShowHeader : true,
             header: ({navigation}) => {  
               return (
                 <SafeAreaView>

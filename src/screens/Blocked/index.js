@@ -5,6 +5,8 @@ import Tabbar from '../../components/Tabbar';
 import BlockedUserList from './elements/UserScreen';
 import BlockedDomainList from './elements/DomainScreen';
 import BlockedTopicList from './elements/TopicScreen';
+import {showHeaderProfile} from '../../context/actions/setMyProfileAction'
+import {Context} from '../../context';
 
 const styles = StyleSheet.create({
     containerTab: {
@@ -18,9 +20,21 @@ const Blocked = (props) => {
     const TAB_BLOCKED_DOMAIN = 'tabBlockedDomain'
     const TAB_BLOCKED_TOPIC = 'tabBlockedTopic'
     const Tabs = createMaterialTopTabNavigator();
+    const [, dispatchNavbar] = React.useContext(Context).profile
+
     const myTabbar = (tabbarProps) => (
         <Tabbar {...tabbarProps} />
     )
+
+    React.useEffect(() => {
+        navigation.addListener('focus', () => {
+            showHeaderProfile(true, dispatchNavbar)
+        })
+        navigation.addListener('blur', () => {
+            showHeaderProfile(false, dispatchNavbar)
+        })
+    }, [])
+
     return (
         <View style={styles.containerTab} >
                   <Tabs.Navigator
