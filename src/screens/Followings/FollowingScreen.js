@@ -10,9 +10,10 @@ import Followings from '.';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {Context} from '../../context';
-import {setNavbarTitle} from '../../context/actions/setMyProfileAction'
+import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction'
 
-export default function FollowingScreen() {
+export default function FollowingScreen(props) {
+  const {navigation} = props
   const [, dispatchNavbar] = React.useContext(Context).profile
   const TAB_TOPIC = 'TabTopic'
   const TAB_FOLLOWING = 'TabFollowing'
@@ -87,6 +88,15 @@ export default function FollowingScreen() {
       setNavbarTitle("Your Topics", dispatchNavbar)
     }
   }
+
+  React.useEffect(() => {
+    navigation.addListener('focus', () => {
+      showHeaderProfile(true, dispatchNavbar)
+    })
+    navigation.addListener('blur', () => {
+      showHeaderProfile(false, dispatchNavbar)
+    })
+  }, [])
 
   return (
     <View style={{flex: 1}} >

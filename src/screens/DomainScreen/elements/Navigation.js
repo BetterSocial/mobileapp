@@ -12,8 +12,9 @@ const Navigation = ({domain}) => {
     navigation.goBack();
   };
   return (
-    <View style={styles.Header}>
-      <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>
+    <SafeAreaView>
+      <View style={styles.Header}>
+      <TouchableOpacity onPress={() => backScreen()} >
         <MemoIc_arrow_back width={normalize(18)} height={normalize(18)} />
       </TouchableOpacity>
       <View style={styles.domain}>
@@ -22,6 +23,8 @@ const Navigation = ({domain}) => {
         </Text>
       </View>
     </View>
+    </SafeAreaView>
+    
   );
 };
 
@@ -32,10 +35,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: normalize(16),
     alignItems: 'center',
     backgroundColor: 'white',
-  },
-  backbutton: {
-    position: 'absolute',
-    left: 20,
   },
   domain: {
     flex: 1,
