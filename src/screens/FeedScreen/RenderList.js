@@ -135,7 +135,6 @@ const RenderListFeed = (props) => {
       setLoadingVote(false);
     } catch (e) {
       setLoadingVote(false);
-      console.log(e)
       return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     }
   };
@@ -153,7 +152,6 @@ const RenderListFeed = (props) => {
       setLoadingVote(false);
     } catch (e) {
       setLoadingVote(false);
-      console.log(e)
       return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     }
   };

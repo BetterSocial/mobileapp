@@ -576,7 +576,6 @@ const CreatePost = () => {
         });
       }
     } catch (e) {
-      console.log('Error');
       showMessage({
         message: StringConstant.createPostFailedGeneralError,
         type: 'danger',

@@ -1,18 +1,17 @@
 import * as React from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 
 import StringConstant from '../../utils/string/StringConstant';
-import {colors} from '../../utils/colors';
+import { colors } from '../../utils/colors';
 import ConnectorWrapper from './ConnectorWrapper';
 import Comment from './Comment';
 import DetailDomainScreenCommentItem from './DetailDomainScreenCommentItem';
 
-const DetailDomainScreenContainerComment = ({comments, indexFeed}) => {
+const DetailDomainScreenContainerComment = ({ comments, indexFeed }) => {
   const navigation = useNavigation();
   let isLast = (index, item) => {
-    console.log(JSON.stringify(item));
     return (
       index === comments.length - 1 && (item.children_counts.comment || 0) === 0
     );
@@ -50,7 +49,6 @@ const DetailDomainScreenContainerComment = ({comments, indexFeed}) => {
                 isLast={isLast(index, item)}
                 isLastInParent={isLastInParent(index, item)}
                 onPress={() => {
-                  // console.log(item);
                   navigation.navigate('ReplyComment', {
                     item: item,
                     level: 0,
@@ -144,12 +142,12 @@ const ReplyComment = ({
     </ContainerReply>
   );
 };
-const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
+const ContainerReply = ({ children, isGrandchild, hideLeftConnector }) => {
   return (
     <View
       style={[
         styles.containerReply(hideLeftConnector),
-        {borderColor: isGrandchild ? '#fff' : colors.gray1},
+        { borderColor: isGrandchild ? '#fff' : colors.gray1 },
       ]}>
       {children}
     </View>

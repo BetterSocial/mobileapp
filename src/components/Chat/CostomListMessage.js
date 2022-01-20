@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View} from 'react-native';
+import { View } from 'react-native';
 
 import MessageText from './MessageText';
 import MessageWithImage from './MessageWithImage';
@@ -7,7 +7,6 @@ import MessageWithLink from './MessageWithLink';
 import ReplyMessageText from './ReplyMessageText';
 
 const CostomListMessage = (props) => {
-  // console.log(props);
   if (props.message.deleted_at) {
     return null;
   }

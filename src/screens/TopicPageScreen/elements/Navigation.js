@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     height: normalize(48),
     paddingEnd: normalize(16),
     paddingVertical: normalize(8),
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     marginTop: normalize(16),

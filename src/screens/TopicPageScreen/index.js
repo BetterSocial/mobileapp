@@ -18,6 +18,7 @@ import { getUserId } from '../../utils/users';
 import { getUserTopic, putUserTopic } from '../../service/topics';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
+import Empty from './elements/Empty';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -217,8 +218,10 @@ const TopicPageScreen = (props) => {
             />
           )}
         </TiktokScroll>
+
+
       </View>
-      <BlockComponent ref={refBlockComponent} refresh={refreshingData} screen="topic_screen"/>
+      <BlockComponent ref={refBlockComponent} refresh={refreshingData} screen="topic_screen" />
     </View>
   );
 };
