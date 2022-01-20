@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { FlatList, StyleSheet, Dimensions, StatusBar, Text } from 'react-native';
 import PropTypes from 'prop-types';
+import { Dimensions, FlatList, StatusBar, StyleSheet, Text } from 'react-native';
 
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
@@ -60,6 +60,7 @@ ProfileTiktokScroll.propTypes = {
   onScroll: PropTypes.func,
   onScrollBeginDrag: PropTypes.func,
   refreshing: PropTypes.bool,
+  snapToOffsets: PropTypes.arrayOf(PropTypes.number),
   stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
   StickyHeaderComponent: PropTypes.element,
 };

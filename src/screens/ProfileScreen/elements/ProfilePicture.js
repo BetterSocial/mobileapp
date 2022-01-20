@@ -1,17 +1,25 @@
 import * as React from 'react';
-import { View, TouchableNativeFeedback, Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, TouchableNativeFeedback, View } from 'react-native';
+
 import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
 import { DEFAULT_PROFILE_PIC_PATH } from '../../../utils/constants';
+
 /**
  * @typedef {Object} ProfilePicturePropsParam
  * @property {function} onImageContainerClick
  * @property {String} profilePicPath
+ * @property {Boolean} disabledAddIcon
  */
 /**
  * 
  * @param {ProfilePicturePropsParam} props 
  */
-const ProfilePicture = ({ onImageContainerClick, profilePicPath }) => {
+const ProfilePicture = ({ onImageContainerClick, profilePicPath, disabledAddIcon = false}) => {
+    const __renderAddIcon = () => {
+        if(!profilePicPath || !disabledAddIcon) return <></>
+
+        return <MemoIcAddCircle width={48} height={48} style={styles.addCircle} />
+    }
     return <View style={styles.wrapImageProfile}>
         <TouchableNativeFeedback onPress={onImageContainerClick}>
             <View style={styles.profileImageContainer}>
@@ -23,14 +31,7 @@ const ProfilePicture = ({ onImageContainerClick, profilePicPath }) => {
                     : DEFAULT_PROFILE_PIC_PATH,
                 }}
             />
-            {!profilePicPath ? (
-                <MemoIcAddCircle
-                    width={48}
-                    height={48}
-                    style={styles.addCircle} />
-            ) : (
-                <></>
-            )}
+            { __renderAddIcon() }
             </View>
         </TouchableNativeFeedback>
     </View>

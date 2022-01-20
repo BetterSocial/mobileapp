@@ -27,6 +27,9 @@ import BlockProfile from '../../components/Blocking/BlockProfile';
 import BlockUser from '../../components/Blocking/BlockUser';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import Loading from '../Loading';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
+import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
+import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderActivity from './elements/RenderActivity';
 import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
@@ -54,7 +57,8 @@ import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
-const width = Dimensions.get('screen').width;
+const {width, height} = Dimensions.get('screen');
+let headerHeight = 0;
 
 const OtherProfile = () => {
   const navigation = useNavigation();
@@ -65,7 +69,10 @@ const OtherProfile = () => {
   const blockUserRef = React.useRef();
   const reportUserRef = React.useRef();
   const specificIssueRef = React.useRef();
+  const flatListRef = React.useRef();
+
   const [dataMain, setDataMain] = React.useState({});
+  const [dataMainBio, setDataMainBio] = React.useState("");
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [other_id, setOtherId] = React.useState('');
@@ -131,6 +138,7 @@ const OtherProfile = () => {
       const result = await getOtherProfile(username);
       if (result.code === 200) {
         setDataMain(result.data);
+        setDataMainBio(result.data.bio)
         checkUserBlockHandle(result.data.user_id);
         setOtherId(result.data.user_id);
         getOtherFeeds(result.data.user_id)
@@ -212,33 +220,23 @@ const OtherProfile = () => {
   };
 
   const handleScroll = (event) => {
-    postRef.current.measure((x, y, width, height, pagex, pagey) => {
-      if (pagey < 0) {
-        setIsOffsetScroll(true);
-      } else {
-        setIsOffsetScroll(false);
-      }
-    });
-
     const currentOffset = event.nativeEvent.contentOffset.y;
     if (currentOffset < 70) {
       setOpacity(0);
       setIsShowButton(false);
-    } else if (currentOffset >= 70 && currentOffset <= 270) {
+    } else if (currentOffset >= 70 && currentOffset <= headerHeight) {
       setIsShowButton(true);
       setOpacity((currentOffset - 70) * (1 / 100));
-    } else if (currentOffset > 270) {
+    } else if (currentOffset > headerHeight) {
       setOpacity(1);
       setIsShowButton(true);
     }
   };
 
   const toTop = () => {
-    scrollViewReff.current?.scrollTo({
-      y: 0,
-      animated: true,
-    });
+    flatListRef.current.scrollToTop();
   };
+
   const createChannel = async () => {
     try {
       let members = [other_id, user_id];
@@ -409,174 +407,68 @@ const OtherProfile = () => {
     });
   };
 
+  const isFeedsShown = !(blockStatus.blocked) && !(blockStatus.blocker)
 
   return (
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
       <SafeAreaView style={styles.container}>
-        {isOffsetScroll ? (
-          <View style={styles.tabsFixed}>
-            <Text style={styles.postText}>Post{}</Text>
+        <ProfileHeader hideSetting showArrow onShareClicked={onShare} username={dataMain.username}/>  
+        {isLoading ? (
+          <View style={styles.containerLoading}>
+            <LoadingWithoutModal />
           </View>
-        ) : null}
-        <ScrollView onScroll={handleScroll} ref={scrollViewReff}>
-          {tokenJwt !== '' && (
-            <StreamApp
-              apiKey={STREAM_API_KEY}
-              appId={STREAM_APP_ID}
-              token={tokenJwt}>
-              {!isLoading ? (
-                <View style={styles.content}>
-                  {blockStatus.blocked ? null : (
-                    <React.Fragment>
-                      <View style={styles.header}>
-                        <View style={styles.wrapNameAndbackButton}>
-                          <TouchableNativeFeedback
-                            onPress={() => navigation.goBack()}>
-                            <ArrowLeftIcon width={20} height={12} fill="#000" />
-                          </TouchableNativeFeedback>
-                          <Text style={styles.textUsername}>{username}</Text>
-                        </View>
-                        <TouchableNativeFeedback onPress={onShare}>
-                          <ShareIcon width={20} height={20} fill="#000" />
-                        </TouchableNativeFeedback>
-                      </View>
-                      <View style={styles.containerProfile}>
-                        <View style={styles.wrapImageAndStatus}>
-                          <Image
-                            style={styles.profileImage}
-                            source={{
-                              uri: dataMain.profile_pic_path
-                                ? dataMain.profile_pic_path
-                                : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-                            }}
-                          />
+        ) : (
+          <></>
+        )}
 
-                          <View style={styles.wrapButton}>
-                            <TouchableNativeFeedback onPress={onBlockReaction}>
-                              {blockStatus.blocker ? (
-                                <View style={styles.buttonFollowing}>
-                                  <Text style={styles.textButtonFollowing}>
-                                    Blocked
-                                  </Text>
-                                </View>
-                              ) : (
-                                <BlockBlueIcon
-                                  width={20}
-                                  height={20}
-                                  fill={colors.bondi_blue}
-                                />
-                              )}
-                            </TouchableNativeFeedback>
-
-                            {blockStatus.blocker ? null : (
-                              <React.Fragment>
-                                <TouchableNativeFeedback
-                                  onPress={createChannel}>
-                                  <View style={styles.btnMsg}>
-                                    <EnveloveBlueIcon
-                                      width={20}
-                                      height={16}
-                                      fill={colors.bondi_blue}
-                                    />
-                                  </View>
-                                </TouchableNativeFeedback>
-                                {user_id === dataMain.user_id ? null : <React.Fragment>{dataMain.is_following ? (
-                                  <TouchableNativeFeedback
-                                    onPress={() => handleSetUnFollow()}>
-                                    <View style={styles.buttonFollowing}>
-                                      <Text style={styles.textButtonFollowing}>
-                                        Following
-                                      </Text>
-                                    </View>
-                                  </TouchableNativeFeedback>
-                                ) : (
-                                  <TouchableNativeFeedback
-                                    onPress={() => handleSetFollow()}>
-                                    <View style={styles.buttonFollow}>
-                                      <Text style={styles.textButtonFollow}>
-                                        Follow
-                                      </Text>
-                                    </View>
-                                  </TouchableNativeFeedback>
-                                )}</React.Fragment>}
-                                
-                              </React.Fragment>
-                            )}
-                          </View>
-                        </View>
-                        {dataMain.real_name && (
-                          <Text style={styles.nameProfile}>
-                            {dataMain.real_name}
-                          </Text>
-                        )}
-                      </View>
-                      {blockStatus.blocker ? null : (
-                        <React.Fragment>
-                          <View style={styles.wrapFollower}>
-                            <View style={styles.wrapRow}>
-                              <Text style={styles.textTotal}>
-                                {dataMain.follower_symbol}
-                              </Text>
-                              <Text style={styles.textFollow}>Followers</Text>
-                            </View>
-                            {user_id === dataMain.user_id ?           <View style={styles.following}>
-                            <TouchableNativeFeedback
-                              onPress={() =>
-                                goToFollowings(dataMain.user_id, dataMain.username)
-                              }>
-                              <View style={styles.wrapRow}>
-                                <Text style={styles.textTotal}>
-                                  {dataMain.following_symbol}
-                                </Text>
-                                <Text style={styles.textFollow}>Following</Text>
-                              </View>
-                            </TouchableNativeFeedback>
-                          </View> : null}
-                          </View>
-                          {renderBio(dataMain.bio)}
-                        </React.Fragment>
-                      )}
-                    </React.Fragment>
-                  )}
+        <ProfileTiktokScroll
+          ref={flatListRef}
+          data={isFeedsShown ? feeds : []}
+          onScroll={handleScroll}
+          snapToOffsets={(() => {
+            let posts = feeds.map((item, index) => {
+              return headerHeight + (index * (height - 42 - StatusBar.currentHeight - 164))
+            })
+            return [headerHeight, ...posts]
+          })()}
+          ListHeaderComponent={
+            <View onLayout={(event) => {
+              let headerHeightLayout = event.nativeEvent.layout.height
+              headerHeight = headerHeightLayout
+            }}>
+              <View style={styles.content}>
+                {renderBio(dataMainBio)}
+              </View>
+              <View>
+                <View style={styles.tabs} ref={postRef}>
+                  <Text style={styles.postText}>
+                    Posts
+                  </Text>
                 </View>
-              ) : null}
-              {!isLoading ? (
-                <React.Fragment>
-                  {blockStatus.blocked || blockStatus.blocker ? null : (
-                  // {true ? null : (
-                    <View>
-                      <View style={styles.tabs} ref={postRef}>
-                        <Text style={styles.postText}>
-                          Post{/* Please change this to post size */}
-                        </Text>
-                      </View>
-                      <View style={styles.containerFlatFeed}>
-                        {feeds.map((item, index) => {
-                          return (
-                            <RenderItem 
-                              bottomBar={false}
-                              item={item} 
-                              index={index} 
-                              onNewPollFetched={onNewPollFetched}
-                              onPressDomain={onPressDomain}
-                              onPress={() => onPress(item, index)}
-                              onPressComment={() => onPressComment(index)}
-                              onPressBlock={onBlockReaction}
-                              onPressUpvote={(post) => setUpVote(post, index)}
-                              selfUserId={user_id}
-                              onPressDownVote={(post) =>
-                                setDownVote(post, index)
-                              }/>
-                          )
-                        })}
-                      </View>
-                    </View>
-                  )}
-                </React.Fragment>
-              ) : null}
-            </StreamApp>
-          )}
+              </View>
+            </View>
+          }>
+            {({item, index}) => {
+              return <View style={{width: '100%'}}>
+                <RenderItem
+                  bottomBar={false}
+                  item={item}
+                  index={index}
+                  onNewPollFetched={onNewPollFetched}
+                  onPressDomain={onPressDomain}
+                  onPress={() => onPress(item, index)}
+                  onPressComment={() => onPressComment(index)}
+                  onPressBlock={() => onPressBlock(item)}
+                  onPressUpvote={(post) => setUpVote(post, index)}
+                  selfUserId={yourselfId}
+                  onPressDownVote={(post) =>
+                    setDownVote(post, index)
+                  } />
+            </View>
+            }}
+          </ProfileTiktokScroll>
+        
           <BlockProfile
             onSelect={onBlocking}
             refBlockUser={blockUserRef}
@@ -594,7 +486,6 @@ const OtherProfile = () => {
             onPress={onReportIssue}
             loading={loadingBlocking}
           />
-        </ScrollView>
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
             <View style={{...styles.btnBottom, opacity}}>
@@ -602,7 +493,6 @@ const OtherProfile = () => {
             </View>
           </TouchableNativeFeedback>
         ) : null}
-        <Loading visible={isLoading} />
       </SafeAreaView>
     </>
   );
@@ -779,6 +669,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingRight: 16,
     paddingLeft: 24,
+  },
+  containerLoading: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 export default OtherProfile;

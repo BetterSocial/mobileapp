@@ -15,10 +15,9 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import {FlatFeed, StreamApp} from 'react-native-activity-feed';
-import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {showMessage} from 'react-native-flash-message';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
@@ -26,9 +25,12 @@ import BlockComponent from '../../components/BlockComponent';
 import BottomSheetBio from './elements/BottomSheetBio';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
+import FollowInfoRow from './elements/FollowInfoRow';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import ProfileHeader from './elements/ProfileHeader';
+import ProfilePicture from './elements/ProfilePicture';
+import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
@@ -56,10 +58,6 @@ import {setImageUrl} from '../../context/actions/users';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
-import ProfilePicture from './elements/ProfilePicture';
-import FollowInfoRow from './elements/FollowInfoRow';
-import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 const { height, width } = Dimensions.get('screen');
 let headerHeight = 0;
@@ -231,7 +229,6 @@ const ProfileScreen = () => {
   };
 
   const toTop = () => {
-    console.log('asdadasdasd')
     flatListScrollRef.current.scrollToTop()
   };
 
@@ -466,8 +463,8 @@ const ProfileScreen = () => {
             let posts = feeds.map((item, index) => {
               return headerHeight + (index * (height - 42 - StatusBar.currentHeight - bottomBarHeight - 164))
             })
-            console.log('scroll height')
-            console.log([headerHeight, ...posts])
+            // console.log('scroll height')
+            // console.log([headerHeight, ...posts])
             return [headerHeight, ...posts]
           })()}
           ListHeaderComponent={

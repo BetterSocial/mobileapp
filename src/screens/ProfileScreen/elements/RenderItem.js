@@ -1,6 +1,7 @@
 import * as React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {Dimensions, Share, StyleSheet, View} from 'react-native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
 import Content from '../../FeedScreen/Content';
@@ -8,6 +9,7 @@ import ContentLink from '../../FeedScreen/ContentLink';
 import ContentPoll from '../../FeedScreen/ContentPoll';
 import Header from '../../FeedScreen/Header';
 import ShareUtils from '../../../utils/share';
+import dimen from '../../../utils/dimen';
 import {
   ANALYTICS_SHARE_POST_PROFILE_ID,
   ANALYTICS_SHARE_POST_PROFILE_SCREEN,
@@ -19,8 +21,6 @@ import {Context} from '../../../context';
 import {Footer, Gap, PreviewComment} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import dimen from '../../../utils/dimen';
 
 const {width, height} = Dimensions.get('window');
 
@@ -79,6 +79,7 @@ const Item = ({
   onNewPollFetched,
   onCardContentPress,
   index = -1,
+  bottomBar = true,
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -90,7 +91,8 @@ const Item = ({
   // const [item, setItem] = React.useState(feeds.feeds[index]);
   const navigation = useNavigation();
   const [contentHeight, setContentHeight] = React.useState(0);
-  const bottomHeight = useBottomTabBarHeight();
+  // const bottomHeight = bottomBar ? useBottomTabBarHeight() : 0;
+  const bottomHeight = 0;
 
   // console.log('item');
   // console.log(item);
