@@ -12,19 +12,19 @@ import DetailDomainScreenContainerComment from '../../components/Comments/Detail
 import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
 import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
 import WriteComment from '../../components/Comments/WriteComment';
-import {COLORS, SIZES} from '../../utils/theme';
-import {DomainHeader, Footer, Gap} from '../../components';
-import {createCommentParent} from '../../service/comment';
-import {downVoteDomain, upVoteDomain} from '../../service/vote';
-import {fonts} from '../../utils/fonts';
+import { COLORS, SIZES } from '../../utils/theme';
+import { DomainHeader, Footer, Gap } from '../../components';
+import { createCommentParent } from '../../service/comment';
+import { downVoteDomain, upVoteDomain } from '../../service/vote';
+import { fonts } from '../../utils/fonts';
 import {
   getCountCommentWithChild,
   getCountCommentWithChildInDetailPage,
 } from '../../utils/getstream';
-import {getMyProfile} from '../../service/profile';
-import {getUserId} from '../../utils/users';
+import { getMyProfile } from '../../service/profile';
+import { getUserId } from '../../utils/users';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const DetailDomainScreen = (props) => {
 
@@ -40,8 +40,6 @@ const DetailDomainScreen = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
 
-  // console.log('item');
-  // console.log(JSON.stringify(props.route.params.item));
 
   React.useEffect(() => {
     const initial = () => {
@@ -146,7 +144,6 @@ const DetailDomainScreen = (props) => {
         Toast.show('Comments are not empty', Toast.LONG);
       }
     } catch (e) {
-      console.log(e);
       Toast.show('Failed Comment', Toast.LONG);
     }
   };
@@ -166,14 +163,14 @@ const DetailDomainScreen = (props) => {
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
-      <ScrollView showsVerticalScrollIndicator={false} style={{height: '100%'}}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}>
         <View style={styles.content}>
-          <View style={{paddingHorizontal: 0}}>
+          <View style={{ paddingHorizontal: 0 }}>
             <DetailDomainScreenHeader
               domain={item.domain.name}
               time={item.content.created_at}
               image={item.domain.image}
-              onFollowDomainPressed={() => {}}
+              onFollowDomainPressed={() => { }}
             />
           </View>
 
@@ -298,7 +295,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginBottom: 16,
   },
-  gap: {height: 16},
+  gap: { height: 16 },
   footerWrapper: {
     height: 52,
     borderBottomColor: COLORS.gray1,

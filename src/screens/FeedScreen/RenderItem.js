@@ -1,26 +1,26 @@
 import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {Dimensions, Share, StyleSheet, View} from 'react-native';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import {useNavigation} from '@react-navigation/core';
+import { Dimensions, Share, StyleSheet, View } from 'react-native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/core';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
 import ContentPoll from './ContentPoll';
 import Header from './Header';
-import {Card} from '../../components/CardStack';
-import {Context} from '../../context';
-import {Footer, Gap, PreviewComment} from '../../components';
+import { Card } from '../../components/CardStack';
+import { Context } from '../../context';
+import { Footer, Gap, PreviewComment } from '../../components';
 import {
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
-import {getCountCommentWithChild} from '../../utils/getstream';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import { getCountCommentWithChild } from '../../utils/getstream';
+import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const getHeightReaction = () => {
   let h = Math.floor((height * 16) / 100);
@@ -91,7 +91,6 @@ async function buildLink(username) {
 }
 
 const onShare = async (username) => {
-  console.log(username)
   analytics().logEvent('feed_screen_btn_share', {
     id: 'btn_share',
   });
@@ -289,7 +288,6 @@ const Item = ({
                 setVoteStatus('none');
                 setTotalVote((p) => p - 1);
               }
-              console.log('vote ', prev);
               return prev;
             });
           }}
@@ -338,9 +336,9 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     borderBottomColor: 'transparent',
   }),
-  paddingHorizontal: {paddingHorizontal: 20},
-  lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
-  footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
+  paddingHorizontal: { paddingHorizontal: 20 },
+  lineAffterFooter: { backgroundColor: '#C4C4C4', height: 1 },
+  footerWrapper: (h) => ({ height: h, paddingHorizontal: 0 }),
   contentReaction: (heightReaction) => ({
     height: heightReaction,
   }),

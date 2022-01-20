@@ -10,7 +10,7 @@ import {
   View,
   SafeAreaView
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import Comment from '../../components/Comments/Comment';
@@ -19,17 +19,17 @@ import LoadingComment from '../../components/LoadingComment';
 import ReplyCommentItem from '../../components/Comments/ReplyCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
-import {Context} from '../../context';
-import {colors} from '../../utils/colors';
-import {createChildComment} from '../../service/comment';
-import {fonts} from '../../utils/fonts';
-import {getComment} from '../../utils/getstream/getComment';
-import {getFeedDetail} from '../../service/post';
-import {setFeedByIndex} from '../../context/actions/feeds';
+import { Context } from '../../context';
+import { colors } from '../../utils/colors';
+import { createChildComment } from '../../service/comment';
+import { fonts } from '../../utils/fonts';
+import { getComment } from '../../utils/getstream/getComment';
+import { getFeedDetail } from '../../service/post';
+import { setFeedByIndex } from '../../context/actions/feeds';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
-const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, setFeedByIndexProps}) => {
+const ReplyCommentComponent = ({ itemProp, indexFeed, level, feeds, dispatch, setFeedByIndexProps }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const [temporaryText, setTemporaryText] = React.useState('')
@@ -41,11 +41,11 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
   const [defaultData, setDefaultData] = React.useState({
-    data: {count_downvote: 0, count_upvote: 0, text: textComment}, 
-    id: newCommentList.length + 1, kind: "comment", updated_at: moment(), 
-    children_counts: {comment: 0}, 
-    latest_children: {}, 
-    user: {data: {...itemProp.user.data, profile_pic_url: users.photoUrl}, id: itemProp.user.id}
+    data: { count_downvote: 0, count_upvote: 0, text: textComment },
+    id: newCommentList.length + 1, kind: "comment", updated_at: moment(),
+    children_counts: { comment: 0 },
+    latest_children: {},
+    user: { data: { ...itemProp.user.data, profile_pic_url: users.photoUrl }, id: itemProp.user.id }
   })
 
   const setComment = (text) => {
@@ -53,7 +53,7 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
   };
 
   React.useEffect(() => {
-    if(!loadingCMD) {
+    if (!loadingCMD) {
       setTextComment(temporaryText)
     }
   }, [temporaryText, loadingCMD])
@@ -65,7 +65,7 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
       }
     };
     init();
-    if(item.latest_children && item.latest_children.comment) {
+    if (item.latest_children && item.latest_children.comment) {
       setIdComment(item.latest_children.comment.length)
     }
   }, [item]);
@@ -86,7 +86,7 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
         (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix(),
       );
     }
-    setItem({...newItem, latest_children: {comment: comments}});
+    setItem({ ...newItem, latest_children: { comment: comments } });
     setNewCommentList(comments)
   };
   React.useEffect(() => {
@@ -99,8 +99,8 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
       let data = await getFeedDetail(feeds[indexFeed].id);
       if (data) {
         let oldData = data.data
-        if(isSort) {
-          oldData = {...oldData, latest_reactions: {...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix())} }
+        if (isSort) {
+          oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()) } }
         }
         getThisComment(oldData);
         setFeedByIndexProps(
@@ -123,9 +123,8 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
     try {
       if (textComment.trim() !== '') {
         let data = await createChildComment(textComment, item.id);
-        console.log(data, 'kakak')
         if (data.code === 200) {
-          setNewCommentList([...newCommentList, {...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data}])
+          setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
           setLoadingCMD(false);
           await updateFeed(true)
         } else {
@@ -144,11 +143,11 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
 
   const navigationGoBack = () => navigation.goBack();
 
-  const saveNewComment = ({data}) => {
+  const saveNewComment = ({ data }) => {
     updateFeed()
   }
 
-  const saveParentComment = ({data}) => {
+  const saveParentComment = ({ data }) => {
     updateFeed()
   }
 
@@ -165,22 +164,22 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
-       {/* Header */}
-       <SafeAreaView>
-       <View style={styles.header}>
-            <TouchableOpacity
-              onPress={navigationGoBack}
-              style={styles.backArrow}>
-              <ArrowLeftIcon width={20} height={12} fill="#000" />
-            </TouchableOpacity>
-            <Text style={styles.headerText}>
-              Reply to {itemProp.user.data.username}
-            </Text>
-            <View style={styles.btn} />
-          </View>
-       </SafeAreaView>
-   
-          {/* Header */}
+      {/* Header */}
+      <SafeAreaView>
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={navigationGoBack}
+            style={styles.backArrow}>
+            <ArrowLeftIcon width={20} height={12} fill="#000" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>
+            Reply to {itemProp.user.data.username}
+          </Text>
+          <View style={styles.btn} />
+        </View>
+      </SafeAreaView>
+
+      {/* Header */}
       <ScrollView contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
           <ReplyCommentItem
@@ -228,7 +227,7 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
                         loading={loadingCMD}
                         refreshComment={saveNewComment}
 
-                        // showLeftConnector
+                      // showLeftConnector
                       />
                       {itemReply.children_counts.comment > 0 && (
                         <>
@@ -252,15 +251,15 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
                 </ContainerReply>
               );
             })}
-            {loadingCMD && (
-              <ContainerReply>
-                <ConnectorWrapper>
+          {loadingCMD && (
+            <ContainerReply>
+              <ConnectorWrapper>
                 <View style={styles.childCommentWrapperLoading}>
-                <LoadingComment commentText={textComment} user={itemProp.user}  />
+                  <LoadingComment commentText={textComment} user={itemProp.user} />
                 </View>
-                </ConnectorWrapper>    
-              </ContainerReply>
-            )}
+              </ConnectorWrapper>
+            </ContainerReply>
+          )}
           {newCommentList.length > 0 ? <View style={styles.childLevelMainConnector} /> : null}
         </View>
       </ScrollView>
@@ -272,18 +271,18 @@ const ReplyCommentComponent = ({itemProp, indexFeed, level, feeds, dispatch, set
         onPress={() => createComment()}
         // onPress={() => console.log('level ', level)}
         value={temporaryText}
-        // loadingComment={loadingCMD}
+      // loadingComment={loadingCMD}
       />
     </View>
   );
 };
-const ContainerReply = ({children, isGrandchild = true, hideLeftConnector, key}) => {
+const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key }) => {
   return (
     <View
       key={key}
       style={[
         styles.containerReply(hideLeftConnector),
-        {borderColor: isGrandchild ? 'transparent' : colors.gray1},
+        { borderColor: isGrandchild ? 'transparent' : colors.gray1 },
       ]}>
       {children}
     </View>

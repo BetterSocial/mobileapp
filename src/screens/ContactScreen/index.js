@@ -55,7 +55,6 @@ const ContactScreen = ({ navigation }) => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        console.log(error);
       }
     };
     getUserPopulate();
@@ -120,13 +119,11 @@ const ContactScreen = ({ navigation }) => {
       const clientChat = await client.client;
       const filter = { type: 'messaging', members: { $eq: members } };
       const sort = [{ last_message_at: -1 }];
-      console.log(filter)
       const findChannels = await clientChat.queryChannels(filter, sort, {
         watch: true,
         state: true,
       });
 
-      console.log('query channel done')
 
       let generatedChannelId = generateRandomId();
       let memberWithRoles = members.map((item, index) => {
@@ -156,7 +153,6 @@ const ContactScreen = ({ navigation }) => {
       setLoading(false);
       await navigation.replace('ChatDetailPage');
     } catch (error) {
-      console.log('errror create chat', error);
       showMessage({
         message: 'Failed creating new chat',
         type: 'danger',

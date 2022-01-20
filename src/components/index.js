@@ -7,6 +7,7 @@ import Dot from './Dot';
 import Gap from './Gap';
 import DomainHeader from './DomainHeader';
 import Header from './Header';
+import CustomMessageSystem from './CustomMessageSystem';
 
 export {
   Avatar,
@@ -18,4 +19,5 @@ export {
   Gap,
   DomainHeader,
   Header,
+  CustomMessageSystem,
 };

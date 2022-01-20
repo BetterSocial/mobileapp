@@ -1,4 +1,4 @@
-import { NAVBAR_TITLE_MY_PROFILE, SET_MY_PROFILE, SHOW_HEADER_NAVBAR } from '../Types';
+import {  NAVBAR_TITLE_MY_PROFILE , SET_MY_PROFILE, SHOW_HEADER_NAVBAR } from '../Types';
 
 export const setMyProfileAction = (profile, dispatch) => {
   dispatch({

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -46,15 +46,15 @@ import {
   GroupSetting,
   ProfileScreen,
 } from '../screens';
-import {Context} from '../context';
-import {colors} from '../utils/colors';
-import {fonts} from '../utils/fonts';
+import { Context } from '../context';
+import { colors } from '../utils/colors';
+import { fonts } from '../utils/fonts';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
   const [clientState] = React.useContext(Context).client;
   const [profileState] = React.useContext(Context).profile
-  const {client} = clientState;
+  const { client } = clientState;
   const isIos = Platform.OS === 'ios'
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
@@ -82,124 +82,124 @@ const RootStact = () => {
         <Stack.Screen
           name="GroupSetting"
           component={GroupSetting}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="AddParticipant"
           component={AddParticipant}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="GroupMedia"
           component={GroupMedia}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="GroupInfo"
           component={GroupInfo}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="DetailGroupImage"
           component={DetailGroupImage}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ChatDetailPage"
           component={ChatDetailPage}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ReplyComment"
           component={ReplyComment}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ProfileReplyComment"
           component={ProfileReplyComment}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OtherProfileReplyComment"
           component={OtherProfileReplyComment}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PostDetailPage"
           component={PostDetailPage}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ProfilePostDetailPage"
           component={ProfilePostDetail}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OtherProfilePostDetailPage"
           component={OtherProfilePostDetail}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="SplashScreen"
           component={SplashScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="HomeTabs"
           component={HomeBottomTabs}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ChannelScreen"
           component={ChannelScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="SignIn"
           component={SignIn}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ChooseUsername"
           component={ChooseUsername}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="LocalComunity"
           component={LocalComunity}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Topics"
           component={Topics}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="WhotoFollow"
           component={WhotoFollow}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="CreatePost"
           component={CreatePost}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Followings"
           component={FollowingScreen}
           options={{
             headerShown: isIos ? profileState.isShowHeader : true,
-            header: ({navigation}) => {  
+            header: ({ navigation }) => {
               return (
                 <SafeAreaView>
                   <Header
-                  title={profileState.navbarTitle}
-                  containerStyle={styles.header}
-                  titleStyle={styles.title}
-                  onPress={() => navigation.goBack()}
-                />
+                    title={profileState.navbarTitle}
+                    containerStyle={styles.header}
+                    titleStyle={styles.title}
+                    onPress={() => navigation.goBack()}
+                  />
                 </SafeAreaView>
-               
+
               );
             },
           }}
@@ -207,75 +207,75 @@ const RootStact = () => {
         <Stack.Screen
           name="OtherProfile"
           component={OtherProfile}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Settings"
           component={Settings}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="TermsAndCondition"
           component={TermsAndCondition}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PrivacyPolicies"
           component={PrivacyPolicies}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ProfileScreen"
           component={ProfileScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen name="ImageViewer" component={ImageViewerScreen} />
         <Stack.Screen
           name="DomainScreen"
           component={DomainScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="CreateGroupScreen"
           component={CreateGroupScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ContactScreen"
           component={ContactScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="DetailDomainScreen"
           component={DetailDomainScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="LinkContextScreen"
           component={LinkContextScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="TopicPageScreen"
           component={TopicPageScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
-        <Stack.Screen 
+        <Stack.Screen
           name='BlockScreen'
           component={Blocked}
           options={{
             headerShown:  isIos ? profileState.isShowHeader : true,
-            header: ({navigation}) => {  
+            header: ({ navigation }) => {
               return (
                 <SafeAreaView>
                   <Header
-                  title={"Blocked"}
-                  containerStyle={styles.header}
-                  titleStyle={styles.title}
-                  onPress={() => navigation.goBack()}
-                />
+                    title={"Blocked"}
+                    containerStyle={styles.header}
+                    titleStyle={styles.title}
+                    onPress={() => navigation.goBack()}
+                  />
                 </SafeAreaView>
-               
+
               );
             },
           }}
@@ -293,5 +293,5 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
   },
-  title: {fontSize: 16, fontFamily: fonts.inter[600]},
+  title: { fontSize: 16, fontFamily: fonts.inter[600] },
 });

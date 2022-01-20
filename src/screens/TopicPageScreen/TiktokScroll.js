@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { FlatList, StyleSheet, Dimensions, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
+import Empty from './elements/Empty';
 
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
@@ -34,6 +35,7 @@ const TiktokScroll = (props) => {
       onRefresh={onRefresh}
       scrollEventThrottle={1}
       onEndReached={onEndReach}
+      ListEmptyComponent={<Empty />}
     />
   );
 };
