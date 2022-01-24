@@ -26,10 +26,10 @@ const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
 const getHeightHeader = () => {
-  let h = Math.floor((FULL_HEIGHT * 10) / 100);
-  return h;
+  // let h = Math.floor((FULL_HEIGHT * 10) / 100);
+  // return h;
+  return dimen.size.FEED_HEADER_HEIGHT
 };
-
 
 const RenderListFeed = (props) => {
   const {
@@ -68,8 +68,9 @@ const RenderListFeed = (props) => {
   };
 
   const getHeightReaction = () => {
-    let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
-    return h;
+    // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
+    // return h;
+    return dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
   };
 
   const onPressDownVoteHandle = async () => {
@@ -259,7 +260,7 @@ const RenderListFeed = (props) => {
             }
           />
         </View>
-        <View style={styles.contentReaction(isReaction ? getHeightReaction() : 0)}>
+        <View style={styles.contentReaction(getHeightReaction())}>
           {isReaction && (
             <React.Fragment>
               <PreviewComment
@@ -283,9 +284,9 @@ const RenderListFeed = (props) => {
 
 
 const styles = StyleSheet.create({
-  cardContainer: (bottomHeight) => ({
+  cardContainer: () => ({
     // height: FULL_HEIGHT - tabBarHeight,
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT(0),
+    height: dimen.size.TOPIC_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
     backgroundColor: colors.white,
     borderBottomWidth: 7,
@@ -297,8 +298,8 @@ const styles = StyleSheet.create({
   },
   footerWrapper: (h) => ({ height: h }),
   contentReaction: (heightReaction) => ({
-    height: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
+    maxHeight: heightReaction,
+    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
   }),
 });
 

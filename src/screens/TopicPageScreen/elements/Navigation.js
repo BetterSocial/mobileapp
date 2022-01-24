@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
-
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
-import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
+import dimen from '../../../utils/dimen';
 import { ButtonFollow, ButtonFollowing } from '../../../components/Button';
 import { convertString } from '../../../utils/string/StringUtils';
+import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 
 const Navigation = ({ domain, onPress, isFollow = false }) => {
   const navigation = useNavigation();
@@ -38,13 +38,12 @@ const Navigation = ({ domain, onPress, isFollow = false }) => {
 const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
-    height: normalize(48),
+    height: dimen.size.TOPIC_FEED_HEADER_HEIGHT,
     paddingEnd: normalize(16),
     paddingVertical: normalize(8),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    marginTop: normalize(16),
   },
   backbutton: {
     paddingLeft: 24,
@@ -57,6 +56,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginRight: 14,
+    alignSelf: 'center',
+    marginTop: 4,
   },
   domainText: {
     fontSize: normalizeFontSize(18),

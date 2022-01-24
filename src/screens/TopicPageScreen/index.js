@@ -1,5 +1,5 @@
 import * as  React from 'react';
-import { Text, View } from 'react-native';
+import { StatusBar, Text, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
@@ -9,6 +9,7 @@ import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import TiktokScroll from '../../components/TiktokScroll/index';
+import dimen from '../../utils/dimen';
 import { Context } from '../../context';
 import { Gap } from '../../components';
 import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
@@ -194,11 +195,11 @@ const TopicPageScreen = (props) => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-      <Gap height={8} />
+      <StatusBar barStyle="dark-content" translucent={false}/>
       <Navigation domain={capitalizeFirstText(topicName)} onPress={() => handleFollowTopic()} isFollow={isFollow} />
       <View style={{ flex: 1 }}>
         <TiktokScroll
-          bottomBarHeight={0}
+          contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
           data={feeds}
           onEndReach={onEndReach}
           onRefresh={onRefresh}

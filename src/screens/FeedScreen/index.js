@@ -8,6 +8,7 @@ import BlockComponent from '../../components/BlockComponent';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import RenderListFeed from './RenderList';
 import TiktokScroll from '../../components/TiktokScroll';
+import dimen from '../../utils/dimen';
 import { ButtonNewPost } from '../../components/Button';
 import { Context } from '../../context';
 import { downVote, upVote } from '../../service/vote';
@@ -171,7 +172,7 @@ const FeedScreen = (props) => {
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
       <TiktokScroll
-        bottomBarHeight={bottomBarHeight}
+        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT(bottomBarHeight)}
         data={feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}
