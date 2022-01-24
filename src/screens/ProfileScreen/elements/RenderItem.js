@@ -290,22 +290,10 @@ const RenderItem = React.memo(Item, compare);
 export default RenderItem;
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: height - 74,
-    shadowColor: '#c4c4c4',
-    shadowOffset: {
-        width: 1,
-        height: 8,
-    },
-    shadowOpacity: 0.5,
-    backgroundColor: 'white',
-    paddingBottom: 0,
-    borderBottomColor: 'transparent',
-  },
   cardContainer: (bottomHeight) => ({
     width: '100%',
     height: dimen.size.PROFILE_ITEM_HEIGHT(bottomHeight),
+    maxHeight: dimen.size.PROFILE_ITEM_HEIGHT(bottomHeight),
     shadowColor: '#c4c4c4',
     shadowOffset: {
       width: 1,

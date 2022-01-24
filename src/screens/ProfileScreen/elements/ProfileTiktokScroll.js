@@ -27,8 +27,8 @@ class ProfileTiktokScroll extends React.Component {
   }
 
   __onViewableItemsChanged({ viewableItems, changed }) {
-    console.log("Visible items are", viewableItems);
-    console.log("Changed in this iteration", changed);
+    // console.log("Visible items are", viewableItems);
+    // console.log("Changed in this iteration", changed);
   }
 
   render() {

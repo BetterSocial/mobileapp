@@ -26,6 +26,7 @@ import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFou
 import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
+import dimen from '../../utils/dimen';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
@@ -86,8 +87,8 @@ const _renderAnonimity = ({
           ) : null}
           <Image
             source={AnonymousProfile}
-            width={48}
-            height={48}
+            width={dimen.size.FEED_HEADER_IMAGE_RADIUS}
+            height={dimen.size.FEED_HEADER_IMAGE_RADIUS}
             style={styles.imageAnonimity}
           />
           <View style={styles.containerFeedProfile}>
@@ -173,7 +174,7 @@ const _renderProfileNormal = ({
                     ? profile_pic_url
                     : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
                 }
-                size={48}
+                size={dimen.size.FEED_HEADER_IMAGE_RADIUS}
                 noShadow
               />
             </View>
@@ -369,8 +370,8 @@ const styles = StyleSheet.create({
   },
   imageAnonimity: {
     marginRight: 0,
-    width: 48,
-    height: 48,
+    width: dimen.size.FEED_HEADER_IMAGE_RADIUS,
+    height: dimen.size.FEED_HEADER_IMAGE_RADIUS,
   },
 });
 

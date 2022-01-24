@@ -14,10 +14,8 @@ const styles = StyleSheet.create({
 });
 
 const TiktokScroll = (props) => {
-  const {data, children, onRefresh, refreshing, onEndReach, bottomBarHeight} = props;
+  const {data, children, onRefresh, refreshing, onEndReach, contentHeight} = props;
   const flatListRef = React.useRef();
-  const deviceHeight = dimen.size.FEED_CURRENT_ITEM_HEIGHT(bottomBarHeight)
-
 
   return (
     <FlatList
@@ -34,7 +32,7 @@ const TiktokScroll = (props) => {
       scrollEventThrottle={1}
       showsVerticalScrollIndicator={false}
       snapToAlignment="center"
-      snapToInterval={deviceHeight}
+      snapToInterval={contentHeight}
     />
   );
 };
