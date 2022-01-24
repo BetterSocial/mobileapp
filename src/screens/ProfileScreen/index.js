@@ -575,10 +575,10 @@ const styles = StyleSheet.create({
   },
   btnBottom: {
     position: 'absolute',
-    width: 60,
-    height: 60,
+    width: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
+    height: dimen.size.PROFILE_ACTION_BUTTON_RADIUS,
     right: 20,
-    bottom: 50,
+    bottom: dimen.size.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM,
     backgroundColor: colors.bondi_blue,
     borderRadius: 30,
     flexDirection: 'row',
