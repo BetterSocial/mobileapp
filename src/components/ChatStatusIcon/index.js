@@ -23,8 +23,10 @@ const ChatStatusIcon = (props) => {
 
     let __renderCheckMark = () => {
         let { status } = message
-        let showStatus = message?.groupStyles?.includes("bottom")
+        let showStatus = message?.groupStyles?.length > 0
         let isMe = message?.user?.id === userId
+        console.log(message?.text)
+        console.log(message?.groupStyles)
 
         if(!showStatus || !isMe || status === 'failed') return <></>
         // Not sent yet
@@ -52,7 +54,7 @@ const ChatStatusIcon = (props) => {
     return (
         <View style={styles.dateContainer}>
             { __renderCheckMark() }
-            { __renderDate() }
+            {/* { __renderDate() } */}
         </View>
     );
 }

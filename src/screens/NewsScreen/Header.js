@@ -1,21 +1,21 @@
-import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
 import {
-  View,
-  Text,
   Image,
-  TouchableOpacity,
-  StyleSheet,
   Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+
+import Gap from '../../components/Gap';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import {Avatar} from '../../components';
-import Gap from '../../components/Gap';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 
 const Header = ({image, domain, time, item}) => {
   const navigation = useNavigation();
-  console.log(item, 'maman')
   const onHeaderPressed = () => {
     navigation.push('DomainScreen', {
       item: {
