@@ -1,34 +1,35 @@
 import * as React from 'react';
 import {
-  View,
-  Text,
   Image,
-  StyleSheet,
-  TouchableOpacity,
   Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
+import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
+import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
+import MemoIc_rectangle_gradient_mini from '../../../assets/Ic_rectangle_gradient_mini';
+import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
+import MemoUnfollowDomain from '../../../assets/icon/IconUnfollowDomain';
+import Memoic_globe from '../../../assets/icons/ic_globe';
+import NewsEmptyState from '../../../assets/images/news-empty-state.png';
+import dimen from '../../../utils/dimen';
+import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
+import {
+  Footer,
+  Gap,
+  PreviewComment,
+  SingleSidedShadowBox,
+} from '../../../components';
+import { colors } from '../../../utils/colors';
+import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 import {
   getCountComment,
   getCountCommentWithChild,
   getCountVote,
 } from '../../../utils/getstream';
-import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
-import { colors } from '../../../utils/colors';
-import {
-  Footer,
-  PreviewComment,
-  Gap,
-  SingleSidedShadowBox,
-} from '../../../components';
-import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
-import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
-import Memoic_globe from '../../../assets/icons/ic_globe';
-import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
-import MemoIc_rectangle_gradient_mini from '../../../assets/Ic_rectangle_gradient_mini';
-import NewsEmptyState from '../../../assets/images/news-empty-state.png';
-import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
-import MemoUnfollowDomain from '../../../assets/icon/IconUnfollowDomain';
 
 const RenderItem = ({
   item,
@@ -298,6 +299,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 4,
     borderBottomColor: COLORS.gray6,
+    height: dimen.size.DOMAIN_CURRENT_HEIGHT - 2
   },
   wrapperImage: {
     borderRadius: normalize(45),

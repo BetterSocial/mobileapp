@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, SafeAreaView} from 'react-native';
-
+import {SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
+import dimen from '../../../utils/dimen';
 import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
 
 const Navigation = ({domain}) => {
@@ -31,7 +31,7 @@ const Navigation = ({domain}) => {
 const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
-    height: normalize(48),
+    height: dimen.size.DOMAIN_HEADER_HEIGHT,
     paddingHorizontal: normalize(16),
     alignItems: 'center',
     backgroundColor: 'white',
