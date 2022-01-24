@@ -20,7 +20,7 @@ const baseSize = {
   FEED_ACTION_BUTTON_RADIUS: 50,
   FEED_COMMENT_CONTAINER_HEIGHT: 128,
   FEED_CONTENT_LINK_MAX_HEIGHT: 460,
-  PROFILE_HEADER_HEIGHT: 42 + 26 /** Height Correction */,
+  PROFILE_HEADER_HEIGHT: 42 + 24 /** Height Correction */,
 };
 
 const size = {

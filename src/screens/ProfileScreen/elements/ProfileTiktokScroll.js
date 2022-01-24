@@ -39,7 +39,7 @@ class ProfileTiktokScroll extends React.Component {
         { ...this.props}
         contentContainerStyle={styles.flatlistContainer}
         data={data}
-        decelerationRate={"fast"}
+        decelerationRate={'normal'}
         disableIntervalMomentum={true}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={ListHeaderComponent}

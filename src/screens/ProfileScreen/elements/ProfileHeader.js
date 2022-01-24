@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
 import SettingIcon from '../../../assets/icons/images/setting.svg';
@@ -15,6 +16,7 @@ const ProfileHeader = ({
     hideSetting = false,
     showArrow = false,
 }) => {
+    const navigation = useNavigation()
     const __renderSettings = () => {
         if(hideSetting) return null
 
