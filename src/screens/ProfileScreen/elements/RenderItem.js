@@ -1,6 +1,7 @@
 import * as React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {Dimensions, Share, StyleSheet, View} from 'react-native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
 import Content from '../../FeedScreen/Content';
@@ -8,6 +9,7 @@ import ContentLink from '../../FeedScreen/ContentLink';
 import ContentPoll from '../../FeedScreen/ContentPoll';
 import Header from '../../FeedScreen/Header';
 import ShareUtils from '../../../utils/share';
+import dimen from '../../../utils/dimen';
 import {
   ANALYTICS_SHARE_POST_PROFILE_ID,
   ANALYTICS_SHARE_POST_PROFILE_SCREEN,
@@ -77,6 +79,7 @@ const Item = ({
   onNewPollFetched,
   onCardContentPress,
   index = -1,
+  bottomBar = true,
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -88,6 +91,8 @@ const Item = ({
   // const [item, setItem] = React.useState(feeds.feeds[index]);
   const navigation = useNavigation();
   const [contentHeight, setContentHeight] = React.useState(0);
+  const bottomHeight = bottomBar ? useBottomTabBarHeight() : 0;
+  // const bottomHeight = 0;
 
   // console.log('item');
   // console.log(item);
@@ -96,7 +101,7 @@ const Item = ({
     const initial = () => {
       let reactionCount = item.reaction_counts;
       if (JSON.stringify(reactionCount) !== '{}') {
-        let comment = reactionCount.comment;
+        let comment = reactionCount?.comment;
         if (comment !== undefined) {
           if (comment > 0) {
             setReaction(true);
@@ -153,8 +158,11 @@ const Item = ({
     initialVote();
   }, [item]);
 
+  console.log('item height')
+  console.log(dimen.size.PROFILE_ITEM_HEIGHT(bottomHeight))
+
   return (
-    <View style={styles.container}>
+    <View style={styles.cardContainer(bottomHeight)}>
       <Header props={item} height={getHeightHeader()} />
 
       {item.post_type === POST_TYPE_POLL && (
@@ -174,13 +182,15 @@ const Item = ({
       )}
 
       {item.post_type === POST_TYPE_LINK && (
-        <ContentLink
-          index={index}
-          og={item.og}
-          onPress={onPress}
-          onHeaderPress={onPressDomain}
-          onCardContentPress={() => navigateToLinkContextPage(item)}
-        />
+        <View style={{flex: 1}}>
+          <ContentLink
+            index={index}
+            og={item.og}
+            onPress={onPress}
+            onHeaderPress={onPressDomain}
+            onCardContentPress={() => navigateToLinkContextPage(item)}
+          />
+        </View>
       )}
       {item.post_type === POST_TYPE_STANDARD && (
         <Content
@@ -285,6 +295,19 @@ const styles = StyleSheet.create({
     height: height - 74,
     shadowColor: '#c4c4c4',
     shadowOffset: {
+        width: 1,
+        height: 8,
+    },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    paddingBottom: 0,
+    borderBottomColor: 'transparent',
+  },
+  cardContainer: (bottomHeight) => ({
+    width: '100%',
+    height: dimen.size.PROFILE_ITEM_HEIGHT(bottomHeight),
+    shadowColor: '#c4c4c4',
+    shadowOffset: {
       width: 1,
       height: 8,
     },
@@ -292,7 +315,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingBottom: 0,
     borderBottomColor: 'transparent',
-  },
+  }),
   paddingHorizontal: {paddingHorizontal: 20},
   lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
   footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),

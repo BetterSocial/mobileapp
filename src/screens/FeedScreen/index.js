@@ -1,6 +1,7 @@
 import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
 import { StyleSheet, View } from 'react-native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
@@ -25,8 +26,9 @@ const FeedScreen = (props) => {
   const [time, setTime] = React.useState(new Date());
 
   const refBlockComponent = React.useRef();
-
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
+  const bottomBarHeight = useBottomTabBarHeight();
+
   let { feeds } = feedsContext;
 
   const getDataFeeds = async (id = '') => {
@@ -169,6 +171,7 @@ const FeedScreen = (props) => {
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
       <TiktokScroll
+        bottomBarHeight={bottomBarHeight}
         data={feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}

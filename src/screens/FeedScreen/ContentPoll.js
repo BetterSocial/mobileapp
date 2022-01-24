@@ -1,31 +1,31 @@
 import * as React from 'react';
+import SeeMore from 'react-native-see-more-inline';
 import {
-  View,
+  Dimensions,
+  FlatList,
+  Image,
+  Platform,
+  Pressable,
   StyleSheet,
   Text,
-  Platform,
-  Dimensions,
-  Image,
-  FlatList,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Pressable,
+  View,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
-import SeeMore from 'react-native-see-more-inline';
 
-import {inputSingleChoicePoll} from '../../service/post';
-import {
-  getPollTime,
-  isPollExpired,
-  NO_POLL_UUID,
-} from '../../utils/string/StringUtils';
 import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
+import {COLORS} from '../../utils/theme';
+import {
+  NO_POLL_UUID,
+  getPollTime,
+  isPollExpired,
+} from '../../utils/string/StringUtils';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
+import {inputSingleChoicePoll} from '../../service/post';
 
 const {width: screenWidth} = Dimensions.get('window');
 

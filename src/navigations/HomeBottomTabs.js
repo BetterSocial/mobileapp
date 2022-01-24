@@ -1,25 +1,25 @@
 import * as React from 'react';
-import {StyleSheet, Text, View, StatusBar} from 'react-native';
-
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
+import FirebaseConfig from '../configs/FirebaseConfig';
+import MemoFeed from '../assets/icon/Feed';
+import MemoHome from '../assets/icon/Home';
+import MemoNews from '../assets/icon/News';
+import MemoProfileIcon from '../assets/icon/Profile';
 import {
   ChannelListScreen,
   FeedScreen,
   NewsScreen,
   ProfileScreen,
 } from '../screens';
-import {colors} from '../utils/colors';
-import MemoHome from '../assets/icon/Home';
-import MemoFeed from '../assets/icon/Feed';
-import MemoNews from '../assets/icon/News';
-import {getMyProfile} from '../service/profile';
-import MemoProfileIcon from '../assets/icon/Profile';
 import {Context} from '../context';
+import {colors} from '../utils/colors';
+import {getMyProfile} from '../service/profile';
+import {getUserId} from '../utils/users';
 import {setImageUrl} from '../context/actions/users';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
-import {getUserId} from '../utils/users';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import FirebaseConfig from '../configs/FirebaseConfig';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,6 +52,7 @@ function HomeBottomTabs(props) {
       <StatusBar />
       <Tab.Navigator
         initialRouteName="ChannelList"
+        // initialRouteName="Profile"
         tabBarOptions={{
           // showLabel: true,
           activeTintColor: colors.holytosca,

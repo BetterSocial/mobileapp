@@ -20,6 +20,7 @@ const baseSize = {
   FEED_ACTION_BUTTON_RADIUS: 50,
   FEED_COMMENT_CONTAINER_HEIGHT: 128,
   FEED_CONTENT_LINK_MAX_HEIGHT: 460,
+  PROFILE_HEADER_HEIGHT: 42 + 24 /** Height Correction */,
 };
 
 const size = {
@@ -31,6 +32,9 @@ const size = {
     (bottomBarHeight) => normalizeDimen(height - baseSize.FEED_HEADER_HEIGHT - bottomBarHeight - 164),
   FEED_COMMENT_CONTAINER_HEIGHT: normalizeDimen(baseSize.FEED_COMMENT_CONTAINER_HEIGHT),
   FEED_CONTENT_LINK_MAX_HEIGHT: normalizeDimen(baseSize.FEED_CONTENT_LINK_MAX_HEIGHT),
+
+  PROFILE_ITEM_HEIGHT:
+    (bottomBarHeight = 0) => normalizeDimen(height - statusBarHeight - baseSize.PROFILE_HEADER_HEIGHT - bottomBarHeight - 164),
 };
 
 export default {

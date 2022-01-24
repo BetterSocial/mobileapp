@@ -4,10 +4,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
 import BlockDomain from '../../components/Blocking/BlockDomain';
+import Empty from './elements/Empty';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
 import ReportDomain from '../../components/Blocking/ReportDomain';
-import TiktokScroll from './TiktokScroll';
+import TiktokScroll from '../../components/TiktokScroll/index';
 import { Context } from '../../context';
 import { Gap } from '../../components';
 import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
@@ -18,7 +19,6 @@ import { getUserId } from '../../utils/users';
 import { getUserTopic, putUserTopic } from '../../service/topics';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
-import Empty from './elements/Empty';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -198,6 +198,7 @@ const TopicPageScreen = (props) => {
       <Navigation domain={capitalizeFirstText(topicName)} onPress={() => handleFollowTopic()} isFollow={isFollow} />
       <View style={{ flex: 1 }}>
         <TiktokScroll
+          bottomBarHeight={0}
           data={feeds}
           onEndReach={onEndReach}
           onRefresh={onRefresh}
