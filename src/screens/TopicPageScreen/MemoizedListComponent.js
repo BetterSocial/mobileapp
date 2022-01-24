@@ -9,6 +9,7 @@ import ContentLink from '../FeedScreen/ContentLink';
 import ContentPoll from '../FeedScreen/ContentPoll';
 import Header from '../FeedScreen/Header';
 import ShareUtils from '../../utils/share'
+import dimen from '../../utils/dimen';
 import { ANALYTICS_SHARE_POST_TOPIC_ID, ANALYTICS_SHARE_POST_TOPIC_SCREEN } from '../../utils/constants';
 import { Footer, Gap, PreviewComment } from '../../components';
 import {
@@ -283,7 +284,8 @@ const RenderListFeed = (props) => {
 
 const styles = StyleSheet.create({
   cardContainer: (bottomHeight) => ({
-    height: FULL_HEIGHT - tabBarHeight,
+    // height: FULL_HEIGHT - tabBarHeight,
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT(0),
     width: FULL_WIDTH,
     backgroundColor: colors.white,
     borderBottomWidth: 7,

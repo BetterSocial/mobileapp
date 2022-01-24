@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {Dimensions, FlatList, StatusBar, StyleSheet} from 'react-native';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 import dimen from '../../utils/dimen';
 
@@ -15,10 +14,9 @@ const styles = StyleSheet.create({
 });
 
 const TiktokScroll = (props) => {
-  const {data, children, onRefresh, refreshing, onEndReach} = props;
+  const {data, children, onRefresh, refreshing, onEndReach, bottomBarHeight} = props;
   const flatListRef = React.useRef();
-  // const deviceHeight = FULL_HEIGHT - tabBarHeight - useBottomTabBarHeight()
-  const deviceHeight = dimen.size.FEED_CURRENT_ITEM_HEIGHT(useBottomTabBarHeight())
+  const deviceHeight = dimen.size.FEED_CURRENT_ITEM_HEIGHT(bottomBarHeight)
 
 
   return (
