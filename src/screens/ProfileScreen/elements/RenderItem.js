@@ -91,8 +91,8 @@ const Item = ({
   // const [item, setItem] = React.useState(feeds.feeds[index]);
   const navigation = useNavigation();
   const [contentHeight, setContentHeight] = React.useState(0);
-  // const bottomHeight = bottomBar ? useBottomTabBarHeight() : 0;
-  const bottomHeight = 0;
+  const bottomHeight = bottomBar ? useBottomTabBarHeight() : 0;
+  // const bottomHeight = 0;
 
   // console.log('item');
   // console.log(item);
@@ -295,8 +295,8 @@ const styles = StyleSheet.create({
     height: height - 74,
     shadowColor: '#c4c4c4',
     shadowOffset: {
-      width: 1,
-      height: 8,
+        width: 1,
+        height: 8,
     },
     shadowOpacity: 0.5,
     backgroundColor: 'white',

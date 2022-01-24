@@ -32,6 +32,7 @@ import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
+import dimen from '../../utils/dimen';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {
@@ -461,11 +462,11 @@ const ProfileScreen = () => {
           onScroll={handleScroll}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {
-              return headerHeight + (index * (height - 42 - StatusBar.currentHeight - bottomBarHeight - 164))
+              return headerHeight + (index * dimen.size.PROFILE_ITEM_HEIGHT(bottomBarHeight))
             })
-            // console.log('scroll height')
-            // console.log([headerHeight, ...posts])
-            return [headerHeight, ...posts]
+            console.log('scroll offsets')
+            console.log([0, ...posts])
+            return [0, ...posts]
           })()}
           ListHeaderComponent={
             <View onLayout={(event) => {

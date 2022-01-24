@@ -26,27 +26,39 @@ class ProfileTiktokScroll extends React.Component {
     })
   }
 
+  __onViewableItemsChanged({ viewableItems, changed }) {
+    console.log("Visible items are", viewableItems);
+    console.log("Changed in this iteration", changed);
+  }
+
   render() {
     const { data, children, onRefresh, refreshing, 
       onEndReach, onScroll, ListHeaderComponent } = this.props;
     return (
       <FlatList
         { ...this.props}
-        ref={this.flatListScrollRef}
-        data={data}
-        renderItem={children}
-        keyExtractor={(item) => {
-          return item.id;
-        }}
-        ListHeaderComponent={ListHeaderComponent}
-        showsVerticalScrollIndicator={false}
-        snapToAlignment="center"
         contentContainerStyle={styles.flatlistContainer}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        scrollEventThrottle={1}
+        data={data}
+        decelerationRate={"fast"}
+        disableIntervalMomentum={true}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={ListHeaderComponent}
         onEndReached={onEndReach}
-        onScroll={onScroll} />
+        onRefresh={onRefresh}
+        onScroll={onScroll}
+        ref={this.flatListScrollRef}
+        refreshing={refreshing}
+        renderItem={children}
+        scrollEventThrottle={1}
+        showsVerticalScrollIndicator={false}
+        snapToAlignment="end"
+        viewabilityConfig={{
+          waitForInteraction: false,
+          minimumViewTime: 100,
+          itemVisiblePercentThreshold: 80
+        }}
+        onViewableItemsChanged={this.__onViewableItemsChanged}
+      />
     );
   }
 }

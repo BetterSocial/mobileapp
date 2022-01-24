@@ -34,7 +34,7 @@ const size = {
   FEED_CONTENT_LINK_MAX_HEIGHT: normalizeDimen(baseSize.FEED_CONTENT_LINK_MAX_HEIGHT),
 
   PROFILE_ITEM_HEIGHT:
-    (bottomBarHeight) => normalizeDimen(height - statusBarHeight - baseSize.PROFILE_HEADER_HEIGHT - bottomBarHeight - 164),
+    (bottomBarHeight = 0) => normalizeDimen(height - statusBarHeight - baseSize.PROFILE_HEADER_HEIGHT - bottomBarHeight - 164),
 };
 
 export default {

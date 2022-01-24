@@ -26,6 +26,7 @@ const TiktokScroll = (props) => {
       contentContainerStyle={styles.flatlistContainer}
       data={data}
       decelerationRate="fast"
+      disableIntervalMomentum={true}
       keyExtractor={(item) => item.id}
       onEndReached={onEndReach}
       onRefresh={onRefresh}
