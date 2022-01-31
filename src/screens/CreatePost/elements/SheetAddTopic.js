@@ -1,19 +1,23 @@
 import * as React from 'react';
-import {TextInput, ScrollView, StyleSheet, Text, View} from 'react-native';
+import { TextInput, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
 import KeyEvent from 'react-native-keyevent';
 
 import TopicItem from '../../../components/TopicItem';
-import {Button} from '../../../components/Button';
-import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
+import { Button } from '../../../components/Button';
+import { colors } from '../../../utils/colors';
+import { fonts } from '../../../utils/fonts';
 import AutoFocusTextArea from '../../../components/TextArea/AutoFocusTextArea';
+import { getTopics } from '../../../service/topics';
+import { isEmptyOrSpaces } from '../../../utils/Utils';
+import { capitalizeFirstText, convertString } from '../../../utils/string/StringUtils';
 
-const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
+const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
   const [dataTopic, setTopic] = React.useState('');
   const [listTopics, setlistTopics] = React.useState([]);
   const [trigger, setTrigger] = React.useState(-1);
+  const [topicSuggestion, setTopicSuggestion] = React.useState([]);
   let inputRef = React.useRef();
 
   React.useEffect(() => {
@@ -37,6 +41,20 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
     }
   };
 
+  const searchTopic = async (name) => {
+    if (!isEmptyOrSpaces(name)) {
+      console.log('nama untuk di cara: ', name);
+      getTopics(name)
+        .then(v => {
+          console.log(v);
+          if (v.data.length > 0) {
+            setTopicSuggestion(v.data);
+          }
+        })
+        .catch(err => console.log(err));
+    }
+  }
+
   const add = () => {
     let data = dataTopic.replace(/\s/g, '').toLowerCase();
     if (data !== '' && !listTopics.includes(data)) {
@@ -44,6 +62,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
       setTopic('');
     }
     setTopic('');
+    setTopicSuggestion([]);
   };
   const removeTopic = (v) => {
     let newArr = listTopics.filter((e) => e !== v);
@@ -121,6 +140,9 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
                       return add();
                     }
                     setTopic(v);
+                    if (v !== '') {
+                      searchTopic(v);
+                    }
                   }}
                   autoCapitalize="none"
                   blurOnSubmit={false}
@@ -128,6 +150,40 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose}) => {
               </View>
             )}
           </View>
+
+          {topicSuggestion.length > 0 && (
+            <View style={{
+              backgroundColor: 'white',
+              borderRadius: 8,
+              paddingVertical: 8,
+              paddingHorizontal: 10,
+              margin: 16,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 6,
+              },
+              shadowOpacity: 0.39,
+              shadowRadius: 8.30,
+
+              elevation: 13,
+            }}>
+              {topicSuggestion.map(item => {
+                return (
+                  <Text style={{
+                    color: '#000000',
+                    fontFamily: fonts.inter[500],
+                    fontWeight: '500',
+                    fontSize: 12,
+                    lineHeight: 18
+                  }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
+                )
+              })}
+
+
+            </View>
+          )}
+
           <Text style={styles.textDesc}>
             Hit space to start a new topic. Add up to 5 topics.
           </Text>
@@ -206,5 +262,5 @@ const styles = StyleSheet.create({
   topicItem: {
     marginBottom: 12,
   },
-  input: {width: '100%', paddingStart: 0},
+  input: { width: '100%', paddingStart: 0 },
 });

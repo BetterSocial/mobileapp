@@ -55,7 +55,7 @@ import {
   requestExternalStoragePermission,
   requestCameraPermission,
 } from '../../utils/permission';
-import { getUrl, isContainUrl } from '../../utils/Utils';
+import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
 import {
   getDurationId,
   getLocationId,
@@ -65,6 +65,7 @@ import {
   setPrivacyId,
 } from '../../utils/setting';
 import { instanceOf } from 'prop-types';
+import { getTopics } from '../../service/topics';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -129,6 +130,18 @@ const CreatePost = () => {
     },
   ]);
 
+  const [audienceEstimations, setAudienceEstimations] = React.useState(0);
+  const [privacySelect, setPrivacySelect] = React.useState(0);
+  const [dataImage, setDataImage] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [typeUser, setTypeUser] = React.useState(false);
+  const [dataProfile, setDataProfile] = React.useState({});
+  const [geoList, setGeoList] = React.useState([]);
+  const [geoSelect, setGeoSelect] = React.useState(0);
+  const [topicSearch, setTopicSearch] = React.useState([]);
+  const [isTopicOverlay, setTopicOverlay] = React.useState(false);
+
+
   const listPostExpired = [
     {
       label: '24 hours',
@@ -178,15 +191,6 @@ const CreatePost = () => {
       key: 'people_i_follow',
     },
   ];
-
-  const [audienceEstimations, setAudienceEstimations] = React.useState(0);
-  const [privacySelect, setPrivacySelect] = React.useState(0);
-  const [dataImage, setDataImage] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [typeUser, setTypeUser] = React.useState(false);
-  const [dataProfile, setDataProfile] = React.useState({});
-  const [geoList, setGeoList] = React.useState([]);
-  const [geoSelect, setGeoSelect] = React.useState(0);
 
   React.useEffect(() => {
     init();
@@ -612,6 +616,22 @@ const CreatePost = () => {
     return <View />;
   };
 
+
+
+  const searchTopic = async (name) => {
+    if (!isEmptyOrSpaces(name)) {
+      console.log('nama untuk di cara: ', name);
+      getTopics(name)
+        .then(v => {
+          console.log(v);
+          setTopicSearch(v.data);
+        })
+        .catch(err => console.log(err));
+
+    }
+
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -638,7 +658,21 @@ const CreatePost = () => {
         />
         <Gap style={styles.height(8)} />
         <TextInput
-          onChangeText={(v) => setMessage(v)}
+          onChangeText={(v) => {
+            // cek apakah mengndung # apa tidak
+            if (v.includes('#')) {
+              // ambil posisi #
+              let position = v.indexOf('#');
+              // cari spasi mulai dari posisi #
+              let spaceStatus = v.includes(' ', position);
+              if (!spaceStatus) {
+                let textSeacrh = v.substring(position + 1);
+                searchTopic(textSeacrh);
+              }
+              // harus ke trigger sebelum ketik spasi setelah 
+            }
+            setMessage(v)
+          }}
           value={message}
           multiline={true}
           style={styles.input}
@@ -648,6 +682,41 @@ const CreatePost = () => {
           }
           autoCapitalize={'none'}
         />
+
+
+        <Gap height={16} />
+
+        <View>
+
+        </View>
+
+        <View style={{
+          backgroundColor: 'white',
+          borderRadius: 8,
+          paddingVertical: 8,
+          paddingHorizontal: 10,
+          margin: 16,
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 6,
+          },
+          shadowOpacity: 0.39,
+          shadowRadius: 8.30,
+
+          elevation: 13,
+        }}>
+
+          <Text style={{
+            color: '#000000',
+            fontFamily: fonts.inter[500],
+            fontWeight: '500',
+            fontSize: 12,
+            lineHeight: 18
+          }}>#Corona</Text>
+
+
+        </View>
 
         {isLinkPreviewShown && (
           <ContentLink
