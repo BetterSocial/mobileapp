@@ -11,6 +11,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
+import DiscoveryScreen from '../screens/DiscoveryScreen';
 import DomainScreen from '../screens/DomainScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import Header from '../components/Header';
@@ -258,6 +259,11 @@ const RootStact = () => {
         <Stack.Screen
           name="TopicPageScreen"
           component={TopicPageScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DiscoveryScreen"
+          component={DiscoveryScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

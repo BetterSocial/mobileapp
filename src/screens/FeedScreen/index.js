@@ -1,6 +1,6 @@
 import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Animated } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 
@@ -16,6 +16,9 @@ import { getFeedDetail, getMainFeed } from '../../service/post';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
+import Search from './elements/Search';
+
+let lastDragY = 0;
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -25,6 +28,8 @@ const FeedScreen = (props) => {
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
   const [time, setTime] = React.useState(new Date());
+
+  const offset = React.useRef(new Animated.Value(-70)).current
 
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
@@ -169,13 +174,44 @@ const FeedScreen = (props) => {
     getDataFeeds('');
   };
 
+  let handleScrollEvent = (event) => {
+    console.log(event.nativeEvent)
+    let y = event.nativeEvent.contentOffset.y;
+    let dy = y - lastDragY;
+    if (dy <= 0) {
+      return Animated.timing(offset, {
+        toValue: 0,
+        duration: 50,
+        useNativeDriver: false,
+      }).start();
+    } else if (dy > 0) {
+      return Animated.timing(offset, {
+        toValue: -70,
+        duration: 50,
+        useNativeDriver: false,
+      }).start();
+    }
+  };
+
+  let handleOnScrollBeginDrag = (event) => {
+    lastDragY = event.nativeEvent.contentOffset.y;
+  };
+
+  let handleSearchBarClicked = () => {
+    console.log('search bar clicked')
+    navigation.navigate('DiscoveryScreen')
+  }
+
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
+      <Search animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
       <TiktokScroll
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT(bottomBarHeight)}
         data={feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}
+        onScroll={handleScrollEvent}
+        onScrollBeginDrag={handleOnScrollBeginDrag}
         refreshing={loading}>
         {({ item, index }) => (
           <RenderListFeed
