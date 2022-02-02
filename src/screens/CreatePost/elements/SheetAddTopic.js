@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextInput, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { TextInput, ScrollView, StyleSheet, Text, View, TouchableNativeFeedback, Image } from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
 import KeyEvent from 'react-native-keyevent';
@@ -12,12 +12,15 @@ import AutoFocusTextArea from '../../../components/TextArea/AutoFocusTextArea';
 import { getTopics } from '../../../service/topics';
 import { isEmptyOrSpaces } from '../../../utils/Utils';
 import { capitalizeFirstText, convertString } from '../../../utils/string/StringUtils';
+import Card from './Card';
+
 
 const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
   const [dataTopic, setTopic] = React.useState('');
   const [listTopics, setlistTopics] = React.useState([]);
   const [trigger, setTrigger] = React.useState(-1);
   const [topicSuggestion, setTopicSuggestion] = React.useState([]);
+  const [widthInput, setWidthInput] = React.useState(0);
   let inputRef = React.useRef();
 
   React.useEffect(() => {
@@ -43,12 +46,15 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
 
   const searchTopic = async (name) => {
     if (!isEmptyOrSpaces(name)) {
-      console.log('nama untuk di cara: ', name);
       getTopics(name)
         .then(v => {
-          console.log(v);
           if (v.data.length > 0) {
-            setTopicSuggestion(v.data);
+            if (v.data.length > 5) {
+              let newData = v.data.slice(0, 5);
+              setTopicSuggestion(newData);
+            } else {
+              setTopicSuggestion(v.data);
+            }
           }
         })
         .catch(err => console.log(err));
@@ -72,7 +78,6 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
     setlistTopics(topics);
   };
   const save = () => {
-    console.log('save');
     let data = dataTopic.replace(/\s/g, '').toLowerCase();
     if (data === '') {
       onAdd(listTopics);
@@ -109,12 +114,21 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
         container: styles.containerSheet,
         draggableIcon: styles.draggableIcon,
       }}>
-      <View style={styles.container}>
+      <View style={styles.container}
+      >
         <ScrollView
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="always">
           <Text style={styles.title}>Add topics</Text>
-          <View style={styles.content}>
+          <View style={styles.content}
+            onLayout={(event) => {
+              let headerHeightLayout = event.nativeEvent.layout.height;
+              let headerWidthLayout = event.nativeEvent.layout.width;
+              console.log('height: ', headerHeightLayout);
+              console.log('width: ', headerWidthLayout);
+              // widthInput = headerWidthLayout;
+              setWidthInput(headerWidthLayout);
+            }}>
             <View style={styles.listItem}>
               {listTopics.map((value, index) => {
                 return (
@@ -128,7 +142,8 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
               })}
             </View>
             {listTopics.length < 5 && (
-              <View style={styles.containerInput}>
+              <View style={styles.containerInput}
+              >
                 <Text style={styles.hashtag}>#</Text>
                 <AutoFocusTextArea
                   ref={inputRef}
@@ -152,38 +167,28 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
           </View>
 
           {topicSuggestion.length > 0 && (
-            <View style={{
-              backgroundColor: 'white',
-              borderRadius: 8,
-              paddingVertical: 8,
-              paddingHorizontal: 10,
-              margin: 16,
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 6,
-              },
-              shadowOpacity: 0.39,
-              shadowRadius: 8.30,
-
-              elevation: 13,
-            }}>
-              {topicSuggestion.map(item => {
-                return (
-                  <Text style={{
-                    color: '#000000',
-                    fontFamily: fonts.inter[500],
-                    fontWeight: '500',
-                    fontSize: 12,
-                    lineHeight: 18
-                  }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
-                )
-              })}
-
-
-            </View>
+            <Card style={{ marginTop: -72 }}>{topicSuggestion.map((item, index) => {
+              return (
+                <TouchableNativeFeedback onPress={() => {
+                  setTopic(capitalizeFirstText(convertString(item.name, " ", "")));
+                  setTopicSuggestion([]);
+                }}>
+                  <View style={{ marginBottom: 5 }} >
+                    <Text style={{
+                      color: '#000000',
+                      fontFamily: fonts.inter[500],
+                      fontWeight: '500',
+                      fontSize: 12,
+                      lineHeight: 18
+                    }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
+                    {index !== topicSuggestion.length - 1 && (
+                      <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
+                    )}
+                  </View>
+                </TouchableNativeFeedback>
+              )
+            })}</Card>
           )}
-
           <Text style={styles.textDesc}>
             Hit space to start a new topic. Add up to 5 topics.
           </Text>
