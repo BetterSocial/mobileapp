@@ -38,12 +38,13 @@ const FeedNotification = (props) => {
 
     const callStreamFeed = async () => {
         const token = await getAccessToken()
+        console.log(token, 'nani')
         const client = streamFeed(token)
         const notif = client.feed('notification', userid, token)
         console.log('skita')
         notif.subscribe(function (data) {
             console.log(data, 'kulakan')
-            notif.get({limit: 5}).then((data) => {
+            notif.get().then((data) => {
                 console.log(data, 'mantap')
             })
         })
