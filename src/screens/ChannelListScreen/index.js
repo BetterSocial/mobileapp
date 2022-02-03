@@ -11,6 +11,8 @@ import {
   ChannelPreviewTitle,
   Chat,
   Streami18n,
+  OverlayProvider,
+  DeepPartial, Theme
 } from 'stream-chat-react-native';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
@@ -31,6 +33,17 @@ import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import FeedNotification from './elements/FeedNotification';
+
+const theme = {
+  messageSimple: {
+    file: {
+      container: {
+        backgroundColor: 'red',
+      },
+    },
+  },
+};
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -98,6 +111,8 @@ const ChannelListScreen = ({ navigation }) => {
     );
   };
 
+  console.log('chat by')
+
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
@@ -111,6 +126,8 @@ const ChannelListScreen = ({ navigation }) => {
         <View style={{ paddingHorizontal: 0, flex: 1 }}>
           {client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>
+            <FeedNotification userid={userId} />
+ 
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
@@ -136,12 +153,14 @@ const ChannelListScreen = ({ navigation }) => {
                   refreshControl: null,
                 }}
               />
+      
             </Chat>
           ) : (
             <View style={styles.content}>
               <ActivityIndicator size="small" color={COLORS.holyTosca} />
             </View>
           )}
+   
         </View>
       </View>
     </SafeAreaView>
