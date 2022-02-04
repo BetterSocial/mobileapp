@@ -1,6 +1,5 @@
 import * as React from 'react';
-import SplashScreenPackage from 'react-native-splash-screen';
-import analytics from '@react-native-firebase/analytics';
+
 import {
   Alert,
   Image,
@@ -10,13 +9,15 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/core';
 
+import SplashScreenPackage from 'react-native-splash-screen';
 import StringConstant from '../../utils/string/StringConstant';
+import analytics from '@react-native-firebase/analytics';
 import {getAccessToken} from '../../utils/token';
 import {getProfileByUsername} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {useNavigation} from '@react-navigation/core';
 import {verifyTokenGetstream} from '../../service/users';
 
 const SplashScreen = () => {
@@ -78,6 +79,7 @@ const SplashScreen = () => {
   let navigateWithoutDeeplink = async (selfUserId) => {
     await SplashScreenPackage.hide();
     navigation.replace(selfUserId ? 'HomeTabs' : 'SignIn');
+    // navigation.replace(selfUserId ? 'DiscoveryScreen' : 'SignIn');
   };
 
   let doVerifyUser = async () => {

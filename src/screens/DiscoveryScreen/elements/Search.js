@@ -11,21 +11,60 @@ import {
 } from 'react-native';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
+import {Context} from '../../../context/Store';
+import DiscoveryAction from '../../../context/actions/discoveryAction';
+import DiscoveryRepo from '../../../service/discovery';
+import GeneralComponentAction from '../../../context/actions/generalComponentAction';
 import MemoIcClearCircle from '../../../assets/icons/ic_clear_circle';
 import MemoIc_arrow_back_white from '../../../assets/arrow/Ic_arrow_back_white';
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import { colors } from '../../../utils/colors';
+import dimen from '../../../utils/dimen';
 import {fonts} from '../../../utils/fonts';
 import { useNavigation } from '@react-navigation/core'
 
-const Search = ({value, onChangeText, onPress, animatedValue, showBackButton = false, onContainerClicked = () => {}}) => {
+let getDataTimeoutId;
+
+const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onContainerClicked = () => {}}) => {
   const navigation = useNavigation()
+  const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
+  const [discovery, discoveryDispatch] = React.useContext(Context).discovery
+  const discoverySearchBarRef = React.useRef(null)
+
+  let { discoverySearchBarText } = generalComponent
 
   const __handleBackPress = () => {
     if(navigation.canGoBack()) navigation.goBack()
   }
+
+  const __handleChangeText = (text) => {
+    GeneralComponentAction.setDiscoverySearchBar(text, generalComponentDispatch)
+  }
+
+  const __handleOnClearText = () => {
+    __handleChangeText("")
+    discoverySearchBarRef.current.focus()
+  }
+
+  const __fetchDiscoveryData = async() => {
+    let data = await DiscoveryRepo.fetchDiscoveryData(discoverySearchBarText)
+    if(data.success) {
+      DiscoveryAction.setDiscoveryData(data, discoveryDispatch)
+    }
+    DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
+  }
+
+  React.useEffect(() => {
+    if(discoverySearchBarText.length > 3) {
+      DiscoveryAction.setDiscoveryLoadingData(true, discoveryDispatch)
+      if(getDataTimeoutId) clearTimeout(getDataTimeoutId)
+      getDataTimeoutId = setTimeout( async() => {
+        await __fetchDiscoveryData()
+      }, 3000)
+    }
+  }, [discoverySearchBarText])
 
   return (
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
@@ -41,17 +80,17 @@ const Search = ({value, onChangeText, onPress, animatedValue, showBackButton = f
           </View>
           {/* <Text style={styles.inputText}>{StringConstant.newsTabHeaderPlaceholder}</Text> */}
           <TextInput
+            ref={discoverySearchBarRef}
             focusable={true}
             autoFocus={true}
-            value={value}
-            onChangeText={onChangeText}
+            value={generalComponent.discoverySearchBarText}
+            onChangeText={__handleChangeText}
             multiline={false}
             placeholder={StringConstant.newsTabHeaderPlaceholder}
             placeholderTextColor={COLORS.gray1}
-            style={styles.input}
-            />
+            style={styles.input} />
 
-          <Pressable onPress={() => onChangeText("")} style={styles.clearIconContainer}>
+          <Pressable onPress={__handleOnClearText} style={styles.clearIconContainer}>
             <View style={styles.wrapperDeleteIcon}>
               <MemoIcClearCircle width={16.67} height={16.67} iconColor={colors.black}/>
             </View>
@@ -133,13 +172,9 @@ const styles = StyleSheet.create({
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
     backgroundColor: 'white',
-    marginBottom: SIZES.base,
     marginTop: animatedValue,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
     zIndex: 10,
+    height: dimen.size.DISCOVERY_HEADER_HEIGHT,
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
@@ -149,4 +184,4 @@ const styles = StyleSheet.create({
   }),
 });
 
-export default Search;
+export default DiscoverySearch;

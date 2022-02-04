@@ -1,16 +1,16 @@
 import * as React from 'react';
-import {StatusBar, StyleSheet, TouchableOpacity, View, SafeAreaView, Platform} from 'react-native';
 
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import Animated from 'react-native-reanimated';
-
-import DomainFragmentScreen from './elements/DomainFragmentScreen';
-import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
-import Followings from '.';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {Context} from '../../context';
+import {Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction'
+
+import Animated from 'react-native-reanimated';
+import {Context} from '../../context';
+import DomainFragmentScreen from './elements/DomainFragmentScreen';
+import Followings from '.';
+import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
+import {colors} from '../../utils/colors';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {fonts} from '../../utils/fonts';
 
 export default function FollowingScreen(props) {
   const {navigation} = props

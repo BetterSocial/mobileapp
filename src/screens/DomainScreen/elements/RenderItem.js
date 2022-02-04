@@ -1,4 +1,11 @@
 import * as React from 'react';
+
+import {
+  Footer,
+  Gap,
+  PreviewComment,
+  SingleSidedShadowBox,
+} from '../../../components';
 import {
   Image,
   Pressable,
@@ -7,6 +14,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
+import {
+  getCountComment,
+  getCountCommentWithChild,
+  getCountVote,
+} from '../../../utils/getstream';
+import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
 
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
@@ -15,21 +29,9 @@ import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoUnfollowDomain from '../../../assets/icon/IconUnfollowDomain';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
-import dimen from '../../../utils/dimen';
-import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
-import {
-  Footer,
-  Gap,
-  PreviewComment,
-  SingleSidedShadowBox,
-} from '../../../components';
+import RenderItemHeader from './RenderItemHeader'
 import { colors } from '../../../utils/colors';
-import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
-import {
-  getCountComment,
-  getCountCommentWithChild,
-  getCountVote,
-} from '../../../utils/getstream';
+import dimen from '../../../utils/dimen';
 
 const RenderItem = ({
   item,
@@ -125,7 +127,13 @@ const RenderItem = ({
   return (
     <SingleSidedShadowBox>
       <View style={styles.wrapperItem}>
-        <View style={styles.container}>
+        <RenderItemHeader 
+          item={item} 
+          image={image} 
+          handleFollow={handleFollow} 
+          handleUnfollow={handleUnfollow}
+          follow={follow} />
+        {/* <View style={styles.container}>
           <View style={styles.wrapperImage}>
             {image ? (
               <Image
@@ -181,7 +189,7 @@ const RenderItem = ({
               </TouchableOpacity>
             )}
           </View>
-        </View>
+            </View> */}
         <Pressable onPress={() => onPressComment(item)}>
           <View>
             <View
@@ -375,6 +383,7 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.gray1,
     paddingBottom: 8,
     paddingTop: 8,
+    backgroundColor: 'red'
   },
   wrapperTextUnFollow: {
     backgroundColor: '#00ADB5',
