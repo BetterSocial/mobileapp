@@ -68,7 +68,12 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
 
   return (
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
-      <Pressable onPress={__handleBackPress}>
+      <Pressable onPress={__handleBackPress}
+        android_ripple={{
+          color: COLORS.gray1,
+          borderless: true,
+          radius: 20,
+        }} style={styles.arrowContainer}>
         <View style={styles.backArrow}>        
           <MemoIc_arrow_back_white width={20} height={12} fill={colors.black} style={{ alignSelf: 'center'}}/>
         </View>
@@ -90,7 +95,12 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
             placeholderTextColor={COLORS.gray1}
             style={styles.input} />
 
-          <Pressable onPress={__handleOnClearText} style={styles.clearIconContainer}>
+          <Pressable onPress={__handleOnClearText} style={styles.clearIconContainer}
+            android_ripple={{
+              color: COLORS.gray1,
+              borderless: true,
+              radius: 14,
+            }}>
             <View style={styles.wrapperDeleteIcon}>
               <MemoIcClearCircle width={16.67} height={16.67} iconColor={colors.black}/>
             </View>
@@ -102,6 +112,7 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
 };
 
 const styles = StyleSheet.create({
+  arrowContainer: {paddingLeft:20},
   backArrow : {flex: 1, justifyContent: 'center', marginRight: 16, },
   container: {
     flexDirection: 'row',
@@ -109,9 +120,10 @@ const styles = StyleSheet.create({
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base,
   },
-  clearIconContainer: {justifyContent: 'center'},
+  clearIconContainer: {justifyContent: 'center', alignItems: 'center'},
   searchContainer: {
     flex: 1,
+    marginRight: 20,
   },
   wrapperSearch: {
     flex: 1,
@@ -120,6 +132,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     flexDirection: 'row',
     height: 36,
+    paddingRight: 8,
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -159,8 +172,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   wrapperDeleteIcon: {
-    marginLeft: 8,
-    marginRight: 16,
     alignSelf: 'center',
     justifyContent: 'center',
   },
@@ -179,8 +190,8 @@ const styles = StyleSheet.create({
     paddingBottom: 7,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.alto,
-    paddingLeft: 20,
-    paddingRight: 20,
+    // paddingLeft: 20,
+    // paddingRight: 20,
   }),
 });
 
