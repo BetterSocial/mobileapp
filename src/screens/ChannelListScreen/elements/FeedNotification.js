@@ -4,6 +4,8 @@ import { COLORS } from '../../../utils/theme'
 import streamFeed from '../../../utils/getstream/streamer'
 import { getAccessToken } from '../../../utils/token'
 import PropTypes from 'prop-types';
+import { getFeedNotification } from '../../../service/feeds'
+import ListFeedNotification from './components/ListFeedNotification'
 const styles = StyleSheet.create({
     containerCard: {
         padding: 16,
@@ -35,6 +37,7 @@ const styles = StyleSheet.create({
 
 const FeedNotification = (props) => {
     const {userid} = props
+    const [listNotif, setListNotif] = React.useState([])
 
     const callStreamFeed = async () => {
         const token = await getAccessToken()
@@ -44,12 +47,19 @@ const FeedNotification = (props) => {
         console.log('skita')
         notif.subscribe(function (data) {
             console.log(data, 'kulakan')
-            notif.get().then((data) => {
-                console.log(data, 'mantap')
-            })
+            getPostNotification()
+
         })
 
         // client.feed(getAccessToken())
+    }
+
+    const getPostNotification = async () => {
+        const res = await getFeedNotification()
+        if(res.success) {
+            setListNotif(res.data)
+        }
+        console.log(res, 'mamankin')
     }
 
     React.useEffect(() => {
@@ -59,19 +69,18 @@ const FeedNotification = (props) => {
 
     }, [userid])
 
+    React.useEffect(() => {
+        getPostNotification()
+    }, [])
+
+    console.log(listNotif, 'kamil')
+
     return (
-        <View style={styles.containerCard} >
-            <View style={styles.avatarContainer} >
-                <Image source={{ uri: "https://cdn-icons-png.flaticon.com/512/147/147144.png" }} style={styles.avatar} />
-            </View>
-            <View style={styles.titleContainer} >
-                <Text style={styles.titleText} >Your post haha is commented</Text>
-                <Text style={styles.subtitleStyle} >Hi bro how are you ? </Text>
-            </View>
-            <View style={styles.lastContentContainer} >
-                <Text>Thursday</Text>
-            </View>
-        </View>
+        <React.Fragment>
+            {listNotif.map((notif, index) => (
+                <ListFeedNotification notif={notif} key={index} />
+            ))}
+        </React.Fragment>
     )
 }
 
