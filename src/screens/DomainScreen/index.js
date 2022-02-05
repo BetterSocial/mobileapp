@@ -1,19 +1,20 @@
 import * as React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Toast from 'react-native-simple-toast';
-import { FlatList, StatusBar, StyleSheet, View } from 'react-native';
+import { Dimensions, FlatList, StatusBar, StyleSheet, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
 import Header from './elements/Header';
 import Loading from '../Loading';
 import Navigation from './elements/Navigation';
+import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
+import dimen from '../../utils/dimen';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { addIFollowByID, setIFollow } from '../../context/actions/news';
-import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import {
   checkBlockDomainPage,
   followDomain,
@@ -22,8 +23,12 @@ import {
   getProfileDomain,
   unfollowDomain,
 } from '../../service/domain';
+import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { getUserId } from '../../utils/users';
 import { unblokDomain } from '../../service/blocking';
+
+const { height, width } = Dimensions.get('screen');
+let headerHeight = 0;
 
 const DomainScreen = () => {
   const route = useRoute();
@@ -38,6 +43,9 @@ const DomainScreen = () => {
   const [domainFollowers, setDomainFollowers] = React.useState(0);
   const [isBlocked, setIsBlocked] = React.useState(false)
   const [follow, setFollow] = React.useState(false);
+
+  const tiktokScrollRef = React.useRef(null);
+
   let iddomain = dataDomain.content.domain_page_id;
   const [dataFollow] = React.useState({
     domainId: iddomain,
@@ -90,7 +98,8 @@ const DomainScreen = () => {
     let res = await getDetailDomains(dataDomain.og.domain);
     if (res.code === 200) {
       setDomainFollowers(res.followers);
-      setData([{ dummy: true }, ...res.data]);
+      // setData([{dummy: true}, ...res.data]);
+      setData(res.data);
       setLoading(false);
     }
     if (withLoading) {
@@ -179,20 +188,67 @@ const DomainScreen = () => {
     }
   }
 
- const onUnblockDomain = async () => {
+  const onUnblockDomain = async () => {
     await unblokDomain({domain_page_id: iddomain}).then(() => {
         checkBlockDomain()
     })
 
-}
-
-  console.log(dataDomain, 'kakam')
-
+  }
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
       <Navigation domain={dataDomain.og.domain} />
-      <FlatList
+      <ProfileTiktokScroll
+        ref={tiktokScrollRef}
+        data={data}
+        snapToOffsets={(() => {
+          return data.map((item, index) => {
+            return headerHeight + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)
+          })
+        })()}
+        ListHeaderComponent={
+          <View style={{ backgroundColor: 'transparent' }} onLayout={(event) => {
+            let headerHeightLayout = event.nativeEvent.layout.height
+            headerHeight = headerHeightLayout
+          }}>
+            <Header
+              image={domainImage}
+              description={profile.short_description}
+              domain={dataDomain.og.domain}
+              followers={domainFollowers}
+              onPressBlock={onReaction}
+              onPressUnblock={onUnblockDomain}
+              follow={follow}
+              handleFollow={handleFollow}
+              handleUnfollow={handleUnfollow}
+              isBlocked={isBlocked}
+            />
+            <LinearGradient
+              colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']}
+              style={styles.linearGradient}
+            />
+          </View>
+        }>
+        {({item, index}) => {
+          return (
+            <RenderItem
+              key={index}
+              item={item}
+              image={profile.logo}
+              onPressComment={(itemNews) => handleOnPressComment(itemNews)}
+              onPressUpvote={(news) => upvoteNews(news)}
+              onPressDownVote={(news) => downvoteNews(news)}
+              selfUserId={idFromToken}
+              onPressBlock={() => onReaction(0)}
+              follow={follow}
+              handleFollow={handleFollow}
+              handleUnfollow={handleUnfollow}
+              onPressShare={ShareUtils.shareDomain}
+            />
+          );
+        }}
+      </ProfileTiktokScroll>
+      {/* <FlatList
         data={data}
         renderItem={({ item, index }) => {
           if (index === 0) {
@@ -239,7 +295,7 @@ const DomainScreen = () => {
         }}
         style={styles.list}
         keyExtractor={(i) => i.id}
-      />
+      /> */}
 
       <Loading visible={loading} />
       <BlockDomainComponent
