@@ -41,7 +41,7 @@ const TopicFragment = () => {
 
         { unfollowedTopic.length > 0 && <Text style={styles.unfollowedHeaders}>Unfollowed Topics</Text>}
         { unfollowedTopic.map((item, index) => {
-            return <DomainList key={`followedTopic-${index}`} isHashtag item={{
+            return <DomainList key={`unfollowedTopic-${index}`} isHashtag item={{
                 name: item.name,
                 image: item.profile_pic_path,
                 isunfollowed: item.user_id_follower === null

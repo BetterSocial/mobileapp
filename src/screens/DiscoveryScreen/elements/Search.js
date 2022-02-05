@@ -66,6 +66,14 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
     }
   }, [discoverySearchBarText])
 
+  React.useEffect(() => {
+    const unsubscribe = () => {
+      GeneralComponentAction.setDiscoverySearchBar('', generalComponentDispatch)
+    }
+
+    return unsubscribe
+  },[])
+
   return (
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
       <Pressable onPress={__handleBackPress}

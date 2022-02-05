@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TextInput,
   Animated,
+  Pressable,
 } from 'react-native';
 
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
@@ -13,21 +14,28 @@ import MemoIc_search from '../../assets/icons/Ic_search';
 import StringConstant from '../../utils/string/StringConstant';
 import {fonts} from '../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
+import { useNavigation } from '@react-navigation/native';
+import { DISCOVERY_TAB_NEWS } from '../../utils/constants';
 
 const Search = ({onPress, animatedValue}) => {
+  const navigation = useNavigation()
+  
+  const __handleOnContainerPress = () => {
+    navigation.push('DiscoveryScreen', {
+      tab: DISCOVERY_TAB_NEWS
+    })
+  }
+
   return (
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
-      <View style={styles.wrapperSearch}>
-        <View style={styles.wrapperIcon}>
-          <MemoIc_search width={16.67} height={16.67} />
+      <Pressable style={styles.pressableContainer} onPress={__handleOnContainerPress}>
+        <View style={styles.wrapperSearch}>
+          <View style={styles.wrapperIcon}>
+            <MemoIc_search width={16.67} height={16.67} />
+          </View>
+          <Text style={styles.input}>{StringConstant.newsTabHeaderPlaceholder}</Text>
         </View>
-        <TextInput
-          multiline={false}
-          placeholder={StringConstant.newsTabHeaderPlaceholder}
-          placeholderTextColor={COLORS.gray1}
-          style={styles.input}
-        />
-      </View>
+      </Pressable>
     </Animated.View>
   );
 };
@@ -38,6 +46,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base,
+  },
+  pressableContainer: {
+    flex: 1,
   },
   wrapperSearch: {
     flex: 1,
@@ -65,9 +76,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontFamily: fonts.inter[400],
-    height: 36,
+    // height: 36,
     paddingTop: 0,
     paddingBottom: 0,
+    alignSelf: 'center',
+    color: COLORS.gray1
   },
   wrapperIcon: {
     marginLeft: 8,

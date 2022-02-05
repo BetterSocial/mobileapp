@@ -17,6 +17,7 @@ import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
 import Search from './elements/Search';
+import { DISCOVERY_TAB_TOPICS } from '../../utils/constants';
 
 let lastDragY = 0;
 
@@ -199,7 +200,9 @@ const FeedScreen = (props) => {
 
   let handleSearchBarClicked = () => {
     console.log('search bar clicked')
-    navigation.navigate('DiscoveryScreen')
+    navigation.navigate('DiscoveryScreen', {
+      tab: DISCOVERY_TAB_TOPICS
+    })
   }
 
   return (

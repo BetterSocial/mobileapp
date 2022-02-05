@@ -41,7 +41,7 @@ const UsersFragment = () => {
 
         { unfollowedUsers.length > 0 && <Text style={styles.unfollowedHeaders}>Unfollowed Users</Text>}
         { unfollowedUsers.map((item, index) => {
-            return <DomainList key={`followedUsers-${index}`} item={{
+            return <DomainList key={`unfollowedUsers-${index}`} item={{
                 name: item.username,
                 image: item.profile_pic_path,
                 isunfollowed: item.user_id_follower === null

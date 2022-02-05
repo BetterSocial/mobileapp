@@ -17,35 +17,14 @@ import { colors } from '../../utils/colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { fonts } from '../../utils/fonts';
 
-const DiscoveryScreen = () => {
+const DiscoveryScreen = ({ route }) => {
     const [search, setSearch] = React.useState("")
     const offset = React.useRef(new Animated.Value(0)).current
+    const { tab } = route.params
+
+    let initialRouteName = tab || DISCOVERY_TAB_USERS
 
     const Tabs = createMaterialTopTabNavigator()    
-
-    const users = [
-        { name: "Usupsuparma", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-        { name: "Fajarism", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-        { name: "Agita", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-        { name: "Busan", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-        { name: "Bastian", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-    ]
-
-    const domains = [
-        { name: "politico.eu", description: '', image: "https://www.politico.eu/wp-content/themes/politico-new/assets/images/politico-billboard.png" },
-        { name: "kumparan.com", description: '', image: "https://blue.kumparan.com/image/upload/v1486023171/logo-1200_yos3so.jpg" },
-        { name: "bola.com", description: '', image: "https://upload.wikimedia.org/wikipedia/commons/f/fb/Stiker_Bolacom_%28cropped%29.png" },
-        // { name: "Busan", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-        // { name: "Bastian", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-    ]
-
-    const topics = [
-        { name: "Bali", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-        { name: "Tari Kecak", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-        { name: "Pizza Tower", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-        { name: "Minecraft", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-        { name: "Free Fire", description: '', image: DEFAULT_PROFILE_PIC_PATH },
-    ]
 
     function MyTabBar(props) {
         let {state, descriptors, navigation, position} = props
@@ -107,7 +86,7 @@ const DiscoveryScreen = () => {
         <View style={{flex: 1}}>
             <StatusBar translucent={false} />
             <Tabs.Navigator
-                initialRouteName={DISCOVERY_TAB_USERS}
+                initialRouteName={initialRouteName}
                 tabBar={tabComponent} >
                 <Tabs.Screen
                     name={DISCOVERY_TAB_USERS}
@@ -134,29 +113,6 @@ const DiscoveryScreen = () => {
                         title: 'Topics',
                     }} />
             </Tabs.Navigator>
-            {/* <ScrollView>
-                <View style={styles.container}>
-                    <StatusBar translucent={false} />
-                    <Text style={styles.sectionTitle}>People</Text>
-                    { users.map((item, index) => {
-                        return <DomainList key={`discovery-user-${index}`} item={item} />
-                    })}
-
-                    <Text style={styles.sectionTitle}>Domain</Text>
-                    { domains.map((item, index) => {
-                        return <DomainList key={`discovery-user-${index}`} item={item} />
-                    })}
-                    <Text style={styles.sectionTitle}>Topic</Text>
-                    { topics.map((item, index) => {
-                        return <DomainList 
-                            // onPressBody={onPressBody} 
-                            // handleSetFollow={() => handleFollow(index, item)} 
-                            // handleSetUnFollow={() => handleUnfollow(index, item)} 
-                            isHashtag 
-                            item={item} />
-                    })}
-                </View>
-            </ScrollView> */}
         </View>
         
 )}
