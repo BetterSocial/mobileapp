@@ -145,6 +145,7 @@ const CreatePost = () => {
   const [topicSearch, setTopicSearch] = React.useState([]);
   const [isTopicOverlay, setTopicOverlay] = React.useState(false);
   const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
+  const [inPositionSearch, setInPositionSearch] = React.useState([]);
 
 
   const listPostExpired = [
@@ -705,11 +706,16 @@ const CreatePost = () => {
                     // todo masukan pilihan user kedalam text
                     let topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
                     let oldMessage = message;
-                    oldMessage.substring(0, positionTopicSearch);
+                    console.log(positionTopicSearch);
                     let pos = positionTopicSearch + 1;
-                    let newMessage = oldMessage.insert(pos, topicItem);
+                    console.log(pos);
+                    let s = oldMessage.substring(0, pos);
+                    console.log('old message: ', s);
+                    let newMessage = s.insert(pos, topicItem);
+                    console.log('new message: ', newMessage);
                     setMessage(newMessage);
                     setTopicSearch([]);
+                    setInPositionSearch(inPositionSearch.push(positionTopicSearch));
                   }}>
                     <View style={{ marginBottom: 5 }} >
                       <Text style={{
