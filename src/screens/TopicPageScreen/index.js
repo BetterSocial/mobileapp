@@ -53,12 +53,30 @@ const TopicPageScreen = (props) => {
       try {
         setLoading(true)
         let id = convertString(route.params.id, 'topic_', '');
-        let name = convertString(id, '-', ' ')
-        setTopicName(name);
-        console.log(name);
-        const result = await getTopicPages(name);
+        console.log('id: ', id);
+        let topicName = convertString(id, '-', ' ')
+        setTopicName(topicName);
+        console.log('topicName: ', topicName);
+
+        let name = capitalizeFirstText(id);
+        let newName = convertString(name, '-', ' ');
+        console.log('new Name: ', newName);
+        setUserTopicName(newName);
+        let query = `?name=${convertString(topicName, '-', ' ')}`;
+        let [
+          _resultGetTopicPages,
+          _resultGetUserTopic,
+        ] = await Promise.all([
+          getTopicPages(topicName),
+          getUserTopic(query)
+        ]
+        )
         setTopicId(id);
-        setMainFeeds(result.data, dispatch);
+        setMainFeeds(_resultGetTopicPages.data, dispatch);
+        console.log(_resultGetUserTopic);
+        if (_resultGetUserTopic.data) {
+          setIsFollow(true);
+        }
 
         setLoading(false)
       } catch (error) {
@@ -83,22 +101,22 @@ const TopicPageScreen = (props) => {
     }
   }
 
-  React.useEffect(() => {
-    const init = async () => {
-      let id = convertString(route.params.id, 'topic_', '');
+  // React.useEffect(() => {
+  //   const init = async () => {
+  //     let id = convertString(route.params.id, 'topic_', '');
 
-      let name = capitalizeFirstText(id);
-      let newName = convertString(name, '-', ' ');
-      setUserTopicName(newName);
-      let query = `?name=${convertString(newName, '-', ' ')}`;
-      let result = await getUserTopic(query);
+  //     let name = capitalizeFirstText(id);
+  //     let newName = convertString(name, '-', ' ');
+  //     setUserTopicName(newName);
+  //     let query = `?name=${convertString(newName, '-', ' ')}`;
+  //     let result = await getUserTopic(query);
 
-      if (result.data) {
-        setIsFollow(true);
-      }
-    }
-    init()
-  }, [])
+  //     if (result.data) {
+  //       setIsFollow(true);
+  //     }
+  //   }
+  //   init()
+  // }, [])
 
 
   const handleFollowTopic = async () => {
@@ -195,7 +213,7 @@ const TopicPageScreen = (props) => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-      <StatusBar barStyle="dark-content" translucent={false}/>
+      <StatusBar barStyle="dark-content" translucent={false} />
       <Navigation domain={capitalizeFirstText(topicName)} onPress={() => handleFollowTopic()} isFollow={isFollow} />
       <View style={{ flex: 1 }}>
         <TiktokScroll
