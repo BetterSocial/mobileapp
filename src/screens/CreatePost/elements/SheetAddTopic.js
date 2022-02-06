@@ -167,27 +167,29 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
           </View>
 
           {topicSuggestion.length > 0 && (
-            <Card style={{ marginTop: -72 }}>{topicSuggestion.map((item, index) => {
-              return (
-                <TouchableNativeFeedback onPress={() => {
-                  setTopic(capitalizeFirstText(convertString(item.name, " ", "")));
-                  setTopicSuggestion([]);
-                }}>
-                  <View style={{ marginBottom: 5 }} >
-                    <Text style={{
-                      color: '#000000',
-                      fontFamily: fonts.inter[500],
-                      fontWeight: '500',
-                      fontSize: 12,
-                      lineHeight: 18
-                    }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
-                    {index !== topicSuggestion.length - 1 && (
-                      <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
-                    )}
-                  </View>
-                </TouchableNativeFeedback>
-              )
-            })}</Card>
+            <Card style={{ marginTop: -72 }}>
+              {topicSuggestion.map((item, index) => {
+                return (
+                  <TouchableNativeFeedback onPress={() => {
+                    setTopic(capitalizeFirstText(convertString(item.name, " ", "")));
+                    setTopicSuggestion([]);
+                  }}>
+                    <View style={{ marginBottom: 5 }} >
+                      <Text style={{
+                        color: '#000000',
+                        fontFamily: fonts.inter[500],
+                        fontWeight: '500',
+                        fontSize: 12,
+                        lineHeight: 18
+                      }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
+                      {index !== topicSuggestion.length - 1 && (
+                        <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
+                      )}
+                    </View>
+                  </TouchableNativeFeedback>
+                )
+              })}
+            </Card>
           )}
           <Text style={styles.textDesc}>
             Hit space to start a new topic. Add up to 5 topics.

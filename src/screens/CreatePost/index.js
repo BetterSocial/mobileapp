@@ -10,6 +10,7 @@ import {
   View,
   Platform,
   StatusBar,
+  TouchableNativeFeedback
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/core';
@@ -66,6 +67,9 @@ import {
 } from '../../utils/setting';
 import { instanceOf } from 'prop-types';
 import { getTopics } from '../../service/topics';
+import Card from './elements/Card';
+
+import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -140,6 +144,7 @@ const CreatePost = () => {
   const [geoSelect, setGeoSelect] = React.useState(0);
   const [topicSearch, setTopicSearch] = React.useState([]);
   const [isTopicOverlay, setTopicOverlay] = React.useState(false);
+  const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
 
 
   const listPostExpired = [
@@ -620,17 +625,21 @@ const CreatePost = () => {
 
   const searchTopic = async (name) => {
     if (!isEmptyOrSpaces(name)) {
-      console.log('nama untuk di cara: ', name);
       getTopics(name)
         .then(v => {
-          console.log(v);
           setTopicSearch(v.data);
         })
         .catch(err => console.log(err));
+    }
+  }
 
+  String.prototype.insert = function (index, string) {
+    if (index > 0) {
+      return this.substring(0, index) + string + this.substr(index);
     }
 
-  }
+    return string + this;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -667,6 +676,7 @@ const CreatePost = () => {
               let spaceStatus = v.includes(' ', position);
               if (!spaceStatus) {
                 let textSeacrh = v.substring(position + 1);
+                setPositionTopicSearch(position);
                 searchTopic(textSeacrh);
               }
               // harus ke trigger sebelum ketik spasi setelah 
@@ -686,37 +696,40 @@ const CreatePost = () => {
 
         <Gap height={16} />
 
-        <View>
+        {
+          topicSearch.length > 0 && (
+            <Card>
+              {topicSearch.map((item, index) => {
+                return (
+                  <TouchableNativeFeedback onPress={() => {
+                    // todo masukan pilihan user kedalam text
+                    let topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
+                    let oldMessage = message;
+                    oldMessage.substring(0, positionTopicSearch);
+                    let pos = positionTopicSearch + 1;
+                    let newMessage = oldMessage.insert(pos, topicItem);
+                    setMessage(newMessage);
+                    setTopicSearch([]);
+                  }}>
+                    <View style={{ marginBottom: 5 }} >
+                      <Text style={{
+                        color: '#000000',
+                        fontFamily: fonts.inter[500],
+                        fontWeight: '500',
+                        fontSize: 12,
+                        lineHeight: 18
+                      }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
+                      {index !== topicSearch.length - 1 && (
+                        <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
+                      )}
+                    </View>
+                  </TouchableNativeFeedback>
+                )
+              })}
+            </Card>
+          )
+        }
 
-        </View>
-
-        <View style={{
-          backgroundColor: 'white',
-          borderRadius: 8,
-          paddingVertical: 8,
-          paddingHorizontal: 10,
-          margin: 16,
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 0,
-            height: 6,
-          },
-          shadowOpacity: 0.39,
-          shadowRadius: 8.30,
-
-          elevation: 13,
-        }}>
-
-          <Text style={{
-            color: '#000000',
-            fontFamily: fonts.inter[500],
-            fontWeight: '500',
-            fontSize: 12,
-            lineHeight: 18
-          }}>#Corona</Text>
-
-
-        </View>
 
         {isLinkPreviewShown && (
           <ContentLink
