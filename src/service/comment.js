@@ -18,11 +18,12 @@ const createCommentParent = async (text, activityId, useridFeed) => {
   }
 };
 
-const createChildComment = async (text, reactionId) => {
+const createChildComment = async (text, reactionId, useridFeed) => {
   try {
     let data = {
       reaction_id: reactionId,
       message: text,
+      useridFeed,
     };
 
     let resApi = await api.post('/activity/child-comment', data);

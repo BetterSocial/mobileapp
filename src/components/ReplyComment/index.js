@@ -122,7 +122,7 @@ const ReplyCommentComponent = ({ itemProp, indexFeed, level, feeds, dispatch, se
     setIdComment((prev) => prev + 1)
     try {
       if (textComment.trim() !== '') {
-        let data = await createChildComment(textComment, item.id);
+        let data = await createChildComment(textComment, item.id, item.user.id);
         if (data.code === 200) {
           setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
           setLoadingCMD(false);
@@ -159,7 +159,7 @@ const ReplyCommentComponent = ({ itemProp, indexFeed, level, feeds, dispatch, se
     return unsubscribe
   }, [])
 
-
+  console.log(itemProp, item, 'julak')
 
   return (
     <View style={styles.container}>
