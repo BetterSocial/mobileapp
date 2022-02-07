@@ -174,7 +174,7 @@ const PostPageDetailComponent = (props) => {
     setLoadingPost(true)
     try {
       if (textComment.trim() !== '') {
-        let data = await createCommentParent(textComment, item.id);
+        let data = await createCommentParent(textComment, item.id, item.actor.id);
         if (data.code === 200) {
           setTextComment('');
           updateFeed(true);
@@ -325,6 +325,7 @@ const PostPageDetailComponent = (props) => {
     }
   }, [])
 
+  console.log(item, 'jamanlu')
 
   return (
     <View style={styles.container}>

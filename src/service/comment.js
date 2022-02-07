@@ -1,11 +1,12 @@
 import api from './config';
 import crashlytics from '@react-native-firebase/crashlytics';
 
-const createCommentParent = async (text, activityId) => {
+const createCommentParent = async (text, activityId, useridFeed) => {
   try {
     let data = {
       activity_id: activityId,
       message: text,
+      useridFeed,
     };
 
     let resApi = await api.post('/activity/comment', data);

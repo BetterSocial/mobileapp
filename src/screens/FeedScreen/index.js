@@ -42,6 +42,7 @@ const FeedScreen = (props) => {
       }
 
       const dataFeeds = await getMainFeed(query);
+      console.log(dataFeeds, 'sumani')
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         if (id === '') {
