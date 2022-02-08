@@ -126,7 +126,7 @@ const ChannelListScreen = ({ navigation }) => {
         <View style={{ paddingHorizontal: 0, flex: 1 }}>
           {client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>
-            <FeedNotification userid={userId} />
+            <FeedNotification navigation={navigation} userid={userId} />
  
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}

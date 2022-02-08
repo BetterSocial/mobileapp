@@ -33,6 +33,7 @@ import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';
+import PostFeedPage from '../screens/PostPageDetail/PostPageDetailId'
 import {
   AddParticipant,
   ChannelScreen,
@@ -279,6 +280,12 @@ const RootStact = () => {
               );
             },
           }}
+        />
+        <Stack.Screen 
+        name='PostFeedPage'
+        component={PostFeedPage}
+        options={{headerShown: false}}
+
         />
       </Stack.Navigator>
     </View>

@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 })
 
 
-const ListFeedNotification = ({notif}) => {
+const ListFeedNotification = ({notif, onPress}) => {
     const [user] = React.useContext(Context).users;
     const [profile] = React.useContext(Context).profile;
 
@@ -72,9 +72,9 @@ const ListFeedNotification = ({notif}) => {
         return ""
     }
 
-    console.log(notif, 'sapilak')
+
     return (
-        <TouchableOpacity style={styles.containerCard} >
+        <TouchableOpacity onPress={() => onPress(notif.activity_id)} style={styles.containerCard} >
             <View style={styles.row} >
             <View style={styles.avatarContainer} >
                 {user.photoUrl ? <Image source={{ uri: user.photoUrl }} style={styles.avatar} /> : null}
@@ -129,7 +129,8 @@ const ListFeedNotification = ({notif}) => {
 }
 
 ListFeedNotification.propTypes = {
-    notif: PropTypes.object
+    notif: PropTypes.object,
+    onPress: PropTypes.func
 }
 
 

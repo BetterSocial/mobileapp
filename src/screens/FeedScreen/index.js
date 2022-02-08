@@ -150,15 +150,20 @@ const FeedScreen = (props) => {
   };
 
   const onPress = (item, index) => {
+    console.log(item, 'bahan')
     props.navigation.navigate('PostDetailPage', {
       index: index,
       isalreadypolling: item.isalreadypolling,
+      feedId: item.id
     });
   };
 
-  const onPressComment = (index) => {
+  const onPressComment = (index, item) => {
+    console.log(index, item, 'bahaya')
     props.navigation.navigate('PostDetailPage', {
       index: index,
+      feedId: item.id
+      // feedId:
     });
   };
 
@@ -185,7 +190,7 @@ const FeedScreen = (props) => {
             index={index}
             onPressDomain={onPressDomain}
             onPress={() => onPress(item, index)}
-            onPressComment={() => onPressComment(index)}
+            onPressComment={() => onPressComment(index, item)}
             onPressBlock={() => onPressBlock(item)}
             onPressUpvote={(post) => setUpVote(post, index)}
             selfUserId={yourselfId}

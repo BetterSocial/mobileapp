@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 })
 
 const FeedNotification = (props) => {
-    const {userid} = props
+    const {userid, navigation} = props
     const [listNotif, setListNotif] = React.useState([])
 
     const callStreamFeed = async () => {
@@ -54,12 +54,18 @@ const FeedNotification = (props) => {
         // client.feed(getAccessToken())
     }
 
+    const onDetailFeed = (id) => {
+        console.log(id, 'saman')
+        navigation.navigate('PostFeedPage', {
+            feedId: id
+        })
+    }
+
     const getPostNotification = async () => {
         const res = await getFeedNotification()
         if(res.success) {
             setListNotif(res.data)
         }
-        console.log(res, 'mamankin')
     }
 
     React.useEffect(() => {
@@ -78,14 +84,15 @@ const FeedNotification = (props) => {
     return (
         <React.Fragment>
             {listNotif.map((notif, index) => (
-                <ListFeedNotification notif={notif} key={index} />
+                <ListFeedNotification onPress={onDetailFeed} notif={notif} key={index} />
             ))}
         </React.Fragment>
     )
 }
 
 FeedNotification.propTypes = {
-    userid: PropTypes.string
+    userid: PropTypes.string,
+    navigation: PropTypes.object
 }
 
 
