@@ -23,6 +23,11 @@ const normalizeDimenHeight = (size) => {
   return size * (height / baseReferenceScreenWidth);
 };
 
+const normalizeDimenByWidth = (size) => {
+  const baseReferenceScreenWidth = 375;
+  return size * (width / baseReferenceScreenWidth);
+};
+
 const baseSize = {
   BASE_NEXT_CONTENT_PREVIEW_HEIGHT: 164,
 
@@ -41,6 +46,7 @@ const baseSize = {
   PROFILE_HEADER_HEIGHT: 42 + 1 /** Height Correction */,
 
   TOPIC_FEED_HEADER_HEIGHT: 48,
+  BASE_FEED3_CURRENT_ITEM_HEIGHT: 548,
 };
 
 const size = {
@@ -51,8 +57,9 @@ const size = {
   FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM: normalizeDimenHeight(baseSize.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM),
   FEED_ACTION_BUTTON_HEIGHT_FROM_RIGHT: normalizeDimen(baseSize.FEED_ACTION_BUTTON_HEIGHT_FROM_RIGHT),
   FEED_ACTION_BUTTON_RADIUS: normalizeDimen(baseSize.FEED_ACTION_BUTTON_RADIUS),
-  FEED_CURRENT_ITEM_HEIGHT:
-    (bottomBarHeight) => (height - statusBarHeight - bottomBarHeight - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
+  // FEED_CURRENT_ITEM_HEIGHT:
+  //   (bottomBarHeight) => (height - statusBarHeight - bottomBarHeight - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
+  FEED_CURRENT_ITEM_HEIGHT: (bottomBarHeight) => normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
   FEED_COMMENT_CONTAINER_HEIGHT: normalizeDimenHeight(baseSize.FEED_COMMENT_CONTAINER_HEIGHT),
   FEED_CONTENT_LINK_MAX_HEIGHT: normalizeDimenHeight(baseSize.FEED_CONTENT_LINK_MAX_HEIGHT),
   FEED_HEADER_HEIGHT: normalizeDimenHeight(baseSize.FEED_HEADER_HEIGHT),
@@ -62,7 +69,8 @@ const size = {
   PROFILE_ITEM_HEIGHT:
     (bottomBarHeight = 0) => (height - statusBarHeight - baseSize.PROFILE_HEADER_HEIGHT - bottomBarHeight - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
   TOPIC_FEED_HEADER_HEIGHT: normalizeDimenHeight(baseSize.TOPIC_FEED_HEADER_HEIGHT),
-  TOPIC_CURRENT_ITEM_HEIGHT: (height - statusBarHeight - baseSize.TOPIC_FEED_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
+  // TOPIC_CURRENT_ITEM_HEIGHT: (height - statusBarHeight - baseSize.TOPIC_FEED_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
+  TOPIC_CURRENT_ITEM_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
 
 };
 
