@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
     marginTop: SIZES.base,
     marginHorizontal: 6,
     backgroundColor: COLORS.white,
-    maxHeight: dimen.size.FEED_CONTENT_LINK_MAX_HEIGHT,
+    // maxHeight: dimen.size.FEED_CONTENT_LINK_MAX_HEIGHT,
   },
 });

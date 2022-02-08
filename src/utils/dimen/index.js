@@ -3,6 +3,8 @@ import { Dimensions, StatusBar } from 'react-native';
 
 const statusBarHeight = StatusBar.currentHeight;
 const { width, height } = Dimensions.get('screen');
+console.log('height');
+console.log(height);
 /**
  *
  * @param {int} size - Size to be normalized according to screen size
@@ -66,8 +68,8 @@ const size = {
   PROFILE_ACTION_BUTTON_RADIUS: normalizeDimen(baseSize.PROFILE_ACTION_BUTTON_RADIUS),
   PROFILE_ITEM_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
   TOPIC_FEED_HEADER_HEIGHT: normalizeDimenHeight(baseSize.TOPIC_FEED_HEADER_HEIGHT),
-  TOPIC_CURRENT_ITEM_HEIGHT: (height - statusBarHeight - baseSize.TOPIC_FEED_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
-  // TOPIC_CURRENT_ITEM_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
+  // TOPIC_CURRENT_ITEM_HEIGHT: (height - statusBarHeight - baseSize.TOPIC_FEED_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
+  TOPIC_CURRENT_ITEM_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
   // DOMAIN_CURRENT_HEIGHT: (height - statusBarHeight - baseSize.DOMAIN_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
   // PROFILE_ITEM_HEIGHT:
   //   (bottomBarHeight = 0) => (height - statusBarHeight - baseSize.PROFILE_HEADER_HEIGHT - bottomBarHeight - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
@@ -75,6 +77,8 @@ const size = {
   //   (bottomBarHeight) => (height - statusBarHeight - bottomBarHeight - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
 
 };
+
+console.log(size.TOPIC_CURRENT_ITEM_HEIGHT);
 
 export default {
   size,

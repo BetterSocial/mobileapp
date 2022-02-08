@@ -63,7 +63,8 @@ const RenderListFeed = (props) => {
   };
 
   const getHeightFooter = () => {
-    let h = Math.floor(((FULL_HEIGHT) * 6.8) / 100);
+    // let h = Math.floor(((FULL_HEIGHT) * 6.8) / 100);
+    let h = Math.floor(((FULL_HEIGHT - tabBarHeight) * 6.8) / 100);
     return h;
   };
 
@@ -156,6 +157,9 @@ const RenderListFeed = (props) => {
 
   const initial = () => {
     let reactionCount = item.reaction_counts;
+    if(item?.id === '06f2a0e0-850b-11ec-bbb5-123430d3b8d3') {
+      console.log(item)
+    }
     if (JSON.stringify(reactionCount) !== '{}') {
       let comment = reactionCount.comment;
       handleVote(reactionCount);
@@ -164,6 +168,8 @@ const RenderListFeed = (props) => {
           setReaction(true);
           setPreviewComment(item.latest_reactions.comment[0]);
         }
+      } else {
+        setReaction(false)
       }
     }
   };
@@ -260,22 +266,19 @@ const RenderListFeed = (props) => {
             }
           />
         </View>
-        <View style={styles.contentReaction(getHeightReaction())}>
-          {isReaction && (
-            <React.Fragment>
-              <PreviewComment
-                user={previewComment.user}
-                comment={previewComment.data.text}
-                image={previewComment.user.data.profile_pic_url}
-                time={previewComment.created_at}
-                totalComment={getCountCommentWithChild(item) - 1}
-                onPress={onPressComment}
-              />
-              <Gap height={8} />
-            </React.Fragment>
-          )}
-        </View>
-
+        {isReaction && (
+          <View style={styles.contentReaction(getHeightReaction())}>
+            <PreviewComment
+              user={previewComment.user}
+              comment={previewComment.data.text}
+              image={previewComment.user.data.profile_pic_url}
+              time={previewComment.created_at}
+              totalComment={getCountCommentWithChild(item) - 1}
+              onPress={onPressComment}
+            />
+            <Gap height={8} />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -296,7 +299,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  footerWrapper: (h) => ({ height: h }),
+  footerWrapper: (h) => ({ height: h, bottom: 0, }),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,

@@ -28,6 +28,7 @@ const TiktokScroll = (props) => {
       onRefresh={onRefresh}
       onScroll={onScroll}
       onScrollBeginDrag={onScrollBeginDrag}
+      // onMomentumScrollEnd={(event) => console.log(event)}
       ref={flatListRef}
       refreshing={refreshing}
       renderItem={children}
