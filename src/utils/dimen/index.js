@@ -50,27 +50,29 @@ const baseSize = {
 };
 
 const size = {
-  DOMAIN_CURRENT_HEIGHT: (height - statusBarHeight - baseSize.DOMAIN_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
+  DOMAIN_CURRENT_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
   DOMAIN_HEADER_HEIGHT: normalizeDimenHeight(baseSize.DOMAIN_HEADER_HEIGHT),
   DISCOVERY_HEADER_HEIGHT: normalizeDimenHeight(baseSize.DISCOVERY_HEADER_HEIGHT),
 
   FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM: normalizeDimenHeight(baseSize.FEED_ACTION_BUTTON_HEIGHT_FROM_BOTTOM),
   FEED_ACTION_BUTTON_HEIGHT_FROM_RIGHT: normalizeDimen(baseSize.FEED_ACTION_BUTTON_HEIGHT_FROM_RIGHT),
   FEED_ACTION_BUTTON_RADIUS: normalizeDimen(baseSize.FEED_ACTION_BUTTON_RADIUS),
-  // FEED_CURRENT_ITEM_HEIGHT:
-  //   (bottomBarHeight) => (height - statusBarHeight - bottomBarHeight - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
-  FEED_CURRENT_ITEM_HEIGHT: (bottomBarHeight) => normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
+  FEED_CURRENT_ITEM_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
   FEED_COMMENT_CONTAINER_HEIGHT: normalizeDimenHeight(baseSize.FEED_COMMENT_CONTAINER_HEIGHT),
   FEED_CONTENT_LINK_MAX_HEIGHT: normalizeDimenHeight(baseSize.FEED_CONTENT_LINK_MAX_HEIGHT),
   FEED_HEADER_HEIGHT: normalizeDimenHeight(baseSize.FEED_HEADER_HEIGHT),
   FEED_HEADER_IMAGE_RADIUS: normalizeDimenHeight(baseSize.FEED_HEADER_IMAGE_RADIUS),
 
   PROFILE_ACTION_BUTTON_RADIUS: normalizeDimen(baseSize.PROFILE_ACTION_BUTTON_RADIUS),
-  PROFILE_ITEM_HEIGHT:
-    (bottomBarHeight = 0) => (height - statusBarHeight - baseSize.PROFILE_HEADER_HEIGHT - bottomBarHeight - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
+  PROFILE_ITEM_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
   TOPIC_FEED_HEADER_HEIGHT: normalizeDimenHeight(baseSize.TOPIC_FEED_HEADER_HEIGHT),
-  // TOPIC_CURRENT_ITEM_HEIGHT: (height - statusBarHeight - baseSize.TOPIC_FEED_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
-  TOPIC_CURRENT_ITEM_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
+  TOPIC_CURRENT_ITEM_HEIGHT: (height - statusBarHeight - baseSize.TOPIC_FEED_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
+  // TOPIC_CURRENT_ITEM_HEIGHT: normalizeDimenByWidth(baseSize.BASE_FEED3_CURRENT_ITEM_HEIGHT),
+  // DOMAIN_CURRENT_HEIGHT: (height - statusBarHeight - baseSize.DOMAIN_HEADER_HEIGHT - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
+  // PROFILE_ITEM_HEIGHT:
+  //   (bottomBarHeight = 0) => (height - statusBarHeight - baseSize.PROFILE_HEADER_HEIGHT - bottomBarHeight - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
+  // FEED_CURRENT_ITEM_HEIGHT:
+  //   (bottomBarHeight) => (height - statusBarHeight - bottomBarHeight - baseSize.BASE_NEXT_CONTENT_PREVIEW_HEIGHT),
 
 };
 

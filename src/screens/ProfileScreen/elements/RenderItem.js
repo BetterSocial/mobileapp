@@ -158,8 +158,8 @@ const Item = ({
     initialVote();
   }, [item]);
 
-  console.log('item height')
-  console.log(dimen.size.PROFILE_ITEM_HEIGHT(bottomHeight))
+  // console.log('item height')
+  // console.log(dimen.size.PROFILE_ITEM_HEIGHT(bottomHeight))
 
   return (
     <View style={styles.cardContainer(bottomHeight)}>
@@ -292,8 +292,8 @@ export default RenderItem;
 const styles = StyleSheet.create({
   cardContainer: (bottomHeight) => ({
     width: '100%',
-    height: dimen.size.PROFILE_ITEM_HEIGHT(bottomHeight),
-    maxHeight: dimen.size.PROFILE_ITEM_HEIGHT(bottomHeight),
+    height: dimen.size.PROFILE_ITEM_HEIGHT,
+    maxHeight: dimen.size.PROFILE_ITEM_HEIGHT,
     shadowColor: '#c4c4c4',
     shadowOffset: {
       width: 1,

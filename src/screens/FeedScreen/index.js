@@ -1,23 +1,23 @@
 import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
-import { StyleSheet, View, Animated } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import RenderListFeed from './RenderList';
+import Search from './elements/Search';
 import TiktokScroll from '../../components/TiktokScroll';
 import dimen from '../../utils/dimen';
 import { ButtonNewPost } from '../../components/Button';
 import { Context } from '../../context';
+import { DISCOVERY_TAB_TOPICS } from '../../utils/constants';
 import { downVote, upVote } from '../../service/vote';
 import { getFeedDetail, getMainFeed } from '../../service/post';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
-import Search from './elements/Search';
-import { DISCOVERY_TAB_TOPICS } from '../../utils/constants';
 
 let lastDragY = 0;
 
@@ -209,7 +209,7 @@ const FeedScreen = (props) => {
     <View style={styles.container} forceInset={{ top: 'always' }}>
       <Search animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
       <TiktokScroll
-        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT(bottomBarHeight)}
+        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
         onEndReach={onEndReach}
         onRefresh={onRefresh}
