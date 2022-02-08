@@ -711,7 +711,12 @@ const CreatePost = () => {
                     console.log(pos);
                     let s = oldMessage.substring(0, pos);
                     console.log('old message: ', s);
-                    let newMessage = s.insert(pos, topicItem);
+                    let test = (
+                      <Text style={{ fontSize: 24 }}>
+                        {topicItem}
+                      </Text>
+                    )
+                    let newMessage = s.insert(pos, test);
                     console.log('new message: ', newMessage);
                     setMessage(newMessage);
                     setTopicSearch([]);

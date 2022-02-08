@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginRight: 14,
     alignSelf: 'center',
-    marginTop: 4,
   },
   domainText: {
     fontSize: normalizeFontSize(18),
