@@ -10,6 +10,7 @@ import {
   View,
   Platform,
   StatusBar,
+  TouchableNativeFeedback
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/core';
@@ -55,7 +56,7 @@ import {
   requestExternalStoragePermission,
   requestCameraPermission,
 } from '../../utils/permission';
-import { getUrl, isContainUrl } from '../../utils/Utils';
+import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
 import {
   getDurationId,
   getLocationId,
@@ -65,6 +66,10 @@ import {
   setPrivacyId,
 } from '../../utils/setting';
 import { instanceOf } from 'prop-types';
+import { getTopics } from '../../service/topics';
+import Card from './elements/Card';
+
+import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -129,6 +134,20 @@ const CreatePost = () => {
     },
   ]);
 
+  const [audienceEstimations, setAudienceEstimations] = React.useState(0);
+  const [privacySelect, setPrivacySelect] = React.useState(0);
+  const [dataImage, setDataImage] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [typeUser, setTypeUser] = React.useState(false);
+  const [dataProfile, setDataProfile] = React.useState({});
+  const [geoList, setGeoList] = React.useState([]);
+  const [geoSelect, setGeoSelect] = React.useState(0);
+  const [topicSearch, setTopicSearch] = React.useState([]);
+  const [isTopicOverlay, setTopicOverlay] = React.useState(false);
+  const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
+  const [inPositionSearch, setInPositionSearch] = React.useState([]);
+
+
   const listPostExpired = [
     {
       label: '24 hours',
@@ -178,15 +197,6 @@ const CreatePost = () => {
       key: 'people_i_follow',
     },
   ];
-
-  const [audienceEstimations, setAudienceEstimations] = React.useState(0);
-  const [privacySelect, setPrivacySelect] = React.useState(0);
-  const [dataImage, setDataImage] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [typeUser, setTypeUser] = React.useState(false);
-  const [dataProfile, setDataProfile] = React.useState({});
-  const [geoList, setGeoList] = React.useState([]);
-  const [geoSelect, setGeoSelect] = React.useState(0);
 
   React.useEffect(() => {
     init();
@@ -612,6 +622,26 @@ const CreatePost = () => {
     return <View />;
   };
 
+
+
+  const searchTopic = async (name) => {
+    if (!isEmptyOrSpaces(name)) {
+      getTopics(name)
+        .then(v => {
+          setTopicSearch(v.data);
+        })
+        .catch(err => console.log(err));
+    }
+  }
+
+  String.prototype.insert = function (index, string) {
+    if (index > 0) {
+      return this.substring(0, index) + string + this.substr(index);
+    }
+
+    return string + this;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -638,7 +668,22 @@ const CreatePost = () => {
         />
         <Gap style={styles.height(8)} />
         <TextInput
-          onChangeText={(v) => setMessage(v)}
+          onChangeText={(v) => {
+            // cek apakah mengndung # apa tidak
+            if (v.includes('#')) {
+              // ambil posisi #
+              let position = v.indexOf('#');
+              // cari spasi mulai dari posisi #
+              let spaceStatus = v.includes(' ', position);
+              if (!spaceStatus) {
+                let textSeacrh = v.substring(position + 1);
+                setPositionTopicSearch(position);
+                searchTopic(textSeacrh);
+              }
+              // harus ke trigger sebelum ketik spasi setelah 
+            }
+            setMessage(v)
+          }}
           value={message}
           multiline={true}
           style={styles.input}
@@ -648,6 +693,54 @@ const CreatePost = () => {
           }
           autoCapitalize={'none'}
         />
+
+
+        <Gap height={16} />
+
+        {
+          topicSearch.length > 0 && (
+            <Card>
+              {topicSearch.map((item, index) => {
+                return (
+                  <TouchableNativeFeedback onPress={() => {
+                    // todo masukan pilihan user kedalam text
+                    let topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
+                    let oldMessage = message;
+                    console.log(positionTopicSearch);
+                    let pos = positionTopicSearch + 1;
+                    console.log(pos);
+                    let s = oldMessage.substring(0, pos);
+                    console.log('old message: ', s);
+                    let test = (
+                      <Text style={{ fontSize: 24 }}>
+                        {topicItem}
+                      </Text>
+                    )
+                    let newMessage = s.insert(pos, test);
+                    console.log('new message: ', newMessage);
+                    setMessage(newMessage);
+                    setTopicSearch([]);
+                    setInPositionSearch(inPositionSearch.push(positionTopicSearch));
+                  }}>
+                    <View style={{ marginBottom: 5 }} >
+                      <Text style={{
+                        color: '#000000',
+                        fontFamily: fonts.inter[500],
+                        fontWeight: '500',
+                        fontSize: 12,
+                        lineHeight: 18
+                      }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
+                      {index !== topicSearch.length - 1 && (
+                        <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
+                      )}
+                    </View>
+                  </TouchableNativeFeedback>
+                )
+              })}
+            </Card>
+          )
+        }
+
 
         {isLinkPreviewShown && (
           <ContentLink
