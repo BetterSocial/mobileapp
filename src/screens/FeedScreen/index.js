@@ -152,7 +152,7 @@ const FeedScreen = (props) => {
   const onPress = (item, index) => {
     console.log(item, 'bahan')
     props.navigation.navigate('PostDetailPage', {
-      index: index,
+      // index: index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id
     });
@@ -161,7 +161,7 @@ const FeedScreen = (props) => {
   const onPressComment = (index, item) => {
     console.log(index, item, 'bahaya')
     props.navigation.navigate('PostDetailPage', {
-      index: index,
+      // index: index,
       feedId: item.id
       // feedId:
     });

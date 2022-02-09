@@ -56,7 +56,7 @@ const FeedNotification = (props) => {
 
     const onDetailFeed = (id) => {
         console.log(id, 'saman')
-        navigation.navigate('PostFeedPage', {
+        navigation.navigate('PostDetailPage', {
             feedId: id
         })
     }

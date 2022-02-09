@@ -56,11 +56,10 @@ const PostPageDetailIdComponent = (props) => {
   const refBlockComponent = React.useRef();
 
   // let [feeds, dispatch] = React.useContext(Context).feeds;
-  let { dispatch, setFeedByIndexProps = () => {}} = props
+  let { feedId, 
+    navigateToReplyView = () => {}} = props
+    
 
-  let navigateToReplyView = (data) => {
-    navigation.navigate('ReplyComment', data);
-}
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -86,8 +85,6 @@ const PostPageDetailIdComponent = (props) => {
   }, [yourselfId]);
 
   const scrollViewRef = React.useRef(null);
-
-  let {feedId} = props.route.params
 
   const [item, setItem] = React.useState(null);
 
@@ -133,6 +130,11 @@ const PostPageDetailIdComponent = (props) => {
     setItem(data.data)
   }
 
+
+  const updateParentPost = (data) => {
+    setItem(data)
+  }
+
   React.useEffect(() => {
     initial()
   }, [item]);
@@ -161,13 +163,13 @@ const PostPageDetailIdComponent = (props) => {
       setLoadingPost(false)
       if (data) {
         setItem(oldData);
-        setFeedByIndexProps(
-          {
-            singleFeed: oldData,
-            index,
-          },
-          dispatch,
-        );
+        // setFeedByIndexProps(
+        //   {
+        //     singleFeed: oldData,
+        //     index,
+        //   },
+        //   dispatch,
+        // );
       }
     } catch (e) {
       console.log(e);
@@ -247,13 +249,13 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const onNewPollFetched = (newPolls, index) => {
-    setFeedByIndexProps(
-      {
-        index,
-        singleFeed: newPolls,
-      },
-      dispatch,
-    );
+    // setFeedByIndexProps(
+    //   {
+    //     index,
+    //     singleFeed: newPolls,
+    //   },
+    //   dispatch,
+    // );
   };
 
   const navigateToLinkContextPage = (item) => {
@@ -336,8 +338,6 @@ const PostPageDetailIdComponent = (props) => {
     }
   }, [])
 
-  console.log(item, 'jamanlu')
-  const index = 0
 
   return (
     <View style={styles.container}>
@@ -352,7 +352,6 @@ const PostPageDetailIdComponent = (props) => {
   <View style={styles.content(height)}>
     {item && item.post_type === POST_TYPE_POLL && (
       <ContentPoll
-        index={index}
         message={item.message}
         images_url={item.images_url}
         polls={item.pollOptions}
@@ -406,11 +405,10 @@ const PostPageDetailIdComponent = (props) => {
   {isReaction && commentList && (
     <ContainerComment
       comments={commentList}
-      indexFeed={index}
       isLoading={loadingPost}
       refreshComment={handleRefreshComment}
       refreshChildComment={handleRefreshChildComment}
-      navigateToReplyView={navigateToReplyView}
+      navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
     />
   )}
 </ScrollView>
