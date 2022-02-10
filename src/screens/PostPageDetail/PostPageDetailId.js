@@ -34,10 +34,15 @@ import {getFeedDetail} from '../../service/post';
 import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
+import {Context} from '../../context';
 
 const {width, height} = Dimensions.get('window');
 
 const PostPageDetailIdComponent = (props) => {
+  const [user] = React.useContext(Context).users;
+  const [profile] = React.useContext(Context).profile;
+  const [loading, setLoading] = React.useState(true)
   const [dataProfile, setDataProfile] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
@@ -48,7 +53,6 @@ const PostPageDetailIdComponent = (props) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
-  const [loadingVote, setLoadingVote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false)
   const [commentList, setCommentList] = React.useState([])
   let navigation = useNavigation()
@@ -56,10 +60,10 @@ const PostPageDetailIdComponent = (props) => {
   const refBlockComponent = React.useRef();
 
   // let [feeds, dispatch] = React.useContext(Context).feeds;
-  let { feedId, 
+  let { feedId, refreshParent, 
     navigateToReplyView = () => {}} = props
     
-
+    console.log(user, profile, 'saliman')
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -126,8 +130,10 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const getDetailFeed = async () => {
+    setLoading(true)
     let data = await getFeedDetail(feedId);
     setItem(data.data)
+    setLoading(false)
   }
 
 
@@ -228,11 +234,6 @@ const PostPageDetailIdComponent = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await upVote(data);
-    if (processData.code == 200) {
-      updateFeed()    
-      return setLoadingVote(false);
-    }
-    setLoadingVote(false);
   };
   const setDownVote = async (status) => {
     const data = {
@@ -241,11 +242,6 @@ const PostPageDetailIdComponent = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await downVote(data);
-    if (processData.code == 200) {
-      updateFeed()
-      return setLoadingVote(false);;
-    }
-    setLoadingVote(false);
   };
 
   const onNewPollFetched = (newPolls, index) => {
@@ -269,7 +265,7 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const onPressDownVoteHandle = async () => {
-    setLoadingVote(true);
+    // setLoadingVote(true);
     setStatusDowvote((prev) => !prev);
     if(voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 2)
@@ -287,7 +283,7 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const onPressUpvoteHandle = async () => {
-    setLoadingVote(true);
+    // setLoadingVote(true);
     setStatusUpvote((prev) => !prev);
     if(voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 1)
@@ -313,20 +309,22 @@ const PostPageDetailIdComponent = (props) => {
     updateFeed()
   }
 
+
   const checkVotes = () => {
-    const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === yourselfId)
-    const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && item.own_reactions.downvotes.find((vote) => vote.user_id === yourselfId)
+    const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && Array.isArray(item.own_reactions.upvotes) && item.own_reactions.upvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id)
+    const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && Array.isArray(item.own_reactions.downvotes) && item.own_reactions.downvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id)
     if(findUpvote) {
       setVoteStatus('upvote')
       setStatusUpvote(true)
-    } else if(findDownvote) {
+    } 
+    if(findDownvote) {
       setVoteStatus('downvote')
       setStatusDowvote(true)
-    } else {
+    }
+    if(!findDownvote && !findUpvote) {
       setVoteStatus('none')
     }
   }
-
 
   React.useEffect(() => {
     checkVotes()
@@ -341,6 +339,7 @@ const PostPageDetailIdComponent = (props) => {
 
   return (
     <View style={styles.container}>
+      {loading ? <LoadingWithoutModal /> : null}
       <StatusBar translucent={false} />
       {item ? <React.Fragment>
         <Header props={item} isBackButton={true} />
@@ -396,7 +395,7 @@ const PostPageDetailIdComponent = (props) => {
         statusVote={voteStatus}
         onPressShare={() => {}}
         onPressComment={onCommentButtonClicked}
-        loadingVote={loadingVote}
+        // loadingVote={loadingVote}
         onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
         isSelf={yourselfId === item.actor.id ? true : false}
       />

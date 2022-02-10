@@ -154,7 +154,9 @@ const FeedScreen = (props) => {
     props.navigation.navigate('PostDetailPage', {
       // index: index,
       isalreadypolling: item.isalreadypolling,
-      feedId: item.id
+      feedId: item.id,
+      refreshParent: getDataFeeds
+      
     });
   };
 
@@ -162,7 +164,8 @@ const FeedScreen = (props) => {
     console.log(index, item, 'bahaya')
     props.navigation.navigate('PostDetailPage', {
       // index: index,
-      feedId: item.id
+      feedId: item.id,
+      refreshParent: getDataFeeds
       // feedId:
     });
   };
