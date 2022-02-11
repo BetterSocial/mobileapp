@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 
 // import PostPageDetailComponent from '../../components/PostPageDetail'
-import PostPageDetailComponent from './PostPageDetailId'
+import PostPageDetailComponent from '../../components/PostPageDetail'
 import {Context} from '../../context';
 import { setFeedByIndex } from '../../context/actions/feeds';
 

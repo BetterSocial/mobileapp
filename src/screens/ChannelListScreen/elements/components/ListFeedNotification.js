@@ -2,7 +2,6 @@ import React, {memo} from 'react'
 import { View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment'
-
 import { COLORS } from '../../../../utils/theme'
 import {Context} from '../../../../context';
 import MemoIc_arrow_down_vote_on from '../../../../assets/arrow/Ic_downvote_on';

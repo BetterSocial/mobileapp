@@ -29,13 +29,14 @@ import { setFeedByIndex } from '../../context/actions/feeds';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
-const ReplyCommentComponent = ({ itemProp, indexFeed, level, feeds, dispatch, setFeedByIndexProps }) => {
+const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const [temporaryText, setTemporaryText] = React.useState('')
   const [, setReaction] = React.useState(false);
   const [loadingCMD, setLoadingCMD] = React.useState(false);
   let [users] = React.useContext(Context).users;
+  let [profile] = React.useContext(Context).profile;
 
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
@@ -45,12 +46,12 @@ const ReplyCommentComponent = ({ itemProp, indexFeed, level, feeds, dispatch, se
     id: newCommentList.length + 1, kind: "comment", updated_at: moment(),
     children_counts: { comment: 0 },
     latest_children: {},
-    user: { data: { ...itemProp.user.data, profile_pic_url: users.photoUrl }, id: itemProp.user.id }
+    user: { data: { ...itemProp.user.data, profile_pic_url: users.photoUrl, username: profile.myProfile.username }, id: itemProp.user.id }
   })
-
   const setComment = (text) => {
     setTemporaryText(text)
   };
+
 
   React.useEffect(() => {
     if (!loadingCMD) {
@@ -73,8 +74,8 @@ const ReplyCommentComponent = ({ itemProp, indexFeed, level, feeds, dispatch, se
     let newItem = await getComment({
       feed: newFeed,
       level: level,
-      idlevel1: item.id,
-      idlevel2: item.parent,
+      idlevel1: itemProp.id,
+      idlevel2: itemProp.parent,
     });
     let comments = [];
     if (
@@ -90,26 +91,28 @@ const ReplyCommentComponent = ({ itemProp, indexFeed, level, feeds, dispatch, se
     setNewCommentList(comments)
   };
   React.useEffect(() => {
-    getThisComment(feeds[indexFeed]);
-  }, [JSON.stringify(feeds)]);
-
+    getThisComment(itemProp);
+  }, [itemProp]);
 
   const updateFeed = async (isSort) => {
     try {
-      let data = await getFeedDetail(feeds[indexFeed].id);
+      let data = await getFeedDetail(itemProp.activity_id);
       if (data) {
         let oldData = data.data
         if (isSort) {
           oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()) } }
         }
         getThisComment(oldData);
-        setFeedByIndexProps(
-          {
-            singleFeed: oldData,
-            index: indexFeed,
-          },
-          dispatch,
-        );
+        if(updateParent) {
+          updateParent(oldData)
+        }
+        // setFeedByIndexProps(
+        //   {
+        //     singleFeed: oldData,
+        //     index: indexFeed,
+        //   },
+        //   dispatch,
+        // );
       }
     } catch (e) {
       console.log(e);
@@ -117,27 +120,28 @@ const ReplyCommentComponent = ({ itemProp, indexFeed, level, feeds, dispatch, se
   };
 
   const createComment = async () => {
-    setLoadingCMD(true);
+    // setLoadingCMD(true);
     setTemporaryText('')
     setIdComment((prev) => prev + 1)
+    setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
     try {
       if (textComment.trim() !== '') {
         let data = await createChildComment(textComment, item.id, item.user.id);
         if (data.code === 200) {
-          setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
-          setLoadingCMD(false);
+          // setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
+          // setLoadingCMD(false);
           await updateFeed(true)
         } else {
           Toast.show('Failed Comment', Toast.LONG);
-          setLoadingCMD(false);
+          // setLoadingCMD(false);
         }
       } else {
         Toast.show('Comments are not empty', Toast.LONG);
-        setLoadingCMD(false);
+        // setLoadingCMD(false);
       }
     } catch (error) {
       Toast.show('Failed Comment', Toast.LONG);
-      setLoadingCMD(false);
+      // setLoadingCMD(false);
     }
   };
 
@@ -158,8 +162,6 @@ const ReplyCommentComponent = ({ itemProp, indexFeed, level, feeds, dispatch, se
 
     return unsubscribe
   }, [])
-
-  console.log(itemProp, item, 'julak')
 
   return (
     <View style={styles.container}>
@@ -288,7 +290,7 @@ const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key 
     </View>
   );
 };
-export default ReplyCommentComponent;
+export default ReplyCommentId;
 
 const styles = StyleSheet.create({
   container: {

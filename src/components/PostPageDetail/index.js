@@ -34,10 +34,15 @@ import {getFeedDetail} from '../../service/post';
 import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
+import {Context} from '../../context';
 
 const {width, height} = Dimensions.get('window');
 
-const PostPageDetailComponent = (props) => {
+const PostPageDetailIdComponent = (props) => {
+  const [user] = React.useContext(Context).users;
+  const [profile] = React.useContext(Context).profile;
+  const [loading, setLoading] = React.useState(true)
   const [dataProfile, setDataProfile] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
@@ -48,7 +53,6 @@ const PostPageDetailComponent = (props) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
-  const [loadingVote, setLoadingVote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false)
   const [commentList, setCommentList] = React.useState([])
   let navigation = useNavigation()
@@ -56,8 +60,10 @@ const PostPageDetailComponent = (props) => {
   const refBlockComponent = React.useRef();
 
   // let [feeds, dispatch] = React.useContext(Context).feeds;
-  let {feeds, dispatch, setFeedByIndexProps, 
+  let { feedId, refreshParent, 
     navigateToReplyView = () => {}} = props
+    
+    console.log(user, profile, 'saliman')
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -84,23 +90,20 @@ const PostPageDetailComponent = (props) => {
 
   const scrollViewRef = React.useRef(null);
 
-  let {index} = props;
-
-  const [item, setItem] = React.useState(feeds[index]);
+  const [item, setItem] = React.useState(null);
 
   React.useEffect(() => {
-    setItem(feeds[index]);
-    if(feeds[index] && feeds[index].latest_reactions && feeds[index].latest_reactions.comment) {
-      setCommentList(feeds[index].latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
+    if(item && item.latest_reactions && item.latest_reactions.comment) {
+      setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
     }
-  }, [JSON.stringify(feeds)]);
+  }, [item]);
 
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0
     const downvotes = data.downvotes ? data.downvotes : 0
     setTotalVote(upvote - downvotes)
   };
-  const initial = () => {
+  const initial = async () => {
     let reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
@@ -126,9 +129,25 @@ const PostPageDetailComponent = (props) => {
     }
   };
 
+  const getDetailFeed = async () => {
+    setLoading(true)
+    let data = await getFeedDetail(feedId);
+    setItem(data.data)
+    setLoading(false)
+  }
+
+
+  const updateParentPost = (data) => {
+    setItem(data)
+  }
+
   React.useEffect(() => {
-    initial();
-  }, [props, item]);
+    initial()
+  }, [item]);
+
+  React.useEffect(() => {
+    getDetailFeed()
+  }, [])
 
   const fetchMyProfile = async () => {
     let id = await getUserId();
@@ -142,7 +161,7 @@ const PostPageDetailComponent = (props) => {
 
   const updateFeed = async (isSort) => {
     try {
-      let data = await getFeedDetail(item.id);
+      let data = await getFeedDetail(feedId);
       let oldData = data.data
       if(isSort) {
         oldData = {...oldData, latest_reactions: {...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix())} }
@@ -150,13 +169,13 @@ const PostPageDetailComponent = (props) => {
       setLoadingPost(false)
       if (data) {
         setItem(oldData);
-        setFeedByIndexProps(
-          {
-            singleFeed: oldData,
-            index,
-          },
-          dispatch,
-        );
+        // setFeedByIndexProps(
+        //   {
+        //     singleFeed: oldData,
+        //     index,
+        //   },
+        //   dispatch,
+        // );
       }
     } catch (e) {
       console.log(e);
@@ -215,11 +234,6 @@ const PostPageDetailComponent = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await upVote(data);
-    if (processData.code == 200) {
-      updateFeed()    
-      return setLoadingVote(false);
-    }
-    setLoadingVote(false);
   };
   const setDownVote = async (status) => {
     const data = {
@@ -228,21 +242,16 @@ const PostPageDetailComponent = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await downVote(data);
-    if (processData.code == 200) {
-      updateFeed()
-      return setLoadingVote(false);;
-    }
-    setLoadingVote(false);
   };
 
   const onNewPollFetched = (newPolls, index) => {
-    setFeedByIndexProps(
-      {
-        index,
-        singleFeed: newPolls,
-      },
-      dispatch,
-    );
+    // setFeedByIndexProps(
+    //   {
+    //     index,
+    //     singleFeed: newPolls,
+    //   },
+    //   dispatch,
+    // );
   };
 
   const navigateToLinkContextPage = (item) => {
@@ -256,7 +265,7 @@ const PostPageDetailComponent = (props) => {
   };
 
   const onPressDownVoteHandle = async () => {
-    setLoadingVote(true);
+    // setLoadingVote(true);
     setStatusDowvote((prev) => !prev);
     if(voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 2)
@@ -274,7 +283,7 @@ const PostPageDetailComponent = (props) => {
   };
 
   const onPressUpvoteHandle = async () => {
-    setLoadingVote(true);
+    // setLoadingVote(true);
     setStatusUpvote((prev) => !prev);
     if(voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 1)
@@ -300,20 +309,22 @@ const PostPageDetailComponent = (props) => {
     updateFeed()
   }
 
+
   const checkVotes = () => {
-    const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === yourselfId)
-    const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && item.own_reactions.downvotes.find((vote) => vote.user_id === yourselfId)
+    const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && Array.isArray(item.own_reactions.upvotes) && item.own_reactions.upvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id)
+    const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && Array.isArray(item.own_reactions.downvotes) && item.own_reactions.downvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id)
     if(findUpvote) {
       setVoteStatus('upvote')
       setStatusUpvote(true)
-    } else if(findDownvote) {
+    } 
+    if(findDownvote) {
       setVoteStatus('downvote')
       setStatusDowvote(true)
-    } else {
+    }
+    if(!findDownvote && !findUpvote) {
       setVoteStatus('none')
     }
   }
-
 
   React.useEffect(() => {
     checkVotes()
@@ -325,101 +336,102 @@ const PostPageDetailComponent = (props) => {
     }
   }, [])
 
-  console.log(item, 'jamanlu')
 
   return (
     <View style={styles.container}>
+      {loading ? <LoadingWithoutModal /> : null}
       <StatusBar translucent={false} />
-      <Header props={item} isBackButton={true} />
+      {item ? <React.Fragment>
+        <Header props={item} isBackButton={true} />
 
-      <ScrollView
-        ref={scrollViewRef}
-        showsVerticalScrollIndicator={false}
-        style={styles.contentScrollView(totalComment)}>
-        <View style={styles.content(height)}>
-          {item && item.post_type === POST_TYPE_POLL && (
-            <ContentPoll
-              index={index}
-              message={item.message}
-              images_url={item.images_url}
-              polls={item.pollOptions}
-              onPress={() => {}}
-              item={item}
-              pollexpiredat={item.polls_expired_at}
-              multiplechoice={item.multiplechoice}
-              isalreadypolling={item.isalreadypolling}
-              onnewpollfetched={onNewPollFetched}
-              voteCount={item.voteCount}
-            />
-          )}
-
-          {item && item.post_type === POST_TYPE_LINK && (
-            <ContentLink
-              og={item.og}
-              onCardPress={onPressDomain}
-              onHeaderPress={onPressDomain}
-              onCardContentPress={() => navigateToLinkContextPage(item)}
-            />
-          )}
-
-          {item && item.post_type === POST_TYPE_STANDARD && (
-            <Content
-              message={item.message}
-              images_url={item.images_url}
-              style={styles.additionalContentStyle(
-                item.images_url.length,
-                height,
-              )}
-            />
-          )}
-          <Gap height={16} />
-          <View style={{height: 52, paddingHorizontal: 0, position: 'absolute', bottom : 0, width: '100%'}}>
-            <Footer
-              item={item}
-              disableComment={false}
-              totalComment={totalComment}
-              totalVote={totalVote}
-              onPressDownVote={onPressDownVoteHandle}
-              onPressUpvote={onPressUpvoteHandle}
-              statusVote={voteStatus}
-              onPressShare={() => {}}
-              onPressComment={onCommentButtonClicked}
-              loadingVote={loadingVote}
-              onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
-              isSelf={yourselfId === item.actor.id ? true : false}
-            />
-          </View>
-        </View>
-        {isReaction && commentList && (
-          <ContainerComment
-            comments={commentList}
-            indexFeed={index}
-            isLoading={loadingPost}
-            refreshComment={handleRefreshComment}
-            refreshChildComment={handleRefreshChildComment}
-            navigateToReplyView={navigateToReplyView}
-          />
-        )}
-      </ScrollView>
-      <WriteComment
-        username={
-          item.anonimity
-            ? StringConstant.generalAnonymousText
-            : item.actor.data.username
-        }
-        value={textComment}
-        onChangeText={(value) => setTextComment(value)}
-        onPress={() => {
-          onComment();
-        }}
+<ScrollView
+  ref={scrollViewRef}
+  showsVerticalScrollIndicator={false}
+  style={styles.contentScrollView(totalComment)}>
+  <View style={styles.content(height)}>
+    {item && item.post_type === POST_TYPE_POLL && (
+      <ContentPoll
+        message={item.message}
+        images_url={item.images_url}
+        polls={item.pollOptions}
+        onPress={() => {}}
+        item={item}
+        pollexpiredat={item.polls_expired_at}
+        multiplechoice={item.multiplechoice}
+        isalreadypolling={item.isalreadypolling}
+        onnewpollfetched={onNewPollFetched}
+        voteCount={item.voteCount}
       />
+    )}
 
-      <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page"/>
+    {item && item.post_type === POST_TYPE_LINK && (
+      <ContentLink
+        og={item.og}
+        onCardPress={onPressDomain}
+        onHeaderPress={onPressDomain}
+        onCardContentPress={() => navigateToLinkContextPage(item)}
+      />
+    )}
+
+    {item && item.post_type === POST_TYPE_STANDARD && (
+      <Content
+        message={item.message}
+        images_url={item.images_url}
+        style={styles.additionalContentStyle(
+          item.images_url.length,
+          height,
+        )}
+      />
+    )}
+    <Gap height={16} />
+    <View style={{height: 52, paddingHorizontal: 0, position: 'absolute', bottom : 0, width: '100%'}}>
+      <Footer
+        item={item}
+        disableComment={false}
+        totalComment={totalComment}
+        totalVote={totalVote}
+        onPressDownVote={onPressDownVoteHandle}
+        onPressUpvote={onPressUpvoteHandle}
+        statusVote={voteStatus}
+        onPressShare={() => {}}
+        onPressComment={onCommentButtonClicked}
+        // loadingVote={loadingVote}
+        onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
+        isSelf={yourselfId === item.actor.id ? true : false}
+      />
+    </View>
+  </View>
+  {isReaction && commentList && (
+    <ContainerComment
+      comments={commentList}
+      isLoading={loadingPost}
+      refreshComment={handleRefreshComment}
+      refreshChildComment={handleRefreshChildComment}
+      navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
+    />
+  )}
+</ScrollView>
+<WriteComment
+  username={
+    item.anonimity
+      ? StringConstant.generalAnonymousText
+      : item.actor.data.username
+  }
+  value={textComment}
+  onChangeText={(value) => setTextComment(value)}
+  onPress={() => {
+    onComment();
+  }}
+/>
+
+<BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page"/>
+      </React.Fragment> : null}
+      
     </View>
   );
 };
 
-export default PostPageDetailComponent;
+export default PostPageDetailIdComponent;
 
 const styles = StyleSheet.create({
   container: {

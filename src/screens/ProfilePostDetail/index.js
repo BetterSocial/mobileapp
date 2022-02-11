@@ -7,17 +7,26 @@ import {Context} from '../../context';
 import { setFeedByIndex } from '../../context/actions/myProfileFeed';
 
 const ProfilePostDetail = (props) => {
-    let [feeds, dispatch] = React.useContext(Context).myProfileFeed
-    let {index} = props.route.params
+    let [feeds, dispatch] = React.useContext(Context).feeds
+    let {index, feedId, refreshParent} = props.route.params
     let navigation = useNavigation()
 
-    let navigateToReplyView = (data) => {
-        navigation.navigate('ProfileReplyComment', data);
+    let navigateToReplyView = (data, updateParent) => {
+        navigation.navigate('ReplyComment', {...data, updateParent});
     }
+    console.log(feedId, 'saminake')
+    React.useEffect(() => {
+        return () => {
+            if(refreshParent) {
+                refreshParent()
+            }
+        }
+    }, [])
     
     return(
         <View style={styles.container}>
-            <PostPageDetailComponent index={index} 
+            <PostPageDetailComponent 
+                feedId={feedId} 
                 feeds={feeds.feeds} 
                 dispatch={dispatch} 
                 setFeedByIndexProps={setFeedByIndex}

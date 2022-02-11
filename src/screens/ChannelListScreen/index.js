@@ -2,7 +2,7 @@ import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment'
-import { ActivityIndicator, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import {
   ChannelList,
   ChannelPreviewMessage,
@@ -116,7 +116,7 @@ const ChannelListScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
-      <View style={{ height: '100%' }}>
+      <ScrollView >
         <View style={{ height: 52 }}>
           <Search
             animatedValue={0}
@@ -126,8 +126,6 @@ const ChannelListScreen = ({ navigation }) => {
         <View style={{ paddingHorizontal: 0, flex: 1 }}>
           {client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>
-            <FeedNotification navigation={navigation} userid={userId} />
- 
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
@@ -160,9 +158,12 @@ const ChannelListScreen = ({ navigation }) => {
               <ActivityIndicator size="small" color={COLORS.holyTosca} />
             </View>
           )}
+
    
         </View>
-      </View>
+        <FeedNotification navigation={navigation} userid={userId} />
+
+      </ScrollView>
     </SafeAreaView>
   );
 };

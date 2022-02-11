@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import ReplyCommentComponent from './ReplyCommentId';
+import ReplyCommentComponent from '../../components/ReplyComment';
 import { Context } from '../../context';
 import { setFeedByIndex } from '../../context/actions/feeds';
 
