@@ -146,6 +146,7 @@ const CreatePost = () => {
   const [isTopicOverlay, setTopicOverlay] = React.useState(false);
   const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
   const [inPositionSearch, setInPositionSearch] = React.useState([]);
+  const [locationId, setLocationId] = React.useState(0);
 
 
   const listPostExpired = [
