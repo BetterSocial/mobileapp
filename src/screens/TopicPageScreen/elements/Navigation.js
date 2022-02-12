@@ -4,9 +4,10 @@ import { useNavigation } from '@react-navigation/core';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import dimen from '../../../utils/dimen';
-import { ButtonFollow, ButtonFollowing } from '../../../components/Button';
 import { convertString } from '../../../utils/string/StringUtils';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
+import ButtonFollowing from './ButtonFollowing';
+import ButtonFollow from './ButtonFollow';
 
 const Navigation = ({ domain, onPress, isFollow = false }) => {
   const navigation = useNavigation();
@@ -57,7 +58,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginRight: 14,
     alignSelf: 'center',
-    marginTop: 4,
   },
   domainText: {
     fontSize: normalizeFontSize(18),
