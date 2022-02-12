@@ -146,7 +146,7 @@ const CreatePost = () => {
   const [isTopicOverlay, setTopicOverlay] = React.useState(false);
   const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
   const [inPositionSearch, setInPositionSearch] = React.useState([]);
-  const [locationId, setLocationId] = React.useState(0);
+  const [locationId, setLocationId] = React.useState('');
 
 
   const listPostExpired = [
@@ -269,6 +269,7 @@ const CreatePost = () => {
             neighborhood: res.neighborhood,
           });
         });
+        console.log('Locations: ', location);
         setGeoList(location);
       }
 
@@ -363,6 +364,7 @@ const CreatePost = () => {
       geoList[v].location_id,
     );
     setGeoSelect(v);
+    setLocationId(geoList[v].location_id);
     sheetGeoRef.current.close();
   };
   const onSetPrivacySelect = (v) => {
@@ -415,6 +417,7 @@ const CreatePost = () => {
         privacy: listPrivacy[privacySelect].label,
         anonimity: typeUser,
         location: geoList[geoSelect].neighborhood,
+        location_id: locationId,
         duration_feed: postExpired[expiredSelect].value,
         images_url: dataImage,
       };
@@ -553,6 +556,7 @@ const CreatePost = () => {
       privacy: listPrivacy[privacySelect].label,
       anonimity: typeUser,
       location: geoList[geoSelect].neighborhood,
+      location_id: locationId,
       duration_feed: postExpired[expiredSelect].value,
       polls: getReducedPoll(),
       pollsduration: selectedTime,
