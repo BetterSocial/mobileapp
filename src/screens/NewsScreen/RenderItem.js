@@ -26,6 +26,75 @@ const RenderItem = ({
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [totalVote, setTotalVote] = React.useState(0);
 
+  console.log(statusDownvote, statusUpvote, 'status')
+
+  const onPressUpvoteOld = () => {
+    setStatusUpvote((prev) => {
+      prev = !prev;
+      onPressUpvote({
+        activity_id: item.id,
+        status: prev,
+        feed_group: 'domain',
+        domain: item.domain.name,
+      });
+      if (prev) {
+        setVoteStatus('upvote');
+        if (statusDownvote === true) {
+          setTotalVote((p) => p + 2);
+        } else {
+          setTotalVote((p) => p + 1);
+        }
+        setStatusDowvote(false);
+      } else {
+        setVoteStatus('none');
+        setTotalVote((p) => p - 1);
+      }
+      return prev;
+    });
+  }
+
+  const onPressUpvoteNew = (item) => {
+    onPressUpvote({
+      activity_id: item.id,
+      status: !statusUpvote,
+      feed_group: 'domain',
+      domain: item.domain.name,
+    });
+    if (voteStatus === 'none') {
+      setVoteStatus('upvote');
+      setTotalVote((vote) => vote + 1)
+    } 
+    if(voteStatus === 'upvote') {
+      setVoteStatus('none')
+      setTotalVote((vote) => vote - 1)
+    }
+    if(voteStatus === 'downvote') {
+      setVoteStatus('downvote')
+      setTotalVote((vote) => vote + 2)
+    }
+  }
+
+  const onPressDownVoteHandle = () => {
+    onPressDownVote({
+      activity_id: item.id,
+      status: !statusUpvote,
+      feed_group: 'domain',
+      domain: item.domain.name,
+    });
+    if (voteStatus === 'none') {
+      setVoteStatus('downvote');
+      setTotalVote((vote) => vote - 1)
+    } 
+    if(voteStatus === 'downvote') {
+      setVoteStatus('none')
+      setTotalVote((vote) => vote + 1)
+    }
+    if(voteStatus === 'upvote') {
+      setVoteStatus('downvote')
+      setTotalVote((vote) => vote - 2)
+    }
+  }
+
   React.useEffect(() => {
     const initialVote = () => {
       let c = getCountVote(item);
@@ -34,7 +103,10 @@ const RenderItem = ({
     initialVote();
   }, [item]);
 
+  console.log(selfUserId, 'saminta')
+
   React.useEffect(() => {
+    console.log(item, 'surya')
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
@@ -43,7 +115,6 @@ const RenderItem = ({
           );
           if (upvote !== undefined) {
             setVoteStatus('upvote');
-            setStatusUpvote(true);
           }
         }
 
@@ -53,7 +124,6 @@ const RenderItem = ({
           );
           if (downvotes !== undefined) {
             setVoteStatus('downvote');
-            setStatusDowvote(true);
           }
         }
       }
@@ -84,54 +154,8 @@ const RenderItem = ({
           onPressShare={() => onPressShare(item)}
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
-          onPressDownVote={() => {
-            setStatusDowvote((prev) => {
-              prev = !prev;
-              onPressDownVote({
-                activity_id: item.id,
-                status: prev,
-                feed_group: 'domain',
-                domain: item.domain.name,
-              });
-              if (prev) {
-                setVoteStatus('downvote');
-                if (statusUpvote === true) {
-                  setTotalVote((p) => p - 2);
-                } else {
-                  setTotalVote((p) => p - 1);
-                }
-                setStatusUpvote(false);
-              } else {
-                setVoteStatus('none');
-                setTotalVote((p) => p + 1);
-              }
-              return prev;
-            });
-          }}
-          onPressUpvote={() => {
-            setStatusUpvote((prev) => {
-              prev = !prev;
-              onPressUpvote({
-                activity_id: item.id,
-                status: prev,
-                feed_group: 'domain',
-                domain: item.domain.name,
-              });
-              if (prev) {
-                setVoteStatus('upvote');
-                if (statusDownvote === true) {
-                  setTotalVote((p) => p + 2);
-                } else {
-                  setTotalVote((p) => p + 1);
-                }
-                setStatusDowvote(false);
-              } else {
-                setVoteStatus('none');
-                setTotalVote((p) => p - 1);
-              }
-              return prev;
-            });
-          }}
+          onPressDownVote={onPressDownVoteHandle}
+          onPressUpvote={() => onPressUpvoteNew(item)}
           statusVote={voteStatus}
         />
       </View>
