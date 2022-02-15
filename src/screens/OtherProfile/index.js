@@ -112,14 +112,11 @@ const OtherProfile = () => {
     };
 
     getJwtToken();
-    console.log('params')
-    console.log(params)
     setUserId(params.data.user_id);
     setUsername(params.data.username);
     fetchOtherProfile(params.data.username);
   }, [params.data]);
 
-  console.log(tokenJwt, 'sulima')
   const checkUserBlockHandle = async (user_id) => {
     try {
       const sendData = {
@@ -182,7 +179,6 @@ const OtherProfile = () => {
       user_id_followed: other_id,
       follow_source: 'other-profile',
     };
-    console.log('nanima', data)
     const result = await setUnFollow(data);
     if (result.code == 200) {
       fetchOtherProfile(username);
@@ -195,7 +191,6 @@ const OtherProfile = () => {
       user_id_followed: other_id,
       follow_source: 'other-profile',
     };
-    console.log('nanima1', data)
 
     const result = await setFollow(data);
 
@@ -369,8 +364,6 @@ const OtherProfile = () => {
   const createChannel = async () => {
     try {
       let members = [other_id, user_id];
-      console.log('members')
-      console.log(members)
       setIsLoading(true);
       const clientChat = await client.client;
       const filter = {type: 'messaging', members: {$eq: members}};
@@ -440,8 +433,6 @@ const OtherProfile = () => {
       console.log(e, 'eman');
     }
   };
-
-  console.log(dataMain, 'kalak')
 
   const onBlocking = (reason) => {
     if (reason === 1) {

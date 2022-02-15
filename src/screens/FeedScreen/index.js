@@ -20,6 +20,7 @@ import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuild
 import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
 
 let lastDragY = 0;
+let searchBarDebounce
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
@@ -30,6 +31,7 @@ const FeedScreen = (props) => {
   const [yourselfId, setYourselfId] = React.useState('');
   const [time, setTime] = React.useState(new Date());
   const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
+  const [shouldSearchBarShown, setShouldSearchBarShown] = React.useState(0)
 
   const offset = React.useRef(new Animated.Value(-70)).current
 
@@ -73,6 +75,8 @@ const FeedScreen = (props) => {
       screen_class: 'FeedScreen',
       screen_name: 'Feed Screen',
     });
+
+    getDataFeeds(lastId);
   }, []);
 
   React.useEffect(() => {
@@ -84,8 +88,11 @@ const FeedScreen = (props) => {
   }, [navigation, lastId]);
 
   React.useEffect(() => {
-    getDataFeeds(lastId);
-  }, []);
+    searchBarDebounce = setTimeout(async () => {
+      showSearchBar(false)
+      setShouldSearchBarShown(false)
+    }, 2000)
+  }, [shouldSearchBarShown]);
 
   const updateFeed = async (post, index) => {
     try {
@@ -114,10 +121,7 @@ const FeedScreen = (props) => {
   };
 
   const sendViewPost = (id, viewTime) => {
-    // console.log(postId);
-    // console.log(id);
-    console.log('post time send')
-    viewTimePost(id, time);
+    viewTimePost(id, viewTime);
   };
 
   React.useEffect(() => {
@@ -183,24 +187,29 @@ const FeedScreen = (props) => {
     getDataFeeds('');
   };
 
+  const showSearchBar = (isShown) => {
+    return Animated.timing(offset, {
+      toValue: isShown ? 0 : -70,
+      duration: 50,
+      useNativeDriver: false,
+    }).start();
+  }
+
   let handleScrollEvent = (event) => {
-    // console.log(event.nativeEvent)
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
-    if (dy <= 0) {
-      return Animated.timing(offset, {
-        toValue: 0,
-        duration: 50,
-        useNativeDriver: false,
-      }).start();
-    } else if (dy > 0) {
-      return Animated.timing(offset, {
-        toValue: -70,
-        duration: 50,
-        useNativeDriver: false,
-      }).start();
-    }
+    showSearchBar(dy <= 0)
   };
+
+  let debounceSearchBar = (event) => {
+    let y = event.nativeEvent.contentOffset.y;
+    let dy = y - lastDragY;
+
+    if(dy <= 0) {
+      clearTimeout(searchBarDebounce)
+      setShouldSearchBarShown(new Date().getTime())
+    }
+  }
 
   let handleOnScrollBeginDrag = (event) => {
     lastDragY = event.nativeEvent.contentOffset.y;
@@ -208,6 +217,7 @@ const FeedScreen = (props) => {
 
   let handleOnMomentumEnd = (event) => {
     onWillSendViewPostTime(event)
+    debounceSearchBar(event)
   }
 
   let onWillSendViewPostTime = (event) => {
@@ -222,7 +232,6 @@ const FeedScreen = (props) => {
   }
 
   let handleSearchBarClicked = () => {
-    console.log('search bar clicked')
     navigation.navigate('DiscoveryScreen', {
       tab: DISCOVERY_TAB_TOPICS
     })
