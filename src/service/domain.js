@@ -99,3 +99,13 @@ export const checkBlockDomainPage = async (domainId) => {
     throw new Error(e)
   }
 }
+
+export const getDomainDetailById = async (domainId) => {
+  try {
+    const processGetDomain = await api.get(`/domain/detail/${domainId}`)
+    return processGetDomain.data.data
+  } catch (e) {
+    crashlytics().recordError(new Error(e))
+    throw new Error(e)
+  }
+}

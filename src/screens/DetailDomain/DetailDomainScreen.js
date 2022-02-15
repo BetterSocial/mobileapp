@@ -15,6 +15,7 @@ import WriteComment from '../../components/Comments/WriteComment';
 import { COLORS, SIZES } from '../../utils/theme';
 import { DomainHeader, Footer, Gap } from '../../components';
 import { createCommentParent } from '../../service/comment';
+import {getDomainDetailById} from '../../service/domain'
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import {
@@ -27,9 +28,9 @@ import { getUserId } from '../../utils/users';
 const { width, height } = Dimensions.get('window');
 
 const DetailDomainScreen = (props) => {
-
+  const dataDomain = props.route.params && props.route.params.item
   const [dataProfile, setDataProfile] = React.useState({});
-  const [item, setItem] = React.useState(props.route.params.item);
+  const [item, setItem] = React.useState(null);
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
   const [typeComment, setTypeComment] = React.useState('parent');
@@ -40,36 +41,47 @@ const DetailDomainScreen = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
 
+  const initial = () => {
+    let reactionCount = item.reaction_counts;
+    if (JSON.stringify(reactionCount) !== '{}') {
+      let count = 0;
+      let comment = reactionCount.comment;
+      if (comment !== undefined) {
+        if (comment > 0) {
+          setReaction(true);
+          setTotalComment(
+            getCountCommentWithChildInDetailPage(
+              props.route.params.item.latest_reactions,
+            ),
+          );
+        }
+      }
+      let upvote = reactionCount.upvotes;
+      if (upvote !== undefined) {
+        count = count + upvote;
+      }
+      let downvote = reactionCount.downvotes;
+      if (downvote !== undefined) {
+        count = count - downvote;
+      }
+      setTotalVote(count);
+    }
+  };
+
 
   React.useEffect(() => {
-    const initial = () => {
-      let reactionCount = props.route.params.item.reaction_counts;
-      if (JSON.stringify(reactionCount) !== '{}') {
-        let count = 0;
-        let comment = reactionCount.comment;
-        if (comment !== undefined) {
-          if (comment > 0) {
-            setReaction(true);
-            setTotalComment(
-              getCountCommentWithChildInDetailPage(
-                props.route.params.item.latest_reactions,
-              ),
-            );
-          }
-        }
-        let upvote = reactionCount.upvotes;
-        if (upvote !== undefined) {
-          count = count + upvote;
-        }
-        let downvote = reactionCount.downvotes;
-        if (downvote !== undefined) {
-          count = count - downvote;
-        }
-        setTotalVote(count);
-      }
-    };
+   
+   if(item) {
     initial();
-  }, [props]);
+   }
+  }, [item]);
+
+  React.useEffect(() => {
+    getDomainDetailById(dataDomain.id).then((res) => {
+      // console.log(res, dataDomain, 'sabung')
+      setItem(res)
+    })
+  }, [])
 
   React.useEffect(() => {
     fetchMyProfile();
@@ -85,31 +97,36 @@ const DetailDomainScreen = (props) => {
     parseToken();
   }, []);
 
-  React.useEffect(() => {
-    const validationStatusVote = () => {
-      if (item.reaction_counts !== undefined || null) {
-        if (item.latest_reactions.upvotes !== undefined) {
-          let upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === yourselfId,
-          );
-          if (upvote !== undefined) {
-            setVoteStatus('upvote');
-            setStatusUpvote(true);
-          }
-        }
 
-        if (item.latest_reactions.downvotes !== undefined) {
-          let downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === yourselfId,
-          );
-          if (downvotes !== undefined) {
-            setVoteStatus('downvote');
-            setStatusDowvote(true);
-          }
+  const validationStatusVote = () => {
+    if (item.reaction_counts !== undefined || null) {
+      if (item.latest_reactions.upvotes !== undefined) {
+        let upvote = item.latest_reactions.upvotes.filter(
+          (vote) => vote.user_id === yourselfId,
+        );
+        if (upvote !== undefined) {
+          setVoteStatus('upvote');
+          setStatusUpvote(true);
         }
       }
-    };
-    validationStatusVote();
+
+      if (item.latest_reactions.downvotes !== undefined) {
+        let downvotes = item.latest_reactions.downvotes.filter(
+          (vote) => vote.user_id === yourselfId,
+        );
+        if (downvotes !== undefined) {
+          setVoteStatus('downvote');
+          setStatusDowvote(true);
+        }
+      }
+    }
+  };
+
+  React.useEffect(() => {
+
+    if(item) {
+      validationStatusVote();
+    }
   }, [item, yourselfId]);
 
   const fetchMyProfile = async () => {
@@ -160,10 +177,13 @@ const DetailDomainScreen = (props) => {
     });
   };
 
+  console.log(item, 'sentak')
+
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
-      <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}>
+      {item ? <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}>
+        
         <View style={styles.content}>
           <View style={{ paddingHorizontal: 0 }}>
             <DetailDomainScreenHeader
@@ -247,8 +267,9 @@ const DetailDomainScreen = (props) => {
             comments={item.latest_reactions.comment}
           />
         )}
-      </ScrollView>
-      <WriteComment
+      </ScrollView>  : null}
+     {item && (
+        <WriteComment
         value={textComment}
         username={item.domain.name}
         onChangeText={(value) => setTextComment(value)}
@@ -256,6 +277,8 @@ const DetailDomainScreen = (props) => {
           onComment();
         }}
       />
+     )}
+      
     </View>
   );
 };

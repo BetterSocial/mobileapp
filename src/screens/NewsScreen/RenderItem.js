@@ -28,31 +28,6 @@ const RenderItem = ({
 
   console.log(statusDownvote, statusUpvote, 'status')
 
-  const onPressUpvoteOld = () => {
-    setStatusUpvote((prev) => {
-      prev = !prev;
-      onPressUpvote({
-        activity_id: item.id,
-        status: prev,
-        feed_group: 'domain',
-        domain: item.domain.name,
-      });
-      if (prev) {
-        setVoteStatus('upvote');
-        if (statusDownvote === true) {
-          setTotalVote((p) => p + 2);
-        } else {
-          setTotalVote((p) => p + 1);
-        }
-        setStatusDowvote(false);
-      } else {
-        setVoteStatus('none');
-        setTotalVote((p) => p - 1);
-      }
-      return prev;
-    });
-  }
-
   const onPressUpvoteNew = async (item) => {
     await onPressUpvote({
       activity_id: item.id,
@@ -106,7 +81,6 @@ const RenderItem = ({
   console.log(selfUserId, 'saminta')
 
   React.useEffect(() => {
-    console.log(item, 'surya')
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
