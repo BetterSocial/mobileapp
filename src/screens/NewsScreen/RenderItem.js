@@ -53,8 +53,8 @@ const RenderItem = ({
     });
   }
 
-  const onPressUpvoteNew = (item) => {
-    onPressUpvote({
+  const onPressUpvoteNew = async (item) => {
+    await onPressUpvote({
       activity_id: item.id,
       status: !statusUpvote,
       feed_group: 'domain',
@@ -69,13 +69,13 @@ const RenderItem = ({
       setTotalVote((vote) => vote - 1)
     }
     if(voteStatus === 'downvote') {
-      setVoteStatus('downvote')
+      setVoteStatus('upvote')
       setTotalVote((vote) => vote + 2)
     }
   }
 
-  const onPressDownVoteHandle = () => {
-    onPressDownVote({
+  const onPressDownVoteHandle = async () => {
+    await onPressDownVote({
       activity_id: item.id,
       status: !statusUpvote,
       feed_group: 'domain',
