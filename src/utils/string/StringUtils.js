@@ -1,6 +1,7 @@
-import moment from 'moment';
 import * as React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import moment from 'moment';
+import { StyleSheet, Text, View } from 'react-native';
+
 import { fonts } from '../fonts';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
@@ -164,13 +165,26 @@ const capitalizeFirstText = (str) => {
   return str2;
 }
 
+const randomString = (length) => {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * 
+    charactersLength));
+  }
+  console.log(result)
+  return result;
+}
+
 export {
-  getPollTime,
-  isPollExpired,
+  capitalizeFirstText,
+  convertString,
   displayFormattedSearchLocations,
   getChatName,
   getGroupMemberCount,
+  getPollTime,
+  isPollExpired,
   NO_POLL_UUID,
-  convertString,
-  capitalizeFirstText,
+  randomString,
 };

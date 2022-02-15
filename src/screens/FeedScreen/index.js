@@ -14,7 +14,7 @@ import { ButtonNewPost } from '../../components/Button';
 import { Context } from '../../context';
 import { DISCOVERY_TAB_TOPICS } from '../../utils/constants';
 import { downVote, upVote } from '../../service/vote';
-import { getFeedDetail, getMainFeed } from '../../service/post';
+import { getFeedDetail, getMainFeed, viewTimePost } from '../../service/post';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
@@ -29,6 +29,7 @@ const FeedScreen = (props) => {
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
   const [time, setTime] = React.useState(new Date());
+  const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
 
   const offset = React.useRef(new Animated.Value(-70)).current
 
@@ -112,6 +113,13 @@ const FeedScreen = (props) => {
     return processVote
   };
 
+  const sendViewPost = (id, viewTime) => {
+    // console.log(postId);
+    // console.log(id);
+    console.log('post time send')
+    viewTimePost(id, time);
+  };
+
   React.useEffect(() => {
     const parseToken = async () => {
       const id = await getUserId();
@@ -176,7 +184,7 @@ const FeedScreen = (props) => {
   };
 
   let handleScrollEvent = (event) => {
-    console.log(event.nativeEvent)
+    // console.log(event.nativeEvent)
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
     if (dy <= 0) {
@@ -198,6 +206,21 @@ const FeedScreen = (props) => {
     lastDragY = event.nativeEvent.contentOffset.y;
   };
 
+  let handleOnMomentumEnd = (event) => {
+    onWillSendViewPostTime(event)
+  }
+
+  let onWillSendViewPostTime = (event) => {
+    let currentTime = new Date()
+    let diffTime = currentTime.getTime() - time.getTime()
+    sendViewPost(feeds[viewPostTimeIndex].id, diffTime)
+    
+    let y = event.nativeEvent.contentOffset.y;
+    let shownIndex = Math.ceil(y / dimen.size.FEED_CURRENT_ITEM_HEIGHT)
+    setViewPostTimeIndex(shownIndex)
+    setTime(new Date())
+  }
+
   let handleSearchBarClicked = () => {
     console.log('search bar clicked')
     navigation.navigate('DiscoveryScreen', {
@@ -212,6 +235,7 @@ const FeedScreen = (props) => {
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
         onEndReach={onEndReach}
+        onMomentumScrollEnd={handleOnMomentumEnd}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}
