@@ -278,7 +278,7 @@ const RenderListFeed = (props) => {
 const styles = StyleSheet.create({
   cardContainer: (bottomHeight) => ({
     // height: FULL_HEIGHT - bottomHeight - tabBarHeight,
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT(bottomHeight),
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
     backgroundColor: colors.white,
     borderBottomWidth: 7,
