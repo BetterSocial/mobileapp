@@ -40,6 +40,7 @@ const DetailDomainScreen = (props) => {
   const [yourselfId, setYourselfId] = React.useState('');
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
+  const [comments, setComments] = React.useState([])
 
 
   const initial = () => {
@@ -131,6 +132,7 @@ const validationStatusVote = () => {
 
     if(item) {
       validationStatusVote();
+      setComments(item.latest_reactions.comment)
     }
   }, [item, yourselfId]);
 
@@ -147,15 +149,15 @@ const validationStatusVote = () => {
   };
 
   const onComment = () => {
-    if (typeComment === 'parent') {
-      commentParent();
-    }
+    commentParent();
   };
 
   const commentParent = async () => {
     try {
       if (textComment.trim() !== '') {
         let data = await createCommentParent(textComment, item.id);
+        setComments([...comments, data.data])
+        console.log(data, 'siban')
         if (data.code === 200) {
           setTextComment('');
           // Toast.show('Comment successful', Toast.LONG);
@@ -170,10 +172,9 @@ const validationStatusVote = () => {
     }
   };
 
-
+  console.log(comments, 'suryana')
 
   const onPressUpvoteNew = async () => {
-    console.log('masumlam')
     await upVoteDomain({
       activity_id: item.id,
       status: !statusUpvote,
@@ -262,7 +263,7 @@ const validationStatusVote = () => {
         </View>
         {isReaction && (
           <DetailDomainScreenContainerComment
-            comments={item.latest_reactions.comment}
+            comments={comments}
           />
         )}
       </ScrollView>  : null}

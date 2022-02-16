@@ -78,7 +78,6 @@ const RenderItem = ({
     initialVote();
   }, [item]);
 
-  console.log(selfUserId, 'saminta')
 
   const validationStatusVote = () => {
     if (item.reaction_counts !== undefined || null) {
