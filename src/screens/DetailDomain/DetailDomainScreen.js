@@ -29,6 +29,7 @@ const { width, height } = Dimensions.get('window');
 
 const DetailDomainScreen = (props) => {
   const dataDomain = props.route.params && props.route.params.item
+  const refreshNews = props.route.params && props.route.params.refreshNews
   const [dataProfile, setDataProfile] = React.useState({});
   const [item, setItem] = React.useState(null);
   const [isReaction, setReaction] = React.useState(false);
@@ -39,7 +40,7 @@ const DetailDomainScreen = (props) => {
   const [yourselfId, setYourselfId] = React.useState('');
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
-  const [statusDownvote, setStatusDowvote] = React.useState(false);
+
 
   const initial = () => {
     let reactionCount = item.reaction_counts;
@@ -97,8 +98,14 @@ const DetailDomainScreen = (props) => {
     parseToken();
   }, []);
 
+  const onRefreshNews = () => {
+    if(refreshNews && typeof refreshNews === 'function') {
+      refreshNews()
+    }
+  }
 
-  const validationStatusVote = () => {
+
+const validationStatusVote = () => {
     if (item.reaction_counts !== undefined || null) {
       if (item.latest_reactions.upvotes !== undefined) {
         let upvote = item.latest_reactions.upvotes.filter(
@@ -106,7 +113,6 @@ const DetailDomainScreen = (props) => {
         );
         if (upvote !== undefined) {
           setVoteStatus('upvote');
-          setStatusUpvote(true);
         }
       }
 
@@ -116,7 +122,6 @@ const DetailDomainScreen = (props) => {
         );
         if (downvotes !== undefined) {
           setVoteStatus('downvote');
-          setStatusDowvote(true);
         }
       }
     }
@@ -164,20 +169,59 @@ const DetailDomainScreen = (props) => {
       Toast.show('Failed Comment', Toast.LONG);
     }
   };
-  const setUpVote = async (post) => {
-    upVoteDomain(post);
-  };
-  const setDownVote = async (post) => {
-    downVoteDomain(post);
-  };
 
-  const onPressDomain = () => {
-    props.navigation.navigate('DomainScreen', {
-      item: item,
+
+
+  const onPressUpvoteNew = async () => {
+    console.log('masumlam')
+    await upVoteDomain({
+      activity_id: item.id,
+      status: !statusUpvote,
+      feed_group: 'domain',
+      domain: item.domain.name,
     });
-  };
+    console.log('masumlam1')
+    if (voteStatus === 'none') {
+      setVoteStatus('upvote');
+      setTotalVote((vote) => vote + 1)
+    } 
+    if(voteStatus === 'upvote') {
+      setVoteStatus('none')
+      setTotalVote((vote) => vote - 1)
+    }
+    if(voteStatus === 'downvote') {
+      setVoteStatus('upvote')
+      setTotalVote((vote) => vote + 2)
+    }
+    onRefreshNews()
 
-  console.log(item, 'sentak')
+  }
+
+  const onPressDownVoteHandle = async () => {
+    console.log('masumkam')
+    console.log(item, 'riban')
+    await downVoteDomain({
+      activity_id: item.id,
+      status: !statusUpvote,
+      feed_group: 'domain',
+      domain: item.domain.name,
+    });
+    console.log('masumlam1')
+    if (voteStatus === 'none') {
+      setVoteStatus('downvote');
+      setTotalVote((vote) => vote - 1)
+    } 
+    if(voteStatus === 'downvote') {
+      setVoteStatus('none')
+      setTotalVote((vote) => vote + 1)
+    }
+    if(voteStatus === 'upvote') {
+      setVoteStatus('downvote')
+      setTotalVote((vote) => vote - 2)
+    }
+    onRefreshNews()
+
+  }
 
   return (
     <View style={styles.container}>
@@ -210,54 +254,8 @@ const DetailDomainScreen = (props) => {
                 statusVote={voteStatus}
                 totalComment={totalComment}
                 totalVote={totalVote}
-                onPressDownVote={() => {
-                  setStatusDowvote((prev) => {
-                    prev = !prev;
-                    setDownVote({
-                      activity_id: item.id,
-                      status: prev,
-                      feed_group: 'domain',
-                      domain: item.domain.name,
-                    });
-                    if (prev) {
-                      setVoteStatus('downvote');
-                      if (statusUpvote === true) {
-                        setTotalVote((p) => p - 2);
-                      } else {
-                        setTotalVote((p) => p - 1);
-                      }
-                      setStatusUpvote(false);
-                    } else {
-                      setVoteStatus('none');
-                      setTotalVote((p) => p + 1);
-                    }
-                    return prev;
-                  });
-                }}
-                onPressUpvote={() => {
-                  setStatusUpvote((prev) => {
-                    prev = !prev;
-                    setUpVote({
-                      activity_id: item.id,
-                      status: prev,
-                      feed_group: 'domain',
-                      domain: item.domain.name,
-                    });
-                    if (prev) {
-                      setVoteStatus('upvote');
-                      if (statusDownvote === true) {
-                        setTotalVote((p) => p + 2);
-                      } else {
-                        setTotalVote((p) => p + 1);
-                      }
-                      setStatusDowvote(false);
-                    } else {
-                      setVoteStatus('none');
-                      setTotalVote((p) => p - 1);
-                    }
-                    return prev;
-                  });
-                }}
+                onPressDownVote={onPressDownVoteHandle}
+                onPressUpvote={onPressUpvoteNew}
               />
             </View>
           </View>
