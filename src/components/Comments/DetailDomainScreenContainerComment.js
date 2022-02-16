@@ -9,7 +9,7 @@ import ConnectorWrapper from './ConnectorWrapper';
 import Comment from './Comment';
 import DetailDomainScreenCommentItem from './DetailDomainScreenCommentItem';
 
-const DetailDomainScreenContainerComment = ({ comments, indexFeed }) => {
+const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent }) => {
   const navigation = useNavigation();
   let isLast = (index, item) => {
     return (
@@ -53,6 +53,7 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed }) => {
                     item: item,
                     level: 0,
                     indexFeed: indexFeed,
+                    updateParent: updateParent
                   });
                 }}
               />
@@ -64,6 +65,7 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed }) => {
                 countComment={item.children_counts.comment}
                 navigation={navigation}
                 indexFeed={indexFeed}
+                updateParent={updateParent}
               />
             )}
           </View>
@@ -78,6 +80,7 @@ const ReplyComment = ({
   countComment,
   navigation,
   hideLeftConnector,
+  updateParent
 }) => {
   let isLast = (item, index) => {
     return (
@@ -97,6 +100,7 @@ const ReplyComment = ({
             item: item,
             level: 1,
             indexFeed: indexFeed,
+            updateParent: updateParent
           });
 
         const showChildCommentView = () =>
@@ -104,6 +108,8 @@ const ReplyComment = ({
             item: item,
             level: 2,
             indexFeed: indexFeed,
+            updateParent: updateParent
+            
           });
 
         return (

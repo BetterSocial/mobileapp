@@ -79,11 +79,15 @@ const DetailDomainScreen = (props) => {
   }, [item]);
 
   React.useEffect(() => {
+    getDomain()
+  }, [])
+
+  const getDomain = () => {
     getDomainDetailById(dataDomain.id).then((res) => {
       // console.log(res, dataDomain, 'sabung')
       setItem(res)
     })
-  }, [])
+  }
 
   React.useEffect(() => {
     fetchMyProfile();
@@ -264,6 +268,7 @@ const validationStatusVote = () => {
         {isReaction && (
           <DetailDomainScreenContainerComment
             comments={comments}
+            updateParent={getDomain}
           />
         )}
       </ScrollView>  : null}
