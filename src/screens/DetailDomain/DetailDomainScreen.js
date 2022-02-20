@@ -24,10 +24,12 @@ import {
 } from '../../utils/getstream';
 import { getMyProfile } from '../../service/profile';
 import { getUserId } from '../../utils/users';
+import ContainerComment from '../../components/Comments/ContainerComment';
 
 const { width, height } = Dimensions.get('window');
 
 const DetailDomainScreen = (props) => {
+  const {navigation} = props
   const dataDomain = props.route.params && props.route.params.item
   const refreshNews = props.route.params && props.route.params.refreshNews
   const [dataProfile, setDataProfile] = React.useState({});
@@ -131,7 +133,7 @@ const validationStatusVote = () => {
       }
     }
   };
-
+  console.log(item, 'habitat')
   React.useEffect(() => {
 
     if(item) {
@@ -185,7 +187,6 @@ const validationStatusVote = () => {
       feed_group: 'domain',
       domain: item.domain.name,
     });
-    console.log('masumlam1')
     if (voteStatus === 'none') {
       setVoteStatus('upvote');
       setTotalVote((vote) => vote + 1)
@@ -203,8 +204,6 @@ const validationStatusVote = () => {
   }
 
   const onPressDownVoteHandle = async () => {
-    console.log('masumkam')
-    console.log(item, 'riban')
     await downVoteDomain({
       activity_id: item.id,
       status: !statusUpvote,
@@ -227,6 +226,15 @@ const validationStatusVote = () => {
     onRefreshNews()
 
   }
+
+  const updateParentPost = (data) => {
+    console.log(data, 'supolo')
+    setItem(data)
+  }
+
+  const navigateToReplyView = (data) => {
+    navigation.navigate('ReplyComment', {...data, updateParent: updateParentPost});
+}
 
   return (
     <View style={styles.container}>
@@ -266,9 +274,12 @@ const validationStatusVote = () => {
           </View>
         </View>
         {isReaction && (
-          <DetailDomainScreenContainerComment
-            comments={comments}
-            updateParent={getDomain}
+          <ContainerComment 
+          comments={comments}
+          refreshComment={getDomain}
+          refreshChildComment={getDomain}
+          navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
+          // refreshComment={refreshNews}
           />
         )}
       </ScrollView>  : null}

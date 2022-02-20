@@ -80,7 +80,6 @@ const RenderItem = ({
 
 
   const validationStatusVote = () => {
-    if (item.reaction_counts !== undefined || null) {
       if (item.latest_reactions.upvotes !== undefined) {
         let upvote = item.latest_reactions.upvotes.filter(
           (vote) => vote.user_id === selfUserId,
@@ -88,21 +87,19 @@ const RenderItem = ({
         if (upvote !== undefined) {
           setVoteStatus('upvote');
         }
-      }
-
-      if (item.latest_reactions.downvotes !== undefined) {
+      } else if (item.latest_reactions.downvotes !== undefined) {
         let downvotes = item.latest_reactions.downvotes.filter(
           (vote) => vote.user_id === selfUserId,
         );
         if (downvotes !== undefined) {
           setVoteStatus('downvote');
         }
-      }
-    }
+      } else {
+        setVoteStatus('none')
+      }    
   };
 
   React.useEffect(() => {
-
     validationStatusVote();
   }, [item, selfUserId]);
 
