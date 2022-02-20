@@ -467,7 +467,7 @@ const ProfileScreen = () => {
           onScroll={handleScroll}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {
-              return headerHeight + (index * dimen.size.PROFILE_ITEM_HEIGHT(bottomBarHeight))
+              return headerHeight + (index * dimen.size.PROFILE_ITEM_HEIGHT)
             })
             console.log('scroll offsets')
             console.log([0, ...posts])

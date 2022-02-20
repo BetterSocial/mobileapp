@@ -557,7 +557,7 @@ const OtherProfile = () => {
           onScroll={handleScroll}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {
-              return headerHeight + (index * dimen.size.PROFILE_ITEM_HEIGHT(0))
+              return headerHeight + (index * dimen.size.PROFILE_ITEM_HEIGHT)
             })
             return [headerHeight, ...posts]
           })()}

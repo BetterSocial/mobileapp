@@ -2,7 +2,9 @@ import * as React from 'react';
 
 import {channelReducer, channelState} from './reducers/channelReducer';
 import {clientReducer, clientState} from './reducers/clientReducer';
+import { discoveryReducer, discoveryState } from './reducers/discoveryReducer';
 import {feedsReducer, feedsState} from './reducers/FeedReducer';
+import { generalComponentReducer, generalComponentState } from './reducers/generalComponentReducer';
 import {groupChatReducer, groupChatState} from './reducers/groupChat';
 import {
   localCommunityReducer,
@@ -22,11 +24,18 @@ import {
 } from './reducers/unReadMessageReducer';
 import {usersReducer, usersState} from './reducers/userReducer';
 
+/**
+ * 
+ * @typedef {Object} MainContext 
+ * @property {import('./reducers/discoveryReducer').DiscoveryState} discovery
+ */
 const Store = ({children}) => {
   const rootReducer = {
     channel: React.useReducer(channelReducer, channelState),
     client: React.useReducer(clientReducer, clientState),
+    discovery: React.useReducer(discoveryReducer, discoveryState),
     feeds: React.useReducer(feedsReducer, feedsState),
+    generalComponent: React.useReducer(generalComponentReducer, generalComponentState),
     groupChat: React.useReducer(groupChatReducer, groupChatState),
     localCommunity: React.useReducer(
       localCommunityReducer,

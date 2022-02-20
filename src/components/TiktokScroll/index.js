@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 });
 
 const TiktokScroll = (props) => {
-  const {data, children, onRefresh, refreshing, onEndReach, contentHeight} = props;
+  const {data, children, onRefresh, refreshing, onEndReach, contentHeight, onScroll, onScrollBeginDrag} = props;
   const flatListRef = React.useRef();
 
   return (
@@ -26,6 +26,9 @@ const TiktokScroll = (props) => {
       keyExtractor={(item) => item.id}
       onEndReached={onEndReach}
       onRefresh={onRefresh}
+      onScroll={onScroll}
+      onScrollBeginDrag={onScrollBeginDrag}
+      // onMomentumScrollEnd={(event) => console.log(event)}
       ref={flatListRef}
       refreshing={refreshing}
       renderItem={children}
@@ -44,11 +47,15 @@ TiktokScroll.propTypes = {
   refreshing: PropTypes.bool,
   onScrollBeginDrag: PropTypes.func,
   onEndReach: PropTypes.func,
+  onScroll: PropTypes.func,
+  onScrollBeginDrag: PropTypes.func
 };
 
 TiktokScroll.defaultProps = {
   data: [],
   onEndReach: () => null,
+  onScroll: () => {},
+  onScrollBeginDrag: () => {}
 };
 
 export default TiktokScroll;

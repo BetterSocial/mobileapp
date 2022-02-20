@@ -1,5 +1,5 @@
-import api from "./config";
 import crashlytics from '@react-native-firebase/crashlytics';
+import api from './config';
 
 const getUserTopic = async (query) => {
   try {
@@ -10,7 +10,7 @@ const getUserTopic = async (query) => {
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }
-}
+};
 
 const putUserTopic = async (data) => {
   try {
@@ -21,20 +21,29 @@ const putUserTopic = async (data) => {
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }
-
-}
+};
 
 const getFollowingTopic = async () => {
   try {
-    const processGetFollowTopic = await api.get('/topics/followed')
-    return processGetFollowTopic.data
-  } catch(e) {
-    throw new Error(e)
+    const processGetFollowTopic = await api.get('/topics/followed');
+    return processGetFollowTopic.data;
+  } catch (e) {
+    throw new Error(e);
   }
-}
+};
+
+const getTopics = async (name) => {
+  try {
+    const result = await api.get(`/topics/?name=${name}`);
+    return result.data;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
 
 export {
   getUserTopic,
   putUserTopic,
-  getFollowingTopic
-}
+  getFollowingTopic,
+  getTopics,
+};

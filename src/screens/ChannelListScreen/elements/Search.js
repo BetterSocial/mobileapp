@@ -6,28 +6,41 @@ import {
   StyleSheet,
   TextInput,
   Animated,
+  Pressable
 } from 'react-native';
+import { useNavigation } from '@react-navigation/core'
 
 import MemoIcNewChat from '../../../assets/icons/ic_new_chat';
 import MemoIc_search from '../../../assets/icons/Ic_search';
+import { colors } from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
+import { DISCOVERY_TAB_USERS } from '../../../utils/constants';
 
 const Search = ({onPress, animatedValue}) => {
+  const navigation = useNavigation()
+
+  const __handleOnSearchClicked = () => {
+    navigation.push('DiscoveryScreen', {
+      tab: DISCOVERY_TAB_USERS
+    })
+  }
+
   return (
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
-      <View style={styles.wrapperSearch}>
-        <View style={styles.wrapperIcon}>
-          <MemoIc_search width={16.67} height={16.67} />
+      <Pressable onPress={__handleOnSearchClicked} style={styles.searchPressableContainer}>
+        <View style={styles.wrapperSearch}>
+          <View style={styles.wrapperIcon}>
+            <MemoIc_search width={16.67} height={16.67} />
+          </View>
+          <Text
+            // placeholder={StringConstant.chatTabHeaderPlaceholder}
+            // placeholderTextColor={COLORS.gray1}
+            style={styles.input}
+          >{StringConstant.chatTabHeaderPlaceholder}</Text>
         </View>
-        <TextInput
-          multiline={false}
-          placeholder={StringConstant.chatTabHeaderPlaceholder}
-          placeholderTextColor={COLORS.gray1}
-          style={styles.input}
-        />
-      </View>
+      </Pressable>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
         <Text style={styles.newPostText}>
           {StringConstant.chatTabHeaderCreateChatButtonText}
@@ -45,6 +58,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     marginBottom: SIZES.base,
+  },
+  searchPressableContainer: {
+    flex: 1,
   },
   wrapperSearch: {
     flex: 1,
@@ -74,6 +90,8 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     fontFamily: fonts.inter[400],
     fontSize: 14,
+    alignSelf: 'center',
+    color: COLORS.gray1,
   },
   wrapperIcon: {
     marginLeft: 8,
