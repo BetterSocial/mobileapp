@@ -70,16 +70,17 @@ const ListFeedNotification = ({notif, onPress}) => {
         }
         return ""
     }
-
+    console.log(notif.postMaker, 'notif123')
 
     return (
         <TouchableOpacity onPress={() => onPress(notif.activity_id)} style={styles.containerCard} >
             <View style={styles.row} >
             <View style={styles.avatarContainer} >
-                {user.photoUrl ? <Image source={{ uri: user.photoUrl }} style={styles.avatar} /> : null}
+                {notif.postMaker && notif.postMaker.data ? <Image source={{ uri: notif.postMaker.data.profile_pic_url }} style={styles.avatar} /> : null}
             </View>
             <View style={styles.titleContainer} >
-                <Text style={styles.titleText} >{profile.myProfile && profile.myProfile.username}'s post : {notif.titlePost}</Text>
+                {notif.postMaker && notif.postMaker.data ? <Text style={styles.titleText} >{notif.postMaker.data.username}'s post : {notif.titlePost}</Text> : null}
+                
                 <Text style={styles.subtitleStyle} >
                     {notif.comments[0] 
                     && notif.comments[0].actor 
