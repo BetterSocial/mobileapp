@@ -2,7 +2,7 @@ import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment'
-import { ActivityIndicator, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import {
   ChannelList,
   ChannelPreviewMessage,
@@ -11,6 +11,8 @@ import {
   ChannelPreviewTitle,
   Chat,
   Streami18n,
+  OverlayProvider,
+  DeepPartial, Theme
 } from 'stream-chat-react-native';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
@@ -31,6 +33,17 @@ import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import FeedNotification from './elements/FeedNotification';
+
+const theme = {
+  messageSimple: {
+    file: {
+      container: {
+        backgroundColor: 'red',
+      },
+    },
+  },
+};
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -98,10 +111,12 @@ const ChannelListScreen = ({ navigation }) => {
     );
   };
 
+  console.log('chat by')
+
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
-      <View style={{ height: '100%' }}>
+      <ScrollView >
         <View style={{ height: 52 }}>
           <Search
             animatedValue={0}
@@ -136,14 +151,19 @@ const ChannelListScreen = ({ navigation }) => {
                   refreshControl: null,
                 }}
               />
+      
             </Chat>
           ) : (
             <View style={styles.content}>
               <ActivityIndicator size="small" color={COLORS.holyTosca} />
             </View>
           )}
+
+   
         </View>
-      </View>
+        <FeedNotification navigation={navigation} userid={userId} />
+
+      </ScrollView>
     </SafeAreaView>
   );
 };

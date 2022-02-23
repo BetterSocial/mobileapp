@@ -119,7 +119,7 @@ const NewsScreen = ({}) => {
   };
 
   const comment = (item) => {
-    navigation.navigate('DetailDomainScreen', {item});
+    navigation.navigate('DetailDomainScreen', {item, refreshNews: onRefresh});
   };
 
   const blockNews = (itemNews) => {

@@ -48,6 +48,7 @@ const FeedScreen = (props) => {
       }
 
       const dataFeeds = await getMainFeed(query);
+      console.log(dataFeeds, 'sumani')
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         if (id === '') {
@@ -155,15 +156,23 @@ const FeedScreen = (props) => {
   };
 
   const onPress = (item, index) => {
+    console.log(item, 'bahan')
     props.navigation.navigate('PostDetailPage', {
-      index: index,
+      // index: index,
       isalreadypolling: item.isalreadypolling,
+      feedId: item.id,
+      refreshParent: getDataFeeds
+      
     });
   };
 
-  const onPressComment = (index) => {
+  const onPressComment = (index, item) => {
+    console.log(index, item, 'bahaya')
     props.navigation.navigate('PostDetailPage', {
-      index: index,
+      // index: index,
+      feedId: item.id,
+      refreshParent: getDataFeeds
+      // feedId:
     });
   };
 
@@ -223,7 +232,7 @@ const FeedScreen = (props) => {
             index={index}
             onPressDomain={onPressDomain}
             onPress={() => onPress(item, index)}
-            onPressComment={() => onPressComment(index)}
+            onPressComment={() => onPressComment(index, item)}
             onPressBlock={() => onPressBlock(item)}
             onPressUpvote={(post) => setUpVote(post, index)}
             selfUserId={yourselfId}

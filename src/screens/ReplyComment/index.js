@@ -7,19 +7,28 @@ import { setFeedByIndex } from '../../context/actions/feeds';
 
 const ProfileReplyComment = (props) => {
   let itemProp = props.route.params.item;
-  let indexFeed = props.route.params.indexFeed;
+  const updateParentPost = props.route.params.updateParent
   const level = props.route.params.level;
-  
   let [feeds, dispatch] = React.useContext(Context).feeds
+  const feedIndex = () => {
+    if(feeds && Array.isArray(feeds)) {
+      const findIndex = feeds.find((feed) => feed.id === itemProp.activity_id)
+      return findIndex
+    }
+    return 0
+  }
+
 
   return (
     <View style={styles.container}>
-      <ReplyCommentComponent indexFeed={indexFeed} 
+      <ReplyCommentComponent indexFeed={feedIndex()} 
         itemProp={itemProp}
         dispatch={dispatch}
         feeds={feeds.feeds}
         level={level}
-        setFeedByIndexProps={setFeedByIndex} />
+        setFeedByIndexProps={setFeedByIndex} 
+        updateParent={updateParentPost}
+        />
     </View>
   )
 }

@@ -24,6 +24,10 @@ const DetailDomainScreenCommentItem = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
+  onVoteUp,
+  onVoteDown,
+  voteStatus,
+  totalVotes
 }) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
@@ -111,10 +115,10 @@ const DetailDomainScreenCommentItem = ({
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.arrowup, styles.btn]}>
+        <TouchableOpacity onPress={onVoteDown} style={[styles.arrowup, styles.btn]}>
           <MemoIc_arrow_down_vote_off width={18} height={18} />
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.arrowdown, styles.btn]}>
+        <TouchableOpacity onPress={onVoteUp} style={[styles.arrowdown, styles.btn]}>
           <MemoIc_arrow_upvote_off width={18} height={18} />
         </TouchableOpacity>
       </View>
