@@ -64,14 +64,33 @@ const ListFeedNotification = ({notif, onPress}) => {
     const [profile] = React.useContext(Context).profile;
 
     const handleDate = (reaction) => {
-        if(reaction && reaction.created_at) {
-            console.log(reaction.created_at, 'jamil')
-            return moment(reaction.created_at).format('dddd')
+        if(reaction && reaction.updated_at) {
+            console.log(reaction.updated_at, 'jamil')
+            return moment(reaction.updated_at).format('dddd')
         }
         return ""
     }
-    console.log(notif.postMaker, 'notif123')
+    console.log(notif, profile, 'notif123')
 
+    const handleReplyComment = () => {
+        const actorId = notif.comments[0] && notif.comments[0].actor && notif.comments[0].actor.data && notif.comments[0].actor.id
+        console.log(actorId, profile.myProfile.user_id, 'salak')
+        if(actorId === profile.myProfile.user_id) {
+            return "You"
+        } else if(notif.comments[0] && notif.comments[0].reaction && notif.comments[0].reaction.parent !== "") {
+            return `${notif.comments[0] 
+                && notif.comments[0].actor 
+                && notif.comments[0].actor.data 
+                && notif.comments[0].actor.data.username} Replied to your comment`
+        }
+        else {
+            return notif.comments[0] 
+            && notif.comments[0].actor 
+            && notif.comments[0].actor.data 
+            && notif.comments[0].actor.data.username
+        }
+    }
+    console.log(notif.comments[0].reaction.parent, 'pantat')
     return (
         <TouchableOpacity onPress={() => onPress(notif.activity_id)} style={styles.containerCard} >
             <View style={styles.row} >
@@ -82,10 +101,10 @@ const ListFeedNotification = ({notif, onPress}) => {
                 {notif.postMaker && notif.postMaker.data ? <Text style={styles.titleText} >{notif.postMaker.data.username}'s post : {notif.titlePost}</Text> : null}
                 
                 <Text style={styles.subtitleStyle} >
-                    {notif.comments[0] 
-                    && notif.comments[0].actor 
-                    && notif.comments[0].actor.data 
-                    && notif.comments[0].actor.data.username}
+                    <Text style={styles.titleText} >
+                    {handleReplyComment()} :
+                    </Text>
+                  
                     {" "}
                     {notif.comments[0] 
                     && notif.comments[0].reaction 
