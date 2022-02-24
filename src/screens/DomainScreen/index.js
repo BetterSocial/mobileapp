@@ -26,6 +26,7 @@ import {
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { getUserId } from '../../utils/users';
 import { unblokDomain } from '../../service/blocking';
+import setDomainData from '../../context/actions/domainAction';
 
 const { height, width } = Dimensions.get('screen');
 let headerHeight = 0;
@@ -43,6 +44,7 @@ const DomainScreen = () => {
   const [domainFollowers, setDomainFollowers] = React.useState(0);
   const [isBlocked, setIsBlocked] = React.useState(false)
   const [follow, setFollow] = React.useState(false);
+  const [domains, dispatchDomain] = React.useContext(Context).domains;
 
   const tiktokScrollRef = React.useRef(null);
 
@@ -74,12 +76,12 @@ const DomainScreen = () => {
   }, [])
 
   const checkBlockDomain = async () => {
-   const processCheckBlock = await checkBlockDomainPage(iddomain)
-   if(processCheckBlock.data) {
-    setIsBlocked(true)
-   } else {
-     setIsBlocked(false)
-   }
+    const processCheckBlock = await checkBlockDomainPage(iddomain)
+    if (processCheckBlock.data) {
+      setIsBlocked(true)
+    } else {
+      setIsBlocked(false)
+    }
   }
 
   const getIFollow = async () => {
@@ -95,10 +97,13 @@ const DomainScreen = () => {
     if (withLoading) {
       setLoading(true);
     }
+    console.log(domains.domains);
     let res = await getDetailDomains(dataDomain.og.domain);
     if (res.code === 200) {
       setDomainFollowers(res.followers);
       // setData([{dummy: true}, ...res.data]);
+      // dispatchDomain(res.data);
+      setDomainData(res.data, dispatchDomain);
       setData(res.data);
       setLoading(false);
     }
@@ -181,7 +186,7 @@ const DomainScreen = () => {
   };
 
   const checkBlock = (data) => {
-    if(!data) {
+    if (!data) {
       setIsBlocked(false)
     } else {
       setIsBlocked(true)
@@ -189,8 +194,8 @@ const DomainScreen = () => {
   }
 
   const onUnblockDomain = async () => {
-    await unblokDomain({domain_page_id: iddomain}).then(() => {
-        checkBlockDomain()
+    await unblokDomain({ domain_page_id: iddomain }).then(() => {
+      checkBlockDomain()
     })
 
   }
@@ -200,7 +205,7 @@ const DomainScreen = () => {
       <Navigation domain={dataDomain.og.domain} />
       <ProfileTiktokScroll
         ref={tiktokScrollRef}
-        data={data}
+        data={domains.domains}
         snapToOffsets={(() => {
           return data.map((item, index) => {
             return headerHeight + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)
@@ -229,7 +234,7 @@ const DomainScreen = () => {
             />
           </View>
         }>
-        {({item, index}) => {
+        {({ item, index }) => {
           return (
             <RenderItem
               key={index}
@@ -302,9 +307,9 @@ const DomainScreen = () => {
         ref={refBlockDomainComponent}
         domain={domain}
         domainId={dataDomain.content.domain_page_id}
-        screen="domain_screen" 
+        screen="domain_screen"
         getValueBlock={(data) => checkBlock(data)}
-        />
+      />
     </View>
   );
 };
