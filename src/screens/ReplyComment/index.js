@@ -18,7 +18,7 @@ const ProfileReplyComment = (props) => {
     return 0
   }
 
-
+  console.log(props.route, 'kalah')
   return (
     <View style={styles.container}>
       <ReplyCommentComponent indexFeed={feedIndex()} 
@@ -28,6 +28,7 @@ const ProfileReplyComment = (props) => {
         level={level}
         setFeedByIndexProps={setFeedByIndex} 
         updateParent={updateParentPost}
+        page={props.route.params.page}
         />
     </View>
   )

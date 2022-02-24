@@ -13,8 +13,10 @@ const FeedsPostDetail = (props) => {
     let navigation = useNavigation()
 
     let navigateToReplyView = (data, updateParent) => {
-        navigation.navigate('ReplyComment', {...data, updateParent});
+        navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent});
     }
+
+    console.log(props.route, 'sinta')
 
     React.useEffect(() => {
         return () => {
@@ -31,7 +33,9 @@ const FeedsPostDetail = (props) => {
                 feedId={feedId}
                 dispatch={dispatch} 
                 setFeedByIndexProps={setFeedByIndex}
-                navigateToReplyView={navigateToReplyView}/>
+                navigateToReplyView={navigateToReplyView}
+                page={props.route.name}
+                />
         </View>
     )
 }

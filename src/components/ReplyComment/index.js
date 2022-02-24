@@ -29,7 +29,7 @@ import { setFeedByIndex } from '../../context/actions/feeds';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
-const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => {
+const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const [temporaryText, setTemporaryText] = React.useState('')
@@ -121,12 +121,17 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
 
   const createComment = async () => {
     // setLoadingCMD(true);
+    let sendPostNotif = false
+    if(page !== 'DetailDomainScreen') {
+      sendPostNotif = true
+    }
+    console.log(sendPostNotif, 'sendpostnotif')
     setTemporaryText('')
     setIdComment((prev) => prev + 1)
     setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
     try {
       if (textComment.trim() !== '') {
-        let data = await createChildComment(textComment, item.id, item.user.id);
+        let data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif);
         if (data.code === 200) {
           // setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
           // setLoadingCMD(false);
