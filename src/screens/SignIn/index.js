@@ -215,7 +215,7 @@ const SignIn = () => {
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('P19FGPQGMSZ5VSHA0YSQ')}>
+          <TouchableOpacity onPress={() => dummyLogin('1G1H-1TUHI-7U9H7-572G21')}>
             <Text style={S.dummyAccountItem}>
               usupsuparma : P19FGPQGMSZ5VSHA0YSQ
             </Text>

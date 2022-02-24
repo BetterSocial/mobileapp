@@ -13,19 +13,19 @@ import SimpleToast from 'react-native-simple-toast';
 import MemoIc_interface from '../../../assets/icons/Ic_interface';
 import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
-import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
-import {SIZES, COLORS} from '../../../utils/theme';
-import {SingleSidedShadowBox, Gap} from '../../../components';
+import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
+import { SIZES, COLORS } from '../../../utils/theme';
+import { SingleSidedShadowBox, Gap } from '../../../components';
 import StringConstant from '../../../utils/string/StringConstant';
-import {Context} from '../../../context';
+import { Context } from '../../../context';
 import {
   followDomain,
   getDomainIdIFollow,
   unfollowDomain,
 } from '../../../service/domain';
-import {addIFollowByID, setIFollow} from '../../../context/actions/news';
-import {TouchableNativeFeedback} from 'react-native';
-import {colors} from '../../../utils/colors';
+import { addIFollowByID, setIFollow } from '../../../context/actions/news';
+import { TouchableNativeFeedback } from 'react-native';
+import { colors } from '../../../utils/colors';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 
 const lorem =
@@ -63,7 +63,7 @@ const Header = ({
             <>
               <View style={styles.circleImageWrapper} />
               <Image
-                source={{uri: image}}
+                source={{ uri: image }}
                 style={[styles.circleImage, StyleSheet.absoluteFillObject]}
               />
             </>
@@ -86,22 +86,22 @@ const Header = ({
             </TouchableNativeFeedback>
           )}
           <Gap width={normalize(SIZES.base)} />
-          {!isBlocked ?     <TouchableOpacity
+          {!isBlocked ? <TouchableOpacity
             style={styles.buttonBlock}
             onPress={() => onPressBlock()}>
             <Text style={styles.blockButtonText}>Block</Text>
-          </TouchableOpacity> :     <TouchableOpacity
+          </TouchableOpacity> : <TouchableOpacity
             style={styles.buttonUnblock}
             onPress={() => onPressUnblock()}>
             <Text style={styles.unblockButtonText}>Blocked</Text>
           </TouchableOpacity>}
-      
+
         </View>
       </View>
       <Gap height={normalize(12)} />
       <View style={styles.row}>
         <Text style={styles.domainName}>{domain}</Text>
-        <View style={{justifyContent: 'center'}}>
+        <View style={{ justifyContent: 'center' }}>
           <TouchableOpacity
             style={styles.openInBrowserIcon}
             onPress={openDomainLink}>
@@ -110,7 +110,7 @@ const Header = ({
         </View>
       </View>
       <Gap height={normalize(2)} />
-      <View style={[styles.row, {alignItems: 'center'}]}>
+      <View style={[styles.row, { alignItems: 'center' }]}>
         <Text style={styles.followersNumber}>{followers}</Text>
         <Gap width={normalize(4)} />
         <Text style={styles.followersText}>
@@ -119,11 +119,11 @@ const Header = ({
       </View>
       <Gap height={normalize(14)} />
       <Text style={styles.domainDescription}>
-        {description ? description : lorem}
+        {description}
       </Text>
       <Gap height={normalize(10)} />
-      <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
-        <View style={{flex: 1, paddingBottom: 0}}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+        <View style={{ flex: 1, paddingBottom: 0 }}>
           <MemoIc_rectangle_gradient width={'100%'} height={normalize(18)} />
         </View>
         <Tooltip
@@ -134,11 +134,11 @@ const Header = ({
           showChildInTooltip={false}
           onClose={() => setIsTooltipShown(false)}
           contentStyle={styles.tooltipShadowContainer}
-          arrowSize={{width: 0, height: 0}}
+          arrowSize={{ width: 0, height: 0 }}
           content={
             <View>
               <Text style={styles.tooltipContent}>
-                {description ? description : `${lorem} ${lorem} ${lorem}`}
+                {description}
               </Text>
             </View>
           }>
@@ -163,21 +163,21 @@ const Header = ({
 };
 
 const styles = StyleSheet.create({
-  icon: {flexDirection: 'row', alignItems: 'center'},
+  icon: { flexDirection: 'row', alignItems: 'center' },
   desc: {
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[400],
     lineHeight: normalizeFontSize(16),
   },
-  containerFollowers: {flexDirection: 'row'},
+  containerFollowers: { flexDirection: 'row' },
   followers: {
     color: '#00ADB5',
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
     fontWeight: '700',
   },
-  wrapperDomain: {flexDirection: 'row', marginTop: 8},
-  iconDomain: {marginStart: 8, justifyContent: 'center'},
+  wrapperDomain: { flexDirection: 'row', marginTop: 8 },
+  iconDomain: { marginStart: 8, justifyContent: 'center' },
   domain: {
     fontSize: normalizeFontSize(24),
     fontFamily: fonts.inter[600],
@@ -201,8 +201,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
   },
-  image: {height: '100%', width: '100%', borderRadius: 45},
-  containerImage: {flex: 1.3},
+  image: { height: '100%', width: '100%', borderRadius: 45 },
+  containerImage: { flex: 1.3 },
   boxImage: {
     borderRadius: 45,
     borderWidth: 0.2,
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
     top: 23,
     zIndex: 10000000,
     left: 10,
-    transform: [{rotate: '45deg'}],
+    transform: [{ rotate: '45deg' }],
     shadowColor: '#000',
     shadowOffset: {
       width: 2,
