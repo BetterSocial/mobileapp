@@ -28,10 +28,12 @@ export const downVote = async (data) => {
   }
 };
 export const upVoteDomain = async (data) => {
+  console.log(data, 'minak')
   try {
     let resApi = await api.post('/activity/upvote-domain', data);
     return resApi.data;
   } catch (error) {
+    console.log(error, 'rusalam')
     crashlytics().recordError(new Error(error));
     SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     return error.response.data;

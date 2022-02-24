@@ -1,19 +1,20 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
+import ButtonFollow from './ButtonFollow';
+import ButtonFollowing from './ButtonFollowing';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import dimen from '../../../utils/dimen';
 import { convertString } from '../../../utils/string/StringUtils';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
-import ButtonFollowing from './ButtonFollowing';
-import ButtonFollow from './ButtonFollow';
 
 const Navigation = ({ domain, onPress, isFollow = false }) => {
   const navigation = useNavigation();
   const backScreen = () => {
     navigation.goBack();
   };
+
   return (
     <SafeAreaView style={styles.Header}>
       <TouchableOpacity onPress={() => backScreen()} style={styles.backbutton}>

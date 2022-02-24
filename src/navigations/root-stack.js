@@ -1,4 +1,18 @@
 import * as React from 'react';
+
+import {
+  AddParticipant,
+  ChannelScreen,
+  ChatDetailPage,
+  ContactScreen,
+  CreateGroupScreen,
+  DetailDomainScreen,
+  DetailGroupImage,
+  GroupInfo,
+  GroupMedia,
+  GroupSetting,
+  ProfileScreen,
+} from '../screens';
 import {
   Platform,
   SafeAreaView,
@@ -6,13 +20,16 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
+import { Context } from '../context';
 import CreatePost from '../screens/CreatePost';
+import DiscoveryScreen from '../screens/DiscoveryScreen';
+import DiscoverySearch from '../screens/DiscoveryScreen/elements/Search';
 import DomainScreen from '../screens/DomainScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
+import GeneralComponentAction from '../context/actions/generalComponentAction';
 import Header from '../components/Header';
 import HomeBottomTabs from './HomeBottomTabs';
 import ImageViewerScreen from '../screens/ImageViewer';
@@ -33,27 +50,14 @@ import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';
-import {
-  AddParticipant,
-  ChannelScreen,
-  ChatDetailPage,
-  ContactScreen,
-  CreateGroupScreen,
-  DetailDomainScreen,
-  DetailGroupImage,
-  GroupInfo,
-  GroupMedia,
-  GroupSetting,
-  ProfileScreen,
-} from '../screens';
-import { Context } from '../context';
 import { colors } from '../utils/colors';
+import { createStackNavigator } from '@react-navigation/stack';
 import { fonts } from '../utils/fonts';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
   const [clientState] = React.useContext(Context).client;
-  const [profileState] = React.useContext(Context).profile
+  const [profileState] = React.useContext(Context).profile;
   const { client } = clientState;
   const isIos = Platform.OS === 'ios'
   React.useEffect(() => {
@@ -261,6 +265,20 @@ const RootStact = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="DiscoveryScreen"
+          component={DiscoveryScreen}
+          options={{ 
+            headerShown: true,
+            header: ({ navigation }) => {
+              return (
+                <SafeAreaView>
+                  <DiscoverySearch animatedValue={0} showBackButton />
+                </SafeAreaView>
+              )
+            }
+          }}
+        />
+        <Stack.Screen
           name='BlockScreen'
           component={Blocked}
           options={{
@@ -280,6 +298,7 @@ const RootStact = () => {
             },
           }}
         />
+
       </Stack.Navigator>
     </View>
   );

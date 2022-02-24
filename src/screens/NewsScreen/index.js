@@ -72,6 +72,7 @@ const NewsScreen = ({}) => {
     setLoading(true);
     try {
       let res = await getDomains();
+      console.log(res.data)
       setNews([{dummy: true}, ...res.data], dispatch);
       setLoading(false);
     } catch (error) {
@@ -118,7 +119,7 @@ const NewsScreen = ({}) => {
   };
 
   const comment = (item) => {
-    navigation.navigate('DetailDomainScreen', {item});
+    navigation.navigate('DetailDomainScreen', {item, refreshNews: onRefresh});
   };
 
   const blockNews = (itemNews) => {

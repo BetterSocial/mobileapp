@@ -8,8 +8,11 @@ import { colors } from '../../utils/colors';
 import ConnectorWrapper from './ConnectorWrapper';
 import Comment from './Comment';
 import DetailDomainScreenCommentItem from './DetailDomainScreenCommentItem';
+import { downVoteDomain, upVoteDomain } from '../../service/vote';
 
-const DetailDomainScreenContainerComment = ({ comments, indexFeed }) => {
+const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent, refreshNews }) => {
+  const [totalVote, setTotalVote] = React.useState(0);
+  const [voteStatus, setVoteStatus] = React.useState('none');
   const navigation = useNavigation();
   let isLast = (index, item) => {
     return (
@@ -24,6 +27,58 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed }) => {
   let hideLeftConnector = (index, item) => {
     return index === comments.length - 1;
   };
+
+  const onVoteUp = async (item) => {
+    console.log(item, 'sapila')
+    await upVoteDomain({
+      activity_id: item.id,
+      feed_group: 'domain',
+      domain: item.domain.name,
+    });
+    if (voteStatus === 'none') {
+      setVoteStatus('upvote');
+      setTotalVote((vote) => vote + 1)
+    } 
+    if(voteStatus === 'upvote') {
+      setVoteStatus('none')
+      setTotalVote((vote) => vote - 1)
+    }
+    if(voteStatus === 'downvote') {
+      setVoteStatus('upvote')
+      setTotalVote((vote) => vote + 2)
+    }
+    onRefreshNews()
+  }
+
+  const onVoteDown = async () => {
+    await downVoteDomain({
+      activity_id: item.id,
+      status: !statusUpvote,
+      feed_group: 'domain',
+      domain: item.domain.name,
+    });
+    console.log('masumlam1')
+    if (voteStatus === 'none') {
+      setVoteStatus('downvote');
+      setTotalVote((vote) => vote - 1)
+    } 
+    if(voteStatus === 'downvote') {
+      setVoteStatus('none')
+      setTotalVote((vote) => vote + 1)
+    }
+    if(voteStatus === 'upvote') {
+      setVoteStatus('downvote')
+      setTotalVote((vote) => vote - 2)
+    }
+    onRefreshNews()
+
+  }
+
+  const onRefreshNews = () => {
+    if(refreshNews && typeof refreshNews === 'function') {
+      refreshNews()
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -53,8 +108,12 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed }) => {
                     item: item,
                     level: 0,
                     indexFeed: indexFeed,
+                    updateParent: updateParent
                   });
                 }}
+                onVoteDown={() => onVoteDown(item)}
+                onVoteUp={() => onVoteUp(item)}
+                totalVotes={totalVote}
               />
             </View>
             {item.children_counts.comment > 0 && (
@@ -64,6 +123,7 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed }) => {
                 countComment={item.children_counts.comment}
                 navigation={navigation}
                 indexFeed={indexFeed}
+                updateParent={updateParent}
               />
             )}
           </View>
@@ -78,6 +138,7 @@ const ReplyComment = ({
   countComment,
   navigation,
   hideLeftConnector,
+  updateParent
 }) => {
   let isLast = (item, index) => {
     return (
@@ -97,6 +158,7 @@ const ReplyComment = ({
             item: item,
             level: 1,
             indexFeed: indexFeed,
+            updateParent: updateParent
           });
 
         const showChildCommentView = () =>
@@ -104,6 +166,8 @@ const ReplyComment = ({
             item: item,
             level: 2,
             indexFeed: indexFeed,
+            updateParent: updateParent
+            
           });
 
         return (

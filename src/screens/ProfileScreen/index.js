@@ -392,15 +392,19 @@ const ProfileScreen = () => {
   };
 
   const onPress = (item, index) => {
+    console.log('masuk satu', item)
     navigation.navigate('ProfilePostDetailPage', {
       index: index,
       isalreadypolling: item.isalreadypolling,
+      feedId: item.id,
+      refreshParent: getMyFeeds
     });
   };
 
-  const onPressComment = (index) => {
+  const onPressComment = (id) => {
     navigation.navigate('ProfilePostDetailPage', {
-      index: index,
+      feedId: id,
+      refreshParent: getMyFeeds
     });
   };
 
@@ -444,6 +448,7 @@ const ProfileScreen = () => {
     refBlockComponet.current.openBlockComponent(value);
   }
 
+  console.log('profile saya')
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -462,7 +467,7 @@ const ProfileScreen = () => {
           onScroll={handleScroll}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {
-              return headerHeight + (index * dimen.size.PROFILE_ITEM_HEIGHT(bottomBarHeight))
+              return headerHeight + (index * dimen.size.PROFILE_ITEM_HEIGHT)
             })
             console.log('scroll offsets')
             console.log([0, ...posts])
@@ -499,7 +504,7 @@ const ProfileScreen = () => {
                     onNewPollFetched={onNewPollFetched}
                     onPressDomain={onPressDomain}
                     onPress={() => onPress(item, index)}
-                    onPressComment={() => onPressComment(index)}
+                    onPressComment={() => onPressComment(item.id)}
                     onPressBlock={() => onPressBlock(item)}
                     onPressUpvote={(post) => setUpVote(post, index)}
                     selfUserId={yourselfId}
