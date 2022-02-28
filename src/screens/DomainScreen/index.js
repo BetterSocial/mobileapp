@@ -26,7 +26,7 @@ import {
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { getUserId } from '../../utils/users';
 import { unblokDomain } from '../../service/blocking';
-import setDomainData from '../../context/actions/domainAction';
+import { setDomainData, selectedLastDomain } from '../../context/actions/domainAction';
 
 const { height, width } = Dimensions.get('screen');
 let headerHeight = 0;
@@ -44,7 +44,7 @@ const DomainScreen = () => {
   const [domainFollowers, setDomainFollowers] = React.useState(0);
   const [isBlocked, setIsBlocked] = React.useState(false)
   const [follow, setFollow] = React.useState(false);
-  const [domains, dispatchDomain] = React.useContext(Context).domains;
+  const [domainStore, dispatchDomain] = React.useContext(Context).domains;
 
   const tiktokScrollRef = React.useRef(null);
 
@@ -94,22 +94,29 @@ const DomainScreen = () => {
   };
 
   const init = async (withLoading = false) => {
-    if (withLoading) {
-      setLoading(true);
+
+    let domainName = dataDomain.og.domain;
+    if (domainName != domainStore.selectedLastDomain) {
+      if (withLoading) {
+        setLoading(true);
+      }
+
+      setDomainData([], dispatchDomain);
+      let res = await getDetailDomains(dataDomain.og.domain);
+      if (res.code === 200) {
+        setDomainFollowers(res.followers);
+        // setData([{dummy: true}, ...res.data]);
+        // dispatchDomain(res.data);
+        setDomainData(res.data, dispatchDomain);
+        selectedLastDomain(dataDomain.og.domain, dispatchDomain);
+        setData(res.data);
+        setLoading(false);
+      }
+      if (withLoading) {
+        setLoading(false);
+      }
     }
-    console.log(domains.domains);
-    let res = await getDetailDomains(dataDomain.og.domain);
-    if (res.code === 200) {
-      setDomainFollowers(res.followers);
-      // setData([{dummy: true}, ...res.data]);
-      // dispatchDomain(res.data);
-      setDomainData(res.data, dispatchDomain);
-      setData(res.data);
-      setLoading(false);
-    }
-    if (withLoading) {
-      setLoading(false);
-    }
+
   };
 
   React.useEffect(() => {
@@ -205,7 +212,7 @@ const DomainScreen = () => {
       <Navigation domain={dataDomain.og.domain} />
       <ProfileTiktokScroll
         ref={tiktokScrollRef}
-        data={domains.domains}
+        data={domainStore.domains}
         snapToOffsets={(() => {
           return data.map((item, index) => {
             return headerHeight + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)

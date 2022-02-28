@@ -1,7 +1,8 @@
-import { SET_DOMAIN_DATA } from '../Types';
+import { SET_DOMAIN_DATA, SET_SELECTED_LAST_DOMAIN } from '../Types';
 
 const domainState = {
   domains: [],
+  selectedLastDomain: null,
 };
 
 const domainReducer = (state = domainState, action) => {
@@ -10,6 +11,11 @@ const domainReducer = (state = domainState, action) => {
       return {
         ...state,
         domains: action.payload,
+      };
+    case SET_SELECTED_LAST_DOMAIN:
+      return {
+        ...state,
+        selectedLastDomain: action.payload,
       };
     default:
       return state;
