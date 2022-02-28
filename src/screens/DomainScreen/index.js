@@ -26,7 +26,7 @@ import {
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { getUserId } from '../../utils/users';
 import { unblokDomain } from '../../service/blocking';
-import { setDomainData, selectedLastDomain } from '../../context/actions/domainAction';
+import { setDomainData, setSelectedLastDomain, setProfileDomain } from '../../context/actions/domainAction';
 
 const { height, width } = Dimensions.get('screen');
 let headerHeight = 0;
@@ -101,14 +101,23 @@ const DomainScreen = () => {
         setLoading(true);
       }
 
+      setProfileDomain({}, dispatchDomain);
       setDomainData([], dispatchDomain);
+      let result = await getProfileDomain(domain);
+      if (result.code === 200) {
+        setProfile(result.data);
+        setProfileDomain(result.data, dispatchDomain);
+      } else {
+        Toast.show('Domain Not Found', Toast.LONG);
+        navigation.goBack();
+      }
       let res = await getDetailDomains(dataDomain.og.domain);
       if (res.code === 200) {
         setDomainFollowers(res.followers);
         // setData([{dummy: true}, ...res.data]);
         // dispatchDomain(res.data);
         setDomainData(res.data, dispatchDomain);
-        selectedLastDomain(dataDomain.og.domain, dispatchDomain);
+        setSelectedLastDomain(dataDomain.og.domain, dispatchDomain);
         setData(res.data);
         setLoading(false);
       }
@@ -123,18 +132,20 @@ const DomainScreen = () => {
     init(true);
   }, [dataDomain]);
 
-  React.useEffect(() => {
-    const getProfile = async () => {
-      let res = await getProfileDomain(domain);
-      if (res.code === 200) {
-        setProfile(res.data);
-      } else {
-        Toast.show('Domain Not Found', Toast.LONG);
-        navigation.goBack();
-      }
-    };
-    getProfile();
-  }, [dataDomain]);
+  // React.useEffect(() => {
+  //   const getProfile = async () => {
+  //     setProfileDomain({}, dispatchDomain);
+  //     let res = await getProfileDomain(domain);
+  //     if (res.code === 200) {
+  //       setProfile(res.data);
+  //       setProfileDomain(res.data, dispatchDomain);
+  //     } else {
+  //       Toast.show('Domain Not Found', Toast.LONG);
+  //       navigation.goBack();
+  //     }
+  //   };
+  //   getProfile();
+  // }, [dataDomain]);
 
   const handleOnPressComment = (itemNews) => {
     navigation.navigate('DetailDomainScreen', { item: itemNews });
@@ -225,7 +236,7 @@ const DomainScreen = () => {
           }}>
             <Header
               image={domainImage}
-              description={profile.short_description}
+              description={domainStore.profileDomain.short_description}
               domain={dataDomain.og.domain}
               followers={domainFollowers}
               onPressBlock={onReaction}

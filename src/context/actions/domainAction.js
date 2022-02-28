@@ -1,4 +1,4 @@
-import { SET_DOMAIN_DATA, SET_SELECTED_LAST_DOMAIN } from '../Types';
+import { SET_DOMAIN_DATA, SET_SELECTED_LAST_DOMAIN, SET_PROFILE_DOMAIN } from '../Types';
 
 const setDomainData = (data, dispatch) => {
   dispatch({
@@ -7,13 +7,22 @@ const setDomainData = (data, dispatch) => {
   });
 };
 
-const selectedLastDomain = (data, dispatch) => {
+const setSelectedLastDomain = (data, dispatch) => {
   dispatch({
     type: SET_SELECTED_LAST_DOMAIN,
     payload: data,
   });
 };
+
+const setProfileDomain = (data, dispatch) => {
+  dispatch({
+    type: SET_PROFILE_DOMAIN,
+    payload: data,
+  });
+};
+
 export {
-  selectedLastDomain,
+  setSelectedLastDomain,
   setDomainData,
+  setProfileDomain,
 };
