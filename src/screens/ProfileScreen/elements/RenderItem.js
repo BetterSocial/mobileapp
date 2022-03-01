@@ -88,14 +88,10 @@ const Item = ({
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [feeds, dispatch] = React.useContext(Context).feeds;
-  // const [item, setItem] = React.useState(feeds.feeds[index]);
   const navigation = useNavigation();
   const [contentHeight, setContentHeight] = React.useState(0);
   const bottomHeight = bottomBar ? useBottomTabBarHeight() : 0;
   // const bottomHeight = 0;
-
-  // console.log('item');
-  // console.log(item);
 
   React.useEffect(() => {
     const initial = () => {
@@ -157,9 +153,6 @@ const Item = ({
     };
     initialVote();
   }, [item]);
-
-  // console.log('item height')
-  // console.log(dimen.size.PROFILE_ITEM_HEIGHT(bottomHeight))
 
   return (
     <View style={styles.cardContainer(bottomHeight)}>
@@ -255,7 +248,6 @@ const Item = ({
                 setVoteStatus('none');
                 setTotalVote((p) => p - 1);
               }
-              console.log('vote ', prev);
               return prev;
             });
           }}

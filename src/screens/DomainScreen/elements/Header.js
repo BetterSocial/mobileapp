@@ -1,32 +1,33 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Linking,
-} from 'react-native';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import SimpleToast from 'react-native-simple-toast';
+import Tooltip from 'react-native-walkthrough-tooltip';
+import {
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {TouchableNativeFeedback} from 'react-native';
 
+import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoIc_interface from '../../../assets/icons/Ic_interface';
 import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
-import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
-import {SIZES, COLORS} from '../../../utils/theme';
-import {SingleSidedShadowBox, Gap} from '../../../components';
 import StringConstant from '../../../utils/string/StringConstant';
+import {COLORS, SIZES} from '../../../utils/theme';
 import {Context} from '../../../context';
+import {Gap, SingleSidedShadowBox} from '../../../components';
+import {addIFollowByID, setIFollow} from '../../../context/actions/news';
+import {colors} from '../../../utils/colors';
 import {
   followDomain,
   getDomainIdIFollow,
   unfollowDomain,
 } from '../../../service/domain';
-import {addIFollowByID, setIFollow} from '../../../context/actions/news';
-import {TouchableNativeFeedback} from 'react-native';
-import {colors} from '../../../utils/colors';
-import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import { getSingularOrPluralText } from '../../../utils/string/StringUtils';
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis.';
@@ -114,7 +115,7 @@ const Header = ({
         <Text style={styles.followersNumber}>{followers}</Text>
         <Gap width={normalize(4)} />
         <Text style={styles.followersText}>
-          {followers < 2 ? 'Follower' : 'Followers'}
+          {getSingularOrPluralText(followers, 'Follower', 'Followers')}
         </Text>
       </View>
       <Gap height={normalize(14)} />
