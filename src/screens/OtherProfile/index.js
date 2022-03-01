@@ -52,6 +52,7 @@ import { downVote, upVote } from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../utils/token';
 import { getFeedDetail } from '../../service/post';
+import { getSingularOrPluralText } from '../../utils/string/StringUtils';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import {setChannel} from '../../context/actions/setChannel';
 import { setFeedByIndex, setOtherProfileFeed } from '../../context/actions/otherProfileFeed';
@@ -241,7 +242,7 @@ const OtherProfile = () => {
               <Text style={styles.textTotal}>
                 {dataMain.follower_symbol}
               </Text>
-              <Text style={styles.textFollow}>Followers</Text>
+              <Text style={styles.textFollow}>{getSingularOrPluralText(dataMain.follower_symbol, "Follower", "Followers")}</Text>
             </View>
             {user_id === dataMain.user_id ? <View style={styles.following}>
             <TouchableNativeFeedback

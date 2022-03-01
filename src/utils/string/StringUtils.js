@@ -177,6 +177,18 @@ const randomString = (length) => {
   return result;
 }
 
+/**
+ * 
+ * @param {Number} number 
+ * @param {String} singularText 
+ * @param {String} pluralText 
+ * @returns 
+ */
+const getSingularOrPluralText = (number, singularText, pluralText) => {
+  if(number === 1) return singularText
+  return pluralText
+} 
+
 export {
   capitalizeFirstText,
   convertString,
@@ -184,6 +196,7 @@ export {
   getChatName,
   getGroupMemberCount,
   getPollTime,
+  getSingularOrPluralText,
   isPollExpired,
   NO_POLL_UUID,
   randomString,

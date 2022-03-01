@@ -1,62 +1,56 @@
 import * as React from 'react';
+import Toast from 'react-native-simple-toast';
+import analytics from '@react-native-firebase/analytics';
 import {
   Alert,
   BackHandler,
+  Platform,
   SafeAreaView,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
-  View,
-  Platform,
-  StatusBar,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  View
 } from 'react-native';
-
-import { useNavigation } from '@react-navigation/core';
-import { showMessage } from 'react-native-flash-message';
-import analytics from '@react-native-firebase/analytics';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import Toast from 'react-native-simple-toast';
 import { getLinkPreview } from 'link-preview-js';
+import { instanceOf } from 'prop-types';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { showMessage } from 'react-native-flash-message';
+import { useNavigation } from '@react-navigation/core';
 
-import Header from '../../components/Header';
-import { Button, ButtonAddMedia } from '../../components/Button';
-import UserProfile from './elements/UserProfile';
-import SheetCloseBtn from './elements/SheetCloseBtn';
-import { createPost, ShowingAudience } from '../../service/post';
+import Card from './elements/Card';
+import ContentLink from './elements/ContentLink';
+import CreatePollContainer from './elements/CreatePollContainer';
 import Gap from '../../components/Gap';
+import Header from '../../components/Header';
 import ListItem from '../../components/MenuPostItem';
 import Loading from '../Loading';
-import SheetMedia from './elements/SheetMedia';
-import ShowMedia from './elements/ShowMedia';
+import Location from '../../assets/icons/Ic_location';
+import MemoIc_hastag from '../../assets/icons/Ic_hastag';
+import MemoIc_user_group from '../../assets/icons/Ic_user_group';
+import MemoIc_world from '../../assets/icons/Ic_world';
+import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import SheetAddTopic from './elements/SheetAddTopic';
-import TopicItem from '../../components/TopicItem';
+import SheetCloseBtn from './elements/SheetCloseBtn';
 import SheetExpiredPost from './elements/SheetExpiredPost';
 import SheetGeographic from './elements/SheetGeographic';
+import SheetMedia from './elements/SheetMedia';
 import SheetPrivacy from './elements/SheetPrivacy';
-import CreatePollContainer from './elements/CreatePollContainer';
-import ContentLink from './elements/ContentLink';
-
-import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
-import { getMyProfile } from '../../service/profile';
-import { colors } from '../../utils/colors';
-import MemoIc_hastag from '../../assets/icons/Ic_hastag';
-import Timer from '../../assets/icons/Ic_timer';
-import Location from '../../assets/icons/Ic_location';
-import World from '../../assets/icons/Ic_world';
-import { fonts } from '../../utils/fonts';
-import MemoIc_world from '../../assets/icons/Ic_world';
-import MemoIc_user_group from '../../assets/icons/Ic_user_group';
-import { createPollPost } from '../../service/post';
-import ProfileDefault from '../../assets/images/ProfileDefault.png';
+import ShowMedia from './elements/ShowMedia';
 import StringConstant from '../../utils/string/StringConstant';
-import { getUserId } from '../../utils/users';
-import {
-  requestExternalStoragePermission,
-  requestCameraPermission,
-} from '../../utils/permission';
-import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
+import Timer from '../../assets/icons/Ic_timer';
+import TopicItem from '../../components/TopicItem';
+import UserProfile from './elements/UserProfile';
+import World from '../../assets/icons/Ic_world';
+import { Button, ButtonAddMedia } from '../../components/Button';
+import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
+import { ShowingAudience, createPost } from '../../service/post';
+import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
+import { colors } from '../../utils/colors';
+import { createPollPost } from '../../service/post';
+import { fonts } from '../../utils/fonts';
 import {
   getDurationId,
   getLocationId,
@@ -65,11 +59,14 @@ import {
   setLocationId,
   setPrivacyId,
 } from '../../utils/setting';
-import { instanceOf } from 'prop-types';
+import { getMyProfile } from '../../service/profile';
 import { getTopics } from '../../service/topics';
-import Card from './elements/Card';
-
-import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
+import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
+import { getUserId } from '../../utils/users';
+import {
+  requestCameraPermission,
+  requestExternalStoragePermission,
+} from '../../utils/permission';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -825,11 +822,11 @@ const CreatePost = () => {
           labelStyle={styles.listText}
           onPress={() => sheetPrivacyRef.current.open()}
         />
-        <Gap style={styles.height(16)} />
+        {/* <Gap style={styles.height(16)} />
         <Text style={styles.desc}>
           Your post targets{' '}
           <Text style={styles.userTarget}>~ {audienceEstimations}</Text> users.
-        </Text>
+        </Text> */}
         <Gap style={styles.height(25)} />
         {isPollShown ? (
           <Button
