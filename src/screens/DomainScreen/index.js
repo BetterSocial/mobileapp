@@ -100,9 +100,6 @@ const DomainScreen = () => {
       if (withLoading) {
         setLoading(true);
       }
-
-      setProfileDomain({}, dispatchDomain);
-      setDomainData([], dispatchDomain);
       let result = await getProfileDomain(domain);
       if (result.code === 200) {
         setProfile(result.data);
