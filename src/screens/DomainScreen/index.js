@@ -27,6 +27,7 @@ import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { getUserId } from '../../utils/users';
 import { unblokDomain } from '../../service/blocking';
 import { setDomainData, setSelectedLastDomain, setProfileDomain } from '../../context/actions/domainAction';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 
 const { height, width } = Dimensions.get('screen');
 let headerHeight = 0;
@@ -118,6 +119,7 @@ const DomainScreen = () => {
         setData(res.data);
         setLoading(false);
       }
+
       if (withLoading) {
         setLoading(false);
       }
@@ -214,6 +216,13 @@ const DomainScreen = () => {
     })
 
   }
+  if (loading) {
+    return (
+      <View style={styles.containerLoading}>
+        <LoadingWithoutModal visible={loading} />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
@@ -249,25 +258,28 @@ const DomainScreen = () => {
             />
           </View>
         }>
-        {({ item, index }) => {
-          return (
-            <RenderItem
-              key={index}
-              item={item}
-              image={profile.logo}
-              onPressComment={(itemNews) => handleOnPressComment(itemNews)}
-              onPressUpvote={(news) => upvoteNews(news)}
-              onPressDownVote={(news) => downvoteNews(news)}
-              selfUserId={idFromToken}
-              onPressBlock={() => onReaction(0)}
-              follow={follow}
-              handleFollow={handleFollow}
-              handleUnfollow={handleUnfollow}
-              onPressShare={ShareUtils.shareDomain}
-            />
-          );
-        }}
+
+        {
+          ({ item, index }) => {
+            return (
+              <RenderItem
+                key={index}
+                item={item}
+                image={profile.logo}
+                onPressComment={(itemNews) => handleOnPressComment(itemNews)}
+                onPressUpvote={(news) => upvoteNews(news)}
+                onPressDownVote={(news) => downvoteNews(news)}
+                selfUserId={idFromToken}
+                onPressBlock={() => onReaction(0)}
+                follow={follow}
+                handleFollow={handleFollow}
+                handleUnfollow={handleUnfollow}
+                onPressShare={ShareUtils.shareDomain}
+              />
+            );
+          }}
       </ProfileTiktokScroll>
+
       {/* <FlatList
         data={data}
         renderItem={({ item, index }) => {
@@ -317,7 +329,6 @@ const DomainScreen = () => {
         keyExtractor={(i) => i.id}
       /> */}
 
-      <Loading visible={loading} />
       <BlockDomainComponent
         ref={refBlockDomainComponent}
         domain={domain}
@@ -342,6 +353,7 @@ const styles = StyleSheet.create({
   linearGradient: {
     height: 8,
   },
+  containerLoading: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
 
 export default DomainScreen;
