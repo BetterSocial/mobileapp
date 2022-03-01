@@ -91,7 +91,6 @@ const ListFeedNotification = ({notif, onPress}) => {
             && notif.comments[0].actor.data.username
         }
     }
-    console.log(notif.comments[0].reaction.parent, 'pantat')
     return (
         <TouchableOpacity onPress={() => onPress(notif.activity_id)} style={styles.containerCard} >
             <View style={styles.row} >
@@ -103,7 +102,7 @@ const ListFeedNotification = ({notif, onPress}) => {
                 
                 <Text style={styles.subtitleStyle} >
                     <Text style={styles.titleText} >
-                    {handleReplyComment()} :
+                    {handleReplyComment()}:
                     </Text>
                   
                     {" "}
