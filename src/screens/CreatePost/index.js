@@ -425,7 +425,7 @@ const CreatePost = () => {
       setLocationId(JSON.stringify(geoSelect));
       setDurationId(JSON.stringify(expiredSelect));
       setPrivacyId(JSON.stringify(privacySelect));
-
+      console.log(data, 'salam')
       analytics().logEvent('create_post', {
         id: 6,
         newpost_reach: geoList[geoSelect].neighborhood,
@@ -437,6 +437,7 @@ const CreatePost = () => {
         predicted_audience: audienceEstimations,
       });
       let res = await createPost(data);
+      console.log(res, 'hambana')
       if (res.code === 200) {
         showMessage({
           message: StringConstant.createPostDone,

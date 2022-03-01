@@ -298,6 +298,7 @@ const RootStact = () => {
             },
           }}
         />
+
       </Stack.Navigator>
     </View>
   );

@@ -10,6 +10,7 @@ export const getDomains = async (lastId = null) => {
       url = '/domain';
     }
     let res = await api.get(url);
+    console.log(res,'sumina')
     return res.data;
   } catch (error) {
     console.log(error);
@@ -93,6 +94,16 @@ export const checkBlockDomainPage = async (domainId) => {
   try {
     const processGetFollowDomain = await api.get(`/domain/check-blocked/${domainId}`)
     return processGetFollowDomain.data
+  } catch (e) {
+    crashlytics().recordError(new Error(e))
+    throw new Error(e)
+  }
+}
+
+export const getDomainDetailById = async (domainId) => {
+  try {
+    const processGetDomain = await api.get(`/domain/detail/${domainId}`)
+    return processGetDomain.data.data
   } catch (e) {
     crashlytics().recordError(new Error(e))
     throw new Error(e)
