@@ -1,5 +1,6 @@
-import api from './config';
 import crashlytics from '@react-native-firebase/crashlytics';
+
+import api from './config';
 
 /**
  *
@@ -30,7 +31,6 @@ const fetchDiscoveryData = async (query) => {
       message: response.data.message,
     };
   } catch (error) {
-    console.log(error);
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }

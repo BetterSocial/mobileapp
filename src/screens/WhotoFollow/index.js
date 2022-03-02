@@ -27,6 +27,7 @@ import { Context } from '../../context';
 import { ProgressBar } from '../../components/ProgressBar';
 import { colors } from '../../utils/colors';
 import { get } from '../../api/server';
+import { randomString } from '../../utils/string/StringUtils';
 import { registerUser } from '../../service/users';
 import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
@@ -175,6 +176,8 @@ const WhotoFollow = () => {
         username: usersState.username,
         human_id: usersState.userId,
         country_code: usersState.countryCode,
+        // human_id: randomString(20).toUpperCase(),
+        // country_code: 'ID',
         profile_pic_path: usersState.photo,
         status: 'A',
       },
