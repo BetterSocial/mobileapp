@@ -98,7 +98,7 @@ const ListFeedNotification = ({notif, onPress}) => {
                 {notif.postMaker && notif.postMaker.data ? <Image source={{ uri: notif.postMaker.data.profile_pic_url }} style={styles.avatar} /> : null}
             </View>
             <View style={styles.titleContainer} >
-                {notif.postMaker && notif.postMaker.data ? <Text style={styles.titleText} >{notif.postMaker.data.username}'s post : {notif.titlePost}</Text> : null}
+                {notif.postMaker && notif.postMaker.data ? <Text style={styles.titleText} >{notif.postMaker.data.username}'s post: {notif.titlePost}</Text> : null}
                 
                 <Text style={styles.subtitleStyle} >
                     <Text style={styles.titleText} >
