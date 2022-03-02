@@ -232,8 +232,10 @@ const validationStatusVote = () => {
     setItem(data)
   }
 
+  console.log(props.route, 'cinata')
+
   const navigateToReplyView = (data) => {
-    navigation.navigate('ReplyComment', {...data, updateParent: updateParentPost});
+    navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent: updateParentPost});
 }
 
   return (

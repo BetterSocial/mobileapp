@@ -193,7 +193,7 @@ const PostPageDetailIdComponent = (props) => {
     setLoadingPost(true)
     try {
       if (textComment.trim() !== '') {
-        let data = await createCommentParent(textComment, item.id, item.actor.id);
+        let data = await createCommentParent(textComment, item.id, item.actor.id, true);
         if (data.code === 200) {
           setTextComment('');
           updateFeed(true);

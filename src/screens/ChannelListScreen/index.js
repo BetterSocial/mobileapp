@@ -110,8 +110,7 @@ const ChannelListScreen = ({ navigation }) => {
       />
     );
   };
-
-  console.log('chat by')
+  
 
   return (
     <SafeAreaView style={{ height: '100%' }}>

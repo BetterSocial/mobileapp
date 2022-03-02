@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
     },
     avatar: {
         height: 40,
-        width: 40
+        width: 40,
+        borderRadius: 20
     },
     avatarContainer: {
         marginRight: 10,
@@ -64,27 +65,46 @@ const ListFeedNotification = ({notif, onPress}) => {
     const [profile] = React.useContext(Context).profile;
 
     const handleDate = (reaction) => {
-        if(reaction && reaction.created_at) {
-            console.log(reaction.created_at, 'jamil')
-            return moment(reaction.created_at).format('dddd')
+        if(reaction && reaction.updated_at) {
+            console.log(reaction.updated_at, 'jamil')
+            return moment(reaction.updated_at).format('dddd')
         }
         return ""
     }
+    console.log(notif, profile, 'notif123')
 
-
+    const handleReplyComment = () => {
+        const actorId = notif.comments[0] && notif.comments[0].actor && notif.comments[0].actor.data && notif.comments[0].actor.id
+        console.log(actorId, profile.myProfile.user_id, 'salak')
+        if(actorId === profile.myProfile.user_id) {
+            return "You"
+        } else if(notif.comments[0] && notif.comments[0].reaction && notif.comments[0].reaction.parent !== "") {
+            return `${notif.comments[0] 
+                && notif.comments[0].actor 
+                && notif.comments[0].actor.data 
+                && notif.comments[0].actor.data.username} Replied to your comment`
+        }
+        else {
+            return notif.comments[0] 
+            && notif.comments[0].actor 
+            && notif.comments[0].actor.data 
+            && notif.comments[0].actor.data.username
+        }
+    }
     return (
         <TouchableOpacity onPress={() => onPress(notif.activity_id)} style={styles.containerCard} >
             <View style={styles.row} >
             <View style={styles.avatarContainer} >
-                {user.photoUrl ? <Image source={{ uri: user.photoUrl }} style={styles.avatar} /> : null}
+                {notif.postMaker && notif.postMaker.data ? <Image source={{ uri: notif.postMaker.data.profile_pic_url }} style={styles.avatar} /> : null}
             </View>
             <View style={styles.titleContainer} >
-                <Text style={styles.titleText} >{profile.myProfile && profile.myProfile.username}'s post : {notif.titlePost}</Text>
+                {notif.postMaker && notif.postMaker.data ? <Text style={styles.titleText} >{notif.postMaker.data.username}'s post: {notif.titlePost}</Text> : null}
+                
                 <Text style={styles.subtitleStyle} >
-                    {notif.comments[0] 
-                    && notif.comments[0].actor 
-                    && notif.comments[0].actor.data 
-                    && notif.comments[0].actor.data.username}
+                    <Text style={styles.titleText} >
+                    {handleReplyComment()}:
+                    </Text>
+                  
                     {" "}
                     {notif.comments[0] 
                     && notif.comments[0].reaction 
