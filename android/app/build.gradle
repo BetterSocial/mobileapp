@@ -150,7 +150,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 39
         versionName "1.22.2"
-        flavorDimensions "default"
     }
     splits {
         abi {
@@ -191,10 +190,9 @@ android {
         }
     }
 
-
+    flavorDimensions "env"
     productFlavors {
         dev {
-            dimension "default"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
             resValue "string", "app_name", "Better Social Dev"
