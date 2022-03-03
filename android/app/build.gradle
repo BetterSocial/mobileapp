@@ -85,6 +85,14 @@ project.ext.react = [
 
 apply from: "../../node_modules/react-native/react.gradle"
 
+
+project.ext.envConfigFiles = [
+    dev: ".env.development",
+    prod: ".env.production"
+]
+
+apply from: project(":react-native-config").projectDir.getPath() + "/dotenv.gradle"
+
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -135,7 +143,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    flavorDimensions "default"
 
     defaultConfig {
         applicationId "org.bettersocial"
@@ -143,6 +150,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 39
         versionName "1.22.2"
+        flavorDimensions "default"
     }
     splits {
         abi {
@@ -166,6 +174,7 @@ android {
             keyPassword keystoreProperties['keyPassword']
         }
     }
+
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -182,18 +191,23 @@ android {
         }
     }
 
+
     productFlavors {
         dev {
             dimension "default"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            resValue "string", "build_config_package", "org.bettersocial.dev"
+            resValue "string", "app_name", "Better Social Dev"
             applicationIdSuffix ".dev"
+            resValue "string", "build_config_package", "org.bettersocial.dev"
+            // applicationId "org.bettersocial.dev"
         }
         prod {
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "app_name", "Better Social"
             resValue "string", "build_config_package", "org.bettersocial"
+            // applicationId "org.bettersocial"
         }
     }
 

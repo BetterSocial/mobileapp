@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import {FlatFeed, StreamApp} from 'react-native-activity-feed';
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
+import Config from 'react-native-config'
 import {generateRandomId} from 'stream-chat-react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
@@ -422,8 +423,8 @@ const OtherProfile = () => {
         <ScrollView onScroll={handleScroll} ref={scrollViewReff}>
           {tokenJwt !== '' && (
             <StreamApp
-              apiKey={STREAM_API_KEY}
-              appId={STREAM_APP_ID}
+              apiKey={Config.STREAM_API_KEY}
+              appId={Config.STREAM_APP_ID}
               token={tokenJwt}>
               {!isLoading ? (
                 <View style={styles.content}>
