@@ -87,11 +87,13 @@ apply from: "../../node_modules/react-native/react.gradle"
 
 
 project.ext.envConfigFiles = [
-    dev: ".env.development",
-    prod: ".env.production"
+    devdebug: ".env.development",
+    proddebug: ".env.production",
+    devrelease: ".env.development",
+    prodrelease: ".env.production"
 ]
 
-apply from: project(":react-native-config").projectDir.getPath() + "/dotenv.gradle"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -177,6 +179,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            matchingFallbacks = ['debug', 'release']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -190,22 +193,20 @@ android {
         }
     }
 
-    flavorDimensions "env"
+    flavorDimensions "default"
     productFlavors {
         dev {
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
             resValue "string", "app_name", "Better Social Dev"
             applicationIdSuffix ".dev"
-            resValue "string", "build_config_package", "org.bettersocial.dev"
-            // applicationId "org.bettersocial.dev"
+            resValue "string", "build_config_package", "org.bettersocial"
         }
         prod {
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
             resValue "string", "app_name", "Better Social"
             resValue "string", "build_config_package", "org.bettersocial"
-            // applicationId "org.bettersocial"
         }
     }
 

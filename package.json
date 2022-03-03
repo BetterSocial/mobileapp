@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android:dev-debug": "cd android && ./gradlew clean && cd .. && ENVFILE=.env.development npx react-native run-android --variant=devDebug --appIdSuffix=dev",
-    "android:prod-debug": "cd android && ./gradlew clean && cd .. && ENVFILE=.env.production npx react-native run-android --variant=prodDebug",
+    "android:dev-debug": "cd android && ./gradlew clean && cd .. && ENVFILE=.env.development npx react-native run-android --variant=devdebug",
+    "android:prod-debug": "cd android && ./gradlew clean && cd .. && ENVFILE=.env.production npx react-native run-android --variant=proddebug",
     "android:dev": "react-native run-android --variant=devDebug --appIdSuffix=dev",
     "build:apk-android-dev": "cd android && ENVFILE=.env.development ./gradlew assembleDevRelease",
     "build:apk-android-prod": "cd android && ENVFILE=.env.production ./gradlew assembleRelease",
