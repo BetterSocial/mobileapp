@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {TouchableNativeFeedback} from 'react-native';
+import { TouchableNativeFeedback } from 'react-native';
 
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoIc_interface from '../../../assets/icons/Ic_interface';
@@ -19,17 +19,7 @@ import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 import { SIZES, COLORS } from '../../../utils/theme';
 import { SingleSidedShadowBox, Gap } from '../../../components';
 import StringConstant from '../../../utils/string/StringConstant';
-import {COLORS, SIZES} from '../../../utils/theme';
-import { Context } from '../../../context';
-import {Gap, SingleSidedShadowBox} from '../../../components';
-import {addIFollowByID, setIFollow} from '../../../context/actions/news';
-import {colors} from '../../../utils/colors';
-import {
-  followDomain,
-  getDomainIdIFollow,
-  unfollowDomain,
-} from '../../../service/domain';
-import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
+import { colors } from '../../../utils/colors';
 import { getSingularOrPluralText } from '../../../utils/string/StringUtils';
 
 const lorem =
