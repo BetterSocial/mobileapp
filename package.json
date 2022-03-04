@@ -3,19 +3,18 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "ENVFILE=.env.development react-native run-android --variant=devDebug --appIdSuffix=dev",
+    "android:dev-debug": "cd android && ./gradlew clean && cd .. && ENVFILE=.env.development npx react-native run-android --variant=devdebug",
+    "android:prod-debug": "cd android && ./gradlew clean && cd .. && ENVFILE=.env.production npx react-native run-android --variant=proddebug",
     "android:dev": "react-native run-android --variant=devDebug --appIdSuffix=dev",
-    "build:apk:android": "cd android && ENVFILE=.env.development ./gradlew assembleDevDebug",
-    "build:apk:android:release": "cd android && ENVFILE=.env.development ./gradlew assembleDevRelease",
+    "build:apk-android-dev": "cd android && ENVFILE=.env.development ./gradlew assembledevrelease",
+    "build:apk-android-prod": "cd android && ENVFILE=.env.production ./gradlew assembleprodrelease",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest --verbose",
     "lint": "eslint .",
-    "android:release": "cd android && ./gradlew app:assembleRelease",
     "android:clean": "cd android && ./gradlew clean && ./gradlew cleanBuildCache",
     "reinstall": "rm -rf node_modules && yarn install",
-    "reset": "react-native start --reset-cache",
-    "android:install": "react-native run-android --variant=DevRelease"
+    "reset": "react-native start --reset-cache"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.12",

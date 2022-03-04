@@ -1,5 +1,6 @@
 import api from './config';
 import crashlytics from '@react-native-firebase/crashlytics';
+import config from 'react-native-config'
 import {getRefreshToken, setAccessToken, setRefreshToken} from '../utils/token';
 import {BASE_URL} from '@env';
 export const verifyUser = async (userId) => {
@@ -87,7 +88,7 @@ export const refreshToken = async () => {
   };
 
   // const resp = await fetchWithTimeout(this.url, options, 10000);
-  const resp = await fetch(BASE_URL + '/users/refresh-token', options);
+  const resp = await fetch(config.BASE_URL + '/users/refresh-token', options);
   return await resp.json();
 };
 
