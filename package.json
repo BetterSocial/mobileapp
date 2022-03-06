@@ -8,7 +8,7 @@
     "android:dev": "react-native run-android --variant=devDebug --appIdSuffix=dev",
     "build:apk-android-dev": "cd android && ENVFILE=.env.development ./gradlew assembledevrelease",
     "build:apk-android-prod": "cd android && ENVFILE=.env.production ./gradlew assembleprodrelease",
-    "ios": "react-native run-ios",
+    "ios:dev-debug": "react-native run-ios --scheme 'BetterSocialDev' --simulator='iPhone 13'",
     "start": "react-native start",
     "test": "jest --verbose",
     "lint": "eslint .",

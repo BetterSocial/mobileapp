@@ -5,6 +5,7 @@
 .env
 .env.development
 .env.production
+ios/tmp.xcconfig
 # Xcode
 #
 build/
