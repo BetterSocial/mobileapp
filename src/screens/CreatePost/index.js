@@ -143,6 +143,7 @@ const CreatePost = () => {
   const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
   const [locationId, setLocationId] = React.useState('');
   const [positionEndCursor, setPositionEndCursor] = React.useState(0);
+  const [hastagPosition, setHastagPosition] = React.useState(0);
 
 
 
@@ -391,6 +392,7 @@ const CreatePost = () => {
   };
 
   const onSaveTopic = (v) => {
+    console.log(v);
     setListTopic(v);
     sheetTopicRef.current.close();
   };
@@ -674,25 +676,40 @@ const CreatePost = () => {
           onSelectionChange={(e) => {
             setPositionEndCursor(e.nativeEvent.selection.end);
           }}
+          onChange={(v) => {
+          }}
           onChangeText={(v) => {
             if (v.includes('#')) {
               let position = v.lastIndexOf('#', positionEndCursor);
               let spaceStatus = v.includes(' ', position);
               let detectEnter = v.includes('\n', position);
+              let textSeacrh = v.substring(position + 1);
+              setHastagPosition(position);
+              /**
+               * cari posisi kursor dimana
+               * cek apakah posisi sebelum kursor # atau bukan
+               * ambil semua value setelah posisi #
+               */
               if (!spaceStatus) {
                 if (!detectEnter) {
-                  let textSeacrh = v.substring(position + 1);
                   setPositionTopicSearch(position);
                   searchTopic(textSeacrh);
                 }
                 else {
                   setTopicSearch([]);
+                  // if (listTopic.indexOf(textSeacrh) === -1) {
+                  //   let newArr = [...listTopic, textSeacrh];
+                  //   setListTopic(newArr);
+                  // }
                 }
               }
               else {
                 setTopicSearch([]);
+                // if (listTopic.indexOf(textSeacrh) === -1) {
+                //   let newArr = [...listTopic, textSeacrh];
+                //   setListTopic(newArr);
+                // }
               }
-              // harus ke trigger sebelum ketik spasi setelah 
             }
             else {
               setTopicSearch([]);
@@ -717,9 +734,14 @@ const CreatePost = () => {
                   <TouchableNativeFeedback onPress={() => {
                     let topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
                     let oldMessage = message;
-                    let pos = positionTopicSearch + 1;
-                    let s = oldMessage.substring(0, pos);
-                    let newMessage = s.insert(pos, topicItem);
+                    let start = hastagPosition + 1;
+                    let end = positionTopicSearch + 1;
+                    let s = oldMessage.substring(0, end);
+                    let newMessage = s.insert(start, topicItem);
+                    if (listTopic.indexOf(topicItem) === -1) {
+                      let newArr = [...listTopic, topicItem];
+                      setListTopic(newArr);
+                    }
                     setMessage(newMessage);
                     setTopicSearch([]);
                   }}>
