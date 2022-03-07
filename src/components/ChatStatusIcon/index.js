@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import IconChatCheckMark from '../../assets/icon/IconChatCheckMark'
 import IconChatClock from '../../assets/icon/IconChatClock';
+import IconChatDelivered from '../../assets/icon/IconChatDelivered';
 import { calculateTime } from '../../utils/time';
 import { getUserId } from '../../utils/users';
 
@@ -34,8 +35,12 @@ const ChatStatusIcon = (props) => {
         if(status === 'sending') {
             // TODO: Change to clock icon
             return <IconChatClock height={14} width={14} />
-        } else {
+         } else if(checkMarkStatus === 1) {
+            // Not read by recipient
             return <IconChatCheckMark height={14} width={14}/>
+        } else if(checkMarkStatus === 2) {
+            // Read by recipient
+            return <IconChatDelivered height={14} width={14}/>
         }
     }
 

@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import {
   Animated,
   Pressable,
@@ -9,21 +8,22 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {COLORS, FONTS, SIZES} from '../../../utils/theme';
+import { useNavigation } from '@react-navigation/core'
 
-import {Context} from '../../../context/Store';
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryRepo from '../../../service/discovery';
 import GeneralComponentAction from '../../../context/actions/generalComponentAction';
+import IconClear from '../../../assets/icon/IconClear';
 import MemoIcClearCircle from '../../../assets/icons/ic_clear_circle';
 import MemoIc_arrow_back_white from '../../../assets/arrow/Ic_arrow_back_white';
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
-import { colors } from '../../../utils/colors';
 import dimen from '../../../utils/dimen';
+import {COLORS, FONTS, SIZES} from '../../../utils/theme';
+import {Context} from '../../../context/Store';
+import { colors } from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
-import { useNavigation } from '@react-navigation/core'
 
 let getDataTimeoutId;
 
@@ -32,6 +32,8 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
   const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery
   const discoverySearchBarRef = React.useRef(null)
+  const [isTextAvailable, setIsTextAvailable] = React.useState(false)
+  const [isFocus, setIsFocus] = React.useState(false)
 
   let { discoverySearchBarText } = generalComponent
 
@@ -39,12 +41,18 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
     if(navigation.canGoBack()) navigation.goBack()
   }
 
+  const __handleFocus = (isFocus) => {
+    setIsFocus(isFocus)
+  }
+
   const __handleChangeText = (text) => {
+    setIsTextAvailable(text.length > 0)
     GeneralComponentAction.setDiscoverySearchBar(text, generalComponentDispatch)
   }
 
   const __handleOnClearText = () => {
     __handleChangeText("")
+    setIsTextAvailable(false)
     discoverySearchBarRef.current.focus()
   }
 
@@ -68,6 +76,7 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
 
   React.useEffect(() => {
     const unsubscribe = () => {
+      setIsTextAvailable(false)
       GeneralComponentAction.setDiscoverySearchBar('', generalComponentDispatch)
     }
 
@@ -88,9 +97,10 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
       </Pressable>
       <Pressable onPress={onContainerClicked} style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
-          <View style={styles.wrapperIcon}>
+          {(!isTextAvailable && !isFocus) && <View style={styles.wrapperIcon}>
             <MemoIc_search width={16.67} height={16.67} />
           </View>
+          }
           {/* <Text style={styles.inputText}>{StringConstant.newsTabHeaderPlaceholder}</Text> */}
           <TextInput
             ref={discoverySearchBarRef}
@@ -98,21 +108,23 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
             autoFocus={true}
             value={generalComponent.discoverySearchBarText}
             onChangeText={__handleChangeText}
+            onFocus={() => __handleFocus(true)}
+            onBlur={() => __handleFocus(false)}
             multiline={false}
-            placeholder={StringConstant.newsTabHeaderPlaceholder}
+            placeholder={StringConstant.discoverySearchBarPlaceholder}
             placeholderTextColor={COLORS.gray1}
             style={styles.input} />
 
-          <Pressable onPress={__handleOnClearText} style={styles.clearIconContainer}
+          {(isTextAvailable || isFocus) && <Pressable onPress={__handleOnClearText} style={styles.clearIconContainer}
             android_ripple={{
               color: COLORS.gray1,
               borderless: true,
               radius: 14,
             }}>
             <View style={styles.wrapperDeleteIcon}>
-              <MemoIcClearCircle width={16.67} height={16.67} iconColor={colors.black}/>
+              <IconClear width={9} height={10} iconColor={colors.black}/>
             </View>
-          </Pressable>
+          </Pressable> }
         </View>
       </Pressable>
     </Animated.View>
@@ -121,14 +133,17 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
 
 const styles = StyleSheet.create({
   arrowContainer: {paddingLeft:20},
-  backArrow : {flex: 1, justifyContent: 'center', marginRight: 16, },
+  backArrow : {flex: 1, justifyContent: 'center', marginRight: 9, },
   container: {
     flexDirection: 'row',
     backgroundColor: 'white',
     marginBottom: SIZES.base,
     marginHorizontal: SIZES.base,
   },
-  clearIconContainer: {justifyContent: 'center', alignItems: 'center'},
+  clearIconContainer: {
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
   searchContainer: {
     flex: 1,
     marginRight: 20,
@@ -154,7 +169,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginRight: 16,
-    paddingStart: 10,
+    paddingStart: 8,
     flex: 1,
     fontSize: 14,
     fontFamily: fonts.inter[400],
@@ -175,13 +190,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   wrapperIcon: {
-    marginLeft: 8,
+    marginLeft: 9.67,
+    marginRight: 1.67,
     alignSelf: 'center',
     justifyContent: 'center',
   },
   wrapperDeleteIcon: {
     alignSelf: 'center',
     justifyContent: 'center',
+    marginRight: 9.5,
   },
   newPostText: {
     color: COLORS.holyTosca,

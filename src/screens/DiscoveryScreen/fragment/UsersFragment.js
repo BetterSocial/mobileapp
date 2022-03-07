@@ -1,16 +1,19 @@
 import * as React from 'react';
-
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 
-import { Context } from '../../../context/Store'
-import DomainList from '../../Followings/elements/RenderList';
+import DomainList from '../elements/DiscoveryItemList';
 import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import StringConstant from '../../../utils/string/StringConstant';
+import { COLORS } from '../../../utils/theme';
+import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
 
 const UsersFragment = () => {
+    const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const { isLoadingDiscovery, followedUsers, unfollowedUsers } = discovery
@@ -24,6 +27,19 @@ const UsersFragment = () => {
         };
         parseToken();
     }, []);
+
+    const __handleOnPress = (item) => {
+        // console.log(item)
+        // console.log(myId)
+        navigation.push('OtherProfile', {
+            data : {
+                user_id: myId,
+                other_id: item.user_id,
+                username: item.username,    
+            }
+        })
+
+    }
     
     if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
     if(followedUsers.length === 0 && unfollowedUsers.length ===0) return <View style={styles.noDataFoundContainer}>
@@ -32,19 +48,24 @@ const UsersFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer}>
         { followedUsers.map((item, index) => {
-            return <DomainList key={`followedUsers-${index}`} item={{
+            return <DomainList key={`followedUsers-${index}`} onPressBody={() => __handleOnPress(item)} item={{
                 name: item.username,
                 image: item.profile_pic_path,
                 isunfollowed: item.user_id_follower === null,
+                description: item.bio
             }} />
         })}
 
-        { unfollowedUsers.length > 0 && <Text style={styles.unfollowedHeaders}>Unfollowed Users</Text>}
+        { unfollowedUsers.length > 0 && 
+            <View style={styles.unfollowedHeaderContainer}>
+            <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
+            </View>}
         { unfollowedUsers.map((item, index) => {
-            return <DomainList key={`unfollowedUsers-${index}`} item={{
+            return <DomainList key={`unfollowedUsers-${index}`} onPressBody={() => __handleOnPress(item)} item={{
                 name: item.username,
                 image: item.profile_pic_path,
-                isunfollowed: item.user_id_follower === null
+                isunfollowed: item.user_id_follower === null,
+                description: item.bio
             }} />
         })}
     </ScrollView>
@@ -65,9 +86,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         fontFamily: fonts.inter[600],
     },
+    unfollowedHeaderContainer: {
+        backgroundColor: COLORS.lightgrey,
+        height: 40,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
+    },
     unfollowedHeaders: {
         fontFamily: fonts.inter[600],
-        marginLeft: 24,
+        paddingLeft: 24,
     }
 })
 
