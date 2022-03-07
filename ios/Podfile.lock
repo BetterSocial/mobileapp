@@ -552,7 +552,7 @@ PODS:
   - RNVectorIcons (8.1.0):
     - React-Core
   - Toast (4.0.0)
-  - TOCropViewController (2.6.0)
+  - TOCropViewController (2.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -895,10 +895,10 @@ SPEC CHECKSUMS:
   RNTextSize: 91955a6ea2adda9dc7802ce472b7a4dc717686f6
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
+  TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: fb0ea0765298fa72a9ca47043cfb40f815384d77
+PODFILE CHECKSUM: 5447c728f7a8a3871fd44d84c23bb2fa4eb29682
 
 COCOAPODS: 1.11.2
