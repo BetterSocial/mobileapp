@@ -145,6 +145,17 @@ const convertString = (str, from, to) => {
   return str.split(from).join(to);
 };
 
+/**
+ * 
+ * @param {String} topic 
+ * @returns {String}
+ */
+const convertTopicNameToTopicPageScreenParam = (topic) => {
+  let lowerCaseTopic = topic.toLocaleLowerCase()
+  let sanitizeSpaceTopic = lowerCaseTopic.split(` `).join('-')
+  return `topic_${sanitizeSpaceTopic}`
+}
+
 const capitalizeFirstText = (str) => {
   //split the above string into an array of strings 
   //whenever a blank space is encountered
@@ -192,6 +203,7 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
 export {
   capitalizeFirstText,
   convertString,
+  convertTopicNameToTopicPageScreenParam,
   displayFormattedSearchLocations,
   getChatName,
   getGroupMemberCount,
