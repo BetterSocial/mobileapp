@@ -35,10 +35,10 @@ const ChannelStatusIcon = (props) => {
             return <IconChatClock height={14} width={14} />
         } else if(checkMarkStatus === 1) {
             // Not read by recipient
-            return <IconChatCheckMark height={10} width={10} style={{alignSelf:'center'}}/>
+            return <IconChatCheckMark height={15} width={11} style={{alignSelf:'center'}}/>
         } else if(checkMarkStatus === 2) {
             // Read by recipient
-            return <IconChatDelivered height={14} width={14}/>
+            return <IconChatDelivered height={15} width={15} style={{alignSelf:'center'}}/>
         }
     }
 

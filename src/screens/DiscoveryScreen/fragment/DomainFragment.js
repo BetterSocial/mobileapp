@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 
 import DomainList from '../elements/DiscoveryItemList';
 import Header from '../../../screens/DomainScreen/elements/Header';
@@ -13,6 +14,7 @@ import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
 
 const DomainFragment = () => {
+    const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const { isLoadingDiscovery, followedDomains, unfollowedDomains } = discovery
@@ -27,8 +29,25 @@ const DomainFragment = () => {
         parseToken();
     }, []);
 
-    console.log(followedDomains)
-    console.log(unfollowedDomains)
+    const __handleOnPressDomain = (item) => {
+        console.log(item)
+        let navigationParam = {
+            item: {
+                content : {
+                    domain_page_id : item.domain_page_id
+                },
+                domain: {
+                    image: item.logo
+                },
+                og: {
+                    domain : item.domain_name,
+                    domainImage: item.logo,
+                }    
+            }
+        }
+
+        navigation.push('DomainScreen', navigationParam)
+    }
     
     if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
     if(followedDomains.length === 0 && unfollowedDomains.length ===0) return <View style={styles.noDataFoundContainer}>
@@ -38,11 +57,13 @@ const DomainFragment = () => {
     return <ScrollView style={styles.fragmentContainer}>
         { followedDomains.map((item, index) => {
             return <View key={`domainDiscovery-${index}`} style={styles.domainContainer}>
-                <DomainList isDomain={true} item={{
+                <DomainList isDomain={true} 
+                    onPressBody={() => __handleOnPressDomain(item)}
+                    item={{
                         name: item.domain_name,
                         image: item.logo,
                         isunfollowed: item.user_id_follower === null,
-                        description: item.short_description || ""
+                        description: item.short_description || null
                     }}
                     />
             </View>
@@ -55,11 +76,13 @@ const DomainFragment = () => {
         }
         { unfollowedDomains.map((item, index) => {
             return <View key={`domainDiscovery-${index}`} style={styles.domainContainer}>
-                 <DomainList isDomain={true} item={{
+                 <DomainList isDomain={true} 
+                    onPressBody={() => __handleOnPressDomain(item)}
+                    item={{
                         name: item.domain_name,
                         image: item.logo,
                         isunfollowed: item.user_id_follower === null,
-                        description: item.short_description || ""
+                        description: item.short_description || null
                     }}
                     />
             </View>
@@ -69,7 +92,7 @@ const DomainFragment = () => {
 
 const styles = StyleSheet.create({
     domainContainer: {
-        paddingVertical: 16,
+        // paddingVertical: 16,
     },
     fragmentContainer: {
         flex: 1,

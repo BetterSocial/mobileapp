@@ -10,13 +10,15 @@ import {
   ChannelPreviewStatus,
   ChannelPreviewTitle,
   Chat,
-  Streami18n,
+  DeepPartial,
   OverlayProvider,
-  DeepPartial, Theme
+  Streami18n,
+  Theme
 } from 'stream-chat-react-native';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
+import FeedNotification from './elements/FeedNotification';
 import IconChatCheckMark from '../../assets/icon/IconChatCheckMark'
 import Loading from '../Loading';
 import Search from './elements/Search';
@@ -33,7 +35,6 @@ import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import FeedNotification from './elements/FeedNotification';
 
 const theme = {
   messageSimple: {
@@ -135,6 +136,8 @@ const ChannelListScreen = ({ navigation }) => {
                   if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
                     // toDo reset main feeds
                     setMainFeeds(null, dispatchFeed)
+                    console.log('channel.data.id')
+                    console.log(channel.data.id)
                     navigation.navigate('TopicPageScreen', { id: channel.data.id });
                   } else {
                     setChannel(channel, dispatch);

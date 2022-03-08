@@ -36,10 +36,10 @@ const ChatStatusIcon = (props) => {
             return <IconChatClock height={14} width={14} />
         } else if(readBy) {
             // NOTE: status read by recipient
-            return <IconChatDelivered height={14} width={14}/>
+            return <IconChatDelivered height={14} width={14} style={{marginTop: -2}}/>
         } else {
             // NOTE: status has not been read by recipient
-            return <IconChatCheckMark height={10} width={10} style={{alignSelf:'center'}}/>
+            return <IconChatCheckMark height={11} width={11}/>
         }
     }
 

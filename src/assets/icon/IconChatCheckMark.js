@@ -1,22 +1,22 @@
 import * as React from "react"
 import Svg, { Path } from "react-native-svg"
 
-const IconChatCheckMark = (props) => (
+const SvgComponent = (props) => (
   <Svg
-    width={14}
-    height={14}
+    width={15}
+    height={11}
     fill="none"
-    viewBox="0 0 10 10"
+    viewBox="0 0 15 11"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
     <Path
       fillRule="evenodd"
       clipRule="evenodd"
-      d="M10.635.193c.267.261.272.69.011.958L4.031 7.925a.677.677 0 0 1-1.002-.036L.16 4.502a.677.677 0 0 1 1.034-.875l2.388 2.819L9.677.204a.677.677 0 0 1 .958-.011Z"
+      d="M14.181.257c.357.349.364.92.015 1.277l-8.821 9.034a.903.903 0 0 1-1.336-.047L.214 6.003a.903.903 0 0 1 1.379-1.168l3.183 3.759L12.904.272A.903.903 0 0 1 14.18.257Z"
       fill="#828282"
     />
   </Svg>
 )
 
-export default IconChatCheckMark
+export default SvgComponent

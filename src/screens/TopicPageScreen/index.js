@@ -52,6 +52,7 @@ const TopicPageScreen = (props) => {
     const initData = async () => {
       try {
         setLoading(true)
+        console.log(route.params.id)
         let id = convertString(route.params.id, 'topic_', '');
         console.log('id: ', id);
         let topicName = convertString(id, '-', ' ')
