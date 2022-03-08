@@ -1,11 +1,13 @@
 import * as React from 'react';
-
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
-import { Context } from '../../../context/Store'
+import DomainList from '../elements/DiscoveryItemList';
 import Header from '../../../screens/DomainScreen/elements/Header';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RenderItemHeader from '../../../screens/DomainScreen/elements/RenderItemHeader';
+import StringConstant from '../../../utils/string/StringConstant';
+import { COLORS } from '../../../utils/theme';
+import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
@@ -24,6 +26,9 @@ const DomainFragment = () => {
         };
         parseToken();
     }, []);
+
+    console.log(followedDomains)
+    console.log(unfollowedDomains)
     
     if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
     if(followedDomains.length === 0 && unfollowedDomains.length ===0) return <View style={styles.noDataFoundContainer}>
@@ -33,18 +38,30 @@ const DomainFragment = () => {
     return <ScrollView style={styles.fragmentContainer}>
         { followedDomains.map((item, index) => {
             return <View key={`domainDiscovery-${index}`} style={styles.domainContainer}>
-                <RenderItemHeader image={item.logo} 
-                    item={{ domain: { name : item.domain_name } , time: new Date().toUTCString()}} 
-                    follow={item.user_id_follower !== null} />
+                <DomainList isDomain={true} item={{
+                        name: item.domain_name,
+                        image: item.logo,
+                        isunfollowed: item.user_id_follower === null,
+                        description: item.short_description || ""
+                    }}
+                    />
             </View>
         })}
 
-        { unfollowedDomains.length > 0 && <Text style={styles.unfollowedHeaders}>Unfollowed Domains</Text>}
+        { unfollowedDomains.length > 0 && 
+            <View style={styles.unfollowedHeaderContainer}>
+                <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreDomains}</Text>
+            </View>
+        }
         { unfollowedDomains.map((item, index) => {
             return <View key={`domainDiscovery-${index}`} style={styles.domainContainer}>
-                <RenderItemHeader image={item.logo} 
-                    item={{ domain: { name : item.domain_name } , time: new Date().toUTCString()}} 
-                    follow={item.user_id_follower !== null} />
+                 <DomainList isDomain={true} item={{
+                        name: item.domain_name,
+                        image: item.logo,
+                        isunfollowed: item.user_id_follower === null,
+                        description: item.short_description || ""
+                    }}
+                    />
             </View>
         })}
     </ScrollView>
@@ -67,6 +84,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         fontFamily: fonts.inter[600],
+    },
+    unfollowedHeaderContainer: {
+        backgroundColor: COLORS.lightgrey,
+        height: 40,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
     },
     unfollowedHeaders: {
         fontFamily: fonts.inter[600],

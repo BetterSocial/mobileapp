@@ -1,11 +1,12 @@
 import * as React from 'react';
-
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
-import { Context } from '../../../context/Store'
-import DomainList from '../../Followings/elements/RenderList';
+import DomainList from '../elements/DiscoveryItemList';
 import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import StringConstant from '../../../utils/string/StringConstant';
+import { COLORS } from '../../../utils/theme';
+import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
@@ -39,7 +40,11 @@ const TopicFragment = () => {
             }} />
         })}
 
-        { unfollowedTopic.length > 0 && <Text style={styles.unfollowedHeaders}>Unfollowed Topics</Text>}
+        { unfollowedTopic.length > 0 && 
+            <View style={styles.unfollowedHeaderContainer}>
+                <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreTopics}</Text>
+            </View>
+        }
         { unfollowedTopic.map((item, index) => {
             return <DomainList key={`unfollowedTopic-${index}`} isHashtag item={{
                 name: item.name,
@@ -64,6 +69,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         fontFamily: fonts.inter[600],
+    },
+    unfollowedHeaderContainer: {
+        backgroundColor: COLORS.lightgrey,
+        height: 40,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
     },
     unfollowedHeaders: {
         fontFamily: fonts.inter[600],

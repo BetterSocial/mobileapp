@@ -72,6 +72,15 @@ const styles = StyleSheet.create({
         // backgroundColor: 'green',
         marginTop: 4,
       },
+      domainDescription: {
+        fontFamily: fonts.inter[400],
+        fontSize: 12,
+        color: colors.bondi_blue,
+        flexWrap: 'wrap',
+        lineHeight: 18,
+        // backgroundColor: 'green',
+        marginTop: 4,
+      },
       buttonFollowing: {
         width: 88,
         height: 36,
@@ -95,7 +104,7 @@ const styles = StyleSheet.create({
 })
 
 const DomainList = (props) => {
-    const {onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody} = props
+    const {onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody, isDomain} = props
 
     const handlePress = (event) => {
         event.preventDefault();
@@ -123,8 +132,8 @@ const DomainList = (props) => {
                   {isHashtag && "#"}{item.name}
                 </Text>
 
-                { item.description && <Text
-                  style={styles.textProfileFullName}
+                { item.description !== null && <Text
+                  style={item.isDomain ? styles.textProfileFullName : styles.domainDescription}
                   numberOfLines={1}
                   ellipsizeMode={'tail'}>
                   {item.description ? item.description : ''}
@@ -153,6 +162,7 @@ DomainList.propTypes = {
     item: PropTypes.object,
     onPressList: PropTypes.func,
     isHashtag: PropTypes.bool,
+    isDomain: PropTypes.bool,
     onPressBody: PropTypes.func
 }
 

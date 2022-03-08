@@ -35,7 +35,7 @@ const ChannelStatusIcon = (props) => {
             return <IconChatClock height={14} width={14} />
         } else if(checkMarkStatus === 1) {
             // Not read by recipient
-            return <IconChatCheckMark height={14} width={14}/>
+            return <IconChatCheckMark height={10} width={10} style={{alignSelf:'center'}}/>
         } else if(checkMarkStatus === 2) {
             // Read by recipient
             return <IconChatDelivered height={14} width={14}/>
@@ -64,7 +64,13 @@ const styles = StyleSheet.create({
         fontSize: 12, marginLeft: 4
     },
 
-    dateContainer: { paddingRight: 12, display:'flex', flexDirection:'row'}
+    dateContainer: { 
+        paddingRight: 12, 
+        display:'flex', 
+        flexDirection:'row',
+        justifyContent: 'center',
+        // backgroundColor: 'red'
+    }
 })
 
 export default ChannelStatusIcon

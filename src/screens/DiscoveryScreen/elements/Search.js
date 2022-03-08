@@ -65,9 +65,10 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
   }
 
   React.useEffect(() => {
-    if(discoverySearchBarText.length > 3) {
+    if(discoverySearchBarText.length > 1) {
       DiscoveryAction.setDiscoveryLoadingData(true, discoveryDispatch)
       if(getDataTimeoutId) clearTimeout(getDataTimeoutId)
+      
       getDataTimeoutId = setTimeout( async() => {
         await __fetchDiscoveryData()
       }, 3000)
