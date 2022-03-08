@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
+import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DomainList from '../elements/DiscoveryItemList';
 import Header from '../../../screens/DomainScreen/elements/Header';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
@@ -10,8 +11,12 @@ import StringConstant from '../../../utils/string/StringConstant';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
+import { followDomain, unfollowDomain } from '../../../service/domain';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
+
+const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
+const FROM_UNFOLLOWED_DOMAIN = 'fromunfolloweddomains';
 
 const DomainFragment = () => {
     const navigation = useNavigation()
@@ -48,6 +53,54 @@ const DomainFragment = () => {
 
         navigation.push('DomainScreen', navigationParam)
     }
+
+    const __handleFollow = async (from, willFollow, item, index) => {
+        // console.log(item)
+        if(from === FROM_FOLLOWED_DOMAIN) {
+            let newFollowedDomains = [...followedDomains]
+            newFollowedDomains[index].user_id_follower = willFollow ? myId : null
+
+            DiscoveryAction.setNewFollowedDomains(newFollowedDomains, discoveryDispatch)
+        }
+
+        if(from === FROM_UNFOLLOWED_DOMAIN) {
+            let newUnfollowedDomains = [...unfollowedDomains]
+            newUnfollowedDomains[index].user_id_follower = willFollow ? myId : null
+
+            DiscoveryAction.setNewUnfollowedDomains(newUnfollowedDomains, discoveryDispatch)
+        }
+
+        let data = {
+            domainId: item.domain_page_id,
+            source: 'discoveryScreen',
+        };
+
+        console.log('data')
+        console.log(data)
+        if(willFollow) {
+            const res = await followDomain(data);
+            console.log(res)
+        } else {
+            const res = await unfollowDomain(data);
+            console.log(res)
+        }
+    }
+
+    const __renderDiscoveryItem = (from, key, item, index) => {
+        return <View key={`${key}-${index}`} style={styles.domainContainer}>
+                <DomainList isDomain={true} 
+                    onPressBody={() => __handleOnPressDomain(item)}
+                    handleSetFollow={() => __handleFollow(from, true, item, index)}
+                    handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+                    item={{
+                        name: item.domain_name,
+                        image: item.logo,
+                        isunfollowed: item.user_id_follower === null,
+                        description: item.short_description || null
+                    }}
+                    />
+            </View>
+    }
     
     if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
     if(followedDomains.length === 0 && unfollowedDomains.length ===0) return <View style={styles.noDataFoundContainer}>
@@ -56,17 +109,18 @@ const DomainFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer}>
         { followedDomains.map((item, index) => {
-            return <View key={`domainDiscovery-${index}`} style={styles.domainContainer}>
-                <DomainList isDomain={true} 
-                    onPressBody={() => __handleOnPressDomain(item)}
-                    item={{
-                        name: item.domain_name,
-                        image: item.logo,
-                        isunfollowed: item.user_id_follower === null,
-                        description: item.short_description || null
-                    }}
-                    />
-            </View>
+            return __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN, `followedDomainDiscovery`, item, index)
+            // return <View key={`domainDiscovery-${index}`} style={styles.domainContainer}>
+            //     <DomainList isDomain={true} 
+            //         onPressBody={() => __handleOnPressDomain(item)}
+            //         item={{
+            //             name: item.domain_name,
+            //             image: item.logo,
+            //             isunfollowed: item.user_id_follower === null,
+            //             description: item.short_description || null
+            //         }}
+            //         />
+            // </View>
         })}
 
         { unfollowedDomains.length > 0 && 
@@ -75,17 +129,18 @@ const DomainFragment = () => {
             </View>
         }
         { unfollowedDomains.map((item, index) => {
-            return <View key={`domainDiscovery-${index}`} style={styles.domainContainer}>
-                 <DomainList isDomain={true} 
-                    onPressBody={() => __handleOnPressDomain(item)}
-                    item={{
-                        name: item.domain_name,
-                        image: item.logo,
-                        isunfollowed: item.user_id_follower === null,
-                        description: item.short_description || null
-                    }}
-                    />
-            </View>
+            return __renderDiscoveryItem(FROM_UNFOLLOWED_DOMAIN, `unfollowedDomainDiscovery`, item, index)
+        //     return <View key={`domainDiscovery-${index}`} style={styles.domainContainer}>
+        //          <DomainList isDomain={true} 
+        //             onPressBody={() => __handleOnPressDomain(item)}
+        //             item={{
+        //                 name: item.domain_name,
+        //                 image: item.logo,
+        //                 isunfollowed: item.user_id_follower === null,
+        //                 description: item.short_description || null
+        //             }}
+        //             />
+        //     </View>
         })}
     </ScrollView>
 }

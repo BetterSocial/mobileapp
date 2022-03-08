@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'
 
+import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DomainList from '../elements/DiscoveryItemList';
 import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
@@ -11,6 +12,10 @@ import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
+import { setFollow, setUnFollow } from '../../../service/profile';
+
+const FROM_FOLLOWED_USERS = 'fromfollowedusers';
+const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
 
 const UsersFragment = () => {
     const navigation = useNavigation()
@@ -29,8 +34,6 @@ const UsersFragment = () => {
     }, []);
 
     const __handleOnPress = (item) => {
-        // console.log(item)
-        // console.log(myId)
         navigation.push('OtherProfile', {
             data : {
                 user_id: myId,
@@ -38,7 +41,46 @@ const UsersFragment = () => {
                 username: item.username,    
             }
         })
+    }
 
+    const __handleFollow = async (from, willFollow, item, index) => {
+        if(from === FROM_FOLLOWED_USERS) {
+            let newFollowedUsers = [...followedUsers]
+            newFollowedUsers[index].user_id_follower = willFollow ? myId : null
+
+            DiscoveryAction.setNewFollowedUsers(newFollowedUsers, discoveryDispatch)
+        }
+
+        if(from === FROM_UNFOLLOWED_USERS) {
+            let newUnfollowedUsers = [...unfollowedUsers]
+            newUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
+
+            DiscoveryAction.setNewUnfollowedUsers(newUnfollowedUsers, discoveryDispatch)
+        }
+
+        let data = {
+            user_id_follower: myId,
+            user_id_followed: item.user_id,
+            follow_source: 'discoveryScreen',
+        };
+
+        if(willFollow) {
+            const result = await setFollow(data);
+        } else {
+            const result = await setUnFollow(data);
+        }
+    }
+
+    const __renderDiscoveryItem = (from, key, item, index) => {
+        return <DomainList key={`${key}-${index}`} onPressBody={() => __handleOnPress(item)} 
+            handleSetFollow={() => __handleFollow(from, true, item, index)}
+            handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+            item={{
+                name: item.username,
+                image: item.profile_pic_path,
+                isunfollowed: item.user_id_follower === null,
+                description: item.bio
+        }} />
     }
     
     if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
@@ -48,12 +90,7 @@ const UsersFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer}>
         { followedUsers.map((item, index) => {
-            return <DomainList key={`followedUsers-${index}`} onPressBody={() => __handleOnPress(item)} item={{
-                name: item.username,
-                image: item.profile_pic_path,
-                isunfollowed: item.user_id_follower === null,
-                description: item.bio
-            }} />
+            return __renderDiscoveryItem(FROM_FOLLOWED_USERS, "followedUsers", item, index)
         })}
 
         { unfollowedUsers.length > 0 && 
@@ -61,12 +98,7 @@ const UsersFragment = () => {
             <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
             </View>}
         { unfollowedUsers.map((item, index) => {
-            return <DomainList key={`unfollowedUsers-${index}`} onPressBody={() => __handleOnPress(item)} item={{
-                name: item.username,
-                image: item.profile_pic_path,
-                isunfollowed: item.user_id_follower === null,
-                description: item.bio
-            }} />
+            return __renderDiscoveryItem(FROM_UNFOLLOWED_USERS, "unfollowedUsers", item, index)
         })}
     </ScrollView>
 }

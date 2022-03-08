@@ -14,7 +14,6 @@ import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryRepo from '../../../service/discovery';
 import GeneralComponentAction from '../../../context/actions/generalComponentAction';
 import IconClear from '../../../assets/icon/IconClear';
-import MemoIcClearCircle from '../../../assets/icons/ic_clear_circle';
 import MemoIc_arrow_back_white from '../../../assets/arrow/Ic_arrow_back_white';
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../../assets/icons/Ic_search';
@@ -79,6 +78,15 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
     const unsubscribe = () => {
       setIsTextAvailable(false)
       GeneralComponentAction.setDiscoverySearchBar('', generalComponentDispatch)
+      DiscoveryAction.setDiscoveryData({
+        followedUsers: [], 
+        unfollowedUsers: [], 
+        followedDomains: [],
+        unfollowedDomains: [], 
+        followedTopic: [], 
+        unfollowedTopic: [], 
+        news: [],
+      }, discoveryDispatch)
     }
 
     return unsubscribe

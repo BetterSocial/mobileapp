@@ -9,6 +9,7 @@ import StringConstant from '../../../utils/string/StringConstant';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
+import { convertTopicNameToTopicPageScreenParam } from '../../../utils/string/StringUtils';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
 
@@ -30,6 +31,13 @@ const TopicFragment = () => {
 
     const __handleOnTopicPress = (item) => {
         console.log(item)
+
+        let navigationParam = {
+            id: convertTopicNameToTopicPageScreenParam(item.name)
+        }
+
+        console.log(navigationParam)
+        navigation.push('TopicPageScreen', navigationParam)
     }
     
     if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
