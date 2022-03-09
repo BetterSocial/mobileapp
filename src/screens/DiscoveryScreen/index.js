@@ -1,20 +1,19 @@
 import * as React from 'react';
-
-import {DEFAULT_PROFILE_PIC_PATH, DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS, DISCOVERY_TAB_TOPICS, DISCOVERY_TAB_USERS} from '../../utils/constants';
-import {ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
 import Animated from 'react-native-reanimated';
+import {ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 import DomainFragment from './fragment/DomainFragment';
 import DomainList from '../Followings/elements/RenderList';
-import { FONTS } from '../../utils/theme';
 import Followings from '../Followings';
 import NewsFragment from './fragment/NewsFragment';
 import Search from './elements/Search';
 import StringConstant from '../../utils/string/StringConstant';
 import TopicFragment from './fragment/TopicFragment';
 import UsersFragment from './fragment/UsersFragment';
+import {DEFAULT_PROFILE_PIC_PATH, DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS, DISCOVERY_TAB_TOPICS, DISCOVERY_TAB_USERS} from '../../utils/constants';
+import { FONTS } from '../../utils/theme';
 import { colors } from '../../utils/colors';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { fonts } from '../../utils/fonts';
 
 const DiscoveryScreen = ({ route }) => {
@@ -95,6 +94,12 @@ const DiscoveryScreen = ({ route }) => {
                         title: 'Users',
                     }} />
                 <Tabs.Screen
+                    name={DISCOVERY_TAB_TOPICS}
+                    component={TopicFragment}
+                    options={{
+                        title: 'Topics',
+                    }} />
+                <Tabs.Screen
                     name={DISCOVERY_TAB_DOMAINS}
                     component={DomainFragment}
                     options={{
@@ -105,12 +110,6 @@ const DiscoveryScreen = ({ route }) => {
                     component={NewsFragment}
                     options={{
                         title: 'News',
-                    }} />
-                <Tabs.Screen
-                    name={DISCOVERY_TAB_TOPICS}
-                    component={TopicFragment}
-                    options={{
-                        title: 'Topics',
                     }} />
             </Tabs.Navigator>
         </View>
@@ -145,8 +144,8 @@ const S = StyleSheet.create({
     toptabcontainer: {
         flexDirection: 'row',
         backgroundColor: colors.white,
-        borderBottomColor: '#00000050',
-        borderBottomWidth: 1,
+        // borderBottomColor: '#00000050',
+        // borderBottomWidth: 1,
         paddingHorizontal: 4,
     },
 
@@ -159,12 +158,13 @@ const S = StyleSheet.create({
         fontFamily: fonts.inter[500],
         textAlign: 'left',
         fontSize: 14,
-        paddingVertical: 10,
+        paddingVertical: 15,
     },
 
     viewborderbottom: {
         borderBottomColor: colors.holytosca,
         borderBottomWidth: 1,
+        width: '60%',
     },
 });
 

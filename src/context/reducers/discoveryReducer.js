@@ -2,6 +2,10 @@
 import {
   DISCOVERY_SET_DATA,
   DISCOVERY_SET_LOADING_DATA,
+  DISCOVERY_SET_NEW_FOLLOWED_DOMAIN,
+  DISCOVERY_SET_NEW_FOLLOWED_USER,
+  DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN,
+  DISCOVERY_SET_NEW_UNFOLLOWED_USER,
 } from '../Types';
 
 /**
@@ -64,6 +68,30 @@ const discoveryReducer = (state = discoveryState, action) => {
       return {
         ...state,
         isLoadingDiscovery: action.payload,
+      };
+
+    case DISCOVERY_SET_NEW_FOLLOWED_USER:
+      return {
+        ...state,
+        followedUsers: action.payload.newFollowedUsers,
+      };
+
+    case DISCOVERY_SET_NEW_UNFOLLOWED_USER:
+      return {
+        ...state,
+        unfollowedUsers: action.payload.newUnfollowedUsers,
+      };
+
+    case DISCOVERY_SET_NEW_FOLLOWED_DOMAIN:
+      return {
+        ...state,
+        followedDomains: action.payload.newFollowedDomains,
+      };
+
+    case DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN:
+      return {
+        ...state,
+        unfollowedDomains: action.payload.newUnfollowedDomains,
       };
     default:
       return state;

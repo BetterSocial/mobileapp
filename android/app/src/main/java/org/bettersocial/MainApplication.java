@@ -14,6 +14,7 @@ import java.util.List;
 import com.facebook.react.bridge.JSIModulePackage; // <- add
 import com.swmansion.reanimated.ReanimatedJSIModulePackage; // <- add
 import io.invertase.firebase.analytics.ReactNativeFirebaseAnalyticsPackage;
+import org.bettersocial.RNENVConfigPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           // packages.add(new ReactNativeFirebaseAnalyticsPackage());
+          packages.add(new RNENVConfigPackage());
           return packages;
         }
 

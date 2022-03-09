@@ -1,8 +1,10 @@
 import {StreamChat} from 'stream-chat';
+import Config from 'react-native-config';
 import {STREAM_API_KEY} from '@env';
 import {getAccessToken} from '../utils/token';
 import {getUserId} from '../utils/users';
-const chatClient = new StreamChat(STREAM_API_KEY);
+
+const chatClient = new StreamChat(Config.STREAM_API_KEY);
 const createChannel = async (
   channelType,
   members,
