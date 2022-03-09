@@ -6,15 +6,15 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/core';
-import {useRoute} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/core';
+import { useRoute } from '@react-navigation/native';
 
 import DomainList from './elements/RenderList';
 import Loading from '../Loading';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
-import {getUserId} from '../../utils/users';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
+import { getFollowing, setFollow, setUnFollow } from '../../service/profile';
+import { getUserId } from '../../utils/users';
 
 const width = Dimensions.get('screen').width;
 
@@ -26,7 +26,7 @@ const Followings = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [dataFollowing, setDataFollowing] = React.useState([]);
 
-  const {params} = route;
+  const { params } = route;
 
   React.useEffect(() => {
     setUserId(params.user_id);
@@ -40,7 +40,7 @@ const Followings = () => {
     const result = await getFollowing(userId);
     if (result.code === 200) {
       withLoading ? setIsLoading(false) : null;
-      const newData = result.data.map((data) => ({ ...data, name: data.user.username, image: data.user.profile_pic_path, description: null}))
+      const newData = result.data.map((data) => ({ ...data, name: data.user.username, image: data.user.profile_pic_path, description: null }))
       console.log('newData')
       console.log(newData)
       setDataFollowing(newData);
@@ -57,7 +57,7 @@ const Followings = () => {
       username: value.user.username,
     };
 
-    navigation.navigate('OtherProfile', {data});
+    navigation.navigate('OtherProfile', { data });
   };
 
   const handleSetUnFollow = async (index) => {
@@ -73,6 +73,7 @@ const Followings = () => {
     };
 
     const result = await setUnFollow(data);
+    console.log('handle unfollow: ', result);
   };
 
   const handleSetFollow = async (index) => {
@@ -89,7 +90,7 @@ const Followings = () => {
     const result = await setFollow(data);
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <DomainList item={item} onPressBody={() => goToOtherProfile(item)} handleSetFollow={() => handleSetFollow(index)} handleSetUnFollow={() => handleSetUnFollow(index)} />
     );
@@ -108,12 +109,12 @@ const Followings = () => {
           />
         </View>
       ) : (<View style={styles.nousercontent}>
-          <Text style={styles.nousertext}>
-            {
-              isLoading ? "" : 'You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.'
-            }
-          </Text>
-        </View>
+        <Text style={styles.nousertext}>
+          {
+            isLoading ? "" : 'You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.'
+          }
+        </Text>
+      </View>
       )}
       <Loading visible={isLoading} />
     </View>

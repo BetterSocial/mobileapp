@@ -140,10 +140,11 @@ const CreatePost = () => {
   const [geoList, setGeoList] = React.useState([]);
   const [geoSelect, setGeoSelect] = React.useState(0);
   const [topicSearch, setTopicSearch] = React.useState([]);
-  const [isTopicOverlay, setTopicOverlay] = React.useState(false);
   const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
-  const [inPositionSearch, setInPositionSearch] = React.useState([]);
   const [locationId, setLocationId] = React.useState('');
+  const [positionEndCursor, setPositionEndCursor] = React.useState(0);
+  const [hastagPosition, setHastagPosition] = React.useState(0);
+
 
 
   const listPostExpired = [
@@ -391,6 +392,7 @@ const CreatePost = () => {
   };
 
   const onSaveTopic = (v) => {
+    console.log(v);
     setListTopic(v);
     sheetTopicRef.current.close();
   };
@@ -671,19 +673,46 @@ const CreatePost = () => {
         />
         <Gap style={styles.height(8)} />
         <TextInput
+          onSelectionChange={(e) => {
+            setPositionEndCursor(e.nativeEvent.selection.end);
+          }}
+          onChange={(v) => {
+          }}
           onChangeText={(v) => {
-            // cek apakah mengndung # apa tidak
             if (v.includes('#')) {
-              // ambil posisi #
-              let position = v.indexOf('#');
-              // cari spasi mulai dari posisi #
+              let position = v.lastIndexOf('#', positionEndCursor);
               let spaceStatus = v.includes(' ', position);
+              let detectEnter = v.includes('\n', position);
+              let textSeacrh = v.substring(position + 1);
+              setHastagPosition(position);
+              /**
+               * cari posisi kursor dimana
+               * cek apakah posisi sebelum kursor # atau bukan
+               * ambil semua value setelah posisi #
+               */
               if (!spaceStatus) {
-                let textSeacrh = v.substring(position + 1);
-                setPositionTopicSearch(position);
-                searchTopic(textSeacrh);
+                if (!detectEnter) {
+                  setPositionTopicSearch(position);
+                  searchTopic(textSeacrh);
+                }
+                else {
+                  setTopicSearch([]);
+                  // if (listTopic.indexOf(textSeacrh) === -1) {
+                  //   let newArr = [...listTopic, textSeacrh];
+                  //   setListTopic(newArr);
+                  // }
+                }
               }
-              // harus ke trigger sebelum ketik spasi setelah 
+              else {
+                setTopicSearch([]);
+                // if (listTopic.indexOf(textSeacrh) === -1) {
+                //   let newArr = [...listTopic, textSeacrh];
+                //   setListTopic(newArr);
+                // }
+              }
+            }
+            else {
+              setTopicSearch([]);
             }
             setMessage(v)
           }}
@@ -697,33 +726,24 @@ const CreatePost = () => {
           autoCapitalize={'none'}
         />
 
-
-        <Gap height={16} />
-
         {
           topicSearch.length > 0 && (
-            <Card>
+            <Card style={{ marginTop: -16 }}>
               {topicSearch.map((item, index) => {
                 return (
                   <TouchableNativeFeedback onPress={() => {
-                    // todo masukan pilihan user kedalam text
                     let topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
                     let oldMessage = message;
-                    console.log(positionTopicSearch);
-                    let pos = positionTopicSearch + 1;
-                    console.log(pos);
-                    let s = oldMessage.substring(0, pos);
-                    console.log('old message: ', s);
-                    let test = (
-                      <Text style={{ fontSize: 24 }}>
-                        {topicItem}
-                      </Text>
-                    )
-                    let newMessage = s.insert(pos, test);
-                    console.log('new message: ', newMessage);
+                    let start = hastagPosition + 1;
+                    let end = positionTopicSearch + 1;
+                    let s = oldMessage.substring(0, end);
+                    let newMessage = s.insert(start, topicItem);
+                    if (listTopic.indexOf(topicItem) === -1) {
+                      let newArr = [...listTopic, topicItem];
+                      setListTopic(newArr);
+                    }
                     setMessage(newMessage);
                     setTopicSearch([]);
-                    setInPositionSearch(inPositionSearch.push(positionTopicSearch));
                   }}>
                     <View style={{ marginBottom: 5 }} >
                       <Text style={{
