@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 
-import Header from './Header';
 import Content from './Content';
-import {Footer} from '../../components';
-import {COLORS, SIZES} from '../../utils/theme';
 import Gap from '../../components/Gap';
+import Header from './Header';
+import {COLORS, SIZES} from '../../utils/theme';
+import {Footer} from '../../components';
 import {
   getCountComment,
   getCountCommentWithChild,
@@ -25,8 +25,6 @@ const RenderItem = ({
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [totalVote, setTotalVote] = React.useState(0);
-
-  console.log(statusDownvote, statusUpvote, 'status')
 
   const onPressUpvoteNew = async (item) => {
     await onPressUpvote({

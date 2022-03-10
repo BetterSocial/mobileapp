@@ -1,16 +1,16 @@
 import * as React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
   Animated,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-
-import CheckIcon from '../../../../assets/icons/check.svg';
-import AddIcon from '../../../../assets/icons/add.svg';
 import {Pressable} from 'react-native';
+
+import AddIcon from '../../../../assets/icons/add.svg';
+import CheckIcon from '../../../../assets/icons/check.svg';
 
 const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
   let followIconFadeAnimation = React.useRef(new Animated.Value(0)).current;
@@ -49,7 +49,7 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
         />
         <View style={styles.containerTextCard}>
           <Text style={styles.textFullName}>{username}</Text>
-          <Text style={styles.textUsername}>{bio ? bio : ''}</Text>
+          <Text style={styles.textUsername} numberOfLines={1}>{bio ? bio : ''}</Text>
         </View>
       </View>
       <View style={styles.containerButton}>
@@ -100,6 +100,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 'bold',
+    fontSize: 14,
+    color: '#000000',
+    lineHeight: 21,
+    alignSelf: 'flex-start',
+  },
+  textUsername: {
     fontSize: 14,
     color: '#000000',
     lineHeight: 21,

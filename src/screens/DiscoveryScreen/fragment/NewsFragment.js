@@ -1,16 +1,15 @@
 import * as React from 'react';
-
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
-import { Context } from '../../../context/Store'
 import DomainList from '../../Followings/elements/RenderList';
 import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RenderItem from '../../NewsScreen/RenderItem';
+import share from '../../../utils/share';
+import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
-import share from '../../../utils/share';
 
 const NewsFragment = () => {
     const [myId, setMyId] = React.useState('')
@@ -28,7 +27,7 @@ const NewsFragment = () => {
     }, []);
     
     if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
-    if(news.length  ===0) return <View style={styles.noDataFoundContainer}>
+    if(news.length ===0) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No news found</Text>
     </View>
 

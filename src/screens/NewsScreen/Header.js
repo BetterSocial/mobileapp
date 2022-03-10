@@ -7,16 +7,23 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
-import {Avatar} from '../../components';
-import {COLORS, FONTS, SIZES} from '../../utils/theme';
+import { Avatar } from '../../components';
+import { COLORS, FONTS, SIZES } from '../../utils/theme';
+import { Context } from '../../context';
+import { setDomainData, setProfileDomain } from '../../context/actions/domainAction';
 
-const Header = ({image, domain, time, item}) => {
+const Header = ({ image, domain, time, item }) => {
+  const [domainStore, dispatchDomain] = React.useContext(Context).domains;
   const navigation = useNavigation();
   const onHeaderPressed = () => {
+    if (item.domain.name !== domainStore.selectedLastDomain) {
+      setProfileDomain({}, dispatchDomain);
+      setDomainData([], dispatchDomain);
+    }
     navigation.push('DomainScreen', {
       item: {
         ...item,
@@ -30,13 +37,13 @@ const Header = ({image, domain, time, item}) => {
   return (
     <Pressable onPress={onHeaderPressed}>
       <View style={styles.container}>
-        <Avatar image={image} style={{width: 36, height: 36}} />
+        <Avatar image={image} style={{ width: 36, height: 36 }} />
         <Gap width={8} />
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{...FONTS.h4}}>{domain}</Text>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ ...FONTS.h4 }}>{domain}</Text>
             <View style={styles.point} />
-            <Text style={{color: COLORS.gray, ...FONTS.body4}}>
+            <Text style={{ color: COLORS.gray, ...FONTS.body4 }}>
               {new Date(time).toLocaleDateString()}
             </Text>
           </View>
@@ -55,7 +62,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
     marginTop: 4,
   },
-  wrapperItem: {backgroundColor: 'white', marginBottom: 16},
+  wrapperItem: { backgroundColor: 'white', marginBottom: 16 },
   wrapperImage: {
     borderRadius: 45,
     borderWidth: 0.2,

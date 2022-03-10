@@ -26,6 +26,8 @@ import {
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { getUserId } from '../../utils/users';
 import { unblokDomain } from '../../service/blocking';
+import { setDomainData, setSelectedLastDomain, setProfileDomain } from '../../context/actions/domainAction';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 
 const { height, width } = Dimensions.get('screen');
 let headerHeight = 0;
@@ -43,6 +45,7 @@ const DomainScreen = () => {
   const [domainFollowers, setDomainFollowers] = React.useState(0);
   const [isBlocked, setIsBlocked] = React.useState(false)
   const [follow, setFollow] = React.useState(false);
+  const [domainStore, dispatchDomain] = React.useContext(Context).domains;
 
   const tiktokScrollRef = React.useRef(null);
 
@@ -74,12 +77,12 @@ const DomainScreen = () => {
   }, [])
 
   const checkBlockDomain = async () => {
-   const processCheckBlock = await checkBlockDomainPage(iddomain)
-   if(processCheckBlock.data) {
-    setIsBlocked(true)
-   } else {
-     setIsBlocked(false)
-   }
+    const processCheckBlock = await checkBlockDomainPage(iddomain)
+    if (processCheckBlock.data) {
+      setIsBlocked(true)
+    } else {
+      setIsBlocked(false)
+    }
   }
 
   const getIFollow = async () => {
@@ -92,37 +95,56 @@ const DomainScreen = () => {
   };
 
   const init = async (withLoading = false) => {
-    if (withLoading) {
-      setLoading(true);
+
+    let domainName = dataDomain.og.domain;
+    if (domainName != domainStore.selectedLastDomain) {
+      if (withLoading) {
+        setLoading(true);
+      }
+      let result = await getProfileDomain(domain);
+      if (result.code === 200) {
+        setProfile(result.data);
+        setProfileDomain(result.data, dispatchDomain);
+      } else {
+        Toast.show('Domain Not Found', Toast.LONG);
+        navigation.goBack();
+      }
+      let res = await getDetailDomains(dataDomain.og.domain);
+      if (res.code === 200) {
+        setDomainFollowers(res.followers);
+        // setData([{dummy: true}, ...res.data]);
+        // dispatchDomain(res.data);
+        setDomainData(res.data, dispatchDomain);
+        setSelectedLastDomain(dataDomain.og.domain, dispatchDomain);
+        setData(res.data);
+        setLoading(false);
+      }
+
+      if (withLoading) {
+        setLoading(false);
+      }
     }
-    let res = await getDetailDomains(dataDomain.og.domain);
-    if (res.code === 200) {
-      setDomainFollowers(res.followers);
-      // setData([{dummy: true}, ...res.data]);
-      setData(res.data);
-      setLoading(false);
-    }
-    if (withLoading) {
-      setLoading(false);
-    }
+
   };
 
   React.useEffect(() => {
     init(true);
   }, [dataDomain]);
 
-  React.useEffect(() => {
-    const getProfile = async () => {
-      let res = await getProfileDomain(domain);
-      if (res.code === 200) {
-        setProfile(res.data);
-      } else {
-        Toast.show('Domain Not Found', Toast.LONG);
-        navigation.goBack();
-      }
-    };
-    getProfile();
-  }, [dataDomain]);
+  // React.useEffect(() => {
+  //   const getProfile = async () => {
+  //     setProfileDomain({}, dispatchDomain);
+  //     let res = await getProfileDomain(domain);
+  //     if (res.code === 200) {
+  //       setProfile(res.data);
+  //       setProfileDomain(res.data, dispatchDomain);
+  //     } else {
+  //       Toast.show('Domain Not Found', Toast.LONG);
+  //       navigation.goBack();
+  //     }
+  //   };
+  //   getProfile();
+  // }, [dataDomain]);
 
   const handleOnPressComment = (itemNews) => {
     navigation.navigate('DetailDomainScreen', { item: itemNews });
@@ -181,7 +203,7 @@ const DomainScreen = () => {
   };
 
   const checkBlock = (data) => {
-    if(!data) {
+    if (!data) {
       setIsBlocked(false)
     } else {
       setIsBlocked(true)
@@ -189,10 +211,17 @@ const DomainScreen = () => {
   }
 
   const onUnblockDomain = async () => {
-    await unblokDomain({domain_page_id: iddomain}).then(() => {
-        checkBlockDomain()
+    await unblokDomain({ domain_page_id: iddomain }).then(() => {
+      checkBlockDomain()
     })
 
+  }
+  if (loading) {
+    return (
+      <View style={styles.containerLoading}>
+        <LoadingWithoutModal visible={loading} />
+      </View>
+    );
   }
   return (
     <View style={styles.container}>
@@ -200,7 +229,7 @@ const DomainScreen = () => {
       <Navigation domain={dataDomain.og.domain} />
       <ProfileTiktokScroll
         ref={tiktokScrollRef}
-        data={data}
+        data={domainStore.domains}
         snapToOffsets={(() => {
           return data.map((item, index) => {
             return headerHeight + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)
@@ -213,7 +242,7 @@ const DomainScreen = () => {
           }}>
             <Header
               image={domainImage}
-              description={profile.short_description}
+              description={domainStore.profileDomain.short_description}
               domain={dataDomain.og.domain}
               followers={domainFollowers}
               onPressBlock={onReaction}
@@ -229,25 +258,28 @@ const DomainScreen = () => {
             />
           </View>
         }>
-        {({item, index}) => {
-          return (
-            <RenderItem
-              key={index}
-              item={item}
-              image={profile.logo}
-              onPressComment={(itemNews) => handleOnPressComment(itemNews)}
-              onPressUpvote={(news) => upvoteNews(news)}
-              onPressDownVote={(news) => downvoteNews(news)}
-              selfUserId={idFromToken}
-              onPressBlock={() => onReaction(0)}
-              follow={follow}
-              handleFollow={handleFollow}
-              handleUnfollow={handleUnfollow}
-              onPressShare={ShareUtils.shareDomain}
-            />
-          );
-        }}
+
+        {
+          ({ item, index }) => {
+            return (
+              <RenderItem
+                key={index}
+                item={item}
+                image={profile.logo}
+                onPressComment={(itemNews) => handleOnPressComment(itemNews)}
+                onPressUpvote={(news) => upvoteNews(news)}
+                onPressDownVote={(news) => downvoteNews(news)}
+                selfUserId={idFromToken}
+                onPressBlock={() => onReaction(0)}
+                follow={follow}
+                handleFollow={handleFollow}
+                handleUnfollow={handleUnfollow}
+                onPressShare={ShareUtils.shareDomain}
+              />
+            );
+          }}
       </ProfileTiktokScroll>
+
       {/* <FlatList
         data={data}
         renderItem={({ item, index }) => {
@@ -297,14 +329,13 @@ const DomainScreen = () => {
         keyExtractor={(i) => i.id}
       /> */}
 
-      <Loading visible={loading} />
       <BlockDomainComponent
         ref={refBlockDomainComponent}
         domain={domain}
         domainId={dataDomain.content.domain_page_id}
-        screen="domain_screen" 
+        screen="domain_screen"
         getValueBlock={(data) => checkBlock(data)}
-        />
+      />
     </View>
   );
 };
@@ -322,6 +353,7 @@ const styles = StyleSheet.create({
   linearGradient: {
     height: 8,
   },
+  containerLoading: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
 
 export default DomainScreen;

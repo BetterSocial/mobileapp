@@ -72,7 +72,6 @@ const NewsScreen = ({}) => {
     setLoading(true);
     try {
       let res = await getDomains();
-      console.log(res.data)
       setNews([{dummy: true}, ...res.data], dispatch);
       setLoading(false);
     } catch (error) {

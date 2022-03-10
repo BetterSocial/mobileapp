@@ -4,6 +4,7 @@ import { Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, Vie
 
 import { colors } from '../../../../utils/colors';
 import { fonts } from '../../../../utils/fonts';
+
 // data needed name, description, image
 const styles = StyleSheet.create({
     buttonFollow: {
@@ -59,12 +60,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
         color: colors.black,
+        lineHeight: 16.94,
       },
       textProfileFullName: {
         fontFamily: fonts.inter[400],
         fontSize: 12,
         color: colors.gray,
         flexWrap: 'wrap',
+        lineHeight: 18,
       },
       buttonFollowing: {
         width: 88,

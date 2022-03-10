@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { View, Text, TouchableNativeFeedback, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
+
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
+import { getSingularOrPluralText } from '../../../utils/string/StringUtils';
 
 /**
  * 
@@ -27,7 +29,7 @@ const FollowInfoRow = ({ follower, following, onFollowingContainerClicked}) => {
             <Text style={styles.textTotal}>
                 {follower}
             </Text>
-            <Text style={styles.textFollow}>Followers</Text>
+            <Text style={styles.textFollow}>{getSingularOrPluralText(follower, "Follower", "Followers")}</Text>
         </View>
         <View style={styles.following}>
             <TouchableNativeFeedback
