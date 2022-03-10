@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StreamChat} from 'stream-chat';
 import jwtDecode from 'jwt-decode';
-
+import config from 'react-native-config'
 import {Context} from '../../context';
 import {getAccessToken} from '../token';
 import {STREAM_API_KEY} from '@env';
@@ -14,7 +14,6 @@ import {
 import {setMessage} from '../firebase/setMessaging';
 const defaultImage =
   'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png';
-
 export const useClientGetstream = () => {
   const [client, dispatch] = React.useContext(Context).client;
   const [unReadMessage, dispatchUnReadMessage] =
@@ -31,7 +30,7 @@ export const useClientGetstream = () => {
           image: userData?.data.profile_pic_path ?? defaultImage,
           invisible: true,
         };
-        const chatClient = await new StreamChat(STREAM_API_KEY);
+        const chatClient = await new StreamChat(config.STREAM_API_KEY);
         let res = await chatClient.connectUser(user, token);
         let unRead = {
           total_unread_count: res.me.total_unread_count,

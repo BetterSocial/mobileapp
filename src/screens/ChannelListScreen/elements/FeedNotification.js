@@ -1,11 +1,12 @@
-import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
-import { COLORS } from '../../../utils/theme'
-import streamFeed from '../../../utils/getstream/streamer'
-import { getAccessToken } from '../../../utils/token'
 import PropTypes from 'prop-types';
-import { getFeedNotification } from '../../../service/feeds'
+import React from 'react'
+import { Image, StyleSheet, Text, View } from 'react-native'
+
 import ListFeedNotification from './components/ListFeedNotification'
+import streamFeed from '../../../utils/getstream/streamer'
+import { COLORS } from '../../../utils/theme'
+import { getAccessToken } from '../../../utils/token'
+import { getFeedNotification } from '../../../service/feeds'
 const styles = StyleSheet.create({
     containerCard: {
         padding: 16,
@@ -78,8 +79,6 @@ const FeedNotification = (props) => {
     React.useEffect(() => {
         getPostNotification()
     }, [])
-
-    console.log(listNotif, 'kamil')
 
     return (
         <React.Fragment>

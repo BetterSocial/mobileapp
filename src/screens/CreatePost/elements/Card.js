@@ -11,6 +11,7 @@ const Card = props => {
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 1,
         shadowRadius: 10,
+        zIndex: 999,
         // width: widthInput,
         ...props.style,
       }}

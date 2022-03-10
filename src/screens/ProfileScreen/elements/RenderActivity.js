@@ -1,5 +1,8 @@
-import moment from 'moment';
 import * as React from 'react';
+import SeeMore from 'react-native-see-more-inline';
+import moment from 'moment';
+import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
+import {Activity, Avatar} from 'react-native-activity-feed';
 import {
   Dimensions,
   Platform,
@@ -8,9 +11,6 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import {Activity, Avatar} from 'react-native-activity-feed';
-import SeeMore from 'react-native-see-more-inline';
-import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 
 import ArrowDownRedIcon from '../../../assets/icons/images/arrow-down-red.svg';
 import ArrowUpIcon from '../../../assets/icons/images/arrow-up.svg';
@@ -23,7 +23,6 @@ import {fonts} from '../../../utils/fonts';
 const {width: screenWidth} = Dimensions.get('window');
 
 const renderActivity = (props, data) => {
-  console.log(props);
   const _renderItem = ({item, index}, parallaxProps) => {
     return (
       <View key={index} style={styles.item}>

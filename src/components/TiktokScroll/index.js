@@ -14,8 +14,13 @@ const styles = StyleSheet.create({
 });
 
 const TiktokScroll = (props) => {
-  const {data, children, onRefresh, refreshing, onEndReach, contentHeight, onScroll, onScrollBeginDrag} = props;
+  const {data, children, onRefresh, refreshing, onEndReach, contentHeight, onScroll, onScrollBeginDrag, onMomentumScrollEnd} = props;
   const flatListRef = React.useRef();
+
+  const __onViewambleItemsChanged = React.useCallback(({ viewableItems, changed}) => {
+    console.log("Visible items are", viewableItems);
+    console.log("Changed in this iteration", changed);
+  }, [])
 
   return (
     <FlatList
@@ -28,7 +33,8 @@ const TiktokScroll = (props) => {
       onRefresh={onRefresh}
       onScroll={onScroll}
       onScrollBeginDrag={onScrollBeginDrag}
-      // onMomentumScrollEnd={(event) => console.log(event)}
+      // onViewableItemsChanged={__onViewambleItemsChanged}
+      onMomentumScrollEnd={onMomentumScrollEnd}
       ref={flatListRef}
       refreshing={refreshing}
       renderItem={children}
@@ -45,6 +51,7 @@ TiktokScroll.propTypes = {
   children: PropTypes.node.isRequired,
   onRefresh: PropTypes.func,
   refreshing: PropTypes.bool,
+  onMomentumScrollEnd: PropTypes.func,
   onScrollBeginDrag: PropTypes.func,
   onEndReach: PropTypes.func,
   onScroll: PropTypes.func,
@@ -55,7 +62,8 @@ TiktokScroll.defaultProps = {
   data: [],
   onEndReach: () => null,
   onScroll: () => {},
-  onScrollBeginDrag: () => {}
+  onScrollBeginDrag: () => {},
+  onMomentumScrollEnd: () => {}
 };
 
 export default TiktokScroll;
