@@ -4,7 +4,8 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import DomainList from '../../Followings/elements/RenderList';
 import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
-import RenderItem from '../../NewsScreen/RenderItem';
+import RenderItem from '../elements/RenderItem';
+import paramBuilder from '../../../utils/navigation/paramBuilder';
 import share from '../../../utils/share';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
@@ -33,9 +34,19 @@ const NewsFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer}>
         { news.map((item, index) => {
+            let contentParam = paramBuilder.newsDiscoveryContentParamBuilder(
+                item.title,
+                item.image,
+                item.description,
+                item.news_url,
+                item.newsLinkDomain.logo,
+                item.newsLinkDomain.domain_name,
+                item.createdAt
+            )
+
             return <RenderItem key={`newsDiscovery-${index}`} 
                 selfUserId={myId}    
-                item={item}
+                item={contentParam}
                 onPressShare={share.shareNews} />
         })}
     </ScrollView>

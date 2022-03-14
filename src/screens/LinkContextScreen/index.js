@@ -57,6 +57,7 @@ const LinkContextScreen = () => {
         setIdFromToken(decoded.user_id);
       }
     };
+    console.log('parseToken')
     parseToken();
   }, []);
 

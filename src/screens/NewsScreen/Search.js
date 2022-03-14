@@ -14,7 +14,7 @@ import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../assets/icons/Ic_search';
 import StringConstant from '../../utils/string/StringConstant';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
-import { DISCOVERY_TAB_DOMAINS } from '../../utils/constants';
+import { DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS } from '../../utils/constants';
 import {fonts} from '../../utils/fonts';
 
 const Search = ({onPress, animatedValue}) => {
@@ -22,7 +22,7 @@ const Search = ({onPress, animatedValue}) => {
   
   const __handleOnContainerPress = () => {
     navigation.push('DiscoveryScreen', {
-      tab: DISCOVERY_TAB_DOMAINS
+      tab: DISCOVERY_TAB_NEWS
     })
   }
 

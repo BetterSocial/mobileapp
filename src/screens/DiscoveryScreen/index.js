@@ -105,12 +105,12 @@ const DiscoveryScreen = ({ route }) => {
                     options={{
                         title: 'Domains',
                     }} />
-                {/* <Tabs.Screen
+                <Tabs.Screen
                     name={DISCOVERY_TAB_NEWS}
                     component={NewsFragment}
                     options={{
                         title: 'News',
-                    }} /> */}
+                    }} />
             </Tabs.Navigator>
         </View>
         
