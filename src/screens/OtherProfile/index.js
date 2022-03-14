@@ -61,7 +61,7 @@ import {trimString} from '../../utils/string/TrimString';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
 const {width, height} = Dimensions.get('screen');
-let headerHeight = 0;
+// let headerHeight = 0;
 
 const OtherProfile = () => {
   const navigation = useNavigation();
@@ -94,6 +94,9 @@ const OtherProfile = () => {
     blocker: false,
   });
   const [loadingBlocking, setLoadingBlocking] = React.useState(false);
+
+  const headerHeightRef = React.useRef(0);
+
   const [profile] = React.useContext(Context).profile;
   const create = useClientGetstream();
 
@@ -102,7 +105,11 @@ const OtherProfile = () => {
 
   const getOtherFeeds = async (userId) => {
     let result = await getOtherFeedsInProfile(userId)
-    setOtherProfileFeed(result.data, dispatchOtherProfile)
+    if(result.data.length > 0) {
+      setOtherProfileFeed([...result.data, {dummy: true}], dispatchOtherProfile)
+    } else {
+      setOtherProfileFeed(result.data, dispatchOtherProfile)
+    }
   }
 
   React.useEffect(() => {
@@ -349,10 +356,10 @@ const OtherProfile = () => {
     if (currentOffset < 70) {
       setOpacity(0);
       setIsShowButton(false);
-    } else if (currentOffset >= 70 && currentOffset <= headerHeight) {
+    } else if (currentOffset >= 70 && currentOffset <= headerHeightRef.current) {
       setIsShowButton(true);
       setOpacity((currentOffset - 70) * (1 / 100));
-    } else if (currentOffset > headerHeight) {
+    } else if (currentOffset > headerHeightRef.current) {
       setOpacity(1);
       setIsShowButton(true);
     }
@@ -549,14 +556,15 @@ const OtherProfile = () => {
           onScroll={handleScroll}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {
-              return headerHeight + (index * dimen.size.PROFILE_ITEM_HEIGHT)
+              return headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT)
             })
-            return [headerHeight, ...posts]
+            console.log(posts)
+            return [headerHeightRef.current, ...posts]
           })()}
           ListHeaderComponent={
             <View onLayout={(event) => {
               let headerHeightLayout = event.nativeEvent.layout.height
-              headerHeight = headerHeightLayout
+              headerHeightRef.current = headerHeightLayout
             }}>
               <View style={styles.content}>
                 {__renderListHeader()}
@@ -571,6 +579,8 @@ const OtherProfile = () => {
             </View>
           }>
             {({item, index}) => {
+              let dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight;
+              if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
               return <View style={{width: '100%'}}>
                 <RenderItem
                   bottomBar={false}
@@ -627,6 +637,12 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
     padding: 20,
+  },
+  dummyItem : (height) => {
+    return {
+      height,
+      backgroundColor: colors.gray1
+    }
   },
   header: {
     flexDirection: 'row',

@@ -61,7 +61,7 @@ import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 
 const { height, width } = Dimensions.get('screen');
-let headerHeight = 0;
+// let headerHeight = 0;
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -99,6 +99,7 @@ const ProfileScreen = () => {
   const [loading, setLoading] = React.useState(false);
 
   const refBlockComponent = React.useRef();
+  const headerHeightRef = React.useRef(0);
   const bottomBarHeight = useBottomTabBarHeight()
 
   let {feeds} = myProfileFeed;
@@ -162,7 +163,11 @@ const ProfileScreen = () => {
     //   {dummy: true, component: 'Profile'}, 
     //   {dummy: true, component: 'PostStickyHeader'},
     //   ...result.data], myProfileDispatch);
-    setMyProfileFeed(result.data, myProfileDispatch)
+    if(result.data.length > 0) {
+      setMyProfileFeed([...result.data, {dummy: true}], myProfileDispatch)
+    } else {
+      setMyProfileFeed(result.data, myProfileDispatch)
+    }
   };
 
 
@@ -220,10 +225,10 @@ const ProfileScreen = () => {
     if (currentOffset < 70) {
       setOpacity(0);
       setIsShowButton(false);
-    } else if (currentOffset >= 70 && currentOffset <= headerHeight) {
+    } else if (currentOffset >= 70 && currentOffset <= headerHeightRef.current) {
       setIsShowButton(true);
       setOpacity((currentOffset - 70) * (1 / 100));
-    } else if (currentOffset > headerHeight) {
+    } else if (currentOffset > headerHeightRef.current) {
       setOpacity(1);
       setIsShowButton(true);
     }
@@ -448,7 +453,6 @@ const ProfileScreen = () => {
     refBlockComponet.current.openBlockComponent(value);
   }
 
-  console.log('profile saya')
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -467,8 +471,9 @@ const ProfileScreen = () => {
           onScroll={handleScroll}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {
-              return headerHeight + (index * dimen.size.PROFILE_ITEM_HEIGHT)
+              return headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT)
             })
+            // console.log('asdadad')
             console.log('scroll offsets')
             console.log([0, ...posts])
             return [0, ...posts]
@@ -476,7 +481,7 @@ const ProfileScreen = () => {
           ListHeaderComponent={
             <View onLayout={(event) => {
               let headerHeightLayout = event.nativeEvent.layout.height
-              headerHeight = headerHeightLayout
+              headerHeightRef.current = headerHeightLayout
             }}>
               <View style={styles.content}>
                 <ProfilePicture onImageContainerClick={changeImage} profilePicPath={dataMain.profile_pic_path} />
@@ -497,6 +502,8 @@ const ProfileScreen = () => {
             </View>
           }>
             {({item, index}) => {
+              let dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight - bottomBarHeight;
+              if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
               return <View style={{width: '100%'}}>
                   <RenderItem
                     item={item}
@@ -564,6 +571,12 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
     paddingHorizontal: 20,
+  },
+  dummyItem : (height) => {
+    return {
+      height,
+      backgroundColor: colors.gray1
+    }
   },
   postText: {
     fontFamily: fonts.inter[600],

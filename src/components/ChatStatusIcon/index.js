@@ -57,7 +57,7 @@ const ChatStatusIcon = (props) => {
     
     return (
         <View style={styles.dateContainer}>
-            { __renderCheckMark() }
+            {/* { __renderCheckMark() } */}
             {/* { __renderDate() } */}
         </View>
     );
