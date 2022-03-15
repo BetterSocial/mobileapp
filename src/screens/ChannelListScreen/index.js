@@ -70,7 +70,7 @@ const ChannelListScreen = ({ navigation }) => {
 
   React.useEffect(() => { }, [unReadMessage]);
 
-  const sort = [{ last_message_at: -1 }, { cid: -1 }];
+  const sort = [{ last_message_at: -1 }];
   const options = {
     state: true,
     watch: true,
@@ -133,6 +133,12 @@ const ChannelListScreen = ({ navigation }) => {
     );
   };
 
+  const goToFeedDetail = (item) => {
+    navigation.navigate('PostDetailPage', {
+      feedId: item.activity_id
+  })
+  }
+
   const CustomPreviewMessage = (props) => {
     return (
       <ChannelPreviewMessage
@@ -151,7 +157,6 @@ const ChannelListScreen = ({ navigation }) => {
             onPress={() => navigation.navigate('ContactScreen')}
           />
         </View>
-        <View style={{ paddingHorizontal: 0, flex: 1 }}>
           {client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>
               <ChannelList
@@ -164,8 +169,6 @@ const ChannelListScreen = ({ navigation }) => {
                   if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
                     // toDo reset main feeds
                     setMainFeeds(null, dispatchFeed)
-                    console.log('channel.data.id')
-                    console.log(channel.data.id)
                     navigation.navigate('TopicPageScreen', { id: channel.data.id });
                   } else {
                     setChannel(channel, dispatch);
@@ -173,7 +176,7 @@ const ChannelListScreen = ({ navigation }) => {
                     navigation.navigate('ChatDetailPage');
                   }
                 }}
-                sort={sort}
+                // sort={sort}
                 options={options}
                 maxUnreadCount={99}
                 additionalFlatListProps={{
@@ -182,6 +185,8 @@ const ChannelListScreen = ({ navigation }) => {
                 }}
                additionalData={listPostNotif}
                context={myContext}
+               onSelectAdditionalData={goToFeedDetail}
+               
               />
       
             </Chat>
@@ -192,8 +197,6 @@ const ChannelListScreen = ({ navigation }) => {
           )}
 
    
-        </View>
-        {/* <FeedNotification navigation={navigation} userid={userId} /> */}
 
       </ScrollView>
     </SafeAreaView>
