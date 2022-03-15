@@ -35,6 +35,9 @@ import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import { getFeedNotification } from '../../service/feeds'
+import { getAccessToken } from '../../utils/token'
+import streamFeed from '../../utils/getstream/streamer'
 
 const theme = {
   messageSimple: {
@@ -50,12 +53,13 @@ const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
     language: 'en',
   });
-
+  const [listPostNotif, setListPostNotif] = React.useState([])
   const [userId, setUserId] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
   const [, dispatchFeed] = React.useContext(Context).feeds;
   const [profile] = React.useContext(Context).profile;
+  const myContext = React.useContext(Context)
   const [unReadMessage, dispatchUnReadMessage] =
     React.useContext(Context).unReadMessage;
   let connect = useClientGetstream();
@@ -66,7 +70,7 @@ const ChannelListScreen = ({ navigation }) => {
 
   React.useEffect(() => { }, [unReadMessage]);
 
-  const sort = [{ last_message_at: -1 }, { cid: -1 }];
+  const sort = [{ last_message_at: -1 }];
   const options = {
     state: true,
     watch: true,
@@ -80,9 +84,27 @@ const ChannelListScreen = ({ navigation }) => {
       screen_class: 'ChannelListScreen',
       screen_name: 'Channel List',
     });
+    getPostNotification()
     connect();
     setupClient();
   }, []);
+
+  React.useEffect(() => {
+    callStreamFeed()
+  }, [userId])
+
+  const callStreamFeed = async () => {
+    const token = await getAccessToken()
+    const client = streamFeed(token)
+    const notif = client.feed('notification', userId, token)
+    notif.subscribe(function (data) {
+        getPostNotification()
+
+    })
+
+}
+
+
   const setupClient = async () => {
     try {
       const id = await getUserId();
@@ -91,6 +113,13 @@ const ChannelListScreen = ({ navigation }) => {
       crashlytics().recordError(err);
     }
   };
+
+  const getPostNotification = async () => {
+    const res = await getFeedNotification()
+    if(res.success) {
+        setListPostNotif(res.data)
+    }
+} 
 
   const customPreviewTitle = (props) => {
     let { name } = props.channel?.data;
@@ -104,6 +133,12 @@ const ChannelListScreen = ({ navigation }) => {
     );
   };
 
+  const goToFeedDetail = (item) => {
+    navigation.navigate('PostDetailPage', {
+      feedId: item.activity_id
+  })
+  }
+
   const CustomPreviewMessage = (props) => {
     return (
       <ChannelPreviewMessage
@@ -112,7 +147,6 @@ const ChannelListScreen = ({ navigation }) => {
     );
   };
   
-
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
@@ -123,7 +157,6 @@ const ChannelListScreen = ({ navigation }) => {
             onPress={() => navigation.navigate('ContactScreen')}
           />
         </View>
-        <View style={{ paddingHorizontal: 0, flex: 1 }}>
           {client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>
               <ChannelList
@@ -136,8 +169,6 @@ const ChannelListScreen = ({ navigation }) => {
                   if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
                     // toDo reset main feeds
                     setMainFeeds(null, dispatchFeed)
-                    console.log('channel.data.id')
-                    console.log(channel.data.id)
                     navigation.navigate('TopicPageScreen', { id: channel.data.id });
                   } else {
                     setChannel(channel, dispatch);
@@ -145,13 +176,17 @@ const ChannelListScreen = ({ navigation }) => {
                     navigation.navigate('ChatDetailPage');
                   }
                 }}
-                sort={sort}
+                // sort={sort}
                 options={options}
                 maxUnreadCount={99}
                 additionalFlatListProps={{
                   onEndReached: () => null,
                   refreshControl: null,
                 }}
+               additionalData={listPostNotif}
+               context={myContext}
+               onSelectAdditionalData={goToFeedDetail}
+               
               />
       
             </Chat>
@@ -162,8 +197,6 @@ const ChannelListScreen = ({ navigation }) => {
           )}
 
    
-        </View>
-        <FeedNotification navigation={navigation} userid={userId} />
 
       </ScrollView>
     </SafeAreaView>
