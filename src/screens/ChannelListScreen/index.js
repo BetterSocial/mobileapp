@@ -38,6 +38,7 @@ import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { getFeedNotification } from '../../service/feeds'
 import { getAccessToken } from '../../utils/token'
 import streamFeed from '../../utils/getstream/streamer'
+import { MessageSystem } from 'stream-chat-react-native-core'
 
 const theme = {
   messageSimple: {
@@ -176,7 +177,7 @@ const ChannelListScreen = ({ navigation }) => {
                     navigation.navigate('ChatDetailPage');
                   }
                 }}
-                // sort={sort}
+                sort={sort}
                 options={options}
                 maxUnreadCount={99}
                 additionalFlatListProps={{
