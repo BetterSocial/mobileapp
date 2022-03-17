@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DomainList from '../elements/DiscoveryItemList';
+import FollowingAction from '../../../context/actions/following';
 import Header from '../../../screens/DomainScreen/elements/Header';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RenderItemHeader from '../../../screens/DomainScreen/elements/RenderItemHeader';
@@ -16,13 +17,20 @@ import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
 
 const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
+const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
 const FROM_UNFOLLOWED_DOMAIN = 'fromunfolloweddomains';
 
 const DomainFragment = () => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
+    const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
+    const [following, followingDispatch] = React.useContext(Context).following
+
+    const { domains } = following
+    // console.log(domains)
     const { isLoadingDiscovery, followedDomains, unfollowedDomains } = discovery
+    console.log(unfollowedDomains)
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -33,6 +41,10 @@ const DomainFragment = () => {
         };
         parseToken();
     }, []);
+
+    React.useEffect(() => {
+        if(followedDomains.length > 0 || unfollowedDomains.length > 0) setIsFirstTimeOpen(false)
+    },[ followedDomains, unfollowedDomains ])
 
     const __handleOnPressDomain = (item) => {
         console.log(item)
@@ -56,6 +68,12 @@ const DomainFragment = () => {
 
     const __handleFollow = async (from, willFollow, item, index) => {
         // console.log(item)
+        if(from === FROM_FOLLOWED_DOMAIN_INITIAL) {
+            let newFollowedDomains = [...domains]
+            newFollowedDomains[index].user_id_follower = willFollow ? myId : null
+
+            FollowingAction.setFollowingDomain(newFollowedDomains, followingDispatch)
+        }
         if(from === FROM_FOLLOWED_DOMAIN) {
             let newFollowedDomains = [...followedDomains]
             newFollowedDomains[index].user_id_follower = willFollow ? myId : null
@@ -101,26 +119,38 @@ const DomainFragment = () => {
                     />
             </View>
     }
+
+    const __renderDomainItems = () => {
+        if(isFirstTimeOpen) return domains.map((item, index) => {
+            return __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN_INITIAL, "followedDomainDiscovery", { ...item, user_id_follower: item.user_id_follower }, index)
+        })
+
+        return (
+            <>
+                { followedDomains.map((item, index) => {
+                    return __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN, "followedDomainDiscovery", item, index)
+                })}
+
+                { unfollowedDomains.length > 0 && 
+                    <View style={styles.unfollowedHeaderContainer}>
+                    <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreDomains}</Text>
+                    </View>}
+                { unfollowedDomains.map((item, index) => {
+                    return __renderDiscoveryItem(FROM_UNFOLLOWED_DOMAIN, "unfollowedDomainDiscovery", item, index)
+                })}
+            </>
+        )
+    }
     
     if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
-    if(followedDomains.length === 0 && unfollowedDomains.length ===0) return <View style={styles.noDataFoundContainer}>
+    if(followedDomains.length === 0 && unfollowedDomains.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Domains found</Text>
     </View>
 
     return <ScrollView style={styles.fragmentContainer}>
-        { followedDomains.map((item, index) => {
+        { __renderDomainItems() }
+        {/* { followedDomains.map((item, index) => {
             return __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN, `followedDomainDiscovery`, item, index)
-            // return <View key={`domainDiscovery-${index}`} style={styles.domainContainer}>
-            //     <DomainList isDomain={true} 
-            //         onPressBody={() => __handleOnPressDomain(item)}
-            //         item={{
-            //             name: item.domain_name,
-            //             image: item.logo,
-            //             isunfollowed: item.user_id_follower === null,
-            //             description: item.short_description || null
-            //         }}
-            //         />
-            // </View>
         })}
 
         { unfollowedDomains.length > 0 && 
@@ -130,18 +160,7 @@ const DomainFragment = () => {
         }
         { unfollowedDomains.map((item, index) => {
             return __renderDiscoveryItem(FROM_UNFOLLOWED_DOMAIN, `unfollowedDomainDiscovery`, item, index)
-        //     return <View key={`domainDiscovery-${index}`} style={styles.domainContainer}>
-        //          <DomainList isDomain={true} 
-        //             onPressBody={() => __handleOnPressDomain(item)}
-        //             item={{
-        //                 name: item.domain_name,
-        //                 image: item.logo,
-        //                 isunfollowed: item.user_id_follower === null,
-        //                 description: item.short_description || null
-        //             }}
-        //             />
-        //     </View>
-        })}
+        })} */}
     </ScrollView>
 }
 

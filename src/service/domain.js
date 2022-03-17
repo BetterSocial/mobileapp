@@ -11,7 +11,6 @@ export const getDomains = async (lastId = null) => {
       url = '/domain';
     }
     const res = await api.get(url);
-    console.log(res, 'sumina');
     return res.data;
   } catch (error) {
     console.log(error);

@@ -1,29 +1,34 @@
 import * as React from 'react';
-
+import SplashScreenPackage from 'react-native-splash-screen';
+import analytics from '@react-native-firebase/analytics';
 import {
-  Alert,
   Image,
   Linking,
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  View,
 } from 'react-native';
-
-import SplashScreenPackage from 'react-native-splash-screen';
-import StringConstant from '../../utils/string/StringConstant';
-import analytics from '@react-native-firebase/analytics';
-import {getAccessToken} from '../../utils/token';
-import {getProfileByUsername} from '../../service/profile';
-import {getUserId} from '../../utils/users';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {useNavigation} from '@react-navigation/core';
+
+import following from '../../context/actions/following';
+import { Context } from '../../context';
+import {getAccessToken} from '../../utils/token';
+import { getDomains, getFollowedDomain } from '../../service/domain';
+import {getFollowing, getProfileByUsername} from '../../service/profile';
+import { getFollowingTopic } from '../../service/topics';
+import {getUserId} from '../../utils/users';
+import { setNews } from '../../context/actions/news';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {verifyTokenGetstream} from '../../service/users';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
   const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org';
   let [isModalShown, setIsModalShown] = React.useState(false);
+
+  const [, newsDispatch] = React.useContext(Context).news
+  const [, followingDispatch] = React.useContext(Context).following
+
   const create = useClientGetstream();
   React.useEffect(() => {
     analytics().logScreenView({
@@ -78,6 +83,7 @@ const SplashScreen = () => {
 
   let navigateWithoutDeeplink = async (selfUserId) => {
     await SplashScreenPackage.hide();
+    await getDiscoveryData(selfUserId)
     navigation.replace(selfUserId ? 'HomeTabs' : 'SignIn');
     // navigation.replace(selfUserId ? 'DiscoveryScreen' : 'SignIn');
   };
@@ -119,6 +125,39 @@ const SplashScreen = () => {
       return false;
     }
   };
+
+  const getDiscoveryData = async (selfUserId) => {
+    if(!selfUserId) return
+    // Not using await so splash screen can navigate to next screen faster
+    
+
+    try {
+      getFollowing(selfUserId).then((res) => {
+        console.log('saving following users')
+        // console.log(res.data)
+        following.setFollowingUsers(res.data, followingDispatch)
+      }) 
+
+      getDomains().then((res) => {
+        setNews([{ dummy: true}, ...res.data], newsDispatch)
+      }) 
+
+      getFollowedDomain().then((res) => {
+        console.log('saving following domains')
+        following.setFollowingDomain(res.data.data, followingDispatch)
+      })
+
+      getFollowingTopic().then((res) => {
+        console.log('saving following topics')
+        console.log(res.data)
+        following.setFollowingTopics(res.data, followingDispatch)
+      })
+    } catch(e) {
+      console.log(e)
+    }
+    
+    return
+  }
 
   return (
     <SafeAreaView style={styles.container}>

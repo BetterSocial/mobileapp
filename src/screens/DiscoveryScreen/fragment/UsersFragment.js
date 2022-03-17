@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DomainList from '../elements/DiscoveryItemList';
+import FollowingAction from '../../../context/actions/following';
 import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import StringConstant from '../../../utils/string/StringConstant';
@@ -15,12 +16,18 @@ import { getUserId } from '../../../utils/users';
 import { setFollow, setUnFollow } from '../../../service/profile';
 
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
+const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
 const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
 
 const UsersFragment = () => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
+    const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
+    const [following, followingDispatch] = React.useContext(Context).following
+
+    const { users } = following
+    // console.log(users)
     const { isLoadingDiscovery, followedUsers, unfollowedUsers } = discovery
 
     React.useEffect(() => {
@@ -33,6 +40,10 @@ const UsersFragment = () => {
         parseToken();
     }, []);
 
+    React.useEffect(() => {
+        if(followedUsers.length > 0 || unfollowedUsers.length > 0) setIsFirstTimeOpen(false)
+    },[ followedUsers, unfollowedUsers ])
+
     const __handleOnPress = (item) => {
         navigation.push('OtherProfile', {
             data : {
@@ -44,6 +55,13 @@ const UsersFragment = () => {
     }
 
     const __handleFollow = async (from, willFollow, item, index) => {
+        if(from === FROM_FOLLOWED_USERS_INITIAL) {
+            console.log('asdadadada')
+            let newFollowedUsers = [...users]
+            newFollowedUsers[index].user_id_follower = willFollow ? myId : null
+
+            FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
+        }
         if(from === FROM_FOLLOWED_USERS) {
             let newFollowedUsers = [...followedUsers]
             newFollowedUsers[index].user_id_follower = willFollow ? myId : null
@@ -82,24 +100,36 @@ const UsersFragment = () => {
                 description: item.bio
         }} />
     }
+
+    const __renderUsersItem = () => {
+        if(isFirstTimeOpen) return users.map((item, index) => {
+            return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
+        })
+
+        return (
+            <>
+                { followedUsers.map((item, index) => {
+                    return __renderDiscoveryItem(FROM_FOLLOWED_USERS, "followedUsers", item, index)
+                })}
+
+                { unfollowedUsers.length > 0 && 
+                    <View style={styles.unfollowedHeaderContainer}>
+                    <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
+                    </View>}
+                { unfollowedUsers.map((item, index) => {
+                    return __renderDiscoveryItem(FROM_UNFOLLOWED_USERS, "unfollowedUsers", item, index)
+                })}
+            </>
+        )
+    }
     
     if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
-    if(followedUsers.length === 0 && unfollowedUsers.length ===0) return <View style={styles.noDataFoundContainer}>
+    if(followedUsers.length === 0 && unfollowedUsers.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No users found</Text>
     </View>
 
     return <ScrollView style={styles.fragmentContainer}>
-        { followedUsers.map((item, index) => {
-            return __renderDiscoveryItem(FROM_FOLLOWED_USERS, "followedUsers", item, index)
-        })}
-
-        { unfollowedUsers.length > 0 && 
-            <View style={styles.unfollowedHeaderContainer}>
-            <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
-            </View>}
-        { unfollowedUsers.map((item, index) => {
-            return __renderDiscoveryItem(FROM_UNFOLLOWED_USERS, "unfollowedUsers", item, index)
-        })}
+        { __renderUsersItem() }
     </ScrollView>
 }
 
