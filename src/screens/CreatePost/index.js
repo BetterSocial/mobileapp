@@ -733,11 +733,12 @@ const CreatePost = () => {
                 return (
                   <TouchableNativeFeedback onPress={() => {
                     let topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
+                    let topicItemWithSpace = topicItem.concat(' ');
                     let oldMessage = message;
                     let start = hastagPosition + 1;
                     let end = positionTopicSearch + 1;
                     let s = oldMessage.substring(0, end);
-                    let newMessage = s.insert(start, topicItem);
+                    let newMessage = s.insert(start, topicItemWithSpace);
                     if (listTopic.indexOf(topicItem) === -1) {
                       let newArr = [...listTopic, topicItem];
                       setListTopic(newArr);
