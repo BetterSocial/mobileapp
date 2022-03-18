@@ -12,16 +12,20 @@ import {
 import {useNavigation} from '@react-navigation/core';
 import VersionNumber from 'react-native-version-number';
 import analytics from '@react-native-firebase/analytics';
+import { Context } from '../../context';
 
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import Header from '../../components/Header';
 import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 import {clearLocalStorege} from '../../utils/token';
+import {createClient} from '../../context/actions/createClient';
 
 const width = Dimensions.get('screen').width;
 
 const Settings = () => {
+  const [clientState, dispatch] = React.useContext(Context).client;
+  const { client } = clientState;
   const navigation = useNavigation();
   React.useEffect(() => {
     analytics().logScreenView({
@@ -30,6 +34,8 @@ const Settings = () => {
     });
   }, []);
   const logout = () => {
+    client?.disconnectUser();
+    createClient(null, dispatch)
     clearLocalStorege();
     navigation.reset({
       index: 0,
