@@ -68,7 +68,6 @@ const ChannelListScreen = ({ navigation }) => {
     members: { $in: [userId] },
     type: 'messaging',
   };
-
   React.useEffect(() => { }, [unReadMessage]);
 
   const sort = [{ last_message_at: -1 }];
