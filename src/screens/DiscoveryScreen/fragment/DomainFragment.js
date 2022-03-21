@@ -28,9 +28,7 @@ const DomainFragment = () => {
     const [following, followingDispatch] = React.useContext(Context).following
 
     const { domains } = following
-    // console.log(domains)
-    const { isLoadingDiscovery, followedDomains, unfollowedDomains, isFirstTimeOpen } = discovery
-    console.log(unfollowedDomains)
+    const { isLoadingDiscoveryDomain, followedDomains, unfollowedDomains, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -142,7 +140,7 @@ const DomainFragment = () => {
         )
     }
     
-    if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
+    if(isLoadingDiscoveryDomain) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
     if(followedDomains.length === 0 && unfollowedDomains.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Domains found</Text>
     </View>

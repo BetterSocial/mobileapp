@@ -18,7 +18,7 @@ const NewsFragment = () => {
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [defaultNews] = React.useContext(Context).news
-    const { isLoadingDiscovery, news, isFirstTimeOpen } = discovery
+    const { isLoadingDiscoveryNews, news, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -47,8 +47,8 @@ const NewsFragment = () => {
                 item.image,
                 item.description,
                 item.news_url,
-                item.newsLinkDomain.logo,
-                item.newsLinkDomain.domain_name,
+                item?.newsLinkDomain?.logo ,
+                item?.newsLinkDomain?.domain_name || item?.site_name,
                 item.createdAt
             )
 
@@ -59,7 +59,7 @@ const NewsFragment = () => {
         })
     }
     
-    if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
+    if(isLoadingDiscoveryNews) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
     if(news.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No news found</Text>
     </View>

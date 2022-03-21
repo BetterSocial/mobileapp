@@ -28,7 +28,12 @@ const UsersFragment = () => {
 
     const { users } = following
     // console.log(users)
-    const { isLoadingDiscovery, followedUsers, unfollowedUsers, isFirstTimeOpen } = discovery
+    const { isLoadingDiscoveryUser, followedUsers, unfollowedUsers, isFirstTimeOpen } = discovery
+
+    console.log('datasss')
+    console.log(followedUsers)
+    console.log('datazzz')
+    console.log(unfollowedUsers)
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -122,7 +127,7 @@ const UsersFragment = () => {
         )
     }
     
-    if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
+    if(isLoadingDiscoveryUser) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
     if(followedUsers.length === 0 && unfollowedUsers.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No users found</Text>
     </View>

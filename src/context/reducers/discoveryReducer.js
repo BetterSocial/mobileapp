@@ -1,8 +1,16 @@
 /* eslint-disable no-case-declarations */
 import {
   DISCOVERY_SET_DATA,
+  DISCOVERY_SET_DATA_DOMAINS,
+  DISCOVERY_SET_DATA_NEWS,
+  DISCOVERY_SET_DATA_TOPICS,
+  DISCOVERY_SET_DATA_USERS,
   DISCOVERY_SET_FIRST_TIME_OPEN,
   DISCOVERY_SET_LOADING_DATA,
+  DISCOVERY_SET_LOADING_DATA_DOMAIN,
+  DISCOVERY_SET_LOADING_DATA_NEWS,
+  DISCOVERY_SET_LOADING_DATA_TOPIC,
+  DISCOVERY_SET_LOADING_DATA_USER,
   DISCOVERY_SET_NEW_FOLLOWED_DOMAIN,
   DISCOVERY_SET_NEW_FOLLOWED_USER,
   DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN,
@@ -28,7 +36,10 @@ const discoveryState = {
   followedDomains: [],
   unfollowedDomains: [],
   news: [],
-  isLoadingDiscovery: false,
+  isLoadingDiscoveryUser: false,
+  isLoadingDiscoveryDomain: false,
+  isLoadingDiscoveryTopic: false,
+  isLoadingDiscoveryNews: false,
   isFirstTimeOpen: true,
 };
 
@@ -50,19 +61,58 @@ const discoveryState = {
  */
 const discoveryReducer = (state = discoveryState, action) => {
   switch (action.type) {
-    case DISCOVERY_SET_DATA:
+    // case DISCOVERY_SET_DATA:
+    //   const {
+    //     followedUsers, unfollowedUsers, followedDomains,
+    //     unfollowedDomains, followedTopic, unfollowedTopic, news,
+    //   } = action.payload.discovery;
+    //   return {
+    //     ...state,
+    //     followedUsers,
+    //     unfollowedUsers,
+    //     followedDomains,
+    //     unfollowedDomains,
+    //     followedTopic,
+    //     unfollowedTopic,
+    //     news,
+    //   };
+
+    case DISCOVERY_SET_DATA_USERS:
       const {
-        followedUsers, unfollowedUsers, followedDomains,
-        unfollowedDomains, followedTopic, unfollowedTopic, news,
+        followedUsers, unfollowedUsers,
       } = action.payload.discovery;
       return {
         ...state,
         followedUsers,
         unfollowedUsers,
+      };
+
+    case DISCOVERY_SET_DATA_DOMAINS:
+      const {
+        followedDomains, unfollowedDomains,
+      } = action.payload.discovery;
+      return {
+        ...state,
         followedDomains,
         unfollowedDomains,
+      };
+
+    case DISCOVERY_SET_DATA_TOPICS:
+      const {
+        followedTopic, unfollowedTopic,
+      } = action.payload.discovery;
+      return {
+        ...state,
         followedTopic,
         unfollowedTopic,
+      };
+
+    case DISCOVERY_SET_DATA_NEWS:
+      const {
+        news,
+      } = action.payload.discovery;
+      return {
+        ...state,
         news,
       };
 
@@ -75,7 +125,34 @@ const discoveryReducer = (state = discoveryState, action) => {
     case DISCOVERY_SET_LOADING_DATA:
       return {
         ...state,
-        isLoadingDiscovery: action.payload,
+        isLoadingDiscoveryUser: action.payload,
+        isLoadingDiscoveryDomain: action.payload,
+        isLoadingDiscoveryTopic: action.payload,
+        isLoadingDiscoveryNews: action.payload,
+      };
+
+    case DISCOVERY_SET_LOADING_DATA_USER:
+      return {
+        ...state,
+        isLoadingDiscoveryUser: action.payload,
+      };
+
+    case DISCOVERY_SET_LOADING_DATA_TOPIC:
+      return {
+        ...state,
+        isLoadingDiscoveryTopic: action.payload,
+      };
+
+    case DISCOVERY_SET_LOADING_DATA_DOMAIN:
+      return {
+        ...state,
+        isLoadingDiscoveryDomain: action.payload,
+      };
+
+    case DISCOVERY_SET_LOADING_DATA_NEWS:
+      return {
+        ...state,
+        isLoadingDiscoveryNews: action.payload,
       };
 
     case DISCOVERY_SET_NEW_FOLLOWED_USER:

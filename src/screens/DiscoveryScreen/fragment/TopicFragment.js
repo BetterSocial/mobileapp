@@ -25,7 +25,7 @@ const TopicFragment = () => {
     const [following, followingDispatch] = React.useContext(Context).following
 
     const { topics } = following
-    const { isLoadingDiscovery, followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
+    const { isLoadingDiscoveryTopic, followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -92,7 +92,7 @@ const TopicFragment = () => {
         )
     }
     
-    if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
+    if(isLoadingDiscoveryTopic) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
     if(followedTopic.length === 0 && unfollowedTopic.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Topics found</Text>
     </View>

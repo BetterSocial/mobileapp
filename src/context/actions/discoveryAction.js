@@ -1,7 +1,15 @@
 import {
   DISCOVERY_SET_DATA,
+  DISCOVERY_SET_DATA_DOMAINS,
+  DISCOVERY_SET_DATA_NEWS,
+  DISCOVERY_SET_DATA_TOPICS,
+  DISCOVERY_SET_DATA_USERS,
   DISCOVERY_SET_FIRST_TIME_OPEN,
   DISCOVERY_SET_LOADING_DATA,
+  DISCOVERY_SET_LOADING_DATA_DOMAIN,
+  DISCOVERY_SET_LOADING_DATA_NEWS,
+  DISCOVERY_SET_LOADING_DATA_TOPIC,
+  DISCOVERY_SET_LOADING_DATA_USER,
   DISCOVERY_SET_NEW_FOLLOWED_DOMAIN,
   DISCOVERY_SET_NEW_FOLLOWED_USER,
   DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN,
@@ -16,6 +24,50 @@ import {
 const setDiscoveryLoadingData = async (isLoading, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_LOADING_DATA,
+    payload: isLoading,
+  });
+};
+/**
+ *
+ * @param {Boolean} isLoading
+ * @param {Any} dispatch
+ */
+const setDiscoveryLoadingDataUser = async (isLoading, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_LOADING_DATA_USER,
+    payload: isLoading,
+  });
+};
+/**
+ *
+ * @param {Boolean} isLoading
+ * @param {Any} dispatch
+ */
+const setDiscoveryLoadingDataDomain = async (isLoading, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_LOADING_DATA_DOMAIN,
+    payload: isLoading,
+  });
+};
+/**
+ *
+ * @param {Boolean} isLoading
+ * @param {Any} dispatch
+ */
+const setDiscoveryLoadingDataTopic = async (isLoading, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_LOADING_DATA_TOPIC,
+    payload: isLoading,
+  });
+};
+/**
+ *
+ * @param {Boolean} isLoading
+ * @param {Any} dispatch
+ */
+const setDiscoveryLoadingDataNews = async (isLoading, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_LOADING_DATA_NEWS,
     payload: isLoading,
   });
 };
@@ -41,6 +93,42 @@ const setDiscoveryFirstTimeOpen = async (isFirstTimeOpen, dispatch) => {
 const setDiscoveryData = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_DATA,
+    payload: {
+      discovery: data,
+    },
+  });
+};
+
+const setDiscoveryDataUsers = async (data, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_DATA_USERS,
+    payload: {
+      discovery: data,
+    },
+  });
+};
+
+const setDiscoveryDataDomains = async (data, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_DATA_DOMAINS,
+    payload: {
+      discovery: data,
+    },
+  });
+};
+
+const setDiscoveryDataTopics = async (data, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_DATA_TOPICS,
+    payload: {
+      discovery: data,
+    },
+  });
+};
+
+const setDiscoveryDataNews = async (data, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_DATA_NEWS,
     payload: {
       discovery: data,
     },
@@ -85,7 +173,15 @@ const setNewUnfollowedDomains = async (data, dispatch) => {
 
 const DiscoveryAction = {
   setDiscoveryLoadingData,
+  setDiscoveryLoadingDataUser,
+  setDiscoveryLoadingDataDomain,
+  setDiscoveryLoadingDataTopic,
+  setDiscoveryLoadingDataNews,
   setDiscoveryData,
+  setDiscoveryDataUsers,
+  setDiscoveryDataDomains,
+  setDiscoveryDataTopics,
+  setDiscoveryDataNews,
   setDiscoveryFirstTimeOpen,
   setNewFollowedDomains,
   setNewFollowedUsers,

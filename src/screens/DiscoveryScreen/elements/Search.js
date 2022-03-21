@@ -56,10 +56,35 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
   }
 
   const __fetchDiscoveryData = async() => {
-    let data = await DiscoveryRepo.fetchDiscoveryData(discoverySearchBarText)
-    if(data.success) {
-      DiscoveryAction.setDiscoveryData(data, discoveryDispatch)
-    }
+    DiscoveryRepo.fetchDiscoveryDataUser(discoverySearchBarText).then(async (data) => {
+      if(data.success) {
+        await DiscoveryAction.setDiscoveryDataUsers(data, discoveryDispatch)
+        DiscoveryAction.setDiscoveryLoadingDataUser(false, discoveryDispatch)
+      }  
+    })
+
+    DiscoveryRepo.fetchDiscoveryDataDomain(discoverySearchBarText).then(async (data) => {
+      if(data.success) {
+        await DiscoveryAction.setDiscoveryDataDomains(data, discoveryDispatch)
+        DiscoveryAction.setDiscoveryLoadingDataDomain(false, discoveryDispatch)
+      }  
+    })
+
+    DiscoveryRepo.fetchDiscoveryDataTopic(discoverySearchBarText).then(async (data) => {
+      if(data.success) {
+        await DiscoveryAction.setDiscoveryDataTopics(data, discoveryDispatch)
+        DiscoveryAction.setDiscoveryLoadingDataTopic(false, discoveryDispatch)
+      }  
+    })
+    
+    DiscoveryRepo.fetchDiscoveryDataNews(discoverySearchBarText).then(async (data) => {
+      if(data.success) {
+        console.log('datasss')
+        console.log(JSON.stringify(data))
+        await DiscoveryAction.setDiscoveryDataNews(data, discoveryDispatch)
+        DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
+      }  
+    })
     DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
   }
 
