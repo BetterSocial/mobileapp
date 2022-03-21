@@ -17,9 +17,11 @@ import Content from './elements/Content';
 import ContentLink from '../../screens/FeedScreen/ContentLink';
 import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import dimen from '../../utils/dimen';
+import {Context} from '../../context';
 import {Footer, Gap} from '../../components';
 import {
   POST_TYPE_LINK,
@@ -34,8 +36,6 @@ import {getFeedDetail} from '../../service/post';
 import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
-import {Context} from '../../context';
 
 const {width, height} = Dimensions.get('window');
 
@@ -62,8 +62,6 @@ const PostPageDetailIdComponent = (props) => {
   // let [feeds, dispatch] = React.useContext(Context).feeds;
   let { feedId, refreshParent, 
     navigateToReplyView = () => {}} = props
-    
-    console.log(user, profile, 'saliman')
 
   React.useEffect(() => {
     const parseToken = async () => {

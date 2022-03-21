@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 import {
   DISCOVERY_SET_DATA,
+  DISCOVERY_SET_FIRST_TIME_OPEN,
   DISCOVERY_SET_LOADING_DATA,
   DISCOVERY_SET_NEW_FOLLOWED_DOMAIN,
   DISCOVERY_SET_NEW_FOLLOWED_USER,
@@ -28,6 +29,7 @@ const discoveryState = {
   unfollowedDomains: [],
   news: [],
   isLoadingDiscovery: false,
+  isFirstTimeOpen: true,
 };
 
 /**
@@ -62,6 +64,12 @@ const discoveryReducer = (state = discoveryState, action) => {
         followedTopic,
         unfollowedTopic,
         news,
+      };
+
+    case DISCOVERY_SET_FIRST_TIME_OPEN:
+      return {
+        ...state,
+        isFirstTimeOpen: action.payload,
       };
 
     case DISCOVERY_SET_LOADING_DATA:

@@ -22,13 +22,13 @@ const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
 const UsersFragment = () => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
-    const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
+    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
 
     const { users } = following
     // console.log(users)
-    const { isLoadingDiscovery, followedUsers, unfollowedUsers } = discovery
+    const { isLoadingDiscovery, followedUsers, unfollowedUsers, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -40,9 +40,9 @@ const UsersFragment = () => {
         parseToken();
     }, []);
 
-    React.useEffect(() => {
-        if(followedUsers.length > 0 || unfollowedUsers.length > 0) setIsFirstTimeOpen(false)
-    },[ followedUsers, unfollowedUsers ])
+    // React.useEffect(() => {
+    //     if(followedUsers.length > 0 || unfollowedUsers.length > 0 || isLoadingDiscovery) setIsFirstTimeOpen(false)
+    // },[ followedUsers, unfollowedUsers, isLoadingDiscovery ])
 
     const __handleOnPress = (item) => {
         navigation.push('OtherProfile', {
@@ -56,7 +56,6 @@ const UsersFragment = () => {
 
     const __handleFollow = async (from, willFollow, item, index) => {
         if(from === FROM_FOLLOWED_USERS_INITIAL) {
-            console.log('asdadadada')
             let newFollowedUsers = [...users]
             newFollowedUsers[index].user_id_follower = willFollow ? myId : null
 
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
     },
     unfollowedHeaders: {
         fontFamily: fonts.inter[600],
-        paddingLeft: 24,
+        marginLeft: 20,
     }
 })
 

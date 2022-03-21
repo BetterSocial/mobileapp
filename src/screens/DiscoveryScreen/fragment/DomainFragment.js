@@ -23,13 +23,13 @@ const FROM_UNFOLLOWED_DOMAIN = 'fromunfolloweddomains';
 const DomainFragment = () => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
-    const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
+    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
 
     const { domains } = following
     // console.log(domains)
-    const { isLoadingDiscovery, followedDomains, unfollowedDomains } = discovery
+    const { isLoadingDiscovery, followedDomains, unfollowedDomains, isFirstTimeOpen } = discovery
     console.log(unfollowedDomains)
 
     React.useEffect(() => {
@@ -42,9 +42,9 @@ const DomainFragment = () => {
         parseToken();
     }, []);
 
-    React.useEffect(() => {
-        if(followedDomains.length > 0 || unfollowedDomains.length > 0) setIsFirstTimeOpen(false)
-    },[ followedDomains, unfollowedDomains ])
+    // React.useEffect(() => {
+    //     if(followedDomains.length > 0 || unfollowedDomains.length > 0) setIsFirstTimeOpen(false)
+    // },[ followedDomains, unfollowedDomains ])
 
     const __handleOnPressDomain = (item) => {
         console.log(item)
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     },
     unfollowedHeaders: {
         fontFamily: fonts.inter[600],
-        marginLeft: 24,
+        marginLeft: 20,
     }
 })
 

@@ -15,10 +15,10 @@ import { getUserId } from '../../../utils/users';
 
 const NewsFragment = () => {
     const [myId, setMyId] = React.useState('')
-    const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
+    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [defaultNews] = React.useContext(Context).news
-    const { isLoadingDiscovery, news } = discovery
+    const { isLoadingDiscovery, news, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -30,9 +30,9 @@ const NewsFragment = () => {
         parseToken();
     }, []);
 
-    React.useEffect(() => {
-        if(news.length > 0) setIsFirstTimeOpen(false)
-    }, [news])
+    // React.useEffect(() => {
+    //     if(news.length > 0) setIsFirstTimeOpen(false)
+    // }, [news])
 
     const renderNewsItem = () => {
         if(isFirstTimeOpen) {
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     },
     unfollowedHeaders: {
         fontFamily: fonts.inter[600],
-        marginLeft: 24,
+        marginLeft: 20,
     }
 })
 

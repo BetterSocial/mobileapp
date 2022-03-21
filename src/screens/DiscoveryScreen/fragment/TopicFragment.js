@@ -20,12 +20,12 @@ const FROM_UNFOLLOWED_TOPIC = 'fromunfollowedtopics';
 const TopicFragment = () => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
-    const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
+    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
 
     const { topics } = following
-    const { isLoadingDiscovery, followedTopic, unfollowedTopic } = discovery
+    const { isLoadingDiscovery, followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -37,9 +37,9 @@ const TopicFragment = () => {
         parseToken();
     }, []);
 
-    React.useEffect(() => {
-        if(followedTopic.length > 0 || unfollowedTopic.length > 0) setIsFirstTimeOpen(false)
-    },[ followedTopic, unfollowedTopic ])
+    // React.useEffect(() => {
+    //     if(followedTopic.length > 0 || unfollowedTopic.length > 0) setIsFirstTimeOpen(false)
+    // },[ followedTopic, unfollowedTopic ])
 
     const __handleOnTopicPress = (item) => {
         console.log(item)
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     },
     unfollowedHeaders: {
         fontFamily: fonts.inter[600],
-        marginLeft: 24,
+        marginLeft: 20,
     }
 })
 

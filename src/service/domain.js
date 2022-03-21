@@ -55,7 +55,6 @@ export const unfollowDomain = async (data) => {
     const res = await api.post('/domain/unfollow', data);
     return res.data;
   } catch (error) {
-    console.log(error, 'sukira');
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }

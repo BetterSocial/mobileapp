@@ -397,7 +397,6 @@ const ProfileScreen = () => {
   };
 
   const onPress = (item, index) => {
-    console.log('masuk satu', item)
     navigation.navigate('ProfilePostDetailPage', {
       index: index,
       isalreadypolling: item.isalreadypolling,

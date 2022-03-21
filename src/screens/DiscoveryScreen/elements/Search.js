@@ -26,7 +26,7 @@ import {fonts} from '../../../utils/fonts';
 
 let getDataTimeoutId;
 
-const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onContainerClicked = () => {}}) => {
+const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = () => {}}) => {
   const navigation = useNavigation()
   const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery
@@ -93,7 +93,7 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
   },[])
 
   return (
-    <Animated.View style={styles.animatedViewContainer(animatedValue)}>
+    <Animated.View style={styles.animatedViewContainer(0)}>
       <Pressable onPress={__handleBackPress}
         android_ripple={{
           color: COLORS.gray1,
@@ -129,7 +129,7 @@ const DiscoverySearch = ({onPress, animatedValue, showBackButton = false, onCont
               color: COLORS.gray1,
               borderless: true,
               radius: 14,
-            }}>
+          }}>
             <View style={styles.wrapperDeleteIcon}>
               <IconClear width={9} height={10} iconColor={colors.black}/>
             </View>
@@ -182,22 +182,24 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontFamily: fonts.inter[400],
-    height: 36,
+    alignSelf: 'center',
+    height: 33,
     paddingTop: 0,
     paddingBottom: 0,
   },
-  inputText: {
-    marginRight: 16,
-    paddingStart: 10,
-    flex: 1,
-    fontSize: 14,
-    fontFamily: fonts.inter[400],
-    // height: 36,
-    paddingTop: 0,
-    paddingBottom: 0,
-    color: COLORS.gray1,
-    alignSelf: 'center'
-  },
+  // inputText: {
+  //   marginRight: 16,
+  //   paddingStart: 10,
+  //   flex: 1,
+  //   fontSize: 14,
+  //   fontFamily: fonts.inter[400],
+  //   height: 36,
+  //   alignSelf: 'center',
+  //   // paddingTop: 0,
+  //   // paddingBottom: 0,
+  //   color: COLORS.gray1,
+  //   alignSelf: 'center'
+  // },
   wrapperIcon: {
     marginLeft: 9.67,
     marginRight: 1.67,

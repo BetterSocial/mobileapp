@@ -1,50 +1,47 @@
-import api from './config';
 import crashlytics from '@react-native-firebase/crashlytics';
+
+import api from './config';
+
 export const createPost = async (data) => {
   try {
-    let resApi = await api.post('/activity/post', data);
+    const resApi = await api.post('/activity/post', data);
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(error.response.data);
-    console.log(error, 'siba');
   }
 };
 
-export const createPollPost = async (data) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let resApi = await api.post(
-        '/activity/post/poll',
-        data,
-        // headers : {
-        //   "Authorization" : getstreamToken
-        // }
-      );
+export const createPollPost = async (data) => new Promise(async (resolve, reject) => {
+  try {
+    const resApi = await api.post(
+      '/activity/post/poll',
+      data,
+      // headers : {
+      //   "Authorization" : getstreamToken
+      // }
+    );
 
-      resolve(resApi.data);
-    } catch (error) {
-      crashlytics().recordError(error.response.data);
-      reject(error);
-    }
-  });
-};
+    resolve(resApi.data);
+  } catch (error) {
+    crashlytics().recordError(error.response.data);
+    reject(error);
+  }
+});
 
-export const createFeedToken = async (data) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let resApi = await api.post('/activity/create-token', data);
-      resolve(resApi.data);
-    } catch (error) {
-      crashlytics().recordError(error.response.data);
-      // console.log(error);
-      reject(error);
-    }
-  });
-};
+export const createFeedToken = async (data) => new Promise(async (resolve, reject) => {
+  try {
+    const resApi = await api.post('/activity/create-token', data);
+    resolve(resApi.data);
+  } catch (error) {
+    crashlytics().recordError(error.response.data);
+    // console.log(error);
+    reject(error);
+  }
+});
 
 export const ShowingAudience = async (privacy, location) => {
   try {
-    let resApi = await api.get(
+    const resApi = await api.get(
       `/users/showing-audience-estimates?privacy=${privacy}&location=${location}`,
     );
     return resApi.data;
@@ -56,7 +53,7 @@ export const ShowingAudience = async (privacy, location) => {
 
 export const getMainFeed = async (query) => {
   try {
-    let res = await api.get('/activity/feeds' + query);
+    const res = await api.get(`/activity/feeds${query}`);
     return res.data;
   } catch (err) {
     crashlytics().recordError(err.response.data);
@@ -65,7 +62,7 @@ export const getMainFeed = async (query) => {
 };
 export const getFeedDetail = async (id) => {
   try {
-    let resApi = await api.get(`/feeds/detail-feed?id=${id}`);
+    const resApi = await api.get(`/feeds/detail-feed?id=${id}`);
     return resApi.data;
   } catch (error) {
     // crashlytics().recordError(error.response.data);
@@ -75,7 +72,7 @@ export const getFeedDetail = async (id) => {
 
 export const inputSingleChoicePoll = async (polling_id, polling_option_id) => {
   try {
-    let resApi = await api.post('/activity/post/poll/input', {
+    const resApi = await api.post('/activity/post/poll/input', {
       polling_id,
       polling_option_id,
     });
@@ -90,7 +87,7 @@ export const inputSingleChoicePoll = async (polling_id, polling_option_id) => {
 
 export const viewTimePost = async (id, time) => {
   try {
-    let resApi = api.post('/activity/viewpost', {
+    const resApi = api.post('/activity/viewpost', {
       post_id: id,
       view_time: time,
     });

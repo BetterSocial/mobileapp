@@ -1,5 +1,6 @@
 import {
   DISCOVERY_SET_DATA,
+  DISCOVERY_SET_FIRST_TIME_OPEN,
   DISCOVERY_SET_LOADING_DATA,
   DISCOVERY_SET_NEW_FOLLOWED_DOMAIN,
   DISCOVERY_SET_NEW_FOLLOWED_USER,
@@ -16,6 +17,19 @@ const setDiscoveryLoadingData = async (isLoading, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_LOADING_DATA,
     payload: isLoading,
+  });
+};
+
+/**
+ *
+ * @param {Boolean} isFirstTimeOpen
+ * @param {Any} dispatch
+ */
+const setDiscoveryFirstTimeOpen = async (isFirstTimeOpen, dispatch) => {
+  console.log('dispatch first time open');
+  dispatch({
+    type: DISCOVERY_SET_FIRST_TIME_OPEN,
+    payload: isFirstTimeOpen,
   });
 };
 
@@ -72,6 +86,7 @@ const setNewUnfollowedDomains = async (data, dispatch) => {
 const DiscoveryAction = {
   setDiscoveryLoadingData,
   setDiscoveryData,
+  setDiscoveryFirstTimeOpen,
   setNewFollowedDomains,
   setNewFollowedUsers,
   setNewUnfollowedDomains,

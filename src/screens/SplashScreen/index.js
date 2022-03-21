@@ -149,7 +149,6 @@ const SplashScreen = () => {
 
       getFollowingTopic().then((res) => {
         console.log('saving following topics')
-        console.log(res.data)
         following.setFollowingTopics(res.data, followingDispatch)
       })
     } catch(e) {

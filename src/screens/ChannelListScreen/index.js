@@ -15,6 +15,7 @@ import {
   Streami18n,
   Theme
 } from 'stream-chat-react-native';
+import { MessageSystem } from 'stream-chat-react-native-core'
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
@@ -22,6 +23,7 @@ import FeedNotification from './elements/FeedNotification';
 import IconChatCheckMark from '../../assets/icon/IconChatCheckMark'
 import Loading from '../Loading';
 import Search from './elements/Search';
+import streamFeed from '../../utils/getstream/streamer'
 import {
   CHANNEL_TYPE_GROUP_LOCATION,
   CHANNEL_TYPE_TOPIC,
@@ -29,16 +31,14 @@ import {
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { calculateTime } from '../../utils/time';
+import { getAccessToken } from '../../utils/token'
 import { getChatName } from '../../utils/string/StringUtils';
+import { getFeedNotification } from '../../service/feeds'
 import { getUserId } from '../../utils/users';
 import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { getFeedNotification } from '../../service/feeds'
-import { getAccessToken } from '../../utils/token'
-import streamFeed from '../../utils/getstream/streamer'
-import { MessageSystem } from 'stream-chat-react-native-core'
 
 const theme = {
   messageSimple: {
