@@ -5,18 +5,33 @@ import { useNavigation } from '@react-navigation/core';
 // import PostPageDetailComponent from '../../components/PostPageDetail'
 import PostPageDetailComponent from '../../components/PostPageDetail'
 import {Context} from '../../context';
-import { setFeedByIndex } from '../../context/actions/feeds';
+import { SOURCE_FEED_TAB, SOURCE_PDP } from '../../utils/constants';
+import { setFeedByIndex, setTimer } from '../../context/actions/feeds';
+import { viewTimePost } from '../../service/post'
 
 const FeedsPostDetail = (props) => {
-    let [feeds, dispatch] = React.useContext(Context).feeds
+    let [feedsContext, dispatch] = React.useContext(Context).feeds
     let {index, feedId, refreshParent} = props.route.params
     let navigation = useNavigation()
+    let [time, setTime] = React.useState(new Date().getTime())
+
+    let { feeds, timer } = feedsContext
 
     let navigateToReplyView = (data, updateParent) => {
+        let currentTime = new Date()
+        let feedDiffTime = currentTime.getTime() - timer.getTime()
+        let pdpDiffTime = currentTime.getTime() - time;
+
+        if(feedId) {
+            viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
+            viewTimePost(feedId, pdpDiffTime, SOURCE_PDP);
+        }
+
+        setTime(new Date().getTime())
+        setTimer(new Date(), dispatch)
+
         navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent});
     }
-
-    console.log(props.route, 'sinta')
 
     React.useEffect(() => {
         return () => {
@@ -29,7 +44,7 @@ const FeedsPostDetail = (props) => {
     return(
         <View style={styles.container}>
             <PostPageDetailComponent 
-                feeds={feeds.feeds} 
+                feeds={feeds} 
                 feedId={feedId}
                 dispatch={dispatch} 
                 setFeedByIndexProps={setFeedByIndex}

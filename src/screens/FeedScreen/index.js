@@ -135,7 +135,6 @@ const FeedScreen = (props) => {
     let currentTime = new Date()
     let diffTime = currentTime.getTime() - timer.getTime()
     let id = feeds[viewPostTimeIndex]?.id
-    console.log(SOURCE_FEED_TAB)
     if(id) viewTimePost(id, diffTime, SOURCE_FEED_TAB);
 
   };

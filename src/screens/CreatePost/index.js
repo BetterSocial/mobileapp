@@ -672,7 +672,9 @@ const CreatePost = () => {
           }
           onPress={() => {
             setMessage('');
-            navigation.navigate('ProfileScreen');
+            navigation.navigate('ProfileScreen', {
+              isNotFromHomeTab: true
+            });
           }}
         />
         <Gap style={styles.height(8)} />

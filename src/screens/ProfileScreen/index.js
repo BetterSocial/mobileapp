@@ -63,7 +63,7 @@ import {trimString} from '../../utils/string/TrimString';
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ route }) => {
   const navigation = useNavigation();
   const bottomSheetNameRef = React.useRef();
   const bottomSheetBioRef = React.useRef();
@@ -100,7 +100,9 @@ const ProfileScreen = () => {
 
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
-  const bottomBarHeight = useBottomTabBarHeight()
+
+  let isNotFromHomeTab = route?.params?.isNotFromHomeTab
+  let bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
 
   let {feeds} = myProfileFeed;
 
@@ -472,9 +474,6 @@ const ProfileScreen = () => {
             let posts = feeds.map((item, index) => {
               return headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT)
             })
-            // console.log('asdadad')
-            console.log('scroll offsets')
-            console.log([0, ...posts])
             return [0, ...posts]
           })()}
           ListHeaderComponent={
@@ -505,6 +504,7 @@ const ProfileScreen = () => {
               if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
               return <View style={{width: '100%'}}>
                   <RenderItem
+                    bottomBar={!isNotFromHomeTab}
                     item={item}
                     index={index}
                     onNewPollFetched={onNewPollFetched}

@@ -133,7 +133,9 @@ const GroupInfo = () => {
 
   const onProfilePressed = (data) => {
     if (profile.myProfile.user_id === participants[data].user_id) {
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileScreen', {
+        isNotFromHomeTab : true
+      });
       return;
     }
 

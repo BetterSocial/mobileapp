@@ -28,7 +28,7 @@ import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
-import { SOURCE_FEED_TAB } from '../../utils/constants';
+import { SOURCE_FEED_TAB, SOURCE_PDP } from '../../utils/constants';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
@@ -135,6 +135,7 @@ const _renderProfileNormal = ({
   location,
   isBackButton,
   height,
+  source
 }) => {
   const navigation = useNavigation();
   const [feedsContext, dispatch] = React.useContext(Context).feeds
@@ -145,14 +146,18 @@ const _renderProfileNormal = ({
   let { profile_pic_url, username } = actor.data;
 
   let navigateToProfile = async () => {
-    let currentTime = new Date().getTime()
-    let id = feeds[viewPostTimeIndex]?.id
-    if(id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
-    setTimer(new Date(), dispatch)
+    if(source) {
+      let currentTime = new Date().getTime()
+      let id = feeds[viewPostTimeIndex]?.id
+      if(id) viewTimePost(id, currentTime - timer.getTime(), source)
+      setTimer(new Date(), dispatch)  
+    }
 
     let selfUserId = await getUserId();    
     if (selfUserId === userId) {
-      return navigation.navigate('ProfileScreen');
+      return navigation.navigate('ProfileScreen', {
+        isNotFromHomeTab: true
+      });
     }
     return navigation.navigate('OtherProfile', {
       data: {
@@ -171,6 +176,14 @@ const _renderProfileNormal = ({
             <View style={styles.btn}>
               <TouchableOpacity
                 onPress={() => {
+                  if(source) {
+                    let currentTime = new Date().getTime()
+                    let id = feeds[viewPostTimeIndex]?.id
+                    if(id) viewTimePost(id, currentTime - timer.getTime(), source)
+                    if(id && source === SOURCE_PDP) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
+                    setTimer(new Date(), dispatch)  
+                  }
+              
                   navigation.goBack();
                 }}>
                 <MemoIc_arrow_back height={20} width={20} />
@@ -242,9 +255,10 @@ const _renderProfileNormal = ({
   );
 };
 
-const Header = ({ props, isBackButton = false, height }) => {
+const Header = ({ props, isBackButton = false, height, source = null }) => {
   let { anonimity, time, privacy, duration_feed, expired_at, location, actor } =
     props;
+
   if (anonimity) {
     return _renderAnonimity({
       time,
@@ -265,6 +279,7 @@ const Header = ({ props, isBackButton = false, height }) => {
       location,
       isBackButton,
       height,
+      source
     });
   }
 };

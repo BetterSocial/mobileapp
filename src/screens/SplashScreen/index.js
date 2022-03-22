@@ -130,11 +130,8 @@ const SplashScreen = () => {
     if(!selfUserId) return
     // Not using await so splash screen can navigate to next screen faster
     
-
     try {
       getFollowing(selfUserId).then((res) => {
-        console.log('saving following users')
-        // console.log(res.data)
         following.setFollowingUsers(res.data, followingDispatch)
       }) 
 
@@ -143,12 +140,10 @@ const SplashScreen = () => {
       }) 
 
       getFollowedDomain().then((res) => {
-        console.log('saving following domains')
         following.setFollowingDomain(res.data.data, followingDispatch)
       })
 
       getFollowingTopic().then((res) => {
-        console.log('saving following topics')
         following.setFollowingTopics(res.data, followingDispatch)
       })
     } catch(e) {

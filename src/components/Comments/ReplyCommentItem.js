@@ -51,7 +51,9 @@ const ReplyCommentItem = ({
   let openProfile = async () => {
     let selfUserId = await getUserId();
     if (selfUserId === user.id) {
-      return navigation.navigate('ProfileScreen');
+      return navigation.navigate('ProfileScreen', {
+        isNotFromHomeTab: true
+      });
     }
     return navigation.navigate('OtherProfile', {
       data: {
