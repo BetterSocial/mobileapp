@@ -30,11 +30,6 @@ const UsersFragment = () => {
     // console.log(users)
     const { isLoadingDiscoveryUser, followedUsers, unfollowedUsers, isFirstTimeOpen } = discovery
 
-    console.log('datasss')
-    console.log(followedUsers)
-    console.log('datazzz')
-    console.log(unfollowedUsers)
-
     React.useEffect(() => {
         const parseToken = async () => {
             const id = await getUserId();

@@ -1,8 +1,10 @@
 import * as React from 'react';
+import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, StatusBar, StyleSheet, View } from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
@@ -11,13 +13,14 @@ import Search from './elements/Search';
 import TiktokScroll from '../../components/TiktokScroll';
 import dimen from '../../utils/dimen';
 import { ButtonNewPost } from '../../components/Button';
+import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
-import { DISCOVERY_TAB_TOPICS } from '../../utils/constants';
+import { DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB } from '../../utils/constants';
 import { downVote, upVote } from '../../service/vote';
 import { getFeedDetail, getMainFeed, viewTimePost } from '../../service/post';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
+import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../../context/actions/feeds';
 
 let lastDragY = 0;
 let searchBarDebounce
@@ -29,8 +32,8 @@ const FeedScreen = (props) => {
   const [countStack, setCountStack] = React.useState(null);
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
-  const [time, setTime] = React.useState(new Date());
-  const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
+  // const [time, setTime] = React.useState(new Date());
+  // const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
   const [shouldSearchBarShown, setShouldSearchBarShown] = React.useState(0)
 
   const offset = React.useRef(new Animated.Value(-70)).current
@@ -38,8 +41,9 @@ const FeedScreen = (props) => {
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const bottomBarHeight = useBottomTabBarHeight();
+  const { height } = Dimensions.get('screen');
 
-  let { feeds } = feedsContext;
+  let { feeds, timer, viewPostTimeIndex } = feedsContext;
 
   const getDataFeeds = async (id = '') => {
     setCountStack(null);
@@ -51,19 +55,25 @@ const FeedScreen = (props) => {
       }
 
       const dataFeeds = await getMainFeed(query);
-      console.log(dataFeeds, 'sumani')
+      // console.log(dataFeeds, 'sumani')
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
+        let dataWithDummy = [...data, {dummy : true}]
         if (id === '') {
-          setMainFeeds(data, dispatch);
+          // setMainFeeds(data, dispatch);
+          setMainFeeds(dataWithDummy, dispatch);
         } else {
-          setMainFeeds([...feeds, ...data], dispatch);
+          let clonedFeeds = [...feeds]
+          clonedFeeds.splice(feeds.length - 1, 0, ...data)
+          setMainFeeds(clonedFeeds, dispatch);
+          // setMainFeeds([...feeds, ...data], dispatch)
         }
         setCountStack(data.length);
       }
       setLoading(false);
       setInitialLoading(false);
-      setTime(new Date());
+      // setTime(new Date());
+      setTimer(new Date(), dispatch)
       setLoading(false);
     } catch (e) {
       setInitialLoading(false);
@@ -121,8 +131,13 @@ const FeedScreen = (props) => {
     return processVote
   };
 
-  const sendViewPost = (id, viewTime) => {
-    viewTimePost(id, viewTime);
+  const sendViewPost = () => {
+    let currentTime = new Date()
+    let diffTime = currentTime.getTime() - timer.getTime()
+    let id = feeds[viewPostTimeIndex]?.id
+    console.log(SOURCE_FEED_TAB)
+    if(id) viewTimePost(id, diffTime, SOURCE_FEED_TAB);
+
   };
 
   React.useEffect(() => {
@@ -160,15 +175,16 @@ const FeedScreen = (props) => {
       item.og.domainImage,
       item.og.domain_page_id,
     );
+    sendViewPost()
     props.navigation.navigate('DomainScreen', param);
   };
 
   const onEndReach = () => {
-    getDataFeeds(feeds[feeds.length - 1].id);
+    // Use -2 because last item is dummy
+    getDataFeeds(feeds[feeds.length - 2].id);
   };
 
   const onPress = (item, index) => {
-    console.log(item, 'bahan')
     props.navigation.navigate('PostDetailPage', {
       // index: index,
       isalreadypolling: item.isalreadypolling,
@@ -179,7 +195,6 @@ const FeedScreen = (props) => {
   };
 
   const onPressComment = (index, item) => {
-    console.log(index, item, 'bahaya')
     props.navigation.navigate('PostDetailPage', {
       // index: index,
       feedId: item.id,
@@ -230,20 +245,22 @@ const FeedScreen = (props) => {
   }
 
   let onWillSendViewPostTime = (event) => {
-    let currentTime = new Date()
-    let diffTime = currentTime.getTime() - time.getTime()
-    sendViewPost(feeds[viewPostTimeIndex].id, diffTime)
+    sendViewPost()
     
     let y = event.nativeEvent.contentOffset.y;
     let shownIndex = Math.ceil(y / dimen.size.FEED_CURRENT_ITEM_HEIGHT)
-    setViewPostTimeIndex(shownIndex)
-    setTime(new Date())
+    setViewPostTimeIndex(shownIndex, dispatch)
+    setTimer(new Date(), dispatch)
   }
 
   let handleSearchBarClicked = () => {
+    sendViewPost()
+
     navigation.navigate('DiscoveryScreen', {
       tab: DISCOVERY_TAB_TOPICS
     })
+
+    setTimer(new Date(), dispatch)
   }
 
   return (
@@ -258,8 +275,10 @@ const FeedScreen = (props) => {
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}
         refreshing={loading}>
-        {({ item, index }) => (
-          <RenderListFeed
+        {({ item, index }) => {
+          let dummyItemHeight = height - dimen.size.FEED_CURRENT_ITEM_HEIGHT - StatusBar.currentHeight - bottomBarHeight - 16
+          if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
+          return <RenderListFeed
             item={item}
             onNewPollFetched={onNewPollFetched}
             index={index}
@@ -272,7 +291,7 @@ const FeedScreen = (props) => {
             onPressDownVote={(post) => setDownVote(post, index)}
             loading={loading}
           />
-        )}
+        }}
       </TiktokScroll>
       <ButtonNewPost />
       <BlockComponent ref={refBlockComponent} refresh={getDataFeeds} screen="screen_feed" />
@@ -290,6 +309,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: -1,
   },
+  dummyItem : (height) => ({
+    height,
+    backgroundColor: COLORS.gray1,
+  }),
   containerLoading: {
     flex: 1,
     justifyContent: 'center',

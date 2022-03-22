@@ -78,7 +78,6 @@ const setDiscoveryLoadingDataNews = async (isLoading, dispatch) => {
  * @param {Any} dispatch
  */
 const setDiscoveryFirstTimeOpen = async (isFirstTimeOpen, dispatch) => {
-  console.log('dispatch first time open');
   dispatch({
     type: DISCOVERY_SET_FIRST_TIME_OPEN,
     payload: isFirstTimeOpen,

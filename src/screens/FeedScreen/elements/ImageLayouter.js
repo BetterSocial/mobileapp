@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import {fonts} from '../../../utils/fonts';
+
 import {COLORS} from '../../../utils/theme';
+import {fonts} from '../../../utils/fonts';
 
 const ImageLayouter = ({images = [], onimageclick, height}) => {
   if (images.length === 1) {
@@ -20,7 +21,7 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
       <View style={styles.twoPhotoLayout}>
         {images.map((item, index) => {
           return (
-            <View style={styles.twoPhotoItemLayout}>
+            <View key={`image-layouter-${index}`} style={styles.twoPhotoItemLayout}>
               <Pressable onPress={() => onimageclick(index)}>
                 <Image
                   style={styles.imagelayout2}

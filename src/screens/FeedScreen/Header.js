@@ -27,10 +27,14 @@ import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNin
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import dimen from '../../utils/dimen';
+import { Context } from '../../context';
+import { SOURCE_FEED_TAB } from '../../utils/constants';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getUserId } from '../../utils/users';
+import { setTimer } from '../../context/actions/feeds';
+import { viewTimePost } from '../../service/post';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -133,11 +137,20 @@ const _renderProfileNormal = ({
   height,
 }) => {
   const navigation = useNavigation();
+  const [feedsContext, dispatch] = React.useContext(Context).feeds
+
+  const { feeds, timer, viewPostTimeIndex } = feedsContext
+
   let userId = actor.id;
   let { profile_pic_url, username } = actor.data;
 
   let navigateToProfile = async () => {
-    let selfUserId = await getUserId();
+    let currentTime = new Date().getTime()
+    let id = feeds[viewPostTimeIndex]?.id
+    if(id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
+    setTimer(new Date(), dispatch)
+
+    let selfUserId = await getUserId();    
     if (selfUserId === userId) {
       return navigation.navigate('ProfileScreen');
     }

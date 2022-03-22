@@ -79,8 +79,6 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
     
     DiscoveryRepo.fetchDiscoveryDataNews(discoverySearchBarText).then(async (data) => {
       if(data.success) {
-        console.log('datasss')
-        console.log(JSON.stringify(data))
         await DiscoveryAction.setDiscoveryDataNews(data, discoveryDispatch)
         DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
       }  
