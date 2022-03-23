@@ -12,7 +12,7 @@ import Header from './Header';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
-import { ANALYTICS_SHARE_POST_FEED_ID, ANALYTICS_SHARE_POST_FEED_SCREEN } from '../../utils/constants';
+import { ANALYTICS_SHARE_POST_FEED_ID, ANALYTICS_SHARE_POST_FEED_SCREEN, SOURCE_FEED_TAB } from '../../utils/constants';
 import { Footer, Gap, PreviewComment } from '../../components';
 import {
   POST_TYPE_LINK,
@@ -195,7 +195,7 @@ const RenderListFeed = (props) => {
   return (
     <View style={[styles.cardContainer(bottomHeight)]}>
       <View style={styles.cardMain}>
-        <Header props={item} height={getHeightHeader()} />
+        <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB}/>
         {item.post_type === POST_TYPE_POLL && (
           <ContentPoll
             index={index}

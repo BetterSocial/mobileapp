@@ -5,16 +5,30 @@ import {useNavigation} from '@react-navigation/core';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import dimen from '../../utils/dimen';
 import {COLORS} from '../../utils/theme';
+import {Context} from '../../context'
+import {SOURCE_FEED_TAB} from '../../utils/constants';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
+import { setTimer } from '../../context/actions/feeds';
+import { viewTimePost } from '../../service/post';
 
 const ButtonAddPost = () => {
   const navigator = useNavigation();
+  const [feedsContext, dispatch] = React.useContext(Context).feeds
+
+  const { feeds, timer, viewPostTimeIndex } = feedsContext
+
+  const __handleOnAddPostButtonClicked = () => {
+    let currentTime = new Date().getTime()
+    let id = feeds[viewPostTimeIndex]?.id
+    if(id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
+    navigator.navigate('CreatePost');
+    setTimer(new Date(), dispatch)
+  }
+
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => {
-        navigator.navigate('CreatePost');
-      }}>
+      onPress={__handleOnAddPostButtonClicked}>
       <MemoIc_pencil
         width={dimen.normalizeDimen(21)}
         height={dimen.normalizeDimen(21)}

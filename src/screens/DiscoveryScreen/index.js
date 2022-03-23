@@ -3,6 +3,7 @@ import Animated from 'react-native-reanimated';
 import {ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
+import DiscoveryAction from '../../context/actions/discoveryAction';
 import DomainFragment from './fragment/DomainFragment';
 import DomainList from '../Followings/elements/RenderList';
 import Followings from '../Followings';
@@ -11,6 +12,7 @@ import Search from './elements/Search';
 import StringConstant from '../../utils/string/StringConstant';
 import TopicFragment from './fragment/TopicFragment';
 import UsersFragment from './fragment/UsersFragment';
+import { Context } from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH, DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS, DISCOVERY_TAB_TOPICS, DISCOVERY_TAB_USERS} from '../../utils/constants';
 import { FONTS } from '../../utils/theme';
 import { colors } from '../../utils/colors';
@@ -21,9 +23,27 @@ const DiscoveryScreen = ({ route }) => {
     const offset = React.useRef(new Animated.Value(0)).current
     const { tab } = route.params
 
+    const [discovery, discoveryDispatch] = React.useContext(Context).discovery
+    const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
+
+    const {discoverySearchBarText} = generalComponent
+
     let initialRouteName = tab || DISCOVERY_TAB_USERS
 
-    const Tabs = createMaterialTopTabNavigator()    
+    const Tabs = createMaterialTopTabNavigator()
+    
+    React.useEffect(() => {
+        const unsubscribe = (() => {
+            DiscoveryAction.setDiscoveryFirstTimeOpen(true, discoveryDispatch)
+        })
+
+        return unsubscribe
+    }, [])
+
+    React.useEffect(() => {
+        if(discoverySearchBarText.length > 1) DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
+    }, [discoverySearchBarText])
+
 
     function MyTabBar(props) {
         let {state, descriptors, navigation, position} = props
@@ -31,6 +51,7 @@ const DiscoveryScreen = ({ route }) => {
             <View style={S.toptabcontainer}>
                 {state.routes.map((route, index) => {
                     const {options} = descriptors[route.key];
+                    const { title } = options
                     const label =
                         options.tabBarLabel !== undefined
                         ? options.tabBarLabel
@@ -66,10 +87,10 @@ const DiscoveryScreen = ({ route }) => {
                             testID={options.tabBarTestID}
                             onPress={onPress}
                             style={S.singletab}>
-                            <Animated.Text style={{opacity, ...S.singletabtext}}>
+                            <Animated.Text style={{opacity, ...S.singletabtext, ...(isFocused ? S.viewborderbottom(title.length) : {})}}>
                                 {label}
                             </Animated.Text>
-                            <View style={isFocused ? S.viewborderbottom : {}} />
+                            {/* <View style={isFocused ? S.viewborderbottom(title.length) : {}} /> */}
                         </TouchableOpacity>
                     );
                 })}
@@ -146,26 +167,30 @@ const S = StyleSheet.create({
         backgroundColor: colors.white,
         // borderBottomColor: '#00000050',
         // borderBottomWidth: 1,
-        paddingHorizontal: 4,
+        // paddingHorizontal: 4,
+        marginLeft: -14,
     },
 
     singletab: {
         flex: 1,
-        paddingLeft: 16,
+        // paddingLeft: 20,
     },
 
     singletabtext: {
         fontFamily: fonts.inter[500],
-        textAlign: 'left',
+        textAlign: 'center',
         fontSize: 14,
         paddingVertical: 15,
     },
 
-    viewborderbottom: {
+    viewborderbottom: (width) =>  ({
         borderBottomColor: colors.holytosca,
-        borderBottomWidth: 1,
-        width: '60%',
-    },
+        borderBottomWidth: 2,
+        alignSelf:'center',
+        minWidth: 1,
+        paddingHorizontal: 2,
+        // width: '100%',
+    }),
 });
 
 export default DiscoveryScreen

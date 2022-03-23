@@ -13,11 +13,19 @@ import { convertTopicNameToTopicPageScreenParam } from '../../../utils/string/St
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
 
+const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
+const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
+const FROM_UNFOLLOWED_TOPIC = 'fromunfollowedtopics';
+
 const TopicFragment = () => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
+    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
-    const { isLoadingDiscovery, followedTopic, unfollowedTopic } = discovery
+    const [following, followingDispatch] = React.useContext(Context).following
+
+    const { topics } = following
+    const { isLoadingDiscoveryTopic, followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -29,6 +37,10 @@ const TopicFragment = () => {
         parseToken();
     }, []);
 
+    // React.useEffect(() => {
+    //     if(followedTopic.length > 0 || unfollowedTopic.length > 0) setIsFirstTimeOpen(false)
+    // },[ followedTopic, unfollowedTopic ])
+
     const __handleOnTopicPress = (item) => {
         console.log(item)
 
@@ -39,39 +51,54 @@ const TopicFragment = () => {
         console.log(navigationParam)
         navigation.push('TopicPageScreen', navigationParam)
     }
+
+    const __renderDiscoveryItem = (from, key, item, index) => {
+        return <View key={`${key}-${index}`} style={styles.domainContainer}>
+                <DomainList
+                    // handleSetFollow={() => __handleFollow(from, true, item, index)}
+                    // handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+                    key={`followedTopic-${index}`} 
+                    onPressBody={() => __handleOnTopicPress(item)} 
+                    isHashtag 
+                    item={{
+                        name: item.name,
+                        image: item.profile_pic_path,
+                        isunfollowed: item.user_id_follower === null,
+                        description: null,
+                    }}/>
+            </View>
+    }
+
+    const __renderTopicItems = () => {
+        if(isFirstTimeOpen) return topics.map((item, index) => {
+            return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery",
+                { ...item, user_id_follower: item.user_id_follower ? item.user_id_follower : myId }, index)
+        })
+
+        return (
+            <>
+                { followedTopic.map((item, index) => {
+                    return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC, "followedTopicDiscovery", item, index)
+                })}
+
+                { unfollowedTopic.length > 0 && 
+                    <View style={styles.unfollowedHeaderContainer}>
+                    <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreTopics}</Text>
+                    </View>}
+                { unfollowedTopic.map((item, index) => {
+                    return __renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC, "unfollowedTopicDiscovery", item, index)
+                })}
+            </>
+        )
+    }
     
-    if(isLoadingDiscovery) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
-    if(followedTopic.length === 0 && unfollowedTopic.length ===0) return <View style={styles.noDataFoundContainer}>
+    if(isLoadingDiscoveryTopic) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
+    if(followedTopic.length === 0 && unfollowedTopic.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Topics found</Text>
     </View>
 
     return <ScrollView style={styles.fragmentContainer}>
-        { followedTopic.map((item, index) => {
-            return <DomainList key={`followedTopic-${index}`} onPressBody={() => __handleOnTopicPress(item)} 
-                isHashtag 
-                item={{
-                    name: item.name,
-                    image: item.profile_pic_path,
-                    isunfollowed: item.user_id_follower === null,
-                    description: null,
-            }} />
-        })}
-
-        { unfollowedTopic.length > 0 && 
-            <View style={styles.unfollowedHeaderContainer}>
-                <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreTopics}</Text>
-            </View>
-        }
-        { unfollowedTopic.map((item, index) => {
-            return <DomainList key={`unfollowedTopic-${index}`} onPressBody={() => __handleOnTopicPress(item)} 
-                isHashtag 
-                item={{
-                    name: item.name,
-                    image: item.profile_pic_path,
-                    isunfollowed: item.user_id_follower === null,
-                    description: null,
-            }} />
-        })}
+        { __renderTopicItems() }
     </ScrollView>
 }
 
@@ -99,7 +126,7 @@ const styles = StyleSheet.create({
     },
     unfollowedHeaders: {
         fontFamily: fonts.inter[600],
-        marginLeft: 24,
+        marginLeft: 20,
     }
 })
 

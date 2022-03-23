@@ -5,6 +5,7 @@ import { clientReducer, clientState } from './reducers/clientReducer';
 import { discoveryReducer, discoveryState } from './reducers/discoveryReducer';
 import { domainReducer, domainState } from './reducers/domainReducer';
 import { feedsReducer, feedsState } from './reducers/FeedReducer';
+import { followingReducer, followingState } from './reducers/followingReducer';
 import { generalComponentReducer, generalComponentState } from './reducers/generalComponentReducer';
 import { groupChatReducer, groupChatState } from './reducers/groupChat';
 import {
@@ -36,6 +37,7 @@ const Store = ({ children }) => {
     client: React.useReducer(clientReducer, clientState),
     discovery: React.useReducer(discoveryReducer, discoveryState),
     feeds: React.useReducer(feedsReducer, feedsState),
+    following: React.useReducer(followingReducer, followingState),
     generalComponent: React.useReducer(generalComponentReducer, generalComponentState),
     groupChat: React.useReducer(groupChatReducer, groupChatState),
     localCommunity: React.useReducer(

@@ -20,9 +20,69 @@ import api from './config';
  * @param {String} query
  * @return {FetchDiscoveryDataResponse}
  */
-const fetchDiscoveryData = async (query) => {
+const fetchDiscoveryDataUser = async (query) => {
   try {
-    const response = await api.get(`/discovery/?q=${encodeURIComponent(query)}`);
+    const response = await api.get(`/discovery/user/?q=${encodeURIComponent(query)}`);
+    if (response.data.success) {
+      return response.data;
+    }
+    return {
+      success: false,
+      message: response.data.message,
+    };
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+/**
+ *
+ * @param {String} query
+ * @return {FetchDiscoveryDataResponse}
+ */
+const fetchDiscoveryDataDomain = async (query) => {
+  try {
+    const response = await api.get(`/discovery/domain/?q=${encodeURIComponent(query)}`);
+    if (response.data.success) {
+      return response.data;
+    }
+    return {
+      success: false,
+      message: response.data.message,
+    };
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+/**
+ *
+ * @param {String} query
+ * @return {FetchDiscoveryDataResponse}
+ */
+const fetchDiscoveryDataTopic = async (query) => {
+  try {
+    const response = await api.get(`/discovery/topic/?q=${encodeURIComponent(query)}`);
+    if (response.data.success) {
+      return response.data;
+    }
+    return {
+      success: false,
+      message: response.data.message,
+    };
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+/**
+ *
+ * @param {String} query
+ * @return {FetchDiscoveryDataResponse}
+ */
+const fetchDiscoveryDataNews = async (query) => {
+  try {
+    const response = await api.get(`/discovery/news/?q=${encodeURIComponent(query)}`);
     if (response.data.success) {
       return response.data;
     }
@@ -37,7 +97,10 @@ const fetchDiscoveryData = async (query) => {
 };
 
 const DiscoveryRepo = {
-  fetchDiscoveryData,
+  fetchDiscoveryDataUser,
+  fetchDiscoveryDataDomain,
+  fetchDiscoveryDataTopic,
+  fetchDiscoveryDataNews,
 };
 
 export default DiscoveryRepo;

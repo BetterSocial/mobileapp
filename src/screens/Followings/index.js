@@ -41,8 +41,8 @@ const Followings = () => {
     if (result.code === 200) {
       withLoading ? setIsLoading(false) : null;
       const newData = result.data.map((data) => ({ ...data, name: data.user.username, image: data.user.profile_pic_path, description: null }))
-      console.log('newData')
-      console.log(newData)
+      // console.log('newData')
+      // console.log(newData)
       setDataFollowing(newData);
       navigation.setOptions({
         title: `Users (${newData.length})`,

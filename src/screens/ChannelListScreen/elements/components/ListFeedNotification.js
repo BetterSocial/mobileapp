@@ -1,13 +1,14 @@
-import React, {memo} from 'react'
-import { View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment'
-import { COLORS } from '../../../../utils/theme'
-import {Context} from '../../../../context';
+import React, {memo} from 'react'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
 import MemoIc_arrow_down_vote_on from '../../../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_on from '../../../../assets/arrow/Ic_upvote_on';
-import MemoIc_comment from '../../../../assets/icons/Ic_comment';
 import MemoIc_block_inactive from '../../../../assets/block/Ic_block_inactive';
+import MemoIc_comment from '../../../../assets/icons/Ic_comment';
+import { COLORS } from '../../../../utils/theme'
+import {Context} from '../../../../context';
 
 const styles = StyleSheet.create({
     containerCard: {
@@ -66,16 +67,13 @@ const ListFeedNotification = ({notif, onPress}) => {
 
     const handleDate = (reaction) => {
         if(reaction && reaction.updated_at) {
-            console.log(reaction.updated_at, 'jamil')
             return moment(reaction.updated_at).format('dddd')
         }
         return ""
     }
-    console.log(notif, profile, 'notif123')
 
     const handleReplyComment = () => {
         const actorId = notif.comments[0] && notif.comments[0].actor && notif.comments[0].actor.data && notif.comments[0].actor.id
-        console.log(actorId, profile.myProfile.user_id, 'salak')
         if(actorId === profile.myProfile.user_id) {
             return "You"
         } else if(notif.comments[0] && notif.comments[0].reaction && notif.comments[0].reaction.parent !== "") {

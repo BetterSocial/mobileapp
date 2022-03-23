@@ -17,25 +17,27 @@ import Content from './elements/Content';
 import ContentLink from '../../screens/FeedScreen/ContentLink';
 import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import dimen from '../../utils/dimen';
+import {Context} from '../../context';
 import {Footer, Gap} from '../../components';
 import {
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
+  SOURCE_FEED_TAB,
+  SOURCE_PDP,
 } from '../../utils/constants';
 import {createCommentParent} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
-import {getFeedDetail} from '../../service/post';
+import {getFeedDetail, viewTimePost} from '../../service/post';
 import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
-import {Context} from '../../context';
 
 const {width, height} = Dimensions.get('window');
 
@@ -55,15 +57,18 @@ const PostPageDetailIdComponent = (props) => {
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false)
   const [commentList, setCommentList] = React.useState([])
+  const [time, setTime] = React.useState(new Date().getTime())
+  const [item, setItem] = React.useState(null);
   let navigation = useNavigation()
   
+  const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
 
-  // let [feeds, dispatch] = React.useContext(Context).feeds;
+  let [feedsContext, dispatch] = React.useContext(Context).feeds;
+  let { timer } = feedsContext
+  
   let { feedId, refreshParent, 
     navigateToReplyView = () => {}} = props
-    
-    console.log(user, profile, 'saliman')
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -88,9 +93,6 @@ const PostPageDetailIdComponent = (props) => {
     return unsubscribe;
   }, [yourselfId]);
 
-  const scrollViewRef = React.useRef(null);
-
-  const [item, setItem] = React.useState(null);
 
   React.useEffect(() => {
     if(item && item.latest_reactions && item.latest_reactions.comment) {
@@ -220,6 +222,18 @@ const PostPageDetailIdComponent = (props) => {
       item.og.domainImage,
       item.og.domain_page_id,
     );
+
+    let currentTime = new Date()
+    let feedDiffTime = currentTime.getTime() - timer.getTime()
+    let pdpDiffTime = currentTime.getTime() - time;
+
+    if(feedId) {
+        viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
+        viewTimePost(feedId, pdpDiffTime, SOURCE_PDP);
+    }
+
+    setTime(new Date().getTime())
+    setTimer(new Date(), dispatch)
     navigation.navigate('DomainScreen', param);
   };
 
@@ -261,6 +275,19 @@ const PostPageDetailIdComponent = (props) => {
       item.og.domainImage,
       item.og.domain_page_id,
     );
+
+    let currentTime = new Date()
+    let feedDiffTime = currentTime.getTime() - timer.getTime()
+    let pdpDiffTime = currentTime.getTime() - time;
+
+    if(feedId) {
+        viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
+        viewTimePost(feedId, pdpDiffTime, SOURCE_PDP);
+    }
+
+    setTime(new Date().getTime())
+    setTimer(new Date(), dispatch)
+    
     navigation.push('LinkContextScreen', param);
   };
 
@@ -342,91 +369,91 @@ const PostPageDetailIdComponent = (props) => {
       {loading ? <LoadingWithoutModal /> : null}
       <StatusBar translucent={false} />
       {item ? <React.Fragment>
-        <Header props={item} isBackButton={true} />
+        <Header props={item} isBackButton={true} source={SOURCE_PDP}/>
 
-<ScrollView
-  ref={scrollViewRef}
-  showsVerticalScrollIndicator={false}
-  style={styles.contentScrollView(totalComment)}>
-  <View style={styles.content(height)}>
-    {item && item.post_type === POST_TYPE_POLL && (
-      <ContentPoll
-        message={item.message}
-        images_url={item.images_url}
-        polls={item.pollOptions}
-        onPress={() => {}}
-        item={item}
-        pollexpiredat={item.polls_expired_at}
-        multiplechoice={item.multiplechoice}
-        isalreadypolling={item.isalreadypolling}
-        onnewpollfetched={onNewPollFetched}
-        voteCount={item.voteCount}
-      />
-    )}
+      <ScrollView
+        ref={scrollViewRef}
+        showsVerticalScrollIndicator={false}
+        style={styles.contentScrollView(totalComment)}>
+        <View style={styles.content(height)}>
+          {item && item.post_type === POST_TYPE_POLL && (
+            <ContentPoll
+              message={item.message}
+              images_url={item.images_url}
+              polls={item.pollOptions}
+              onPress={() => {}}
+              item={item}
+              pollexpiredat={item.polls_expired_at}
+              multiplechoice={item.multiplechoice}
+              isalreadypolling={item.isalreadypolling}
+              onnewpollfetched={onNewPollFetched}
+              voteCount={item.voteCount}
+            />
+          )}
 
-    {item && item.post_type === POST_TYPE_LINK && (
-      <ContentLink
-        og={item.og}
-        onCardPress={onPressDomain}
-        onHeaderPress={onPressDomain}
-        onCardContentPress={() => navigateToLinkContextPage(item)}
-      />
-    )}
+          {item && item.post_type === POST_TYPE_LINK && (
+            <ContentLink
+              og={item.og}
+              onCardPress={onPressDomain}
+              onHeaderPress={onPressDomain}
+              onCardContentPress={() => navigateToLinkContextPage(item)}
+            />
+          )}
 
-    {item && item.post_type === POST_TYPE_STANDARD && (
-      <Content
-        message={item.message}
-        images_url={item.images_url}
-        style={styles.additionalContentStyle(
-          item.images_url.length,
-          height,
+          {item && item.post_type === POST_TYPE_STANDARD && (
+            <Content
+              message={item.message}
+              images_url={item.images_url}
+              style={styles.additionalContentStyle(
+                item.images_url.length,
+                height,
+              )}
+            />
+          )}
+          <Gap height={16} />
+          <View style={{height: 52, paddingHorizontal: 0, position: 'absolute', bottom : 0, width: '100%'}}>
+            <Footer
+              item={item}
+              disableComment={false}
+              totalComment={totalComment}
+              totalVote={totalVote}
+              onPressDownVote={onPressDownVoteHandle}
+              onPressUpvote={onPressUpvoteHandle}
+              statusVote={voteStatus}
+              onPressShare={() => {}}
+              onPressComment={onCommentButtonClicked}
+              // loadingVote={loadingVote}
+              onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
+              isSelf={yourselfId === item.actor.id ? true : false}
+            />
+          </View>
+        </View>
+        {isReaction && commentList && (
+          <ContainerComment
+            comments={commentList}
+            isLoading={loadingPost}
+            refreshComment={handleRefreshComment}
+            refreshChildComment={handleRefreshChildComment}
+            navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
+          />
         )}
+      </ScrollView>
+      <WriteComment
+        username={
+          item.anonimity
+            ? StringConstant.generalAnonymousText
+            : item.actor.data.username
+        }
+        value={textComment}
+        onChangeText={(value) => setTextComment(value)}
+        onPress={() => {
+          onComment();
+        }}
       />
-    )}
-    <Gap height={16} />
-    <View style={{height: 52, paddingHorizontal: 0, position: 'absolute', bottom : 0, width: '100%'}}>
-      <Footer
-        item={item}
-        disableComment={false}
-        totalComment={totalComment}
-        totalVote={totalVote}
-        onPressDownVote={onPressDownVoteHandle}
-        onPressUpvote={onPressUpvoteHandle}
-        statusVote={voteStatus}
-        onPressShare={() => {}}
-        onPressComment={onCommentButtonClicked}
-        // loadingVote={loadingVote}
-        onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
-        isSelf={yourselfId === item.actor.id ? true : false}
-      />
-    </View>
-  </View>
-  {isReaction && commentList && (
-    <ContainerComment
-      comments={commentList}
-      isLoading={loadingPost}
-      refreshComment={handleRefreshComment}
-      refreshChildComment={handleRefreshChildComment}
-      navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
-    />
-  )}
-</ScrollView>
-<WriteComment
-  username={
-    item.anonimity
-      ? StringConstant.generalAnonymousText
-      : item.actor.data.username
-  }
-  value={textComment}
-  onChangeText={(value) => setTextComment(value)}
-  onPress={() => {
-    onComment();
-  }}
-/>
 
-<BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page"/>
-      </React.Fragment> : null}
-      
+      <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page"/>
+            </React.Fragment> : null}
+            
     </View>
   );
 };

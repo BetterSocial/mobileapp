@@ -310,7 +310,7 @@ const CreatePost = () => {
           setDataImage((val) => [...val, res.base64]);
           sheetMediaRef.current.close();
         } else {
-          console.log(res);
+          // console.log(res);
         }
       });
     } else {
@@ -341,6 +341,11 @@ const CreatePost = () => {
 
   const onRemoveItem = (v) => {
     let deleteItem = mediaStorage.filter((item) => item.id !== v);
+    let index = mediaStorage.findIndex((item) => item.id === v)
+    let newImageData = [...dataImage].splice(index)
+    console.log(newImageData.length)
+
+    setDataImage(newImageData)
     setMediaStorage(deleteItem);
   };
 
@@ -413,7 +418,8 @@ const CreatePost = () => {
         message: message,
         verb: 'tweet',
         feedGroup: 'main_feed',
-        privacy: listPrivacy[privacySelect].label,
+        // privacy: listPrivacy[privacySelect].label,
+        privacy: listPrivacy[privacySelect].key,
         anonimity: typeUser,
         location: geoList[geoSelect].neighborhood,
         location_id: locationId,
@@ -424,7 +430,6 @@ const CreatePost = () => {
       setLocationId(JSON.stringify(geoSelect));
       setDurationId(JSON.stringify(expiredSelect));
       setPrivacyId(JSON.stringify(privacySelect));
-      console.log(data, 'salam')
       analytics().logEvent('create_post', {
         id: 6,
         newpost_reach: geoList[geoSelect].neighborhood,
@@ -436,7 +441,6 @@ const CreatePost = () => {
         predicted_audience: audienceEstimations,
       });
       let res = await createPost(data);
-      console.log(res, 'hambana')
       if (res.code === 200) {
         showMessage({
           message: StringConstant.createPostDone,
@@ -668,7 +672,9 @@ const CreatePost = () => {
           }
           onPress={() => {
             setMessage('');
-            navigation.navigate('ProfileScreen');
+            navigation.navigate('ProfileScreen', {
+              isNotFromHomeTab: true
+            });
           }}
         />
         <Gap style={styles.height(8)} />

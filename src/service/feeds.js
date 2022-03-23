@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import crashlytics from '@react-native-firebase/crashlytics';
+
 import api from './config';
 
 export const getFeedNotification = async () => {

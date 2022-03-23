@@ -1,21 +1,21 @@
 import * as React from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
   Animated,
   Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../assets/icons/Ic_search';
 import StringConstant from '../../utils/string/StringConstant';
-import {fonts} from '../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
-import { useNavigation } from '@react-navigation/native';
-import { DISCOVERY_TAB_NEWS } from '../../utils/constants';
+import { DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS } from '../../utils/constants';
+import {fonts} from '../../utils/fonts';
 
 const Search = ({onPress, animatedValue}) => {
   const navigation = useNavigation()

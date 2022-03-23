@@ -7,6 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import BlockDomainComponent from '../../components/BlockDomain';
 import Header from './elements/Header';
 import Loading from '../Loading';
+import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import Navigation from './elements/Navigation';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
@@ -23,11 +24,11 @@ import {
   getProfileDomain,
   unfollowDomain,
 } from '../../service/domain';
+import { colors } from '../../utils/colors';
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { getUserId } from '../../utils/users';
+import { setDomainData, setProfileDomain, setSelectedLastDomain } from '../../context/actions/domainAction';
 import { unblokDomain } from '../../service/blocking';
-import { setDomainData, setSelectedLastDomain, setProfileDomain } from '../../context/actions/domainAction';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 
 const { height, width } = Dimensions.get('screen');
 let headerHeight = 0;
@@ -48,6 +49,9 @@ const DomainScreen = () => {
   const [domainStore, dispatchDomain] = React.useContext(Context).domains;
 
   const tiktokScrollRef = React.useRef(null);
+  const [headerHeightRef, setHeaderHeightRef] = React.useState(0)
+
+  console.log(headerHeightRef)
 
   let iddomain = dataDomain.content.domain_page_id;
   const [dataFollow] = React.useState({
@@ -114,9 +118,12 @@ const DomainScreen = () => {
         setDomainFollowers(res.followers);
         // setData([{dummy: true}, ...res.data]);
         // dispatchDomain(res.data);
-        setDomainData(res.data, dispatchDomain);
+        if(res.data.length > 0) {
+          setDomainData([...res.data, {dummy: true}], dispatchDomain)
+        } else {
+          setDomainData(res.data, dispatchDomain);
+        }
         setSelectedLastDomain(dataDomain.og.domain, dispatchDomain);
-        setData(res.data);
         setLoading(false);
       }
 
@@ -231,14 +238,17 @@ const DomainScreen = () => {
         ref={tiktokScrollRef}
         data={domainStore.domains}
         snapToOffsets={(() => {
-          return data.map((item, index) => {
-            return headerHeight + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)
+          let posts =  domainStore.domains.map((item, index) => {
+            return headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)
           })
+          console.log('posts')
+          console.log(posts)
+          return [headerHeightRef, ...posts]
         })()}
         ListHeaderComponent={
           <View style={{ backgroundColor: 'transparent' }} onLayout={(event) => {
             let headerHeightLayout = event.nativeEvent.layout.height
-            headerHeight = headerHeightLayout
+            setHeaderHeightRef(headerHeightLayout)
           }}>
             <Header
               image={domainImage}
@@ -261,7 +271,9 @@ const DomainScreen = () => {
 
         {
           ({ item, index }) => {
-            return (
+              let dummyItemHeight = height - dimen.size.DOMAIN_CURRENT_HEIGHT - 44 - 18 - StatusBar.currentHeight;
+              if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
+              return (
               <RenderItem
                 key={index}
                 item={item}
@@ -342,6 +354,12 @@ const DomainScreen = () => {
 
 const styles = StyleSheet.create({
   list: { flex: 1 },
+  dummyItem : (height) => {
+    return {
+      height,
+      backgroundColor: colors.gray1
+    }
+  },
   container: {
     flex: 1,
     // backgroundColor: COLORS.gray1,

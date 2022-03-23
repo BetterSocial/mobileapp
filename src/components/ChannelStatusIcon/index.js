@@ -53,7 +53,7 @@ const ChannelStatusIcon = (props) => {
     return (
         <View style={styles.dateContainer}>
             {/* <ChannelPreviewStatus latestMessagePreview={newLatestMessagePreview} /> */}
-            { __renderCheckMark() }
+            {/* { __renderCheckMark() } */}
             { __renderDate() }
         </View>
     );
