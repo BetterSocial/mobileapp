@@ -9,10 +9,8 @@ import messaging from '@react-native-firebase/messaging';
 import { AppRegistry } from 'react-native';
 import {
   HUMAN_ID_APP_NAME,
-  HUMAN_ID_CLIENT_ID_DEVELOPMENT,
-  HUMAN_ID_CLIENT_ID_PRODUCTION,
-  HUMAN_ID_CLIENT_SECRET_DEVELOPMENT,
-  HUMAN_ID_CLIENT_SECRET_PRODUCTION,
+  HUMAN_ID_CLIENT_ID,
+  HUMAN_ID_CLIENT_SECRET,
 } from '@env';
 import { configureHumanID } from '@human-id/react-native-humanid';
 
@@ -20,12 +18,8 @@ import App from './App';
 import AppIcon from './src/components/AppIcon';
 import { name as appName } from './app.json';
 
-const clientSecret = __DEV__
-  ? HUMAN_ID_CLIENT_SECRET_DEVELOPMENT
-  : HUMAN_ID_CLIENT_SECRET_PRODUCTION;
-const clientId = __DEV__
-  ? HUMAN_ID_CLIENT_ID_DEVELOPMENT
-  : HUMAN_ID_CLIENT_ID_PRODUCTION;
+const clientSecret = HUMAN_ID_CLIENT_SECRET;
+const clientId = HUMAN_ID_CLIENT_ID;
 
 configureHumanID({
   appName: 'Better Social',
@@ -42,7 +36,8 @@ PushNotification.configure({
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
 
-  // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+  // (optional) Called when the user fails to register for remote notifications.
+  // Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
   onRegistrationError(err) {
     console.error(err.message, err);
   },

@@ -47,6 +47,7 @@
 		845C6E9A2758B16500C9F384 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCE2758A00C00C9F384 /* Poppins-Thin.ttf */; };
 		845C6E9B2758B16800C9F384 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DBF2758A00B00C9F384 /* Poppins-ThinItalic.ttf */; };
 		845C6E9C2758B16B00C9F384 /* Poppins.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD52758A00C00C9F384 /* Poppins.ttf */; };
+		8811A9E727EA9C9600DF3BF5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8811A9E627EA9C9600DF3BF5 /* GoogleService-Info.plist */; };
 		889CAB6227D46CD6007F5892 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		889CAB6327D46CD6007F5892 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		889CAB6527D46CD6007F5892 /* libPods-BetterSocial.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D09A2F500E874E8E280EF44 /* libPods-BetterSocial.a */; };
@@ -81,7 +82,6 @@
 		889CAB8327D46CD6007F5892 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DBF2758A00B00C9F384 /* Poppins-ThinItalic.ttf */; };
 		889CAB8527D46CD6007F5892 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCA2758A00B00C9F384 /* Poppins-BoldItalic.ttf */; };
 		889CAB9927D46F9B007F5892 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 889CAB9727D46F9B007F5892 /* GoogleService-Info.plist */; };
-		889CAB9A27D46FA4007F5892 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 889CAB9527D46F9B007F5892 /* GoogleService-Info.plist */; };
 		DE4E62F2D30EC8D079ECAEBC /* libPods-BetterSocial-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63463C3161CE2142F3CBFE27 /* libPods-BetterSocial-tvOS.a */; };
 /* End PBXBuildFile section */
 
@@ -158,9 +158,9 @@
 		845C6DD72758A00C00C9F384 /* Inter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Black.ttf"; path = "../assets/fonts/Inter-Black.ttf"; sourceTree = "<group>"; };
 		845C6DD82758A00C00C9F384 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		845C6DD92758A00C00C9F384 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
+		8811A9E627EA9C9600DF3BF5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		889CAB1B27D437C3007F5892 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		889CAB8E27D46CD6007F5892 /* BetterSocialDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterSocialDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		889CAB9527D46F9B007F5892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		889CAB9727D46F9B007F5892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8BA0FC5770AA4F778663B566 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		A10C675B47ED4AB0B191600C /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
@@ -399,7 +399,7 @@
 		889CAB9427D46F9B007F5892 /* Development */ = {
 			isa = PBXGroup;
 			children = (
-				889CAB9527D46F9B007F5892 /* GoogleService-Info.plist */,
+				8811A9E627EA9C9600DF3BF5 /* GoogleService-Info.plist */,
 			);
 			path = Development;
 			sourceTree = "<group>";
@@ -682,7 +682,7 @@
 				889CAB7D27D46CD6007F5892 /* Inter-Black.ttf in Resources */,
 				889CAB7E27D46CD6007F5892 /* Poppins-ExtraLight.ttf in Resources */,
 				889CAB7F27D46CD6007F5892 /* Inter-Light.ttf in Resources */,
-				889CAB9A27D46FA4007F5892 /* GoogleService-Info.plist in Resources */,
+				8811A9E727EA9C9600DF3BF5 /* GoogleService-Info.plist in Resources */,
 				889CAB8027D46CD6007F5892 /* Poppins-Thin.ttf in Resources */,
 				889CAB8127D46CD6007F5892 /* Poppins-ExtraBold.ttf in Resources */,
 				889CAB8227D46CD6007F5892 /* Poppins-Medium.ttf in Resources */,
@@ -1590,7 +1590,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.bettersocial;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.BetterSocial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1621,7 +1621,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.bettersocial;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.BetterSocial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
