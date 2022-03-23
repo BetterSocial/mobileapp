@@ -87,7 +87,7 @@ export const inputSingleChoicePoll = async (polling_id, polling_option_id) => {
 };
 
 export const viewTimePost = async (id, time, source) => {
-  SimpleToast.show(`view post duration : ${time / 1000}s in ${source}`);
+  // SimpleToast.show(`view post duration : ${time / 1000}s in ${source}`);
   try {
     const resApi = api.post('/activity/viewpost', {
       post_id: id,
