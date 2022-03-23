@@ -8,21 +8,15 @@ import {name as appName} from './app.json';
 import {configureHumanID} from '@human-id/react-native-humanid';
 import {
   HUMAN_ID_APP_NAME,
-  HUMAN_ID_CLIENT_SECRET_DEVELOPMENT,
-  HUMAN_ID_CLIENT_ID_DEVELOPMENT,
-  HUMAN_ID_CLIENT_SECRET_PRODUCTION,
-  HUMAN_ID_CLIENT_ID_PRODUCTION,
+  HUMAN_ID_CLIENT_SECRET,
+  HUMAN_ID_CLIENT_ID,
 } from '@env';
 import AppIcon from './src/components/AppIcon';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
-let clientSecret = __DEV__
-  ? HUMAN_ID_CLIENT_SECRET_DEVELOPMENT
-  : HUMAN_ID_CLIENT_SECRET_PRODUCTION;
-let clientId = __DEV__
-  ? HUMAN_ID_CLIENT_ID_DEVELOPMENT
-  : HUMAN_ID_CLIENT_ID_PRODUCTION;
+let clientSecret = HUMAN_ID_CLIENT_SECRET;
+let clientId = HUMAN_ID_CLIENT_ID;
 
 configureHumanID({
   appName: 'Better Social',
