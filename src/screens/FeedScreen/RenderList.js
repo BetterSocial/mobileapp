@@ -22,6 +22,7 @@ import {
 import { colors } from '../../utils/colors';
 import { getCountCommentWithChild } from '../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
+import { showScoreAlertDialog } from '../../utils/Utils'
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
@@ -244,6 +245,8 @@ const RenderListFeed = (props) => {
             onPressUpvote={onPressUpvoteHandle}
             statusVote={voteStatus}
             loadingVote={loadingVote}
+            showScoreButton={true}
+            onPressScore={() => showScoreAlertDialog(item)}
             isSelf={
               item.anonimity
                 ? false

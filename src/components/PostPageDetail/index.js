@@ -38,6 +38,7 @@ import {getFeedDetail, viewTimePost} from '../../service/post';
 import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import { showScoreAlertDialog } from '../../utils/Utils';
 
 const {width, height} = Dimensions.get('window');
 
@@ -69,7 +70,7 @@ const PostPageDetailIdComponent = (props) => {
   
   let { feedId, refreshParent, 
     navigateToReplyView = () => {}} = props
-
+    
   React.useEffect(() => {
     const parseToken = async () => {
       const id = await getUserId();
@@ -228,8 +229,8 @@ const PostPageDetailIdComponent = (props) => {
     let pdpDiffTime = currentTime.getTime() - time;
 
     if(feedId) {
-        viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
-        viewTimePost(feedId, pdpDiffTime, SOURCE_PDP);
+        // viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
+        viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
     }
 
     setTime(new Date().getTime())
@@ -281,8 +282,9 @@ const PostPageDetailIdComponent = (props) => {
     let pdpDiffTime = currentTime.getTime() - time;
 
     if(feedId) {
-        viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
-        viewTimePost(feedId, pdpDiffTime, SOURCE_PDP);
+        // viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
+        // viewTimePost(feedId, pdpDiffTime, SOURCE_PDP);
+        viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
     }
 
     setTime(new Date().getTime())
@@ -363,6 +365,9 @@ const PostPageDetailIdComponent = (props) => {
     }
   }, [])
 
+  const __handleOnPressScore = () => {
+    showScoreAlertDialog(item)
+  }
 
   return (
     <View style={styles.container}>
@@ -423,6 +428,8 @@ const PostPageDetailIdComponent = (props) => {
               onPressShare={() => {}}
               onPressComment={onCommentButtonClicked}
               // loadingVote={loadingVote}
+              showScoreButton={true}
+              onPressScore={__handleOnPressScore}
               onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
               isSelf={yourselfId === item.actor.id ? true : false}
             />

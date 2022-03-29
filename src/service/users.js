@@ -1,12 +1,15 @@
-import api from './config';
+import SimpleToast from 'react-native-simple-toast';
+import config from 'react-native-config';
 import crashlytics from '@react-native-firebase/crashlytics';
-import config from 'react-native-config'
-import {getRefreshToken, setAccessToken, setRefreshToken} from '../utils/token';
-import {BASE_URL} from '@env';
+import { BASE_URL } from '@env';
+
+import api from './config';
+import { getRefreshToken, setAccessToken, setRefreshToken } from '../utils/token';
+
 export const verifyUser = async (userId) => {
   try {
-    // console.log(BASE_URL);
-    let resApi = await api.post('/users/verify-user', {
+    // SimpleToast.show(`URL : ${BASE_URL}`);
+    const resApi = await api.post('/users/verify-user', {
       user_id: userId,
     });
     return resApi.data;
@@ -17,7 +20,7 @@ export const verifyUser = async (userId) => {
 };
 export const verifyToken = async (token) => {
   try {
-    let resApi = await api.post('/users/veryfy-token', {
+    const resApi = await api.post('/users/veryfy-token', {
       token,
     });
     // console.log(resApi.data);
@@ -29,7 +32,7 @@ export const verifyToken = async (token) => {
 };
 export const verifyUsername = async (username) => {
   try {
-    let resApi = await api.post('/users/check-username', {
+    const resApi = await api.post('/users/check-username', {
       username,
     });
     return resApi.data;
@@ -40,7 +43,7 @@ export const verifyUsername = async (username) => {
 };
 export const registerUser = async (data) => {
   try {
-    let resApi = await api.post('/users/register', {
+    const resApi = await api.post('/users/register', {
       data,
     });
     return resApi.data;
@@ -50,32 +53,26 @@ export const registerUser = async (data) => {
   }
 };
 
-const verifyAccessToken = async () => {
-  return api
-    .get('/users/veryfy-token-getstream', {})
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      let code = err.response.status;
-      return code;
-    });
-};
+const verifyAccessToken = async () => api
+  .get('/users/veryfy-token-getstream', {})
+  .then((res) => res.data)
+  .catch((err) => {
+    const code = err.response.status;
+    return code;
+  });
 
 export const verifyTokenGetstream = async () => {
-  let status = await verifyAccessToken();
+  const status = await verifyAccessToken();
   if (status === 401) {
-    let res = await refreshToken();
+    const res = await refreshToken();
     if (res.code === 200) {
       await setAccessToken(res.data.token);
       await setRefreshToken(res.data.refresh_token);
       return res.data.token;
-    } else {
-      return null;
     }
-  } else {
-    return status;
+    return null;
   }
+  return status;
 };
 
 export const refreshToken = async () => {
@@ -83,18 +80,18 @@ export const refreshToken = async () => {
   const options = {
     method: 'get',
     headers: {
-      Authorization: 'Bearer ' + token,
+      Authorization: `Bearer ${token}`,
     },
   };
 
   // const resp = await fetchWithTimeout(this.url, options, 10000);
-  const resp = await fetch(config.BASE_URL + '/users/refresh-token', options);
+  const resp = await fetch(`${config.BASE_URL}/users/refresh-token`, options);
   return await resp.json();
 };
 
 export const userPopulate = async () => {
   try {
-    let resApi = await api.get('/users/populate');
+    const resApi = await api.get('/users/populate');
     return resApi.data.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -102,12 +99,11 @@ export const userPopulate = async () => {
   }
 };
 
-
 export const getBlockedUserList = async () => {
   try {
-    const getBlockList = await api.get('/profiles/block')
-    return getBlockList.data
-  } catch(e) {
-    crashlytics().recordError(new Error(e))
+    const getBlockList = await api.get('/profiles/block');
+    return getBlockList.data;
+  } catch (e) {
+    crashlytics().recordError(new Error(e));
   }
-}
+};

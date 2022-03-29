@@ -21,6 +21,7 @@ import {Context} from '../../../context';
 import {Footer, Gap, PreviewComment} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
+import { showScoreAlertDialog } from '../../../utils/Utils';
 
 const {width, height} = Dimensions.get('window');
 
@@ -205,6 +206,8 @@ const Item = ({
           )}
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
+          showScoreButton={true}
+          onPressScore={() => showScoreAlertDialog(item)}
           onPressDownVote={() => {
             setStatusDowvote((prev) => {
               prev = !prev;
