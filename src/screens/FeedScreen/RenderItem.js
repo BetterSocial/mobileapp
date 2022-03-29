@@ -19,6 +19,7 @@ import {
 } from '../../utils/constants';
 import { getCountCommentWithChild } from '../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
+import { showScoreAlertDialog } from '../../utils/Utils';
 
 const { width, height } = Dimensions.get('window');
 
@@ -245,6 +246,8 @@ const Item = ({
           onPressComment={() => onPressComment(item)}
           blockStatus={blockStatus}
           onPressBlock={() => onPressBlock(item)}
+          showScoreButton={true}
+          onPressScore={() => showScoreAlertDialog(item)}
           onPressDownVote={() => {
             setStatusDowvote((prev) => {
               prev = !prev;

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import SimpleToast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
@@ -28,6 +29,7 @@ import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
 import StringConstant from '../../utils/string/StringConstant';
 import { Context } from '../../context';
+import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
 import { checkToken } from '../../service/outh';
 import { fonts } from '../../utils/fonts';
 import { openUrl } from '../../utils/Utils';
@@ -40,8 +42,6 @@ import {
 import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
-
-const ENABLE_DEV_ONLY_FEATURE = true;
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -74,15 +74,25 @@ const SignIn = () => {
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
       setLoading(true);
+      console.log('onSuccess')
+      console.log(exchangeToken)
       checkToken(exchangeToken)
         .then((res) => {
+          // console.log('on Res')
+          // console.log(res)
           if (res.data) {
+            console.log('on Res Data')
             const { appUserId, countryCode } = res.data;
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
+            // verifyUser('1G1H-1TUHI-7U9H7-572G2')
               .then((response) => {
+                // SimpleToast.show(`on verify res` + JSON.stringify(response.data))
+                // console.log('on verify res')
+                // console.log(response.data)
                 setLoading(false);
                 if (response.data) {
+                  console.log('on verify res data')
                   create();
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
@@ -94,16 +104,24 @@ const SignIn = () => {
                 setUserId(appUserId);
               })
               .catch((e) => {
+                // SimpleToast.show(`on verify token catch` + e)
+                // console.log('on verify catch')
                 setLoading(false);
               });
+          } else {
+            // SimpleToast.show(`else data`)
+            console.log("else data")
           }
         })
         .catch((e) => {
+          // SimpleToast.show(`on checkt token catch` + e)
+          // console.log('on check token catch')
           console.log('error');
           console.log(e);
         });
     });
     onError((message) => {
+      console.log('on general error')
       crashlytics().recordError(new Error(message));
       console.log('error message', message);
     });
@@ -132,21 +150,28 @@ const SignIn = () => {
     let data = { appUserId, countryCode: 'ID' }
     setDataHumenId(data, dispatch);
     verifyUser(appUserId)
+    // verifyUser('1G1H-1TUHI-7U9H7-572G2')
       .then(async (response) => {
         setLoading(false);
+        // SimpleToast.show(`on verify res` + JSON.stringify(response))
+        // console.log('on verify res')
+        // console.log(response)
         if (response.data) {
+          // SimpleToast.show(`on data`)
           setAccessToken(response.token);
           setRefreshToken(response.refresh_token);
           setTimeout(() => {
             navigation.dispatch(StackActions.replace('HomeTabs'));
           }, 100);
         } else {
+          // SimpleToast.show(`on not data`)
           removeLocalStorege('userId');
           navigation.dispatch(StackActions.replace('ChooseUsername'));
         }
         setUserId(appUserId);
       })
       .catch((e) => {
+        // SimpleToast.show(`on verify catch` + e)
         console.log(e);
         setLoading(false);
       });
@@ -158,7 +183,10 @@ const SignIn = () => {
         <View style={S.devTrialView}>
           <Button
             title="Dev Dummy Onboarding"
-            onPress={() => navigation.navigate('ChooseUsername')}
+            onPress={() => {          
+              setDataHumenId('ASDF-GHJK-QWER-1234', dispatch)
+              navigation.navigate('ChooseUsername')
+            }}
           />
           <Button
             title="Dev Dummy Login"
