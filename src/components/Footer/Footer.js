@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+import MemoIcCreatePoll from '../../assets/icons/ic_create_poll';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
@@ -9,6 +10,8 @@ import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
+import MemoPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
+import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
 import {FONTS, SIZES} from '../../utils/theme';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -22,10 +25,12 @@ const Footer = ({
   statusVote = 'none',
   onPressDownVote,
   onPressUpvote,
+  onPressScore,
   totalVote,
   disableComment = false,
   blockStatus,
   loadingVote,
+  showScoreButton = false,
 }) => {
   const handleBlockUi = () => {
     if (isSelf) {
@@ -44,6 +49,16 @@ const Footer = ({
       }
     }
   };
+
+  const __renderShowScoreUI = () => {
+    if(ENABLE_DEV_ONLY_FEATURE && showScoreButton) {
+      return <TouchableOpacity style={styles.btn} onPress={onPressScore}>
+        <View style={styles.btnComment}>
+          <MemoIcCreatePoll height={24} width={25}/>
+        </View>
+      </TouchableOpacity>
+    } else return <></>
+  }
 
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
@@ -78,6 +93,7 @@ const Footer = ({
           </View>
         </TouchableOpacity>
       )}
+      {__renderShowScoreUI()}
       <View style={styles.rightGroupContainer}>
         {handleBlockUi()}
         <TouchableOpacity

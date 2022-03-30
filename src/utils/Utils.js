@@ -92,3 +92,20 @@ export const shareUserLink = (username) => {
 export function isEmptyOrSpaces(str) {
   return str === null || str.match(/^ *$/) !== null;
 }
+
+export function showScoreAlertDialog(item) {
+  if(item.score_details === undefined) return alert (`This post doesn't have score yet`)
+    
+  const ordered = Object.keys(item.score_details).sort().reduce((obj, key) => {
+    obj[key] = item.score_details[key]
+    return obj
+  }, {})
+
+  let textScoreDetails = ''
+  for(let key in ordered) {
+    let value = ordered[key]
+    textScoreDetails += `${key} = ${value} \n`
+  }
+  
+  alert(textScoreDetails)
+}

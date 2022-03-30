@@ -174,10 +174,10 @@ const WhotoFollow = () => {
     const data = {
       users: {
         username: usersState.username,
-        human_id: usersState.userId,
-        country_code: usersState.countryCode,
-        // human_id: randomString(20).toUpperCase(),
-        // country_code: 'ID',
+        // human_id: usersState.userId,
+        // country_code: usersState.countryCode,
+        human_id: randomString(20).toUpperCase(),
+        country_code: 'ID',
         profile_pic_path: usersState.photo,
         status: 'A',
       },
