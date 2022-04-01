@@ -43,7 +43,6 @@ import {
   checkUserBlock,
   getOtherFeedsInProfile,
   getOtherProfile,
-  getSelfFeedsInProfile,
   setFollow,
   setUnFollow,
 } from '../../service/profile';
@@ -84,9 +83,6 @@ const OtherProfile = () => {
   const [opacity, setOpacity] = React.useState(0);
   const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
   const [tokenJwt, setTokenJwt] = React.useState('');
-  const [client] = React.useContext(Context).client;
-  const [channel, dispatchChannel] = React.useContext(Context).channel;
-  const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [reason, setReason] = React.useState([]);
   const [yourselfId, setYourselfId] = React.useState('');
   const [blockStatus, setBlockStatus] = React.useState({
@@ -94,22 +90,37 @@ const OtherProfile = () => {
     blocker: false,
   });
   const [loadingBlocking, setLoadingBlocking] = React.useState(false);
+  const [postOffset, setPostOffset] = React.useState(0)
 
   const headerHeightRef = React.useRef(0);
 
+  const [client] = React.useContext(Context).client;
+  const [channel, dispatchChannel] = React.useContext(Context).channel;
+  const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
+
   const create = useClientGetstream();
 
   const {params} = route;
   const {feeds} = otherProfileFeeds
 
-  const getOtherFeeds = async (userId) => {
+  const getOtherFeeds = async (userId, offset = 0) => {
+    console.log(`getting data ${offset}`)
     let result = await getOtherFeedsInProfile(userId)
-    if(result.data.length > 0) {
-      setOtherProfileFeed([...result.data, {dummy: true}], dispatchOtherProfile)
-    } else {
-      setOtherProfileFeed(result.data, dispatchOtherProfile)
+
+    console.log('result.data')
+    console.log(result.data.length)
+
+    if(offset === 0) setOtherProfileFeed([...result.data, {dummy: true}], dispatchOtherProfile)
+    else {
+      let clonedFeeds = [...feeds]
+      clonedFeeds.splice(feeds.length - 1, 0, ...data)
+      setOtherProfileFeed(clonedFeeds, dispatchOtherProfile)
     }
+
+    console.log('result.offset')
+    console.log(result.offset)
+    setPostOffset(result.offset)
   }
 
   React.useEffect(() => {
@@ -536,6 +547,7 @@ const OtherProfile = () => {
   };
 
   const isFeedsShown = !(blockStatus.blocked) && !(blockStatus.blocker)
+  const __handleOnEndReached = () => getOtherFeeds(other_id, postOffset)
 
   return (
     <>
@@ -554,6 +566,7 @@ const OtherProfile = () => {
           ref={flatListRef}
           data={isFeedsShown ? feeds : []}
           onScroll={handleScroll}
+          onEndReach={__handleOnEndReached}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {
               return headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT)

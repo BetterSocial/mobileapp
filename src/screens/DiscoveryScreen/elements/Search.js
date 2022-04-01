@@ -59,28 +59,36 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
     DiscoveryRepo.fetchDiscoveryDataUser(discoverySearchBarText).then(async (data) => {
       if(data.success) {
         await DiscoveryAction.setDiscoveryDataUsers(data, discoveryDispatch)
-        DiscoveryAction.setDiscoveryLoadingDataUser(false, discoveryDispatch)
+        setTimeout(() => {
+          DiscoveryAction.setDiscoveryLoadingDataUser(false, discoveryDispatch)
+        }, 500)
       }  
     })
 
     DiscoveryRepo.fetchDiscoveryDataDomain(discoverySearchBarText).then(async (data) => {
       if(data.success) {
         await DiscoveryAction.setDiscoveryDataDomains(data, discoveryDispatch)
-        DiscoveryAction.setDiscoveryLoadingDataDomain(false, discoveryDispatch)
+        setTimeout(() => {
+          DiscoveryAction.setDiscoveryLoadingDataDomain(false, discoveryDispatch)
+        }, 500)
       }  
     })
 
     DiscoveryRepo.fetchDiscoveryDataTopic(discoverySearchBarText).then(async (data) => {
       if(data.success) {
         await DiscoveryAction.setDiscoveryDataTopics(data, discoveryDispatch)
-        DiscoveryAction.setDiscoveryLoadingDataTopic(false, discoveryDispatch)
+        setTimeout(() => {
+          DiscoveryAction.setDiscoveryLoadingDataTopic(false, discoveryDispatch)
+        })
       }  
     })
     
     DiscoveryRepo.fetchDiscoveryDataNews(discoverySearchBarText).then(async (data) => {
       if(data.success) {
         await DiscoveryAction.setDiscoveryDataNews(data, discoveryDispatch)
-        DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
+        setTimeout(() => {
+          DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
+        })
       }  
     })
     DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)

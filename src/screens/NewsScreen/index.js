@@ -30,7 +30,10 @@ const NewsScreen = ({}) => {
   const [yourselfId, setYourselfId] = React.useState('');
   const [domain, setDomain] = React.useState('');
   const [idBlock, setIdBlock] = React.useState('');
+  const [postOffset, setPostOffset] = React.useState(0)
+  
   const [newslist, dispatch] = React.useContext(Context).news;
+  
   const scrollRef = React.createRef();
   let {news} = newslist;
   let lastDragY = 0;
@@ -73,6 +76,7 @@ const NewsScreen = ({}) => {
     try {
       let res = await getDomains();
       setNews([{dummy: true}, ...res.data], dispatch);
+      setPostOffset(res.offset)
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -84,6 +88,7 @@ const NewsScreen = ({}) => {
     try {
       let res = await getDomains();
       setNews([{dummy: true}, ...res.data], dispatch);
+      setPostOffset(res.offset)
       setRefreshing(false);
     } catch (error) {
       setRefreshing(false);
@@ -134,15 +139,16 @@ const NewsScreen = ({}) => {
     downVoteDomain(itemNews);
   };
 
-  const loadMoreData = async (lastId) => {
-    setLoading(true);
+  const loadMoreData = async () => {
+    // setLoading(true);
     try {
-      let res = await getDomains(lastId);
+      let res = await getDomains(postOffset);
       let newNews = [...news, ...res.data];
+      setPostOffset(res.offset)
       setNews([{dummy: true}, ...newNews], dispatch);
-      setLoading(false);
+      // setLoading(false);
     } catch (error) {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -180,7 +186,8 @@ const NewsScreen = ({}) => {
           data={news}
           refreshing={refreshing}
           onRefresh={onRefresh}
-          onMomentumScrollEnd={setSelectedIndex}
+          onEndReached={loadMoreData}
+          // onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
             if (item.dummy) {
               return <View key={index} style={{height: 55}} />;

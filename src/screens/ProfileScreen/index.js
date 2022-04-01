@@ -94,6 +94,7 @@ const ProfileScreen = ({ route }) => {
     React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
+  const [postOffset, setPostOffset] = React.useState(0)
 
   const [yourselfId, setYourselfId] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -159,17 +160,21 @@ const ProfileScreen = ({ route }) => {
     }
   };
 
-  const getMyFeeds = async () => {
-    let result = await getSelfFeedsInProfile();
+  const getMyFeeds = async (offset = 0) => {
+    console.log('getting feeds ' + offset)
+    let result = await getSelfFeedsInProfile(offset);
     // setMyProfileFeed([
     //   {dummy: true, component: 'Profile'}, 
     //   {dummy: true, component: 'PostStickyHeader'},
     //   ...result.data], myProfileDispatch);
-    if(result.data.length > 0) {
-      setMyProfileFeed([...result.data, {dummy: true}], myProfileDispatch)
-    } else {
-      setMyProfileFeed(result.data, myProfileDispatch)
+    if(offset === 0) setMyProfileFeed([...result.data, {dummy: true}], myProfileDispatch)
+    else {
+      let clonedFeeds = [...feeds]
+      clonedFeeds.splice(feeds.length - 1, 0, ...data)
+      setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
+
+    setPostOffset(offset + 10)
   };
 
 
@@ -454,6 +459,8 @@ const ProfileScreen = ({ route }) => {
     refBlockComponet.current.openBlockComponent(value);
   }
 
+  const __handleOnEndReached = () => getMyFeeds(postOffset)
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -470,6 +477,7 @@ const ProfileScreen = ({ route }) => {
           ref={flatListScrollRef}
           data={feeds}
           onScroll={handleScroll}
+          onEndReach={__handleOnEndReached}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {
               return headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT)

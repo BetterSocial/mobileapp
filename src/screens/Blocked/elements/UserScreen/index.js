@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import { FlatList } from 'react-native'
-import PropTypes from 'prop-types';
-import {getBlockedUserList} from '../../../../service/users'
+
 import BlockedList from '../RenderList'
-import {getUserId} from '../../../../utils/users';
 import { blockUser, unblockUserApi } from '../../../../service/blocking';
+import {getBlockedUserList} from '../../../../service/users'
+import {getUserId} from '../../../../utils/users';
 
 const BlockedUserList = (props) => {
     const {navigation} = props
@@ -15,6 +16,8 @@ const BlockedUserList = (props) => {
     const handleFetchData = async () => {
         setIsLoading(true)
         const userList = await getBlockedUserList()
+        console.log('userList')
+        console.log(userList)
         if(userList.success) {
             const mappingData = userList.data.map((data) => ({ ...data, name: data.user.username, image: data.user.profile_pic_path, description: null}))
             setListBlockedUser(mappingData)

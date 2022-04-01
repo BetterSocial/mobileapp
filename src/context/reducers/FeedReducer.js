@@ -8,7 +8,7 @@ import {
 
 const feedsState = {
   feeds: [],
-  timer: 0,
+  timer: new Date(),
   viewPostTimeIndex: 0,
 };
 const feedsReducer = (state = feedsState, action) => {
