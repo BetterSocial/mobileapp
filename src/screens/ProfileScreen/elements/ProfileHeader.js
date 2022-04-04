@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
+import { StyleSheet, Text, TouchableNativeFeedback, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
@@ -35,18 +35,16 @@ const ProfileHeader = ({
         if(!showArrow) return <></>
 
         return (
-            <View style={styles.wrapNameAndbackButton}>
-                <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+                <TouchableOpacity style={styles.backIconContainer} onPress={() => navigation.goBack()}>
                 <ArrowLeftIcon width={20} height={12} fill="#000" />
-                </TouchableNativeFeedback>
-            </View>
+                </TouchableOpacity>
         )
     }
 
     return (
         <View style={styles.header}>
             { __renderBackArrow() }
-            <Text style={styles.textUsername}>{username}</Text>
+            <Text numberOfLines={1} style={styles.textUsername}>{username}</Text>
             <View style={styles.wrapHeaderButton}>
                 <View style={ hideSetting ? styles.btnShareWithoutSetting : styles.btnShare}>
                     <TouchableNativeFeedback onPress={onShareClicked}>
@@ -93,6 +91,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 16,
     },
+    backIconContainer: {
+        padding: 10
+    }
 })
 
 export default ProfileHeader

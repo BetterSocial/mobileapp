@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View, SafeAreaView} from 'react-native';
 
 import {WebView} from 'react-native-webview';
 import {useNavigation} from '@react-navigation/core';
@@ -16,7 +16,10 @@ const TermsAndCondition = () => {
   }, []);
   return (
     <View style={styles.container}>
+      <SafeAreaView>
       <Header title="Terms & Condition" onPress={() => navigator.goBack()} />
+
+      </SafeAreaView>
       <WebView
         source={{uri: 'https://www.lipsum.com/feed/html'}}
         showsVerticalScrollIndicator={false}

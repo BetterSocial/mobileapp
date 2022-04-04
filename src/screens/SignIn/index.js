@@ -81,7 +81,6 @@ const SignIn = () => {
           // console.log('on Res')
           // console.log(res)
           if (res.data) {
-            console.log('on Res Data')
             const { appUserId, countryCode } = res.data;
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
