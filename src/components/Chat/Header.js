@@ -63,7 +63,7 @@ const Header = ({}) => {
           onPress={() => navigation.navigate('GroupInfo')}>
           <View style={styles.touchable}>
             {renderHeaderImage()}
-            <Text style={styles.name}>{trimString(chatName, 21)}</Text>
+            <Text numberOfLines={1} style={styles.name}>{username} </Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     color: '#fff',
     fontSize: 14,
+    flex: 1
   },
   touchable: {
     flexDirection: 'row',

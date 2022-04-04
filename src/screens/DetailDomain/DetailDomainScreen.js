@@ -6,6 +6,7 @@ import {
   StatusBar,
   StyleSheet,
   View,
+  SafeAreaView
 } from 'react-native';
 
 import DetailDomainScreenContainerComment from '../../components/Comments/DetailDomainScreenContainerComment';
@@ -13,7 +14,7 @@ import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
 import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
 import WriteComment from '../../components/Comments/WriteComment';
 import { COLORS, SIZES } from '../../utils/theme';
-import { DomainHeader, Footer, Gap } from '../../components';
+import { DomainHeader, Footer, Gap, Header } from '../../components';
 import { createCommentParent } from '../../service/comment';
 import {getDomainDetailById} from '../../service/domain'
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
@@ -244,14 +245,14 @@ const validationStatusVote = () => {
       {item ? <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}>
         
         <View style={styles.content}>
-          <View style={{ paddingHorizontal: 0 }}>
+          <SafeAreaView style={{ paddingHorizontal: 0 }}>
             <DetailDomainScreenHeader
               domain={item.domain.name}
               time={item.content.created_at}
               image={item.domain.image}
               onFollowDomainPressed={() => { }}
             />
-          </View>
+          </SafeAreaView>
 
           <View>
             <DetailDomainScreenContent

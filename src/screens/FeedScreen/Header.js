@@ -97,7 +97,7 @@ const _renderAnonimity = ({
           />
           <View style={styles.containerFeedProfile}>
             <View style={styles.containerFeedName}>
-              <Text style={styles.feedUsername}>Anonymous</Text>
+              <Text numberOfLines={1} style={styles.feedUsername}>Anonymous</Text>
             </View>
             <View style={styles.containerFeedText}>
               <Text style={styles.feedDate}>{getTime(time)}</Text>
@@ -214,7 +214,7 @@ const _renderProfileNormal = ({
                   false,
                   30,
                 )}>
-                <Text style={styles.feedUsername}>
+                <Text numberOfLines={1} style={styles.feedUsername}>
                   {username ? username : 'no name specifics'}
                 </Text>
               </TouchableNativeFeedback>
@@ -224,7 +224,7 @@ const _renderProfileNormal = ({
                   true,
                   8,
                 )}>
-                <View style={{ alignSelf: 'center', zIndex: 1000 }}>
+                <View style={{ zIndex: 1000 }}>
                   <ElipsisIcon width={3.94} height={18} fill={colors.black} />
                 </View>
               </TouchableNativeFeedback>
