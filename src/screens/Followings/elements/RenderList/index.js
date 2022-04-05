@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native'
+import GlobalButton from '../../../../components/Button/GlobalButton';
 
 import { colors } from '../../../../utils/colors';
 import { fonts } from '../../../../utils/fonts';
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         flex: 1,
-        marginEnd: 16,
+        paddingVertical: 5
       },
       imageProfile: {
         width: 48,
@@ -85,7 +86,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
-        paddingHorizontal: 20,
         marginVertical: 10,
       },
 })
@@ -93,16 +93,9 @@ const styles = StyleSheet.create({
 const DomainList = (props) => {
     const {onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody} = props
 
-    const handlePress = (event) => {
-        event.preventDefault();
-        onPressList(item)
-    }
-
     return (
-        <TouchableNativeFeedback
-        onPress={handlePress}>
         <View style={styles.card}>
-          <TouchableOpacity onPress={() => onPressBody(item)} style={styles.wrapProfile}>
+          <GlobalButton onPress={() => onPressBody(item)} buttonStyle={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
               {item.image  ? <Image
               source={{
@@ -125,22 +118,22 @@ const DomainList = (props) => {
                 {item.description ? item.description : ''}
               </Text>
             </View>
-          </TouchableOpacity>
+          </GlobalButton>
           {item.isunfollowed ? (
-            <TouchableNativeFeedback onPress={handleSetFollow}>
+            <GlobalButton onPress={handleSetFollow}>
               <View style={styles.buttonFollow}>
                 <Text style={styles.textButtonFollow}>Follow</Text>
               </View>
-            </TouchableNativeFeedback>
+            </GlobalButton>
           ) : (
-            <TouchableNativeFeedback onPress={handleSetUnFollow}>
+            <GlobalButton onPress={handleSetUnFollow}>
               <View style={styles.buttonFollowing}>
                 <Text style={styles.textButtonFollowing}>Following</Text>
               </View>
-            </TouchableNativeFeedback>
+            </GlobalButton>
           )}
         </View>
-      </TouchableNativeFeedback>
+   
     )
 }
 
