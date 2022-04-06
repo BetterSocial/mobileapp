@@ -26,7 +26,7 @@ import { getSingularOrPluralText } from '../../../utils/string/StringUtils';
  */
 const FollowInfoRow = ({ follower, following, onFollowingContainerClicked}) => {
     return <View style={styles.wrapFollower}>
-        <GlobalButton buttonStyle={{paddingLeft: 0}} >
+        <GlobalButton buttonStyle={{paddingHorizontal: 0}} >
         <View style={styles.wrapRow}>
             <Text style={styles.textTotal}>
                 {follower}
@@ -34,7 +34,7 @@ const FollowInfoRow = ({ follower, following, onFollowingContainerClicked}) => {
             <Text style={styles.textFollow}>{getSingularOrPluralText(follower, "Follower", "Followers")}</Text>
         </View>
         </GlobalButton>
-        <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={onFollowingContainerClicked}>
+        <GlobalButton buttonStyle={{paddingHorizontal: 0}} onPress={onFollowingContainerClicked}>
         <View style={styles.following}>
                 <View style={styles.wrapRow}>
                 <Text style={styles.textTotal}>
