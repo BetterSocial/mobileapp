@@ -59,6 +59,7 @@ import { setFeedByIndex, setOtherProfileFeed } from '../../context/actions/other
 import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import GlobalButton from '../../components/Button/GlobalButton';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -237,7 +238,8 @@ const OtherProfile = () => {
         <BlockBlueIcon
           width={20}
           height={20}
-          fill={colors.bondi_blue} />)
+          fill={colors.bondi_blue} />
+          )
     }
 
     const __renderFollowerDetail = () => {
@@ -274,26 +276,26 @@ const OtherProfile = () => {
       if(user_id === dataMain.user_id) return <></>
       if(dataMain.is_following) return (
         <React.Fragment>
-          <TouchableNativeFeedback
+          <GlobalButton
             onPress={() => handleSetUnFollow()}>
             <View style={styles.buttonFollowing}>
               <Text style={styles.textButtonFollowing}>
                 Following
               </Text>
             </View>
-          </TouchableNativeFeedback>
+          </GlobalButton>
         </React.Fragment>)
 
       return (
         <React.Fragment>
-          <TouchableNativeFeedback
+          <GlobalButton
             onPress={() => handleSetFollow()}>
             <View style={styles.buttonFollow}>
               <Text style={styles.textButtonFollow}>
                 Follow
               </Text>
             </View>
-          </TouchableNativeFeedback>
+          </GlobalButton>
         </React.Fragment>
       )
     }
@@ -302,16 +304,16 @@ const OtherProfile = () => {
       if(blockStatus.blocker) return <></>
       return (
         <React.Fragment>
-          <TouchableNativeFeedback
+          <GlobalButton
             onPress={createChannel}>
             <View style={styles.btnMsg}>
               <EnveloveBlueIcon
                 width={20}
-                height={16}
+                height={20}
                 fill={colors.bondi_blue}
               />
             </View>
-          </TouchableNativeFeedback>
+          </GlobalButton>
 
           {__renderFollowingButton()}
         
@@ -334,9 +336,9 @@ const OtherProfile = () => {
           />
 
           <View style={styles.wrapButton}>
-            <TouchableNativeFeedback onPress={onBlockReaction}>
+            <GlobalButton onPress={onBlockReaction}>
               {__renderBlockIcon()}
-            </TouchableNativeFeedback>
+            </GlobalButton>
 
             {__renderMessageAndFollowButtonGroup()}
           </View>
@@ -803,9 +805,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   btnMsg: {
-    paddingVertical: 10,
-    paddingRight: 16,
-    paddingLeft: 24,
+    paddingVertical: 0,
   },
   containerLoading: {
     height: '100%',

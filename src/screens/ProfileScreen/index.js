@@ -59,6 +59,7 @@ import {setImageUrl} from '../../context/actions/users';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
+import GlobalButton from '../../components/Button/GlobalButton';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -371,7 +372,7 @@ const ProfileScreen = ({ route }) => {
 
   const renderBio = (string) => {
     return (
-      <TouchableNativeFeedback onPress={() => changeBio()}>
+      <GlobalButton buttonStyle={styles.bioText} onPress={() => changeBio()}>
         <View style={styles.containerBio}>
           {string === null || string === undefined ? (
             <Text style={{color: colors.blue}}>Add Bio</Text>
@@ -384,7 +385,7 @@ const ProfileScreen = ({ route }) => {
             </Text>
           )}
         </View>
-      </TouchableNativeFeedback>
+      </GlobalButton>
     );
   };
 
@@ -645,5 +646,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  bioText: {
+    paddingLeft: 0
+  }
 });
 export default ProfileScreen;

@@ -21,6 +21,7 @@ import Memoic_globe from '../../../assets/icons/ic_globe';
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 import { colors } from '../../../utils/colors';
 import dimen from '../../../utils/dimen';
+import GlobalButton from '../../../components/Button/GlobalButton';
 
 const RenderItemHeader = ({ item, image, follow= false, handleFollow= () => {}, handleUnfollow=() => {} }) => {
     const getname = (i) => {
@@ -82,17 +83,17 @@ const RenderItemHeader = ({ item, image, follow= false, handleFollow= () => {}, 
             </View>
             <View style={{ justifyContent: 'center' }}>
             {follow ? (
-                <TouchableOpacity onPress={handleUnfollow}>
+                <GlobalButton buttonStyle={styles.noPh} onPress={handleUnfollow}>
                 <View style={styles.wrapperTextUnFollow}>
                     <MemoUnfollowDomain />
                 </View>
-                </TouchableOpacity>
+                </GlobalButton>
             ) : (
-                <TouchableOpacity onPress={handleFollow}>
+                <GlobalButton buttonStyle={styles.noPh} onPress={handleFollow}>
                 <View style={styles.wrapperText}>
                     <MemoFollowDomain />
                 </View>
-                </TouchableOpacity>
+                </GlobalButton>
             )}
             </View>
         </View>
@@ -177,6 +178,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: normalize(0.5),
     },
+    noPh: {
+        paddingHorizontal: 0
+    }
 })
 
 export default RenderItemHeader

@@ -21,6 +21,7 @@ import { SingleSidedShadowBox, Gap } from '../../../components';
 import StringConstant from '../../../utils/string/StringConstant';
 import { colors } from '../../../utils/colors';
 import { getSingularOrPluralText } from '../../../utils/string/StringUtils';
+import GlobalButton from '../../../components/Button/GlobalButton';
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis.';
@@ -67,28 +68,37 @@ const Header = ({
         </View>
         <View style={styles.wrapperHeader}>
           {follow ? (
-            <TouchableNativeFeedback onPress={() => handleUnfollow()}>
+            <GlobalButton             buttonStyle={styles.noPh}
+            onPress={() => handleUnfollow()}>
               <View style={styles.buttonFollowing}>
                 <Text style={styles.textButtonFollowing}>Following</Text>
               </View>
-            </TouchableNativeFeedback>
+            </GlobalButton>
           ) : (
-            <TouchableNativeFeedback onPress={() => handleFollow()}>
+            <GlobalButton             buttonStyle={styles.noPh}
+            onPress={() => handleFollow()}>
               <View style={styles.buttonFollow}>
                 <Text style={styles.textButtonFollow}>Follow</Text>
               </View>
-            </TouchableNativeFeedback>
+            </GlobalButton>
           )}
           <Gap width={normalize(SIZES.base)} />
-          {!isBlocked ? <TouchableOpacity
-            style={styles.buttonBlock}
+          {!isBlocked ? <GlobalButton
+                        buttonStyle={styles.noPh}
             onPress={() => onPressBlock()}>
-            <Text style={styles.blockButtonText}>Block</Text>
-          </TouchableOpacity> : <TouchableOpacity
-            style={styles.buttonUnblock}
+              <View style={styles.buttonBlock}>
+              <Text style={styles.blockButtonText}>Block</Text>
+
+              </View>
+          </GlobalButton> : <GlobalButton
+            buttonStyle={styles.noPh}
             onPress={() => onPressUnblock()}>
-            <Text style={styles.unblockButtonText}>Blocked</Text>
-          </TouchableOpacity>}
+              <View
+              style={styles.buttonUnblock}
+              >
+                            <Text style={styles.unblockButtonText}>Blocked</Text>
+              </View>
+          </GlobalButton>}
 
         </View>
       </View>
@@ -392,6 +402,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
     borderColor: 'rgba(0,0,0,0.5)',
   },
+  noPh: {
+    paddingHorizontal: 0
+  }
 });
 
 export default Header;

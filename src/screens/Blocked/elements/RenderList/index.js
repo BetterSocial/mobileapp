@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native'
+import GlobalButton from '../../../../components/Button/GlobalButton';
 
 import { colors } from '../../../../utils/colors';
 import { fonts } from '../../../../utils/fonts';
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         flex: 1,
-        marginEnd: 16,
+        paddingVertical: 11
       },
       imageProfile: {
         width: 48,
@@ -98,10 +99,9 @@ const BlockedList = (props) => {
     }
 
     return (
-        <TouchableNativeFeedback
-        onPress={handlePress}>
+ 
         <View style={styles.card}>
-          <TouchableOpacity onPress={() => onPressBody(item)} style={styles.wrapProfile}>
+          <GlobalButton onPress={() => onPressBody(item)} style={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
               {item.image  ? <Image
               source={{
@@ -124,22 +124,21 @@ const BlockedList = (props) => {
                 {item.description ? item.description : ''}
               </Text>
             </View>
-          </TouchableOpacity>
+          </GlobalButton>
           {item.isUnblocked ? (
-            <TouchableNativeFeedback onPress={handleSetBlock}>
+            <GlobalButton onPress={handleSetBlock}>
               <View style={styles.buttonBlockUser}>
                 <Text style={styles.textButtonBlockUser}>Block</Text>
               </View>
-            </TouchableNativeFeedback>
+            </GlobalButton>
           ) : (
-            <TouchableNativeFeedback onPress={handleSetUnblock}>
+            <GlobalButton  onPress={handleSetUnblock}>
               <View style={styles.buttonBlock}>
                 <Text style={styles.textButtonBlock}>Blocked</Text>
               </View>
-            </TouchableNativeFeedback>
+            </GlobalButton>
           )}
         </View>
-      </TouchableNativeFeedback>
     )
 }
 

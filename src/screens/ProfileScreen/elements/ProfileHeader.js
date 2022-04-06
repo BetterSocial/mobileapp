@@ -8,6 +8,7 @@ import SettingIcon from '../../../assets/icons/images/setting.svg';
 import ShareIcon from '../../../assets/icons/images/share.svg';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
+import GlobalButton from '../../../components/Button/GlobalButton';
 
 const ProfileHeader = ({
     onShareClicked = () => {},
@@ -21,13 +22,13 @@ const ProfileHeader = ({
         if(hideSetting) return null
 
         return (
-            <TouchableNativeFeedback onPress={onSettingsClicked}>
+            <TouchableOpacity onPress={onSettingsClicked}>
                 <SettingIcon
                     width={20}
                     height={20}
                     fill={colors.black}
                 />
-            </TouchableNativeFeedback>
+            </TouchableOpacity>
         )
     }
 
@@ -35,9 +36,11 @@ const ProfileHeader = ({
         if(!showArrow) return <></>
 
         return (
-                <TouchableOpacity style={styles.backIconContainer} onPress={() => navigation.goBack()}>
+            <View style={styles.wrapNameAndbackButton}>
+                <GlobalButton buttonStyle={styles.noPl} onPress={() => navigation.goBack()}>
                 <ArrowLeftIcon width={20} height={12} fill="#000" />
-                </TouchableOpacity>
+                </GlobalButton>
+            </View>
         )
     }
 
@@ -47,13 +50,13 @@ const ProfileHeader = ({
             <Text numberOfLines={1} style={styles.textUsername}>{username}</Text>
             <View style={styles.wrapHeaderButton}>
                 <View style={ hideSetting ? styles.btnShareWithoutSetting : styles.btnShare}>
-                    <TouchableNativeFeedback onPress={onShareClicked}>
+                    <TouchableOpacity onPress={onShareClicked}>
                     <ShareIcon
                         width={20}
                         height={20}
                         fill={colors.black}
                     />
-                    </TouchableNativeFeedback>
+                    </TouchableOpacity>
                 </View>
 
                 { __renderSettings() }
@@ -91,8 +94,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 16,
     },
-    backIconContainer: {
-        padding: 10
+    noPl: {
+        paddingLeft: 0
     }
 })
 

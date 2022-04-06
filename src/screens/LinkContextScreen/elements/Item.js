@@ -1,6 +1,6 @@
 import * as React from 'react';
 import JWTDecode from 'jwt-decode';
-import {StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import BlockDomainComponent from '../../../components/BlockDomain';
@@ -57,6 +57,7 @@ const LinkContextItem = ({
 
   return (
     <View style={styles.container}>
+      <SafeAreaView>
       <Header
         item={item}
         name={domainName}
@@ -67,6 +68,7 @@ const LinkContextItem = ({
         follow={follow}
         showBackButton={showBackButton}
       />
+      </SafeAreaView>
       <Content item={item} onContentPressed={onContentPressed} />
       <LinkContextScreenFooter
         item={item}

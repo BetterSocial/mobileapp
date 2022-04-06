@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
+import GlobalButton from '../../../components/Button/GlobalButton';
 
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
@@ -25,23 +26,25 @@ import { getSingularOrPluralText } from '../../../utils/string/StringUtils';
  */
 const FollowInfoRow = ({ follower, following, onFollowingContainerClicked}) => {
     return <View style={styles.wrapFollower}>
+        <GlobalButton buttonStyle={{paddingLeft: 0}} >
         <View style={styles.wrapRow}>
             <Text style={styles.textTotal}>
                 {follower}
             </Text>
             <Text style={styles.textFollow}>{getSingularOrPluralText(follower, "Follower", "Followers")}</Text>
         </View>
+        </GlobalButton>
+        <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={onFollowingContainerClicked}>
         <View style={styles.following}>
-            <TouchableNativeFeedback
-                onPress={onFollowingContainerClicked}>
                 <View style={styles.wrapRow}>
                 <Text style={styles.textTotal}>
                     {following}
                 </Text>
                 <Text style={styles.textFollow}>Following</Text>
                 </View>
-            </TouchableNativeFeedback>
         </View>
+        </GlobalButton>
+  
     </View>
 }
 
