@@ -15,6 +15,7 @@ import { Avatar } from '../../components';
 import { COLORS, FONTS, SIZES } from '../../utils/theme';
 import { Context } from '../../context';
 import { setDomainData, setProfileDomain } from '../../context/actions/domainAction';
+import GlobalButton from '../../components/Button/GlobalButton';
 
 const Header = ({ image, domain, time, item }) => {
   const [domainStore, dispatchDomain] = React.useContext(Context).domains;
@@ -35,7 +36,7 @@ const Header = ({ image, domain, time, item }) => {
   };
 
   return (
-    <Pressable onPress={onHeaderPressed}>
+    <GlobalButton buttonStyle={styles.noPl} onPress={onHeaderPressed}>
       <View style={styles.container}>
         <Avatar image={image} style={{ width: 36, height: 36 }} />
         <Gap width={8} />
@@ -50,7 +51,7 @@ const Header = ({ image, domain, time, item }) => {
           <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
         </View>
       </View>
-    </Pressable>
+    </GlobalButton>
   );
 };
 
@@ -95,6 +96,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
   },
+  noPl: {
+    paddingLeft: 0
+  }
 });
 
 export default Header;

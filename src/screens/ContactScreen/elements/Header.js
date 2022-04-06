@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import ArrowLeftIcon from '../../../../assets/icons/arrow-left.svg';
+import GlobalButton from '../../../components/Button/GlobalButton';
 import {fonts} from '../../../utils/fonts';
 import {COLORS, SIZES} from '../../../utils/theme';
 const Header = ({
@@ -23,19 +24,19 @@ const Header = ({
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableNativeFeedback onPress={onPress}>
+        <GlobalButton buttonStyle={styles.backContainer} onPress={onPress}>
           <View style={styles.content(-4)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
-        </TouchableNativeFeedback>
+        </GlobalButton>
       );
     } else {
       return (
-        <TouchableHighlight onPress={onPress}>
+        <GlobalButton buttonStyle={styles.backContainer}  onPress={onPress}>
           <View style={styles.content(-8)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
-        </TouchableHighlight>
+        </GlobalButton>
       );
     }
   };
@@ -45,10 +46,9 @@ const Header = ({
       <View style={styles.containerTitle}>
         <Text style={{...styles.text, ...titleStyle}}>{title}</Text>
       </View>
-      <View style={styles.gap} />
-      <TouchableNativeFeedback onPress={onPressSub}>
+      <GlobalButton buttonStyle={styles.nextContainer} onPress={onPressSub}>
         <Text style={{...styles.text, ...subtitleStyle}}>{subTitle}</Text>
-      </TouchableNativeFeedback>
+      </GlobalButton>
     </View>
   );
 };
@@ -81,4 +81,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  backContainer: {
+    paddingLeft: 0
+  },
+  nextContainer: {
+    paddingLeft: 0
+  }
 });

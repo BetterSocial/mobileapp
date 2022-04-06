@@ -8,6 +8,8 @@ import SettingIcon from '../../../assets/icons/images/setting.svg';
 import ShareIcon from '../../../assets/icons/images/share.svg';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
+import GlobalButton from '../../../components/Button/GlobalButton';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ProfileHeader = ({
     onShareClicked = () => {},
@@ -21,13 +23,13 @@ const ProfileHeader = ({
         if(hideSetting) return null
 
         return (
-            <TouchableNativeFeedback onPress={onSettingsClicked}>
+            <TouchableOpacity onPress={onSettingsClicked}>
                 <SettingIcon
                     width={20}
                     height={20}
                     fill={colors.black}
                 />
-            </TouchableNativeFeedback>
+            </TouchableOpacity>
         )
     }
 
@@ -36,9 +38,9 @@ const ProfileHeader = ({
 
         return (
             <View style={styles.wrapNameAndbackButton}>
-                <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+                <GlobalButton buttonStyle={styles.noPl} onPress={() => navigation.goBack()}>
                 <ArrowLeftIcon width={20} height={12} fill="#000" />
-                </TouchableNativeFeedback>
+                </GlobalButton>
             </View>
         )
     }
@@ -49,13 +51,13 @@ const ProfileHeader = ({
             <Text style={styles.textUsername}>{username}</Text>
             <View style={styles.wrapHeaderButton}>
                 <View style={ hideSetting ? styles.btnShareWithoutSetting : styles.btnShare}>
-                    <TouchableNativeFeedback onPress={onShareClicked}>
+                    <TouchableOpacity onPress={onShareClicked}>
                     <ShareIcon
                         width={20}
                         height={20}
                         fill={colors.black}
                     />
-                    </TouchableNativeFeedback>
+                    </TouchableOpacity>
                 </View>
 
                 { __renderSettings() }
@@ -93,6 +95,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 16,
     },
+    noPl: {
+        paddingLeft: 0
+    }
 })
 
 export default ProfileHeader

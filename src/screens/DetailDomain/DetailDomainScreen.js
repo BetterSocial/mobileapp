@@ -6,6 +6,7 @@ import {
   StatusBar,
   StyleSheet,
   View,
+  SafeAreaView
 } from 'react-native';
 
 import DetailDomainScreenContainerComment from '../../components/Comments/DetailDomainScreenContainerComment';
@@ -241,17 +242,19 @@ const validationStatusVote = () => {
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
-      {item ? <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}>
-        
-        <View style={styles.content}>
-          <View style={{ paddingHorizontal: 0 }}>
-            <DetailDomainScreenHeader
+      <SafeAreaView>
+      <DetailDomainScreenHeader
               domain={item.domain.name}
               time={item.content.created_at}
               image={item.domain.image}
               onFollowDomainPressed={() => { }}
             />
-          </View>
+      </SafeAreaView>
+ 
+      {item ? <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}>
+        
+        <View style={styles.content}>
+
 
           <View>
             <DetailDomainScreenContent

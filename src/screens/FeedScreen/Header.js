@@ -35,6 +35,7 @@ import { fonts } from '../../utils/fonts';
 import { getUserId } from '../../utils/users';
 import { setTimer } from '../../context/actions/feeds';
 import { viewTimePost } from '../../service/post';
+import GlobalButton from '../../components/Button/GlobalButton';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -80,24 +81,27 @@ const _renderAnonimity = ({
       <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
-            <View style={{ marginEnd: 16 }}>
-              <TouchableOpacity
+            <View style={[styles.btn]}>
+              <GlobalButton
                 onPress={() => {
                   navigation.goBack();
                 }}>
                 <MemoIc_arrow_back height={20} width={20} />
-              </TouchableOpacity>
+              </GlobalButton>
             </View>
           ) : null}
+          <View style={[styles.imageAnonymContainer]} >
           <Image
             source={AnonymousProfile}
             width={dimen.size.FEED_HEADER_IMAGE_RADIUS}
             height={dimen.size.FEED_HEADER_IMAGE_RADIUS}
             style={styles.imageAnonimity}
           />
-          <View style={styles.containerFeedProfile}>
-            <View style={styles.containerFeedName}>
-              <Text style={styles.feedUsername}>Anonymous</Text>
+          </View>
+      
+          <View style={[styles.containerFeedProfile]}>
+            <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
+              <Text style={[styles.feedUsername]}>Anonymous</Text>
             </View>
             <View style={styles.containerFeedText}>
               <Text style={styles.feedDate}>{getTime(time)}</Text>
@@ -117,9 +121,9 @@ const _renderAnonimity = ({
             </View>
           </View>
         </View>
-        <TouchableNativeFeedback>
+        <GlobalButton>
           <ElipsisIcon width={18} height={3.94} fill={colors.black} />
-        </TouchableNativeFeedback>
+        </GlobalButton>
       </View>
     </SafeAreaView>
 
@@ -174,7 +178,8 @@ const _renderProfileNormal = ({
         <View style={styles.rowCenter}>
           {isBackButton ? (
             <View style={styles.btn}>
-              <TouchableOpacity
+              <GlobalButton
+
                 onPress={() => {
                   if(source) {
                     let currentTime = new Date().getTime()
@@ -187,12 +192,13 @@ const _renderProfileNormal = ({
                   navigation.goBack();
                 }}>
                 <MemoIc_arrow_back height={20} width={20} />
-              </TouchableOpacity>
+              </GlobalButton>
             </View>
           ) : null}
-          <TouchableNativeFeedback
+          <GlobalButton
             onPress={() => navigateToProfile()}
-            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 28)}>
+            
+            >
             <View style={{}}>
               <Avatar
                 source={
@@ -204,32 +210,24 @@ const _renderProfileNormal = ({
                 noShadow
               />
             </View>
-          </TouchableNativeFeedback>
-          <View style={styles.containerFeedProfile}>
-            <View style={styles.containerFeedName}>
-              <TouchableNativeFeedback
-                onPress={() => navigateToProfile()}
-                background={TouchableNativeFeedback.Ripple(
-                  colors.gray1,
-                  false,
-                  30,
-                )}>
+          </GlobalButton>
+          <GlobalButton onPress={() => navigateToProfile()} style={[styles.containerFeedProfile, { paddingBottom: 10}]}>
+            <View style={[styles.containerFeedName, {alignItems: 'flex-end'}]}>
+              
                 <Text style={styles.feedUsername}>
                   {username ? username : 'no name specifics'}
                 </Text>
-              </TouchableNativeFeedback>
-              <TouchableNativeFeedback
-                background={TouchableNativeFeedback.Ripple(
-                  colors.gray1,
-                  true,
-                  8,
-                )}>
-                <View style={{ alignSelf: 'center', zIndex: 1000 }}>
+                
+              
+              <GlobalButton
+                buttonStyle={{marginLeft: 'auto', paddingBottom: 0}}
+                >
+                <View style={{ zIndex: 1000 }}>
                   <ElipsisIcon width={3.94} height={18} fill={colors.black} />
                 </View>
-              </TouchableNativeFeedback>
+              </GlobalButton>
             </View>
-            <View style={styles.containerFeedText}>
+            <View style={[styles.containerFeedText, {paddingBottom: 10}]}>
               <Text style={styles.feedDate}>{getTime(time)}</Text>
               <View style={styles.point} />
               {privacy === 'Public' ? (
@@ -247,7 +245,7 @@ const _renderProfileNormal = ({
                 {location}
               </Text>
             </View>
-          </View>
+          </GlobalButton>
         </View>
       </View>
     </SafeAreaView>
@@ -296,23 +294,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.4,
     paddingTop: 8,
     paddingBottom: 8,
-    paddingLeft: 20,
-    paddingRight: 28,
   },
   rowCenter: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   containerFeedProfile: {
-    flexDirection: 'column',
     justifyContent: 'space-between',
-    marginLeft: 13,
+    // marginLeft: 13,
     flex: 1,
   },
   containerFeedName: {
     flexDirection: 'row',
   },
-  btn: { marginEnd: 16 },
+  btn: { marginEnd: 0 },
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
@@ -323,7 +318,7 @@ const styles = StyleSheet.create({
   containerFeedText: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 2,
+    marginTop: 0,
     width: '100%',
   },
   feedDate: {
@@ -347,7 +342,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
-    marginTop: 2,
+    marginTop: 0,
   },
   contentFeed: {
     marginTop: 12,
@@ -401,6 +396,14 @@ const styles = StyleSheet.create({
     width: dimen.size.FEED_HEADER_IMAGE_RADIUS,
     height: dimen.size.FEED_HEADER_IMAGE_RADIUS,
   },
+  noPaddingLeft: {
+    paddingLeft: 0,
+  },
+  imageAnonymContainer : {
+    // paddingRight: 10,
+    padding:10,
+    // paddingLeft: 24
+  }
 });
 
 Header.propsTypes = {
