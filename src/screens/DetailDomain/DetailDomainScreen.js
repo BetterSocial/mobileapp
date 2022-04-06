@@ -14,7 +14,7 @@ import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
 import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
 import WriteComment from '../../components/Comments/WriteComment';
 import { COLORS, SIZES } from '../../utils/theme';
-import { DomainHeader, Footer, Gap } from '../../components';
+import { DomainHeader, Footer, Gap, Header } from '../../components';
 import { createCommentParent } from '../../service/comment';
 import {getDomainDetailById} from '../../service/domain'
 import { downVoteDomain, upVoteDomain } from '../../service/vote';

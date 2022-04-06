@@ -82,7 +82,6 @@ const SignIn = () => {
           // console.log('on Res')
           console.log(res, 'response token')
           if (res.data) {
-            console.log('on Res Data')
             const { appUserId, countryCode } = res.data;
             console.log(appUserId, 'resak')
             setDataHumenId(res.data, dispatch);

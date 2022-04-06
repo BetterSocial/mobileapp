@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View, SafeAreaView} from 'react-native';
 
 import {WebView} from 'react-native-webview';
 import analytics from '@react-native-firebase/analytics';
@@ -17,7 +17,9 @@ const PrivacyPolicies = () => {
   }, []);
   return (
     <View style={styles.container}>
+      <SafeAreaView>
       <Header title="Privacy Policies" onPress={() => navigator.goBack()} />
+      </SafeAreaView>
       <WebView
         source={{uri: 'https://www.lipsum.com/feed/html'}}
         showsVerticalScrollIndicator={false}

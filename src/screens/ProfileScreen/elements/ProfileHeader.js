@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
+import { StyleSheet, Text, TouchableNativeFeedback, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
@@ -9,7 +9,6 @@ import ShareIcon from '../../../assets/icons/images/share.svg';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import GlobalButton from '../../../components/Button/GlobalButton';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ProfileHeader = ({
     onShareClicked = () => {},
@@ -48,7 +47,7 @@ const ProfileHeader = ({
     return (
         <View style={styles.header}>
             { __renderBackArrow() }
-            <Text style={styles.textUsername}>{username}</Text>
+            <Text numberOfLines={1} style={styles.textUsername}>{username}</Text>
             <View style={styles.wrapHeaderButton}>
                 <View style={ hideSetting ? styles.btnShareWithoutSetting : styles.btnShare}>
                     <TouchableOpacity onPress={onShareClicked}>

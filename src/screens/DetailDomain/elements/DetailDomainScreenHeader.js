@@ -10,6 +10,7 @@ import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
+import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
 
 const DetailDomainScreenHeader = ({
   image,
@@ -26,7 +27,7 @@ const DetailDomainScreenHeader = ({
         onPress={() => {
           navigation.goBack();
         }}>
-        <MemoIc_arrow_back height={16} width={16} />
+        <ArrowLeftIcon width={20} height={12} fill="#000" />
       </TouchableOpacity>
       <View style={styles.wrapperImage}>
         <Image

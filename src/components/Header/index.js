@@ -14,7 +14,7 @@ const Header = ({title, onPress, titleStyle = {}, containerStyle = {}}) => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity style={styles.buttonBackContainer} onPress={onPress}>
           <View style={styles.content(-4)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
@@ -22,8 +22,8 @@ const Header = ({title, onPress, titleStyle = {}, containerStyle = {}}) => {
       );
     } else {
       return (
-        <TouchableOpacity onPress={onPress}>
-          <View style={styles.content(-8)}>
+        <TouchableOpacity style={styles.buttonBackContainer} onPress={onPress}>
+          <View style={styles.content(-4)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
         </TouchableOpacity>
@@ -33,7 +33,7 @@ const Header = ({title, onPress, titleStyle = {}, containerStyle = {}}) => {
   return (
     <View style={{...styles.container, ...containerStyle}}>
       {renderHeader()}
-      <Text style={{...styles.text, ...titleStyle}}>{title}</Text>
+      <Text numberOfLines={1} style={{...styles.text, ...titleStyle}}>{title}</Text>
       <View style={styles.gap} />
     </View>
   );
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   content: (marginLeft) => ({
     padding: 10,
-    marginLeft: marginLeft,
+    // marginLeft: marginLeft,
   }),
   text: {
     color: colors.black,
@@ -57,6 +57,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: -20,
     fontWeight: 'bold',
+    flex: 1,
+
   },
   gap: {width: 20, height: 12},
+  buttonBackContainer : {
+     width: '20%'
+  }
 });
