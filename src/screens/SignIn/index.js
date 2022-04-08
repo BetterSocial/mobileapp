@@ -5,6 +5,7 @@ import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
   Button,
+  Dimensions,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -51,7 +52,7 @@ const SignIn = () => {
   const [isCompleteSliding, setIsCompleteSliding] = React.useState(false);
   const create = useClientGetstream();
   const HUMAN_ID_URL = 'https://www.human-id.org/';
-
+  const heightBs = Dimensions.get('window').height * 0.6
   const dummyLoginRbSheetRef = React.useRef(null);
 
   const handleSlideShow = ({ index }, length) => {
@@ -79,17 +80,17 @@ const SignIn = () => {
       checkToken(exchangeToken)
         .then((res) => {
           // console.log('on Res')
-          // console.log(res)
+          console.log(res, 'response token')
           if (res.data) {
-            console.log('on Res Data')
             const { appUserId, countryCode } = res.data;
+            console.log(appUserId, 'resak')
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
             // verifyUser('1G1H-1TUHI-7U9H7-572G2')
               .then((response) => {
                 // SimpleToast.show(`on verify res` + JSON.stringify(response.data))
                 // console.log('on verify res')
-                // console.log(response.data)
+                console.log(response.data, appUserId, 'response data')
                 setLoading(false);
                 if (response.data) {
                   console.log('on verify res data')
@@ -216,7 +217,7 @@ const SignIn = () => {
       </View>
       <Loading visible={loading} />
       {ENABLE_DEV_ONLY_FEATURE ? (
-        <RBSheet ref={dummyLoginRbSheetRef}>
+        <RBSheet height={heightBs} ref={dummyLoginRbSheetRef}>
           <Text>Choose an account you wish to login</Text>
           <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CP')}>
             <View style={S.divider} />
@@ -253,6 +254,12 @@ const SignIn = () => {
           <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CQS')}>
             <Text style={S.dummyAccountItem}>
               busanid : TVGBYD1BI9YMXMAA6CQS
+            </Text>
+            <View style={S.divider} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => dummyLogin('GWJ47ZY9PQNQO6MFX2HC')}>
+            <Text style={S.dummyAccountItem}>
+              agitfirst : GWJ47ZY9PQNQO6MFX2HC
             </Text>
             <View style={S.divider} />
           </TouchableOpacity>

@@ -11,6 +11,7 @@ import {
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS, SIZES} from '../../utils/theme';
+import GlobalButton from '../Button/GlobalButton';
 const HeaderContact = ({
   title,
   subTitle,
@@ -23,19 +24,19 @@ const HeaderContact = ({
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <TouchableNativeFeedback onPress={onPress}>
+        <GlobalButton buttonStyle={styles.noPaddingLeft} onPress={onPress}>
           <View style={styles.content(-4)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
-        </TouchableNativeFeedback>
+        </GlobalButton>
       );
     } else {
       return (
-        <TouchableHighlight onPress={onPress}>
+        <GlobalButton buttonStyle={styles.noPaddingLeft} onPress={onPress}>
           <View style={styles.content(-8)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
-        </TouchableHighlight>
+        </GlobalButton>
       );
     }
   };
@@ -43,9 +44,9 @@ const HeaderContact = ({
     <View style={[styles.container, containerStyle]}>
       {renderHeader()}
       <Text style={[styles.text, titleStyle]}>{title}</Text>
-      <TouchableNativeFeedback onPress={onPressSub}>
+      <GlobalButton buttonStyle={styles.noPaddingRight} onPress={onPressSub}>
         <Text style={[styles.text, subtitleStyle]}>{subTitle}</Text>
-      </TouchableNativeFeedback>
+      </GlobalButton>
     </View>
   );
 };
@@ -69,5 +70,12 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(14),
     fontWeight: 'bold',
     padding: 10,
+    textAlign: 'center'
   },
+  noPaddingLeft: {
+    paddingLeft: 0
+  },
+  noPaddingRight: {
+    paddingRight: 0
+  }
 });

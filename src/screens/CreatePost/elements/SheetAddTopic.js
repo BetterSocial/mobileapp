@@ -124,9 +124,6 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
             onLayout={(event) => {
               let headerHeightLayout = event.nativeEvent.layout.height;
               let headerWidthLayout = event.nativeEvent.layout.width;
-              console.log('height: ', headerHeightLayout);
-              console.log('width: ', headerWidthLayout);
-              // widthInput = headerWidthLayout;
               setWidthInput(headerWidthLayout);
             }}>
             <View style={styles.listItem}>
@@ -171,8 +168,11 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
               {topicSuggestion.map((item, index) => {
                 return (
                   <TouchableNativeFeedback onPress={() => {
-                    setTopic(capitalizeFirstText(convertString(item.name, " ", "")));
+                    let textTopic = capitalizeFirstText(convertString(item.name, " ", ""))
+                    textTopic = textTopic + ' ';
+                    setTopic(textTopic);
                     setTopicSuggestion([]);
+                    onKeyUp(62);
                   }}>
                     <View style={{ marginBottom: 5 }} >
                       <Text style={{

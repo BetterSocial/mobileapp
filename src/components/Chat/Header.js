@@ -18,6 +18,7 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getChatName, getGroupMemberCount} from '../../utils/string/StringUtils';
 import {trimString} from '../../utils/string/TrimString';
+import GlobalButton from '../Button/GlobalButton';
 
 const Header = ({}) => {
   const navigation = useNavigation();
@@ -56,19 +57,20 @@ const Header = ({}) => {
   return (
     <View style={styles.container}>
       <View style={[styles.row, {flex: 1}]}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <GlobalButton buttonStyle={styles.backContainer} onPress={() => navigation.goBack()}>
           <MemoIc_arrow_back_white width={20} height={12} />
-        </TouchableOpacity>
-        <TouchableWithoutFeedback
+        </GlobalButton>
+        <GlobalButton
+        buttonStyle={styles.backContainer}
           onPress={() => navigation.navigate('GroupInfo')}>
           <View style={styles.touchable}>
             {renderHeaderImage()}
-            <Text style={styles.name}>{trimString(chatName, 21)}</Text>
+            <Text numberOfLines={1} style={styles.name}>{username} </Text>
           </View>
-        </TouchableWithoutFeedback>
+        </GlobalButton>
       </View>
       <View style={styles.row}>
-        <TouchableOpacity
+        <GlobalButton
           style={styles.btnOptions}
           onPress={() =>
             navigation.navigate('GroupSetting', {
@@ -77,7 +79,7 @@ const Header = ({}) => {
             })
           }>
           <IconEP name="dots-three-vertical" size={12.87} color={'#fff'} />
-        </TouchableOpacity>
+        </GlobalButton>
       </View>
     </View>
   );
@@ -98,8 +100,8 @@ const styles = StyleSheet.create({
     marginLeft: 18,
   },
   btnOptions: {
-    paddingLeft: 9.165,
-    paddingRight: 4,
+    paddingLeft: 0,
+    paddingRight: 0,
   },
   btnSearch: {
     paddingRight: 9.165,
@@ -120,10 +122,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     color: '#fff',
     fontSize: 14,
+    flex: 1
   },
   touchable: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
   },
+  backContainer: {
+    paddingLeft: 0
+  }
 });
