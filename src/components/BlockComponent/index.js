@@ -112,7 +112,7 @@ class BlockComponent extends React.Component {
 
     __onSkipOnlyBlock() {
         this.refReportUser.current.close();
-        userBlock();
+        this.__blockUser();
     }
 
     __onIssue(v) {

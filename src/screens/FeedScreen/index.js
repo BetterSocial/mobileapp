@@ -35,6 +35,7 @@ const FeedScreen = (props) => {
   // const [time, setTime] = React.useState(new Date());
   // const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
   const [shouldSearchBarShown, setShouldSearchBarShown] = React.useState(0)
+  const [postOffset, setPostOffset] = React.useState(0)
 
   const offset = React.useRef(new Animated.Value(-70)).current
 
@@ -45,21 +46,17 @@ const FeedScreen = (props) => {
 
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
 
-  const getDataFeeds = async (id = '') => {
+  const getDataFeeds = async (offset = 0) => {
     setCountStack(null);
     setLoading(true);
     try {
-      let query = '';
-      if (id !== '') {
-        query = '?id_lt=' + id;
-      }
+      let query = `?offset=${offset}`
 
       const dataFeeds = await getMainFeed(query);
-      // console.log(dataFeeds, 'sumani')
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         let dataWithDummy = [...data, {dummy : true}]
-        if (id === '') {
+        if (offset === 0) {
           // setMainFeeds(data, dispatch);
           setMainFeeds(dataWithDummy, dispatch);
         } else {
@@ -70,6 +67,9 @@ const FeedScreen = (props) => {
         }
         setCountStack(data.length);
       }
+
+      setPostOffset(dataFeeds.offset)
+
       setLoading(false);
       setInitialLoading(false);
       // setTime(new Date());
@@ -87,16 +87,16 @@ const FeedScreen = (props) => {
       screen_name: 'Feed Screen',
     });
 
-    getDataFeeds(lastId);
+    getDataFeeds();
   }, []);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
-      getDataFeeds(lastId);
+      getDataFeeds();
     });
 
     return unsubscribe;
-  }, [navigation, lastId]);
+  }, [navigation]);
 
   React.useEffect(() => {
     searchBarDebounce = setTimeout(async () => {
@@ -180,7 +180,8 @@ const FeedScreen = (props) => {
 
   const onEndReach = () => {
     // Use -2 because last item is dummy
-    getDataFeeds(feeds[feeds.length - 2].id);
+    // getDataFeeds(feeds[feeds.length - 2].id);
+    getDataFeeds(postOffset);
   };
 
   const onPress = (item, index) => {
@@ -207,7 +208,7 @@ const FeedScreen = (props) => {
   };
 
   const onRefresh = () => {
-    getDataFeeds('');
+    getDataFeeds();
   };
 
   const showSearchBar = (isShown) => {

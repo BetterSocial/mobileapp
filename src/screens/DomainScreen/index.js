@@ -47,11 +47,12 @@ const DomainScreen = () => {
   const [isBlocked, setIsBlocked] = React.useState(false)
   const [follow, setFollow] = React.useState(false);
   const [domainStore, dispatchDomain] = React.useContext(Context).domains;
+  const [postOffset, setPostOffset] = React.useState(0)
 
   const tiktokScrollRef = React.useRef(null);
   const [headerHeightRef, setHeaderHeightRef] = React.useState(0)
 
-  console.log(headerHeightRef)
+  // console.log(headerHeightRef)
 
   let iddomain = dataDomain.content.domain_page_id;
   const [dataFollow] = React.useState({
@@ -113,19 +114,8 @@ const DomainScreen = () => {
         Toast.show('Domain Not Found', Toast.LONG);
         navigation.goBack();
       }
-      let res = await getDetailDomains(dataDomain.og.domain);
-      if (res.code === 200) {
-        setDomainFollowers(res.followers);
-        // setData([{dummy: true}, ...res.data]);
-        // dispatchDomain(res.data);
-        if(res.data.length > 0) {
-          setDomainData([...res.data, {dummy: true}], dispatchDomain)
-        } else {
-          setDomainData(res.data, dispatchDomain);
-        }
-        setSelectedLastDomain(dataDomain.og.domain, dispatchDomain);
-        setLoading(false);
-      }
+
+      await getDomainFeed(postOffset)
 
       if (withLoading) {
         setLoading(false);
@@ -133,6 +123,29 @@ const DomainScreen = () => {
     }
 
   };
+
+  const getDomainFeed = async (offset) => {
+    console.log('postOffset')
+    console.log(postOffset)
+    let res = await getDetailDomains(`${dataDomain.og.domain}?offset=${postOffset}`);
+
+    console.log('res.data')
+    console.log(res.data.length)
+
+    if (res.code === 200) {
+      setDomainFollowers(res.followers);
+      if(offset === 0) setDomainData([...res.data, {dummy: true}], dispatchDomain)
+      else {
+        let clonedFeeds = [...feeds]
+        clonedFeeds.splice(feeds.length - 1, 0, ...data)
+        setDomainData(clonedFeeds, dispatchDomain);
+      }
+      setSelectedLastDomain(dataDomain.og.domain, dispatchDomain);
+      setLoading(false);
+    }
+
+    setPostOffset(parseInt(postOffset) + 10)
+  }
 
   React.useEffect(() => {
     init(true);
@@ -221,8 +234,12 @@ const DomainScreen = () => {
     await unblokDomain({ domain_page_id: iddomain }).then(() => {
       checkBlockDomain()
     })
-
   }
+
+  const __handleOnEndReached = () => {
+    getDomainFeed(postOffset)
+  }
+
   if (loading) {
     return (
       <View style={styles.containerLoading}>
@@ -237,12 +254,13 @@ const DomainScreen = () => {
       <ProfileTiktokScroll
         ref={tiktokScrollRef}
         data={domainStore.domains}
+        onEndReach={__handleOnEndReached}
         snapToOffsets={(() => {
           let posts =  domainStore.domains.map((item, index) => {
             return headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)
           })
-          console.log('posts')
-          console.log(posts)
+          // console.log('posts')
+          // console.log(posts)
           return [headerHeightRef, ...posts]
         })()}
         ListHeaderComponent={

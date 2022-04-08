@@ -131,7 +131,7 @@ const DomainFragment = () => {
 
                 { unfollowedDomains.length > 0 && 
                     <View style={styles.unfollowedHeaderContainer}>
-                    <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreDomains}</Text>
+                        <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreDomains}</Text>
                     </View>}
                 { unfollowedDomains.map((item, index) => {
                     return __renderDiscoveryItem(FROM_UNFOLLOWED_DOMAIN, "unfollowedDomainDiscovery", item, index)

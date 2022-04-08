@@ -1,5 +1,6 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
+import config from 'react-native-config'
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {
   Dimensions,
@@ -15,7 +16,6 @@ import {
 } from 'react-native';
 import {FlatFeed, StreamApp} from 'react-native-activity-feed';
 import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
-import config from 'react-native-config'
 import {generateRandomId} from 'stream-chat-react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
@@ -39,7 +39,6 @@ import {
   checkUserBlock,
   getOtherFeedsInProfile,
   getOtherProfile,
-  getSelfFeedsInProfile,
   setFollow,
   setUnFollow,
 } from '../../service/profile';
