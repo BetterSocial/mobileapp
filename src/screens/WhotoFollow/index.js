@@ -68,6 +68,7 @@ const WhotoFollow = () => {
 
     get({ url: getWhoToFollowListUrl })
       .then((res) => {
+        console.log(res, 'user follow')
         setIsLoading(false);
         if (res.status === 200) {
           setUsers(res.data.body);
@@ -121,7 +122,7 @@ const WhotoFollow = () => {
       setIsRecyclerViewShown(true);
     }
   }, [dataProvider]);
-
+  console.log(localCommunity, 'supro')
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
@@ -175,9 +176,9 @@ const WhotoFollow = () => {
       users: {
         username: usersState.username,
         // human_id: usersState.userId,
-        // country_code: usersState.countryCode,
+        country_code: usersState.countryCode,
         human_id: usersState.userId,
-        country_code: 'ID',
+        // country_code: 'ID',
         profile_pic_path: usersState.photo,
         status: 'A',
       },
