@@ -67,6 +67,7 @@ import {
   requestCameraPermission,
   requestExternalStoragePermission,
 } from '../../utils/permission';
+import handleHastag from '../../utils/hastag';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -144,6 +145,8 @@ const CreatePost = () => {
   const [locationId, setLocationId] = React.useState('');
   const [positionEndCursor, setPositionEndCursor] = React.useState(0);
   const [hastagPosition, setHastagPosition] = React.useState(0);
+
+  const [formattedContent, setFormatHastag] = React.useState('');
 
 
 
@@ -651,6 +654,8 @@ const CreatePost = () => {
     return string + this;
   };
 
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -720,9 +725,11 @@ const CreatePost = () => {
             else {
               setTopicSearch([]);
             }
-            setMessage(v)
+
+            handleHastag(v, setFormatHastag);
+            setMessage(v);
           }}
-          value={message}
+          // value={message}
           multiline={true}
           style={styles.input}
           textAlignVertical="top"
@@ -730,7 +737,9 @@ const CreatePost = () => {
             'What’s on your mind?\nRemember to be respectful .\nDownvotes  & Blocks harm all your posts’ visibility.'
           }
           autoCapitalize={'none'}
-        />
+        >
+          <Text>{formattedContent}</Text>
+        </TextInput>
 
         {
           topicSearch.length > 0 && (
@@ -749,6 +758,7 @@ const CreatePost = () => {
                       let newArr = [...listTopic, topicItem];
                       setListTopic(newArr);
                     }
+                    handleHastag(newMessage, setFormatHastag)
                     setMessage(newMessage);
                     setTopicSearch([]);
                   }}>
