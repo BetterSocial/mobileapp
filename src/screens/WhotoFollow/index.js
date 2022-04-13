@@ -166,7 +166,22 @@ const WhotoFollow = () => {
         setRefreshing(false);
       });
   }, []);
-
+  const data = {
+    users: {
+      username: usersState.username,
+      // human_id: usersState.userId,
+      country_code: usersState.countryCode,
+      human_id:  randomString(20).toUpperCase(),
+      // country_code: 'ID',
+      profile_pic_path: usersState.photo,
+      status: 'A',
+    },
+    local_community: localCommunity.local_community,
+    topics: topics.topics,
+    follows: followed,
+    follow_source: 'onboarding',
+  };
+  console.log(data,'suip')
   const register = () => {
     setFetchRegister(true);
     analytics().logEvent('onb_select_follows_btn_add', {
