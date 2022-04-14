@@ -23,6 +23,7 @@ import {
   onSuccess,
 } from '@human-id/react-native-humanid';
 import { useNavigation } from '@react-navigation/core';
+import {debounce} from 'lodash'
 
 import ButtonSign from '../../assets/icon-svg/button_sign.svg';
 import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
@@ -43,7 +44,6 @@ import {
 import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
-
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = React.useContext(Context).users;
@@ -54,7 +54,7 @@ const SignIn = () => {
   const HUMAN_ID_URL = 'https://www.human-id.org/';
   const heightBs = Dimensions.get('window').height * 0.6
   const dummyLoginRbSheetRef = React.useRef(null);
-
+  const [showComponent, setShowComponent] = React.useState(false)
   const handleSlideShow = ({ index }, length) => {
     setSlideShowIndex(index)
     if (index === length - 1) {
@@ -177,9 +177,19 @@ const SignIn = () => {
         setLoading(false);
       });
   };
+
+  const debounceShowComponent = debounce(() => {
+    setShowComponent(true)
+  }, 350)
+
+  React.useEffect(() => {
+    debounceShowComponent()
+  }, [])
+
   return (
     <SafeAreaView style={S.container}>
       <StatusBar translucent={false} />
+      {showComponent ? <React.Fragment>
       {ENABLE_DEV_ONLY_FEATURE ? (
         <View style={S.devTrialView}>
           <Button
@@ -272,7 +282,10 @@ const SignIn = () => {
         </RBSheet>
       ) : (
         <></>
-      )}
+      )} 
+      </React.Fragment> : null}
+      
+     
     </SafeAreaView>
   );
 };

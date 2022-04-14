@@ -30,6 +30,7 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
             value={props.value}
             onChangeText={props.onChangeText}
             placeholder="Add Bio"
+            keyboardAppearDelay={500}
           />
           <Text style={styles.description}>
             {props.value ? props.value.length : 0}/350

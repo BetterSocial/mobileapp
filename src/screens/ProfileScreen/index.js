@@ -60,7 +60,7 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import GlobalButton from '../../components/Button/GlobalButton';
-
+import {debounce} from 'lodash'
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
 
@@ -339,8 +339,17 @@ const ProfileScreen = ({ route }) => {
     if (dataMain.bio !== null || dataMain.bio !== undefined) {
       setTempBio(dataMain.bio);
     }
-    bottomSheetBioRef.current.open();
+    debounceModalOpen()
   };
+
+  const debounceModalOpen = debounce(() => {
+    bottomSheetBioRef.current.open();
+
+  }, 500)
+
+  const debounceModalClose = debounce(() => {
+    bottomSheetBioRef.current.close();
+  }, 350)
 
   const handleSaveBio = () => {
     setIsLoadingUpdateBio(true);
@@ -352,8 +361,8 @@ const ProfileScreen = ({ route }) => {
       .then((res) => {
         setIsLoadingUpdateBio(false);
         if (res.code === 200) {
-          bottomSheetBioRef.current.close();
           fetchMyProfile(false);
+          debounceModalClose()
         }
       })
       .catch(() => {
@@ -583,7 +592,7 @@ const styles = StyleSheet.create({
   dummyItem : (height) => {
     return {
       height,
-      backgroundColor: colors.gray1
+      backgroundColor: colors.white
     }
   },
   postText: {
