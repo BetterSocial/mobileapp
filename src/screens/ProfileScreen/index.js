@@ -61,10 +61,12 @@ import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import GlobalButton from '../../components/Button/GlobalButton';
 import {debounce} from 'lodash'
+import useIsReady from '../../hooks/useIsReady';
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
 
 const ProfileScreen = ({ route }) => {
+  const isReady = useIsReady()
   const navigation = useNavigation();
   const bottomSheetNameRef = React.useRef();
   const bottomSheetBioRef = React.useRef();
@@ -99,7 +101,6 @@ const ProfileScreen = ({ route }) => {
 
   const [yourselfId, setYourselfId] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
 
@@ -110,7 +111,7 @@ const ProfileScreen = ({ route }) => {
 
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    fetchMyProfile(true);
+    fetchMyProfile();
     getMyFeeds();
 
     getAccessToken().then((val) => {
@@ -137,27 +138,28 @@ const ProfileScreen = ({ route }) => {
   }, []);
 
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e) => {
-      fetchMyProfile(true);
-      getMyFeeds();
-    });
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('tabPress', (e) => {
+  //     fetchMyProfile(true);
+  //     getMyFeeds();
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
 
-  const fetchMyProfile = async (withLoading) => {
+  const fetchMyProfile = async () => {
     const id = await getUserId();
     if (id) {
       setUserId(id);
-      withLoading ? setIsLoading(true) : null;
+      // withLoading ? setIsLoading(true) : null;
       const result = await getMyProfile(id);
       if (result.code === 200) {
         setDataMain(result.data);
         setDataMainBio(result.data.bio)
         setImageUrl(result.data.profile_pic_path, dispatch);
-        withLoading ? setIsLoading(false) : null;
       }
+      setLoading(false)
+
     }
   };
 
@@ -471,6 +473,13 @@ const ProfileScreen = ({ route }) => {
 
   const __handleOnEndReached = () => getMyFeeds(postOffset)
 
+  const handleRefresh = () => {
+    setLoading(true)
+    fetchMyProfile()
+  }
+
+  if(!isReady) return null
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -486,6 +495,8 @@ const ProfileScreen = ({ route }) => {
         <ProfileTiktokScroll
           ref={flatListScrollRef}
           data={feeds}
+          onRefresh={handleRefresh}
+          refreshing={loading}
           onScroll={handleScroll}
           onEndReach={__handleOnEndReached}
           snapToOffsets={(() => {

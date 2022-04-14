@@ -4,17 +4,21 @@ import {ActivityIndicator, StyleSheet, View, SafeAreaView} from 'react-native';
 import {WebView} from 'react-native-webview';
 import analytics from '@react-native-firebase/analytics';
 import {useNavigation} from '@react-navigation/core';
-
+import useIsReady from '../../hooks/useIsReady';
 import Header from '../../components/Header';
 
 const PrivacyPolicies = () => {
   const navigator = useNavigation();
+  const isReady = useIsReady()
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'PrivacyPolicies',
       screen_name: 'PrivacyPolicies',
     });
   }, []);
+
+  if(!isReady) return null
+
   return (
     <View style={styles.container}>
       <SafeAreaView>
