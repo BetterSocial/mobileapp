@@ -62,6 +62,8 @@ import {trimString} from '../../utils/string/TrimString';
 import GlobalButton from '../../components/Button/GlobalButton';
 import {debounce} from 'lodash'
 import useIsReady from '../../hooks/useIsReady';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { PROFILE_CACHE } from '../../utils/cache/constant';
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
 
@@ -111,9 +113,7 @@ const ProfileScreen = ({ route }) => {
 
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    fetchMyProfile();
     getMyFeeds();
-
     getAccessToken().then((val) => {
       setTokenJwt(val);
     });
@@ -137,31 +137,44 @@ const ProfileScreen = ({ route }) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    getSpecificCache(PROFILE_CACHE, (res) => {
+      console.log(res, 'manak')
+      if(!res) {
+        fetchMyProfile()
+      } else {
+        saveProfileState(res)
+      }
+    })
+  }, [])
 
-  // React.useEffect(() => {
-  //   const unsubscribe = navigation.addListener('tabPress', (e) => {
-  //     fetchMyProfile(true);
-  //     getMyFeeds();
-  //   });
 
-  //   return unsubscribe;
-  // }, [navigation]);
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
+      getMyFeeds();
+    });
+
+    return unsubscribe;
+  }, []);
 
   const fetchMyProfile = async () => {
     const id = await getUserId();
     if (id) {
       setUserId(id);
-      // withLoading ? setIsLoading(true) : null;
       const result = await getMyProfile(id);
       if (result.code === 200) {
-        setDataMain(result.data);
-        setDataMainBio(result.data.bio)
-        setImageUrl(result.data.profile_pic_path, dispatch);
+        saveToCache(PROFILE_CACHE, result.data)
+        saveProfileState(result.data)
       }
-      setLoading(false)
-
+      // setIsLoading(false)
     }
   };
+
+  const saveProfileState = (result) => {
+    setDataMain(result);
+    setDataMainBio(result.bio)
+    setImageUrl(result.profile_pic_path, dispatch);
+  }
 
   const getMyFeeds = async (offset = 0) => {
     console.log('getting feeds ' + offset)
@@ -176,7 +189,7 @@ const ProfileScreen = ({ route }) => {
       clonedFeeds.splice(feeds.length - 1, 0, ...data)
       setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
-
+    setLoading(false)
     setPostOffset(offset + 10)
   };
 
@@ -306,7 +319,7 @@ const ProfileScreen = ({ route }) => {
         }
         if (res.code === 200) {
           bottomSheetProfilePictureRef.current.close();
-          fetchMyProfile(false);
+          fetchMyProfile();
         }
       })
       .catch(() => {
@@ -325,7 +338,7 @@ const ProfileScreen = ({ route }) => {
         setIsLoadingRemoveImage(false);
         if (res.code === 200) {
           bottomSheetProfilePictureRef.current.close();
-          fetchMyProfile(false);
+          fetchMyProfile();
         }
       })
       .catch(() => {
@@ -475,7 +488,7 @@ const ProfileScreen = ({ route }) => {
 
   const handleRefresh = () => {
     setLoading(true)
-    fetchMyProfile()
+    getMyFeeds()
   }
 
   if(!isReady) return null

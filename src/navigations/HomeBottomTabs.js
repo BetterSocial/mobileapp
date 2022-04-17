@@ -20,6 +20,8 @@ import {getMyProfile} from '../service/profile';
 import {getUserId} from '../utils/users';
 import {setImageUrl} from '../context/actions/users';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
+import { saveToCache } from '../utils/cache';
+import { PROFILE_CACHE } from '../utils/cache/constant';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,22 +30,22 @@ function HomeBottomTabs(props) {
   let [users, dispatch] = React.useContext(Context).users;
   let [, dispatchProfile] = React.useContext(Context).profile;
   const [unReadMessage] = React.useContext(Context).unReadMessage;
+  const getProfile = async () => {
+    try {
+      let selfUserId = await getUserId();
+      let profile = await getMyProfile(selfUserId);
+      setImageUrl(profile.data.profile_pic_path, dispatch);
+      let data = {
+        user_id: profile.data.user_id,
+        username: profile.data.username,
+      };
+      saveToCache(PROFILE_CACHE, profile.data)
+      setMyProfileAction(data, dispatchProfile);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   React.useEffect(() => {
-    let getProfile = async () => {
-      try {
-        let selfUserId = await getUserId();
-        let profile = await getMyProfile(selfUserId);
-        setImageUrl(profile.data.profile_pic_path, dispatch);
-        let data = {
-          user_id: profile.data.user_id,
-          username: profile.data.username,
-        };
-        setMyProfileAction(data, dispatchProfile);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
     getProfile();
   }, []);
 

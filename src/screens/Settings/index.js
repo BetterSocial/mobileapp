@@ -20,7 +20,9 @@ import Header from '../../components/Header';
 import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 import {clearLocalStorege} from '../../utils/token';
 import {createClient} from '../../context/actions/createClient';
+import {resetProfileFeed} from '../../context/actions/myProfileFeed';
 import useIsReady from '../../hooks/useIsReady';
+import { removeAllCache } from '../../utils/cache';
 const width = Dimensions.get('screen').width;
 
 const Settings = () => {
@@ -28,6 +30,7 @@ const Settings = () => {
   const isReady = useIsReady()
   const { client } = clientState;
   const navigation = useNavigation();
+  let [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Settings',
@@ -35,6 +38,8 @@ const Settings = () => {
     });
   }, []);
   const logout = () => {
+    removeAllCache()
+    resetProfileFeed(myProfileDispatch)
     client?.disconnectUser();
     createClient(null, dispatch)
     clearLocalStorege();
