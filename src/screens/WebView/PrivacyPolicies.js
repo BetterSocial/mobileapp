@@ -6,7 +6,7 @@ import analytics from '@react-native-firebase/analytics';
 import {useNavigation} from '@react-navigation/core';
 import useIsReady from '../../hooks/useIsReady';
 import Header from '../../components/Header';
-
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const PrivacyPolicies = () => {
   const navigator = useNavigation();
   const isReady = useIsReady()
@@ -38,7 +38,7 @@ const PrivacyPolicies = () => {
   );
 };
 
-export default React.memo (PrivacyPolicies);
+export default withInteractionsManaged (React.memo (PrivacyPolicies));
 
 const styles = StyleSheet.create({
   container: {

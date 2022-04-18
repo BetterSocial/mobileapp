@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
 import useIsReady from '../../hooks/useIsReady';
 import Header from '../../components/Header';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const TermsAndCondition = () => {
   const isReady = useIsReady()
   const navigator = useNavigation();
@@ -38,7 +39,7 @@ const TermsAndCondition = () => {
   );
 };
 
-export default React.memo (TermsAndCondition);
+export default withInteractionsManaged (React.memo (TermsAndCondition));
 
 const styles = StyleSheet.create({
   container: {

@@ -21,13 +21,12 @@ import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 import {clearLocalStorege} from '../../utils/token';
 import {createClient} from '../../context/actions/createClient';
 import {resetProfileFeed} from '../../context/actions/myProfileFeed';
-import useIsReady from '../../hooks/useIsReady';
 import { removeAllCache } from '../../utils/cache';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const width = Dimensions.get('screen').width;
 
 const Settings = () => {
   const [clientState, dispatch] = React.useContext(Context).client;
-  const isReady = useIsReady()
   const { client } = clientState;
   const navigation = useNavigation();
   let [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
@@ -52,8 +51,6 @@ const Settings = () => {
   const goToPage = (pageName) => {
     navigation.navigate(pageName)
   }
-
-  if(!isReady) return null
 
   return (
     <>
@@ -169,4 +166,4 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 });
-export default React.memo(Settings);
+export default withInteractionsManaged(React.memo(Settings));
