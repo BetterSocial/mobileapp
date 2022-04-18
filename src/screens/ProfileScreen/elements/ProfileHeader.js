@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ProfileHeader
+export default React.memo (ProfileHeader)

@@ -5,8 +5,8 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableNativeFeedback,
   Dimensions,
+  TouchableOpacity
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
@@ -20,13 +20,17 @@ import Header from '../../components/Header';
 import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 import {clearLocalStorege} from '../../utils/token';
 import {createClient} from '../../context/actions/createClient';
-
+import {resetProfileFeed} from '../../context/actions/myProfileFeed';
+import useIsReady from '../../hooks/useIsReady';
+import { removeAllCache } from '../../utils/cache';
 const width = Dimensions.get('screen').width;
 
 const Settings = () => {
   const [clientState, dispatch] = React.useContext(Context).client;
+  const isReady = useIsReady()
   const { client } = clientState;
   const navigation = useNavigation();
+  let [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Settings',
@@ -34,6 +38,8 @@ const Settings = () => {
     });
   }, []);
   const logout = () => {
+    removeAllCache()
+    resetProfileFeed(myProfileDispatch)
     client?.disconnectUser();
     createClient(null, dispatch)
     clearLocalStorege();
@@ -47,6 +53,8 @@ const Settings = () => {
     navigation.navigate(pageName)
   }
 
+  if(!isReady) return null
+
   return (
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
@@ -55,38 +63,38 @@ const Settings = () => {
           <Header title="Settings" onPress={() => navigation.goBack()} />
         </View>
         <View style={styles.content}>
-          <TouchableNativeFeedback onPress={() => goToPage('BlockScreen')} >
+          <TouchableOpacity onPress={() => goToPage('BlockScreen')} >
             <View style={styles.card}>
               <Text style={styles.textCard}>Blocked list</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={() => navigation.navigate('TermsAndCondition')}>
             <View style={styles.card}>
               <Text style={styles.textCard}>Terms and Condition</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={() => navigation.navigate('PrivacyPolicies')}>
             <View style={styles.card}>
               <Text style={styles.textCard}>Privacy Policy</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback>
+          </TouchableOpacity>
+          <TouchableOpacity>
             <View style={styles.card}>
               <Text style={styles.textCard}>Help Center</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback onPress={logout}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={logout}>
             <View style={styles.card}>
               <Text style={styles.textCard}>Logout</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
-          </TouchableNativeFeedback>
+          </TouchableOpacity>
         </View>
         <View style={styles.footer}>
           <Text
@@ -161,4 +169,4 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 });
-export default Settings;
+export default React.memo(Settings);

@@ -151,4 +151,4 @@ DomainList.defaultProps = {
   onPressBody: () => null
 }
 
-export default DomainList
+export default React.memo (DomainList)

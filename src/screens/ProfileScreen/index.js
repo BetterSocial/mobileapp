@@ -3,6 +3,7 @@ import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   LogBox,
@@ -61,10 +62,14 @@ import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import GlobalButton from '../../components/Button/GlobalButton';
 import {debounce} from 'lodash'
+import useIsReady from '../../hooks/useIsReady';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { PROFILE_CACHE } from '../../utils/cache/constant';
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
 
 const ProfileScreen = ({ route }) => {
+  const isReady = useIsReady()
   const navigation = useNavigation();
   const bottomSheetNameRef = React.useRef();
   const bottomSheetBioRef = React.useRef();
@@ -99,7 +104,6 @@ const ProfileScreen = ({ route }) => {
 
   const [yourselfId, setYourselfId] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
 
@@ -110,9 +114,7 @@ const ProfileScreen = ({ route }) => {
 
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    fetchMyProfile(true);
     getMyFeeds();
-
     getAccessToken().then((val) => {
       setTokenJwt(val);
     });
@@ -136,30 +138,44 @@ const ProfileScreen = ({ route }) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    getSpecificCache(PROFILE_CACHE, (res) => {
+      console.log(res, 'manak')
+      if(!res) {
+        fetchMyProfile()
+      } else {
+        saveProfileState(res)
+      }
+    })
+  }, [])
+
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
-      fetchMyProfile(true);
       getMyFeeds();
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, []);
 
-  const fetchMyProfile = async (withLoading) => {
+  const fetchMyProfile = async () => {
     const id = await getUserId();
     if (id) {
       setUserId(id);
-      withLoading ? setIsLoading(true) : null;
       const result = await getMyProfile(id);
       if (result.code === 200) {
-        setDataMain(result.data);
-        setDataMainBio(result.data.bio)
-        setImageUrl(result.data.profile_pic_path, dispatch);
-        withLoading ? setIsLoading(false) : null;
+        saveToCache(PROFILE_CACHE, result.data)
+        saveProfileState(result.data)
       }
+      // setIsLoading(false)
     }
   };
+
+  const saveProfileState = (result) => {
+    setDataMain(result);
+    setDataMainBio(result.bio)
+    setImageUrl(result.profile_pic_path, dispatch);
+  }
 
   const getMyFeeds = async (offset = 0) => {
     console.log('getting feeds ' + offset)
@@ -174,7 +190,7 @@ const ProfileScreen = ({ route }) => {
       clonedFeeds.splice(feeds.length - 1, 0, ...data)
       setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
-
+    setLoading(false)
     setPostOffset(offset + 10)
   };
 
@@ -304,7 +320,7 @@ const ProfileScreen = ({ route }) => {
         }
         if (res.code === 200) {
           bottomSheetProfilePictureRef.current.close();
-          fetchMyProfile(false);
+          fetchMyProfile();
         }
       })
       .catch(() => {
@@ -323,7 +339,7 @@ const ProfileScreen = ({ route }) => {
         setIsLoadingRemoveImage(false);
         if (res.code === 200) {
           bottomSheetProfilePictureRef.current.close();
-          fetchMyProfile(false);
+          fetchMyProfile();
         }
       })
       .catch(() => {
@@ -471,6 +487,13 @@ const ProfileScreen = ({ route }) => {
 
   const __handleOnEndReached = () => getMyFeeds(postOffset)
 
+  const handleRefresh = () => {
+    setLoading(true)
+    getMyFeeds()
+  }
+
+  if(!isReady) return null
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -486,7 +509,10 @@ const ProfileScreen = ({ route }) => {
         <ProfileTiktokScroll
           ref={flatListScrollRef}
           data={feeds}
+          onRefresh={handleRefresh}
+          refreshing={loading}
           onScroll={handleScroll}
+          ListFooterComponent={<ActivityIndicator />}
           onEndReach={__handleOnEndReached}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {

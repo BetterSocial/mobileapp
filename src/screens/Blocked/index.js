@@ -7,7 +7,7 @@ import BlockedDomainList from './elements/DomainScreen';
 import BlockedTopicList from './elements/TopicScreen';
 import {showHeaderProfile} from '../../context/actions/setMyProfileAction'
 import {Context} from '../../context';
-
+import useIsReady from '../../hooks/useIsReady';
 const styles = StyleSheet.create({
     containerTab: {
         flex: 1
@@ -21,7 +21,7 @@ const Blocked = (props) => {
     const TAB_BLOCKED_TOPIC = 'tabBlockedTopic'
     const Tabs = createMaterialTopTabNavigator();
     const [, dispatchNavbar] = React.useContext(Context).profile
-
+    const isReady = useIsReady()
     const myTabbar = (tabbarProps) => (
         <Tabbar {...tabbarProps} />
     )
@@ -34,6 +34,8 @@ const Blocked = (props) => {
             showHeaderProfile(false, dispatchNavbar)
         })
     }, [])
+
+    if(!isReady) return null
 
     return (
         <View style={styles.containerTab} >

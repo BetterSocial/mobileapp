@@ -75,4 +75,4 @@ let styles = StyleSheet.create({
     },
 })
 
-export default FollowInfoRow
+export default React.memo (FollowInfoRow)

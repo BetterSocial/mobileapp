@@ -17,6 +17,8 @@ import RootStack from './src/navigations/root-stack';
 import Store from './src/context/Store';
 import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
 import { Platform } from 'react-native';
+import { enableScreens } from 'react-native-screens';
+enableScreens(false);
 
 const App = () => {
   const { bottom } = useSafeAreaInsets();
