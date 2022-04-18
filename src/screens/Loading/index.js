@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {ActivityIndicator, Modal, StyleSheet, View} from 'react-native';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import {COLORS} from '../../utils/theme';
 
 const Loading = ({visible}) => {
@@ -14,7 +15,7 @@ const Loading = ({visible}) => {
   );
 };
 
-export default Loading;
+export default withInteractionsManaged (React.memo (Loading));
 
 const styles = StyleSheet.create({
   container: {
