@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 });
-export default BottomSheetBio;
+export default React.memo (BottomSheetBio);

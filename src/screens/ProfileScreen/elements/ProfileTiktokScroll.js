@@ -86,4 +86,4 @@ ProfileTiktokScroll.defaultProps = {
   stickyHeaderIndices: undefined,
 };
 
-export default ProfileTiktokScroll;
+export default React.memo (ProfileTiktokScroll);

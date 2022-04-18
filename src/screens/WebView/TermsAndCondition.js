@@ -38,7 +38,7 @@ const TermsAndCondition = () => {
   );
 };
 
-export default TermsAndCondition;
+export default React.memo (TermsAndCondition);
 
 const styles = StyleSheet.create({
   container: {

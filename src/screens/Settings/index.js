@@ -169,4 +169,4 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 });
-export default Settings;
+export default React.memo(Settings);

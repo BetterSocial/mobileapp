@@ -21,12 +21,12 @@ const Btn = (props) => {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#00ADB5',
-    paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
     flexDirection: 'row',
-    height: 48,
+    height: 50,
     justifyContent: 'center',
+    alignItems:'center'
   },
   buttonText: {
     color: '#FFFFFF',

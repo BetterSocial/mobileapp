@@ -7,7 +7,7 @@ export const saveToCache = (cacheKey, jsonData) => {
       if (result && typeof result === 'string') {
         let parseResult = JSON.parse(result);
         parseResult = { ...parseResult, [cacheKey]: jsonData };
-        AsyncStorage.setItem(CACHE_NAME, parseResult);
+        AsyncStorage.setItem(CACHE_NAME, JSON.stringify(parseResult));
       } else {
         const dataSave = {
           [cacheKey]: jsonData,

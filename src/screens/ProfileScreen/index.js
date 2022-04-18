@@ -3,6 +3,7 @@ import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   LogBox,
@@ -511,6 +512,7 @@ const ProfileScreen = ({ route }) => {
           onRefresh={handleRefresh}
           refreshing={loading}
           onScroll={handleScroll}
+          ListFooterComponent={<ActivityIndicator />}
           onEndReach={__handleOnEndReached}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {
