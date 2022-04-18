@@ -136,7 +136,7 @@ function FollowingScreen(props) {
   );
 }
 
-export default withInteractionsManaged(FollowingScreen)
+export default withInteractionsManaged (FollowingScreen)
 
 const S = StyleSheet.create({
   container: {

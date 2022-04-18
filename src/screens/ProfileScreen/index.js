@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Dimensions,
   Image,
+  InteractionManager,
   LogBox,
   SafeAreaView,
   ScrollView,
@@ -141,7 +142,6 @@ const ProfileScreen = ({ route }) => {
 
   React.useEffect(() => {
     getSpecificCache(PROFILE_CACHE, (res) => {
-      console.log(res, 'manak')
       if(!res) {
         fetchMyProfile()
       } else {
@@ -229,9 +229,17 @@ const ProfileScreen = ({ route }) => {
     });
   };
 
-  const changeImage = () => {
+  const openImageBs = debounce(() => {
     bottomSheetProfilePictureRef.current.open();
-  };
+  }, 350)
+
+  const closeImageBs = debounce(() => {
+    bottomSheetProfilePictureRef.current.close();
+  }, 350)
+
+  const changeImage = () => {
+    openImageBs()
+  }
 
   const handleSave = async () => {
     setIsChangeRealName(true);
@@ -294,7 +302,7 @@ const ProfileScreen = ({ route }) => {
   };
 
   const onViewProfilePicture = () => {
-    bottomSheetProfilePictureRef.current.close();
+    closeImageBs()
     navigation.push('ImageViewer', {
       title: dataMain.username,
       images: [{url: dataMain.profile_pic_path}],
@@ -320,7 +328,7 @@ const ProfileScreen = ({ route }) => {
           setIsLoadingUpdateImageCamera(false);
         }
         if (res.code === 200) {
-          bottomSheetProfilePictureRef.current.close();
+          closeImageBs()
           fetchMyProfile();
         }
       })
@@ -339,7 +347,7 @@ const ProfileScreen = ({ route }) => {
       .then((res) => {
         setIsLoadingRemoveImage(false);
         if (res.code === 200) {
-          bottomSheetProfilePictureRef.current.close();
+          closeImageBs()
           fetchMyProfile();
         }
       })
@@ -362,7 +370,7 @@ const ProfileScreen = ({ route }) => {
   const debounceModalOpen = debounce(() => {
     bottomSheetBioRef.current.open();
 
-  }, 500)
+  }, 350)
 
   const debounceModalClose = debounce(() => {
     bottomSheetBioRef.current.close();

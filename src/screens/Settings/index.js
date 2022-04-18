@@ -52,6 +52,7 @@ const Settings = () => {
     navigation.navigate(pageName)
   }
 
+
   return (
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
@@ -166,4 +167,4 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 });
-export default withInteractionsManaged(React.memo(Settings));
+export default withInteractionsManaged (React.memo(Settings));

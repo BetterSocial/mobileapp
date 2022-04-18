@@ -44,7 +44,6 @@ import {
 import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = React.useContext(Context).users;
@@ -292,7 +291,7 @@ const SignIn = () => {
   );
 };
 
-export default withInteractionsManaged (SignIn);
+export default SignIn;
 
 const S = StyleSheet.create({
   container: {

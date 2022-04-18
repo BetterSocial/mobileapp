@@ -15,35 +15,42 @@ import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getFollowing, setFollow, setUnFollow } from '../../service/profile';
 import { getUserId } from '../../utils/users';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const width = Dimensions.get('screen').width;
 
 const Followings = () => {
 
   const navigation = useNavigation();
   const route = useRoute();
-  const [user_id, setUserId] = React.useState('');
-  const [username, setUsername] = React.useState('');
+  const [user_id, setUserId] = React.useState(null);
+  const [username, setUsername] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [dataFollowing, setDataFollowing] = React.useState([]);
 
   const { params } = route;
 
   React.useEffect(() => {
-    setUserId(params.user_id);
-    setUsername(params.username);
-    fetchFollowing(true);
+    if(params.user_id) {
+      setUserId(params.user_id);
+      setUsername(params.username);
+    }
+
   }, [params.user_id]);
+
+  React.useEffect(() => {
+    if(user_id) {
+      fetchFollowing(true);
+    }
+  }, [user_id])
 
   const fetchFollowing = async (withLoading) => {
     withLoading ? setIsLoading(true) : null;
-    const userId = await getUserId();
-    const result = await getFollowing(userId);
+    // const userId = await getUserId();
+    const result = await getFollowing(user_id);
     if (result.code === 200) {
-      withLoading ? setIsLoading(false) : null;
       const newData = result.data.map((data) => ({ ...data, name: data.user.username, image: data.user.profile_pic_path, description: null }))
-      // console.log('newData')
-      // console.log(newData)
       setDataFollowing(newData);
+      withLoading ? setIsLoading(false) : null;
       navigation.setOptions({
         title: `Users (${newData.length})`,
       });
@@ -73,7 +80,6 @@ const Followings = () => {
     };
 
     const result = await setUnFollow(data);
-    console.log('handle unfollow: ', result);
   };
 
   const handleSetFollow = async (index) => {
@@ -99,25 +105,24 @@ const Followings = () => {
 
   return (
     <View style={styles.container}>
-      {dataFollowing.length > 0 ? (
-        <View style={styles.content}>
+             <View style={styles.content}>
           <FlatList
             data={dataFollowing}
             renderItem={renderItem}
             keyExtractor={(item) => item.follow_action_id}
             refreshing={isLoading}
+            contentContainerStyle={{flex: 1}}
             onRefresh={fetchFollowing}
+            ListEmptyComponent={isLoading ? null : <View style={styles.nousercontent}>
+            <Text style={styles.nousertext}>
+             You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.
+            </Text>
+          </View>}
+          
           />
+ 
         </View>
-      ) : (<View style={styles.nousercontent}>
-        <Text style={styles.nousertext}>
-          {
-            isLoading ? "" : 'You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.'
-          }
-        </Text>
-      </View>
-      )}
-      <Loading visible={isLoading} />
+      {/* <Loading visible={isLoading} /> */}
     </View>
   );
 };
@@ -171,10 +176,11 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'column',
+    flex: 1
     // paddingBottom: 150,
   },
   nousercontent: {
-    flexDirection: 'column',
+    // flexDirection: 'column',
     flex: 1,
     justifyContent: 'center',
   },
@@ -263,4 +269,4 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
 });
-export default Followings;
+export default (Followings);
