@@ -15,11 +15,10 @@ import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getFollowing, setFollow, setUnFollow } from '../../service/profile';
 import { getUserId } from '../../utils/users';
-import useIsReady from '../../hooks/useIsReady';
 const width = Dimensions.get('screen').width;
 
 const Followings = () => {
-  const isReady = useIsReady()
+
   const navigation = useNavigation();
   const route = useRoute();
   const [user_id, setUserId] = React.useState('');
@@ -97,7 +96,6 @@ const Followings = () => {
     );
   };
 
-  if(!isReady) return null
 
   return (
     <View style={styles.container}>

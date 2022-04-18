@@ -65,6 +65,7 @@ import {debounce} from 'lodash'
 import useIsReady from '../../hooks/useIsReady';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
 
@@ -693,4 +694,4 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   }
 });
-export default ProfileScreen;
+export default withInteractionsManaged (ProfileScreen);
