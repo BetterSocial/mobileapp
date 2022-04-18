@@ -22,6 +22,7 @@ import {clearLocalStorege} from '../../utils/token';
 import {createClient} from '../../context/actions/createClient';
 import {resetProfileFeed} from '../../context/actions/myProfileFeed';
 import { removeAllCache } from '../../utils/cache';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const width = Dimensions.get('screen').width;
 
 const Settings = () => {
@@ -166,4 +167,4 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 });
-export default React.memo(Settings);
+export default withInteractionsManaged (React.memo(Settings));

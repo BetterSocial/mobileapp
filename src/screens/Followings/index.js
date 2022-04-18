@@ -15,6 +15,7 @@ import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getFollowing, setFollow, setUnFollow } from '../../service/profile';
 import { getUserId } from '../../utils/users';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const width = Dimensions.get('screen').width;
 
 const Followings = () => {
@@ -117,7 +118,7 @@ const Followings = () => {
         </Text>
       </View>
       )}
-      {/* <Loading visible={isLoading} /> */}
+      <Loading visible={isLoading} />
     </View>
   );
 };
@@ -263,4 +264,4 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
 });
-export default Followings;
+export default withInteractionsManaged (Followings);
