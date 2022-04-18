@@ -38,7 +38,7 @@ const PrivacyPolicies = () => {
   );
 };
 
-export default withInteractionsManaged (React.memo (PrivacyPolicies));
+export default React.memo (PrivacyPolicies);
 
 const styles = StyleSheet.create({
   container: {

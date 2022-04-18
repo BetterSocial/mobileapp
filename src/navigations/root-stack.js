@@ -53,6 +53,7 @@ import WhotoFollow from '../screens/WhotoFollow';
 import { colors } from '../utils/colors';
 import { createStackNavigator } from '@react-navigation/stack';
 import { fonts } from '../utils/fonts';
+import { withInteractionsManaged } from '../components/WithInteractionManaged';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
@@ -304,7 +305,7 @@ const RootStact = () => {
   );
 };
 
-export default RootStact;
+export default withInteractionsManaged (RootStact);
 const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.white,

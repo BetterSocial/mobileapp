@@ -11,7 +11,6 @@ import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
 import {colors} from '../../utils/colors';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {fonts} from '../../utils/fonts';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 function FollowingScreen(props) {
   const {navigation} = props
   const [, dispatchNavbar] = React.useContext(Context).profile
@@ -136,7 +135,7 @@ function FollowingScreen(props) {
   );
 }
 
-export default withInteractionsManaged(FollowingScreen)
+export default FollowingScreen
 
 const S = StyleSheet.create({
   container: {

@@ -22,7 +22,6 @@ import {clearLocalStorege} from '../../utils/token';
 import {createClient} from '../../context/actions/createClient';
 import {resetProfileFeed} from '../../context/actions/myProfileFeed';
 import { removeAllCache } from '../../utils/cache';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const width = Dimensions.get('screen').width;
 
 const Settings = () => {
@@ -51,6 +50,7 @@ const Settings = () => {
   const goToPage = (pageName) => {
     navigation.navigate(pageName)
   }
+
 
   return (
     <>
@@ -166,4 +166,4 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 });
-export default withInteractionsManaged(React.memo(Settings));
+export default React.memo(Settings);

@@ -8,7 +8,6 @@ import BlockedTopicList from './elements/TopicScreen';
 import {showHeaderProfile} from '../../context/actions/setMyProfileAction'
 import {Context} from '../../context';
 import useIsReady from '../../hooks/useIsReady';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const styles = StyleSheet.create({
     containerTab: {
         flex: 1
@@ -72,4 +71,4 @@ const Blocked = (props) => {
 }
 
 
-export default withInteractionsManaged (Blocked)
+export default Blocked

@@ -117,7 +117,7 @@ const Followings = () => {
         </Text>
       </View>
       )}
-      <Loading visible={isLoading} />
+      {/* <Loading visible={isLoading} /> */}
     </View>
   );
 };
