@@ -144,7 +144,7 @@ const SignIn = () => {
     <SafeAreaView style={S.container}>
       <StatusBar translucent={false} />
       <View style={S.containerSlideShow}>
-        {/* <DevDummyLogin /> */}
+        <DevDummyLogin />
         <SlideShow onChangeNewIndex={handleSlideShow} handleLogin={handleLogin}/>
       </View>
     </SafeAreaView>
