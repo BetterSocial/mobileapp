@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View, BackHandler} from 'react-native';
 import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction'
 
 import Animated from 'react-native-reanimated';
@@ -89,6 +89,19 @@ function FollowingScreen(props) {
     }
   }
 
+  const settingBackhandleAndroid = () => {
+    BackHandler.addEventListener('hardwareBackPress', backPress)
+  }
+
+  const removeBackHandleAndroid = () => {
+    BackHandler.removeEventListener('hardwareBackPress', backPress)
+  }
+
+  const backPress = () => {
+    navigation.goBack()
+    return true
+  }
+
   React.useEffect(() => {
     navigation.addListener('focus', () => {
       showHeaderProfile(true, dispatchNavbar)
@@ -96,6 +109,10 @@ function FollowingScreen(props) {
     navigation.addListener('blur', () => {
       showHeaderProfile(false, dispatchNavbar)
     })
+    settingBackhandleAndroid()
+    return () => {
+      removeBackHandleAndroid()
+    }
   }, [])
 
   return (

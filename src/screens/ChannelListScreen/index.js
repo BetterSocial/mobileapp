@@ -39,6 +39,7 @@ import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const theme = {
   messageSimple: {
@@ -209,4 +210,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ChannelListScreen;
+export default withInteractionsManaged (ChannelListScreen);

@@ -502,16 +502,9 @@ const ProfileScreen = ({ route }) => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar translucent={false} barStyle="dark-content" />
       {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
-        <ProfileHeader onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username}/>  
-        {isLoading ? (
-          <View style={styles.containerLoading}>
-            <LoadingWithoutModal />
-          </View>
-        ) : (
-          <></>
-        )}
+        <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username}/>  
         <ProfileTiktokScroll
           ref={flatListScrollRef}
           data={feeds}
