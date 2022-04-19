@@ -141,6 +141,7 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
       data={data}
       scroll
       renderItem={({ item, index }) => <SlideShowItem index={index}
+        key={`slideshowitem-${index}`}
         count={data.length}
         handleLogin={handleLogin}
         illustration={item.illustrations}
@@ -151,7 +152,7 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
       }
       onChangeIndex={handleChangeIndex}
       // viewabilityConfig={{
-      //   itemVisiblePercentThreshold: 50,
+      //   itemVisiblePercentThreshold: 10,
       //   minimumViewTime: 10
       // }}
     />
