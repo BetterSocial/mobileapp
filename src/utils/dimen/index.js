@@ -10,25 +10,16 @@ console.log(height);
  * @param {int} size - Size to be normalized according to screen size
  * @returns {int} normalized size
  */
-const normalizeDimen = (size) => {
-  const baseReferenceScreenWidth = 375;
-  return size * (width / baseReferenceScreenWidth);
-};
+const normalizeDimen = (size, baseReferenceScreenWidth = 375) => size * (width / baseReferenceScreenWidth);
 
 /**
  *
  * @param {int} size - Size to be normalized according to screen size
  * @returns {int} normalized size
  */
-const normalizeDimenHeight = (size) => {
-  const baseReferenceScreenWidth = 833;
-  return size * (height / baseReferenceScreenWidth);
-};
+const normalizeDimenHeight = (size, baseReferenceScreenWidth = 833) => size * (height / baseReferenceScreenWidth);
 
-const normalizeDimenByWidth = (size) => {
-  const baseReferenceScreenWidth = 375;
-  return size * (width / baseReferenceScreenWidth);
-};
+const normalizeDimenByWidth = (size, baseReferenceScreenWidth = 375) => size * (width / baseReferenceScreenWidth);
 
 const baseSize = {
   BASE_NEXT_CONTENT_PREVIEW_HEIGHT: 164,
@@ -52,6 +43,8 @@ const baseSize = {
 
   ONBOARDING_BOTTOM_OVERLAY_CONTAINER: 288,
   ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE: 62,
+  ONBOARDING_BETTER_LOGO_HEIGHT: 213.94,
+  ONBOARDING_BETTER_LOGO_WIDTH: 156,
 };
 
 const size = {
@@ -81,6 +74,8 @@ const size = {
 
   ONBOARDING_BOTTOM_OVERLAY_CONTAINER: normalizeDimen(baseSize.ONBOARDING_BOTTOM_OVERLAY_CONTAINER),
   ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE: normalizeDimen(baseSize.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE),
+  ONBOARDING_BETTER_LOGO_HEIGHT: normalizeDimenHeight(baseSize.ONBOARDING_BETTER_LOGO_HEIGHT, 837.68),
+  ONBOARDING_BETTER_LOGO_WIDTH: normalizeDimenByWidth(baseSize.ONBOARDING_BETTER_LOGO_WIDTH),
 };
 
 console.log(size.TOPIC_CURRENT_ITEM_HEIGHT);

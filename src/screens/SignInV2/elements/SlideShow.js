@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
-import FgOnboarding1 from '../../../assets/background/fg_onboarding_1.png';
-import FgOnboarding2 from '../../../assets/background/fg_onboarding_2.png';
-import FgOnboarding3 from '../../../assets/background/fg_onboarding_3.png';
-import FgOnboarding4 from '../../../assets/background/fg_onboarding_4.png';
+import FgOnboarding1 from '../../../assets/background/fg_onboarding_full_1.png';
+import FgOnboarding2 from '../../../assets/background/fg_onboarding_full_2.png';
+import FgOnboarding3 from '../../../assets/background/fg_onboarding_full_3.png';
+import FgOnboarding4 from '../../../assets/background/fg_onboarding_full_4.png';
 import { COLORS } from '../../../utils/theme';
 import { SlideShowItem } from './SlideShowItem';
 import { fonts, normalizeFontSize } from '../../../utils/fonts';
