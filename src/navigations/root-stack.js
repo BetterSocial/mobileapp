@@ -1,18 +1,4 @@
 import * as React from 'react';
-
-import {
-  AddParticipant,
-  ChannelScreen,
-  ChatDetailPage,
-  ContactScreen,
-  CreateGroupScreen,
-  DetailDomainScreen,
-  DetailGroupImage,
-  GroupInfo,
-  GroupMedia,
-  GroupSetting,
-  ProfileScreen,
-} from '../screens';
 import {
   Platform,
   SafeAreaView,
@@ -20,10 +6,10 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
-import { Context } from '../context';
 import CreatePost from '../screens/CreatePost';
 import DiscoveryScreen from '../screens/DiscoveryScreen';
 import DiscoverySearch from '../screens/DiscoveryScreen/elements/Search';
@@ -44,14 +30,28 @@ import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
 import Settings from '../screens/Settings';
-import SignIn from '../screens/SignIn';
+// import SignIn from '../screens/SignIn';
+import SignIn from '../screens/SignInV2';
 import SplashScreen from '../screens/SplashScreen';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
 import WhotoFollow from '../screens/WhotoFollow';
+import {
+  AddParticipant,
+  ChannelScreen,
+  ChatDetailPage,
+  ContactScreen,
+  CreateGroupScreen,
+  DetailDomainScreen,
+  DetailGroupImage,
+  GroupInfo,
+  GroupMedia,
+  GroupSetting,
+  ProfileScreen,
+} from '../screens';
+import { Context } from '../context';
 import { colors } from '../utils/colors';
-import { createStackNavigator } from '@react-navigation/stack';
 import { fonts } from '../utils/fonts';
 
 const Stack = createStackNavigator();
