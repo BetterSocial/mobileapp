@@ -2,7 +2,7 @@
 
 // Sign in
 const signInScreenHumanIdBrand = 'humanID';
-const signInScreenHumanIdDetail = 'is an independent non-profit guaranteeing your privacy and anonymity. BetterSocial will receive absolutely zero personal information.';
+const signInScreenHumanIdDetail = 'is an independent non-profit guaranteeing\n your privacy. BetterSocial will receive absolutely zero\n personal information.';
 
 // Onboarding - Choose Username
 const onboardingChooseUsernameHeadline = 'Choose your username';

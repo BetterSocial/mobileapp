@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { StackActions } from '@react-navigation/native';
 import { colors } from 'react-native-swiper-flatlist/src/themes';
+import { debounce } from 'lodash'
 import {
   logIn,
   onCancel,
@@ -23,13 +24,13 @@ import {
   onSuccess,
 } from '@human-id/react-native-humanid';
 import { useNavigation } from '@react-navigation/core';
-import {debounce} from 'lodash'
 
 import ButtonSign from '../../assets/icon-svg/button_sign.svg';
 import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
 import StringConstant from '../../utils/string/StringConstant';
+import useIsReady from '../../hooks/useIsReady';
 import { Context } from '../../context';
 import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
 import { checkToken } from '../../service/outh';
@@ -45,6 +46,7 @@ import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = React.useContext(Context).users;
@@ -87,7 +89,7 @@ const SignIn = () => {
             console.log(appUserId, 'resak')
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
-            // verifyUser('1G1H-1TUHI-7U9H7-572G2')
+              // verifyUser('1G1H-1TUHI-7U9H7-572G2')
               .then((response) => {
                 // SimpleToast.show(`on verify res` + JSON.stringify(response.data))
                 // console.log('on verify res')
@@ -152,7 +154,7 @@ const SignIn = () => {
     let data = { appUserId, countryCode: 'ID' }
     setDataHumenId(data, dispatch);
     verifyUser(appUserId)
-    // verifyUser('1G1H-1TUHI-7U9H7-572G2')
+      // verifyUser('1G1H-1TUHI-7U9H7-572G2')
       .then(async (response) => {
         setLoading(false);
         // SimpleToast.show(`on verify res` + JSON.stringify(response))
@@ -187,107 +189,106 @@ const SignIn = () => {
     debounceShowComponent()
   }, [])
 
-
   return (
     <SafeAreaView style={S.container}>
       <StatusBar translucent={false} />
-       <React.Fragment>
-      {ENABLE_DEV_ONLY_FEATURE ? (
-        <View style={S.devTrialView}>
-          <Button
-            title="Dev Dummy Onboarding"
-            onPress={() => {          
-              setDataHumenId('ASDF-GHJK-QWER-1234', dispatch)
-              navigation.navigate('ChooseUsername')
-            }}
-          />
-          <Button
-            title="Dev Dummy Login"
-            onPress={() => dummyLoginRbSheetRef.current.open()}
-          />
-        </View>
-      ) : (
-        <></>
-      )}
-      <View style={S.containerSlideShow}>
-        <SlideShow onChangeNewIndex={handleSlideShow} />
-      </View>
-      <View style={S.containerBtnLogin}>
-        {isCompleteSliding ? (
-          <TouchableOpacity onPress={() => handleLogin()} style={S.btnSign}>
-            <ButtonSign />
-          </TouchableOpacity>
+      <React.Fragment>
+        {ENABLE_DEV_ONLY_FEATURE ? (
+          <View style={S.devTrialView}>
+            <Button
+              title="Dev Dummy Onboarding"
+              onPress={() => {
+                setDataHumenId('ASDF-GHJK-QWER-1234', dispatch)
+                navigation.navigate('ChooseUsername')
+              }}
+            />
+            <Button
+              title="Dev Dummy Login"
+              onPress={() => dummyLoginRbSheetRef.current.open()}
+            />
+          </View>
         ) : (
-          <ButtonSignDisabled />
+          <></>
         )}
-        <Text style={S.desc}>
-          <Text onPress={goToHumanIdWeb} style={S.humanID}>
-            {StringConstant.signInScreenHumanIdBrand}
+        <View style={S.containerSlideShow}>
+          <SlideShow onChangeNewIndex={handleSlideShow} />
+        </View>
+        <View style={S.containerBtnLogin}>
+          {isCompleteSliding ? (
+            <TouchableOpacity onPress={() => handleLogin()} style={S.btnSign}>
+              <ButtonSign />
+            </TouchableOpacity>
+          ) : (
+            <ButtonSignDisabled />
+          )}
+          <Text style={S.desc}>
+            <Text onPress={goToHumanIdWeb} style={S.humanID}>
+              {StringConstant.signInScreenHumanIdBrand}
+            </Text>
+            {` ${StringConstant.signInScreenHumanIdDetail}`}
           </Text>
-          {` ${StringConstant.signInScreenHumanIdDetail}`}
-        </Text>
-      </View>
-      <Loading visible={loading} />
-      {ENABLE_DEV_ONLY_FEATURE ? (
-        <RBSheet height={heightBs} ref={dummyLoginRbSheetRef}>
-          <Text>Choose an account you wish to login</Text>
-          <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CP')}>
-            <View style={S.divider} />
-            <Text style={S.dummyAccountItem}>
-              fajarism : HQEGNQCHA8J1OIX4G2CP
-            </Text>
-            <View style={S.divider} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CQ')}>
-            <Text style={S.dummyAccountItem}>
-              Fajar_alter : HQEGNQCHA8J1OIX4G2CQ
-            </Text>
-            <View style={S.divider} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CR')}>
-            <Text style={S.dummyAccountItem}>
-              Fajar_alter2 : HQEGNQCHA8J1OIX4G2CR
-            </Text>
-            <View style={S.divider} />
-          </TouchableOpacity>
-          {/* <TouchableOpacity onPress={() => dummyLogin('KVL1JKD8VG6KMHUZ0RY8')}> */}
-          <TouchableOpacity onPress={() => dummyLogin('KVL1JKD8VG6KMHUZ0RY5')}>
-            <Text style={S.dummyAccountItem}>
-              bas_v1-4 : KVL1JKD8VG6KMHUZ0RY5
-            </Text>
-            <View style={S.divider} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('1G1H-1TUHI-7U9H7-572G21')}>
-            <Text style={S.dummyAccountItem}>
-              usupsuparma : P19FGPQGMSZ5VSHA0YSQ
-            </Text>
-            <View style={S.divider} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CQS')}>
-            <Text style={S.dummyAccountItem}>
-              busanid : TVGBYD1BI9YMXMAA6CQS
-            </Text>
-            <View style={S.divider} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('GWJ47ZY9PQNQO6MFX2HC')}>
-            <Text style={S.dummyAccountItem}>
-              agitfirst : GWJ47ZY9PQNQO6MFX2HC
-            </Text>
-            <View style={S.divider} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CU53')}>
-            <Text style={S.dummyAccountItem}>
-              usupsu: TVGBYD1BI9YMXMAA6CU53
-            </Text>
-            <View style={S.divider} />
-          </TouchableOpacity>
-        </RBSheet>
-      ) : (
-        <></>
-      )} 
-      </React.Fragment> 
-      
-     
+        </View>
+        <Loading visible={loading} />
+        {ENABLE_DEV_ONLY_FEATURE ? (
+          <RBSheet height={heightBs} ref={dummyLoginRbSheetRef}>
+            <Text>Choose an account you wish to login</Text>
+            <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CP')}>
+              <View style={S.divider} />
+              <Text style={S.dummyAccountItem}>
+                fajarism : HQEGNQCHA8J1OIX4G2CP
+              </Text>
+              <View style={S.divider} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CQ')}>
+              <Text style={S.dummyAccountItem}>
+                Fajar_alter : HQEGNQCHA8J1OIX4G2CQ
+              </Text>
+              <View style={S.divider} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CR')}>
+              <Text style={S.dummyAccountItem}>
+                Fajar_alter2 : HQEGNQCHA8J1OIX4G2CR
+              </Text>
+              <View style={S.divider} />
+            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={() => dummyLogin('KVL1JKD8VG6KMHUZ0RY8')}> */}
+            <TouchableOpacity onPress={() => dummyLogin('KVL1JKD8VG6KMHUZ0RY5')}>
+              <Text style={S.dummyAccountItem}>
+                bas_v1-4 : KVL1JKD8VG6KMHUZ0RY5
+              </Text>
+              <View style={S.divider} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => dummyLogin('1G1H-1TUHI-7U9H7-572G21')}>
+              <Text style={S.dummyAccountItem}>
+                usupsuparma : P19FGPQGMSZ5VSHA0YSQ
+              </Text>
+              <View style={S.divider} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CQS')}>
+              <Text style={S.dummyAccountItem}>
+                busanid : TVGBYD1BI9YMXMAA6CQS
+              </Text>
+              <View style={S.divider} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => dummyLogin('GWJ47ZY9PQNQO6MFX2HC')}>
+              <Text style={S.dummyAccountItem}>
+                agitfirst : GWJ47ZY9PQNQO6MFX2HC
+              </Text>
+              <View style={S.divider} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CU53')}>
+              <Text style={S.dummyAccountItem}>
+                usupsu: TVGBYD1BI9YMXMAA6CU53
+              </Text>
+              <View style={S.divider} />
+            </TouchableOpacity>
+          </RBSheet>
+        ) : (
+          <></>
+        )}
+      </React.Fragment>
+
+
     </SafeAreaView>
   );
 };
