@@ -4,30 +4,34 @@ import {Image, StyleSheet} from 'react-native';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 
-let ProfileIcon = ({uri}) => {
-  if (uri) {
-    return (
-      <Image
-        source={{
-          uri: `${uri}`,
-        }}
-        width={19}
-        height={19}
-        style={styles.borderCircleImage}
-      />
-    );
-  } else {
-    return (
-      <Image
-        source={{
-          uri: `${DEFAULT_PROFILE_PIC_PATH}`,
-        }}
-        width={19}
-        height={19}
-        style={styles.borderCircleImage}
-      />
-    );
+let ProfileIcon = ({uri, loadingUser}) => {
+  if(!loadingUser) {
+    if (uri) {
+      return (
+        <Image
+          source={{
+            uri: `${uri}`,
+          }}
+          width={19}
+          height={19}
+          style={styles.borderCircleImage}
+        />
+      );
+    } else {
+      return (
+        <Image
+          source={{
+            uri: `${DEFAULT_PROFILE_PIC_PATH}`,
+          }}
+          width={19}
+          height={19}
+          style={styles.borderCircleImage}
+        />
+      );
+    }
   }
+  return null
+ 
 };
 
 let styles = StyleSheet.create({

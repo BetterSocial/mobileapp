@@ -29,6 +29,7 @@ import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { getUserId } from '../../utils/users';
 import { setDomainData, setProfileDomain, setSelectedLastDomain } from '../../context/actions/domainAction';
 import { unblokDomain } from '../../service/blocking';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const { height, width } = Dimensions.get('screen');
 let headerHeight = 0;
@@ -392,4 +393,4 @@ const styles = StyleSheet.create({
   containerLoading: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
 
-export default DomainScreen;
+export default withInteractionsManaged (DomainScreen);

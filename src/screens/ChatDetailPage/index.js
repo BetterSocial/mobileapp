@@ -25,6 +25,7 @@ import { fonts } from '../../utils/fonts';
 import { getUserId } from '../../utils/token';
 import { setAsset, setParticipants } from '../../context/actions/groupChat';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const streami18n = new Streami18n({
   language: 'en',
@@ -174,7 +175,7 @@ const CustomDateHeader = () => {
   return null;
 };
 
-export default ChatDetailPage;
+export default withInteractionsManaged (ChatDetailPage);
 const styles = StyleSheet.create({
   date: {
     backgroundColor: COLORS.blackgrey,

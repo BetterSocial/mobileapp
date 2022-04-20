@@ -63,7 +63,6 @@ import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import GlobalButton from '../../components/Button/GlobalButton';
 import {debounce} from 'lodash'
-import useIsReady from '../../hooks/useIsReady';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
@@ -71,7 +70,6 @@ const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
 
 const ProfileScreen = ({ route }) => {
-  const isReady = useIsReady()
   const navigation = useNavigation();
   const bottomSheetNameRef = React.useRef();
   const bottomSheetBioRef = React.useRef();
@@ -103,7 +101,7 @@ const ProfileScreen = ({ route }) => {
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
-
+  const [loadingContainer, setLoadingContainer] = React.useState(true)
   const [yourselfId, setYourselfId] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const refBlockComponent = React.useRef();
@@ -168,7 +166,7 @@ const ProfileScreen = ({ route }) => {
         saveToCache(PROFILE_CACHE, result.data)
         saveProfileState(result.data)
       }
-      // setIsLoading(false)
+      setLoadingContainer(false)
     }
   };
 
@@ -176,6 +174,7 @@ const ProfileScreen = ({ route }) => {
     setDataMain(result);
     setDataMainBio(result.bio)
     setImageUrl(result.profile_pic_path, dispatch);
+    setLoadingContainer(false)
   }
 
   const getMyFeeds = async (offset = 0) => {
@@ -501,20 +500,11 @@ const ProfileScreen = ({ route }) => {
     getMyFeeds()
   }
 
-  if(!isReady) return null
-
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
-        <ProfileHeader onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username}/>  
-        {isLoading ? (
-          <View style={styles.containerLoading}>
-            <LoadingWithoutModal />
-          </View>
-        ) : (
-          <></>
-        )}
+      <StatusBar translucent={false} barStyle="dark-content" />
+      {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
+        <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username}/>  
         <ProfileTiktokScroll
           ref={flatListScrollRef}
           data={feeds}
@@ -609,7 +599,8 @@ const ProfileScreen = ({ route }) => {
         ) : null}
 
         <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-      </SafeAreaView>
+      </SafeAreaView> : null}
+      
     </>
   );
 };

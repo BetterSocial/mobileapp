@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import ReplyCommentComponent from '../../components/ReplyComment';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import { Context } from '../../context';
 import { setFeedByIndex } from '../../context/actions/feeds';
 
@@ -41,4 +42,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ProfileReplyComment
+export default withInteractionsManaged (ProfileReplyComment)

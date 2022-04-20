@@ -30,6 +30,7 @@ function HomeBottomTabs(props) {
   let [users, dispatch] = React.useContext(Context).users;
   let [, dispatchProfile] = React.useContext(Context).profile;
   const [unReadMessage] = React.useContext(Context).unReadMessage;
+  const [loadingUser, setLoadingUser] = React.useState(true)
   const getProfile = async () => {
     try {
       let selfUserId = await getUserId();
@@ -41,7 +42,9 @@ function HomeBottomTabs(props) {
       };
       saveToCache(PROFILE_CACHE, profile.data)
       setMyProfileAction(data, dispatchProfile);
+      setLoadingUser(false)
     } catch (e) {
+      setLoadingUser(false)
       console.log(e);
     }
   };
@@ -102,7 +105,7 @@ function HomeBottomTabs(props) {
           component={ProfileScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({focused}) => <MemoProfileIcon uri={users.photoUrl} />,
+            tabBarIcon: ({focused}) => <MemoProfileIcon loadingUser={loadingUser} uri={users.photoUrl} />,
           }}
         />
       </Tab.Navigator>
