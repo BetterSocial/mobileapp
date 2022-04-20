@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Dimensions,
   Image,
+  InteractionManager,
   LogBox,
   SafeAreaView,
   ScrollView,
@@ -62,14 +63,13 @@ import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import GlobalButton from '../../components/Button/GlobalButton';
 import {debounce} from 'lodash'
-import useIsReady from '../../hooks/useIsReady';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
 
 const ProfileScreen = ({ route }) => {
-  const isReady = useIsReady()
   const navigation = useNavigation();
   const bottomSheetNameRef = React.useRef();
   const bottomSheetBioRef = React.useRef();
@@ -101,7 +101,7 @@ const ProfileScreen = ({ route }) => {
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
   const [image, setImage] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
-
+  const [loadingContainer, setLoadingContainer] = React.useState(true)
   const [yourselfId, setYourselfId] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const refBlockComponent = React.useRef();
@@ -140,7 +140,6 @@ const ProfileScreen = ({ route }) => {
 
   React.useEffect(() => {
     getSpecificCache(PROFILE_CACHE, (res) => {
-      console.log(res, 'manak')
       if(!res) {
         fetchMyProfile()
       } else {
@@ -167,7 +166,7 @@ const ProfileScreen = ({ route }) => {
         saveToCache(PROFILE_CACHE, result.data)
         saveProfileState(result.data)
       }
-      // setIsLoading(false)
+      setLoadingContainer(false)
     }
   };
 
@@ -175,6 +174,7 @@ const ProfileScreen = ({ route }) => {
     setDataMain(result);
     setDataMainBio(result.bio)
     setImageUrl(result.profile_pic_path, dispatch);
+    setLoadingContainer(false)
   }
 
   const getMyFeeds = async (offset = 0) => {
@@ -228,9 +228,17 @@ const ProfileScreen = ({ route }) => {
     });
   };
 
-  const changeImage = () => {
+  const openImageBs = debounce(() => {
     bottomSheetProfilePictureRef.current.open();
-  };
+  }, 350)
+
+  const closeImageBs = debounce(() => {
+    bottomSheetProfilePictureRef.current.close();
+  }, 350)
+
+  const changeImage = () => {
+    openImageBs()
+  }
 
   const handleSave = async () => {
     setIsChangeRealName(true);
@@ -293,7 +301,7 @@ const ProfileScreen = ({ route }) => {
   };
 
   const onViewProfilePicture = () => {
-    bottomSheetProfilePictureRef.current.close();
+    closeImageBs()
     navigation.push('ImageViewer', {
       title: dataMain.username,
       images: [{url: dataMain.profile_pic_path}],
@@ -319,7 +327,7 @@ const ProfileScreen = ({ route }) => {
           setIsLoadingUpdateImageCamera(false);
         }
         if (res.code === 200) {
-          bottomSheetProfilePictureRef.current.close();
+          closeImageBs()
           fetchMyProfile();
         }
       })
@@ -338,7 +346,7 @@ const ProfileScreen = ({ route }) => {
       .then((res) => {
         setIsLoadingRemoveImage(false);
         if (res.code === 200) {
-          bottomSheetProfilePictureRef.current.close();
+          closeImageBs()
           fetchMyProfile();
         }
       })
@@ -361,7 +369,7 @@ const ProfileScreen = ({ route }) => {
   const debounceModalOpen = debounce(() => {
     bottomSheetBioRef.current.open();
 
-  }, 500)
+  }, 350)
 
   const debounceModalClose = debounce(() => {
     bottomSheetBioRef.current.close();
@@ -492,20 +500,11 @@ const ProfileScreen = ({ route }) => {
     getMyFeeds()
   }
 
-  if(!isReady) return null
-
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
-        <ProfileHeader onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username}/>  
-        {isLoading ? (
-          <View style={styles.containerLoading}>
-            <LoadingWithoutModal />
-          </View>
-        ) : (
-          <></>
-        )}
+      <StatusBar translucent={false} barStyle="dark-content" />
+      {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
+        <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username}/>  
         <ProfileTiktokScroll
           ref={flatListScrollRef}
           data={feeds}
@@ -600,7 +599,8 @@ const ProfileScreen = ({ route }) => {
         ) : null}
 
         <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-      </SafeAreaView>
+      </SafeAreaView> : null}
+      
     </>
   );
 };
@@ -693,4 +693,4 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   }
 });
-export default ProfileScreen;
+export default withInteractionsManaged (ProfileScreen);

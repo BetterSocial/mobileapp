@@ -45,9 +45,9 @@ import {
 import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const SignIn = () => {
-  const isReady = useIsReady()
   const navigation = useNavigation();
   const [, dispatch] = React.useContext(Context).users;
   const [loading, setLoading] = React.useState(false);
@@ -189,8 +189,6 @@ const SignIn = () => {
     debounceShowComponent()
   }, [])
 
-  if (!isReady) return null
-
   return (
     <SafeAreaView style={S.container}>
       <StatusBar translucent={false} />
@@ -295,7 +293,7 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default withInteractionsManaged (SignIn);
 
 const S = StyleSheet.create({
   container: {

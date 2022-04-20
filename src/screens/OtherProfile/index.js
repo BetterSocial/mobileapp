@@ -59,6 +59,7 @@ import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import GlobalButton from '../../components/Button/GlobalButton';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -79,7 +80,7 @@ const OtherProfile = () => {
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [other_id, setOtherId] = React.useState('');
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
   const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
@@ -826,4 +827,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-export default OtherProfile;
+export default withInteractionsManaged (OtherProfile);

@@ -4,10 +4,9 @@ import {ActivityIndicator, StyleSheet, View, SafeAreaView} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
-import useIsReady from '../../hooks/useIsReady';
 import Header from '../../components/Header';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const TermsAndCondition = () => {
-  const isReady = useIsReady()
   const navigator = useNavigation();
   React.useEffect(() => {
     analytics().logScreenView({
@@ -16,7 +15,6 @@ const TermsAndCondition = () => {
     });
   }, []);
 
-  if(!isReady) return null
 
   return (
     <View style={styles.container}>
@@ -38,7 +36,7 @@ const TermsAndCondition = () => {
   );
 };
 
-export default React.memo (TermsAndCondition);
+export default withInteractionsManaged (React.memo (TermsAndCondition))
 
 const styles = StyleSheet.create({
   container: {

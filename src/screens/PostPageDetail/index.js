@@ -8,7 +8,7 @@ import {Context} from '../../context';
 import { SOURCE_FEED_TAB, SOURCE_PDP } from '../../utils/constants';
 import { setFeedByIndex, setTimer } from '../../context/actions/feeds';
 import { viewTimePost } from '../../service/post'
-
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 const FeedsPostDetail = (props) => {
     let [feedsContext, dispatch] = React.useContext(Context).feeds
     let {index, feedId, refreshParent} = props.route.params
@@ -62,4 +62,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default FeedsPostDetail
+export default withInteractionsManaged (FeedsPostDetail)
