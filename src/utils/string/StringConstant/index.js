@@ -41,7 +41,7 @@ const createPostFailedNoMessage = 'Post messages cannot be empty.';
 const createPostFailedGeneralError = 'Failed to create new post.';
 
 // Chat Tab
-const chatTabHeaderPlaceholder = 'Search Chats';
+const chatTabHeaderPlaceholder = 'Search Users';
 const chatTabHeaderCreateChatButtonText = 'New Chat';
 
 // News Tab
