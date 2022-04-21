@@ -661,7 +661,7 @@ const CreatePost = () => {
       <StatusBar translucent={false} />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="always"
+        // keyboardShouldPersistTaps="always"
         style={{ paddingHorizontal: Platform.OS === 'ios' ? 20 : 0 }}>
         <Header title="Create a post" onPress={() => onBack()} />
         <UserProfile

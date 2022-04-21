@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>999239767957-3jv3sce57ks240h185eigbejh5g0fsem.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.999239767957-3jv3sce57ks240h185eigbejh5g0fsem</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>999239767957-4eui8rh65kplabh6u37n72mprlidevem.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAiPNgmrrM11JD67mxiiZYYe3-07Si-nkA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>999239767957</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.bettersocial</string>
+	<key>PROJECT_ID</key>
+	<string>bettersocial-2b386</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bettersocial-2b386.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:999239767957:ios:6d1035c2796e0177c4489c</string>
+</dict>
+</plist>
