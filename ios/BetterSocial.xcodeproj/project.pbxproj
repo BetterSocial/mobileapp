@@ -14,7 +14,8 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BetterSocialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BetterSocialTests.m */; };
-		4FFF956C7F6BBDCB1838E21D /* libPods-BetterSocial.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D09A2F500E874E8E280EF44 /* libPods-BetterSocial.a */; };
+		361139EB94F404F2D260A053 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA49E18835A0FD9449B9974E /* libPods-BetterSocial-BetterSocialDev.a */; };
+		4FFF956C7F6BBDCB1838E21D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		6645CE64C933DDCA8E6E47B7 /* libPods-BetterSocial-BetterSocialTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA37CB6032BCA61D70DB3536 /* libPods-BetterSocial-BetterSocialTests.a */; };
 		845147C0275632A000F1BF16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		845147C1275632B300F1BF16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -47,10 +48,10 @@
 		845C6E9A2758B16500C9F384 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCE2758A00C00C9F384 /* Poppins-Thin.ttf */; };
 		845C6E9B2758B16800C9F384 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DBF2758A00B00C9F384 /* Poppins-ThinItalic.ttf */; };
 		845C6E9C2758B16B00C9F384 /* Poppins.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD52758A00C00C9F384 /* Poppins.ttf */; };
-		8811A9E727EA9C9600DF3BF5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8811A9E627EA9C9600DF3BF5 /* GoogleService-Info.plist */; };
+		88203A2D2811FB6400199BF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88203A2C2811FB6400199BF0 /* GoogleService-Info.plist */; };
+		88203A302811FBA200199BF0 /* GoogleService-Info .plist in Resources */ = {isa = PBXBuildFile; fileRef = 88203A2E2811FB9200199BF0 /* GoogleService-Info .plist */; };
 		889CAB6227D46CD6007F5892 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		889CAB6327D46CD6007F5892 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		889CAB6527D46CD6007F5892 /* libPods-BetterSocial.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D09A2F500E874E8E280EF44 /* libPods-BetterSocial.a */; };
 		889CAB6727D46CD6007F5892 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCB2758A00B00C9F384 /* Inter-SemiBold.ttf */; };
 		889CAB6827D46CD6007F5892 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		889CAB6927D46CD6007F5892 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD32758A00C00C9F384 /* Inter-Regular.ttf */; };
@@ -81,7 +82,6 @@
 		889CAB8227D46CD6007F5892 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DC42758A00B00C9F384 /* Poppins-Medium.ttf */; };
 		889CAB8327D46CD6007F5892 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DBF2758A00B00C9F384 /* Poppins-ThinItalic.ttf */; };
 		889CAB8527D46CD6007F5892 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCA2758A00B00C9F384 /* Poppins-BoldItalic.ttf */; };
-		889CAB9927D46F9B007F5892 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 889CAB9727D46F9B007F5892 /* GoogleService-Info.plist */; };
 		DE4E62F2D30EC8D079ECAEBC /* libPods-BetterSocial-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63463C3161CE2142F3CBFE27 /* libPods-BetterSocial-tvOS.a */; };
 /* End PBXBuildFile section */
 
@@ -116,7 +116,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BetterSocial/main.m; sourceTree = "<group>"; };
 		1902BD5E168CF4982CBE7A88 /* Pods-BetterSocial-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-tvOSTests/Pods-BetterSocial-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		1AC891F9490348DCA26D996F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		1D09A2F500E874E8E280EF44 /* libPods-BetterSocial.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1CCDEA722F20DE77B533B520 /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.release.xcconfig"; sourceTree = "<group>"; };
 		24D259700A804021837D0178 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		2BAB2ECDE2FB4F9CBC368E44 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* BetterSocial-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BetterSocial-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,18 +158,20 @@
 		845C6DD72758A00C00C9F384 /* Inter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Black.ttf"; path = "../assets/fonts/Inter-Black.ttf"; sourceTree = "<group>"; };
 		845C6DD82758A00C00C9F384 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		845C6DD92758A00C00C9F384 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
-		8811A9E627EA9C9600DF3BF5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		88203A2C2811FB6400199BF0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "Development/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		88203A2E2811FB9200199BF0 /* GoogleService-Info .plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info .plist"; path = "Production/GoogleService-Info .plist"; sourceTree = SOURCE_ROOT; };
 		889CAB1B27D437C3007F5892 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		889CAB8E27D46CD6007F5892 /* BetterSocialDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterSocialDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		889CAB9727D46F9B007F5892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8BA0FC5770AA4F778663B566 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		A10C675B47ED4AB0B191600C /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		A92BC4F9EB2B23E83944021A /* Pods-BetterSocial.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial/Pods-BetterSocial.release.xcconfig"; sourceTree = "<group>"; };
 		B5BAA4CB6361443A8DC5D9D0 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		BA74824031AE4396AE9CA127 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		BFE258CE74F5AE692C8E778E /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.debug.xcconfig"; sourceTree = "<group>"; };
 		C2576214B1A0AA374756407B /* libPods-BetterSocial-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6006FE7A8A24EA9B9162F27 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		C72CBD03EB29FA72768C1581 /* Pods-BetterSocial-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-tvOS/Pods-BetterSocial-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		CA49E18835A0FD9449B9974E /* libPods-BetterSocial-BetterSocialDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-BetterSocialDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD39DC6CD0BE404FAF9761AD /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		D1F34D050FFD4FA4B200601C /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		D6650B3795AE2B310E1A56A2 /* Pods-BetterSocial.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial/Pods-BetterSocial.debug.xcconfig"; sourceTree = "<group>"; };
@@ -208,7 +210,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FFF956C7F6BBDCB1838E21D /* libPods-BetterSocial.a in Frameworks */,
+				4FFF956C7F6BBDCB1838E21D /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,7 +234,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				889CAB6527D46CD6007F5892 /* libPods-BetterSocial.a in Frameworks */,
+				361139EB94F404F2D260A053 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,10 +279,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				1D09A2F500E874E8E280EF44 /* libPods-BetterSocial.a */,
 				DA37CB6032BCA61D70DB3536 /* libPods-BetterSocial-BetterSocialTests.a */,
 				63463C3161CE2142F3CBFE27 /* libPods-BetterSocial-tvOS.a */,
 				C2576214B1A0AA374756407B /* libPods-BetterSocial-tvOSTests.a */,
+				CA49E18835A0FD9449B9974E /* libPods-BetterSocial-BetterSocialDev.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -399,7 +401,7 @@
 		889CAB9427D46F9B007F5892 /* Development */ = {
 			isa = PBXGroup;
 			children = (
-				8811A9E627EA9C9600DF3BF5 /* GoogleService-Info.plist */,
+				88203A2C2811FB6400199BF0 /* GoogleService-Info.plist */,
 			);
 			path = Development;
 			sourceTree = "<group>";
@@ -407,7 +409,7 @@
 		889CAB9627D46F9B007F5892 /* Production */ = {
 			isa = PBXGroup;
 			children = (
-				889CAB9727D46F9B007F5892 /* GoogleService-Info.plist */,
+				88203A2E2811FB9200199BF0 /* GoogleService-Info .plist */,
 			);
 			path = Production;
 			sourceTree = "<group>";
@@ -423,6 +425,8 @@
 				C72CBD03EB29FA72768C1581 /* Pods-BetterSocial-tvOS.release.xcconfig */,
 				1902BD5E168CF4982CBE7A88 /* Pods-BetterSocial-tvOSTests.debug.xcconfig */,
 				5F05ED9903C49AE7905C3A88 /* Pods-BetterSocial-tvOSTests.release.xcconfig */,
+				BFE258CE74F5AE692C8E778E /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */,
+				1CCDEA722F20DE77B533B520 /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -526,8 +530,6 @@
 				889CAB8627D46CD6007F5892 /* Bundle React Native code and images */,
 				889CAB8727D46CD6007F5892 /* [CP] Embed Pods Frameworks */,
 				889CAB8827D46CD6007F5892 /* [CP] Copy Pods Resources */,
-				889CAB8927D46CD6007F5892 /* [CP-User] [RNFB] Core Configuration */,
-				889CAB8A27D46CD6007F5892 /* [CP-User] [RNFB] Crashlytics Configuration */,
 			);
 			buildRules = (
 			);
@@ -608,11 +610,11 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				845C6E802758AFC500C9F384 /* Inter-Regular.ttf in Resources */,
 				845C6E8A2758B12000C9F384 /* Poppins-Black.ttf in Resources */,
+				88203A302811FBA200199BF0 /* GoogleService-Info .plist in Resources */,
 				845C6E892758B11D00C9F384 /* Inter.ttf in Resources */,
 				845C6E862758B10D00C9F384 /* Inter-Bold.ttf in Resources */,
 				845C6E982758B15F00C9F384 /* Poppins-SemiBold.ttf in Resources */,
 				845C6E852758B10A00C9F384 /* Inter-ExtraBold.ttf in Resources */,
-				889CAB9927D46F9B007F5892 /* GoogleService-Info.plist in Resources */,
 				845C6E8C2758B13700C9F384 /* Poppins-Bold.ttf in Resources */,
 				845C6E882758B11900C9F384 /* Inter-Thin.ttf in Resources */,
 				845C6E962758B15900C9F384 /* Poppins-MediumItalic.ttf in Resources */,
@@ -682,7 +684,7 @@
 				889CAB7D27D46CD6007F5892 /* Inter-Black.ttf in Resources */,
 				889CAB7E27D46CD6007F5892 /* Poppins-ExtraLight.ttf in Resources */,
 				889CAB7F27D46CD6007F5892 /* Inter-Light.ttf in Resources */,
-				8811A9E727EA9C9600DF3BF5 /* GoogleService-Info.plist in Resources */,
+				88203A2D2811FB6400199BF0 /* GoogleService-Info.plist in Resources */,
 				889CAB8027D46CD6007F5892 /* Poppins-Thin.ttf in Resources */,
 				889CAB8127D46CD6007F5892 /* Poppins-ExtraBold.ttf in Resources */,
 				889CAB8227D46CD6007F5892 /* Poppins-Medium.ttf in Resources */,
@@ -907,7 +909,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BetterSocial-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-BetterSocial-BetterSocialDev-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -953,7 +955,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial/Pods-BetterSocial-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -962,7 +964,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial/Pods-BetterSocial-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		889CAB8827D46CD6007F5892 /* [CP] Copy Pods Resources */ = {
@@ -971,7 +973,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial/Pods-BetterSocial-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -1016,35 +1018,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial/Pods-BetterSocial-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		889CAB8927D46CD6007F5892 /* [CP-User] [RNFB] Core Configuration */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			name = "[CP-User] [RNFB] Core Configuration";
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    _JSON_OUTPUT_BASE64=$(python -c 'import json,sys,base64;print(base64.b64encode(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"').read())['${_JSON_ROOT}'])))' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\n\n  # config.admob_delay_app_measurement_init\n  _ADMOB_DELAY_APP_MEASUREMENT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"admob_delay_app_measurement_init\")\n  if [[ $_ADMOB_DELAY_APP_MEASUREMENT == \"true\" ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GADDelayAppMeasurementInit\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"YES\")\n  fi\n\n  # config.admob_ios_app_id\n  _ADMOB_IOS_APP_ID=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"admob_ios_app_id\")\n  if [[ $_ADMOB_IOS_APP_ID ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GADApplicationIdentifier\")\n    _PLIST_ENTRY_TYPES+=(\"string\")\n    _PLIST_ENTRY_VALUES+=(\"$_ADMOB_IOS_APP_ID\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
-		};
-		889CAB8A27D46CD6007F5892 /* [CP-User] [RNFB] Crashlytics Configuration */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			name = "[CP-User] [RNFB] Crashlytics Configuration";
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
 		};
 		947AE61043708BE2C0AC9CCD /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1569,7 +1544,7 @@
 		};
 		889CAB8C27D46CD6007F5892 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6650B3795AE2B310E1A56A2 /* Pods-BetterSocial.debug.xcconfig */;
+			baseConfigurationReference = BFE258CE74F5AE692C8E778E /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1601,7 +1576,7 @@
 		};
 		889CAB8D27D46CD6007F5892 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A92BC4F9EB2B23E83944021A /* Pods-BetterSocial.release.xcconfig */;
+			baseConfigurationReference = 1CCDEA722F20DE77B533B520 /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
