@@ -87,7 +87,7 @@ const discoveryMoreUsers = 'More Users';
 const discoveryMoreTopics = 'More Topics';
 const discoveryMoreDomains = 'More Domains';
 const discoveryMoreNews = 'More News';
-const discoverySearchBarPlaceholder = 'Search Anything';
+const discoverySearchBarPlaceholder = 'Search Better';
 
 export default {
   signInScreenHumanIdBrand,

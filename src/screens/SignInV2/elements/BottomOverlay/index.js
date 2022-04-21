@@ -56,11 +56,14 @@ const bottomOverlayStyles = StyleSheet.create({
         paddingRight: dimen.normalizeDimen(39.24)
     },
     bottomBlock: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'transparent',
-        zIndex: -1,
+        zIndex: -1000,
     },
     btnSign: {
         alignSelf: 'center',
