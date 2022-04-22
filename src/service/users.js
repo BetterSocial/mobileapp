@@ -9,7 +9,8 @@ import { getRefreshToken, setAccessToken, setRefreshToken } from '../utils/token
 export const verifyUser = async (userId) => {
   try {
     // SimpleToast.show(`URL : ${BASE_URL}`);
-    const resApi = await api.post('/users/verify-user', {
+    const resApi = await api.post('http://192.168.0.18:3000/users/verify-user', {
+    // const resApi = await api.post('/users/verify-user', {
       user_id: userId,
     });
     return resApi.data;

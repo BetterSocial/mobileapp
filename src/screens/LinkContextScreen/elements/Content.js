@@ -1,9 +1,9 @@
 import * as React from 'react';
-
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+
+import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 import {Gap} from '../../../components';
 import {SIZES} from '../../../utils/theme';
-import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 import {fonts} from '../../../utils/fonts';
 
 const Content = ({item, onContentPressed}) => {

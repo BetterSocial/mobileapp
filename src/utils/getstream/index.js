@@ -1,12 +1,12 @@
 const getCountVote = (item) => {
-  const reactionCount = item.reaction_counts;
+  const reactionCount = item?.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
-    const upvote = reactionCount.upvotes;
+    const upvote = reactionCount?.upvotes;
     if (upvote !== undefined) {
       count += upvote;
     }
-    const downvote = reactionCount.downvotes;
+    const downvote = reactionCount?.downvotes;
     if (downvote !== undefined) {
       count -= downvote;
     }
@@ -29,10 +29,10 @@ const getCountComment = (item) => {
 const getCountCommentWithChild = (item) => {
   let count = 0;
   const reactionCountLevelOne = item?.reaction_counts;
-  const reactionLevelOne = item?.latest_reactions.comment || [];
+  const reactionLevelOne = item?.latest_reactions?.comment || [];
 
   if (JSON.stringify(reactionCountLevelOne) !== '{}') {
-    const { comment } = reactionCountLevelOne;
+    const { comment } = reactionCountLevelOne || {};
     if (comment !== undefined) {
       count += comment;
     }
