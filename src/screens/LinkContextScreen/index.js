@@ -9,26 +9,26 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import LinkContextItem from './elements/Item';
 import Loading from '../Loading';
 import PostArrowUp from '../../assets/images/post-arrow-up.png';
-import {COLORS} from '../../utils/theme';
-import {Context} from '../../context';
-import {downVoteDomain, upVoteDomain} from '../../service/vote';
-import {fonts} from '../../utils/fonts';
-import {getAccessToken} from '../../utils/token';
+import { COLORS } from '../../utils/theme';
+import { Context } from '../../context';
+import { downVoteDomain, upVoteDomain } from '../../service/vote';
+import { fonts } from '../../utils/fonts';
+import { getAccessToken } from '../../utils/token';
 import {
   getDetailDomains,
   getDomainIdIFollow,
 } from '../../service/domain';
-import {setIFollow} from '../../context/actions/news';
+import { setIFollow } from '../../context/actions/news';
 
 const LinkContextScreen = () => {
   const route = useRoute();
 
-  let {item} = route.params;
+  let { item } = route.params;
   let domainName = item.domain.name;
   let iddomain = item.content.domain_page_id;
 
@@ -43,7 +43,7 @@ const LinkContextScreen = () => {
   const [news, dispatch] = React.useContext(Context).news;
   const [featuredNewsFromFeed, setFeaturedNewsFromFeed] = React.useState(item);
 
-  let {ifollow} = news;
+  let { ifollow } = news;
 
   const animatedBottomAnchorContainerValue = React.useRef(
     new Animated.Value(0),
@@ -57,7 +57,7 @@ const LinkContextScreen = () => {
         setIdFromToken(decoded.user_id);
       }
     };
-    console.log('parseToken')
+    // console.log('parseToken')
     parseToken();
   }, []);
 
@@ -65,6 +65,7 @@ const LinkContextScreen = () => {
     const init = async () => {
       setLoading(true);
       let res = await getDetailDomains(domainName);
+      // console.log('res.data ' + domainName)
       if (res.code === 200) {
         let reducedData = res.data.reduce((acc, currentItem) => {
           if (currentItem.content.news_link_id !== item.content.news_link_id) {
@@ -74,26 +75,13 @@ const LinkContextScreen = () => {
           }
           return acc;
         }, []);
-        setData([{dummy: true}, ...reducedData]);
+        setData([{ dummy: true }, ...reducedData]);
         setLoading(false);
       }
       setLoading(false);
     };
     init();
   }, [dataDomain]);
-
-  // React.useEffect(() => {
-  //   const getProfile = async () => {
-  //     let res = await getProfileDomain(domain);
-  //     if (res.code === 200) {
-  //       setProfile(res.data);
-  //     } else {
-  //       Toast.show('Domain Not Found', Toast.LONG);
-  //       navigation.goBack();
-  //     }
-  //   };
-  //   getProfile();
-  // }, [dataDomain]);
 
   React.useEffect(() => {
     getIFollow();
@@ -104,13 +92,13 @@ const LinkContextScreen = () => {
       let res = await getDomainIdIFollow();
       setIFollow(res.data, dispatch);
     } else {
-      console.log(JSON.stringify(ifollow).includes(iddomain));
+      // console.log(JSON.stringify(ifollow).includes(iddomain));
       setFollow(JSON.stringify(ifollow).includes(iddomain));
     }
   };
 
   const handleOnPressComment = (itemNews) => {
-    navigation.navigate('DetailDomainScreen', {item: itemNews});
+    navigation.navigate('DetailDomainScreen', { item: itemNews });
   };
 
   const upvoteNews = async (news) => {
@@ -137,7 +125,7 @@ const LinkContextScreen = () => {
       }).start();
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
@@ -146,7 +134,7 @@ const LinkContextScreen = () => {
         onScroll={handleOnScroll}
         renderItem={(props) => {
           let singleItem = props.item;
-          let {index} = props;
+          let { index } = props;
 
           if (index === 0) {
             return (
@@ -192,7 +180,9 @@ const LinkContextScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  list: {flex: 1},
+  list: { 
+    // flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',

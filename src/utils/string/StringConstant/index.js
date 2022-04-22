@@ -41,7 +41,7 @@ const createPostFailedNoMessage = 'Post messages cannot be empty.';
 const createPostFailedGeneralError = 'Failed to create new post.';
 
 // Chat Tab
-const chatTabHeaderPlaceholder = 'Search Chats';
+const chatTabHeaderPlaceholder = 'Search Users';
 const chatTabHeaderCreateChatButtonText = 'New Chat';
 
 // News Tab
@@ -87,7 +87,7 @@ const discoveryMoreUsers = 'More Users';
 const discoveryMoreTopics = 'More Topics';
 const discoveryMoreDomains = 'More Domains';
 const discoveryMoreNews = 'More News';
-const discoverySearchBarPlaceholder = 'Search Anything';
+const discoverySearchBarPlaceholder = 'Search Better';
 
 export default {
   signInScreenHumanIdBrand,

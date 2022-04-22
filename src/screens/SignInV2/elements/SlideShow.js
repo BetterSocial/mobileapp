@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
 import FgOnboarding1 from '../../../assets/background/fg_onboarding_full_1.png';
@@ -8,7 +9,7 @@ import FgOnboarding3 from '../../../assets/background/fg_onboarding_full_3.png';
 import FgOnboarding4 from '../../../assets/background/fg_onboarding_full_4.png';
 import { COLORS } from '../../../utils/theme';
 import { SlideShowItem } from './SlideShowItem';
-import { fonts, normalizeFontSize } from '../../../utils/fonts';
+import { fonts, normalizeFontSize, scaleFontSize } from '../../../utils/fonts';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -101,7 +102,7 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
       </Text>,
     },
     {
-      isLogin : true,
+      isLogin: true,
       illustrations: FgOnboarding1,
       title: 'Be Safe',
       text: <Text style={slideShowStyles.textFontNormal}>
@@ -129,8 +130,8 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
 
   const onHandleNextSlide = () => {
     let newIndex = index + 1
-    if(newIndex > data.length) return
-    flatListRef.current.scrollToIndex({ index: newIndex})
+    if (newIndex > data.length) return
+    flatListRef.current.scrollToIndex({ index: newIndex })
     setIndex(newIndex)
   }
 
@@ -151,10 +152,10 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
         title={item.title} />
       }
       onChangeIndex={handleChangeIndex}
-      // viewabilityConfig={{
-      //   itemVisiblePercentThreshold: 10,
-      //   minimumViewTime: 10
-      // }}
+    // viewabilityConfig={{
+    //   itemVisiblePercentThreshold: 10,
+    //   minimumViewTime: 10
+    // }}
     />
   );
 };
@@ -164,14 +165,22 @@ export default SlideShow;
 const slideShowStyles = StyleSheet.create({
   textFontBold: {
     fontFamily: fonts.inter[700],
-    fontSize: normalizeFontSize(14),
-    lineHeight: normalizeFontSize(21),
+    // fontSize: scaleFontSize(14),
+    // lineHeight: scaleFontSize(21),
+    // fontSize: normalizeFontSize(14),
+    // lineHeight: normalizeFontSize(21),
+    fontSize: RFValue(16, 812),
+    lineHeight: RFValue(21),
     color: COLORS.blackgrey
   },
   textFontNormal: {
     fontFamily: fonts.inter[400],
-    fontSize: normalizeFontSize(14),
-    lineHeight: normalizeFontSize(21),
+    // fontSize: scaleFontSize(14),
+    // lineHeight: scaleFontSize(21),
+    // fontSize: normalizeFontSize(14),
+    // lineHeight: normalizeFontSize(21),
+    fontSize: RFValue(16, 812),
+    lineHeight: RFValue(21),
     color: COLORS.blackgrey,
     flex: 1,
     alignSelf: 'flex-start',

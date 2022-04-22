@@ -2,13 +2,15 @@ import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import {
   Dimensions,
+  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
-  View,
-  SafeAreaView
+  Text,
+  View
 } from 'react-native';
 
+import ContainerComment from '../../components/Comments/ContainerComment';
 import DetailDomainScreenContainerComment from '../../components/Comments/DetailDomainScreenContainerComment';
 import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
 import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
@@ -16,21 +18,20 @@ import WriteComment from '../../components/Comments/WriteComment';
 import { COLORS, SIZES } from '../../utils/theme';
 import { DomainHeader, Footer, Gap, Header } from '../../components';
 import { createCommentParent } from '../../service/comment';
-import {getDomainDetailById} from '../../service/domain'
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import {
   getCountCommentWithChild,
   getCountCommentWithChildInDetailPage,
 } from '../../utils/getstream';
+import { getDomainDetailById } from '../../service/domain'
 import { getMyProfile } from '../../service/profile';
 import { getUserId } from '../../utils/users';
-import ContainerComment from '../../components/Comments/ContainerComment';
 
 const { width, height } = Dimensions.get('window');
 
 const DetailDomainScreen = (props) => {
-  const {navigation} = props
+  const { navigation } = props
   const dataDomain = props.route.params && props.route.params.item
   const refreshNews = props.route.params && props.route.params.refreshNews
   const [dataProfile, setDataProfile] = React.useState({});
@@ -44,7 +45,6 @@ const DetailDomainScreen = (props) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [comments, setComments] = React.useState([])
-
 
   const initial = () => {
     let reactionCount = item.reaction_counts;
@@ -75,25 +75,21 @@ const DetailDomainScreen = (props) => {
 
 
   React.useEffect(() => {
-   
-   if(item) {
-    initial();
-   }
-  }, [item]);
 
-  React.useEffect(() => {
-    getDomain()
-  }, [])
+    if (item) {
+      initial();
+    }
+  }, [item]);
 
   const getDomain = () => {
     getDomainDetailById(dataDomain.id).then((res) => {
-      // console.log(res, dataDomain, 'sabung')
       setItem(res)
     })
   }
 
   React.useEffect(() => {
     fetchMyProfile();
+    getDomain()
   }, []);
 
   React.useEffect(() => {
@@ -107,13 +103,13 @@ const DetailDomainScreen = (props) => {
   }, []);
 
   const onRefreshNews = () => {
-    if(refreshNews && typeof refreshNews === 'function') {
+    if (refreshNews && typeof refreshNews === 'function') {
       refreshNews()
     }
   }
 
 
-const validationStatusVote = () => {
+  const validationStatusVote = () => {
     if (item.reaction_counts !== undefined || null) {
       if (item.latest_reactions.upvotes !== undefined) {
         let upvote = item.latest_reactions.upvotes.filter(
@@ -134,17 +130,17 @@ const validationStatusVote = () => {
       }
     }
   };
-  console.log(item, 'habitat')
+  
   React.useEffect(() => {
 
-    if(item) {
+    if (item) {
       validationStatusVote();
       setComments(item.latest_reactions.comment)
     }
   }, [item, yourselfId]);
 
   const fetchMyProfile = async () => {
-    var id = getUserId();
+    var id = await getUserId();
     if (id) {
       const result = await getMyProfile(id);
       if (result.code === 200) {
@@ -164,7 +160,6 @@ const validationStatusVote = () => {
       if (textComment.trim() !== '') {
         let data = await createCommentParent(textComment, item.id);
         setComments([...comments, data.data])
-        console.log(data, 'siban')
         if (data.code === 200) {
           setTextComment('');
           // Toast.show('Comment successful', Toast.LONG);
@@ -179,8 +174,6 @@ const validationStatusVote = () => {
     }
   };
 
-  console.log(comments, 'suryana')
-
   const onPressUpvoteNew = async () => {
     await upVoteDomain({
       activity_id: item.id,
@@ -191,12 +184,12 @@ const validationStatusVote = () => {
     if (voteStatus === 'none') {
       setVoteStatus('upvote');
       setTotalVote((vote) => vote + 1)
-    } 
-    if(voteStatus === 'upvote') {
+    }
+    if (voteStatus === 'upvote') {
       setVoteStatus('none')
       setTotalVote((vote) => vote - 1)
     }
-    if(voteStatus === 'downvote') {
+    if (voteStatus === 'downvote') {
       setVoteStatus('upvote')
       setTotalVote((vote) => vote + 2)
     }
@@ -211,16 +204,15 @@ const validationStatusVote = () => {
       feed_group: 'domain',
       domain: item.domain.name,
     });
-    console.log('masumlam1')
     if (voteStatus === 'none') {
       setVoteStatus('downvote');
       setTotalVote((vote) => vote - 1)
-    } 
-    if(voteStatus === 'downvote') {
+    }
+    if (voteStatus === 'downvote') {
       setVoteStatus('none')
       setTotalVote((vote) => vote + 1)
     }
-    if(voteStatus === 'upvote') {
+    if (voteStatus === 'upvote') {
       setVoteStatus('downvote')
       setTotalVote((vote) => vote - 2)
     }
@@ -229,30 +221,29 @@ const validationStatusVote = () => {
   }
 
   const updateParentPost = (data) => {
-    console.log(data, 'supolo')
     setItem(data)
   }
 
-  console.log(props.route, 'cinata')
-
   const navigateToReplyView = (data) => {
-    navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent: updateParentPost});
-}
+    navigation.navigate('ReplyComment', { ...data, page: props.route.name, updateParent: updateParentPost });
+  }
+
+  if(!item?.domain) return <Text>asdasd</Text>
 
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
       <SafeAreaView>
-      <DetailDomainScreenHeader
-              domain={item.domain.name}
-              time={item.content.created_at}
-              image={item.domain.image}
-              onFollowDomainPressed={() => { }}
-            />
+        <DetailDomainScreenHeader
+          domain={item.domain.name}
+          time={item.content.created_at}
+          image={item.domain.image}
+          onFollowDomainPressed={() => { }}
+        />
       </SafeAreaView>
- 
+
       {item ? <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}>
-        
+
         <View style={styles.content}>
 
 
@@ -279,26 +270,26 @@ const validationStatusVote = () => {
           </View>
         </View>
         {isReaction && (
-          <ContainerComment 
-          comments={comments}
-          refreshComment={getDomain}
-          refreshChildComment={getDomain}
-          navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
+          <ContainerComment
+            comments={comments}
+            refreshComment={getDomain}
+            refreshChildComment={getDomain}
+            navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
           // refreshComment={refreshNews}
           />
         )}
-      </ScrollView>  : null}
-     {item && (
+      </ScrollView> : null}
+      {item && (
         <WriteComment
-        value={textComment}
-        username={item.domain.name}
-        onChangeText={(value) => setTextComment(value)}
-        onPress={() => {
-          onComment();
-        }}
-      />
-     )}
-      
+          value={textComment}
+          username={item.domain.name}
+          onChangeText={(value) => setTextComment(value)}
+          onPress={() => {
+            onComment();
+          }}
+        />
+      )}
+
     </View>
   );
 };

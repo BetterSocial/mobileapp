@@ -36,7 +36,7 @@ const linkContextScreenParamBuilder = (
  * @returns
  */
 const newsDiscoveryContentParamBuilder = (
-  title, image, description, url, domainImage, domainName, createdAt,
+  title, image, description, url, domainImage, domainName, createdAt, newsLinkId,
 ) => ({
   domain: {
     image: domainImage,
@@ -48,6 +48,7 @@ const newsDiscoveryContentParamBuilder = (
     description,
     url,
     created_at: createdAt,
+    news_link_id: newsLinkId,
   },
 });
 

@@ -7,7 +7,7 @@ export const getMyProfile = async (userId) => new Promise((resolve, reject) => {
       resolve(res.data);
     })
     .catch((err) => {
-      console.log('ERR');
+      console.log('ERR GET MY PROFILE');
       console.log(err);
       reject(err);
     });

@@ -14,6 +14,7 @@ const heightBs = Dimensions.get('window').height * 0.6
 
 const DevDummyLogin = () => {
     const [loading, setLoading] = React.useState(false);
+    const [isShown, setIsShown] = React.useState(true)
     const dummyLoginRbSheetRef = React.useRef(null)
     const navigation = useNavigation()
 
@@ -47,7 +48,7 @@ const DevDummyLogin = () => {
             });
     };
 
-    if (ENABLE_DEV_ONLY_FEATURE) return <View style={S.devTrialView}>
+    if (ENABLE_DEV_ONLY_FEATURE && isShown) return <View style={S.devTrialView}>
         <Button
             title="Dev Dummy Onboarding"
             onPress={() => {
@@ -58,6 +59,10 @@ const DevDummyLogin = () => {
         <Button
             title="Dev Dummy Login"
             onPress={() => dummyLoginRbSheetRef.current.open()}
+        />
+        <Button
+            title="Close Dev Menu"
+            onPress={() => setIsShown(false)}
         />
         <RBSheet height={heightBs} ref={dummyLoginRbSheetRef}>
             <Text>Choose an account you wish to login</Text>

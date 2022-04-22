@@ -31,8 +31,10 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
   const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery
   const discoverySearchBarRef = React.useRef(null)
+
+  const [isSearchIconShown, setIsSearchIconShown] = React.useState(false)
   const [isTextAvailable, setIsTextAvailable] = React.useState(false)
-  const [isFocus, setIsFocus] = React.useState(false)
+  const [isFocus, setIsFocus] = React.useState(true)
 
   let { discoverySearchBarText } = generalComponent
 
@@ -79,20 +81,26 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
         await DiscoveryAction.setDiscoveryDataTopics(data, discoveryDispatch)
         setTimeout(() => {
           DiscoveryAction.setDiscoveryLoadingDataTopic(false, discoveryDispatch)
-        })
+        }, 500)
       }  
     })
     
     DiscoveryRepo.fetchDiscoveryDataNews(discoverySearchBarText).then(async (data) => {
+      console.log('data')
+      console.log(data)
       if(data.success) {
         await DiscoveryAction.setDiscoveryDataNews(data, discoveryDispatch)
         setTimeout(() => {
           DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
-        })
+        }, 500)
       }  
     })
     DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
   }
+
+  React.useEffect(() => {
+    setIsSearchIconShown(!isFocus && !isTextAvailable)
+  }, [isTextAvailable, isFocus])
 
   React.useEffect(() => {
     if(discoverySearchBarText.length > 1) {
@@ -137,7 +145,7 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
       </Pressable>
       <Pressable onPress={onContainerClicked} style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
-          {(!isTextAvailable && !isFocus) && <View style={styles.wrapperIcon}>
+          { isSearchIconShown && <View style={styles.wrapperIcon}>
             <MemoIc_search width={16.67} height={16.67} />
           </View>
           }

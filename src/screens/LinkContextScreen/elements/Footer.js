@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 
+import {COLORS} from '../../../utils/theme';
+import {Footer, Gap, PreviewComment} from '../../../components';
 import {
   getCountComment,
   getCountCommentWithChild,
   getCountVote,
 } from '../../../utils/getstream';
-
-import {Gap, PreviewComment, Footer} from '../../../components';
-import {COLORS} from '../../../utils/theme';
 
 const LinkContextScreenFooter = ({
   item,
@@ -65,13 +64,13 @@ const LinkContextScreenFooter = ({
 
   React.useEffect(() => {
     const initial = () => {
-      let reactionCount = item.reaction_counts;
+      let reactionCount = item?.reaction_counts || {};
       if (JSON.stringify(reactionCount) !== '{}') {
-        let comment = reactionCount.comment;
+        let comment = reactionCount?.comment;
         if (comment !== undefined) {
           if (comment > 0) {
             setReaction(true);
-            setPreviewComment(item.latest_reactions.comment[0]);
+            setPreviewComment(item?.latest_reactions?.comment[0]);
           }
         }
       }
