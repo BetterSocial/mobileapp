@@ -6,7 +6,6 @@ import { getAccessToken } from '../utils/token';
 
 const api = axios.create({
   baseURL: configEnv.BASE_URL,
-  // baseURL: 'http://192.168.0.18:3000/api/v1',
   timeout: 3000,
   headers: { 'content-type': 'application/json' },
 });

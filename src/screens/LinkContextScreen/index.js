@@ -57,7 +57,7 @@ const LinkContextScreen = () => {
         setIdFromToken(decoded.user_id);
       }
     };
-    console.log('parseToken')
+    // console.log('parseToken')
     parseToken();
   }, []);
 
@@ -65,7 +65,7 @@ const LinkContextScreen = () => {
     const init = async () => {
       setLoading(true);
       let res = await getDetailDomains(domainName);
-      console.log('res.data ' + domainName)
+      // console.log('res.data ' + domainName)
       if (res.code === 200) {
         let reducedData = res.data.reduce((acc, currentItem) => {
           if (currentItem.content.news_link_id !== item.content.news_link_id) {
@@ -92,7 +92,7 @@ const LinkContextScreen = () => {
       let res = await getDomainIdIFollow();
       setIFollow(res.data, dispatch);
     } else {
-      console.log(JSON.stringify(ifollow).includes(iddomain));
+      // console.log(JSON.stringify(ifollow).includes(iddomain));
       setFollow(JSON.stringify(ifollow).includes(iddomain));
     }
   };

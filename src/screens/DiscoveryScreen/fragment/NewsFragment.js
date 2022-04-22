@@ -49,7 +49,8 @@ const NewsFragment = () => {
                 item.news_url,
                 item?.newsLinkDomain?.logo ,
                 item?.newsLinkDomain?.domain_name || item?.site_name,
-                item.createdAt
+                item.createdAt,
+                item.news_link_id
             )
 
             return <RenderItem key={`newsDiscovery-${index}`} 

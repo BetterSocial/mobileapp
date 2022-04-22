@@ -74,7 +74,7 @@ const LinkContextItem = ({
         item={item}
         itemId={item.id}
         onPressBlock={() => onReaction(0)}
-        onPressComment={(itemNews) => handleOnPressComment(itemNews)}
+        onPressComment={() => handleOnPressComment(item)}
         onPressUpvote={(news) => upvoteNews(news)}
         onPressDownVote={(news) => downvoteNews(news)}
         selfUserId={idFromToken}
