@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
+import {View, Text, StyleSheet, TouchableNativeFeedback, TouchableOpacity} from 'react-native';
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -8,13 +8,13 @@ const Btn = (props) => {
   let disable = props.disabled ? props.disabled : false;
   let disabledStyle = props.disabled ? styles.disabledbutton : {};
   return (
-    <TouchableNativeFeedback disabled={disable} onPress={props.onPress}>
+    <TouchableOpacity disabled={disable} onPress={props.onPress}>
       <View style={{...styles.button, ...props.style, ...disabledStyle}}>
         <Text style={{...styles.buttonText, ...props.textStyling}}>
           {props.children}
         </Text>
       </View>
-    </TouchableNativeFeedback>
+    </TouchableOpacity>
   );
 };
 
