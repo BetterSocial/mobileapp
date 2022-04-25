@@ -15,6 +15,7 @@ import { colors } from '../../../utils/colors';
 import { followDomain, unfollowDomain } from '../../../service/domain';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
+import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
 const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
@@ -181,4 +182,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default DomainFragment
+export default withInteractionsManaged(DomainFragment)

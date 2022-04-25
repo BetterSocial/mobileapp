@@ -14,6 +14,7 @@ import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
 import { setFollow, setUnFollow } from '../../../service/profile';
+import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
 const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
@@ -160,4 +161,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default UsersFragment
+export default withInteractionsManaged(UsersFragment)

@@ -13,6 +13,7 @@ import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
+import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const NewsFragment = () => {
     const [myId, setMyId] = React.useState('')
@@ -115,4 +116,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default NewsFragment
+export default withInteractionsManaged(NewsFragment)

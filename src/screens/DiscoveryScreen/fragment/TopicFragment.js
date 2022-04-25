@@ -12,6 +12,7 @@ import { colors } from '../../../utils/colors';
 import { convertTopicNameToTopicPageScreenParam } from '../../../utils/string/StringUtils';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
+import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
 const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
@@ -130,4 +131,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default TopicFragment
+export default withInteractionsManaged(TopicFragment)
