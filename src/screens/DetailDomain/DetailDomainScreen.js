@@ -82,8 +82,6 @@ const DetailDomainScreen = (props) => {
   }, [item]);
 
   const getDomain = () => {
-    console.log('dataDomain.id')
-    console.log(dataDomain.id)
     getDomainDetailById(dataDomain.id).then((res) => {
       setItem(res)
     })

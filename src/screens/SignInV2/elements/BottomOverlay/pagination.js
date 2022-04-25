@@ -6,7 +6,7 @@ import { COLORS } from '../../../../utils/theme'
 const BottomOverlayPagination = ({ count, active }) => {
     return <View style={styles.container}>
         {Array(count).fill(0).map((item, index) => {
-            return <View style={styles.paginationItem(active === index)}></View>
+            return <View key={`pagination-${index}`} style={styles.paginationItem(active === index)}></View>
         })}
     </View>
 }

@@ -165,22 +165,13 @@ export default SlideShow;
 const slideShowStyles = StyleSheet.create({
   textFontBold: {
     fontFamily: fonts.inter[700],
-    // fontSize: scaleFontSize(14),
-    // lineHeight: scaleFontSize(21),
-    // fontSize: normalizeFontSize(14),
-    // lineHeight: normalizeFontSize(21),
     fontSize: RFValue(16, 812),
-    lineHeight: RFValue(21),
     color: COLORS.blackgrey,
   },
   textFontNormal: {
     fontFamily: fonts.inter[400],
-    // fontSize: scaleFontSize(14),
-    // lineHeight: scaleFontSize(21),
-    // fontSize: normalizeFontSize(14),
-    // lineHeight: normalizeFontSize(21),
     fontSize: RFValue(16, 812),
-    lineHeight: RFValue(21),
+    lineHeight: 24,
     color: COLORS.blackgrey,
     flex: 1,
     alignSelf: 'flex-start',

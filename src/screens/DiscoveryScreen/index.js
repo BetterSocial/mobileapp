@@ -17,6 +17,7 @@ import {DEFAULT_PROFILE_PIC_PATH, DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS, DIS
 import { FONTS } from '../../utils/theme';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const DiscoveryScreen = ({ route }) => {
     const [search, setSearch] = React.useState("")
@@ -193,4 +194,4 @@ const S = StyleSheet.create({
     }),
 });
 
-export default DiscoveryScreen
+export default withInteractionsManaged(DiscoveryScreen)
