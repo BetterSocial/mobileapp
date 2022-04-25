@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 
 import DomainList from '../../Followings/elements/RenderList';
 import Loading from '../../Loading';
@@ -18,6 +19,9 @@ const NewsFragment = () => {
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [defaultNews] = React.useContext(Context).news
+
+    const navigation = useNavigation()
+
     const { isLoadingDiscoveryNews, news, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
@@ -37,7 +41,16 @@ const NewsFragment = () => {
     const renderNewsItem = () => {
         if(isFirstTimeOpen) {
             return defaultNews.news.map((item, index) => {
-                if(!item.dummy) return <RenderItem key={`news-screen-item-${index}`} item={item} selfUserId={myId} />
+                let onContentClicked = () => {
+                    navigation.navigate('DetailDomainScreen', {
+                        item: {
+                            id: item.id
+                        }
+                    })
+                }
+
+                // Disable on press content if view should be navigated to LinkContextScreen
+                if(!item.dummy) return <RenderItem key={`news-screen-item-${index}`} item={item} selfUserId={myId} onPressContent={onContentClicked}/>
             })
         }
 
@@ -53,10 +66,21 @@ const NewsFragment = () => {
                 item.news_link_id
             )
 
+            let onContentClicked = () => {
+                console.log('item')
+                console.log(item)
+                navigation.navigate('DetailDomainScreen', {
+                    item: {
+                        id: item.news_link_id
+                    }
+                })
+            }
+
             return <RenderItem key={`newsDiscovery-${index}`} 
                 selfUserId={myId}    
                 item={contentParam}
-                onPressShare={share.shareNews} />
+                onPressShare={share.shareNews}
+                onPressContent={onContentClicked} />
         })
     }
     
@@ -67,22 +91,6 @@ const NewsFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer}>
         { renderNewsItem() }
-        {/* { news.map((item, index) => {
-            let contentParam = paramBuilder.newsDiscoveryContentParamBuilder(
-                item.title,
-                item.image,
-                item.description,
-                item.news_url,
-                item.newsLinkDomain.logo,
-                item.newsLinkDomain.domain_name,
-                item.createdAt
-            )
-
-            return <RenderItem key={`newsDiscovery-${index}`} 
-                selfUserId={myId}    
-                item={contentParam}
-                onPressShare={share.shareNews} />
-        })} */}
     </ScrollView>
 }
 

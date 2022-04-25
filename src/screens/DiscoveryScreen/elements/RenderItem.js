@@ -19,6 +19,7 @@ const RenderItem = ({
   onPressBlock = () => {},
   onPressDownVote = () => {},
   onPressUpvote = () => {},
+  onPressContent = undefined,
   selfUserId,
 }) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
@@ -115,6 +116,7 @@ const RenderItem = ({
         image={item.content.image}
         description={item.content.description}
         url={item.content.url}
+        onContentClicked={onPressContent}
       />
       {/* <Gap height={8} />
       <View style={styles.wrapperFooter}>
