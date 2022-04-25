@@ -127,7 +127,7 @@ const UsersFragment = () => {
         <Text style={styles.noDataFoundText}>No users found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer}>
+    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'always'}>
         { __renderUsersItem() }
     </ScrollView>
 }

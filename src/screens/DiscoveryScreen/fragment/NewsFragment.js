@@ -89,7 +89,7 @@ const NewsFragment = () => {
         <Text style={styles.noDataFoundText}>No news found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer}>
+    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'always'}>
         { renderNewsItem() }
     </ScrollView>
 }

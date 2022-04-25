@@ -97,7 +97,7 @@ const TopicFragment = () => {
         <Text style={styles.noDataFoundText}>No Topics found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer}>
+    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'always'}>
         { __renderTopicItems() }
     </ScrollView>
 }
