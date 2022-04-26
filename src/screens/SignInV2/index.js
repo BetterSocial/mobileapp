@@ -79,13 +79,11 @@ const SignIn = () => {
       checkToken(exchangeToken)
         .then((res) => {
           console.log(res, 'response token')
-          if (res.data) {
+          if (res.success) {
             const { appUserId, countryCode } = res.data;
-            console.log(appUserId, 'resak')
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
               .then((response) => {
-                console.log(response.data, appUserId, 'response data')
                 setLoading(false);
                 if (response.data) {
                   create();
@@ -102,6 +100,7 @@ const SignIn = () => {
                 setLoading(false);
               });
           } else {
+            SimpleToast.show(res.message, SimpleToast.SHORT)
             console.log("else data")
           }
         })
