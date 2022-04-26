@@ -166,22 +166,7 @@ const WhotoFollow = () => {
         setRefreshing(false);
       });
   }, []);
-  const data = {
-    users: {
-      username: usersState.username,
-      // human_id: usersState.userId,
-      country_code: usersState.countryCode,
-      human_id:  randomString(20).toUpperCase(),
-      // country_code: 'ID',
-      profile_pic_path: usersState.photo,
-      status: 'A',
-    },
-    local_community: localCommunity.local_community,
-    topics: topics.topics,
-    follows: followed,
-    follow_source: 'onboarding',
-  };
-  console.log(data,'suip')
+
   const register = () => {
     setFetchRegister(true);
     analytics().logEvent('onb_select_follows_btn_add', {
@@ -202,7 +187,6 @@ const WhotoFollow = () => {
       follows: followed,
       follow_source: 'onboarding',
     };
-
     registerUser(data)
       .then((res) => {
         setFetchRegister(false);
@@ -241,6 +225,7 @@ const WhotoFollow = () => {
         }
       })
       .catch((error) => {
+        console.log(error, 'bahan')
         crashlytics().recordError(new Error(error.response));
         setFetchRegister(false);
         showMessage({
@@ -370,6 +355,8 @@ const styles = StyleSheet.create({
     elevation: 11,
     flexDirection: 'column',
     justifyContent: 'flex-end',
+    marginTop: 'auto',
+    zIndex: 1000
   },
   containerCard: {
     flexDirection: 'row',
