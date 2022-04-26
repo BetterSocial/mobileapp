@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
+import Comment from './Comment';
+import ConnectorWrapper from './ConnectorWrapper';
+import DetailDomainScreenCommentItem from './DetailDomainScreenCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
 import { colors } from '../../utils/colors';
-import ConnectorWrapper from './ConnectorWrapper';
-import Comment from './Comment';
-import DetailDomainScreenCommentItem from './DetailDomainScreenCommentItem';
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 
 const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent, refreshNews }) => {
@@ -29,7 +29,7 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent,
   };
 
   const onVoteUp = async (item) => {
-    console.log(item, 'sapila')
+    // console.log(item, 'sapila')
     await upVoteDomain({
       activity_id: item.id,
       feed_group: 'domain',
@@ -57,7 +57,7 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent,
       feed_group: 'domain',
       domain: item.domain.name,
     });
-    console.log('masumlam1')
+    // console.log('masumlam1')
     if (voteStatus === 'none') {
       setVoteStatus('downvote');
       setTotalVote((vote) => vote - 1)

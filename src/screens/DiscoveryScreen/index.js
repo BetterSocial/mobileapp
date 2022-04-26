@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Animated from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
@@ -17,6 +18,7 @@ import {DEFAULT_PROFILE_PIC_PATH, DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS, DIS
 import { FONTS } from '../../utils/theme';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
+import { withInteractionsManagedNoStatusBar } from '../../components/WithInteractionManaged';
 
 const DiscoveryScreen = ({ route }) => {
     const [search, setSearch] = React.useState("")
@@ -103,7 +105,7 @@ const DiscoveryScreen = ({ route }) => {
     }
 
     return(
-        <View style={{flex: 1}}>
+        <SafeAreaView style={{flex: 1}}>
             <StatusBar translucent={false} />
             <Tabs.Navigator
                 initialRouteName={initialRouteName}
@@ -133,7 +135,7 @@ const DiscoveryScreen = ({ route }) => {
                         title: 'News',
                     }} />
             </Tabs.Navigator>
-        </View>
+        </SafeAreaView>
         
 )}
 
@@ -193,4 +195,4 @@ const S = StyleSheet.create({
     }),
 });
 
-export default DiscoveryScreen
+export default withInteractionsManagedNoStatusBar(DiscoveryScreen)

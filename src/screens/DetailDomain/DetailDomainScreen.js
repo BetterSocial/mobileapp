@@ -228,7 +228,7 @@ const DetailDomainScreen = (props) => {
     navigation.navigate('ReplyComment', { ...data, page: props.route.name, updateParent: updateParentPost });
   }
 
-  if(!item?.domain) return <Text>asdasd</Text>
+  if(!item?.domain) return <View />
 
   return (
     <View style={styles.container}>

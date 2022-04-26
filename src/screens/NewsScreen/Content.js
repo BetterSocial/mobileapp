@@ -1,27 +1,31 @@
 import * as React from 'react';
 import {
-  View,
-  Text,
   Image,
-  StyleSheet,
   Linking,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
+import {Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {SIZES, FONTS, COLORS} from '../../utils/theme';
-import {sanitizeUrlForLinking} from '../../utils/Utils';
 import Gap from '../../components/Gap';
-import {fonts} from '../../utils/fonts';
+import {COLORS, FONTS, SIZES} from '../../utils/theme';
 import {NewsEmptyState} from '../../assets/images';
-import {Pressable} from 'react-native';
+import {fonts} from '../../utils/fonts';
+import {sanitizeUrlForLinking} from '../../utils/Utils';
 
 const Content = (props) => {
   const navigation = useNavigation();
-  let {item, title, image, description, url} = props;
+  let {item, title, image, description, url, onContentClicked = undefined} = props;
 
   let onContentPressed = () => {
-    navigation.push('LinkContextScreen', {
+    if(onContentClicked) {
+      return onContentClicked()
+    }
+    
+    return navigation.push('LinkContextScreen', {
       item,
     });
   };

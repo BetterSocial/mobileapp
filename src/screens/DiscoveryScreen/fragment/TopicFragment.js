@@ -12,6 +12,7 @@ import { colors } from '../../../utils/colors';
 import { convertTopicNameToTopicPageScreenParam } from '../../../utils/string/StringUtils';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
+import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
 const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
@@ -97,7 +98,7 @@ const TopicFragment = () => {
         <Text style={styles.noDataFoundText}>No Topics found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer}>
+    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'always'}>
         { __renderTopicItems() }
     </ScrollView>
 }
@@ -130,4 +131,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default TopicFragment
+export default withInteractionsManaged(TopicFragment)

@@ -14,6 +14,7 @@ import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
 import { setFollow, setUnFollow } from '../../../service/profile';
+import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
 const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
@@ -127,7 +128,7 @@ const UsersFragment = () => {
         <Text style={styles.noDataFoundText}>No users found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer}>
+    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'always'}>
         { __renderUsersItem() }
     </ScrollView>
 }
@@ -160,4 +161,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default UsersFragment
+export default withInteractionsManaged(UsersFragment)

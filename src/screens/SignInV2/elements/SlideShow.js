@@ -43,7 +43,7 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
     },
     {
       illustrations: FgOnboarding2,
-      title: 'Be Human',
+      title: 'Be human',
       text: <Text style={slideShowStyles.textFontNormal}>
         <Text style={slideShowStyles.textFontBold}>{`Better `}</Text>
         {`blocks fake accounts, and won't spam `}
@@ -65,7 +65,7 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
     },
     {
       illustrations: FgOnboarding3,
-      title: 'Be Real',
+      title: 'Be real',
       text: <Text style={slideShowStyles.textFontNormal}>
         {`Identifying fake news is hard!`}
         {`\n`}
@@ -84,7 +84,7 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
     },
     {
       illustrations: FgOnboarding4,
-      title: 'Be Safe',
+      title: 'Be safe',
       text: <Text style={slideShowStyles.textFontNormal}>
         {`Be safe from surveillance and harassment.`}
         {`\n`}
@@ -165,22 +165,13 @@ export default SlideShow;
 const slideShowStyles = StyleSheet.create({
   textFontBold: {
     fontFamily: fonts.inter[700],
-    // fontSize: scaleFontSize(14),
-    // lineHeight: scaleFontSize(21),
-    // fontSize: normalizeFontSize(14),
-    // lineHeight: normalizeFontSize(21),
     fontSize: RFValue(16, 812),
-    lineHeight: RFValue(21),
-    color: COLORS.blackgrey
+    color: COLORS.blackgrey,
   },
   textFontNormal: {
     fontFamily: fonts.inter[400],
-    // fontSize: scaleFontSize(14),
-    // lineHeight: scaleFontSize(21),
-    // fontSize: normalizeFontSize(14),
-    // lineHeight: normalizeFontSize(21),
     fontSize: RFValue(16, 812),
-    lineHeight: RFValue(21),
+    lineHeight: 24,
     color: COLORS.blackgrey,
     flex: 1,
     alignSelf: 'flex-start',

@@ -1,16 +1,16 @@
 import * as React from 'react';
-import {StyleSheet, View, Image, Text, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
+import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
+import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
+import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
+import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
+import Memoic_globe from '../../../assets/icons/ic_globe';
+import {COLORS, SIZES} from '../../../utils/theme';
 import {Gap} from '../../../components';
 import {fonts} from '../../../utils/fonts';
-import {COLORS, SIZES} from '../../../utils/theme';
-import Memoic_globe from '../../../assets/icons/ic_globe';
-import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
-import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
-import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
-import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
-import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
 
 const DetailDomainScreenHeader = ({
   image,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     borderRadius: 45,
-    backgroundColor: 'red',
+    // backgroundColor: 'white',
   },
   wrapperText: {
     backgroundColor: 'white',

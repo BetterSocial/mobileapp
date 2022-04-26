@@ -15,6 +15,7 @@ import { colors } from '../../../utils/colors';
 import { followDomain, unfollowDomain } from '../../../service/domain';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
+import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
 const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
@@ -145,20 +146,8 @@ const DomainFragment = () => {
         <Text style={styles.noDataFoundText}>No Domains found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer}>
+    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'always'}>
         { __renderDomainItems() }
-        {/* { followedDomains.map((item, index) => {
-            return __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN, `followedDomainDiscovery`, item, index)
-        })}
-
-        { unfollowedDomains.length > 0 && 
-            <View style={styles.unfollowedHeaderContainer}>
-                <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreDomains}</Text>
-            </View>
-        }
-        { unfollowedDomains.map((item, index) => {
-            return __renderDiscoveryItem(FROM_UNFOLLOWED_DOMAIN, `unfollowedDomainDiscovery`, item, index)
-        })} */}
     </ScrollView>
 }
 
@@ -193,4 +182,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default DomainFragment
+export default withInteractionsManaged(DomainFragment)

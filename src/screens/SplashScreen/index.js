@@ -8,9 +8,10 @@ import {
   StatusBar,
   StyleSheet,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
 import { StackActions } from '@react-navigation/native';
 import { debounce } from 'lodash';
+import { useNavigation } from '@react-navigation/core';
+
 import following from '../../context/actions/following';
 import { Context } from '../../context';
 import { getAccessToken } from '../../utils/token';
@@ -85,8 +86,8 @@ const SplashScreen = () => {
         const verify = await verifyTokenGetstream();
         if (verify !== null && verify !== '') {
           create();
-          console.log('user id');
-          console.log(id);
+          // console.log('user id');
+          // console.log(id);
           return id;
         }
         return null;

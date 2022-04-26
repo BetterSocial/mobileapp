@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, TouchableNativeFeedback, View } from "react-native"
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import BottomOverlayPagination from './pagination'
@@ -36,11 +36,13 @@ const BottomOverlay = ({ count, handleLogin, index, isLogin, title, text, onNext
             <View style={bottomOverlayStyles.pagination}>
                 <BottomOverlayPagination count={count} active={index} />
             </View>
-            <TouchableWithoutFeedback style={bottomOverlayStyles.buttonContainer} onPress={onNextSlide}>
-                <View style={bottomOverlayStyles.nextButton}>
-                    <MemoizedIcArrowRightTail width={26.6} height={26.6} style={bottomOverlayStyles.nextButtonIcon} />
+            <Pressable onPress={onNextSlide}>
+                <View style={bottomOverlayStyles.paddingContainer}>
+                    <View style={bottomOverlayStyles.nextButton}>
+                        <MemoizedIcArrowRightTail width={26.6} height={26.6} style={bottomOverlayStyles.nextButtonIcon} />
+                    </View>
                 </View>
-            </TouchableWithoutFeedback>
+            </Pressable>
         </View>
     </View>
 }
@@ -48,13 +50,6 @@ const BottomOverlay = ({ count, handleLogin, index, isLogin, title, text, onNext
 export default BottomOverlay
 
 const bottomOverlayStyles = StyleSheet.create({
-    buttonContainer: {
-        // backgroundColor: 'red',
-        paddingTop: dimen.normalizeDimen(27),
-        paddingLeft: dimen.normalizeDimen(16.76),
-        paddingBottom: dimen.normalizeDimen(23),
-        paddingRight: dimen.normalizeDimen(39.24)
-    },
     bottomBlock: {
         position: 'absolute',
         bottom: 0,
@@ -63,7 +58,8 @@ const bottomOverlayStyles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'transparent',
-        zIndex: -1000,
+        zIndex: 1000,
+        // backgroundColor: 'rgba(255,0,0,0.5)'
     },
     btnSign: {
         alignSelf: 'center',
@@ -77,7 +73,7 @@ const bottomOverlayStyles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-end',
         zIndex: 10,
-    }, 
+    },
     desc: {
         fontWeight: '400',
         fontFamily: fonts.inter[400],
@@ -107,11 +103,12 @@ const bottomOverlayStyles = StyleSheet.create({
     },
     nextButton: {
         backgroundColor: COLORS.blueOnboarding,
+        // backgroundColor: 'red',
         width: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
         height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
         borderRadius: dimen.size.ONBOARDING_BOTTOM_OVERLAY_NEXT_BUTTON_SIZE,
         alignContent: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     nextButtonIcon: {
         alignSelf: 'center',
@@ -126,9 +123,18 @@ const bottomOverlayStyles = StyleSheet.create({
         color: COLORS.blueOnboarding,
         alignSelf: 'flex-start'
     },
+    paddingContainer: {
+        // backgroundColor: 'red',
+        paddingTop: dimen.normalizeDimen(27),
+        paddingLeft: dimen.normalizeDimen(16.76),
+        paddingBottom: dimen.normalizeDimen(23),
+        paddingRight: dimen.normalizeDimen(39.24),
+        zIndex: 1000,
+    },
     pagination: {
         flex: 1,
         // backgroundColor: 'red',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: 4.5,
     }
 })
