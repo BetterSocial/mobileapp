@@ -81,27 +81,22 @@ const SignIn = () => {
           console.log(res, 'response token')
           if (res.success) {
             const { appUserId, countryCode } = res.data;
-            console.log(appUserId, 'resak')
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
               .then((response) => {
-                console.log(response.data, appUserId, 'response data')
                 setLoading(false);
                 if (response.data) {
-                  console.log('masuk response data', response.data)
                   create();
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
                   navigation.dispatch(StackActions.replace('HomeTabs'));
                 } else {
-                  console.log('masuk revove user id')
                   removeLocalStorege('userId');
                   navigation.dispatch(StackActions.replace('ChooseUsername'));
                 }
                 setUserId(appUserId);
               })
               .catch((e) => {
-                console.log(e, 'eman')
                 setLoading(false);
               });
           } else {
