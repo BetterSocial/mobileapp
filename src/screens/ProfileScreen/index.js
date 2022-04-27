@@ -173,7 +173,6 @@ const ProfileScreen = ({ route }) => {
   const saveProfileState = (result) => {
     setDataMain(result);
     setDataMainBio(result.bio)
-    setImageUrl(result.profile_pic_path, dispatch);
     setLoadingContainer(false)
   }
 
