@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import CredderRating from '../../components/CredderRating';
 import Gap from '../../components/Gap';
+import GlobalButton from '../../components/Button/GlobalButton';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import { Avatar } from '../../components';
 import { COLORS, FONTS, SIZES } from '../../utils/theme';
 import { Context } from '../../context';
 import { setDomainData, setProfileDomain } from '../../context/actions/domainAction';
-import GlobalButton from '../../components/Button/GlobalButton';
 
 const Header = ({ image, domain, time, item }) => {
   const [domainStore, dispatchDomain] = React.useContext(Context).domains;
@@ -48,8 +49,9 @@ const Header = ({ image, domain, time, item }) => {
               {new Date(time).toLocaleDateString()}
             </Text>
           </View>
-          <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
+          {/* <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} /> */}
         </View>
+        <CredderRating />
       </View>
     </GlobalButton>
   );
