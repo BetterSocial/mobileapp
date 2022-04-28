@@ -303,6 +303,7 @@ const DomainScreen = () => {
                 selfUserId={idFromToken}
                 onPressBlock={() => onReaction(0)}
                 follow={follow}
+                follower={domainFollowers}
                 handleFollow={handleFollow}
                 handleUnfollow={handleUnfollow}
                 onPressShare={ShareUtils.shareDomain}

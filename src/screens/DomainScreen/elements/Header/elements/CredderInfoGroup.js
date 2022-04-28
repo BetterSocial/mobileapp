@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import CredderLogo from '../../../../../assets/icon/CredderLogo';
+import CredderRating from '../../../../../components/CredderRating';
 import CredderRatingGreen from '../../../../../assets/icon/CredderRatingGreen';
 import MemoIc_question_mark from '../../../../../assets/icons/Ic_question_mark';
 import StringConstant from '../../../../../utils/string/StringConstant';
@@ -15,10 +16,7 @@ const CredderInfoGroup = ({ description }) => {
     let [isTooltipShown, setIsTooltipShown] = React.useState(false);
 
     return <View style={styles.container}>
-        <View style={styles.credderRatingContainer}>
-            <CredderRatingGreen style={{alignSelf: 'center'}}/>
-            <Text style={styles.credderRating}>89%</Text>
-        </View>
+        <CredderRating />
         <Tooltip
             // allowChildInteraction={false}
             isVisible={isTooltipShown}
@@ -66,21 +64,6 @@ const styles = StyleSheet.create({
         lineHeight: RFValue(12),
         fontFamily: fonts.inter[400],
         color: COLORS.blackgrey
-    },
-    credderRating: {
-        fontSize: RFValue(16),
-        fontFamily: fonts.inter[600],
-        marginLeft: 9,
-        color: COLORS.white,
-        alignSelf: 'center'
-    },
-    credderRatingContainer: {
-        paddingLeft: 4,
-        paddingRight: 4,
-        flexDirection: 'row',
-        // height: 28,
-        backgroundColor: COLORS.black43,
-        borderRadius: 8,
     },
     tooltipContent: {
         fontFamily: fonts.inter[400],
