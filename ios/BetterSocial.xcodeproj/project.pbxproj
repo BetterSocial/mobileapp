@@ -85,7 +85,7 @@
 		88A9695C2829EDBA00A87C3C /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34922829E9DC0057417B /* Montserrat-Bold.ttf */; };
 		88A9695D2829EDBA00A87C3C /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34902829E8BE0057417B /* Lato-Regular.ttf */; };
 		88A9695E2829EDBA00A87C3C /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB348E2829E8AA0057417B /* Lato-Bold.ttf */; };
-		88A9695F2829EEA300A87C3C /* GoogleService-Info .plist in Resources */ = {isa = PBXBuildFile; fileRef = 88203A2E2811FB9200199BF0 /* GoogleService-Info .plist */; };
+		88A969612829F34E00A87C3C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88A969602829F34E00A87C3C /* GoogleService-Info.plist */; };
 		88BB348F2829E8B20057417B /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB348E2829E8AA0057417B /* Lato-Bold.ttf */; };
 		88BB34912829E8CF0057417B /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34902829E8BE0057417B /* Lato-Regular.ttf */; };
 		88BB34942829E9F40057417B /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34932829E9E10057417B /* Montserrat-Regular.ttf */; };
@@ -170,10 +170,10 @@
 		845C6DD82758A00C00C9F384 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		845C6DD92758A00C00C9F384 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		88203A2C2811FB6400199BF0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "Development/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
-		88203A2E2811FB9200199BF0 /* GoogleService-Info .plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info .plist"; path = "Production/GoogleService-Info .plist"; sourceTree = SOURCE_ROOT; };
 		889CAB1B27D437C3007F5892 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		889CAB8E27D46CD6007F5892 /* BetterSocialDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterSocialDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88A969582829ED7100A87C3C /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		88A969602829F34E00A87C3C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "Production/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		88BB348E2829E8AA0057417B /* Lato-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Bold.ttf"; path = "../assets/fonts/Lato-Bold.ttf"; sourceTree = "<group>"; };
 		88BB34902829E8BE0057417B /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Regular.ttf"; path = "../assets/fonts/Lato-Regular.ttf"; sourceTree = "<group>"; };
 		88BB34922829E9DC0057417B /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Bold.ttf"; path = "../assets/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; };
@@ -431,7 +431,7 @@
 		889CAB9627D46F9B007F5892 /* Production */ = {
 			isa = PBXGroup;
 			children = (
-				88203A2E2811FB9200199BF0 /* GoogleService-Info .plist */,
+				88A969602829F34E00A87C3C /* GoogleService-Info.plist */,
 			);
 			path = Production;
 			sourceTree = "<group>";
@@ -657,12 +657,12 @@
 				845C6E8F2758B14000C9F384 /* Poppins-ExtraBoldItalic.ttf in Resources */,
 				845C6E872758B11100C9F384 /* Inter-Black.ttf in Resources */,
 				845C6E902758B14300C9F384 /* Poppins-ExtraLight.ttf in Resources */,
+				88A969612829F34E00A87C3C /* GoogleService-Info.plist in Resources */,
 				845C6E832758B10400C9F384 /* Inter-Light.ttf in Resources */,
 				845C6E9A2758B16500C9F384 /* Poppins-Thin.ttf in Resources */,
 				845C6E8E2758B13E00C9F384 /* Poppins-ExtraBold.ttf in Resources */,
 				845C6E952758B15600C9F384 /* Poppins-Medium.ttf in Resources */,
 				845C6E9B2758B16800C9F384 /* Poppins-ThinItalic.ttf in Resources */,
-				88A9695F2829EEA300A87C3C /* GoogleService-Info .plist in Resources */,
 				845C6E8D2758B13A00C9F384 /* Poppins-BoldItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
