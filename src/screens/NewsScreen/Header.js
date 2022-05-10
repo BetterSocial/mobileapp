@@ -51,7 +51,7 @@ const Header = ({ image, domain, time, item }) => {
           </View>
           {/* <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} /> */}
         </View>
-        <CredderRating />
+        <CredderRating containerStyle={{height: 28, alignSelf: 'center'}}/>
       </View>
     </GlobalButton>
   );

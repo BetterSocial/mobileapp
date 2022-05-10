@@ -2,7 +2,7 @@ import * as React from 'react';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import CredderLogo from '../../../../../assets/icon/CredderLogo';
 import CredderRating from '../../../../../components/CredderRating';
@@ -15,7 +15,7 @@ import { fonts, normalize } from '../../../../../utils/fonts';
 const CredderInfoGroup = ({ description }) => {
     let [isTooltipShown, setIsTooltipShown] = React.useState(false);
 
-    return <View style={styles.container}>
+    return <TouchableWithoutFeedback style={styles.container} onPress={() => setIsTooltipShown(true)}>
         <CredderRating />
         <Tooltip
             // allowChildInteraction={false}
@@ -33,8 +33,7 @@ const CredderInfoGroup = ({ description }) => {
                     </Text>
                 </View>
             }>
-            <TouchableOpacity
-                onPress={() => setIsTooltipShown(true)}
+            <View
                 style={{
                     paddingLeft: 5,
                     paddingRight: 11,
@@ -43,20 +42,22 @@ const CredderInfoGroup = ({ description }) => {
                     width={normalize(17)}
                     height={normalize(17)}
                 />
-            </TouchableOpacity>
+            </View>
         </Tooltip>
         <View>
             <Text style={styles.credderDesc}>Credibility Score by</Text>
             <CredderLogo />
         </View>
-    </View>
+    </TouchableWithoutFeedback>
 }
 
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         marginTop: 16,
-        maxWidth: '100%'
+        maxWidth: '100%',
+        margin: -4,
+        padding: 4,
     },
     credderDesc: {
         marginBottom: 4,

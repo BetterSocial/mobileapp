@@ -76,7 +76,7 @@ const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFol
                 </View>
             </View>
             <View style={{marginRight: 10}}>
-                <CredderRating containerStyle={{paddingTop: 5, paddingBottom: 5}}/>
+                <CredderRating containerStyle={{height: 28}}/>
             </View>
             <View style={{ justifyContent: 'center' }}>
                 {follow ? (
@@ -159,21 +159,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#00ADB5',
         borderRadius: 8,
         borderColor: '#00ADB5',
-        width: 36,
-        height: 36,
+        width: 28,
+        height: 28,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 0.5,
+        borderWidth: 2,
     },
     wrapperText: {
         backgroundColor: 'white',
         borderRadius: 8,
         borderColor: '#00ADB5',
-        width: normalize(36),
-        height: normalize(36),
+        width: 28,
+        height: 28,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: normalize(0.5),
+        borderWidth: 2,
     },
     noPh: {
         paddingHorizontal: 0

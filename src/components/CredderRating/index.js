@@ -17,17 +17,18 @@ export default CredderRating
 
 const styles = StyleSheet.create({
     credderRating: {
-        fontSize: RFValue(16),
+        fontSize: 16,
         fontFamily: fonts.inter[600],
         marginLeft: 9,
         color: COLORS.white,
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     credderRatingContainer: {
         paddingLeft: 4,
         paddingRight: 4,
         flexDirection: 'row',
-        // height: 28,
+        width: 69,
+        // height: '100%',
         backgroundColor: COLORS.black43,
         borderRadius: 8,
     },

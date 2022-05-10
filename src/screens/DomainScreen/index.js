@@ -394,4 +394,5 @@ const styles = StyleSheet.create({
   containerLoading: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
 
-export default withInteractionsManaged(DomainScreen);
+// export default withInteractionsManaged(DomainScreen);
+export default DomainScreen;
