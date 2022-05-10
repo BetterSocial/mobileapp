@@ -47,7 +47,6 @@
 		845C6E9B2758B16800C9F384 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DBF2758A00B00C9F384 /* Poppins-ThinItalic.ttf */; };
 		845C6E9C2758B16B00C9F384 /* Poppins.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD52758A00C00C9F384 /* Poppins.ttf */; };
 		88203A2D2811FB6400199BF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88203A2C2811FB6400199BF0 /* GoogleService-Info.plist */; };
-		88203A302811FBA200199BF0 /* GoogleService-Info .plist in Resources */ = {isa = PBXBuildFile; fileRef = 88203A2E2811FB9200199BF0 /* GoogleService-Info .plist */; };
 		889CAB6227D46CD6007F5892 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		889CAB6327D46CD6007F5892 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		889CAB6727D46CD6007F5892 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCB2758A00B00C9F384 /* Inter-SemiBold.ttf */; };
@@ -80,6 +79,17 @@
 		889CAB8227D46CD6007F5892 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DC42758A00B00C9F384 /* Poppins-Medium.ttf */; };
 		889CAB8327D46CD6007F5892 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DBF2758A00B00C9F384 /* Poppins-ThinItalic.ttf */; };
 		889CAB8527D46CD6007F5892 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCA2758A00B00C9F384 /* Poppins-BoldItalic.ttf */; };
+		88A969592829ED8600A87C3C /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88A969582829ED7100A87C3C /* Roboto-Bold.ttf */; };
+		88A9695A2829EDBA00A87C3C /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88A969582829ED7100A87C3C /* Roboto-Bold.ttf */; };
+		88A9695B2829EDBA00A87C3C /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34932829E9E10057417B /* Montserrat-Regular.ttf */; };
+		88A9695C2829EDBA00A87C3C /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34922829E9DC0057417B /* Montserrat-Bold.ttf */; };
+		88A9695D2829EDBA00A87C3C /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34902829E8BE0057417B /* Lato-Regular.ttf */; };
+		88A9695E2829EDBA00A87C3C /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB348E2829E8AA0057417B /* Lato-Bold.ttf */; };
+		88A9695F2829EEA300A87C3C /* GoogleService-Info .plist in Resources */ = {isa = PBXBuildFile; fileRef = 88203A2E2811FB9200199BF0 /* GoogleService-Info .plist */; };
+		88BB348F2829E8B20057417B /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB348E2829E8AA0057417B /* Lato-Bold.ttf */; };
+		88BB34912829E8CF0057417B /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34902829E8BE0057417B /* Lato-Regular.ttf */; };
+		88BB34942829E9F40057417B /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34932829E9E10057417B /* Montserrat-Regular.ttf */; };
+		88BB34952829E9FB0057417B /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34922829E9DC0057417B /* Montserrat-Bold.ttf */; };
 		A7DFC22D7A7416C905E99E3E /* libPods-BetterSocial-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 961222F3C2A6D96F23385F4E /* libPods-BetterSocial-tvOSTests.a */; };
 		E8E037131A2D2EE3F47F535A /* libPods-BetterSocial.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F8127D4E6B0497550E27173 /* libPods-BetterSocial.a */; };
 		F3954C04D840D6F9C566C8FD /* libPods-BetterSocial-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E680F8CC7218DE266D197522 /* libPods-BetterSocial-tvOS.a */; };
@@ -163,6 +173,11 @@
 		88203A2E2811FB9200199BF0 /* GoogleService-Info .plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info .plist"; path = "Production/GoogleService-Info .plist"; sourceTree = SOURCE_ROOT; };
 		889CAB1B27D437C3007F5892 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		889CAB8E27D46CD6007F5892 /* BetterSocialDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterSocialDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		88A969582829ED7100A87C3C /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		88BB348E2829E8AA0057417B /* Lato-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Bold.ttf"; path = "../assets/fonts/Lato-Bold.ttf"; sourceTree = "<group>"; };
+		88BB34902829E8BE0057417B /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Regular.ttf"; path = "../assets/fonts/Lato-Regular.ttf"; sourceTree = "<group>"; };
+		88BB34922829E9DC0057417B /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Bold.ttf"; path = "../assets/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		88BB34932829E9E10057417B /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Regular.ttf"; path = "../assets/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		8BA0FC5770AA4F778663B566 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		961222F3C2A6D96F23385F4E /* libPods-BetterSocial-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9818CC1275B280EE7ECD1AF0 /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.release.xcconfig"; sourceTree = "<group>"; };
@@ -362,9 +377,14 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				88A969582829ED7100A87C3C /* Roboto-Bold.ttf */,
+				88BB34932829E9E10057417B /* Montserrat-Regular.ttf */,
+				88BB34922829E9DC0057417B /* Montserrat-Bold.ttf */,
+				88BB34902829E8BE0057417B /* Lato-Regular.ttf */,
 				889CAB1B27D437C3007F5892 /* Config.xcconfig */,
 				F87F35812717E4C8003F1E09 /* Poppins-Regular.ttf */,
 				F87F35802717E4C8003F1E09 /* Poppins-SemiBold.ttf */,
+				88BB348E2829E8AA0057417B /* Lato-Bold.ttf */,
 				13B07FAE1A68108700A75B9A /* BetterSocial */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BetterSocialTests */,
@@ -608,11 +628,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88A9695A2829EDBA00A87C3C /* Roboto-Bold.ttf in Resources */,
+				88A9695B2829EDBA00A87C3C /* Montserrat-Regular.ttf in Resources */,
+				88A9695C2829EDBA00A87C3C /* Montserrat-Bold.ttf in Resources */,
+				88A9695D2829EDBA00A87C3C /* Lato-Regular.ttf in Resources */,
+				88A9695E2829EDBA00A87C3C /* Lato-Bold.ttf in Resources */,
 				845C6E812758B01200C9F384 /* Inter-SemiBold.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				845C6E802758AFC500C9F384 /* Inter-Regular.ttf in Resources */,
 				845C6E8A2758B12000C9F384 /* Poppins-Black.ttf in Resources */,
-				88203A302811FBA200199BF0 /* GoogleService-Info .plist in Resources */,
 				845C6E892758B11D00C9F384 /* Inter.ttf in Resources */,
 				845C6E862758B10D00C9F384 /* Inter-Bold.ttf in Resources */,
 				845C6E982758B15F00C9F384 /* Poppins-SemiBold.ttf in Resources */,
@@ -638,6 +662,7 @@
 				845C6E8E2758B13E00C9F384 /* Poppins-ExtraBold.ttf in Resources */,
 				845C6E952758B15600C9F384 /* Poppins-Medium.ttf in Resources */,
 				845C6E9B2758B16800C9F384 /* Poppins-ThinItalic.ttf in Resources */,
+				88A9695F2829EEA300A87C3C /* GoogleService-Info .plist in Resources */,
 				845C6E8D2758B13A00C9F384 /* Poppins-BoldItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -661,6 +686,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88A969592829ED8600A87C3C /* Roboto-Bold.ttf in Resources */,
+				88BB34952829E9FB0057417B /* Montserrat-Bold.ttf in Resources */,
+				88BB34942829E9F40057417B /* Montserrat-Regular.ttf in Resources */,
+				88BB34912829E8CF0057417B /* Lato-Regular.ttf in Resources */,
+				88BB348F2829E8B20057417B /* Lato-Bold.ttf in Resources */,
 				889CAB6727D46CD6007F5892 /* Inter-SemiBold.ttf in Resources */,
 				889CAB6827D46CD6007F5892 /* Images.xcassets in Resources */,
 				889CAB6927D46CD6007F5892 /* Inter-Regular.ttf in Resources */,
