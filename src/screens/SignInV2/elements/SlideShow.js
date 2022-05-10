@@ -11,7 +11,9 @@ import { COLORS } from '../../../utils/theme';
 import { SlideShowItem } from './SlideShowItem';
 import { fonts, normalizeFontSize, scaleFontSize } from '../../../utils/fonts';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth, fontScale, scale } = Dimensions.get('window');
+console.log(fontScale)
+console.log('\n')
 
 const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
   const [index, setIndex] = React.useState(0)
@@ -106,33 +108,19 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
       illustrations: FgOnboarding1,
       title: 'Be Safe',
       text: <Text style={slideShowStyles.textFontNormal}>
-        {`Be safe from surveillance and harassment.`}
-        {`\n`}
-
-        {`Block haters in 2 clicks & penalize their posts`}
-        {`\n`}
-
-        {`across the platform. Like real life communities,`}
-        {`\n`}
-
-        {`our algorithm amplifies respect, without`}
-        {`\n`}
-
-        {`rejecting free speech.`}
       </Text>,
     }
 
   ];
   const handleChangeIndex = (swiperData) => {
     // onChangeNewIndex(swiperData, data.length);
+    flatListRef.current.scrollToIndex({ index: swiperData.index })
     setIndex(swiperData.index)
   };
 
-  const onHandleNextSlide = () => {
-    let newIndex = index + 1
-    if (newIndex > data.length) return
-    flatListRef.current.scrollToIndex({ index: newIndex })
-    setIndex(newIndex)
+  const onHandleNextSlide = (toIndex) => {
+    flatListRef.current.scrollToIndex({ index: toIndex })
+    setIndex(toIndex)
   }
 
   return (
@@ -152,10 +140,10 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
         title={item.title} />
       }
       onChangeIndex={handleChangeIndex}
-    // viewabilityConfig={{
-    //   itemVisiblePercentThreshold: 10,
-    //   minimumViewTime: 10
-    // }}
+      viewabilityConfig={{
+        itemVisiblePercentThreshold: 1,
+        minimumViewTime: 10
+      }}
     />
   );
 };
@@ -165,13 +153,14 @@ export default SlideShow;
 const slideShowStyles = StyleSheet.create({
   textFontBold: {
     fontFamily: fonts.inter[700],
-    fontSize: RFValue(16, 812),
+    fontSize: fontScale < 1 ? RFValue(16, 812) : RFValue(14, 812),
+    lineHeight: fontScale < 1 ? RFValue(22) : RFValue(20),
     color: COLORS.blackgrey,
   },
   textFontNormal: {
     fontFamily: fonts.inter[400],
-    fontSize: RFValue(16, 812),
-    lineHeight: 24,
+    fontSize: fontScale < 1 ? RFValue(16, 812) : RFValue(14, 812),
+    lineHeight: fontScale < 1 ? RFValue(22) : RFValue(20),
     color: COLORS.blackgrey,
     flex: 1,
     alignSelf: 'flex-start',
