@@ -165,7 +165,7 @@ const ProfileScreen = ({ route }) => {
       const result = await getMyProfile(id);
       if (result.code === 200) {
         saveToCache(PROFILE_CACHE, result.data)
-        saveProfileState(result.data)
+        saveProfileState(result?.data)
       }
       setLoadingContainer(false)
     }

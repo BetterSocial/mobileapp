@@ -45,6 +45,7 @@ const RenderItem = ({
   handleUnfollow,
   follow = false,
   follower = 0,
+  score
 }) => {
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
@@ -133,7 +134,8 @@ const RenderItem = ({
           handleFollow={handleFollow}
           handleUnfollow={handleUnfollow}
           follow={follow}
-          follower={follower} />
+          follower={follower}
+          score={score} />
         <Pressable onPress={() => onPressComment(item)}>
           <View>
             <View

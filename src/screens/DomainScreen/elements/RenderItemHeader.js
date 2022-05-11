@@ -23,7 +23,9 @@ import { Gap } from '../../../components';
 import { colors } from '../../../utils/colors';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 
-const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFollow = () => { }, handleUnfollow = () => { } }) => {
+const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFollow = () => { }, handleUnfollow = () => { }, score }) => {
+    console.log('item')
+    console.log(item)
     const getname = (i) => {
         try {
             return i.domain.name;
@@ -76,7 +78,7 @@ const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFol
                 </View>
             </View>
             <View style={{marginRight: 10}}>
-                <CredderRating containerStyle={{height: 28}}/>
+                <CredderRating containerStyle={{height: 28}} score={score}/>
             </View>
             <View style={{ justifyContent: 'center' }}>
                 {follow ? (

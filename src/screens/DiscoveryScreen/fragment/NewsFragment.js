@@ -49,7 +49,7 @@ const NewsFragment = () => {
                         }
                     })
                 }
-
+                
                 // Disable on press content if view should be navigated to LinkContextScreen
                 if(!item.dummy) return <RenderItem key={`news-screen-item-${index}`} item={item} selfUserId={myId} onPressContent={onContentClicked}/>
             })
@@ -64,12 +64,11 @@ const NewsFragment = () => {
                 item?.newsLinkDomain?.logo ,
                 item?.newsLinkDomain?.domain_name || item?.site_name,
                 item.createdAt,
-                item.news_link_id
+                item.news_link_id,
+                item?.newsLinkDomain?.credder_score
             )
 
             let onContentClicked = () => {
-                console.log('item')
-                console.log(item)
                 navigation.navigate('DetailDomainScreen', {
                     item: {
                         id: item.news_link_id

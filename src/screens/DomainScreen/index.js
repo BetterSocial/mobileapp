@@ -297,6 +297,7 @@ const DomainScreen = () => {
               <RenderItem
                 key={index}
                 item={item}
+                score={dataDomain.domain.credderScore}
                 image={profile.logo}
                 onPressComment={(itemNews) => handleOnPressComment(itemNews)}
                 onPressUpvote={(news) => upvoteNews(news)}
@@ -395,5 +396,5 @@ const styles = StyleSheet.create({
   containerLoading: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
 
-// export default withInteractionsManaged(DomainScreen);
-export default DomainScreen;
+export default withInteractionsManaged(DomainScreen);
+// export default DomainScreen;
