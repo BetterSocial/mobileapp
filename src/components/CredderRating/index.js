@@ -2,14 +2,25 @@ import * as React from 'react'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { StyleSheet, Text, View } from 'react-native'
 
+import CredderRatingGray from '../../assets/icon/CredderRatingGray'
 import CredderRatingGreen from '../../assets/icon/CredderRatingGreen'
+import CredderRatingRed from '../../assets/icon/CredderRatingRed'
+import CredderRatingYellow from '../../assets/icon/CredderRatingYellow'
 import { COLORS } from '../../utils/theme'
 import { fonts } from '../../utils/fonts'
 
-const CredderRating = ({ containerStyle = {}, }) => {
-    return <View style={{...styles.credderRatingContainer, ...containerStyle}}>
-        <CredderRatingGreen style={{ alignSelf: 'center' }} />
-        <Text style={styles.credderRating}>89%</Text>
+const CredderRating = ({ containerStyle = {}, score }) => {
+    const __renderCredderRatingIcon = () => {
+        if (!score) return <CredderRatingGray style={{ alignSelf: 'center' }} />
+        if (score <= 42) return <CredderRatingRed style={{ alignSelf: 'center' }} />
+        if (score > 42 && score <= 65) return <CredderRatingYellow style={{ alignSelf: 'center' }} />
+
+        return <CredderRatingGreen style={{ alignSelf: 'center' }} />
+    }
+
+    return <View style={{ ...styles.credderRatingContainer, ...containerStyle }}>
+        {__renderCredderRatingIcon()}
+        <Text style={styles.credderRating}>{`${score ? `${score}%` : 'n/a'}`}</Text>
     </View>
 }
 
@@ -19,9 +30,11 @@ const styles = StyleSheet.create({
     credderRating: {
         fontSize: 16,
         fontFamily: fonts.inter[600],
-        marginLeft: 9,
+        // marginLeft: 9,
         color: COLORS.white,
         alignSelf: 'center',
+        textAlign: 'center',
+        flex: 1,
     },
     credderRatingContainer: {
         paddingLeft: 4,

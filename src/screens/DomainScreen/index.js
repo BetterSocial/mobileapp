@@ -280,6 +280,7 @@ const DomainScreen = () => {
               handleFollow={handleFollow}
               handleUnfollow={handleUnfollow}
               isBlocked={isBlocked}
+              item={dataDomain}
             />
             <LinearGradient
               colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']}

@@ -40,7 +40,8 @@ const Header = ({
   handleFollow,
   handleUnfollow,
   follow = false,
-  isBlocked
+  isBlocked,
+  item
 }) => {
   const openDomainLink = async () => {
     let isURL = await Linking.canOpenURL(`https://${domain}`);
@@ -80,7 +81,7 @@ const Header = ({
             </View>
           </View>
           <DomainFollowerNumber followers={followers} />
-          <CredderInfoGroup />
+          <CredderInfoGroup score={item.domain.credderScore}/>
         </View>
       </View>
       <Gap height={normalize(14)} />

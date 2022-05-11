@@ -12,11 +12,11 @@ import StringConstant from '../../../../../utils/string/StringConstant';
 import { COLORS } from '../../../../../utils/theme';
 import { fonts, normalize } from '../../../../../utils/fonts';
 
-const CredderInfoGroup = ({ description }) => {
+const CredderInfoGroup = ({ description, score }) => {
     let [isTooltipShown, setIsTooltipShown] = React.useState(false);
 
     return <TouchableWithoutFeedback style={styles.container} onPress={() => setIsTooltipShown(true)}>
-        <CredderRating />
+        <CredderRating score={score}/>
         <Tooltip
             // allowChildInteraction={false}
             isVisible={isTooltipShown}
