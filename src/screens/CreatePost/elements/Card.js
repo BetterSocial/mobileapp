@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { colors } from '../../../utils/colors';
 const Card = props => {
   return (
@@ -9,8 +9,8 @@ const Card = props => {
         // No backgroundColor
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 1,
-        shadowRadius: 10,
+        shadowOpacity: 0.5,
+        // shadowRadius: 10,
         zIndex: 999,
         // width: widthInput,
         ...props.style,
