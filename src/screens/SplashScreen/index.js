@@ -2,60 +2,60 @@ import * as React from 'react';
 import SplashScreenPackage from 'react-native-splash-screen';
 import analytics from '@react-native-firebase/analytics';
 import {
-  Image,
+
   Linking,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
+
 } from 'react-native';
 import { StackActions } from '@react-navigation/native';
 import { debounce } from 'lodash';
 import { useNavigation } from '@react-navigation/core';
 
-import following from '../../context/actions/following';
-import { Context } from '../../context';
+// import following from '../../context/actions/following';
+// import { Context } from '../../context';
 import { getAccessToken } from '../../utils/token';
 import { getDomains, getFollowedDomain } from '../../service/domain';
 import { getFollowing, getProfileByUsername } from '../../service/profile';
-import { getFollowingTopic } from '../../service/topics';
+// import { getFollowingTopic } from '../../service/topics';
 import { getUserId } from '../../utils/users';
-import { setNews } from '../../context/actions/news';
+// import { setNews } from '../../context/actions/news';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyTokenGetstream } from '../../service/users';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
   const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org';
-  const [isModalShown, setIsModalShown] = React.useState(false);
+  // const [isModalShown, setIsModalShown] = React.useState(false);
 
-  const [, newsDispatch] = React.useContext(Context).news;
-  const [, followingDispatch] = React.useContext(Context).following;
+  // const [, newsDispatch] = React.useContext(Context).news;
+  // const [, followingDispatch] = React.useContext(Context).following;
   const create = useClientGetstream();
   const debounceNavigationPage = debounce((selfUserId) => {
     navigation.dispatch(StackActions.replace(selfUserId ? 'HomeTabs' : 'SignIn'));
   }, 500);
 
   const getDiscoveryData = async (selfUserId) => {
-    if (!selfUserId) {
-      SplashScreenPackage.hide();
-      return debounceNavigationPage(selfUserId);
-    }
-    // Not using await so splash screen can navigate to next screen faster
+    SplashScreenPackage.hide();
+    debounceNavigationPage(selfUserId);
+    // if (!selfUserId) {
+    //   SplashScreenPackage.hide();
+    //   return debounceNavigationPage(selfUserId);
+    // }
+    // // Not using await so splash screen can navigate to next screen faster
 
-    try {
-      const followingUser = await getFollowing(selfUserId);
-      const domains = await getDomains();
-      const followedDomain = await getFollowedDomain();
-      const followingTopic = await getFollowingTopic();
-      await following.setFollowingUsers(followingUser.data, followingDispatch);
-      await setNews([{ dummy: true }, ...domains.data], newsDispatch);
-      await following.setFollowingDomain(followedDomain.data.data, followingDispatch);
-      await following.setFollowingTopics(followingTopic.data, followingDispatch);
-      SplashScreenPackage.hide();
-      debounceNavigationPage(selfUserId);
-    } catch (e) {
-      console.log(e);
-    }
+    // try {
+    //   const followingUser = await getFollowing(selfUserId);
+    //   const domains = await getDomains();
+    //   const followedDomain = await getFollowedDomain();
+    //   const followingTopic = await getFollowingTopic();
+    //   await following.setFollowingUsers(followingUser.data, followingDispatch);
+    //   await setNews([{ dummy: true }, ...domains.data], newsDispatch);
+    //   await following.setFollowingDomain(followedDomain.data.data, followingDispatch);
+    //   await following.setFollowingTopics(followingTopic.data, followingDispatch);
+    //   SplashScreenPackage.hide();
+    //   debounceNavigationPage(selfUserId);
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   const navigateWithoutDeeplink = async (selfUserId) => {

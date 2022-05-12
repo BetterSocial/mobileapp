@@ -19,7 +19,7 @@
     "reset": "react-native start --reset-cache",
     "prepare": "husky install",
     "reset-all": "rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules && npm cache clean --force && npm install && npm start -- --reset-cache",
-    "update-stream": "npm i stream-chat-react-native stream-chat-react-native-core"
+    "update-stream": "npm i stream-chat-react-native stream-chat-react-native-core --force"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.12",
@@ -99,8 +99,8 @@
     "recoil": "^0.5.2",
     "recyclerlistview": "^3.0.5",
     "stream-chat": "4.2.0",
-    "stream-chat-react-native": "git+ssh://git@github.com/agit26milan/stream-chat-react-native.git",
-    "stream-chat-react-native-core": "git+ssh://git@github.com/agit26milan/stream-chat-react-native-core.git",
+    "stream-chat-react-native": "github:agit26milan/stream-chat-react-native",
+    "stream-chat-react-native-core": "github:agit26milan/stream-chat-react-native-core",
     "toggle-switch-react-native": "^3.2.0",
     "ts-jest": "^27.0.2"
   },
