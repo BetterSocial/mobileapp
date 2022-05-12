@@ -171,9 +171,12 @@ const ProfileScreen = ({ route }) => {
   };
 
   const saveProfileState = (result) => {
-    setDataMain(result);
-    setDataMainBio(result.bio)
-    setLoadingContainer(false)
+    if(result && typeof result === 'object') {
+      setDataMain(result);
+      setDataMainBio(result.bio)
+      setLoadingContainer(false)
+    }
+
   }
 
   const getMyFeeds = async (offset = 0) => {
