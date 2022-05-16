@@ -17,6 +17,7 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
+import {debounce} from 'lodash'
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {showMessage} from 'react-native-flash-message';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -28,6 +29,7 @@ import BottomSheetBio from './elements/BottomSheetBio';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import FollowInfoRow from './elements/FollowInfoRow';
+import GlobalButton from '../../components/Button/GlobalButton';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import ProfileHeader from './elements/ProfileHeader';
@@ -37,6 +39,7 @@ import RenderItem from './elements/RenderItem';
 import dimen from '../../utils/dimen';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import { PROFILE_CACHE } from '../../utils/cache/constant';
 import {
   changeRealName,
   getMyProfile,
@@ -50,6 +53,7 @@ import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../utils/token';
 import {getFeedDetail, getMainFeed} from '../../service/post';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {
@@ -61,11 +65,8 @@ import {setImageUrl} from '../../context/actions/users';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
-import GlobalButton from '../../components/Button/GlobalButton';
-import {debounce} from 'lodash'
-import { getSpecificCache, saveToCache } from '../../utils/cache';
-import { PROFILE_CACHE } from '../../utils/cache/constant';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
 
@@ -164,7 +165,7 @@ const ProfileScreen = ({ route }) => {
       const result = await getMyProfile(id);
       if (result.code === 200) {
         saveToCache(PROFILE_CACHE, result.data)
-        saveProfileState(result.data)
+        saveProfileState(result?.data)
       }
       setLoadingContainer(false)
     }

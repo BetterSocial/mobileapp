@@ -9,13 +9,16 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import CredderRating from '../../components/CredderRating';
 import Gap from '../../components/Gap';
+import GlobalButton from '../../components/Button/GlobalButton';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import { Avatar } from '../../components';
 import { COLORS, FONTS, SIZES } from '../../utils/theme';
 import { Context } from '../../context';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
 import { setDomainData, setProfileDomain } from '../../context/actions/domainAction';
-import GlobalButton from '../../components/Button/GlobalButton';
 
 const Header = ({ image, domain, time, item }) => {
   const [domainStore, dispatchDomain] = React.useContext(Context).domains;
@@ -38,30 +41,50 @@ const Header = ({ image, domain, time, item }) => {
   return (
     <GlobalButton buttonStyle={styles.noPl} onPress={onHeaderPressed}>
       <View style={styles.container}>
-        <Avatar image={image} style={{ width: 36, height: 36 }} />
+        <Avatar image={image} style={styles.avatar} />
         <Gap width={8} />
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ ...FONTS.h4 }}>{domain}</Text>
+        <View style={styles.row}>
+          <View style={styles.domainNameContainer}>
+            <Text style={styles.domain}>{domain}</Text>
             <View style={styles.point} />
-            <Text style={{ color: COLORS.gray, ...FONTS.body4 }}>
+            <Text style={styles.domainPostDate}>
               {new Date(time).toLocaleDateString()}
             </Text>
           </View>
-          <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
+          {/* <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} /> */}
         </View>
+        <CredderRating containerStyle={{ height: 28, alignSelf: 'center' }} score={item?.domain?.credderScore} />
       </View>
     </GlobalButton>
   );
 };
 
 const styles = StyleSheet.create({
+  avatar: {
+    width: 36,
+    height: 36
+  },
   container: {
     flexDirection: 'row',
     paddingHorizontal: SIZES.base,
     marginLeft: 12,
     marginRight: 12,
     marginTop: 4,
+  },
+  domain: {
+    lineHeight: 14.52,
+    fontSize: 14,
+    fontFamily: fonts.inter[600]
+  },
+  domainNameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  domainPostDate: {
+    lineHeight: 14.52,
+    fontSize: 14,
+    fontFamily: fonts.inter[400],
+    color: colors.gray
   },
   wrapperItem: { backgroundColor: 'white', marginBottom: 16 },
   wrapperImage: {
@@ -98,6 +121,10 @@ const styles = StyleSheet.create({
   },
   noPl: {
     paddingLeft: 0
+  },
+  row: {
+    flex: 1,
+    justifyContent: 'center'
   }
 });
 

@@ -36,11 +36,12 @@ const linkContextScreenParamBuilder = (
  * @returns
  */
 const newsDiscoveryContentParamBuilder = (
-  title, image, description, url, domainImage, domainName, createdAt, newsLinkId,
+  title, image, description, url, domainImage, domainName, createdAt, newsLinkId, credderScore,
 ) => ({
   domain: {
     image: domainImage,
     name: domainName,
+    credderScore,
   },
   content: {
     title,

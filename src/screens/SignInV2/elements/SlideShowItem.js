@@ -9,13 +9,17 @@ import dimen from '../../../utils/dimen';
 import { COLORS, FONTS } from '../../../utils/theme';
 import { fonts, normalizeFontSize } from '../../../utils/fonts';
 
-const { height, width } = Dimensions.get('screen')
+const { height, width, fontScale } = Dimensions.get('screen')
 
 export const SlideShowItem = ({ children, count, handleLogin, illustration, index, isLogin, title, text, onNextSlide = () => { } }) => {
     // console.log(height)
     const __renderForeground = () => {
         if (index < 4) return (<Image source={illustration} style={styles.onboardingForeground} />)
         return <></>
+    }
+
+    const __onNextSlide = () => {
+        onNextSlide(index + 1)
     }
 
     const getLogoDimension = () => {
@@ -46,7 +50,7 @@ export const SlideShowItem = ({ children, count, handleLogin, illustration, inde
             {__renderForeground()}
             {__renderBackground()}
         </View>
-        <BottomOverlay count={count} handleLogin={handleLogin} isLogin={isLogin} text={text} title={title} index={index} onNextSlide={onNextSlide} />
+        <BottomOverlay count={count} handleLogin={handleLogin} isLogin={isLogin} text={text} title={title} index={index} onNextSlide={__onNextSlide} />
     </View>
 }
 
@@ -56,8 +60,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: fonts.inter[500],
-        fontSize: normalizeFontSize(14.45),
-        lineHeight: normalizeFontSize(21.67),
+        fontSize: fontScale < 1 ? normalizeFontSize(14.45) : normalizeFontSize(12.45),
+        lineHeight: fontScale < 1 ? normalizeFontSize(21.67) : normalizeFontSize(19.67),
         color: COLORS.white
     },
     brandLoginImage: {

@@ -31,6 +31,7 @@ import { randomString } from '../../utils/string/StringUtils';
 import { registerUser } from '../../service/users';
 import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import { Header } from '../../components';
 
 const width = Dimensions.get('screen').width;
 
@@ -254,9 +255,14 @@ const WhotoFollow = () => {
     }
   };
 
+  const onBack = () => {
+    navigation.goBack()
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.wrapperHeader}>{renderHeader()}</View>
+      <Header onPress={onBack} />
+      {/* <View style={styles.wrapperHeader}>{renderHeader()}</View> */}
       <View style={styles.containerProgress}>
         <ProgressBar isStatic={true} value={100} />
       </View>

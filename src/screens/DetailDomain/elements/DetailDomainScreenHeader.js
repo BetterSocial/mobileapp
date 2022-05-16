@@ -1,16 +1,17 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
+import CredderRating from '../../../components/CredderRating';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import Memoic_globe from '../../../assets/icons/ic_globe';
-import {COLORS, SIZES} from '../../../utils/theme';
-import {Gap} from '../../../components';
-import {fonts} from '../../../utils/fonts';
+import { COLORS, SIZES } from '../../../utils/theme';
+import { Gap } from '../../../components';
+import { fonts } from '../../../utils/fonts';
 
 const DetailDomainScreenHeader = ({
   image,
@@ -40,9 +41,9 @@ const DetailDomainScreenHeader = ({
         />
       </View>
       <Gap width={SIZES.base} />
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Text style={styles.headerDomainName}>{domain}</Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={styles.headerDomainDate}>
             {new Date(time).toLocaleDateString()}
           </Text>
@@ -51,12 +52,15 @@ const DetailDomainScreenHeader = ({
           <View style={styles.point} />
 
           <MemoPeopleFollow height={13} width={12} />
-          <Gap style={{width: 4}} />
+          <Gap style={{ width: 4 }} />
           <Text style={styles.followerNumber}>12k</Text>
         </View>
-        <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
+        {/* <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} /> */}
       </View>
-      <View style={{justifyContent: 'center'}}>
+      <View style={{ marginRight: 10 }}>
+        {/* <CredderRating containerStyle={{ height: 28 }} /> */}
+      </View>
+      <View style={{ justifyContent: 'center' }}>
         <TouchableOpacity onPress={onFollowDomainPressed}>
           <View style={styles.wrapperText}>
             <MemoFollowDomain />

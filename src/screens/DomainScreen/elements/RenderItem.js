@@ -1,11 +1,4 @@
 import * as React from 'react';
-
-import {
-  Footer,
-  Gap,
-  PreviewComment,
-  SingleSidedShadowBox,
-} from '../../../components';
 import {
   Image,
   Pressable,
@@ -14,13 +7,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
-import {
-  getCountComment,
-  getCountCommentWithChild,
-  getCountVote,
-} from '../../../utils/getstream';
-import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
 
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
@@ -30,8 +16,21 @@ import MemoUnfollowDomain from '../../../assets/icon/IconUnfollowDomain';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 import RenderItemHeader from './RenderItemHeader'
-import { colors } from '../../../utils/colors';
 import dimen from '../../../utils/dimen';
+import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
+import {
+  Footer,
+  Gap,
+  PreviewComment,
+  SingleSidedShadowBox,
+} from '../../../components';
+import { colors } from '../../../utils/colors';
+import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
+import {
+  getCountComment,
+  getCountCommentWithChild,
+  getCountVote,
+} from '../../../utils/getstream';
 
 const RenderItem = ({
   item,
@@ -45,6 +44,8 @@ const RenderItem = ({
   handleFollow,
   handleUnfollow,
   follow = false,
+  follower = 0,
+  score
 }) => {
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
@@ -127,69 +128,14 @@ const RenderItem = ({
   return (
     <SingleSidedShadowBox>
       <View style={styles.wrapperItem}>
-        <RenderItemHeader 
-          item={item} 
-          image={image} 
-          handleFollow={handleFollow} 
+        <RenderItemHeader
+          item={item}
+          image={image}
+          handleFollow={handleFollow}
           handleUnfollow={handleUnfollow}
-          follow={follow} />
-        {/* <View style={styles.container}>
-          <View style={styles.wrapperImage}>
-            {image ? (
-              <Image
-                source={{ uri: image }}
-                style={[styles.image, StyleSheet.absoluteFillObject]}
-              />
-            ) : (
-              <MemoDomainProfilePicture width="47" height="47" />
-            )}
-          </View>
-          <Gap width={SIZES.base} />
-          <View style={{ flex: 1 }}>
-            <Text style={styles.headerDomainName}>{name}</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.headerDomainDate}>
-                {new Date(time).toLocaleDateString()}
-              </Text>
-              <View style={styles.point} />
-              <Memoic_globe height={normalize(13)} width={normalize(13)} />
-              <View style={styles.point} />
-
-              <MemoPeopleFollow height={normalize(13)} width={normalize(12)} />
-              <Gap style={{ width: 4 }} />
-              <Text
-                style={{
-                  color: '#828282',
-                  fontSize: normalizeFontSize(12),
-                  fontFamily: fonts.inter[700],
-                }}>
-                12k
-              </Text>
-            </View>
-            <Gap height={normalize(8)} />
-            <View style={styles.domainIndicatorContainer}>
-              <MemoIc_rectangle_gradient_mini
-                width={normalize(SIZES.width * 0.43)}
-                height={4}
-              />
-            </View>
-          </View>
-          <View style={{ justifyContent: 'center' }}>
-            {follow ? (
-              <TouchableOpacity onPress={handleUnfollow}>
-                <View style={styles.wrapperTextUnFollow}>
-                  <MemoUnfollowDomain />
-                </View>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={handleFollow}>
-                <View style={styles.wrapperText}>
-                  <MemoFollowDomain />
-                </View>
-              </TouchableOpacity>
-            )}
-          </View>
-            </View> */}
+          follow={follow}
+          follower={follower}
+          score={score} />
         <Pressable onPress={() => onPressComment(item)}>
           <View>
             <View

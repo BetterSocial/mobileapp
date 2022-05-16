@@ -9,19 +9,23 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize'
 import { TouchableNativeFeedback } from 'react-native';
 
-import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
-import MemoIc_interface from '../../../assets/icons/Ic_interface';
-import MemoIc_question_mark from '../../../assets/icons/Ic_question_mark';
-import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
-import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
-import { SIZES, COLORS } from '../../../utils/theme';
-import { SingleSidedShadowBox, Gap } from '../../../components';
-import StringConstant from '../../../utils/string/StringConstant';
-import { colors } from '../../../utils/colors';
-import { getSingularOrPluralText } from '../../../utils/string/StringUtils';
-import GlobalButton from '../../../components/Button/GlobalButton';
+import ActionButtonGroup from './elements/ActionButtonGroup';
+import CredderInfoGroup from './elements/CredderInfoGroup';
+import DomainFollowerNumber from './elements/DomainFollowerNumber';
+import GlobalButton from '../../../../components/Button/GlobalButton';
+import MemoDomainProfilePicture from '../../../../assets/icon/DomainProfilePictureEmptyState';
+import MemoIc_interface from '../../../../assets/icons/Ic_interface';
+import MemoIc_question_mark from '../../../../assets/icons/Ic_question_mark';
+import MemoIc_rectangle_gradient from '../../../../assets/Ic_rectangle_gradient';
+import StringConstant from '../../../../utils/string/StringConstant';
+import { COLORS, SIZES } from '../../../../utils/theme';
+import { Gap, SingleSidedShadowBox } from '../../../../components';
+import { colors } from '../../../../utils/colors';
+import { fonts, normalize, normalizeFontSize } from '../../../../utils/fonts';
+import { getSingularOrPluralText } from '../../../../utils/string/StringUtils';
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis.';
@@ -36,10 +40,9 @@ const Header = ({
   handleFollow,
   handleUnfollow,
   follow = false,
-  isBlocked
+  isBlocked,
+  item
 }) => {
-  let [isTooltipShown, setIsTooltipShown] = React.useState(false);
-
   const openDomainLink = async () => {
     let isURL = await Linking.canOpenURL(`https://${domain}`);
     console.log(isURL);
@@ -67,66 +70,35 @@ const Header = ({
           )}
         </View>
         <View style={styles.wrapperHeader}>
-          {follow ? (
-            <GlobalButton             buttonStyle={styles.noPh}
-            onPress={() => handleUnfollow()}>
-              <View style={styles.buttonFollowing}>
-                <Text style={styles.textButtonFollowing}>Following</Text>
-              </View>
-            </GlobalButton>
-          ) : (
-            <GlobalButton             buttonStyle={styles.noPh}
-            onPress={() => handleFollow()}>
-              <View style={styles.buttonFollow}>
-                <Text style={styles.textButtonFollow}>Follow</Text>
-              </View>
-            </GlobalButton>
-          )}
-          <Gap width={normalize(SIZES.base)} />
-          {!isBlocked ? <GlobalButton
-                        buttonStyle={styles.noPh}
-            onPress={() => onPressBlock()}>
-              <View style={styles.buttonBlock}>
-              <Text style={styles.blockButtonText}>Block</Text>
-
-              </View>
-          </GlobalButton> : <GlobalButton
-            buttonStyle={styles.noPh}
-            onPress={() => onPressUnblock()}>
-              <View
-              style={styles.buttonUnblock}
-              >
-                            <Text style={styles.unblockButtonText}>Blocked</Text>
-              </View>
-          </GlobalButton>}
-
+          <View style={styles.row}>
+            <Text style={styles.domainName}>{domain}</Text>
+            <View style={{alignSelf: 'center'}}>
+              <TouchableOpacity
+                style={styles.openInBrowserIcon}
+                onPress={openDomainLink}>
+                <MemoIc_interface width={17} height={17} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <DomainFollowerNumber followers={followers} />
+          <CredderInfoGroup score={item.domain.credderScore}/>
         </View>
-      </View>
-      <Gap height={normalize(12)} />
-      <View style={styles.row}>
-        <Text style={styles.domainName}>{domain}</Text>
-        <View style={{ justifyContent: 'center' }}>
-          <TouchableOpacity
-            style={styles.openInBrowserIcon}
-            onPress={openDomainLink}>
-            <MemoIc_interface width={17} height={17} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <Gap height={normalize(2)} />
-      <View style={[styles.row, { alignItems: 'center' }]}>
-        <Text style={styles.followersNumber}>{followers}</Text>
-        <Gap width={normalize(4)} />
-        <Text style={styles.followersText}>
-          {getSingularOrPluralText(followers, 'Follower', 'Followers')}
-        </Text>
       </View>
       <Gap height={normalize(14)} />
       <Text style={styles.domainDescription}>
         {description}
+        {/* Lorem Ipsum Dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis. */}
       </Text>
       <Gap height={normalize(10)} />
-      <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+      <ActionButtonGroup 
+        follow={follow} 
+        handleFollow={handleFollow}
+        handleUnfollow={handleUnfollow}
+        isBlocked={isBlocked}
+        onPressBlock={onPressBlock}
+        onPressUnblock={onPressUnblock} />
+      <Gap height={normalize(12)} />
+      {/* <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
         <View style={{ flex: 1, paddingBottom: 0 }}>
           <MemoIc_rectangle_gradient width={'100%'} height={normalize(18)} />
         </View>
@@ -160,8 +132,7 @@ const Header = ({
             />
           </TouchableOpacity>
         </Tooltip>
-      </View>
-      <Gap height={normalize(16)} />
+      </View> */}
     </View>
   );
 };
@@ -224,44 +195,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
   },
-  buttonBlock: {
-    // flex: 1,
-    height: normalize(36),
-    width: normalize(88),
-    borderWidth: 0.5,
-    borderRadius: 8,
-    borderColor: '#FF2E63',
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  buttonUnblock: {
-    height: normalize(36),
-    width: normalize(88),
-    borderWidth: 0.5,
-    borderRadius: 8,
-    borderColor: '#FF2E63',
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FF2E63',
-  },
-  blockButtonText: {
-    fontSize: normalizeFontSize(12),
-    color: '#FF2E63',
-    paddingHorizontal: 0,
-  },
-  unblockButtonText: {
-    fontSize: normalizeFontSize(12),
-    color: 'white',
-    paddingHorizontal: 0,
-  },
   wrapperHeader: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    // alignItems: 'center',
+    flexDirection: 'column',
+    marginLeft: 28,
   },
   width: (wid) => ({
     width: wid,
@@ -286,22 +225,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
   },
   domainName: {
-    fontSize: normalizeFontSize(24),
-    fontFamily: fonts.inter[500],
-    lineHeight: normalizeFontSize(29),
-    color: '#000000',
-  },
-  followersNumber: {
-    color: '#00ADB5',
+    fontSize: RFValue(20),
     fontFamily: fonts.inter[700],
-    fontSize: normalizeFontSize(14),
-    lineHeight: normalizeFontSize(17),
-  },
-  followersText: {
-    color: COLORS.black,
-    fontFamily: fonts.inter[400],
-    fontSize: normalizeFontSize(14),
-    lineHeight: normalizeFontSize(17),
+    lineHeight: RFValue(24.2),
+    color: '#000000',
   },
   domainDescription: {
     fontFamily: fonts.inter[400],
@@ -311,23 +238,6 @@ const styles = StyleSheet.create({
   },
   shadowBox: {
     paddingBottom: 8,
-  },
-  tooltipContent: {
-    fontFamily: fonts.inter[400],
-    fontSize: normalizeFontSize(14),
-    lineHeight: normalizeFontSize(17),
-    color: COLORS.blackgrey,
-  },
-  tooltipShadowContainer: {
-    paddingHorizontal: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   arrow: {
     position: 'absolute',
@@ -350,42 +260,11 @@ const styles = StyleSheet.create({
   },
   openInBrowserIcon: {
     padding: normalize(4),
-    paddingHorizontal: normalize(12),
+    // paddingHorizontal: normalize(12),
+    // marginLeft: 5.67,
+    marginLeft: 3.67,
     top: 0,
-  },
-  buttonFollowing: {
-    width: normalize(88),
-    height: normalize(36),
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.bondi_blue,
-    borderRadius: 8,
-  },
-  textButtonFollowing: {
-    fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
-    fontSize: normalizeFontSize(12),
-    lineHeight: normalizeFontSize(24),
-    color: colors.bondi_blue,
-  },
-  buttonFollow: {
-    width: normalize(88),
-    height: normalize(36),
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    backgroundColor: colors.bondi_blue,
-    color: colors.white,
-  },
-  textButtonFollow: {
-    fontFamily: fonts.inter[600],
-    fontWeight: 'bold',
-    fontSize: normalizeFontSize(12),
-    lineHeight: normalizeFontSize(24),
-    color: colors.white,
+    color: COLORS.bondi_blue
   },
   circleImage: {
     height: normalize(100),
@@ -402,9 +281,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
     borderColor: 'rgba(0,0,0,0.5)',
   },
-  noPh: {
-    paddingHorizontal: 0
-  }
 });
 
 export default Header;

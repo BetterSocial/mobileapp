@@ -25,6 +25,7 @@ import {ProgressBar} from '../../components/ProgressBar';
 import StringConstant from '../../utils/string/StringConstant';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
+import { Header } from '../../components';
 
 const width = Dimensions.get('screen').width;
 
@@ -99,10 +100,15 @@ const Topics = () => {
     }
   };
 
+  const onBack = () => {
+    navigation.goBack()
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {/* <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" /> */}
-      {renderHeader()}
+      <Header onPress={onBack} />
+      {/* {renderHeader()} */}
       <View style={styles.containerProgress}>
         <ProgressBar isStatic={true} value={75} />
       </View>
@@ -115,7 +121,7 @@ const Topics = () => {
         </Text>
       </View>
 
-      <ScrollView style={styles.scrollViewStyle}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
         {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
         {topics !== undefined
           ? Object.keys(topics).map((attribute, index) => {
@@ -187,7 +193,7 @@ const Topics = () => {
   );
 };
 const styles = StyleSheet.create({
-  scrollViewStyle: {marginBottom: 100},
+  scrollViewStyle: {marginBottom: 100, paddingHorizontal: 22},
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -201,6 +207,7 @@ const styles = StyleSheet.create({
   containerProgress: {
     marginTop: 36,
     marginBottom: 24,
+    paddingHorizontal: 22
   },
   textPickYourTopic: {
     fontFamily: 'Inter',
@@ -209,6 +216,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     lineHeight: 44,
     color: colors.bunting,
+    paddingHorizontal: 22
   },
   footer: {
     position: 'absolute',
@@ -240,6 +248,7 @@ const styles = StyleSheet.create({
     opacity: 0.84,
     marginTop: 8,
     marginBottom: 24,
+    paddingHorizontal: 22
   },
   containerTopic: {
     flexDirection: 'column',

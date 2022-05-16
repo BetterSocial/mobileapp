@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import {
     Image,
     Pressable,
@@ -8,10 +7,9 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
-import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
 
-import { Gap } from '../../../components';
+import CredderRating from '../../../components/CredderRating';
+import GlobalButton from '../../../components/Button/GlobalButton';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
 import MemoIc_rectangle_gradient_mini from '../../../assets/Ic_rectangle_gradient_mini';
@@ -19,11 +17,15 @@ import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoUnfollowDomain from '../../../assets/icon/IconUnfollowDomain';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
-import { colors } from '../../../utils/colors';
 import dimen from '../../../utils/dimen';
-import GlobalButton from '../../../components/Button/GlobalButton';
+import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
+import { Gap } from '../../../components';
+import { colors } from '../../../utils/colors';
+import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 
-const RenderItemHeader = ({ item, image, follow= false, handleFollow= () => {}, handleUnfollow=() => {} }) => {
+const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFollow = () => { }, handleUnfollow = () => { }, score }) => {
+    console.log('item')
+    console.log(item)
     const getname = (i) => {
         try {
             return i.domain.name;
@@ -31,7 +33,7 @@ const RenderItemHeader = ({ item, image, follow= false, handleFollow= () => {}, 
             return 'undenfined';
         }
     };
-    
+
     const gettime = (d) => {
         try {
             return d.time;
@@ -42,59 +44,56 @@ const RenderItemHeader = ({ item, image, follow= false, handleFollow= () => {}, 
     return (
         <View style={styles.container}>
             <View style={styles.wrapperImage}>
-            {image ? (
-                <Image
-                    source={{ uri: image }}
-                    style={[styles.image, StyleSheet.absoluteFillObject]}
-                />
-            ) : (
-                <MemoDomainProfilePicture width="47" height="47" />
-            )}
+                {image ? (
+                    <Image
+                        source={{ uri: image }}
+                        style={[styles.image, StyleSheet.absoluteFillObject]}
+                    />
+                ) : (
+                    <MemoDomainProfilePicture width="47" height="47" />
+                )}
             </View>
-            <Gap width={SIZES.base} />
+            <Gap width={13} />
             <View style={{ flex: 1 }}>
-            <Text style={styles.headerDomainName}>{getname(item)}</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={styles.headerDomainDate}>
-                    {new Date(gettime(item)).toLocaleDateString()}
-                </Text>
-                <View style={styles.point} />
-                <Memoic_globe height={normalize(13)} width={normalize(13)} />
-                <View style={styles.point} />
+                <Text style={styles.headerDomainName}>{getname(item)}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.headerDomainDate}>
+                        {new Date(gettime(item)).toLocaleDateString()}
+                    </Text>
+                    <View style={styles.point} />
+                    <Memoic_globe height={normalize(13)} width={normalize(13)} />
+                    <View style={styles.point} />
 
-                <MemoPeopleFollow height={normalize(13)} width={normalize(12)} />
-                <Gap style={{ width: 4 }} />
-                <Text
-                style={{
-                    color: '#828282',
-                    fontSize: normalizeFontSize(12),
-                    fontFamily: fonts.inter[700],
-                }}>
-                12k
-                </Text>
+                    <MemoPeopleFollow height={normalize(13)} width={normalize(12)} />
+                    <Gap style={{ width: 4 }} />
+                    <Text
+                        style={{
+                            color: '#828282',
+                            fontSize: normalizeFontSize(12),
+                            fontFamily: fonts.inter[700],
+                        }}>
+                        {/* Insert real follower number here */}
+                        {follower}
+                    </Text>
+                </View>
             </View>
-            <Gap height={normalize(8)} />
-            <View style={styles.domainIndicatorContainer}>
-                <MemoIc_rectangle_gradient_mini
-                width={normalize(SIZES.width * 0.43)}
-                height={4}
-                />
-            </View>
+            <View style={{marginRight: 10}}>
+                <CredderRating containerStyle={{height: 28}} score={score}/>
             </View>
             <View style={{ justifyContent: 'center' }}>
-            {follow ? (
-                <GlobalButton buttonStyle={styles.noPh} onPress={handleUnfollow}>
-                <View style={styles.wrapperTextUnFollow}>
-                    <MemoUnfollowDomain />
-                </View>
-                </GlobalButton>
-            ) : (
-                <GlobalButton buttonStyle={styles.noPh} onPress={handleFollow}>
-                <View style={styles.wrapperText}>
-                    <MemoFollowDomain />
-                </View>
-                </GlobalButton>
-            )}
+                {follow ? (
+                    <GlobalButton buttonStyle={styles.noPh} onPress={handleUnfollow}>
+                        <View style={styles.wrapperTextUnFollow}>
+                            <MemoUnfollowDomain />
+                        </View>
+                    </GlobalButton>
+                ) : (
+                    <GlobalButton buttonStyle={styles.noPh} onPress={handleFollow}>
+                        <View style={styles.wrapperText}>
+                            <MemoFollowDomain />
+                        </View>
+                    </GlobalButton>
+                )}
             </View>
         </View>
     )
@@ -162,21 +161,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#00ADB5',
         borderRadius: 8,
         borderColor: '#00ADB5',
-        width: 36,
-        height: 36,
+        width: 28,
+        height: 28,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 0.5,
+        borderWidth: 2,
     },
     wrapperText: {
         backgroundColor: 'white',
         borderRadius: 8,
         borderColor: '#00ADB5',
-        width: normalize(36),
-        height: normalize(36),
+        width: 28,
+        height: 28,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: normalize(0.5),
+        borderWidth: 2,
     },
     noPh: {
         paddingHorizontal: 0

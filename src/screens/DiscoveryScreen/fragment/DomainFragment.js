@@ -46,7 +46,6 @@ const DomainFragment = () => {
     // },[ followedDomains, unfollowedDomains ])
 
     const __handleOnPressDomain = (item) => {
-        console.log(item)
         let navigationParam = {
             item: {
                 content : {
@@ -92,14 +91,10 @@ const DomainFragment = () => {
             source: 'discoveryScreen',
         };
 
-        console.log('data')
-        console.log(data)
         if(willFollow) {
             const res = await followDomain(data);
-            console.log(res)
         } else {
             const res = await unfollowDomain(data);
-            console.log(res)
         }
     }
 
