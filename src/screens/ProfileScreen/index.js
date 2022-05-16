@@ -173,8 +173,8 @@ const ProfileScreen = ({ route }) => {
 
   const saveProfileState = (result) => {
     if(result && typeof result === 'object') {
-      setDataMain(result);
-      setDataMainBio(result.bio)
+      setDataMain(result || {});
+      setDataMainBio(result?.bio)
       setLoadingContainer(false)
     }
 

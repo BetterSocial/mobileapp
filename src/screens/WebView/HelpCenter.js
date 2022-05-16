@@ -7,22 +7,22 @@ import {useNavigation} from '@react-navigation/core';
 import Header from '../../components/Header';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const PrivacyPolicies = () => {
+const HelpCenter = () => {
   const navigator = useNavigation();
   React.useEffect(() => {
     analytics().logScreenView({
-      screen_class: 'PrivacyPolicies',
-      screen_name: 'PrivacyPolicies',
+      screen_class: 'HelpCenter',
+      screen_name: 'HelpCenter',
     });
   }, []);
 
   return (
     <View style={styles.container}>
       <SafeAreaView>
-      <Header title="Privacy Policies" onPress={() => navigator.goBack()} containerStyle={styles.header} />
+      <Header title="Help Center" onPress={() => navigator.goBack()} containerStyle={styles.header} />
       </SafeAreaView>
       <WebView
-        source={{uri: 'https://bettersocial.org/privacy'}}
+        source={{uri: 'https://bettersocial.org/help'}}
         showsVerticalScrollIndicator={false}
         startInLoadingState={true}
         style={styles.webview}
@@ -36,7 +36,7 @@ const PrivacyPolicies = () => {
   );
 };
 
-export default withInteractionsManaged (React.memo (PrivacyPolicies));
+export default withInteractionsManaged (React.memo (HelpCenter));
 
 const styles = StyleSheet.create({
   container: {

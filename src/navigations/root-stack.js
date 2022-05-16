@@ -17,6 +17,7 @@ import DomainScreen from '../screens/DomainScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
 import GeneralComponentAction from '../context/actions/generalComponentAction';
 import Header from '../components/Header';
+import HelpCenter from '../screens/WebView/HelpCenter';
 import HomeBottomTabs from './HomeBottomTabs';
 import ImageViewerScreen from '../screens/ImageViewer';
 import LinkContextScreen from '../screens/LinkContextScreen';
@@ -226,6 +227,11 @@ const RootStact = () => {
         <Stack.Screen
           name="PrivacyPolicies"
           component={PrivacyPolicies}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="HelpCenter"
+          component={HelpCenter}
           options={{ headerShown: false }}
         />
         <Stack.Screen
