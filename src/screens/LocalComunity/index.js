@@ -27,6 +27,7 @@ import {Context} from '../../context';
 import {setLocalCommunity} from '../../context/actions/localCommunity';
 import {colors} from '../../utils/colors';
 import StringConstant from '../../utils/string/StringConstant';
+import { Header } from '../../components';
 
 const width = Dimensions.get('screen').width;
 const LocalComunity = () => {
@@ -49,26 +50,6 @@ const LocalComunity = () => {
       screen_name: 'onb_select_location',
     });
   }, []);
-
-  const renderHeader = () => {
-    if (Platform.OS === 'android') {
-      return (
-        <View style={styles.header}>
-          <TouchableNativeFeedback
-            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}
-            onPress={() => navigation.goBack()}>
-            <ArrowLeftIcon width={20} height={12} fill="#000" />
-          </TouchableNativeFeedback>
-        </View>
-      );
-    } else {
-      return (
-        <TouchableHighlight onPress={() => navigation.goBack()}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
-        </TouchableHighlight>
-      );
-    }
-  };
 
   const handleSearch = (value) => {
     if (value.length >= 3) {
@@ -185,9 +166,14 @@ const LocalComunity = () => {
     setSearch('');
   };
 
+  const onBack = () => {
+    navigation.goBack()
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      {renderHeader()}
+      <Header onPress={onBack} />
+      {/* {renderHeader()} */}
       <View style={styles.containerProgress}>
         <ProgressBar isStatic={true} value={50} />
       </View>
