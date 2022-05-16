@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textSearch: {
-    fontFamily: 'FontsFree-Net-SFProText-Regular',
+    // fontFamily: 'SFProText-Regular',
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 18,

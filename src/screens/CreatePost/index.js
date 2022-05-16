@@ -145,7 +145,7 @@ const CreatePost = () => {
   const [locationId, setLocationId] = React.useState('');
   const [positionEndCursor, setPositionEndCursor] = React.useState(0);
   const [hastagPosition, setHastagPosition] = React.useState(0);
-
+  const [positionKeyboard, setPositionKeyboard] = React.useState('never')
   const [formattedContent, setFormatHastag] = React.useState('');
 
 
@@ -654,13 +654,14 @@ const CreatePost = () => {
     return string + this;
   };
 
-  
+  console.log(positionKeyboard, 'manakin')
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       <ScrollView
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps={positionKeyboard}
         style={{ paddingHorizontal: Platform.OS === 'ios' ? 20 : 0 }}>
         <Header title="Create a post" onPress={() => onBack()} />
         <UserProfile
@@ -704,9 +705,12 @@ const CreatePost = () => {
                 if (!detectEnter) {
                   setPositionTopicSearch(position);
                   searchTopic(textSeacrh);
+                  setPositionKeyboard('always')
                 }
                 else {
                   setTopicSearch([]);
+                  setPositionKeyboard('never')
+
                   // if (listTopic.indexOf(textSeacrh) === -1) {
                   //   let newArr = [...listTopic, textSeacrh];
                   //   setListTopic(newArr);
@@ -715,6 +719,8 @@ const CreatePost = () => {
               }
               else {
                 setTopicSearch([]);
+                setPositionKeyboard('never')
+
                 // if (listTopic.indexOf(textSeacrh) === -1) {
                 //   let newArr = [...listTopic, textSeacrh];
                 //   setListTopic(newArr);
@@ -722,9 +728,10 @@ const CreatePost = () => {
               }
             }
             else {
+              setPositionKeyboard('never')
               setTopicSearch([]);
             }
-
+            // setPositionKeyboard('never')
             handleHastag(v, setFormatHastag);
             setMessage(v);
           }}
@@ -736,6 +743,7 @@ const CreatePost = () => {
             'What’s on your mind?\nRemember to be respectful .\nDownvotes  & Blocks harm all your posts’ visibility.'
           }
           autoCapitalize={'none'}
+          
         >
           <Text>{formattedContent}</Text>
         </TextInput>
@@ -757,6 +765,7 @@ const CreatePost = () => {
                       let newArr = [...listTopic, topicItem];
                       setListTopic(newArr);
                     }
+                    setPositionKeyboard('never')
                     handleHastag(newMessage, setFormatHastag)
                     setMessage(newMessage);
                     setTopicSearch([]);
