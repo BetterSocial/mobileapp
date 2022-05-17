@@ -18,9 +18,14 @@ const CredderRating = ({ containerStyle = {}, score }) => {
         return <CredderRatingGreen style={{ alignSelf: 'center' }} />
     }
 
+    const __renderCredderRatingScore = () => {
+        if(!score || score < 0) return `n/a`
+        return `${score}%`
+    }
+
     return <View style={{ ...styles.credderRatingContainer, ...containerStyle }}>
         {__renderCredderRatingIcon()}
-        <Text style={styles.credderRating}>{`${score ? `${score}%` : 'n/a'}`}</Text>
+        <Text style={styles.credderRating}>{__renderCredderRatingScore()}</Text>
     </View>
 }
 

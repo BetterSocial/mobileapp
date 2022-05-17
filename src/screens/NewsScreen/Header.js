@@ -45,9 +45,9 @@ const Header = ({ image, domain, time, item }) => {
         <Gap width={8} />
         <View style={styles.row}>
           <View style={styles.domainNameContainer}>
-            <Text style={styles.domain}>{domain}</Text>
+            <Text style={styles.domain} numberOfLines={1}>{domain}</Text>
             <View style={styles.point} />
-            <Text style={styles.domainPostDate}>
+            <Text style={styles.domainPostDate} numberOfLines={1}>
               {new Date(time).toLocaleDateString()}
             </Text>
           </View>
@@ -62,19 +62,20 @@ const Header = ({ image, domain, time, item }) => {
 const styles = StyleSheet.create({
   avatar: {
     width: 36,
-    height: 36
+    height: 36,
   },
   container: {
     flexDirection: 'row',
     paddingHorizontal: SIZES.base,
     marginLeft: 12,
-    marginRight: 12,
     marginTop: 4,
+    display: 'flex',
   },
   domain: {
     lineHeight: 14.52,
     fontSize: 14,
-    fontFamily: fonts.inter[600]
+    fontFamily: fonts.inter[600],
+    flexShrink: 1,
   },
   domainNameContainer: {
     flexDirection: 'row',
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     fontSize: 14,
     fontFamily: fonts.inter[400],
-    color: colors.gray
+    color: colors.gray,
   },
   wrapperItem: { backgroundColor: 'white', marginBottom: 16 },
   wrapperImage: {
@@ -124,7 +125,8 @@ const styles = StyleSheet.create({
   },
   row: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginRight: 8,
   }
 });
 

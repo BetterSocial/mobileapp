@@ -1,23 +1,22 @@
 import * as React from 'react';
+import _ from 'lodash';
+import PropTypes from 'prop-types';
 import {
-  View,
-  Text,
   Image,
   Linking,
-  StyleSheet,
-  TouchableOpacity,
   Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
-import PropTypes from 'prop-types';
-import _ from 'lodash';
-
-import {sanitizeUrlForLinking} from '../../utils/Utils';
-import {colors} from '../../utils/colors';
-import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
-import {fonts} from '../../utils/fonts';
 import Gap from '../Gap';
+import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import {COLORS} from '../../utils/theme';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
+import {sanitizeUrlForLinking} from '../../utils/Utils';
 
 const Card = (props) => {
   const {
@@ -93,7 +92,7 @@ const Header = ({domain, image, date}) => (
         <View style={styles.point} />
         <Text style={styles.cardHeaderDate}>{date}</Text>
       </View>
-      <MemoIc_rectangle_gradient height={10} width={180} />
+      {/* <MemoIc_rectangle_gradient height={10} width={180} /> */}
     </View>
   </View>
 );

@@ -53,6 +53,8 @@ const FeedScreen = (props) => {
       let query = `?offset=${offset}`
 
       const dataFeeds = await getMainFeed(query);
+      console.log('dataFeeds')
+      console.log(dataFeeds)
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         let dataWithDummy = [...data, {dummy : true}]
