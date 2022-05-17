@@ -183,6 +183,7 @@ const Item = ({
             onPress={onPress}
             onHeaderPress={onPressDomain}
             onCardContentPress={() => navigateToLinkContextPage(item)}
+            score={item.credderScore}
           />
         </View>
       )}
