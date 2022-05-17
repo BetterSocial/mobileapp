@@ -1,14 +1,14 @@
 import * as React from 'react';
 import JWTDecode from 'jwt-decode';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import BlockDomainComponent from '../../../components/BlockDomain';
-import {COLORS} from '../../../utils/theme';
-import {Content, Header, LinkContextScreenFooter} from './';
-import {downVoteDomain, upVoteDomain} from '../../../service/vote';
-import {fonts} from '../../../utils/fonts';
-import {getAccessToken} from '../../../utils/token';
+import { COLORS } from '../../../utils/theme';
+import { Content, Header, LinkContextScreenFooter } from './';
+import { downVoteDomain, upVoteDomain } from '../../../service/vote';
+import { fonts } from '../../../utils/fonts';
+import { getAccessToken } from '../../../utils/token';
 
 const LinkContextItem = ({
   item,
@@ -29,7 +29,13 @@ const LinkContextItem = ({
   };
 
   const handleOnPressComment = (itemNews) => {
-    navigation.navigate('DetailDomainScreen', {item: itemNews});
+    navigation.navigate('DetailDomainScreen', {
+      item: {
+        ...item,
+        score: item?.domain?.credderScore,
+        follower: 0,
+      }
+    });
   };
 
   const upvoteNews = async (news) => {
@@ -41,7 +47,13 @@ const LinkContextItem = ({
   };
 
   const onContentPressed = () => {
-    navigation.navigate('DetailDomainScreen', {item});
+    navigation.navigate('DetailDomainScreen', {
+      item: {
+        ...item,
+        score: item?.domain?.credderScore,
+        follower: 0,
+      }
+    });
   };
 
   React.useEffect(() => {
@@ -58,16 +70,16 @@ const LinkContextItem = ({
   return (
     <View style={styles.container}>
       <SafeAreaView>
-      <Header
-        item={item}
-        name={domainName}
-        image={domainImage}
-        time={postTime}
-        onFollowDomainPressed={() => {}}
-        setFollow={setFollow}
-        follow={follow}
-        showBackButton={showBackButton}
-      />
+        <Header
+          item={item}
+          name={domainName}
+          image={domainImage}
+          time={postTime}
+          onFollowDomainPressed={() => { }}
+          setFollow={setFollow}
+          follow={follow}
+          showBackButton={showBackButton}
+        />
       </SafeAreaView>
       <Content item={item} onContentPressed={onContentPressed} />
       <LinkContextScreenFooter
@@ -87,7 +99,7 @@ const LinkContextItem = ({
         }}
       />
 
-      <BlockDomainComponent 
+      <BlockDomainComponent
         ref={refBlockDomainComponent}
         domain={item.domain.name}
         domainId={item.domain.domain_page_id}

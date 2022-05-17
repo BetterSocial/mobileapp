@@ -24,8 +24,6 @@ import { colors } from '../../../utils/colors';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 
 const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFollow = () => { }, handleUnfollow = () => { }, score }) => {
-    console.log('item')
-    console.log(item)
     const getname = (i) => {
         try {
             return i.domain.name;

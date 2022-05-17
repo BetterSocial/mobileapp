@@ -1,13 +1,12 @@
 import * as React from 'react';
-
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import Gap from '../../components/Gap';
+import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import {Avatar} from '../../components';
-import Gap from '../../components/Gap';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
-import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 
 const Header = ({image, domain, time}) => {
   const navigation = useNavigation();
@@ -31,7 +30,7 @@ const Header = ({image, domain, time}) => {
             {new Date(time).toLocaleDateString()}
           </Text>
         </View>
-        <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} />
+        {/* <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} /> */}
       </View>
     </View>
   );

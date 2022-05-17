@@ -45,7 +45,9 @@ const NewsFragment = () => {
                 let onContentClicked = () => {
                     navigation.navigate('DetailDomainScreen', {
                         item: {
-                            id: item.id
+                            id: item.id,
+                            score: item.domain.credderScore,
+                            follower: 0,
                         }
                     })
                 }
@@ -71,7 +73,8 @@ const NewsFragment = () => {
             let onContentClicked = () => {
                 navigation.navigate('DetailDomainScreen', {
                     item: {
-                        id: item.news_link_id
+                        id: item.news_link_id,
+                        score: item?.newsLinkDomain?.credder_score
                     }
                 })
             }

@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import * as React from 'react';
 import {
   Image,
@@ -8,23 +7,26 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
+import { useNavigation } from '@react-navigation/native';
+
+import CredderRating from '../../../components/CredderRating';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
+import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
+import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
+import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import MemoUnfollowDomain from '../../../assets/icon/IconUnfollowDomain';
 import Memoic_globe from '../../../assets/icons/ic_globe';
-import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
-import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
-import {Gap} from '../../../components';
-import {Context} from '../../../context';
-import {addIFollowByID, setIFollow} from '../../../context/actions/news';
+import { COLORS, SIZES } from '../../../utils/theme';
+import { Context } from '../../../context';
+import { Gap } from '../../../components';
+import { addIFollowByID, setIFollow } from '../../../context/actions/news';
 import {
   followDomain,
   getDomainIdIFollow,
   unfollowDomain,
 } from '../../../service/domain';
-import {fonts} from '../../../utils/fonts';
-import {COLORS, SIZES} from '../../../utils/theme';
+import { fonts } from '../../../utils/fonts';
 
 const Header = ({
   item,
@@ -42,8 +44,11 @@ const Header = ({
     source: 'domain_page',
   });
 
+  console.log('item in domain')
+  console.log(item)
+
   const [news, dispatch] = React.useContext(Context).news;
-  let {ifollow} = news;
+  let { ifollow } = news;
 
   let onHeaderClicked = () => {
     navigation.push('DomainScreen', {
@@ -120,7 +125,7 @@ const Header = ({
         <View style={styles.wrapperImage(showBackButton)}>
           {image ? (
             <Image
-              source={{uri: image}}
+              source={{ uri: image }}
               style={[styles.image, StyleSheet.absoluteFillObject]}
             />
           ) : (
@@ -128,10 +133,10 @@ const Header = ({
           )}
         </View>
         <Gap width={SIZES.base} />
-        <View style={{flex: 1}}>
-          <Text style={styles.headerDomainName}>{name}</Text>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={styles.headerDomainDate}>
+        <View style={styles.headerDomainInfoContainer}>
+          <Text style={styles.headerDomainName} numberOfLines={1}>{name}</Text>
+          <View style={styles.headerDomainDateContainer}>
+            <Text style={styles.headerDomainDate} numberOfLines={1}>
               {new Date(time).toLocaleDateString()}
             </Text>
             <View style={styles.point} />
@@ -139,7 +144,7 @@ const Header = ({
             <View style={styles.point} />
 
             <MemoPeopleFollow height={13} width={12} />
-            <Gap style={{width: 4}} />
+            <Gap style={{ width: 4 }} />
             <Text
               style={{
                 color: '#828282',
@@ -149,13 +154,14 @@ const Header = ({
               12k
             </Text>
           </View>
-          <Gap height={8} />
-          <View style={styles.domainIndicatorContainer}>
+          {/* <Gap height={8} /> */}
+          {/* <View style={styles.domainIndicatorContainer}>
             <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={4} />
-          </View>
+          </View> */}
         </View>
+        <CredderRating containerStyle={styles.credderRating} score={item?.domain?.credderScore}/>
       </Pressable>
-      <View style={{justifyContent: 'center'}}>
+      <View style={{ justifyContent: 'center' }}>
         <TouchableOpacity onPress={onFollowDomainPressed}>
           {follow ? (
             <View style={styles.wrapperTextUnFollow}>
@@ -173,6 +179,21 @@ const Header = ({
 };
 
 const styles = StyleSheet.create({
+  credderRating: {
+    height: 28,
+    alignSelf: 'center',
+    marginRight: 8,
+  },
+  headerDomainInfoContainer: {
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+  },
+  headerDomainDateContainer: { 
+    flexDirection: 'row', 
+    alignItems: 'center' 
+  },
   headerContainer: {
     flexDirection: 'row',
     paddingRight: 20,
@@ -211,6 +232,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: '#828282',
+    flexShrink: 1,
   },
   domainItemTitle: {
     fontSize: 16,
@@ -232,8 +254,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     borderColor: '#00ADB5',
-    width: 36,
-    height: 36,
+    width: 28,
+    height: 28,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0.5,
@@ -242,8 +264,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#00ADB5',
     borderRadius: 8,
     borderColor: '#00ADB5',
-    width: 36,
-    height: 36,
+    width: 28,
+    height: 28,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0.5,

@@ -239,6 +239,8 @@ const DetailDomainScreen = (props) => {
           time={item.content.created_at}
           image={item.domain.image}
           onFollowDomainPressed={() => { }}
+          score={dataDomain?.score}
+          follower={dataDomain?.follower}
         />
       </SafeAreaView>
 
