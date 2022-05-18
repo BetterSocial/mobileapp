@@ -12,8 +12,8 @@ import { fonts } from '../../utils/fonts'
 const CredderRating = ({ containerStyle = {}, score }) => {
     const __renderCredderRatingIcon = () => {
         if (!score || score < 0) return <CredderRatingGray style={{ alignSelf: 'center' }} />
-        if (score <= 42) return <CredderRatingRed style={{ alignSelf: 'center' }} />
-        if (score > 42 && score <= 65) return <CredderRatingYellow style={{ alignSelf: 'center' }} />
+        if (score <= 35) return <CredderRatingRed style={{ alignSelf: 'center' }} />
+        if (score > 35 && score <= 65) return <CredderRatingYellow style={{ alignSelf: 'center' }} />
 
         return <CredderRatingGreen style={{ alignSelf: 'center' }} />
     }
