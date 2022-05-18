@@ -377,7 +377,7 @@ PODS:
   - React-jsinspector (0.64.3)
   - react-native-blur (0.8.0):
     - React
-  - react-native-cameraroll (4.1.2):
+  - react-native-cameraroll (4.0.3):
     - React-Core
   - react-native-config (1.4.5):
     - react-native-config/App (= 1.4.5)
@@ -399,7 +399,7 @@ PODS:
     - React-Core
   - react-native-version-number (0.3.6):
     - React
-  - react-native-webview (11.18.2):
+  - react-native-webview (11.18.1):
     - React-Core
   - React-perflogger (0.64.3)
   - React-RCTActionSheet (0.64.3):
@@ -473,7 +473,7 @@ PODS:
     - React
   - RNCPushNotificationIOS (1.10.1):
     - React-Core
-  - RNDeviceInfo (8.7.1):
+  - RNDeviceInfo (8.7.0):
     - React-Core
   - RNFBAnalytics (11.3.1):
     - Firebase/Analytics (= 7.10.0)
@@ -499,7 +499,7 @@ PODS:
     - Firebase/RemoteConfig (= 7.10.0)
     - React-Core
     - RNFBApp
-  - RNFS (2.20.0):
+  - RNFS (2.19.0):
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
@@ -847,7 +847,7 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
-  Permission-PhotoLibrary: 4b514739911744def3b903a5a48a20037cd01795
+  Permission-PhotoLibrary: ddb5a158725b29cb12e9e477e8a5f5151c66cc3c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: d34bf57e17cb6e3b2681f4809b13843c021feb6c
@@ -861,17 +861,17 @@ SPEC CHECKSUMS:
   React-jsiexecutor: df6abc9fafbecb8e5b7a5fbc5e6d4bd017d594d5
   React-jsinspector: 34e23860273a23695342f58eed3ffd3ba10c31e0
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
-  react-native-cameraroll: 60ac50a5209777cbccfe8d7a62d0743a9da87060
+  react-native-cameraroll: c3496682e8296241cb34529706c462b2152506c1
   react-native-config: 6502b1879f97ed5ac570a029961fc35ea606cd14
-  react-native-document-picker: 50f47078c928691772b86a87a51a967b499a23a6
-  react-native-image-picker: 5a7dd93d4f9dd0d910da5dde3707fd96f70d03b3
-  react-native-image-resizer: 506412a2bdd70dde64a61e13505ce10f61a04369
+  react-native-document-picker: cc847dd5fe2fc51c3a98bd8f2fd1e452db795c48
+  react-native-image-picker: 31971f6184e7c1dcb4fc1f122e1ba2c3fb11ef1e
+  react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
   react-native-keyevent: f8728b8c73dbfbcb4d2c56d9e78be082c673c456
-  react-native-netinfo: 877946c7b4eb85a639cf1ea31333dadc2be999a1
-  react-native-safe-area-context: 5b8a418400eb3d8364aa87300e865c0262cc17b9
+  react-native-netinfo: 3d3769f0d65de15c83a9bf1346f8be71de5a24bf
+  react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
-  react-native-version-number: 15563dc4145a94aabfc1faab2a9af10174a4204e
-  react-native-webview: e742836e562288f0e66e26f436decba163dd93f9
+  react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
+  react-native-webview: 0b7bd2bffced115aefd393e1841babd9b9a557b1
   React-perflogger: cc76a4254d19640f1d8ad1c66fdee800414b805c
   React-RCTActionSheet: 7448f049318d8d7e8a9a1ebb742ada721757eea8
   React-RCTAnimation: fb9b3fa1a4a9f5e6ab01b3368693ce69860ba76a
@@ -884,27 +884,27 @@ SPEC CHECKSUMS:
   React-RCTVibration: c7f845861e79eae13dc1e8217a3cf47a3945b504
   React-runtimeexecutor: 493d9abb8b23c3f84e19ae221eeba92cadcb70dc
   ReactCommon: 8fea6422328e2fc093e25c9fac67adbcf0f04fb4
-  RNCAsyncStorage: bef53cb70c06b8eff11bab4a848de86ad4488c39
-  RNCCheckbox: 934e11d33abb6b0db105cfa5a22a42bd89dfb4b9
-  RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
-  RNCPushNotificationIOS: 089da3b657e1e3d464f38195fd2e3069608ef5af
-  RNDeviceInfo: af47a7d1a09d64c8cbb8b0c883db9bca422a9813
+  RNCAsyncStorage: 005c0e2f09575360f142d0d1f1f15e4ec575b1af
+  RNCCheckbox: ed1b4ca295475b41e7251ebae046360a703b6eb5
+  RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
+  RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
+  RNDeviceInfo: 36286df381fcaf1933ff9d2d3c34ba2abeb2d8d8
   RNFBAnalytics: 9d82838d751736cc626f1265e8412ae62e93eb85
   RNFBApp: 3b002b58041b71034efd09ae7394af65a58df1e4
   RNFBCrashlytics: 31a039911500bf1a3a7fd15c5df3c4a413a542d6
   RNFBDynamicLinks: dc131812ecfbd48c4359046a957b1f38348d53de
   RNFBMessaging: 9445f07d4ffb0bf149daa230ed5f5e52c5edd14b
   RNFBRemoteConfig: 4f1fdad0c86324fdf593443699484305e826e314
-  RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
+  RNFS: fc610f78fdf8bfc89a9e5cc2f898519f4dba1002
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 73891a709e6fd8a47d32104d942757971f220aee
-  RNPermissions: 7ad8d93b004e6bc85c89e27a102afcde90e07efa
+  RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNReactNativeHapticFeedback: 4085973f5a38b40d3c6793a3ee5724773eae045e
   RNReanimated: 024eff8202342abf4b24e11575a16afc441dabfe
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNShare: 4df87d1791f50a2c7b1d89432fb9bbb7c02a9c9a
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
-  RNTextSize: 91955a6ea2adda9dc7802ce472b7a4dc717686f6
+  RNTextSize: 7efa06531c6bb7ab6ed070b4ce0d1248cf06fcdf
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863

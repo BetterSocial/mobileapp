@@ -654,6 +654,11 @@ const CreatePost = () => {
     return string + this;
   };
 
+  const openTopic = () => {
+    setPositionKeyboard('always')
+    sheetTopicRef.current.open()
+  }
+
   console.log(positionKeyboard, 'manakin')
 
   return (
@@ -836,7 +841,7 @@ const CreatePost = () => {
           listTopic={renderListTopic()}
           label="Add Topics"
           labelStyle={styles.hastagText}
-          onPress={() => sheetTopicRef.current.open()}
+          onPress={openTopic}
         />
         <Gap style={styles.height(16)} />
         <ListItem
