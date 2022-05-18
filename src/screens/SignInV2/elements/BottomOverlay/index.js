@@ -10,7 +10,7 @@ import dimen from "../../../../utils/dimen"
 import { COLORS } from "../../../../utils/theme"
 import { fonts, normalizeFontSize } from "../../../../utils/fonts"
 
-const BottomOverlay = ({ count, handleLogin, index, isLogin, title, text, onNextSlide }) => {
+const BottomOverlay = ({ count, handleLogin, index, isLogin, title, text, onNextSlide, textSvg }) => {
     const goToHumanIdWeb = () => {
         openUrl(HUMAN_ID_URL);
     };
@@ -31,7 +31,11 @@ const BottomOverlay = ({ count, handleLogin, index, isLogin, title, text, onNext
 
     return <View style={bottomOverlayStyles.container}>
         <Text style={bottomOverlayStyles.title}>{title}</Text>
-        {text}
+        {/* {text} */}
+        {/* <View style={{backgroundColor: 'rgba(255,0,0,0.1)'}}> */}
+        <View>
+            {textSvg}
+        </View>
         <View style={bottomOverlayStyles.bottomBlock}>
             <View style={bottomOverlayStyles.pagination}>
                 <BottomOverlayPagination count={count} active={index} />
@@ -67,11 +71,13 @@ const bottomOverlayStyles = StyleSheet.create({
     },
     container: {
         backgroundColor: 'white',
+        // backgroundColor: 'red',
         height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER,
         paddingStart: 32,
+        paddingEnd: 32,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'flex-end',
+        // justifyContent: 'flex-end',
         zIndex: 10,
     },
     desc: {
@@ -121,7 +127,7 @@ const bottomOverlayStyles = StyleSheet.create({
         fontFamily: fonts.inter[600],
         lineHeight: 43.57,
         color: COLORS.blueOnboarding,
-        alignSelf: 'flex-start'
+        alignSelf: 'flex-start',
     },
     paddingContainer: {
         // backgroundColor: 'red',

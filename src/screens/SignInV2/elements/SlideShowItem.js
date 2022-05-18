@@ -11,7 +11,7 @@ import { fonts, normalizeFontSize } from '../../../utils/fonts';
 
 const { height, width, fontScale } = Dimensions.get('screen')
 
-export const SlideShowItem = ({ children, count, handleLogin, illustration, index, isLogin, title, text, onNextSlide = () => { } }) => {
+export const SlideShowItem = ({ children, count, handleLogin, illustration, index, isLogin, title, text, textSvg, onNextSlide = () => { } }) => {
     // console.log(height)
     const __renderForeground = () => {
         if (index < 4) return (<Image source={illustration} style={styles.onboardingForeground} />)
@@ -50,7 +50,14 @@ export const SlideShowItem = ({ children, count, handleLogin, illustration, inde
             {__renderForeground()}
             {__renderBackground()}
         </View>
-        <BottomOverlay count={count} handleLogin={handleLogin} isLogin={isLogin} text={text} title={title} index={index} onNextSlide={__onNextSlide} />
+        <BottomOverlay count={count} 
+            handleLogin={handleLogin} 
+            isLogin={isLogin} 
+            text={text}
+            textSvg={textSvg}
+            title={title} 
+            index={index} 
+            onNextSlide={__onNextSlide} />
     </View>
 }
 
