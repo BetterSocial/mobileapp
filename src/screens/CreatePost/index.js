@@ -655,8 +655,8 @@ const CreatePost = () => {
   };
 
   const openTopic = () => {
-    sheetTopicRef.current.open()
     setPositionKeyboard('always')
+    sheetTopicRef.current.open()
   }
 
   console.log(positionKeyboard, 'manakin')
