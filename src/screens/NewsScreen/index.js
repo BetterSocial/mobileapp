@@ -123,7 +123,13 @@ const NewsScreen = ({}) => {
   };
 
   const comment = (item) => {
-    navigation.navigate('DetailDomainScreen', {item, refreshNews: onRefresh});
+    navigation.navigate('DetailDomainScreen', {
+      item : { 
+        ...item,
+        score: item?.domain?.credderScore,
+        follower: 0,
+      }, 
+      refreshNews: onRefresh});
   };
 
   const blockNews = (itemNews) => {

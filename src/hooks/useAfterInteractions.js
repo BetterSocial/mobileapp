@@ -1,7 +1,7 @@
-/* eslint-disable import/prefer-default-export */
-import { useState, useEffect, useRef } from 'react';
 import { InteractionManager } from 'react-native';
 import { debounce } from 'lodash';
+/* eslint-disable import/prefer-default-export */
+import { useEffect, useRef, useState } from 'react';
 
 export const useAfterInteractions = () => {
   const [interactionsComplete, setInteractionsComplete] = useState(false);
@@ -11,7 +11,7 @@ export const useAfterInteractions = () => {
   const transitionRef = useRef(null);
 
   const debounceComplete = debounce(() => {
-    setInteractionsComplete(true);
+    if (setInteractionsComplete) setInteractionsComplete(true);
   }, 100);
 
   useEffect(() => {

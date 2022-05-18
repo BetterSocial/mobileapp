@@ -24,8 +24,6 @@ import { colors } from '../../../utils/colors';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 
 const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFollow = () => { }, handleUnfollow = () => { }, score }) => {
-    console.log('item')
-    console.log(item)
     const getname = (i) => {
         try {
             return i.domain.name;
@@ -54,10 +52,10 @@ const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFol
                 )}
             </View>
             <Gap width={13} />
-            <View style={{ flex: 1 }}>
-                <Text style={styles.headerDomainName}>{getname(item)}</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={styles.headerDomainDate}>
+            <View style={styles.domainNameContainer}>
+                <Text style={styles.headerDomainName} numberOfLines={1}>{getname(item)}</Text>
+                <View style={styles.headerDateContainer}>
+                    <Text style={styles.headerDomainDate} numberOfLines={1}>
                         {new Date(gettime(item)).toLocaleDateString()}
                     </Text>
                     <View style={styles.point} />
@@ -66,19 +64,11 @@ const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFol
 
                     <MemoPeopleFollow height={normalize(13)} width={normalize(12)} />
                     <Gap style={{ width: 4 }} />
-                    <Text
-                        style={{
-                            color: '#828282',
-                            fontSize: normalizeFontSize(12),
-                            fontFamily: fonts.inter[700],
-                        }}>
-                        {/* Insert real follower number here */}
-                        {follower}
-                    </Text>
+                    <Text style={styles.headerFollowerText}>{follower}</Text>
                 </View>
             </View>
-            <View style={{marginRight: 10}}>
-                <CredderRating containerStyle={{height: 28}} score={score}/>
+            <View style={{ marginRight: 10 }}>
+                <CredderRating containerStyle={{ height: 28 }} score={score} />
             </View>
             <View style={{ justifyContent: 'center' }}>
                 {follow ? (
@@ -109,6 +99,7 @@ const styles = StyleSheet.create({
         paddingBottom: 8,
         paddingTop: 8,
     },
+    domainNameContainer: { flex: 1, marginRight: 8, },
     wrapperImage: {
         borderRadius: normalize(45),
         borderWidth: 0.2,
@@ -123,6 +114,7 @@ const styles = StyleSheet.create({
         width: normalize(48),
         borderRadius: normalize(45),
     },
+    headerDateContainer: { flexDirection: 'row', alignItems: 'center' },
     headerDomainName: {
         fontSize: normalizeFontSize(14),
         fontFamily: fonts.inter[600],
@@ -134,6 +126,12 @@ const styles = StyleSheet.create({
         fontSize: normalizeFontSize(12),
         lineHeight: normalizeFontSize(18),
         color: '#828282',
+        flexShrink: 1,
+    },
+    headerFollowerText : {
+        color: '#828282',
+        fontSize: normalizeFontSize(12),
+        fontFamily: fonts.inter[700],
     },
     point: {
         width: 3,

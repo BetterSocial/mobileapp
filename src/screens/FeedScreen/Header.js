@@ -16,6 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
+import GlobalButton from '../../components/Button/GlobalButton';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
@@ -35,7 +36,6 @@ import { fonts } from '../../utils/fonts';
 import { getUserId } from '../../utils/users';
 import { setTimer } from '../../context/actions/feeds';
 import { viewTimePost } from '../../service/post';
-import GlobalButton from '../../components/Button/GlobalButton';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -91,16 +91,16 @@ const _renderAnonimity = ({
             </View>
           ) : null}
           <View style={[styles.imageAnonymContainer]} >
-          <Image
-            source={AnonymousProfile}
-            width={dimen.size.FEED_HEADER_IMAGE_RADIUS}
-            height={dimen.size.FEED_HEADER_IMAGE_RADIUS}
-            style={styles.imageAnonimity}
-          />
+            <Image
+              source={AnonymousProfile}
+              width={dimen.size.FEED_HEADER_IMAGE_RADIUS}
+              height={dimen.size.FEED_HEADER_IMAGE_RADIUS}
+              style={styles.imageAnonimity}
+            />
           </View>
-      
+
           <View style={[styles.containerFeedProfile]}>
-            <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
+            <View style={[styles.containerFeedName, { alignItems: 'center' }]}>
               <Text style={[styles.feedUsername]}>Anonymous</Text>
             </View>
             <View style={styles.containerFeedText}>
@@ -150,14 +150,14 @@ const _renderProfileNormal = ({
   let { profile_pic_url, username } = actor.data;
 
   let navigateToProfile = async () => {
-    if(source) {
+    if (source) {
       let currentTime = new Date().getTime()
       let id = feeds[viewPostTimeIndex]?.id
-      if(id) viewTimePost(id, currentTime - timer.getTime(), source)
-      setTimer(new Date(), dispatch)  
+      if (id) viewTimePost(id, currentTime - timer.getTime(), source)
+      setTimer(new Date(), dispatch)
     }
 
-    let selfUserId = await getUserId();    
+    let selfUserId = await getUserId();
     if (selfUserId === userId) {
       return navigation.navigate('ProfileScreen', {
         isNotFromHomeTab: true
@@ -179,16 +179,15 @@ const _renderProfileNormal = ({
           {isBackButton ? (
             <View style={styles.btn}>
               <GlobalButton
-
                 onPress={() => {
-                  if(source) {
+                  if (source) {
                     let currentTime = new Date().getTime()
                     let id = feeds[viewPostTimeIndex]?.id
-                    if(id) viewTimePost(id, currentTime - timer.getTime(), source)
-                    if(id && source === SOURCE_PDP) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
-                    setTimer(new Date(), dispatch)  
+                    if (id) viewTimePost(id, currentTime - timer.getTime(), source)
+                    if (id && source === SOURCE_PDP) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
+                    setTimer(new Date(), dispatch)
                   }
-              
+
                   navigation.goBack();
                 }}>
                 <MemoIc_arrow_back height={20} width={20} />
@@ -196,9 +195,7 @@ const _renderProfileNormal = ({
             </View>
           ) : null}
           <GlobalButton
-            onPress={() => navigateToProfile()}
-            
-            >
+            onPress={() => navigateToProfile()}>
             <View style={{}}>
               <Avatar
                 source={
@@ -211,23 +208,20 @@ const _renderProfileNormal = ({
               />
             </View>
           </GlobalButton>
-          <GlobalButton onPress={() => navigateToProfile()} style={[styles.containerFeedProfile, { paddingBottom: 10}]}>
-            <View style={[styles.containerFeedName, {alignItems: 'flex-end'}]}>
-              
-                <Text style={styles.feedUsername}>
-                  {username ? username : 'no name specifics'}
-                </Text>
-                
-              
+          <GlobalButton onPress={() => navigateToProfile()} style={[styles.containerFeedProfile, { paddingBottom: 5 }]}>
+            <View style={[styles.containerFeedName, { alignItems: 'flex-end' }]}>
+              <Text style={styles.feedUsername}>
+                {username ? username : 'no name specifics'}
+              </Text>
+
               <GlobalButton
-                buttonStyle={{marginLeft: 'auto', paddingBottom: 0}}
-                >
+                buttonStyle={{ marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center' }}>
                 <View style={{ zIndex: 1000 }}>
-                  <ElipsisIcon width={3.94} height={18} fill={colors.black} />
+                  <ElipsisIcon width={4} height={12} fill={colors.blackgrey} />
                 </View>
               </GlobalButton>
             </View>
-            <View style={[styles.containerFeedText, {paddingBottom: 10}]}>
+            <View style={[styles.containerFeedText, { paddingBottom: 0 }]}>
               <Text style={styles.feedDate}>{getTime(time)}</Text>
               <View style={styles.point} />
               {privacy === 'Public' ? (
@@ -312,6 +306,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 14,
+    lineHeight: 16.94,
     color: colors.black,
     flex: 1,
   },
@@ -399,9 +394,9 @@ const styles = StyleSheet.create({
   noPaddingLeft: {
     paddingLeft: 0,
   },
-  imageAnonymContainer : {
+  imageAnonymContainer: {
     // paddingRight: 10,
-    padding:10,
+    padding: 10,
     // paddingLeft: 24
   }
 });

@@ -1,23 +1,23 @@
 import * as React from 'react';
+import _ from 'lodash';
+import PropTypes from 'prop-types';
 import {
-  View,
-  Text,
   Image,
   Linking,
-  StyleSheet,
-  TouchableOpacity,
   Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
-import PropTypes from 'prop-types';
-import _ from 'lodash';
-
-import {sanitizeUrlForLinking} from '../../utils/Utils';
-import {colors} from '../../utils/colors';
-import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
-import {fonts} from '../../utils/fonts';
+import CredderRating from '../CredderRating';
 import Gap from '../Gap';
-import {COLORS} from '../../utils/theme';
+import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
+import { COLORS } from '../../utils/theme';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
+import { sanitizeUrlForLinking } from '../../utils/Utils';
 
 const Card = (props) => {
   const {
@@ -30,6 +30,7 @@ const Card = (props) => {
     date,
     onHeaderPress,
     onCardContentPress,
+    score
   } = props;
   // const styles = buildStylesheet('card', props.styles);
 
@@ -37,27 +38,27 @@ const Card = (props) => {
     <View style={styles.container}>
       <View>
         <TouchableOpacity onPress={onHeaderPress}>
-          <Header domain={domain} image={domainImage} date={date} />
+          <Header domain={domain} image={domainImage} date={date} score={score}/>
         </TouchableOpacity>
       </View>
-      <View style={{flex: 1}}>
-        <Pressable onPress={onCardContentPress} style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
+        <Pressable onPress={onCardContentPress} style={{ flex: 1 }}>
           <View style={styles.content}>
             <View>
               <Text style={styles.title}>
-                {_.truncate(`${title}`, {length: 80, separator: ''})}
+                {_.truncate(`${title}`, { length: 80, separator: '' })}
               </Text>
             </View>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <Image
                 style={styles.image}
-                source={image ? {uri: image} : null}
+                source={image ? { uri: image } : null}
                 resizeMethod="resize"
               />
             </View>
             <View>
               <Text style={styles.description}>
-                {_.truncate(`${description}`, {length: 120})}
+                {_.truncate(`${description}`, { length: 120 })}
                 {/* {description} */}
                 <Gap style={styles.width(2)} />
                 <Text
@@ -74,27 +75,28 @@ const Card = (props) => {
   );
 };
 
-const Header = ({domain, image, date}) => (
+const Header = ({ domain, image, date, score }) => (
   <View style={styles.headerContainer}>
     <View style={styles.headerImageContainer}>
       <Image
         style={[
-          {height: '100%', width: '100%', borderRadius: 45},
+          { height: '100%', width: '100%', borderRadius: 45 },
           StyleSheet.absoluteFillObject,
         ]}
-        source={{uri: image}}
+        source={{ uri: image }}
         resizeMode={'cover'}
       />
     </View>
-    <Gap style={{width: 8}} />
+    <Gap style={{ width: 8 }} />
     <View style={styles.headerDomainDateContainer}>
       <View style={styles.headerDomainDateRowContainer}>
-        <Text style={styles.cardHeaderDomainName}>{domain}</Text>
+        <Text style={styles.cardHeaderDomainName} numberOfLines={1}>{domain}</Text>
         <View style={styles.point} />
-        <Text style={styles.cardHeaderDate}>{date}</Text>
+        <Text style={styles.cardHeaderDate} numberOfLines={1}>{date}</Text>
       </View>
-      <MemoIc_rectangle_gradient height={10} width={180} />
+      {/* <MemoIc_rectangle_gradient height={10} width={180} /> */}
     </View>
+    <CredderRating containerStyle={styles.credderRating} score={score}/>
   </View>
 );
 Card.propTypes = {
@@ -110,15 +112,19 @@ Card.propTypes = {
 };
 
 const styles = StyleSheet.create({
+  credderRating: {
+    height: 28,
+    alignSelf: 'center',
+  },
   link: {
     color: '#2f80ed',
     textDecorationLine: 'underline',
     marginStart: 8,
     fontSize: 12,
   },
-  contentDomain: {flexDirection: 'row', alignItems: 'center'},
-  containerDomain: {justifyContent: 'space-around'},
-  date: {fontSize: 12, color: '#828282'},
+  contentDomain: { flexDirection: 'row', alignItems: 'center' },
+  containerDomain: { justifyContent: 'space-around' },
+  date: { fontSize: 12, color: '#828282' },
   domain: {
     fontSize: 16,
     lineHeight: 16,
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
   width: (width) => ({
     width,
   }),
-  imageHeader: {height: '100%', width: '100%', borderRadius: 45},
+  imageHeader: { height: '100%', width: '100%', borderRadius: 45 },
   constainerHeader: {
     flexDirection: 'row',
     padding: 8,
@@ -169,10 +175,12 @@ const styles = StyleSheet.create({
   headerDomainDateContainer: {
     justifyContent: 'space-around',
     marginLeft: 8,
+    flex: 1,
   },
   headerDomainDateRowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginRight: 8,
   },
   image: {
     width: '100%',
@@ -213,15 +221,16 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   cardHeaderDomainName: {
-    fontSize: 12,
+    fontSize: 14,
     lineHeight: 16,
     color: '#000000',
     fontWeight: 'bold',
     fontFamily: fonts.inter[600],
+    flexShrink: 1,
     // marginLeft: 8,
   },
   cardHeaderDate: {
-    fontSize: 10,
+    fontSize: 12,
     color: COLORS.blackgrey,
     fontFamily: fonts.inter[200],
     // lineHeight: 12.1,

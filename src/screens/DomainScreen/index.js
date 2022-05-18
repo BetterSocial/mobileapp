@@ -135,7 +135,7 @@ const DomainScreen = () => {
 
     if (res.code === 200) {
       setDomainFollowers(res.followers);
-      if(offset === 0) setDomainData([...res.data, {dummy: true}], dispatchDomain)
+      if (offset === 0) setDomainData([...res.data, { dummy: true }], dispatchDomain)
       else {
         let clonedFeeds = [...feeds]
         clonedFeeds.splice(feeds.length - 1, 0, ...data)
@@ -168,7 +168,13 @@ const DomainScreen = () => {
   // }, [dataDomain]);
 
   const handleOnPressComment = (itemNews) => {
-    navigation.navigate('DetailDomainScreen', { item: itemNews });
+    navigation.navigate('DetailDomainScreen', {
+      item: {
+        ...itemNews,
+        score: dataDomain?.domain?.credderScore ,
+        follower: domainFollowers
+      }
+    });
   };
 
   const upvoteNews = async (news) => {
@@ -257,7 +263,7 @@ const DomainScreen = () => {
         data={domainStore.domains}
         onEndReach={__handleOnEndReached}
         snapToOffsets={(() => {
-          let posts =  domainStore.domains.map((item, index) => {
+          let posts = domainStore.domains.map((item, index) => {
             return headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)
           })
           // console.log('posts')
@@ -291,9 +297,9 @@ const DomainScreen = () => {
 
         {
           ({ item, index }) => {
-              let dummyItemHeight = height - dimen.size.DOMAIN_CURRENT_HEIGHT - 44 - 18 - StatusBar.currentHeight;
-              if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
-              return (
+            let dummyItemHeight = height - dimen.size.DOMAIN_CURRENT_HEIGHT - 44 - 18 - StatusBar.currentHeight;
+            if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
+            return (
               <RenderItem
                 key={index}
                 item={item}
@@ -376,7 +382,7 @@ const DomainScreen = () => {
 
 const styles = StyleSheet.create({
   list: { flex: 1 },
-  dummyItem : (height) => {
+  dummyItem: (height) => {
     return {
       height,
       backgroundColor: colors.gray1

@@ -32,6 +32,9 @@ const LinkContextScreen = () => {
   let domainName = item.domain.name;
   let iddomain = item.content.domain_page_id;
 
+  console.log('item')
+  console.log(item)
+
   const navigation = useNavigation();
   const [dataDomain, setDataDomain] = React.useState(route.params.item);
   const [data, setData] = React.useState([]);
@@ -68,10 +71,13 @@ const LinkContextScreen = () => {
       // console.log('res.data ' + domainName)
       if (res.code === 200) {
         let reducedData = res.data.reduce((acc, currentItem) => {
+          let newItem = { ...currentItem }
+          currentItem.domain.credderScore = dataDomain?.domain?.credderScore
+
           if (currentItem.content.news_link_id !== item.content.news_link_id) {
-            acc.push(currentItem);
+            acc.push(newItem);
           } else {
-            setFeaturedNewsFromFeed(currentItem);
+            setFeaturedNewsFromFeed(newItem);
           }
           return acc;
         }, []);
@@ -98,7 +104,13 @@ const LinkContextScreen = () => {
   };
 
   const handleOnPressComment = (itemNews) => {
-    navigation.navigate('DetailDomainScreen', { item: itemNews });
+    navigation.navigate('DetailDomainScreen', {
+      item: {
+        ...itemNews,
+        score: itemNews?.domain?.credderScore,
+        follower: 0,
+      }
+    });
   };
 
   const upvoteNews = async (news) => {
@@ -180,7 +192,7 @@ const LinkContextScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  list: { 
+  list: {
     // flex: 1,
   },
   container: {

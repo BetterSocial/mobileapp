@@ -16,6 +16,7 @@ import { fonts } from '../../utils/fonts';
 import { getFollowing, setFollow, setUnFollow } from '../../service/profile';
 import { getUserId } from '../../utils/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+
 const width = Dimensions.get('screen').width;
 
 const Followings = () => {
@@ -30,7 +31,7 @@ const Followings = () => {
   const { params } = route;
 
   React.useEffect(() => {
-    if(params.user_id) {
+    if (params.user_id) {
       setUserId(params.user_id);
       setUsername(params.username);
     }
@@ -38,7 +39,7 @@ const Followings = () => {
   }, [params.user_id]);
 
   React.useEffect(() => {
-    if(user_id) {
+    if (user_id) {
       fetchFollowing(true);
     }
   }, [user_id])
@@ -105,23 +106,23 @@ const Followings = () => {
 
   return (
     <View style={styles.container}>
-             <View style={styles.content}>
-          <FlatList
-            data={dataFollowing}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.follow_action_id}
-            refreshing={isLoading}
-            contentContainerStyle={{flex: 1}}
-            onRefresh={fetchFollowing}
-            ListEmptyComponent={isLoading ? null : <View style={styles.nousercontent}>
+      <View style={styles.content}>
+        <FlatList
+          data={dataFollowing}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.follow_action_id}
+          refreshing={isLoading}
+          // contentContainerStyle={{ flex: 1 }}
+          onRefresh={fetchFollowing}
+          ListEmptyComponent={isLoading ? null : <View style={styles.nousercontent}>
             <Text style={styles.nousertext}>
-             You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.
+              You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.
             </Text>
           </View>}
-          
-          />
- 
-        </View>
+
+        />
+
+      </View>
       {/* <Loading visible={isLoading} /> */}
     </View>
   );

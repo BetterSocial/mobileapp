@@ -18,6 +18,8 @@ const DetailDomainScreenHeader = ({
   domain,
   time,
   onFollowDomainPressed,
+  score = -1,
+  follower = 0
 }) => {
   const navigation = useNavigation();
 
@@ -41,10 +43,10 @@ const DetailDomainScreenHeader = ({
         />
       </View>
       <Gap width={SIZES.base} />
-      <View style={{ flex: 1 }}>
-        <Text style={styles.headerDomainName}>{domain}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={styles.headerDomainDate}>
+      <View style={styles.headerDomainInfoContainer}>
+        <Text style={styles.headerDomainName} numberOfLines={1}>{domain}</Text>
+        <View style={styles.headerDomainDateContainer}>
+          <Text style={styles.headerDomainDate} numberOfLines={1}>
             {new Date(time).toLocaleDateString()}
           </Text>
           <View style={styles.point} />
@@ -53,13 +55,11 @@ const DetailDomainScreenHeader = ({
 
           <MemoPeopleFollow height={13} width={12} />
           <Gap style={{ width: 4 }} />
-          <Text style={styles.followerNumber}>12k</Text>
+          <Text style={styles.followerNumber}>{follower}</Text>
         </View>
         {/* <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} /> */}
       </View>
-      <View style={{ marginRight: 10 }}>
-        {/* <CredderRating containerStyle={{ height: 28 }} /> */}
-      </View>
+      <CredderRating containerStyle={styles.credderRating} score={score}/>
       <View style={{ justifyContent: 'center' }}>
         <TouchableOpacity onPress={onFollowDomainPressed}>
           <View style={styles.wrapperText}>
@@ -72,18 +72,21 @@ const DetailDomainScreenHeader = ({
 };
 
 const styles = StyleSheet.create({
+  credderRating: { height: 28, marginRight: 10 },
   image: {
     height: '100%',
     width: '100%',
     borderRadius: 45,
     // backgroundColor: 'white',
   },
+  headerDomainInfoContainer: { flex: 1, marginRight: 8, },
+  headerDomainDateContainer: { flexDirection: 'row', alignItems: 'center', flexShrink: 1 },
   wrapperText: {
     backgroundColor: 'white',
     borderRadius: 8,
     borderColor: '#00ADB5',
-    width: 36,
-    height: 36,
+    width: 28,
+    height: 28,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0.5,
@@ -107,6 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: '#828282',
+    flexShrink: 1,
   },
   point: {
     width: 3,

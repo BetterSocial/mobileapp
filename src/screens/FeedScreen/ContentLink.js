@@ -7,7 +7,7 @@ import dimen from '../../utils/dimen';
 import {COLORS, SIZES} from '../../utils/theme';
 import {smartRender} from '../../utils/Utils';
 
-const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress}) => {
+const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress, score}) => {
   let route = useRoute();
   let isTouchableDisabled = route?.name === 'PostDetailPage';
   return (
@@ -28,6 +28,7 @@ const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress}) => {
         url: og.url,
         onHeaderPress,
         onCardContentPress,
+        score,
       })}
     </Pressable>
   );

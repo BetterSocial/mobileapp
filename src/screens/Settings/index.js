@@ -1,28 +1,28 @@
 import * as React from 'react';
-import {
-  StatusBar,
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity
-} from 'react-native';
-
-import {useNavigation} from '@react-navigation/core';
 import VersionNumber from 'react-native-version-number';
 import analytics from '@react-native-firebase/analytics';
-import { Context } from '../../context';
+import {
+  Dimensions,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 
-import {fonts} from '../../utils/fonts';
-import {colors} from '../../utils/colors';
-import Header from '../../components/Header';
 import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
+import Header from '../../components/Header';
+import { Context } from '../../context';
 import {clearLocalStorege} from '../../utils/token';
+import {colors} from '../../utils/colors';
 import {createClient} from '../../context/actions/createClient';
-import {resetProfileFeed} from '../../context/actions/myProfileFeed';
+import {fonts} from '../../utils/fonts';
 import { removeAllCache } from '../../utils/cache';
+import {resetProfileFeed} from '../../context/actions/myProfileFeed';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+
 const width = Dimensions.get('screen').width;
 
 const Settings = () => {
@@ -68,7 +68,8 @@ const Settings = () => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('TermsAndCondition')}>
+            // onPress={() => navigation.navigate('TermsAndCondition')}
+            >
             <View style={styles.card}>
               <Text style={styles.textCard}>Terms and Condition</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
@@ -81,7 +82,8 @@ const Settings = () => {
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('HelpCenter')}>
             <View style={styles.card}>
               <Text style={styles.textCard}>Help Center</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
