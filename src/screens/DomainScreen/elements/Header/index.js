@@ -98,41 +98,6 @@ const Header = ({
         onPressBlock={onPressBlock}
         onPressUnblock={onPressUnblock} />
       <Gap height={normalize(12)} />
-      {/* <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-        <View style={{ flex: 1, paddingBottom: 0 }}>
-          <MemoIc_rectangle_gradient width={'100%'} height={normalize(18)} />
-        </View>
-        <Tooltip
-          // allowChildInteraction={false}
-          isVisible={isTooltipShown}
-          placement={'bottom'}
-          backgroundColor={'rgba(0,0,0,0)'}
-          showChildInTooltip={false}
-          onClose={() => setIsTooltipShown(false)}
-          contentStyle={styles.tooltipShadowContainer}
-          arrowSize={{ width: 0, height: 0 }}
-          content={
-            <View>
-              <Text style={styles.tooltipContent}>
-                {description}
-              </Text>
-            </View>
-          }>
-          <TouchableOpacity
-            onPress={() => setIsTooltipShown(true)}
-            style={{
-              padding: 8,
-              paddingBottom: 8,
-              paddingTop: 8,
-              paddingRight: 12,
-            }}>
-            <MemoIc_question_mark
-              width={normalize(17)}
-              height={normalize(17)}
-            />
-          </TouchableOpacity>
-        </Tooltip>
-      </View> */}
     </View>
   );
 };

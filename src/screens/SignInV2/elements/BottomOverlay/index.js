@@ -57,12 +57,13 @@ const bottomOverlayStyles = StyleSheet.create({
     bottomBlock: {
         position: 'absolute',
         bottom: 0,
-        right: 0,
+        right: 32,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'transparent',
         zIndex: 1000,
+        width: '100%',
         // backgroundColor: 'rgba(255,0,0,0.5)'
     },
     btnSign: {
@@ -71,13 +72,11 @@ const bottomOverlayStyles = StyleSheet.create({
     },
     container: {
         backgroundColor: 'white',
-        // backgroundColor: 'red',
         height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER,
         paddingStart: 32,
         paddingEnd: 32,
         display: 'flex',
         flexDirection: 'column',
-        // justifyContent: 'flex-end',
         zIndex: 10,
     },
     desc: {
@@ -85,7 +84,6 @@ const bottomOverlayStyles = StyleSheet.create({
         fontFamily: fonts.inter[400],
         lineHeight: 18,
         fontSize: 12,
-        // width: 250,
         textAlign: 'center',
         color: COLORS.gray,
         marginTop: 16,
@@ -93,19 +91,16 @@ const bottomOverlayStyles = StyleSheet.create({
     },
     humanID: {
         color: '#11243D',
-        // fontWeight: 'bold',
         textDecorationLine: 'underline',
     },
     loginContainer: {
         backgroundColor: 'white',
         height: dimen.size.ONBOARDING_BOTTOM_OVERLAY_CONTAINER,
-        // paddingStart: 32,
         paddingTop: 55,
         display: 'flex',
         flexDirection: 'column',
         alignContent: 'center',
         zIndex: 10,
-        // justifyContent: 'center'
     },
     nextButton: {
         backgroundColor: COLORS.blueOnboarding,
@@ -130,16 +125,14 @@ const bottomOverlayStyles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     paddingContainer: {
-        // backgroundColor: 'red',
         paddingTop: dimen.normalizeDimen(27),
         paddingLeft: dimen.normalizeDimen(16.76),
         paddingBottom: dimen.normalizeDimen(23),
-        paddingRight: dimen.normalizeDimen(39.24),
+        paddingRight: dimen.normalizeDimen(8.24),
         zIndex: 1000,
     },
     pagination: {
         flex: 1,
-        // backgroundColor: 'red',
         justifyContent: 'center',
         marginTop: 4.5,
     }
