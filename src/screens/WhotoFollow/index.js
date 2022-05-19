@@ -24,6 +24,7 @@ import Label from './elements/Label';
 import Loading from '../Loading';
 import { Button } from '../../components/Button';
 import { Context } from '../../context';
+import { Header } from '../../components';
 import { ProgressBar } from '../../components/ProgressBar';
 import { colors } from '../../utils/colors';
 import { get } from '../../api/server';
@@ -31,7 +32,6 @@ import { randomString } from '../../utils/string/StringUtils';
 import { registerUser } from '../../service/users';
 import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { Header } from '../../components';
 
 const width = Dimensions.get('screen').width;
 
@@ -176,9 +176,9 @@ const WhotoFollow = () => {
     const data = {
       users: {
         username: usersState.username,
-        // human_id: usersState.userId,
-        country_code: usersState.countryCode,
         human_id: usersState.userId,
+        country_code: usersState.countryCode,
+        // human_id: 'COBA-LAGI-AJA',
         // country_code: 'ID',
         profile_pic_path: usersState.photo,
         status: 'A',
