@@ -17,11 +17,11 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import {debounce} from 'lodash'
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {showMessage} from 'react-native-flash-message';
+import { debounce } from 'lodash'
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { showMessage } from 'react-native-flash-message';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import {useNavigation} from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
@@ -37,8 +37,8 @@ import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import dimen from '../../utils/dimen';
-import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import { Context } from '../../context';
+import { DEFAULT_PROFILE_PIC_PATH } from '../../utils/constants';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -48,23 +48,23 @@ import {
   updateBioProfile,
   updateImageProfile,
 } from '../../service/profile';
-import {colors} from '../../utils/colors';
-import {downVote, upVote} from '../../service/vote';
-import {fonts} from '../../utils/fonts';
-import {getAccessToken} from '../../utils/token';
-import {getFeedDetail, getMainFeed} from '../../service/post';
+import { colors } from '../../utils/colors';
+import { downVote, upVote } from '../../service/vote';
+import { fonts } from '../../utils/fonts';
+import { getAccessToken } from '../../utils/token';
+import { getFeedDetail, getMainFeed } from '../../service/post';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
-import {getUserId} from '../../utils/users';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import { getUserId } from '../../utils/users';
+import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import {
   requestCameraPermission,
   requestExternalStoragePermission,
 } from '../../utils/permission';
-import {setFeedByIndex, setMainFeeds} from '../../context/actions/feeds';
-import {setImageUrl} from '../../context/actions/users';
-import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
+import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
+import { setImageUrl } from '../../context/actions/users';
+import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
-import {trimString} from '../../utils/string/TrimString';
+import { trimString } from '../../utils/string/TrimString';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const { height, width } = Dimensions.get('screen');
@@ -111,7 +111,7 @@ const ProfileScreen = ({ route }) => {
   let isNotFromHomeTab = route?.params?.isNotFromHomeTab
   let bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
 
-  let {feeds} = myProfileFeed;
+  let { feeds } = myProfileFeed;
 
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -140,21 +140,17 @@ const ProfileScreen = ({ route }) => {
   }, []);
 
   React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
+      getMyFeeds();
+    });
+
     getSpecificCache(PROFILE_CACHE, (res) => {
-      if(!res) {
+      if (!res) {
         fetchMyProfile()
       } else {
         saveProfileState(res)
       }
     })
-  }, [])
-
-
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e) => {
-      getMyFeeds();
-    });
-
     return unsubscribe;
   }, []);
 
@@ -172,7 +168,7 @@ const ProfileScreen = ({ route }) => {
   };
 
   const saveProfileState = (result) => {
-    if(result && typeof result === 'object') {
+    if (result && typeof result === 'object') {
       setDataMain(result || {});
       setDataMainBio(result?.bio)
       setLoadingContainer(false)
@@ -187,7 +183,7 @@ const ProfileScreen = ({ route }) => {
     //   {dummy: true, component: 'Profile'}, 
     //   {dummy: true, component: 'PostStickyHeader'},
     //   ...result.data], myProfileDispatch);
-    if(offset === 0) setMyProfileFeed([...result.data, {dummy: true}], myProfileDispatch)
+    if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
     else {
       let clonedFeeds = [...feeds]
       clonedFeeds.splice(feeds.length - 1, 0, ...data)
@@ -227,7 +223,7 @@ const ProfileScreen = ({ route }) => {
   const goToFollowings = (user_id, username) => {
     navigation.navigate('Followings', {
       screen: 'TabFollowing',
-      params: {user_id, username},
+      params: { user_id, username },
     });
   };
 
@@ -274,9 +270,9 @@ const ProfileScreen = ({ route }) => {
   };
 
   const onOpenImageGalery = async () => {
-    let {success, message} = await requestExternalStoragePermission();
+    let { success, message } = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+      launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (res) => {
         if (res.didCancel) {
         } else {
           setImage(res.base64);
@@ -289,9 +285,9 @@ const ProfileScreen = ({ route }) => {
   };
 
   const onOpenCamera = async () => {
-    let {success, message} = await requestCameraPermission();
+    let { success, message } = await requestCameraPermission();
     if (success) {
-      launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
+      launchCamera({ mediaType: 'photo', includeBase64: true }, (res) => {
         if (res.didCancel) {
         } else {
           setImage(res.base64);
@@ -307,7 +303,7 @@ const ProfileScreen = ({ route }) => {
     closeImageBs()
     navigation.push('ImageViewer', {
       title: dataMain.username,
-      images: [{url: dataMain.profile_pic_path}],
+      images: [{ url: dataMain.profile_pic_path }],
     });
   };
 
@@ -416,12 +412,12 @@ const ProfileScreen = ({ route }) => {
       <GlobalButton buttonStyle={styles.bioText} onPress={() => changeBio()}>
         <View style={styles.containerBio}>
           {string === null || string === undefined ? (
-            <Text style={{color: colors.blue}}>Add Bio</Text>
+            <Text style={{ color: colors.blue }}>Add Bio</Text>
           ) : (
             <Text style={styles.seeMore}>
               {trimString(string, 121)}{' '}
               {string.length > 121 ? (
-                <Text style={{color: colors.blue}}>see more</Text>
+                <Text style={{ color: colors.blue }}>see more</Text>
               ) : null}
             </Text>
           )}
@@ -506,8 +502,8 @@ const ProfileScreen = ({ route }) => {
   return (
     <>
       <StatusBar translucent={false} barStyle="dark-content" />
-      {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
-        <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username}/>  
+      {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{ top: 'always' }}>
+        <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username} />
         <ProfileTiktokScroll
           ref={flatListScrollRef}
           data={feeds}
@@ -529,7 +525,7 @@ const ProfileScreen = ({ route }) => {
             }}>
               <View style={styles.content}>
                 <ProfilePicture onImageContainerClick={changeImage} profilePicPath={dataMain.profile_pic_path} />
-                <FollowInfoRow 
+                <FollowInfoRow
                   follower={dataMain.follower_symbol}
                   following={dataMain.following_symbol}
                   onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)} />
@@ -545,26 +541,26 @@ const ProfileScreen = ({ route }) => {
               </View>
             </View>
           }>
-            {({item, index}) => {
-              let dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight - bottomBarHeight;
-              if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
-              return <View style={{width: '100%'}}>
-                  <RenderItem
-                    bottomBar={!isNotFromHomeTab}
-                    item={item}
-                    index={index}
-                    onNewPollFetched={onNewPollFetched}
-                    onPressDomain={onPressDomain}
-                    onPress={() => onPress(item, index)}
-                    onPressComment={() => onPressComment(item.id)}
-                    onPressBlock={() => onPressBlock(item)}
-                    onPressUpvote={(post) => setUpVote(post, index)}
-                    selfUserId={yourselfId}
-                    onPressDownVote={(post) =>
-                      setDownVote(post, index)
-                    } />
-              </View>
-        }}
+          {({ item, index }) => {
+            let dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight - bottomBarHeight;
+            if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
+            return <View style={{ width: '100%' }}>
+              <RenderItem
+                bottomBar={!isNotFromHomeTab}
+                item={item}
+                index={index}
+                onNewPollFetched={onNewPollFetched}
+                onPressDomain={onPressDomain}
+                onPress={() => onPress(item, index)}
+                onPressComment={() => onPressComment(item.id)}
+                onPressBlock={() => onPressBlock(item)}
+                onPressUpvote={(post) => setUpVote(post, index)}
+                selfUserId={yourselfId}
+                onPressDownVote={(post) =>
+                  setDownVote(post, index)
+                } />
+            </View>
+          }}
         </ProfileTiktokScroll>
         <BottomSheetBio
           ref={bottomSheetBioRef}
@@ -595,7 +591,7 @@ const ProfileScreen = ({ route }) => {
         />
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
-            <View style={{...styles.btnBottom, opacity}}>
+            <View style={{ ...styles.btnBottom, opacity }}>
               <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
             </View>
           </TouchableNativeFeedback>
@@ -603,7 +599,7 @@ const ProfileScreen = ({ route }) => {
 
         <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
       </SafeAreaView> : null}
-      
+
     </>
   );
 };
@@ -618,7 +614,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 20,
   },
-  dummyItem : (height) => {
+  dummyItem: (height) => {
     return {
       height,
       backgroundColor: colors.white
@@ -686,7 +682,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     color: colors.black,
   },
-  
+
   containerLoading: {
     height: '100%',
     justifyContent: 'center',
@@ -696,4 +692,4 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   }
 });
-export default withInteractionsManaged (ProfileScreen);
+export default withInteractionsManaged(ProfileScreen);

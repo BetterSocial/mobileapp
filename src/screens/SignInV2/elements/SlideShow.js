@@ -7,12 +7,16 @@ import FgOnboarding1 from '../../../assets/background/fg_onboarding_full_1.png';
 import FgOnboarding2 from '../../../assets/background/fg_onboarding_full_2.png';
 import FgOnboarding3 from '../../../assets/background/fg_onboarding_full_3.png';
 import FgOnboarding4 from '../../../assets/background/fg_onboarding_full_4.png';
+import OnboardingText1 from '../../../assets/onboarding/OnboardingText1';
+import OnboardingText2 from '../../../assets/onboarding/OnboardingText2';
+import OnboardingText3 from '../../../assets/onboarding/OnboardingText3';
+import OnboardingText4 from '../../../assets/onboarding/OnboardingText4';
 import { COLORS } from '../../../utils/theme';
 import { SlideShowItem } from './SlideShowItem';
 import { fonts, normalizeFontSize, scaleFontSize } from '../../../utils/fonts';
 
 const { width: screenWidth, fontScale, scale } = Dimensions.get('window');
-console.log(fontScale)
+console.log(screenWidth)
 console.log('\n')
 
 const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
@@ -24,6 +28,8 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
     {
       illustrations: FgOnboarding1,
       title: 'Be yourself',
+      // textSvg: <OnboardingText1 preserveAspectRatio="xMinYMin meet" width={292 - 32}/>,
+      textSvg: <OnboardingText1 preserveAspectRatio="xMinYMin meet" width={'100%'}/>,
       text: <Text style={slideShowStyles.textFontNormal}>
         {`Say `}
         <Text style={slideShowStyles.textFontBold}>{`No `}</Text>
@@ -46,6 +52,8 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
     {
       illustrations: FgOnboarding2,
       title: 'Be human',
+      // textSvg: <OnboardingText2 preserveAspectRatio="xMinYMin meet" width={297 - 32}/>,
+      textSvg: <OnboardingText2 preserveAspectRatio="xMinYMin meet" width={'100%'}/>,
       text: <Text style={slideShowStyles.textFontNormal}>
         <Text style={slideShowStyles.textFontBold}>{`Better `}</Text>
         {`blocks fake accounts, and won't spam `}
@@ -68,6 +76,8 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
     {
       illustrations: FgOnboarding3,
       title: 'Be real',
+      // textSvg: <OnboardingText3 preserveAspectRatio="xMinYMin meet" width={303 - 32}/>,
+      textSvg: <OnboardingText3 preserveAspectRatio="xMinYMin meet" width={'100%'}/>,
       text: <Text style={slideShowStyles.textFontNormal}>
         {`Identifying fake news is hard!`}
         {`\n`}
@@ -87,6 +97,8 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
     {
       illustrations: FgOnboarding4,
       title: 'Be safe',
+      // textSvg: <OnboardingText4 preserveAspectRatio="xMinYMin meet" width={306 - 32}/>,
+      textSvg: <OnboardingText4 preserveAspectRatio="xMinYMin meet" width={'100%'}/>,
       text: <Text style={slideShowStyles.textFontNormal}>
         {`Be safe from surveillance and harassment.`}
         {`\n`}
@@ -114,7 +126,7 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
   ];
   const handleChangeIndex = (swiperData) => {
     // onChangeNewIndex(swiperData, data.length);
-    flatListRef.current.scrollToIndex({ index: swiperData.index })
+    // flatListRef.current.scrollToIndex({ index: swiperData.index })
     setIndex(swiperData.index)
   };
 
@@ -137,7 +149,8 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
         isLogin={item.isLogin}
         onNextSlide={onHandleNextSlide}
         text={item.text}
-        title={item.title} />
+        title={item.title}
+        textSvg={item.textSvg} />
       }
       onChangeIndex={handleChangeIndex}
       viewabilityConfig={{
