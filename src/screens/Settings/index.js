@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontSize: 14,
     color: colors.black,
+    lineHeight: 16,
   },
   footer: {
     position: 'absolute',

@@ -79,9 +79,9 @@ const DevDummyLogin = () => {
                 </Text>
                 <View style={S.divider} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CR')}>
+            <TouchableOpacity onPress={() => dummyLogin('COBA-LAGI-AJA')}>
                 <Text style={S.dummyAccountItem}>
-                    Fajar_alter2 : HQEGNQCHA8J1OIX4G2CR
+                    Fajarcobalagi : COBA-LAGI-AJA
                 </Text>
                 <View style={S.divider} />
             </TouchableOpacity>
