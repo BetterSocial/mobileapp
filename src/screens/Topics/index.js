@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 22,
+    padding: Platform.OS === 'ios' ? 22 : 0,
     backgroundColor: colors.white,
   },
   containerProgress: {
