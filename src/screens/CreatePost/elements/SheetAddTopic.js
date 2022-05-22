@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextInput, ScrollView, StyleSheet, Text, View, TouchableNativeFeedback, Image } from 'react-native';
+import { TextInput, ScrollView, StyleSheet, Text, View, TouchableNativeFeedback, Image, Platform } from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
 import KeyEvent from 'react-native-keyevent';
@@ -37,6 +37,7 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
   React.useEffect(() => {
     add();
   }, [trigger]);
+
 
   const onKeyUp = (keycode) => {
     if (keycode === 62) {
@@ -142,23 +143,25 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
               <View style={styles.containerInput}
               >
                 <Text style={styles.hashtag}>#</Text>
-                <AutoFocusTextArea
-                  ref={inputRef}
-                  style={styles.input}
-                  onSubmitEditing={() => add()}
-                  value={dataTopic}
-                  onChangeText={(v) => {
-                    if (v.match(/\s+$/gm)) {
-                      return add();
-                    }
-                    setTopic(v);
-                    if (v !== '') {
-                      searchTopic(v);
-                    }
-                  }}
-                  autoCapitalize="none"
-                  blurOnSubmit={false}
+                <TextInput 
+               ref={inputRef}
+               style={styles.input}
+               onSubmitEditing={() => add()}
+               value={dataTopic}
+               onChangeText={(v) => {
+                 if (v.match(/\s+$/gm)) {
+                   return add();
+                 }
+                 setTopic(v);
+                 if (v !== '') {
+                   searchTopic(v);
+                 }
+               }}
+               autoCapitalize="none"
+               blurOnSubmit={false}
+               autoFocus
                 />
+
               </View>
             )}
           </View>
@@ -247,10 +250,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   hashtag: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '400',
     fontFamily: fonts.inter[400],
-    marginTop: -8,
+    marginTop: Platform.OS === 'android' ? -8 : 0,
   },
   textDesc: {
     fontSize: 10,

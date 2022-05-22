@@ -659,7 +659,6 @@ const CreatePost = () => {
     sheetTopicRef.current.open()
   }
 
-  console.log(positionKeyboard, 'manakin')
 
   return (
     <SafeAreaView style={styles.container}>
