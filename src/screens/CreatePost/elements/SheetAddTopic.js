@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextInput, ScrollView, StyleSheet, Text, View, TouchableNativeFeedback, Image } from 'react-native';
+import { TextInput, ScrollView, StyleSheet, Text, View, TouchableNativeFeedback, Dimensions } from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
 import KeyEvent from 'react-native-keyevent';
@@ -20,6 +20,7 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
   const [listTopics, setlistTopics] = React.useState([]);
   const [trigger, setTrigger] = React.useState(-1);
   const [topicSuggestion, setTopicSuggestion] = React.useState([]);
+  const rbSheetHeight = 330
   const [widthInput, setWidthInput] = React.useState(0);
   let inputRef = React.useRef();
 
@@ -37,6 +38,7 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
   React.useEffect(() => {
     add();
   }, [trigger]);
+
 
   const onKeyUp = (keycode) => {
     if (keycode === 62) {
@@ -102,9 +104,11 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
     }
     add();
   };
+
+
   return (
     <RBSheet
-      height={330}
+      height={rbSheetHeight}
       onOpen={merge}
       onClose={onSwepDown}
       ref={refTopic}
@@ -142,29 +146,29 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
               <View style={styles.containerInput}
               >
                 <Text style={styles.hashtag}>#</Text>
-                <AutoFocusTextArea
-                  ref={inputRef}
-                  style={styles.input}
-                  onSubmitEditing={() => add()}
-                  value={dataTopic}
-                  onChangeText={(v) => {
-                    if (v.match(/\s+$/gm)) {
-                      return add();
-                    }
-                    setTopic(v);
-                    if (v !== '') {
-                      searchTopic(v);
-                    }
-                  }}
-                  autoCapitalize="none"
-                  blurOnSubmit={false}
+                <TextInput 
+               ref={inputRef}
+               style={styles.input}
+               onSubmitEditing={() => add()}
+               value={dataTopic}
+               onChangeText={(v) => {
+                 if (v.match(/\s+$/gm)) {
+                   return add();
+                 }
+                 setTopic(v);
+                 if (v !== '') {
+                   searchTopic(v);
+                 }
+               }}
+               autoCapitalize="none"
+               blurOnSubmit={false}
+               autoFocus
                 />
+
               </View>
             )}
-          </View>
-
-          {topicSuggestion.length > 0 && (
-            <Card style={{ marginTop: -72 }}>
+             {topicSuggestion.length > 0 && (
+            <Card >
               {topicSuggestion.map((item, index) => {
                 return (
                   <TouchableNativeFeedback onPress={() => {
@@ -191,6 +195,9 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
               })}
             </Card>
           )}
+          </View>
+
+          
           <Text style={styles.textDesc}>
             Hit space to start a new topic. Add up to 5 topics.
           </Text>
@@ -215,6 +222,7 @@ const styles = StyleSheet.create({
     minHeight: 150,
     marginTop: 12,
     borderRadius: 8,
+    paddingBottom: 16
   },
   title: {
     color: colors.black,
@@ -247,10 +255,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   hashtag: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '400',
     fontFamily: fonts.inter[400],
-    marginTop: -8,
+    // marginTop: Platform.OS === 'android' ? -8 : 0,
   },
   textDesc: {
     fontSize: 10,
