@@ -10,6 +10,8 @@ import {
   Platform,
   Image,
   StatusBar,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
@@ -216,12 +218,14 @@ const ChooseUsername = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
+
       <KeyboardAvoidingView
         style={styles.keyboardavoidingview}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={18}
-        enabled>
-        <View style={styles.content}>
+        >
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
+                <View style={styles.content}>
           <ProgressBar isStatic={true} value={25} />
           <Text style={styles.title}>
             {StringConstant.onboardingChooseUsernameHeadline}
@@ -259,6 +263,7 @@ const ChooseUsername = () => {
                 textContentType="username"
                 autoCapitalize="sentences"
                 autoCorrect={false}
+                autoFocus
               />
               {messageTypeFetch(typeFetch, username)}
             </View>
@@ -272,8 +277,10 @@ const ChooseUsername = () => {
             </Text>
           </View>
         </View>
+</TouchableWithoutFeedback>
+        
         <View style={styles.gap} />
-        <Button style={styles.btnNext} onPress={() => next()}>
+        <Button  onPress={() => next()}>
           {StringConstant.onboardingChooseUsernameButtonStateNext}
         </Button>
       </KeyboardAvoidingView>
