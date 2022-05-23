@@ -137,12 +137,12 @@ const RenderItem = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    marginTop: 8,
     borderRadius: SIZES.radius,
     backgroundColor: COLORS.white,
     elevation: 0.0,
     borderColor: COLORS.gray,
-    paddingTop: SIZES.base,
+    paddingBottom: 16,
     marginHorizontal: SIZES.base,
   },
   wrapperFooter: {

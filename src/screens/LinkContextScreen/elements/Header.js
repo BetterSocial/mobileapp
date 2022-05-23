@@ -43,10 +43,7 @@ const Header = ({
     domainId: iddomain,
     source: 'domain_page',
   });
-
-  console.log('item in domain')
-  console.log(item)
-
+  
   const [news, dispatch] = React.useContext(Context).news;
   let { ifollow } = news;
 

@@ -67,14 +67,14 @@ const Settings = () => {
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            // onPress={() => navigation.navigate('TermsAndCondition')}
+          {/* <TouchableOpacity
+            onPress={() => navigation.navigate('TermsAndCondition')}
             >
             <View style={styles.card}>
               <Text style={styles.textCard}>Terms and Condition</Text>
               <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => navigation.navigate('PrivacyPolicies')}>
             <View style={styles.card}>

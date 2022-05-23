@@ -73,7 +73,7 @@ const NewsFragment = () => {
             let onContentClicked = () => {
                 navigation.navigate('DetailDomainScreen', {
                     item: {
-                        id: item.news_link_id,
+                        id: item.post_id,
                         score: item?.newsLinkDomain?.credder_score
                     }
                 })
@@ -94,13 +94,14 @@ const NewsFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'always'}>
         { renderNewsItem() }
+        <View style={styles.padding} />
     </ScrollView>
 }
 
 const styles = StyleSheet.create({
     fragmentContainer: {
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.concrete,
     },
     noDataFoundContainer: {
         flex: 1,
@@ -111,6 +112,9 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         fontFamily: fonts.inter[600],
+    },
+    padding: {
+        height: 16,
     },
     unfollowedHeaders: {
         fontFamily: fonts.inter[600],
