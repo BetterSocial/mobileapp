@@ -54,7 +54,7 @@ const SignIn = () => {
   const [slideShowIndex, setSlideShowIndex] = React.useState(0)
   const [isCompleteSliding, setIsCompleteSliding] = React.useState(false);
   const [showComponent, setShowComponent] = React.useState(false)
-
+  const [clickTime, setClickTime] = React.useState(0)
   // const isReady = useIsReady()
   const navigation = useNavigation();
   const create = useClientGetstream();
@@ -65,6 +65,10 @@ const SignIn = () => {
       setIsCompleteSliding(true);
     }
   };
+
+  const onClickContainer = () => {
+    setClickTime((prevState) => prevState + 1)
+  }
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -137,16 +141,18 @@ const SignIn = () => {
   React.useEffect(() => {
     debounceShowComponent()
   }, [])
-
   // if (!isReady) return null
 
   return (
     <SafeAreaView style={S.container}>
       <StatusBar translucent={false} />
+      <TouchableWithoutFeedback onPress={onClickContainer} >
       <View style={S.containerSlideShow}>
-        <DevDummyLogin />
+        {clickTime >= 7 ? <DevDummyLogin /> : null}
         <SlideShow onChangeNewIndex={handleSlideShow} handleLogin={handleLogin}/>
       </View>
+      </TouchableWithoutFeedback>
+      
     </SafeAreaView>
   );
 };
