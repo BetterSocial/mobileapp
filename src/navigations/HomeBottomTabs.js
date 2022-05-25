@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {StatusBar, StyleSheet, Text, View} from 'react-native';
+import {StatusBar, StyleSheet, Text, View, Platform} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
@@ -29,6 +29,8 @@ const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs(props) {
   const {navigation} = props
+  const isIos = Platform.OS === 'ios'
+
   let [users, dispatch] = React.useContext(Context).users;
   let [, dispatchProfile] = React.useContext(Context).profile;
   const [unReadMessage] = React.useContext(Context).unReadMessage;
