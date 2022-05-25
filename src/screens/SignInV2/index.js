@@ -146,12 +146,10 @@ const SignIn = () => {
   return (
     <SafeAreaView style={S.container}>
       <StatusBar translucent={false} />
-      <TouchableWithoutFeedback onPress={onClickContainer} >
       <View style={S.containerSlideShow}>
-        {clickTime >= 7 ? <DevDummyLogin /> : null}
-        <SlideShow onChangeNewIndex={handleSlideShow} handleLogin={handleLogin}/>
+        {clickTime >= 7 ? <DevDummyLogin />  : null}
+        <SlideShow onContainerPress={onClickContainer} onChangeNewIndex={handleSlideShow} handleLogin={handleLogin}/>
       </View>
-      </TouchableWithoutFeedback>
       
     </SafeAreaView>
   );
