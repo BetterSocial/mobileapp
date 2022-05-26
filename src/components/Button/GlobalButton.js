@@ -1,6 +1,6 @@
-import React from 'react'
-import { TouchableNativeFeedback, StyleSheet, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types';
+import React from 'react'
+import { StyleSheet, TouchableNativeFeedback, TouchableOpacity } from 'react-native'
 const styles = StyleSheet.create({
     paddingButton: {
         padding: 10,

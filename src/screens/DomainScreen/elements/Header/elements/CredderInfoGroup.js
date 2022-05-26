@@ -5,11 +5,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import CredderLogo from '../../../../../assets/icon/CredderLogo';
-import CredderRating from '../../../../../components/CredderRating';
 import CredderRatingGreen from '../../../../../assets/icon/CredderRatingGreen';
 import MemoIc_question_mark from '../../../../../assets/icons/Ic_question_mark';
 import StringConstant from '../../../../../utils/string/StringConstant';
 import { COLORS } from '../../../../../utils/theme';
+import {CredderRating} from '../../../../../components/CredderRating';
 import { fonts, normalize } from '../../../../../utils/fonts';
 
 const CredderInfoGroup = ({ description, score }) => {

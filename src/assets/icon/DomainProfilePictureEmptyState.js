@@ -3,7 +3,7 @@ import Svg, {Path, Rect} from 'react-native-svg';
 
 function DomainProfilePictureEmptyState(props) {
   return (
-    <Svg width="100" height="100" viewBox="0 0 100 100" fill="none" {...props}>
+    <Svg width="20" height="20" viewBox="0 0 100 100" fill="none" {...props}>
       <Path
         d="M0 50C0 22.3858 22.3858 0 50 0C77.6142 0 100 22.3858 100 50C100 77.6142 77.6142 100 50 100C22.3858 100 0 77.6142 0 50Z"
         fill="#2F80ED"

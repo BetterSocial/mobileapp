@@ -3,13 +3,13 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
-import CredderRating from '../../../components/CredderRating';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import { COLORS, SIZES } from '../../../utils/theme';
+import {CredderRating} from '../../../components/CredderRating';
 import { Gap } from '../../../components';
 import { fonts } from '../../../utils/fonts';
 

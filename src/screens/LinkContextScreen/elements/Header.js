@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import CredderRating from '../../../components/CredderRating';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
@@ -19,6 +18,7 @@ import MemoUnfollowDomain from '../../../assets/icon/IconUnfollowDomain';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import { COLORS, SIZES } from '../../../utils/theme';
 import { Context } from '../../../context';
+import { FeedCredderRating } from '../../../components/CredderRating';
 import { Gap } from '../../../components';
 import { addIFollowByID, setIFollow } from '../../../context/actions/news';
 import {
@@ -43,7 +43,7 @@ const Header = ({
     domainId: iddomain,
     source: 'domain_page',
   });
-  
+
   const [news, dispatch] = React.useContext(Context).news;
   let { ifollow } = news;
 
@@ -137,9 +137,8 @@ const Header = ({
               {new Date(time).toLocaleDateString()}
             </Text>
             <View style={styles.point} />
-            <Memoic_globe height={13} width={13} />
-            <View style={styles.point} />
-
+            {/* <Memoic_globe height={13} width={13} /> */}
+            {/* <View style={styles.point} /> */}
             <MemoPeopleFollow height={13} width={12} />
             <Gap style={{ width: 4 }} />
             <Text
@@ -150,13 +149,10 @@ const Header = ({
               }}>
               12k
             </Text>
+            <View style={styles.point} />
+            <FeedCredderRating containerStyle={styles.credderRating} score={item?.domain?.credderScore} />
           </View>
-          {/* <Gap height={8} /> */}
-          {/* <View style={styles.domainIndicatorContainer}>
-            <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={4} />
-          </View> */}
         </View>
-        <CredderRating containerStyle={styles.credderRating} score={item?.domain?.credderScore}/>
       </Pressable>
       <View style={{ justifyContent: 'center' }}>
         <TouchableOpacity onPress={onFollowDomainPressed}>
@@ -187,9 +183,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 8,
   },
-  headerDomainDateContainer: { 
-    flexDirection: 'row', 
-    alignItems: 'center' 
+  headerDomainDateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   headerContainer: {
     flexDirection: 'row',

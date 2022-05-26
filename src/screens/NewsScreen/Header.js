@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import CredderRating from '../../components/CredderRating';
 import Gap from '../../components/Gap';
 import GlobalButton from '../../components/Button/GlobalButton';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import { Avatar } from '../../components';
 import { COLORS, FONTS, SIZES } from '../../utils/theme';
 import { Context } from '../../context';
+import { FeedCredderRating } from '../../components/CredderRating';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { setDomainData, setProfileDomain } from '../../context/actions/domainAction';
@@ -50,10 +50,11 @@ const Header = ({ image, domain, time, item }) => {
             <Text style={styles.domainPostDate} numberOfLines={1}>
               {new Date(time).toLocaleDateString()}
             </Text>
+            <View style={styles.point} />
+            <FeedCredderRating containerStyle={{ height: 28, alignSelf: 'center' }} score={item?.domain?.credderScore} />
           </View>
           {/* <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} /> */}
         </View>
-        <CredderRating containerStyle={{ height: 28, alignSelf: 'center' }} score={item?.domain?.credderScore} />
       </View>
     </GlobalButton>
   );
@@ -61,19 +62,22 @@ const Header = ({ image, domain, time, item }) => {
 
 const styles = StyleSheet.create({
   avatar: {
-    width: 36,
-    height: 36,
+    width: 24,
+    height: 24,
+    alignSelf: 'center',
   },
   container: {
     flexDirection: 'row',
     paddingHorizontal: SIZES.base,
     marginLeft: 12,
-    marginTop: 4,
+    paddingTop: 8.5,
+    marginBottom: 8.5,
     display: 'flex',
+    // backgroundColor: 'red'
   },
   domain: {
     lineHeight: 14.52,
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: fonts.inter[600],
     flexShrink: 1,
   },
@@ -83,7 +87,7 @@ const styles = StyleSheet.create({
   },
   domainPostDate: {
     lineHeight: 14.52,
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: fonts.inter[400],
     color: colors.gray,
   },
@@ -121,7 +125,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   noPl: {
-    paddingLeft: 0
+    padding: 0
   },
   row: {
     flex: 1,

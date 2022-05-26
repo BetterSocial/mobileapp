@@ -8,7 +8,6 @@ import {
     View,
 } from 'react-native';
 
-import CredderRating from '../../../components/CredderRating';
 import GlobalButton from '../../../components/Button/GlobalButton';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
@@ -19,6 +18,7 @@ import Memoic_globe from '../../../assets/icons/ic_globe';
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 import dimen from '../../../utils/dimen';
 import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
+import {CredderRating} from '../../../components/CredderRating';
 import { Gap } from '../../../components';
 import { colors } from '../../../utils/colors';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';

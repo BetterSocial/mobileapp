@@ -80,7 +80,7 @@ const Content = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: SIZES.base,
+    // marginTop: SIZES.base,
   },
   base: {
     paddingHorizontal: SIZES.base,

@@ -53,7 +53,7 @@ const newsDiscoveryContentParamBuilder = (
   },
 });
 
-export default {
+export {
   newsDiscoveryContentParamBuilder,
   linkContextScreenParamBuilder,
 };

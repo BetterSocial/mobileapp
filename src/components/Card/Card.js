@@ -11,10 +11,10 @@ import {
   View,
 } from 'react-native';
 
-import CredderRating from '../CredderRating';
 import Gap from '../Gap';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import { COLORS } from '../../utils/theme';
+import { FeedCredderRating } from '../CredderRating';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { sanitizeUrlForLinking } from '../../utils/Utils';
@@ -38,7 +38,7 @@ const Card = (props) => {
     <View style={styles.container}>
       <View>
         <TouchableOpacity onPress={onHeaderPress}>
-          <Header domain={domain} image={domainImage} date={date} score={score}/>
+          <Header domain={domain} image={domainImage} date={date} score={score} />
         </TouchableOpacity>
       </View>
       <View style={{ flex: 1 }}>
@@ -93,10 +93,11 @@ const Header = ({ domain, image, date, score }) => (
         <Text style={styles.cardHeaderDomainName} numberOfLines={1}>{domain}</Text>
         <View style={styles.point} />
         <Text style={styles.cardHeaderDate} numberOfLines={1}>{date}</Text>
+        <View style={styles.point} />
+        <FeedCredderRating containerStyle={styles.credderRating} score={score} />
       </View>
       {/* <MemoIc_rectangle_gradient height={10} width={180} /> */}
     </View>
-    <CredderRating containerStyle={styles.credderRating} score={score}/>
   </View>
 );
 Card.propTypes = {
