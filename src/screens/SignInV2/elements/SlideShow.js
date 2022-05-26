@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
@@ -19,11 +19,11 @@ const { width: screenWidth, fontScale, scale } = Dimensions.get('window');
 console.log(screenWidth)
 console.log('\n')
 
-const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
+const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin, onContainerPress = () => {} }) => {
   const [index, setIndex] = React.useState(0)
 
   const flatListRef = React.useRef(null)
-
+  
   const data = [
     {
       illustrations: FgOnboarding1,
@@ -141,16 +141,18 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin }) => {
       index={0}
       data={data}
       scroll
-      renderItem={({ item, index }) => <SlideShowItem index={index}
-        key={`slideshowitem-${index}`}
-        count={data.length}
-        handleLogin={handleLogin}
-        illustration={item.illustrations}
-        isLogin={item.isLogin}
-        onNextSlide={onHandleNextSlide}
-        text={item.text}
-        title={item.title}
-        textSvg={item.textSvg} />
+      renderItem={({ item, index }) => 
+      <SlideShowItem index={index}
+      onPressContainer={onContainerPress}
+      key={`slideshowitem-${index}`}
+      count={data.length}
+      handleLogin={handleLogin}
+      illustration={item.illustrations}
+      isLogin={item.isLogin}
+      onNextSlide={onHandleNextSlide}
+      text={item.text}
+      title={item.title}
+      textSvg={item.textSvg} />
       }
       onChangeIndex={handleChangeIndex}
       viewabilityConfig={{

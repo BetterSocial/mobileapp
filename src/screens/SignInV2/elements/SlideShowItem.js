@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { Button, Dimensions, Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 
 import BgOnboarding from '../../../assets/background/bg_onboarding.png'
 import BgOnboardingTop from '../../../assets/background/bg_onboarding_top.png'
@@ -11,10 +11,14 @@ import { fonts, normalizeFontSize } from '../../../utils/fonts';
 
 const { height, width, fontScale } = Dimensions.get('screen')
 
-export const SlideShowItem = ({ children, count, handleLogin, illustration, index, isLogin, title, text, textSvg, onNextSlide = () => { } }) => {
+export const SlideShowItem = ({ children, count, handleLogin, illustration, index, isLogin, title, text, textSvg, onNextSlide = () => { }, onPressContainer = () => {} }) => {
     // console.log(height)
     const __renderForeground = () => {
-        if (index < 4) return (<Image source={illustration} style={styles.onboardingForeground} />)
+        if (index < 4) return (
+            <TouchableWithoutFeedback onPress={onPressContainer} >
+                <Image source={illustration} style={styles.onboardingForeground} />
+            </TouchableWithoutFeedback>
+        )
         return <></>
     }
 
