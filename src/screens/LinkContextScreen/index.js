@@ -32,9 +32,6 @@ const LinkContextScreen = () => {
   let domainName = item.domain.name;
   let iddomain = item.content.domain_page_id;
 
-  console.log('item')
-  console.log(item)
-
   const navigation = useNavigation();
   const [dataDomain, setDataDomain] = React.useState(route.params.item);
   const [data, setData] = React.useState([]);

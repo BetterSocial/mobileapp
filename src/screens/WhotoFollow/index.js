@@ -238,9 +238,10 @@ const WhotoFollow = () => {
   };
 
   const rowRenderer = (type, item, index, extendedState) => {
+    let labelName = item.neighborhood ? item.neighborhood : item.name || ""
     switch (type) {
       case VIEW_TYPE_LABEL:
-        return <Label label={item.name} />;
+        return <Label label={labelName} />;
       case VIEW_TYPE_DATA:
         return (
           <ItemUser

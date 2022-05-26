@@ -20,7 +20,7 @@ import {
 import {Context} from '../../../context';
 import {Footer, Gap, PreviewComment} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
-import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
+import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder'
 import { showScoreAlertDialog } from '../../../utils/Utils';
 
 const {width, height} = Dimensions.get('window');

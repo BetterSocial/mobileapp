@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
+
 import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
 
 const index = ({image, style}) => {
@@ -11,7 +12,7 @@ const index = ({image, style}) => {
           style={[styles.image, StyleSheet.absoluteFillObject]}
         />
       ) : (
-        <MemoDomainProfilePicture width="36" height="36" />
+        <MemoDomainProfilePicture width="24" height="24" />
       )}
     </View>
   );
