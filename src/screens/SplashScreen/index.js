@@ -27,41 +27,13 @@ const SplashScreen = () => {
   const [, newsDispatch] = React.useContext(Context).news;
   const [, followingDispatch] = React.useContext(Context).following;
   const create = useClientGetstream();
-  const debounceNavigationPage = debounce((selfUserId) => {
+  const debounceNavigationPage = (selfUserId) => {
     navigation.dispatch(StackActions.replace(selfUserId ? 'HomeTabs' : 'SignIn'));
-  }, 500);
+  }
 
   const getDiscoveryData = async (selfUserId) => {
     SplashScreenPackage.hide();
-    // debounceNavigationPage(selfUserId);
-    if (!selfUserId) {
-      SplashScreenPackage.hide();
-      return debounceNavigationPage(selfUserId);
-    }
-    // Not using await so splash screen can navigate to next screen faster
-
-    try {
-      getFollowing(selfUserId).then((response) => {
-        following.setFollowingUsers(response.data, followingDispatch);
-      });
-
-      getDomains().then((response) => {
-        setNews([{ dummy: true }, ...response.data], newsDispatch);
-      });
-
-      getFollowedDomain().then((response) => {
-        following.setFollowingDomain(response.data.data, followingDispatch);
-      });
-
-      getFollowingTopic().then((response) => {
-        following.setFollowingTopics(response.data, followingDispatch);
-      });
-
-      SplashScreenPackage.hide();
-      debounceNavigationPage(selfUserId);
-    } catch (e) {
-      console.log(e);
-    }
+    debounceNavigationPage(selfUserId)
   };
 
   const navigateWithoutDeeplink = async (selfUserId) => {
@@ -71,11 +43,7 @@ const SplashScreen = () => {
   const doGetProfileByUsername = async (username) => {
     try {
       const response = await getProfileByUsername(username);
-      console.log('response.data');
-      console.log(response.data);
       if (response.code === 200) {
-        console.log('response.data');
-        console.log(response.data);
         return response.data;
       }
       return false;
@@ -86,7 +54,6 @@ const SplashScreen = () => {
 
   const doVerifyUser = async () => {
     try {
-      const token = await getAccessToken();
       const id = await getUserId();
       if (id !== null && id !== '') {
         const verify = await verifyTokenGetstream();
