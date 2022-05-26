@@ -52,8 +52,7 @@ const getCountCommentWithChild = (item) => {
         }
       });
     } catch (e) {
-      // console.log('item.latest_reactions');
-      // console.log(JSON.stringify(reactionLevelOne));
+
     }
   }
 

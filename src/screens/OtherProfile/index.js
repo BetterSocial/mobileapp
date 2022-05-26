@@ -27,6 +27,7 @@ import BlockDomain from '../../components/Blocking/BlockDomain';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BlockUser from '../../components/Blocking/BlockUser';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
+import GlobalButton from '../../components/Button/GlobalButton';
 import Loading from '../Loading';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
@@ -58,7 +59,6 @@ import { setFeedByIndex, setOtherProfileFeed } from '../../context/actions/other
 import { shareUserLink } from '../../utils/Utils';
 import {trimString} from '../../utils/string/TrimString';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import GlobalButton from '../../components/Button/GlobalButton';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const {width, height} = Dimensions.get('screen');
@@ -107,11 +107,7 @@ const OtherProfile = () => {
   const {feeds} = otherProfileFeeds
 
   const getOtherFeeds = async (userId, offset = 0) => {
-    console.log(`getting data ${offset}`)
     let result = await getOtherFeedsInProfile(userId)
-
-    console.log('result.data')
-    console.log(result.data.length)
 
     if(offset === 0) setOtherProfileFeed([...result.data, {dummy: true}], dispatchOtherProfile)
     else {
@@ -120,8 +116,6 @@ const OtherProfile = () => {
       setOtherProfileFeed(clonedFeeds, dispatchOtherProfile)
     }
 
-    console.log('result.offset')
-    console.log(result.offset)
     setPostOffset(result.offset)
   }
 
