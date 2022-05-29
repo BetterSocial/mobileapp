@@ -94,10 +94,13 @@ const SignIn = () => {
               .then((response) => {
                 setLoading(false);
                 if (response.data) {
-                  create();
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
-                  navigation.dispatch(StackActions.replace('HomeTabs'));
+                  create(response.token).then(() => {
+                    navigation.dispatch(StackActions.replace('HomeTabs'));
+
+                  })
+         
                 } else {
                   removeLocalStorege('userId');
                   navigation.dispatch(StackActions.replace('ChooseUsername'));

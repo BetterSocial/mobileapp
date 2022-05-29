@@ -86,7 +86,7 @@ const ChannelListScreen = ({ navigation }) => {
       screen_name: 'Channel List',
     });
     getPostNotification()
-    connect();
+    // connect();
     setupClient();
   }, []);
 
