@@ -12,14 +12,16 @@ import { verifyUser } from '../../service/users';
 
 const heightBs = Dimensions.get('window').height * 0.6
 
-const DevDummyLogin = () => {
+const DevDummyLogin = ({resetClickTime = () => {}}) => {
     const [loading, setLoading] = React.useState(false);
     const [isShown, setIsShown] = React.useState(true)
     const dummyLoginRbSheetRef = React.useRef(null)
     const navigation = useNavigation()
 
     const [, dispatch] = React.useContext(Context).users;
-
+    const closeDummyLogin = () => {
+        resetClickTime()
+    }
     const dummyLogin = (appUserId) => {
         if (ENABLE_DEV_ONLY_FEATURE) {
             dummyLoginRbSheetRef.current.close();
@@ -62,7 +64,7 @@ const DevDummyLogin = () => {
         />
         <Button
             title="Close Dev Menu"
-            onPress={() => setIsShown(false)}
+            onPress={closeDummyLogin}
         />
         <RBSheet height={heightBs} ref={dummyLoginRbSheetRef}>
             <Text>Choose an account you wish to login</Text>
