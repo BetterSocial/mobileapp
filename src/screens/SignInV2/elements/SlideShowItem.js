@@ -33,7 +33,8 @@ export const SlideShowItem = ({ children, count, handleLogin, illustration, inde
     const __renderBackground = () => {
         // if (index < 4) return <Image source={BgOnboarding} style={styles.onboardingBackground} />
         if (index < 4) return <></>
-        return <View style={styles.onboardingBackgroundTopContainer}>
+        return <TouchableWithoutFeedback onPress={onPressContainer} > 
+            <View style={styles.onboardingBackgroundTopContainer}>
             <Image source={BgOnboardingTop} style={styles.onboardingBackgroundTop} />
             <View style={styles.brandLoginContainer}>
                 <IconBetterOnboarding width={dimen.size.ONBOARDING_BETTER_LOGO_WIDTH} height={dimen.size.ONBOARDING_BETTER_LOGO_HEIGHT} style={styles.brandLoginImage} />
@@ -47,6 +48,7 @@ export const SlideShowItem = ({ children, count, handleLogin, illustration, inde
                 </Text>
             </View>
         </View >
+        </TouchableWithoutFeedback>
     }
 
     return <View style={styles.container}>

@@ -70,6 +70,10 @@ const SignIn = () => {
     setClickTime((prevState) => prevState + 1)
   }
 
+  const resetClickTime = () => {
+    setClickTime(0)
+  }
+
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'SignIn',
@@ -90,10 +94,13 @@ const SignIn = () => {
               .then((response) => {
                 setLoading(false);
                 if (response.data) {
-                  create();
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
-                  navigation.dispatch(StackActions.replace('HomeTabs'));
+                  create(response.token).then(() => {
+                    navigation.dispatch(StackActions.replace('HomeTabs'));
+
+                  })
+         
                 } else {
                   removeLocalStorege('userId');
                   navigation.dispatch(StackActions.replace('ChooseUsername'));
@@ -147,7 +154,7 @@ const SignIn = () => {
     <SafeAreaView style={S.container}>
       <StatusBar translucent={false} />
       <View style={S.containerSlideShow}>
-        {clickTime >= 7 ? <DevDummyLogin />  : null}
+        {clickTime >= 7 ? <DevDummyLogin resetClickTime={resetClickTime} />  : null}
         <SlideShow onContainerPress={onClickContainer} onChangeNewIndex={handleSlideShow} handleLogin={handleLogin}/>
       </View>
       

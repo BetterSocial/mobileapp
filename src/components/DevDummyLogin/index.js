@@ -9,17 +9,20 @@ import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
 import { removeLocalStorege, setAccessToken, setRefreshToken, setUserId } from '../../utils/token';
 import { setDataHumenId } from '../../context/actions/users';
 import { verifyUser } from '../../service/users';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
 const heightBs = Dimensions.get('window').height * 0.6
 
-const DevDummyLogin = () => {
+const DevDummyLogin = ({resetClickTime = () => {}}) => {
     const [loading, setLoading] = React.useState(false);
     const [isShown, setIsShown] = React.useState(true)
     const dummyLoginRbSheetRef = React.useRef(null)
     const navigation = useNavigation()
-
+    const streamChat = useClientGetstream()
     const [, dispatch] = React.useContext(Context).users;
-
+    const closeDummyLogin = () => {
+        resetClickTime()
+    }
     const dummyLogin = (appUserId) => {
         if (ENABLE_DEV_ONLY_FEATURE) {
             dummyLoginRbSheetRef.current.close();
@@ -33,9 +36,9 @@ const DevDummyLogin = () => {
                 if (response.data) {
                     setAccessToken(response.token);
                     setRefreshToken(response.refresh_token);
-                    setTimeout(() => {
+                    streamChat(response.token).then(() => {
                         navigation.dispatch(StackActions.replace('HomeTabs'));
-                    }, 100);
+                    })
                 } else {
                     removeLocalStorege('userId');
                     navigation.dispatch(StackActions.replace('ChooseUsername'));
@@ -62,7 +65,7 @@ const DevDummyLogin = () => {
         />
         <Button
             title="Close Dev Menu"
-            onPress={() => setIsShown(false)}
+            onPress={closeDummyLogin}
         />
         <RBSheet height={heightBs} ref={dummyLoginRbSheetRef}>
             <Text>Choose an account you wish to login</Text>
