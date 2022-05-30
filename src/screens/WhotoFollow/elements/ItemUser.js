@@ -81,10 +81,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: 76,
     paddingHorizontal: 20,
+    width: '100%',
+    flex: 1,
   },
   cardLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   tinyLogo: {
     width: 48,
@@ -95,6 +98,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     marginLeft: 8,
+    flex: 1,
   },
   textFullName: {
     fontFamily: 'Poppins',
