@@ -11,7 +11,8 @@ import {
   Image,
   StatusBar,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Animated
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
@@ -47,6 +48,25 @@ const ChooseUsername = () => {
   const [users, dispatch] = React.useContext(Context).users;
   const [username, setUsernameState] = React.useState('');
   const [typeFetch, setTypeFetch] = React.useState('');
+  const [showInfo, setShowInfo] = React.useState(false)
+  const [fadeInfo] = React.useState(new Animated.Value(0))
+  React.useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', hideInfo)
+    Keyboard.addListener('keyboardDidHide', showInfoHandle)
+  }, [])
+
+  const hideInfo = () => {
+    Animated.timing(fadeInfo, {
+      toValue: 0,
+      duration: 500
+    }).start()
+  }
+  const showInfoHandle = () => {
+    Animated.timing(fadeInfo, {
+      toValue: 1,
+      duration: 500
+    }).start()
+  }
 
   React.useEffect(() => {
     analytics().logScreenView({
@@ -268,14 +288,20 @@ const ChooseUsername = () => {
               {messageTypeFetch(typeFetch, username)}
             </View>
           </View>
-          <View style={styles.constainerInfo}>
+          <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
+            <View style={styles.parentIcon} >
             <View style={styles.containerIcon}>
-              <IconFontAwesome5 name="exclamation" size={14} color="#2F80ED" />
+              <IconFontAwesome5 name="exclamation" size={12} color="#2F80ED" />
             </View>
-            <Text style={styles.infoText}>
+            </View>
+              <View style={styles.parentInfo} >
+              <Text style={styles.infoText}>
               {StringConstant.onboardingChooseUsernameBlueBoxHint}
             </Text>
-          </View>
+              </View>
+            
+          </Animated.View>
+   
         </View>
 </TouchableWithoutFeedback>
         
@@ -341,33 +367,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   constainerInfo: {
-    backgroundColor: 'rgba(47,128,237,0.2)',
+    backgroundColor: 'rgba(85, 194, 255, 0.3)',
     flexDirection: 'row',
     borderRadius: 4,
     width: '100%',
-    paddingLeft: 14,
-    paddingTop: 13,
-    paddingRight: 11,
-    paddingBottom: 11,
+    paddingHorizontal: 7,
+    paddingVertical: 13
   },
   containerIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: 30,
+    width: 25,
+    height: 25,
+    borderRadius: 13,
     backgroundColor: 'rgba(47,128,237,0.3)',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 7,
+    marginTop: 3
+    // marginRight: 7
   },
   infoText: {
     fontFamily: 'Inter-Regular',
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 14,
-    color: colors.blue,
-    marginLeft: 12,
+    color: 'rgba(47, 128, 237, 1)',
+    // marginLeft: 12,
     lineHeight: 24,
-    width: width - 95,
+    paddingHorizontal: 4
+    // width: width - 95,
+    // backgroundColor: 'red'
   },
   containerAddIcon: {
     marginRight: 13,
@@ -386,4 +415,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     marginTop: marginTop ? 6 : 0,
   }),
+  parentIcon: {
+    width: '10%', 
+    alignItems: 'center'
+  },
+  parentInfo: {
+    width: '90%'
+  }
 });

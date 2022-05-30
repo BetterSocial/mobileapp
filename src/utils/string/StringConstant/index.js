@@ -7,7 +7,7 @@ const signInScreenHumanIdDetail = 'is an independent non-profit guaranteeing\n y
 // Onboarding - Choose Username
 const onboardingChooseUsernameHeadline = 'Choose your username';
 const onboardingChooseUsernameSubHeadline = 'BetterSocial does not require real names - just make sure your friends will find & recognize you';
-const onboardingChooseUsernameBlueBoxHint = 'Whatever your username, you will always be able to post anonymously.';
+const onboardingChooseUsernameBlueBoxHint = 'Remember that whatever your name, you will always be able to post anonymously';
 const onboardingChooseUsernameButtonStateNext = 'NEXT';
 const onboardingChooseUsernameErrorCannotBeEmpty = 'Username cannot be empty';
 const onboardingChooseUsernameLabelCheckingAvailability = 'Checking availability';
