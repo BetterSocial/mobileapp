@@ -280,26 +280,21 @@ const styles = StyleSheet.create({
   bgTopicSelectActive: {
     backgroundColor: colors.bondi_blue,
     minWidth: 100,
-    height: 28,
-    paddingLeft: 18,
-    paddingRight: 18,
-    paddingTop: 6,
-    paddingBottom: 6,
+    paddingHorizontal: 18,
+    paddingVertical: 7,
     borderRadius: 14,
     flexDirection: 'row',
     justifyContent: 'center',
     marginRight: 8,
-    marginBottom: 10
+    marginBottom: 10,
+    alignItems: 'center'
   },
 
   bgTopicSelectNotActive: {
     backgroundColor: colors.concrete,
     minWidth: 100,
-    height: 28,
-    paddingLeft: 18,
-    paddingRight: 18,
-    paddingTop: 6,
-    paddingBottom: 6,
+    paddingHorizontal: 18,
+    paddingVertical: 7,
     borderRadius: 14,
     flexDirection: 'row',
     justifyContent: 'center',
