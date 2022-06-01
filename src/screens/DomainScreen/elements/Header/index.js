@@ -66,7 +66,7 @@ const Header = ({
               />
             </>
           ) : (
-            <MemoDomainProfilePicture />
+            <MemoDomainProfilePicture height={normalize(100)} width={normalize(100)}/>
           )}
         </View>
         <View style={styles.wrapperHeader}>
