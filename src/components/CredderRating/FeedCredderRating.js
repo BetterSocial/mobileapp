@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         return {
             fontSize,
             fontFamily: fonts.inter[500],
-            color: COLORS.gray1,
+            color: COLORS.black,
             alignSelf: 'center',
             textAlign: 'center',
             marginLeft: 4,

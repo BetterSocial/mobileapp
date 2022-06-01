@@ -51,7 +51,9 @@ const Header = ({ image, domain, time, item }) => {
               {new Date(time).toLocaleDateString()}
             </Text>
             <View style={styles.point} />
-            <FeedCredderRating containerStyle={{ height: 28, alignSelf: 'center' }} score={item?.domain?.credderScore} />
+            <FeedCredderRating containerStyle={{ height: 15, alignSelf: 'center' }} 
+              score={item?.domain?.credderScore} scoreSize={12}
+              iconSize={16} />
           </View>
           {/* <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} /> */}
         </View>
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.base,
     marginLeft: 12,
     paddingTop: 8.5,
-    marginBottom: 8.5,
+    paddingBottom: 8.5,
     display: 'flex',
     // backgroundColor: 'red'
   },
@@ -117,12 +119,13 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
   },
   point: {
-    width: 4,
-    height: 4,
+    width: 3,
+    height: 3,
     borderRadius: 4,
     backgroundColor: COLORS.gray,
-    marginLeft: 8,
-    marginRight: 8,
+    marginLeft: 6,
+    marginRight: 6,
+    marginTop: 1,
   },
   noPl: {
     padding: 0
@@ -131,6 +134,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginRight: 8,
+    // backgroundColor: 'blue'
   }
 });
 
