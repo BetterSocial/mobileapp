@@ -20,12 +20,13 @@ import {get} from '../../api/server';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
-import {ChunkArray} from '../../utils/array/ChunkArray';
+import {ChunkArray, chunkArrayCustom} from '../../utils/array/ChunkArray';
 import {ProgressBar} from '../../components/ProgressBar';
 import StringConstant from '../../utils/string/StringConstant';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import { Header } from '../../components';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const width = Dimensions.get('screen').width;
 
@@ -128,17 +129,21 @@ const Topics = () => {
               return (
                 <View key={index} style={styles.containerTopic}>
                   <Text style={styles.title}>{attribute}</Text>
-                  <View>
-                    {ChunkArray(topics[attribute], 4).map((val, idx) => {
+                  <ScrollView
+                  showsHorizontalScrollIndicator={false}
+                  horizontal={true}
+                  style={styles.scrollButtonParent}
+                  >
+                    {chunkArrayCustom(Math.round(topics[attribute].length / 3) + 1, topics[attribute]).map((val, idx) => {
                       return (
-                        <ScrollView
-                          showsHorizontalScrollIndicator={false}
+                        <View
                           key={idx}
                           style={styles.listTopic}
-                          horizontal={true}>
+    
+                          >
                           {val.map((value, i) => {
                             return (
-                              <TouchableOpacity
+                              <TouchableWithoutFeedback
                                 onPress={() =>
                                   handleSelectedLanguage(value.topic_id)
                                 }
@@ -149,7 +154,8 @@ const Topics = () => {
                                   ) > -1
                                     ? styles.bgTopicSelectActive
                                     : styles.bgTopicSelectNotActive
-                                }>
+                                }
+                                >
                                 <Text>{value.icon}</Text>
                                 <Text
                                   style={
@@ -159,15 +165,15 @@ const Topics = () => {
                                       ? styles.textTopicActive
                                       : styles.textTopicNotActive
                                   }>
-                                  {value.name}
+                                  #{value.name}
                                 </Text>
-                              </TouchableOpacity>
+                              </TouchableWithoutFeedback>
                             );
                           })}
-                        </ScrollView>
+                        </View>
                       );
                     })}
-                  </View>
+                  </ScrollView>
                 </View>
               );
             })
@@ -193,7 +199,7 @@ const Topics = () => {
   );
 };
 const styles = StyleSheet.create({
-  scrollViewStyle: {marginBottom: 100, paddingHorizontal: 22},
+  scrollViewStyle: {marginBottom: 100},
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -263,38 +269,37 @@ const styles = StyleSheet.create({
     color: colors.black,
     marginBottom: 13,
     textTransform: 'capitalize',
+    paddingHorizontal: 22
   },
   listTopic: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginBottom: 8,
+    marginRight: 20,
   },
 
   bgTopicSelectActive: {
     backgroundColor: colors.bondi_blue,
     minWidth: 100,
-    height: 28,
-    paddingLeft: 18,
-    paddingRight: 18,
-    paddingTop: 6,
-    paddingBottom: 6,
+    paddingHorizontal: 18,
+    paddingVertical: 7,
     borderRadius: 14,
     flexDirection: 'row',
     justifyContent: 'center',
     marginRight: 8,
+    marginBottom: 10,
+    alignItems: 'center'
   },
 
   bgTopicSelectNotActive: {
     backgroundColor: colors.concrete,
     minWidth: 100,
-    height: 28,
-    paddingLeft: 18,
-    paddingRight: 18,
-    paddingTop: 6,
-    paddingBottom: 6,
+    paddingHorizontal: 18,
+    paddingVertical: 7,
     borderRadius: 14,
     flexDirection: 'row',
     justifyContent: 'center',
     marginRight: 8,
+    marginBottom: 10
   },
   textTopicActive: {
     fontFamily: 'Inter',
@@ -327,5 +332,8 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.gray,
   },
+  scrollButtonParent: {
+    paddingHorizontal: 22
+  }
 });
 export default Topics;

@@ -5,3 +5,16 @@ export const ChunkArray = (arr, size) => {
   }
   return myArray;
 };
+
+export const chunkArrayCustom = (perChunk = 2, inputArray = []) => {
+  var result = inputArray.reduce((resultArray, item, index) => { 
+    const chunkIndex = index % perChunk
+
+    if(!resultArray[chunkIndex]) {
+      resultArray[chunkIndex] = []; // start a new chunk
+    }
+    resultArray[chunkIndex].push(item);
+    return resultArray;
+  }, []);
+  return result
+};
