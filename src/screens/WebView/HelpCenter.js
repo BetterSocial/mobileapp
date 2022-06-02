@@ -41,7 +41,6 @@ export default withInteractionsManaged(React.memo(HelpCenter));
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 21,
     // paddingHorizontal: 20,
     flex: 1,
     backgroundColor: '#fff',
