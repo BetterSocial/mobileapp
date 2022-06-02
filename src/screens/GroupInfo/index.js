@@ -17,7 +17,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
-import Header from './elements/Header';
+import Header from '../../components/Header';
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
@@ -198,7 +198,8 @@ const GroupInfo = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
-      <Header title={chatName} />
+      {/* <Header title={chatName} /> */}
+      <Header isCenter onPress={() => navigation.goBack()} title={chatName} />
       <View style={styles.lineTop} />
       <ScrollView>
         <SafeAreaView>

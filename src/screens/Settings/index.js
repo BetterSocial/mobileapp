@@ -57,9 +57,7 @@ const Settings = () => {
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
       <SafeAreaView style={styles.container}>
-        <View style={styles.containerHeader}>
-          <Header title="Settings" onPress={() => navigation.goBack()} />
-        </View>
+      <Header title="Settings" isCenter onPress={() => navigation.goBack()} />
         <View style={styles.content}>
           <TouchableOpacity onPress={() => goToPage('BlockScreen')} >
             <View style={styles.card}>

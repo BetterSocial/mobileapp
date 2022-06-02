@@ -19,7 +19,7 @@ const PrivacyPolicies = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <Header title="Privacy Policies" onPress={() => navigator.goBack()} containerStyle={styles.header} />
+      <Header title="Privacy Policies" onPress={() => navigator.goBack()}  />
       </SafeAreaView>
       <WebView
         androidHardwareAccelerationDisabled={true}
@@ -41,7 +41,6 @@ export default withInteractionsManaged(React.memo(PrivacyPolicies));
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 21,
     // paddingHorizontal: 20,
     flex: 1,
     backgroundColor: '#fff',
