@@ -1,18 +1,17 @@
 import * as React from 'react';
+import Modal from 'react-native-modal';
 import {
-  View,
-  Text,
-  StyleSheet,
   Dimensions,
+  StyleSheet,
+  Text,
   TouchableNativeFeedback,
+  View,
 } from 'react-native';
 
-import Modal from 'react-native-modal';
-
+import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
 import CrossIcon from '../../../assets/icons/cross.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import { displayFormattedSearchLocations } from '../../utils/string/StringUtils';
-import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
 
 const width = Dimensions.get('screen').width;
 
@@ -55,6 +54,8 @@ const SearchModal = (props) => {
                 value={props.value}
                 placeholder={props.placeholder ? props.placeholder : ''}
                 placeholderTextColor="#BDBDBD"
+                multiline={false}
+                returnKeyType="search"
               />
             </View>
             {props.isLoading ? <Text>Please wait...</Text> : null}

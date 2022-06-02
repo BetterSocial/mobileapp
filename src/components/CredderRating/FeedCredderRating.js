@@ -26,7 +26,7 @@ const FeedCredderRating = ({ containerStyle = {}, iconSize = 14, scoreSize = 16,
 
     return <View style={{ ...styles.credderRatingContainer, ...containerStyle }}>
         {__renderCredderRatingIcon()}
-        <Text style={styles.credderRating(scoreSize)}>{__renderCredderRatingScore()}</Text>
+        <Text style={styles.credderRating(scoreSize, score)}>{__renderCredderRatingScore()}</Text>
     </View >
 }
 
@@ -36,14 +36,15 @@ const styles = StyleSheet.create({
     credderIcon: {
         alignSelf: "center",
     },
-    credderRating: (fontSize) => {
+    credderRating: (fontSize, score) => {
         return {
             fontSize,
-            fontFamily: fonts.inter[500],
-            color: COLORS.black,
+            fontFamily: fonts.inter[400],
+            color: COLORS.gray,
             alignSelf: 'center',
             textAlign: 'center',
             marginLeft: 4,
+            marginTop: (!score || score < 0) ? -1 : 0,
         }
     },
     credderRatingContainer: {

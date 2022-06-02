@@ -22,7 +22,7 @@ const PrivacyPolicies = () => {
         <Header title="Privacy Policies" onPress={() => navigator.goBack()} containerStyle={styles.header} />
       </SafeAreaView>
       <WebView
-        androidHardwareAccelerationDisabled={true}
+        androidHardwareAccelerationDisabled={false}
         source={{ uri: 'https://bettersocial.org/privacy' }}
         showsVerticalScrollIndicator={false}
         startInLoadingState={true}

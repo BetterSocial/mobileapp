@@ -157,6 +157,7 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
             onFocus={() => __handleFocus(true)}
             onBlur={() => __handleFocus(false)}
             multiline={false}
+            returnKeyType="search"
             placeholder={StringConstant.discoverySearchBarPlaceholder}
             placeholderTextColor={COLORS.gray1}
             style={styles.input} />
