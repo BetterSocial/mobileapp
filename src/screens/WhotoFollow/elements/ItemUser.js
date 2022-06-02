@@ -49,7 +49,7 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
         />
         <View style={styles.containerTextCard}>
           <Text style={styles.textFullName}>{username}</Text>
-          <Text style={styles.textUsername} numberOfLines={1}>{bio ? bio : ''}</Text>
+          <Text style={styles.textUsername} numberOfLines={1}>{bio ? bio + bio + bio + bio + bio + bio + bio + bio : ''}</Text>
         </View>
       </View>
       <View style={styles.containerButton}>
@@ -81,10 +81,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: 76,
     paddingHorizontal: 20,
+    width: '100%',
+    flex: 1,
   },
   cardLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   tinyLogo: {
     width: 48,
@@ -95,6 +98,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     marginLeft: 8,
+    flex: 1,
   },
   textFullName: {
     fontFamily: 'Poppins',
@@ -110,6 +114,8 @@ const styles = StyleSheet.create({
     color: '#000000',
     lineHeight: 21,
     alignSelf: 'flex-start',
+    width: '100%',
+    marginRight: 16,
   },
   containerButton: {
     width: 32,
@@ -118,6 +124,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    marginLeft: 8,
   },
   followAction: (width, height) => ({
     height,

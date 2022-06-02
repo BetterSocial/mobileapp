@@ -87,14 +87,14 @@ const Header = ({ domain, image, date, score }) => (
         resizeMode={'cover'}
       />
     </View>
-    <Gap style={{ width: 8 }} />
+    <Gap style={{ width: 0 }} />
     <View style={styles.headerDomainDateContainer}>
       <View style={styles.headerDomainDateRowContainer}>
         <Text style={styles.cardHeaderDomainName} numberOfLines={1}>{domain}</Text>
         <View style={styles.point} />
         <Text style={styles.cardHeaderDate} numberOfLines={1}>{date}</Text>
         <View style={styles.point} />
-        <FeedCredderRating containerStyle={styles.credderRating} score={score} />
+        <FeedCredderRating containerStyle={styles.credderRating} score={score} iconSize={16} scoreSize={12} />
       </View>
       {/* <MemoIc_rectangle_gradient height={10} width={180} /> */}
     </View>
@@ -114,7 +114,8 @@ Card.propTypes = {
 
 const styles = StyleSheet.create({
   credderRating: {
-    height: 28,
+    // height: 24,
+    height: 15,
     alignSelf: 'center',
   },
   link: {
@@ -160,7 +161,8 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flexDirection: 'row',
-    paddingTop: 12,
+    // paddingTop: 12,
+    paddingVertical: 8.5,
     paddingLeft: 20,
     paddingRight: 20,
   },
@@ -168,8 +170,8 @@ const styles = StyleSheet.create({
     borderRadius: 45,
     borderWidth: 0.2,
     borderColor: 'rgba(0,0,0,0.5)',
-    width: 36,
-    height: 36,
+    width: 24,
+    height: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -177,6 +179,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginLeft: 8,
     flex: 1,
+    alignSelf: 'center',
+    // backgroundColor: 'red',
   },
   headerDomainDateRowContainer: {
     flexDirection: 'row',
@@ -188,9 +192,10 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   content: {
-    paddingTop: 8,
+    // paddingTop: 8,
     justifyContent: 'space-between',
     flex: 1,
+    // backgroundColor: 'blue',
   },
   title: {
     color: '#000000',
@@ -199,7 +204,6 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     marginBottom: 8,
     fontFamily: fonts.inter[600],
-    paddingHorizontal: 8,
     paddingRight: 20,
     paddingLeft: 20,
   },
@@ -213,13 +217,13 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   point: {
-    width: 4,
-    height: 4,
+    width: 3,
+    height: 3,
     borderRadius: 4,
-    marginTop: 2,
+    marginTop: 1,
     backgroundColor: colors.gray1,
-    marginLeft: 8,
-    marginRight: 8,
+    marginLeft: 6,
+    marginRight: 6,
   },
   cardHeaderDomainName: {
     fontSize: 14,
@@ -232,8 +236,8 @@ const styles = StyleSheet.create({
   },
   cardHeaderDate: {
     fontSize: 12,
-    color: COLORS.blackgrey,
-    fontFamily: fonts.inter[200],
+    color: COLORS.gray,
+    fontFamily: fonts.inter[400],
     // lineHeight: 12.1,
   },
   openLinkText: {

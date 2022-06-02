@@ -241,7 +241,7 @@ const ChooseUsername = () => {
 
       <KeyboardAvoidingView
         style={styles.keyboardavoidingview}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={'height'}
         keyboardVerticalOffset={18}
         >
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
@@ -288,7 +288,7 @@ const ChooseUsername = () => {
               {messageTypeFetch(typeFetch, username)}
             </View>
           </View>
-          <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
+          {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
             <View style={styles.parentIcon} >
             <View style={styles.containerIcon}>
               <IconFontAwesome5 name="exclamation" size={12} color="#2F80ED" />
@@ -300,15 +300,22 @@ const ChooseUsername = () => {
             </Text>
               </View>
             
-          </Animated.View>
+          </Animated.View> */}
    
         </View>
 </TouchableWithoutFeedback>
         
         <View style={styles.gap} />
+        <View style={styles.footer} >
+        <Text
+          style={
+            styles.textSmall
+          }>No matter your username, you can always post anonymously</Text>
         <Button  onPress={() => next()}>
           {StringConstant.onboardingChooseUsernameButtonStateNext}
         </Button>
+        </View>
+  
       </KeyboardAvoidingView>
       <BottomSheetChooseImage
         ref={bottomSheetChooseImageRef}
@@ -401,12 +408,14 @@ const styles = StyleSheet.create({
   containerAddIcon: {
     marginRight: 13,
   },
-  content: {},
+  content: {
+    paddingHorizontal: 20
+  },
   keyboardavoidingview: {
     flex: 1,
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     paddingTop: 75,
-    paddingBottom: 32,
+    // paddingBottom: 32,
     justifyContent: 'flex-end',
   },
   textMessage: (color, marginTop) => ({
@@ -421,5 +430,31 @@ const styles = StyleSheet.create({
   },
   parentInfo: {
     width: '90%'
+  },
+  footer: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.36,
+    shadowRadius: 6.68,
+    elevation: 11,
+    height: 112,
+    
+  },
+  textSmall: {
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 10,
+    textAlign: 'center',
+    color: colors.emperor,
+    marginBottom: 20,
+    marginTop: 10,
   }
 });
