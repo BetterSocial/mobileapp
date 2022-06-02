@@ -11,38 +11,28 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 
-const Header = ({ title, onPress, titleStyle = {}, containerStyle = {} }) => {
+const Header = ({ title, onPress, titleStyle = {}, containerStyle = {}, isCenter }) => {
   const renderHeader = () => {
-    if (Platform.OS === 'android') {
-      return (
-        <TouchableOpacity onPress={onPress}>
-          <View style={styles.content(-4)}>
-            <ArrowLeftIcon width={20} height={12} fill="#000" />
+    return (
+      <View style={styles.buttonBackContainerIos} >
+        <View style={styles.content}>
+        <TouchableOpacity style={styles.backPadding}  onPress={onPress}>
+          <ArrowLeftIcon  />
+          </TouchableOpacity>
+          <View style={styles.flex} >
+          <Text numberOfLines={1} style={{ ...styles.textIos, ...titleStyle, textAlign: isCenter ? 'center' : 'left'}}>{title}</Text>
+
           </View>
-        </TouchableOpacity>
-      );
-    } else {
-      return (
-        <TouchableOpacity style={styles.buttonBackContainerIos} onPress={onPress}>
-          <View style={styles.content(-4)}>
-            <ArrowLeftIcon width={20} height={12} fill="#000" />
-          </View>
-        </TouchableOpacity>
-      );
-    }
+        </View>
+      </View>
+    );
   };
 
-  const renderText = () => {
-    if (Platform.OS === 'android') {
-      return <Text numberOfLines={1} style={{ ...styles.text, ...titleStyle }}>{title}</Text>
-    }
 
-    return <Text numberOfLines={1} style={{ ...styles.textIos, ...titleStyle }}>{title}</Text>
-  }
   return (
     <View style={{ ...styles.container, ...containerStyle }}>
       {renderHeader()}
-      {renderText()}
+      {/* {renderText()} */}
       <View style={styles.gap} />
     </View>
   );
@@ -55,31 +45,41 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    // padding: 10
   },
-  content: (marginLeft) => ({
-    padding: 10,
-    // marginLeft: marginLeft,
-  }),
+  content: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10
+  },
   text: {
     color: colors.black,
     fontFamily: fonts.poppins[600],
     fontSize: 14,
-    marginLeft: -20,
     fontWeight: 'bold',
   },
   textIos: {
     color: colors.black,
     fontFamily: fonts.poppins[600],
-    fontSize: 14,
-    marginLeft: -20,
+    fontSize: 16,
     fontWeight: 'bold',
-    flex: 1,
+    marginRight: 15
   },
   gap: { width: 20, height: 12 },
   buttonBackContainer: {
-    width: '20%'
+    width: '100%'
   },
   buttonBackContainerIos: {
-    width: '20%'
+    width: '100%',
+
+  },
+  backPadding: {
+    paddingVertical: 10,
+    paddingRight: 15 ,
+    paddingLeft: 10
+  },
+  flex: {
+    flex: 1,
   }
 });

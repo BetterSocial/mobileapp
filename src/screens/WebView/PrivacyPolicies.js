@@ -19,7 +19,7 @@ const PrivacyPolicies = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-      <Header title="Privacy Policies" onPress={() => navigator.goBack()} containerStyle={styles.header} />
+      <Header title="Privacy Policies" onPress={() => navigator.goBack()}  />
       </SafeAreaView>
       <WebView
         source={{uri: 'https://bettersocial.org/privacy'}}

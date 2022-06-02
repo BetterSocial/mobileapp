@@ -19,7 +19,7 @@ const HelpCenter = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-      <Header title="Help Center" onPress={() => navigator.goBack()} containerStyle={styles.header} />
+      <Header title="Help Center" onPress={() => navigator.goBack()}  />
       </SafeAreaView>
       <WebView
         source={{uri: 'https://bettersocial.org/help'}}
