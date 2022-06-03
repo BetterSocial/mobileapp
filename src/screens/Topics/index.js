@@ -27,6 +27,7 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import { Header } from '../../components';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { globalReplaceAll } from '../../utils/Utils';
 
 const width = Dimensions.get('screen').width;
 
@@ -104,7 +105,7 @@ const Topics = () => {
   const onBack = () => {
     navigation.goBack()
   }
-
+  console.log(topics, 'makan')
   return (
     <SafeAreaView style={styles.container}>
       {/* <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" /> */}
@@ -133,6 +134,7 @@ const Topics = () => {
                   showsHorizontalScrollIndicator={false}
                   horizontal={true}
                   style={styles.scrollButtonParent}
+                  contentContainerStyle={styles.containerContent}
                   >
                     {chunkArrayCustom(Math.round(topics[attribute].length / 3) + 1, topics[attribute]).map((val, idx) => {
                       return (
@@ -168,6 +170,7 @@ const Topics = () => {
                                   #{value.name}
                                 </Text>
                               </TouchableWithoutFeedback>
+
                             );
                           })}
                         </View>
@@ -274,18 +277,19 @@ const styles = StyleSheet.create({
   listTopic: {
     flexDirection: 'column',
     marginBottom: 8,
-    marginRight: 20,
+    paddingRight: 8,
+
   },
 
   bgTopicSelectActive: {
     backgroundColor: colors.bondi_blue,
     minWidth: 100,
-    paddingHorizontal: 18,
+    paddingHorizontal: 15,
     paddingVertical: 7,
     borderRadius: 14,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginRight: 8,
+    // marginRight: 20,
     marginBottom: 10,
     alignItems: 'center'
   },
@@ -293,12 +297,12 @@ const styles = StyleSheet.create({
   bgTopicSelectNotActive: {
     backgroundColor: colors.concrete,
     minWidth: 100,
-    paddingHorizontal: 18,
+    paddingHorizontal: 15,
     paddingVertical: 7,
     borderRadius: 14,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginRight: 8,
+    // marginRight: 20,
     marginBottom: 10
   },
   textTopicActive: {
@@ -308,7 +312,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.white,
     paddingLeft: 5,
-    textTransform: 'capitalize',
   },
   textTopicNotActive: {
     fontFamily: 'Inter',
@@ -317,7 +320,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.mine_shaft,
     paddingLeft: 5,
-    textTransform: 'capitalize',
   },
   textSmall: {
     fontFamily: 'Inter',
@@ -333,7 +335,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
   },
   scrollButtonParent: {
-    paddingHorizontal: 22
+    paddingHorizontal: 22,
+  },
+  containerContent: {
+    paddingRight: 20
   }
 });
 export default Topics;
