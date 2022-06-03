@@ -167,7 +167,7 @@ const Topics = () => {
                                       ? styles.textTopicActive
                                       : styles.textTopicNotActive
                                   }>
-                                  #{value.name.replace(/ /g, '')}
+                                  #{value.name}
                                 </Text>
                               </TouchableWithoutFeedback>
 
@@ -312,7 +312,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.white,
     paddingLeft: 5,
-    textTransform: 'capitalize',
   },
   textTopicNotActive: {
     fontFamily: 'Inter',
@@ -321,7 +320,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.mine_shaft,
     paddingLeft: 5,
-    textTransform: 'capitalize',
   },
   textSmall: {
     fontFamily: 'Inter',
