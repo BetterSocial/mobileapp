@@ -17,7 +17,7 @@ const Navigation = ({domain}) => {
     title={domain}
     titleStyle={styles.domainText}
     onPress={backScreen}
-    containerStyle={styles.Header}
+    // containerStyle={styles.Header}
     />
     </SafeAreaView>
   

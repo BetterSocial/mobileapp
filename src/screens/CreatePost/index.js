@@ -666,8 +666,9 @@ const CreatePost = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={positionKeyboard}
-        style={{ paddingHorizontal: Platform.OS === 'ios' ? 20 : 0 }}>
+        >
         <Header title="Create a post" onPress={() => onBack()} />
+        <View style={{paddingHorizontal: 15}} >
         <UserProfile
           typeUser={typeUser}
           setTypeUser={setTypeUser}
@@ -924,6 +925,8 @@ const CreatePost = () => {
           goBack={() => navigation.goBack()}
           continueToEdit={() => sheetBackRef.current.close()}
         />
+        </View>
+        
       </ScrollView>
       <Loading visible={loading} />
     </SafeAreaView>
@@ -936,8 +939,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingTop: 20,
   },
   input: {
     backgroundColor: colors.lightgrey,

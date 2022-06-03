@@ -93,7 +93,7 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
         }, 500)
       }  
     })
-    DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
+    // DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
   }
 
   React.useEffect(() => {

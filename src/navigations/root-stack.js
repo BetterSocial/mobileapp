@@ -69,7 +69,7 @@ const RootStact = () => {
       await client?.disconnectUser();
     };
   }, []);
-
+  console.log('kurama',profileState)
   return (
     <View
       style={{
@@ -199,9 +199,10 @@ const RootStact = () => {
                 <SafeAreaView>
                   <Header
                     title={profileState.navbarTitle}
-                    containerStyle={styles.header}
+                    // containerStyle={styles.header}
                     titleStyle={styles.title}
                     onPress={() => navigation.goBack()}
+                    isCenter
                   />
                 </SafeAreaView>
 
@@ -294,9 +295,10 @@ const RootStact = () => {
                 <SafeAreaView>
                   <Header
                     title={"Blocked"}
-                    containerStyle={styles.header}
+                    // containerStyle={styles.header}
                     titleStyle={styles.title}
                     onPress={() => navigation.goBack()}
+                    isCenter
                   />
                 </SafeAreaView>
 
