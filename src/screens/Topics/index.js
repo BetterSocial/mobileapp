@@ -11,6 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
@@ -102,6 +103,34 @@ const Topics = () => {
     }
   };
 
+  const renderListTopics = (value, i) => (
+    <TouchableWithoutFeedback
+    onPress={() =>
+      handleSelectedLanguage(value.topic_id)
+    }
+    key={i}
+    style={
+      topicSelected.findIndex(
+        (data) => data === value.topic_id,
+      ) > -1
+        ? styles.bgTopicSelectActive
+        : styles.bgTopicSelectNotActive
+    }
+    >
+    <Text>{value.icon}</Text>
+    <Text
+      style={
+        topicSelected.findIndex(
+          (data) => data === value.topic_id,
+        ) > -1
+          ? styles.textTopicActive
+          : styles.textTopicNotActive
+      }>
+      #{value.name}
+    </Text>
+  </TouchableWithoutFeedback>
+  )
+
   const onBack = () => {
     navigation.goBack()
   }
@@ -136,46 +165,14 @@ const Topics = () => {
                   style={styles.scrollButtonParent}
                   contentContainerStyle={styles.containerContent}
                   >
-                    {chunkArrayCustom(Math.round(topics[attribute].length / 3) + 1, topics[attribute]).map((val, idx) => {
-                      return (
-                        <View
-                          key={idx}
-                          style={styles.listTopic}
-    
-                          >
-                          {val.map((value, i) => {
-                            return (
-                              <TouchableWithoutFeedback
-                                onPress={() =>
-                                  handleSelectedLanguage(value.topic_id)
-                                }
-                                key={i}
-                                style={
-                                  topicSelected.findIndex(
-                                    (data) => data === value.topic_id,
-                                  ) > -1
-                                    ? styles.bgTopicSelectActive
-                                    : styles.bgTopicSelectNotActive
-                                }
-                                >
-                                <Text>{value.icon}</Text>
-                                <Text
-                                  style={
-                                    topicSelected.findIndex(
-                                      (data) => data === value.topic_id,
-                                    ) > -1
-                                      ? styles.textTopicActive
-                                      : styles.textTopicNotActive
-                                  }>
-                                  #{value.name}
-                                </Text>
-                              </TouchableWithoutFeedback>
-
-                            );
-                          })}
-                        </View>
-                      );
-                    })}
+                    <FlatList 
+                    data={topics[attribute]}
+                    renderItem={({item , index}) => renderListTopics(item, index)}
+                    numColumns={Math.floor(topics[attribute].length / 3) + 1}
+                    nestedScrollEnabled 
+                    scrollEnabled={false}
+                    />
+                    
                   </ScrollView>
                 </View>
               );
@@ -283,27 +280,27 @@ const styles = StyleSheet.create({
 
   bgTopicSelectActive: {
     backgroundColor: colors.bondi_blue,
-    minWidth: 100,
+    // minWidth: 100,
     paddingHorizontal: 15,
     paddingVertical: 7,
     borderRadius: 14,
     flexDirection: 'row',
-    justifyContent: 'center',
-    // marginRight: 20,
+    // justifyContent: 'center',
+    marginRight: 8,
     marginBottom: 10,
-    alignItems: 'center'
+    // alignItems: 'center',
   },
 
   bgTopicSelectNotActive: {
     backgroundColor: colors.concrete,
-    minWidth: 100,
+    // minWidth: 100,
     paddingHorizontal: 15,
     paddingVertical: 7,
     borderRadius: 14,
     flexDirection: 'row',
-    justifyContent: 'center',
-    // marginRight: 20,
-    marginBottom: 10
+    // justifyContent: 'center',
+    marginRight: 8,
+    marginBottom: 10,
   },
   textTopicActive: {
     fontFamily: 'Inter',
