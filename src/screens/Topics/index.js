@@ -125,9 +125,7 @@ const Topics = () => {
         ) > -1
           ? styles.textTopicActive
           : styles.textTopicNotActive
-      }>
-      #{value.name}
-    </Text>
+      }>#{value.name}</Text>
   </TouchableWithoutFeedback>
   )
 
@@ -308,7 +306,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 12,
     color: colors.white,
-    paddingLeft: 5,
+    // paddingLeft: 5,
   },
   textTopicNotActive: {
     fontFamily: 'Inter',
@@ -316,7 +314,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 12,
     color: colors.mine_shaft,
-    paddingLeft: 5,
+    // paddingLeft: 5,
   },
   textSmall: {
     fontFamily: 'Inter',
