@@ -19,6 +19,8 @@ import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import {getDomainIdIFollow, getDomains} from '../../service/domain';
 import {getUserId} from '../../utils/users';
 import {setIFollow, setNews} from '../../context/actions/news';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { NEWS_CACHE } from '../../utils/cache/constant';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
@@ -39,7 +41,7 @@ const NewsScreen = ({}) => {
   let lastDragY = 0;
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
-      initData();
+      initData()
     });
 
     analytics().logScreenView({
@@ -61,9 +63,23 @@ const NewsScreen = ({}) => {
   }, []);
 
   React.useEffect(() => {
-    initData();
+
+   checkCache()
     getNewsIfollow();
   }, []);
+
+  const checkCache = () => {
+    setLoading(true)
+    getSpecificCache(NEWS_CACHE, (cache) => {
+      if(cache) {
+        setNews([{dummy: true}, ...cache.data], dispatch);
+        setPostOffset(cache.offset)
+        setLoading(false);
+      } else {
+        initData(true)
+      }
+    })
+  }
 
   React.useEffect(() => {
     if(domain !== '' && idBlock !== '') {
@@ -71,10 +87,11 @@ const NewsScreen = ({}) => {
     }
   },[domain, idBlock])
 
-  const initData = async () => {
-    setLoading(true);
+  const initData = async (enableLoading) => {
+    if(enableLoading) setLoading(true);
     try {
       let res = await getDomains();
+      saveToCache(NEWS_CACHE, res)
       setNews([{dummy: true}, ...res.data], dispatch);
       setPostOffset(res.offset)
       setLoading(false);
