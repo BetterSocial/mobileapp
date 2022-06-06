@@ -63,7 +63,7 @@ const Topics = () => {
     let allTopics = []
     if(data && typeof data ==='object') {
       Object.keys(data).map((attribute) => {
-        allTopics.push({name: attribute, data: data[attribute].map((att) => ({topic_id: att.topic_id, name: att.name, icon: att.icon}))})
+        allTopics.push({name: attribute, data: data[attribute].map((att) => ({topic_id: att.topic_id, name: att.name}))})
       })
     }
     setTopics(allTopics)
@@ -96,8 +96,8 @@ const Topics = () => {
     let textStyle = styles.textTopicNotActive
     const isSelectedTopic = topicSelected.filter((topic) => topic === item.topic_id).length >=1
     if(isSelectedTopic) {
-      containerStyles = styles.bgTopicSelectActive
-      textStyle = styles.textTopicActive
+      containerStyles = {...containerStyles, backgroundColor: colors.bondi_blue}
+      textStyle = {...textStyle, color: colors.white}
     }
     return (
       <TouchableWithoutFeedback
