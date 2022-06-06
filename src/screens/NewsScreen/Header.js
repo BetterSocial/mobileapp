@@ -51,7 +51,7 @@ const Header = ({ image, domain, time, item }) => {
               {new Date(time).toLocaleDateString()}
             </Text>
             <View style={styles.point} />
-            <FeedCredderRating containerStyle={{ height: 15, alignSelf: 'center' }} 
+            <FeedCredderRating containerStyle={{ height: 16, alignSelf: 'center' }} 
               score={item?.domain?.credderScore} scoreSize={12}
               iconSize={16} />
           </View>

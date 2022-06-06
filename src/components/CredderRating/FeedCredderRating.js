@@ -40,11 +40,14 @@ const styles = StyleSheet.create({
         return {
             fontSize,
             fontFamily: fonts.inter[400],
-            color: COLORS.gray,
+            color: COLORS.gray4,
             alignSelf: 'center',
-            textAlign: 'center',
+            // textAlign: 'center',
             marginLeft: 4,
-            marginTop: (!score || score < 0) ? -1 : 0,
+            lineHeight: 15,
+            // marginTop: 0,
+            marginTop: (!score || score < 0) ? -1.2 : 0,
+            // backgroundColor: 'red',
         }
     },
     credderRatingContainer: {
