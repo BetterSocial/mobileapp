@@ -68,6 +68,8 @@ import {
   requestExternalStoragePermission,
 } from '../../utils/permission';
 import handleHastag from '../../utils/hastag';
+import { getSpecificCache } from '../../utils/cache';
+import { PROFILE_CACHE } from '../../utils/cache/constant';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -264,19 +266,43 @@ const CreatePost = () => {
       if (result.code === 200) {
         setDataProfile(result.data);
         setLoading(false);
-        await result.data.locations.map((res) => {
-          location.push({
-            location_id: res.location_id,
-            neighborhood: res.neighborhood,
-          });
-        });
-        console.log('Locations: ', location);
-        setGeoList(location);
+        handleLocation(result.data)
+        // await result.data.locations.map((res) => {
+        //   location.push({
+        //     location_id: res.location_id,
+        //     neighborhood: res.neighborhood,
+        //   });
+        // });
+        // console.log('Locations: ', location);
+        // setGeoList(location);
       }
 
       setLoading(false);
     }
   };
+
+  React.useEffect(() => {
+    getSpecificCache(PROFILE_CACHE, async (res) => {
+      if(!res) {
+        fetchMyProfile()
+      } else {
+        setDataProfile(res);
+        handleLocation(res)
+        console.log('location', res)
+      }
+    })
+  }, [])
+
+  const handleLocation = async (res) => {
+    await res.locations.map((res) => {
+      location.push({
+        location_id: res.location_id,
+        neighborhood: res.neighborhood,
+      });
+    });
+    setGeoList(location)
+    setLoading(false)
+  }
 
   React.useEffect(() => {
     fetchMyProfile();
@@ -666,8 +692,9 @@ const CreatePost = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={positionKeyboard}
-        style={{ paddingHorizontal: Platform.OS === 'ios' ? 20 : 0 }}>
+        >
         <Header title="Create a post" onPress={() => onBack()} />
+        <View style={{paddingHorizontal: 15}} >
         <UserProfile
           typeUser={typeUser}
           setTypeUser={setTypeUser}
@@ -924,6 +951,8 @@ const CreatePost = () => {
           goBack={() => navigation.goBack()}
           continueToEdit={() => sheetBackRef.current.close()}
         />
+        </View>
+        
       </ScrollView>
       <Loading visible={loading} />
     </SafeAreaView>
@@ -936,8 +965,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingTop: 20,
   },
   input: {
     backgroundColor: colors.lightgrey,

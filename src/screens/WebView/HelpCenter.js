@@ -19,7 +19,7 @@ const HelpCenter = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <Header title="Help Center" onPress={() => navigator.goBack()} containerStyle={styles.header} />
+      <Header title="Help Center" onPress={() => navigator.goBack()}  />
       </SafeAreaView>
       <WebView
         androidHardwareAccelerationDisabled={false}
@@ -41,7 +41,6 @@ export default withInteractionsManaged(React.memo(HelpCenter));
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 21,
     // paddingHorizontal: 20,
     flex: 1,
     backgroundColor: '#fff',

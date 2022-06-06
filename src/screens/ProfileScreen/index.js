@@ -177,7 +177,6 @@ const ProfileScreen = ({ route }) => {
   }
 
   const getMyFeeds = async (offset = 0) => {
-    console.log('getting feeds ' + offset)
     let result = await getSelfFeedsInProfile(offset);
     // setMyProfileFeed([
     //   {dummy: true, component: 'Profile'}, 

@@ -25,7 +25,7 @@ import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
 import { getFollowingTopic } from '../service/topics';
 import { getUserId } from '../utils/users';
-import { saveToCache } from '../utils/cache';
+import { getSpecificCache, saveToCache } from '../utils/cache';
 import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 
@@ -92,7 +92,6 @@ function HomeBottomTabs(props) {
       setLoadingUser(false)
     } catch (e) {
       setLoadingUser(false)
-      console.log(e);
     }
   };
 
@@ -154,18 +153,30 @@ function HomeBottomTabs(props) {
     );
   };
 
+  React.useEffect(() => {
+    getSpecificCache(PROFILE_CACHE, (res) => {
+      if(!res) {
+        getProfile()
+      } else {
+        let data = {
+          user_id: res.user_id,
+          username: res.username,
+        };
+        setMyProfileAction(data, dispatchProfile)
+        setLoadingUser(false)
+        setImageUrl(res.profile_pic_path, dispatch)
+      }
+    })
+  }, [])
 
   React.useEffect(() => {
     requestPermission()
-    getProfile();
+    // getProfile();
     getDiscoveryData()
   }, []);
-
   React.useEffect(() => {
     createChannel()
     const unsubscribe = messaging().onMessage((remoteMessage) => {
-      console.log('NOtifICAtion');
-      console.log('messag ', remoteMessage);
       !isIos ? pushNotifAndroid(remoteMessage) : pushNotifIos(remoteMessage)
 
     });

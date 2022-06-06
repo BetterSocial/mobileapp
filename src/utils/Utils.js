@@ -109,3 +109,9 @@ export function showScoreAlertDialog(item) {
   
   alert(textScoreDetails)
 }
+
+export const globalReplaceAll = (str, find, replace) => {
+  if (str && find && replace) {
+    return str.split(find).join(replace);
+  }
+};
