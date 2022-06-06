@@ -100,7 +100,8 @@ const Topics = () => {
       textStyle = {...textStyle, color: colors.white}
     }
     return (
-      <TouchableWithoutFeedback
+      <TouchableOpacity
+      activeOpacity={1}
       onPress={() =>
         handleSelectedLanguage(item.topic_id)
       }
@@ -114,7 +115,7 @@ const Topics = () => {
         style={
           textStyle
         }>#{item.name}</Text>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
     )
   }
 
@@ -148,6 +149,7 @@ const Topics = () => {
           horizontal={true}
           style={styles.scrollButtonParent}
           contentContainerStyle={styles.containerContent}
+          nestedScrollEnabled
           >
             <FlatList 
             data={topic.data}
@@ -271,6 +273,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     marginRight: 8,
     marginBottom: 10,
+    alignItems: 'center'
     // alignItems: 'center',
   },
 
@@ -284,6 +287,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     marginRight: 8,
     marginBottom: 10,
+    alignItems: 'center'
   },
   textTopicActive: {
     fontFamily: 'Inter',
