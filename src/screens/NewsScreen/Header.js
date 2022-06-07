@@ -134,7 +134,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginRight: 8,
-    // backgroundColor: 'blue'
   }
 });
 

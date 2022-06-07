@@ -19,7 +19,7 @@ const FeedCredderRating = ({ containerStyle = {}, iconSize = 14, scoreSize = 16,
     }
 
     const __renderCredderRatingScore = () => {
-        if (!score || score < 0) return `n/a`
+        if (!score || score < 0) return 'n/a'
         // return ${score}${<Text>{`%`}</Text>}
         return <Text>{`${score}`}<Text style={{fontSize: scoreSize - 3}}>%</Text></Text>
     }
@@ -41,18 +41,16 @@ const styles = StyleSheet.create({
             fontSize,
             fontFamily: fonts.inter[400],
             color: COLORS.blackgrey,
-            // alignSelf: 'center',
-            // textAlign: 'center',
+            alignSelf: 'center',
             marginLeft: 4,
-            lineHeight: 15,
-            marginTop: 0,
+            lineHeight: 14.52,
             // marginTop: (!score || score < 0) ? 0 : 0,
             // backgroundColor: 'red',
         }
     },
     credderRatingContainer: {
         flexDirection: 'row',
-        flex: 1,
+        // flex: 1,
         borderRadius: 8,
     },
 })
