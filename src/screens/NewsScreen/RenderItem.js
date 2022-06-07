@@ -147,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RenderItem;
+export default React.memo(RenderItem) 
