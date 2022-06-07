@@ -33,7 +33,6 @@ const NewsScreen = ({}) => {
   const [domain, setDomain] = React.useState('');
   const [idBlock, setIdBlock] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
-  
   const [newslist, dispatch] = React.useContext(Context).news;
   
   const scrollRef = React.createRef();
@@ -72,7 +71,7 @@ const NewsScreen = ({}) => {
     // setLoading(true)
     getSpecificCache(NEWS_CACHE, (cache) => {
       if(cache) {
-        setNews([{dummy: true}, ...cache.data], dispatch);
+        setNews(cache.data, dispatch);
         setPostOffset(cache.offset)
         setLoading(false);
       } else {
@@ -92,7 +91,7 @@ const NewsScreen = ({}) => {
     try {
       let res = await getDomains();
       saveToCache(NEWS_CACHE, res)
-      setNews([{dummy: true}, ...res.data], dispatch);
+      setNews(res.data, dispatch);
       setPostOffset(res.offset)
       setLoading(false);
     } catch (error) {
@@ -104,7 +103,7 @@ const NewsScreen = ({}) => {
     setRefreshing(true)
     try {
       let res = await getDomains();
-      setNews([{dummy: true}, ...res.data], dispatch);
+      setNews(res.data, dispatch);
       setPostOffset(res.offset)
       setRefreshing(false);
     } catch (error) {
@@ -163,14 +162,16 @@ const NewsScreen = ({}) => {
   };
 
   const loadMoreData = async () => {
-    // setLoading(true);
+    setRefreshing(true)
     try {
       let res = await getDomains(postOffset);
       let newNews = [...news, ...res.data];
       setPostOffset(res.offset)
-      setNews([{dummy: true}, ...newNews], dispatch);
+      setNews(newNews, dispatch);
+      setRefreshing(false)
       // setLoading(false);
     } catch (error) {
+      setRefreshing(false)
       // setLoading(false);
     }
   };
@@ -210,11 +211,9 @@ const NewsScreen = ({}) => {
           refreshing={refreshing}
           onRefresh={onRefresh}
           onEndReached={loadMoreData}
+          contentContainerStyle={styles.flatlistContainer}
           // onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
-            if (item.dummy) {
-              return <View key={index} style={{height: 55}} />;
-            }
             return (
               <RenderItem
                 key={item.id}
@@ -246,6 +245,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.gray6,
   },
   containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  flatlistContainer: {
+    paddingTop: 65
+  }
 });
 
 export default NewsScreen;
