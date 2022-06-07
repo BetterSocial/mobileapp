@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   Animated,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -27,7 +28,7 @@ const Search = ({onPress, animatedValue}) => {
   }
 
   return (
-    <Animated.View style={styles.animatedViewContainer(animatedValue)}>
+    <Animated.View style={[styles.animatedViewContainer(animatedValue), {position: Platform.OS === 'android' ? 'absolute' : 'relative'}]}>
       <Pressable style={styles.pressableContainer} onPress={__handleOnContainerPress}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
@@ -96,9 +97,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     // marginBottom: SIZES.base,
-    marginTop: animatedValue,
-    // position: 'absolute',
-    top: 0,
+    marginTop: Platform.OS === 'android' ? 0 : animatedValue,
+    top: Platform.OS === 'android' ? animatedValue : 0,
     left: 0,
     right: 0,
     zIndex: 10,
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     paddingBottom: 7,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.alto,
+    height: 50
   }),
 });
 

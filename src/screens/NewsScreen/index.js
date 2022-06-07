@@ -3,6 +3,7 @@ import analytics from '@react-native-firebase/analytics';
 import {
   Animated,
   FlatList,
+  Platform,
   StyleSheet,
   View,
 } from 'react-native';
@@ -26,7 +27,7 @@ const NewsScreen = ({}) => {
   const navigation = useNavigation();
   const refBlockDomainComponent = React.useRef(null);
   const offset = React.useRef(new Animated.Value(0)).current;
-
+  const paddingContainer = React.useRef(new Animated.Value(50)).current
   const [loading, setLoading] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
   const [yourselfId, setYourselfId] = React.useState('');
@@ -120,17 +121,31 @@ const NewsScreen = ({}) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
     if (dy <= 0) {
-      return Animated.timing(offset, {
-        toValue: 0,
-        duration: 50,
-        useNativeDriver: false,
-      }).start();
+      requestAnimationFrame(() => {
+        Animated.timing(offset, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(paddingContainer, {
+          toValue: 50,
+          duration: 300
+        }).start()
+      })
+
     } else if (dy > 0) {
-      return Animated.timing(offset, {
-        toValue: -70,
-        duration: 50,
-        useNativeDriver: false,
-      }).start();
+      requestAnimationFrame(() => {
+        Animated.timing(offset, {
+          toValue: -50,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(paddingContainer, {
+          toValue: 0,
+          duration: 300
+        }).start()
+      })
+
     }
   };
 
@@ -200,7 +215,7 @@ const NewsScreen = ({}) => {
   return (
     <View style={styles.container}>
       <Search animatedValue={offset} />
-      <Animated.View>
+        <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}} >
         <FlatList
           ref={scrollRef}
           keyExtractor={(item, index) => item.id}
@@ -228,6 +243,8 @@ const NewsScreen = ({}) => {
             );
           }}
         />
+        </Animated.View>
+        
 
         <BlockDomainComponent
           ref={refBlockDomainComponent}
@@ -235,7 +252,7 @@ const NewsScreen = ({}) => {
           domainId={idBlock}
           screen="news_screen" />
         
-      </Animated.View>
+
     </View>
   );
 };
