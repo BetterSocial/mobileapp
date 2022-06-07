@@ -8,12 +8,6 @@ import {
   View,
 } from 'react-native';
 
-import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
-import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
-import MemoIc_rectangle_gradient_mini from '../../../assets/Ic_rectangle_gradient_mini';
-import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
-import MemoUnfollowDomain from '../../../assets/icon/IconUnfollowDomain';
-import Memoic_globe from '../../../assets/icons/ic_globe';
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 import RenderItemHeader from './RenderItemHeader'
 import dimen from '../../../utils/dimen';
@@ -125,6 +119,56 @@ const RenderItem = ({
   const onFollowDomainPressed = () => {
   };
 
+  const onDownvoteClick = () => {
+    setStatusDowvote((prev) => {
+      prev = !prev;
+      onPressDownVote({
+        activity_id: item.id,
+        status: prev,
+        feed_group: 'domain',
+        domain: item.domain.name,
+      });
+      if (prev) {
+        setVoteStatus('downvote');
+        if (statusUpvote === true) {
+          setTotalVote((p) => p - 2);
+        } else {
+          setTotalVote((p) => p - 1);
+        }
+        setStatusUpvote(false);
+      } else {
+        setVoteStatus('none');
+        setTotalVote((p) => p + 1);
+      }
+      return prev;
+    });
+  }
+
+  const onUpvoteClick = () => {
+    setStatusUpvote((prev) => {
+      prev = !prev;
+      onPressUpvote({
+        activity_id: item.id,
+        status: prev,
+        feed_group: 'domain',
+        domain: item.domain.name,
+      });
+      if (prev) {
+        setVoteStatus('upvote');
+        if (statusDownvote === true) {
+          setTotalVote((p) => p + 2);
+        } else {
+          setTotalVote((p) => p + 1);
+        }
+        setStatusDowvote(false);
+      } else {
+        setVoteStatus('none');
+        setTotalVote((p) => p - 1);
+      }
+      return prev;
+    });
+  }
+
   return (
     <SingleSidedShadowBox>
       <View style={styles.wrapperItem}>
@@ -136,33 +180,29 @@ const RenderItem = ({
           follow={follow}
           follower={follower}
           score={score} />
-        <Pressable onPress={() => onPressComment(item)}>
-          <View>
-            <View
-              style={{ paddingHorizontal: 20, marginTop: 14, marginBottom: 14 }}>
-              <Text style={styles.domainItemTitle}>{item.content.title}</Text>
-            </View>
-            <Gap height={SIZES.base} />
-            {item.content.image ? (
-              <Image
-                source={{ uri: item.content.image }}
-                style={{ height: normalize(200), marginBottom: 14 }}
-              />
-            ) : (
-              <Image
-                source={NewsEmptyState}
-                style={{ height: normalize(135), marginBottom: 14 }}
-              />
-            )}
-            <Gap />
-            <Gap height={SIZES.base} />
-            <View style={{ paddingHorizontal: 20 }}>
-              <Text style={styles.domainItemDescription}>
-                {item.content.description}
-              </Text>
-            </View>
-            <Gap height={normalize(14)} />
+        <Pressable onPress={() => onPressComment(item)} style={styles.contentContainer}>
+          {/* <View> */}
+          <View
+            style={styles.titleContainer}>
+            <Text style={styles.domainItemTitle} numberOfLines={2} ellipsizeMode="tail">{item.content.title}</Text>
           </View>
+          {item.content.image ? (
+            <Image
+              source={{ uri: item.content.image }}
+              style={styles.domainImage}
+            />
+          ) : (
+            <Image
+              source={NewsEmptyState}
+              style={styles.domainImageEmptyState}
+            />
+          )}
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.domainItemDescription} ellipsizeMode="tail" numberOfLines={4}>
+              {item.content.description}
+            </Text>
+          </View>
+          {/* </View> */}
         </Pressable>
 
         <View style={styles.wrapperFooter}>
@@ -174,58 +214,12 @@ const RenderItem = ({
             onPressBlock={onPressBlock}
             onPressShare={() => onPressShare(item)}
             onPressComment={() => onPressComment(item)}
-            onPressDownVote={() => {
-              setStatusDowvote((prev) => {
-                prev = !prev;
-                onPressDownVote({
-                  activity_id: item.id,
-                  status: prev,
-                  feed_group: 'domain',
-                  domain: item.domain.name,
-                });
-                if (prev) {
-                  setVoteStatus('downvote');
-                  if (statusUpvote === true) {
-                    setTotalVote((p) => p - 2);
-                  } else {
-                    setTotalVote((p) => p - 1);
-                  }
-                  setStatusUpvote(false);
-                } else {
-                  setVoteStatus('none');
-                  setTotalVote((p) => p + 1);
-                }
-                return prev;
-              });
-            }}
-            onPressUpvote={() => {
-              setStatusUpvote((prev) => {
-                prev = !prev;
-                onPressUpvote({
-                  activity_id: item.id,
-                  status: prev,
-                  feed_group: 'domain',
-                  domain: item.domain.name,
-                });
-                if (prev) {
-                  setVoteStatus('upvote');
-                  if (statusDownvote === true) {
-                    setTotalVote((p) => p + 2);
-                  } else {
-                    setTotalVote((p) => p + 1);
-                  }
-                  setStatusDowvote(false);
-                } else {
-                  setVoteStatus('none');
-                  setTotalVote((p) => p - 1);
-                }
-                return prev;
-              });
-            }}
+            onPressDownVote={onDownvoteClick}
+            onPressUpvote={onUpvoteClick}
           />
         </View>
         {isReaction && (
-          <View style={{ zIndex: 1000 }}>
+          <View style={styles.previewCommentContainer}>
             <PreviewComment
               user={previewComment.user}
               comment={previewComment.data.text}
@@ -247,8 +241,17 @@ const styles = StyleSheet.create({
   iconPlush: { fontSize: normalizeFontSize(24), color: '#00ADB5' },
   views: { color: '#828282' },
   containerDetail: { flex: 1 },
+  contentContainer: { flex: 1 },
   contentDetail: { flexDirection: 'row', alignItems: 'center' },
   content: { flexDirection: 'row', paddingHorizontal: 16 },
+  descriptionContainer: {
+    paddingHorizontal: 20,
+    height: 0,
+    flex: 1,
+    marginBottom: 14,
+  },
+  domainImage: { height: normalize(200), marginBottom: 14 },
+  domainImageEmptyState: { height: normalize(135), marginBottom: 14 },
   wrapperItem: {
     backgroundColor: 'white',
     borderBottomWidth: 4,
@@ -292,6 +295,7 @@ const styles = StyleSheet.create({
   wrapperFooter: {
     paddingHorizontal: 8,
     height: normalize(52),
+    // flexBasis: 52,
     borderBottomColor: COLORS.gray1,
     borderBottomWidth: 1,
   },
@@ -316,6 +320,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(16),
     lineHeight: normalizeFontSize(24),
+    // fontSize: 16,
+    // lineHeight: 23,
+    // backgroundColor: 'red',
+    flex: 1,
+    // height: 50,
   },
   domainIndicatorContainer: {
     marginLeft: -4,
@@ -329,7 +338,6 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.gray1,
     paddingBottom: 8,
     paddingTop: 8,
-    backgroundColor: 'red'
   },
   wrapperTextUnFollow: {
     backgroundColor: '#00ADB5',
@@ -341,6 +349,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 0.5,
   },
+  previewCommentContainer: { zIndex: 1000 },
+  titleContainer: {
+    paddingHorizontal: 20,
+    marginTop: 14,
+    marginBottom: 14
+  }
 });
 
 export default RenderItem;

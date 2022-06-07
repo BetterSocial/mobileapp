@@ -40,13 +40,13 @@ const styles = StyleSheet.create({
         return {
             fontSize,
             fontFamily: fonts.inter[400],
-            color: COLORS.gray4,
-            alignSelf: 'center',
+            color: COLORS.blackgrey,
+            // alignSelf: 'center',
             // textAlign: 'center',
             marginLeft: 4,
             lineHeight: 15,
-            // marginTop: 0,
-            marginTop: (!score || score < 0) ? -1.2 : 0,
+            marginTop: 0,
+            // marginTop: (!score || score < 0) ? 0 : 0,
             // backgroundColor: 'red',
         }
     },
