@@ -115,7 +115,7 @@ Card.propTypes = {
 const styles = StyleSheet.create({
   credderRating: {
     // height: 24,
-    height: 15,
+    height: 16,
     alignSelf: 'center',
   },
   link: {

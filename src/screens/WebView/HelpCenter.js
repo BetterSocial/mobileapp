@@ -22,7 +22,7 @@ const HelpCenter = () => {
       <Header title="Help Center" onPress={() => navigator.goBack()}  />
       </SafeAreaView>
       <WebView
-        androidHardwareAccelerationDisabled={true}
+        androidHardwareAccelerationDisabled={false}
         source={{ uri: 'https://bettersocial.org/help' }}
         showsVerticalScrollIndicator={false}
         startInLoadingState={true}

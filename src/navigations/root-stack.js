@@ -69,7 +69,7 @@ const RootStact = () => {
       await client?.disconnectUser();
     };
   }, []);
-  console.log('kurama',profileState)
+  // console.log('kurama',profileState)
   return (
     <View
       style={{
