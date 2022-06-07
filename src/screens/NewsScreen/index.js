@@ -19,19 +19,20 @@ import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import {getDomainIdIFollow, getDomains} from '../../service/domain';
 import {getUserId} from '../../utils/users';
 import {setIFollow, setNews} from '../../context/actions/news';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { NEWS_CACHE } from '../../utils/cache/constant';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
   const refBlockDomainComponent = React.useRef(null);
   const offset = React.useRef(new Animated.Value(0)).current;
 
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
   const [yourselfId, setYourselfId] = React.useState('');
   const [domain, setDomain] = React.useState('');
   const [idBlock, setIdBlock] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
-  
   const [newslist, dispatch] = React.useContext(Context).news;
   
   const scrollRef = React.createRef();
@@ -39,7 +40,7 @@ const NewsScreen = ({}) => {
   let lastDragY = 0;
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
-      initData();
+      initData()
     });
 
     analytics().logScreenView({
@@ -61,9 +62,23 @@ const NewsScreen = ({}) => {
   }, []);
 
   React.useEffect(() => {
-    initData();
+
+   checkCache()
     getNewsIfollow();
   }, []);
+
+  const checkCache = () => {
+    // setLoading(true)
+    getSpecificCache(NEWS_CACHE, (cache) => {
+      if(cache) {
+        setNews(cache.data, dispatch);
+        setPostOffset(cache.offset)
+        setLoading(false);
+      } else {
+        initData(true)
+      }
+    })
+  }
 
   React.useEffect(() => {
     if(domain !== '' && idBlock !== '') {
@@ -71,11 +86,12 @@ const NewsScreen = ({}) => {
     }
   },[domain, idBlock])
 
-  const initData = async () => {
-    setLoading(true);
+  const initData = async (enableLoading) => {
+    if(enableLoading) setLoading(true);
     try {
       let res = await getDomains();
-      setNews([{dummy: true}, ...res.data], dispatch);
+      saveToCache(NEWS_CACHE, res)
+      setNews(res.data, dispatch);
       setPostOffset(res.offset)
       setLoading(false);
     } catch (error) {
@@ -87,7 +103,7 @@ const NewsScreen = ({}) => {
     setRefreshing(true)
     try {
       let res = await getDomains();
-      setNews([{dummy: true}, ...res.data], dispatch);
+      setNews(res.data, dispatch);
       setPostOffset(res.offset)
       setRefreshing(false);
     } catch (error) {
@@ -146,14 +162,16 @@ const NewsScreen = ({}) => {
   };
 
   const loadMoreData = async () => {
-    // setLoading(true);
+    setRefreshing(true)
     try {
       let res = await getDomains(postOffset);
       let newNews = [...news, ...res.data];
       setPostOffset(res.offset)
-      setNews([{dummy: true}, ...newNews], dispatch);
+      setNews(newNews, dispatch);
+      setRefreshing(false)
       // setLoading(false);
     } catch (error) {
+      setRefreshing(false)
       // setLoading(false);
     }
   };
@@ -193,11 +211,9 @@ const NewsScreen = ({}) => {
           refreshing={refreshing}
           onRefresh={onRefresh}
           onEndReached={loadMoreData}
+          contentContainerStyle={styles.flatlistContainer}
           // onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
-            if (item.dummy) {
-              return <View key={index} style={{height: 55}} />;
-            }
             return (
               <RenderItem
                 key={item.id}
@@ -229,6 +245,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.gray6,
   },
   containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  flatlistContainer: {
+    paddingTop: 10
+  }
 });
 
 export default NewsScreen;

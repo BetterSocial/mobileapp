@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
     backgroundColor: 'white',
-    marginBottom: SIZES.base,
+    // marginBottom: SIZES.base,
     marginTop: animatedValue,
-    position: 'absolute',
+    // position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
