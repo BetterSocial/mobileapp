@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   },
   containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   flatlistContainer: {
-    paddingTop: 65
+    paddingTop: 10
   }
 });
 
