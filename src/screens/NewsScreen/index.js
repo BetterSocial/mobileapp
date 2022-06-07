@@ -27,7 +27,7 @@ const NewsScreen = ({}) => {
   const refBlockDomainComponent = React.useRef(null);
   const offset = React.useRef(new Animated.Value(0)).current;
 
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
   const [yourselfId, setYourselfId] = React.useState('');
   const [domain, setDomain] = React.useState('');
@@ -69,7 +69,7 @@ const NewsScreen = ({}) => {
   }, []);
 
   const checkCache = () => {
-    setLoading(true)
+    // setLoading(true)
     getSpecificCache(NEWS_CACHE, (cache) => {
       if(cache) {
         setNews([{dummy: true}, ...cache.data], dispatch);
