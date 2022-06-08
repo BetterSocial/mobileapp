@@ -9,7 +9,7 @@ import CredderRatingYellow from '../../assets/icon/CredderRatingYellow'
 import { COLORS } from '../../utils/theme'
 import { fonts } from '../../utils/fonts'
 
-const FeedCredderRating = ({ containerStyle = {}, iconSize = 14, scoreSize = 16, score, viewBox = "0 0 18 18" }) => {
+const FeedCredderRating = ({ containerStyle = {}, iconSize = 14, scoreSize = 16, score, viewBox = "0 0 18 18", scoreStyle = {}}) => {
     const __renderCredderRatingIcon = () => {
         if (!score || score < 0) return <CredderRatingGray style={styles.credderIcon} height={iconSize} width={iconSize} viewBox={viewBox} />
         if (score <= 35) return <CredderRatingRed style={styles.credderIcon} height={iconSize} width={iconSize} viewBox={viewBox} />
@@ -26,7 +26,7 @@ const FeedCredderRating = ({ containerStyle = {}, iconSize = 14, scoreSize = 16,
 
     return <View style={{ ...styles.credderRatingContainer, ...containerStyle }}>
         {__renderCredderRatingIcon()}
-        <Text style={styles.credderRating(scoreSize, score)}>{__renderCredderRatingScore()}</Text>
+        <Text style={{...styles.credderRating(scoreSize, score), ...scoreStyle}}>{__renderCredderRatingScore()}</Text>
     </View >
 }
 
