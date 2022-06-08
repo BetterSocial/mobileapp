@@ -189,8 +189,8 @@ function HomeBottomTabs(props) {
     <SafeAreaView style={styles.container}>
       <StatusBar />
       <Tab.Navigator
-        // initialRouteName="ChannelList"
-        initialRouteName="Profile"
+        initialRouteName="ChannelList"
+        // initialRouteName="Profile"
         tabBarOptions={{
           // showLabel: true,
           activeTintColor: colors.holytosca,
