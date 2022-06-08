@@ -3,6 +3,7 @@ import analytics from '@react-native-firebase/analytics';
 import {
   Animated,
   FlatList,
+  InteractionManager,
   Platform,
   StyleSheet,
   View,
@@ -35,18 +36,21 @@ const NewsScreen = ({}) => {
   const [idBlock, setIdBlock] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
   const [newslist, dispatch] = React.useContext(Context).news;
+  const [isCompleteAnimation, setIsCompleteAnimation] = React.useState(false)
   
   const scrollRef = React.createRef();
   let {news} = newslist;
   let lastDragY = 0;
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
-      initData()
       Animated.timing(offset, {
         toValue: 0,
         duration: 0,
         useNativeDriver: false,
-      }).start();
+      }).start(() => {
+        initData()
+
+      });
     });
 
     analytics().logScreenView({
@@ -126,7 +130,7 @@ const NewsScreen = ({}) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
     if (dy + 20 <= 0) {
-      requestAnimationFrame(() => {
+      InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
           toValue: 0,
           duration: 100,
@@ -136,10 +140,12 @@ const NewsScreen = ({}) => {
           toValue: 50,
           duration: 100
         }).start()
+      
       })
 
     } else if (dy - 20 > 0) {
-      requestAnimationFrame(() => {
+ 
+      InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
           toValue: -50,
           duration: 100,
@@ -149,8 +155,8 @@ const NewsScreen = ({}) => {
           toValue: 0,
           duration: 100
         }).start()
+     
       })
-
     }
   };
 
@@ -208,6 +214,16 @@ const NewsScreen = ({}) => {
       loadMoreData(lastId);
     }
   };
+
+  React.useEffect(() => {
+    InteractionManager.runAfterInteractions(() => {
+      setIsCompleteAnimation(true)
+    })
+  })
+
+  if(!isCompleteAnimation) {
+    return null
+  }
 
   if (loading) {
     return (
