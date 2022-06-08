@@ -3,6 +3,7 @@ import analytics from '@react-native-firebase/analytics';
 import {
   Animated,
   FlatList,
+  Platform,
   StyleSheet,
   View,
 } from 'react-native';
@@ -26,14 +27,13 @@ const NewsScreen = ({}) => {
   const navigation = useNavigation();
   const refBlockDomainComponent = React.useRef(null);
   const offset = React.useRef(new Animated.Value(0)).current;
-
-  const [loading, setLoading] = React.useState(false);
+  const paddingContainer = React.useRef(new Animated.Value(50)).current
+  const [loading, setLoading] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
   const [yourselfId, setYourselfId] = React.useState('');
   const [domain, setDomain] = React.useState('');
   const [idBlock, setIdBlock] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
-  
   const [newslist, dispatch] = React.useContext(Context).news;
   
   const scrollRef = React.createRef();
@@ -69,10 +69,10 @@ const NewsScreen = ({}) => {
   }, []);
 
   const checkCache = () => {
-    setLoading(true)
+    // setLoading(true)
     getSpecificCache(NEWS_CACHE, (cache) => {
       if(cache) {
-        setNews([{dummy: true}, ...cache.data], dispatch);
+        setNews(cache.data, dispatch);
         setPostOffset(cache.offset)
         setLoading(false);
       } else {
@@ -92,7 +92,7 @@ const NewsScreen = ({}) => {
     try {
       let res = await getDomains();
       saveToCache(NEWS_CACHE, res)
-      setNews([{dummy: true}, ...res.data], dispatch);
+      setNews(res.data, dispatch);
       setPostOffset(res.offset)
       setLoading(false);
     } catch (error) {
@@ -104,7 +104,7 @@ const NewsScreen = ({}) => {
     setRefreshing(true)
     try {
       let res = await getDomains();
-      setNews([{dummy: true}, ...res.data], dispatch);
+      setNews(res.data, dispatch);
       setPostOffset(res.offset)
       setRefreshing(false);
     } catch (error) {
@@ -120,18 +120,32 @@ const NewsScreen = ({}) => {
   let handleScrollEvent = (event) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
-    if (dy <= 0) {
-      return Animated.timing(offset, {
-        toValue: 0,
-        duration: 50,
-        useNativeDriver: false,
-      }).start();
-    } else if (dy > 0) {
-      return Animated.timing(offset, {
-        toValue: -70,
-        duration: 50,
-        useNativeDriver: false,
-      }).start();
+    if (dy + 20 <= 0) {
+      requestAnimationFrame(() => {
+        Animated.timing(offset, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(paddingContainer, {
+          toValue: 50,
+          duration: 100
+        }).start()
+      })
+
+    } else if (dy - 20 > 0) {
+      requestAnimationFrame(() => {
+        Animated.timing(offset, {
+          toValue: -50,
+          duration: 100,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(paddingContainer, {
+          toValue: 0,
+          duration: 100
+        }).start()
+      })
+
     }
   };
 
@@ -163,14 +177,16 @@ const NewsScreen = ({}) => {
   };
 
   const loadMoreData = async () => {
-    // setLoading(true);
+    setRefreshing(true)
     try {
       let res = await getDomains(postOffset);
       let newNews = [...news, ...res.data];
       setPostOffset(res.offset)
-      setNews([{dummy: true}, ...newNews], dispatch);
+      setNews(newNews, dispatch);
+      setRefreshing(false)
       // setLoading(false);
     } catch (error) {
+      setRefreshing(false)
       // setLoading(false);
     }
   };
@@ -199,7 +215,7 @@ const NewsScreen = ({}) => {
   return (
     <View style={styles.container}>
       <Search animatedValue={offset} />
-      <Animated.View>
+        <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}} >
         <FlatList
           ref={scrollRef}
           keyExtractor={(item, index) => item.id}
@@ -210,11 +226,9 @@ const NewsScreen = ({}) => {
           refreshing={refreshing}
           onRefresh={onRefresh}
           onEndReached={loadMoreData}
+          contentContainerStyle={styles.flatlistContainer}
           // onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
-            if (item.dummy) {
-              return <View key={index} style={{height: 55}} />;
-            }
             return (
               <RenderItem
                 key={item.id}
@@ -229,6 +243,8 @@ const NewsScreen = ({}) => {
             );
           }}
         />
+        </Animated.View>
+        
 
         <BlockDomainComponent
           ref={refBlockDomainComponent}
@@ -236,7 +252,7 @@ const NewsScreen = ({}) => {
           domainId={idBlock}
           screen="news_screen" />
         
-      </Animated.View>
+
     </View>
   );
 };
@@ -246,6 +262,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.gray6,
   },
   containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  flatlistContainer: {
+    paddingTop: 10
+  }
 });
 
 export default NewsScreen;
