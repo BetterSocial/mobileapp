@@ -417,7 +417,7 @@ const PostPageDetailIdComponent = (props) => {
             />
           )}
           <Gap height={16} />
-          <View style={{height: 52, paddingHorizontal: 0, position: 'absolute', bottom : 0, width: '100%'}}>
+          <View style={{height: 52, paddingHorizontal: 0, width: '100%'}}>
             <Footer
               item={item}
               disableComment={false}
@@ -500,7 +500,7 @@ const styles = StyleSheet.create({
       borderBottomWidth: 1,
       borderBottomColor: '#C4C4C4',
       marginBottom: -1,
-      height: h - 145,
+      height: h - 170,
     };
   },
   gap: {height: 16},

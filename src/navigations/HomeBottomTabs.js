@@ -24,8 +24,8 @@ import { colors } from '../utils/colors';
 import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
 import { getFollowingTopic } from '../service/topics';
-import { getUserId } from '../utils/users';
 import { getSpecificCache, saveToCache } from '../utils/cache';
+import { getUserId } from '../utils/users';
 import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 
@@ -189,8 +189,8 @@ function HomeBottomTabs(props) {
     <SafeAreaView style={styles.container}>
       <StatusBar />
       <Tab.Navigator
-        initialRouteName="ChannelList"
-        // initialRouteName="Profile"
+        // initialRouteName="ChannelList"
+        initialRouteName="Profile"
         tabBarOptions={{
           // showLabel: true,
           activeTintColor: colors.holytosca,

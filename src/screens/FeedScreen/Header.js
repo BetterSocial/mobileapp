@@ -39,8 +39,6 @@ import { viewTimePost } from '../../service/post';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const getTime = (date) => calculateTime(date);
-
 const validationTimer = (timer, duration_feed) => {
   let date1 = new Date(timer);
   let date2 = new Date();
@@ -104,7 +102,7 @@ const _renderAnonimity = ({
               <Text style={[styles.feedUsername]}>Anonymous</Text>
             </View>
             <View style={styles.containerFeedText}>
-              <Text style={styles.feedDate}>{getTime(time)}</Text>
+              <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
               {privacy === 'Public' ? (
                 <Memoic_globe height={16} width={16} />
@@ -222,7 +220,7 @@ const _renderProfileNormal = ({
               </GlobalButton>
             </View>
             <View style={[styles.containerFeedText, { paddingBottom: 0 }]}>
-              <Text style={styles.feedDate}>{getTime(time)}</Text>
+              <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
               {privacy === 'Public' ? (
                 <Memoic_globe height={16} width={16} />
