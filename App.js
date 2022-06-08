@@ -7,7 +7,6 @@ import messaging from '@react-native-firebase/messaging';
 import { HumanIDProvider } from '@human-id/react-native-humanid';
 import { NavigationContainer } from '@react-navigation/native';
 import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
-import {RecoilRoot} from 'recoil';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
@@ -71,12 +70,12 @@ const App = () => {
     // Register FCM token with stream chat server.
     // requestPermission()
     // createChannel();
-    
+
     // const unsubscribe = messaging().onMessage((remoteMessage) => {
     //   console.log('NOtifICAtion');
     //   console.log('messag ', remoteMessage);
     //   !isIos ? pushNotifAndroid(remoteMessage) : pushNotifIos(remoteMessage)
-   
+
     // });
     // initFCM();
     const init = async () => {
@@ -93,13 +92,11 @@ const App = () => {
     <>
       <HumanIDProvider />
       <Store>
-        <RecoilRoot>
         <NavigationContainer>
           <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
             <RootStack />
           </OverlayProvider>
         </NavigationContainer>
-        </RecoilRoot>
       </Store>
       <FlashMessage position="top" />
     </>

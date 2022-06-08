@@ -1,6 +1,5 @@
 import axios from 'axios';
 import configEnv from 'react-native-config';
-import { BASE_URL, BASE_URL_DEV } from '@env';
 
 import { getAccessToken } from '../utils/token';
 
@@ -15,7 +14,6 @@ api.interceptors.request.use(
     const token = await getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-    }
     return config;
   },
   (error) => Promise.reject(error),
