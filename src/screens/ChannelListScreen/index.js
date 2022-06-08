@@ -196,9 +196,6 @@ const ChannelListScreen = ({ navigation }) => {
               <ActivityIndicator size="small" color={COLORS.holyTosca} />
             </View>
           )}
-
-   
-
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,18 +1,20 @@
 import moment from 'moment';
 
+import DateTimeUtils from './DateTime';
+
 // eslint-disable-next-line import/prefer-default-export
 export const calculateTime = (time) => {
   if (time) {
     const now = moment();
     const utc = now;
-    const date = moment(new Date(time).toISOString());
+    const date = moment(time);
     const minutes = utc.diff(date, 'minutes');
     const hours = utc.diff(date, 'hours');
     const days = utc.diff(date, 'days');
     const weeks = utc.diff(date, 'weeks');
 
     if (days >= 30) {
-      return new Date(date).toLocaleDateString();
+      return DateTimeUtils.format(time);
     }
 
     if (minutes < 60) {

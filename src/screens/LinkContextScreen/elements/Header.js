@@ -21,6 +21,7 @@ import { Context } from '../../../context';
 import { FeedCredderRating } from '../../../components/CredderRating';
 import { Gap } from '../../../components';
 import { addIFollowByID, setIFollow } from '../../../context/actions/news';
+import { calculateTime } from '../../../utils/time';
 import {
   followDomain,
   getDomainIdIFollow,
@@ -134,7 +135,8 @@ const Header = ({
           <Text style={styles.headerDomainName} numberOfLines={1}>{name}</Text>
           <View style={styles.headerDomainDateContainer}>
             <Text style={styles.headerDomainDate} numberOfLines={1}>
-              {new Date(time).toLocaleDateString()}
+              {/* {new Date(time).toLocaleDateString()} */}
+              {calculateTime(time)}
             </Text>
             <View style={styles.point} />
             {/* <Memoic_globe height={13} width={13} /> */}

@@ -168,6 +168,8 @@ const ProfileScreen = ({ route }) => {
   };
 
   const saveProfileState = (result) => {
+    if (result === null || result === undefined) return
+
     if (result && typeof result === 'object') {
       setDataMain(result || {});
       setDataMainBio(result?.bio)
@@ -178,10 +180,6 @@ const ProfileScreen = ({ route }) => {
 
   const getMyFeeds = async (offset = 0) => {
     let result = await getSelfFeedsInProfile(offset);
-    // setMyProfileFeed([
-    //   {dummy: true, component: 'Profile'}, 
-    //   {dummy: true, component: 'PostStickyHeader'},
-    //   ...result.data], myProfileDispatch);
     if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
     else {
       let clonedFeeds = [...feeds]
@@ -444,9 +442,10 @@ const ProfileScreen = ({ route }) => {
     });
   };
 
-  const onPressComment = (id) => {
+  const onPressComment = (item, id) => {
     navigation.navigate('ProfilePostDetailPage', {
       feedId: id,
+      isalreadypolling: item.isalreadypolling,
       refreshParent: getMyFeeds
     });
   };
@@ -495,7 +494,7 @@ const ProfileScreen = ({ route }) => {
 
   const handleRefresh = () => {
     setLoading(true)
-    getMyFeeds()
+    getMyFeeds(0)
   }
 
   return (
@@ -551,7 +550,7 @@ const ProfileScreen = ({ route }) => {
                 onNewPollFetched={onNewPollFetched}
                 onPressDomain={onPressDomain}
                 onPress={() => onPress(item, index)}
-                onPressComment={() => onPressComment(item.id)}
+                onPressComment={() => onPressComment(item, item.id)}
                 onPressBlock={() => onPressBlock(item)}
                 onPressUpvote={(post) => setUpVote(post, index)}
                 selfUserId={yourselfId}

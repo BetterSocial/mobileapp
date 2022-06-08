@@ -16,12 +16,12 @@ import Search from './Search';
 import ShareUtils from '../../utils/share'
 import {COLORS,} from '../../utils/theme';
 import {Context} from '../../context';
+import { NEWS_CACHE } from '../../utils/cache/constant';
 import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import {getDomainIdIFollow, getDomains} from '../../service/domain';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {setIFollow, setNews} from '../../context/actions/news';
-import { getSpecificCache, saveToCache } from '../../utils/cache';
-import { NEWS_CACHE } from '../../utils/cache/constant';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
@@ -129,7 +129,8 @@ const NewsScreen = ({}) => {
         }).start();
         Animated.timing(paddingContainer, {
           toValue: 50,
-          duration: 100
+          duration: 100,
+          useNativeDriver: false,
         }).start()
       })
 
@@ -142,7 +143,8 @@ const NewsScreen = ({}) => {
         }).start();
         Animated.timing(paddingContainer, {
           toValue: 0,
-          duration: 100
+          duration: 100,
+          useNativeDriver: false,
         }).start()
       })
 
@@ -215,7 +217,7 @@ const NewsScreen = ({}) => {
   return (
     <View style={styles.container}>
       <Search animatedValue={offset} />
-        <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}} >
+        <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
         <FlatList
           ref={scrollRef}
           keyExtractor={(item, index) => item.id}

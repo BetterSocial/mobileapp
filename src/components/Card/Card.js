@@ -1,6 +1,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import {
   Image,
   Linking,
@@ -15,6 +16,7 @@ import Gap from '../Gap';
 import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import { COLORS } from '../../utils/theme';
 import { FeedCredderRating } from '../CredderRating';
+import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { sanitizeUrlForLinking } from '../../utils/Utils';
@@ -33,7 +35,6 @@ const Card = (props) => {
     score
   } = props;
   // const styles = buildStylesheet('card', props.styles);
-
   return (
     <View style={styles.container}>
       <View>
@@ -92,7 +93,8 @@ const Header = ({ domain, image, date, score }) => (
       <View style={styles.headerDomainDateRowContainer}>
         <Text style={styles.cardHeaderDomainName} numberOfLines={1}>{domain}</Text>
         <View style={styles.point} />
-        <Text style={styles.cardHeaderDate} numberOfLines={1}>{date}</Text>
+        {/* <Text style={styles.cardHeaderDate} numberOfLines={1}>{date}</Text> */}
+        <Text style={styles.cardHeaderDate} numberOfLines={1}>{calculateTime(moment(date, 'DD MMM YYYY'))}</Text>
         <View style={styles.point} />
         <FeedCredderRating containerStyle={styles.credderRating} score={score} iconSize={16} scoreSize={12} />
       </View>

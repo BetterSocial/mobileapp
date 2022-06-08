@@ -8,6 +8,7 @@ import {
     View,
 } from 'react-native';
 
+import DateTimeUtils from '../../../utils/time/DateTime';
 import GlobalButton from '../../../components/Button/GlobalButton';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
@@ -18,8 +19,9 @@ import Memoic_globe from '../../../assets/icons/ic_globe';
 import NewsEmptyState from '../../../assets/images/news-empty-state.png';
 import dimen from '../../../utils/dimen';
 import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
-import {CredderRating} from '../../../components/CredderRating';
+import {CredderRating, FeedCredderRating} from '../../../components/CredderRating';
 import { Gap } from '../../../components';
+import { calculateTime } from '../../../utils/time';
 import { colors } from '../../../utils/colors';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 
@@ -32,13 +34,6 @@ const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFol
         }
     };
 
-    const gettime = (d) => {
-        try {
-            return d.time;
-        } catch (error) {
-            return new Date().toUTCString();
-        }
-    };
     return (
         <View style={styles.container}>
             <View style={styles.wrapperImage}>
@@ -56,20 +51,25 @@ const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFol
                 <Text style={styles.headerDomainName} numberOfLines={1}>{getname(item)}</Text>
                 <View style={styles.headerDateContainer}>
                     <Text style={styles.headerDomainDate} numberOfLines={1}>
-                        {new Date(gettime(item)).toLocaleDateString()}
+                        {/* {new Date(gettime(item)).toLocaleDateString()} */}
+                        {calculateTime(item?.content?.created_at)}
                     </Text>
                     <View style={styles.point} />
-                    <Memoic_globe height={normalize(13)} width={normalize(13)} />
-                    <View style={styles.point} />
-
+                    {/* <Memoic_globe height={normalize(13)} width={normalize(13)} /> */}
+                    {/* <View style={styles.point} /> */}
                     <MemoPeopleFollow height={normalize(13)} width={normalize(12)} />
-                    <Gap style={{ width: 4 }} />
+                    <Gap style={{ width: 3.33 }} />
                     <Text style={styles.headerFollowerText}>{follower}</Text>
+                    <View style={styles.point} />
+                    <FeedCredderRating 
+                        containerStyle={{ height: 16, alignSelf: 'center' }} 
+                        scoreStyle={{marginTop: normalizeFontSize(1.5)}}
+                        score={score} scoreSize={normalizeFontSize(12)} iconSize={16} />
                 </View>
             </View>
-            <View style={{ marginRight: 10 }}>
+            {/* <View style={{ marginRight: 10 }}>
                 <CredderRating containerStyle={{ height: 28 }} score={score} />
-            </View>
+            </View> */}
             <View style={{ justifyContent: 'center' }}>
                 {follow ? (
                     <GlobalButton buttonStyle={styles.noPh} onPress={handleUnfollow}>
@@ -134,12 +134,12 @@ const styles = StyleSheet.create({
         fontFamily: fonts.inter[700],
     },
     point: {
-        width: 3,
-        height: 3,
+        width: 2,
+        height: 2,
         borderRadius: 4,
         backgroundColor: colors.gray,
-        marginLeft: 8,
-        marginRight: 8,
+        marginLeft: 5,
+        marginRight: 5,
     },
     domainItemTitle: {
         fontSize: normalizeFontSize(16),
