@@ -42,6 +42,11 @@ const NewsScreen = ({}) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
       initData()
+      Animated.timing(offset, {
+        toValue: 0,
+        duration: 0,
+        useNativeDriver: false,
+      }).start();
     });
 
     analytics().logScreenView({
