@@ -120,29 +120,29 @@ const NewsScreen = ({}) => {
   let handleScrollEvent = (event) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
-    if (dy <= 0) {
+    if (dy + 20 <= 0) {
       requestAnimationFrame(() => {
         Animated.timing(offset, {
           toValue: 0,
-          duration: 300,
+          duration: 100,
           useNativeDriver: false,
         }).start();
         Animated.timing(paddingContainer, {
           toValue: 50,
-          duration: 300
+          duration: 100
         }).start()
       })
 
-    } else if (dy > 0) {
+    } else if (dy - 20 > 0) {
       requestAnimationFrame(() => {
         Animated.timing(offset, {
           toValue: -50,
-          duration: 300,
+          duration: 100,
           useNativeDriver: false,
         }).start();
         Animated.timing(paddingContainer, {
           toValue: 0,
-          duration: 300
+          duration: 100
         }).start()
       })
 
