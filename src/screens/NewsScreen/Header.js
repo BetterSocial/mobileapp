@@ -16,6 +16,7 @@ import { Avatar } from '../../components';
 import { COLORS, FONTS, SIZES } from '../../utils/theme';
 import { Context } from '../../context';
 import { FeedCredderRating } from '../../components/CredderRating';
+import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { setDomainData, setProfileDomain } from '../../context/actions/domainAction';
@@ -48,7 +49,8 @@ const Header = ({ image, domain, time, item }) => {
             <Text style={styles.domain} numberOfLines={1}>{domain}</Text>
             <View style={styles.point} />
             <Text style={styles.domainPostDate} numberOfLines={1}>
-              {new Date(time).toLocaleDateString()}
+              {/* {new Date(time).toLocaleDateString()} */}
+              {calculateTime(time)}
             </Text>
             <View style={styles.point} />
             <FeedCredderRating containerStyle={{ height: 16, alignSelf: 'center' }} 

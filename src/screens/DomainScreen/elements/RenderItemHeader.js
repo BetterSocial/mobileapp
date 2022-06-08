@@ -8,7 +8,7 @@ import {
     View,
 } from 'react-native';
 
-import DateTimeUtils from '../../../utils/datetime';
+import DateTimeUtils from '../../../utils/time/DateTime';
 import GlobalButton from '../../../components/Button/GlobalButton';
 import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoFollowDomain from '../../../assets/icon/IconFollowDomain';
@@ -21,6 +21,7 @@ import dimen from '../../../utils/dimen';
 import theme, { COLORS, FONTS, SIZES } from '../../../utils/theme';
 import {CredderRating, FeedCredderRating} from '../../../components/CredderRating';
 import { Gap } from '../../../components';
+import { calculateTime } from '../../../utils/time';
 import { colors } from '../../../utils/colors';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 
@@ -51,7 +52,7 @@ const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFol
                 <View style={styles.headerDateContainer}>
                     <Text style={styles.headerDomainDate} numberOfLines={1}>
                         {/* {new Date(gettime(item)).toLocaleDateString()} */}
-                        {DateTimeUtils.format(item?.time)}
+                        {calculateTime(item?.content?.created_at)}
                     </Text>
                     <View style={styles.point} />
                     <Memoic_globe height={normalize(13)} width={normalize(13)} />

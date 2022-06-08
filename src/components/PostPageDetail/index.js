@@ -38,6 +38,7 @@ import {getFeedDetail, viewTimePost} from '../../service/post';
 import {getMyProfile} from '../../service/profile';
 import {getUserId} from '../../utils/users';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import { setTimer } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
 
 const {width, height} = Dimensions.get('window');
