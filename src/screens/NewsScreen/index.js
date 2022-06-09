@@ -47,9 +47,8 @@ const NewsScreen = ({}) => {
         toValue: 0,
         duration: 0,
         useNativeDriver: false,
-      }).start(() => {
-        initData()
-
+      }, () => {
+        checkCache()
       });
     });
 
@@ -100,6 +99,7 @@ const NewsScreen = ({}) => {
     if(enableLoading) setLoading(true);
     try {
       let res = await getDomains();
+      console.log(res, 'domain res')
       saveToCache(NEWS_CACHE, res)
       setNews(res.data, dispatch);
       setPostOffset(res.offset)
@@ -191,11 +191,14 @@ const NewsScreen = ({}) => {
 
   const loadMoreData = async () => {
     setRefreshing(true)
+    console.log(postOffset, 'lakik')
     try {
       let res = await getDomains(postOffset);
+      console.log(res, 'lakik2')
       let newNews = [...news, ...res.data];
       setPostOffset(res.offset)
       setNews(newNews, dispatch);
+      saveToCache(newNews, dispatch)
       setRefreshing(false)
       // setLoading(false);
     } catch (error) {
