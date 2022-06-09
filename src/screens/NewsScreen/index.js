@@ -44,7 +44,7 @@ const NewsScreen = ({}) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('blur', (e) => {
       offset.setValue(0)
-      checkCache()
+      // checkCache()
     });
 
     analytics().logScreenView({
