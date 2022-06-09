@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
-import { Animated, Dimensions, StatusBar, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, InteractionManager, StatusBar, StyleSheet, View } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
@@ -50,24 +50,34 @@ const FeedScreen = (props) => {
 
   const getDataFeeds = async (offset = 0) => {
     setCountStack(null);
-    // setLoading(true);
+    if(offset > 0) {
+          setLoading(true);
+    } 
     try {
       let query = `?offset=${offset}`
 
       const dataFeeds = await getMainFeed(query);
-      console.log(dataFeeds, query, 'dataFeeds')
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         let dataWithDummy = [...data, {dummy : true}]
+        let saveData = {
+          offset: dataFeeds.offset,
+          data: dataWithDummy
+         
+        }
         if (offset === 0) {
           // setMainFeeds(data, dispatch);
           setMainFeeds(dataWithDummy, dispatch);
-          saveToCache(FEEDS_CACHE, dataWithDummy)
+          saveToCache(FEEDS_CACHE, saveData)
         } else {
           let clonedFeeds = [...feeds]
           clonedFeeds.splice(feeds.length - 1, 0, ...data)
+          saveData = {
+            ...saveData,
+            data: clonedFeeds
+          }
           setMainFeeds(clonedFeeds, dispatch);
-          saveToCache(FEEDS_CACHE, clonedFeeds)
+          saveToCache(FEEDS_CACHE, saveData)
           // setMainFeeds([...feeds, ...data], dispatch)
         }
         setCountStack(data.length);
@@ -75,13 +85,10 @@ const FeedScreen = (props) => {
 
       setPostOffset(dataFeeds.offset)
 
-      setLoading(false);
-      setInitialLoading(false);
       // setTime(new Date());
       setTimer(new Date(), dispatch)
       setLoading(false);
     } catch (e) {
-      setInitialLoading(false);
       setLoading(false);
     }
   };
@@ -98,8 +105,9 @@ const FeedScreen = (props) => {
   const checkCache = () => {
     getSpecificCache(FEEDS_CACHE, (result) => {
       if(result) {
-        setMainFeeds(result, dispatch)
-        setInitialLoading(false)
+        setMainFeeds(result.data, dispatch)
+        setPostOffset(result.offset)
+
       } else {
         getDataFeeds()
       }
@@ -120,6 +128,12 @@ const FeedScreen = (props) => {
       setShouldSearchBarShown(false)
     }, 2000)
   }, [shouldSearchBarShown]);
+
+  React.useEffect(() => {
+    InteractionManager.runAfterInteractions(() => {
+      setInitialLoading(false)
+    })
+  }, [])
 
   const updateFeed = async (post, index) => {
     try {
@@ -175,12 +189,8 @@ const FeedScreen = (props) => {
     );
   };
 
-  if (initialLoading === true) {
-    return (
-      <View style={styles.containerLoading}>
-        <LoadingWithoutModal visible={initialLoading} />
-      </View>
-    );
+  if (initialLoading) {
+    return null
   }
 
   const onPressDomain = (item) => {
