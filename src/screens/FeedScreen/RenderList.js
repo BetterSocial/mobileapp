@@ -193,6 +193,7 @@ const RenderListFeed = (props) => {
   React.useEffect(() => {
     initial();
   }, [item]);
+
   return (
     <View style={[styles.cardContainer(bottomHeight)]}>
       <View style={styles.cardMain}>
@@ -220,6 +221,7 @@ const RenderListFeed = (props) => {
             onPress={() => onPress(item)}
             onHeaderPress={() => onPressDomain(item)}
             onCardContentPress={() => navigateToLinkContextPage(item)}
+            score={item?.credderScore}
           />
         )}
         {item.post_type === POST_TYPE_STANDARD && (
