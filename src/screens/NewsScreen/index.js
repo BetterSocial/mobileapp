@@ -42,15 +42,9 @@ const NewsScreen = ({}) => {
   let {news} = newslist;
   let lastDragY = 0;
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e) => {
-      Animated.timing(offset, {
-        toValue: 0,
-        duration: 0,
-        useNativeDriver: false,
-      }).start(() => {
-        initData()
-
-      });
+    const unsubscribe = navigation.addListener('blur', (e) => {
+      offset.setValue(0)
+      // checkCache()
     });
 
     analytics().logScreenView({
@@ -58,8 +52,9 @@ const NewsScreen = ({}) => {
       screen_name: 'Feed',
     });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
+
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -79,6 +74,7 @@ const NewsScreen = ({}) => {
 
   const checkCache = () => {
     // setLoading(true)
+    // offset.setValue(0)
     getSpecificCache(NEWS_CACHE, (cache) => {
       if(cache) {
         setNews(cache.data, dispatch);
@@ -196,6 +192,7 @@ const NewsScreen = ({}) => {
       let newNews = [...news, ...res.data];
       setPostOffset(res.offset)
       setNews(newNews, dispatch);
+      saveToCache(NEWS_CACHE, newNews)
       setRefreshing(false)
       // setLoading(false);
     } catch (error) {
@@ -227,13 +224,13 @@ const NewsScreen = ({}) => {
     return null
   }
 
-  if (loading) {
-    return (
-      <View style={styles.containerLoading}>
-        <LoadingWithoutModal visible={loading} />
-      </View>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <View style={styles.containerLoading}>
+  //       <LoadingWithoutModal visible={loading} />
+  //     </View>
+  //   );
+  // }
 
   return (
     <View style={styles.container}>
@@ -241,7 +238,7 @@ const NewsScreen = ({}) => {
         <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
         <FlatList
           ref={scrollRef}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item, index) => index}
           onScrollBeginDrag={handleOnScrollBeginDrag}
           onScroll={handleScrollEvent}
           scrollEventThrottle={16}
@@ -254,7 +251,7 @@ const NewsScreen = ({}) => {
           renderItem={({item, index}) => {
             return (
               <RenderItem
-                key={item.id}
+                key={index}
                 item={item}
                 onPressShare={ShareUtils.shareNews}
                 onPressComment={(itemNews) => comment(itemNews)}
