@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.black,
     marginBottom: 13,
-    textTransform: 'capitalize',
+    // textTransform: 'capitalize',
     paddingHorizontal: 22
   },
   listTopic: {
