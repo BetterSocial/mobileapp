@@ -194,7 +194,7 @@ const NewsScreen = ({}) => {
       let newNews = [...news, ...res.data];
       setPostOffset(res.offset)
       setNews(newNews, dispatch);
-      saveToCache(newNews, dispatch)
+      saveToCache(NEWS_CACHE, newNews)
       setRefreshing(false)
       // setLoading(false);
     } catch (error) {
@@ -240,7 +240,7 @@ const NewsScreen = ({}) => {
         <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
         <FlatList
           ref={scrollRef}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item, index) => index}
           onScrollBeginDrag={handleOnScrollBeginDrag}
           onScroll={handleScrollEvent}
           scrollEventThrottle={16}
@@ -253,7 +253,7 @@ const NewsScreen = ({}) => {
           renderItem={({item, index}) => {
             return (
               <RenderItem
-                key={item.id}
+                key={index}
                 item={item}
                 onPressShare={ShareUtils.shareNews}
                 onPressComment={(itemNews) => comment(itemNews)}
