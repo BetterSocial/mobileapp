@@ -191,10 +191,8 @@ const NewsScreen = ({}) => {
 
   const loadMoreData = async () => {
     setRefreshing(true)
-    console.log(postOffset, 'lakik')
     try {
       let res = await getDomains(postOffset);
-      console.log(res, 'lakik2')
       let newNews = [...news, ...res.data];
       setPostOffset(res.offset)
       setNews(newNews, dispatch);
