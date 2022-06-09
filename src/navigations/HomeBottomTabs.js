@@ -19,7 +19,7 @@ import {
   ProfileScreen,
 } from '../screens';
 import { Context } from '../context';
-import { PROFILE_CACHE } from '../utils/cache/constant';
+import { NEWS_CACHE, PROFILE_CACHE } from '../utils/cache/constant';
 import { colors } from '../utils/colors';
 import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
@@ -28,6 +28,7 @@ import { getSpecificCache, saveToCache } from '../utils/cache';
 import { getUserId } from '../utils/users';
 import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
+import {setNews} from '../context/actions/news';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +39,8 @@ function HomeBottomTabs(props) {
   let [users, dispatch] = React.useContext(Context).users;
   let [, dispatchProfile] = React.useContext(Context).profile;
   let [, followingDispatch] = React.useContext(Context).following;
-  
+  const [, newsDispatch] = React.useContext(Context).news;
+
   const [unReadMessage] = React.useContext(Context).unReadMessage;
   const [loadingUser, setLoadingUser] = React.useState(true)
 
@@ -104,10 +106,6 @@ function HomeBottomTabs(props) {
         following.setFollowingUsers(response.data, followingDispatch);
       });
 
-      getDomains().then((response) => {
-        setNews([{ dummy: true }, ...response.data], newsDispatch);
-      });
-
       getFollowedDomain().then((response) => {
         following.setFollowingDomain(response.data.data, followingDispatch);
       });
@@ -116,10 +114,8 @@ function HomeBottomTabs(props) {
         following.setFollowingTopics(response.data, followingDispatch);
       });
 
-      SplashScreenPackage.hide();
-      debounceNavigationPage(selfUserId);
     } catch (e) {
-      console.log(e);
+      console.log('manusia',e);
     }
   }
 
@@ -153,6 +149,15 @@ function HomeBottomTabs(props) {
     );
   };
 
+  const getDomain = () => {
+    getDomains().then((response) => {
+      saveToCache(NEWS_CACHE, response)
+      setNews(response.data, newsDispatch);
+    }).catch((e) => {
+      throw new Error(e)
+    })
+  }
+
   React.useEffect(() => {
     getSpecificCache(PROFILE_CACHE, (res) => {
       if(!res) {
@@ -169,8 +174,11 @@ function HomeBottomTabs(props) {
     })
   }, [])
 
+
+
   React.useEffect(() => {
     requestPermission()
+    getDomain()
     // getProfile();
     getDiscoveryData()
   }, []);

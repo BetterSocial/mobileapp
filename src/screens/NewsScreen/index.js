@@ -44,7 +44,7 @@ const NewsScreen = ({}) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('blur', (e) => {
       offset.setValue(0)
-      checkCache(true)
+      checkCache()
     });
 
     analytics().logScreenView({
@@ -72,14 +72,12 @@ const NewsScreen = ({}) => {
     getNewsIfollow();
   }, []);
 
-  const checkCache = (onlySetOffset) => {
+  const checkCache = () => {
     // setLoading(true)
     // offset.setValue(0)
     getSpecificCache(NEWS_CACHE, (cache) => {
       if(cache) {
-        if(!onlySetOffset) {
-          setNews(cache.data, dispatch);
-        }
+        setNews(cache.data, dispatch);
         setPostOffset(cache.offset)
         setLoading(false);
       } else {
@@ -226,13 +224,13 @@ const NewsScreen = ({}) => {
     return null
   }
 
-  if (loading) {
-    return (
-      <View style={styles.containerLoading}>
-        <LoadingWithoutModal visible={loading} />
-      </View>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <View style={styles.containerLoading}>
+  //       <LoadingWithoutModal visible={loading} />
+  //     </View>
+  //   );
+  // }
 
   return (
     <View style={styles.container}>
