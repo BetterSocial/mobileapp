@@ -19,8 +19,10 @@ import { DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB } from '../../utils/constants';
 import { downVote, upVote } from '../../service/vote';
 import { getFeedDetail, getMainFeed, viewTimePost } from '../../service/post';
 import { getUserId } from '../../utils/users';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../../context/actions/feeds';
+import { FEEDS_CACHE } from '../../utils/cache/constant';
 
 let lastDragY = 0;
 let searchBarDebounce
@@ -48,21 +50,24 @@ const FeedScreen = (props) => {
 
   const getDataFeeds = async (offset = 0) => {
     setCountStack(null);
-    setLoading(true);
+    // setLoading(true);
     try {
       let query = `?offset=${offset}`
 
       const dataFeeds = await getMainFeed(query);
+      console.log(dataFeeds, query, 'dataFeeds')
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         let dataWithDummy = [...data, {dummy : true}]
         if (offset === 0) {
           // setMainFeeds(data, dispatch);
           setMainFeeds(dataWithDummy, dispatch);
+          saveToCache(FEEDS_CACHE, dataWithDummy)
         } else {
           let clonedFeeds = [...feeds]
           clonedFeeds.splice(feeds.length - 1, 0, ...data)
           setMainFeeds(clonedFeeds, dispatch);
+          saveToCache(FEEDS_CACHE, clonedFeeds)
           // setMainFeeds([...feeds, ...data], dispatch)
         }
         setCountStack(data.length);
@@ -87,12 +92,23 @@ const FeedScreen = (props) => {
       screen_name: 'Feed Screen',
     });
 
-    getDataFeeds();
+    checkCache()
   }, []);
 
+  const checkCache = () => {
+    getSpecificCache(FEEDS_CACHE, (result) => {
+      if(result) {
+        setMainFeeds(result, dispatch)
+        setInitialLoading(false)
+      } else {
+        getDataFeeds()
+      }
+    })
+  }
+
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e) => {
-      getDataFeeds();
+    const unsubscribe = navigation.addListener('focus', (e) => {
+      // getDataFeeds();
     });
 
     return unsubscribe;
