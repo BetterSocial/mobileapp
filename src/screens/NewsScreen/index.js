@@ -42,14 +42,9 @@ const NewsScreen = ({}) => {
   let {news} = newslist;
   let lastDragY = 0;
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e) => {
-      Animated.timing(offset, {
-        toValue: 0,
-        duration: 0,
-        useNativeDriver: false,
-      }, () => {
-        checkCache()
-      });
+    const unsubscribe = navigation.addListener('blur', (e) => {
+      offset.setValue(0)
+      checkCache(true)
     });
 
     analytics().logScreenView({
@@ -57,8 +52,9 @@ const NewsScreen = ({}) => {
       screen_name: 'Feed',
     });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
+
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -76,11 +72,14 @@ const NewsScreen = ({}) => {
     getNewsIfollow();
   }, []);
 
-  const checkCache = () => {
+  const checkCache = (onlySetOffset) => {
     // setLoading(true)
+    // offset.setValue(0)
     getSpecificCache(NEWS_CACHE, (cache) => {
       if(cache) {
-        setNews(cache.data, dispatch);
+        if(!onlySetOffset) {
+          setNews(cache.data, dispatch);
+        }
         setPostOffset(cache.offset)
         setLoading(false);
       } else {
@@ -99,7 +98,6 @@ const NewsScreen = ({}) => {
     if(enableLoading) setLoading(true);
     try {
       let res = await getDomains();
-      console.log(res, 'domain res')
       saveToCache(NEWS_CACHE, res)
       setNews(res.data, dispatch);
       setPostOffset(res.offset)
