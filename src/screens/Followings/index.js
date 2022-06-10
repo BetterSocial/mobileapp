@@ -17,7 +17,7 @@ import { getFollowing, setFollow, setUnFollow } from '../../service/profile';
 import { getUserId } from '../../utils/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const width = Dimensions.get('screen').width;
+const { width, height } = Dimensions.get('screen');
 
 const Followings = () => {
 
@@ -116,7 +116,7 @@ const Followings = () => {
           onRefresh={fetchFollowing}
           ListEmptyComponent={isLoading ? null : <View style={styles.nousercontent}>
             <Text style={styles.nousertext}>
-              You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.
+              {`You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.`}
             </Text>
           </View>}
 
@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
   },
   nousercontent: {
     // flexDirection: 'column',
+    height: height - 140,
     flex: 1,
     justifyContent: 'center',
   },
