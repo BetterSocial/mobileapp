@@ -97,6 +97,25 @@ let displayFormattedSearchLocations = (searchQuery, locationObject) => {
     );
   }
 
+  if (locationObject.location_level === "Country") {
+    return <Text>{`${locationObject.country}${zipString}`}</Text>
+  }
+
+  if (locationObject.location_level === "State") {
+    return <Text>{`${locationObject.state}, ${locationObject.country}${zipString}`}</Text>
+  }
+
+  if (locationObject.location_level === "City") {
+    return <Text>{`${locationObject.city} , ${locationObject.state}, ${locationObject.country}${zipString}`}</Text>
+  }
+
+  // if (locationObject.neighborhood === null) {
+  //   return (
+  //     <Text>{`${locationObject.city}, ${locationObject.state}, ${locationObject.country}`}</Text>
+  //   );
+
+  // }
+
   return (
     <Text>{`${locationObject.neighborhood}, ${locationObject.city}, ${locationObject.state}, ${locationObject.country}`}</Text>
   );
@@ -177,12 +196,12 @@ const capitalizeFirstText = (str) => {
 }
 
 const randomString = (length) => {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-    result += characters.charAt(Math.floor(Math.random() * 
-    charactersLength));
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() *
+      charactersLength));
   }
   console.log(result)
   return result;
@@ -196,9 +215,9 @@ const randomString = (length) => {
  * @returns 
  */
 const getSingularOrPluralText = (number, singularText, pluralText) => {
-  if(number === 1) return singularText
+  if (number === 1) return singularText
   return pluralText
-} 
+}
 
 export {
   capitalizeFirstText,

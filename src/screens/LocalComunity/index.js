@@ -1,4 +1,5 @@
 import * as React from 'react';
+import analytics from '@react-native-firebase/analytics';
 import {
   Dimensions,
   FlatList,
@@ -10,24 +11,23 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-
-import analytics from '@react-native-firebase/analytics';
-import {useNavigation} from '@react-navigation/core';
-import {showMessage} from 'react-native-flash-message';
+import { debounce } from 'lodash'
+import { showMessage } from 'react-native-flash-message';
+import { useNavigation } from '@react-navigation/core';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import PinIcon from '../../../assets/icons/pin.svg';
 import PlusIcon from '../../../assets/icons/plus.svg';
-import TrashIcon from '../../../assets/icons/trash.svg';
-import {post} from '../../api/server';
-import {Button} from '../../components/Button';
-import {ProgressBar} from '../../components/ProgressBar';
-import {SearchModal} from '../../components/Search';
-import {Context} from '../../context';
-import {setLocalCommunity} from '../../context/actions/localCommunity';
-import {colors} from '../../utils/colors';
 import StringConstant from '../../utils/string/StringConstant';
+import TrashIcon from '../../../assets/icons/trash.svg';
+import { Button } from '../../components/Button';
+import { Context } from '../../context';
 import { Header } from '../../components';
+import { ProgressBar } from '../../components/ProgressBar';
+import { SearchModal } from '../../components/Search';
+import { colors } from '../../utils/colors';
+import { post } from '../../api/server';
+import { setLocalCommunity } from '../../context/actions/localCommunity';
 
 const width = Dimensions.get('screen').width;
 const LocalComunity = () => {
@@ -52,26 +52,34 @@ const LocalComunity = () => {
   }, []);
 
   const handleSearch = (value) => {
-    if (value.length >= 3) {
-      setIsLoading(true);
-      let params = {
-        name: value,
-      };
-      post({url: '/location/list', params})
-        .then((res) => {
-          setIsLoading(false);
-          if (res.status === 200) {
-            setOptionsSearch(res.data.body);
-          }
-        })
-        .catch(() => {
-          setIsLoading(false);
-        });
-    } else {
-      setOptionsSearch([]);
-    }
-    setSearch(value);
+    setIsLoading(true);
+    let params = {
+      name: value,
+    };
+    post({ url: '/location/list', params })
+      .then((res) => {
+        setIsLoading(false);
+        if (res.status === 200) {
+          setOptionsSearch(res.data.body);
+        }
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
+
+  const doOnLocationSearchTextDebounce = React.useCallback(debounce(handleSearch, 500), [])
+
+  const onChangeLocationSearchText = (text) => {
+    if (text.length >= 3) {
+      doOnLocationSearchTextDebounce(text)
+    } else {
+      doOnLocationSearchTextDebounce.cancel()
+      setOptionsSearch([])
+    }
+
+    setSearch(text)
+  }
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -99,7 +107,7 @@ const LocalComunity = () => {
     await setLocationLog(locLog);
   };
 
-  const renderItem = ({index, item}) => (
+  const renderItem = ({ index, item }) => (
     <TouchableNativeFeedback
       onPress={() => {
         setSearch('');
@@ -235,7 +243,7 @@ const LocalComunity = () => {
         isVisible={isVisibleFirstLocation}
         onClose={() => onPressFirstLocation(false)}
         value={search}
-        onChangeText={(text) => handleSearch(text)}
+        onChangeText={(text) => onChangeLocationSearchText(text)}
         placeholder={StringConstant.searchModalPlaceholder}
         options={optionsSearch}
         onSelect={(val) => {
@@ -251,7 +259,7 @@ const LocalComunity = () => {
         isVisible={isVisibleSecondLocation}
         onClose={() => onPressSecondLocation(false)}
         value={search}
-        onChangeText={(text) => handleSearch(text)}
+        onChangeText={(text) => onChangeLocationSearchText(text)}
         placeholder={StringConstant.searchModalPlaceholder}
         options={optionsSearch}
         onSelect={(val) => {
@@ -280,7 +288,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5},
+  header: { paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5 },
   textFindYourLocalComunity: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
