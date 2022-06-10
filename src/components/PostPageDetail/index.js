@@ -371,15 +371,6 @@ const PostPageDetailIdComponent = (props) => {
     showScoreAlertDialog(item)
   }
 
-  const __renderMessageContentLink = () => {
-    if (!item?.message) return <></>
-    let sanitizeUrl = item?.message?.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
-    if (sanitizeUrl?.length === 0) return <></>
-    return <View style={styles.messageContainer}>
-      <Text style={styles.message} numberOfLines={3}>{sanitizeUrl}</Text>
-    </View>
-  }
-
   return (
     <View style={styles.container}>
       {loading ? <LoadingWithoutModal /> : null}
@@ -408,15 +399,14 @@ const PostPageDetailIdComponent = (props) => {
             )}
 
             {item && item.post_type === POST_TYPE_LINK && (
-              <>
-                {__renderMessageContentLink()}
                 <ContentLink
                   og={item.og}
                   onCardPress={onPressDomain}
                   onHeaderPress={onPressDomain}
                   onCardContentPress={() => navigateToLinkContextPage(item)}
+                  message={item?.message}
+                  score={item?.credderScore}
                 />
-              </>
             )}
 
             {item && item.post_type === POST_TYPE_STANDARD && (
@@ -530,14 +520,4 @@ const styles = StyleSheet.create({
     height: height,
     marginBottom: totalComment > 0 ? 82 : 0,
   }),
-  messageContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 15
-  },
-  message: {
-    fontFamily: fonts.inter[400],
-    lineHeight: 24,
-    fontSize: 16,
-    letterSpacing: 0.1
-  }
 });

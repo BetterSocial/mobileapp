@@ -198,15 +198,6 @@ const RenderListFeed = (props) => {
     console.log(item)
   }, [item]);
 
-  const __renderMessageContentLink = () => {
-    if (!item?.message) return <></>
-    let sanitizeUrl = item?.message?.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
-    if (sanitizeUrl?.length === 0) return <></>
-    return <View style={styles.messageContainer}>
-      <Text style={styles.message} numberOfLines={3}>{sanitizeUrl}</Text>
-    </View>
-  }
-
   return (
     <View style={[styles.cardContainer(bottomHeight)]}>
       <View style={styles.cardMain}>
@@ -228,17 +219,16 @@ const RenderListFeed = (props) => {
         )}
 
         {item.post_type === POST_TYPE_LINK && (
-          <>
-            {__renderMessageContentLink()}
-            <ContentLink
-              index={index}
-              og={item.og}
-              onPress={() => onPress(item)}
-              onHeaderPress={() => onPressDomain(item)}
-              onCardContentPress={() => navigateToLinkContextPage(item)}
-              score={item?.credderScore}
-            />
-          </>
+          <ContentLink
+            index={index}
+            og={item.og}
+            onPress={() => onPress(item)}
+            onHeaderPress={() => onPressDomain(item)}
+            onCardContentPress={() => navigateToLinkContextPage(item)}
+            score={item?.credderScore}
+            message={item?.message}
+            messageContainerStyle={{paddingHorizontal: 10}}
+          />
         )}
         {item.post_type === POST_TYPE_STANDARD && (
           <Content
@@ -315,16 +305,6 @@ const styles = StyleSheet.create({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
   }),
-  messageContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 15
-  },
-  message: {
-    fontFamily: fonts.inter[400],
-    lineHeight: 24,
-    fontSize: 16,
-    letterSpacing: 0.1
-  }
 });
 
 RenderListFeed.propTypes = {
