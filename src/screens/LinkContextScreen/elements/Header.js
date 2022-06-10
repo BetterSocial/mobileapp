@@ -152,7 +152,7 @@ const Header = ({
               12k
             </Text>
             <View style={styles.point} />
-            <FeedCredderRating containerStyle={styles.credderRating} score={item?.domain?.credderScore} />
+            <FeedCredderRating containerStyle={styles.credderRating} scoreSize={12} score={item?.domain?.credderScore} />
           </View>
         </View>
       </Pressable>

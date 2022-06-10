@@ -7,7 +7,7 @@ import Moment from 'moment';
 const format = (time) => {
   if (time === undefined || time === null) throw new Error('Param "time" is not defined or null');
 
-  return Moment(time).format('MMM DD, YYYY');
+  return Moment(time).format('MMM D, YYYY');
 };
 
 const DateTimeUtils = {
