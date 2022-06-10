@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import { Dimensions, Platform, Share, StatusBar, StyleSheet, View } from 'react-native';
+import { Dimensions, Platform, Share, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
 
@@ -20,6 +20,7 @@ import {
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
 import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
 import { getCountCommentWithChild } from '../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { showScoreAlertDialog } from '../../utils/Utils'
@@ -192,12 +193,24 @@ const RenderListFeed = (props) => {
 
   React.useEffect(() => {
     initial();
+
+    console.log('item')
+    console.log(item)
   }, [item]);
+
+  const __renderMessageContentLink = () => {
+    if (!item?.message) return <></>
+    let sanitizeUrl = item?.message?.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
+    if (sanitizeUrl?.length === 0) return <></>
+    return <View style={styles.messageContainer}>
+      <Text style={styles.message} numberOfLines={3}>{sanitizeUrl}</Text>
+    </View>
+  }
 
   return (
     <View style={[styles.cardContainer(bottomHeight)]}>
       <View style={styles.cardMain}>
-        <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB}/>
+        <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB} />
         {item.post_type === POST_TYPE_POLL && (
           <ContentPoll
             index={index}
@@ -215,14 +228,17 @@ const RenderListFeed = (props) => {
         )}
 
         {item.post_type === POST_TYPE_LINK && (
-          <ContentLink
-            index={index}
-            og={item.og}
-            onPress={() => onPress(item)}
-            onHeaderPress={() => onPressDomain(item)}
-            onCardContentPress={() => navigateToLinkContextPage(item)}
-            score={item?.credderScore}
-          />
+          <>
+            {__renderMessageContentLink()}
+            <ContentLink
+              index={index}
+              og={item.og}
+              onPress={() => onPress(item)}
+              onHeaderPress={() => onPressDomain(item)}
+              onCardContentPress={() => navigateToLinkContextPage(item)}
+              score={item?.credderScore}
+            />
+          </>
         )}
         {item.post_type === POST_TYPE_STANDARD && (
           <Content
@@ -258,7 +274,7 @@ const RenderListFeed = (props) => {
             }
           />
         </View>
-        { isReaction && (
+        {isReaction && (
           <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
@@ -271,9 +287,9 @@ const RenderListFeed = (props) => {
               />
               <Gap height={8} />
             </React.Fragment>
-        </View>
+          </View>
         )}
-        
+
 
       </View>
     </View>
@@ -299,6 +315,16 @@ const styles = StyleSheet.create({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
   }),
+  messageContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 15
+  },
+  message: {
+    fontFamily: fonts.inter[400],
+    lineHeight: 24,
+    fontSize: 16,
+    letterSpacing: 0.1
+  }
 });
 
 RenderListFeed.propTypes = {
