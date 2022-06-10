@@ -7,6 +7,7 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
@@ -21,8 +22,8 @@ import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import dimen from '../../utils/dimen';
-import {Context} from '../../context';
-import {Footer, Gap} from '../../components';
+import { Context } from '../../context';
+import { Footer, Gap } from '../../components';
 import {
   POST_TYPE_LINK,
   POST_TYPE_POLL,
@@ -30,18 +31,18 @@ import {
   SOURCE_FEED_TAB,
   SOURCE_PDP,
 } from '../../utils/constants';
-import {createCommentParent} from '../../service/comment';
-import {downVote, upVote} from '../../service/vote';
-import {fonts} from '../../utils/fonts';
-import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
-import {getFeedDetail, viewTimePost} from '../../service/post';
-import {getMyProfile} from '../../service/profile';
-import {getUserId} from '../../utils/users';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import { createCommentParent } from '../../service/comment';
+import { downVote, upVote } from '../../service/vote';
+import { fonts } from '../../utils/fonts';
+import { getCountCommentWithChildInDetailPage } from '../../utils/getstream';
+import { getFeedDetail, viewTimePost } from '../../service/post';
+import { getMyProfile } from '../../service/profile';
+import { getUserId } from '../../utils/users';
+import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setTimer } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const PostPageDetailIdComponent = (props) => {
   const [user] = React.useContext(Context).users;
@@ -62,16 +63,16 @@ const PostPageDetailIdComponent = (props) => {
   const [time, setTime] = React.useState(new Date().getTime())
   const [item, setItem] = React.useState(null);
   let navigation = useNavigation()
-  
+
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
 
   let [feedsContext, dispatch] = React.useContext(Context).feeds;
   let { timer } = feedsContext
-  
-  let { feedId, refreshParent, 
-    navigateToReplyView = () => {}} = props
-    
+
+  let { feedId, refreshParent,
+    navigateToReplyView = () => { } } = props
+
   React.useEffect(() => {
     const parseToken = async () => {
       const id = await getUserId();
@@ -97,7 +98,7 @@ const PostPageDetailIdComponent = (props) => {
 
 
   React.useEffect(() => {
-    if(item && item.latest_reactions && item.latest_reactions.comment) {
+    if (item && item.latest_reactions && item.latest_reactions.comment) {
       setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
     }
   }, [item]);
@@ -167,8 +168,8 @@ const PostPageDetailIdComponent = (props) => {
     try {
       let data = await getFeedDetail(feedId);
       let oldData = data.data
-      if(isSort) {
-        oldData = {...oldData, latest_reactions: {...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix())} }
+      if (isSort) {
+        oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()) } }
       }
       setLoadingPost(false)
       if (data) {
@@ -202,7 +203,7 @@ const PostPageDetailIdComponent = (props) => {
           setTextComment('');
           updateFeed(true);
           // Toast.show('Comment successful', Toast.LONG);
-          
+
         } else {
           Toast.show('Failed Comment', Toast.LONG);
           setLoadingPost(false)
@@ -229,9 +230,9 @@ const PostPageDetailIdComponent = (props) => {
     let feedDiffTime = currentTime.getTime() - timer.getTime()
     let pdpDiffTime = currentTime.getTime() - time;
 
-    if(feedId) {
-        // viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
-        viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
+    if (feedId) {
+      // viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
+      viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
     }
 
     setTime(new Date().getTime())
@@ -282,60 +283,60 @@ const PostPageDetailIdComponent = (props) => {
     let feedDiffTime = currentTime.getTime() - timer.getTime()
     let pdpDiffTime = currentTime.getTime() - time;
 
-    if(feedId) {
-        // viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
-        // viewTimePost(feedId, pdpDiffTime, SOURCE_PDP);
-        viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
+    if (feedId) {
+      // viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
+      // viewTimePost(feedId, pdpDiffTime, SOURCE_PDP);
+      viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
     }
 
     setTime(new Date().getTime())
     setTimer(new Date(), dispatch)
-    
+
     navigation.push('LinkContextScreen', param);
   };
 
   const onPressDownVoteHandle = async () => {
     // setLoadingVote(true);
     setStatusDowvote((prev) => !prev);
-    if(voteStatus === 'upvote') {
+    if (voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 2)
       setVoteStatus('downvote')
     }
-    if(voteStatus === 'downvote') {
+    if (voteStatus === 'downvote') {
       setTotalVote((prevState) => prevState + 1)
       setVoteStatus('none')
     }
-    if(voteStatus === 'none') {
+    if (voteStatus === 'none') {
       setTotalVote((prevState) => prevState - 1)
       setVoteStatus('downvote')
-    } 
+    }
     await setDownVote(!statusDownvote);
   };
 
   const onPressUpvoteHandle = async () => {
     // setLoadingVote(true);
     setStatusUpvote((prev) => !prev);
-    if(voteStatus === 'upvote') {
+    if (voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 1)
       setVoteStatus('none')
     }
-    if(voteStatus === 'downvote') {
-      setTotalVote((prevState) => prevState +2)
+    if (voteStatus === 'downvote') {
+      setTotalVote((prevState) => prevState + 2)
       setVoteStatus('upvote')
     }
-    if(voteStatus === 'none') {
+    if (voteStatus === 'none') {
       setTotalVote((prevState) => prevState + 1)
       setVoteStatus('upvote')
-    } 
+    }
     await setUpVote(!statusUpvote);
   };
 
 
-  const handleRefreshComment = ({data}) => {
+  const handleRefreshComment = ({ data }) => {
     updateFeed()
   }
 
-  const handleRefreshChildComment = ({parent, children}) => {
+  const handleRefreshChildComment = ({ parent, children }) => {
     updateFeed()
   }
 
@@ -343,15 +344,15 @@ const PostPageDetailIdComponent = (props) => {
   const checkVotes = () => {
     const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && Array.isArray(item.own_reactions.upvotes) && item.own_reactions.upvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id)
     const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && Array.isArray(item.own_reactions.downvotes) && item.own_reactions.downvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id)
-    if(findUpvote) {
+    if (findUpvote) {
       setVoteStatus('upvote')
       setStatusUpvote(true)
-    } 
-    if(findDownvote) {
+    }
+    if (findDownvote) {
       setVoteStatus('downvote')
       setStatusDowvote(true)
     }
-    if(!findDownvote && !findUpvote) {
+    if (!findDownvote && !findUpvote) {
       setVoteStatus('none')
     }
   }
@@ -375,93 +376,95 @@ const PostPageDetailIdComponent = (props) => {
       {loading ? <LoadingWithoutModal /> : null}
       <StatusBar translucent={false} />
       {item ? <React.Fragment>
-        <Header props={item} isBackButton={true} source={SOURCE_PDP}/>
+        <Header props={item} isBackButton={true} source={SOURCE_PDP} />
 
-      <ScrollView
-        ref={scrollViewRef}
-        showsVerticalScrollIndicator={false}
-        style={styles.contentScrollView(totalComment)}>
-        <View style={styles.content(height)}>
-          {item && item.post_type === POST_TYPE_POLL && (
-            <ContentPoll
-              message={item.message}
-              images_url={item.images_url}
-              polls={item.pollOptions}
-              onPress={() => {}}
-              item={item}
-              pollexpiredat={item.polls_expired_at}
-              multiplechoice={item.multiplechoice}
-              isalreadypolling={item.isalreadypolling}
-              onnewpollfetched={onNewPollFetched}
-              voteCount={item.voteCount}
-            />
-          )}
+        <ScrollView
+          ref={scrollViewRef}
+          showsVerticalScrollIndicator={false}
+          style={styles.contentScrollView(totalComment)}>
+          <View style={styles.content(height)}>
+            {item && item.post_type === POST_TYPE_POLL && (
+              <ContentPoll
+                message={item.message}
+                images_url={item.images_url}
+                polls={item.pollOptions}
+                onPress={() => { }}
+                item={item}
+                pollexpiredat={item.polls_expired_at}
+                multiplechoice={item.multiplechoice}
+                isalreadypolling={item.isalreadypolling}
+                onnewpollfetched={onNewPollFetched}
+                voteCount={item.voteCount}
+              />
+            )}
 
-          {item && item.post_type === POST_TYPE_LINK && (
-            <ContentLink
-              og={item.og}
-              onCardPress={onPressDomain}
-              onHeaderPress={onPressDomain}
-              onCardContentPress={() => navigateToLinkContextPage(item)}
-            />
-          )}
+            {item && item.post_type === POST_TYPE_LINK && (
+                <ContentLink
+                  og={item.og}
+                  onCardPress={onPressDomain}
+                  onHeaderPress={onPressDomain}
+                  onCardContentPress={() => navigateToLinkContextPage(item)}
+                  message={item?.message}
+                  score={item?.credderScore}
+                />
+            )}
 
-          {item && item.post_type === POST_TYPE_STANDARD && (
-            <Content
-              message={item.message}
-              images_url={item.images_url}
-              style={styles.additionalContentStyle(
-                item.images_url.length,
-                height,
-              )}
-            />
-          )}
-          <Gap height={16} />
-          <View style={{height: 52, paddingHorizontal: 0, width: '100%'}}>
-            <Footer
-              item={item}
-              disableComment={false}
-              totalComment={totalComment}
-              totalVote={totalVote}
-              onPressDownVote={onPressDownVoteHandle}
-              onPressUpvote={onPressUpvoteHandle}
-              statusVote={voteStatus}
-              onPressShare={() => {}}
-              onPressComment={onCommentButtonClicked}
-              // loadingVote={loadingVote}
-              showScoreButton={true}
-              onPressScore={__handleOnPressScore}
-              onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
-              isSelf={yourselfId === item.actor.id ? true : false}
-            />
+            {item && item.post_type === POST_TYPE_STANDARD && (
+              <Content
+                message={item.message}
+                images_url={item.images_url}
+                style={styles.additionalContentStyle(
+                  item.images_url.length,
+                  height,
+                )}
+              />
+            )}
+            <Gap height={16} />
+            <View style={{ height: 52, paddingHorizontal: 0, width: '100%' }}>
+              <Footer
+                item={item}
+                disableComment={false}
+                totalComment={totalComment}
+                totalVote={totalVote}
+                onPressDownVote={onPressDownVoteHandle}
+                onPressUpvote={onPressUpvoteHandle}
+                statusVote={voteStatus}
+                onPressShare={() => { }}
+                onPressComment={onCommentButtonClicked}
+                // loadingVote={loadingVote}
+                showScoreButton={true}
+                onPressScore={__handleOnPressScore}
+                onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
+                isSelf={yourselfId === item.actor.id ? true : false}
+              />
+            </View>
           </View>
-        </View>
-        {isReaction && commentList && (
-          <ContainerComment
-            comments={commentList}
-            isLoading={loadingPost}
-            refreshComment={handleRefreshComment}
-            refreshChildComment={handleRefreshChildComment}
-            navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
-          />
-        )}
-      </ScrollView>
-      <WriteComment
-        username={
-          item.anonimity
-            ? StringConstant.generalAnonymousText
-            : item.actor.data.username
-        }
-        value={textComment}
-        onChangeText={(value) => setTextComment(value)}
-        onPress={() => {
-          onComment();
-        }}
-      />
+          {isReaction && commentList && (
+            <ContainerComment
+              comments={commentList}
+              isLoading={loadingPost}
+              refreshComment={handleRefreshComment}
+              refreshChildComment={handleRefreshChildComment}
+              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
+            />
+          )}
+        </ScrollView>
+        <WriteComment
+          username={
+            item.anonimity
+              ? StringConstant.generalAnonymousText
+              : item.actor.data.username
+          }
+          value={textComment}
+          onChangeText={(value) => setTextComment(value)}
+          onPress={() => {
+            onComment();
+          }}
+        />
 
-      <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page"/>
-            </React.Fragment> : null}
-            
+        <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />
+      </React.Fragment> : null}
+
     </View>
   );
 };
@@ -503,7 +506,7 @@ const styles = StyleSheet.create({
       height: h - 170,
     };
   },
-  gap: {height: 16},
+  gap: { height: 16 },
   additionalContentStyle: (imageLength, h) => {
     if (imageLength > 0) {
       return {

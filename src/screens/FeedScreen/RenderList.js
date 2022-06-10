@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import { Dimensions, Platform, Share, StatusBar, StyleSheet, View } from 'react-native';
+import { Dimensions, Platform, Share, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
 
@@ -20,6 +20,7 @@ import {
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
 import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
 import { getCountCommentWithChild } from '../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { showScoreAlertDialog } from '../../utils/Utils'
@@ -192,12 +193,15 @@ const RenderListFeed = (props) => {
 
   React.useEffect(() => {
     initial();
+
+    console.log('item')
+    console.log(item)
   }, [item]);
 
   return (
     <View style={[styles.cardContainer(bottomHeight)]}>
       <View style={styles.cardMain}>
-        <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB}/>
+        <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB} />
         {item.post_type === POST_TYPE_POLL && (
           <ContentPoll
             index={index}
@@ -222,6 +226,8 @@ const RenderListFeed = (props) => {
             onHeaderPress={() => onPressDomain(item)}
             onCardContentPress={() => navigateToLinkContextPage(item)}
             score={item?.credderScore}
+            message={item?.message}
+            messageContainerStyle={{paddingHorizontal: 10}}
           />
         )}
         {item.post_type === POST_TYPE_STANDARD && (
@@ -258,7 +264,7 @@ const RenderListFeed = (props) => {
             }
           />
         </View>
-        { isReaction && (
+        {isReaction && (
           <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
@@ -271,9 +277,9 @@ const RenderListFeed = (props) => {
               />
               <Gap height={8} />
             </React.Fragment>
-        </View>
+          </View>
         )}
-        
+
 
       </View>
     </View>
