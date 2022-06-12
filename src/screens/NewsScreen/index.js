@@ -23,6 +23,7 @@ import {getDomainIdIFollow, getDomains} from '../../service/domain';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {setIFollow, setNews} from '../../context/actions/news';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
@@ -36,7 +37,7 @@ const NewsScreen = ({}) => {
   const [idBlock, setIdBlock] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
   const [newslist, dispatch] = React.useContext(Context).news;
-  const [isCompleteAnimation, setIsCompleteAnimation] = React.useState(false)
+  // const [isCompleteAnimation, setIsCompleteAnimation] = React.useState(false)
   
   const scrollRef = React.createRef();
   let {news} = newslist;
@@ -214,15 +215,15 @@ const NewsScreen = ({}) => {
     }
   };
 
-  React.useEffect(() => {
-    InteractionManager.runAfterInteractions(() => {
-      setIsCompleteAnimation(true)
-    })
-  })
+  // React.useEffect(() => {
+  //   InteractionManager.runAfterInteractions(() => {
+  //     setIsCompleteAnimation(true)
+  //   })
+  // })
 
-  if(!isCompleteAnimation) {
-    return null
-  }
+  // if(!isCompleteAnimation) {
+  //   return null
+  // }
 
   // if (loading) {
   //   return (
@@ -287,4 +288,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default NewsScreen;
+export default withInteractionsManaged (NewsScreen);

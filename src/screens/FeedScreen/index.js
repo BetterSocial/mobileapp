@@ -23,13 +23,14 @@ import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../../context/actions/feeds';
 import { FEEDS_CACHE } from '../../utils/cache/constant';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 let lastDragY = 0;
 let searchBarDebounce
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
-  const [initialLoading, setInitialLoading] = React.useState(true);
+  // const [initialLoading, setInitialLoading] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const [countStack, setCountStack] = React.useState(null);
   const [lastId, setLastId] = React.useState('');
@@ -129,11 +130,11 @@ const FeedScreen = (props) => {
     }, 2000)
   }, [shouldSearchBarShown]);
 
-  React.useEffect(() => {
-    InteractionManager.runAfterInteractions(() => {
-      setInitialLoading(false)
-    })
-  }, [])
+  // React.useEffect(() => {
+  //   InteractionManager.runAfterInteractions(() => {
+  //     setInitialLoading(false)
+  //   })
+  // }, [])
 
   const updateFeed = async (post, index) => {
     try {
@@ -286,9 +287,9 @@ const FeedScreen = (props) => {
     setTimer(new Date(), dispatch)
   }
 
-  if (initialLoading) {
-    return null
-  }
+  // if (initialLoading) {
+  //   return null
+  // }
 
 
   return (
@@ -328,7 +329,7 @@ const FeedScreen = (props) => {
   );
 };
 
-export default FeedScreen;
+export default withInteractionsManaged (FeedScreen);
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: {
