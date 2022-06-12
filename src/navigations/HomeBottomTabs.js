@@ -38,7 +38,8 @@ function HomeBottomTabs(props) {
   let [users, dispatch] = React.useContext(Context).users;
   let [, dispatchProfile] = React.useContext(Context).profile;
   let [, followingDispatch] = React.useContext(Context).following;
-  
+
+  const [initialStartup] = React.useContext(Context).initialStartup;
   const [unReadMessage] = React.useContext(Context).unReadMessage;
   const [loadingUser, setLoadingUser] = React.useState(true)
 
@@ -189,7 +190,7 @@ function HomeBottomTabs(props) {
     <SafeAreaView style={styles.container}>
       <StatusBar />
       <Tab.Navigator
-        initialRouteName="ChannelList"
+        initialRouteName={initialStartup!== null && initialStartup.deeplinkProfile === true ? 'Profile' : 'ChannelList'}
         // initialRouteName="Profile"
         tabBarOptions={{
           // showLabel: true,
