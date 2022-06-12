@@ -10,9 +10,11 @@ export const useAfterInteractions = () => {
 
   const transitionRef = useRef(null);
 
-  const debounceComplete = debounce(() => {
-    setInteractionsComplete(true);
-  }, 100);
+  const debounceComplete = () => {
+    setTimeout(() => {
+      setInteractionsComplete(true);
+    }, 100);
+  };
 
   useEffect(() => {
     subscriptionRef.current = InteractionManager.runAfterInteractions(() => {

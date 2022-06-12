@@ -172,7 +172,7 @@ const ProfileScreen = ({ route }) => {
 
     if (result && typeof result === 'object') {
       setDataMain(result || {});
-      setDataMainBio(result?.bio)
+      setDataMainBio(result.bio)
       setLoadingContainer(false)
     }
 
