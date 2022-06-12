@@ -314,4 +314,4 @@ RenderListFeed.propTypes = {
   loading: PropTypes.bool,
 };
 
-export default RenderListFeed;
+export default React.memo (RenderListFeed);

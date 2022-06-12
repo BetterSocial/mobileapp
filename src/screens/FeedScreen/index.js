@@ -189,9 +189,6 @@ const FeedScreen = (props) => {
     );
   };
 
-  if (initialLoading) {
-    return null
-  }
 
   const onPressDomain = (item) => {
     let param = linkContextScreenParamBuilder(
@@ -288,6 +285,11 @@ const FeedScreen = (props) => {
 
     setTimer(new Date(), dispatch)
   }
+
+  if (initialLoading) {
+    return null
+  }
+
 
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
