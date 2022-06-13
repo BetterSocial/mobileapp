@@ -14,9 +14,7 @@ const FeedsPostDetail = (props) => {
     let {index, feedId, refreshParent} = props.route.params
     let navigation = useNavigation()
     let [time, setTime] = React.useState(new Date().getTime())
-
     let { feeds, timer } = feedsContext
-
     let navigateToReplyView = (data, updateParent) => {
         let currentTime = new Date()
         let feedDiffTime = currentTime.getTime() - timer.getTime()

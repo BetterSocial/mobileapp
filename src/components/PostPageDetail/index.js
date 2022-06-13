@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
-
+import {useRoute} from '@react-navigation/native'
 import BlockComponent from '../../components/BlockComponent';
 import ContainerComment from '../../components/Comments/ContainerComment';
 import Content from './elements/Content';
@@ -63,7 +63,7 @@ const PostPageDetailIdComponent = (props) => {
   const [time, setTime] = React.useState(new Date().getTime())
   const [item, setItem] = React.useState(null);
   let navigation = useNavigation()
-
+  const route = useRoute()
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
 
@@ -135,10 +135,16 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const getDetailFeed = async () => {
-    setLoading(true)
-    let data = await getFeedDetail(feedId);
-    setItem(data.data)
-    setLoading(false)
+    if(!route.params.isCaching) {
+      setLoading(true)
+      let data = await getFeedDetail(feedId);
+      setItem(data.data)
+      setLoading(false)
+
+    }else {
+      setItem(route.params.data)
+    }
+
   }
 
 
@@ -373,7 +379,7 @@ const PostPageDetailIdComponent = (props) => {
 
   return (
     <View style={styles.container}>
-      {loading ? <LoadingWithoutModal /> : null}
+      {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
       <StatusBar translucent={false} />
       {item ? <React.Fragment>
         <Header props={item} isBackButton={true} source={SOURCE_PDP} />

@@ -213,7 +213,9 @@ const FeedScreen = (props) => {
       // index: index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
-      refreshParent: getDataFeeds
+      refreshParent: getDataFeeds,
+      data: item,
+      isCaching:true
       
     });
   };
@@ -222,7 +224,9 @@ const FeedScreen = (props) => {
     props.navigation.navigate('PostDetailPage', {
       // index: index,
       feedId: item.id,
-      refreshParent: getDataFeeds
+      refreshParent: getDataFeeds,
+      data: item,
+      isCaching: true
       // feedId:
     });
   };
@@ -290,7 +294,6 @@ const FeedScreen = (props) => {
   // if (initialLoading) {
   //   return null
   // }
-
 
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
