@@ -20,6 +20,7 @@ import { getUserId } from '../../utils/users';
 import { getUserTopic, putUserTopic } from '../../service/topics';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -246,4 +247,4 @@ const TopicPageScreen = (props) => {
     </View>
   );
 };
-export default TopicPageScreen;
+export default withInteractionsManaged (TopicPageScreen);
