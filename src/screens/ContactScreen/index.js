@@ -23,6 +23,7 @@ import { Loading } from '../../components';
 import { Search } from './elements';
 import { setChannel } from '../../context/actions/setChannel';
 import { userPopulate } from '../../service/users';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const width = Dimensions.get('screen').width;
 
@@ -299,4 +300,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ContactScreen;
+export default withInteractionsManaged (ContactScreen);
