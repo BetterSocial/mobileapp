@@ -41,6 +41,8 @@ import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setTimer } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
+import { getSpecificCache } from '../../utils/cache';
+import { FEEDS_CACHE } from '../../utils/cache/constant';
 
 const { width, height } = Dimensions.get('window');
 
@@ -72,7 +74,7 @@ const PostPageDetailIdComponent = (props) => {
 
   let { feedId, refreshParent,
     navigateToReplyView = () => { } } = props
-
+  console.log('silat', feedsContext)
   React.useEffect(() => {
     const parseToken = async () => {
       const id = await getUserId();
@@ -85,7 +87,7 @@ const PostPageDetailIdComponent = (props) => {
       parseToken();
     }
 
-    return unsubscribe;
+    return () =>  unsubscribe();
   }, []);
 
   React.useEffect(() => {
@@ -93,7 +95,7 @@ const PostPageDetailIdComponent = (props) => {
       fetchMyProfile();
     }
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, [yourselfId]);
 
 
@@ -250,6 +252,19 @@ const PostPageDetailIdComponent = (props) => {
     scrollViewRef.current.scrollToEnd();
   };
 
+  const findChangeFeed = () => {
+    console.log('sukiman6', feedsContext)
+    const mappingData = feedsContext.feeds.map((feed) => {
+      if(feed.id === item.id) {
+        return {...feed, reaction_counts: {taiman: 0}}
+      }
+      return {...feed}
+    })
+    const dataFeed = mappingData.find((feed) => feed.id === item.id)
+    console.log('sukiman5', dataFeed.reaction_counts)
+  }
+
+  console.log('sukiman0', item)
   const setUpVote = async (status) => {
     const data = {
       activity_id: item.id,
@@ -257,6 +272,8 @@ const PostPageDetailIdComponent = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await upVote(data);
+    findChangeFeed()
+    console.log('sukiman',processData)
   };
   const setDownVote = async (status) => {
     const data = {
@@ -265,6 +282,9 @@ const PostPageDetailIdComponent = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await downVote(data);
+    findChangeFeed()
+    console.log('sukiman2',processData)
+
   };
 
   const onNewPollFetched = (newPolls, index) => {
@@ -394,7 +414,7 @@ const PostPageDetailIdComponent = (props) => {
                 message={item.message}
                 images_url={item.images_url}
                 polls={item.pollOptions}
-                onPress={() => { }}
+                // onPress={() => { }}
                 item={item}
                 pollexpiredat={item.polls_expired_at}
                 multiplechoice={item.multiplechoice}
