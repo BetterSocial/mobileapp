@@ -39,7 +39,7 @@ import { getFeedDetail, viewTimePost } from '../../service/post';
 import { getMyProfile } from '../../service/profile';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { setTimer } from '../../context/actions/feeds';
+import { setTimer, setMainFeeds } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
 import { getSpecificCache } from '../../utils/cache';
 import { FEEDS_CACHE } from '../../utils/cache/constant';
@@ -252,16 +252,30 @@ const PostPageDetailIdComponent = (props) => {
     scrollViewRef.current.scrollToEnd();
   };
 
-  const findChangeFeed = () => {
+  const findChangeFeed = (response, type) => {
     console.log('sukiman6', feedsContext)
     const mappingData = feedsContext.feeds.map((feed) => {
       if(feed.id === item.id) {
-        return {...feed, reaction_counts: {taiman: 0}}
+        if(type === 'upvote') {
+          if(response.data) {
+            return {...feed, reaction_counts: {...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes + 1}}
+          } else {
+            return {...feed, reaction_counts: {...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes - 1}}
+          }
+        } else {
+          if(response.data) {
+            return {...feed, reaction_counts: {...feed.reaction_counts, downvotes: feed.reaction_counts.downvotes + 1}}
+          } else {
+            return {...feed, reaction_counts: {...feed.reaction_counts, downvotes: feed.reaction_counts.downvotes - 1}}
+          }
+        }
+   
       }
       return {...feed}
     })
     const dataFeed = mappingData.find((feed) => feed.id === item.id)
-    console.log('sukiman5', dataFeed.reaction_counts)
+    setMainFeeds(mappingData, dispatch)
+    console.log('sukiman5', dataFeed.reaction_counts, response)
   }
 
   console.log('sukiman0', item)
@@ -272,7 +286,7 @@ const PostPageDetailIdComponent = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await upVote(data);
-    findChangeFeed()
+    findChangeFeed(processData, 'upvote')
     console.log('sukiman',processData)
   };
   const setDownVote = async (status) => {
@@ -282,7 +296,7 @@ const PostPageDetailIdComponent = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await downVote(data);
-    findChangeFeed()
+    findChangeFeed(processData, 'downvote')
     console.log('sukiman2',processData)
 
   };
