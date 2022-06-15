@@ -44,11 +44,13 @@ const FeedScreen = (props) => {
 
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
+  const [profileContext] = React.useContext(Context).profile;
   const bottomBarHeight = useBottomTabBarHeight();
   const { height } = Dimensions.get('screen');
 
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
-
+  let {myProfile} = profileContext
+  console.log(myProfile, 'profile')
   const getDataFeeds = async (offset = 0) => {
     setCountStack(null);
     if(offset > 0) {
@@ -169,16 +171,6 @@ const FeedScreen = (props) => {
     if(id) viewTimePost(id, diffTime, SOURCE_FEED_TAB);
 
   };
-
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setYourselfId(id);
-      }
-    };
-    parseToken();
-  }, []);
 
   let onNewPollFetched = (newPolls, index) => {
     setFeedByIndex(
@@ -319,7 +311,7 @@ const FeedScreen = (props) => {
             onPressComment={() => onPressComment(index, item)}
             onPressBlock={() => onPressBlock(item)}
             onPressUpvote={(post) => setUpVote(post, index)}
-            selfUserId={yourselfId}
+            selfUserId={myProfile.user_id}
             onPressDownVote={(post) => setDownVote(post, index)}
             loading={loading}
           />

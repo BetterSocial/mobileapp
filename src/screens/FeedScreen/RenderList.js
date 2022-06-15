@@ -176,6 +176,8 @@ const RenderListFeed = (props) => {
   const checkVotes = () => {
     const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === selfUserId)
     const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && item.own_reactions.downvotes.find((vote) => vote.user_id === selfUserId)
+    console.log(findUpvote, 'findupvote')
+    console.log(findDownvote, 'finddownvote')
     if (findUpvote) {
       setVoteStatus('upvote')
       setStatusUpvote(true)
@@ -193,9 +195,6 @@ const RenderListFeed = (props) => {
 
   React.useEffect(() => {
     initial();
-
-    console.log('item')
-    console.log(item)
   }, [item]);
 
   return (

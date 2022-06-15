@@ -68,35 +68,35 @@ const PostPageDetailIdComponent = (props) => {
   const route = useRoute()
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
-
   let [feedsContext, dispatch] = React.useContext(Context).feeds;
   let { timer } = feedsContext
+
 
   let { feedId, refreshParent,
     navigateToReplyView = () => { } } = props
   console.log('silat', feedsContext)
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setYourselfId(id);
-      }
-    };
+  // React.useEffect(() => {
+  //   const parseToken = async () => {
+  //     const id = await getUserId();
+  //     if (id) {
+  //       setYourselfId(id);
+  //     }
+  //   };
 
-    const unsubscribe = () => {
-      parseToken();
-    }
+  //   const unsubscribe = () => {
+  //     parseToken();
+  //   }
 
-    return () =>  unsubscribe();
-  }, []);
+  //   return () =>  unsubscribe();
+  // }, []);
 
-  React.useEffect(() => {
-    const unsubscribe = () => {
-      fetchMyProfile();
-    }
+  // React.useEffect(() => {
+  //   const unsubscribe = () => {
+  //     fetchMyProfile();
+  //   }
 
-    return () => unsubscribe();
-  }, [yourselfId]);
+  //   return () => unsubscribe();
+  // }, [yourselfId]);
 
 
   React.useEffect(() => {
@@ -252,21 +252,28 @@ const PostPageDetailIdComponent = (props) => {
     scrollViewRef.current.scrollToEnd();
   };
 
+
+  console.log('sukiman51',item && item.own_reactions, )
+
   const findChangeFeed = (response, type) => {
     console.log('sukiman6', feedsContext)
+    const data = []
+    data.push(response.data)
     const mappingData = feedsContext.feeds.map((feed) => {
       if(feed.id === item.id) {
         if(type === 'upvote') {
           if(response.data) {
-            return {...feed, reaction_counts: {...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes + 1}}
+            
+            console.log(data, 'sukiman578')
+            return {...feed, reaction_counts: {...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes + 1, downvotes: voteStatus === 'downvote' ? feed.reaction_counts.downvotes - 1 : feed.reaction_counts.downvotes}, own_reactions: {...feed.own_reactions, upvotes: typeof feed.own_reactions === 'object' ? data : feed.own_reactions.push(response.data)}}
           } else {
-            return {...feed, reaction_counts: {...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes - 1}}
+            return {...feed, reaction_counts: {...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes - 1}, own_reactions: {...feed.own_reactions, upvotes: Array.isArray(feed.own_reactions.upvotes) ? feed.own_reactions.upvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : [] }}
           }
         } else {
           if(response.data) {
-            return {...feed, reaction_counts: {...feed.reaction_counts, downvotes: feed.reaction_counts.downvotes + 1}}
+            return {...feed, reaction_counts: {...feed.reaction_counts, downvotes: feed.reaction_counts.downvotes + 1, upvotes: voteStatus === 'upvote' ? feed.reaction_counts.upvotes - 1 : feed.reaction_counts.upvotes}, own_reactions: {...feed.own_reactions, downvotes: typeof feed.own_reactions === 'object' ? data : feed.own_reactions.push(response.data)}}
           } else {
-            return {...feed, reaction_counts: {...feed.reaction_counts, downvotes: feed.reaction_counts.downvotes - 1}}
+            return {...feed, reaction_counts: {...feed.reaction_counts, downvotes: feed.reaction_counts.downvotes - 1}, own_reactions: {...feed.own_reactions, downvotes: Array.isArray(feed.own_reactions.downvotes) ? feed.own_reactions.downvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : [] }}
           }
         }
    
@@ -275,7 +282,8 @@ const PostPageDetailIdComponent = (props) => {
     })
     const dataFeed = mappingData.find((feed) => feed.id === item.id)
     setMainFeeds(mappingData, dispatch)
-    console.log('sukiman5', dataFeed.reaction_counts, response)
+    console.log('sukiman5', dataFeed.own_reactions)
+    console.log('sukiman512',  response)
   }
 
   console.log('sukiman0', item)
@@ -384,6 +392,8 @@ const PostPageDetailIdComponent = (props) => {
   const checkVotes = () => {
     const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && Array.isArray(item.own_reactions.upvotes) && item.own_reactions.upvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id)
     const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && Array.isArray(item.own_reactions.downvotes) && item.own_reactions.downvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id)
+    console.log(findDownvote, 'votedown')
+    console.log(findUpvote, 'voteup')
     if (findUpvote) {
       setVoteStatus('upvote')
       setStatusUpvote(true)
@@ -399,7 +409,7 @@ const PostPageDetailIdComponent = (props) => {
 
   React.useEffect(() => {
     checkVotes()
-  }, [item, yourselfId])
+  }, [item])
 
   React.useEffect(() => {
     return () => {
@@ -475,7 +485,7 @@ const PostPageDetailIdComponent = (props) => {
                 showScoreButton={true}
                 onPressScore={__handleOnPressScore}
                 onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
-                isSelf={yourselfId === item.actor.id ? true : false}
+                isSelf={profile.myProfile.user_id === item.actor.id ? true : false}
               />
             </View>
           </View>
