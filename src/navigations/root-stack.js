@@ -54,50 +54,25 @@ import {
 import { Context } from '../context';
 import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
-import { getUserId } from '../utils/users';
-import { verifyTokenGetstream } from '../service/users';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
-import SplashScreenPackage from 'react-native-splash-screen';
 import { getDeepLinkUrl } from './linking';
+import { doVerifyUser } from '../service/initialStartup';
 
 const Stack = createStackNavigator();
 const RootStact = () => {
   const [profile, setProfile] = React.useState(null);
   const [clientState] = React.useContext(Context).client;
   const [profileState] = React.useContext(Context).profile;
-  const [profileUser, dispatch] = React.useContext(Context).initialStartup;
+  const [_, dispatch] = React.useContext(Context).initialStartup;
   const { client } = clientState;
   const isIos = Platform.OS === 'ios'
 
   const create = useClientGetstream();
 
-  const doVerifyUser = async () => {
-    try {
-      const id = await getUserId();
-      if (id !== null && id !== '') {
-        const verify = await verifyTokenGetstream();
-        if (verify !== null && verify !== '') {
-          create();
-          setProfile(id);
-        } else {
-          setProfile('')
-        }
-      } else {
-        setProfile('');
-      }
-    } catch (e) {
-      console.log('doVerifyUser ', e);
-      setProfile(null);
-    }
-    setTimeout(() => {
-      SplashScreenPackage.hide();
-    }, 700);
-  };
-
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
-    void doVerifyUser();
+    void doVerifyUser(create, setProfile);
 
     return async () => {
       await client?.disconnectUser();

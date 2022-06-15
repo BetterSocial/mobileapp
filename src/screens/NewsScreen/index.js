@@ -31,9 +31,9 @@ const NewsScreen = ({}) => {
   const [domain, setDomain] = React.useState('');
   const [idBlock, setIdBlock] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
-  
+
   const [newslist, dispatch] = React.useContext(Context).news;
-  
+
   const scrollRef = React.createRef();
   let {news} = newslist;
   let lastDragY = 0;
@@ -124,11 +124,11 @@ const NewsScreen = ({}) => {
 
   const comment = (item) => {
     navigation.navigate('DetailDomainScreen', {
-      item : { 
+      item : {
         ...item,
         score: item?.domain?.credderScore,
         follower: 0,
-      }, 
+      },
       refreshNews: onRefresh});
   };
 
@@ -193,7 +193,6 @@ const NewsScreen = ({}) => {
           refreshing={refreshing}
           onRefresh={onRefresh}
           onEndReached={loadMoreData}
-          // onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
             if (item.dummy) {
               return <View key={index} style={{height: 55}} />;
@@ -218,7 +217,7 @@ const NewsScreen = ({}) => {
           domain={domain}
           domainId={idBlock}
           screen="news_screen" />
-        
+
       </Animated.View>
     </View>
   );
