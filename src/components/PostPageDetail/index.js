@@ -302,7 +302,7 @@ const PostPageDetailIdComponent = (props) => {
       if(feed.id === item.id) {
         let joinComment = []
         if(Array.isArray(feed.latest_reactions.comment)) {
-          joinComment = [...feed.latest_reactions.comment, comment]
+          joinComment = [...feed.latest_reactions.comment, comment].sort((a, b) => new Date(b.created_at).getTime() -  new Date(a.created_at).getTime())
         } else {
           joinComment.push(comment)
         }
@@ -311,8 +311,8 @@ const PostPageDetailIdComponent = (props) => {
       return {...feed}
     })
     const find = mappingData.find((feed) => feed.id === item.id)
-    // setMainFeeds(mappingData, dispatch)
-    console.log('mapping data',find)
+    setMainFeeds(mappingData, dispatch)
+    console.log('mapping data',find.latest_reactions.comment)
   }
 
   const setUpVote = async (status) => {

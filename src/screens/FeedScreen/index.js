@@ -50,7 +50,7 @@ const FeedScreen = (props) => {
 
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
   let {myProfile} = profileContext
-  console.log(myProfile, 'profile')
+
   const getDataFeeds = async (offset = 0) => {
     setCountStack(null);
     if(offset > 0) {
