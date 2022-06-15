@@ -98,7 +98,7 @@ const PostPageDetailIdComponent = (props) => {
   //   return () => unsubscribe();
   // }, [yourselfId]);
 
-
+    console.log( 'jakali', item && item.latest_reactions)
   React.useEffect(() => {
     if (item && item.latest_reactions && item.latest_reactions.comment) {
       setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
@@ -206,7 +206,10 @@ const PostPageDetailIdComponent = (props) => {
     setLoadingPost(true)
     try {
       if (textComment.trim() !== '') {
+
         let data = await createCommentParent(textComment, item.id, item.actor.id, true);
+        updateCachingComment(data.data)
+        console.log(data, 'komenbaru')
         if (data.code === 200) {
           setTextComment('');
           updateFeed(true);
@@ -287,6 +290,31 @@ const PostPageDetailIdComponent = (props) => {
   }
 
   console.log('sukiman0', item)
+
+  // user={previewComment.user}
+  // comment={previewComment.data.text}
+  // image={previewComment.user.data.profile_pic_url}
+  // time={previewComment.created_at}
+
+  const updateCachingComment = (comment) => {
+    console.log(comment, 'komen')
+    const mappingData = feedsContext.feeds.map((feed) => {
+      if(feed.id === item.id) {
+        let joinComment = []
+        if(Array.isArray(feed.latest_reactions.comment)) {
+          joinComment = [...feed.latest_reactions.comment, comment]
+        } else {
+          joinComment.push(comment)
+        }
+        return {...feed, latest_reactions: {...feed.latest_reactions, comment: joinComment}}
+      }
+      return {...feed}
+    })
+    const find = mappingData.find((feed) => feed.id === item.id)
+    // setMainFeeds(mappingData, dispatch)
+    console.log('mapping data',find)
+  }
+
   const setUpVote = async (status) => {
     const data = {
       activity_id: item.id,
