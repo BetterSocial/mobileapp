@@ -19,7 +19,12 @@ const ProfileReplyComment = (props) => {
     return 0
   }
 
-  console.log(props.route, 'kalah')
+  React.useEffect(() => {
+    return () => {
+      console.log('call api refresh')
+    }
+  }, [])
+
   return (
     <View style={styles.container}>
       <ReplyCommentComponent indexFeed={feedIndex()} 

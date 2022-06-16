@@ -52,6 +52,7 @@ const FeedScreen = (props) => {
   let {myProfile} = profileContext
 
   const getDataFeeds = async (offset = 0) => {
+    console.log(offset, 'offset')
     setCountStack(null);
     if(offset > 0) {
           setLoading(true);
@@ -60,6 +61,7 @@ const FeedScreen = (props) => {
       let query = `?offset=${offset}`
 
       const dataFeeds = await getMainFeed(query);
+      console.log('dataFeed', dataFeeds)
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         let dataWithDummy = [...data, {dummy : true}]
