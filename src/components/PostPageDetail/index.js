@@ -74,31 +74,7 @@ const PostPageDetailIdComponent = (props) => {
 
   let { feedId, refreshParent,
     navigateToReplyView = () => { } } = props
-  console.log('silat', feedsContext)
-  // React.useEffect(() => {
-  //   const parseToken = async () => {
-  //     const id = await getUserId();
-  //     if (id) {
-  //       setYourselfId(id);
-  //     }
-  //   };
 
-  //   const unsubscribe = () => {
-  //     parseToken();
-  //   }
-
-  //   return () =>  unsubscribe();
-  // }, []);
-
-  // React.useEffect(() => {
-  //   const unsubscribe = () => {
-  //     fetchMyProfile();
-  //   }
-
-  //   return () => unsubscribe();
-  // }, [yourselfId]);
-
-    console.log( 'jakali', item && item.latest_reactions)
   React.useEffect(() => {
     if (item && item.latest_reactions && item.latest_reactions.comment) {
       setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
@@ -209,7 +185,6 @@ const PostPageDetailIdComponent = (props) => {
 
         let data = await createCommentParent(textComment, item.id, item.actor.id, true);
         updateCachingComment(data.data)
-        console.log(data, 'komenbaru')
         if (data.code === 200) {
           setTextComment('');
           updateFeed(true);
@@ -256,18 +231,33 @@ const PostPageDetailIdComponent = (props) => {
   };
 
 
-  console.log('sukiman51',item && item.own_reactions, )
+  const updateAllComment = () => {
+    if(item && item.id) {
+      const mappingData = feedsContext.feeds.map((feed) => {
+        if(feed.id === item.id) {
+          return {...feed, ...item}
+        }
+        return {...feed}
+      })
+      setMainFeeds(mappingData, dispatch)
+    }
+
+  }
+
+  React.useEffect(() => {
+    return () => {
+      updateAllComment()
+    }
+  }, [item])
+
 
   const findChangeFeed = (response, type) => {
-    console.log('sukiman6', feedsContext)
     const data = []
     data.push(response.data)
     const mappingData = feedsContext.feeds.map((feed) => {
       if(feed.id === item.id) {
         if(type === 'upvote') {
-          if(response.data) {
-            
-            console.log(data, 'sukiman578')
+          if(response.data) {            
             return {...feed, reaction_counts: {...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes + 1, downvotes: voteStatus === 'downvote' ? feed.reaction_counts.downvotes - 1 : feed.reaction_counts.downvotes}, own_reactions: {...feed.own_reactions, upvotes: typeof feed.own_reactions === 'object' ? data : feed.own_reactions.push(response.data), downvotes: voteStatus === 'downvote' ? feed.own_reactions.downvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : feed.own_reactions.downvotes}}
           } else {
             return {...feed, reaction_counts: {...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes - 1}, own_reactions: {...feed.own_reactions, upvotes: Array.isArray(feed.own_reactions.upvotes) ? feed.own_reactions.upvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : [] }}
@@ -285,19 +275,9 @@ const PostPageDetailIdComponent = (props) => {
     })
     const dataFeed = mappingData.find((feed) => feed.id === item.id)
     setMainFeeds(mappingData, dispatch)
-    console.log('sukiman5', dataFeed.own_reactions)
-    console.log('sukiman512',  response)
   }
 
-  console.log('sukiman0', item)
-
-  // user={previewComment.user}
-  // comment={previewComment.data.text}
-  // image={previewComment.user.data.profile_pic_url}
-  // time={previewComment.created_at}
-
   const updateCachingComment = (comment) => {
-    console.log(comment, 'komen')
     const mappingData = feedsContext.feeds.map((feed) => {
       if(feed.id === item.id) {
         let joinComment = []
@@ -312,7 +292,6 @@ const PostPageDetailIdComponent = (props) => {
     })
     const find = mappingData.find((feed) => feed.id === item.id)
     setMainFeeds(mappingData, dispatch)
-    console.log('mapping data',find.latest_reactions.comment)
   }
 
   const setUpVote = async (status) => {
@@ -323,7 +302,6 @@ const PostPageDetailIdComponent = (props) => {
     };
     const processData = await upVote(data);
     findChangeFeed(processData, 'upvote')
-    console.log('sukiman',processData)
   };
   const setDownVote = async (status) => {
     const data = {
@@ -333,7 +311,6 @@ const PostPageDetailIdComponent = (props) => {
     };
     const processData = await downVote(data);
     findChangeFeed(processData, 'downvote')
-    console.log('sukiman2',processData)
 
   };
 
@@ -420,8 +397,6 @@ const PostPageDetailIdComponent = (props) => {
   const checkVotes = () => {
     const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && Array.isArray(item.own_reactions.upvotes) && item.own_reactions.upvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id)
     const findDownvote = item && item.own_reactions && item.own_reactions.downvotes && Array.isArray(item.own_reactions.downvotes) && item.own_reactions.downvotes.find((reaction) => reaction.user_id === profile.myProfile.user_id)
-    console.log(findDownvote, 'votedown')
-    console.log(findUpvote, 'voteup')
     if (findUpvote) {
       setVoteStatus('upvote')
       setStatusUpvote(true)
