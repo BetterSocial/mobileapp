@@ -177,7 +177,9 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   }, [])
 
   React.useEffect(() => {
-    return () => updateFeed()
+    return () => {
+      updateFeed()
+    }
   }, [])
 
   return (
@@ -216,7 +218,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
               const showChildrenCommentView = () => {
                 navigation.push('ReplyComment', {
                   item: itemReply,
-                  level: parseInt(level) + 2,
+                  level: parseInt(level) + 1,
                   indexFeed,
                 });
               };
