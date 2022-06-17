@@ -11,9 +11,7 @@ export const useAfterInteractions = () => {
   const transitionRef = useRef(null);
 
   const debounceComplete = () => {
-    setTimeout(() => {
-      setInteractionsComplete(true);
-    }, 100);
+    setInteractionsComplete(true);
   };
 
   useEffect(() => {

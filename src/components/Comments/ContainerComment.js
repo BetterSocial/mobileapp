@@ -10,7 +10,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import {DATALOADING} from '../../utils/string/LoadingComment';
 import {colors} from '../../utils/colors';
 
-const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView}) => {
+const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate}) => {
   const navigation = useNavigation();
   let isLast = (index, item) => {
     return (
@@ -50,6 +50,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                   indexFeed: indexFeed,
                 })}
                 refreshComment={refreshComment}
+                findCommentAndUpdate={findCommentAndUpdate}
               />
             </View>
             {item.children_counts.comment > 0 && (

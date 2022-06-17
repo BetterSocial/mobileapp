@@ -28,16 +28,9 @@ const FeedsPostDetail = (props) => {
         setTime(new Date().getTime())
         setTimer(new Date(), dispatch)
 
-        navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent});
+        navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent, findAndUpdateComment});
     }
 
-    React.useEffect(() => {
-        return () => {
-            if(refreshParent) {
-                refreshParent()
-            }
-        }
-    }, [])
 
     return(
         <View style={styles.container}>

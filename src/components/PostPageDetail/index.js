@@ -70,11 +70,10 @@ const PostPageDetailIdComponent = (props) => {
   const refBlockComponent = React.useRef();
   let [feedsContext, dispatch] = React.useContext(Context).feeds;
   let { timer } = feedsContext
-
+  
 
   let { feedId, refreshParent,
     navigateToReplyView = () => { } } = props
-
   React.useEffect(() => {
     if (item && item.latest_reactions && item.latest_reactions.comment) {
       setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
@@ -128,6 +127,7 @@ const PostPageDetailIdComponent = (props) => {
 
   const updateParentPost = (data) => {
     setItem(data)
+    updateAllContent(data)
   }
 
   React.useEffect(() => {
@@ -138,15 +138,6 @@ const PostPageDetailIdComponent = (props) => {
     getDetailFeed()
   }, [])
 
-  const fetchMyProfile = async () => {
-    let id = await getUserId();
-    if (id) {
-      const result = await getMyProfile(id);
-      if (result.code === 200) {
-        setDataProfile(result.data);
-      }
-    }
-  };
 
   const updateFeed = async (isSort) => {
     try {
@@ -158,14 +149,9 @@ const PostPageDetailIdComponent = (props) => {
       setLoadingPost(false)
       if (data) {
         setItem(oldData);
-        // setFeedByIndexProps(
-        //   {
-        //     singleFeed: oldData,
-        //     index,
-        //   },
-        //   dispatch,
-        // );
+
       }
+      updateAllContent(oldData)
     } catch (e) {
       console.log(e);
     }
@@ -231,11 +217,11 @@ const PostPageDetailIdComponent = (props) => {
   };
 
 
-  const updateAllComment = () => {
+  const updateAllContent = (newFeed) => {
     if(item && item.id) {
       const mappingData = feedsContext.feeds.map((feed) => {
         if(feed.id === item.id) {
-          return {...feed, ...item}
+          return {...feed, ...newFeed}
         }
         return {...feed}
       })
@@ -244,14 +230,9 @@ const PostPageDetailIdComponent = (props) => {
 
   }
 
-  React.useEffect(() => {
-    return () => {
-      updateAllComment()
-    }
-  }, [item])
 
 
-  const findChangeFeed = (response, type) => {
+  const findVoteAndUpdate = (response, type) => {
     const data = []
     data.push(response.data)
     const mappingData = feedsContext.feeds.map((feed) => {
@@ -273,7 +254,6 @@ const PostPageDetailIdComponent = (props) => {
       }
       return {...feed}
     })
-    const dataFeed = mappingData.find((feed) => feed.id === item.id)
     setMainFeeds(mappingData, dispatch)
   }
 
@@ -290,9 +270,29 @@ const PostPageDetailIdComponent = (props) => {
       }
       return {...feed}
     })
-    const find = mappingData.find((feed) => feed.id === item.id)
     setMainFeeds(mappingData, dispatch)
   }
+
+  const findCommentAndUpdate = (id, newData) => {
+    const updatedComment = commentList.map((comment) => {
+      if(comment.id === id) {
+        return {...comment, ...newData}
+      }
+      return {...comment}
+    })
+    findReduxCommentAndUpdate(updatedComment)
+  }
+
+  const findReduxCommentAndUpdate = (comment) => {
+    const mappingData = feedsContext.feeds.map((feed) => {
+      if(feed.id === item.id) {
+        return {...feed,  latest_reactions: {...feed.latest_reactions, comment}}
+      }
+      return {...feed}
+    })
+    setMainFeeds(mappingData, dispatch)
+  }
+
 
   const setUpVote = async (status) => {
     const data = {
@@ -301,7 +301,7 @@ const PostPageDetailIdComponent = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await upVote(data);
-    findChangeFeed(processData, 'upvote')
+    findVoteAndUpdate(processData, 'upvote')
   };
   const setDownVote = async (status) => {
     const data = {
@@ -310,7 +310,7 @@ const PostPageDetailIdComponent = (props) => {
       feed_group: 'main_feed',
     };
     const processData = await downVote(data);
-    findChangeFeed(processData, 'downvote')
+    findVoteAndUpdate(processData, 'downvote')
 
   };
 
@@ -337,8 +337,6 @@ const PostPageDetailIdComponent = (props) => {
     let pdpDiffTime = currentTime.getTime() - time;
 
     if (feedId) {
-      // viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
-      // viewTimePost(feedId, pdpDiffTime, SOURCE_PDP);
       viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
     }
 
@@ -424,6 +422,7 @@ const PostPageDetailIdComponent = (props) => {
     showScoreAlertDialog(item)
   }
 
+
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -446,7 +445,7 @@ const PostPageDetailIdComponent = (props) => {
                 pollexpiredat={item.polls_expired_at}
                 multiplechoice={item.multiplechoice}
                 isalreadypolling={item.isalreadypolling}
-                onnewpollfetched={onNewPollFetched}
+                // onnewpollfetched={onNewPollFetched}
                 voteCount={item.voteCount}
               />
             )}
@@ -498,7 +497,8 @@ const PostPageDetailIdComponent = (props) => {
               isLoading={loadingPost}
               refreshComment={handleRefreshComment}
               refreshChildComment={handleRefreshChildComment}
-              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
+              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost, findCommentAndUpdate)}
+              findCommentAndUpdate={findCommentAndUpdate}
             />
           )}
         </ScrollView>

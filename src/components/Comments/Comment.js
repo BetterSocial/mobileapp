@@ -30,7 +30,8 @@ const Comment = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
-  refreshComment
+  refreshComment,
+  findCommentAndUpdate
 }) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
@@ -105,6 +106,9 @@ const Comment = ({
   };
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
+    if(findCommentAndUpdate) {
+      findCommentAndUpdate(comment.id, result.data)
+    }
     // setTotalVote(
     //   result.data.data.count_upvote - result.data.data.count_downvote,
     // );
