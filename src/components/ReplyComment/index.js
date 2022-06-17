@@ -37,7 +37,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   const [loadingCMD, setLoadingCMD] = React.useState(false);
   let [users] = React.useContext(Context).users;
   let [profile] = React.useContext(Context).profile;
-
+  console.log('level vote',level)
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
@@ -143,7 +143,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
         if (data.code === 200) {
           // setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
           // setLoadingCMD(false);
-          await updateFeed(true)
+          // await updateFeed(true)
         } else {
           Toast.show('Failed Comment', Toast.LONG);
           // setLoadingCMD(false);
@@ -173,7 +173,11 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
       updateFeed(true)
     })
 
-    return unsubscribe
+    return () => unsubscribe()
+  }, [])
+
+  React.useEffect(() => {
+    return () => updateFeed()
   }, [])
 
   return (
@@ -241,6 +245,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
                         level={parseInt(level) + 1}
                         loading={loadingCMD}
                         refreshComment={saveNewComment}
+                   
 
                       // showLeftConnector
                       />
