@@ -62,6 +62,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                 indexFeed={indexFeed}
                 navigateToReplyView={navigateToReplyView}
                 refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
+                findCommentAndUpdate={findCommentAndUpdate}
               />
             )}
           </View>
@@ -79,7 +80,8 @@ const ReplyComment = ({
   navigation,
   hideLeftConnector,
   refreshComment,
-  navigateToReplyView
+  navigateToReplyView,
+  findCommentAndUpdate
 }) => {
   let isLast = (item, index) => {
     return (
@@ -123,6 +125,7 @@ const ReplyComment = ({
                 onPress={showCommentView}
                 isLast={isLast(item, index)}
                 refreshComment={refreshComment}
+                findCommentAndUpdate={findCommentAndUpdate}
               />
               {item.children_counts.comment > 0 && (
                 <>

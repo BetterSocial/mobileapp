@@ -272,7 +272,6 @@ const PostPageDetailIdComponent = (props) => {
     })
     setMainFeeds(mappingData, dispatch)
   }
-
   const findCommentAndUpdate = (id, newData) => {
     const updatedComment = commentList.map((comment) => {
       if(comment.id === id) {
@@ -280,6 +279,7 @@ const PostPageDetailIdComponent = (props) => {
       }
       return {...comment}
     })
+    setCommentList(updatedComment)
     findReduxCommentAndUpdate(updatedComment)
   }
 

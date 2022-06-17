@@ -15,7 +15,7 @@ const FeedsPostDetail = (props) => {
     let navigation = useNavigation()
     let [time, setTime] = React.useState(new Date().getTime())
     let { feeds, timer } = feedsContext
-    let navigateToReplyView = (data, updateParent) => {
+    let navigateToReplyView = (data, updateParent, findCommentAndUpdate) => {
         let currentTime = new Date()
         let feedDiffTime = currentTime.getTime() - timer.getTime()
         let pdpDiffTime = currentTime.getTime() - time;
@@ -28,7 +28,7 @@ const FeedsPostDetail = (props) => {
         setTime(new Date().getTime())
         setTimer(new Date(), dispatch)
 
-        navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent, findAndUpdateComment});
+        navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent, findCommentAndUpdate});
     }
 
 

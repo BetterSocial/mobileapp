@@ -41,6 +41,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
+  const [childrenComment, setChildrenComment] = React.useState([])
   const [defaultData, setDefaultData] = React.useState({
     data: { count_downvote: 0, count_upvote: 0, text: textComment },
     id: newCommentList.length + 1, kind: "comment", updated_at: moment(),
@@ -51,7 +52,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   const setComment = (text) => {
     setTemporaryText(text)
   };
-
+  console.log(newCommentList, 'vote list')
 
   React.useEffect(() => {
     if (!loadingCMD) {
@@ -71,27 +72,34 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
     }
   }, [item]);
   const getThisComment = async (newFeed) => {
-    let newItem = await getComment({
-      feed: newFeed,
-      level: level,
-      idlevel1: itemProp.id,
-      idlevel2: itemProp.parent,
-    });
+    console.log('vote parent',itemProp,newFeed)
+    // let newItem = await getComment({
+    //   feed: newFeed,
+    //   level: level,
+    //   idlevel1: itemProp.id,
+    //   idlevel2: itemProp.parent,
+    // });
     let comments = [];
     if (
-      newItem.latest_children &&
-      newItem.latest_children.comment &&
-      Array.isArray(newItem.latest_children.comment)
+      itemProp.latest_children &&
+      itemProp.latest_children.comment &&
+      Array.isArray(itemProp.latest_children.comment)
     ) {
-      comments = newItem.latest_children.comment.sort(
+      comments = itemProp.latest_children.comment.sort(
         (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix(),
       );
     }
-    setItem({ ...newItem, latest_children: { comment: comments } });
+    setItem({ ...itemProp, latest_children: { comment: comments } });
     setNewCommentList(comments)
   };
+
+  console.log('vote children',childrenComment)
+
   React.useEffect(() => {
-    getThisComment(itemProp);
+    if(itemProp) {
+      getThisComment(itemProp);
+
+    }
   }, [itemProp]);
 
   const updateFeed = async (isSort) => {
