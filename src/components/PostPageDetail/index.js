@@ -272,15 +272,35 @@ const PostPageDetailIdComponent = (props) => {
     })
     setMainFeeds(mappingData, dispatch)
   }
-  const findCommentAndUpdate = (id, newData) => {
-    const updatedComment = commentList.map((comment) => {
-      if(comment.id === id) {
-        return {...comment, ...newData}
-      }
-      return {...comment}
-    })
-    setCommentList(updatedComment)
-    findReduxCommentAndUpdate(updatedComment)
+  const findCommentAndUpdate = (id, newData, level) => {
+    let newCommenList = []
+    if(level > 0) {
+      const updatedComment = commentList.map((comment) => {
+        if(comment.id === newData.parent) {
+          const findComment = comment.latest_children.comment.map((comment1) => {
+            if(comment1.id === newData.id) {
+              return {...comment1, ...newData}
+            } else {
+              return {...comment1}
+            }
+          })
+          return {...comment, latest_children: {...comment.latest_children, comment: findComment}}
+        } 
+        return {...comment}
+      })
+      newCommenList = updatedComment
+    } else {
+      const updatedComment = commentList.map((comment) => {
+        if(comment.id === id) {
+          return {...comment, ...newData}
+        }
+        return {...comment}
+      })
+      newCommenList = updatedComment
+    }
+    
+    setCommentList(newCommenList)
+    findReduxCommentAndUpdate(newCommenList)
   }
 
   const findReduxCommentAndUpdate = (comment) => {

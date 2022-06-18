@@ -106,8 +106,10 @@ const Comment = ({
   };
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
+    console.log('sontak',result)
     if(findCommentAndUpdate) {
-      findCommentAndUpdate(comment.id, result.data)
+      console.log('masuklah')
+      findCommentAndUpdate(comment.id, result.data, level)
     }
     // setTotalVote(
     //   result.data.data.count_upvote - result.data.data.count_downvote,

@@ -37,7 +37,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   const [loadingCMD, setLoadingCMD] = React.useState(false);
   let [users] = React.useContext(Context).users;
   let [profile] = React.useContext(Context).profile;
-  console.log('level vote',level)
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
@@ -52,7 +51,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   const setComment = (text) => {
     setTemporaryText(text)
   };
-  console.log(newCommentList, 'vote list')
 
   React.useEffect(() => {
     if (!loadingCMD) {
@@ -72,7 +70,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
     }
   }, [item]);
   const getThisComment = async (newFeed) => {
-    console.log('vote parent',itemProp,newFeed)
     // let newItem = await getComment({
     //   feed: newFeed,
     //   level: level,
@@ -93,7 +90,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
     setNewCommentList(comments)
   };
 
-  console.log('vote children',childrenComment)
 
   React.useEffect(() => {
     if(itemProp) {
@@ -108,7 +104,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
       if (data) {
         let oldData = data.data
         if (isSort) {
-          oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()) } }
+          oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment } }
         }
         getThisComment(oldData);
         if(updateParent) {
@@ -133,7 +129,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
     if(page !== 'DetailDomainScreen') {
       sendPostNotif = true
     }
-    console.log(sendPostNotif, 'sendpostnotif')
     setTemporaryText('')
     setIdComment((prev) => prev + 1)
     setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
@@ -168,15 +163,16 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
     updateFeed()
   }
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      updateFeed(true)
-    })
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     updateFeed(true)
+  //   })
 
-    return () => unsubscribe()
-  }, [])
+  //   return () => unsubscribe()
+  // }, [])
 
   React.useEffect(() => {
+    // updateFeed(true)
     return () => {
       updateFeed()
     }

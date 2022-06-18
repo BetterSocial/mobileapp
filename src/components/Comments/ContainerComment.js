@@ -25,7 +25,6 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
   let hideLeftConnector = (index, item) => {
     return index === comments.length - 1;
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />
@@ -33,6 +32,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
         return (
           <View key={index} >
             <View key={'p' + index}>
+              {  console.log('rumit', item, index)}
               <Comment
                 indexFeed={indexFeed}
                 key={'p' + index}
