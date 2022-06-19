@@ -32,7 +32,6 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
         return (
           <View key={index} >
             <View key={'p' + index}>
-              {  console.log('rumit', item, index)}
               <Comment
                 indexFeed={indexFeed}
                 key={'p' + index}
