@@ -37,10 +37,10 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   const [loadingCMD, setLoadingCMD] = React.useState(false);
   let [users] = React.useContext(Context).users;
   let [profile] = React.useContext(Context).profile;
-
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
+  const [childrenComment, setChildrenComment] = React.useState([])
   const [defaultData, setDefaultData] = React.useState({
     data: { count_downvote: 0, count_upvote: 0, text: textComment },
     id: newCommentList.length + 1, kind: "comment", updated_at: moment(),
@@ -51,7 +51,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   const setComment = (text) => {
     setTemporaryText(text)
   };
-
 
   React.useEffect(() => {
     if (!loadingCMD) {
@@ -71,27 +70,32 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
     }
   }, [item]);
   const getThisComment = async (newFeed) => {
-    let newItem = await getComment({
-      feed: newFeed,
-      level: level,
-      idlevel1: itemProp.id,
-      idlevel2: itemProp.parent,
-    });
+    // let newItem = await getComment({
+    //   feed: newFeed,
+    //   level: level,
+    //   idlevel1: itemProp.id,
+    //   idlevel2: itemProp.parent,
+    // });
     let comments = [];
     if (
-      newItem.latest_children &&
-      newItem.latest_children.comment &&
-      Array.isArray(newItem.latest_children.comment)
+      itemProp.latest_children &&
+      itemProp.latest_children.comment &&
+      Array.isArray(itemProp.latest_children.comment)
     ) {
-      comments = newItem.latest_children.comment.sort(
+      comments = itemProp.latest_children.comment.sort(
         (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix(),
       );
     }
-    setItem({ ...newItem, latest_children: { comment: comments } });
+    setItem({ ...itemProp, latest_children: { comment: comments } });
     setNewCommentList(comments)
   };
+
+
   React.useEffect(() => {
-    getThisComment(itemProp);
+    if(itemProp) {
+      getThisComment(itemProp);
+
+    }
   }, [itemProp]);
 
   const updateFeed = async (isSort) => {
@@ -100,7 +104,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
       if (data) {
         let oldData = data.data
         if (isSort) {
-          oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()) } }
+          oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment } }
         }
         getThisComment(oldData);
         if(updateParent) {
@@ -125,7 +129,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
     if(page !== 'DetailDomainScreen') {
       sendPostNotif = true
     }
-    console.log(sendPostNotif, 'sendpostnotif')
     setTemporaryText('')
     setIdComment((prev) => prev + 1)
     setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
@@ -135,7 +138,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
         if (data.code === 200) {
           // setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
           // setLoadingCMD(false);
-          await updateFeed(true)
+          // await updateFeed(true)
         } else {
           Toast.show('Failed Comment', Toast.LONG);
           // setLoadingCMD(false);
@@ -160,12 +163,19 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
     updateFeed()
   }
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      updateFeed(true)
-    })
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     updateFeed(true)
+  //   })
 
-    return unsubscribe
+  //   return () => unsubscribe()
+  // }, [])
+
+  React.useEffect(() => {
+    // updateFeed(true)
+    return () => {
+      updateFeed()
+    }
   }, [])
 
   return (
@@ -204,7 +214,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
               const showChildrenCommentView = () => {
                 navigation.push('ReplyComment', {
                   item: itemReply,
-                  level: parseInt(level) + 2,
+                  level: parseInt(level) + 1,
                   indexFeed,
                 });
               };
@@ -233,6 +243,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
                         level={parseInt(level) + 1}
                         loading={loadingCMD}
                         refreshComment={saveNewComment}
+                   
 
                       // showLeftConnector
                       />

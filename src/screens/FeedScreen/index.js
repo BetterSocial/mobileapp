@@ -44,12 +44,15 @@ const FeedScreen = (props) => {
 
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
+  const [profileContext] = React.useContext(Context).profile;
   const bottomBarHeight = useBottomTabBarHeight();
   const { height } = Dimensions.get('screen');
 
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
+  let {myProfile} = profileContext
 
   const getDataFeeds = async (offset = 0) => {
+    console.log(offset, 'offset')
     setCountStack(null);
     if(offset > 0) {
           setLoading(true);
@@ -58,6 +61,7 @@ const FeedScreen = (props) => {
       let query = `?offset=${offset}`
 
       const dataFeeds = await getMainFeed(query);
+      console.log('dataFeed', dataFeeds)
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         let dataWithDummy = [...data, {dummy : true}]
@@ -170,16 +174,6 @@ const FeedScreen = (props) => {
 
   };
 
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setYourselfId(id);
-      }
-    };
-    parseToken();
-  }, []);
-
   let onNewPollFetched = (newPolls, index) => {
     setFeedByIndex(
       {
@@ -213,7 +207,9 @@ const FeedScreen = (props) => {
       // index: index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
-      refreshParent: getDataFeeds
+      // refreshParent:  getDataFeeds,
+      data: item,
+      isCaching:true
       
     });
   };
@@ -222,7 +218,9 @@ const FeedScreen = (props) => {
     props.navigation.navigate('PostDetailPage', {
       // index: index,
       feedId: item.id,
-      refreshParent: getDataFeeds
+      // refreshParent: getDataFeeds,
+      data: item,
+      isCaching: true
       // feedId:
     });
   };
@@ -291,7 +289,6 @@ const FeedScreen = (props) => {
   //   return null
   // }
 
-
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
       <Search animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
@@ -316,7 +313,7 @@ const FeedScreen = (props) => {
             onPressComment={() => onPressComment(index, item)}
             onPressBlock={() => onPressBlock(item)}
             onPressUpvote={(post) => setUpVote(post, index)}
-            selfUserId={yourselfId}
+            selfUserId={myProfile.user_id}
             onPressDownVote={(post) => setDownVote(post, index)}
             loading={loading}
           />

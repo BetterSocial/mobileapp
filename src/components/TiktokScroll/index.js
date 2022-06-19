@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 });
 
 const TiktokScroll = (props) => {
-  const {data, children, onRefresh, refreshing, onEndReach, contentHeight, onScroll, onScrollBeginDrag, onMomentumScrollEnd} = props;
+  const {data, children, onRefresh, refreshing, onEndReach, contentHeight, onScroll, onScrollBeginDrag, onMomentumScrollEnd, ...otherProps} = props;
   const flatListRef = React.useRef();
 
   const __onViewambleItemsChanged = React.useCallback(({ viewableItems, changed}) => {
@@ -42,6 +42,7 @@ const TiktokScroll = (props) => {
       showsVerticalScrollIndicator={false}
       snapToAlignment="center"
       snapToInterval={contentHeight}
+      {...otherProps}
     />
   );
 };

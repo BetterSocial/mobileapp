@@ -84,7 +84,6 @@ const ReplyCommentItem = ({
 
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
-    console.log(result.data.data.count_upvote - result.data.data.count_downvote, 'sanam')
     setTotalVote(result.data.data.count_upvote - result.data.data.count_downvote)
     iVote()
     if(refreshComment) refreshComment(result)
