@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import FollowingAction from '../../../context/actions/following';
 import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
@@ -23,6 +25,7 @@ const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
 const UsersFragment = () => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
+    const [isRecentSearchTermsShown, setIsRecentSearchTermsShown] = React.useState(true)
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
@@ -34,7 +37,7 @@ const UsersFragment = () => {
     React.useEffect(() => {
         const parseToken = async () => {
             const id = await getUserId();
-                if (id) {
+            if (id) {
                 setMyId(id);
             }
         };
@@ -47,29 +50,29 @@ const UsersFragment = () => {
 
     const __handleOnPress = (item) => {
         navigation.push('OtherProfile', {
-            data : {
+            data: {
                 user_id: myId,
                 other_id: item.user_id,
-                username: item.username,    
+                username: item.username,
             }
         })
     }
 
     const __handleFollow = async (from, willFollow, item, index) => {
-        if(from === FROM_FOLLOWED_USERS_INITIAL) {
+        if (from === FROM_FOLLOWED_USERS_INITIAL) {
             let newFollowedUsers = [...users]
             newFollowedUsers[index].user_id_follower = willFollow ? myId : null
 
             FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
         }
-        if(from === FROM_FOLLOWED_USERS) {
+        if (from === FROM_FOLLOWED_USERS) {
             let newFollowedUsers = [...followedUsers]
             newFollowedUsers[index].user_id_follower = willFollow ? myId : null
 
             DiscoveryAction.setNewFollowedUsers(newFollowedUsers, discoveryDispatch)
         }
 
-        if(from === FROM_UNFOLLOWED_USERS) {
+        if (from === FROM_UNFOLLOWED_USERS) {
             let newUnfollowedUsers = [...unfollowedUsers]
             newUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
 
@@ -82,15 +85,19 @@ const UsersFragment = () => {
             follow_source: 'discoveryScreen',
         };
 
-        if(willFollow) {
+        if (willFollow) {
             const result = await setFollow(data);
         } else {
             const result = await setUnFollow(data);
         }
     }
 
+    const __handleScroll = (event) => {
+        Keyboard.dismiss()
+    }
+
     const __renderDiscoveryItem = (from, key, item, index) => {
-        return <DomainList key={`${key}-${index}`} onPressBody={() => __handleOnPress(item)} 
+        return <DomainList key={`${key}-${index}`} onPressBody={() => __handleOnPress(item)}
             handleSetFollow={() => __handleFollow(from, true, item, index)}
             handleSetUnFollow={() => __handleFollow(from, false, item, index)}
             item={{
@@ -98,38 +105,41 @@ const UsersFragment = () => {
                 image: item.profile_pic_path,
                 isunfollowed: item.user_id_follower === null,
                 description: item.bio
-        }} />
+            }} />
     }
 
     const __renderUsersItem = () => {
-        if(isFirstTimeOpen) return users.map((item, index) => {
+        if (isFirstTimeOpen) return users.map((item, index) => {
             return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
         })
 
         return (
             <>
-                { followedUsers.map((item, index) => {
+                {followedUsers.map((item, index) => {
                     return __renderDiscoveryItem(FROM_FOLLOWED_USERS, "followedUsers", item, index)
                 })}
 
-                { unfollowedUsers.length > 0 && 
+                {unfollowedUsers.length > 0 &&
                     <View style={styles.unfollowedHeaderContainer}>
-                    <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
+                        <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
                     </View>}
-                { unfollowedUsers.map((item, index) => {
+                {unfollowedUsers.map((item, index) => {
                     return __renderDiscoveryItem(FROM_UNFOLLOWED_USERS, "unfollowedUsers", item, index)
                 })}
             </>
         )
     }
-    
-    if(isLoadingDiscoveryUser) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
-    if(followedUsers.length === 0 && unfollowedUsers.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
+
+    if (isLoadingDiscoveryUser) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
+    if (followedUsers.length === 0 && unfollowedUsers.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No users found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'always'}>
-        { __renderUsersItem() }
+    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
+        onMomentumScrollBegin={__handleScroll}>
+        <RecentSearch />
+        <DiscoveryTitleSeparator text="Suggested Users" />
+        {__renderUsersItem()}
     </ScrollView>
 }
 

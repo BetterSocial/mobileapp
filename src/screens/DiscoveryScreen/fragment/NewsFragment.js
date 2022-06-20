@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 import DomainList from '../../Followings/elements/RenderList';
@@ -17,6 +17,7 @@ import { withInteractionsManaged } from '../../../components/WithInteractionMana
 
 const NewsFragment = () => {
     const [myId, setMyId] = React.useState('')
+    const [isRecentSearchTermsShown, setIsRecentSearchTermsShown] = React.useState(true)
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [defaultNews] = React.useContext(Context).news
@@ -38,6 +39,10 @@ const NewsFragment = () => {
     // React.useEffect(() => {
     //     if(news.length > 0) setIsFirstTimeOpen(false)
     // }, [news])
+    
+    const __handleScroll = (event) => {
+        Keyboard.dismiss()
+    }
 
     const renderNewsItem = () => {
         if (isFirstTimeOpen) {
@@ -92,7 +97,8 @@ const NewsFragment = () => {
         <Text style={styles.noDataFoundText}>No news found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'always'}>
+    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
+        onMomentumScrollBegin={__handleScroll}>
         {renderNewsItem()}
         <View style={styles.padding} />
     </ScrollView>

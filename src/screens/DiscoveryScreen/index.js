@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import DiscoveryAction from '../../context/actions/discoveryAction';
@@ -14,7 +14,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import TopicFragment from './fragment/TopicFragment';
 import UsersFragment from './fragment/UsersFragment';
 import { Context } from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH, DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS, DISCOVERY_TAB_TOPICS, DISCOVERY_TAB_USERS} from '../../utils/constants';
+import { DEFAULT_PROFILE_PIC_PATH, DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS, DISCOVERY_TAB_TOPICS, DISCOVERY_TAB_USERS } from '../../utils/constants';
 import { FONTS } from '../../utils/theme';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
@@ -28,12 +28,12 @@ const DiscoveryScreen = ({ route }) => {
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
 
-    const {discoverySearchBarText} = generalComponent
+    const { discoverySearchBarText } = generalComponent
 
     let initialRouteName = tab || DISCOVERY_TAB_USERS
 
     const Tabs = createMaterialTopTabNavigator()
-    
+
     React.useEffect(() => {
         const unsubscribe = (() => {
             DiscoveryAction.setDiscoveryFirstTimeOpen(true, discoveryDispatch)
@@ -43,53 +43,53 @@ const DiscoveryScreen = ({ route }) => {
     }, [])
 
     React.useEffect(() => {
-        if(discoverySearchBarText.length > 1) DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
+        if (discoverySearchBarText.length > 1) DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
     }, [discoverySearchBarText])
 
 
     function MyTabBar(props) {
-        let {state, descriptors, navigation, position} = props
+        let { state, descriptors, navigation, position } = props
         return (
             <View style={S.toptabcontainer}>
                 {state.routes.map((route, index) => {
-                    const {options} = descriptors[route.key];
+                    const { options } = descriptors[route.key];
                     const { title } = options
                     const label =
                         options.tabBarLabel !== undefined
-                        ? options.tabBarLabel
-                        : options.title !== undefined
-                        ? options.title
-                        : route.name;
-        
+                            ? options.tabBarLabel
+                            : options.title !== undefined
+                                ? options.title
+                                : route.name;
+
                     const isFocused = state.index === index;
-        
+
                     const onPress = () => {
                         const event = navigation.emit({
-                        type: 'tabPress',
-                        target: route.key,
-                        canPreventDefault: true,
+                            type: 'tabPress',
+                            target: route.key,
+                            canPreventDefault: true,
                         });
-        
+
                         if (!isFocused && !event.defaultPrevented) {
                             navigation.navigate(route.name);
                         }
                     };
-        
+
                     const inputRange = state.routes.map((_, i) => i);
                     const opacity = Animated.interpolateNode(position, {
                         inputRange,
                         outputRange: inputRange.map((i) => (i === index ? 1 : 0.3)),
                     });
-    
+
                     return (
                         <TouchableOpacity
                             accessibilityRole="button"
-                            accessibilityState={isFocused ? {selected: true} : {}}
+                            accessibilityState={isFocused ? { selected: true } : {}}
                             accessibilityLabel={options.tabBarAccessibilityLabel}
                             testID={options.tabBarTestID}
                             onPress={onPress}
                             style={S.singletab}>
-                            <Animated.Text style={{opacity, ...S.singletabtext, ...(isFocused ? S.viewborderbottom(title.length) : {})}}>
+                            <Animated.Text style={{ opacity, ...S.singletabtext, ...(isFocused ? S.viewborderbottom(title.length) : {}) }}>
                                 {label}
                             </Animated.Text>
                             {/* <View style={isFocused ? S.viewborderbottom(title.length) : {}} /> */}
@@ -97,15 +97,15 @@ const DiscoveryScreen = ({ route }) => {
                     );
                 })}
             </View>
-            );
+        );
     }
 
     const tabComponent = (tabProps) => {
         return <MyTabBar {...tabProps} />
     }
 
-    return(
-        <SafeAreaView style={{flex: 1}}>
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
             <StatusBar translucent={false} />
             <Tabs.Navigator
                 initialRouteName={initialRouteName}
@@ -136,8 +136,9 @@ const DiscoveryScreen = ({ route }) => {
                     }} />
             </Tabs.Navigator>
         </SafeAreaView>
-        
-)}
+
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 60
     },
-    sectionTitle : {
+    sectionTitle: {
         paddingHorizontal: 24,
         paddingVertical: 4,
         fontFamily: fonts.inter[600]
@@ -185,10 +186,10 @@ const S = StyleSheet.create({
         paddingVertical: 15,
     },
 
-    viewborderbottom: (width) =>  ({
+    viewborderbottom: (width) => ({
         borderBottomColor: colors.holytosca,
         borderBottomWidth: 2,
-        alignSelf:'center',
+        alignSelf: 'center',
         minWidth: 1,
         paddingHorizontal: 2,
         // width: '100%',
