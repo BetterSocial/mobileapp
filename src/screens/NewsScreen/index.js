@@ -24,6 +24,7 @@ import { getSpecificCache, saveToCache } from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {setIFollow, setNews} from '../../context/actions/news';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
@@ -37,6 +38,9 @@ const NewsScreen = ({}) => {
   const [idBlock, setIdBlock] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
   const [newslist, dispatch] = React.useContext(Context).news;
+  const {interactionsComplete} = useAfterInteractions()
+  const [profileContext] = React.useContext(Context).profile;
+  let {myProfile} = profileContext
   // const [isCompleteAnimation, setIsCompleteAnimation] = React.useState(false)
   
   const scrollRef = React.createRef();
@@ -58,20 +62,12 @@ const NewsScreen = ({}) => {
 
 
   React.useEffect(() => {
-    const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setYourselfId(id);
-      }
-    };
-    parseToken();
-  }, []);
+    if(interactionsComplete) {
+      checkCache()
+      getNewsIfollow();
+    }
 
-  React.useEffect(() => {
-
-   checkCache()
-    getNewsIfollow();
-  }, []);
+  }, [interactionsComplete]);
 
   const checkCache = () => {
     // setLoading(true)
@@ -88,10 +84,13 @@ const NewsScreen = ({}) => {
   }
 
   React.useEffect(() => {
-    if(domain !== '' && idBlock !== '') {
-      refBlockDomainComponent.current.openBlockDomain();
+    if(interactionsComplete) {
+      if(domain !== '' && idBlock !== '') {
+        refBlockDomainComponent.current.openBlockDomain();
+      }
     }
-  },[domain, idBlock])
+
+  },[domain, idBlock, interactionsComplete])
 
   const initData = async (enableLoading) => {
     if(enableLoading) setLoading(true);
@@ -259,7 +258,7 @@ const NewsScreen = ({}) => {
                 onPressBlock={(itemNews) => blockNews(itemNews)}
                 onPressUpvote={(itemNews) => upvoteNews(itemNews)}
                 onPressDownVote={(itemNews) => downvoteNews(itemNews)}
-                selfUserId={yourselfId}
+                selfUserId={myProfile.user_id}
               />
             );
           }}

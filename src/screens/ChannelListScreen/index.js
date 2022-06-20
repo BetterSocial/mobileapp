@@ -40,6 +40,7 @@ import { setMainFeeds } from '../../context/actions/feeds';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 
 const theme = {
   messageSimple: {
@@ -62,6 +63,7 @@ const ChannelListScreen = ({ navigation }) => {
   const [, dispatchFeed] = React.useContext(Context).feeds;
   const [profile] = React.useContext(Context).profile;
   const myContext = React.useContext(Context)
+  const {interactionsComplete} = useAfterInteractions()
   const [unReadMessage, dispatchUnReadMessage] =
     React.useContext(Context).unReadMessage;
   let connect = useClientGetstream();
@@ -81,19 +83,24 @@ const ChannelListScreen = ({ navigation }) => {
   const memoizedFilters = React.useMemo(() => filters, [userId]);
 
   React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'ChannelListScreen',
-      screen_name: 'Channel List',
-    });
-    getPostNotification()
-    // connect();
-    setupClient();
-  }, []);
+    if(interactionsComplete) {
+      analytics().logScreenView({
+        screen_class: 'ChannelListScreen',
+        screen_name: 'Channel List',
+      });
+      getPostNotification()
+      // connect();
+      setupClient();
+    }
+
+  }, [interactionsComplete]);
 
   React.useEffect(() => {
-    callStreamFeed()
-  }, [userId])
+    if(interactionsComplete) {
+      callStreamFeed()
 
+    }
+  }, [userId, interactionsComplete])
   const callStreamFeed = async () => {
     const token = await getAccessToken()
     const client = streamFeed(token)

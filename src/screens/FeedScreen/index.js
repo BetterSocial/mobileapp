@@ -24,6 +24,7 @@ import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuild
 import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../../context/actions/feeds';
 import { FEEDS_CACHE } from '../../utils/cache/constant';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 
 let lastDragY = 0;
 let searchBarDebounce
@@ -49,7 +50,7 @@ const FeedScreen = (props) => {
   const [profileContext] = React.useContext(Context).profile;
   const bottomBarHeight = useBottomTabBarHeight();
   const { height } = Dimensions.get('screen');
-
+  const {interactionsComplete} = useAfterInteractions()
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
   let {myProfile} = profileContext
 
@@ -99,13 +100,16 @@ const FeedScreen = (props) => {
   };
 
   React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'FeedScreen',
-      screen_name: 'Feed Screen',
-    });
+    if(interactionsComplete) {
+      analytics().logScreenView({
+        screen_class: 'FeedScreen',
+        screen_name: 'Feed Screen',
+      });
+  
+      checkCache()
+    }
 
-    checkCache()
-  }, []);
+  }, [interactionsComplete]);
 
   const checkCache = () => {
     getSpecificCache(FEEDS_CACHE, (result) => {
@@ -127,12 +131,15 @@ const FeedScreen = (props) => {
     return unsubscribe;
   }, [navigation]);
 
-  React.useEffect(() => {
-    searchBarDebounce = setTimeout(async () => {
-      showSearchBar(false)
-      setShouldSearchBarShown(false)
-    }, 2000)
-  }, [shouldSearchBarShown]);
+  // React.useEffect(() => {
+  //   if(interactionsComplete) {
+  //     searchBarDebounce = setTimeout(async () => {
+  //       showSearchBar(false)
+  //       setShouldSearchBarShown(false)
+  //     }, 2000)
+  //   }
+
+  // }, [shouldSearchBarShown]);
 
   // React.useEffect(() => {
   //   InteractionManager.runAfterInteractions(() => {

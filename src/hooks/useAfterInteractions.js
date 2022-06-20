@@ -11,14 +11,15 @@ export const useAfterInteractions = () => {
   const transitionRef = useRef(null);
 
   const debounceComplete = () => {
-    setInteractionsComplete(true);
+    setTimeout(() => {
+      setInteractionsComplete(true);
+    }, 100);
   };
 
   useEffect(() => {
     subscriptionRef.current = InteractionManager.runAfterInteractions(() => {
       transitionRef.current?.animateNextTransition();
       debounceComplete();
-      subscriptionRef.current = null;
     });
     return () => {
       subscriptionRef.current?.cancel();
