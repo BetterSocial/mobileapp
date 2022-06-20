@@ -6,7 +6,9 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import {useRecoilValue} from 'recoil';
 import { createStackNavigator } from '@react-navigation/stack';
+import SplashScreen from 'react-native-splash-screen';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -33,7 +35,6 @@ import ReplyComment from '../screens/ReplyComment';
 import Settings from '../screens/Settings';
 // import SignIn from '../screens/SignIn';
 import SignIn from '../screens/SignInV2';
-import SplashScreen from '../screens/SplashScreen';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
@@ -56,14 +57,14 @@ import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 import { getDeepLinkUrl } from './linking';
-import { doVerifyUser } from '../service/initialStartup';
+import { InitialStartupAtom } from '../service/initialStartup';
 
 const Stack = createStackNavigator();
-const RootStact = () => {
+const RootStack = () => {
   const [profile, setProfile] = React.useState(null);
+  const initialStartup = useRecoilValue(InitialStartupAtom);
   const [clientState] = React.useContext(Context).client;
   const [profileState] = React.useContext(Context).profile;
-  const [_, dispatch] = React.useContext(Context).initialStartup;
   const { client } = clientState;
   const isIos = Platform.OS === 'ios'
 
@@ -72,7 +73,11 @@ const RootStact = () => {
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
-    void doVerifyUser(create, setProfile);
+    if (initialStartup !== '') {
+      // console.log(initialStartup, 'initialStartup');
+      getDeepLinkUrl(profile, dispatch);
+      create();
+    }
 
     return async () => {
       await client?.disconnectUser();
@@ -80,12 +85,13 @@ const RootStact = () => {
   }, []);
 
   React.useEffect(() => {
-    if (profile !== null) {
-      getDeepLinkUrl(profile, dispatch);
+    if (initialStartup.id !== null) {
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 700);
     }
-  }, [profile]);
+  }, [initialStartup])
 
-  console.log('kurama',profileState)
   return (
     <View
       style={{
@@ -93,7 +99,7 @@ const RootStact = () => {
       }}>
       <StatusBar translucent backgroundColor="white" />
       <Stack.Navigator
-        initialRouteName={profile !== null && profile !== '' ? "HomeTabs" : "SignIn"}
+        initialRouteName={initialStartup.id !== null && initialStartup.id !== '' ? "HomeTabs" : "SignIn"}
         screenOptions={{
           headerStyle: {
             height: Platform.OS === 'ios' ? 64 : 56 + StatusBar.currentHeight,
@@ -158,11 +164,6 @@ const RootStact = () => {
         <Stack.Screen
           name="OtherProfilePostDetailPage"
           component={OtherProfilePostDetail}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SplashScreen"
-          component={SplashScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -328,7 +329,7 @@ const RootStact = () => {
   );
 };
 
-export default RootStact;
+export default RootStack;
 const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.white,

@@ -1,9 +1,5 @@
 import * as React from 'react';
 import FlashMessage from 'react-native-flash-message';
-import PushNotification from 'react-native-push-notification';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
-
-import messaging from '@react-native-firebase/messaging';
 import { HumanIDProvider } from '@human-id/react-native-humanid';
 import { NavigationContainer } from '@react-navigation/native';
 import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
@@ -12,6 +8,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
+import {RecoilRoot} from 'recoil';
 import RootStack from './src/navigations/root-stack';
 import Store from './src/context/Store';
 import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
@@ -91,13 +88,15 @@ const App = () => {
   const newLocal = (
     <>
       <HumanIDProvider />
-      <Store>
-        <NavigationContainer>
-          <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
-            <RootStack />
-          </OverlayProvider>
-        </NavigationContainer>
-      </Store>
+      <RecoilRoot>
+        <Store>
+          <NavigationContainer>
+            <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
+              <RootStack />
+            </OverlayProvider>
+          </NavigationContainer>
+        </Store>
+      </RecoilRoot>
       <FlashMessage position="top" />
     </>
   );
