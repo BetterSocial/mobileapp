@@ -137,8 +137,6 @@ const UsersFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
         onMomentumScrollBegin={__handleScroll}>
-        <RecentSearch />
-        <DiscoveryTitleSeparator text="Suggested Users" />
         {__renderUsersItem()}
     </ScrollView>
 }

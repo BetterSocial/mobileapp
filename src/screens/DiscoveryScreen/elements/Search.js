@@ -1,4 +1,5 @@
 import * as React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Animated,
   Pressable,
@@ -21,6 +22,7 @@ import StringConstant from '../../../utils/string/StringConstant';
 import dimen from '../../../utils/dimen';
 import { COLORS, FONTS, SIZES } from '../../../utils/theme';
 import { Context } from '../../../context/Store';
+import { RECENT_SEARCH_TERMS } from '../../../utils/cache/constant';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 
@@ -34,7 +36,9 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
 
   const [isSearchIconShown, setIsSearchIconShown] = React.useState(false)
   const [isTextAvailable, setIsTextAvailable] = React.useState(false)
-  const [isFocus, setIsFocus] = React.useState(true)
+  // const [isFocus, setIsFocus] = React.useState(true)
+
+  let { isFocus } = discovery
 
   let { discoverySearchBarText } = generalComponent
 
@@ -43,7 +47,7 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
   }
 
   const __handleFocus = (isFocus) => {
-    setIsFocus(isFocus)
+    DiscoveryAction.setDiscoveryFocus(isFocus, discoveryDispatch)
   }
 
   const __handleChangeText = (text) => {
@@ -55,6 +59,25 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
     __handleChangeText("")
     setIsTextAvailable(false)
     discoverySearchBarRef.current.focus()
+  }
+
+  const __handleSubmitSearchData = async () => {
+    __fetchDiscoveryData()
+
+    let result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
+
+    if (!result) {
+      let itemToSave = JSON.stringify([discoverySearchBarText])
+      return AsyncStorage.setItem(RECENT_SEARCH_TERMS, itemToSave)
+    }
+
+    let resultArray = JSON.parse(result)
+    if (resultArray.indexOf(discoverySearchBarText) > -1) return
+
+    resultArray = [discoverySearchBarText].concat(resultArray)
+    if (resultArray.length > 3) resultArray.pop()
+
+    return AsyncStorage.setItem(RECENT_SEARCH_TERMS, JSON.stringify(resultArray))
   }
 
   const __fetchDiscoveryData = async () => {
@@ -93,7 +116,6 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
         }, 500)
       }
     })
-    // DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
   }
 
   React.useEffect(() => {
@@ -106,8 +128,9 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
       if (getDataTimeoutId) clearTimeout(getDataTimeoutId)
 
       getDataTimeoutId = setTimeout(async () => {
-        await __fetchDiscoveryData()
-      }, 3000)
+        // await __fetchDiscoveryData()
+        __handleSubmitSearchData()
+      }, 2000)
     }
   }, [discoverySearchBarText])
 
@@ -158,6 +181,7 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
             onBlur={() => __handleFocus(false)}
             multiline={false}
             returnKeyType="search"
+            onSubmitEditing={__handleSubmitSearchData}
             placeholder={StringConstant.discoverySearchBarPlaceholder}
             placeholderTextColor={COLORS.gray1}
             style={styles.input} />

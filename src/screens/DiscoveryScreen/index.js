@@ -9,7 +9,10 @@ import DomainFragment from './fragment/DomainFragment';
 import DomainList from '../Followings/elements/RenderList';
 import Followings from '../Followings';
 import NewsFragment from './fragment/NewsFragment';
+import RecentSearch from './elements/RecentSearch';
+import RecentSearchItems from './elements/RecentSearchItem';
 import Search from './elements/Search';
+import SearchFragment from './fragment/SearchFragment';
 import StringConstant from '../../utils/string/StringConstant';
 import TopicFragment from './fragment/TopicFragment';
 import UsersFragment from './fragment/UsersFragment';
@@ -101,40 +104,46 @@ const DiscoveryScreen = ({ route }) => {
     }
 
     const tabComponent = (tabProps) => {
-        return <MyTabBar {...tabProps} />
+        return <MyTabBar key={`mytabbar-${Math.random() * 1000000}`} {...tabProps} />
+    }
+
+    const __renderChild = () => {
+        if (discovery.isFocus || generalComponent.discoverySearchBarText.length === 0) return <SearchFragment />
+
+        return <Tabs.Navigator
+            initialRouteName={initialRouteName}
+            tabBar={tabComponent} >
+            <Tabs.Screen
+                name={DISCOVERY_TAB_USERS}
+                component={UsersFragment}
+                options={{
+                    title: 'Users',
+                }} />
+            <Tabs.Screen
+                name={DISCOVERY_TAB_TOPICS}
+                component={TopicFragment}
+                options={{
+                    title: 'Topics',
+                }} />
+            <Tabs.Screen
+                name={DISCOVERY_TAB_DOMAINS}
+                component={DomainFragment}
+                options={{
+                    title: 'Domains',
+                }} />
+            <Tabs.Screen
+                name={DISCOVERY_TAB_NEWS}
+                component={NewsFragment}
+                options={{
+                    title: 'News',
+                }} />
+        </Tabs.Navigator>
     }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar translucent={false} />
-            <Tabs.Navigator
-                initialRouteName={initialRouteName}
-                tabBar={tabComponent} >
-                <Tabs.Screen
-                    name={DISCOVERY_TAB_USERS}
-                    component={UsersFragment}
-                    options={{
-                        title: 'Users',
-                    }} />
-                <Tabs.Screen
-                    name={DISCOVERY_TAB_TOPICS}
-                    component={TopicFragment}
-                    options={{
-                        title: 'Topics',
-                    }} />
-                <Tabs.Screen
-                    name={DISCOVERY_TAB_DOMAINS}
-                    component={DomainFragment}
-                    options={{
-                        title: 'Domains',
-                    }} />
-                <Tabs.Screen
-                    name={DISCOVERY_TAB_NEWS}
-                    component={NewsFragment}
-                    options={{
-                        title: 'News',
-                    }} />
-            </Tabs.Navigator>
+            {__renderChild()}
         </SafeAreaView>
 
     )
