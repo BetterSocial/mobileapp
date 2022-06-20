@@ -21,7 +21,7 @@ import {
 } from '../../utils/constants';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
-import { getCountCommentWithChild } from '../../utils/getstream';
+import { getCommentLength, getCountCommentWithChild } from '../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { showScoreAlertDialog } from '../../utils/Utils'
 
@@ -81,7 +81,7 @@ const RenderListFeed = (props) => {
   };
 
   const onPressDownVoteHandle = async () => {
-    setLoadingVote(true);
+    // setLoadingVote(true);
     if (voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 2)
       setVoteStatus('downvote')
@@ -99,7 +99,7 @@ const RenderListFeed = (props) => {
   };
 
   const onPressUpvoteHandle = async () => {
-    setLoadingVote(true);
+    // setLoadingVote(true);
 
     if (voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 1)
@@ -130,13 +130,13 @@ const RenderListFeed = (props) => {
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
-        setLoadingVote(false);
+        // setLoadingVote(false);
         return;
         // return SimpleToast.show('Success Vote', SimpleToast.SHORT);
       }
-      setLoadingVote(false);
+      // setLoadingVote(false);
     } catch (e) {
-      setLoadingVote(false);
+      // setLoadingVote(false);
       return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     }
   };
@@ -148,19 +148,18 @@ const RenderListFeed = (props) => {
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
-        setLoadingVote(false);
+        // setLoadingVote(false);
         return;
       }
-      setLoadingVote(false);
+      // setLoadingVote(false);
     } catch (e) {
-      setLoadingVote(false);
+      // setLoadingVote(false);
       return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     }
   };
 
   const initial = () => {
     let reactionCount = item.reaction_counts;
-    console.log(reactionCount)
     if (JSON.stringify(reactionCount) !== '{}') {
       let comment = reactionCount.comment;
       handleVote(reactionCount);
@@ -172,6 +171,7 @@ const RenderListFeed = (props) => {
       }
     }
   };
+
 
   const checkVotes = () => {
     const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === selfUserId)
@@ -193,11 +193,7 @@ const RenderListFeed = (props) => {
 
   React.useEffect(() => {
     initial();
-
-    console.log('item')
-    console.log(item)
   }, [item]);
-
   return (
     <View style={[styles.cardContainer(bottomHeight)]}>
       <View style={styles.cardMain}>
@@ -241,7 +237,7 @@ const RenderListFeed = (props) => {
         <View style={styles.footerWrapper(getHeightFooter())}>
           <Footer
             item={item}
-            totalComment={getCountCommentWithChild(item)}
+            totalComment={getCommentLength(item.latest_reactions.comment)}
             totalVote={totalVote}
             onPressShare={() => ShareUtils.shareFeeds(item,
               ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -252,7 +248,7 @@ const RenderListFeed = (props) => {
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}
             statusVote={voteStatus}
-            loadingVote={loadingVote}
+            // loadingVote={loadingVote}
             showScoreButton={true}
             onPressScore={() => showScoreAlertDialog(item)}
             isSelf={
@@ -264,15 +260,15 @@ const RenderListFeed = (props) => {
             }
           />
         </View>
-        {isReaction && (
+        {getCommentLength(item.latest_reactions.comment) > 0 && (
           <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
-                user={previewComment.user}
-                comment={previewComment.data.text}
-                image={previewComment.user.data.profile_pic_url}
-                time={previewComment.created_at}
-                totalComment={getCountCommentWithChild(item) - 1}
+                user={item.latest_reactions.comment[0].user}
+                comment={item.latest_reactions.comment[0].data.text}
+                image={item.latest_reactions.comment[0].user.data.profile_pic_url}
+                time={item.latest_reactions.comment[0].created_at}
+                totalComment={getCommentLength(item.latest_reactions.comment) - 1}
                 onPress={onPressComment}
               />
               <Gap height={8} />
@@ -322,4 +318,4 @@ RenderListFeed.propTypes = {
   loading: PropTypes.bool,
 };
 
-export default RenderListFeed;
+export default React.memo (RenderListFeed);

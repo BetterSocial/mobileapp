@@ -10,6 +10,7 @@ const ProfileReplyComment = (props) => {
   let itemProp = props.route.params.item;
   const updateParentPost = props.route.params.updateParent
   const level = props.route.params.level;
+  const findAndUpdateComment = props.route.params.findAndUpdateComment
   let [feeds, dispatch] = React.useContext(Context).feeds
   const feedIndex = () => {
     if(feeds && Array.isArray(feeds)) {
@@ -19,7 +20,6 @@ const ProfileReplyComment = (props) => {
     return 0
   }
 
-  console.log(props.route, 'kalah')
   return (
     <View style={styles.container}>
       <ReplyCommentComponent indexFeed={feedIndex()} 

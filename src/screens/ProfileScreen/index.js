@@ -171,8 +171,8 @@ const ProfileScreen = ({ route }) => {
     if (result === null || result === undefined) return
 
     if (result && typeof result === 'object') {
-      setDataMain(result || {});
-      setDataMainBio(result?.bio)
+      setDataMain(result);
+      setDataMainBio(result.bio)
       setLoadingContainer(false)
     }
 

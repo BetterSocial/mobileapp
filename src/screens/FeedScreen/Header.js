@@ -404,4 +404,4 @@ Header.propsTypes = {
   isBackButton: PropsTypes.bool,
 };
 
-export default Header;
+export default React.memo (Header);
