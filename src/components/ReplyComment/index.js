@@ -41,6 +41,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
   const [childrenComment, setChildrenComment] = React.useState([])
+  const scrollViewRef = React.useRef(null)
   const [defaultData, setDefaultData] = React.useState({
     data: { count_downvote: 0, count_upvote: 0, text: textComment },
     id: newCommentList.length + 1, kind: "comment", updated_at: moment(),
@@ -135,6 +136,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
     try {
       if (textComment.trim() !== '') {
         let data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif);
+        scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
           // setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
           // setLoadingCMD(false);
@@ -197,7 +199,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
       </SafeAreaView>
 
       {/* Header */}
-      <ScrollView contentContainerStyle={styles.commentScrollView}>
+      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
           <ReplyCommentItem
             indexFeed={indexFeed}

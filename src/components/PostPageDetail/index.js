@@ -172,6 +172,7 @@ const PostPageDetailIdComponent = (props) => {
         let data = await createCommentParent(textComment, item.id, item.actor.id, true);
         updateCachingComment(data.data)
         if (data.code === 200) {
+          onCommentButtonClicked()
           setTextComment('');
           updateFeed(true);
           // Toast.show('Comment successful', Toast.LONG);

@@ -260,7 +260,7 @@ const FeedScreen = (props) => {
     debounceSearchBar(event)
   }
 
-  let handleScrollEvent = (event) => {
+  let handleScrollEvent = React.useCallback((event) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
     if (dy + 20 <= 0) {
@@ -294,7 +294,7 @@ const FeedScreen = (props) => {
      
       })
     }
-  };
+  }, [offset])
 
 
   let onWillSendViewPostTime = (event) => {
