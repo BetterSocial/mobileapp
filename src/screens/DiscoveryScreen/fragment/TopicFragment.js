@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 import DomainList from '../elements/DiscoveryItemList';
@@ -31,7 +31,7 @@ const TopicFragment = () => {
     React.useEffect(() => {
         const parseToken = async () => {
             const id = await getUserId();
-                if (id) {
+            if (id) {
                 setMyId(id);
             }
         };
@@ -53,53 +53,58 @@ const TopicFragment = () => {
         navigation.push('TopicPageScreen', navigationParam)
     }
 
+    const __handleScroll = (event) => {
+        Keyboard.dismiss()
+    }
+
     const __renderDiscoveryItem = (from, key, item, index) => {
         return <View key={`${key}-${index}`} style={styles.domainContainer}>
-                <DomainList
-                    // handleSetFollow={() => __handleFollow(from, true, item, index)}
-                    // handleSetUnFollow={() => __handleFollow(from, false, item, index)}
-                    key={`followedTopic-${index}`} 
-                    onPressBody={() => __handleOnTopicPress(item)} 
-                    isHashtag 
-                    item={{
-                        name: item.name,
-                        image: item.profile_pic_path,
-                        isunfollowed: item.user_id_follower === null,
-                        description: null,
-                    }}/>
-            </View>
+            <DomainList
+                // handleSetFollow={() => __handleFollow(from, true, item, index)}
+                // handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+                key={`followedTopic-${index}`}
+                onPressBody={() => __handleOnTopicPress(item)}
+                isHashtag
+                item={{
+                    name: item.name,
+                    image: item.profile_pic_path,
+                    isunfollowed: item.user_id_follower === null,
+                    description: null,
+                }} />
+        </View>
     }
 
     const __renderTopicItems = () => {
-        if(isFirstTimeOpen) return topics.map((item, index) => {
+        if (isFirstTimeOpen) return topics.map((item, index) => {
             return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery",
                 { ...item, user_id_follower: item.user_id_follower ? item.user_id_follower : myId }, index)
         })
 
         return (
             <>
-                { followedTopic.map((item, index) => {
+                {followedTopic.map((item, index) => {
                     return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC, "followedTopicDiscovery", item, index)
                 })}
 
-                { unfollowedTopic.length > 0 && 
+                {unfollowedTopic.length > 0 &&
                     <View style={styles.unfollowedHeaderContainer}>
-                    <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreTopics}</Text>
+                        <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreTopics}</Text>
                     </View>}
-                { unfollowedTopic.map((item, index) => {
+                {unfollowedTopic.map((item, index) => {
                     return __renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC, "unfollowedTopicDiscovery", item, index)
                 })}
             </>
         )
     }
-    
-    if(isLoadingDiscoveryTopic) return <View style={styles.fragmentContainer}><LoadingWithoutModal/></View>
-    if(followedTopic.length === 0 && unfollowedTopic.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
+
+    if (isLoadingDiscoveryTopic) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
+    if (followedTopic.length === 0 && unfollowedTopic.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Topics found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'always'}>
-        { __renderTopicItems() }
+    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
+        onMomentumScrollBegin={__handleScroll}>
+        {__renderTopicItems()}
     </ScrollView>
 }
 

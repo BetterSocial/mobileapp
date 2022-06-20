@@ -1,4 +1,5 @@
 import * as React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Animated,
   Pressable,
@@ -19,14 +20,15 @@ import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import dimen from '../../../utils/dimen';
-import {COLORS, FONTS, SIZES} from '../../../utils/theme';
-import {Context} from '../../../context/Store';
+import { COLORS, FONTS, SIZES } from '../../../utils/theme';
+import { Context } from '../../../context/Store';
+import { RECENT_SEARCH_TERMS } from '../../../utils/cache/constant';
 import { colors } from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
+import { fonts } from '../../../utils/fonts';
 
 let getDataTimeoutId;
 
-const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = () => {}}) => {
+const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked = () => { } }) => {
   const navigation = useNavigation()
   const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery
@@ -34,16 +36,18 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
 
   const [isSearchIconShown, setIsSearchIconShown] = React.useState(false)
   const [isTextAvailable, setIsTextAvailable] = React.useState(false)
-  const [isFocus, setIsFocus] = React.useState(true)
+  // const [isFocus, setIsFocus] = React.useState(true)
+
+  let { isFocus } = discovery
 
   let { discoverySearchBarText } = generalComponent
 
   const __handleBackPress = () => {
-    if(navigation.canGoBack()) navigation.goBack()
+    if (navigation.canGoBack()) navigation.goBack()
   }
 
   const __handleFocus = (isFocus) => {
-    setIsFocus(isFocus)
+    DiscoveryAction.setDiscoveryFocus(isFocus, discoveryDispatch)
   }
 
   const __handleChangeText = (text) => {
@@ -57,43 +61,61 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
     discoverySearchBarRef.current.focus()
   }
 
-  const __fetchDiscoveryData = async() => {
+  const __handleSubmitSearchData = async () => {
+    __fetchDiscoveryData()
+
+    let result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
+
+    if (!result) {
+      let itemToSave = JSON.stringify([discoverySearchBarText])
+      return AsyncStorage.setItem(RECENT_SEARCH_TERMS, itemToSave)
+    }
+
+    let resultArray = JSON.parse(result)
+    if (resultArray.indexOf(discoverySearchBarText) > -1) return
+
+    resultArray = [discoverySearchBarText].concat(resultArray)
+    if (resultArray.length > 3) resultArray.pop()
+
+    return AsyncStorage.setItem(RECENT_SEARCH_TERMS, JSON.stringify(resultArray))
+  }
+
+  const __fetchDiscoveryData = async () => {
     DiscoveryRepo.fetchDiscoveryDataUser(discoverySearchBarText).then(async (data) => {
-      if(data.success) {
+      if (data.success) {
         await DiscoveryAction.setDiscoveryDataUsers(data, discoveryDispatch)
         setTimeout(() => {
           DiscoveryAction.setDiscoveryLoadingDataUser(false, discoveryDispatch)
         }, 500)
-      }  
+      }
     })
 
     DiscoveryRepo.fetchDiscoveryDataDomain(discoverySearchBarText).then(async (data) => {
-      if(data.success) {
+      if (data.success) {
         await DiscoveryAction.setDiscoveryDataDomains(data, discoveryDispatch)
         setTimeout(() => {
           DiscoveryAction.setDiscoveryLoadingDataDomain(false, discoveryDispatch)
         }, 500)
-      }  
+      }
     })
 
     DiscoveryRepo.fetchDiscoveryDataTopic(discoverySearchBarText).then(async (data) => {
-      if(data.success) {
+      if (data.success) {
         await DiscoveryAction.setDiscoveryDataTopics(data, discoveryDispatch)
         setTimeout(() => {
           DiscoveryAction.setDiscoveryLoadingDataTopic(false, discoveryDispatch)
         }, 500)
-      }  
+      }
     })
-    
+
     DiscoveryRepo.fetchDiscoveryDataNews(discoverySearchBarText).then(async (data) => {
-      if(data.success) {
+      if (data.success) {
         await DiscoveryAction.setDiscoveryDataNews(data, discoveryDispatch)
         setTimeout(() => {
           DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
         }, 500)
-      }  
+      }
     })
-    // DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
   }
 
   React.useEffect(() => {
@@ -101,13 +123,14 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
   }, [isTextAvailable, isFocus])
 
   React.useEffect(() => {
-    if(discoverySearchBarText.length > 1) {
+    if (discoverySearchBarText.length > 1) {
       DiscoveryAction.setDiscoveryLoadingData(true, discoveryDispatch)
-      if(getDataTimeoutId) clearTimeout(getDataTimeoutId)
-      
-      getDataTimeoutId = setTimeout( async() => {
-        await __fetchDiscoveryData()
-      }, 3000)
+      if (getDataTimeoutId) clearTimeout(getDataTimeoutId)
+
+      getDataTimeoutId = setTimeout(async () => {
+        // await __fetchDiscoveryData()
+        __handleSubmitSearchData()
+      }, 2000)
     }
   }, [discoverySearchBarText])
 
@@ -116,18 +139,18 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
       setIsTextAvailable(false)
       GeneralComponentAction.setDiscoverySearchBar('', generalComponentDispatch)
       DiscoveryAction.setDiscoveryData({
-        followedUsers: [], 
-        unfollowedUsers: [], 
+        followedUsers: [],
+        unfollowedUsers: [],
         followedDomains: [],
-        unfollowedDomains: [], 
-        followedTopic: [], 
-        unfollowedTopic: [], 
+        unfollowedDomains: [],
+        followedTopic: [],
+        unfollowedTopic: [],
         news: [],
       }, discoveryDispatch)
     }
 
     return unsubscribe
-  },[])
+  }, [])
 
   return (
     <Animated.View style={styles.animatedViewContainer(0)}>
@@ -137,13 +160,13 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
           borderless: true,
           radius: 20,
         }} style={styles.arrowContainer}>
-        <View style={styles.backArrow}>        
-          <MemoIc_arrow_back_white width={20} height={12} fill={colors.black} style={{ alignSelf: 'center'}}/>
+        <View style={styles.backArrow}>
+          <MemoIc_arrow_back_white width={20} height={12} fill={colors.black} style={{ alignSelf: 'center' }} />
         </View>
       </Pressable>
       <Pressable onPress={onContainerClicked} style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
-          { isSearchIconShown && <View style={styles.wrapperIcon}>
+          {isSearchIconShown && <View style={styles.wrapperIcon}>
             <MemoIc_search width={16.67} height={16.67} />
           </View>
           }
@@ -158,6 +181,7 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
             onBlur={() => __handleFocus(false)}
             multiline={false}
             returnKeyType="search"
+            onSubmitEditing={__handleSubmitSearchData}
             placeholder={StringConstant.discoverySearchBarPlaceholder}
             placeholderTextColor={COLORS.gray1}
             style={styles.input} />
@@ -167,11 +191,11 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
               color: COLORS.gray1,
               borderless: true,
               radius: 14,
-          }}>
+            }}>
             <View style={styles.wrapperDeleteIcon}>
-              <IconClear width={9} height={10} iconColor={colors.black}/>
+              <IconClear width={9} height={10} iconColor={colors.black} />
             </View>
-          </Pressable> }
+          </Pressable>}
         </View>
       </Pressable>
     </Animated.View>
@@ -179,8 +203,8 @@ const DiscoverySearch = ({onPress, showBackButton = false, onContainerClicked = 
 };
 
 const styles = StyleSheet.create({
-  arrowContainer: {paddingLeft:20},
-  backArrow : {flex: 1, justifyContent: 'center', marginRight: 9, },
+  arrowContainer: { paddingLeft: 20 },
+  backArrow: { flex: 1, justifyContent: 'center', marginRight: 9, },
   container: {
     flexDirection: 'row',
     backgroundColor: 'white',
@@ -188,7 +212,7 @@ const styles = StyleSheet.create({
     marginHorizontal: SIZES.base,
   },
   clearIconContainer: {
-    justifyContent: 'center', 
+    justifyContent: 'center',
     alignItems: 'center',
   },
   searchContainer: {

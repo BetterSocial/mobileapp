@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     // marginVertical: 10,
   },
   followContainer: {
-    paddingRight: 30,
+    paddingRight: 20,
     paddingLeft: 8,
     height: '100%',
     justifyContent: 'center',
