@@ -35,6 +35,8 @@ const FeedScreen = (props) => {
   const [countStack, setCountStack] = React.useState(null);
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+  const paddingContainer = React.useRef(new Animated.Value(50)).current
+
   // const [time, setTime] = React.useState(new Date());
   // const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
   const [shouldSearchBarShown, setShouldSearchBarShown] = React.useState(0)
@@ -52,7 +54,6 @@ const FeedScreen = (props) => {
   let {myProfile} = profileContext
 
   const getDataFeeds = async (offset = 0) => {
-    console.log(offset, 'offset')
     setCountStack(null);
     if(offset > 0) {
           setLoading(true);
@@ -61,7 +62,6 @@ const FeedScreen = (props) => {
       let query = `?offset=${offset}`
 
       const dataFeeds = await getMainFeed(query);
-      console.log('dataFeed', dataFeeds)
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         let dataWithDummy = [...data, {dummy : true}]
@@ -241,12 +241,6 @@ const FeedScreen = (props) => {
     }).start();
   }
 
-  let handleScrollEvent = (event) => {
-    let y = event.nativeEvent.contentOffset.y;
-    let dy = y - lastDragY;
-    showSearchBar(dy <= 0)
-  };
-
   let debounceSearchBar = (event) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
@@ -265,6 +259,43 @@ const FeedScreen = (props) => {
     onWillSendViewPostTime(event)
     debounceSearchBar(event)
   }
+
+  let handleScrollEvent = (event) => {
+    let y = event.nativeEvent.contentOffset.y;
+    let dy = y - lastDragY;
+    if (dy + 20 <= 0) {
+      InteractionManager.runAfterInteractions(() => {
+        Animated.timing(offset, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(paddingContainer, {
+          toValue: 50,
+          duration: 100,
+          useNativeDriver: false,
+        }).start()
+      
+      })
+
+    } else if (dy - 20 > 0) {
+ 
+      InteractionManager.runAfterInteractions(() => {
+        Animated.timing(offset, {
+          toValue: -50,
+          duration: 100,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(paddingContainer, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: false,
+        }).start()
+     
+      })
+    }
+  };
+
 
   let onWillSendViewPostTime = (event) => {
     sendViewPost()
@@ -296,10 +327,11 @@ const FeedScreen = (props) => {
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
         onEndReach={onEndReach}
-        onMomentumScrollEnd={handleOnMomentumEnd}
+        // onMomentumScrollEnd={handleOnMomentumEnd}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}
+        // onScrollBeginDrag={handleOnScrollBeginDrag}
         refreshing={loading}>
         {({ item, index }) => {
           let dummyItemHeight = height - dimen.size.FEED_CURRENT_ITEM_HEIGHT - StatusBar.currentHeight - bottomBarHeight - 16
