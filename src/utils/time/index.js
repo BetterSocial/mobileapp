@@ -7,7 +7,7 @@ export const calculateTime = (time) => {
   if (time) {
     const now = moment();
     const utc = now;
-    const date = moment(time);
+    const date = moment.utc(time);
     const minutes = utc.diff(date, 'minutes');
     const hours = utc.diff(date, 'hours');
     const days = utc.diff(date, 'days');

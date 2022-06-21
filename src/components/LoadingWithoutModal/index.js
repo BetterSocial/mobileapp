@@ -1,8 +1,9 @@
 import * as React from 'react';
-import {StyleSheet, View, Modal, ActivityIndicator} from 'react-native';
+import {ActivityIndicator, Modal, StyleSheet, View} from 'react-native';
+
 import {COLORS} from '../../utils/theme';
 
-const LoadingWithoutModal = ({visible}) => {
+const LoadingWithoutModal = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -19,6 +20,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    // backgroundColor: 'red'
   },
   content: {
     backgroundColor: 'rgba(0, 0, 0, 0.22)',
