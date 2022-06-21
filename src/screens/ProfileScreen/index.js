@@ -506,7 +506,6 @@ const ProfileScreen = ({ route }) => {
 
   return (
     <>
-      <StatusBar translucent={false} barStyle="dark-content" />
       {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{ top: 'always' }}>
         <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username} />
         <ProfileTiktokScroll

@@ -64,11 +64,14 @@ const ChannelListScreen = ({ navigation }) => {
   const [profile] = React.useContext(Context).profile;
   const myContext = React.useContext(Context)
   const {interactionsComplete} = useAfterInteractions()
+  const [profileContext] = React.useContext(Context).profile;
+  let {myProfile} = profileContext
+
   const [unReadMessage, dispatchUnReadMessage] =
     React.useContext(Context).unReadMessage;
   let connect = useClientGetstream();
   const filters = {
-    members: { $in: [userId] },
+    members: { $in: [myProfile.user_id] },
     type: 'messaging',
   };
   React.useEffect(() => { }, [unReadMessage]);
@@ -80,7 +83,12 @@ const ChannelListScreen = ({ navigation }) => {
     presence: true,
   };
 
-  const memoizedFilters = React.useMemo(() => filters, [userId]);
+  const memoizedFilters = React.useMemo(() => filters, [JSON.stringify(myProfile)]);
+
+  // React.useEffect(() => {
+  //   setupClient();
+
+  // }, [])
 
   React.useEffect(() => {
     if(interactionsComplete) {
@@ -90,7 +98,6 @@ const ChannelListScreen = ({ navigation }) => {
       });
       getPostNotification()
       // connect();
-      setupClient();
     }
 
   }, [interactionsComplete]);
@@ -100,11 +107,11 @@ const ChannelListScreen = ({ navigation }) => {
       callStreamFeed()
 
     }
-  }, [userId, interactionsComplete])
+  }, [interactionsComplete])
   const callStreamFeed = async () => {
     const token = await getAccessToken()
     const client = streamFeed(token)
-    const notif = client.feed('notification', userId, token)
+    const notif = client.feed('notification', myProfile.user_id, token)
     notif.subscribe(function (data) {
         getPostNotification()
 
@@ -113,14 +120,14 @@ const ChannelListScreen = ({ navigation }) => {
 }
 
 
-  const setupClient = async () => {
-    try {
-      const id = await getUserId();
-      setUserId(id);
-    } catch (err) {
-      crashlytics().recordError(err);
-    }
-  };
+  // const setupClient = async () => {
+  //   try {
+  //     const id = await getUserId();
+  //     setUserId(id);
+  //   } catch (err) {
+  //     crashlytics().recordError(err);
+  //   }
+  // };
 
   const getPostNotification = async () => {
     const res = await getFeedNotification()
