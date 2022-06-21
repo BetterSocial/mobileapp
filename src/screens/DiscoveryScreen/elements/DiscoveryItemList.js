@@ -28,7 +28,7 @@ const DomainList = (props) => {
             /> : <View style={styles.profilepicture} />}
           </React.Fragment> : null}
 
-          <View style={styles.wrapTextProfile}>
+          <View style={isHashtag ? styles.wrapTextProfileTopic : styles.wrapTextProfile}>
             <Text numberOfLines={1}
               style={styles.textProfileUsername}>
               {isHashtag && "#"}{item.name}
@@ -115,6 +115,11 @@ const styles = StyleSheet.create({
   },
   wrapTextProfile: {
     marginLeft: 12,
+    flexDirection: 'column',
+    flex: 1,
+    // justifyContent: 'space-between',
+  },
+  wrapTextProfileTopic: {
     flexDirection: 'column',
     flex: 1,
     // justifyContent: 'space-between',

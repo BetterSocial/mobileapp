@@ -67,15 +67,19 @@ const DiscoveryScreen = ({ route }) => {
                     const isFocused = state.index === index;
 
                     const onPress = () => {
-                        const event = navigation.emit({
-                            type: 'tabPress',
-                            target: route.key,
-                            canPreventDefault: true,
-                        });
+                        // const event = navigation.emit({
+                        //     type: 'tabPress',
+                        //     target: route.key,
+                        //     canPreventDefault: false,
+                        // });
 
-                        if (!isFocused && !event.defaultPrevented) {
-                            navigation.navigate(route.name);
-                        }
+                        // if (!isFocused && !event.defaultPrevented) {
+                        //     navigation.navigate(route.name);
+                        // }
+
+                        console.log('clicked ' + new Date().valueOf())
+                        if(!isFocused) navigation.navigate(route.name)
+                        // navigation.navigate(route.name)
                     };
 
                     const inputRange = state.routes.map((_, i) => i);
@@ -108,7 +112,7 @@ const DiscoveryScreen = ({ route }) => {
     }
 
     const __renderChild = () => {
-        if (discovery.isFocus || generalComponent.discoverySearchBarText.length === 0) return <SearchFragment />
+        // if (discovery.isFocus || generalComponent.discoverySearchBarText.length === 0) return <SearchFragment />
 
         return <Tabs.Navigator
             initialRouteName={initialRouteName}
@@ -186,6 +190,7 @@ const S = StyleSheet.create({
     singletab: {
         flex: 1,
         // paddingLeft: 20,
+        // backgroundColor: 'red'
     },
 
     singletabtext: {
@@ -205,4 +210,5 @@ const S = StyleSheet.create({
     }),
 });
 
-export default withInteractionsManagedNoStatusBar(DiscoveryScreen)
+// export default withInteractionsManagedNoStatusBar(React.memo(DiscoveryScreen))
+export default React.memo(DiscoveryScreen)

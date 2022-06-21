@@ -109,9 +109,9 @@ const UsersFragment = () => {
     }
 
     const __renderUsersItem = () => {
-        if (isFirstTimeOpen) return users.map((item, index) => {
+        if (isFirstTimeOpen) return [<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>].concat(users.map((item, index) => {
             return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
-        })
+        }))
 
         return (
             <>
@@ -119,7 +119,7 @@ const UsersFragment = () => {
                     return __renderDiscoveryItem(FROM_FOLLOWED_USERS, "followedUsers", item, index)
                 })}
 
-                {unfollowedUsers.length > 0 &&
+                {unfollowedUsers.length > 0 && followedUsers.length > 0 &&
                     <View style={styles.unfollowedHeaderContainer}>
                         <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
                     </View>}
@@ -137,6 +137,7 @@ const UsersFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
         onMomentumScrollBegin={__handleScroll}>
+        <RecentSearch shown={isFirstTimeOpen}/>
         {__renderUsersItem()}
     </ScrollView>
 }

@@ -2,9 +2,11 @@ import * as React from 'react';
 import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
@@ -75,10 +77,10 @@ const TopicFragment = () => {
     }
 
     const __renderTopicItems = () => {
-        if (isFirstTimeOpen) return topics.map((item, index) => {
+        if (isFirstTimeOpen) return [<DiscoveryTitleSeparator key="topic-title-separator" text='Suggested Topics' />].concat(topics.map((item, index) => {
             return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery",
                 { ...item, user_id_follower: item.user_id_follower ? item.user_id_follower : myId }, index)
-        })
+        }))
 
         return (
             <>
@@ -86,7 +88,7 @@ const TopicFragment = () => {
                     return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC, "followedTopicDiscovery", item, index)
                 })}
 
-                {unfollowedTopic.length > 0 &&
+                {unfollowedTopic.length > 0 && followedTopic.length > 0 &&
                     <View style={styles.unfollowedHeaderContainer}>
                         <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreTopics}</Text>
                     </View>}
@@ -104,6 +106,7 @@ const TopicFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
         onMomentumScrollBegin={__handleScroll}>
+        <RecentSearch shown={isFirstTimeOpen} />
         {__renderTopicItems()}
     </ScrollView>
 }

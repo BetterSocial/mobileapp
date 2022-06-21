@@ -3,10 +3,12 @@ import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import FollowingAction from '../../../context/actions/following';
 import Header from '../../../screens/DomainScreen/elements/Header';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import RecentSearch from '../elements/RecentSearch';
 import RenderItemHeader from '../../../screens/DomainScreen/elements/RenderItemHeader';
 import StringConstant from '../../../utils/string/StringConstant';
 import { COLORS } from '../../../utils/theme';
@@ -119,9 +121,9 @@ const DomainFragment = () => {
     }
 
     const __renderDomainItems = () => {
-        if (isFirstTimeOpen) return domains.map((item, index) => {
+        if (isFirstTimeOpen) return [<DiscoveryTitleSeparator text="Suggested Domains" key="domain-title-separator" />].concat(domains.map((item, index) => {
             return __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN_INITIAL, "followedDomainDiscovery", { ...item, user_id_follower: item.user_id_follower }, index)
-        })
+        }))
 
         return (
             <>
@@ -129,7 +131,7 @@ const DomainFragment = () => {
                     return __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN, "followedDomainDiscovery", item, index)
                 })}
 
-                {unfollowedDomains.length > 0 &&
+                {unfollowedDomains.length > 0 && followedDomains.length > 0 &&
                     <View style={styles.unfollowedHeaderContainer}>
                         <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreDomains}</Text>
                     </View>}
@@ -147,6 +149,7 @@ const DomainFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
         onMomentumScrollBegin={__handleScroll}>
+        <RecentSearch shown={isFirstTimeOpen} />
         {__renderDomainItems()}
     </ScrollView>
 }
