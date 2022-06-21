@@ -2,9 +2,11 @@ import * as React from 'react';
 import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
+import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../../Followings/elements/RenderList';
 import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
+import RecentSearch from '../elements/RecentSearch';
 import RenderItem from '../elements/RenderItem';
 import RenderNewsScreenItem from '../../../screens/NewsScreen/RenderItem';
 import share from '../../../utils/share';
@@ -24,7 +26,7 @@ const NewsFragment = () => {
 
     const navigation = useNavigation()
 
-    const { isLoadingDiscoveryNews, news, isFirstTimeOpen } = discovery
+    const { isLoadingDiscoveryNews, news, isFirstTimeOpen, isFocus } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -46,7 +48,7 @@ const NewsFragment = () => {
 
     const renderNewsItem = () => {
         if (isFirstTimeOpen) {
-            return defaultNews.news.map((item, index) => {
+            return [<DiscoveryTitleSeparator key="news-title-separator" text="Suggested News" />].concat(defaultNews.news.map((item, index) => {
                 let onContentClicked = () => {
                     navigation.navigate('DetailDomainScreen', {
                         item: {
@@ -59,7 +61,7 @@ const NewsFragment = () => {
 
                 // Disable on press content if view should be navigated to LinkContextScreen
                 if (!item.dummy) return <RenderItem key={`news-screen-item-${index}`} item={item} selfUserId={myId} onPressContent={onContentClicked} />
-            })
+            }))
         }
 
         return news.map((item, index) => {
@@ -99,6 +101,7 @@ const NewsFragment = () => {
 
     return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
         onMomentumScrollBegin={__handleScroll}>
+        <RecentSearch shown={isFirstTimeOpen} />
         {renderNewsItem()}
         <View style={styles.padding} />
     </ScrollView>

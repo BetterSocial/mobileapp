@@ -14,15 +14,17 @@ import { fonts } from '../../../utils/fonts';
 
 /**
  * @typedef {Object} RecentSearchOptions
- *
+ * @property {Boolean}[shown = true] shown
  */
 /**
  * 
  * @param {RecentSearchOptions} param
  */
 const RecentSearch = (param) => {
-    const [isShown, setIsShown] = React.useState(true)
+    const { shown = true } = param
+    const [isShown, setIsShown] = React.useState(shown)
     const [items, setItems] = React.useState([])
+
 
     const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
@@ -39,7 +41,7 @@ const RecentSearch = (param) => {
         getStorage()
     }, [])
 
-    const manipulateSearchTermsOrder = async (search) => {
+    const __manipulateSearchTermsOrder = async (search) => {
         let result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
         if(!result) return
 
@@ -55,43 +57,43 @@ const RecentSearch = (param) => {
     const __fetchDiscoveryData = async (search) => {
         GeneralComponentAction.setDiscoverySearchBar(search, generalComponentDispatch)
         Keyboard.dismiss()
-        manipulateSearchTermsOrder(search)
+        __manipulateSearchTermsOrder(search)
         
-        DiscoveryRepo.fetchDiscoveryDataUser(search).then(async (data) => {
-            if (data.success) {
-                await DiscoveryAction.setDiscoveryDataUsers(data, discoveryDispatch)
-                setTimeout(() => {
-                    DiscoveryAction.setDiscoveryLoadingDataUser(false, discoveryDispatch)
-                }, 500)
-            }
-        })
+        // DiscoveryRepo.fetchDiscoveryDataUser(search).then(async (data) => {
+        //     if (data.success) {
+        //         await DiscoveryAction.setDiscoveryDataUsers(data, discoveryDispatch)
+        //         setTimeout(() => {
+        //             DiscoveryAction.setDiscoveryLoadingDataUser(false, discoveryDispatch)
+        //         }, 500)
+        //     }
+        // })
 
-        DiscoveryRepo.fetchDiscoveryDataDomain(search).then(async (data) => {
-            if (data.success) {
-                await DiscoveryAction.setDiscoveryDataDomains(data, discoveryDispatch)
-                setTimeout(() => {
-                    DiscoveryAction.setDiscoveryLoadingDataDomain(false, discoveryDispatch)
-                }, 500)
-            }
-        })
+        // DiscoveryRepo.fetchDiscoveryDataDomain(search).then(async (data) => {
+        //     if (data.success) {
+        //         await DiscoveryAction.setDiscoveryDataDomains(data, discoveryDispatch)
+        //         setTimeout(() => {
+        //             DiscoveryAction.setDiscoveryLoadingDataDomain(false, discoveryDispatch)
+        //         }, 500)
+        //     }
+        // })
 
-        DiscoveryRepo.fetchDiscoveryDataTopic(search).then(async (data) => {
-            if (data.success) {
-                await DiscoveryAction.setDiscoveryDataTopics(data, discoveryDispatch)
-                setTimeout(() => {
-                    DiscoveryAction.setDiscoveryLoadingDataTopic(false, discoveryDispatch)
-                }, 500)
-            }
-        })
+        // DiscoveryRepo.fetchDiscoveryDataTopic(search).then(async (data) => {
+        //     if (data.success) {
+        //         await DiscoveryAction.setDiscoveryDataTopics(data, discoveryDispatch)
+        //         setTimeout(() => {
+        //             DiscoveryAction.setDiscoveryLoadingDataTopic(false, discoveryDispatch)
+        //         }, 500)
+        //     }
+        // })
 
-        DiscoveryRepo.fetchDiscoveryDataNews(search).then(async (data) => {
-            if (data.success) {
-                await DiscoveryAction.setDiscoveryDataNews(data, discoveryDispatch)
-                setTimeout(() => {
-                    DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
-                }, 500)
-            }
-        })
+        // DiscoveryRepo.fetchDiscoveryDataNews(search).then(async (data) => {
+        //     if (data.success) {
+        //         await DiscoveryAction.setDiscoveryDataNews(data, discoveryDispatch)
+        //         setTimeout(() => {
+        //             DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
+        //         }, 500)
+        //     }
+        // })
 
         // DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
     }
@@ -131,8 +133,9 @@ const styles = StyleSheet.create({
         color: colors.black
     },
     recentContainer: {
-        marginTop: 18,
-        marginBottom: 15,
+        paddingTop: 18,
+        paddingBottom: 15,
+        backgroundColor: colors.white
     },
     recentTitle: {
         fontSize: 14,

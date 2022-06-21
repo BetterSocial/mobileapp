@@ -30,7 +30,6 @@ import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import FollowInfoRow from './elements/FollowInfoRow';
 import GlobalButton from '../../components/Button/GlobalButton';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';

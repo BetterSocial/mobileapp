@@ -58,6 +58,8 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
   const __handleOnClearText = () => {
     __handleChangeText("")
     setIsTextAvailable(false)
+    GeneralComponentAction.setDiscoverySearchBar("", generalComponentDispatch)
+    DiscoveryAction.setDiscoveryFirstTimeOpen(true, discoveryDispatch);
     discoverySearchBarRef.current.focus()
   }
 
@@ -130,7 +132,10 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
       getDataTimeoutId = setTimeout(async () => {
         // await __fetchDiscoveryData()
         __handleSubmitSearchData()
-      }, 2000)
+      }, 1500)
+    } else {
+      DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
+      if (getDataTimeoutId) clearTimeout(getDataTimeoutId)
     }
   }, [discoverySearchBarText])
 
@@ -190,7 +195,7 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
             android_ripple={{
               color: COLORS.gray1,
               borderless: true,
-              radius: 14,
+              radius: 35,
             }}>
             <View style={styles.wrapperDeleteIcon}>
               <IconClear width={9} height={10} iconColor={colors.black} />
@@ -214,6 +219,12 @@ const styles = StyleSheet.create({
   clearIconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    // backgroundColor: 'red',
+    // marginRight: 9.5,
+    marginRight: -20.5,
+    paddingRight: 30,
+    paddingLeft: 30,
+    zIndex: 1000,
   },
   searchContainer: {
     flex: 1,
@@ -271,7 +282,7 @@ const styles = StyleSheet.create({
   wrapperDeleteIcon: {
     alignSelf: 'center',
     justifyContent: 'center',
-    marginRight: 9.5,
+    // marginRight: 9.5,
   },
   newPostText: {
     color: COLORS.holyTosca,

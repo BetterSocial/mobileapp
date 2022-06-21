@@ -7,7 +7,6 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import RenderListFeed from './RenderList';
 import Search from './elements/Search';
 import TiktokScroll from '../../components/TiktokScroll';
@@ -16,13 +15,13 @@ import { ButtonNewPost } from '../../components/Button';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB } from '../../utils/constants';
+import { FEEDS_CACHE } from '../../utils/cache/constant';
 import { downVote, upVote } from '../../service/vote';
 import { getFeedDetail, getMainFeed, viewTimePost } from '../../service/post';
-import { getUserId } from '../../utils/users';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../../context/actions/feeds';
-import { FEEDS_CACHE } from '../../utils/cache/constant';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 let lastDragY = 0;
