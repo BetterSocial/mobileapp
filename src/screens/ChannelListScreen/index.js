@@ -83,7 +83,7 @@ const ChannelListScreen = ({ navigation }) => {
     presence: true,
   };
 
-  const memoizedFilters = React.useMemo(() => filters, [JSON.stringify(myProfile)]);
+  const memoizedFilters = React.useMemo(() => filters, [myProfile.user_id]);
 
   // React.useEffect(() => {
   //   setupClient();
@@ -103,11 +103,11 @@ const ChannelListScreen = ({ navigation }) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
-    if(interactionsComplete) {
+    if(interactionsComplete && myProfile) {
       callStreamFeed()
 
     }
-  }, [interactionsComplete])
+  }, [interactionsComplete, JSON.stringify(myProfile)])
   const callStreamFeed = async () => {
     const token = await getAccessToken()
     const client = streamFeed(token)
@@ -118,7 +118,6 @@ const ChannelListScreen = ({ navigation }) => {
     })
 
 }
-
 
   // const setupClient = async () => {
   //   try {
@@ -172,7 +171,7 @@ const ChannelListScreen = ({ navigation }) => {
             onPress={() => navigation.navigate('ContactScreen')}
           />
         </View>
-          {client.client ? (
+          {myProfile && myProfile.user_id && client.client ? (
             <Chat client={client.client} i18nInstance={streami18n}>
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
