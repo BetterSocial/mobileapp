@@ -248,6 +248,10 @@ const NewsScreen = ({}) => {
           onEndReached={loadMoreData}
           contentContainerStyle={styles.flatlistContainer}
           initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          updateCellsBatchingPeriod={10}
+          removeClippedSubviews
+          windowSize={10}
           // onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
             return (

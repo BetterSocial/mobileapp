@@ -43,6 +43,10 @@ const TiktokScroll = (props) => {
       showsVerticalScrollIndicator={false}
       snapToAlignment="center"
       snapToInterval={contentHeight}
+      maxToRenderPerBatch={2}
+      updateCellsBatchingPeriod={10}
+      removeClippedSubviews
+      windowSize={10}
       {...otherProps}
     />
   );
