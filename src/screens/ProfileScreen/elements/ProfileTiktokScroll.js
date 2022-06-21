@@ -36,7 +36,7 @@ class ProfileTiktokScroll extends React.Component {
       onEndReach, onScroll, ListHeaderComponent } = this.props;
     return (
       <FlatList
-        { ...this.props}
+        initialNumToRender={2}
         contentContainerStyle={styles.flatlistContainer}
         data={data}
         decelerationRate={'normal'}
@@ -58,6 +58,7 @@ class ProfileTiktokScroll extends React.Component {
           itemVisiblePercentThreshold: 80
         }}
         onViewableItemsChanged={this.__onViewableItemsChanged}
+        { ...this.props}
       />
     );
   }

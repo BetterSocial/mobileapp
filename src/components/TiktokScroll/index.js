@@ -35,6 +35,7 @@ const TiktokScroll = (props) => {
       onScrollBeginDrag={onScrollBeginDrag}
       // onViewableItemsChanged={__onViewambleItemsChanged}
       onMomentumScrollEnd={onMomentumScrollEnd}
+      initialNumToRender={2}
       ref={flatListRef}
       refreshing={refreshing}
       renderItem={children}

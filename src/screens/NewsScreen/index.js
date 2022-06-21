@@ -247,6 +247,7 @@ const NewsScreen = ({}) => {
           onRefresh={onRefresh}
           onEndReached={loadMoreData}
           contentContainerStyle={styles.flatlistContainer}
+          initialNumToRender={2}
           // onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
             return (
