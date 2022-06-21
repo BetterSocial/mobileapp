@@ -24,13 +24,13 @@ import { colors } from '../utils/colors';
 import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
 import { getFollowingTopic } from '../service/topics';
+import { getMainFeed } from '../service/post';
 import { getSpecificCache, saveToCache } from '../utils/cache';
 import { getUserId } from '../utils/users';
+import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../context/actions/feeds';
 import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import {setNews} from '../context/actions/news';
-import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../context/actions/feeds';
-import { getMainFeed } from '../service/post';
 
 const Tab = createBottomTabNavigator();
 
