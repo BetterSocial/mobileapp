@@ -36,7 +36,7 @@ class ProfileTiktokScroll extends React.Component {
       onEndReach, onScroll, ListHeaderComponent } = this.props;
     return (
       <FlatList
-        { ...this.props}
+        initialNumToRender={2}
         contentContainerStyle={styles.flatlistContainer}
         data={data}
         decelerationRate={'normal'}
@@ -52,12 +52,17 @@ class ProfileTiktokScroll extends React.Component {
         scrollEventThrottle={1}
         showsVerticalScrollIndicator={false}
         snapToAlignment="end"
+        maxToRenderPerBatch={2}
+        updateCellsBatchingPeriod={10}
+        removeClippedSubviews
+        windowSize={10}
         viewabilityConfig={{
           waitForInteraction: false,
           minimumViewTime: 100,
           itemVisiblePercentThreshold: 80
         }}
         onViewableItemsChanged={this.__onViewableItemsChanged}
+        { ...this.props}
       />
     );
   }
