@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
+  Pressable
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
@@ -80,6 +81,7 @@ const Topics = () => {
     }
     setTopicSelected(copytopicSelected);
   }, [topicSelected])
+  
   const next = () => {
     if (topicSelected.length >= minTopic) {
       analytics().logEvent('onb_select_topics_add_btn', {
@@ -90,38 +92,38 @@ const Topics = () => {
     }
   };
 
+  const isActive = React.useCallback((item) => {
+    const findTopic = topicSelected.find((topic) => topic === item.topic_id)
+    return findTopic
+  }, [topicSelected])
 
-  const renderListTopics = ({item, i}) => {
-    let containerStyles = styles.bgTopicSelectNotActive
-    let textStyle = styles.textTopicNotActive
-    const isSelectedTopic = topicSelected.filter((topic) => topic === item.topic_id).length >=1
-    if(isSelectedTopic) {
-      containerStyles = {...containerStyles, backgroundColor: colors.bondi_blue}
-      textStyle = {...textStyle, color: colors.white}
-    }
+
+  const renderListTopics = React.useCallback(({item, i}) => {
     return (
-      <TouchableOpacity
-      activeOpacity={1}
+      <Pressable
       onPress={() =>
         handleSelectedLanguage(item.topic_id)
       }
       key={i}
       style={
-        containerStyles
+        [styles.bgTopicSelectNotActive, {backgroundColor: isActive(item) ? colors.bondi_blue : colors.concrete}]
       }
       >
       <Text>{item.icon}</Text>
       <Text
         style={
-          textStyle
+          [styles.textTopicNotActive, {color: isActive(item) ?  colors.white : colors.mine_shaft}]
         }>#{item.name}</Text>
-    </TouchableOpacity>
+    </Pressable>
     )
-  }
+  }, [topicSelected])
 
   const onBack = () => {
     navigation.goBack()
   }
+
+  const keyExtractor = React.useCallback((item ,index) => index.toString(), [])
+
   return (
     <SafeAreaView style={styles.container}>
       {/* <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" /> */}
@@ -158,6 +160,11 @@ const Topics = () => {
             nestedScrollEnabled 
             scrollEnabled={false}
             extraData={topicSelected}
+            maxToRenderPerBatch={2}
+            updateCellsBatchingPeriod={10}
+            removeClippedSubviews
+            windowSize={10}
+            keyExtractor={keyExtractor}
             />
             
           </ScrollView>
