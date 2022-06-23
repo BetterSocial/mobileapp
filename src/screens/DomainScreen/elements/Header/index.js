@@ -70,8 +70,8 @@ const Header = ({
           )}
         </View>
         <View style={styles.wrapperHeader}>
-          <View style={styles.row}>
-            <Text style={styles.domainName}>{domain}</Text>
+          <View style={{...styles.row, ...styles.domainNameContainer}}>
+            <Text style={styles.domainName} ellipsizeMode="tail" numberOfLines={1}>{domain}</Text>
             <View style={{alignSelf: 'center'}}>
               <TouchableOpacity
                 style={styles.openInBrowserIcon}
@@ -118,6 +118,9 @@ const styles = StyleSheet.create({
   },
   wrapperDomain: { flexDirection: 'row', marginTop: 8 },
   iconDomain: { marginStart: 8, justifyContent: 'center' },
+  domainNameContainer: {
+    width: '100%', 
+  },
   domain: {
     fontSize: normalizeFontSize(24),
     fontFamily: fonts.inter[600],
@@ -194,6 +197,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[700],
     lineHeight: RFValue(24.2),
     color: '#000000',
+    // flex: 1,
+    flexShrink: 1
   },
   domainDescription: {
     fontFamily: fonts.inter[400],
