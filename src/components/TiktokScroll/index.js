@@ -35,6 +35,7 @@ const TiktokScroll = (props) => {
       onScrollBeginDrag={onScrollBeginDrag}
       // onViewableItemsChanged={__onViewambleItemsChanged}
       onMomentumScrollEnd={onMomentumScrollEnd}
+      initialNumToRender={2}
       ref={flatListRef}
       refreshing={refreshing}
       renderItem={children}
@@ -42,6 +43,10 @@ const TiktokScroll = (props) => {
       showsVerticalScrollIndicator={false}
       snapToAlignment="center"
       snapToInterval={contentHeight}
+      maxToRenderPerBatch={2}
+      updateCellsBatchingPeriod={10}
+      removeClippedSubviews
+      windowSize={10}
       {...otherProps}
     />
   );

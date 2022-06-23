@@ -65,6 +65,7 @@ import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -106,52 +107,58 @@ const ProfileScreen = ({ route }) => {
   const [loading, setLoading] = React.useState(false);
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
-
+  const {interactionsComplete} = useAfterInteractions()
   let isNotFromHomeTab = route?.params?.isNotFromHomeTab
   let bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
 
   let { feeds } = myProfileFeed;
 
   React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    getMyFeeds();
-    getAccessToken().then((val) => {
-      setTokenJwt(val);
-    });
-    analytics().logScreenView({
-      screen_class: 'ProfileScreen',
-      screen_name: 'ProfileScreen',
-    });
-    analytics().logEvent('myprofile_begin_view', {
-      id: 'profile_begin',
-      myprofile_begin_view: Date.now(),
-    });
-    return () => {
-      analytics().logEvent('myprofile_end_view', {
-        id: 'myprofile_end_view',
-        myprofile_end_view: Date.now(),
+    if(interactionsComplete) {
+      LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+      analytics().logScreenView({
+        screen_class: 'ProfileScreen',
+        screen_name: 'ProfileScreen',
       });
       analytics().logEvent('myprofile_begin_view', {
         id: 'profile_begin',
         myprofile_begin_view: Date.now(),
       });
-    };
-  }, []);
+      return () => {
+        analytics().logEvent('myprofile_end_view', {
+          id: 'myprofile_end_view',
+          myprofile_end_view: Date.now(),
+        });
+        analytics().logEvent('myprofile_begin_view', {
+          id: 'profile_begin',
+          myprofile_begin_view: Date.now(),
+        });
+      };
+    }
+
+  }, [interactionsComplete]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
       getMyFeeds();
     });
+    if(interactionsComplete) {
+      getMyFeeds();
+      getAccessToken().then((val) => {
+        setTokenJwt(val);
+      });
+      getSpecificCache(PROFILE_CACHE, (res) => {
+        if (!res) {
+          fetchMyProfile()
+        } else {
+          saveProfileState(res)
+        }
+      })
+    }
 
-    getSpecificCache(PROFILE_CACHE, (res) => {
-      if (!res) {
-        fetchMyProfile()
-      } else {
-        saveProfileState(res)
-      }
-    })
-    return unsubscribe;
-  }, []);
+
+    return () => unsubscribe();
+  }, [interactionsComplete]);
 
   const fetchMyProfile = async () => {
     const id = await getUserId();
@@ -498,7 +505,6 @@ const ProfileScreen = ({ route }) => {
 
   return (
     <>
-      <StatusBar translucent={false} barStyle="dark-content" />
       {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{ top: 'always' }}>
         <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username} />
         <ProfileTiktokScroll
