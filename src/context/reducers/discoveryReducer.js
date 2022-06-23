@@ -1,5 +1,6 @@
 /* eslint-disable no-case-declarations */
 import {
+  DISCOVERY_RESET,
   DISCOVERY_SET_DATA,
   DISCOVERY_SET_DATA_DOMAINS,
   DISCOVERY_SET_DATA_NEWS,
@@ -16,6 +17,7 @@ import {
   DISCOVERY_SET_NEW_FOLLOWED_USER,
   DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN,
   DISCOVERY_SET_NEW_UNFOLLOWED_USER,
+  DISCOVERY_SET_RECENT_SEARCH,
 } from '../Types';
 
 /**
@@ -37,6 +39,7 @@ const discoveryState = {
   followedDomains: [],
   unfollowedDomains: [],
   news: [],
+  recentSearch: [],
   isLoadingDiscoveryUser: false,
   isLoadingDiscoveryDomain: false,
   isLoadingDiscoveryTopic: false,
@@ -78,6 +81,16 @@ const discoveryReducer = (state = discoveryState, action) => {
     //     unfollowedTopic,
     //     news,
     //   };
+
+    case DISCOVERY_RESET:
+      return {
+        ...state,
+        isFirstTimeOpen: true,
+        isLoadingDiscoveryUser: false,
+        isLoadingDiscoveryDomain: false,
+        isLoadingDiscoveryTopic: false,
+        isLoadingDiscoveryNews: false,
+      };
 
     case DISCOVERY_SET_DATA_USERS:
       const {
@@ -128,6 +141,12 @@ const discoveryReducer = (state = discoveryState, action) => {
       return {
         ...state,
         isFirstTimeOpen: action.payload,
+      };
+
+    case DISCOVERY_SET_RECENT_SEARCH:
+      return {
+        ...state,
+        recentSearch: action.payload,
       };
 
     case DISCOVERY_SET_LOADING_DATA:

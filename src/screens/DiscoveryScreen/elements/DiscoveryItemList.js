@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
+    backgroundColor: 'white',
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],

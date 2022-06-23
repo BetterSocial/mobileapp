@@ -31,7 +31,7 @@ const DomainFragment = () => {
     const [following, followingDispatch] = React.useContext(Context).following
 
     const { domains } = following
-    const { isLoadingDiscoveryDomain, followedDomains, unfollowedDomains, isFirstTimeOpen } = discovery
+    const { isLoadingDiscoveryDomain, followedDomains, unfollowedDomains, isFirstTimeOpen = true } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {

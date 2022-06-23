@@ -1,4 +1,5 @@
 import {
+  DISCOVERY_RESET,
   DISCOVERY_SET_DATA,
   DISCOVERY_SET_DATA_DOMAINS,
   DISCOVERY_SET_DATA_NEWS,
@@ -15,6 +16,7 @@ import {
   DISCOVERY_SET_NEW_FOLLOWED_USER,
   DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN,
   DISCOVERY_SET_NEW_UNFOLLOWED_USER,
+  DISCOVERY_SET_RECENT_SEARCH,
 } from '../Types';
 
 /**
@@ -129,6 +131,13 @@ const setDiscoveryDataDomains = async (data, dispatch) => {
   });
 };
 
+const setDiscoveryRecentSearch = async (data, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_RECENT_SEARCH,
+    payload: data,
+  });
+};
+
 const setDiscoveryDataTopics = async (data, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_DATA_TOPICS,
@@ -183,23 +192,31 @@ const setNewUnfollowedDomains = async (data, dispatch) => {
   });
 };
 
+const reset = async (dispatch) => {
+  dispatch({
+    type: DISCOVERY_RESET,
+  });
+};
+
 const DiscoveryAction = {
-  setDiscoveryLoadingData,
-  setDiscoveryLoadingDataUser,
-  setDiscoveryLoadingDataDomain,
-  setDiscoveryLoadingDataTopic,
-  setDiscoveryLoadingDataNews,
+  reset,
   setDiscoveryData,
-  setDiscoveryDataUsers,
   setDiscoveryDataDomains,
-  setDiscoveryDataTopics,
   setDiscoveryDataNews,
+  setDiscoveryDataTopics,
+  setDiscoveryDataUsers,
   setDiscoveryFirstTimeOpen,
   setDiscoveryFocus,
+  setDiscoveryLoadingData,
+  setDiscoveryLoadingDataDomain,
+  setDiscoveryLoadingDataNews,
+  setDiscoveryLoadingDataTopic,
+  setDiscoveryLoadingDataUser,
   setNewFollowedDomains,
   setNewFollowedUsers,
   setNewUnfollowedDomains,
   setNewUnfollowedUsers,
+  setDiscoveryRecentSearch,
 };
 
 export default DiscoveryAction;

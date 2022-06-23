@@ -23,23 +23,11 @@ import { fonts } from '../../../utils/fonts';
 const RecentSearch = (param) => {
     const { shown = true } = param
     const [isShown, setIsShown] = React.useState(shown)
-    const [items, setItems] = React.useState([])
-
 
     const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
 
-    React.useState(() => {
-        const getStorage = async () => {
-            let response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
-            // console.log('response')
-            // console.log(response)
-            if (!response) return
-            setItems(JSON.parse(response))
-        }
-
-        getStorage()
-    }, [])
+    const [items, setItems] = React.useState(discovery.recentSearch)
 
     const __manipulateSearchTermsOrder = async (search) => {
         let result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
@@ -51,11 +39,15 @@ const RecentSearch = (param) => {
         let itemIndex = resultArray.indexOf(search)
         resultArray = [search].concat(resultArray)
         resultArray.splice(itemIndex + 1, 1)
+        DiscoveryAction.setDiscoveryRecentSearch(resultArray, discoveryDispatch)
         AsyncStorage.setItem(RECENT_SEARCH_TERMS, JSON.stringify(resultArray))
+        setItems(resultArray)
+
     }
 
     const __fetchDiscoveryData = async (search) => {
         GeneralComponentAction.setDiscoverySearchBar(search, generalComponentDispatch)
+        DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
         Keyboard.dismiss()
         __manipulateSearchTermsOrder(search)
         

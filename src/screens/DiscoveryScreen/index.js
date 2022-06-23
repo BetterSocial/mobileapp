@@ -39,15 +39,17 @@ const DiscoveryScreen = ({ route }) => {
 
     React.useEffect(() => {
         const unsubscribe = (() => {
+            // console.log('coba')
             DiscoveryAction.setDiscoveryFirstTimeOpen(true, discoveryDispatch)
+            DiscoveryAction.setDiscoveryFocus(true, discoveryDispatch)
         })
 
         return unsubscribe
     }, [])
 
-    React.useEffect(() => {
-        if (discoverySearchBarText.length > 1) DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
-    }, [discoverySearchBarText])
+    // React.useEffect(() => {
+    //     if (discoverySearchBarText.length > 1) DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
+    // }, [discoverySearchBarText])
 
 
     function MyTabBar(props) {
@@ -77,9 +79,9 @@ const DiscoveryScreen = ({ route }) => {
                         //     navigation.navigate(route.name);
                         // }
 
-                        console.log('clicked ' + new Date().valueOf())
-                        if(!isFocused) navigation.navigate(route.name)
-                        // navigation.navigate(route.name)
+                        // console.log('clicked ' + new Date().valueOf())
+                        // if(!isFocused) navigation.navigate(route.name)
+                        navigation.navigate(route.name)
                     };
 
                     const inputRange = state.routes.map((_, i) => i);
@@ -90,6 +92,7 @@ const DiscoveryScreen = ({ route }) => {
 
                     return (
                         <TouchableOpacity
+                            key={`tabbar-${index}`}
                             accessibilityRole="button"
                             accessibilityState={isFocused ? { selected: true } : {}}
                             accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -108,7 +111,7 @@ const DiscoveryScreen = ({ route }) => {
     }
 
     const tabComponent = (tabProps) => {
-        return <MyTabBar key={`mytabbar-${Math.random() * 1000000}`} {...tabProps} />
+        return <MyTabBar {...tabProps} />
     }
 
     const __renderChild = () => {
@@ -210,5 +213,5 @@ const S = StyleSheet.create({
     }),
 });
 
-// export default withInteractionsManagedNoStatusBar(React.memo(DiscoveryScreen))
-export default React.memo(DiscoveryScreen)
+export default withInteractionsManagedNoStatusBar(DiscoveryScreen)
+// export default React.memo(DiscoveryScreen)
