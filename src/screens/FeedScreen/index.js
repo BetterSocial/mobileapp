@@ -53,9 +53,9 @@ const FeedScreen = (props) => {
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
   let {myProfile} = profileContext
 
-  const getDataFeeds = async (offset = 0) => {
+  const getDataFeeds = async (offset = 0, useLoading) => {
     setCountStack(null);
-    if(offset > 0) {
+    if(useLoading) {
           setLoading(true);
     } 
     try {
@@ -236,7 +236,7 @@ const FeedScreen = (props) => {
   };
 
   const onRefresh = () => {
-    getDataFeeds();
+    getDataFeeds(0, true);
   };
 
   const showSearchBar = (isShown) => {
