@@ -10,6 +10,7 @@ import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
+import useIsReady from '../../../hooks/useIsReady';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
@@ -26,6 +27,7 @@ const UsersFragment = () => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
     const [isRecentSearchTermsShown, setIsRecentSearchTermsShown] = React.useState(true)
+    const isReady = useIsReady()
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
@@ -130,6 +132,8 @@ const UsersFragment = () => {
         )
     }
 
+    if(!isReady) return <></>
+
     if (isLoadingDiscoveryUser) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (followedUsers.length === 0 && unfollowedUsers.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No users found</Text>
@@ -171,3 +175,4 @@ const styles = StyleSheet.create({
 })
 
 export default withInteractionsManaged(UsersFragment)
+// export default UsersFragment

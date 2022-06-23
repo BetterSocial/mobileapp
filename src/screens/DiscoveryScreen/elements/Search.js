@@ -30,6 +30,7 @@ import { Context } from '../../../context/Store';
 import { RECENT_SEARCH_TERMS } from '../../../utils/cache/constant';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
+import { withInteractionsManaged, withInteractionsManagedNoStatusBar } from '../../../components/WithInteractionManaged';
 
 const DiscoverySearch = ({}) => {
   const navigation = useNavigation()
@@ -37,8 +38,11 @@ const DiscoverySearch = ({}) => {
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery
   const discoverySearchBarRef = React.useRef(null)
 
+  let { discoverySearchBarText } = generalComponent
+
   const [isSearchIconShown, setIsSearchIconShown] = React.useState(false)
   const [isTextAvailable, setIsTextAvailable] = React.useState(false)
+  const [searchText, setSearchText] = React.useState(discoverySearchBarText)
 
   const debounced = React.useCallback(debounce((text) => {
     __handleSubmitSearchData(text)
@@ -48,7 +52,6 @@ const DiscoverySearch = ({}) => {
 
   let { isFocus } = discovery
 
-  let { discoverySearchBarText } = generalComponent
 
   const __handleBackPress = () => {
     Keyboard.dismiss()
@@ -71,6 +74,7 @@ const DiscoverySearch = ({}) => {
   }
 
   const __handleChangeText = (text) => {
+    setSearchText(text)
     setIsTextAvailable(text.length > 0)
     DiscoveryAction.setDiscoveryFirstTimeOpen(text.length < 1, discoveryDispatch)
     __debounceChangeText(text)
@@ -78,11 +82,12 @@ const DiscoverySearch = ({}) => {
   }
 
   const __handleOnClearText = () => {
-    GeneralComponentAction.setDiscoverySearchBar("", generalComponentDispatch)
-    setIsTextAvailable(false)
-    debounced.cancel()
+    setSearchText("")
+    // GeneralComponentAction.setDiscoverySearchBar("", generalComponentDispatch)
+    // setIsTextAvailable(false)
+    // debounced.cancel()
     DiscoveryAction.reset(discoveryDispatch)
-    discoverySearchBarRef.current.focus()
+    // discoverySearchBarRef.current.focus()
   }
 
   const __handleSubmitSearchData = async (text) => {
@@ -143,8 +148,12 @@ const DiscoverySearch = ({}) => {
   }, [isTextAvailable, isFocus])
 
   React.useEffect(() => {
-    __debounceChangeText(discoverySearchBarText)
-    setIsTextAvailable(discoverySearchBarText.length > 0)
+    __debounceChangeText(searchText)
+    setIsTextAvailable(searchText.length > 0)
+  }, [searchText])
+
+  React.useEffect(() => {
+    setSearchText(discoverySearchBarText)
   }, [discoverySearchBarText])
 
   React.useEffect(() => {
@@ -189,7 +198,8 @@ const DiscoverySearch = ({}) => {
             ref={discoverySearchBarRef}
             focusable={true}
             autoFocus={true}
-            value={discoverySearchBarText}
+            // value={discoverySearchBarText}
+            value={searchText}
             onChangeText={__handleChangeText}
             onFocus={() => __handleFocus(true)}
             onBlur={() => __handleFocus(false)}

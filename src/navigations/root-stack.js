@@ -276,10 +276,10 @@ const RootStact = () => {
           component={DiscoveryScreen}
           options={{ 
             headerShown: true,
-            header: ({ navigation }) => {
+            header: ({}) => {
               return (
                 <SafeAreaView>
-                  <DiscoverySearch animatedValue={0} showBackButton />
+                  <DiscoverySearch />
                 </SafeAreaView>
               )
             }

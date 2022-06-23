@@ -16,6 +16,7 @@ import SearchFragment from './fragment/SearchFragment';
 import StringConstant from '../../utils/string/StringConstant';
 import TopicFragment from './fragment/TopicFragment';
 import UsersFragment from './fragment/UsersFragment';
+import useIsReady from '../../hooks/useIsReady';
 import { Context } from '../../context';
 import { DEFAULT_PROFILE_PIC_PATH, DISCOVERY_TAB_DOMAINS, DISCOVERY_TAB_NEWS, DISCOVERY_TAB_TOPICS, DISCOVERY_TAB_USERS } from '../../utils/constants';
 import { FONTS } from '../../utils/theme';
@@ -30,6 +31,7 @@ const DiscoveryScreen = ({ route }) => {
 
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
+    const isReady = useIsReady()
 
     const { discoverySearchBarText } = generalComponent
 
@@ -69,19 +71,19 @@ const DiscoveryScreen = ({ route }) => {
                     const isFocused = state.index === index;
 
                     const onPress = () => {
-                        // const event = navigation.emit({
-                        //     type: 'tabPress',
-                        //     target: route.key,
-                        //     canPreventDefault: false,
-                        // });
+                        const event = navigation.emit({
+                            type: 'tabPress',
+                            target: route.key,
+                            canPreventDefault: false,
+                        });
 
-                        // if (!isFocused && !event.defaultPrevented) {
-                        //     navigation.navigate(route.name);
-                        // }
+                        if (!isFocused && !event.defaultPrevented) {
+                            navigation.navigate(route.name);
+                        }
 
                         // console.log('clicked ' + new Date().valueOf())
                         // if(!isFocused) navigation.navigate(route.name)
-                        navigation.navigate(route.name)
+                        // navigation.navigate(route.name)
                     };
 
                     const inputRange = state.routes.map((_, i) => i);
@@ -96,6 +98,7 @@ const DiscoveryScreen = ({ route }) => {
                             accessibilityRole="button"
                             accessibilityState={isFocused ? { selected: true } : {}}
                             accessibilityLabel={options.tabBarAccessibilityLabel}
+                            delayPressIn={0}
                             testID={options.tabBarTestID}
                             onPress={onPress}
                             style={S.singletab}>
@@ -113,13 +116,14 @@ const DiscoveryScreen = ({ route }) => {
     const tabComponent = (tabProps) => {
         return <MyTabBar {...tabProps} />
     }
-
+    
     const __renderChild = () => {
         // if (discovery.isFocus || generalComponent.discoverySearchBarText.length === 0) return <SearchFragment />
 
         return <Tabs.Navigator
             initialRouteName={initialRouteName}
-            tabBar={tabComponent} >
+            tabBar={MyTabBar} 
+            >
             <Tabs.Screen
                 name={DISCOVERY_TAB_USERS}
                 component={UsersFragment}
@@ -146,6 +150,8 @@ const DiscoveryScreen = ({ route }) => {
                 }} />
         </Tabs.Navigator>
     }
+
+    if(!isReady) return <></>
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

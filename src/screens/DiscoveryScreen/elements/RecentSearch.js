@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Keyboard, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Keyboard, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryRepo from '../../../service/discovery';
@@ -50,44 +50,6 @@ const RecentSearch = (param) => {
         DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
         Keyboard.dismiss()
         __manipulateSearchTermsOrder(search)
-        
-        // DiscoveryRepo.fetchDiscoveryDataUser(search).then(async (data) => {
-        //     if (data.success) {
-        //         await DiscoveryAction.setDiscoveryDataUsers(data, discoveryDispatch)
-        //         setTimeout(() => {
-        //             DiscoveryAction.setDiscoveryLoadingDataUser(false, discoveryDispatch)
-        //         }, 500)
-        //     }
-        // })
-
-        // DiscoveryRepo.fetchDiscoveryDataDomain(search).then(async (data) => {
-        //     if (data.success) {
-        //         await DiscoveryAction.setDiscoveryDataDomains(data, discoveryDispatch)
-        //         setTimeout(() => {
-        //             DiscoveryAction.setDiscoveryLoadingDataDomain(false, discoveryDispatch)
-        //         }, 500)
-        //     }
-        // })
-
-        // DiscoveryRepo.fetchDiscoveryDataTopic(search).then(async (data) => {
-        //     if (data.success) {
-        //         await DiscoveryAction.setDiscoveryDataTopics(data, discoveryDispatch)
-        //         setTimeout(() => {
-        //             DiscoveryAction.setDiscoveryLoadingDataTopic(false, discoveryDispatch)
-        //         }, 500)
-        //     }
-        // })
-
-        // DiscoveryRepo.fetchDiscoveryDataNews(search).then(async (data) => {
-        //     if (data.success) {
-        //         await DiscoveryAction.setDiscoveryDataNews(data, discoveryDispatch)
-        //         setTimeout(() => {
-        //             DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
-        //         }, 500)
-        //     }
-        // })
-
-        // DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
     }
 
     const __handleClearRecentSearch = async () => {
@@ -101,14 +63,15 @@ const RecentSearch = (param) => {
     if (isShown && items.length > 0) return <View style={styles.recentContainer}>
         <View style={styles.recentTitleContainer}>
             <Text style={styles.recentTitle}>Recent</Text>
-            <Pressable style={styles.iconClear} onPress={__handleClearRecentSearch}
-                android_ripple={{
-                    borderless: true,
-                    radius: 15,
-                    color: colors.gray1,
-                }}>
+            <TouchableOpacity delayPressIn={0} style={styles.iconClear} onPress={__handleClearRecentSearch}
+                // android_ripple={{
+                //     borderless: true,
+                //     radius: 15,
+                //     color: colors.gray1,
+                // }}
+                >
                 <IconClear fill={colors.black} />
-            </Pressable>
+            </TouchableOpacity>
         </View>
         {items.map((item, index) => {
             return <RecentSearchItems key={`recentSearch-${index}`} text={item} onItemClicked={() => __fetchDiscoveryData(item)} />

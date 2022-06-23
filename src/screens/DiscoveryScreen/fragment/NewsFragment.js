@@ -10,6 +10,7 @@ import RecentSearch from '../elements/RecentSearch';
 import RenderItem from '../elements/RenderItem';
 import RenderNewsScreenItem from '../../../screens/NewsScreen/RenderItem';
 import share from '../../../utils/share';
+import useIsReady from '../../../hooks/useIsReady';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
@@ -23,6 +24,8 @@ const NewsFragment = () => {
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [defaultNews] = React.useContext(Context).news
+
+    const isReady = useIsReady()
 
     const navigation = useNavigation()
 
@@ -94,6 +97,8 @@ const NewsFragment = () => {
         })
     }
 
+    if(!isReady) return <></>
+
     if (isLoadingDiscoveryNews) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (news.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No news found</Text>
@@ -132,3 +137,4 @@ const styles = StyleSheet.create({
 })
 
 export default withInteractionsManaged(NewsFragment)
+// export default NewsFragment

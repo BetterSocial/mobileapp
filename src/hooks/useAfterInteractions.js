@@ -18,7 +18,7 @@ export const useAfterInteractions = () => {
 
   useEffect(() => {
     subscriptionRef.current = InteractionManager.runAfterInteractions(() => {
-      transitionRef.current?.animateNextTransition();
+      transitionRef?.current?.animateNextTransition();
       debounceComplete();
     });
     return () => {

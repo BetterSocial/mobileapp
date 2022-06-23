@@ -8,6 +8,7 @@ import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
+import useIsReady from '../../../hooks/useIsReady';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
@@ -26,6 +27,8 @@ const TopicFragment = () => {
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
+
+    const isReady = useIsReady()
 
     const { topics } = following
     const { isLoadingDiscoveryTopic, followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
@@ -99,6 +102,8 @@ const TopicFragment = () => {
         )
     }
 
+    if(!isReady) return <></>
+
     if (isLoadingDiscoveryTopic) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (followedTopic.length === 0 && unfollowedTopic.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Topics found</Text>
@@ -107,7 +112,7 @@ const TopicFragment = () => {
     return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
         onMomentumScrollBegin={__handleScroll}>
         <RecentSearch shown={isFirstTimeOpen} />
-        {__renderTopicItems()}
+        {/* {__renderTopicItems()} */}
     </ScrollView>
 }
 
@@ -140,3 +145,4 @@ const styles = StyleSheet.create({
 })
 
 export default withInteractionsManaged(TopicFragment)
+// export default TopicFragment

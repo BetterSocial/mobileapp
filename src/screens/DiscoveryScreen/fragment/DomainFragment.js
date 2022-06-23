@@ -11,6 +11,7 @@ import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import RenderItemHeader from '../../../screens/DomainScreen/elements/RenderItemHeader';
 import StringConstant from '../../../utils/string/StringConstant';
+import useIsReady from '../../../hooks/useIsReady';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
@@ -29,6 +30,8 @@ const DomainFragment = () => {
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
+
+    const isReady = useIsReady()
 
     const { domains } = following
     const { isLoadingDiscoveryDomain, followedDomains, unfollowedDomains, isFirstTimeOpen = true } = discovery
@@ -142,6 +145,8 @@ const DomainFragment = () => {
         )
     }
 
+    if(!isReady) return <></>
+
     if (isLoadingDiscoveryDomain) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (followedDomains.length === 0 && unfollowedDomains.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Domains found</Text>
@@ -186,3 +191,4 @@ const styles = StyleSheet.create({
 })
 
 export default withInteractionsManaged(DomainFragment)
+// export default DomainFragment
