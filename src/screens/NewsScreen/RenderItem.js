@@ -147,4 +147,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(RenderItem) 
+export default React.memo(RenderItem, (prevProps, nextProps) => {
+  return prevProps.item === nextProps.item
+}) 

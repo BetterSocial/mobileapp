@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
-import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
+import useIsReady from '../../../hooks/useIsReady';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
@@ -26,6 +26,8 @@ const TopicFragment = () => {
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
+
+    const isReady = useIsReady()
 
     const { topics } = following
     const { isLoadingDiscoveryTopic, followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
@@ -53,10 +55,6 @@ const TopicFragment = () => {
 
         console.log(navigationParam)
         navigation.push('TopicPageScreen', navigationParam)
-    }
-
-    const __handleScroll = (event) => {
-        Keyboard.dismiss()
     }
 
     const __renderDiscoveryItem = (from, key, item, index) => {
@@ -99,16 +97,17 @@ const TopicFragment = () => {
         )
     }
 
+    if (!isReady) return <></>
+
     if (isLoadingDiscoveryTopic) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (followedTopic.length === 0 && unfollowedTopic.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Topics found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
-        onMomentumScrollBegin={__handleScroll}>
+    return <View>
         <RecentSearch shown={isFirstTimeOpen} />
         {__renderTopicItems()}
-    </ScrollView>
+    </View>
 }
 
 const styles = StyleSheet.create({
@@ -140,3 +139,4 @@ const styles = StyleSheet.create({
 })
 
 export default withInteractionsManaged(TopicFragment)
+// export default TopicFragment

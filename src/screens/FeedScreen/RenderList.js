@@ -318,4 +318,6 @@ RenderListFeed.propTypes = {
   loading: PropTypes.bool,
 };
 
-export default React.memo (RenderListFeed);
+export default React.memo (RenderListFeed, (prevProps, nextProps) => {
+  return prevProps.item === nextProps.item
+});

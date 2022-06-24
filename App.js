@@ -16,6 +16,10 @@ import { Platform } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 enableScreens(false);
 
+if(!__DEV__) {
+  console.log = function () {}
+}
+
 const App = () => {
   const { bottom } = useSafeAreaInsets();
   const isIos = Platform.OS === 'ios'

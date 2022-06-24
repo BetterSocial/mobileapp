@@ -107,9 +107,9 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
                 </Text>
                 <View style={S.divider} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('GWJ47ZY9PQNQO6MFX2HC')}>
+            <TouchableOpacity onPress={() => dummyLogin('I4K3M10FGR78EWQQDNQ2')}>
                 <Text style={S.dummyAccountItem}>
-                    agitfirst : GWJ47ZY9PQNQO6MFX2HC
+                    agita : I4K3M10FGR78EWQQDNQ2
                 </Text>
                 <View style={S.divider} />
             </TouchableOpacity>

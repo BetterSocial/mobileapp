@@ -280,7 +280,7 @@ const Item = ({
   );
 };
 function compare(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+  return prevProps.item === nextProps.item;
 }
 
 const RenderItem = React.memo(Item, compare);

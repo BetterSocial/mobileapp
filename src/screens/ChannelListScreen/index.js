@@ -220,4 +220,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default withInteractionsManaged (ChannelListScreen);
+export default React.memo(withInteractionsManaged (ChannelListScreen))
