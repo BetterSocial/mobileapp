@@ -294,4 +294,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withInteractionsManaged (NewsScreen);
+export default React.memo( withInteractionsManaged (NewsScreen));

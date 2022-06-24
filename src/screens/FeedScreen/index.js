@@ -364,7 +364,7 @@ const FeedScreen = (props) => {
   );
 };
 
-export default withInteractionsManaged (FeedScreen);
+export default React.memo (withInteractionsManaged (FeedScreen));
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: {
