@@ -11,11 +11,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
-import DiscoveryScreen from '../screens/DiscoveryScreen';
-import DiscoverySearch from '../screens/DiscoveryScreen/elements/Search';
+// import DiscoveryScreen from '../screens/DiscoveryScreen';
+import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
+// import DiscoverySearch from '../screens/DiscoveryScreen/elements/Search';
 import DomainScreen from '../screens/DomainScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
-import GeneralComponentAction from '../context/actions/generalComponentAction';
+// import GeneralComponentAction from '../context/actions/generalComponentAction';
 import Header from '../components/Header';
 import HelpCenter from '../screens/WebView/HelpCenter';
 import HomeBottomTabs from './HomeBottomTabs';
@@ -271,8 +272,8 @@ const RootStact = () => {
           component={TopicPageScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="DiscoveryScreen"
+        {/* <Stack.Screen
+          name="DiscoveryScreenOld"
           component={DiscoveryScreen}
           options={{ 
             headerShown: true,
@@ -283,6 +284,13 @@ const RootStact = () => {
                 </SafeAreaView>
               )
             }
+          }}
+        /> */}
+         <Stack.Screen
+          name="DiscoveryScreen"
+          component={DiscoveryScreenV2}
+          options={{ 
+            headerShown: false,
           }}
         />
         <Stack.Screen

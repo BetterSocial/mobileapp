@@ -27,6 +27,15 @@ const RecentSearch = (param) => {
     const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
 
+    React.useEffect(() => {
+        setIsShown(shown)
+    }, [shown])
+
+    React.useEffect(() => {
+        setItems(discovery.recentSearch)
+    }, [discovery.recentSearch])
+
+
     const [items, setItems] = React.useState(discovery.recentSearch)
 
     const __manipulateSearchTermsOrder = async (search) => {
@@ -34,6 +43,7 @@ const RecentSearch = (param) => {
         if(!result) return
 
         let resultArray = JSON.parse(result)
+        // console.log(`resultArray.length < 1 ${resultArray.length <= 1}` )
         if(resultArray.length <= 1) return
 
         let itemIndex = resultArray.indexOf(search)
@@ -58,6 +68,8 @@ const RecentSearch = (param) => {
         let response = await AsyncStorage.removeItem(RECENT_SEARCH_TERMS, () => {
             console.log('response asdadadasd')
         })
+
+        DiscoveryAction.setDiscoveryRecentSearch([], discoveryDispatch)
     }
 
     if (isShown && items.length > 0) return <View style={styles.recentContainer}>

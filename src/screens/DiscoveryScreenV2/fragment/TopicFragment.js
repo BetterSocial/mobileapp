@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
-import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
@@ -58,10 +57,6 @@ const TopicFragment = () => {
         navigation.push('TopicPageScreen', navigationParam)
     }
 
-    const __handleScroll = (event) => {
-        Keyboard.dismiss()
-    }
-
     const __renderDiscoveryItem = (from, key, item, index) => {
         return <View key={`${key}-${index}`} style={styles.domainContainer}>
             <DomainList
@@ -102,18 +97,17 @@ const TopicFragment = () => {
         )
     }
 
-    if(!isReady) return <></>
+    if (!isReady) return <></>
 
     if (isLoadingDiscoveryTopic) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (followedTopic.length === 0 && unfollowedTopic.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Topics found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
-        onMomentumScrollBegin={__handleScroll}>
+    return <View>
         <RecentSearch shown={isFirstTimeOpen} />
-        {/* {__renderTopicItems()} */}
-    </ScrollView>
+        {__renderTopicItems()}
+    </View>
 }
 
 const styles = StyleSheet.create({

@@ -1,16 +1,12 @@
 import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  Animated,
   Keyboard,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
-  Touchable,
-  TouchableNativeFeedback,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View
 } from 'react-native';
 import { debounce } from 'lodash'
@@ -32,7 +28,7 @@ import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { withInteractionsManaged, withInteractionsManagedNoStatusBar } from '../../../components/WithInteractionManaged';
 
-const DiscoverySearch = ({}) => {
+const DiscoverySearch = ({ }) => {
   const navigation = useNavigation()
   const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery
@@ -46,7 +42,7 @@ const DiscoverySearch = ({}) => {
 
   const debounced = React.useCallback(debounce((text) => {
     __handleSubmitSearchData(text)
-  }, 1500)
+  }, 1000)
 
     , [])
 
@@ -76,14 +72,14 @@ const DiscoverySearch = ({}) => {
   const __handleChangeText = (text) => {
     setSearchText(text)
     setIsTextAvailable(text.length > 0)
-    DiscoveryAction.setDiscoveryFirstTimeOpen(text.length < 1, discoveryDispatch)
+    DiscoveryAction.setDiscoveryFirstTimeOpen(text.length <= 2, discoveryDispatch)
     __debounceChangeText(text)
     GeneralComponentAction.setDiscoverySearchBar(text, generalComponentDispatch)
   }
 
   const __handleOnClearText = () => {
     setSearchText("")
-    // GeneralComponentAction.setDiscoverySearchBar("", generalComponentDispatch)
+    GeneralComponentAction.setDiscoverySearchBar("", generalComponentDispatch)
     // setIsTextAvailable(false)
     // debounced.cancel()
     DiscoveryAction.reset(discoveryDispatch)
@@ -97,6 +93,7 @@ const DiscoverySearch = ({}) => {
 
     if (!result) {
       let itemToSave = JSON.stringify([text])
+      DiscoveryAction.setDiscoveryRecentSearch([text], discoveryDispatch)
       return AsyncStorage.setItem(RECENT_SEARCH_TERMS, itemToSave)
     }
 
@@ -153,6 +150,8 @@ const DiscoverySearch = ({}) => {
   }, [searchText])
 
   React.useEffect(() => {
+    console.log('discoverySearchBarText')
+    console.log(discoverySearchBarText)
     setSearchText(discoverySearchBarText)
   }, [discoverySearchBarText])
 
@@ -181,7 +180,7 @@ const DiscoverySearch = ({}) => {
           color: COLORS.gray1,
           borderless: true,
           radius: 20,
-        }} 
+        }}
         style={styles.arrowContainer}>
         <View style={styles.backArrow}>
           <MemoIc_arrow_back_white width={20} height={12} fill={colors.black} style={{ alignSelf: 'center' }} />
@@ -210,16 +209,17 @@ const DiscoverySearch = ({}) => {
             placeholderTextColor={COLORS.gray1}
             style={styles.input} />
 
-          <Pressable delayPressIn={0} onPress={__handleOnClearText} style={styles.clearIconContainer}
+          <TouchableOpacity delayPressIn={0} onPress={__handleOnClearText} style={styles.clearIconContainer}
             android_ripple={{
               color: COLORS.gray1,
               borderless: true,
               radius: 35,
-            }}>
+            }}
+          >
             <View style={styles.wrapperDeleteIcon}>
               <IconClear width={9} height={10} iconColor={colors.black} />
             </View>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
