@@ -706,4 +706,4 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   }
 });
-export default withInteractionsManaged(ProfileScreen);
+export default React.memo( withInteractionsManaged(ProfileScreen));
