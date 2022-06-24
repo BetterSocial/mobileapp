@@ -75,7 +75,7 @@ const Topics = () => {
     let copytopicSelected = [...topicSelected];
     let index = copytopicSelected.findIndex((data) => data === val);
     if (index > -1) {
-      copytopicSelected.splice(index, 1);
+      copytopicSelected = copytopicSelected.filter((data) => data !== val)
     } else {
       copytopicSelected.push(val);
     }
