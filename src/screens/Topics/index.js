@@ -332,4 +332,4 @@ const styles = StyleSheet.create({
     paddingRight: 20
   }
 });
-export default Topics;
+export default React.memo (Topics);
