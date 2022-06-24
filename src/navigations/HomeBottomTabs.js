@@ -259,6 +259,7 @@ function HomeBottomTabs(props) {
             tabBarBadge: unReadMessage.total_unread_count
               ? unReadMessage.total_unread_count
               : null,
+
           }}
         />
         <Tab.Screen
@@ -267,6 +268,7 @@ function HomeBottomTabs(props) {
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: ({ color }) => <MemoFeed fill={color} />,
+            unmountOnBlur: true
           }}
         />
         <Tab.Screen
@@ -275,6 +277,7 @@ function HomeBottomTabs(props) {
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: ({ focused, color }) => <MemoNews fill={color} />,
+            unmountOnBlur: true
           }}
         />
         <Tab.Screen
@@ -283,6 +286,7 @@ function HomeBottomTabs(props) {
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: ({ focused }) => <MemoProfileIcon loadingUser={loadingUser} uri={users.photoUrl} />,
+            unmountOnBlur:true
           }}
         />
       </Tab.Navigator>

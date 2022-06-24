@@ -214,6 +214,8 @@ const NewsScreen = ({}) => {
     }
   };
 
+  const keyExtractor = React.useCallback((item, index) => index.toString(), [])
+
   // React.useEffect(() => {
   //   InteractionManager.runAfterInteractions(() => {
   //     setIsCompleteAnimation(true)
@@ -238,7 +240,7 @@ const NewsScreen = ({}) => {
         <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
         <FlatList
           ref={scrollRef}
-          keyExtractor={(item, index) => index}
+          keyExtractor={keyExtractor}
           onScrollBeginDrag={handleOnScrollBeginDrag}
           onScroll={handleScrollEvent}
           scrollEventThrottle={16}

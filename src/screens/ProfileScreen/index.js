@@ -140,7 +140,7 @@ const ProfileScreen = ({ route }) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
-      getMyFeeds();
+      // getMyFeeds();
     });
     if(interactionsComplete) {
       getMyFeeds();
@@ -503,6 +503,32 @@ const ProfileScreen = ({ route }) => {
     getMyFeeds(0)
   }
 
+  const renderHeader = React.useMemo(() => {
+    return (
+      <View onLayout={(event) => {
+        let headerHeightLayout = event.nativeEvent.layout.height
+        headerHeightRef.current = headerHeightLayout
+      }}>
+        <View style={styles.content}>
+          <ProfilePicture onImageContainerClick={changeImage} profilePicPath={dataMain.profile_pic_path} />
+          <FollowInfoRow
+            follower={dataMain.follower_symbol}
+            following={dataMain.following_symbol}
+            onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)} />
+
+          {renderBio(dataMainBio)}
+        </View>
+        <View>
+          <View style={styles.tabs} ref={postRef}>
+            <Text style={styles.postText}>
+              Posts
+            </Text>
+          </View>
+        </View>
+      </View>
+    )
+  }, [dataMain, dataMainBio])
+
   return (
     <>
       {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{ top: 'always' }}>
@@ -515,6 +541,11 @@ const ProfileScreen = ({ route }) => {
           onScroll={handleScroll}
           ListFooterComponent={<ActivityIndicator />}
           onEndReach={__handleOnEndReached}
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          updateCellsBatchingPeriod={10}
+          removeClippedSubviews
+          windowSize={10}
           snapToOffsets={(() => {
             let posts = feeds.map((item, index) => {
               return headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT)
@@ -522,27 +553,7 @@ const ProfileScreen = ({ route }) => {
             return [0, ...posts]
           })()}
           ListHeaderComponent={
-            <View onLayout={(event) => {
-              let headerHeightLayout = event.nativeEvent.layout.height
-              headerHeightRef.current = headerHeightLayout
-            }}>
-              <View style={styles.content}>
-                <ProfilePicture onImageContainerClick={changeImage} profilePicPath={dataMain.profile_pic_path} />
-                <FollowInfoRow
-                  follower={dataMain.follower_symbol}
-                  following={dataMain.following_symbol}
-                  onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)} />
-
-                {renderBio(dataMainBio)}
-              </View>
-              <View>
-                <View style={styles.tabs} ref={postRef}>
-                  <Text style={styles.postText}>
-                    Posts
-                  </Text>
-                </View>
-              </View>
-            </View>
+            renderHeader
           }>
           {({ item, index }) => {
             let dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight - bottomBarHeight;
