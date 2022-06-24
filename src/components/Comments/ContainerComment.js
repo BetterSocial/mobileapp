@@ -110,7 +110,7 @@ const ReplyComment = ({
           });
 
         return (
-          <ConnectorWrapper index={index}>
+          <ConnectorWrapper key={`c-${index}`} index={index}>
             <View key={'c' + index} style={styles.levelOneCommentWrapper}>
               <Comment
                 indexFeed={indexFeed}

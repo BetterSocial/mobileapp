@@ -77,8 +77,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bondi_blue,
   },
   container: {
-    flex: 1,
+    height: 64,
     flexDirection: 'row',
+    backgroundColor: 'white',
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  Animated,
+  Keyboard,
   Pressable,
   StyleSheet,
   Text,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { debounce } from 'lodash'
 import { useNavigation } from '@react-navigation/core'
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
@@ -25,98 +26,117 @@ import { Context } from '../../../context/Store';
 import { RECENT_SEARCH_TERMS } from '../../../utils/cache/constant';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
+import { withInteractionsManaged, withInteractionsManagedNoStatusBar } from '../../../components/WithInteractionManaged';
 
-let getDataTimeoutId;
-
-const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked = () => { } }) => {
+const DiscoverySearch = ({ }) => {
   const navigation = useNavigation()
   const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery
   const discoverySearchBarRef = React.useRef(null)
 
+  let { discoverySearchBarText } = generalComponent
+
   const [isSearchIconShown, setIsSearchIconShown] = React.useState(false)
   const [isTextAvailable, setIsTextAvailable] = React.useState(false)
-  // const [isFocus, setIsFocus] = React.useState(true)
+  const [searchText, setSearchText] = React.useState(discoverySearchBarText)
+
+  const debounced = React.useCallback(debounce((text) => {
+    __handleSubmitSearchData(text)
+  }, 1000)
+
+    , [])
 
   let { isFocus } = discovery
 
-  let { discoverySearchBarText } = generalComponent
 
   const __handleBackPress = () => {
+    Keyboard.dismiss()
     if (navigation.canGoBack()) navigation.goBack()
+    // console.log('back ' + new Date().valueOf())
   }
 
   const __handleFocus = (isFocus) => {
     DiscoveryAction.setDiscoveryFocus(isFocus, discoveryDispatch)
   }
 
+  const __debounceChangeText = (text) => {
+    if (text.length > 2) {
+      DiscoveryAction.setDiscoveryLoadingData(true, discoveryDispatch)
+      debounced(text)
+    } else {
+      DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
+      debounced.cancel()
+    }
+  }
+
   const __handleChangeText = (text) => {
+    setSearchText(text)
     setIsTextAvailable(text.length > 0)
+    DiscoveryAction.setDiscoveryFirstTimeOpen(text.length <= 2, discoveryDispatch)
+    __debounceChangeText(text)
     GeneralComponentAction.setDiscoverySearchBar(text, generalComponentDispatch)
   }
 
   const __handleOnClearText = () => {
-    __handleChangeText("")
-    setIsTextAvailable(false)
+    setSearchText("")
     GeneralComponentAction.setDiscoverySearchBar("", generalComponentDispatch)
-    DiscoveryAction.setDiscoveryFirstTimeOpen(true, discoveryDispatch);
-    discoverySearchBarRef.current.focus()
+    // setIsTextAvailable(false)
+    // debounced.cancel()
+    DiscoveryAction.reset(discoveryDispatch)
+    // discoverySearchBarRef.current.focus()
   }
 
-  const __handleSubmitSearchData = async () => {
-    __fetchDiscoveryData()
+  const __handleSubmitSearchData = async (text) => {
+    __fetchDiscoveryData(text)
 
     let result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
 
     if (!result) {
-      let itemToSave = JSON.stringify([discoverySearchBarText])
+      let itemToSave = JSON.stringify([text])
+      DiscoveryAction.setDiscoveryRecentSearch([text], discoveryDispatch)
       return AsyncStorage.setItem(RECENT_SEARCH_TERMS, itemToSave)
     }
 
     let resultArray = JSON.parse(result)
-    if (resultArray.indexOf(discoverySearchBarText) > -1) return
+    if (resultArray.indexOf(text) > -1) return
 
-    resultArray = [discoverySearchBarText].concat(resultArray)
+    resultArray = [text].concat(resultArray)
     if (resultArray.length > 3) resultArray.pop()
 
+    DiscoveryAction.setDiscoveryRecentSearch(resultArray, discoveryDispatch)
     return AsyncStorage.setItem(RECENT_SEARCH_TERMS, JSON.stringify(resultArray))
   }
 
-  const __fetchDiscoveryData = async () => {
-    DiscoveryRepo.fetchDiscoveryDataUser(discoverySearchBarText).then(async (data) => {
+  const __fetchDiscoveryData = async (text) => {
+    DiscoveryRepo.fetchDiscoveryDataUser(text).then(async (data) => {
       if (data.success) {
         await DiscoveryAction.setDiscoveryDataUsers(data, discoveryDispatch)
-        setTimeout(() => {
-          DiscoveryAction.setDiscoveryLoadingDataUser(false, discoveryDispatch)
-        }, 500)
       }
+      DiscoveryAction.setDiscoveryLoadingDataUser(false, discoveryDispatch)
     })
 
-    DiscoveryRepo.fetchDiscoveryDataDomain(discoverySearchBarText).then(async (data) => {
+    DiscoveryRepo.fetchDiscoveryDataDomain(text).then(async (data) => {
       if (data.success) {
         await DiscoveryAction.setDiscoveryDataDomains(data, discoveryDispatch)
-        setTimeout(() => {
-          DiscoveryAction.setDiscoveryLoadingDataDomain(false, discoveryDispatch)
-        }, 500)
       }
+
+      DiscoveryAction.setDiscoveryLoadingDataDomain(false, discoveryDispatch)
     })
 
-    DiscoveryRepo.fetchDiscoveryDataTopic(discoverySearchBarText).then(async (data) => {
+    DiscoveryRepo.fetchDiscoveryDataTopic(text).then(async (data) => {
       if (data.success) {
         await DiscoveryAction.setDiscoveryDataTopics(data, discoveryDispatch)
-        setTimeout(() => {
-          DiscoveryAction.setDiscoveryLoadingDataTopic(false, discoveryDispatch)
-        }, 500)
       }
+
+      DiscoveryAction.setDiscoveryLoadingDataTopic(false, discoveryDispatch)
     })
 
-    DiscoveryRepo.fetchDiscoveryDataNews(discoverySearchBarText).then(async (data) => {
+    DiscoveryRepo.fetchDiscoveryDataNews(text).then(async (data) => {
       if (data.success) {
         await DiscoveryAction.setDiscoveryDataNews(data, discoveryDispatch)
-        setTimeout(() => {
-          DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
-        }, 500)
       }
+
+      DiscoveryAction.setDiscoveryLoadingDataNews(false, discoveryDispatch)
     })
   }
 
@@ -125,18 +145,14 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
   }, [isTextAvailable, isFocus])
 
   React.useEffect(() => {
-    if (discoverySearchBarText.length > 1) {
-      DiscoveryAction.setDiscoveryLoadingData(true, discoveryDispatch)
-      if (getDataTimeoutId) clearTimeout(getDataTimeoutId)
+    __debounceChangeText(searchText)
+    setIsTextAvailable(searchText.length > 0)
+  }, [searchText])
 
-      getDataTimeoutId = setTimeout(async () => {
-        // await __fetchDiscoveryData()
-        __handleSubmitSearchData()
-      }, 1500)
-    } else {
-      DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
-      if (getDataTimeoutId) clearTimeout(getDataTimeoutId)
-    }
+  React.useEffect(() => {
+    console.log('discoverySearchBarText')
+    console.log(discoverySearchBarText)
+    setSearchText(discoverySearchBarText)
   }, [discoverySearchBarText])
 
   React.useEffect(() => {
@@ -158,18 +174,19 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
   }, [])
 
   return (
-    <Animated.View style={styles.animatedViewContainer(0)}>
-      <Pressable onPress={__handleBackPress}
+    <View style={styles.animatedViewContainer}>
+      <Pressable delayPressIn={0} onPress={__handleBackPress}
         android_ripple={{
           color: COLORS.gray1,
           borderless: true,
           radius: 20,
-        }} style={styles.arrowContainer}>
+        }}
+        style={styles.arrowContainer}>
         <View style={styles.backArrow}>
           <MemoIc_arrow_back_white width={20} height={12} fill={colors.black} style={{ alignSelf: 'center' }} />
         </View>
       </Pressable>
-      <Pressable onPress={onContainerClicked} style={styles.searchContainer}>
+      <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
           {isSearchIconShown && <View style={styles.wrapperIcon}>
             <MemoIc_search width={16.67} height={16.67} />
@@ -180,7 +197,8 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
             ref={discoverySearchBarRef}
             focusable={true}
             autoFocus={true}
-            value={generalComponent.discoverySearchBarText}
+            // value={discoverySearchBarText}
+            value={searchText}
             onChangeText={__handleChangeText}
             onFocus={() => __handleFocus(true)}
             onBlur={() => __handleFocus(false)}
@@ -191,19 +209,20 @@ const DiscoverySearch = ({ onPress, showBackButton = false, onContainerClicked =
             placeholderTextColor={COLORS.gray1}
             style={styles.input} />
 
-          {(isTextAvailable || isFocus) && <Pressable onPress={__handleOnClearText} style={styles.clearIconContainer}
+          <TouchableOpacity delayPressIn={0} onPress={__handleOnClearText} style={styles.clearIconContainer}
             android_ripple={{
               color: COLORS.gray1,
               borderless: true,
               radius: 35,
-            }}>
+            }}
+          >
             <View style={styles.wrapperDeleteIcon}>
               <IconClear width={9} height={10} iconColor={colors.black} />
             </View>
-          </Pressable>}
+          </TouchableOpacity>
         </View>
-      </Pressable>
-    </Animated.View>
+      </View>
+    </View>
   );
 };
 
@@ -289,10 +308,10 @@ const styles = StyleSheet.create({
     marginRight: 11,
     ...FONTS.h3,
   },
-  animatedViewContainer: (animatedValue) => ({
+  animatedViewContainer: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    marginTop: animatedValue,
+    marginTop: 0,
     zIndex: 10,
     height: dimen.size.DISCOVERY_HEADER_HEIGHT,
     paddingTop: 7,
@@ -301,7 +320,7 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.alto,
     // paddingLeft: 20,
     // paddingRight: 20,
-  }),
+  },
 });
 
 export default DiscoverySearch;

@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import FollowingAction from '../../../context/actions/following';
-import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
+import useIsReady from '../../../hooks/useIsReady';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
@@ -25,7 +25,7 @@ const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
 const UsersFragment = () => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
-    const [isRecentSearchTermsShown, setIsRecentSearchTermsShown] = React.useState(true)
+    const isReady = useIsReady()
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
@@ -91,11 +91,7 @@ const UsersFragment = () => {
             const result = await setUnFollow(data);
         }
     }
-
-    const __handleScroll = (event) => {
-        Keyboard.dismiss()
-    }
-
+    
     const __renderDiscoveryItem = (from, key, item, index) => {
         return <DomainList key={`${key}-${index}`} onPressBody={() => __handleOnPress(item)}
             handleSetFollow={() => __handleFollow(from, true, item, index)}
@@ -130,16 +126,18 @@ const UsersFragment = () => {
         )
     }
 
+    if(!isReady) return <></>
+
     if (isLoadingDiscoveryUser) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (followedUsers.length === 0 && unfollowedUsers.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No users found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
-        onMomentumScrollBegin={__handleScroll}>
+    return <View>
         <RecentSearch shown={isFirstTimeOpen}/>
         {__renderUsersItem()}
-    </ScrollView>
+    </View>
+
 }
 
 const styles = StyleSheet.create({
@@ -171,3 +169,4 @@ const styles = StyleSheet.create({
 })
 
 export default withInteractionsManaged(UsersFragment)
+// export default UsersFragment

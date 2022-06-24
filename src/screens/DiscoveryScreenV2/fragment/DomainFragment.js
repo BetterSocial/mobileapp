@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Keyboard, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import FollowingAction from '../../../context/actions/following';
-import Header from '../../../screens/DomainScreen/elements/Header';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
-import RenderItemHeader from '../../../screens/DomainScreen/elements/RenderItemHeader';
 import StringConstant from '../../../utils/string/StringConstant';
+import useIsReady from '../../../hooks/useIsReady';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
@@ -30,8 +29,10 @@ const DomainFragment = () => {
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
 
+    const isReady = useIsReady()
+
     const { domains } = following
-    const { isLoadingDiscoveryDomain, followedDomains, unfollowedDomains, isFirstTimeOpen } = discovery
+    const { isLoadingDiscoveryDomain, followedDomains, unfollowedDomains, isFirstTimeOpen = true } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -65,11 +66,7 @@ const DomainFragment = () => {
 
         navigation.push('DomainScreen', navigationParam)
     }
-
-    const __handleScroll = (event) => {
-        Keyboard.dismiss()
-    }
-
+    
     const __handleFollow = async (from, willFollow, item, index) => {
         // console.log(item)
         if (from === FROM_FOLLOWED_DOMAIN_INITIAL) {
@@ -142,16 +139,17 @@ const DomainFragment = () => {
         )
     }
 
+    if(!isReady) return <></>
+
     if (isLoadingDiscoveryDomain) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (followedDomains.length === 0 && unfollowedDomains.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Domains found</Text>
     </View>
 
-    return <ScrollView style={styles.fragmentContainer} keyboardShouldPersistTaps={'handled'}
-        onMomentumScrollBegin={__handleScroll}>
+    return <View>
         <RecentSearch shown={isFirstTimeOpen} />
         {__renderDomainItems()}
-    </ScrollView>
+    </View>
 }
 
 const styles = StyleSheet.create({
@@ -186,3 +184,4 @@ const styles = StyleSheet.create({
 })
 
 export default withInteractionsManaged(DomainFragment)
+// export default DomainFragment

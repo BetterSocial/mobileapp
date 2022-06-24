@@ -1,4 +1,5 @@
 import * as React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
@@ -6,6 +7,7 @@ import { Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import DiscoveryAction from '../context/actions/discoveryAction';
 import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
@@ -19,18 +21,18 @@ import {
   ProfileScreen,
 } from '../screens';
 import { Context } from '../context';
-import { FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE } from '../utils/cache/constant';
+import { FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS } from '../utils/cache/constant';
 import { colors } from '../utils/colors';
 import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
 import { getFollowingTopic } from '../service/topics';
+import { getMainFeed } from '../service/post';
 import { getSpecificCache, saveToCache } from '../utils/cache';
 import { getUserId } from '../utils/users';
+import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../context/actions/feeds';
 import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
-import {setNews} from '../context/actions/news';
-import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../context/actions/feeds';
-import { getMainFeed } from '../service/post';
+import { setNews } from '../context/actions/news';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,6 +45,7 @@ function HomeBottomTabs(props) {
   let [, followingDispatch] = React.useContext(Context).following;
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
+  const [, discoveryDispatch] = React.useContext(Context).discovery;
   const [unReadMessage] = React.useContext(Context).unReadMessage;
   const [loadingUser, setLoadingUser] = React.useState(true)
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
@@ -104,8 +107,14 @@ function HomeBottomTabs(props) {
     let selfUserId = await getUserId();
     // Not using await so splash screen can navigate to next screen faster
 
+    let response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
+    if (!response) return
+    // setItems(JSON.parse(response))
+    DiscoveryAction.setDiscoveryRecentSearch(JSON.parse(response), discoveryDispatch)
+
     try {
       getFollowing(selfUserId).then((response) => {
+        console.log('asdadadasdadadasd')
         following.setFollowingUsers(response.data, followingDispatch);
       });
 
@@ -118,6 +127,8 @@ function HomeBottomTabs(props) {
       });
 
     } catch (e) {
+      console.log('error')
+      console.log(e)
       throw new Error(e)
     }
   }
@@ -168,11 +179,11 @@ function HomeBottomTabs(props) {
       const dataFeeds = await getMainFeed(query);
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
-        let dataWithDummy = [...data, {dummy : true}]
+        let dataWithDummy = [...data, { dummy: true }]
         let saveData = {
           offset: dataFeeds.offset,
           data: dataWithDummy
-         
+
         }
         if (offset === 0) {
           setMainFeeds(dataWithDummy, dispatchFeeds);
@@ -196,7 +207,7 @@ function HomeBottomTabs(props) {
 
   React.useEffect(() => {
     getSpecificCache(PROFILE_CACHE, (res) => {
-      if(!res) {
+      if (!res) {
         getProfile()
       } else {
         let data = {
