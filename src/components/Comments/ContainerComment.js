@@ -10,7 +10,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import {DATALOADING} from '../../utils/string/LoadingComment';
 import {colors} from '../../utils/colors';
 
-const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView}) => {
+const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate}) => {
   const navigation = useNavigation();
   let isLast = (index, item) => {
     return (
@@ -25,7 +25,6 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
   let hideLeftConnector = (index, item) => {
     return index === comments.length - 1;
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />
@@ -50,6 +49,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                   indexFeed: indexFeed,
                 })}
                 refreshComment={refreshComment}
+                findCommentAndUpdate={findCommentAndUpdate}
               />
             </View>
             {item.children_counts.comment > 0 && (
@@ -61,6 +61,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                 indexFeed={indexFeed}
                 navigateToReplyView={navigateToReplyView}
                 refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
+                findCommentAndUpdate={findCommentAndUpdate}
               />
             )}
           </View>
@@ -78,7 +79,8 @@ const ReplyComment = ({
   navigation,
   hideLeftConnector,
   refreshComment,
-  navigateToReplyView
+  navigateToReplyView,
+  findCommentAndUpdate
 }) => {
   let isLast = (item, index) => {
     return (
@@ -122,6 +124,7 @@ const ReplyComment = ({
                 onPress={showCommentView}
                 isLast={isLast(item, index)}
                 refreshComment={refreshComment}
+                findCommentAndUpdate={findCommentAndUpdate}
               />
               {item.children_counts.comment > 0 && (
                 <>

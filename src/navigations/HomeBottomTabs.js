@@ -19,15 +19,19 @@ import {
   ProfileScreen,
 } from '../screens';
 import { Context } from '../context';
-import { PROFILE_CACHE } from '../utils/cache/constant';
+import { FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE } from '../utils/cache/constant';
 import { colors } from '../utils/colors';
 import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
 import { getFollowingTopic } from '../service/topics';
 import { getUserId } from '../utils/users';
 import { getSpecificCache, saveToCache } from '../utils/cache';
+import { getUserId } from '../utils/users';
 import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
+import {setNews} from '../context/actions/news';
+import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../context/actions/feeds';
+import { getMainFeed } from '../service/post';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,13 +39,16 @@ function HomeBottomTabs(props) {
   const { navigation } = props
   const isIos = Platform.OS === 'ios'
 
-  let [users, dispatch] = React.useContext(Context).users;
+  let [users, dispatchUser] = React.useContext(Context).users;
   let [, dispatchProfile] = React.useContext(Context).profile;
   let [, followingDispatch] = React.useContext(Context).following;
 
   const [initialStartup] = React.useContext(Context).initialStartup;
+  const [, newsDispatch] = React.useContext(Context).news;
+  const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
   const [unReadMessage] = React.useContext(Context).unReadMessage;
   const [loadingUser, setLoadingUser] = React.useState(true)
+  let { feeds, timer, viewPostTimeIndex } = feedsContext;
 
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
@@ -83,7 +90,7 @@ function HomeBottomTabs(props) {
     try {
       let selfUserId = await getUserId();
       let profile = await getMyProfile(selfUserId);
-      setImageUrl(profile.data.profile_pic_path, dispatch);
+      setImageUrl(profile.data.profile_pic_path, dispatchUser);
       let data = {
         user_id: profile.data.user_id,
         username: profile.data.username,
@@ -105,10 +112,6 @@ function HomeBottomTabs(props) {
         following.setFollowingUsers(response.data, followingDispatch);
       });
 
-      getDomains().then((response) => {
-        setNews([{ dummy: true }, ...response.data], newsDispatch);
-      });
-
       getFollowedDomain().then((response) => {
         following.setFollowingDomain(response.data.data, followingDispatch);
       });
@@ -117,10 +120,8 @@ function HomeBottomTabs(props) {
         following.setFollowingTopics(response.data, followingDispatch);
       });
 
-      SplashScreenPackage.hide();
-      debounceNavigationPage(selfUserId);
     } catch (e) {
-      console.log(e);
+      throw new Error(e)
     }
   }
 
@@ -154,6 +155,48 @@ function HomeBottomTabs(props) {
     );
   };
 
+  const getDomain = () => {
+    getDomains().then((response) => {
+      saveToCache(NEWS_CACHE, response)
+      setNews(response.data, newsDispatch);
+    }).catch((e) => {
+      throw new Error(e)
+    })
+  }
+
+  const getDataFeeds = async (offset = 0) => {
+    try {
+      let query = `?offset=${offset}`
+
+      const dataFeeds = await getMainFeed(query);
+      if (dataFeeds.data.length > 0) {
+        let data = dataFeeds.data;
+        let dataWithDummy = [...data, {dummy : true}]
+        let saveData = {
+          offset: dataFeeds.offset,
+          data: dataWithDummy
+
+        }
+        if (offset === 0) {
+          setMainFeeds(dataWithDummy, dispatchFeeds);
+          saveToCache(FEEDS_CACHE, saveData)
+        } else {
+          let clonedFeeds = [...feeds]
+          clonedFeeds.splice(feeds.length - 1, 0, ...data)
+          saveData = {
+            ...saveData,
+            data: clonedFeeds
+          }
+          setMainFeeds(clonedFeeds, dispatchFeeds);
+          saveToCache(FEEDS_CACHE, saveData)
+        }
+      }
+      setTimer(new Date(), dispatchFeeds)
+    } catch (e) {
+      throw new Error(e)
+    }
+  };
+
   React.useEffect(() => {
     getSpecificCache(PROFILE_CACHE, (res) => {
       if(!res) {
@@ -165,14 +208,17 @@ function HomeBottomTabs(props) {
         };
         setMyProfileAction(data, dispatchProfile)
         setLoadingUser(false)
-        setImageUrl(res.profile_pic_path, dispatch)
+        setImageUrl(res.profile_pic_path, dispatchUser)
       }
     })
   }, [])
 
+
+
   React.useEffect(() => {
     requestPermission()
-    // getProfile();
+    getDomain()
+    getDataFeeds()
     getDiscoveryData()
   }, []);
   React.useEffect(() => {

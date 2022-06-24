@@ -59,6 +59,14 @@ const getCountCommentWithChild = (item) => {
   return count;
 };
 
+const getCommentLength = (comments) => {
+  let commentLength = 0;
+  if (comments && Array.isArray(comments)) {
+    commentLength = comments.length;
+  }
+  return commentLength;
+};
+
 const getCountCommentWithChildInDetailPage = (item) => {
   let count = 0;
   const reactionCountLevelOne = item.comment;
@@ -83,4 +91,5 @@ export {
   getCountVote,
   getCountCommentWithChild,
   getCountCommentWithChildInDetailPage,
+  getCommentLength,
 };

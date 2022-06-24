@@ -1,13 +1,12 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
-import { Animated, Dimensions, StatusBar, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, InteractionManager, StatusBar, StyleSheet, View } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import RenderListFeed from './RenderList';
 import Search from './elements/Search';
 import TiktokScroll from '../../components/TiktokScroll';
@@ -16,22 +15,28 @@ import { ButtonNewPost } from '../../components/Button';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB } from '../../utils/constants';
+import { FEEDS_CACHE } from '../../utils/cache/constant';
 import { downVote, upVote } from '../../service/vote';
 import { getFeedDetail, getMainFeed, viewTimePost } from '../../service/post';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../../context/actions/feeds';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 
 let lastDragY = 0;
 let searchBarDebounce
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
-  const [initialLoading, setInitialLoading] = React.useState(true);
+  // const [initialLoading, setInitialLoading] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const [countStack, setCountStack] = React.useState(null);
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+  const paddingContainer = React.useRef(new Animated.Value(50)).current
+
   // const [time, setTime] = React.useState(new Date());
   // const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
   const [shouldSearchBarShown, setShouldSearchBarShown] = React.useState(0)
@@ -41,30 +46,43 @@ const FeedScreen = (props) => {
 
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
+  const [profileContext] = React.useContext(Context).profile;
   const bottomBarHeight = useBottomTabBarHeight();
   const { height } = Dimensions.get('screen');
-
+  const {interactionsComplete} = useAfterInteractions()
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
+  let {myProfile} = profileContext
 
   const getDataFeeds = async (offset = 0) => {
     setCountStack(null);
-    setLoading(true);
+    if(offset > 0) {
+          setLoading(true);
+    } 
     try {
       let query = `?offset=${offset}`
 
       const dataFeeds = await getMainFeed(query);
-      console.log('dataFeeds')
-      console.log(dataFeeds)
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
         let dataWithDummy = [...data, {dummy : true}]
+        let saveData = {
+          offset: dataFeeds.offset,
+          data: dataWithDummy
+         
+        }
         if (offset === 0) {
           // setMainFeeds(data, dispatch);
           setMainFeeds(dataWithDummy, dispatch);
+          saveToCache(FEEDS_CACHE, saveData)
         } else {
           let clonedFeeds = [...feeds]
           clonedFeeds.splice(feeds.length - 1, 0, ...data)
+          saveData = {
+            ...saveData,
+            data: clonedFeeds
+          }
           setMainFeeds(clonedFeeds, dispatch);
+          saveToCache(FEEDS_CACHE, saveData)
           // setMainFeeds([...feeds, ...data], dispatch)
         }
         setCountStack(data.length);
@@ -72,40 +90,61 @@ const FeedScreen = (props) => {
 
       setPostOffset(dataFeeds.offset)
 
-      setLoading(false);
-      setInitialLoading(false);
       // setTime(new Date());
       setTimer(new Date(), dispatch)
       setLoading(false);
     } catch (e) {
-      setInitialLoading(false);
       setLoading(false);
     }
   };
 
   React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'FeedScreen',
-      screen_name: 'Feed Screen',
-    });
+    if(interactionsComplete) {
+      analytics().logScreenView({
+        screen_class: 'FeedScreen',
+        screen_name: 'Feed Screen',
+      });
+  
+      checkCache()
+    }
 
-    getDataFeeds();
-  }, []);
+  }, [interactionsComplete]);
+
+  const checkCache = () => {
+    getSpecificCache(FEEDS_CACHE, (result) => {
+      if(result) {
+        setMainFeeds(result.data, dispatch)
+        setPostOffset(result.offset)
+
+      } else {
+        getDataFeeds()
+      }
+    })
+  }
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e) => {
-      getDataFeeds();
+    const unsubscribe = navigation.addListener('focus', (e) => {
+      // getDataFeeds();
     });
 
     return unsubscribe;
   }, [navigation]);
 
-  React.useEffect(() => {
-    searchBarDebounce = setTimeout(async () => {
-      showSearchBar(false)
-      setShouldSearchBarShown(false)
-    }, 2000)
-  }, [shouldSearchBarShown]);
+  // React.useEffect(() => {
+  //   if(interactionsComplete) {
+  //     searchBarDebounce = setTimeout(async () => {
+  //       showSearchBar(false)
+  //       setShouldSearchBarShown(false)
+  //     }, 2000)
+  //   }
+
+  // }, [shouldSearchBarShown]);
+
+  // React.useEffect(() => {
+  //   InteractionManager.runAfterInteractions(() => {
+  //     setInitialLoading(false)
+  //   })
+  // }, [])
 
   const updateFeed = async (post, index) => {
     try {
@@ -141,16 +180,6 @@ const FeedScreen = (props) => {
 
   };
 
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setYourselfId(id);
-      }
-    };
-    parseToken();
-  }, []);
-
   let onNewPollFetched = (newPolls, index) => {
     setFeedByIndex(
       {
@@ -161,13 +190,6 @@ const FeedScreen = (props) => {
     );
   };
 
-  if (initialLoading === true) {
-    return (
-      <View style={styles.containerLoading}>
-        <LoadingWithoutModal visible={initialLoading} />
-      </View>
-    );
-  }
 
   const onPressDomain = (item) => {
     let param = linkContextScreenParamBuilder(
@@ -191,7 +213,9 @@ const FeedScreen = (props) => {
       // index: index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
-      refreshParent: getDataFeeds
+      // refreshParent:  getDataFeeds,
+      data: item,
+      isCaching:true
       
     });
   };
@@ -200,7 +224,9 @@ const FeedScreen = (props) => {
     props.navigation.navigate('PostDetailPage', {
       // index: index,
       feedId: item.id,
-      refreshParent: getDataFeeds
+      // refreshParent: getDataFeeds,
+      data: item,
+      isCaching: true
       // feedId:
     });
   };
@@ -221,12 +247,6 @@ const FeedScreen = (props) => {
     }).start();
   }
 
-  let handleScrollEvent = (event) => {
-    let y = event.nativeEvent.contentOffset.y;
-    let dy = y - lastDragY;
-    showSearchBar(dy <= 0)
-  };
-
   let debounceSearchBar = (event) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
@@ -245,6 +265,43 @@ const FeedScreen = (props) => {
     onWillSendViewPostTime(event)
     debounceSearchBar(event)
   }
+
+  let handleScrollEvent = React.useCallback((event) => {
+    let y = event.nativeEvent.contentOffset.y;
+    let dy = y - lastDragY;
+    if (dy + 20 <= 0) {
+      InteractionManager.runAfterInteractions(() => {
+        Animated.timing(offset, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(paddingContainer, {
+          toValue: 50,
+          duration: 100,
+          useNativeDriver: false,
+        }).start()
+      
+      })
+
+    } else if (dy - 20 > 0) {
+ 
+      InteractionManager.runAfterInteractions(() => {
+        Animated.timing(offset, {
+          toValue: -50,
+          duration: 100,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(paddingContainer, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: false,
+        }).start()
+     
+      })
+    }
+  }, [offset])
+
 
   let onWillSendViewPostTime = (event) => {
     sendViewPost()
@@ -265,6 +322,10 @@ const FeedScreen = (props) => {
     setTimer(new Date(), dispatch)
   }
 
+  // if (initialLoading) {
+  //   return null
+  // }
+
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
       <Search animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
@@ -272,10 +333,11 @@ const FeedScreen = (props) => {
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
         onEndReach={onEndReach}
-        onMomentumScrollEnd={handleOnMomentumEnd}
+        // onMomentumScrollEnd={handleOnMomentumEnd}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}
+        // onScrollBeginDrag={handleOnScrollBeginDrag}
         refreshing={loading}>
         {({ item, index }) => {
           let dummyItemHeight = height - dimen.size.FEED_CURRENT_ITEM_HEIGHT - StatusBar.currentHeight - bottomBarHeight - 16
@@ -289,7 +351,7 @@ const FeedScreen = (props) => {
             onPressComment={() => onPressComment(index, item)}
             onPressBlock={() => onPressBlock(item)}
             onPressUpvote={(post) => setUpVote(post, index)}
-            selfUserId={yourselfId}
+            selfUserId={myProfile.user_id}
             onPressDownVote={(post) => setDownVote(post, index)}
             loading={loading}
           />
@@ -302,7 +364,7 @@ const FeedScreen = (props) => {
   );
 };
 
-export default FeedScreen;
+export default withInteractionsManaged (FeedScreen);
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: {

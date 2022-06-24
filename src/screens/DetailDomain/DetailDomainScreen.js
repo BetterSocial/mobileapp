@@ -11,17 +11,15 @@ import {
 } from 'react-native';
 
 import ContainerComment from '../../components/Comments/ContainerComment';
-import DetailDomainScreenContainerComment from '../../components/Comments/DetailDomainScreenContainerComment';
 import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
 import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
 import WriteComment from '../../components/Comments/WriteComment';
-import { COLORS, SIZES } from '../../utils/theme';
-import { DomainHeader, Footer, Gap, Header } from '../../components';
+import { COLORS } from '../../utils/theme';
+import { Footer } from '../../components';
 import { createCommentParent } from '../../service/comment';
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import {
-  getCountCommentWithChild,
   getCountCommentWithChildInDetailPage,
 } from '../../utils/getstream';
 import { getDomainDetailById } from '../../service/domain'

@@ -30,7 +30,6 @@ import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import FollowInfoRow from './elements/FollowInfoRow';
 import GlobalButton from '../../components/Button/GlobalButton';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
@@ -66,6 +65,7 @@ import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -107,52 +107,58 @@ const ProfileScreen = ({ route }) => {
   const [loading, setLoading] = React.useState(false);
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
-
+  const {interactionsComplete} = useAfterInteractions()
   let isNotFromHomeTab = route?.params?.isNotFromHomeTab
   let bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
 
   let { feeds } = myProfileFeed;
 
   React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    getMyFeeds();
-    getAccessToken().then((val) => {
-      setTokenJwt(val);
-    });
-    analytics().logScreenView({
-      screen_class: 'ProfileScreen',
-      screen_name: 'ProfileScreen',
-    });
-    analytics().logEvent('myprofile_begin_view', {
-      id: 'profile_begin',
-      myprofile_begin_view: Date.now(),
-    });
-    return () => {
-      analytics().logEvent('myprofile_end_view', {
-        id: 'myprofile_end_view',
-        myprofile_end_view: Date.now(),
+    if(interactionsComplete) {
+      LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+      analytics().logScreenView({
+        screen_class: 'ProfileScreen',
+        screen_name: 'ProfileScreen',
       });
       analytics().logEvent('myprofile_begin_view', {
         id: 'profile_begin',
         myprofile_begin_view: Date.now(),
       });
-    };
-  }, []);
+      return () => {
+        analytics().logEvent('myprofile_end_view', {
+          id: 'myprofile_end_view',
+          myprofile_end_view: Date.now(),
+        });
+        analytics().logEvent('myprofile_begin_view', {
+          id: 'profile_begin',
+          myprofile_begin_view: Date.now(),
+        });
+      };
+    }
+
+  }, [interactionsComplete]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
       getMyFeeds();
     });
+    if(interactionsComplete) {
+      getMyFeeds();
+      getAccessToken().then((val) => {
+        setTokenJwt(val);
+      });
+      getSpecificCache(PROFILE_CACHE, (res) => {
+        if (!res) {
+          fetchMyProfile()
+        } else {
+          saveProfileState(res)
+        }
+      })
+    }
 
-    getSpecificCache(PROFILE_CACHE, (res) => {
-      if (!res) {
-        fetchMyProfile()
-      } else {
-        saveProfileState(res)
-      }
-    })
-    return unsubscribe;
-  }, []);
+
+    return () => unsubscribe();
+  }, [interactionsComplete]);
 
   const fetchMyProfile = async () => {
     const id = await getUserId();
@@ -168,9 +174,11 @@ const ProfileScreen = ({ route }) => {
   };
 
   const saveProfileState = (result) => {
+    if (result === null || result === undefined) return
+
     if (result && typeof result === 'object') {
-      setDataMain(result || {});
-      setDataMainBio(result?.bio)
+      setDataMain(result);
+      setDataMainBio(result.bio)
       setLoadingContainer(false)
     }
 
@@ -178,10 +186,6 @@ const ProfileScreen = ({ route }) => {
 
   const getMyFeeds = async (offset = 0) => {
     let result = await getSelfFeedsInProfile(offset);
-    // setMyProfileFeed([
-    //   {dummy: true, component: 'Profile'}, 
-    //   {dummy: true, component: 'PostStickyHeader'},
-    //   ...result.data], myProfileDispatch);
     if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
     else {
       let clonedFeeds = [...feeds]
@@ -444,9 +448,10 @@ const ProfileScreen = ({ route }) => {
     });
   };
 
-  const onPressComment = (id) => {
+  const onPressComment = (item, id) => {
     navigation.navigate('ProfilePostDetailPage', {
       feedId: id,
+      isalreadypolling: item.isalreadypolling,
       refreshParent: getMyFeeds
     });
   };
@@ -495,12 +500,11 @@ const ProfileScreen = ({ route }) => {
 
   const handleRefresh = () => {
     setLoading(true)
-    getMyFeeds()
+    getMyFeeds(0)
   }
 
   return (
     <>
-      <StatusBar translucent={false} barStyle="dark-content" />
       {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{ top: 'always' }}>
         <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username} />
         <ProfileTiktokScroll
@@ -551,7 +555,7 @@ const ProfileScreen = ({ route }) => {
                 onNewPollFetched={onNewPollFetched}
                 onPressDomain={onPressDomain}
                 onPress={() => onPress(item, index)}
-                onPressComment={() => onPressComment(item.id)}
+                onPressComment={() => onPressComment(item, item.id)}
                 onPressBlock={() => onPressBlock(item)}
                 onPressUpvote={(post) => setUpVote(post, index)}
                 selfUserId={yourselfId}

@@ -51,7 +51,7 @@ const Footer = ({
   };
 
   const __renderShowScoreUI = () => {
-    if(ENABLE_DEV_ONLY_FEATURE && showScoreButton) {
+    if(false && showScoreButton) {
       return <TouchableOpacity style={styles.btn} onPress={onPressScore}>
         <View style={styles.btnComment}>
           <MemoIcCreatePoll height={24} width={25}/>

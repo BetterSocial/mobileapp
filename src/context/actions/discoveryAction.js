@@ -5,6 +5,7 @@ import {
   DISCOVERY_SET_DATA_TOPICS,
   DISCOVERY_SET_DATA_USERS,
   DISCOVERY_SET_FIRST_TIME_OPEN,
+  DISCOVERY_SET_FOCUS,
   DISCOVERY_SET_LOADING_DATA,
   DISCOVERY_SET_LOADING_DATA_DOMAIN,
   DISCOVERY_SET_LOADING_DATA_NEWS,
@@ -81,6 +82,18 @@ const setDiscoveryFirstTimeOpen = async (isFirstTimeOpen, dispatch) => {
   dispatch({
     type: DISCOVERY_SET_FIRST_TIME_OPEN,
     payload: isFirstTimeOpen,
+  });
+};
+
+/**
+ *
+ * @param {Boolean} isFocus
+ * @param {Any} dispatch
+ */
+const setDiscoveryFocus = async (isFocus, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_FOCUS,
+    payload: isFocus,
   });
 };
 
@@ -182,6 +195,7 @@ const DiscoveryAction = {
   setDiscoveryDataTopics,
   setDiscoveryDataNews,
   setDiscoveryFirstTimeOpen,
+  setDiscoveryFocus,
   setNewFollowedDomains,
   setNewFollowedUsers,
   setNewUnfollowedDomains,

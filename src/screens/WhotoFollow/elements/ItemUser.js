@@ -49,7 +49,7 @@ const ItemUser = ({photo, username, bio, followed, onPress, userid}) => {
         />
         <View style={styles.containerTextCard}>
           <Text style={styles.textFullName}>{username}</Text>
-          <Text style={styles.textUsername} numberOfLines={1}>{bio ? bio + bio + bio + bio + bio + bio + bio + bio : ''}</Text>
+          <Text style={styles.textUsername} numberOfLines={1}>{bio ? bio : ''}</Text>
         </View>
       </View>
       <View style={styles.containerButton}>

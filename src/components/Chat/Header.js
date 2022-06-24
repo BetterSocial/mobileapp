@@ -1,6 +1,6 @@
 import * as React from 'react';
 import IconEP from 'react-native-vector-icons/Entypo';
-import {ChannelAvatar} from 'stream-chat-react-native';
+import { ChannelAvatar } from 'stream-chat-react-native';
 import {
   Image,
   StyleSheet,
@@ -9,37 +9,39 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import DefaultGroupProfilePicture from '../../assets/images/default-group-picture.png';
-import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
-import {Context} from '../../context';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {getChatName, getGroupMemberCount} from '../../utils/string/StringUtils';
-import {trimString} from '../../utils/string/TrimString';
 import GlobalButton from '../Button/GlobalButton';
+import MemoIc_arrow_back_white from '../../assets/arrow/Ic_arrow_back_white';
+import { Context } from '../../context';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
+import { getChatName, getGroupMemberCount } from '../../utils/string/StringUtils';
+import { trimString } from '../../utils/string/TrimString';
 
-const Header = ({}) => {
+const Header = ({ }) => {
   const navigation = useNavigation();
   const [channelClient] = React.useContext(Context).channel;
   const [profileContext] = React.useContext(Context).profile;
-  const {channel} = channelClient;
+  const { channel } = channelClient;
 
   let username = channelClient.channel?.data?.name;
 
   let chatName = getChatName(username, profileContext.myProfile.username);
+  console.log('chatName')
+  console.log(chatName)
 
   const renderHeaderImage = () => {
     if (channel?.data?.image) {
       if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
         return (
-          <Image source={{uri: channel?.data?.image}} style={styles.image} />
+          <Image source={{ uri: channel?.data?.image }} style={styles.image} />
         );
       }
       return (
         <Image
-          source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
+          source={{ uri: `data:image/jpg;base64,${channel?.data?.image}` }}
           style={styles.image}
         />
       );
@@ -56,16 +58,16 @@ const Header = ({}) => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.row, {flex: 1}]}>
+      <View style={[styles.row, { flex: 1 }]}>
         <GlobalButton buttonStyle={styles.backContainer} onPress={() => navigation.goBack()}>
           <MemoIc_arrow_back_white width={20} height={12} />
         </GlobalButton>
         <GlobalButton
-        buttonStyle={styles.backContainer}
+          buttonStyle={styles.backContainer}
           onPress={() => navigation.navigate('GroupInfo')}>
           <View style={styles.touchable}>
             {renderHeaderImage()}
-            <Text numberOfLines={1} style={styles.name}>{username} </Text>
+            <Text numberOfLines={1} style={styles.name}>{chatName} </Text>
           </View>
         </GlobalButton>
       </View>
@@ -75,7 +77,7 @@ const Header = ({}) => {
           onPress={() =>
             navigation.navigate('GroupSetting', {
               username,
-              focusChatName : true,
+              focusChatName: true,
             })
           }>
           <IconEP name="dots-three-vertical" size={12.87} color={'#fff'} />
@@ -122,7 +124,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     color: '#fff',
     fontSize: 14,
-    flex: 1
+    width: '70%',
   },
   touchable: {
     flexDirection: 'row',

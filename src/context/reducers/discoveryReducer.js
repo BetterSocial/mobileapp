@@ -6,6 +6,7 @@ import {
   DISCOVERY_SET_DATA_TOPICS,
   DISCOVERY_SET_DATA_USERS,
   DISCOVERY_SET_FIRST_TIME_OPEN,
+  DISCOVERY_SET_FOCUS,
   DISCOVERY_SET_LOADING_DATA,
   DISCOVERY_SET_LOADING_DATA_DOMAIN,
   DISCOVERY_SET_LOADING_DATA_NEWS,
@@ -41,6 +42,7 @@ const discoveryState = {
   isLoadingDiscoveryTopic: false,
   isLoadingDiscoveryNews: false,
   isFirstTimeOpen: true,
+  isFocus: true,
 };
 
 /**
@@ -114,6 +116,12 @@ const discoveryReducer = (state = discoveryState, action) => {
       return {
         ...state,
         news,
+      };
+
+    case DISCOVERY_SET_FOCUS:
+      return {
+        ...state,
+        isFocus: action.payload,
       };
 
     case DISCOVERY_SET_FIRST_TIME_OPEN:

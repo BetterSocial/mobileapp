@@ -9,7 +9,7 @@ import CredderRatingYellow from '../../assets/icon/CredderRatingYellow'
 import { COLORS } from '../../utils/theme'
 import { fonts } from '../../utils/fonts'
 
-const FeedCredderRating = ({ containerStyle = {}, iconSize = 14, scoreSize = 16, score, viewBox = "0 0 18 18" }) => {
+const FeedCredderRating = ({ containerStyle = {}, iconSize = 14, scoreSize = 16, score, viewBox = "0 0 18 18", scoreStyle = {}}) => {
     const __renderCredderRatingIcon = () => {
         if (!score || score < 0) return <CredderRatingGray style={styles.credderIcon} height={iconSize} width={iconSize} viewBox={viewBox} />
         if (score <= 35) return <CredderRatingRed style={styles.credderIcon} height={iconSize} width={iconSize} viewBox={viewBox} />
@@ -19,14 +19,14 @@ const FeedCredderRating = ({ containerStyle = {}, iconSize = 14, scoreSize = 16,
     }
 
     const __renderCredderRatingScore = () => {
-        if (!score || score < 0) return `n/a`
+        if (!score || score < 0) return 'n/a'
         // return ${score}${<Text>{`%`}</Text>}
         return <Text>{`${score}`}<Text style={{fontSize: scoreSize - 3}}>%</Text></Text>
     }
 
     return <View style={{ ...styles.credderRatingContainer, ...containerStyle }}>
         {__renderCredderRatingIcon()}
-        <Text style={styles.credderRating(scoreSize)}>{__renderCredderRatingScore()}</Text>
+        <Text style={{...styles.credderRating(scoreSize, score), ...scoreStyle}}>{__renderCredderRatingScore()}</Text>
     </View >
 }
 
@@ -36,19 +36,21 @@ const styles = StyleSheet.create({
     credderIcon: {
         alignSelf: "center",
     },
-    credderRating: (fontSize) => {
+    credderRating: (fontSize, score) => {
         return {
             fontSize,
-            fontFamily: fonts.inter[500],
-            color: COLORS.black,
+            fontFamily: fonts.inter[400],
+            color: COLORS.blackgrey,
             alignSelf: 'center',
-            textAlign: 'center',
             marginLeft: 4,
+            lineHeight: 14.52,
+            // marginTop: (!score || score < 0) ? 0 : 0,
+            // backgroundColor: 'red',
         }
     },
     credderRatingContainer: {
         flexDirection: 'row',
-        flex: 1,
+        // flex: 1,
         borderRadius: 8,
     },
 })

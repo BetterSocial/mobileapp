@@ -35,7 +35,7 @@ const width = Dimensions.get('screen').width;
 const Topics = () => {
   const navigation = useNavigation();
   const [topicSelected, setTopicSelected] = React.useState([]);
-  const [topics, setTopics] = React.useState({});
+  const [topics, setTopics] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [minTopic] = React.useState(3);
   const [, dispatch] = React.useContext(Context).topics;
@@ -50,7 +50,8 @@ const Topics = () => {
       .then((res) => {
         setIsLoading(false);
         if (res.status == 200) {
-          setTopics(res.data.body);
+          topicMapping(res.data.body)
+          // setTopics(res.data.body);
         }
       })
       .catch(() => {
@@ -58,32 +59,18 @@ const Topics = () => {
       });
   }, []);
 
-  const renderHeader = () => {
-    if (Platform.OS === 'android') {
-      return (
-        <View style={styles.header}>
-          <TouchableNativeFeedback
-            onPress={() => navigation.goBack()}
-            background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
-            <ArrowLeftIcon width={20} height={12} fill="#000" />
-          </TouchableNativeFeedback>
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.header}>
-          <TouchableHighlight onPress={() => navigation.goBack()}>
-            <ArrowLeftIcon width={20} height={12} fill="#000" />
-          </TouchableHighlight>
-          <TouchableNativeFeedback>
-            <Text style={styles.textSkip}>{StringConstant.headerIosSkip}</Text>
-          </TouchableNativeFeedback>
-        </View>
-      );
+  const topicMapping = (data) => {
+    let allTopics = []
+    if(data && typeof data ==='object') {
+      Object.keys(data).map((attribute) => {
+        allTopics.push({name: attribute, data: data[attribute].map((att) => ({topic_id: att.topic_id, name: att.name}))})
+      })
     }
-  };
+    setTopics(allTopics)
+  }
 
-  const handleSelectedLanguage = (val) => {
+
+  const handleSelectedLanguage = React.useCallback((val) => {
     let copytopicSelected = [...topicSelected];
     let index = copytopicSelected.findIndex((data) => data === val);
     if (index > -1) {
@@ -92,7 +79,7 @@ const Topics = () => {
       copytopicSelected.push(val);
     }
     setTopicSelected(copytopicSelected);
-  };
+  }, [topicSelected])
   const next = () => {
     if (topicSelected.length >= minTopic) {
       analytics().logEvent('onb_select_topics_add_btn', {
@@ -103,36 +90,38 @@ const Topics = () => {
     }
   };
 
-  const renderListTopics = (value, i) => (
-    <TouchableWithoutFeedback
-    onPress={() =>
-      handleSelectedLanguage(value.topic_id)
+
+  const renderListTopics = ({item, i}) => {
+    let containerStyles = styles.bgTopicSelectNotActive
+    let textStyle = styles.textTopicNotActive
+    const isSelectedTopic = topicSelected.filter((topic) => topic === item.topic_id).length >=1
+    if(isSelectedTopic) {
+      containerStyles = {...containerStyles, backgroundColor: colors.bondi_blue}
+      textStyle = {...textStyle, color: colors.white}
     }
-    key={i}
-    style={
-      topicSelected.findIndex(
-        (data) => data === value.topic_id,
-      ) > -1
-        ? styles.bgTopicSelectActive
-        : styles.bgTopicSelectNotActive
-    }
-    >
-    <Text>{value.icon}</Text>
-    <Text
+    return (
+      <TouchableOpacity
+      activeOpacity={1}
+      onPress={() =>
+        handleSelectedLanguage(item.topic_id)
+      }
+      key={i}
       style={
-        topicSelected.findIndex(
-          (data) => data === value.topic_id,
-        ) > -1
-          ? styles.textTopicActive
-          : styles.textTopicNotActive
-      }>#{value.name}</Text>
-  </TouchableWithoutFeedback>
-  )
+        containerStyles
+      }
+      >
+      <Text>{item.icon}</Text>
+      <Text
+        style={
+          textStyle
+        }>#{item.name}</Text>
+    </TouchableOpacity>
+    )
+  }
 
   const onBack = () => {
     navigation.goBack()
   }
-  console.log(topics, 'makan')
   return (
     <SafeAreaView style={styles.container}>
       {/* <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" /> */}
@@ -152,30 +141,28 @@ const Topics = () => {
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
         {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
-        {topics !== undefined
-          ? Object.keys(topics).map((attribute, index) => {
-              return (
-                <View key={index} style={styles.containerTopic}>
-                  <Text style={styles.title}>{attribute}</Text>
-                  <ScrollView
-                  showsHorizontalScrollIndicator={false}
-                  horizontal={true}
-                  style={styles.scrollButtonParent}
-                  contentContainerStyle={styles.containerContent}
-                  >
-                    <FlatList 
-                    data={topics[attribute]}
-                    renderItem={({item , index}) => renderListTopics(item, index)}
-                    numColumns={Math.floor(topics[attribute].length / 3) + 1}
-                    nestedScrollEnabled 
-                    scrollEnabled={false}
-                    />
-                    
-                  </ScrollView>
-                </View>
-              );
-            })
-          : null}
+        {topics ? topics.map((topic, index) => (
+          <View key={index} style={styles.containerTopic}>
+          <Text style={styles.title}>{topic.name}</Text>
+          <ScrollView
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+          style={styles.scrollButtonParent}
+          contentContainerStyle={styles.containerContent}
+          nestedScrollEnabled
+          >
+            <FlatList 
+            data={topic.data}
+            renderItem={renderListTopics}
+            numColumns={Math.floor(topic.data.length / 3) + 1}
+            nestedScrollEnabled 
+            scrollEnabled={false}
+            extraData={topicSelected}
+            />
+            
+          </ScrollView>
+        </View>
+        )) : null}
       </ScrollView>
       <View style={styles.footer}>
         <Text
@@ -266,7 +253,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.black,
     marginBottom: 13,
-    textTransform: 'capitalize',
+    // textTransform: 'capitalize',
     paddingHorizontal: 22
   },
   listTopic: {
@@ -286,6 +273,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     marginRight: 8,
     marginBottom: 10,
+    alignItems: 'center'
     // alignItems: 'center',
   },
 
@@ -299,6 +287,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     marginRight: 8,
     marginBottom: 10,
+    alignItems: 'center'
   },
   textTopicActive: {
     fontFamily: 'Inter',

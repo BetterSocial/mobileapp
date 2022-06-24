@@ -20,6 +20,7 @@ export const COLORS = {
   gray: '#6A6A6A',
   gray1: '#C4C4C4',
   gray6: '#F2F2F2',
+  gray4: '#4A4A4A',
   greyseries: '#333333',
   holytosca: '#00ADB5',
   holyTosca: '#00ADB5',

@@ -9,8 +9,9 @@ import MemoIc_rectangle_gradient from '../../../assets/Ic_rectangle_gradient';
 import MemoPeopleFollow from '../../../assets/icons/Ic_people_follow';
 import Memoic_globe from '../../../assets/icons/ic_globe';
 import { COLORS, SIZES } from '../../../utils/theme';
-import {CredderRating} from '../../../components/CredderRating';
+import { CredderRating, FeedCredderRating } from '../../../components/CredderRating';
 import { Gap } from '../../../components';
+import { calculateTime } from '../../../utils/time';
 import { fonts } from '../../../utils/fonts';
 
 const DetailDomainScreenHeader = ({
@@ -47,19 +48,21 @@ const DetailDomainScreenHeader = ({
         <Text style={styles.headerDomainName} numberOfLines={1}>{domain}</Text>
         <View style={styles.headerDomainDateContainer}>
           <Text style={styles.headerDomainDate} numberOfLines={1}>
-            {new Date(time).toLocaleDateString()}
+            {/* {new Date(time).toLocaleDateString()} */}
+            {calculateTime(time)}
           </Text>
+          {/* <View style={styles.point} /> */}
+          {/* <Memoic_globe height={13} width={13} /> */}
           <View style={styles.point} />
-          <Memoic_globe height={13} width={13} />
-          <View style={styles.point} />
-
           <MemoPeopleFollow height={13} width={12} />
           <Gap style={{ width: 4 }} />
           <Text style={styles.followerNumber}>{follower}</Text>
+          <View style={styles.point} />
+          <FeedCredderRating score={score} iconSize={16} scoreSize={12} />
         </View>
         {/* <MemoIc_rectangle_gradient width={SIZES.width * 0.43} height={20} /> */}
       </View>
-      <CredderRating containerStyle={styles.credderRating} score={score}/>
+      {/* <CredderRating containerStyle={styles.credderRating} score={score}/> */}
       <View style={{ justifyContent: 'center' }}>
         <TouchableOpacity onPress={onFollowDomainPressed}>
           <View style={styles.wrapperText}>
@@ -113,12 +116,12 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   point: {
-    width: 3,
-    height: 3,
+    width: 2,
+    height: 2,
     borderRadius: 4,
     backgroundColor: COLORS.gray,
-    marginLeft: 8,
-    marginRight: 8,
+    marginLeft: 5,
+    marginRight: 5,
   },
   headerContainer: {
     flexDirection: 'row',
