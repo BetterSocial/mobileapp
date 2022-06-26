@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image'
 
 import Gap from '../../components/Gap';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
@@ -39,12 +40,13 @@ const Content = (props) => {
         <Gap height={SIZES.base} />
         <View style={{paddingHorizontal: -SIZES.base}}>
           {image ? (
-            <Image
-              source={{uri: image}}
+            <FastImage
+              source={{uri: image, priority: FastImage.priority.normal}}
               style={{
                 width: '100%',
                 height: 180,
               }}
+              resizeMode={FastImage.resizeMode.contain}
             />
           ) : (
             <Image
