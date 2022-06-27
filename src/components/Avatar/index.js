@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
 
@@ -7,9 +8,10 @@ const index = ({image, style}) => {
   return (
     <View style={[styles.wrapperImage, style]}>
       {image ? (
-        <Image
-          source={{uri: image}}
+        <FastImage
+          source={{uri: image, priority: FastImage.priority.normal}}
           style={[styles.image, StyleSheet.absoluteFillObject]}
+          resizeMode={FastImage.resizeMode.contain}
         />
       ) : (
         <MemoDomainProfilePicture width="24" height="24" />
