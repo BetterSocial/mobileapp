@@ -6,19 +6,16 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {useRecoilValue} from 'recoil';
+import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
-// import DiscoveryScreen from '../screens/DiscoveryScreen';
 import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
-// import DiscoverySearch from '../screens/DiscoveryScreen/elements/Search';
 import DomainScreen from '../screens/DomainScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
-// import GeneralComponentAction from '../context/actions/generalComponentAction';
 import Header from '../components/Header';
 import HelpCenter from '../screens/WebView/HelpCenter';
 import HomeBottomTabs from './HomeBottomTabs';
@@ -34,7 +31,6 @@ import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
 import Settings from '../screens/Settings';
-// import SignIn from '../screens/SignIn';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicPageScreen from '../screens/TopicPageScreen';
@@ -62,8 +58,8 @@ import { InitialStartupAtom } from '../service/initialStartup';
 
 const Stack = createStackNavigator();
 const RootStack = () => {
-  const [profile, setProfile] = React.useState(null);
   const initialStartup = useRecoilValue(InitialStartupAtom);
+  const initialStartupAction = useRecoilCallback();
   const [clientState] = React.useContext(Context).client;
   const [profileState] = React.useContext(Context).profile;
   const { client } = clientState;
@@ -74,9 +70,8 @@ const RootStack = () => {
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
-    if (initialStartup !== '') {
-      // console.log(initialStartup, 'initialStartup');
-      getDeepLinkUrl(profile, dispatch);
+    if (initialStartup.id !== null && initialStartup.id !== '') {
+      getDeepLinkUrl(initialStartup.id);
       create();
     }
 
@@ -306,7 +301,7 @@ const RootStack = () => {
          <Stack.Screen
           name="DiscoveryScreen"
           component={DiscoveryScreenV2}
-          options={{ 
+          options={{
             headerShown: false,
           }}
         />

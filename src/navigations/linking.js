@@ -1,6 +1,5 @@
 import { Linking } from 'react-native';
 import { getProfileByUsername } from '../service/profile';
-import { rejuvenateApp } from '../context/actions/initialStartupAction';
 
 const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org';
 
@@ -16,7 +15,7 @@ const doGetProfileByUsername = async (username) => {
   }
 };
 
-const getDeepLinkUrl = async (userId, dispatch) => {
+const getDeepLinkUrl = async (userId) => {
   try {
     const deepLinkUrl = await Linking.getInitialURL();
 
@@ -26,13 +25,13 @@ const getDeepLinkUrl = async (userId, dispatch) => {
       const otherProfile = await doGetProfileByUsername(username);
 
       // Check if myself
-      rejuvenateApp({ id: userId, deeplinkProfile: userId === otherProfile.user_id }, dispatch);
+      { id: userId, deeplinkProfile: userId === otherProfile.user_id })
     }
   } catch (e) {
     // eslint-disable-next-line no-undef
-    // if (__DEV__) {
-    console.log('getDeeplinkUrl error :', e);
-    // }
+    if (__DEV__) {
+      console.error('getDeeplinkUrl error :', e);
+    }
   }
 };
 

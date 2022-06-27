@@ -1,27 +1,11 @@
 import { atom } from 'recoil';
+import { Linking } from 'react-native';
 import { getUserId } from '../utils/users';
 import { verifyTokenGetstream } from './users';
 import { setAccessToken, setRefreshToken, removeAccessToken } from '../utils/token';
+import { getProfileByUsername } from './profile';
 
-export const doVerifyUser = async (callbackVerified, callbackSetId) => {
-  try {
-    const id = await getUserId();
-    if (id !== null && id !== '') {
-      const verify = await verifyTokenGetstream();
-      if (verify !== null && verify !== '') {
-        callbackVerified();
-        callbackSetId(id);
-      } else {
-        callbackSetId('');
-      }
-    } else {
-      callbackSetId('');
-    }
-  } catch (e) {
-    console.log('doVerifyUser ', e);
-    callbackSetId(null);
-  }
-};
+const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org';
 
 export const InitialStartupAtom = atom({
   key: 'InitialStartupAtom',
@@ -34,10 +18,10 @@ export const InitialStartupAtom = atom({
       // If there's a persisted value - set it on load
       const loadPersisted = async () => {
         const savedValue = await getUserId();
-        console.log('effects', savedValue);
+
         if (savedValue != null && savedValue !== '') {
           const verify = await verifyTokenGetstream();
-          console.log('effects verify', verify);
+
           if (verify !== null && verify !== '') {
             setSelf({ id: verify, deeplinkProfile: false });
           } else {
@@ -52,9 +36,10 @@ export const InitialStartupAtom = atom({
 
       // Subscribe to state changes and persist them to localStorage
       onSet((user) => {
+        console.log(user);
         if (user !== null && user !== undefined) {
-          setAccessToken(res.data.token);
-          setRefreshToken(res.data.refresh_token);
+          // setAccessToken(user);
+          // setRefreshToken(user);
         } else {
           removeAccessToken();
         }
@@ -62,3 +47,36 @@ export const InitialStartupAtom = atom({
     },
   ],
 });
+
+const doGetProfileByUsername = async (username) => {
+  try {
+    const response = await getProfileByUsername(username);
+    if (response.code === 200) {
+      return response.data;
+    }
+    return false;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const initialStartupTask = ({ snapshot, set }) => async () => {
+  const userId = snapshot.getLoadable(InitialStartupAtom).getValue();
+  try {
+    const deepLinkUrl = await Linking.getInitialURL();
+
+    const match = deepLinkUrl.match(`(?<=${BASE_DEEPLINK_URL_REGEX}\/).+`);
+    if (match.length > 0) {
+      const username = match[0];
+      const otherProfile = await doGetProfileByUsername(username);
+
+      // Check if myself
+      set(InitialStartupAtom, { id: userId, deeplinkProfile: userId === otherProfile.user_id });
+    }
+  } catch (e) {
+    // eslint-disable-next-line no-undef
+    if (__DEV__) {
+      console.error('getDeeplinkUrl error :', e);
+    }
+  }
+};
