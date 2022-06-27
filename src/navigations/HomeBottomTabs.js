@@ -46,6 +46,8 @@ function HomeBottomTabs(props) {
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
   const [, discoveryDispatch] = React.useContext(Context).discovery;
+
+  const [initialStartup] = React.useContext(Context).initialStartup;
   const [unReadMessage] = React.useContext(Context).unReadMessage;
   const [loadingUser, setLoadingUser] = React.useState(true)
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
@@ -244,7 +246,7 @@ function HomeBottomTabs(props) {
     <SafeAreaView style={styles.container}>
       <StatusBar />
       <Tab.Navigator
-        initialRouteName="ChannelList"
+        initialRouteName={initialStartup!== null && initialStartup.deeplinkProfile === true ? 'Profile' : 'ChannelList'}
         // initialRouteName="Profile"
         tabBarOptions={{
           // showLabel: true,

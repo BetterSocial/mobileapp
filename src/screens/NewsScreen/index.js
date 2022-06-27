@@ -23,8 +23,8 @@ import {getDomainIdIFollow, getDomains} from '../../service/domain';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import {getUserId} from '../../utils/users';
 import {setIFollow, setNews} from '../../context/actions/news';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
@@ -164,11 +164,11 @@ const NewsScreen = ({}) => {
 
   const comment = (item) => {
     navigation.navigate('DetailDomainScreen', {
-      item : { 
+      item : {
         ...item,
         score: item?.domain?.credderScore,
         follower: 0,
-      }, 
+      },
       refreshNews: onRefresh});
   };
 
@@ -272,14 +272,11 @@ const NewsScreen = ({}) => {
         />
         </Animated.View>
         
-
         <BlockDomainComponent
           ref={refBlockDomainComponent}
           domain={domain}
           domainId={idBlock}
           screen="news_screen" />
-        
-
     </View>
   );
 };

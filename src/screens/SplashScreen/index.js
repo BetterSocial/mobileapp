@@ -22,18 +22,18 @@ import { verifyTokenGetstream } from '../../service/users';
 const SplashScreen = () => {
   const navigation = useNavigation();
   const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org';
-  // const [isModalShown, setIsModalShown] = React.useState(false);
+  const [isModalShown, setIsModalShown] = React.useState(false);
 
   const [, newsDispatch] = React.useContext(Context).news;
   const [, followingDispatch] = React.useContext(Context).following;
   const create = useClientGetstream();
   const debounceNavigationPage = (selfUserId) => {
     navigation.dispatch(StackActions.replace(selfUserId ? 'HomeTabs' : 'SignIn'));
-  }
+  };
 
   const getDiscoveryData = async (selfUserId) => {
     SplashScreenPackage.hide();
-    debounceNavigationPage(selfUserId)
+    debounceNavigationPage(selfUserId);
   };
 
   const navigateWithoutDeeplink = async (selfUserId) => {

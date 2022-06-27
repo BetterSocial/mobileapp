@@ -25,10 +25,11 @@ import {
   unReadMessageState,
 } from './reducers/unReadMessageReducer';
 import { usersReducer, usersState } from './reducers/userReducer';
+import { initialStartupReducer, initialStartupState } from './reducers/intialStartupReducer';
 
 /**
- * 
- * @typedef {Object} MainContext 
+ *
+ * @typedef {Object} MainContext
  * @property {import('./reducers/discoveryReducer').DiscoveryState} discovery
  */
 const Store = ({ children }) => {
@@ -52,6 +53,7 @@ const Store = ({ children }) => {
     unReadMessage: React.useReducer(unReadMessageReducer, unReadMessageState),
     users: React.useReducer(usersReducer, usersState),
     domains: React.useReducer(domainReducer, domainState),
+    initialStartup: React.useReducer(initialStartupReducer, initialStartupState)
   };
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };
