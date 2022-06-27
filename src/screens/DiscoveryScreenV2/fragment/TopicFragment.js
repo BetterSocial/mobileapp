@@ -29,7 +29,9 @@ const TopicFragment = () => {
 
     const isReady = useIsReady()
 
-    const { topics } = following
+    // const { topics } = following
+    let topics = discovery.initialTopics
+    
     const { isLoadingDiscoveryTopic, followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
@@ -58,6 +60,8 @@ const TopicFragment = () => {
     }
 
     const __renderDiscoveryItem = (from, key, item, index) => {
+        console.log('' + item.name)
+        console.log('' + item?.user_id_follower)
         return <View key={`${key}-${index}`} style={styles.domainContainer}>
             <DomainList
                 // handleSetFollow={() => __handleFollow(from, true, item, index)}
@@ -77,7 +81,9 @@ const TopicFragment = () => {
     const __renderTopicItems = () => {
         if (isFirstTimeOpen) return [<DiscoveryTitleSeparator key="topic-title-separator" text='Suggested Topics' />].concat(topics.map((item, index) => {
             return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery",
-                { ...item, user_id_follower: item.user_id_follower ? item.user_id_follower : myId }, index)
+                // { ...item, user_id_follower: item.user_id_follower ? item.user_id_follower : myId },
+                item,
+                index)
         }))
 
         return (

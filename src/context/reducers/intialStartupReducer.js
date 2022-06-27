@@ -1,6 +1,6 @@
 const initialStartupState = {
   id: null,
-  deeplinkProfile: true,
+  deeplinkProfile: false,
 };
 
 const initialStartupReducer = (state = initialStartupState, action) => {

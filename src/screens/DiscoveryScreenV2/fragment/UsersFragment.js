@@ -30,8 +30,11 @@ const UsersFragment = () => {
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
 
-    const { users } = following
+    // const { users } = following
     // console.log(users)
+
+    let users = discovery.initialUsers
+
     const { isLoadingDiscoveryUser, followedUsers, unfollowedUsers, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
@@ -63,7 +66,8 @@ const UsersFragment = () => {
             let newFollowedUsers = [...users]
             newFollowedUsers[index].user_id_follower = willFollow ? myId : null
 
-            FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
+            // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
+            DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch)
         }
         if (from === FROM_FOLLOWED_USERS) {
             let newFollowedUsers = [...followedUsers]
@@ -106,7 +110,8 @@ const UsersFragment = () => {
 
     const __renderUsersItem = () => {
         if (isFirstTimeOpen) return [<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>].concat(users.map((item, index) => {
-            return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
+            // return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
+            return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)
         }))
 
         return (

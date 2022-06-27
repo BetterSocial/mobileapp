@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import DiscoveryAction from '../context/actions/discoveryAction';
+import DiscoveryRepo from '../service/discovery';
 import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
@@ -130,6 +131,12 @@ function HomeBottomTabs(props) {
         following.setFollowingTopics(response.data, followingDispatch);
       });
 
+      let discoveryInitialUserResponse = await DiscoveryRepo.fetchInitialDiscoveryUsers()
+      DiscoveryAction.setDiscoveryInitialUsers(discoveryInitialUserResponse.suggestedUsers, discoveryDispatch)
+      
+      let discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics()
+      DiscoveryAction.setDiscoveryInitialTopics(discoveryInitialTopicResponse.suggestedTopics, discoveryDispatch)
+      
     } catch (e) {
       console.log('error')
       console.log(e)
