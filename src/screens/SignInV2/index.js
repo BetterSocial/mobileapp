@@ -80,13 +80,15 @@ const SignIn = () => {
       screen_name: 'SignIn',
     });
   });
-  
+
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
       setLoading(true);
       checkToken(exchangeToken)
         .then((res) => {
-          console.log(res, 'response token')
+          if (__DEV__) {
+            console.log(res, 'response token')
+          }
           if (res.success) {
             const { appUserId, countryCode } = res.data;
             setDataHumenId(res.data, dispatch);
@@ -100,7 +102,7 @@ const SignIn = () => {
                     navigation.dispatch(StackActions.replace('HomeTabs'));
 
                   })
-         
+
                 } else {
                   removeLocalStorege('userId');
                   navigation.dispatch(StackActions.replace('ChooseUsername'));
@@ -112,14 +114,15 @@ const SignIn = () => {
               });
           } else {
             SimpleToast.show(res.message, SimpleToast.SHORT)
-            console.log("else data")
           }
         })
         .catch((e) => {
           // SimpleToast.show(`on checkt token catch` + e)
           // console.log('on check token catch')
-          console.log('error');
-          console.log(e);
+          if (__DEV__) {
+            console.log('error');
+            console.log(e);
+          }
         });
     });
     onError((message) => {
@@ -157,7 +160,6 @@ const SignIn = () => {
         {clickTime >= 7 ? <DevDummyLogin resetClickTime={resetClickTime} />  : null}
         <SlideShow onContainerPress={onClickContainer} onChangeNewIndex={handleSlideShow} handleLogin={handleLogin}/>
       </View>
-      
     </SafeAreaView>
   );
 };

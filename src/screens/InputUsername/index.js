@@ -147,7 +147,7 @@ const ChooseUsername = () => {
   const next = () => {
     if (username && username.length > 2 && typeFetch === 'available') {
       setUsername(username, dispatch);
-      navigation.navigate('LocalComunity');
+      navigation.navigate('LocalCommunity');
     } else {
       if (!username) {
         return showMessage({

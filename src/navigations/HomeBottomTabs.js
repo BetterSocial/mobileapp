@@ -33,6 +33,8 @@ import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '..
 import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
+import { useRecoilValue } from 'recoil';
+import { InitialStartupAtom } from '../service/initialStartup';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,7 +46,7 @@ function HomeBottomTabs(props) {
   let [, dispatchProfile] = React.useContext(Context).profile;
   let [, followingDispatch] = React.useContext(Context).following;
 
-  const [initialStartup] = React.useContext(Context).initialStartup;
+  const initialStartup = useRecoilValue(InitialStartupAtom);
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
   const [, discoveryDispatch] = React.useContext(Context).discovery;

@@ -9,7 +9,7 @@ import {
 } from 'react-native-safe-area-context';
 
 import {RecoilRoot} from 'recoil';
-import RootStack from './src/navigations/root-stack';
+import {RootNavigator} from './src/navigations/root-stack';
 import Store from './src/context/Store';
 import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
 import { Platform } from 'react-native';
@@ -96,7 +96,7 @@ const App = () => {
         <Store>
           <NavigationContainer>
             <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
-              <RootStack />
+              <RootNavigator />
             </OverlayProvider>
           </NavigationContainer>
         </Store>

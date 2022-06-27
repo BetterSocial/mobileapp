@@ -25,7 +25,7 @@ const getDeepLinkUrl = async (userId) => {
       const otherProfile = await doGetProfileByUsername(username);
 
       // Check if myself
-      { id: userId, deeplinkProfile: userId === otherProfile.user_id })
+      // { id: userId, deeplinkProfile: userId === otherProfile.user_id })
     }
   } catch (e) {
     // eslint-disable-next-line no-undef

@@ -81,7 +81,7 @@ export const verifyTokenGetstream = async () => {
     }
     return null;
   }
-  return status;
+  return status.data;
 };
 
 export const userPopulate = async () => {

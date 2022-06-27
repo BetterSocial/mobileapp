@@ -21,9 +21,8 @@ export const InitialStartupAtom = atom({
 
         if (savedValue != null && savedValue !== '') {
           const verify = await verifyTokenGetstream();
-
           if (verify !== null && verify !== '') {
-            setSelf({ id: verify, deeplinkProfile: false });
+            setSelf({ id: savedValue, deeplinkProfile: false });
           } else {
             setSelf({ id: '', deeplinkProfile: false });
           }
@@ -36,10 +35,10 @@ export const InitialStartupAtom = atom({
 
       // Subscribe to state changes and persist them to localStorage
       onSet((user) => {
-        console.log(user);
+        console.log(user, 'user');
         if (user !== null && user !== undefined) {
-          // setAccessToken(user);
-          // setRefreshToken(user);
+          setAccessToken(user);
+          setRefreshToken(user);
         } else {
           removeAccessToken();
         }
@@ -65,13 +64,16 @@ export const initialStartupTask = ({ snapshot, set }) => async () => {
   try {
     const deepLinkUrl = await Linking.getInitialURL();
 
-    const match = deepLinkUrl.match(`(?<=${BASE_DEEPLINK_URL_REGEX}\/).+`);
-    if (match.length > 0) {
-      const username = match[0];
-      const otherProfile = await doGetProfileByUsername(username);
+    if (deepLinkUrl !== null) {
+      const match = deepLinkUrl.match(`(?<=${BASE_DEEPLINK_URL_REGEX}\/).+`);
 
-      // Check if myself
-      set(InitialStartupAtom, { id: userId, deeplinkProfile: userId === otherProfile.user_id });
+      if (match.length > 0) {
+        const username = match[0];
+        const otherProfile = await doGetProfileByUsername(username);
+
+        // Check if myself
+        set(InitialStartupAtom, { id: userId, deeplinkProfile: userId === otherProfile.user_id });
+      }
     }
   } catch (e) {
     // eslint-disable-next-line no-undef
