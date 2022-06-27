@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Dimensions, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, Keyboard, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
@@ -7,16 +7,21 @@ import { fonts } from '../../../utils/fonts';
 const { width } = Dimensions.get('screen');
 
 const DiscoveryTab = ({ onChangeScreen, selectedScreen = 0 }) => {
+    const handleTabOnClicked = React.useCallback((index) => {
+        Keyboard.dismiss()
+        onChangeScreen(index)
+    }, [])
+
     const tabs = ["Users", "Topics", "Domains", "News"];
     return <KeyboardAvoidingView>
-        <ScrollView horizontal={true} style={styles.tabContainer}>
+        <ScrollView horizontal={true} style={styles.tabContainer} keyboardShouldPersistTaps='handled'>
             {tabs.map((item, index) => {
                 return <Pressable key={`tabItem-${item}`}
                     android_ripple={{
                         color: colors.gray1
                     }}
                     style={styles.tabItem}
-                    onPress={() => onChangeScreen(index)}>
+                    onPress={() => handleTabOnClicked(index)}>
                     <View style={styles.tabItemContainer}>
                         <Text style={index === selectedScreen ? styles.tabItemTextFocus : styles.tabItemText}>{item}</Text>
                         <View style={index === selectedScreen ? styles.underlineFocus : {}}></View>

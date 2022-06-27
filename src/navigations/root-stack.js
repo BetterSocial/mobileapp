@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SplashScreen from 'react-native-splash-screen';
+// import SplashScreenNative from 'react-native-splash-screen';
 import {
   Platform,
   SafeAreaView,
@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {useRecoilValue} from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -36,6 +36,7 @@ import ReplyComment from '../screens/ReplyComment';
 import Settings from '../screens/Settings';
 // import SignIn from '../screens/SignIn';
 import SignIn from '../screens/SignInV2';
+import SplashScreen from '../screens/SplashScreen';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
@@ -89,7 +90,7 @@ const RootStack = () => {
   React.useEffect(() => {
     if (initialStartup.id !== null) {
       setTimeout(() => {
-        SplashScreen.hide();
+        // SplashScreenNative.hide();
       }, 700);
     }
   }, [initialStartup])
@@ -101,13 +102,19 @@ const RootStack = () => {
       }}>
       <StatusBar translucent backgroundColor="white" />
       <Stack.Navigator
-        initialRouteName={initialStartup.id !== null && initialStartup.id !== '' ? "HomeTabs" : "SignIn"}
+        // initialRouteName={initialStartup.id !== null && initialStartup.id !== '' ? "HomeTabs" : "SignIn"}
+        initualRouteName="SplashScreen"
         screenOptions={{
           headerStyle: {
             height: Platform.OS === 'ios' ? 64 : 56 + StatusBar.currentHeight,
             paddingTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight,
           },
         }}>
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="GroupSetting"
           component={GroupSetting}
@@ -304,10 +311,10 @@ const RootStack = () => {
             }
           }}
         /> */}
-         <Stack.Screen
+        <Stack.Screen
           name="DiscoveryScreen"
           component={DiscoveryScreenV2}
-          options={{ 
+          options={{
             headerShown: false,
           }}
         />
@@ -315,7 +322,7 @@ const RootStack = () => {
           name='BlockScreen'
           component={Blocked}
           options={{
-            headerShown:  isIos ? profileState.isShowHeader : true,
+            headerShown: isIos ? profileState.isShowHeader : true,
             header: ({ navigation }) => {
               return (
                 <SafeAreaView>
