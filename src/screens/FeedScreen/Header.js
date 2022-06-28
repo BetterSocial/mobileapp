@@ -29,7 +29,7 @@ import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
-import { SOURCE_FEED_TAB, SOURCE_PDP } from '../../utils/constants';
+import { PRIVACY_PUBLIC, SOURCE_FEED_TAB, SOURCE_PDP } from '../../utils/constants';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
@@ -104,7 +104,7 @@ const _renderAnonimity = ({
             <View style={styles.containerFeedText}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
-              {privacy === 'Public' ? (
+              {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
                 <Memoic_globe height={16} width={16} />
               ) : (
                 <MemoPeopleFollow height={16} width={16} />
@@ -222,7 +222,7 @@ const _renderProfileNormal = ({
             <View style={[styles.containerFeedText, { paddingBottom: 0 }]}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
-              {privacy === 'Public' ? (
+              {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
                 <Memoic_globe height={16} width={16} />
               ) : (
                 <MemoPeopleFollow height={16} width={16} />

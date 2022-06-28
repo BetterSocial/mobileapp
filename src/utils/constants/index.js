@@ -33,6 +33,9 @@ const DISCOVERY_TAB_NEWS = 3;
 const SOURCE_FEED_TAB = 'feed tab';
 const SOURCE_PDP = 'PDP';
 
+const PRIVACY_PUBLIC = 'public';
+const PRIVACY_PEOPLE_I_FOLLOW = 'people_i_follow';
+
 const ENABLE_DEV_ONLY_FEATURE = true;
 
 export {
@@ -65,4 +68,6 @@ export {
   POST_VERB_LINK,
   POST_VERB_POLL,
   POST_VERB_STANDARD,
+  PRIVACY_PEOPLE_I_FOLLOW,
+  PRIVACY_PUBLIC,
 };
