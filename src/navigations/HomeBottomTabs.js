@@ -52,7 +52,8 @@ function HomeBottomTabs(props) {
   const [unReadMessage] = React.useContext(Context).unReadMessage;
   const [loadingUser, setLoadingUser] = React.useState(true)
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
-
+  const LIMIT_FIRST_FEEDS = 1
+  const LIMIT_FIRST_NEWS = 3
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
@@ -117,7 +118,6 @@ function HomeBottomTabs(props) {
 
     try {
       getFollowing(selfUserId).then((response) => {
-        console.log('asdadadasdadadasd')
         following.setFollowingUsers(response.data, followingDispatch);
       });
 
@@ -138,8 +138,6 @@ function HomeBottomTabs(props) {
       DiscoveryAction.setDiscoveryInitialTopics(discoveryInitialTopicResponse.suggestedTopics, discoveryDispatch)
       
     } catch (e) {
-      console.log('error')
-      console.log(e)
       throw new Error(e)
     }
   }
@@ -175,7 +173,7 @@ function HomeBottomTabs(props) {
   };
 
   const getDomain = () => {
-    getDomains().then((response) => {
+    getDomains(0, LIMIT_FIRST_NEWS).then((response) => {
       saveToCache(NEWS_CACHE, response)
       setNews(response.data, newsDispatch);
     }).catch((e) => {
@@ -185,8 +183,7 @@ function HomeBottomTabs(props) {
 
   const getDataFeeds = async (offset = 0) => {
     try {
-      let query = `?offset=${offset}`
-
+      let query = `?offset=${offset}&limit=${LIMIT_FIRST_FEEDS}`
       const dataFeeds = await getMainFeed(query);
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
