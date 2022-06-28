@@ -178,7 +178,7 @@ const WhotoFollow = () => {
         username: usersState.username,
         human_id: usersState.userId,
         country_code: usersState.countryCode,
-        // human_id: 'COBA-LAGI-AJA',
+        // human_id: 'NNDG-PRMN-0001',
         // country_code: 'ID',
         profile_pic_path: usersState.photo,
         status: 'A',
