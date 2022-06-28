@@ -110,7 +110,7 @@ const ProfileScreen = ({ route }) => {
   const {interactionsComplete} = useAfterInteractions()
   let isNotFromHomeTab = route?.params?.isNotFromHomeTab
   let bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
-
+  const LIMIT_PROFILE_FEED = 1
   let { feeds } = myProfileFeed;
 
   React.useEffect(() => {
@@ -143,7 +143,7 @@ const ProfileScreen = ({ route }) => {
       // getMyFeeds();
     });
     if(interactionsComplete) {
-      getMyFeeds();
+      getMyFeeds(0, LIMIT_PROFILE_FEED);
       getAccessToken().then((val) => {
         setTokenJwt(val);
       });
@@ -184,8 +184,9 @@ const ProfileScreen = ({ route }) => {
 
   }
 
-  const getMyFeeds = async (offset = 0) => {
-    let result = await getSelfFeedsInProfile(offset);
+  const getMyFeeds = async (offset = 0, limit = 10) => {
+    let result = await getSelfFeedsInProfile(offset, limit);
+    console.log('kakak',result.data.length)
     if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
     else {
       let clonedFeeds = [...feeds]
@@ -500,7 +501,7 @@ const ProfileScreen = ({ route }) => {
 
   const handleRefresh = () => {
     setLoading(true)
-    getMyFeeds(0)
+    getMyFeeds(0, LIMIT_PROFILE_FEED)
   }
 
   const renderHeader = React.useMemo(() => {
