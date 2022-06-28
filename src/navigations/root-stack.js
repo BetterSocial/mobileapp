@@ -1,4 +1,5 @@
 import * as React from 'react';
+// import SplashScreenNative from 'react-native-splash-screen';
 import {
   Platform,
   SafeAreaView,
@@ -7,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useRecoilValue } from 'recoil';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -53,24 +55,46 @@ import {
   ProfileScreen,
 } from '../screens';
 import { Context } from '../context';
+import { InitialStartupAtom } from '../service/initialStartup';
 import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
+import { getDeepLinkUrl } from './linking';
+import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 
 const Stack = createStackNavigator();
-const RootStact = () => {
+const RootStack = () => {
+  const [profile, setProfile] = React.useState(null);
+  const initialStartup = useRecoilValue(InitialStartupAtom);
   const [clientState] = React.useContext(Context).client;
+  const [, initialStartupDispatch] = React.useContext(Context).initialStartup;
   const [profileState] = React.useContext(Context).profile;
   const { client } = clientState;
   const isIos = Platform.OS === 'ios'
+
+  const create = useClientGetstream();
+
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
+    if (initialStartup !== '') {
+      // console.log(initialStartup, 'initialStartup');
+      getDeepLinkUrl(profile, initialStartupDispatch);
+      create();
+    }
 
     return async () => {
       await client?.disconnectUser();
     };
   }, []);
-  // console.log('kurama',profileState)
+
+  React.useEffect(() => {
+    if (initialStartup.id !== null) {
+      setTimeout(() => {
+        // SplashScreenNative.hide();
+      }, 700);
+    }
+  }, [initialStartup])
+
   return (
     <View
       style={{
@@ -78,13 +102,19 @@ const RootStact = () => {
       }}>
       <StatusBar translucent backgroundColor="white" />
       <Stack.Navigator
-        initialRouteName="SplashScreen"
+        // initialRouteName={initialStartup.id !== null && initialStartup.id !== '' ? "HomeTabs" : "SignIn"}
+        initualRouteName="SplashScreen"
         screenOptions={{
           headerStyle: {
             height: Platform.OS === 'ios' ? 64 : 56 + StatusBar.currentHeight,
             paddingTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight,
           },
         }}>
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="GroupSetting"
           component={GroupSetting}
@@ -143,11 +173,6 @@ const RootStact = () => {
         <Stack.Screen
           name="OtherProfilePostDetailPage"
           component={OtherProfilePostDetail}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SplashScreen"
-          component={SplashScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -275,7 +300,7 @@ const RootStact = () => {
         {/* <Stack.Screen
           name="DiscoveryScreenOld"
           component={DiscoveryScreen}
-          options={{ 
+          options={{
             headerShown: true,
             header: ({}) => {
               return (
@@ -286,10 +311,10 @@ const RootStact = () => {
             }
           }}
         /> */}
-         <Stack.Screen
+        <Stack.Screen
           name="DiscoveryScreen"
           component={DiscoveryScreenV2}
-          options={{ 
+          options={{
             headerShown: false,
           }}
         />
@@ -297,7 +322,7 @@ const RootStact = () => {
           name='BlockScreen'
           component={Blocked}
           options={{
-            headerShown:  isIos ? profileState.isShowHeader : true,
+            headerShown: isIos ? profileState.isShowHeader : true,
             header: ({ navigation }) => {
               return (
                 <SafeAreaView>
@@ -320,7 +345,7 @@ const RootStact = () => {
   );
 };
 
-export default RootStact;
+export default RootStack;
 const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.white,

@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import DiscoveryAction from '../context/actions/discoveryAction';
+import DiscoveryRepo from '../service/discovery';
 import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
@@ -46,6 +47,8 @@ function HomeBottomTabs(props) {
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
   const [, discoveryDispatch] = React.useContext(Context).discovery;
+
+  const [initialStartup] = React.useContext(Context).initialStartup;
   const [unReadMessage] = React.useContext(Context).unReadMessage;
   const [loadingUser, setLoadingUser] = React.useState(true)
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
@@ -119,13 +122,21 @@ function HomeBottomTabs(props) {
       });
 
       getFollowedDomain().then((response) => {
+        console.log('qweqweqweqeqwe')
         following.setFollowingDomain(response.data.data, followingDispatch);
       });
 
       getFollowingTopic().then((response) => {
+        console.log('zxczxczczxc')
         following.setFollowingTopics(response.data, followingDispatch);
       });
 
+      let discoveryInitialUserResponse = await DiscoveryRepo.fetchInitialDiscoveryUsers()
+      DiscoveryAction.setDiscoveryInitialUsers(discoveryInitialUserResponse.suggestedUsers, discoveryDispatch)
+      
+      let discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics()
+      DiscoveryAction.setDiscoveryInitialTopics(discoveryInitialTopicResponse.suggestedTopics, discoveryDispatch)
+      
     } catch (e) {
       console.log('error')
       console.log(e)
@@ -244,7 +255,7 @@ function HomeBottomTabs(props) {
     <SafeAreaView style={styles.container}>
       <StatusBar />
       <Tab.Navigator
-        initialRouteName="ChannelList"
+        initialRouteName={initialStartup!== null && initialStartup.deeplinkProfile === true ? 'Profile' : 'ChannelList'}
         // initialRouteName="Profile"
         tabBarOptions={{
           // showLabel: true,

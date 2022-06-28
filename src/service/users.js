@@ -1,4 +1,3 @@
-import SimpleToast from 'react-native-simple-toast';
 import config from 'react-native-config';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { BASE_URL } from '@env';
@@ -60,32 +59,29 @@ const verifyAccessToken = async () => api
     return code;
   });
 
-export const verifyTokenGetstream = async () => {
-  const status = await verifyAccessToken();
-  if (status === 401) {
-    const res = await refreshToken();
-    if (res.code === 200) {
-      await setAccessToken(res.data.token);
-      await setRefreshToken(res.data.refresh_token);
-      return res.data.token;
-    }
-    return null;
-  }
-  return status;
-};
-
 export const refreshToken = async () => {
   const token = await getRefreshToken();
   const options = {
-    method: 'get',
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
   // const resp = await fetchWithTimeout(this.url, options, 10000);
-  const resp = await fetch(`${config.BASE_URL}/users/refresh-token`, options);
-  return await resp.json();
+  const resp = await api.get('/users/refresh-token', options);
+  return resp.data;
+};
+
+export const verifyTokenGetstream = async () => {
+  const status = await verifyAccessToken();
+  if (status === 401) {
+    const res = await refreshToken();
+    if (res.code === 200) {
+      return res.data.token;
+    }
+    return null;
+  }
+  return status;
 };
 
 export const userPopulate = async () => {

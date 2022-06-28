@@ -62,8 +62,10 @@ const DiscoverySearch = ({ }) => {
   const __debounceChangeText = (text) => {
     if (text.length > 2) {
       DiscoveryAction.setDiscoveryLoadingData(true, discoveryDispatch)
+      DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
       debounced(text)
     } else {
+      if(text.length === 0) DiscoveryAction.setDiscoveryFirstTimeOpen(true, discoveryDispatch)
       DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
       debounced.cancel()
     }
@@ -72,7 +74,6 @@ const DiscoverySearch = ({ }) => {
   const __handleChangeText = (text) => {
     setSearchText(text)
     setIsTextAvailable(text.length > 0)
-    DiscoveryAction.setDiscoveryFirstTimeOpen(text.length <= 2, discoveryDispatch)
     __debounceChangeText(text)
     GeneralComponentAction.setDiscoverySearchBar(text, generalComponentDispatch)
   }
@@ -86,7 +87,14 @@ const DiscoverySearch = ({ }) => {
     // discoverySearchBarRef.current.focus()
   }
 
+  const __handleOnSubmitEditing = (event) => {
+    let { text } = event?.nativeEvent
+    __handleSubmitSearchData(text)
+  }
+
   const __handleSubmitSearchData = async (text) => {
+    DiscoveryAction.setDiscoveryLoadingData(true, discoveryDispatch)
+    DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
     __fetchDiscoveryData(text)
 
     let result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
@@ -204,7 +212,7 @@ const DiscoverySearch = ({ }) => {
             onBlur={() => __handleFocus(false)}
             multiline={false}
             returnKeyType="search"
-            onSubmitEditing={__handleSubmitSearchData}
+            onSubmitEditing={__handleOnSubmitEditing}
             placeholder={StringConstant.discoverySearchBarPlaceholder}
             placeholderTextColor={COLORS.gray1}
             style={styles.input} />

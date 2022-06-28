@@ -1,18 +1,14 @@
 import * as React from 'react';
 import FlashMessage from 'react-native-flash-message';
-import PushNotification from 'react-native-push-notification';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
-
-import messaging from '@react-native-firebase/messaging';
 import { HumanIDProvider } from '@human-id/react-native-humanid';
 import { NavigationContainer } from '@react-navigation/native';
 import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
-import {RecoilRoot} from 'recoil';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
+import {RecoilRoot} from 'recoil';
 import RootStack from './src/navigations/root-stack';
 import Store from './src/context/Store';
 import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
@@ -75,12 +71,12 @@ const App = () => {
     // Register FCM token with stream chat server.
     // requestPermission()
     // createChannel();
-    
+
     // const unsubscribe = messaging().onMessage((remoteMessage) => {
     //   console.log('NOtifICAtion');
     //   console.log('messag ', remoteMessage);
     //   !isIos ? pushNotifAndroid(remoteMessage) : pushNotifIos(remoteMessage)
-   
+
     // });
     // initFCM();
     const init = async () => {
@@ -96,15 +92,15 @@ const App = () => {
   const newLocal = (
     <>
       <HumanIDProvider />
-      <Store>
-        <RecoilRoot>
-        <NavigationContainer>
-          <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
-            <RootStack />
-          </OverlayProvider>
-        </NavigationContainer>
-        </RecoilRoot>
-      </Store>
+      <RecoilRoot>
+        <Store>
+          <NavigationContainer>
+            <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
+              <RootStack />
+            </OverlayProvider>
+          </NavigationContainer>
+        </Store>
+      </RecoilRoot>
       <FlashMessage position="top" />
     </>
   );

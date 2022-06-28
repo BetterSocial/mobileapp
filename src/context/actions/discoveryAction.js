@@ -7,6 +7,8 @@ import {
   DISCOVERY_SET_DATA_USERS,
   DISCOVERY_SET_FIRST_TIME_OPEN,
   DISCOVERY_SET_FOCUS,
+  DISCOVERY_SET_INITIAL_TOPICS,
+  DISCOVERY_SET_INITIAL_USERS,
   DISCOVERY_SET_LOADING_DATA,
   DISCOVERY_SET_LOADING_DATA_DOMAIN,
   DISCOVERY_SET_LOADING_DATA_NEWS,
@@ -30,6 +32,31 @@ const setDiscoveryLoadingData = async (isLoading, dispatch) => {
     payload: isLoading,
   });
 };
+
+/**
+ *
+ * @param {import('../../service/discovery').FetchInitialDiscoveryTopicsResponse.SuggestedTopics[]} data
+ * @param {Any} dispatch
+ */
+const setDiscoveryInitialTopics = async (data, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_INITIAL_TOPICS,
+    payload: data,
+  });
+};
+
+/**
+ *
+ * @param {import('../../service/discovery').FetchInitialDiscoveryUsersResponse.SuggestedUsers[]} data
+ * @param {Any} dispatch
+ */
+const setDiscoveryInitialUsers = async (data, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_INITIAL_USERS,
+    payload: data,
+  });
+};
+
 /**
  *
  * @param {Boolean} isLoading
@@ -200,6 +227,8 @@ const reset = async (dispatch) => {
 
 const DiscoveryAction = {
   reset,
+  setDiscoveryInitialTopics,
+  setDiscoveryInitialUsers,
   setDiscoveryData,
   setDiscoveryDataDomains,
   setDiscoveryDataNews,
