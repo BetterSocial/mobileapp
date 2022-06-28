@@ -159,7 +159,9 @@ const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
     </View>
   );
 };
-export default ContainerComment;
+export default React.memo (ContainerComment, (prevProps, nextProps) => {
+  return prevProps.comments === nextProps.comments
+});
 
 const styles = StyleSheet.create({
   container: {

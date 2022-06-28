@@ -3,6 +3,7 @@ import IconEn from 'react-native-vector-icons/Entypo';
 import Toast from 'react-native-simple-toast';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image'
 
 import BlockComponent from '../BlockComponent';
 import MemoCommentReply from '../../assets/icon/CommentReply';
@@ -161,13 +162,14 @@ const Comment = ({
       })}>
       <TouchableOpacity onPress={openProfile}>
         <View style={styles.profile}>
-          <Image
+          <FastImage
             source={
               photo
-                ? {uri: removeWhiteSpace(photo)}
+                ? {uri: removeWhiteSpace(photo), priority: FastImage.priority.normal}
                 : require('../../assets/images/ProfileDefault.png')
             }
             style={styles.image}
+            resizeMode={FastImage.resizeMode.contain}
           />
           <View style={styles.containerUsername}>
             <Text style={styles.username}>{user.data.username} •</Text>

@@ -62,6 +62,7 @@
     "react-native-document-picker": "5.0.2",
     "react-native-dotenv": "^2.5.3",
     "react-native-emoji-selector": "^0.2.0",
+    "react-native-fast-image": "^8.5.11",
     "react-native-flash-message": "^0.1.23",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.10.3",
