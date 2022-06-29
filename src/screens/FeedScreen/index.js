@@ -41,7 +41,7 @@ const FeedScreen = (props) => {
   // const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
   const [shouldSearchBarShown, setShouldSearchBarShown] = React.useState(0)
   const [postOffset, setPostOffset] = React.useState(0)
-
+  // const [selectedFeed, setSelectedFeed] = React.useState(null)
   const offset = React.useRef(new Animated.Value(-70)).current
 
   const refBlockComponent = React.useRef();
@@ -233,6 +233,7 @@ const FeedScreen = (props) => {
 
   const onPressBlock = (value) => {
     refBlockComponent.current.openBlockComponent(value);
+    // setSelectedFeed(value)
   };
 
   const onRefresh = () => {

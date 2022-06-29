@@ -16,8 +16,6 @@ const BlockedUserList = (props) => {
     const handleFetchData = async () => {
         setIsLoading(true)
         const userList = await getBlockedUserList()
-        console.log('userList')
-        console.log(userList)
         if(userList.success) {
             const mappingData = userList.data.map((data) => ({ ...data, name: data.user.username, image: data.user.profile_pic_path, description: null}))
             setListBlockedUser(mappingData)
@@ -54,6 +52,7 @@ const BlockedUserList = (props) => {
    }
 
    const handleUnblockUser = async (data) => {
+    console.log('susan',data , listBlockedUser,)
     const mappingData = listBlockedUser.map((blocked) => {
         if(blocked.user_id_blocked === data.user_id_blocked) {
             return {...blocked, isUnblocked: true }
@@ -64,10 +63,13 @@ const BlockedUserList = (props) => {
         userId: data.user_id_blocked,
         source: 'blocklist_screen',
       };
+      setListBlockedUser(mappingData)
+
       const blockingUser = await unblockUserApi(dataSend);
-      if(blockingUser.code === 200) {
-        setListBlockedUser(mappingData)
-      }
+      // console.log(blockingUser, 'suratan')
+      // if(blockingUser.code === 200) {
+      //   // setListBlockedUser(mappingData)
+      // }
    }
 
    const handleTabbarName = () => {
@@ -108,4 +110,4 @@ BlockedUserList.propTypes = {
 }
 
 
-export default BlockedUserList
+export default React.memo (BlockedUserList)

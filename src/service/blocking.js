@@ -3,6 +3,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import api from './config';
 
 export const blockUser = async (data) => {
+  console.log('sapiman',data)
   try {
     const resApi = await api.post('/users/blockuser', data);
     return resApi.data;

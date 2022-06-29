@@ -23,4 +23,4 @@ const BlockedTopicList = () => {
 }
 
 
-export default BlockedTopicList
+export default React.memo (BlockedTopicList)

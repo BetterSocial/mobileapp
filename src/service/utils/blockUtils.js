@@ -29,7 +29,9 @@ const uiBlockUser = async(postId, userId, source, reason, message, callback) => 
         reason,
         message,
     };
+    console.log('mamiko',data )
     let result = await blockUser(data);
+    console.log('result block',result)
     if (result.code === 200) {
         callback()
         Toast.show(

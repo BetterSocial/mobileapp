@@ -443,7 +443,7 @@ const PostPageDetailIdComponent = (props) => {
   const __handleOnPressScore = () => {
     showScoreAlertDialog(item)
   }
-
+  console.log('item nih', item)
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
