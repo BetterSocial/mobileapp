@@ -1,17 +1,17 @@
 import * as React from 'react';
-
-import {Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View, BackHandler} from 'react-native';
-import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction'
-
 import Animated from 'react-native-reanimated';
-import {Context} from '../../context';
+import {BackHandler, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+
 import DomainFragmentScreen from './elements/DomainFragmentScreen';
 import Followings from '.';
 import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
+import {Context} from '../../context';
 import {colors} from '../../utils/colors';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {fonts} from '../../utils/fonts';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction'
+import { withInteractionsManaged, withInteractionsManagedNoStatusBar } from '../../components/WithInteractionManaged';
+
 function FollowingScreen(props) {
   const {navigation} = props
   const [, dispatchNavbar] = React.useContext(Context).profile
@@ -153,7 +153,7 @@ function FollowingScreen(props) {
   );
 }
 
-export default withInteractionsManaged (FollowingScreen)
+export default withInteractionsManagedNoStatusBar(FollowingScreen)
 
 const S = StyleSheet.create({
   container: {
