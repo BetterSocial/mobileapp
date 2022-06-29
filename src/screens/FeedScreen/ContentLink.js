@@ -3,12 +3,14 @@ import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-nativ
 import { useRoute } from '@react-navigation/native';
 
 import Card from '../../components/Card/Card';
+import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import dimen from '../../utils/dimen';
 import { COLORS, SIZES } from '../../utils/theme';
+import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { smartRender } from '../../utils/Utils';
 
-const ContentLink = ({ og, onPress, onHeaderPress, onCardContentPress, score, message = "", messageContainerStyle = {} }) => {
+const ContentLink = ({ og, onPress, onHeaderPress, onCardContentPress, score, message = "", messageContainerStyle = {}, topics = [] }) => {
   let route = useRoute();
   let isTouchableDisabled = route?.name === 'PostDetailPage';
 
@@ -17,6 +19,7 @@ const ContentLink = ({ og, onPress, onHeaderPress, onCardContentPress, score, me
     if (sanitizeUrl?.length === 0) return <></>
     return <View style={{ ...styles.messageContainer, ...messageContainerStyle }}>
       <Text style={styles.message} numberOfLines={3}>{sanitizeUrl}</Text>
+      <TopicsChip topics={topics} />
     </View>
   }
 

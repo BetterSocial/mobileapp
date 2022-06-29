@@ -1,29 +1,29 @@
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-  Dimensions,
-  Image,
-  FlatList,
-  Pressable,
-  Text,
-} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-
 import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {COLORS, SIZES} from '../../utils/theme';
 import ImageLayouter from './elements/ImageLayouter';
+import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import { COLORS, SIZES } from '../../utils/theme';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
 
-const {width: screenWidth} = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
-const Content = ({message, images_url, style, onPress}) => {
+const Content = ({ message, images_url, style, onPress, topics = [] }) => {
   const route = useRoute();
   const navigation = useNavigation();
   const cekImage = () => {
@@ -35,7 +35,7 @@ const Content = ({message, images_url, style, onPress}) => {
       title: 'Photo',
       index,
       images: images_url.reduce((acc, current) => {
-        acc.push({url: current});
+        acc.push({ url: current });
         return acc;
       }, []),
     });
@@ -44,32 +44,42 @@ const Content = ({message, images_url, style, onPress}) => {
   const handleText = (text, onPress) => {
     if (text.length > 750) {
       return (
-        <Text style={styles.text(text)}>
-          {`${text.substring(0, 750).trim()} `}
-          <Text onPress={onPress} style={styles.seemore}>
-            ...more
+        <View style={styles.textContainer}>
+          <Text style={styles.text(text)}>
+            {`${text.substring(0, 750).trim()} `}
+            <Text onPress={onPress} style={styles.seemore}>
+              ...more
+            </Text>
+            <TopicsChip topics={topics} />
           </Text>
-        </Text>
+        </View>
       );
     } else {
-      return <Text style={styles.text(text)}>{text}</Text>;
+      return <View style={styles.textContainer}>
+        <Text style={styles.text(text)}>{text}</Text>
+        <TopicsChip topics={topics} />
+      </View>;
     }
   };
 
   const handleTextMedia = (text, onPress) => {
     return (
-      <Text numberOfLines={4} style={styles.textMedia(text)}>
-        {text.length < 180 ? (
-          `${text}`
-        ) : (
-          <Text>
-            {`${text.substring(0, 165)}...`}
-            <Text onPress={onPress} style={styles.seemore}>
-              more
+      <View>
+        <Text numberOfLines={4} style={styles.textMedia(text)}>
+          {text.length < 180 ? (
+            `${text}`
+          ) : (
+            <Text>
+              {`${text.substring(0, 165)}...`}
+              <Text onPress={onPress} style={styles.seemore}>
+                more
+              </Text>
             </Text>
-          </Text>
-        )}
-      </Text>
+          )}
+        </Text>
+        <TopicsChip topics={topics} />
+      </View>
+
     );
   };
 
@@ -108,6 +118,7 @@ Content.propTypes = {
   images_url: PropTypes.array,
   style: PropTypes.object,
   onPress: PropTypes.func,
+  topics: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default Content;
@@ -244,7 +255,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
+    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
     backgroundColor: 'white',
     borderRadius: 8,
   },
@@ -258,5 +269,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     width: 32,
     height: 32,
+  },
+  textContainer: {
   },
 });
