@@ -12,22 +12,23 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {useRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
-import {COLORS} from '../../utils/theme';
+import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import { COLORS } from '../../utils/theme';
 import {
   NO_POLL_UUID,
   getPollTime,
   isPollExpired,
 } from '../../utils/string/StringUtils';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {inputSingleChoicePoll} from '../../service/post';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
+import { inputSingleChoicePoll } from '../../service/post';
 
-const {width: screenWidth} = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
 const ContentPoll = ({
   message,
@@ -41,6 +42,7 @@ const ContentPoll = ({
   pollexpiredat,
   index = -1,
   voteCount = 0,
+  topics = []
 }) => {
   let modifiedPoll = polls.reduce(
     (acc, current) => {
@@ -50,13 +52,13 @@ const ContentPoll = ({
         acc.maxId = [];
         acc.maxId.push(current.polling_option_id);
       } else if (current.counter === acc.maxValue) {
-        let {maxId} = acc;
+        let { maxId } = acc;
         maxId.push(current.polling_option_id);
       }
 
       return acc;
     },
-    {totalpoll: 0, maxId: [], maxValue: 0},
+    { totalpoll: 0, maxId: [], maxValue: 0 },
   );
 
   let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] =
@@ -74,7 +76,7 @@ const ContentPoll = ({
       return;
     }
     let newPolls = [...polls];
-    let newItem = {...item};
+    let newItem = { ...item };
 
     if (multiplechoice) {
       newItem.isalreadypolling = true;
@@ -132,18 +134,21 @@ const ContentPoll = ({
 
   const handleTextCaption = (text, onPress) => {
     return (
-      <Text numberOfLines={4} style={styles.textMedia(text)}>
-        {text.length < 180 ? (
-          `${text}`
-        ) : (
-          <Text>
-            {`${text.substring(0, 165)}...`}
-            <Text onPress={onPress} style={styles.seemore}>
-              more
+      <View>
+        <Text numberOfLines={4} style={styles.textMedia(text)}>
+          {text.length < 180 ? (
+            `${text}`
+          ) : (
+            <Text>
+              {`${text.substring(0, 165)}...`}
+              <Text onPress={onPress} style={styles.seemore}>
+                more
+              </Text>
             </Text>
-          </Text>
-        )}
-      </Text>
+          )}
+        </Text>
+        <TopicsChip topics={topics} />
+      </View>
     );
   };
 
@@ -167,16 +172,16 @@ const ContentPoll = ({
               horizontal={true}
               pagingEnabled={true}
               data={images_url}
-              renderItem={({item, index}) => {
+              renderItem={({ item, index }) => {
                 return (
                   <Image
-                    source={{uri: item}}
+                    source={{ uri: item }}
                     style={styles.imageList}
                     resizeMode={'cover'}
                   />
                 );
               }}
-              keyExtractor={({item, index}) => index}
+              keyExtractor={({ item, index }) => index}
             />
           </View>
         ) : (
@@ -267,9 +272,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: colors.blackgrey,
   },
-  fletlist: {flex: 1},
-  containerShowMessage: {justifyContent: 'center', flex: 1},
-  imageList: {flex: 1, width: screenWidth - 32, borderRadius: 16},
+  fletlist: { flex: 1 },
+  containerShowMessage: { justifyContent: 'center', flex: 1 },
+  imageList: { flex: 1, width: screenWidth - 32, borderRadius: 16 },
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -351,7 +356,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ios: 0, android: 1}),
+    marginBottom: Platform.select({ ios: 0, android: 1 }),
     backgroundColor: 'white',
     borderRadius: 8,
   },

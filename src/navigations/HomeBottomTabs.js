@@ -111,11 +111,6 @@ function HomeBottomTabs(props) {
     let selfUserId = await getUserId();
     // Not using await so splash screen can navigate to next screen faster
 
-    let response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
-    if (!response) return
-    // setItems(JSON.parse(response))
-    DiscoveryAction.setDiscoveryRecentSearch(JSON.parse(response), discoveryDispatch)
-
     try {
       getFollowing(selfUserId).then((response) => {
         following.setFollowingUsers(response.data, followingDispatch);
@@ -133,10 +128,15 @@ function HomeBottomTabs(props) {
 
       let discoveryInitialUserResponse = await DiscoveryRepo.fetchInitialDiscoveryUsers()
       DiscoveryAction.setDiscoveryInitialUsers(discoveryInitialUserResponse.suggestedUsers, discoveryDispatch)
-      
+
       let discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics()
       DiscoveryAction.setDiscoveryInitialTopics(discoveryInitialTopicResponse.suggestedTopics, discoveryDispatch)
-      
+
+      let response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
+      if (!response) return
+      // setItems(JSON.parse(response))
+      DiscoveryAction.setDiscoveryRecentSearch(JSON.parse(response), discoveryDispatch)
+
     } catch (e) {
       throw new Error(e)
     }
@@ -252,7 +252,7 @@ function HomeBottomTabs(props) {
     <SafeAreaView style={styles.container}>
       <StatusBar />
       <Tab.Navigator
-        initialRouteName={initialStartup!== null && initialStartup.deeplinkProfile === true ? 'Profile' : 'ChannelList'}
+        initialRouteName={initialStartup !== null && initialStartup.deeplinkProfile === true ? 'Profile' : 'ChannelList'}
         // initialRouteName="Profile"
         tabBarOptions={{
           // showLabel: true,

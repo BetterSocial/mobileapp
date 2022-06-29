@@ -20,6 +20,7 @@ import ContentLink from '../../screens/FeedScreen/ContentLink';
 import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
+import Log from '../../utils/log/Log';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import dimen from '../../utils/dimen';
@@ -468,6 +469,7 @@ const PostPageDetailIdComponent = (props) => {
                 isalreadypolling={item.isalreadypolling}
                 // onnewpollfetched={onNewPollFetched}
                 voteCount={item.voteCount}
+                topics={item?.topics}
               />
             )}
 
@@ -479,6 +481,7 @@ const PostPageDetailIdComponent = (props) => {
                 onCardContentPress={() => navigateToLinkContextPage(item)}
                 message={item?.message}
                 score={item?.credderScore}
+                topics={item?.topics}
               />
             )}
 
@@ -490,6 +493,7 @@ const PostPageDetailIdComponent = (props) => {
                   item.images_url.length,
                   height,
                 )}
+                topics={item?.topics}
               />
             )}
             <Gap height={16} />

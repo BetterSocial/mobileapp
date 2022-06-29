@@ -9,6 +9,7 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import ContentPoll from './ContentPoll';
 import Header from './Header';
+import Log from '../../utils/log/Log';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
@@ -232,6 +233,7 @@ const RenderListFeed = (props) => {
             message={item.message}
             images_url={item.images_url}
             onPress={onPress}
+            topics={item?.topics}
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
