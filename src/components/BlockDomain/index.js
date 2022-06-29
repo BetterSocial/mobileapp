@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
-import {View} from 'react-native';
+import {InteractionManager, View} from 'react-native';
 
 import BlockDomain from '../Blocking/BlockDomain';
 import ReportDomain from '../Blocking/ReportDomain';
@@ -28,7 +28,10 @@ class BlockDomainComponent extends React.Component {
     }
 
     openBlockDomain() {
-        this.refBlockDomain.current.open()
+        InteractionManager.runAfterInteractions(() => {
+            this.refBlockDomain.current.open()
+
+        })
     }
 
     __getSpecificIssue(v) {
@@ -46,14 +49,20 @@ class BlockDomainComponent extends React.Component {
             reportOption : v
         })
         this.refReportDomain.current.close();
-        this.refSpecificIssue.current.open();
+        InteractionManager.runAfterInteractions(() => {
+            this.refSpecificIssue.current.open();
+
+        })
     }
 
     __onSelectBlock(v) {
         if (v === 1) {
             this.__onBlockDomain();
         } else {
-            this.refReportDomain.current.open();
+            InteractionManager.runAfterInteractions(() => {
+                this.refReportDomain.current.open();
+
+            })
         }
         this.refBlockDomain.current.close();
     }
@@ -91,7 +100,7 @@ class BlockDomainComponent extends React.Component {
                 onPress={this.__getSpecificIssue}
                 onSkip={this.__onSkipOnlyBlock} />
             <ReportDomain
-                refReportDomain={this.refReportDomain}
+                ref={this.refReportDomain}
                 onSkip={this.__onSkipOnlyBlock}
                 onSelect={this.__onNextQuestion} />
             </View>

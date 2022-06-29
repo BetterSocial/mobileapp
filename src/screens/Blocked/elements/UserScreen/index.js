@@ -93,7 +93,6 @@ const BlockedUserList = (props) => {
     React.useEffect(() => {
         handleTabbarName()
     }, [listBlockedUser])
-
     return (
         <FlatList 
         data={listBlockedUser}
