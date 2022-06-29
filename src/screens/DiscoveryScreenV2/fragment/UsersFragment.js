@@ -21,14 +21,25 @@ import { withInteractionsManaged } from '../../../components/WithInteractionMana
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
 const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
 const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
+const FROM_UNFOLLOWED_USERS_INITIAL = 'fromunfollowedusersinitial';
 
 const UsersFragment = () => {
-    const navigation = useNavigation()
-    const [myId, setMyId] = React.useState('')
-    const isReady = useIsReady()
-    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
+
+    const navigation = useNavigation()
+
+    const [myId, setMyId] = React.useState('')
+    const [initialFollowedUsers, setInitialFollowedUsers] = React.useState(
+        discovery.initialUsers.filter((item) => item.user_id_follower !== null)
+    )
+
+    const [initialUnfollowedUsers, setInitialUnfollowedUsers] = React.useState(
+        discovery.initialUsers.filter((item) => item.user_id_follower === null)
+    )
+
+    const isReady = useIsReady()
+    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
 
     // const { users } = following
     // console.log(users)
@@ -63,12 +74,25 @@ const UsersFragment = () => {
 
     const __handleFollow = async (from, willFollow, item, index) => {
         if (from === FROM_FOLLOWED_USERS_INITIAL) {
-            let newFollowedUsers = [...users]
-            newFollowedUsers[index].user_id_follower = willFollow ? myId : null
+            // let newFollowedUsers = [...users]
+            let newInitialFollowedUsers = [...initialFollowedUsers]
+            newInitialFollowedUsers[index].user_id_follower = willFollow ? myId : null
 
             // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
-            DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch)
+            // DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch)
+            setInitialFollowedUsers(newInitialFollowedUsers)
         }
+
+        if (from === FROM_UNFOLLOWED_USERS_INITIAL) {
+            // let newFollowedUsers = [...users]
+            let newInitialUnfollowedUsers = [...initialUnfollowedUsers]
+            newInitialUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
+
+            // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
+            // DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch)
+            setInitialUnfollowedUsers(newInitialUnfollowedUsers)
+        }
+
         if (from === FROM_FOLLOWED_USERS) {
             let newFollowedUsers = [...followedUsers]
             newFollowedUsers[index].user_id_follower = willFollow ? myId : null
@@ -109,10 +133,18 @@ const UsersFragment = () => {
     }
 
     const __renderUsersItem = () => {
-        if (isFirstTimeOpen) return [<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>].concat(users.map((item, index) => {
-            // return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
-            return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)
-        }))
+        if (isFirstTimeOpen) {
+            let renderArray = []
+            initialFollowedUsers.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)))
+            renderArray.push(<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>)
+            initialUnfollowedUsers.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_UNFOLLOWED_USERS_INITIAL, "unfollowedUsers", item, index)))
+            
+            return renderArray
+            // return [<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>].concat(users.map((item, index) => {
+            //     // return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
+            //     return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)
+            // }))   
+        }
 
         return (
             <>
