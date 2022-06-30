@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native'
 import GlobalButton from '../../../../components/Button/GlobalButton';
-
+import Anonymous from '../../../../assets/images/AnonymousProfile.png'
 import { colors } from '../../../../utils/colors';
 import { fonts } from '../../../../utils/fonts';
 // data needed name, description, image
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         borderRadius: 24,
         resizeMode: 'cover',
         borderColor: colors.lightgrey,
-        borderWidth: 1
+        borderWidth: 1,
       },
       wrapProfile: {
         flexDirection: 'row',
@@ -93,9 +93,24 @@ const styles = StyleSheet.create({
 const BlockedList = (props) => {
     const {onPressList, item, isHashtag, handleSetBlock, handleSetUnblock, onPressBody} = props
 
-    const handlePress = (event) => {
-        event.preventDefault();
-        onPressList(item)
+  console.log('taiman', item)
+
+    const hanldeImage = (uri) => {
+      if(uri && typeof uri === 'string') {
+        return (
+          <Image
+              source={{
+                uri: uri,
+              }}
+              style={styles.profilepicture}
+              width={48}
+              height={48}
+            /> 
+        )
+      }
+      return (
+        <View style={[styles.profilepicture, {backgroundColor: colors.gray1}]} /> 
+      )
     }
 
     return (
@@ -103,19 +118,12 @@ const BlockedList = (props) => {
         <View style={styles.card}>
           <GlobalButton onPress={() => onPressBody(item)} style={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
-              {item.image  ? <Image
-              source={{
-                uri: item.image,
-              }}
-              style={styles.profilepicture}
-              width={48}
-              height={48}
-            />  :  <View style={styles.profilepicture} />}
+              {hanldeImage(item.image)}
             </React.Fragment> : null}
             
             <View style={styles.wrapTextProfile}>
               <Text style={styles.textProfileUsername}>
-                {isHashtag && "#"}{item.name}
+                {isHashtag && "#"}{item.name || 'Anonymous'}
               </Text>
               <Text
                 style={styles.textProfileFullName}
