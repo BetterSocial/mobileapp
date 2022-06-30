@@ -42,8 +42,7 @@ const FeedScreen = (props) => {
   const [shouldSearchBarShown, setShouldSearchBarShown] = React.useState(0)
   const [postOffset, setPostOffset] = React.useState(0)
   // const [selectedFeed, setSelectedFeed] = React.useState(null)
-  const offset = React.useRef(new Animated.Value(-70)).current
-
+  const offset = React.useRef(new Animated.Value(0)).current
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const [profileContext] = React.useContext(Context).profile;
@@ -330,6 +329,7 @@ const FeedScreen = (props) => {
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
       <Search animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
+      <Animated.View style={{paddingTop: paddingContainer}}/>
       <TiktokScroll
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}

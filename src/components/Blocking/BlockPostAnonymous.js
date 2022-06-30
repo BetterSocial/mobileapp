@@ -12,14 +12,14 @@ const BlockPostAnonymous = ({refBlockPostAnonymous, onSelect}) => {
     {
       id: 1,
       icon: 'block',
-      label: 'Block Anonymous indefinitely',
-      desc: 'You will not be able to see each other’s posts, or message each other. The user’s reach will be reduced across BetterSocial, in particular for this post.',
+      label: "Block user's anonymous post indefinitely",
+      desc: 'You won’t see any anonymous posts from this user and the user’s reach will be reduced across BetterSocial, in particular for this post. This action cannot be reversed!',
       iconReght: false,
     },
     {
       id: 2,
       icon: 'handcuffs',
-      label: 'Block & report anonymous',
+      label: 'Block & report this user',
       desc: 'This account is fake, hacked, or involved in criminal activity. You will need to provide additional information to help us take consequences.',
       iconReght: true,
     },
