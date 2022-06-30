@@ -2,6 +2,7 @@ import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import {
   Dimensions,
+  InteractionManager,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -25,6 +26,7 @@ import {
 import { getDomainDetailById } from '../../service/domain'
 import { getMyProfile } from '../../service/profile';
 import { getUserId } from '../../utils/users';
+import BlockDomainComponent from '../../components/BlockDomain';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,7 +45,7 @@ const DetailDomainScreen = (props) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [comments, setComments] = React.useState([])
-
+  const blockRef = React.useRef(null)
   const initial = () => {
     let reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
@@ -226,6 +228,9 @@ const DetailDomainScreen = (props) => {
     navigation.navigate('ReplyComment', { ...data, page: props.route.name, updateParent: updateParentPost });
   }
 
+  const blockNews = () => {
+    blockRef.current.refBlockDomain.current.open()
+  };
   if(!item?.domain) return <View />
 
   return (
@@ -265,6 +270,7 @@ const DetailDomainScreen = (props) => {
                 totalVote={totalVote}
                 onPressDownVote={onPressDownVoteHandle}
                 onPressUpvote={onPressUpvoteNew}
+                onPressBlock={blockNews}
               />
             </View>
           </View>
@@ -279,6 +285,7 @@ const DetailDomainScreen = (props) => {
           />
         )}
       </ScrollView> : null}
+
       {item && (
         <WriteComment
           value={textComment}
@@ -289,7 +296,12 @@ const DetailDomainScreen = (props) => {
           }}
         />
       )}
+         <BlockDomainComponent 
+     ref={blockRef}
+     domain={item.domain.name}
+     domainId={item.domain.domain_page_id}
 
+     />
     </View>
   );
 };
