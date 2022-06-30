@@ -212,6 +212,7 @@ const RenderListFeed = (props) => {
             isalreadypolling={item.isalreadypolling}
             onnewpollfetched={onNewPollFetched}
             voteCount={item.voteCount}
+            topics={item?.topics}
           />
         )}
 
@@ -225,6 +226,7 @@ const RenderListFeed = (props) => {
             score={item?.credderScore}
             message={item?.message}
             messageContainerStyle={{paddingHorizontal: 10}}
+            topics={item?.topics}
           />
         )}
         {item.post_type === POST_TYPE_STANDARD && (
