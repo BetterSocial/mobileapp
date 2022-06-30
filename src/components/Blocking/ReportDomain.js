@@ -16,6 +16,7 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const ReportDomain = React.forwardRef((props, ref) => {
+  const {onSelect, onSkip} = props
   const data = [
     {
       id: 1,
