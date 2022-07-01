@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
-import { Animated, Dimensions, InteractionManager, StatusBar, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, InteractionManager, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
@@ -35,7 +35,7 @@ const FeedScreen = (props) => {
   const [countStack, setCountStack] = React.useState(null);
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
-  const paddingContainer = React.useRef(new Animated.Value(50)).current
+  const paddingContainer = React.useRef(new Animated.Value(Platform.OS === 'ios' ? 30 : 50)).current
 
   // const [time, setTime] = React.useState(new Date());
   // const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
@@ -242,7 +242,7 @@ const FeedScreen = (props) => {
   const showSearchBar = (isShown) => {
     return Animated.timing(offset, {
       toValue: isShown ? 0 : -70,
-      duration: 50,
+      duration: Platform.OS === 'ios' ? 30 : 50,
       useNativeDriver: false,
     }).start();
   }
@@ -277,7 +277,7 @@ const FeedScreen = (props) => {
           useNativeDriver: false,
         }).start();
         Animated.timing(paddingContainer, {
-          toValue: 50,
+          toValue: Platform.OS === 'ios' ? 30 : 50,
           duration: 100,
           useNativeDriver: false,
         }).start()
