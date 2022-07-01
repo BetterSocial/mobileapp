@@ -124,6 +124,7 @@ const FeedScreen = (props) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', (e) => {
       // getDataFeeds();
+      showSearchBarAnimation()
     });
 
     return unsubscribe;
@@ -266,23 +267,27 @@ const FeedScreen = (props) => {
     debounceSearchBar(event)
   }
 
+  const showSearchBarAnimation = () => {
+    InteractionManager.runAfterInteractions(() => {
+      Animated.timing(offset, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: false,
+      }).start();
+      Animated.timing(paddingContainer, {
+        toValue: Platform.OS === 'ios' ? 30 : 50,
+        duration: 100,
+        useNativeDriver: false,
+      }).start()
+    
+    })
+  }
+
   let handleScrollEvent = React.useCallback((event) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
     if (dy + 20 <= 0) {
-      InteractionManager.runAfterInteractions(() => {
-        Animated.timing(offset, {
-          toValue: 0,
-          duration: 100,
-          useNativeDriver: false,
-        }).start();
-        Animated.timing(paddingContainer, {
-          toValue: Platform.OS === 'ios' ? 30 : 50,
-          duration: 100,
-          useNativeDriver: false,
-        }).start()
-      
-      })
+      showSearchBarAnimation()
 
     } else if (dy - 20 > 0) {
  
