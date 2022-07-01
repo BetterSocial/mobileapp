@@ -30,13 +30,13 @@ const UsersFragment = () => {
     const navigation = useNavigation()
 
     const [myId, setMyId] = React.useState('')
-    const [initialFollowedUsers, setInitialFollowedUsers] = React.useState(
-        discovery.initialUsers.filter((item) => item.user_id_follower !== null)
-    )
+    // const [initialFollowedUsers, setInitialFollowedUsers] = React.useState(
+    //     discovery.initialUsers.filter((item) => item.user_id_follower !== null)
+    // )
 
-    const [initialUnfollowedUsers, setInitialUnfollowedUsers] = React.useState(
-        discovery.initialUsers.filter((item) => item.user_id_follower === null)
-    )
+    // const [initialUnfollowedUsers, setInitialUnfollowedUsers] = React.useState(
+    //     discovery.initialUsers.filter((item) => item.user_id_follower === null)
+    // )
 
     const isReady = useIsReady()
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
@@ -79,8 +79,8 @@ const UsersFragment = () => {
             newInitialFollowedUsers[index].user_id_follower = willFollow ? myId : null
 
             // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
-            // DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch)
-            setInitialFollowedUsers(newInitialFollowedUsers)
+            DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch)
+            // setInitialFollowedUsers(newInitialFollowedUsers)
         }
 
         if (from === FROM_UNFOLLOWED_USERS_INITIAL) {
@@ -89,8 +89,8 @@ const UsersFragment = () => {
             newInitialUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
 
             // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
-            // DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch)
-            setInitialUnfollowedUsers(newInitialUnfollowedUsers)
+            DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch)
+            // setInitialUnfollowedUsers(newInitialUnfollowedUsers)
         }
 
         if (from === FROM_FOLLOWED_USERS) {
@@ -134,16 +134,17 @@ const UsersFragment = () => {
 
     const __renderUsersItem = () => {
         if (isFirstTimeOpen) {
-            let renderArray = []
-            initialFollowedUsers.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)))
-            renderArray.push(<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>)
-            initialUnfollowedUsers.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_UNFOLLOWED_USERS_INITIAL, "unfollowedUsers", item, index)))
+            // let renderArray = []
+            // initialFollowedUsers.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)))
+            // renderArray.push(<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>)
+            // initialUnfollowedUsers.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_UNFOLLOWED_USERS_INITIAL, "unfollowedUsers", item, index)))
             
-            return renderArray
-            // return [<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>].concat(users.map((item, index) => {
-            //     // return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
-            //     return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)
-            // }))   
+            // return renderArray
+            
+            return [<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>].concat(users.map((item, index) => {
+                // return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
+                return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)
+            }))   
         }
 
         return (
