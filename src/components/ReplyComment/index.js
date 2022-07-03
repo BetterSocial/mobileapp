@@ -26,6 +26,7 @@ import { fonts } from '../../utils/fonts';
 import { getComment } from '../../utils/getstream/getComment';
 import { getFeedDetail } from '../../service/post';
 import { setFeedByIndex } from '../../context/actions/feeds';
+import ButtonHightlight from '../ButtonHighlight';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
@@ -256,13 +257,13 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
                               isLastInParent(index),
                             )}>
                             <View style={styles.connector} />
-                            <TouchableOpacity onPress={showChildrenCommentView}>
+                            <ButtonHightlight onPress={showChildrenCommentView}>
                               <Text style={styles.seeRepliesText}>
                                 {StringConstant.postDetailPageSeeReplies(
                                   itemReply.children_counts.comment || 0,
                                 )}
                               </Text>
-                            </TouchableOpacity>
+                            </ButtonHightlight>
                           </View>
                         </>
                       )}
