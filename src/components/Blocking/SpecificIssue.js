@@ -33,6 +33,7 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
           value={message}
           onChangeText={(v) => setMessage(v)}
           textAlignVertical="top"
+          multiline
           placeholder={
             'Please provide more details to inform our\n team (min. 50 characters)'
           }

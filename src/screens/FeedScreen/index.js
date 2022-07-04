@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
-import { Animated, Dimensions, InteractionManager, StatusBar, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, InteractionManager, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
@@ -35,15 +35,14 @@ const FeedScreen = (props) => {
   const [countStack, setCountStack] = React.useState(null);
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
-  const paddingContainer = React.useRef(new Animated.Value(50)).current
+  const paddingContainer = React.useRef(new Animated.Value(Platform.OS === 'ios' ? 30 : 50)).current
 
   // const [time, setTime] = React.useState(new Date());
   // const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
   const [shouldSearchBarShown, setShouldSearchBarShown] = React.useState(0)
   const [postOffset, setPostOffset] = React.useState(0)
   // const [selectedFeed, setSelectedFeed] = React.useState(null)
-  const offset = React.useRef(new Animated.Value(-70)).current
-
+  const offset = React.useRef(new Animated.Value(0)).current
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const [profileContext] = React.useContext(Context).profile;
@@ -125,6 +124,7 @@ const FeedScreen = (props) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', (e) => {
       // getDataFeeds();
+      showSearchBarAnimation()
     });
 
     return unsubscribe;
@@ -243,7 +243,7 @@ const FeedScreen = (props) => {
   const showSearchBar = (isShown) => {
     return Animated.timing(offset, {
       toValue: isShown ? 0 : -70,
-      duration: 50,
+      duration: Platform.OS === 'ios' ? 30 : 50,
       useNativeDriver: false,
     }).start();
   }
@@ -267,23 +267,27 @@ const FeedScreen = (props) => {
     debounceSearchBar(event)
   }
 
+  const showSearchBarAnimation = () => {
+    InteractionManager.runAfterInteractions(() => {
+      Animated.timing(offset, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: false,
+      }).start();
+      Animated.timing(paddingContainer, {
+        toValue: Platform.OS === 'ios' ? 30 : 50,
+        duration: 100,
+        useNativeDriver: false,
+      }).start()
+    
+    })
+  }
+
   let handleScrollEvent = React.useCallback((event) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
     if (dy + 20 <= 0) {
-      InteractionManager.runAfterInteractions(() => {
-        Animated.timing(offset, {
-          toValue: 0,
-          duration: 100,
-          useNativeDriver: false,
-        }).start();
-        Animated.timing(paddingContainer, {
-          toValue: 50,
-          duration: 100,
-          useNativeDriver: false,
-        }).start()
-      
-      })
+      showSearchBarAnimation()
 
     } else if (dy - 20 > 0) {
  
@@ -330,6 +334,7 @@ const FeedScreen = (props) => {
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
       <Search animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
+      <Animated.View style={{paddingTop: paddingContainer}}/>
       <TiktokScroll
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
