@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const ButtonHightlight = (props) => {
     const {onPress, style, children} = props
-    const opacity = React.useRef(new Animated.Value(100)).current
+    const [opacity] = React.useState(new Animated.Value(100))
     const ButtonAnimated = Animated.createAnimatedComponent(Pressable)
 
     const onPressClick = () => {
@@ -41,4 +41,4 @@ ButtonHightlight.defaultProps = {
     styles: []
 }
 
-export default ButtonHightlight
+export default React.memo (ButtonHightlight)
