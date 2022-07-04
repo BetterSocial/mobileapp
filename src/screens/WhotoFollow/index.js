@@ -31,6 +31,7 @@ import { get } from '../../api/server';
 import { randomString } from '../../utils/string/StringUtils';
 import { registerUser } from '../../service/users';
 import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
+import { setImage } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
 const width = Dimensions.get('screen').width;
@@ -46,7 +47,7 @@ const WhotoFollow = () => {
   const [fetchRegister, setFetchRegister] = React.useState(false);
   const [topics] = React.useContext(Context).topics;
   const [localCommunity] = React.useContext(Context).localCommunity;
-  const [usersState] = React.useContext(Context).users;
+  const [usersState, usersDispatch] = React.useContext(Context).users;
   const [dataProvider, setDataProvider] = React.useState(null);
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
   const [layoutProvider, setLayoutProvider] = React.useState(() => { });
@@ -178,7 +179,8 @@ const WhotoFollow = () => {
         username: usersState.username,
         human_id: usersState.userId,
         country_code: usersState.countryCode,
-        // human_id: 'NNDG-PRMN-0001',
+
+        // human_id: 'randomString(16)',
         // country_code: 'ID',
         profile_pic_path: usersState.photo,
         status: 'A',
@@ -188,6 +190,7 @@ const WhotoFollow = () => {
       follows: followed,
       follow_source: 'onboarding',
     };
+
     registerUser(data)
       .then((res) => {
         setFetchRegister(false);
@@ -202,6 +205,7 @@ const WhotoFollow = () => {
           });
           setTimeout(() => {
             create();
+            setImage(null, usersDispatch)
             navigation.dispatch(StackActions.replace('HomeTabs'));
           }, 2000);
         } else {
