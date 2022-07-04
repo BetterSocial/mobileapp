@@ -48,11 +48,11 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
   };
 
   const handleText = (text, onPress) => {
-    if (text.length > 750) {
+    if (text.length > 650) {
       return (
         <View style={styles.textContainer}>
-          <Text style={styles.text(text)}>
-            {`${text.substring(0, 750).trim()} `}
+          <Text style={styles.text(text)} numberOfLines={15}>
+            {`${text.substring(0, 650).trim()} `}
             <Text onPress={onPress} style={styles.seemore}>
               ...more
             </Text>
@@ -62,7 +62,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
       );
     } else {
       return <View style={styles.textContainer}>
-        <Text style={styles.text(text)}>{text}</Text>
+        <Text style={styles.text(text)} numberOfLines={14}>{text}</Text>
         <TopicsChip topics={topics} fontSize={topicChipFontSize} />
       </View>;
     }
