@@ -187,6 +187,7 @@ const Item = ({
             score={item.credderScore}
             message={item?.message}
             topics={item?.topics}
+            item={item}
           />
         </View>
       )}

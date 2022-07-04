@@ -12,7 +12,7 @@ import { smartRender } from '../../utils/Utils';
 
 const FONT_SIZE_TEXT = 16
 
-const ContentLink = ({ og, onPress, onHeaderPress, onCardContentPress, score, message = "", messageContainerStyle = {}, topics = [] }) => {
+const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, score, message = "", messageContainerStyle = {}, topics = [] }) => {
   let route = useRoute();
   let isTouchableDisabled = route?.name === 'PostDetailPage';
 
@@ -46,6 +46,7 @@ const ContentLink = ({ og, onPress, onHeaderPress, onCardContentPress, score, me
           onHeaderPress,
           onCardContentPress,
           score,
+          item
         })}
       </>
     </Pressable>

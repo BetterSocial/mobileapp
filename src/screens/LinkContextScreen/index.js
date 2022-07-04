@@ -69,13 +69,17 @@ const LinkContextScreen = () => {
       if (res.code === 200) {
         let reducedData = res.data.reduce((acc, currentItem) => {
           let newItem = { ...currentItem }
-          currentItem.domain.credderScore = dataDomain?.domain?.credderScore
+          newItem.domain.credderScore = dataDomain?.domain?.credderScore
 
-          if (currentItem.content.news_link_id !== item.content.news_link_id) {
-            acc.push(newItem);
-          } else {
-            setFeaturedNewsFromFeed(newItem);
+          // console.log(`currentItem ${currentItem?.content?.news_link_id} vs ${item?.content?.news_link_id}`)
+
+          let currentNewsLinkId = currentItem?.content?.news_link_id
+          let featuredNewsLinkId = item?.content?.news_link_id
+          if(currentNewsLinkId !== undefined && featuredNewsLinkId !== undefined) {
+            if(currentNewsLinkId === featuredNewsLinkId) return acc
           }
+
+          acc.push(newItem)
           return acc;
         }, []);
         setData([{ dummy: true }, ...reducedData]);
@@ -141,6 +145,7 @@ const LinkContextScreen = () => {
       <FlatList
         data={data}
         onScroll={handleOnScroll}
+        initialNumToRender={5}
         renderItem={(props) => {
           let singleItem = props.item;
           let { index } = props;
