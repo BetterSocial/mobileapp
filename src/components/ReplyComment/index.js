@@ -8,7 +8,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-  SafeAreaView
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -182,7 +184,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   }, [])
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} style={styles.container}>
       <StatusBar translucent={false} />
       {/* Header */}
       <SafeAreaView>
@@ -294,7 +296,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
         value={temporaryText}
       // loadingComment={loadingCMD}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key }) => {
