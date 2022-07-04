@@ -444,7 +444,7 @@ const PostPageDetailIdComponent = (props) => {
   const __handleOnPressScore = () => {
     showScoreAlertDialog(item)
   }
-  console.log('item nih', item)
+  // console.log('item nih', item)
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -455,7 +455,8 @@ const PostPageDetailIdComponent = (props) => {
         <ScrollView
           ref={scrollViewRef}
           showsVerticalScrollIndicator={false}
-          style={styles.contentScrollView(totalComment)}>
+          style={styles.contentScrollView(totalComment)}
+          nestedScrollEnabled={true}>
           <View style={styles.content(height)}>
             {item && item.post_type === POST_TYPE_POLL && (
               <ContentPoll

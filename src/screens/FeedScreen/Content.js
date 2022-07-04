@@ -23,12 +23,18 @@ import { fonts } from '../../utils/fonts';
 
 const { width: screenWidth } = Dimensions.get('window');
 
+const FONT_SIZE_MEDIA = 16
+const FONT_SIZE_TEXT = 24
+const FONT_SIZE_TEXT_LONG = 16
+
 const Content = ({ message, images_url, style, onPress, topics = [] }) => {
   const route = useRoute();
   const navigation = useNavigation();
   const cekImage = () => {
     return images_url !== null && images_url !== '' && images_url !== undefined;
   };
+
+  const topicChipFontSize = message.length < 270 ? FONT_SIZE_TEXT : FONT_SIZE_TEXT_LONG; 
 
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
@@ -42,22 +48,22 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
   };
 
   const handleText = (text, onPress) => {
-    if (text.length > 750) {
+    if (text.length > 650) {
       return (
         <View style={styles.textContainer}>
-          <Text style={styles.text(text)}>
-            {`${text.substring(0, 750).trim()} `}
+          <Text style={styles.text(text)} numberOfLines={15}>
+            {`${text.substring(0, 650).trim()} `}
             <Text onPress={onPress} style={styles.seemore}>
               ...more
             </Text>
-            <TopicsChip topics={topics} />
+            <TopicsChip topics={topics} fontSize={topicChipFontSize} />
           </Text>
         </View>
       );
     } else {
       return <View style={styles.textContainer}>
-        <Text style={styles.text(text)}>{text}</Text>
-        <TopicsChip topics={topics} />
+        <Text style={styles.text(text)} numberOfLines={14}>{text}</Text>
+        <TopicsChip topics={topics} fontSize={topicChipFontSize} />
       </View>;
     }
   };
@@ -77,7 +83,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
             </Text>
           )}
         </Text>
-        <TopicsChip topics={topics} />
+        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA}/>
       </View>
 
     );
@@ -151,7 +157,7 @@ const styles = StyleSheet.create({
       return {
         fontFamily: fonts.inter[400],
         fontWeight: 'normal',
-        fontSize: 24,
+        fontSize: FONT_SIZE_TEXT,
         color: colors.black,
         lineHeight: 44,
       };
@@ -159,7 +165,7 @@ const styles = StyleSheet.create({
     return {
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
-      fontSize: 16,
+      fontSize: FONT_SIZE_TEXT_LONG,
       color: colors.black,
       lineHeight: 24,
     };
@@ -168,7 +174,7 @@ const styles = StyleSheet.create({
     return {
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
-      fontSize: 16,
+      fontSize: FONT_SIZE_MEDIA,
       color: colors.black,
       lineHeight: 24,
     };

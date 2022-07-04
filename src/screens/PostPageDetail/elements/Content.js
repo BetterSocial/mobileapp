@@ -1,25 +1,24 @@
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-  Dimensions,
-  Image,
-  FlatList,
-  Pressable,
-} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-
 import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
-
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+
 import ImageLayouter from './ImageLayouter';
-import {Gap} from '../../../components';
-import {fonts} from '../../../utils/fonts';
-import {colors} from '../../../utils/colors';
 import {COLORS} from '../../../utils/theme';
+import {Gap} from '../../../components';
+import {colors} from '../../../utils/colors';
+import {fonts} from '../../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 

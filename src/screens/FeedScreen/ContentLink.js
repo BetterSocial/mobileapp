@@ -10,6 +10,8 @@ import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { smartRender } from '../../utils/Utils';
 
+const FONT_SIZE_TEXT = 16
+
 const ContentLink = ({ og, onPress, onHeaderPress, onCardContentPress, score, message = "", messageContainerStyle = {}, topics = [] }) => {
   let route = useRoute();
   let isTouchableDisabled = route?.name === 'PostDetailPage';
@@ -19,7 +21,7 @@ const ContentLink = ({ og, onPress, onHeaderPress, onCardContentPress, score, me
     if (sanitizeUrl?.length === 0) return <></>
     return <View style={{ ...styles.messageContainer, ...messageContainerStyle }}>
       <Text style={styles.message} numberOfLines={3}>{sanitizeUrl}</Text>
-      <TopicsChip topics={topics} />
+      <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT}/>
     </View>
   }
 
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
   message: {
     fontFamily: fonts.inter[400],
     lineHeight: 24,
-    fontSize: 16,
+    fontSize: FONT_SIZE_TEXT,
     letterSpacing: 0.1
   }
 });

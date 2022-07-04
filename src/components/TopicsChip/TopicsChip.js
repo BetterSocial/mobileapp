@@ -5,7 +5,7 @@ import { View } from "react-native"
 import { colors } from "../../utils/colors"
 import { fonts } from "../../utils/fonts"
 
-const TopicsChip = ({ topics = [] }) => {
+const TopicsChip = ({ topics = [], fontSize = 24 }) => {
     if (topics.length === 0) return <></>
 
     return <View style={styles.topicContainer}>
@@ -17,7 +17,7 @@ const TopicsChip = ({ topics = [] }) => {
                         color: colors.gray1
                     }}
                     onPress={() => console.log(`press topic ${item}`)}>
-                    <Text style={styles.topicText}>#{item}</Text>
+                    <Text style={{...styles.topicText, fontSize }}>#{item}</Text>
                 </Pressable>
             </View>
         })}
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 12,
         // marginTop: 12,
-        // backgroundColor: colors.red
+        // backgroundColor: colors.blue
     },
     topicItemContainer: {
         backgroundColor: colors.lightgrey,
@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
         fontFamily: fonts.inter[500],
         paddingHorizontal: 15,
         paddingVertical: 6.5,
-        fontSize: 12,
-        lineHeight: 14.52,
+        // fontSize: 12,
+        // lineHeight: 14.52,
         borderRadius: 20,
         color: colors.blue,
         // backgroundColor: colors.red,

@@ -8,9 +8,11 @@ import {
   Platform,
   Pressable,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -47,13 +49,8 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
-            <SeeMore
-              seeLessText={' '}
-              numberOfLines={4}
-              linkStyle={styles.textContentFeed}>
-              {message}
-            </SeeMore>
-            <TopicsChip topics={topics} />
+            <Text style={styles.textContentFeed}>{message}</Text>
+            <TopicsChip topics={topics} fontSize={16}/>
             <Gap height={16} />
             <ImageLayouter
               images={images_url}
@@ -61,14 +58,16 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
             />
           </View>
         ) : (
-          <View style={styles.containerShowMessage(route.name)}>
+          // <View style={styles.containerShowMessage(route.name)}>
+          <ScrollView nestedScrollEnabled={true}>
             <View>
-              <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
+              {/* <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
                 {message}
-              </SeeMore>
-              <TopicsChip topics={topics} />
+              </SeeMore> */}
+              <Text style={styles.textContentFeed}>{message}</Text>
+              <TopicsChip topics={topics} fontSize={16}/>
             </View>
-          </View>
+          </ScrollView>
 
         )
       ) : null}
@@ -155,7 +154,7 @@ const styles = StyleSheet.create({
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
-    fontSize: 24,
+    fontSize: 16,
     lineHeight: 24,
     color: colors.black,
   },

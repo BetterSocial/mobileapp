@@ -29,6 +29,7 @@ import { fonts } from '../../utils/fonts';
 import { inputSingleChoicePoll } from '../../service/post';
 
 const { width: screenWidth } = Dimensions.get('window');
+const FONT_SIZE_MEDIA = 16
 
 const ContentPoll = ({
   message,
@@ -147,7 +148,7 @@ const ContentPoll = ({
             </Text>
           )}
         </Text>
-        <TopicsChip topics={topics} />
+        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} />
       </View>
     );
   };
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
     return {
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
-      fontSize: 16,
+      fontSize: FONT_SIZE_MEDIA,
       color: colors.black,
       lineHeight: 24,
     };
