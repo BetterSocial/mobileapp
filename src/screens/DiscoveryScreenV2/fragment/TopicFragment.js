@@ -58,7 +58,7 @@ const TopicFragment = () => {
     // },[ followedTopic, unfollowedTopic ])
 
     const __handleOnTopicPress = (item) => {
-        console.log(item)
+        // console.log(item)
 
         let navigationParam = {
             id: convertTopicNameToTopicPageScreenParam(item.name)
@@ -69,8 +69,8 @@ const TopicFragment = () => {
     }
 
     const __renderDiscoveryItem = (from, key, item, index) => {
-        console.log('' + item.name)
-        console.log('' + item?.user_id_follower)
+        // console.log('' + item.name)
+        // console.log('' + item?.user_id_follower)
         return <View key={`${key}-${index}`} style={styles.domainContainer}>
             <DomainList
                 // handleSetFollow={() => __handleFollow(from, true, item, index)}

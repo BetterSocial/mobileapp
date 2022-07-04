@@ -144,8 +144,8 @@ const _renderProfileNormal = ({
 
   const { feeds, timer, viewPostTimeIndex } = feedsContext
 
-  let userId = actor.id;
-  let { profile_pic_url, username } = actor.data;
+  let userId = actor?.id;
+  let { profile_pic_url, username } = actor?.data;
 
   let navigateToProfile = async () => {
     if (source) {

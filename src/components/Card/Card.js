@@ -23,22 +23,23 @@ import { sanitizeUrlForLinking } from '../../utils/Utils';
 
 const Card = (props) => {
   const {
-    title,
+    date,
     description,
-    image,
-    url,
     domain,
     domainImage,
-    date,
-    onHeaderPress,
+    image,
+    item,
     onCardContentPress,
-    score
+    onHeaderPress,
+    score,
+    title,
+    url,
   } = props;
   // const styles = buildStylesheet('card', props.styles);
   return (
     <View style={styles.container}>
       <View>
-        <TouchableOpacity onPress={onHeaderPress}>
+        <TouchableOpacity onPress={() => onHeaderPress(item)}>
           <Header domain={domain} image={domainImage} date={date} score={score} />
         </TouchableOpacity>
       </View>
