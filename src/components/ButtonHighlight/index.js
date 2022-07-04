@@ -9,7 +9,7 @@ const ButtonHightlight = (props) => {
 
     const onPressClick = () => {
         Animated.timing(opacity, {
-            toValue: 0,
+            toValue: 0.2,
             duration: 100,
             useNativeDriver: true
         }).start(() => {
