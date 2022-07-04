@@ -1,5 +1,5 @@
 import React from 'react'
-import {Pressable, Animated} from 'react-native'
+import {Pressable, Animated, InteractionManager} from 'react-native'
 import PropTypes from 'prop-types';
 
 const ButtonHightlight = (props) => {
@@ -13,15 +13,14 @@ const ButtonHightlight = (props) => {
             duration: 100,
             useNativeDriver: true
         }).start(() => {
-            if(onPress && typeof onPress === 'function') onPress()
+            opacity.setValue(1)
+            if(onPress && typeof onPress === 'function') {
+                InteractionManager.runAfterInteractions(() => {
+                    onPress()
+                })
+            }
+           
         })
-       setTimeout(() => {
-        Animated.timing(opacity, {
-            toValue: 100,
-            duration: 100,
-            useNativeDriver: true
-        }).start()
-       }, 500)
     }
 
 
