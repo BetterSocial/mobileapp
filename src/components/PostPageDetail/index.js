@@ -2,8 +2,12 @@ import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 import {
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -446,13 +450,13 @@ const PostPageDetailIdComponent = (props) => {
   }
   // console.log('item nih', item)
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} enabled style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
       <StatusBar translucent={false} />
       {item ? <React.Fragment>
         <Header props={item} isBackButton={true} source={SOURCE_PDP} />
 
-        <ScrollView
+        <ScrollView 
           ref={scrollViewRef}
           showsVerticalScrollIndicator={false}
           style={styles.contentScrollView(totalComment)}
@@ -527,7 +531,8 @@ const PostPageDetailIdComponent = (props) => {
               findCommentAndUpdate={findCommentAndUpdate}
             />
           )}
-        </ScrollView>
+        </ScrollView >
+
         <WriteComment
           username={
             item.anonimity
@@ -544,7 +549,7 @@ const PostPageDetailIdComponent = (props) => {
         <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />
       </React.Fragment> : null}
 
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
