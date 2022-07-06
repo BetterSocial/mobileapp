@@ -139,8 +139,9 @@ const ChatDetailPage = () => {
             return defaultActionsAllowed(props);
           }}
           ReactionList={() => null}>
-          <View style={{ flex: 1, zIndex: 0 }}>
+            <>
             <Header />
+            <View style={{ flex: 1, zIndex: 0 }}>
             <View style={{ flex: 1, zIndex: 1 }}>
               <MessageList
                 tDateTimeParser={testDate}
@@ -148,7 +149,9 @@ const ChatDetailPage = () => {
               />
             </View>
             <MessageInput Input={InputMessage} />
-          </View>
+            </View>
+            </>
+   
         </Channel>
       </Chat>
     </SafeAreaView>
