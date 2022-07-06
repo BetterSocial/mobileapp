@@ -127,7 +127,7 @@ const ChatDetailPage = () => {
           DateHeader={CustomDateHeader}
           hasFilePicker={false}
           ImageUploadPreview={<ImageSendPreview />}
-          keyboardVerticalOffset={50}
+          keyboardVerticalOffset={0}
           mutesEnabled={false}
           reactionsEnabled={false}
           readEventsEnabled={true}
@@ -141,13 +141,13 @@ const ChatDetailPage = () => {
           ReactionList={() => null}>
             <>
             <Header />
-            <View style={{ flex: 1, zIndex: 0 }}>
-            <View style={{ flex: 1, zIndex: 1 }}>
+            <View style={{ flex: 1 }}>
+            
               <MessageList
                 tDateTimeParser={testDate}
                 InlineDateSeparator={CustomInlineDateSeparator}
               />
-            </View>
+ 
             <MessageInput Input={InputMessage} />
             </View>
             </>
