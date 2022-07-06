@@ -174,8 +174,6 @@ const ProfileScreen = ({ route }) => {
   };
 
   const saveProfileState = (result) => {
-    if (result === null || result === undefined) return
-
     if (result && typeof result === 'object') {
       setDataMain(result);
       setDataMainBio(result.bio)

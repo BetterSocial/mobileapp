@@ -21,7 +21,7 @@
     "reset": "react-native start --reset-cache",
     "prepare": "husky install",
     "reset-all": "rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules && npm cache clean --force && npm install && npm start -- --reset-cache",
-    "update-stream": "npm i stream-chat-react-native stream-chat-react-native-core --force"
+    "update-stream": "npm i stream-chat-react-native stream-chat-react-native-core --legacy-peer-deps"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.12",
@@ -51,7 +51,7 @@
     "link-preview-js": "^2.1.8",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "react": "16.13.1",
+    "react": "17.0.1",
     "react-native": "0.64",
     "react-native-activity-feed": "^1.0.3",
     "react-native-autolink": "^4.0.0",
@@ -136,8 +136,8 @@
     "metro-react-native-babel-preset": "0.59.0",
     "prop-types": "^15.7.2",
     "react-devtools": "^4.10.1",
-    "react-dom": "^17.0.2",
-    "react-test-renderer": "16.13.1",
+    "react-dom": "17.0.1",
+    "react-test-renderer": "17.0.1",
     "ts-jest": "^27.0.2"
   },
   "jest": {

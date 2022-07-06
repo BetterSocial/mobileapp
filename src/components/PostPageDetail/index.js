@@ -13,6 +13,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Keyboard
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { useRoute } from '@react-navigation/native'
@@ -180,6 +181,7 @@ const PostPageDetailIdComponent = (props) => {
         updateCachingComment(data.data)
         if (data.code === 200) {
           setTextComment('');
+          Keyboard.dismiss()
           updateFeed(true);
           // Toast.show('Comment successful', Toast.LONG);
 
