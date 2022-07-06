@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
   dummyItem : (height) => {
     return {
       height,
-      backgroundColor: colors.gray1
+      
     }
   },
   header: {
