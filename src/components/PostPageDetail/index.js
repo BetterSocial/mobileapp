@@ -13,7 +13,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Keyboard
+  Keyboard,
+  InteractionManager
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { useRoute } from '@react-navigation/native'
@@ -158,7 +159,12 @@ const PostPageDetailIdComponent = (props) => {
 
       }
       updateAllContent(oldData)
-      onCommentButtonClicked()
+      Keyboard.dismiss()
+      setTimeout(() => {
+        if(scrollViewRef && scrollViewRef.current) {
+          scrollViewRef.current.scrollTo({y: Dimensions.get('screen').height + 30, x: 0})
+        } 
+      }, 300)
 
     } catch (e) {
       console.log(e);
@@ -181,7 +187,6 @@ const PostPageDetailIdComponent = (props) => {
         updateCachingComment(data.data)
         if (data.code === 200) {
           setTextComment('');
-          Keyboard.dismiss()
           updateFeed(true);
           // Toast.show('Comment successful', Toast.LONG);
 
@@ -450,7 +455,6 @@ const PostPageDetailIdComponent = (props) => {
   const __handleOnPressScore = () => {
     showScoreAlertDialog(item)
   }
-  // console.log('item nih', item)
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} enabled style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
