@@ -35,6 +35,7 @@ const FeedScreen = (props) => {
   const [countStack, setCountStack] = React.useState(null);
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+  const [showNavbar, setShowNavbar] = React.useState(false)
   const paddingContainer = React.useRef(new Animated.Value(Platform.OS === 'ios' ? 30 : 50)).current
 
   // const [time, setTime] = React.useState(new Date());
@@ -47,6 +48,7 @@ const FeedScreen = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const [profileContext] = React.useContext(Context).profile;
   const bottomBarHeight = useBottomTabBarHeight();
+  const [searchHeight, setSearchHeight] = React.useState(0)
   const { height } = Dimensions.get('screen');
   const {interactionsComplete} = useAfterInteractions()
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
@@ -268,6 +270,7 @@ const FeedScreen = (props) => {
   }
 
   const showSearchBarAnimation = () => {
+    setShowNavbar(true)
     InteractionManager.runAfterInteractions(() => {
       Animated.timing(offset, {
         toValue: 0,
@@ -290,7 +293,7 @@ const FeedScreen = (props) => {
       showSearchBarAnimation()
 
     } else if (dy - 20 > 0) {
- 
+      setShowNavbar(false)
       InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
           toValue: -50,
@@ -302,7 +305,7 @@ const FeedScreen = (props) => {
           duration: 100,
           useNativeDriver: false,
         }).start()
-     
+        
       })
     }
   }, [offset])
@@ -327,13 +330,17 @@ const FeedScreen = (props) => {
     setTimer(new Date(), dispatch)
   }
 
-  // if (initialLoading) {
-  //   return null
-  // }
+  const saveSearchHeight = (height) => {
+    if(!searchHeight) {
+      setSearchHeight(Number(height))
+
+    }
+  }
+
 
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
-      <Search animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
+      <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
       <Animated.View style={{paddingTop: paddingContainer}}/>
       <TiktokScroll
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
@@ -360,6 +367,8 @@ const FeedScreen = (props) => {
             selfUserId={myProfile.user_id}
             onPressDownVote={(post) => setDownVote(post, index)}
             loading={loading}
+            showNavbar={showNavbar}
+            searchHeight={searchHeight}
           />
         }}
       </TiktokScroll>

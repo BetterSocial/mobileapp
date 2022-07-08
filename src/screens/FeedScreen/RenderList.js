@@ -50,6 +50,8 @@ const RenderListFeed = (props) => {
     onPressUpvote,
     selfUserId,
     onPressDownVote,
+    showNavbar,
+    searchHeight
   } = props;
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
@@ -74,7 +76,7 @@ const RenderListFeed = (props) => {
     let h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 6.8) / 100);
     return h;
   };
-
+  console.log(showNavbar, 'show navbar')
   const getHeightReaction = () => {
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
@@ -187,7 +189,6 @@ const RenderListFeed = (props) => {
       setVoteStatus('none')
     }
   }
-
   React.useEffect(() => {
     checkVotes()
   }, [item]);
@@ -195,9 +196,11 @@ const RenderListFeed = (props) => {
   React.useEffect(() => {
     initial();
   }, [item]);
+
+
   return (
-    <View style={[styles.cardContainer(bottomHeight)]}>
-      <View style={styles.cardMain}>
+    <View style={[styles.cardContainer(0)]}>
+      <View style={styles.cardMain(searchHeight, showNavbar ? searchHeight : 14)}>
         <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB} />
         {item.post_type === POST_TYPE_POLL && (
           <ContentPoll
@@ -287,19 +290,18 @@ const RenderListFeed = (props) => {
 };
 
 const styles = StyleSheet.create({
-  cardContainer: (bottomHeight) => ({
-    // height: FULL_HEIGHT - bottomHeight - tabBarHeight,
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
+  cardContainer: (navbarHeight) => ({
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT   ,
     width: FULL_WIDTH,
     backgroundColor: colors.white,
     borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
   }),
-  cardMain: {
-    height: '100%',
+  cardMain: (searhHeight = 0) => ({
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT ,
     width: '100%',
-    paddingVertical: Platform.OS === 'ios' && majorVersion >= 10 ? 30 : 0,
-  },
+    paddingVertical: searhHeight + 14
+  }),
   footerWrapper: (h) => ({ height: h, bottom: 0, }),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
@@ -320,6 +322,8 @@ RenderListFeed.propTypes = {
   onPressUpvote: PropTypes.func,
   onPressDownVote: PropTypes.func,
   loading: PropTypes.bool,
+  showNavbar: PropTypes.number,
+  searchHeight: PropTypes.number
 };
 
 export default React.memo (RenderListFeed, (prevProps, nextProps) => {
