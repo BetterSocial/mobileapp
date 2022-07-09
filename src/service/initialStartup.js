@@ -19,15 +19,15 @@ export const InitialStartupAtom = atom({
       const loadPersisted = async () => {
         const savedValue = await getUserId();
 
-        if (savedValue != null && savedValue !== '') {
+        if (savedValue !== null && savedValue !== '') {
           const verify = await verifyTokenGetstream();
           if (verify !== null && verify !== '') {
-            setSelf({ id: savedValue, deeplinkProfile: false });
+            setSelf({ id: savedValue, deeplinkProfile: null });
           } else {
-            setSelf({ id: '', deeplinkProfile: false });
+            setSelf({ id: '', deeplinkProfile: null });
           }
         } else {
-          setSelf({ id: '', deeplinkProfile: false });
+          setSelf({ id: '', deeplinkProfile: null });
         }
       };
 
@@ -35,7 +35,6 @@ export const InitialStartupAtom = atom({
 
       // Subscribe to state changes and persist them to localStorage
       onSet((user) => {
-        console.log(user, 'user');
         if (user !== null && user !== undefined) {
           setAccessToken(user);
           setRefreshToken(user);
@@ -72,7 +71,7 @@ export const initialStartupTask = ({ snapshot, set }) => async () => {
         const otherProfile = await doGetProfileByUsername(username);
 
         // Check if myself
-        set(InitialStartupAtom, { id: userId, deeplinkProfile: userId === otherProfile.user_id });
+        set(InitialStartupAtom, { id: userId, deeplinkProfile: otherProfile });
       }
     }
   } catch (e) {

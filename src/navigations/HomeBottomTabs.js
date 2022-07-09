@@ -35,6 +35,7 @@ import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
 import { useRecoilValue } from 'recoil';
 import { InitialStartupAtom } from '../service/initialStartup';
+import otherProfile from '../screens/OtherProfile';
 
 const Tab = createBottomTabNavigator();
 
@@ -118,7 +119,6 @@ function HomeBottomTabs(props) {
 
     try {
       getFollowing(selfUserId).then((response) => {
-        console.log('asdadadasdadadasd')
         following.setFollowingUsers(response.data, followingDispatch);
       });
 
@@ -225,9 +225,7 @@ function HomeBottomTabs(props) {
         setImageUrl(res.profile_pic_path, dispatchUser)
       }
     })
-  }, [])
-
-
+  }, []);
 
   React.useEffect(() => {
     requestPermission()
@@ -235,22 +233,33 @@ function HomeBottomTabs(props) {
     getDataFeeds()
     getDiscoveryData()
   }, []);
+
   React.useEffect(() => {
     createChannel()
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       !isIos ? pushNotifAndroid(remoteMessage) : pushNotifIos(remoteMessage)
 
     });
+
+    if (initialStartup.deeplinkProfile !== null) {
+      navigation.navigate('OtherProfile', {
+        data: {
+          user_id: selfUserId,
+          other_id: initialStartup.deeplinkProfile.user_id,
+          username: initialStartup.deeplinkProfile.username,
+        },
+      })
+    }
     return () => {
       unsubscribe()
     }
-  }, [])
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar />
       <Tab.Navigator
-        initialRouteName={initialStartup!== null && initialStartup.deeplinkProfile === true ? 'Profile' : 'ChannelList'}
+        initialRouteName={initialStartup !== null && initialStartup.deeplinkProfile.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
         // initialRouteName="Profile"
         tabBarOptions={{
           // showLabel: true,

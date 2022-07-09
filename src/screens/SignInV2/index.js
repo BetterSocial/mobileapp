@@ -47,6 +47,8 @@ import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { useSetRecoilState } from 'recoil';
+import { InitialStartupAtom } from '../../service/initialStartup';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;
@@ -55,6 +57,7 @@ const SignIn = () => {
   const [isCompleteSliding, setIsCompleteSliding] = React.useState(false);
   const [showComponent, setShowComponent] = React.useState(false)
   const [clickTime, setClickTime] = React.useState(0)
+  const setValueStartup = useSetRecoilState(InitialStartupAtom);
   // const isReady = useIsReady()
   const navigation = useNavigation();
   const create = useClientGetstream();
@@ -98,10 +101,11 @@ const SignIn = () => {
                 if (response.data) {
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
-                  create(response.token).then(() => {
-                    navigation.dispatch(StackActions.replace('HomeTabs'));
-
-                  })
+                  setValueStartup({
+                    id: response.token,
+                    deeplinkProfile: false
+                  });
+                  create(response.token);
 
                 } else {
                   removeLocalStorege('userId');

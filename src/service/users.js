@@ -68,14 +68,19 @@ export const refreshToken = async () => {
   };
 
   // const resp = await fetchWithTimeout(this.url, options, 10000);
-  const resp = await api.get('/users/refresh-token', options);
-  return resp.data;
+  try {
+    const resp = await api.get('/users/refresh-token', options);
+    return resp.data;
+  } catch (err) {
+    return err.response.status;
+  }
 };
 
 export const verifyTokenGetstream = async () => {
   const status = await verifyAccessToken();
   if (status === 401) {
     const res = await refreshToken();
+
     if (res.code === 200) {
       return res.data.token;
     }
