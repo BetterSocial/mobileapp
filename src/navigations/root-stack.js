@@ -80,6 +80,7 @@ export const RootNavigator = () => {
       if (initialStartup.id !== '') {
         create();
       }
+
       setTimeout(() => {
         SplashScreen.hide();
       }, 700);

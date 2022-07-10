@@ -34,8 +34,7 @@ import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
 import { useRecoilValue } from 'recoil';
-import { InitialStartupAtom } from '../service/initialStartup';
-import otherProfile from '../screens/OtherProfile';
+import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,6 +47,7 @@ function HomeBottomTabs(props) {
   let [, followingDispatch] = React.useContext(Context).following;
 
   const initialStartup = useRecoilValue(InitialStartupAtom);
+  const otherProfileData = useRecoilValue(otherProfileAtom);
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
   const [, discoveryDispatch] = React.useContext(Context).discovery;
@@ -241,25 +241,31 @@ function HomeBottomTabs(props) {
 
     });
 
-    if (initialStartup.deeplinkProfile !== null) {
-      navigation.navigate('OtherProfile', {
-        data: {
-          user_id: selfUserId,
-          other_id: initialStartup.deeplinkProfile.user_id,
-          username: initialStartup.deeplinkProfile.username,
-        },
-      })
-    }
     return () => {
       unsubscribe()
     }
   }, []);
 
+  React.useEffect(() => {
+    console.log(initialStartup, otherProfileData, 'msk');
+    if (otherProfileData !== null && initialStartup.id !== null) {
+      setTimeout(() => {
+        navigation.navigate('OtherProfile', {
+          data: {
+            user_id: initialStartup.id,
+            other_id: otherProfileData.user_id,
+            username: otherProfileData.username,
+          },
+        })
+      }, 5000);
+    }
+  }, [initialStartup, otherProfileData]);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar />
       <Tab.Navigator
-        initialRouteName={initialStartup !== null && initialStartup.deeplinkProfile.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
+        initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
         // initialRouteName="Profile"
         tabBarOptions={{
           // showLabel: true,

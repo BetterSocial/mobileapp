@@ -126,7 +126,9 @@ export const updateBioProfile = async (userID, data) => new Promise((resolve, re
 });
 
 export const getProfileByUsername = async (username) => {
+  // if (__DEV__) {
   console.log(`username ${username}`);
+  // }
   return new Promise((resolve, reject) => {
     if (!username) {
       return reject();

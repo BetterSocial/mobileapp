@@ -5,13 +5,12 @@ import { verifyTokenGetstream } from './users';
 import { setAccessToken, setRefreshToken, removeAccessToken } from '../utils/token';
 import { getProfileByUsername } from './profile';
 
-const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org';
+const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org/u';
 
 export const InitialStartupAtom = atom({
   key: 'InitialStartupAtom',
   default: {
     id: null,
-    deeplinkProfile: false,
   },
   effects: [
     ({ setSelf, onSet }) => {
@@ -22,12 +21,12 @@ export const InitialStartupAtom = atom({
         if (savedValue !== null && savedValue !== '') {
           const verify = await verifyTokenGetstream();
           if (verify !== null && verify !== '') {
-            setSelf({ id: savedValue, deeplinkProfile: null });
+            setSelf({ id: savedValue });
           } else {
-            setSelf({ id: '', deeplinkProfile: null });
+            setSelf({ id: '' });
           }
         } else {
-          setSelf({ id: '', deeplinkProfile: null });
+          setSelf({ id: '' });
         }
       };
 
@@ -46,6 +45,11 @@ export const InitialStartupAtom = atom({
   ],
 });
 
+export const otherProfileAtom = atom({
+  key: 'otherProfileAtom',
+  default: null,
+});
+
 const doGetProfileByUsername = async (username) => {
   try {
     const response = await getProfileByUsername(username);
@@ -58,8 +62,7 @@ const doGetProfileByUsername = async (username) => {
   }
 };
 
-export const initialStartupTask = ({ snapshot, set }) => async () => {
-  const userId = snapshot.getLoadable(InitialStartupAtom).getValue();
+export const initialStartupTask = ({ set }) => async () => {
   try {
     const deepLinkUrl = await Linking.getInitialURL();
 
@@ -71,7 +74,7 @@ export const initialStartupTask = ({ snapshot, set }) => async () => {
         const otherProfile = await doGetProfileByUsername(username);
 
         // Check if myself
-        set(InitialStartupAtom, { id: userId, deeplinkProfile: otherProfile });
+        set(otherProfileAtom, otherProfile);
       }
     }
   } catch (e) {
@@ -80,4 +83,5 @@ export const initialStartupTask = ({ snapshot, set }) => async () => {
       console.error('getDeeplinkUrl error :', e);
     }
   }
+  // }
 };
