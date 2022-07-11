@@ -8,6 +8,7 @@ import {
   DISCOVERY_SET_DATA_USERS,
   DISCOVERY_SET_FIRST_TIME_OPEN,
   DISCOVERY_SET_FOCUS,
+  DISCOVERY_SET_INITIAL_DOMAINS,
   DISCOVERY_SET_INITIAL_TOPICS,
   DISCOVERY_SET_INITIAL_USERS,
   DISCOVERY_SET_LOADING_DATA,
@@ -24,8 +25,9 @@ import {
 
 /**
  * @typedef {Object} DiscoveryState
- * @property {Object[]} initialUsers
+ * @property {Object[]} initialDomains
  * @property {Object[]} initialTopics
+ * @property {Object[]} initialUsers
  * @property {Object[]} followedUsers
  * @property {Object[]} unfollowedUsers
  * @property {Object[]} followedTopic
@@ -36,8 +38,9 @@ import {
  * @property {Boolean} isLoadingDiscovery
  */
 const discoveryState = {
-  initialUsers: [],
+  initialDomains: [],
   initialTopics: [],
+  initialUsers: [],
   followedUsers: [],
   unfollowedUsers: [],
   followedTopic: [],
@@ -96,6 +99,12 @@ const discoveryReducer = (state = discoveryState, action) => {
         isLoadingDiscoveryDomain: false,
         isLoadingDiscoveryTopic: false,
         isLoadingDiscoveryNews: false,
+      };
+
+    case DISCOVERY_SET_INITIAL_DOMAINS:
+      return {
+        ...state,
+        initialDomains: action.payload,
       };
 
     case DISCOVERY_SET_INITIAL_TOPICS:

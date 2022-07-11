@@ -43,11 +43,11 @@ const styles = StyleSheet.create({
     },
     topicText: {
         fontFamily: fonts.inter[500],
-        paddingHorizontal: 15,
-        paddingVertical: 6.5,
+        paddingHorizontal: 13,
+        paddingVertical: 4.5,
         // fontSize: 12,
         // lineHeight: 14.52,
-        borderRadius: 20,
+        borderRadius: 14,
         color: colors.blue,
         // backgroundColor: colors.red,
     }
