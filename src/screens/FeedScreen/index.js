@@ -53,6 +53,7 @@ const FeedScreen = (props) => {
   const {interactionsComplete} = useAfterInteractions()
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
   let {myProfile} = profileContext
+  const bottomHeight = useBottomTabBarHeight();
 
   const getDataFeeds = async (offset = 0, useLoading) => {
     setCountStack(null);
@@ -270,7 +271,6 @@ const FeedScreen = (props) => {
   }
 
   const showSearchBarAnimation = () => {
-    setShowNavbar(true)
     InteractionManager.runAfterInteractions(() => {
       Animated.timing(offset, {
         toValue: 0,
@@ -284,8 +284,10 @@ const FeedScreen = (props) => {
       }).start()
     
     })
-  }
+    setShowNavbar(true)
 
+  }
+  console.log(showNavbar, 'shownavbar 123')
   let handleScrollEvent = React.useCallback((event) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
@@ -293,7 +295,6 @@ const FeedScreen = (props) => {
       showSearchBarAnimation()
 
     } else if (dy - 20 > 0) {
-      setShowNavbar(false)
       InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
           toValue: -50,
@@ -307,6 +308,7 @@ const FeedScreen = (props) => {
         }).start()
         
       })
+      setShowNavbar(false)
     }
   }, [offset])
 
@@ -343,7 +345,7 @@ const FeedScreen = (props) => {
       <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
       <Animated.View style={{paddingTop: paddingContainer}}/>
       <TiktokScroll
-        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
+        contentHeight={Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight}
         data={feeds}
         onEndReach={onEndReach}
         // onMomentumScrollEnd={handleOnMomentumEnd}
@@ -353,7 +355,7 @@ const FeedScreen = (props) => {
         // onScrollBeginDrag={handleOnScrollBeginDrag}
         refreshing={loading}>
         {({ item, index }) => {
-          let dummyItemHeight = height - dimen.size.FEED_CURRENT_ITEM_HEIGHT - StatusBar.currentHeight - bottomBarHeight - 16
+          let dummyItemHeight = Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight
           if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
           return <RenderListFeed
             item={item}
