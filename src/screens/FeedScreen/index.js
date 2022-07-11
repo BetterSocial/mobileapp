@@ -355,8 +355,8 @@ const FeedScreen = (props) => {
         // onScrollBeginDrag={handleOnScrollBeginDrag}
         refreshing={loading}>
         {({ item, index }) => {
-          let dummyItemHeight = Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight
-          if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
+          // let dummyItemHeight = Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight
+          if(item.dummy) return null
           return <RenderListFeed
             item={item}
             onNewPollFetched={onNewPollFetched}

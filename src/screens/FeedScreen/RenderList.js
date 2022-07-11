@@ -30,11 +30,7 @@ const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
-const getHeightHeader = () => {
-  // let h = Math.floor((FULL_HEIGHT * 10) / 100);
-  // return h;
-  return dimen.size.FEED_HEADER_HEIGHT
-};
+
 
 const majorVersion = parseInt(Platform.Version, 10)
 
@@ -80,6 +76,13 @@ const RenderListFeed = (props) => {
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
     return dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
+  };
+
+  const getHeightHeader = () => {
+    let h = (FULL_HEIGHT * 10) / 100
+    return h;
+    // return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) *0.1
+
   };
 
   const onPressDownVoteHandle = async () => {
@@ -311,7 +314,7 @@ const RenderListFeed = (props) => {
 };
 
 const styles = StyleSheet.create({
-  cardContainer: (navbarHeight) => ({
+  cardContainer: () => ({
     height: Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()  ,
     width: FULL_WIDTH,
     backgroundColor: colors.white,
@@ -325,8 +328,6 @@ const styles = StyleSheet.create({
   }),
   footerWrapper: (h) => ({ height: '5%' }),
   contentReaction: (heightReaction) => ({
-    // maxHeight: heightReaction,
-    // marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
     height: '20%',
   }),
 });
