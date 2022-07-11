@@ -145,7 +145,7 @@ const _renderProfileNormal = ({
   const { feeds, timer, viewPostTimeIndex } = feedsContext
 
   let userId = actor?.id;
-  let { profile_pic_url, username } = actor?.data;
+  let { profile_pic_url, username } = actor?.data || {};
 
   let navigateToProfile = async () => {
     if (source) {
@@ -222,7 +222,7 @@ const _renderProfileNormal = ({
             <View style={[styles.containerFeedText, { paddingBottom: 0 }]}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
-              {privacy.toLowerCase() === PRIVACY_PUBLIC ? (
+              {privacy?.toLowerCase() === PRIVACY_PUBLIC ? (
                 <Memoic_globe height={16} width={16} />
               ) : (
                 <MemoPeopleFollow height={16} width={16} />

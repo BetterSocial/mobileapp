@@ -132,6 +132,9 @@ function HomeBottomTabs(props) {
       let discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics()
       DiscoveryAction.setDiscoveryInitialTopics(discoveryInitialTopicResponse.suggestedTopics, discoveryDispatch)
 
+      let discoveryInitialDomainResponse = await DiscoveryRepo.fetchInitialDiscoveryDomains()
+      DiscoveryAction.setDiscoveryInitialDomains(discoveryInitialDomainResponse.suggestedDomains, discoveryDispatch)
+
       let response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
       if (!response) return
       // setItems(JSON.parse(response))

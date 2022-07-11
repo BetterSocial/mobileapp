@@ -14,7 +14,7 @@ const ProfilePostDetail = (props) => {
     let navigateToReplyView = (data, updateParent) => {
         navigation.navigate('ReplyComment', {...data, updateParent});
     }
-    console.log(feedId, 'saminake')
+    
     React.useEffect(() => {
         return () => {
             if(refreshParent) {

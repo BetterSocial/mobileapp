@@ -110,6 +110,8 @@ const OtherProfile = () => {
   const getOtherFeeds = async (userId, offset = 0) => {
     let result = await getOtherFeedsInProfile(userId)
 
+    console.log('result.data')
+    console.log(result.data)
     if(offset === 0) setOtherProfileFeed([...result.data, {dummy: true}], dispatchOtherProfile)
     else {
       let clonedFeeds = [...feeds]
