@@ -1,7 +1,9 @@
 import * as React from 'react';
 import moment from 'moment';
+import reactStringReplace from 'react-string-replace'
 import { StyleSheet, Text, View } from 'react-native';
 
+import { COLORS } from '../theme';
 import { fonts } from '../fonts';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
@@ -219,11 +221,43 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
   return pluralText
 }
 
+/**
+ * 
+ * @param {String} text 
+ * @param {Any} navigation 
+ * @returns 
+ */
+const getCaptionWithTopicStyle = (text, navigation) => {
+  let occurences = text.split(' ').filter((item) => item.startsWith('#'))
+
+  const onClick = (match) => {
+    // Do navigation here
+    if (!navigation) return
+    console.log(`topic ${match}`)
+    navigation.navigate('TopicPageScreen', { id: match.replace('#', '') })
+  }
+
+  text = reactStringReplace(text, /\B(\#[a-zA-Z0-9]+\b)(?!;)/, (match, index) => {
+    console.log(`${match} ${index}`)
+    console.log(match)
+    return <Text onPress={() => onClick(match)} style={{
+      color: COLORS.blue, fontFamily: fonts.inter[500]
+    }}>{match}</Text>
+  })
+  // occurences.forEach((item, index) => {
+  //   text = reactStringReplace(text, item, (match, index) => <Text onPress={() => onTopicPress(match)} style={{ 
+  //     color: COLORS.blue, fontFamily: fonts.inter[500] }}>{match}</Text>)
+  // })
+
+  return text
+}
+
 export {
   capitalizeFirstText,
   convertString,
   convertTopicNameToTopicPageScreenParam,
   displayFormattedSearchLocations,
+  getCaptionWithTopicStyle,
   getChatName,
   getGroupMemberCount,
   getPollTime,

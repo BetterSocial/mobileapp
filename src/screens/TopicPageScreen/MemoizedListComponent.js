@@ -161,12 +161,12 @@ const RenderListFeed = (props) => {
       console.log(item)
     }
     if (JSON.stringify(reactionCount) !== '{}') {
-      let comment = reactionCount.comment;
+      let comment = reactionCount?.comment;
       handleVote(reactionCount);
       if (comment !== undefined) {
         if (comment > 0) {
           setReaction(true);
-          setPreviewComment(item.latest_reactions.comment[0]);
+          setPreviewComment(item?.latest_reactions?.comment[0]);
         }
       } else {
         setReaction(false)
@@ -260,7 +260,7 @@ const RenderListFeed = (props) => {
             isSelf={
               item.anonimity
                 ? false
-                : userId === item.actor.id
+                : userId === item?.actor?.id
                   ? true
                   : false
             }

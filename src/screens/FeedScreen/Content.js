@@ -20,6 +20,7 @@ import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import { COLORS, SIZES } from '../../utils/theme';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
+import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -52,7 +53,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
       return (
         <View style={styles.textContainer}>
           <Text style={styles.text(text)} numberOfLines={15}>
-            {`${text.substring(0, 650).trim()} `}
+            {getCaptionWithTopicStyle(text.substring(0, 650).trim(), navigation)}
             <Text onPress={onPress} style={styles.seemore}>
               ...more
             </Text>
@@ -62,7 +63,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
       );
     } else {
       return <View style={styles.textContainer}>
-        <Text style={styles.text(text)} numberOfLines={14}>{text}</Text>
+        <Text style={styles.text(text)} numberOfLines={14}>{getCaptionWithTopicStyle(text, navigation)}</Text>
         <TopicsChip topics={topics} fontSize={topicChipFontSize} />
       </View>;
     }
@@ -73,7 +74,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
       <View>
         <Text numberOfLines={4} style={styles.textMedia(text)}>
           {text.length < 180 ? (
-            `${text}`
+            getCaptionWithTopicStyle(text, navigation)
           ) : (
             <Text>
               {`${text.substring(0, 165)}...`}

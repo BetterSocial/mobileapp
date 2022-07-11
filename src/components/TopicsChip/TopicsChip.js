@@ -1,11 +1,18 @@
 import * as React from 'react';
 import { Pressable, StyleSheet, Text } from "react-native"
 import { View } from "react-native"
+import { useNavigation } from '@react-navigation/native';
 
 import { colors } from "../../utils/colors"
 import { fonts } from "../../utils/fonts"
 
 const TopicsChip = ({ topics = [], fontSize = 24 }) => {
+    const navigation = useNavigation()
+
+    const onTopicPress = (topic) => {
+        navigation.navigate('TopicPageScreen', { id: topic.replace('#', '') })
+    }
+
     if (topics.length === 0) return <></>
 
     return <View style={styles.topicContainer}>
@@ -16,8 +23,8 @@ const TopicsChip = ({ topics = [], fontSize = 24 }) => {
                         borderless: false,
                         color: colors.gray1
                     }}
-                    onPress={() => console.log(`press topic ${item}`)}>
-                    <Text style={{...styles.topicText, fontSize }}>#{item}</Text>
+                    onPress={() => onTopicPress(item)}>
+                    <Text style={{ ...styles.topicText, fontSize }}>#{item}</Text>
                 </Pressable>
             </View>
         })}

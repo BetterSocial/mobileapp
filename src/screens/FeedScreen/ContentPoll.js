@@ -12,7 +12,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
@@ -21,6 +21,7 @@ import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import { COLORS } from '../../utils/theme';
 import {
   NO_POLL_UUID,
+  getCaptionWithTopicStyle,
   getPollTime,
   isPollExpired,
 } from '../../utils/string/StringUtils';
@@ -69,6 +70,7 @@ const ContentPoll = ({
   let [isAlreadyPolling, setIsAlreadyPolling] =
     React.useState(isalreadypolling);
   let route = useRoute();
+  let navigation = useNavigation()
 
   let isTouchableDisabled = route.name === 'PostDetailPage';
 
@@ -134,14 +136,16 @@ const ContentPoll = ({
   };
 
   const handleTextCaption = (text, onPress) => {
+    getCaptionWithTopicStyle(text)
     return (
       <View>
         <Text numberOfLines={4} style={styles.textMedia(text)}>
           {text.length < 180 ? (
-            `${text}`
+            getCaptionWithTopicStyle(text, navigation)
           ) : (
             <Text>
-              {`${text.substring(0, 165)}...`}
+              getCaptionWithTopicStyle(`${text.substring(0, 165)}...`, navigation)
+              {/* {`${getCaptionWithTopicStyle('#hashtag1', navigation)}`} */}
               <Text onPress={onPress} style={styles.seemore}>
                 more
               </Text>
