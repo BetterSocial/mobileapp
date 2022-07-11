@@ -35,7 +35,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
     return images_url !== null && images_url !== '' && images_url !== undefined;
   };
 
-  const topicChipFontSize = message.length < 270 ? FONT_SIZE_TEXT : FONT_SIZE_TEXT_LONG; 
+  const topicChipFontSize = message.length < 270 ? FONT_SIZE_TEXT : FONT_SIZE_TEXT_LONG;
 
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
@@ -57,14 +57,15 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
             <Text onPress={onPress} style={styles.seemore}>
               ...more
             </Text>
-            <TopicsChip topics={topics} fontSize={topicChipFontSize} />
+            <TopicsChip topics={topics} fontSize={topicChipFontSize} 
+              text={getCaptionWithTopicStyle(text.substring(0, 650).trim())} />
           </Text>
         </View>
       );
     } else {
       return <View style={styles.textContainer}>
         <Text style={styles.text(text)} numberOfLines={14}>{getCaptionWithTopicStyle(text, navigation)}</Text>
-        <TopicsChip topics={topics} fontSize={topicChipFontSize} />
+        <TopicsChip topics={topics} fontSize={topicChipFontSize} text={text}/>
       </View>;
     }
   };
@@ -84,7 +85,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
             </Text>
           )}
         </Text>
-        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA}/>
+        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} />
       </View>
 
     );

@@ -23,7 +23,7 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
     if (sanitizeUrl?.length === 0) return <></>
     return <View style={{ ...styles.messageContainer, ...messageContainerStyle }}>
       <Text style={styles.message} numberOfLines={3}>{getCaptionWithTopicStyle(sanitizeUrl, navigation)}</Text>
-      <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT}/>
+      <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl}/>
     </View>
   }
 

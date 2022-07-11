@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { colors } from "../../utils/colors"
 import { fonts } from "../../utils/fonts"
 
-const TopicsChip = ({ topics = [], fontSize = 24 }) => {
+const TopicsChip = ({ topics = [], fontSize = 24, text = '' }) => {
     const navigation = useNavigation()
 
     const onTopicPress = (topic) => {
@@ -17,7 +17,7 @@ const TopicsChip = ({ topics = [], fontSize = 24 }) => {
 
     return <View style={styles.topicContainer}>
         {topics.map((item, index) => {
-            return <View key={`topicContainer-${index}`} style={styles.topicItemContainer}>
+            if(text.indexOf(`#${item}`) < 0) return <View key={`topicContainer-${index}`} style={styles.topicItemContainer}>
                 <Pressable
                     android_ripple={{
                         borderless: false,

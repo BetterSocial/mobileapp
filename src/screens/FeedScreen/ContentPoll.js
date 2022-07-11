@@ -144,7 +144,7 @@ const ContentPoll = ({
             getCaptionWithTopicStyle(text, navigation)
           ) : (
             <Text>
-              getCaptionWithTopicStyle(`${text.substring(0, 165)}...`, navigation)
+              {getCaptionWithTopicStyle(`${text.substring(0, 165)}...`, navigation)}
               {/* {`${getCaptionWithTopicStyle('#hashtag1', navigation)}`} */}
               <Text onPress={onPress} style={styles.seemore}>
                 more
@@ -152,7 +152,7 @@ const ContentPoll = ({
             </Text>
           )}
         </Text>
-        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} />
+        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} text={text.substring(0, 165)} />
       </View>
     );
   };

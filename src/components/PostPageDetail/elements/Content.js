@@ -51,7 +51,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
         images_url.length > 0 ? (
           <View style={styles.container}>
             <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
-            <TopicsChip topics={topics} fontSize={16}/>
+            <TopicsChip topics={topics} fontSize={16} text={message} />
             <Gap height={16} />
             <ImageLayouter
               images={images_url}
@@ -66,7 +66,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
                 {message}
               </SeeMore> */}
               <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
-              <TopicsChip topics={topics} fontSize={16}/>
+              <TopicsChip topics={topics} fontSize={16} text={message} />
             </View>
           </ScrollView>
 
