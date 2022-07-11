@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Image, StyleSheet, TouchableNativeFeedback, View } from 'react-native';
-import FastImage from 'react-native-fast-image'
 
 import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
 import { DEFAULT_PROFILE_PIC_PATH } from '../../../utils/constants';
@@ -12,8 +11,8 @@ import { DEFAULT_PROFILE_PIC_PATH } from '../../../utils/constants';
  * @property {Boolean} disabledAddIcon
  */
 /**
- * 
- * @param {ProfilePicturePropsParam} props 
+ *
+ * @param {ProfilePicturePropsParam} props
  */
 const ProfilePicture = ({ onImageContainerClick, profilePicPath, disabledAddIcon = false}) => {
     const __renderAddIcon = () => {
@@ -24,7 +23,7 @@ const ProfilePicture = ({ onImageContainerClick, profilePicPath, disabledAddIcon
     return <View style={styles.wrapImageProfile}>
         <TouchableNativeFeedback onPress={onImageContainerClick}>
             <View style={styles.profileImageContainer}>
-            <FastImage
+            <Image
                 style={styles.profileImage}
                 source={{
                 uri: profilePicPath

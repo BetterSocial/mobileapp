@@ -13,13 +13,15 @@ import {
   HUMAN_ID_CLIENT_SECRET,
 } from '@env';
 import { configureHumanID } from '@human-id/react-native-humanid';
-
+import {enableScreens} from 'react-native-screens';
 import App from './App';
 import AppIcon from './src/components/AppIcon';
 import { name as appName } from './app.json';
 
 const clientSecret = HUMAN_ID_CLIENT_SECRET;
 const clientId = HUMAN_ID_CLIENT_ID;
+
+enableScreens();
 
 configureHumanID({
   appName: 'Better Social',

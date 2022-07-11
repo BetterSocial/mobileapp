@@ -78,7 +78,7 @@ const Comment = ({
     if(statusVote === 'none') {
       setTotalVote((prevState) => prevState + 1)
       setStatusVote('upvote')
-    } 
+    }
     let dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
@@ -98,7 +98,7 @@ const Comment = ({
     if(statusVote === 'none') {
       setTotalVote((prevState) => prevState - 1)
       setStatusVote('downvote')
-    } 
+    }
     let dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
@@ -108,9 +108,8 @@ const Comment = ({
   };
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
-    console.log('sontak',result)
+
     if(findCommentAndUpdate) {
-      console.log('masuklah')
       findCommentAndUpdate(comment.id, result.data, level)
     }
     // setTotalVote(

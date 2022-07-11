@@ -117,12 +117,10 @@ function HomeBottomTabs(props) {
       });
 
       getFollowedDomain().then((response) => {
-        console.log('qweqweqweqeqwe')
         following.setFollowingDomain(response.data.data, followingDispatch);
       });
 
       getFollowingTopic().then((response) => {
-        console.log('zxczxczczxc')
         following.setFollowingTopics(response.data, followingDispatch);
       });
 

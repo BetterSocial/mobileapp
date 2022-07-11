@@ -42,12 +42,9 @@ const FeedNotification = (props) => {
 
     const callStreamFeed = async () => {
         const token = await getAccessToken()
-        console.log(token, 'nani')
         const client = streamFeed(token)
         const notif = client.feed('notification', userid, token)
-        console.log('skita')
         notif.subscribe(function (data) {
-            console.log(data, 'kulakan')
             getPostNotification()
 
         })
@@ -56,7 +53,6 @@ const FeedNotification = (props) => {
     }
 
     const onDetailFeed = (id) => {
-        console.log(id, 'saman')
         navigation.navigate('PostDetailPage', {
             feedId: id
         })

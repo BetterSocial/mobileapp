@@ -133,7 +133,7 @@ const ChannelListScreen = ({ navigation }) => {
     if(res.success) {
         setListPostNotif(res.data)
     }
-} 
+}
 
   const customPreviewTitle = (props) => {
     let { name } = props.channel?.data;
@@ -160,7 +160,7 @@ const ChannelListScreen = ({ navigation }) => {
       />
     );
   };
-  
+
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
@@ -168,7 +168,7 @@ const ChannelListScreen = ({ navigation }) => {
         <View style={{ height: 52 }}>
           <Search
             animatedValue={0}
-            onPress={() => navigation.navigate('ContactScreen')}
+            onPress={() => crashlytics().crash()}
           />
         </View>
           {myProfile && myProfile.user_id && client.client ? (
@@ -200,9 +200,9 @@ const ChannelListScreen = ({ navigation }) => {
                additionalData={listPostNotif}
                context={myContext}
                onSelectAdditionalData={goToFeedDetail}
-               
+
               />
-      
+
             </Chat>
           ) : (
             <View style={styles.content}>
@@ -220,4 +220,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default React.memo(withInteractionsManaged (ChannelListScreen))
+export default React.memo(ChannelListScreen)
