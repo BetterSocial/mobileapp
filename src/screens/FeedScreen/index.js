@@ -287,7 +287,6 @@ const FeedScreen = (props) => {
     setShowNavbar(true)
 
   }
-  console.log(showNavbar, 'shownavbar 123')
   let handleScrollEvent = React.useCallback((event) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
