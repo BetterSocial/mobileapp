@@ -92,7 +92,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
   };
 
   return (
-    <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
+    <Pressable  onPress={onPress} style={[styles.contentFeed, style]}>
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>

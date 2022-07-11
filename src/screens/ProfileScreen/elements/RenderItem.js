@@ -304,6 +304,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingBottom: 0,
     borderBottomColor: 'transparent',
+    paddingHorizontal: 9
   }),
   paddingHorizontal: {paddingHorizontal: 20},
   lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},

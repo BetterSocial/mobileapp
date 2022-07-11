@@ -71,8 +71,11 @@ const _renderAnonimity = ({
   location,
   isBackButton,
   height,
+  getSearchLayout
 }) => {
   const navigation = useNavigation();
+  
+
 
   return (
     <SafeAreaView>
