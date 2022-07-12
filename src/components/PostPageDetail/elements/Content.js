@@ -22,6 +22,7 @@ import { COLORS } from '../../../utils/theme';
 import { Gap } from '../../../components';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
+import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -49,8 +50,8 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
-            <Text style={styles.textContentFeed}>{message}</Text>
-            <TopicsChip topics={topics} fontSize={16}/>
+            <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
+            <TopicsChip topics={topics} fontSize={16} text={message} />
             <Gap height={16} />
             <ImageLayouter
               images={images_url}
@@ -64,8 +65,8 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
               {/* <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
                 {message}
               </SeeMore> */}
-              <Text style={styles.textContentFeed}>{message}</Text>
-              <TopicsChip topics={topics} fontSize={16}/>
+              <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
+              <TopicsChip topics={topics} fontSize={16} text={message} />
             </View>
           </ScrollView>
 

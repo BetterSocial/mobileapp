@@ -35,6 +35,7 @@ const FeedScreen = (props) => {
   const [countStack, setCountStack] = React.useState(null);
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
+  const [showNavbar, setShowNavbar] = React.useState(false)
   const paddingContainer = React.useRef(new Animated.Value(Platform.OS === 'ios' ? 30 : 50)).current
 
   // const [time, setTime] = React.useState(new Date());
@@ -47,10 +48,12 @@ const FeedScreen = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const [profileContext] = React.useContext(Context).profile;
   const bottomBarHeight = useBottomTabBarHeight();
+  const [searchHeight, setSearchHeight] = React.useState(0)
   const { height } = Dimensions.get('screen');
   const {interactionsComplete} = useAfterInteractions()
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
   let {myProfile} = profileContext
+  const bottomHeight = useBottomTabBarHeight();
 
   const getDataFeeds = async (offset = 0, useLoading) => {
     setCountStack(null);
@@ -281,8 +284,9 @@ const FeedScreen = (props) => {
       }).start()
     
     })
-  }
+    setShowNavbar(true)
 
+  }
   let handleScrollEvent = React.useCallback((event) => {
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
@@ -290,7 +294,6 @@ const FeedScreen = (props) => {
       showSearchBarAnimation()
 
     } else if (dy - 20 > 0) {
- 
       InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
           toValue: -50,
@@ -302,8 +305,9 @@ const FeedScreen = (props) => {
           duration: 100,
           useNativeDriver: false,
         }).start()
-     
+        
       })
+      setShowNavbar(false)
     }
   }, [offset])
 
@@ -327,16 +331,20 @@ const FeedScreen = (props) => {
     setTimer(new Date(), dispatch)
   }
 
-  // if (initialLoading) {
-  //   return null
-  // }
+  const saveSearchHeight = (height) => {
+    if(!searchHeight) {
+      setSearchHeight(Number(height))
+
+    }
+  }
+
 
   return (
     <View style={styles.container} forceInset={{ top: 'always' }}>
-      <Search animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
+      <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
       <Animated.View style={{paddingTop: paddingContainer}}/>
       <TiktokScroll
-        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
+        contentHeight={Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight}
         data={feeds}
         onEndReach={onEndReach}
         // onMomentumScrollEnd={handleOnMomentumEnd}
@@ -346,8 +354,8 @@ const FeedScreen = (props) => {
         // onScrollBeginDrag={handleOnScrollBeginDrag}
         refreshing={loading}>
         {({ item, index }) => {
-          let dummyItemHeight = height - dimen.size.FEED_CURRENT_ITEM_HEIGHT - StatusBar.currentHeight - bottomBarHeight - 16
-          if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
+          // let dummyItemHeight = Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight
+          if(item.dummy) return null
           return <RenderListFeed
             item={item}
             onNewPollFetched={onNewPollFetched}
@@ -360,6 +368,8 @@ const FeedScreen = (props) => {
             selfUserId={myProfile.user_id}
             onPressDownVote={(post) => setDownVote(post, index)}
             loading={loading}
+            showNavbar={showNavbar}
+            searchHeight={searchHeight}
           />
         }}
       </TiktokScroll>

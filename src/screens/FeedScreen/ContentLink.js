@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
@@ -8,6 +8,7 @@ import dimen from '../../utils/dimen';
 import { COLORS, SIZES } from '../../utils/theme';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
+import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 import { smartRender } from '../../utils/Utils';
 
 const FONT_SIZE_TEXT = 16
@@ -15,13 +16,14 @@ const FONT_SIZE_TEXT = 16
 const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, score, message = "", messageContainerStyle = {}, topics = [] }) => {
   let route = useRoute();
   let isTouchableDisabled = route?.name === 'PostDetailPage';
+  let navigation = useNavigation()
 
   const __renderMessageContentLink = () => {
     let sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
     if (sanitizeUrl?.length === 0) return <></>
     return <View style={{ ...styles.messageContainer, ...messageContainerStyle }}>
-      <Text style={styles.message} numberOfLines={3}>{sanitizeUrl}</Text>
-      <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT}/>
+      <Text style={styles.message} numberOfLines={3}>{getCaptionWithTopicStyle(sanitizeUrl, navigation)}</Text>
+      <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl}/>
     </View>
   }
 

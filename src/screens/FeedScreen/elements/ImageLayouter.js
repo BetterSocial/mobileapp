@@ -3,13 +3,14 @@ import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
 import {COLORS} from '../../../utils/theme';
 import {fonts} from '../../../utils/fonts';
+import FastImage from 'react-native-fast-image';
 
 const ImageLayouter = ({images = [], onimageclick, height}) => {
   if (images.length === 1) {
     return (
       <Pressable onPress={() => onimageclick(0)}>
-        <Image
-          source={{uri: images[0]}}
+        <FastImage
+          source={{uri: images[0],  priority: FastImage.priority.normal,}}
           style={styles.imagelayout1}
           width={'100%'}
           height={'100%'}
@@ -23,9 +24,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           return (
             <View key={`image-layouter-${index}`} style={styles.twoPhotoItemLayout}>
               <Pressable onPress={() => onimageclick(index)}>
-                <Image
+                <FastImage
                   style={styles.imagelayout2}
-                  source={{uri: item}}
+                  source={{uri: item,  priority: FastImage.priority.normal,}}
                   width={'100%'}
                   height={'100%'}
                 />
@@ -42,9 +43,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(0)}
             style={styles.threePhotoTopFirstLayout}>
-            <Image
+            <FastImage
               style={styles.imagelayout3}
-              source={{uri: images[0]}}
+              source={{uri: images[0],  priority: FastImage.priority.normal,}}
               width={'100%'}
               height={'100%'}
             />
@@ -52,9 +53,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(1)}
             style={styles.threePhotoTopSecondLayout}>
-            <Image
+            <FastImage
               style={styles.imagelayout3}
-              source={{uri: images[1]}}
+              source={{uri: images[1],  priority: FastImage.priority.normal,}}
               width={'100%'}
               height={'100%'}
             />
@@ -62,9 +63,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
         </View>
         <View style={styles.threePhotoBottomLayout}>
           <Pressable onPress={() => onimageclick(2)}>
-            <Image
+            <FastImage
               style={styles.imagelayout2}
-              source={{uri: images[2]}}
+              source={{uri: images[2],  priority: FastImage.priority.normal,}}
               width={'100%'}
               height={'100%'}
             />
@@ -79,9 +80,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(0)}
             style={styles.threePhotoTopFirstLayout}>
-            <Image
+            <FastImage
               style={styles.imagelayout3}
-              source={{uri: images[0]}}
+              source={{uri: images[0],  priority: FastImage.priority.normal,}}
               width={'100%'}
               height={'100%'}
             />
@@ -89,9 +90,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(1)}
             style={styles.threePhotoTopSecondLayout}>
-            <Image
+            <FastImage
               style={styles.imagelayout3}
-              source={{uri: images[1]}}
+              source={{uri: images[1],  priority: FastImage.priority.normal,}}
               width={'100%'}
               height={'100%'}
             />
@@ -101,9 +102,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(2)}
             style={styles.threePhotoTopFirstLayout}>
-            <Image
+            <FastImage
               style={styles.imagelayout3}
-              source={{uri: images[2]}}
+              source={{uri: images[2],  priority: FastImage.priority.normal,}}
               width={'100%'}
               height={'100%'}
             />
@@ -111,9 +112,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(3)}
             style={styles.threePhotoTopSecondLayout}>
-            <Image
+            <FastImage
               style={styles.imagelayout3}
-              source={{uri: images[3]}}
+              source={{uri: images[3],  priority: FastImage.priority.normal,}}
               width={'100%'}
               height={'100%'}
             />
@@ -128,9 +129,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(0)}
             style={styles.threePhotoTopFirstLayout}>
-            <Image
+            <FastImage
               style={styles.imagelayout3}
-              source={{uri: images[0]}}
+              source={{uri: images[0],  priority: FastImage.priority.normal,}}
               width={'100%'}
               height={'100%'}
             />
@@ -138,9 +139,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(1)}
             style={styles.threePhotoTopSecondLayout}>
-            <Image
+            <FastImage
               style={styles.imagelayout3}
-              source={{uri: images[1]}}
+              source={{uri: images[1],  priority: FastImage.priority.normal,}}
               width={'100%'}
               height={'100%'}
             />
@@ -150,9 +151,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(2)}
             style={styles.threePhotoTopFirstLayout}>
-            <Image
+            <FastImage
               style={styles.imagelayout3}
-              source={{uri: images[2]}}
+              source={{uri: images[2],  priority: FastImage.priority.normal,}}
               width={'100%'}
               height={'100%'}
             />
@@ -182,9 +183,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
                 zIndex: 1000,
                 color: COLORS.white,
               }}>{`${images.length - 3}+`}</Text>
-            <Image
+            <FastImage
               style={styles.imagelayout3}
-              source={{uri: images[3]}}
+              source={{uri: images[3],  priority: FastImage.priority.normal}}
               width={'100%'}
               height={'100%'}
             />

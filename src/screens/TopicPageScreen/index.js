@@ -158,7 +158,7 @@ const TopicPageScreen = (props) => {
   };
 
   const onEndReach = () => {
-    refreshingData(feeds[feeds.length - 1].id);
+    refreshingData(feeds[feeds.length - 1]?.id);
   };
 
   const onPress = (item, index) => {

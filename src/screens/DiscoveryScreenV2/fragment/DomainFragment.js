@@ -31,7 +31,8 @@ const DomainFragment = () => {
 
     const isReady = useIsReady()
 
-    const { domains } = following
+    // const { domains } = following
+    const domains = discovery.initialDomains
     const { isLoadingDiscoveryDomain, followedDomains, unfollowedDomains, isFirstTimeOpen = true } = discovery
 
     React.useEffect(() => {

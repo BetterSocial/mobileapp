@@ -20,6 +20,7 @@ import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { sanitizeUrlForLinking } from '../../utils/Utils';
+import FastImage from 'react-native-fast-image';
 
 const Card = (props) => {
   const {
@@ -52,9 +53,9 @@ const Card = (props) => {
               </Text>
             </View>
             <View style={{ flex: 1 }}>
-              <Image
+              <FastImage
                 style={styles.image}
-                source={image ? { uri: image } : null}
+                source={image ? { uri: image,  priority: FastImage.priority.normal, } : null}
                 resizeMethod="resize"
               />
             </View>
@@ -80,7 +81,7 @@ const Card = (props) => {
 const Header = ({ domain, image, date, score }) => (
   <View style={styles.headerContainer}>
     <View style={styles.headerImageContainer}>
-      <Image
+      <FastImage
         style={[
           { height: '100%', width: '100%', borderRadius: 45 },
           StyleSheet.absoluteFillObject,

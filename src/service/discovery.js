@@ -116,7 +116,7 @@ const fetchDiscoveryDataNews = async (query) => {
  * @typedef {Object} FetchInitialDiscoveryTopicsResponse
  * @property {Boolean} success
  * @property {String} message
- * @property {Number} [nextPage]
+ * @property {Number} [page]
  * @property {FetchInitialDiscoveryTopicsResponse.SuggestedUsers[]} [suggestedTopics]
  */
 
@@ -125,9 +125,9 @@ const fetchDiscoveryDataNews = async (query) => {
  * @param {Number} page
  * @returns {FetchInitialDiscoveryTopicsResponse}
  */
-const fetchInitialDiscoveryTopics = async (limit = 10, page = 0) => {
+const fetchInitialDiscoveryTopics = async (limit = 25, page = 0) => {
   try {
-    const response = await api.post('/discovery/init/topic', {
+    const response = await api.post(`/discovery/init/topic?limit=${limit}`, {
       limit,
       page,
     });
@@ -165,7 +165,7 @@ const fetchInitialDiscoveryTopics = async (limit = 10, page = 0) => {
  * @typedef {Object} FetchInitialDiscoveryUsersResponse
  * @property {Boolean} success
  * @property {String} message
- * @property {Number} [nextPage]
+ * @property {Number} [page]
  * @property {FetchInitialDiscoveryUsersResponse.SuggestedUsers[]} [suggestedUsers]
  */
 
@@ -174,9 +174,52 @@ const fetchInitialDiscoveryTopics = async (limit = 10, page = 0) => {
  * @param {Number} page
  * @returns {FetchInitialDiscoveryUsersResponse}
  */
-const fetchInitialDiscoveryUsers = async (limit = 10, page = 0) => {
+const fetchInitialDiscoveryUsers = async (limit = 25, page = 0) => {
   try {
-    const response = await api.post('https://devme.bettersocial.org/api/v1/discovery/init/user', {
+    const response = await api.post('discovery/init/user', {
+      limit,
+      page,
+    });
+
+    if (response.data.success) {
+      return response.data;
+    }
+    return {
+      success: false,
+      message: response.data.message,
+    };
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+
+/**
+ * @typedef {Object} FetchInitialDiscoveryUsersResponse.SuggestedDomain
+ * @property {String} domain_name
+ * @property {String} domain_id_followed
+ * @property {String} short_description
+ * @property {String} logo
+ * @property {String} user_id_follower
+ * @property {Number} credder_score
+ * @property {Number} common
+ */
+/**
+ * @typedef {Object} FetchInitialDiscoveryDomainsResponse
+ * @property {Boolean} success
+ * @property {String} message
+ * @property {Number} [page]
+ * @property {FetchInitialDiscoveryUsersResponse.SuggestedDomain[]} [suggestedDomains]
+ */
+
+/**
+ * @param {Number} limit
+ * @param {Number} page
+ * @returns {FetchInitialDiscoveryDomainsResponse}
+ */
+const fetchInitialDiscoveryDomains = async (limit = 25, page = 0) => {
+  try {
+    const response = await api.post(`discovery/init/domain?limit=${limit}`, {
       limit,
       page,
     });
@@ -201,6 +244,7 @@ const DiscoveryRepo = {
   fetchDiscoveryDataNews,
   fetchInitialDiscoveryTopics,
   fetchInitialDiscoveryUsers,
+  fetchInitialDiscoveryDomains,
 };
 
 export default DiscoveryRepo;
