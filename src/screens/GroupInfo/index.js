@@ -48,6 +48,8 @@ const GroupInfo = () => {
   let createChat = channelState.channel?.data?.created_at;
   let countUser = Object.entries(participants).length;
 
+  console.log(username)
+
   const serializeMembersList = (result = []) => {
     if (typeof result !== 'object') {
       return {};
@@ -78,6 +80,8 @@ const GroupInfo = () => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      console.log('route.parms.from')
+      console.log(route?.params?.from)
       if (route?.params?.from === 'AddParticipant') {
         setIsLoadingMembers(true);
         getMembersList();
@@ -91,7 +95,7 @@ const GroupInfo = () => {
     if (profileChannel || channel?.data?.image) {
       if (uploadedImage !== '') {
         return (
-          <Image style={styles.btnUpdatePhoto} source={{uri: uploadedImage}} />
+          <Image style={styles.btnUpdatePhoto} source={{uri: uploadedImage !== '' ? uploadedImage: undefined}} />
         );
       }
 
@@ -99,7 +103,7 @@ const GroupInfo = () => {
         return (
           <Image
             style={styles.btnUpdatePhoto}
-            source={{uri: channel?.data?.image}}
+            source={{uri: channel?.data?.image !== '' ? channel?.data?.image : undefined}}
           />
         );
       }
@@ -236,7 +240,7 @@ const GroupInfo = () => {
               renderItem={({item, index}) => (
                 <Image
                   source={{
-                    uri: item.message.attachments[0].image_url,
+                    uri: item.message.attachments[0].image_url !== '' ? item.message.attachments[0] : undefined,
                   }}
                   width={80}
                   height={80}
