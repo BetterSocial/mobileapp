@@ -53,7 +53,7 @@ import { Context } from '../context';
 import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
-import {initialStartupTask, InitialStartupAtom } from '../service/initialStartup';
+import { initialStartupTask, InitialStartupAtom } from '../service/initialStartup';
 
 const RootStack = createStackNavigator();
 
@@ -85,7 +85,7 @@ export const RootNavigator = () => {
         SplashScreen.hide();
       }, 700);
     }
-  }, [initialStartup])
+  }, [initialStartup]);
 
   return (
     <View
@@ -107,7 +107,7 @@ export const RootNavigator = () => {
               name="AuthenticatedStack"
               component={AuthenticatedNavigator}
               />
-            ) : (
+          ) : (
               <RootStack.Screen
                 name="UnauthenticatedStack"
                 component={UnauthenticatedNavigator}
@@ -119,7 +119,7 @@ export const RootNavigator = () => {
   );
 };
 
-//region authenticatedStack
+// region authenticatedStack
 const AuthenticatedStack = createStackNavigator();
 
 const AuthenticatedNavigator = () => {
@@ -189,8 +189,7 @@ const AuthenticatedNavigator = () => {
         component={FollowingScreen}
         options={{
           headerShown: isIos ? profileState.isShowHeader : true,
-          header: ({ navigation }) => {
-            return (
+          header: ({ navigation }) => (
               <SafeAreaView>
                 <Header
                   title={profileState.navbarTitle}
@@ -201,8 +200,7 @@ const AuthenticatedNavigator = () => {
                 />
               </SafeAreaView>
 
-            );
-          },
+          ),
         }}
       />
       <AuthenticatedStack.Screen
@@ -232,11 +230,10 @@ const AuthenticatedNavigator = () => {
         component={Blocked}
         options={{
           headerShown: isIos ? profileState.isShowHeader : true,
-          header: ({ navigation }) => {
-            return (
+          header: ({ navigation }) => (
               <SafeAreaView>
                 <Header
-                  title={"Blocked"}
+                  title={'Blocked'}
                   // containerStyle={styles.header}
                   titleStyle={styles.title}
                   onPress={() => navigation.goBack()}
@@ -244,8 +241,7 @@ const AuthenticatedNavigator = () => {
                 />
               </SafeAreaView>
 
-            );
-          },
+          ),
         }}
       />
       <AuthenticatedStack.Screen
@@ -314,16 +310,15 @@ const AuthenticatedNavigator = () => {
         options={{ headerShown: false }}
       />
     </AuthenticatedStack.Navigator>
-  )
-}
+  );
+};
 
-//endregion
+// endregion
 
-//region UnauthenticatedStack
+// region UnauthenticatedStack
 const UnauthenticatedStack = createStackNavigator();
 
-const UnauthenticatedNavigator = () => {
-  return (
+const UnauthenticatedNavigator = () => (
     <UnauthenticatedStack.Navigator>
       <UnauthenticatedStack.Screen
         name="SignIn"
@@ -351,10 +346,9 @@ const UnauthenticatedNavigator = () => {
         options={{ headerShown: false }}
       />
     </UnauthenticatedStack.Navigator>
-  )
-}
+);
 
-//endregion
+// endregion
 
 const styles = StyleSheet.create({
   header: {
