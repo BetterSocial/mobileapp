@@ -8,7 +8,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-  SafeAreaView
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -26,6 +28,7 @@ import { fonts } from '../../utils/fonts';
 import { getComment } from '../../utils/getstream/getComment';
 import { getFeedDetail } from '../../service/post';
 import { setFeedByIndex } from '../../context/actions/feeds';
+import ButtonHightlight from '../ButtonHighlight';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
@@ -181,7 +184,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
   }, [])
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} style={styles.container}>
       <StatusBar translucent={false} />
       {/* Header */}
       <SafeAreaView>
@@ -256,13 +259,13 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
                               isLastInParent(index),
                             )}>
                             <View style={styles.connector} />
-                            <TouchableOpacity onPress={showChildrenCommentView}>
+                            <ButtonHightlight onPress={showChildrenCommentView}>
                               <Text style={styles.seeRepliesText}>
                                 {StringConstant.postDetailPageSeeReplies(
                                   itemReply.children_counts.comment || 0,
                                 )}
                               </Text>
-                            </TouchableOpacity>
+                            </ButtonHightlight>
                           </View>
                         </>
                       )}
@@ -293,7 +296,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
         value={temporaryText}
       // loadingComment={loadingCMD}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key }) => {

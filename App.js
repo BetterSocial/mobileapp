@@ -13,9 +13,7 @@ import {RootNavigator} from './src/navigations/root-stack';
 import Store from './src/context/Store';
 import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
 import { Platform } from 'react-native';
-import { enableScreens } from 'react-native-screens';
 import { linking } from './src/navigations/linking';
-enableScreens(false);
 
 if(!__DEV__) {
   console.log = function () {}
@@ -84,7 +82,9 @@ const App = () => {
       try {
         fetchRemoteConfig();
       } catch (error) {
-        console.log('app ', error);
+        if (__DEV__) {
+          console.log('app ', error);
+        }
       }
     };
     init();

@@ -107,4 +107,4 @@ const BlockedDomainList = (props) => {
 }
 
 
-export default BlockedDomainList
+export default React.memo (BlockedDomainList)

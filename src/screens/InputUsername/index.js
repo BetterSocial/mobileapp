@@ -1,44 +1,44 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Dimensions,
-  SafeAreaView,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
-  StatusBar,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Animated
-} from 'react-native';
-
-import {useNavigation} from '@react-navigation/core';
-import {showMessage} from 'react-native-flash-message';
-import analytics from '@react-native-firebase/analytics';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import _ from 'lodash';
 import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Toast from 'react-native-simple-toast';
+import analytics from '@react-native-firebase/analytics';
+import {
+  Animated,
+  Dimensions,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { showMessage } from 'react-native-flash-message';
+import { useNavigation } from '@react-navigation/core';
 
-import {ProgressBar} from '../../components/ProgressBar';
-import {Button} from '../../components/Button';
-import {Input} from '../../components/Input';
-import {Context} from '../../context';
-import {setImage, setUsername} from '../../context/actions/users';
-import {verifyUsername} from '../../service/users';
-import {fonts} from '../../utils/fonts';
-import {colors} from '../../utils/colors';
+import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
+import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
+import StringConstant from '../../utils/string/StringConstant';
+import { Button } from '../../components/Button';
+import { Context } from '../../context';
+import { DEFAULT_PROFILE_PIC_PATH } from '../../utils/constants';
+import { Input } from '../../components/Input';
+import { ProgressBar } from '../../components/ProgressBar';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
 import {
   requestCameraPermission,
   requestExternalStoragePermission,
 } from '../../utils/permission';
-import StringConstant from '../../utils/string/StringConstant';
-import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
-import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
-import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
-import {setCapitalFirstLetter} from '../../utils/Utils';
+import { setCapitalFirstLetter } from '../../utils/Utils';
+import { setImage, setUsername } from '../../context/actions/users';
+import { verifyUsername } from '../../service/users';
 
 const width = Dimensions.get('screen').width;
 
@@ -50,6 +50,17 @@ const ChooseUsername = () => {
   const [typeFetch, setTypeFetch] = React.useState('');
   const [showInfo, setShowInfo] = React.useState(false)
   const [fadeInfo] = React.useState(new Animated.Value(0))
+
+  const verifyUsernameDebounce = React.useCallback(_.debounce(async (text) => {
+    const user = await verifyUsername(text);
+    setTypeFetch('max');
+    if (user.data && text.length > 2) {
+      setTypeFetch('notavailable');
+    } else {
+      setTypeFetch('available');
+    }
+  }, 500), [])
+
   React.useEffect(() => {
     Keyboard.addListener('keyboardDidShow', hideInfo)
     Keyboard.addListener('keyboardDidHide', showInfoHandle)
@@ -83,7 +94,7 @@ const ChooseUsername = () => {
   };
 
   const handleOpenCamera = async () => {
-    let {success, message} = await requestCameraPermission();
+    let { success, message } = await requestCameraPermission();
     if (success) {
       launchCamera(
         {
@@ -104,9 +115,9 @@ const ChooseUsername = () => {
   };
 
   const handleOpenGallery = async () => {
-    let {success, message} = await requestExternalStoragePermission();
+    let { success, message } = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+      launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (res) => {
         if (res.base64) {
           setImage(`${res.base64}`, dispatch);
           bottomSheetChooseImageRef.current.close();
@@ -126,14 +137,7 @@ const ChooseUsername = () => {
       if (value.length > 2) {
         if (isNaN(v)) {
           setTypeFetch('fetch');
-          const user = await verifyUsername(value);
-          // console.log(user)
-          setTypeFetch('max');
-          if (user.data && v.length > 2) {
-            setTypeFetch('notavailable');
-          } else {
-            setTypeFetch('available');
-          }
+          verifyUsernameDebounce(value)
         } else {
           setTypeFetch('nan');
         }
@@ -243,52 +247,52 @@ const ChooseUsername = () => {
         style={styles.keyboardavoidingview}
         behavior={'height'}
         keyboardVerticalOffset={18}
-        >
+      >
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
-                <View style={styles.content}>
-          <ProgressBar isStatic={true} value={25} />
-          <Text style={styles.title}>
-            {StringConstant.onboardingChooseUsernameHeadline}
-          </Text>
-          <Text style={styles.desc}>
-            {StringConstant.onboardingChooseUsernameSubHeadline}
-          </Text>
-          <View style={styles.containerInput}>
-            <TouchableOpacity
-              style={styles.containerAddIcon}
-              onPress={() => onPhoto()}>
-              <View style={{}}>
-                <Image
-                  source={{
-                    uri: users.photo
-                      ? `data:image/png;base64,${users.photo}`
-                      : DEFAULT_PROFILE_PIC_PATH,
-                    cache: 'reload',
-                  }}
-                  width={52}
-                  height={52}
-                  style={styles.image}
-                />
-                <View style={styles.icon}>
-                  <MemoOnboardingChangeProfilePlusIcon />
+          <View style={styles.content}>
+            <ProgressBar isStatic={true} value={25} />
+            <Text style={styles.title}>
+              {StringConstant.onboardingChooseUsernameHeadline}
+            </Text>
+            <Text style={styles.desc}>
+              {StringConstant.onboardingChooseUsernameSubHeadline}
+            </Text>
+            <View style={styles.containerInput}>
+              <TouchableOpacity
+                style={styles.containerAddIcon}
+                onPress={() => onPhoto()}>
+                <View style={{}}>
+                  <Image
+                    source={{
+                      uri: users.photo
+                        ? `data:image/png;base64,${users.photo}`
+                        : DEFAULT_PROFILE_PIC_PATH,
+                      cache: 'reload',
+                    }}
+                    width={52}
+                    height={52}
+                    style={styles.image}
+                  />
+                  <View style={styles.icon}>
+                    <MemoOnboardingChangeProfilePlusIcon />
+                  </View>
                 </View>
+              </TouchableOpacity>
+              <View>
+                <Input
+                  placeholder="Username"
+                  onChangeText={(v) => checkUsername(v)}
+                  value={username}
+                  autoCompleteType="username"
+                  textContentType="username"
+                  autoCapitalize="sentences"
+                  autoCorrect={false}
+                  autoFocus
+                />
+                {messageTypeFetch(typeFetch, username)}
               </View>
-            </TouchableOpacity>
-            <View>
-              <Input
-                placeholder="Username"
-                onChangeText={(v) => checkUsername(v)}
-                value={username}
-                autoCompleteType="username"
-                textContentType="username"
-                autoCapitalize="sentences"
-                autoCorrect={false}
-                autoFocus
-              />
-              {messageTypeFetch(typeFetch, username)}
             </View>
-          </View>
-          {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
+            {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
             <View style={styles.parentIcon} >
             <View style={styles.containerIcon}>
               <IconFontAwesome5 name="exclamation" size={12} color="#2F80ED" />
@@ -301,21 +305,21 @@ const ChooseUsername = () => {
               </View>
             
           </Animated.View> */}
-   
-        </View>
-</TouchableWithoutFeedback>
-        
+
+          </View>
+        </TouchableWithoutFeedback>
+
         <View style={styles.gap} />
         <View style={styles.footer} >
-        <Text
-          style={
-            styles.textSmall
-          }>No matter your username, you can always post anonymously</Text>
-        <Button  onPress={() => next()}>
-          {StringConstant.onboardingChooseUsernameButtonStateNext}
-        </Button>
+          <Text
+            style={
+              styles.textSmall
+            }>No matter your username, you can always post anonymously</Text>
+          <Button onPress={() => next()}>
+            {StringConstant.onboardingChooseUsernameButtonStateNext}
+          </Button>
         </View>
-  
+
       </KeyboardAvoidingView>
       <BottomSheetChooseImage
         ref={bottomSheetChooseImageRef}
@@ -337,8 +341,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  btnNext: {marginTop: 16},
-  gap: {flex: 1},
+  btnNext: { marginTop: 16 },
+  gap: { flex: 1 },
   icon: {
     width: 14,
     height: 14,
@@ -425,7 +429,7 @@ const styles = StyleSheet.create({
     marginTop: marginTop ? 6 : 0,
   }),
   parentIcon: {
-    width: '10%', 
+    width: '10%',
     alignItems: 'center'
   },
   parentInfo: {
@@ -445,7 +449,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6.68,
     elevation: 11,
     height: 112,
-    
+
   },
   textSmall: {
     fontFamily: 'Inter',

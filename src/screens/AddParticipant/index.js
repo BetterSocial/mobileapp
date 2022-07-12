@@ -27,6 +27,7 @@ const AddParticipant = ({ navigation }) => {
   const [channel] = React.useContext(Context).channel;
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
   const [followed, setFollowed] = React.useState([]);
+  const [followedName, setFollowedName] = React.useState([]);
   const [layoutProvider, setLayoutProvider] = React.useState(() => { });
   const [dataProvider, setDataProvider] = React.useState(null);
   const [users, setUsers] = React.useState([]);
@@ -106,6 +107,17 @@ const AddParticipant = ({ navigation }) => {
     setFollowed(copyFollowed);
   };
 
+  const handleSelectedName = (value) => {
+    let copyFollowed = [...followedName];
+    let index = followedName.indexOf(value);
+    if (index > -1) {
+      copyFollowed.splice(index, 1);
+    } else {
+      copyFollowed.push(value);
+    }
+    setFollowedName(copyFollowed);
+  };
+
   const updateChannel = async () => {
     if (followed.length !== 0 && channel.channel) {
       try {
@@ -116,7 +128,14 @@ const AddParticipant = ({ navigation }) => {
             channel_role: 'channel_moderator'
           }
         })
+
         await channel.channel.addMembers(followedWithRoles);
+        let previousChannelMembers = channel?.channel?.data?.name?.split(',')
+        if(previousChannelMembers.length > 1) {
+          await channel?.channel?.update({
+            name: [...previousChannelMembers, ...followedName].join(', ')
+          })
+        }
         setLoading(false);
         navigation.navigate('GroupInfo', {
           from: 'AddParticipant',
@@ -139,12 +158,20 @@ const AddParticipant = ({ navigation }) => {
       setUsers(cacheUser);
     }
   };
+
+  const onUserSelected = (item) => {
+    handleSelected(item.user_id)
+    handleSelectedName(item.username)
+  }
+
+  console.log(followedName)
+
   const rowRenderer = (type, item, index, extendedState) => {
     return (
       <ProfileContact
         select={extendedState.followed.includes(item.user_id)}
         fullname={item.username}
-        onPress={() => handleSelected(item.user_id)}
+        onPress={() => onUserSelected(item)}
         photo={item.profile_pic_path}
       />
     );

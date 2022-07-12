@@ -9,6 +9,7 @@ import LoadingComment from '../LoadingComment';
 import StringConstant from '../../utils/string/StringConstant';
 import {DATALOADING} from '../../utils/string/LoadingComment';
 import {colors} from '../../utils/colors';
+import ButtonHightlight from '../ButtonHighlight';
 
 const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate}) => {
   const navigation = useNavigation();
@@ -131,13 +132,13 @@ const ReplyComment = ({
                   <View
                     style={styles.seeRepliesContainer(isLastInParent(index))}>
                     <View style={styles.connector} />
-                    <TouchableOpacity onPress={showChildCommentView}>
+                    <ButtonHightlight onPress={showChildCommentView}>
                       <Text style={styles.seeRepliesText}>
                         {StringConstant.postDetailPageSeeReplies(
                           item.children_counts.comment || 0,
                         )}
                       </Text>
-                    </TouchableOpacity>
+                    </ButtonHightlight>
                   </View>
                 </>
               )}
@@ -159,7 +160,9 @@ const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
     </View>
   );
 };
-export default ContainerComment;
+export default React.memo (ContainerComment, (prevProps, nextProps) => {
+  return prevProps.comments === nextProps.comments
+});
 
 const styles = StyleSheet.create({
   container: {

@@ -15,9 +15,17 @@ import StringConstant from '../../../utils/string/StringConstant';
 import {fonts} from '../../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
-const Search = ({onPress, animatedValue, onContainerClicked = () => {}}) => {
+const Search = ({onPress, animatedValue, onContainerClicked = () => {}, getSearchLayout}) => {
+
+  const onSearchLayout = (event) => {
+    var {x, y, width, height} = event.nativeEvent.layout;
+    if(getSearchLayout) {
+      getSearchLayout(height)
+    }
+  }
+
   return (
-    <Animated.View style={styles.animatedViewContainer(animatedValue)}>
+    <Animated.View onLayout={onSearchLayout} style={styles.animatedViewContainer(animatedValue)}>
       <Pressable onPress={onContainerClicked} style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>

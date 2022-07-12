@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import DiscoveryAction from '../context/actions/discoveryAction';
+import DiscoveryRepo from '../service/discovery';
 import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
@@ -54,7 +55,8 @@ function HomeBottomTabs(props) {
   const [unReadMessage] = React.useContext(Context).unReadMessage;
   const [loadingUser, setLoadingUser] = React.useState(true)
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
-
+  const LIMIT_FIRST_FEEDS = 1
+  const LIMIT_FIRST_NEWS = 3
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
@@ -112,11 +114,6 @@ function HomeBottomTabs(props) {
     let selfUserId = await getUserId();
     // Not using await so splash screen can navigate to next screen faster
 
-    let response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
-    if (!response) return
-    // setItems(JSON.parse(response))
-    DiscoveryAction.setDiscoveryRecentSearch(JSON.parse(response), discoveryDispatch)
-
     try {
       getFollowing(selfUserId).then((response) => {
         following.setFollowingUsers(response.data, followingDispatch);
@@ -129,6 +126,20 @@ function HomeBottomTabs(props) {
       getFollowingTopic().then((response) => {
         following.setFollowingTopics(response.data, followingDispatch);
       });
+
+      let discoveryInitialUserResponse = await DiscoveryRepo.fetchInitialDiscoveryUsers()
+      DiscoveryAction.setDiscoveryInitialUsers(discoveryInitialUserResponse.suggestedUsers, discoveryDispatch)
+
+      let discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics()
+      DiscoveryAction.setDiscoveryInitialTopics(discoveryInitialTopicResponse.suggestedTopics, discoveryDispatch)
+
+      let discoveryInitialDomainResponse = await DiscoveryRepo.fetchInitialDiscoveryDomains()
+      DiscoveryAction.setDiscoveryInitialDomains(discoveryInitialDomainResponse.suggestedDomains, discoveryDispatch)
+
+      let response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
+      if (!response) return
+      // setItems(JSON.parse(response))
+      DiscoveryAction.setDiscoveryRecentSearch(JSON.parse(response), discoveryDispatch)
 
     } catch (e) {
       if (__DEV__) {
@@ -170,7 +181,7 @@ function HomeBottomTabs(props) {
   };
 
   const getDomain = () => {
-    getDomains().then((response) => {
+    getDomains(0, LIMIT_FIRST_NEWS).then((response) => {
       saveToCache(NEWS_CACHE, response)
       setNews(response.data, newsDispatch);
     }).catch((e) => {
@@ -180,8 +191,7 @@ function HomeBottomTabs(props) {
 
   const getDataFeeds = async (offset = 0) => {
     try {
-      let query = `?offset=${offset}`
-
+      let query = `?offset=${offset}&limit=${LIMIT_FIRST_FEEDS}`
       const dataFeeds = await getMainFeed(query);
       if (dataFeeds.data.length > 0) {
         let data = dataFeeds.data;
@@ -299,7 +309,7 @@ function HomeBottomTabs(props) {
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: ({ color }) => <MemoFeed fill={color} />,
-            unmountOnBlur: true
+            // unmountOnBlur: true
           }}
         />
         <Tab.Screen
@@ -308,7 +318,7 @@ function HomeBottomTabs(props) {
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: ({ focused, color }) => <MemoNews fill={color} />,
-            unmountOnBlur: true
+            // unmountOnBlur: true
           }}
         />
         <Tab.Screen
@@ -317,7 +327,7 @@ function HomeBottomTabs(props) {
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: ({ focused }) => <MemoProfileIcon loadingUser={loadingUser} uri={users.photoUrl} />,
-            unmountOnBlur:true
+            // unmountOnBlur:true
           }}
         />
       </Tab.Navigator>

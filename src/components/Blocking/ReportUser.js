@@ -14,8 +14,9 @@ import {Button} from '../../components/Button';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const ReportUser = ({refReportUser, onSelect, onSkip, loading}) => {
-  const data = [
+const ReportUser = React.forwardRef((props, ref) => {
+  const { onSelect, onSkip, loading} = props
+    const data = [
     {
       id: 1,
       label: 'It’s promotional spam',
@@ -66,7 +67,7 @@ const ReportUser = ({refReportUser, onSelect, onSkip, loading}) => {
   };
   return (
     <RBSheet
-      ref={refReportUser}
+      ref={ref}
       closeOnDragDown={true}
       closeOnPressMask={true}
       customStyles={{
@@ -99,7 +100,7 @@ const ReportUser = ({refReportUser, onSelect, onSkip, loading}) => {
       </ScrollView>
     </RBSheet>
   );
-};
+});
 
 export default ReportUser;
 

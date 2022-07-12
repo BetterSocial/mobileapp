@@ -495,7 +495,7 @@ const PostPageDetail = (props) => {
         onSelect={() => {}}
       />
       <ReportUser
-        refReportUser={refReportUser}
+        ref={refReportUser}
         onSelect={onNextQuestion}
         onSkip={onSkipOnlyBlock}
       />

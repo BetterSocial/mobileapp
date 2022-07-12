@@ -19,17 +19,28 @@ import { withInteractionsManaged } from '../../../components/WithInteractionMana
 const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
 const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
 const FROM_UNFOLLOWED_TOPIC = 'fromunfollowedtopics';
+const FROM_UNFOLLOWED_TOPIC_INITIAL = 'fromunfollowedtopicsinitial';
 
 const TopicFragment = () => {
-    const navigation = useNavigation()
-    const [myId, setMyId] = React.useState('')
-    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
     const [following, followingDispatch] = React.useContext(Context).following
 
+    const navigation = useNavigation()
+
+    // const [initialFollowedTopics, setInitialFollowedTopics] = React.useState(
+    //     discovery.initialTopics.filter((item) => item.user_id_follower !== null)
+    // )
+    // const [initialUnfollowedTopics, setInitiaUnfollowedTopics] = React.useState(
+    //     discovery.initialTopics.filter((item) => item.user_id_follower === null)
+    // )
+    const [myId, setMyId] = React.useState('')
+    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
+
     const isReady = useIsReady()
 
-    const { topics } = following
+    // const { topics } = following
+    let topics = discovery.initialTopics
+
     const { isLoadingDiscoveryTopic, followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
@@ -47,7 +58,7 @@ const TopicFragment = () => {
     // },[ followedTopic, unfollowedTopic ])
 
     const __handleOnTopicPress = (item) => {
-        console.log(item)
+        // console.log(item)
 
         let navigationParam = {
             id: convertTopicNameToTopicPageScreenParam(item.name)
@@ -58,6 +69,8 @@ const TopicFragment = () => {
     }
 
     const __renderDiscoveryItem = (from, key, item, index) => {
+        // console.log('' + item.name)
+        // console.log('' + item?.user_id_follower)
         return <View key={`${key}-${index}`} style={styles.domainContainer}>
             <DomainList
                 // handleSetFollow={() => __handleFollow(from, true, item, index)}
@@ -75,10 +88,20 @@ const TopicFragment = () => {
     }
 
     const __renderTopicItems = () => {
-        if (isFirstTimeOpen) return [<DiscoveryTitleSeparator key="topic-title-separator" text='Suggested Topics' />].concat(topics.map((item, index) => {
-            return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery",
-                { ...item, user_id_follower: item.user_id_follower ? item.user_id_follower : myId }, index)
-        }))
+        if (isFirstTimeOpen) {
+            // let renderArray = []
+            // initialFollowedTopics.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery", item, index)))
+            // renderArray.push(<DiscoveryTitleSeparator key="topic-title-separator" text='Suggested Topics' />)
+            // initialUnfollowedTopics.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC_INITIAL, "unfollowedTopicDiscovery", item, index)))
+
+            // return renderArray
+            return [<DiscoveryTitleSeparator key="topic-title-separator" text='Suggested Topics' />].concat(topics.map((item, index) => {
+                return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery",
+                    // { ...item, user_id_follower: item.user_id_follower ? item.user_id_follower : myId },
+                    item,
+                    index)
+            }))
+        }
 
         return (
             <>

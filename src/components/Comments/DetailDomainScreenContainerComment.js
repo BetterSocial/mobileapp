@@ -9,6 +9,7 @@ import DetailDomainScreenCommentItem from './DetailDomainScreenCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
 import { colors } from '../../utils/colors';
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
+import ButtonHightlight from '../ButtonHighlight';
 
 const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent, refreshNews }) => {
   const [totalVote, setTotalVote] = React.useState(0);
@@ -189,13 +190,13 @@ const ReplyComment = ({
                   <View
                     style={styles.seeRepliesContainer(isLastInParent(index))}>
                     <View style={styles.connector} />
-                    <TouchableOpacity onPress={showChildCommentView}>
+                    <ButtonHightlight onPress={showChildCommentView}>
                       <Text style={styles.seeRepliesText}>
                         {StringConstant.postDetailPageSeeReplies(
                           item.children_counts.comment || 0,
                         )}
                       </Text>
-                    </TouchableOpacity>
+                    </ButtonHightlight>
                   </View>
                 </>
               )}

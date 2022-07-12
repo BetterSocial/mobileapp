@@ -2,13 +2,19 @@ import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 import {
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   View,
+  Keyboard,
+  InteractionManager
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { useRoute } from '@react-navigation/native'
@@ -20,6 +26,7 @@ import ContentLink from '../../screens/FeedScreen/ContentLink';
 import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
+import Log from '../../utils/log/Log';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import dimen from '../../utils/dimen';
@@ -152,6 +159,13 @@ const PostPageDetailIdComponent = (props) => {
 
       }
       updateAllContent(oldData)
+      Keyboard.dismiss()
+      setTimeout(() => {
+        if(scrollViewRef && scrollViewRef.current) {
+          scrollViewRef.current.scrollTo({y: Dimensions.get('screen').height + 30, x: 0})
+        } 
+      }, 300)
+
     } catch (e) {
       console.log(e);
     }
@@ -172,7 +186,6 @@ const PostPageDetailIdComponent = (props) => {
         let data = await createCommentParent(textComment, item.id, item.actor.id, true);
         updateCachingComment(data.data)
         if (data.code === 200) {
-          onCommentButtonClicked()
           setTextComment('');
           updateFeed(true);
           // Toast.show('Comment successful', Toast.LONG);
@@ -442,18 +455,18 @@ const PostPageDetailIdComponent = (props) => {
   const __handleOnPressScore = () => {
     showScoreAlertDialog(item)
   }
-
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} enabled style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
       <StatusBar translucent={false} />
       {item ? <React.Fragment>
         <Header props={item} isBackButton={true} source={SOURCE_PDP} />
 
-        <ScrollView
+        <ScrollView 
           ref={scrollViewRef}
           showsVerticalScrollIndicator={false}
-          style={styles.contentScrollView(totalComment)}>
+          style={styles.contentScrollView(totalComment)}
+          nestedScrollEnabled={true}>
           <View style={styles.content(height)}>
             {item && item.post_type === POST_TYPE_POLL && (
               <ContentPoll
@@ -467,6 +480,7 @@ const PostPageDetailIdComponent = (props) => {
                 isalreadypolling={item.isalreadypolling}
                 // onnewpollfetched={onNewPollFetched}
                 voteCount={item.voteCount}
+                topics={item?.topics}
               />
             )}
 
@@ -478,6 +492,7 @@ const PostPageDetailIdComponent = (props) => {
                 onCardContentPress={() => navigateToLinkContextPage(item)}
                 message={item?.message}
                 score={item?.credderScore}
+                topics={item?.topics}
               />
             )}
 
@@ -489,6 +504,7 @@ const PostPageDetailIdComponent = (props) => {
                   item.images_url.length,
                   height,
                 )}
+                topics={item?.topics}
               />
             )}
             <Gap height={16} />
@@ -521,7 +537,8 @@ const PostPageDetailIdComponent = (props) => {
               findCommentAndUpdate={findCommentAndUpdate}
             />
           )}
-        </ScrollView>
+        </ScrollView >
+
         <WriteComment
           username={
             item.anonimity
@@ -538,7 +555,7 @@ const PostPageDetailIdComponent = (props) => {
         <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />
       </React.Fragment> : null}
 
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

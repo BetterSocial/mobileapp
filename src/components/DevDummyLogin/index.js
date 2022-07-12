@@ -8,8 +8,8 @@ import { Context } from '../../context';
 import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
 import { removeLocalStorege, setAccessToken, setRefreshToken, setUserId } from '../../utils/token';
 import { setDataHumenId } from '../../context/actions/users';
-import { verifyUser } from '../../service/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import { verifyUser } from '../../service/users';
 
 const heightBs = Dimensions.get('window').height * 0.6
 
@@ -76,15 +76,9 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
                 </Text>
                 <View style={S.divider} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CQ')}>
+            <TouchableOpacity onPress={() => dummyLogin('NNDG-PRMN-0001')}>
                 <Text style={S.dummyAccountItem}>
-                    Fajar_alter : HQEGNQCHA8J1OIX4G2CQ
-                </Text>
-                <View style={S.divider} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('COBA-LAGI-AJA')}>
-                <Text style={S.dummyAccountItem}>
-                    Fajarcobalagi : COBA-LAGI-AJA
+                    Nandangpermana : NNDG-PRMN-0001
                 </Text>
                 <View style={S.divider} />
             </TouchableOpacity>

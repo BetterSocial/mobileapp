@@ -1,29 +1,32 @@
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-  Dimensions,
-  Image,
-  FlatList,
-  Pressable,
-} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-
 import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-import {TouchableWithoutFeedback} from 'react-native';
 import ImageLayouter from './ImageLayouter';
-import {Gap} from '../../../components';
-import {fonts} from '../../../utils/fonts';
-import {colors} from '../../../utils/colors';
-import {COLORS} from '../../../utils/theme';
+import TopicsChip from '../../TopicsChip/TopicsChip';
+import { COLORS } from '../../../utils/theme';
+import { Gap } from '../../../components';
+import { colors } from '../../../utils/colors';
+import { fonts } from '../../../utils/fonts';
+import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
 
-const {width: screenWidth} = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
-const Content = ({message, images_url, style, onPress}) => {
+const Content = ({ message, images_url, style, onPress, topics = [] }) => {
   const route = useRoute();
   const navigation = useNavigation();
   const cekImage = () => {
@@ -36,7 +39,7 @@ const Content = ({message, images_url, style, onPress}) => {
       title: 'Photo',
       index,
       images: images_url.reduce((acc, current) => {
-        acc.push({url: current});
+        acc.push({ url: current });
         return acc;
       }, []),
     });
@@ -47,12 +50,8 @@ const Content = ({message, images_url, style, onPress}) => {
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
-            <SeeMore
-              seeLessText={' '}
-              numberOfLines={4}
-              linkStyle={styles.textContentFeed}>
-              {message}
-            </SeeMore>
+            <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
+            <TopicsChip topics={topics} fontSize={16} text={message} />
             <Gap height={16} />
             <ImageLayouter
               images={images_url}
@@ -60,11 +59,17 @@ const Content = ({message, images_url, style, onPress}) => {
             />
           </View>
         ) : (
-          <View style={styles.containerShowMessage(route.name)}>
-            <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
-              {message}
-            </SeeMore>
-          </View>
+          // <View style={styles.containerShowMessage(route.name)}>
+          <ScrollView nestedScrollEnabled={true}>
+            <View>
+              {/* <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
+                {message}
+              </SeeMore> */}
+              <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
+              <TopicsChip topics={topics} fontSize={16} text={message} />
+            </View>
+          </ScrollView>
+
         )
       ) : null}
     </Pressable>
@@ -85,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 16,
   },
-  fletlist: {flex: 1},
+  fletlist: { flex: 1 },
   imageList: {
     flex: 1,
     width: screenWidth - 32,
@@ -146,10 +151,11 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     backgroundColor: COLORS.white,
+    // backgroundColor: COLORS.red,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
-    fontSize: 24,
+    fontSize: 16,
     lineHeight: 24,
     color: colors.black,
   },
@@ -181,7 +187,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
+    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
     backgroundColor: 'white',
     borderRadius: 8,
   },

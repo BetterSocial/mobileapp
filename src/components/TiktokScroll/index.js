@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {Dimensions, FlatList, StatusBar, StyleSheet} from 'react-native';
 
 import dimen from '../../utils/dimen';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
-const FULL_HEIGHT = Dimensions.get('screen').height;
-const tabBarHeight = StatusBar.currentHeight;
+
 
 const styles = StyleSheet.create({
   flatlistContainer: {
@@ -16,7 +16,10 @@ const styles = StyleSheet.create({
 const TiktokScroll = (props) => {
   const {data, children, onRefresh, refreshing, onEndReach, contentHeight, onScroll, onScrollBeginDrag, onMomentumScrollEnd, ...otherProps} = props;
   const flatListRef = React.useRef();
-
+  const FULL_HEIGHT = Dimensions.get('screen').height;
+const tabBarHeight = StatusBar.currentHeight;
+const bottomHeight = useBottomTabBarHeight()
+const cardHeight = FULL_HEIGHT - tabBarHeight - bottomHeight
   const __onViewambleItemsChanged = React.useCallback(({ viewableItems, changed}) => {
     // console.log("Visible items are", viewableItems);
     // console.log("Changed in this iteration", changed);
@@ -33,6 +36,9 @@ const TiktokScroll = (props) => {
       onRefresh={onRefresh}
       onScroll={onScroll}
       onScrollBeginDrag={onScrollBeginDrag}
+      getItemLayout={(data, index) => ({
+        length: cardHeight, offset: cardHeight * index, index
+      })}
       // onViewableItemsChanged={__onViewambleItemsChanged}
       onMomentumScrollEnd={onMomentumScrollEnd}
       initialNumToRender={2}

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import Image from '../../components/Image';
 
 import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
 
@@ -9,7 +10,7 @@ const index = ({image, style}) => {
       {image ? (
         <Image
           source={{uri: image}}
-          style={[styles.image, StyleSheet.absoluteFillObject]}
+          style={StyleSheet.flatten([styles.image, StyleSheet.absoluteFillObject])}
         />
       ) : (
         <MemoDomainProfilePicture width="24" height="24" />

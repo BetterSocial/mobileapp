@@ -1,15 +1,11 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
-  InteractionManager,
   LogBox,
   SafeAreaView,
-  ScrollView,
   Share,
   StatusBar,
   StyleSheet,
@@ -30,14 +26,12 @@ import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import FollowInfoRow from './elements/FollowInfoRow';
 import GlobalButton from '../../components/Button/GlobalButton';
-import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
-import { DEFAULT_PROFILE_PIC_PATH } from '../../utils/constants';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -64,8 +58,8 @@ import { setImageUrl } from '../../context/actions/users';
 import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -107,14 +101,14 @@ const ProfileScreen = ({ route }) => {
   const [loading, setLoading] = React.useState(false);
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
-  const {interactionsComplete} = useAfterInteractions()
+  const { interactionsComplete } = useAfterInteractions()
   let isNotFromHomeTab = route?.params?.isNotFromHomeTab
   let bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
-
+  const LIMIT_PROFILE_FEED = 1
   let { feeds } = myProfileFeed;
 
   React.useEffect(() => {
-    if(interactionsComplete) {
+    if (interactionsComplete) {
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
       analytics().logScreenView({
         screen_class: 'ProfileScreen',
@@ -142,8 +136,8 @@ const ProfileScreen = ({ route }) => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
       // getMyFeeds();
     });
-    if(interactionsComplete) {
-      getMyFeeds();
+    if (interactionsComplete) {
+      getMyFeeds(0, LIMIT_PROFILE_FEED);
       getAccessToken().then((val) => {
         setTokenJwt(val);
       });
@@ -174,8 +168,6 @@ const ProfileScreen = ({ route }) => {
   };
 
   const saveProfileState = (result) => {
-    if (result === null || result === undefined) return
-
     if (result && typeof result === 'object') {
       setDataMain(result);
       setDataMainBio(result.bio)
@@ -184,8 +176,9 @@ const ProfileScreen = ({ route }) => {
 
   }
 
-  const getMyFeeds = async (offset = 0) => {
-    let result = await getSelfFeedsInProfile(offset);
+  const getMyFeeds = async (offset = 0, limit = 10) => {
+    let result = await getSelfFeedsInProfile(offset, limit);
+    console.log('kakak', result.data.length)
     if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
     else {
       let clonedFeeds = [...feeds]
@@ -500,7 +493,7 @@ const ProfileScreen = ({ route }) => {
 
   const handleRefresh = () => {
     setLoading(true)
-    getMyFeeds(0)
+    getMyFeeds(0, LIMIT_PROFILE_FEED)
   }
 
   const renderHeader = React.useMemo(() => {
@@ -532,6 +525,7 @@ const ProfileScreen = ({ route }) => {
   return (
     <>
       {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{ top: 'always' }}>
+        <StatusBar translucent={false} />
         <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username} />
         <ProfileTiktokScroll
           ref={flatListScrollRef}
@@ -706,4 +700,4 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   }
 });
-export default React.memo( withInteractionsManaged(ProfileScreen));
+export default React.memo(withInteractionsManaged(ProfileScreen));

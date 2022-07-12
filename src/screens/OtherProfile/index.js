@@ -4,6 +4,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {
   Dimensions,
   Image,
+  InteractionManager,
   SafeAreaView,
   ScrollView,
   Share,
@@ -109,6 +110,8 @@ const OtherProfile = () => {
   const getOtherFeeds = async (userId, offset = 0) => {
     let result = await getOtherFeedsInProfile(userId)
 
+    console.log('result.data')
+    console.log(result.data)
     if(offset === 0) setOtherProfileFeed([...result.data, {dummy: true}], dispatchOtherProfile)
     else {
       let clonedFeeds = [...feeds]
@@ -132,12 +135,13 @@ const OtherProfile = () => {
     fetchOtherProfile(params.data.username);
   }, [params.data]);
 
-  const checkUserBlockHandle = async (user_id) => {
+  const checkUserBlockHandle = async (user_id, callback) => {
     try {
       const sendData = {
         user_id,
       };
       const processGetBlock = await checkUserBlock(sendData);
+      if(callback) callback()
       if (processGetBlock.status === 200) {
         setBlockStatus(processGetBlock.data.data);
         setIsLoading(false);
@@ -445,8 +449,12 @@ const OtherProfile = () => {
         specificIssueRef.current.close();
         reportUserRef.current.close();
       }
+
     } catch (e) {
-      console.log(e, 'eman');
+      checkUserBlockHandle(dataMain.user_id);
+      blockUserRef.current.close();
+      specificIssueRef.current.close();
+      reportUserRef.current.close();
     }
   };
 
@@ -455,7 +463,9 @@ const OtherProfile = () => {
       handleBlocking();
     } else if (reason === 2) {
       blockUserRef.current.close();
-      reportUserRef.current.open();
+      InteractionManager.runAfterInteractions(() => {
+        reportUserRef.current.open();
+      })
     } else {
       unblockUser();
     }
@@ -464,7 +474,10 @@ const OtherProfile = () => {
   const onNextQuestion = (question) => {
     setReason(question);
     reportUserRef.current.close();
-    specificIssueRef.current.open();
+    InteractionManager.runAfterInteractions(() => {
+      specificIssueRef.current.open();
+
+    })
   };
 
   const skipQuestion = () => {
@@ -617,7 +630,7 @@ const OtherProfile = () => {
             isBlocker={blockStatus.blocker}
           />
           <ReportUser
-            refReportUser={reportUserRef}
+            ref={reportUserRef}
             onSelect={onNextQuestion}
             onSkip={skipQuestion}
           />
@@ -651,7 +664,7 @@ const styles = StyleSheet.create({
   dummyItem : (height) => {
     return {
       height,
-      backgroundColor: colors.gray1
+      
     }
   },
   header: {

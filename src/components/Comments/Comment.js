@@ -1,22 +1,23 @@
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
-import Toast from 'react-native-simple-toast';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import BlockComponent from '../BlockComponent';
+import Image from '../Image';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import {FONTS} from '../../utils/theme';
-import {calculateTime, diffDate} from '../../utils/time';
+import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {iVoteComment, voteComment} from '../../service/vote';
 import { removeWhiteSpace } from '../../utils/Utils';
+import ButtonHightlight from '../ButtonHighlight';
 
 const Comment = ({
   user,
@@ -76,7 +77,7 @@ const Comment = ({
     if(statusVote === 'none') {
       setTotalVote((prevState) => prevState + 1)
       setStatusVote('upvote')
-    } 
+    }
     let dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
@@ -96,7 +97,7 @@ const Comment = ({
     if(statusVote === 'none') {
       setTotalVote((prevState) => prevState - 1)
       setStatusVote('downvote')
-    } 
+    }
     let dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
@@ -159,7 +160,7 @@ const Comment = ({
         isLastInParent,
         showLeftConnector,
       })}>
-      <TouchableOpacity onPress={openProfile}>
+      <ButtonHightlight onPress={openProfile}>
         <View style={styles.profile}>
           <Image
             source={
@@ -174,26 +175,26 @@ const Comment = ({
             <Text style={styles.time}> {calculateTime(time)}</Text>
           </View>
         </View>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={onTextPress}>
+      </ButtonHightlight>
+      <ButtonHightlight onPress={onTextPress}>
         <Text style={styles.post}>{comment.data.text}</Text>
-      </TouchableOpacity>
+      </ButtonHightlight>
       <View style={styles.constainerFooter}>
         {isLast && level >= 2 ? (
           <View style={styles.gap} />
         ) : (
-          <TouchableOpacity style={styles.btnReply} onPress={onPress}>
+          <ButtonHightlight style={styles.btnReply} onPress={onPress}>
             <MemoCommentReply />
             <Text style={styles.btnReplyText}>Reply</Text>
-          </TouchableOpacity>
+          </ButtonHightlight>
         )}
-        <TouchableOpacity
+        <ButtonHightlight
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => onBlockComponent(comment)}>
           <IconEn name="block" size={15.02} color={colors.gray1} />
-        </TouchableOpacity>
+        </ButtonHightlight>
 
-        <TouchableOpacity
+        <ButtonHightlight
           style={[styles.arrowup, styles.btn]}
           onPress={onDownVote}>
           {statusVote === 'downvote' ? (
@@ -201,9 +202,9 @@ const Comment = ({
           ) : (
             <MemoIc_arrow_down_vote_off width={20} height={18} />
           )}
-        </TouchableOpacity>
+        </ButtonHightlight>
         <Text style={styles.vote(totalVote)}>{totalVote}</Text>
-        <TouchableOpacity
+        <ButtonHightlight
           style={[styles.arrowdown, styles.btn]}
           onPress={onUpVote}>
           {statusVote === 'upvote'  ? (
@@ -211,7 +212,7 @@ const Comment = ({
           ) : (
             <MemoIc_arrow_upvote_off width={20} height={18} />
           )}
-        </TouchableOpacity>
+        </ButtonHightlight>
       </View>
 
       <BlockComponent ref={refBlockComponent} refresh={() => {}} screen={"feed_comment_item"}/>

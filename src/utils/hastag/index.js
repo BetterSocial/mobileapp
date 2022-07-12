@@ -1,6 +1,8 @@
 import * as React from 'react';
-import {  StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { generateRandomId } from 'stream-chat-react-native-core';
+
+import { colors } from '../colors';
 import { fonts } from '../fonts';
 
 const handleHastag = (text, setFormattedContent) => {
@@ -45,7 +47,8 @@ const handleHastag = (text, setFormattedContent) => {
 const styles = StyleSheet.create({
   mention: {
     color: '#2F80ED',
-    fontSize: 16,
+    // color: colors.red,
+    // fontSize: 14,
     fontFamily: fonts.inter[500],
     fontWeight: "500",
   },

@@ -3,7 +3,6 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
-  Image,
   Linking,
   Pressable,
   StyleSheet,
@@ -13,32 +12,33 @@ import {
 } from 'react-native';
 
 import Gap from '../Gap';
-import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import { COLORS } from '../../utils/theme';
 import { FeedCredderRating } from '../CredderRating';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { sanitizeUrlForLinking } from '../../utils/Utils';
+import Image from '../Image';
 
 const Card = (props) => {
   const {
-    title,
+    date,
     description,
-    image,
-    url,
     domain,
     domainImage,
-    date,
-    onHeaderPress,
+    image,
+    item,
     onCardContentPress,
-    score
+    onHeaderPress,
+    score,
+    title,
+    url,
   } = props;
   // const styles = buildStylesheet('card', props.styles);
   return (
     <View style={styles.container}>
       <View>
-        <TouchableOpacity onPress={onHeaderPress}>
+        <TouchableOpacity onPress={() => onHeaderPress(item)}>
           <Header domain={domain} image={domainImage} date={date} score={score} />
         </TouchableOpacity>
       </View>
@@ -54,7 +54,6 @@ const Card = (props) => {
               <Image
                 style={styles.image}
                 source={image ? { uri: image } : null}
-                resizeMethod="resize"
               />
             </View>
             <View>
@@ -79,7 +78,7 @@ const Card = (props) => {
 const Header = ({ domain, image, date, score }) => (
   <View style={styles.headerContainer}>
     <View style={styles.headerImageContainer}>
-      <Image
+      <FastImage
         style={[
           { height: '100%', width: '100%', borderRadius: 45 },
           StyleSheet.absoluteFillObject,

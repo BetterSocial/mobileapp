@@ -172,6 +172,7 @@ const Item = ({
           isalreadypolling={item.isalreadypolling}
           onnewpollfetched={onNewPollFetched}
           voteCount={item.voteCount}
+          topics={item?.topics}
         />
       )}
 
@@ -185,6 +186,8 @@ const Item = ({
             onCardContentPress={() => navigateToLinkContextPage(item)}
             score={item.credderScore}
             message={item?.message}
+            topics={item?.topics}
+            item={item}
           />
         </View>
       )}
@@ -194,6 +197,7 @@ const Item = ({
           message={item.message}
           images_url={item.images_url}
           onPress={onPress}
+          topics={item?.topics}
         />
       )}
       <View style={styles.footerWrapper(getHeightFooter())}>
@@ -300,6 +304,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingBottom: 0,
     borderBottomColor: 'transparent',
+    paddingHorizontal: 9
   }),
   paddingHorizontal: {paddingHorizontal: 20},
   lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},

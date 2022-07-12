@@ -1,80 +1,98 @@
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-  Dimensions,
-  Image,
-  FlatList,
-  Pressable,
-  Text,
-} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-
 import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {COLORS, SIZES} from '../../utils/theme';
 import ImageLayouter from './elements/ImageLayouter';
+import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import { COLORS, SIZES } from '../../utils/theme';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
+import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 
-const {width: screenWidth} = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
-const Content = ({message, images_url, style, onPress}) => {
+const FONT_SIZE_MEDIA = 16
+const FONT_SIZE_TEXT = 24
+const FONT_SIZE_TEXT_LONG = 16
+
+const Content = ({ message, images_url, style, onPress, topics = [] }) => {
   const route = useRoute();
   const navigation = useNavigation();
   const cekImage = () => {
     return images_url !== null && images_url !== '' && images_url !== undefined;
   };
 
+  const topicChipFontSize = message.length < 270 ? FONT_SIZE_TEXT : FONT_SIZE_TEXT_LONG;
+
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
       index,
       images: images_url.reduce((acc, current) => {
-        acc.push({url: current});
+        acc.push({ url: current });
         return acc;
       }, []),
     });
   };
 
   const handleText = (text, onPress) => {
-    if (text.length > 750) {
+    if (text.length > 650) {
       return (
-        <Text style={styles.text(text)}>
-          {`${text.substring(0, 750).trim()} `}
-          <Text onPress={onPress} style={styles.seemore}>
-            ...more
+        <View style={styles.textContainer}>
+          <Text style={styles.text(text)} numberOfLines={15}>
+            {getCaptionWithTopicStyle(text.substring(0, 650).trim(), navigation)}
+            <Text onPress={onPress} style={styles.seemore}>
+              ...more
+            </Text>
+            <TopicsChip topics={topics} fontSize={topicChipFontSize} 
+              text={getCaptionWithTopicStyle(text.substring(0, 650).trim())} />
           </Text>
-        </Text>
+        </View>
       );
     } else {
-      return <Text style={styles.text(text)}>{text}</Text>;
+      return <View style={styles.textContainer}>
+        <Text style={styles.text(text)} numberOfLines={14}>{getCaptionWithTopicStyle(text, navigation)}</Text>
+        <TopicsChip topics={topics} fontSize={topicChipFontSize} text={text}/>
+      </View>;
     }
   };
 
   const handleTextMedia = (text, onPress) => {
     return (
-      <Text numberOfLines={4} style={styles.textMedia(text)}>
-        {text.length < 180 ? (
-          `${text}`
-        ) : (
-          <Text>
-            {`${text.substring(0, 165)}...`}
-            <Text onPress={onPress} style={styles.seemore}>
-              more
+      <View>
+        <Text numberOfLines={4} style={styles.textMedia(text)}>
+          {text.length < 180 ? (
+            getCaptionWithTopicStyle(text, navigation)
+          ) : (
+            <Text>
+              {`${text.substring(0, 165)}...`}
+              <Text onPress={onPress} style={styles.seemore}>
+                more
+              </Text>
             </Text>
-          </Text>
-        )}
-      </Text>
+          )}
+        </Text>
+        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} />
+      </View>
+
     );
   };
 
   return (
-    <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
+    <Pressable  onPress={onPress} style={[styles.contentFeed, style]}>
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
@@ -108,6 +126,7 @@ Content.propTypes = {
   images_url: PropTypes.array,
   style: PropTypes.object,
   onPress: PropTypes.func,
+  topics: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default Content;
@@ -140,7 +159,7 @@ const styles = StyleSheet.create({
       return {
         fontFamily: fonts.inter[400],
         fontWeight: 'normal',
-        fontSize: 24,
+        fontSize: FONT_SIZE_TEXT,
         color: colors.black,
         lineHeight: 44,
       };
@@ -148,7 +167,7 @@ const styles = StyleSheet.create({
     return {
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
-      fontSize: 16,
+      fontSize: FONT_SIZE_TEXT_LONG,
       color: colors.black,
       lineHeight: 24,
     };
@@ -157,7 +176,7 @@ const styles = StyleSheet.create({
     return {
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
-      fontSize: 16,
+      fontSize: FONT_SIZE_MEDIA,
       color: colors.black,
       lineHeight: 24,
     };
@@ -244,7 +263,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
+    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
     backgroundColor: 'white',
     borderRadius: 8,
   },
@@ -258,5 +277,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     width: 32,
     height: 32,
+  },
+  textContainer: {
   },
 });

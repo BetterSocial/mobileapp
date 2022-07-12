@@ -1,16 +1,15 @@
 import * as React from 'react';
 import {
-  Image,
   Linking,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
+import Image, {imageConst} from '../../components/Image';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 import {NewsEmptyState} from '../../assets/images';
 import {fonts} from '../../utils/fonts';
@@ -24,7 +23,7 @@ const Content = (props) => {
     if(onContentClicked) {
       return onContentClicked()
     }
-    
+
     return navigation.push('LinkContextScreen', {
       item,
     });
@@ -40,7 +39,7 @@ const Content = (props) => {
         <View style={{paddingHorizontal: -SIZES.base}}>
           {image ? (
             <Image
-              source={{uri: image}}
+              source={{uri: image, priority: imageConst.priority.normal}}
               style={{
                 width: '100%',
                 height: 180,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
-import {View} from 'react-native';
+import {InteractionManager, View} from 'react-native';
 
 import BlockPostAnonymous from '../Blocking/BlockPostAnonymous';
 import BlockUser from '../Blocking/BlockUser';
@@ -20,6 +20,7 @@ class BlockComponent extends React.Component {
             reportOption: -1,
             userId: '',
             username: '',
+            reason: []
         };
 
         this.refBlockPostAnonymous = React.createRef();
@@ -40,13 +41,14 @@ class BlockComponent extends React.Component {
     componentDidMount() {
         this.__parseToken()
     }
+    
 
     setDataToState(value){
         if (value.anonimity === true) {
             this.setState({
                 postId: value.id,
                 userId: `${value.actor.id}-anonymous`,
-                username: 'Anonymous'
+                username: 'Anonymous',
             })
         } else {
             this.setState({
@@ -85,7 +87,9 @@ class BlockComponent extends React.Component {
 
     __onSelectBlocking(v) {
         if (v !== 1) {
-            this.refReportUser.current.open();
+           InteractionManager.runAfterInteractions(() => {
+            this.refReportUser.current.open()
+           })
         } else {
             this.__blockUser();
         }
@@ -94,7 +98,9 @@ class BlockComponent extends React.Component {
 
     __onSelectBlockingPostAnonymous(v) {
         if (v !== 1) {
-            this.refReportPostAnonymous.current.open();
+            InteractionManager.runAfterInteractions(() => {
+                this.refReportPostAnonymous.current.open();
+            })
         } else {
             this.__blockPostAnonymous();
         }
@@ -103,11 +109,13 @@ class BlockComponent extends React.Component {
 
     __onNextQuestion(v) {
         this.setState({
-            reportOption: v
+            reason: v
         });
         this.refReportUser.current.close();
         this.refReportPostAnonymous.current.close();
-        this.refSpecificIssue.current.open();
+        InteractionManager.runAfterInteractions(() => {
+            this.refSpecificIssue.current.open();
+        })
     }
 
     __onSkipOnlyBlock() {
@@ -128,23 +136,23 @@ class BlockComponent extends React.Component {
     }
 
     __blockUser() {
-        let {postId, reportOption, userId, messageReport} = this.state
+        let {postId, userId, messageReport, reason} = this.state
         blockUtils.uiBlockUser(
             postId,
             userId,
             this.props.screen || "screen_feed",
-            reportOption,
+            reason,
             messageReport,
             () => this.props.refresh('')
         )
     }
 
     __blockPostAnonymous() {
-        let {postId, reportOption, messageReport} = this.state
+        let {postId, messageReport, reason} = this.state
         blockUtils.uiBlockPostAnonymous(
             postId,
             this.props.screen || "screen_feed",
-            reportOption,
+            reason,
             messageReport,
             () => this.props.refresh('')
         )
@@ -163,7 +171,7 @@ class BlockComponent extends React.Component {
                 username={this.state.username}
             />
             <ReportUser
-                refReportUser={this.refReportUser}
+                ref={this.refReportUser}
                 onSelect={this.__onNextQuestion}
                 onSkip={this.__onSkipOnlyBlock}
             />

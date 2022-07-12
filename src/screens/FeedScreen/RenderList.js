@@ -9,6 +9,7 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import ContentPoll from './ContentPoll';
 import Header from './Header';
+import Log from '../../utils/log/Log';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
@@ -29,11 +30,7 @@ const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
-const getHeightHeader = () => {
-  // let h = Math.floor((FULL_HEIGHT * 10) / 100);
-  // return h;
-  return dimen.size.FEED_HEADER_HEIGHT
-};
+
 
 const majorVersion = parseInt(Platform.Version, 10)
 
@@ -49,6 +46,8 @@ const RenderListFeed = (props) => {
     onPressUpvote,
     selfUserId,
     onPressDownVote,
+    showNavbar,
+    searchHeight
   } = props;
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
@@ -73,11 +72,17 @@ const RenderListFeed = (props) => {
     let h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 6.8) / 100);
     return h;
   };
-
   const getHeightReaction = () => {
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
     return dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
+  };
+
+  const getHeightHeader = () => {
+    let h = (FULL_HEIGHT * 10) / 100
+    return h;
+    // return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) *0.1
+
   };
 
   const onPressDownVoteHandle = async () => {
@@ -186,7 +191,6 @@ const RenderListFeed = (props) => {
       setVoteStatus('none')
     }
   }
-
   React.useEffect(() => {
     checkVotes()
   }, [item]);
@@ -194,11 +198,31 @@ const RenderListFeed = (props) => {
   React.useEffect(() => {
     initial();
   }, [item]);
+  const cardHeight = React.useCallback(() => {
+    if(showNavbar) {
+      return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) * 0.68 - searchHeight
+
+    }
+    return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) * 0.68
+  }, [showNavbar])
+
+  const fullCardHeight = React.useCallback(() => {
+    if(showNavbar) {
+      return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) * 0.78 -searchHeight
+
+    }
+    return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) * 0.78 
+  }, [showNavbar])
+
+  const isHaveComment = getCommentLength(item.latest_reactions.comment) > 0
+
   return (
-    <View style={[styles.cardContainer(bottomHeight)]}>
-      <View style={styles.cardMain}>
+    <View style={[styles.cardContainer(0)]}>
+      <View style={styles.cardMain(showNavbar, searchHeight)}>
         <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB} />
-        {item.post_type === POST_TYPE_POLL && (
+        <View style={{height: '100%'}} >
+          <View style={{height: isHaveComment ? cardHeight() : fullCardHeight()}} >
+          {item.post_type === POST_TYPE_POLL && (
           <ContentPoll
             index={index}
             message={item.message}
@@ -211,6 +235,7 @@ const RenderListFeed = (props) => {
             isalreadypolling={item.isalreadypolling}
             onnewpollfetched={onNewPollFetched}
             voteCount={item.voteCount}
+            topics={item?.topics}
           />
         )}
 
@@ -224,6 +249,7 @@ const RenderListFeed = (props) => {
             score={item?.credderScore}
             message={item?.message}
             messageContainerStyle={{paddingHorizontal: 10}}
+            topics={item?.topics}
           />
         )}
         {item.post_type === POST_TYPE_STANDARD && (
@@ -232,8 +258,11 @@ const RenderListFeed = (props) => {
             message={item.message}
             images_url={item.images_url}
             onPress={onPress}
+            topics={item?.topics}
           />
         )}
+          </View>
+        
         <View style={styles.footerWrapper(getHeightFooter())}>
           <Footer
             item={item}
@@ -260,7 +289,7 @@ const RenderListFeed = (props) => {
             }
           />
         </View>
-        {getCommentLength(item.latest_reactions.comment) > 0 && (
+        {isHaveComment && (
           <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
@@ -276,6 +305,8 @@ const RenderListFeed = (props) => {
           </View>
         )}
 
+        </View>
+        
 
       </View>
     </View>
@@ -283,23 +314,21 @@ const RenderListFeed = (props) => {
 };
 
 const styles = StyleSheet.create({
-  cardContainer: (bottomHeight) => ({
-    // height: FULL_HEIGHT - bottomHeight - tabBarHeight,
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
+  cardContainer: () => ({
+    height: Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()  ,
     width: FULL_WIDTH,
     backgroundColor: colors.white,
     borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
   }),
-  cardMain: {
-    height: '100%',
+  cardMain: ( showSearchbar, navbarHeight) => ({
+    height:  Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight() ,
     width: '100%',
-    paddingVertical: Platform.OS === 'ios' && majorVersion >= 10 ? 30 : 0,
-  },
-  footerWrapper: (h) => ({ height: h, bottom: 0, }),
+    paddingVertical: Platform.OS === 'ios' && showSearchbar ? navbarHeight - 10 : 14
+  }),
+  footerWrapper: (h) => ({ height: '5%' }),
   contentReaction: (heightReaction) => ({
-    maxHeight: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
+    height: '20%',
   }),
 });
 
@@ -316,8 +345,8 @@ RenderListFeed.propTypes = {
   onPressUpvote: PropTypes.func,
   onPressDownVote: PropTypes.func,
   loading: PropTypes.bool,
+  showNavbar: PropTypes.number,
+  searchHeight: PropTypes.number
 };
 
-export default React.memo (RenderListFeed, (prevProps, nextProps) => {
-  return prevProps.item === nextProps.item
-});
+export default React.memo (RenderListFeed);
