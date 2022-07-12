@@ -129,8 +129,10 @@ let getChatName = (usernames, me) => {
   }
 
   let userArrays = usernames.split(',');
+
+  if(userArrays.length <= 1) return usernames
   let userArraysWithoutMe = userArrays.reduce((acc, currentItem) => {
-    if (currentItem.trim() !== me) {
+    if (currentItem && currentItem !== '' && currentItem.trim() !== me) {
       acc.push(currentItem.trim());
     }
     return acc;
