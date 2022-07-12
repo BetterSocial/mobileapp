@@ -257,9 +257,7 @@ function HomeBottomTabs(props) {
   }, []);
 
   React.useEffect(() => {
-    console.log(initialStartup, otherProfileData, 'msk');
     if (otherProfileData !== null && initialStartup.id !== null) {
-      setTimeout(() => {
         navigation.navigate('OtherProfile', {
           data: {
             user_id: initialStartup.id,
@@ -267,7 +265,6 @@ function HomeBottomTabs(props) {
             username: otherProfileData.username,
           },
         })
-      }, 5000);
     }
   }, [initialStartup, otherProfileData]);
 

@@ -61,8 +61,6 @@ export const RootNavigator = () => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const initialStartupAction = useRecoilCallback(initialStartupTask);
   const [clientState] = React.useContext(Context).client;
-  const [, initialStartupDispatch] = React.useContext(Context).initialStartup;
-  const [profileState] = React.useContext(Context).profile;
   const { client } = clientState;
 
   const create = useClientGetstream();

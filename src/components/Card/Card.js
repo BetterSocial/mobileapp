@@ -18,7 +18,7 @@ import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { sanitizeUrlForLinking } from '../../utils/Utils';
-import Image from '../Image';
+import Image, {imageConst} from '../Image';
 
 const Card = (props) => {
   const {
@@ -78,13 +78,13 @@ const Card = (props) => {
 const Header = ({ domain, image, date, score }) => (
   <View style={styles.headerContainer}>
     <View style={styles.headerImageContainer}>
-      <FastImage
+      <Image
         style={[
           { height: '100%', width: '100%', borderRadius: 45 },
           StyleSheet.absoluteFillObject,
         ]}
         source={{ uri: image }}
-        resizeMode={'cover'}
+        resizeMode={imageConst.resizeMode.cover}
       />
     </View>
     <Gap style={{ width: 0 }} />
