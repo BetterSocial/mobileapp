@@ -52,14 +52,14 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
     if (text.length > 650) {
       return (
         <View style={styles.textContainer}>
-          <Text style={styles.text(text)} numberOfLines={15}>
+          <Text style={styles.text(text)} numberOfLines={14}>
             {getCaptionWithTopicStyle(text.substring(0, 650).trim(), navigation)}
             <Text onPress={onPress} style={styles.seemore}>
               ...more
             </Text>
-            <TopicsChip topics={topics} fontSize={topicChipFontSize} 
-              text={getCaptionWithTopicStyle(text.substring(0, 650).trim())} />
           </Text>
+          <TopicsChip topics={topics} fontSize={topicChipFontSize} 
+              text={getCaptionWithTopicStyle(text.substring(0, 650).trim())} />
         </View>
       );
     } else {
