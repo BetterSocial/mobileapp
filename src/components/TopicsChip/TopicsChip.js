@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         width: '100%',
         marginTop: 12,
-        // marginTop: 12,
         // backgroundColor: colors.blue
     },
     topicItemContainer: {
@@ -47,6 +46,7 @@ const styles = StyleSheet.create({
         borderRadius: 14,
         overflow: 'hidden',
         marginEnd: 11,
+        marginBottom: 4,
     },
     topicText: {
         fontFamily: fonts.inter[500],
