@@ -149,7 +149,7 @@ const _renderProfileNormal = ({
 
   let userId = actor?.id;
   let { profile_pic_url, username } = actor?.data || {};
-
+  
   let navigateToProfile = async () => {
     if (source) {
       let currentTime = new Date().getTime()
