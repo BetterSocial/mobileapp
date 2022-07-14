@@ -92,10 +92,10 @@ const discoverySearchBarPlaceholder = 'Search Better';
 
 // Profile Screeen
 const profileDeleteAccountAlertMessage = 'Are you sure you want to delete your account immediately and irreversibly? All data will be deleted from our servers!';
-const profileDeleteAccountAlertTitle = 'Delete Account Confirmation';
+const profileDeleteAccountAlertTitle = 'Delete Account Permanently';
 const profileDeleteAccountAlertCancel = 'Cancel';
 const profileDeleteAccountAlertSubmit = 'Yes - Delete my account';
-const profileDeleteAccountSuccess = 'Success - your account is deleted';
+const profileDeleteAccountSuccess = 'Success - your account has been deleted';
 
 export default {
   signInScreenHumanIdBrand,
