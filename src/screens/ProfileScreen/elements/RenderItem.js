@@ -44,11 +44,11 @@ const getCountVote = (item) => {
   let reactionCount = item.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
-    let upvote = reactionCount.upvotes;
+    let upvote = reactionCount?.upvotes;
     if (upvote !== undefined) {
       count = count + upvote;
     }
-    let downvote = reactionCount.downvotes;
+    let downvote = reactionCount?.downvotes;
     if (downvote !== undefined) {
       count = count - downvote;
     }
