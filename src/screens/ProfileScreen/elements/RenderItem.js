@@ -157,7 +157,7 @@ const Item = ({
 
   return (
     <View style={styles.cardContainer(bottomHeight)}>
-      <Header props={item} height={getHeightHeader()} />
+      <Header headerStyle={{paddingHorizontal: 9}} props={item} height={getHeightHeader()} />
 
       {item.post_type === POST_TYPE_POLL && (
         <ContentPoll
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingBottom: 0,
     borderBottomColor: 'transparent',
-    paddingHorizontal: 9
+    // paddingHorizontal: 9
   }),
   paddingHorizontal: {paddingHorizontal: 20},
   lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
