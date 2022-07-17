@@ -72,6 +72,14 @@ const ContentPoll = ({
   let route = useRoute();
   let navigation = useNavigation()
 
+  React.useEffect(() => {
+    if(singleChoiceSelectedIndex === -1) return
+    if(isAlreadyPolling) return
+    if(multiplechoice) return
+
+    return onSeeResultsClicked()
+  }, [singleChoiceSelectedIndex])
+
   let isTouchableDisabled = route.name === 'PostDetailPage';
 
   let onSeeResultsClicked = () => {
@@ -102,7 +110,7 @@ const ContentPoll = ({
         }
         newItem.pollOptions = newPolls;
         newItem.mypolling = selectedPolls;
-        newItem.voteCount++;
+        if(multipleChoiceSelected.length > 0) newItem.voteCount++;
       }
 
       onnewpollfetched(newItem, index);
@@ -156,6 +164,13 @@ const ContentPoll = ({
       </View>
     );
   };
+
+  const __renderSeeResultButton = () => {
+    if(isFetchingResultPoll) return 'Loading...'
+    if(multiplechoice && multipleChoiceSelected.length > 0) return 'Submit'
+
+    return 'See Results'
+  }
 
   return (
     <Pressable
@@ -250,7 +265,7 @@ const ContentPoll = ({
                 <View style={styles.seeresultscontainer}>
                   <TouchableOpacity onPress={onSeeResultsClicked}>
                     <Text style={styles.seeresultstext}>
-                      {isFetchingResultPoll ? 'Loading...' : 'See Results'}
+                      {__renderSeeResultButton()}
                     </Text>
                   </TouchableOpacity>
                 </View>

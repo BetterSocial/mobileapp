@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { Dimensions, StatusBar } from 'react-native';
 
-const statusBarHeight = StatusBar.currentHeight;
+// const statusBarHeight = StatusBar.currentHeight;
 const { width, height } = Dimensions.get('screen');
 console.log('height');
 console.log(height);

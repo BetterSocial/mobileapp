@@ -14,12 +14,12 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import {FlatFeed, StreamApp} from 'react-native-activity-feed';
-import {STREAM_API_KEY, STREAM_APP_ID} from '@env';
-import {generateRandomId} from 'stream-chat-react-native';
+import { FlatFeed, StreamApp } from 'react-native-activity-feed';
+import { STREAM_API_KEY, STREAM_APP_ID } from '@env';
+import { generateRandomId } from 'stream-chat-react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import {useNavigation} from '@react-navigation/core';
-import {useRoute} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/core';
+import { useRoute } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
@@ -39,8 +39,8 @@ import ReportUser from '../../components/Blocking/ReportUser';
 import ShareIcon from '../../assets/icons/images/share.svg';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import dimen from '../../utils/dimen';
-import {Context} from '../../context';
-import {blockUser, unblockUserApi} from '../../service/blocking';
+import { Context } from '../../context';
+import { blockUser, unblockUserApi } from '../../service/blocking';
 import {
   checkUserBlock,
   getOtherFeedsInProfile,
@@ -48,21 +48,21 @@ import {
   setFollow,
   setUnFollow,
 } from '../../service/profile';
-import {colors} from '../../utils/colors';
+import { colors } from '../../utils/colors';
 import { downVote, upVote } from '../../service/vote';
-import {fonts} from '../../utils/fonts';
-import {getAccessToken} from '../../utils/token';
+import { fonts } from '../../utils/fonts';
+import { getAccessToken } from '../../utils/token';
 import { getFeedDetail } from '../../service/post';
 import { getSingularOrPluralText } from '../../utils/string/StringUtils';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import {setChannel} from '../../context/actions/setChannel';
+import { setChannel } from '../../context/actions/setChannel';
 import { setFeedByIndex, setOtherProfileFeed } from '../../context/actions/otherProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
-import {trimString} from '../../utils/string/TrimString';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import { trimString } from '../../utils/string/TrimString';
+import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const {width, height} = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
 // let headerHeight = 0;
 
 const OtherProfile = () => {
@@ -101,18 +101,17 @@ const OtherProfile = () => {
   const [channel, dispatchChannel] = React.useContext(Context).channel;
   const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
+  const [feedsContext, dispatch] = React.useContext(Context).feeds;
 
   const create = useClientGetstream();
 
-  const {params} = route;
-  const {feeds} = otherProfileFeeds
+  const { params } = route;
+  const { feeds } = otherProfileFeeds
 
   const getOtherFeeds = async (userId, offset = 0) => {
     let result = await getOtherFeedsInProfile(userId)
-
-    console.log('result.data')
-    console.log(result.data)
-    if(offset === 0) setOtherProfileFeed([...result.data, {dummy: true}], dispatchOtherProfile)
+    
+    if (offset === 0) setOtherProfileFeed([...result.data, { dummy: true }], dispatchOtherProfile)
     else {
       let clonedFeeds = [...feeds]
       clonedFeeds.splice(feeds.length - 1, 0, ...data)
@@ -141,7 +140,7 @@ const OtherProfile = () => {
         user_id,
       };
       const processGetBlock = await checkUserBlock(sendData);
-      if(callback) callback()
+      if (callback) callback()
       if (processGetBlock.status === 200) {
         setBlockStatus(processGetBlock.data.data);
         setIsLoading(false);
@@ -162,8 +161,8 @@ const OtherProfile = () => {
         getOtherFeeds(result.data.user_id)
       }
     } catch (e) {
-      if(e.response && e.response.data && e.response.data.message) {
-          SimpleToast.show(e.response.data.message, SimpleToast.SHORT)
+      if (e.response && e.response.data && e.response.data.message) {
+        SimpleToast.show(e.response.data.message, SimpleToast.SHORT)
       }
       setBlockStatus({
         ...blockStatus,
@@ -227,7 +226,7 @@ const OtherProfile = () => {
           <Text linkStyle={styles.seeMore}>
             {trimString(string, 121)}{' '}
             {string.length > 121 ? (
-              <Text style={{color: colors.blue}}>see more</Text>
+              <Text style={{ color: colors.blue }}>see more</Text>
             ) : null}
           </Text>
         )}
@@ -237,7 +236,7 @@ const OtherProfile = () => {
 
   const __renderListHeader = () => {
     const __renderBlockIcon = () => {
-      if(blockStatus.blocker) return (
+      if (blockStatus.blocker) return (
         <View style={styles.buttonFollowing}>
           <Text style={styles.textButtonFollowing}>
             Blocked
@@ -249,11 +248,11 @@ const OtherProfile = () => {
           width={20}
           height={20}
           fill={colors.bondi_blue} />
-          )
+      )
     }
 
     const __renderFollowerDetail = () => {
-      if(blockStatus.blocker) return <></>
+      if (blockStatus.blocker) return <></>
       return (
         <React.Fragment>
           <View style={styles.wrapFollower}>
@@ -264,18 +263,18 @@ const OtherProfile = () => {
               <Text style={styles.textFollow}>{getSingularOrPluralText(dataMain.follower_symbol, "Follower", "Followers")}</Text>
             </View>
             {user_id === dataMain.user_id ? <View style={styles.following}>
-            <TouchableNativeFeedback
-              onPress={() =>
-                goToFollowings(dataMain.user_id, dataMain.username)
-              }>
-              <View style={styles.wrapRow}>
-                <Text style={styles.textTotal}>
-                  {dataMain.following_symbol}
-                </Text>
-                <Text style={styles.textFollow}>Following</Text>
-              </View>
-            </TouchableNativeFeedback>
-          </View> : null}
+              <TouchableNativeFeedback
+                onPress={() =>
+                  goToFollowings(dataMain.user_id, dataMain.username)
+                }>
+                <View style={styles.wrapRow}>
+                  <Text style={styles.textTotal}>
+                    {dataMain.following_symbol}
+                  </Text>
+                  <Text style={styles.textFollow}>Following</Text>
+                </View>
+              </TouchableNativeFeedback>
+            </View> : null}
           </View>
           {__renderBio(dataMain.bio)}
         </React.Fragment>
@@ -283,8 +282,8 @@ const OtherProfile = () => {
     }
 
     const __renderFollowingButton = () => {
-      if(user_id === dataMain.user_id) return <></>
-      if(dataMain.is_following) return (
+      if (user_id === dataMain.user_id) return <></>
+      if (dataMain.is_following) return (
         <React.Fragment>
           <GlobalButton
             onPress={() => handleSetUnFollow()}>
@@ -311,7 +310,7 @@ const OtherProfile = () => {
     }
 
     const __renderMessageAndFollowButtonGroup = () => {
-      if(blockStatus.blocker) return <></>
+      if (blockStatus.blocker) return <></>
       return (
         <React.Fragment>
           <GlobalButton
@@ -326,42 +325,43 @@ const OtherProfile = () => {
           </GlobalButton>
 
           {__renderFollowingButton()}
-        
-      </React.Fragment>
+
+        </React.Fragment>
       )
     }
 
-    if(blockStatus.blocked) return <></>
+    if (blockStatus.blocked) return <></>
     return (
-    <React.Fragment>
-      <View style={styles.containerProfile}>
-        <View style={styles.wrapImageAndStatus}>
-          <Image
-            style={styles.profileImage}
-            source={{
-              uri: dataMain.profile_pic_path
-                ? dataMain.profile_pic_path
-                : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-            }}
-          />
+      <React.Fragment>
+        <View style={styles.containerProfile}>
+          <View style={styles.wrapImageAndStatus}>
+            <Image
+              style={styles.profileImage}
+              source={{
+                uri: dataMain.profile_pic_path
+                  ? dataMain.profile_pic_path
+                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
+              }}
+            />
 
-          <View style={styles.wrapButton}>
-            <GlobalButton onPress={onBlockReaction}>
-              {__renderBlockIcon()}
-            </GlobalButton>
+            <View style={styles.wrapButton}>
+              <GlobalButton onPress={onBlockReaction}>
+                {__renderBlockIcon()}
+              </GlobalButton>
 
-            {__renderMessageAndFollowButtonGroup()}
+              {__renderMessageAndFollowButtonGroup()}
+            </View>
           </View>
+          {dataMain.real_name && (
+            <Text style={styles.nameProfile}>
+              {dataMain.real_name}
+            </Text>
+          )}
         </View>
-        {dataMain.real_name && (
-          <Text style={styles.nameProfile}>
-            {dataMain.real_name}
-          </Text>
-        )}
-      </View>
-      {__renderFollowerDetail()}
-  </React.Fragment>
-  )}
+        {__renderFollowerDetail()}
+      </React.Fragment>
+    )
+  }
 
   const handleScroll = (event) => {
     const currentOffset = event.nativeEvent.contentOffset.y;
@@ -386,8 +386,8 @@ const OtherProfile = () => {
       let members = [other_id, user_id];
       setIsLoading(true);
       const clientChat = await client.client;
-      const filter = {type: 'messaging', members: {$eq: members}};
-      const sort = [{last_message_at: -1}];
+      const filter = { type: 'messaging', members: { $eq: members } };
+      const sort = [{ last_message_at: -1 }];
       const channels = await clientChat.queryChannels(filter, sort, {
         watch: true,
         state: true,
@@ -409,7 +409,7 @@ const OtherProfile = () => {
       await navigation.navigate('ChatDetailPage');
       setTimeout(() => setIsLoading(false), 400)
       // setIsLoading(false)
-    } catch(e) {
+    } catch (e) {
       console.log(e)
     }
   };
@@ -426,7 +426,7 @@ const OtherProfile = () => {
       reason,
     };
     if (message) {
-      data = {...data, message};
+      data = { ...data, message };
     }
     const blockingUser = await blockUser(data);
     if (blockingUser.code == 200) {
@@ -442,7 +442,7 @@ const OtherProfile = () => {
 
   const unblockUser = async () => {
     try {
-      const processPostApi = await unblockUserApi({userId: dataMain.user_id});
+      const processPostApi = await unblockUserApi({ userId: dataMain.user_id });
       if (processPostApi.code == 200) {
         checkUserBlockHandle(dataMain.user_id);
         blockUserRef.current.close();
@@ -498,6 +498,8 @@ const OtherProfile = () => {
       },
       dispatch,
     );
+
+    getOtherFeeds(other_id)
   };
 
   const onPressDomain = (item) => {
@@ -548,11 +550,11 @@ const OtherProfile = () => {
       console.log(e);
     }
   };
-  
+
   const goToFollowings = (user_id, username) => {
     navigation.navigate('Followings', {
       screen: 'TabFollowing',
-      params: {user_id, username},
+      params: { user_id, username },
     });
   };
 
@@ -563,7 +565,7 @@ const OtherProfile = () => {
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
       <SafeAreaView style={styles.container}>
-        <ProfileHeader hideSetting showArrow onShareClicked={onShare} username={dataMain.username}/>  
+        <ProfileHeader hideSetting showArrow onShareClicked={onShare} username={dataMain.username} />
         {isLoading ? (
           <View style={styles.containerLoading}>
             <LoadingWithoutModal />
@@ -601,48 +603,51 @@ const OtherProfile = () => {
               </View>
             </View>
           }>
-            {({item, index}) => {
-              let dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight;
-              if(item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
-              return <View style={{width: '100%'}}>
-                <RenderItem
-                  bottomBar={false}
-                  item={item}
-                  index={index}
-                  onNewPollFetched={onNewPollFetched}
-                  onPressDomain={onPressDomain}
-                  onPress={() => onPress(item, index)}
-                  onPressComment={() => onPressComment(index)}
-                  onPressBlock={() => onPressBlock(item)}
-                  onPressUpvote={(post) => setUpVote(post, index)}
-                  selfUserId={yourselfId}
-                  onPressDownVote={(post) =>
-                    setDownVote(post, index)
-                  } />
+          {({ item, index }) => {
+
+            console.log('item.actor')
+            console.log(item.actor)
+            let dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight;
+            if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
+            return <View style={{ width: '100%' }}>
+              <RenderItem
+                bottomBar={false}
+                item={item}
+                index={index}
+                onNewPollFetched={onNewPollFetched}
+                onPressDomain={onPressDomain}
+                onPress={() => onPress(item, index)}
+                onPressComment={() => onPressComment(index)}
+                onPressBlock={() => onPressBlock(item)}
+                onPressUpvote={(post) => setUpVote(post, index)}
+                selfUserId={yourselfId}
+                onPressDownVote={(post) =>
+                  setDownVote(post, index)
+                } />
             </View>
-            }}
-          </ProfileTiktokScroll>
-        
-          <BlockProfile
-            onSelect={onBlocking}
-            refBlockUser={blockUserRef}
-            username={username}
-            isBlocker={blockStatus.blocker}
-          />
-          <ReportUser
-            ref={reportUserRef}
-            onSelect={onNextQuestion}
-            onSkip={skipQuestion}
-          />
-          <SpecificIssue
-            refSpecificIssue={specificIssueRef}
-            onSkip={skipQuestion}
-            onPress={onReportIssue}
-            loading={loadingBlocking}
-          />
+          }}
+        </ProfileTiktokScroll>
+
+        <BlockProfile
+          onSelect={onBlocking}
+          refBlockUser={blockUserRef}
+          username={username}
+          isBlocker={blockStatus.blocker}
+        />
+        <ReportUser
+          ref={reportUserRef}
+          onSelect={onNextQuestion}
+          onSkip={skipQuestion}
+        />
+        <SpecificIssue
+          refSpecificIssue={specificIssueRef}
+          onSkip={skipQuestion}
+          onPress={onReportIssue}
+          loading={loadingBlocking}
+        />
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
-            <View style={{...styles.btnBottom, opacity}}>
+            <View style={{ ...styles.btnBottom, opacity }}>
               <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
             </View>
           </TouchableNativeFeedback>
@@ -661,10 +666,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 20,
   },
-  dummyItem : (height) => {
+  dummyItem: (height) => {
     return {
       height,
-      
+
     }
   },
   header: {
@@ -672,7 +677,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  following: {marginLeft: 18},
+  following: { marginLeft: 18 },
   textUsername: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
@@ -834,4 +839,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-export default withInteractionsManaged (OtherProfile);
+export default withInteractionsManaged(OtherProfile);
