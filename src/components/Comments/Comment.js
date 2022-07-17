@@ -1,18 +1,17 @@
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
-import Toast from 'react-native-simple-toast';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import FastImage from 'react-native-fast-image'
 
 import BlockComponent from '../BlockComponent';
+import Image from '../Image';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import {FONTS} from '../../utils/theme';
-import {calculateTime, diffDate} from '../../utils/time';
+import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
@@ -78,7 +77,7 @@ const Comment = ({
     if(statusVote === 'none') {
       setTotalVote((prevState) => prevState + 1)
       setStatusVote('upvote')
-    } 
+    }
     let dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
@@ -98,7 +97,7 @@ const Comment = ({
     if(statusVote === 'none') {
       setTotalVote((prevState) => prevState - 1)
       setStatusVote('downvote')
-    } 
+    }
     let dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
@@ -163,14 +162,13 @@ const Comment = ({
       })}>
       <ButtonHightlight onPress={openProfile}>
         <View style={styles.profile}>
-          <FastImage
+          <Image
             source={
               photo
-                ? {uri: removeWhiteSpace(photo), priority: FastImage.priority.normal}
+                ? {uri: removeWhiteSpace(photo)}
                 : require('../../assets/images/ProfileDefault.png')
             }
             style={styles.image}
-            resizeMode={FastImage.resizeMode.contain}
           />
           <View style={styles.containerUsername}>
             <Text style={styles.username}>{user.data.username} •</Text>

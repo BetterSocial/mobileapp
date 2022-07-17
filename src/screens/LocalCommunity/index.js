@@ -30,7 +30,7 @@ import { post } from '../../api/server';
 import { setLocalCommunity } from '../../context/actions/localCommunity';
 
 const width = Dimensions.get('screen').width;
-const LocalComunity = () => {
+const LocalCommunity = () => {
   const navigation = useNavigation();
   const [search, setSearch] = React.useState('');
   const [location, setLocation] = React.useState([]);
@@ -46,7 +46,7 @@ const LocalComunity = () => {
   const [, dispatch] = React.useContext(Context).localCommunity;
   React.useEffect(() => {
     analytics().logScreenView({
-      screen_class: 'LocalComunity',
+      screen_class: 'LocalCommunity',
       screen_name: 'onb_select_location',
     });
   }, []);
@@ -186,7 +186,7 @@ const LocalComunity = () => {
         <ProgressBar isStatic={true} value={50} />
       </View>
       <View>
-        <Text style={styles.textFindYourLocalComunity}>
+        <Text style={styles.textFindYourLocalCommunity}>
           {StringConstant.onboardingLocalCommunityHeadline}
         </Text>
         <Text style={styles.textDesc}>
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: { paddingHorizontal: 22, paddingTop: 22, paddingBottom: 5 },
-  textFindYourLocalComunity: {
+  textFindYourLocalCommunity: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: 'bold',
@@ -426,4 +426,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
   },
 });
-export default LocalComunity;
+export default LocalCommunity;

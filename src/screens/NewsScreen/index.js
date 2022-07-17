@@ -42,7 +42,7 @@ const NewsScreen = ({}) => {
   const [profileContext] = React.useContext(Context).profile;
   let {myProfile} = profileContext
   // const [isCompleteAnimation, setIsCompleteAnimation] = React.useState(false)
-  
+
   const scrollRef = React.createRef();
   let {news} = newslist;
   let lastDragY = 0;
@@ -137,11 +137,11 @@ const NewsScreen = ({}) => {
           duration: 100,
           useNativeDriver: false,
         }).start()
-      
+
       })
 
     } else if (dy - 20 > 0) {
- 
+
       InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
           toValue: -50,
@@ -153,7 +153,7 @@ const NewsScreen = ({}) => {
           duration: 100,
           useNativeDriver: false,
         }).start()
-     
+
       })
     }
   };
@@ -270,7 +270,7 @@ const NewsScreen = ({}) => {
           }}
         />
         </Animated.View>
-        
+
         <BlockDomainComponent
           ref={refBlockDomainComponent}
           domain={domain}

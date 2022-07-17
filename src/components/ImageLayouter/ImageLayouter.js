@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Image from '../Image';
 import { fonts } from '../../utils/fonts';
 import { COLORS } from '../../utils/theme';
 
@@ -10,8 +11,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
         <Image
           source={{ uri: images[0] }}
           style={styles.imagelayout1}
-          width={'100%'}
-          height={'100%'}
         />
       </Pressable>
     );
@@ -25,8 +24,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
                 <Image
                   style={styles.imagelayout2}
                   source={{ uri: item }}
-                  width={'100%'}
-                  height={'100%'}
                 />
               </Pressable>
             </View>
@@ -44,8 +41,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout3}
               source={{ uri: images[0] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
           <Pressable
@@ -54,8 +49,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout3}
               source={{ uri: images[1] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
         </View>
@@ -64,8 +57,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout2}
               source={{ uri: images[2] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
         </View>
@@ -81,8 +72,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout3}
               source={{ uri: images[0] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
           <Pressable
@@ -91,8 +80,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout3}
               source={{ uri: images[1] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
         </View>
@@ -103,8 +90,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout3}
               source={{ uri: images[2] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
           <Pressable
@@ -113,8 +98,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout3}
               source={{ uri: images[3] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
         </View>
@@ -130,8 +113,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout3}
               source={{ uri: images[0] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
           <Pressable
@@ -140,8 +121,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout3}
               source={{ uri: images[1] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
         </View>
@@ -152,8 +131,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout3}
               source={{ uri: images[2] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
           <Pressable
@@ -184,8 +161,6 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             <Image
               style={styles.imagelayout3}
               source={{ uri: images[3] }}
-              width={'100%'}
-              height={'100%'}
             />
           </Pressable>
         </View>
