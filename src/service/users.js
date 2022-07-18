@@ -107,3 +107,15 @@ export const getBlockedUserList = async () => {
     crashlytics().recordError(new Error(e));
   }
 };
+
+export const deleteAccount = async () => {
+  try {
+    const result = await api.post('/users/delete');
+    return result.data;
+  } catch (e) {
+    console.log('e')
+    console.log(e)
+    crashlytics().recordError(new Error(e));
+    return null
+  }
+}
