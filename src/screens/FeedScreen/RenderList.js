@@ -13,13 +13,15 @@ import Log from '../../utils/log/Log';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
-import { ANALYTICS_SHARE_POST_FEED_ID, ANALYTICS_SHARE_POST_FEED_SCREEN, SOURCE_FEED_TAB } from '../../utils/constants';
-import { Footer, Gap, PreviewComment } from '../../components';
 import {
+  ANALYTICS_SHARE_POST_FEED_ID,
+  ANALYTICS_SHARE_POST_FEED_SCREEN,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
+  SOURCE_FEED_TAB,
 } from '../../utils/constants';
+import { Footer, Gap, PreviewComment } from '../../components';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getCommentLength, getCountCommentWithChild } from '../../utils/getstream';
@@ -59,7 +61,7 @@ const RenderListFeed = (props) => {
   const [loadingVote, setLoadingVote] = React.useState(false);
   const bottomHeight = useBottomTabBarHeight();
   const navigateToLinkContextPage = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -69,17 +71,17 @@ const RenderListFeed = (props) => {
   };
 
   const getHeightFooter = () => {
-    let h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 6.8) / 100);
+    const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 6.8) / 100);
     return h;
   };
-  const getHeightReaction = () => {
+  const getHeightReaction = () => 
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
-    return dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
-  };
+     dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
+  ;
 
   const getHeightHeader = () => {
-    let h = (FULL_HEIGHT * 10) / 100
+    const h = (FULL_HEIGHT * 10) / 100
     return h;
     // return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) *0.1
 
@@ -131,7 +133,7 @@ const RenderListFeed = (props) => {
     try {
       const processData = await onPressUpvote({
         activity_id: item.id,
-        status: status,
+        status,
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
@@ -149,7 +151,7 @@ const RenderListFeed = (props) => {
     try {
       const processData = await onPressDownVote({
         activity_id: item.id,
-        status: status,
+        status,
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
@@ -164,9 +166,9 @@ const RenderListFeed = (props) => {
   };
 
   const initial = () => {
-    let reactionCount = item.reaction_counts;
+    const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
-      let comment = reactionCount.comment;
+      const {comment} = reactionCount;
       handleVote(reactionCount);
       if (comment !== undefined) {
         if (comment > 0) {
@@ -284,8 +286,6 @@ const RenderListFeed = (props) => {
               item.anonimity
                 ? false
                 : selfUserId === item.actor.id
-                  ? true
-                  : false
             }
           />
         </View>
@@ -293,11 +293,11 @@ const RenderListFeed = (props) => {
           <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
-                user={item.latest_reactions.comment[0].user}
-                comment={item.latest_reactions.comment[0].data.text}
-                image={item.latest_reactions.comment[0].user.data.profile_pic_url}
-                time={item.latest_reactions.comment[0].created_at}
-                totalComment={getCommentLength(item.latest_reactions.comment) - 1}
+                user={item?.latest_reactions?.comment[0]?.user}
+                comment={item?.latest_reactions?.comment[0]?.data?.text}
+                image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url}
+                time={item?.latest_reactions?.comment[0]?.created_at}
+                totalComment={getCommentLength(item?.latest_reactions?.comment) - 1}
                 onPress={onPressComment}
               />
               <Gap height={8} />
