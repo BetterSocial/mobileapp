@@ -85,10 +85,9 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
                 </Text>
                 <View style={S.divider} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('BuAC1onVOvDppJax')}>
-                <View style={S.divider} />
+            <TouchableOpacity onPress={() => dummyLogin('RNDM-RNDM-0001')}>
                 <Text style={S.dummyAccountItem}>
-                    exusiai : BuAC1onVOvDppJax
+                    fajarismrandom01 : RNDM-RNDM-0001
                 </Text>
                 <View style={S.divider} />
             </TouchableOpacity>
