@@ -1,6 +1,5 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, Text, TouchableNativeFeedback, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';

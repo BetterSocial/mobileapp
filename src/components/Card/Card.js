@@ -3,7 +3,6 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
-  Image,
   Linking,
   Pressable,
   StyleSheet,
@@ -13,14 +12,13 @@ import {
 } from 'react-native';
 
 import Gap from '../Gap';
-import MemoIc_rectangle_gradient from '../../assets/Ic_rectangle_gradient';
 import { COLORS } from '../../utils/theme';
 import { FeedCredderRating } from '../CredderRating';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { sanitizeUrlForLinking } from '../../utils/Utils';
-import FastImage from 'react-native-fast-image';
+import Image, {imageConst} from '../Image';
 
 const Card = (props) => {
   const {
@@ -53,10 +51,9 @@ const Card = (props) => {
               </Text>
             </View>
             <View style={{ flex: 1 }}>
-              <FastImage
+              <Image
                 style={styles.image}
-                source={image ? { uri: image,  priority: FastImage.priority.normal, } : null}
-                resizeMethod="resize"
+                source={image ? { uri: image } : null}
               />
             </View>
             <View>
@@ -81,13 +78,13 @@ const Card = (props) => {
 const Header = ({ domain, image, date, score }) => (
   <View style={styles.headerContainer}>
     <View style={styles.headerImageContainer}>
-      <FastImage
+      <Image
         style={[
           { height: '100%', width: '100%', borderRadius: 45 },
           StyleSheet.absoluteFillObject,
         ]}
         source={{ uri: image }}
-        resizeMode={'cover'}
+        resizeMode={imageConst.resizeMode.cover}
       />
     </View>
     <Gap style={{ width: 0 }} />

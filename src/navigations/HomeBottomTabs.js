@@ -3,10 +3,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
-import { Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
+import {
+  Platform, StatusBar, StyleSheet, Text,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { useRecoilValue } from 'recoil';
 import DiscoveryAction from '../context/actions/discoveryAction';
 import DiscoveryRepo from '../service/discovery';
 import FirebaseConfig from '../configs/FirebaseConfig';
@@ -22,7 +25,9 @@ import {
   ProfileScreen,
 } from '../screens';
 import { Context } from '../context';
-import { FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS } from '../utils/cache/constant';
+import {
+  FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS,
+} from '../utils/cache/constant';
 import { colors } from '../utils/colors';
 import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
@@ -30,30 +35,34 @@ import { getFollowingTopic } from '../service/topics';
 import { getMainFeed } from '../service/post';
 import { getSpecificCache, saveToCache } from '../utils/cache';
 import { getUserId } from '../utils/users';
-import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../context/actions/feeds';
+import {
+  setMainFeeds, setTimer,
+} from '../context/actions/feeds';
 import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
+import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs(props) {
-  const { navigation } = props
-  const isIos = Platform.OS === 'ios'
+  const { navigation } = props;
+  const isIos = Platform.OS === 'ios';
 
-  let [users, dispatchUser] = React.useContext(Context).users;
-  let [, dispatchProfile] = React.useContext(Context).profile;
-  let [, followingDispatch] = React.useContext(Context).following;
+  const [users, dispatchUser] = React.useContext(Context).users;
+  const [, dispatchProfile] = React.useContext(Context).profile;
+  const [, followingDispatch] = React.useContext(Context).following;
+
+  const initialStartup = useRecoilValue(InitialStartupAtom);
+  const otherProfileData = useRecoilValue(otherProfileAtom);
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
   const [, discoveryDispatch] = React.useContext(Context).discovery;
-
-  const [initialStartup] = React.useContext(Context).initialStartup;
   const [unReadMessage] = React.useContext(Context).unReadMessage;
-  const [loadingUser, setLoadingUser] = React.useState(true)
-  let { feeds, timer, viewPostTimeIndex } = feedsContext;
-  const LIMIT_FIRST_FEEDS = 1
-  const LIMIT_FIRST_NEWS = 3
+  const [loadingUser, setLoadingUser] = React.useState(true);
+  const { feeds } = feedsContext;
+  const LIMIT_FIRST_FEEDS = 1;
+  const LIMIT_FIRST_NEWS = 3;
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
@@ -92,23 +101,23 @@ function HomeBottomTabs(props) {
 
   const getProfile = async () => {
     try {
-      let selfUserId = await getUserId();
-      let profile = await getMyProfile(selfUserId);
+      const selfUserId = await getUserId();
+      const profile = await getMyProfile(selfUserId);
       setImageUrl(profile.data.profile_pic_path, dispatchUser);
-      let data = {
+      const data = {
         user_id: profile.data.user_id,
         username: profile.data.username,
       };
-      saveToCache(PROFILE_CACHE, profile.data)
+      saveToCache(PROFILE_CACHE, profile.data);
       setMyProfileAction(data, dispatchProfile);
-      setLoadingUser(false)
+      setLoadingUser(false);
     } catch (e) {
-      setLoadingUser(false)
+      setLoadingUser(false);
     }
   };
 
   const getDiscoveryData = async () => {
-    let selfUserId = await getUserId();
+    const selfUserId = await getUserId();
     // Not using await so splash screen can navigate to next screen faster
 
     try {
@@ -117,40 +126,50 @@ function HomeBottomTabs(props) {
       });
 
       getFollowedDomain().then((response) => {
-        console.log('qweqweqweqeqwe')
         following.setFollowingDomain(response.data.data, followingDispatch);
       });
 
       getFollowingTopic().then((response) => {
-        console.log('zxczxczczxc')
         following.setFollowingTopics(response.data, followingDispatch);
       });
 
-      let discoveryInitialUserResponse = await DiscoveryRepo.fetchInitialDiscoveryUsers()
-      DiscoveryAction.setDiscoveryInitialUsers(discoveryInitialUserResponse.suggestedUsers, discoveryDispatch)
+      const discoveryInitialUserResponse = await DiscoveryRepo.fetchInitialDiscoveryUsers();
+      DiscoveryAction.setDiscoveryInitialUsers(
+        discoveryInitialUserResponse.suggestedUsers,
+        discoveryDispatch,
+      );
 
-      let discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics()
-      DiscoveryAction.setDiscoveryInitialTopics(discoveryInitialTopicResponse.suggestedTopics, discoveryDispatch)
+      const discoveryInitialTopicResponse = await DiscoveryRepo.fetchInitialDiscoveryTopics();
+      DiscoveryAction.setDiscoveryInitialTopics(
+        discoveryInitialTopicResponse.suggestedTopics,
+        discoveryDispatch,
+      );
 
-      let discoveryInitialDomainResponse = await DiscoveryRepo.fetchInitialDiscoveryDomains()
-      DiscoveryAction.setDiscoveryInitialDomains(discoveryInitialDomainResponse.suggestedDomains, discoveryDispatch)
+      const discoveryInitialDomainResponse = await DiscoveryRepo.fetchInitialDiscoveryDomains();
+      DiscoveryAction.setDiscoveryInitialDomains(
+        discoveryInitialDomainResponse.suggestedDomains,
+        discoveryDispatch,
+      );
 
-      let response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
-      if (!response) return
+      const response = await AsyncStorage.getItem(RECENT_SEARCH_TERMS);
+      if (!response) return;
       // setItems(JSON.parse(response))
-      DiscoveryAction.setDiscoveryRecentSearch(JSON.parse(response), discoveryDispatch)
-
+      DiscoveryAction.setDiscoveryRecentSearch(JSON.parse(response), discoveryDispatch);
     } catch (e) {
-      throw new Error(e)
+      if (__DEV__) {
+        console.log('error');
+        console.log(e);
+      }
+      throw new Error(e);
     }
-  }
+  };
 
   const pushNotifIos = (message) => {
     PushNotificationIOS.addNotificationRequest({
       alertBody: message.notification.body,
-      alertTitle: message.notification.title
-    })
-  }
+      alertTitle: message.notification.title,
+    });
+  };
 
   const pushNotifAndroid = (remoteMessage) => {
     PushNotification.localNotification({
@@ -159,7 +178,7 @@ function HomeBottomTabs(props) {
       channelId: 'bettersosialid',
       message: remoteMessage.notification.body,
     });
-  }
+  };
 
   const createChannel = () => {
     PushNotification.createChannel(
@@ -177,101 +196,111 @@ function HomeBottomTabs(props) {
 
   const getDomain = () => {
     getDomains(0, LIMIT_FIRST_NEWS).then((response) => {
-      saveToCache(NEWS_CACHE, response)
+      saveToCache(NEWS_CACHE, response);
       setNews(response.data, newsDispatch);
     }).catch((e) => {
-      throw new Error(e)
-    })
-  }
+      throw new Error(e);
+    });
+  };
 
   const getDataFeeds = async (offset = 0) => {
     try {
-      let query = `?offset=${offset}&limit=${LIMIT_FIRST_FEEDS}`
+      const query = `?offset=${offset}&limit=${LIMIT_FIRST_FEEDS}`;
       const dataFeeds = await getMainFeed(query);
       if (dataFeeds.data.length > 0) {
-        let data = dataFeeds.data;
-        let dataWithDummy = [...data, { dummy: true }]
+        const { data } = dataFeeds;
+        const dataWithDummy = [...data, { dummy: true }];
         let saveData = {
           offset: dataFeeds.offset,
-          data: dataWithDummy
+          data: dataWithDummy,
 
-        }
+        };
         if (offset === 0) {
           setMainFeeds(dataWithDummy, dispatchFeeds);
-          saveToCache(FEEDS_CACHE, saveData)
+          saveToCache(FEEDS_CACHE, saveData);
         } else {
-          let clonedFeeds = [...feeds]
-          clonedFeeds.splice(feeds.length - 1, 0, ...data)
+          const clonedFeeds = [...feeds];
+          clonedFeeds.splice(feeds.length - 1, 0, ...data);
           saveData = {
             ...saveData,
-            data: clonedFeeds
-          }
+            data: clonedFeeds,
+          };
           setMainFeeds(clonedFeeds, dispatchFeeds);
-          saveToCache(FEEDS_CACHE, saveData)
+          saveToCache(FEEDS_CACHE, saveData);
         }
       }
-      setTimer(new Date(), dispatchFeeds)
+      setTimer(new Date(), dispatchFeeds);
     } catch (e) {
-      throw new Error(e)
+      throw new Error(e);
     }
   };
 
   React.useEffect(() => {
     getSpecificCache(PROFILE_CACHE, (res) => {
       if (!res) {
-        getProfile()
+        getProfile();
       } else {
-        let data = {
+        const data = {
           user_id: res.user_id,
           username: res.username,
         };
-        setMyProfileAction(data, dispatchProfile)
-        setLoadingUser(false)
-        setImageUrl(res.profile_pic_path, dispatchUser)
+        setMyProfileAction(data, dispatchProfile);
+        setLoadingUser(false);
+        setImageUrl(res.profile_pic_path, dispatchUser);
       }
-    })
-  }, [])
-
-
-
-  React.useEffect(() => {
-    requestPermission()
-    getDomain()
-    getDataFeeds()
-    getDiscoveryData()
-  }, []);
-  React.useEffect(() => {
-    createChannel()
-    const unsubscribe = messaging().onMessage((remoteMessage) => {
-      !isIos ? pushNotifAndroid(remoteMessage) : pushNotifIos(remoteMessage)
-
     });
+  }, []);
+
+  React.useEffect(() => {
+    requestPermission();
+    getDomain();
+    getDataFeeds();
+    getDiscoveryData();
+  }, []);
+
+  React.useEffect(() => {
+    createChannel();
+    const unsubscribe = messaging().onMessage((remoteMessage) => {
+      // eslint-disable-next-line no-unused-expressions
+      !isIos ? pushNotifAndroid(remoteMessage) : pushNotifIos(remoteMessage);
+    });
+
     return () => {
-      unsubscribe()
+      unsubscribe();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (otherProfileData !== null && initialStartup.id !== null) {
+      navigation.navigate('OtherProfile', {
+        data: {
+          user_id: initialStartup.id,
+          other_id: otherProfileData.user_id,
+          username: otherProfileData.username,
+        },
+      });
     }
-  }, [])
+  }, [initialStartup, otherProfileData]);
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar />
       <Tab.Navigator
-        initialRouteName={initialStartup !== null && initialStartup.deeplinkProfile === true ? 'Profile' : 'ChannelList'}
+        initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
         // initialRouteName="Profile"
         tabBarOptions={{
           // showLabel: true,
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
         }}
-        screenOptions={({ route, navigation }) => {
-          return {
-            activeTintColor: colors.holytosca,
-            tabBarLabel: () => (
+        screenOptions={({ navigation: screenOptionsNavigation }) => ({
+          activeTintColor: colors.holytosca,
+          tabBarLabel: () => (
               <Text style={styles.label}>
-                {navigation.isFocused() ? '\u2B24' : ''}
+                {screenOptionsNavigation.isFocused() ? '\u2B24' : ''}
               </Text>
-            ),
-          };
-        }}>
+          ),
+        })}>
         <Tab.Screen
           name="ChannelList"
           component={ChannelListScreen}
@@ -281,7 +310,6 @@ function HomeBottomTabs(props) {
             tabBarBadge: unReadMessage.total_unread_count
               ? unReadMessage.total_unread_count
               : null,
-
           }}
         />
         <Tab.Screen
@@ -298,7 +326,7 @@ function HomeBottomTabs(props) {
           component={NewsScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({ focused, color }) => <MemoNews fill={color} />,
+            tabBarIcon: ({ color }) => <MemoNews fill={color} />,
             // unmountOnBlur: true
           }}
         />
@@ -307,7 +335,7 @@ function HomeBottomTabs(props) {
           component={ProfileScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({ focused }) => <MemoProfileIcon loadingUser={loadingUser} uri={users.photoUrl} />,
+            tabBarIcon: () => <MemoProfileIcon loadingUser={loadingUser} uri={users.photoUrl} />,
             // unmountOnBlur:true
           }}
         />

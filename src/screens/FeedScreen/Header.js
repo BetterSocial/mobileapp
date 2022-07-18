@@ -71,7 +71,8 @@ const _renderAnonimity = ({
   location,
   isBackButton,
   height,
-  getSearchLayout
+  getSearchLayout,
+  headerStyle
 }) => {
   const navigation = useNavigation();
   
@@ -79,7 +80,7 @@ const _renderAnonimity = ({
 
   return (
     <SafeAreaView>
-      <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
+      <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
             <View style={[styles.btn]}>
@@ -140,7 +141,8 @@ const _renderProfileNormal = ({
   location,
   isBackButton,
   height,
-  source
+  source,
+  headerStyle
 }) => {
   const navigation = useNavigation();
   const [feedsContext, dispatch] = React.useContext(Context).feeds
@@ -175,7 +177,7 @@ const _renderProfileNormal = ({
 
   return (
     <SafeAreaView>
-      <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height)]}>
+      <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
             <View style={styles.btn}>
@@ -248,7 +250,7 @@ const _renderProfileNormal = ({
   );
 };
 
-const Header = ({ props, isBackButton = false, height, source = null }) => {
+const Header = ({ props, isBackButton = false, height, source = null, headerStyle }) => {
   let { anonimity, time, privacy, duration_feed, expired_at, location, actor } =
     props;
 
@@ -261,6 +263,7 @@ const Header = ({ props, isBackButton = false, height, source = null }) => {
       location,
       isBackButton,
       height,
+      headerStyle
     });
   } else {
     return _renderProfileNormal({
@@ -272,7 +275,8 @@ const Header = ({ props, isBackButton = false, height, source = null }) => {
       location,
       isBackButton,
       height,
-      source
+      source,
+      headerStyle
     });
   }
 };
@@ -316,6 +320,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 0,
     width: '100%',
+    marginTop: 3
   },
   feedDate: {
     fontFamily: fonts.inter[400],
