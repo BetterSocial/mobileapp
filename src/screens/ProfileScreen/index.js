@@ -1,15 +1,11 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
-  InteractionManager,
   LogBox,
   SafeAreaView,
-  ScrollView,
   Share,
   StatusBar,
   StyleSheet,
@@ -30,14 +26,12 @@ import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import FollowInfoRow from './elements/FollowInfoRow';
 import GlobalButton from '../../components/Button/GlobalButton';
-import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
-import { DEFAULT_PROFILE_PIC_PATH } from '../../utils/constants';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
 import {
   changeRealName,

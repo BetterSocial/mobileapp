@@ -9,31 +9,40 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
+import { useSetRecoilState } from 'recoil';
 
-import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 import Header from '../../components/Header';
+import Loading from '../Loading';
 import ProfileSettingItem from './element/ProfileSettingItem';
 import StringConstant from '../../utils/string/StringConstant';
 import { Context } from '../../context';
+import { InitialStartupAtom } from '../../service/initialStartup';
 import { clearLocalStorege } from '../../utils/token';
 import { colors } from '../../utils/colors';
 import { createClient } from '../../context/actions/createClient';
+import { deleteAccount } from '../../service/users';
 import { fonts } from '../../utils/fonts';
 import { removeAllCache } from '../../utils/cache';
 import { resetProfileFeed } from '../../context/actions/myProfileFeed';
+import { setMainFeeds } from '../../context/actions/feeds';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const width = Dimensions.get('screen').width;
+const { width } = Dimensions.get('screen');
 
 const Settings = () => {
+  const [isLoadingDeletingAccount, setIsLoadingDeletingAccount] = React.useState(false)
+
   const [clientState, dispatch] = React.useContext(Context).client;
   const { client } = clientState;
   const navigation = useNavigation();
-  let [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
+  const setStartupValue = useSetRecoilState(InitialStartupAtom)
+
+  const [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
+  const [, feedDispatch] = React.useContext(Context).feeds;
+
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Settings',
@@ -43,30 +52,39 @@ const Settings = () => {
   const logout = () => {
     removeAllCache()
     resetProfileFeed(myProfileDispatch)
+    setMainFeeds([], feedDispatch)
     client?.disconnectUser();
     createClient(null, dispatch)
     clearLocalStorege();
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'SignIn' }],
-    });
+
+    setStartupValue({
+      id: null,
+      deeplinkProfile: false,
+    })
   };
 
   const goToPage = (pageName) => {
     navigation.navigate(pageName)
   }
 
-  const deleteAccount = () => {
+  const doDeleteAccount = async () => {
     // TODO :change this to delete account API call
-    logout()
-    Toast.show(StringConstant.profileDeleteAccountSuccess, Toast.SHORT);
+    setIsLoadingDeletingAccount(true)
+    const response = await deleteAccount()
+    console.log('response')
+    console.log(response.status)
+    if (response.status === 'success') {
+      logout()
+      Toast.show(StringConstant.profileDeleteAccountSuccess, Toast.SHORT);
+    }
+    setIsLoadingDeletingAccount(false)
   }
 
   const showDeleteAccountAlert = () => {
     Alert.alert(StringConstant.profileDeleteAccountAlertTitle, StringConstant.profileDeleteAccountAlertMessage,
       [
-        {text: StringConstant.profileDeleteAccountAlertCancel, onPress: () => {}, style: 'default'},
-        {text: StringConstant.profileDeleteAccountAlertSubmit, onPress: deleteAccount, style: 'destructive'}
+        { text: StringConstant.profileDeleteAccountAlertCancel, onPress: () => { }, style: 'default' },
+        { text: StringConstant.profileDeleteAccountAlertSubmit, onPress: doDeleteAccount, style: 'destructive' }
       ])
   }
 
@@ -89,6 +107,8 @@ const Settings = () => {
               styles.textVersion
             }>{`Version ${VersionNumber.appVersion}`}</Text>
         </View>
+
+        <Loading visible={isLoadingDeletingAccount} />
       </SafeAreaView>
     </>
   );

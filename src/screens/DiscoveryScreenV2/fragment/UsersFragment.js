@@ -39,12 +39,8 @@ const UsersFragment = () => {
     // )
 
     const isReady = useIsReady()
-    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
 
-    // const { users } = following
-    // console.log(users)
-
-    let users = discovery.initialUsers
+    const users = discovery.initialUsers
 
     const { isLoadingDiscoveryUser, followedUsers, unfollowedUsers, isFirstTimeOpen } = discovery
 
@@ -58,11 +54,7 @@ const UsersFragment = () => {
         parseToken();
     }, []);
 
-    // React.useEffect(() => {
-    //     if(followedUsers.length > 0 || unfollowedUsers.length > 0 || isLoadingDiscovery) setIsFirstTimeOpen(false)
-    // },[ followedUsers, unfollowedUsers, isLoadingDiscovery ])
-
-    const __handleOnPress = (item) => {
+    const handleOnPress = (item) => {
         navigation.push('OtherProfile', {
             data: {
                 user_id: myId,
@@ -72,11 +64,12 @@ const UsersFragment = () => {
         })
     }
 
-    const __handleFollow = async (from, willFollow, item, index) => {
+    const handleFollow = async (from, willFollow, item, index) => {
         if (from === FROM_FOLLOWED_USERS_INITIAL) {
-            // let newFollowedUsers = [...users]
-            let newInitialFollowedUsers = [...initialFollowedUsers]
-            newInitialFollowedUsers[index].user_id_follower = willFollow ? myId : null
+            const newFollowedUsers = [...users]
+            newFollowedUsers[index].user_id_follower = willFollow ? myId : null
+            // const newInitialFollowedUsers = [...initialFollowedUsers]
+            // newInitialFollowedUsers[index].user_id_follower = willFollow ? myId : null
 
             // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
             DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch)
@@ -84,9 +77,10 @@ const UsersFragment = () => {
         }
 
         if (from === FROM_UNFOLLOWED_USERS_INITIAL) {
-            // let newFollowedUsers = [...users]
-            let newInitialUnfollowedUsers = [...initialUnfollowedUsers]
-            newInitialUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
+            const newFollowedUsers = [...users]
+            newFollowedUsers[index].user_id_follower = willFollow ? myId : null
+            // const newInitialUnfollowedUsers = [...initialUnfollowedUsers]
+            // newInitialUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
 
             // FollowingAction.setFollowingUsers(newFollowedUsers, followingDispatch)
             DiscoveryAction.setDiscoveryInitialUsers(newFollowedUsers, discoveryDispatch)
@@ -94,24 +88,27 @@ const UsersFragment = () => {
         }
 
         if (from === FROM_FOLLOWED_USERS) {
-            let newFollowedUsers = [...followedUsers]
+            const newFollowedUsers = [...followedUsers]
             newFollowedUsers[index].user_id_follower = willFollow ? myId : null
 
             DiscoveryAction.setNewFollowedUsers(newFollowedUsers, discoveryDispatch)
         }
 
         if (from === FROM_UNFOLLOWED_USERS) {
-            let newUnfollowedUsers = [...unfollowedUsers]
+            const newUnfollowedUsers = [...unfollowedUsers]
             newUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
 
             DiscoveryAction.setNewUnfollowedUsers(newUnfollowedUsers, discoveryDispatch)
         }
 
-        let data = {
+        const data = {
             user_id_follower: myId,
             user_id_followed: item.user_id,
             follow_source: 'discoveryScreen',
         };
+
+        console.log('data')
+        console.log(data)
 
         if (willFollow) {
             const result = await setFollow(data);
@@ -119,52 +116,50 @@ const UsersFragment = () => {
             const result = await setUnFollow(data);
         }
     }
-    
-    const __renderDiscoveryItem = (from, key, item, index) => {
-        return <DomainList key={`${key}-${index}`} onPressBody={() => __handleOnPress(item)}
-            handleSetFollow={() => __handleFollow(from, true, item, index)}
-            handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+
+    const renderDiscoveryItem = (from, key, item, index) => <DomainList key={`${key}-${index}`} onPressBody={() => handleOnPress(item)}
+            handleSetFollow={() => handleFollow(from, true, item, index)}
+            handleSetUnFollow={() => handleFollow(from, false, item, index)}
             item={{
                 name: item.username,
                 image: item.profile_pic_path,
                 isunfollowed: item.user_id_follower === null,
                 description: item.bio
             }} />
-    }
 
-    const __renderUsersItem = () => {
+    const renderUsersItem = () => {
         if (isFirstTimeOpen) {
             // let renderArray = []
-            // initialFollowedUsers.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)))
+            // initialFollowedUsers.map((item, index) => renderArray.push(renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)))
             // renderArray.push(<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>)
-            // initialUnfollowedUsers.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_UNFOLLOWED_USERS_INITIAL, "unfollowedUsers", item, index)))
-            
+            // initialUnfollowedUsers.map((item, index) => renderArray.push(renderDiscoveryItem(FROM_UNFOLLOWED_USERS_INITIAL, "unfollowedUsers", item, index)))
+
             // return renderArray
-            
-            return [<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users"/>].concat(users.map((item, index) => {
-                // return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
-                return __renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)
-            }))   
+
+            return [<DiscoveryTitleSeparator key="user-title-separator" text="Suggested Users" />].concat(users.map((item, index) =>
+                // return renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", { ...item.user, user_id_follower: item.user_id_follower }, index)
+                renderDiscoveryItem(FROM_FOLLOWED_USERS_INITIAL, "followedUsers", item, index)
+            ))
         }
 
         return (
             <>
-                {followedUsers.map((item, index) => {
-                    return __renderDiscoveryItem(FROM_FOLLOWED_USERS, "followedUsers", item, index)
-                })}
+                {followedUsers.map((item, index) =>
+                    renderDiscoveryItem(FROM_FOLLOWED_USERS, "followedUsers", item, index)
+                )}
 
                 {unfollowedUsers.length > 0 && followedUsers.length > 0 &&
                     <View style={styles.unfollowedHeaderContainer}>
                         <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreUsers}</Text>
                     </View>}
-                {unfollowedUsers.map((item, index) => {
-                    return __renderDiscoveryItem(FROM_UNFOLLOWED_USERS, "unfollowedUsers", item, index)
-                })}
+                {unfollowedUsers.map((item, index) =>
+                    renderDiscoveryItem(FROM_UNFOLLOWED_USERS, "unfollowedUsers", item, index)
+                )}
             </>
         )
     }
 
-    if(!isReady) return <></>
+    if (!isReady) return <></>
 
     if (isLoadingDiscoveryUser) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (followedUsers.length === 0 && unfollowedUsers.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
@@ -172,8 +167,8 @@ const UsersFragment = () => {
     </View>
 
     return <View>
-        <RecentSearch shown={isFirstTimeOpen}/>
-        {__renderUsersItem()}
+        <RecentSearch shown={isFirstTimeOpen} />
+        {renderUsersItem()}
     </View>
 
 }
