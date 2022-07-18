@@ -13,12 +13,14 @@ import {
   View
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
+import { useSetRecoilState } from 'recoil';
 
 import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 import Header from '../../components/Header';
 import ProfileSettingItem from './element/ProfileSettingItem';
 import StringConstant from '../../utils/string/StringConstant';
 import { Context } from '../../context';
+import { InitialStartupAtom } from '../../service/initialStartup';
 import { clearLocalStorege } from '../../utils/token';
 import { colors } from '../../utils/colors';
 import { createClient } from '../../context/actions/createClient';
@@ -27,13 +29,15 @@ import { removeAllCache } from '../../utils/cache';
 import { resetProfileFeed } from '../../context/actions/myProfileFeed';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 
 const Settings = () => {
   const [clientState, dispatch] = React.useContext(Context).client;
   const { client } = clientState;
   const navigation = useNavigation();
-  let [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
+  const setStartupValue = useSetRecoilState(InitialStartupAtom)
+
+  const [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Settings',
@@ -46,10 +50,11 @@ const Settings = () => {
     client?.disconnectUser();
     createClient(null, dispatch)
     clearLocalStorege();
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'SignIn' }],
-    });
+    
+    setStartupValue({
+      id: null,
+      deeplinkProfile : false,
+    })
   };
 
   const goToPage = (pageName) => {
