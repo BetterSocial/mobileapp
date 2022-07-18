@@ -146,15 +146,19 @@ function HomeBottomTabs(props) {
   }
 
   const pushNotifIos = (message) => {
+    console.log(message.messageId, 'message')
     PushNotificationIOS.addNotificationRequest({
-      alertBody: message.notification.body,
-      alertTitle: message.notification.title
+      // alertBody: message.notification.body,
+      // alertTitle: message.notification.title
+      title: message.notification.title,
+      body: message.notification.body,
+      id: message.messageId
     })
   }
 
   const pushNotifAndroid = (remoteMessage) => {
     PushNotification.localNotification({
-      id: '123',
+      id: remoteMessage.messageId,
       title: remoteMessage.notification.title,
       channelId: 'bettersosialid',
       message: remoteMessage.notification.body,
