@@ -1,20 +1,37 @@
 {
     "env": {
         "es2020": true,
-        "node": true
+        "node": true,
+        "es6": true
     },
     "extends": [
-        "airbnb-base"
+        "airbnb-base",
+        "plugin:react/recommended",
+        "prettier"
     ],
+    "rules": {
+        "quotes": [2, "single", {"avoidEscape": true}],
+        "comma-dangle": ["error", "always-multiline"]
+    },
     "parserOptions": {
         "ecmaVersion": 12,
         "sourceType": "module",
-        "ecmaFeatures": {
-            "experimentalObjectRestSpread": true
-        }
+        "parserOptions": {
+            "ecmaFeatures": {
+                "jsx": true,
+                "modules": true
+            }
+        },
+        "plugins": ["import", "@typescript-eslint","prettier", "react", "react-hooks", "react-native"]
     },
     "rules": {
         "linebreak-style": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "import/prefer-default-export": "off",
+        "no-use-before-define": "warn",
+        "react/prop-types": "off"
+    },
+    "globals": {
+        "__DEV__": true
     }
 }

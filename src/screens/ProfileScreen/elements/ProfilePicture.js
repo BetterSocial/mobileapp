@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Image, StyleSheet, TouchableNativeFeedback, View } from 'react-native';
+import { StyleSheet, TouchableNativeFeedback, View } from 'react-native';
 
+import Image from '../../../components/Image';
 import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
 import { DEFAULT_PROFILE_PIC_PATH } from '../../../utils/constants';
 
@@ -29,9 +30,8 @@ const ProfilePicture = ({ onImageContainerClick, profilePicPath, disabledAddIcon
                 uri: profilePicPath
                     ? `${profilePicPath}`
                     : DEFAULT_PROFILE_PIC_PATH,
-                    priority: FastImage.priority.normal
                 }}
-                resizeMode={FastImage.resizeMode.contain}
+                resizeMode="contain"
             />
             { __renderAddIcon() }
             </View>

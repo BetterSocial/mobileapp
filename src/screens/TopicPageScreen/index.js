@@ -7,6 +7,7 @@ import BlockDomain from '../../components/Blocking/BlockDomain';
 import Empty from './elements/Empty';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
+import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import ReportDomain from '../../components/Blocking/ReportDomain';
 import TiktokScroll from '../../components/TiktokScroll/index';
 import dimen from '../../utils/dimen';
@@ -37,6 +38,7 @@ const TopicPageScreen = (props) => {
   const refBlockComponent = React.useRef();
   const refBlockDomain = React.useRef();
   const refReportDomain = React.useRef();
+  const [headerHeightRef, setHeaderHeightRef] = React.useState(0)
 
 
   React.useEffect(() => {
@@ -218,12 +220,20 @@ const TopicPageScreen = (props) => {
       <StatusBar barStyle="dark-content" translucent={false} />
       <Navigation domain={capitalizeFirstText(topicName)} onPress={() => handleFollowTopic()} isFollow={isFollow} />
       <View style={{ flex: 1 }}>
-        <TiktokScroll
+        <ProfileTiktokScroll
           contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
           data={feeds}
           onEndReach={onEndReach}
           onRefresh={onRefresh}
-          refreshing={loading}>
+          refreshing={loading}
+          snapToOffsets={(() => {
+            let posts = feeds.map((item, index) => {
+              return headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)
+            })
+            // console.log('posts')
+            // console.log(posts)
+            return [headerHeightRef, ...posts]
+          })()}>
           {({ item, index }) => (
             <MemoizedListComponent
               item={item}
@@ -239,7 +249,7 @@ const TopicPageScreen = (props) => {
               loading={loading}
             />
           )}
-        </TiktokScroll>
+        </ProfileTiktokScroll>
 
 
       </View>
@@ -247,4 +257,4 @@ const TopicPageScreen = (props) => {
     </View>
   );
 };
-export default withInteractionsManaged (TopicPageScreen);
+export default withInteractionsManaged(TopicPageScreen);

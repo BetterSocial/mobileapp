@@ -1,15 +1,11 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
-  InteractionManager,
   LogBox,
   SafeAreaView,
-  ScrollView,
   Share,
   StatusBar,
   StyleSheet,
@@ -22,6 +18,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
@@ -30,14 +27,12 @@ import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import FollowInfoRow from './elements/FollowInfoRow';
 import GlobalButton from '../../components/Button/GlobalButton';
-import MemoIcAddCircle from '../../assets/icons/ic_add_circle';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
-import { DEFAULT_PROFILE_PIC_PATH } from '../../utils/constants';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
 import {
   changeRealName,
@@ -184,7 +179,6 @@ const ProfileScreen = ({ route }) => {
 
   const getMyFeeds = async (offset = 0, limit = 10) => {
     let result = await getSelfFeedsInProfile(offset, limit);
-    console.log('kakak', result.data.length)
     if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
     else {
       let clonedFeeds = [...feeds]
@@ -530,7 +524,7 @@ const ProfileScreen = ({ route }) => {
 
   return (
     <>
-      {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{ top: 'always' }}>
+      {!loadingContainer ? <SafeAreaProvider style={styles.container} forceInset={{ top: 'always' }}>
         <StatusBar translucent={false} />
         <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username} />
         <ProfileTiktokScroll
@@ -612,7 +606,7 @@ const ProfileScreen = ({ route }) => {
         ) : null}
 
         <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-      </SafeAreaView> : null}
+      </SafeAreaProvider> : null}
 
     </>
   );

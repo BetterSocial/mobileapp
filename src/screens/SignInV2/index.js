@@ -47,6 +47,8 @@ import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { useSetRecoilState } from 'recoil';
+import { InitialStartupAtom } from '../../service/initialStartup';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;
@@ -55,6 +57,7 @@ const SignIn = () => {
   const [isCompleteSliding, setIsCompleteSliding] = React.useState(false);
   const [showComponent, setShowComponent] = React.useState(false)
   const [clickTime, setClickTime] = React.useState(0)
+  const setValueStartup = useSetRecoilState(InitialStartupAtom);
   // const isReady = useIsReady()
   const navigation = useNavigation();
   const create = useClientGetstream();
@@ -80,13 +83,15 @@ const SignIn = () => {
       screen_name: 'SignIn',
     });
   });
-  
+
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
       setLoading(true);
       checkToken(exchangeToken)
         .then((res) => {
-          console.log(res, 'response token')
+          if (__DEV__) {
+            console.log(res, 'response token')
+          }
           if (res.success) {
             const { appUserId, countryCode } = res.data;
             setDataHumenId(res.data, dispatch);
@@ -96,11 +101,12 @@ const SignIn = () => {
                 if (response.data) {
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
-                  create(response.token).then(() => {
-                    navigation.dispatch(StackActions.replace('HomeTabs'));
+                  setValueStartup({
+                    id: response.token,
+                    deeplinkProfile: false
+                  });
+                  create(response.token);
 
-                  })
-         
                 } else {
                   removeLocalStorege('userId');
                   navigation.dispatch(StackActions.replace('ChooseUsername'));
@@ -112,14 +118,15 @@ const SignIn = () => {
               });
           } else {
             SimpleToast.show(res.message, SimpleToast.SHORT)
-            console.log("else data")
           }
         })
         .catch((e) => {
           // SimpleToast.show(`on checkt token catch` + e)
           // console.log('on check token catch')
-          console.log('error');
-          console.log(e);
+          if (__DEV__) {
+            console.log('error');
+            console.log(e);
+          }
         });
     });
     onError((message) => {
@@ -157,7 +164,6 @@ const SignIn = () => {
         {clickTime >= 7 ? <DevDummyLogin resetClickTime={resetClickTime} />  : null}
         <SlideShow onContainerPress={onClickContainer} onChangeNewIndex={handleSlideShow} handleLogin={handleLogin}/>
       </View>
-      
     </SafeAreaView>
   );
 };

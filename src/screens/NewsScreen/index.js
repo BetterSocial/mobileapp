@@ -25,6 +25,7 @@ import {getUserId} from '../../utils/users';
 import {setIFollow, setNews} from '../../context/actions/news';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
@@ -42,7 +43,7 @@ const NewsScreen = ({}) => {
   const [profileContext] = React.useContext(Context).profile;
   let {myProfile} = profileContext
   // const [isCompleteAnimation, setIsCompleteAnimation] = React.useState(false)
-  
+
   const scrollRef = React.createRef();
   let {news} = newslist;
   let lastDragY = 0;
@@ -137,11 +138,11 @@ const NewsScreen = ({}) => {
           duration: 100,
           useNativeDriver: false,
         }).start()
-      
+
       })
 
     } else if (dy - 20 > 0) {
- 
+
       InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
           toValue: -50,
@@ -153,7 +154,7 @@ const NewsScreen = ({}) => {
           duration: 100,
           useNativeDriver: false,
         }).start()
-     
+
       })
     }
   };
@@ -235,7 +236,7 @@ const NewsScreen = ({}) => {
   // }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider style={styles.container}>
       <Search animatedValue={offset} />
         <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
         <FlatList
@@ -252,7 +253,6 @@ const NewsScreen = ({}) => {
           initialNumToRender={2}
           maxToRenderPerBatch={2}
           updateCellsBatchingPeriod={10}
-          removeClippedSubviews
           windowSize={10}
           // onMomentumScrollEnd={setSelectedIndex}
           renderItem={({item, index}) => {
@@ -271,13 +271,13 @@ const NewsScreen = ({}) => {
           }}
         />
         </Animated.View>
-        
+
         <BlockDomainComponent
           ref={refBlockDomainComponent}
           domain={domain}
           domainId={idBlock}
           screen="news_screen" />
-    </View>
+    </SafeAreaProvider>
   );
 };
 

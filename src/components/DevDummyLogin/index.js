@@ -2,10 +2,12 @@ import * as React from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { Button, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
+import { useSetRecoilState } from 'recoil';
 
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
+import { InitialStartupAtom } from '../../service/initialStartup';
 import { removeLocalStorege, setAccessToken, setRefreshToken, setUserId } from '../../utils/token';
 import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
@@ -23,12 +25,15 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
     const closeDummyLogin = () => {
         resetClickTime()
     }
+
+    const setStartupValue = useSetRecoilState(InitialStartupAtom)
+
     const dummyLogin = (appUserId) => {
         if (ENABLE_DEV_ONLY_FEATURE) {
             dummyLoginRbSheetRef.current.close();
         }
         setLoading(true);
-        let data = { appUserId, countryCode: 'ID' }
+        const data = { appUserId, countryCode: 'ID' }
         setDataHumenId(data, dispatch);
         verifyUser(appUserId)
             .then(async (response) => {
@@ -37,7 +42,11 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
                     setAccessToken(response.token);
                     setRefreshToken(response.refresh_token);
                     streamChat(response.token).then(() => {
-                        navigation.dispatch(StackActions.replace('HomeTabs'));
+                        // navigation.dispatch(StackActions.replace('HomeTabs'));
+                        setStartupValue({
+                            id: response.token,
+                            deeplinkProfile: false
+                        })
                     })
                 } else {
                     removeLocalStorege('userId');
@@ -73,6 +82,12 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
                 <View style={S.divider} />
                 <Text style={S.dummyAccountItem}>
                     fajarism : HQEGNQCHA8J1OIX4G2CP
+                </Text>
+                <View style={S.divider} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => dummyLogin('RNDM-RNDM-0001')}>
+                <Text style={S.dummyAccountItem}>
+                    fajarismrandom01 : RNDM-RNDM-0001
                 </Text>
                 <View style={S.divider} />
             </TouchableOpacity>

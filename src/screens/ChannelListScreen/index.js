@@ -16,6 +16,7 @@ import {
   Theme
 } from 'stream-chat-react-native';
 import { MessageSystem } from 'stream-chat-react-native-core'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
@@ -38,9 +39,9 @@ import { getUserId } from '../../utils/users';
 import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
 import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
+import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 
 const theme = {
   messageSimple: {
@@ -65,11 +66,11 @@ const ChannelListScreen = ({ navigation }) => {
   const myContext = React.useContext(Context)
   const {interactionsComplete} = useAfterInteractions()
   const [profileContext] = React.useContext(Context).profile;
-  let {myProfile} = profileContext
+  const {myProfile} = profileContext
 
   const [unReadMessage, dispatchUnReadMessage] =
     React.useContext(Context).unReadMessage;
-  let connect = useClientGetstream();
+  const connect = useClientGetstream();
   const filters = {
     members: { $in: [myProfile.user_id] },
     type: 'messaging',
@@ -112,7 +113,7 @@ const ChannelListScreen = ({ navigation }) => {
     const token = await getAccessToken()
     const client = streamFeed(token)
     const notif = client.feed('notification', myProfile.user_id, token)
-    notif.subscribe(function (data) {
+    notif.subscribe((data) => {
         getPostNotification()
 
     })
@@ -136,7 +137,7 @@ const ChannelListScreen = ({ navigation }) => {
 }
 
   const customPreviewTitle = (props) => {
-    let { name } = props.channel?.data;
+    const { name } = props.channel?.data;
 
     return (
       <View style={{ paddingRight: 12 }}>
@@ -153,8 +154,7 @@ const ChannelListScreen = ({ navigation }) => {
   })
   }
 
-  const CustomPreviewMessage = (props) => {
-    return (
+  const CustomPreviewMessage = (props) => (
       <ChannelPreviewMessage
         latestMessagePreview={{ ...props.latestMessagePreview }}
       />
@@ -162,7 +162,7 @@ const ChannelListScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ height: '100%' }}>
+    <SafeAreaProvider style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
       <ScrollView >
         <View style={{ height: 52 }}>
@@ -210,7 +210,7 @@ const ChannelListScreen = ({ navigation }) => {
             </View>
           )}
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 
@@ -220,4 +220,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default React.memo(ChannelListScreen)
+export default React.memo(withInteractionsManaged (ChannelListScreen))

@@ -5,14 +5,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
 import {
   SafeAreaProvider,
+  useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import {Analytics} from './src/libraries/analytics';
 import {RecoilRoot} from 'recoil';
-import RootStack from './src/navigations/root-stack';
+import {RootNavigator} from './src/navigations/root-stack';
 import Store from './src/context/Store';
 import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
 import { Platform } from 'react-native';
+import { linking } from './src/navigations/linking';
 
 if(!__DEV__) {
   console.log = function () {}
@@ -23,6 +25,7 @@ const App = () => {
   const routeNameRef = React.useRef<string | undefined>();
   const navRef = React.createRef();
   const isIos = Platform.OS === 'ios'
+  const {height} = useSafeAreaFrame()
   const streami18n = new Streami18n({
     language: 'en',
   });
@@ -83,12 +86,15 @@ const App = () => {
       try {
         fetchRemoteConfig();
       } catch (error) {
-        console.log('app ', error);
+        if (__DEV__) {
+          console.log('app ', error);
+        }
       }
     };
     init();
     // return unsubscribe;
   }, []);
+
   const newLocal = (
     <>
       <HumanIDProvider />
@@ -109,9 +115,10 @@ const App = () => {
                 Analytics.trackingScreen(currentRouteName);
               }
               routeNameRef.current = currentRouteName;
-            }}>
+            }}
+            linking={linking}>
             <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
-              <RootStack />
+              <RootNavigator areaHeight={height} />
             </OverlayProvider>
           </NavigationContainer>
         </Store>
@@ -124,8 +131,11 @@ const App = () => {
   );
 };
 
-export default () => (
+const RootApp = () => (
   <SafeAreaProvider>
     <App />
   </SafeAreaProvider>
-);
+)
+
+export default RootApp
+

@@ -1,35 +1,48 @@
 import * as React from 'react';
+import Toast from 'react-native-simple-toast';
 import VersionNumber from 'react-native-version-number';
 import analytics from '@react-native-firebase/analytics';
 import {
+  Alert,
   Dimensions,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View
 } from 'react-native';
-import {useNavigation} from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
+import { useSetRecoilState } from 'recoil';
 
-import ChevronRightIcon from '../../assets/icons/images/chevron-right.svg';
 import Header from '../../components/Header';
+import Loading from '../Loading';
+import ProfileSettingItem from './element/ProfileSettingItem';
+import StringConstant from '../../utils/string/StringConstant';
 import { Context } from '../../context';
-import {clearLocalStorege} from '../../utils/token';
-import {colors} from '../../utils/colors';
-import {createClient} from '../../context/actions/createClient';
-import {fonts} from '../../utils/fonts';
+import { InitialStartupAtom } from '../../service/initialStartup';
+import { clearLocalStorege } from '../../utils/token';
+import { colors } from '../../utils/colors';
+import { createClient } from '../../context/actions/createClient';
+import { deleteAccount } from '../../service/users';
+import { fonts } from '../../utils/fonts';
 import { removeAllCache } from '../../utils/cache';
-import {resetProfileFeed} from '../../context/actions/myProfileFeed';
+import { resetProfileFeed } from '../../context/actions/myProfileFeed';
+import { setMainFeeds } from '../../context/actions/feeds';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const width = Dimensions.get('screen').width;
+const { width } = Dimensions.get('screen');
 
 const Settings = () => {
+  const [isLoadingDeletingAccount, setIsLoadingDeletingAccount] = React.useState(false)
+
   const [clientState, dispatch] = React.useContext(Context).client;
   const { client } = clientState;
   const navigation = useNavigation();
-  let [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
+  const setStartupValue = useSetRecoilState(InitialStartupAtom)
+
+  const [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
+  const [, feedDispatch] = React.useContext(Context).feeds;
+
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Settings',
@@ -39,17 +52,40 @@ const Settings = () => {
   const logout = () => {
     removeAllCache()
     resetProfileFeed(myProfileDispatch)
+    setMainFeeds([], feedDispatch)
     client?.disconnectUser();
     createClient(null, dispatch)
     clearLocalStorege();
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'SignIn'}],
-    });
+
+    setStartupValue({
+      id: null,
+      deeplinkProfile: false,
+    })
   };
 
   const goToPage = (pageName) => {
     navigation.navigate(pageName)
+  }
+
+  const doDeleteAccount = async () => {
+    // TODO :change this to delete account API call
+    setIsLoadingDeletingAccount(true)
+    const response = await deleteAccount()
+    console.log('response')
+    console.log(response.status)
+    if (response.status === 'success') {
+      logout()
+      Toast.show(StringConstant.profileDeleteAccountSuccess, Toast.SHORT);
+    }
+    setIsLoadingDeletingAccount(false)
+  }
+
+  const showDeleteAccountAlert = () => {
+    Alert.alert(StringConstant.profileDeleteAccountAlertTitle, StringConstant.profileDeleteAccountAlertMessage,
+      [
+        { text: StringConstant.profileDeleteAccountAlertCancel, onPress: () => { }, style: 'default' },
+        { text: StringConstant.profileDeleteAccountAlertSubmit, onPress: doDeleteAccount, style: 'destructive' }
+      ])
   }
 
 
@@ -57,42 +93,13 @@ const Settings = () => {
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
       <SafeAreaView style={styles.container}>
-      <Header title="Settings" isCenter onPress={() => navigation.goBack()} />
+        <Header title="Settings" isCenter onPress={() => navigation.goBack()} />
         <View style={styles.content}>
-          <TouchableOpacity onPress={() => goToPage('BlockScreen')} >
-            <View style={styles.card}>
-              <Text style={styles.textCard}>Blocked list</Text>
-              <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
-            </View>
-          </TouchableOpacity>
-          {/* <TouchableOpacity
-            onPress={() => navigation.navigate('TermsAndCondition')}
-            >
-            <View style={styles.card}>
-              <Text style={styles.textCard}>Terms and Condition</Text>
-              <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
-            </View>
-          </TouchableOpacity> */}
-          <TouchableOpacity
-            onPress={() => navigation.navigate('PrivacyPolicies')}>
-            <View style={styles.card}>
-              <Text style={styles.textCard}>Privacy Policy</Text>
-              <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('HelpCenter')}>
-            <View style={styles.card}>
-              <Text style={styles.textCard}>Help Center</Text>
-              <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={logout}>
-            <View style={styles.card}>
-              <Text style={styles.textCard}>Logout</Text>
-              <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
-            </View>
-          </TouchableOpacity>
+          <ProfileSettingItem text="Blocked List" onPress={() => goToPage('BlockScreen')} />
+          <ProfileSettingItem text="Privacy Policies" onPress={() => goToPage('PrivacyPolicies')} />
+          <ProfileSettingItem text="Help Center" onPress={() => goToPage('HelpCenter')} />
+          <ProfileSettingItem text="Delete Account" onPress={showDeleteAccountAlert} />
+          <ProfileSettingItem text="Logout" onPress={logout} />
         </View>
         <View style={styles.footer}>
           <Text
@@ -100,6 +107,8 @@ const Settings = () => {
               styles.textVersion
             }>{`Version ${VersionNumber.appVersion}`}</Text>
         </View>
+
+        <Loading visible={isLoadingDeletingAccount} />
       </SafeAreaView>
     </>
   );
@@ -109,7 +118,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
-  containerHeader: {padding: 16},
+  containerHeader: { padding: 16 },
   header: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -133,26 +142,6 @@ const styles = StyleSheet.create({
     padding: 20,
     flexDirection: 'column',
   },
-  card: {
-    height: 52,
-    borderRadius: 8,
-    backgroundColor: colors.lightgrey,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 18,
-    paddingBottom: 18,
-    marginBottom: 12,
-  },
-  textCard: {
-    fontFamily: fonts.inter[700],
-    fontWeight: '800',
-    fontSize: 14,
-    color: colors.black,
-    lineHeight: 16,
-  },
   footer: {
     position: 'absolute',
     bottom: 0,
@@ -168,4 +157,4 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 });
-export default withInteractionsManaged (React.memo(Settings));
+export default withInteractionsManaged(React.memo(Settings));

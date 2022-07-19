@@ -1,19 +1,17 @@
 import * as React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 import {COLORS} from '../../../utils/theme';
 import {fonts} from '../../../utils/fonts';
-import FastImage from 'react-native-fast-image';
+import Image from '../../../components/Image';
 
 const ImageLayouter = ({images = [], onimageclick, height}) => {
   if (images.length === 1) {
     return (
       <Pressable onPress={() => onimageclick(0)}>
-        <FastImage
-          source={{uri: images[0],  priority: FastImage.priority.normal,}}
+        <Image
+          source={{uri: images[0]}}
           style={styles.imagelayout1}
-          width={'100%'}
-          height={'100%'}
         />
       </Pressable>
     );
@@ -24,11 +22,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           return (
             <View key={`image-layouter-${index}`} style={styles.twoPhotoItemLayout}>
               <Pressable onPress={() => onimageclick(index)}>
-                <FastImage
+                <Image
                   style={styles.imagelayout2}
-                  source={{uri: item,  priority: FastImage.priority.normal,}}
-                  width={'100%'}
-                  height={'100%'}
+                  source={{uri: item}}
                 />
               </Pressable>
             </View>
@@ -43,31 +39,25 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(0)}
             style={styles.threePhotoTopFirstLayout}>
-            <FastImage
+            <Image
               style={styles.imagelayout3}
-              source={{uri: images[0],  priority: FastImage.priority.normal,}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[0]}}
             />
           </Pressable>
           <Pressable
             onPress={() => onimageclick(1)}
             style={styles.threePhotoTopSecondLayout}>
-            <FastImage
+            <Image
               style={styles.imagelayout3}
-              source={{uri: images[1],  priority: FastImage.priority.normal,}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[1]}}
             />
           </Pressable>
         </View>
         <View style={styles.threePhotoBottomLayout}>
           <Pressable onPress={() => onimageclick(2)}>
-            <FastImage
+            <Image
               style={styles.imagelayout2}
-              source={{uri: images[2],  priority: FastImage.priority.normal,}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[2]}}
             />
           </Pressable>
         </View>
@@ -80,21 +70,17 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(0)}
             style={styles.threePhotoTopFirstLayout}>
-            <FastImage
+            <Image
               style={styles.imagelayout3}
-              source={{uri: images[0],  priority: FastImage.priority.normal,}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[0]}}
             />
           </Pressable>
           <Pressable
             onPress={() => onimageclick(1)}
             style={styles.threePhotoTopSecondLayout}>
-            <FastImage
+            <Image
               style={styles.imagelayout3}
-              source={{uri: images[1],  priority: FastImage.priority.normal,}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[1]}}
             />
           </Pressable>
         </View>
@@ -102,21 +88,17 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(2)}
             style={styles.threePhotoTopFirstLayout}>
-            <FastImage
+            <Image
               style={styles.imagelayout3}
-              source={{uri: images[2],  priority: FastImage.priority.normal,}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[2]}}
             />
           </Pressable>
           <Pressable
             onPress={() => onimageclick(3)}
             style={styles.threePhotoTopSecondLayout}>
-            <FastImage
+            <Image
               style={styles.imagelayout3}
-              source={{uri: images[3],  priority: FastImage.priority.normal,}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[3]}}
             />
           </Pressable>
         </View>
@@ -129,21 +111,17 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(0)}
             style={styles.threePhotoTopFirstLayout}>
-            <FastImage
+            <Image
               style={styles.imagelayout3}
-              source={{uri: images[0],  priority: FastImage.priority.normal,}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[0]}}
             />
           </Pressable>
           <Pressable
             onPress={() => onimageclick(1)}
             style={styles.threePhotoTopSecondLayout}>
-            <FastImage
+            <Image
               style={styles.imagelayout3}
-              source={{uri: images[1],  priority: FastImage.priority.normal,}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[1]}}
             />
           </Pressable>
         </View>
@@ -151,11 +129,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
           <Pressable
             onPress={() => onimageclick(2)}
             style={styles.threePhotoTopFirstLayout}>
-            <FastImage
+            <Image
               style={styles.imagelayout3}
-              source={{uri: images[2],  priority: FastImage.priority.normal,}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[2]}}
             />
           </Pressable>
           <Pressable
@@ -183,11 +159,9 @@ const ImageLayouter = ({images = [], onimageclick, height}) => {
                 zIndex: 1000,
                 color: COLORS.white,
               }}>{`${images.length - 3}+`}</Text>
-            <FastImage
+            <Image
               style={styles.imagelayout3}
-              source={{uri: images[3],  priority: FastImage.priority.normal}}
-              width={'100%'}
-              height={'100%'}
+              source={{uri: images[3]}}
             />
           </Pressable>
         </View>
