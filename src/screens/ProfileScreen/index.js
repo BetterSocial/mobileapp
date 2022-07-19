@@ -18,6 +18,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
@@ -178,7 +179,6 @@ const ProfileScreen = ({ route }) => {
 
   const getMyFeeds = async (offset = 0, limit = 10) => {
     let result = await getSelfFeedsInProfile(offset, limit);
-    console.log('kakak', result.data.length)
     if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
     else {
       let clonedFeeds = [...feeds]
@@ -524,7 +524,7 @@ const ProfileScreen = ({ route }) => {
 
   return (
     <>
-      {!loadingContainer ? <SafeAreaView style={styles.container} forceInset={{ top: 'always' }}>
+      {!loadingContainer ? <SafeAreaProvider style={styles.container} forceInset={{ top: 'always' }}>
         <StatusBar translucent={false} />
         <ProfileHeader showArrow={isNotFromHomeTab} onShareClicked={onShare} onSettingsClicked={goToSettings} username={dataMain.username} />
         <ProfileTiktokScroll
@@ -606,7 +606,7 @@ const ProfileScreen = ({ route }) => {
         ) : null}
 
         <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
-      </SafeAreaView> : null}
+      </SafeAreaProvider> : null}
 
     </>
   );

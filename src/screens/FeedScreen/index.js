@@ -5,7 +5,7 @@ import { Animated, Dimensions, InteractionManager, Platform, StatusBar, StyleShe
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
-
+import { SafeAreaProvider, useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 import BlockComponent from '../../components/BlockComponent';
 import RenderListFeed from './RenderList';
 import Search from './elements/Search';
@@ -35,9 +35,9 @@ const FeedScreen = (props) => {
   const [countStack, setCountStack] = React.useState(null);
   const [lastId, setLastId] = React.useState('');
   const [yourselfId, setYourselfId] = React.useState('');
-  const [showNavbar, setShowNavbar] = React.useState(false)
-  const paddingContainer = React.useRef(new Animated.Value(Platform.OS === 'ios' ? 30 : 50)).current
-
+  const [showNavbar, setShowNavbar] = React.useState(true)
+  // const paddingContainer = React.useRef(new Animated.Value(Platform.OS === 'ios' ? 30 : 50)).current
+  const frameHeight = useSafeAreaFrame().height
   // const [time, setTime] = React.useState(new Date());
   // const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
   const [shouldSearchBarShown, setShouldSearchBarShown] = React.useState(0)
@@ -54,6 +54,7 @@ const FeedScreen = (props) => {
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
   let {myProfile} = profileContext
   const bottomHeight = useBottomTabBarHeight();
+  const { bottom } = useSafeAreaInsets();
 
   const getDataFeeds = async (offset = 0, useLoading) => {
     setCountStack(null);
@@ -111,7 +112,7 @@ const FeedScreen = (props) => {
     }
 
   }, [interactionsComplete]);
-
+  console.log(bottom, 'musik')
   const checkCache = () => {
     getSpecificCache(FEEDS_CACHE, (result) => {
       if(result) {
@@ -277,11 +278,11 @@ const FeedScreen = (props) => {
         duration: 100,
         useNativeDriver: false,
       }).start();
-      Animated.timing(paddingContainer, {
-        toValue: Platform.OS === 'ios' ? 30 : 50,
-        duration: 100,
-        useNativeDriver: false,
-      }).start()
+      // Animated.timing(paddingContainer, {
+      //   toValue: Platform.OS === 'ios' ? 30 : 50,
+      //   duration: 100,
+      //   useNativeDriver: false,
+      // }).start()
     
     })
     setShowNavbar(true)
@@ -300,11 +301,11 @@ const FeedScreen = (props) => {
           duration: 100,
           useNativeDriver: false,
         }).start();
-        Animated.timing(paddingContainer, {
-          toValue: 0,
-          duration: 100,
-          useNativeDriver: false,
-        }).start()
+        // Animated.timing(paddingContainer, {
+        //   toValue: 0,
+        //   duration: 100,
+        //   useNativeDriver: false,
+        // }).start()
         
       })
       setShowNavbar(false)
@@ -340,13 +341,14 @@ const FeedScreen = (props) => {
 
 
   return (
-    <View style={styles.container} forceInset={{ top: 'always' }}>
+    <SafeAreaProvider style={styles.container} forceInset={{ top: 'always' }}>
       <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
-      <Animated.View style={{paddingTop: paddingContainer}}/>
+      {/* <Animated.View style={{paddingTop: paddingContainer}}/> */}
       <TiktokScroll
         contentHeight={Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight}
         data={feeds}
         onEndReach={onEndReach}
+        
         // onMomentumScrollEnd={handleOnMomentumEnd}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}
@@ -370,12 +372,13 @@ const FeedScreen = (props) => {
             loading={loading}
             showNavbar={showNavbar}
             searchHeight={searchHeight}
+            bottomArea={bottom}
           />
         }}
       </TiktokScroll>
       <ButtonNewPost />
       <BlockComponent ref={refBlockComponent} refresh={getDataFeeds} screen="screen_feed" />
-    </View>
+    </SafeAreaProvider>
 
   );
 };

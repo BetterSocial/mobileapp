@@ -57,7 +57,7 @@ import { initialStartupTask, InitialStartupAtom } from '../service/initialStartu
 
 const RootStack = createStackNavigator();
 
-export const RootNavigator = () => {
+export const RootNavigator = (props) => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const initialStartupAction = useRecoilCallback(initialStartupTask);
   const [clientState] = React.useContext(Context).client;
@@ -84,6 +84,9 @@ export const RootNavigator = () => {
       setTimeout(() => {
         SplashScreen.hide();
       }, 700);
+    } else {
+      SplashScreen.hide();
+
     }
   }, [initialStartup]);
 
