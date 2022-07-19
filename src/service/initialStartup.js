@@ -4,6 +4,7 @@ import { getUserId } from '../utils/users';
 import { verifyTokenGetstream } from './users';
 import { setAccessToken, setRefreshToken, removeAccessToken } from '../utils/token';
 import { getProfileByUsername } from './profile';
+import { setCrashlyticsUserId } from '../libraries/crashlytics';
 
 const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org/u';
 
@@ -21,6 +22,7 @@ export const InitialStartupAtom = atom({
         if (savedValue !== null && savedValue !== '') {
           const verify = await verifyTokenGetstream();
           if (verify !== null && verify !== '') {
+            setCrashlyticsUserId(savedValue);
             setSelf({ id: savedValue });
           } else {
             setSelf({ id: '' });

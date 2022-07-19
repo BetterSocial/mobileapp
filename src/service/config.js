@@ -1,8 +1,8 @@
 import axios from 'axios';
 import configEnv from 'react-native-config';
-import { BASE_URL, BASE_URL_DEV } from '@env';
 
 import { getAccessToken } from '../utils/token';
+import { getErrorConfig, logError } from '../libraries/crashlytics';
 
 const api = axios.create({
   baseURL: configEnv.BASE_URL,
@@ -17,7 +17,17 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => {
+    logError({
+      type: 'API_NETWORK_EXCEPTION',
+      data: {
+        code: error.code,
+        message: error.message,
+        ...getErrorConfig(error.config)
+      }
+    });
+    return Promise.reject(error);
+  },
 );
 
 export default api;

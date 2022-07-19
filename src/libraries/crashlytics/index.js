@@ -17,6 +17,17 @@ export function setCrashlyticsUserId(id) {
     }
   }
 }
+
+export function getErrorConfig(
+  config
+) {
+  return config ? {
+    url: config.url,
+    method: config.method,
+    baseURL: config.baseURL
+  } : null;
+}
+
 export function logError(params) {
   const {
     code,
