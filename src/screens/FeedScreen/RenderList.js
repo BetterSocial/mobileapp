@@ -229,7 +229,7 @@ const RenderListFeed = (props) => {
     if(Platform.OS === 'ios') {
       if(showNavbar) {
         if(isScroll) {
-          return searchHeight + bottomArea + 7
+          return searchHeight + bottomArea + 10
         } 
           if(!hasNotch()) {
             return bottomArea + 50
@@ -238,7 +238,7 @@ const RenderListFeed = (props) => {
           return bottomArea + 14
         
       }  
-        return bottomArea + 7
+        return bottomArea + 10
       
     } 
       if(showNavbar) {
