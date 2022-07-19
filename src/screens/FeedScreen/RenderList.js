@@ -62,7 +62,6 @@ const RenderListFeed = (props) => {
   const bottomHeight = useBottomTabBarHeight();
   const inset = useSafeAreaInsets()
   const frameHeight = useSafeAreaFrame().height
-  console.log(frameHeight, 'ripa')
   const navigateToLinkContextPage = (item) => {
     let param = linkContextScreenParamBuilder(
       item,
@@ -335,7 +334,6 @@ const styles = StyleSheet.create({
 
   }),
   cardMain: (frameHeight, showSearchbar, navbarHeight, bottomArea) => {
-    console.log(bottomArea, 'ripa')
     return {
       height: frameHeight - tabBarHeight - useBottomTabBarHeight() - navbarHeight - bottomArea ,
       width: '100%',
