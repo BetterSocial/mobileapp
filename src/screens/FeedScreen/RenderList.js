@@ -6,6 +6,8 @@ import { Dimensions, Platform, Share, StatusBar, StyleSheet, Text, View } from '
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
 import { useSafeAreaInsets, useSafeAreaFrame } from 'react-native-safe-area-context';
+import { getModel, getDeviceId, hasNotch } from 'react-native-device-info';
+
 import Content from './Content';
 import ContentLink from './ContentLink';
 import ContentPoll from './ContentPoll';
@@ -14,13 +16,12 @@ import Log from '../../utils/log/Log';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
-import { ANALYTICS_SHARE_POST_FEED_ID, ANALYTICS_SHARE_POST_FEED_SCREEN, SOURCE_FEED_TAB } from '../../utils/constants';
-import { Footer, Gap, PreviewComment } from '../../components';
-import {
+import { ANALYTICS_SHARE_POST_FEED_ID, ANALYTICS_SHARE_POST_FEED_SCREEN, SOURCE_FEED_TAB ,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
+import { Footer, Gap, PreviewComment } from '../../components';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getCommentLength, getCountCommentWithChild } from '../../utils/getstream';
@@ -49,7 +50,8 @@ const RenderListFeed = (props) => {
     onPressDownVote,
     showNavbar,
     searchHeight,
-    bottomArea
+    bottomArea,
+    isScroll 
   } = props;
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
@@ -62,8 +64,9 @@ const RenderListFeed = (props) => {
   const bottomHeight = useBottomTabBarHeight();
   const inset = useSafeAreaInsets()
   const frameHeight = useSafeAreaFrame().height
+  const iosMajorVersion = parseInt(Platform.Version, 10)
   const navigateToLinkContextPage = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -73,7 +76,7 @@ const RenderListFeed = (props) => {
   };
 
   const getHeightFooter = () => {
-    let h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 6) / 100);
+    const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 6) / 100);
     return h;
   };
   const getHeightReaction = () => {
@@ -83,7 +86,7 @@ const RenderListFeed = (props) => {
   };
 
   const getHeightHeader = () => {
-    let h = (FULL_HEIGHT * 10) / 100
+    const h = (FULL_HEIGHT * 10) / 100
     return h;
     // return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) *0.1
 
@@ -135,7 +138,7 @@ const RenderListFeed = (props) => {
     try {
       const processData = await onPressUpvote({
         activity_id: item.id,
-        status: status,
+        status,
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
@@ -153,7 +156,7 @@ const RenderListFeed = (props) => {
     try {
       const processData = await onPressDownVote({
         activity_id: item.id,
-        status: status,
+        status,
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
@@ -167,9 +170,9 @@ const RenderListFeed = (props) => {
     }
   };
   const initial = () => {
-    let reactionCount = item.reaction_counts;
+    const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
-      let comment = reactionCount.comment;
+      const {comment} = reactionCount;
       handleVote(reactionCount);
       if (comment !== undefined) {
         if (comment > 0) {
@@ -222,11 +225,33 @@ const RenderListFeed = (props) => {
     return (frameHeight) * 0.80 
   }, [showNavbar, frameHeight, searchHeight])
 
-  
+  const handleCardContainer = React.useCallback(() => {
+    if(Platform.OS === 'ios') {
+      if(showNavbar) {
+        if(isScroll) {
+          return searchHeight + bottomArea + 7
+        } 
+          if(!hasNotch()) {
+            return bottomArea + 50
+
+          }
+          return bottomArea + 14
+        
+      }  
+        return bottomArea + 7
+      
+    } 
+      if(showNavbar) {
+        return bottomArea + searchHeight
+      }  
+        return bottomArea
+      
+    
+  }, [showNavbar,  searchHeight, bottomArea])
   const isHaveComment = getCommentLength(item.latest_reactions.comment) > 0
   
   return (
-    <View style={[styles.cardContainer(showNavbar, searchHeight, bottomArea)]}>
+    <View style={[styles.cardContainer(handleCardContainer)]}>
       <View style={styles.cardMain(frameHeight, showNavbar, searchHeight, bottomArea)}>
         <Header props={item} height={headerHeight()} source={SOURCE_FEED_TAB} />
         <View style={{height: '100%'}} >
@@ -293,8 +318,6 @@ const RenderListFeed = (props) => {
               item.anonimity
                 ? false
                 : selfUserId === item.actor.id
-                  ? true
-                  : false
             }
           />
         </View>
@@ -323,14 +346,14 @@ const RenderListFeed = (props) => {
 };
 
 const styles = StyleSheet.create({
-  cardContainer: (showSearchBar, navbarHeight, areaHeight) => ({
+  cardContainer: (handleCardContainer) => ({
     height: Dimensions.get('screen').height - useBottomTabBarHeight() - tabBarHeight ,
     width: FULL_WIDTH,
     borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
     backgroundColor: 'white',
     // eslint-disable-next-line no-nested-ternary
-    paddingTop: Platform.OS === 'ios' && showSearchBar ? navbarHeight + areaHeight + 7 : showSearchBar ? areaHeight + navbarHeight : areaHeight ,
+    paddingTop: handleCardContainer() ,
 
   }),
   cardMain: (frameHeight, showSearchbar, navbarHeight, bottomArea) => {

@@ -92,8 +92,6 @@ const App = () => {
     // return unsubscribe;
   }, []);
 
-  console.log(bottom, 'lurah')
-
   const newLocal = (
     <>
       <HumanIDProvider />

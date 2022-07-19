@@ -55,6 +55,7 @@ const FeedScreen = (props) => {
   let {myProfile} = profileContext
   const bottomHeight = useBottomTabBarHeight();
   const { bottom } = useSafeAreaInsets();
+  const [isScroll, setIsScroll] = React.useState(false)
 
   const getDataFeeds = async (offset = 0, useLoading) => {
     setCountStack(null);
@@ -112,7 +113,6 @@ const FeedScreen = (props) => {
     }
 
   }, [interactionsComplete]);
-  console.log(bottom, 'musik')
   const checkCache = () => {
     getSpecificCache(FEEDS_CACHE, (result) => {
       if(result) {
@@ -124,7 +124,6 @@ const FeedScreen = (props) => {
       }
     })
   }
-
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', (e) => {
       // getDataFeeds();
@@ -289,6 +288,7 @@ const FeedScreen = (props) => {
 
   }
   let handleScrollEvent = React.useCallback((event) => {
+    setIsScroll(true)
     let y = event.nativeEvent.contentOffset.y;
     let dy = y - lastDragY;
     if (dy + 20 <= 0) {
@@ -373,6 +373,7 @@ const FeedScreen = (props) => {
             showNavbar={showNavbar}
             searchHeight={searchHeight}
             bottomArea={bottom}
+            isScroll={isScroll}
           />
         }}
       </TiktokScroll>
