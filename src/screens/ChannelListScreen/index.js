@@ -16,6 +16,7 @@ import {
   Theme
 } from 'stream-chat-react-native';
 import { MessageSystem } from 'stream-chat-react-native-core'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
@@ -160,7 +161,7 @@ const ChannelListScreen = ({ navigation }) => {
     );
   
   return (
-    <SafeAreaView style={{ height: '100%' }}>
+    <SafeAreaProvider style={{ height: '100%' }}>
       <StatusBar backgroundColor="transparent" />
       <ScrollView >
         <View style={{ height: 52 }}>
@@ -208,7 +209,7 @@ const ChannelListScreen = ({ navigation }) => {
             </View>
           )}
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

@@ -25,6 +25,7 @@ import {getUserId} from '../../utils/users';
 import {setIFollow, setNews} from '../../context/actions/news';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const NewsScreen = ({}) => {
   const navigation = useNavigation();
@@ -235,7 +236,7 @@ const NewsScreen = ({}) => {
   // }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider style={styles.container}>
       <Search animatedValue={offset} />
         <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
         <FlatList
@@ -276,7 +277,7 @@ const NewsScreen = ({}) => {
           domain={domain}
           domainId={idBlock}
           screen="news_screen" />
-    </View>
+    </SafeAreaProvider>
   );
 };
 

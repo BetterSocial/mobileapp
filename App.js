@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
 import {
   SafeAreaProvider,
+  useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
@@ -21,7 +22,7 @@ if(!__DEV__) {
 
 const App = () => {
   const { bottom } = useSafeAreaInsets();
-  const isIos = Platform.OS === 'ios'
+  const {height} = useSafeAreaFrame()
   const streami18n = new Streami18n({
     language: 'en',
   });
@@ -90,6 +91,7 @@ const App = () => {
     init();
     // return unsubscribe;
   }, []);
+
   const newLocal = (
     <>
       <HumanIDProvider />
@@ -97,7 +99,7 @@ const App = () => {
         <Store>
           <NavigationContainer linking={linking}>
             <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
-              <RootNavigator />
+              <RootNavigator areaHeight={height} />
             </OverlayProvider>
           </NavigationContainer>
         </Store>
@@ -110,8 +112,11 @@ const App = () => {
   );
 };
 
-export default () => (
+const RootApp = () => (
   <SafeAreaProvider>
     <App />
   </SafeAreaProvider>
-);
+)
+
+export default RootApp
+
