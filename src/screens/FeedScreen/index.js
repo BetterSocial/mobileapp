@@ -345,7 +345,7 @@ const FeedScreen = (props) => {
       <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
       {/* <Animated.View style={{paddingTop: paddingContainer}}/> */}
       <TiktokScroll
-        contentHeight={Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight}
+        contentHeight={(Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight) * 0.8}
         data={feeds}
         onEndReach={onEndReach}
         
@@ -353,10 +353,10 @@ const FeedScreen = (props) => {
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}
+        
         // onScrollBeginDrag={handleOnScrollBeginDrag}
         refreshing={loading}>
         {({ item, index }) => {
-          // let dummyItemHeight = Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight
           if(item.dummy) return null
           return <RenderListFeed
             item={item}

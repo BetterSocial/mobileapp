@@ -251,11 +251,12 @@ const RenderListFeed = (props) => {
   const isHaveComment = getCommentLength(item.latest_reactions.comment) > 0
   
   return (
-    <View style={[styles.cardContainer(handleCardContainer)]}>
-      <View style={styles.cardMain(frameHeight, showNavbar, searchHeight, bottomArea)}>
+    <>
+    {/* // <View style={[styles.cardContainer(handleCardContainer)]}>
+    //   <View style={styles.cardMain(frameHeight, showNavbar, searchHeight, bottomArea)}> */}
         <Header props={item} height={headerHeight()} source={SOURCE_FEED_TAB} />
-        <View style={{height: '100%'}} >
-          <View style={{height: isHaveComment ? cardHeight() : fullCardHeight()}} >
+        <View style={{height: '100%', backgroundColor: 'yellow'}} >
+          {/* <View style={{height: '80%', backgroundColor: 'blue'}} >
           {item.post_type === POST_TYPE_POLL && (
           <ContentPoll
             index={index}
@@ -295,9 +296,9 @@ const RenderListFeed = (props) => {
             topics={item?.topics}
           />
         )}
-          </View>
+          </View> */}
         
-        <View style={styles.footerWrapper(getHeightFooter(), searchHeight)}>
+        {/* <View style={styles.footerWrapper(getHeightFooter(), searchHeight)}>
           <Footer
             item={item}
             totalComment={getCommentLength(item.latest_reactions.comment)}
@@ -320,8 +321,8 @@ const RenderListFeed = (props) => {
                 : selfUserId === item.actor.id
             }
           />
-        </View>
-        {isHaveComment && (
+        </View> */}
+        {/* {isHaveComment && (
           <View style={styles.contentReaction(getHeightReaction(), searchHeight)}>
             <React.Fragment>
               <PreviewComment
@@ -335,36 +336,38 @@ const RenderListFeed = (props) => {
               <Gap height={8} />
             </React.Fragment>
           </View>
-        )}
+        )} */}
 
         </View>
-        
+        </>
 
-      </View>
-    </View>
+    //   </View>
+    // </View>
   );
 };
 
 const styles = StyleSheet.create({
-  cardContainer: (handleCardContainer) => ({
-    height: Dimensions.get('screen').height - useBottomTabBarHeight() - tabBarHeight ,
+  cardContainer: () => ({
+    height: (Dimensions.get('screen').height - useBottomTabBarHeight() - tabBarHeight) * 0.8 ,
     width: FULL_WIDTH,
     borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
     backgroundColor: 'white',
+    maxHeight: 548
     // eslint-disable-next-line no-nested-ternary
-    paddingTop: handleCardContainer() ,
+    // paddingTop: handleCardContainer() ,
 
   }),
   cardMain: (frameHeight, showSearchbar, navbarHeight, bottomArea) => {
     return {
-      height: frameHeight - tabBarHeight - useBottomTabBarHeight() - navbarHeight - bottomArea ,
+      height: (frameHeight - tabBarHeight - useBottomTabBarHeight() - navbarHeight - bottomArea) * 0.8 ,
       width: '100%',
+      maxHeight: 548 * 0.8
     }
   },
-  footerWrapper: (h) => ({ height: h }),
+  footerWrapper: (h) => ({ height: '5%', marginVertical: 5 }),
   contentReaction: (heightReaction) => ({
-    height: heightReaction,
+    height: '15%',
   }),
 });
 
