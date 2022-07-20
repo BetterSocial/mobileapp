@@ -84,7 +84,7 @@ export const RootNavigator = (props) => {
     };
   }, []);
 
-  
+
   React.useEffect(() => {
     console.log('initialStartup')
     console.log(initialStartup)
@@ -97,7 +97,9 @@ export const RootNavigator = (props) => {
         SplashScreen.hide();
       }, 700);
     } else {
-      SplashScreen.hide();
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 700);
     }
   }, [initialStartup]);
 
@@ -117,7 +119,7 @@ export const RootNavigator = (props) => {
         }}>
         {
           initialStartup.id !== null && initialStartup.id !== '' ? (
-          // token !== null && token !== '' ? (
+            // token !== null && token !== '' ? (
             <RootStack.Screen
               name="AuthenticatedStack"
               component={AuthenticatedNavigator}

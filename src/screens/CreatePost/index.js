@@ -5,6 +5,7 @@ import {
   Alert,
   BackHandler,
   Platform,
+  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -43,13 +44,13 @@ import StringConstant from '../../utils/string/StringConstant';
 import Timer from '../../assets/icons/Ic_timer';
 import TopicItem from '../../components/TopicItem';
 import UserProfile from './elements/UserProfile';
-import World from '../../assets/icons/Ic_world';
+import handleHastag from '../../utils/hastag';
 import { Button, ButtonAddMedia } from '../../components/Button';
 import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
-import { ShowingAudience, createPost } from '../../service/post';
+import { PROFILE_CACHE } from '../../utils/cache/constant';
+import { ShowingAudience, createPollPost, createPost } from '../../service/post';
 import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
 import { colors } from '../../utils/colors';
-import { createPollPost } from '../../service/post';
 import { fonts } from '../../utils/fonts';
 import {
   getDurationId,
@@ -60,6 +61,7 @@ import {
   setPrivacyId,
 } from '../../utils/setting';
 import { getMyProfile } from '../../service/profile';
+import { getSpecificCache } from '../../utils/cache';
 import { getTopics } from '../../service/topics';
 import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
 import { getUserId } from '../../utils/users';
@@ -67,16 +69,13 @@ import {
   requestCameraPermission,
   requestExternalStoragePermission,
 } from '../../utils/permission';
-import handleHastag from '../../utils/hastag';
-import { getSpecificCache } from '../../utils/cache';
-import { PROFILE_CACHE } from '../../utils/cache/constant';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
 const CreatePost = () => {
-  let defaultPollItem = [{ text: '' }, { text: '' }];
+  const defaultPollItem = [{ text: '' }, { text: '' }];
   const navigation = useNavigation();
   const sheetMediaRef = React.useRef();
   const sheetTopicRef = React.useRef();
@@ -207,15 +206,15 @@ const CreatePost = () => {
   }, []);
 
   const init = async () => {
-    let privacyId = await getPrivacyId();
+    const privacyId = await getPrivacyId();
     if (privacyId) {
       setPrivacySelect(privacyId);
     }
-    let durationId = await getDurationId();
+    const durationId = await getDurationId();
     if (durationId) {
       setExpiredSelect(durationId);
     }
-    let locationId = await getLocationId();
+    const locationId = await getLocationId();
     if (locationId) {
       setGeoSelect(locationId);
     }
@@ -227,7 +226,7 @@ const CreatePost = () => {
       newLink = `https://${link}`;
     }
 
-    let data = await getLinkPreview(newLink);
+    const data = await getLinkPreview(newLink);
     if (data) {
       setLinkPreviewMeta({
         domain: data.siteName,
@@ -240,7 +239,7 @@ const CreatePost = () => {
     } else {
       setLinkPreviewMeta(null);
     }
-    setIsLinkPreviewShown(data ? true : false);
+    setIsLinkPreviewShown(!!data);
   }
 
   React.useEffect(() => {
@@ -251,7 +250,7 @@ const CreatePost = () => {
     }
   }, [message]);
 
-  let location = [
+  const location = [
     {
       location_id: 'everywhere',
       neighborhood: 'Everywhere',
@@ -260,7 +259,7 @@ const CreatePost = () => {
 
   const fetchMyProfile = async () => {
     setLoading(true);
-    let userId = await getUserId();
+    const userId = await getUserId();
     if (userId) {
       const result = await getMyProfile(userId);
       if (result.code === 200) {
@@ -283,12 +282,11 @@ const CreatePost = () => {
 
   React.useEffect(() => {
     getSpecificCache(PROFILE_CACHE, async (res) => {
-      if(!res) {
+      if (!res) {
         fetchMyProfile()
       } else {
         setDataProfile(res);
         handleLocation(res)
-        console.log('location', res)
       }
     })
   }, [])
@@ -325,13 +323,13 @@ const CreatePost = () => {
   };
 
   const uploadMediaFromLibrary = async () => {
-    let { success, message } = await requestExternalStoragePermission();
+    const { success, message } = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (res) => {
         if (res.didCancel) {
           console.log('User cancelled image picker');
         } else if (res.uri) {
-          let newArr = {
+          const newArr = {
             id: mediaStorage.length,
             data: res.uri,
           };
@@ -348,13 +346,13 @@ const CreatePost = () => {
   };
 
   const takePhoto = async () => {
-    let { success, message } = await requestCameraPermission();
+    const { success, message } = await requestCameraPermission();
     if (success) {
       launchCamera({ mediaType: 'photo', includeBase64: true }, (res) => {
         if (res.didCancel) {
           console.log('User cancelled image picker');
         } else if (res.uri) {
-          let newArr = {
+          const newArr = {
             id: mediaStorage.length,
             data: res.uri,
           };
@@ -369,9 +367,9 @@ const CreatePost = () => {
   };
 
   const onRemoveItem = (v) => {
-    let deleteItem = mediaStorage.filter((item) => item.id !== v);
-    let index = mediaStorage.findIndex((item) => item.id === v)
-    let newImageData = [...dataImage].splice(index)
+    const deleteItem = mediaStorage.filter((item) => item.id !== v);
+    const index = mediaStorage.findIndex((item) => item.id === v)
+    const newImageData = [...dataImage].splice(index)
     console.log(newImageData.length)
 
     setDataImage(newImageData)
@@ -383,7 +381,7 @@ const CreatePost = () => {
   };
 
   const removeTopic = (v) => {
-    let newArr = listTopic.filter((e) => e !== v);
+    const newArr = listTopic.filter((e) => e !== v);
     setListTopic(newArr);
   };
   const onSetExpiredSelect = (v) => {
@@ -406,7 +404,7 @@ const CreatePost = () => {
   };
 
   const getReducedPoll = () => {
-    let reducedPoll = polls.reduce((acc, current) => {
+    const reducedPoll = polls.reduce((acc, current) => {
       if (current.text !== '') {
         acc.push(current);
       }
@@ -442,9 +440,9 @@ const CreatePost = () => {
       }
 
       setLoading(true);
-      let data = {
+      const data = {
         topics: listTopic,
-        message: message,
+        message,
         verb: 'tweet',
         feedGroup: 'main_feed',
         // privacy: listPrivacy[privacySelect].label,
@@ -469,7 +467,7 @@ const CreatePost = () => {
         anon: typeUser,
         predicted_audience: audienceEstimations,
       });
-      let res = await createPost(data);
+      const res = await createPost(data);
       if (res.code === 200) {
         showMessage({
           message: StringConstant.createPostDone,
@@ -515,15 +513,16 @@ const CreatePost = () => {
           onAddMedia={() => sheetMediaRef.current.open()}
         />
       );
-    } else {
-      return (
-        <ButtonAddMedia
-          label="+ Add media or poll"
-          onPress={() => sheetMediaRef.current.open()}
-          labelStyle={styles.labelButtonAddMedia}
-        />
-      );
     }
+
+    return (
+      <ButtonAddMedia
+        label="+ Add media or poll"
+        onPress={() => sheetMediaRef.current.open()}
+        labelStyle={styles.labelButtonAddMedia}
+      />
+    );
+
   };
 
   const createPoll = () => {
@@ -532,7 +531,7 @@ const CreatePost = () => {
   };
 
   const removeAllPoll = () => {
-    let isPollNotEmpty = polls.reduce(
+    const isPollNotEmpty = polls.reduce(
       (accumulator, current) => accumulator || current.text !== '',
       false,
     );
@@ -547,10 +546,11 @@ const CreatePost = () => {
           },
         },
       ]);
-    } else {
-      setIsPollShown(false);
-      setPolls(defaultPollItem);
     }
+
+    setIsPollShown(false);
+    setPolls(defaultPollItem);
+    return null
   };
 
   const addNewPollItem = () => {
@@ -573,14 +573,12 @@ const CreatePost = () => {
     setPolls([...polls]);
   };
 
-  const isPollButtonDisabled = () => {
-    return getReducedPoll().length < 2;
-  };
+  const isPollButtonDisabled = () => getReducedPoll().length < 2;
 
   const sendPollPost = async () => {
     setLoading(true);
 
-    let data = {
+    const data = {
       message,
       topics: ['poll'],
       verb: 'poll',
@@ -601,7 +599,7 @@ const CreatePost = () => {
     setPrivacyId(JSON.stringify(privacySelect));
 
     try {
-      let response = await createPollPost(data);
+      const response = await createPollPost(data);
       if (response.status) {
         showMessage({
           message: StringConstant.createPostDone,
@@ -649,11 +647,11 @@ const CreatePost = () => {
           style={styles.listTopic}
           horizontal
           showsHorizontalScrollIndicator={false}>
-          {listTopic.map((value, index) => {
-            return (
-              <TopicItem key={index} label={value} removeTopic={removeTopic} />
-            );
-          })}
+          {listTopic.map((value, index) => (
+            <Pressable key={index} onPress={openTopic}>
+              <TopicItem label={value} removeTopic={removeTopic} onTopicPress={() => openTopic()} />
+            </Pressable>
+          ))}
         </ScrollView>
       );
     }
@@ -692,51 +690,61 @@ const CreatePost = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={positionKeyboard}
-        >
+      >
         <Header title="Create a post" onPress={() => onBack()} />
-        <View style={{paddingHorizontal: 15}} >
-        <UserProfile
-          typeUser={typeUser}
-          setTypeUser={setTypeUser}
-          username={
-            dataProfile.username ? dataProfile.username : 'Loading . . .'
-          }
-          photo={
-            dataProfile.profile_pic_path
-              ? { uri: dataProfile.profile_pic_path }
-              : ProfileDefault
-          }
-          onPress={() => {
-            setMessage('');
-            navigation.navigate('ProfileScreen', {
-              isNotFromHomeTab: true
-            });
-          }}
-        />
-        <Gap style={styles.height(8)} />
-        <TextInput
-          onSelectionChange={(e) => {
-            setPositionEndCursor(e.nativeEvent.selection.end);
-          }}
-          onChange={(v) => {
-          }}
-          onChangeText={(v) => {
-            if (v.includes('#')) {
-              let position = v.lastIndexOf('#', positionEndCursor);
-              let spaceStatus = v.includes(' ', position);
-              let detectEnter = v.includes('\n', position);
-              let textSeacrh = v.substring(position + 1);
-              setHastagPosition(position);
-              /**
-               * cari posisi kursor dimana
-               * cek apakah posisi sebelum kursor # atau bukan
-               * ambil semua value setelah posisi #
-               */
-              if (!spaceStatus) {
-                if (!detectEnter) {
-                  setPositionTopicSearch(position);
-                  searchTopic(textSeacrh);
-                  setPositionKeyboard('always')
+        <View style={{ paddingHorizontal: 15 }} >
+          <UserProfile
+            typeUser={typeUser}
+            setTypeUser={setTypeUser}
+            username={
+              dataProfile.username ? dataProfile.username : 'Loading . . .'
+            }
+            photo={
+              dataProfile.profile_pic_path
+                ? { uri: dataProfile.profile_pic_path }
+                : ProfileDefault
+            }
+            onPress={() => {
+              setMessage('');
+              navigation.navigate('ProfileScreen', {
+                isNotFromHomeTab: true
+              });
+            }}
+          />
+          <Gap style={styles.height(8)} />
+          <TextInput
+            onSelectionChange={(e) => {
+              setPositionEndCursor(e.nativeEvent.selection.end);
+            }}
+            onChange={(v) => {
+            }}
+            onChangeText={(v) => {
+              if (v.includes('#')) {
+                const position = v.lastIndexOf('#', positionEndCursor);
+                const spaceStatus = v.includes(' ', position);
+                const detectEnter = v.includes('\n', position);
+                const textSeacrh = v.substring(position + 1);
+                setHastagPosition(position);
+                /**
+                 * cari posisi kursor dimana
+                 * cek apakah posisi sebelum kursor # atau bukan
+                 * ambil semua value setelah posisi #
+                 */
+                if (!spaceStatus) {
+                  if (!detectEnter) {
+                    setPositionTopicSearch(position);
+                    searchTopic(textSeacrh);
+                    setPositionKeyboard('always')
+                  }
+                  else {
+                    setTopicSearch([]);
+                    setPositionKeyboard('never')
+
+                    // if (listTopic.indexOf(textSeacrh) === -1) {
+                    //   let newArr = [...listTopic, textSeacrh];
+                    //   setListTopic(newArr);
+                    // }
+                  }
                 }
                 else {
                   setTopicSearch([]);
@@ -749,84 +757,69 @@ const CreatePost = () => {
                 }
               }
               else {
-                setTopicSearch([]);
                 setPositionKeyboard('never')
-
-                // if (listTopic.indexOf(textSeacrh) === -1) {
-                //   let newArr = [...listTopic, textSeacrh];
-                //   setListTopic(newArr);
-                // }
+                setTopicSearch([]);
               }
+              // setPositionKeyboard('never')
+              handleHastag(v, setFormatHastag);
+              setMessage(v);
+            }}
+            // value={message}
+            multiline={true}
+            style={styles.input}
+            textAlignVertical="top"
+            placeholder={
+              'What’s on your mind?\nRemember to be respectful .\nDownvotes  & Blocks harm all your posts’ visibility.'
             }
-            else {
-              setPositionKeyboard('never')
-              setTopicSearch([]);
-            }
-            // setPositionKeyboard('never')
-            handleHastag(v, setFormatHastag);
-            setMessage(v);
-          }}
-          // value={message}
-          multiline={true}
-          style={styles.input}
-          textAlignVertical="top"
-          placeholder={
-            'What’s on your mind?\nRemember to be respectful .\nDownvotes  & Blocks harm all your posts’ visibility.'
+            autoCapitalize={'none'}
+
+          >
+            <Text>{formattedContent}</Text>
+          </TextInput>
+
+          {
+            topicSearch.length > 0 && (
+              <Card style={{ marginTop: -16 }}>
+                {topicSearch.map((item, index) => <TouchableNativeFeedback key={`topicSearch-${index}`} onPress={() => {
+                  const topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
+                  const topicItemWithSpace = topicItem.concat(' ');
+                  const oldMessage = message;
+                  const start = hastagPosition + 1;
+                  const end = positionTopicSearch + 1;
+                  const s = oldMessage.substring(0, end);
+                  const newMessage = s.insert(start, topicItemWithSpace);
+                  if (listTopic.indexOf(topicItem) === -1) {
+                    const newArr = [...listTopic, topicItem];
+                    setListTopic(newArr);
+                  }
+                  setPositionKeyboard('never')
+                  handleHastag(newMessage, setFormatHastag)
+                  setMessage(newMessage);
+                  setTopicSearch([]);
+                }}>
+                  <View style={{ marginBottom: 5 }} >
+                    <Text style={{
+                      color: '#000000',
+                      fontFamily: fonts.inter[500],
+                      fontWeight: '500',
+                      fontSize: 12,
+                      lineHeight: 18
+                    }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
+                    {index !== topicSearch.length - 1 && (
+                      <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
+                    )}
+                  </View>
+                </TouchableNativeFeedback>
+                )}
+              </Card>
+            )
           }
-          autoCapitalize={'none'}
-          
-        >
-          <Text>{formattedContent}</Text>
-        </TextInput>
-
-        {
-          topicSearch.length > 0 && (
-            <Card style={{ marginTop: -16 }}>
-              {topicSearch.map((item, index) => {
-                return (
-                  <TouchableNativeFeedback onPress={() => {
-                    let topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
-                    let topicItemWithSpace = topicItem.concat(' ');
-                    let oldMessage = message;
-                    let start = hastagPosition + 1;
-                    let end = positionTopicSearch + 1;
-                    let s = oldMessage.substring(0, end);
-                    let newMessage = s.insert(start, topicItemWithSpace);
-                    if (listTopic.indexOf(topicItem) === -1) {
-                      let newArr = [...listTopic, topicItem];
-                      setListTopic(newArr);
-                    }
-                    setPositionKeyboard('never')
-                    handleHastag(newMessage, setFormatHastag)
-                    setMessage(newMessage);
-                    setTopicSearch([]);
-                  }}>
-                    <View style={{ marginBottom: 5 }} >
-                      <Text style={{
-                        color: '#000000',
-                        fontFamily: fonts.inter[500],
-                        fontWeight: '500',
-                        fontSize: 12,
-                        lineHeight: 18
-                      }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
-                      {index !== topicSearch.length - 1 && (
-                        <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
-                      )}
-                    </View>
-                  </TouchableNativeFeedback>
-                )
-              })}
-            </Card>
-          )
-        }
 
 
-        {isLinkPreviewShown && (
-          <ContentLink
-            og={
-              linkPreviewMeta
-                ? linkPreviewMeta
-                : {
+          {isLinkPreviewShown && (
+            <ContentLink
+              og={
+                linkPreviewMeta || {
                   domain: '',
                   domainImage: '',
                   title: '',
@@ -834,125 +827,125 @@ const CreatePost = () => {
                   image: '',
                   url: '',
                 }
-            }
-          />
-        )}
+              }
+            />
+          )}
 
-        {isPollShown && (
-          <CreatePollContainer
-            polls={polls}
-            onaddpoll={() => addNewPollItem()}
-            onsinglepollchanged={(item, index) =>
-              onSinglePollChanged(item, index)
-            }
-            onremovesinglepoll={(index) => removeSinglePollByIndex(index)}
-            onremoveallpoll={() => removeAllPoll()}
-            ismultiplechoice={isPollMultipleChoice}
-            selectedtime={selectedTime}
-            ontimechanged={(timeObject) => setSelectedTime(timeObject)}
-            onmultiplechoicechanged={(ismultiplechoice) =>
-              setIsPollMultipleChoice(ismultiplechoice)
-            }
-            expiredobject={postExpired[expiredSelect].expiredobject}
+          {isPollShown && (
+            <CreatePollContainer
+              polls={polls}
+              onaddpoll={() => addNewPollItem()}
+              onsinglepollchanged={(item, index) =>
+                onSinglePollChanged(item, index)
+              }
+              onremovesinglepoll={(index) => removeSinglePollByIndex(index)}
+              onremoveallpoll={() => removeAllPoll()}
+              ismultiplechoice={isPollMultipleChoice}
+              selectedtime={selectedTime}
+              ontimechanged={(timeObject) => setSelectedTime(timeObject)}
+              onmultiplechoicechanged={(ismultiplechoice) =>
+                setIsPollMultipleChoice(ismultiplechoice)
+              }
+              expiredobject={postExpired[expiredSelect].expiredobject}
+            />
+          )}
+          <Gap style={styles.height(26)} />
+          {randerComponentMedia()}
+          <Gap style={styles.height(29)} />
+          <Text style={styles.label}>Advanced Settings</Text>
+          <Gap style={styles.height(12)} />
+          <ListItem
+            icon={<MemoIc_hastag width={16.67} height={16.67} />}
+            topic={listTopic.length > 0}
+            listTopic={renderListTopic()}
+            label="Add Topics"
+            labelStyle={styles.hastagText}
+            onPress={openTopic}
           />
-        )}
-        <Gap style={styles.height(26)} />
-        {randerComponentMedia()}
-        <Gap style={styles.height(29)} />
-        <Text style={styles.label}>Advanced Settings</Text>
-        <Gap style={styles.height(12)} />
-        <ListItem
-          icon={<MemoIc_hastag width={16.67} height={16.67} />}
-          topic={listTopic.length > 0}
-          listTopic={renderListTopic()}
-          label="Add Topics"
-          labelStyle={styles.hastagText}
-          onPress={openTopic}
-        />
-        <Gap style={styles.height(16)} />
-        <ListItem
-          icon={<Timer width={16.67} height={16.67} />}
-          label={postExpired.length === 0
-            ? 'Loading...'
-            : listPostExpired[expiredSelect].label}
-          labelStyle={styles.listText}
-          onPress={() => sheetExpiredRef.current.open()}
-        />
-        <Gap style={styles.height(16)} />
-        <ListItem
-          icon={<Location width={16.67} height={16.67} />}
-          label={
-            geoList.length === 0
+          <Gap style={styles.height(16)} />
+          <ListItem
+            icon={<Timer width={16.67} height={16.67} />}
+            label={postExpired.length === 0
               ? 'Loading...'
-              : geoList[geoSelect].neighborhood
-          }
-          labelStyle={styles.listText}
-          onPress={() => sheetGeoRef.current.open()}
-        />
-        <Gap style={styles.height(16)} />
-        <ListItem
-          icon={<World width={16.67} height={16.67} />}
-          label={listPrivacy.length === 0
-            ? 'Loading...'
-            : listPrivacy[privacySelect].label}
-          labelStyle={styles.listText}
-          onPress={() => sheetPrivacyRef.current.open()}
-        />
-        {/* <Gap style={styles.height(16)} />
+              : listPostExpired[expiredSelect].label}
+            labelStyle={styles.listText}
+            onPress={() => sheetExpiredRef.current.open()}
+          />
+          <Gap style={styles.height(16)} />
+          <ListItem
+            icon={<Location width={16.67} height={16.67} />}
+            label={
+              geoList.length === 0
+                ? 'Loading...'
+                : geoList[geoSelect].neighborhood
+            }
+            labelStyle={styles.listText}
+            onPress={() => sheetGeoRef.current.open()}
+          />
+          <Gap style={styles.height(16)} />
+          <ListItem
+            icon={<MemoIc_world width={16.67} height={16.67} />}
+            label={listPrivacy.length === 0
+              ? 'Loading...'
+              : listPrivacy[privacySelect].label}
+            labelStyle={styles.listText}
+            onPress={() => sheetPrivacyRef.current.open()}
+          />
+          {/* <Gap style={styles.height(16)} />
         <Text style={styles.desc}>
           Your post targets{' '}
           <Text style={styles.userTarget}>~ {audienceEstimations}</Text> users.
         </Text> */}
-        <Gap style={styles.height(25)} />
-        {isPollShown ? (
-          <Button
-            disabled={isPollButtonDisabled()}
-            onPress={() => sendPollPost()}>
-            Post
-          </Button>
-        ) : (
-          <Button onPress={() => postTopic()}>Post</Button>
-        )}
-        <Gap style={styles.height(18)} />
-        <SheetMedia
-          refMedia={sheetMediaRef}
-          medias={mediaStorage}
-          uploadFromMedia={() => uploadMediaFromLibrary()}
-          takePhoto={() => takePhoto()}
-          createPoll={() => createPoll()}
-        />
-        <SheetAddTopic
-          refTopic={sheetTopicRef}
-          onAdd={(v) => onSaveTopic(v)}
-          topics={listTopic}
-          onClose={() => sheetTopicRef.current.close()}
-          saveOnClose={(v) => setListTopic(v)}
-        />
-        <SheetExpiredPost
-          refExpired={sheetExpiredRef}
-          data={postExpired}
-          select={expiredSelect}
-          onSelect={onSetExpiredSelect}
-        />
-        <SheetGeographic
-          geoRef={sheetGeoRef}
-          data={geoList}
-          select={geoSelect}
-          onSelect={onSetGeoSelect}
-        />
-        <SheetPrivacy
-          privacyRef={sheetPrivacyRef}
-          data={listPrivacy}
-          select={privacySelect}
-          onSelect={onSetPrivacySelect}
-        />
-        <SheetCloseBtn
-          backRef={sheetBackRef}
-          goBack={() => navigation.goBack()}
-          continueToEdit={() => sheetBackRef.current.close()}
-        />
+          <Gap style={styles.height(25)} />
+          {isPollShown ? (
+            <Button
+              disabled={isPollButtonDisabled()}
+              onPress={() => sendPollPost()}>
+              Post
+            </Button>
+          ) : (
+            <Button onPress={() => postTopic()}>Post</Button>
+          )}
+          <Gap style={styles.height(18)} />
+          <SheetMedia
+            refMedia={sheetMediaRef}
+            medias={mediaStorage}
+            uploadFromMedia={() => uploadMediaFromLibrary()}
+            takePhoto={() => takePhoto()}
+            createPoll={() => createPoll()}
+          />
+          <SheetAddTopic
+            refTopic={sheetTopicRef}
+            onAdd={(v) => onSaveTopic(v)}
+            topics={listTopic}
+            onClose={() => sheetTopicRef.current.close()}
+            saveOnClose={(v) => setListTopic(v)}
+          />
+          <SheetExpiredPost
+            refExpired={sheetExpiredRef}
+            data={postExpired}
+            select={expiredSelect}
+            onSelect={onSetExpiredSelect}
+          />
+          <SheetGeographic
+            geoRef={sheetGeoRef}
+            data={geoList}
+            select={geoSelect}
+            onSelect={onSetGeoSelect}
+          />
+          <SheetPrivacy
+            privacyRef={sheetPrivacyRef}
+            data={listPrivacy}
+            select={privacySelect}
+            onSelect={onSetPrivacySelect}
+          />
+          <SheetCloseBtn
+            backRef={sheetBackRef}
+            goBack={() => navigation.goBack()}
+            continueToEdit={() => sheetBackRef.current.close()}
+          />
         </View>
-        
+
       </ScrollView>
       <Loading visible={loading} />
     </SafeAreaView>
