@@ -1,12 +1,12 @@
 import * as React from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import configEnv from 'react-native-config';
 import { Button, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { useSetRecoilState } from 'recoil';
 
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
-import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
 import { InitialStartupAtom } from '../../service/initialStartup';
 import { removeLocalStorege, setAccessToken, setRefreshToken, setUserId } from '../../utils/token';
 import { setDataHumenId } from '../../context/actions/users';
@@ -15,7 +15,11 @@ import { verifyUser } from '../../service/users';
 
 const heightBs = Dimensions.get('window').height * 0.6
 
-const DevDummyLogin = ({resetClickTime = () => {}}) => {
+const DevDummyLogin = ({ resetClickTime = () => { } }) => {
+    const { ENABLE_DEV_ONLY_FEATURE } = configEnv
+
+    console.log('ENABLE_DEV_ONLY_FEATURE')
+    console.log(ENABLE_DEV_ONLY_FEATURE)
     const [loading, setLoading] = React.useState(false);
     const [isShown, setIsShown] = React.useState(true)
     const dummyLoginRbSheetRef = React.useRef(null)
@@ -29,7 +33,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
     const setStartupValue = useSetRecoilState(InitialStartupAtom)
 
     const dummyLogin = (appUserId) => {
-        if (ENABLE_DEV_ONLY_FEATURE) {
+        if (ENABLE_DEV_ONLY_FEATURE === "true") {
             dummyLoginRbSheetRef.current.close();
         }
         setLoading(true);
@@ -60,7 +64,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
             });
     };
 
-    if (ENABLE_DEV_ONLY_FEATURE && isShown) return <View style={S.devTrialView}>
+    if (ENABLE_DEV_ONLY_FEATURE === "true" && isShown) return <View style={S.devTrialView}>
         <Button
             title="Dev Dummy Onboarding"
             onPress={() => {
