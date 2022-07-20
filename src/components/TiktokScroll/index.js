@@ -14,18 +14,16 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   cardContainer: (bottomTabbar) => ({
-    height: (Dimensions.get('screen').height - bottomTabbar - StatusBar.currentHeight) * 0.8 ,
+    height: 548,
     width: FULL_WIDTH,
     borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
     backgroundColor: 'white',
     maxHeight: 548
-    // eslint-disable-next-line no-nested-ternary
-    // paddingTop: handleCardContainer() ,
 
   }),
   cardMain: (frameHeight, bottomTabbar, showSearchbar, searchHeight = 0, bottomArea) => ({
-    height: (frameHeight - StatusBar.currentHeight - bottomTabbar - searchHeight - bottomArea) * 0.8 ,
+      height: 548 ,
       width: '100%',
       maxHeight: 548 * 0.8
   }),
@@ -37,13 +35,10 @@ const TiktokScroll = (props) => {
   const bottomTabbar = useBottomTabBarHeight()
   const frameHeight = useSafeAreaFrame().height
   const { bottom } = useSafeAreaInsets();
-  console.log(bottomTabbar, 'nukan')
-  // const onViewAbleChange = ({ viewableItems, changed }) => {
-  //   console.log(viewableItems, 'lakan')
-  // }
+
   return (
     <FlatList
-      contentContainerStyle={styles.flatlistContainer}
+      contentContainerStyle={[styles.flatlistContainer, {paddingTop: showSearchBar ? searchHeight : 0}]}
       data={data}
       decelerationRate="fast"
       disableIntervalMomentum={true}
@@ -55,14 +50,14 @@ const TiktokScroll = (props) => {
       getItemLayout={(data, index) => ({
         length: contentHeight, offset: contentHeight * index, index
       })}
+    
       // onViewableItemsChanged={onViewAbleChange}
-      // onViewableItemsChanged={__onViewambleItemsChanged}
       onMomentumScrollEnd={onMomentumScrollEnd}
       initialNumToRender={2}
       ref={flatListRef}
       refreshing={refreshing}
       renderItem={({item ,index}) => (
-        <View style={[styles.cardContainer(bottomTabbar)]}>
+        <View style={[styles.cardContainer(bottomTabbar, index)]}>
         <View style={styles.cardMain(frameHeight, bottomTabbar, showSearchBar, searchHeight, bottom)}>
           {children({item, index})}
         </View>
@@ -74,7 +69,6 @@ const TiktokScroll = (props) => {
       snapToInterval={contentHeight}
       maxToRenderPerBatch={2}
       updateCellsBatchingPeriod={10}
-      removeClippedSubviews
       windowSize={10}
       {...otherProps}
     />
@@ -90,7 +84,8 @@ TiktokScroll.propTypes = {
   onScrollBeginDrag: PropTypes.func,
   onEndReach: PropTypes.func,
   onScroll: PropTypes.func,
-  searchHeight: PropTypes.number
+  searchHeight: PropTypes.number,
+  showSearchBar: PropTypes.bool
 };
 
 TiktokScroll.defaultProps = {
