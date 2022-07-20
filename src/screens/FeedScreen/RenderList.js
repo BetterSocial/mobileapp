@@ -14,10 +14,13 @@ import Header from './Header';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
-import { ANALYTICS_SHARE_POST_FEED_ID, ANALYTICS_SHARE_POST_FEED_SCREEN, SOURCE_FEED_TAB ,
+import {
+  ANALYTICS_SHARE_POST_FEED_ID,
+  ANALYTICS_SHARE_POST_FEED_SCREEN,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
+  SOURCE_FEED_TAB,
 } from '../../utils/constants';
 import { Footer, Gap, PreviewComment } from '../../components';
 import { colors } from '../../utils/colors';
@@ -71,11 +74,11 @@ const RenderListFeed = (props) => {
     const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 6) / 100);
     return h;
   };
-  const getHeightReaction = () => {
+  const getHeightReaction = () =>
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
-    return dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
-  };
+    dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
+    ;
 
   // const getHeightHeader = () => {
   //   const h = (FULL_HEIGHT * 10) / 100
@@ -161,7 +164,7 @@ const RenderListFeed = (props) => {
   const initial = () => {
     const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
-      const {comment} = reactionCount;
+      const { comment } = reactionCount;
       handleVote(reactionCount);
       if (comment !== undefined) {
         if (comment > 0) {
@@ -194,13 +197,13 @@ const RenderListFeed = (props) => {
   }, [item]);
 
   const headerHeight = React.useCallback(() => {
-      return (frameHeight) * 0.10
+    return (frameHeight) * 0.10
 
-    
+
   }, [showNavbar, frameHeight])
 
   const isHaveComment = getCommentLength(item.latest_reactions.comment) > 0
-  
+
   return (
     <>
         <Header props={item} height={headerHeight()} source={SOURCE_FEED_TAB} />
@@ -247,45 +250,46 @@ const RenderListFeed = (props) => {
         )}
           </View>
         
-        <View style={styles.footerWrapper(getHeightFooter(), searchHeight)}>
-          <Footer
-            item={item}
-            totalComment={getCommentLength(item.latest_reactions.comment)}
-            totalVote={totalVote}
-            onPressShare={() => ShareUtils.shareFeeds(item,
-              ANALYTICS_SHARE_POST_FEED_SCREEN,
-              ANALYTICS_SHARE_POST_FEED_ID
-            )}
-            onPressComment={() => onPressComment(item)}
-            onPressBlock={() => onPressBlock(item)}
-            onPressDownVote={onPressDownVoteHandle}
-            onPressUpvote={onPressUpvoteHandle}
-            statusVote={voteStatus}
-            // loadingVote={loadingVote}
-            showScoreButton={true}
-            onPressScore={() => showScoreAlertDialog(item)}
-            isSelf={
-              item.anonimity
-                ? false
-                : selfUserId === item.actor.id
-            }
-          />
-        </View>
-        {isHaveComment && (
-          <View style={styles.contentReaction(getHeightReaction(), searchHeight)}>
-            <React.Fragment>
-              <PreviewComment
-                user={item.latest_reactions.comment[0].user}
-                comment={item.latest_reactions.comment[0].data.text}
-                image={item.latest_reactions.comment[0].user.data.profile_pic_url}
-                time={item.latest_reactions.comment[0].created_at}
-                totalComment={getCommentLength(item.latest_reactions.comment) - 1}
-                onPress={onPressComment}
-              />
-              <Gap height={8} />
-            </React.Fragment>
+
+          <View style={styles.footerWrapper(getHeightFooter(), searchHeight)}>
+            <Footer
+              item={item}
+              totalComment={getCommentLength(item.latest_reactions.comment)}
+              totalVote={totalVote}
+              onPressShare={() => ShareUtils.shareFeeds(item,
+                ANALYTICS_SHARE_POST_FEED_SCREEN,
+                ANALYTICS_SHARE_POST_FEED_ID
+              )}
+              onPressComment={() => onPressComment(item)}
+              onPressBlock={() => onPressBlock(item)}
+              onPressDownVote={onPressDownVoteHandle}
+              onPressUpvote={onPressUpvoteHandle}
+              statusVote={voteStatus}
+              // loadingVote={loadingVote}
+              showScoreButton={true}
+              onPressScore={() => showScoreAlertDialog(item)}
+              isSelf={
+                item.anonimity
+                  ? false
+                  : selfUserId === item.actor.id
+              }
+            />
           </View>
-        )}
+          {isHaveComment && (
+            <View style={styles.contentReaction(getHeightReaction(), searchHeight)}>
+              <React.Fragment>
+                <PreviewComment
+                  user={item?.latest_reactions?.comment[0]?.user}
+                  comment={item?.latest_reactions?.comment[0]?.data?.text}
+                  image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url}
+                  time={item?.latest_reactions?.comment[0]?.created_at}
+                  totalComment={getCommentLength(item?.latest_reactions?.comment) - 1}
+                  onPress={onPressComment}
+                />
+                <Gap height={8} />
+              </React.Fragment>
+            </View>
+          )}
 
         </View>
         </>
@@ -316,4 +320,4 @@ RenderListFeed.propTypes = {
   searchHeight: PropTypes.number
 };
 
-export default React.memo (RenderListFeed);
+export default React.memo(RenderListFeed);

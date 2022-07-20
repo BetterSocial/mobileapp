@@ -1,4 +1,5 @@
 import * as React from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import {
   Platform,
   SafeAreaView,
@@ -6,9 +7,8 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { createStackNavigator } from '@react-navigation/stack';
-import SplashScreen from 'react-native-splash-screen';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -50,10 +50,11 @@ import {
   ProfileScreen,
 } from '../screens';
 import { Context } from '../context';
+import { InitialStartupAtom, initialStartupTask } from '../service/initialStartup';
 import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
+import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
-import { initialStartupTask, InitialStartupAtom } from '../service/initialStartup';
 
 const RootStack = createStackNavigator();
 
@@ -65,17 +66,28 @@ export const RootNavigator = (props) => {
 
   const create = useClientGetstream();
 
+  // const doGetAccessToken = async() => {
+  //   const accessToken = await getAccessToken()
+  //   setToken(accessToken)
+  //   setTimeout(() => SplashScreen.hide(), 700)
+  //   return token
+  // }
+
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
 
     initialStartupAction();
+    // doGetAccessToken()
     return async () => {
       await client?.disconnectUser();
     };
   }, []);
 
+  
   React.useEffect(() => {
+    console.log('initialStartup')
+    console.log(initialStartup)
     if (initialStartup.id !== null) {
       if (initialStartup.id !== '') {
         create();
@@ -86,7 +98,6 @@ export const RootNavigator = (props) => {
       }, 700);
     } else {
       SplashScreen.hide();
-
     }
   }, [initialStartup]);
 
@@ -106,15 +117,16 @@ export const RootNavigator = (props) => {
         }}>
         {
           initialStartup.id !== null && initialStartup.id !== '' ? (
+          // token !== null && token !== '' ? (
             <RootStack.Screen
               name="AuthenticatedStack"
               component={AuthenticatedNavigator}
-              />
+            />
           ) : (
-              <RootStack.Screen
-                name="UnauthenticatedStack"
-                component={UnauthenticatedNavigator}
-                />
+            <RootStack.Screen
+              name="UnauthenticatedStack"
+              component={UnauthenticatedNavigator}
+            />
           )
         }
       </RootStack.Navigator>
@@ -161,7 +173,7 @@ const AuthenticatedNavigator = () => {
         component={ProfileScreen}
         options={{ headerShown: false }}
       />
-      <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen}/>
+      <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
       <AuthenticatedStack.Screen
         name="DomainScreen"
         component={DomainScreen}
@@ -193,15 +205,15 @@ const AuthenticatedNavigator = () => {
         options={{
           headerShown: isIos ? profileState.isShowHeader : true,
           header: ({ navigation }) => (
-              <SafeAreaView>
-                <Header
-                  title={profileState.navbarTitle}
-                  // containerStyle={styles.header}
-                  titleStyle={styles.title}
-                  onPress={() => navigation.goBack()}
-                  isCenter
-                />
-              </SafeAreaView>
+            <SafeAreaView>
+              <Header
+                title={profileState.navbarTitle}
+                // containerStyle={styles.header}
+                titleStyle={styles.title}
+                onPress={() => navigation.goBack()}
+                isCenter
+              />
+            </SafeAreaView>
 
           ),
         }}
@@ -234,15 +246,15 @@ const AuthenticatedNavigator = () => {
         options={{
           headerShown: isIos ? profileState.isShowHeader : true,
           header: ({ navigation }) => (
-              <SafeAreaView>
-                <Header
-                  title={'Blocked'}
-                  // containerStyle={styles.header}
-                  titleStyle={styles.title}
-                  onPress={() => navigation.goBack()}
-                  isCenter
-                />
-              </SafeAreaView>
+            <SafeAreaView>
+              <Header
+                title={'Blocked'}
+                // containerStyle={styles.header}
+                titleStyle={styles.title}
+                onPress={() => navigation.goBack()}
+                isCenter
+              />
+            </SafeAreaView>
 
           ),
         }}
@@ -322,33 +334,33 @@ const AuthenticatedNavigator = () => {
 const UnauthenticatedStack = createStackNavigator();
 
 const UnauthenticatedNavigator = () => (
-    <UnauthenticatedStack.Navigator>
-      <UnauthenticatedStack.Screen
-        name="SignIn"
-        component={SignIn}
-        options={{ headerShown: false }}
-      />
-      <UnauthenticatedStack.Screen
-        name="ChooseUsername"
-        component={ChooseUsername}
-        options={{ headerShown: false }}
-      />
-      <UnauthenticatedStack.Screen
-        name="LocalCommunity"
-        component={LocalCommunity}
-        options={{ headerShown: false }}
-      />
-      <UnauthenticatedStack.Screen
-        name="WhotoFollow"
-        component={WhotoFollow}
-        options={{ headerShown: false }}
-      />
-      <UnauthenticatedStack.Screen
-        name="Topics"
-        component={Topics}
-        options={{ headerShown: false }}
-      />
-    </UnauthenticatedStack.Navigator>
+  <UnauthenticatedStack.Navigator>
+    <UnauthenticatedStack.Screen
+      name="SignIn"
+      component={SignIn}
+      options={{ headerShown: false }}
+    />
+    <UnauthenticatedStack.Screen
+      name="ChooseUsername"
+      component={ChooseUsername}
+      options={{ headerShown: false }}
+    />
+    <UnauthenticatedStack.Screen
+      name="LocalCommunity"
+      component={LocalCommunity}
+      options={{ headerShown: false }}
+    />
+    <UnauthenticatedStack.Screen
+      name="WhotoFollow"
+      component={WhotoFollow}
+      options={{ headerShown: false }}
+    />
+    <UnauthenticatedStack.Screen
+      name="Topics"
+      component={Topics}
+      options={{ headerShown: false }}
+    />
+  </UnauthenticatedStack.Navigator>
 );
 
 // endregion

@@ -337,19 +337,15 @@ const FeedScreen = (props) => {
   return (
     <SafeAreaProvider style={styles.container} forceInset={{ top: 'always' }}>
       <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
-      {/* <Animated.View style={{paddingTop: paddingContainer}}/> */}
       <TiktokScroll
         contentHeight={548}
         data={feeds}
-        onEndReach={onEndReach}
-        
-        // onMomentumScrollEnd={handleOnMomentumEnd}
+        onEndReach={onEndReach}        
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}
         searchHeight={searchHeight}
         showSearchBar={showNavbar}
-        // onScrollBeginDrag={handleOnScrollBeginDrag}
         refreshing={loading}>
         {({ item, index }) => {
           if(item.dummy) return null

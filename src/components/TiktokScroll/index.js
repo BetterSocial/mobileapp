@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   flatlistContainer: {
     paddingBottom: 0,
   },
-  cardContainer: (bottomTabbar) => ({
+  cardContainer: () => ({
     height: 548,
     width: FULL_WIDTH,
     borderBottomWidth: 7,
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     maxHeight: 548
 
   }),
-  cardMain: (frameHeight, bottomTabbar, showSearchbar, searchHeight = 0, bottomArea) => ({
+  cardMain: () => ({
       height: 548 ,
       width: '100%',
       maxHeight: 548 * 0.8
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 });
 
 const TiktokScroll = (props) => {
-  const {data, children, onRefresh, refreshing, onEndReach, contentHeight, onScroll, onScrollBeginDrag, onMomentumScrollEnd, searchHeight, showSearchBar, ...otherProps} = props;
+  const {data, children, onRefresh, refreshing, onEndReach, contentHeight = 548, onScroll, onScrollBeginDrag, onMomentumScrollEnd, searchHeight, showSearchBar, ...otherProps} = props;
   const flatListRef = React.useRef();
   const bottomTabbar = useBottomTabBarHeight()
   const frameHeight = useSafeAreaFrame().height
@@ -51,7 +51,6 @@ const TiktokScroll = (props) => {
         length: contentHeight, offset: contentHeight * index, index
       })}
     
-      // onViewableItemsChanged={onViewAbleChange}
       onMomentumScrollEnd={onMomentumScrollEnd}
       initialNumToRender={2}
       ref={flatListRef}
