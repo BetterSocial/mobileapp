@@ -58,8 +58,12 @@ import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 
 const RootStack = createStackNavigator();
 
+<<<<<<< HEAD
 export const RootNavigator = () => {
   // const [token, setToken] = React.useState(null)
+=======
+export const RootNavigator = (props) => {
+>>>>>>> d0d8e74b5dd18355565332a87445119e73a1c17f
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const initialStartupAction = useRecoilCallback(initialStartupTask);
   const [clientState] = React.useContext(Context).client;
@@ -97,9 +101,9 @@ export const RootNavigator = () => {
       setTimeout(() => {
         SplashScreen.hide();
       }, 700);
-    } else setTimeout(() => {
+    } else {
       SplashScreen.hide();
-    }, 700);
+    }
   }, [initialStartup]);
 
   return (

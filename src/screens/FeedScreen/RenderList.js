@@ -1,9 +1,12 @@
+/* eslint-disable arrow-body-style */
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import { Dimensions, Platform, Share, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { getDeviceId, getModel, hasNotch } from 'react-native-device-info';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
+import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -49,7 +52,9 @@ const RenderListFeed = (props) => {
     selfUserId,
     onPressDownVote,
     showNavbar,
-    searchHeight
+    searchHeight,
+    bottomArea,
+    isScroll
   } = props;
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
@@ -60,6 +65,9 @@ const RenderListFeed = (props) => {
   const [isReaction, setReaction] = React.useState(false);
   const [loadingVote, setLoadingVote] = React.useState(false);
   const bottomHeight = useBottomTabBarHeight();
+  const inset = useSafeAreaInsets()
+  const frameHeight = useSafeAreaFrame().height
+  const iosMajorVersion = parseInt(Platform.Version, 10)
   const navigateToLinkContextPage = (item) => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -71,14 +79,14 @@ const RenderListFeed = (props) => {
   };
 
   const getHeightFooter = () => {
-    const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 6.8) / 100);
+    const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 6) / 100);
     return h;
   };
-  const getHeightReaction = () => 
+  const getHeightReaction = () =>
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
-     dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
-  ;
+    dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
+    ;
 
   const getHeightHeader = () => {
     const h = (FULL_HEIGHT * 10) / 100
@@ -164,11 +172,10 @@ const RenderListFeed = (props) => {
       return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     }
   };
-
   const initial = () => {
     const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
-      const {comment} = reactionCount;
+      const { comment } = reactionCount;
       handleVote(reactionCount);
       if (comment !== undefined) {
         if (comment > 0) {
@@ -178,7 +185,6 @@ const RenderListFeed = (props) => {
       }
     }
   };
-
 
   const checkVotes = () => {
     const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === selfUserId)
@@ -201,112 +207,141 @@ const RenderListFeed = (props) => {
     initial();
   }, [item]);
   const cardHeight = React.useCallback(() => {
-    if(showNavbar) {
-      return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) * 0.68 - searchHeight
+    if (showNavbar) {
+      return (frameHeight) * 0.70 - searchHeight
 
     }
-    return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) * 0.68
-  }, [showNavbar])
+    return (frameHeight) * 0.70
+  }, [showNavbar, frameHeight, searchHeight])
+
+  const headerHeight = React.useCallback(() => {
+    return (frameHeight) * 0.10
+
+
+  }, [showNavbar, frameHeight])
 
   const fullCardHeight = React.useCallback(() => {
-    if(showNavbar) {
-      return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) * 0.78 -searchHeight
+    if (showNavbar) {
+      return (frameHeight) * 0.80 - searchHeight
 
     }
-    return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) * 0.78 
-  }, [showNavbar])
+    return (frameHeight) * 0.80
+  }, [showNavbar, frameHeight, searchHeight])
 
+  const handleCardContainer = React.useCallback(() => {
+    if (Platform.OS === 'ios') {
+      if (showNavbar) {
+        if (isScroll) {
+          return searchHeight + bottomArea + 10
+        }
+        if (!hasNotch()) {
+          return bottomArea + 50
+
+        }
+        return bottomArea + 14
+
+      }
+      return bottomArea + 10
+
+    }
+    if (showNavbar) {
+      return bottomArea + searchHeight
+    }
+    return bottomArea
+
+
+  }, [showNavbar, searchHeight, bottomArea])
   const isHaveComment = getCommentLength(item.latest_reactions.comment) > 0
 
   return (
-    <View style={[styles.cardContainer(0)]}>
-      <View style={styles.cardMain(showNavbar, searchHeight)}>
-        <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB} />
-        <View style={{height: '100%'}} >
-          <View style={{height: isHaveComment ? cardHeight() : fullCardHeight()}} >
-          {item.post_type === POST_TYPE_POLL && (
-          <ContentPoll
-            index={index}
-            message={item.message}
-            images_url={item.images_url}
-            polls={item.pollOptions}
-            onPress={() => onPress(item, index)}
-            item={item}
-            pollexpiredat={item.polls_expired_at}
-            multiplechoice={item.multiplechoice}
-            isalreadypolling={item.isalreadypolling}
-            onnewpollfetched={onNewPollFetched}
-            voteCount={item.voteCount}
-            topics={item?.topics}
-          />
-        )}
-
-        {item.post_type === POST_TYPE_LINK && (
-          <ContentLink
-            index={index}
-            og={item.og}
-            onPress={() => onPress(item)}
-            onHeaderPress={() => onPressDomain(item)}
-            onCardContentPress={() => navigateToLinkContextPage(item)}
-            score={item?.credderScore}
-            message={item?.message}
-            messageContainerStyle={{paddingHorizontal: 10}}
-            topics={item?.topics}
-          />
-        )}
-        {item.post_type === POST_TYPE_STANDARD && (
-          <Content
-            index={index}
-            message={item.message}
-            images_url={item.images_url}
-            onPress={onPress}
-            topics={item?.topics}
-          />
-        )}
-          </View>
-        
-        <View style={styles.footerWrapper(getHeightFooter())}>
-          <Footer
-            item={item}
-            totalComment={getCommentLength(item.latest_reactions.comment)}
-            totalVote={totalVote}
-            onPressShare={() => ShareUtils.shareFeeds(item,
-              ANALYTICS_SHARE_POST_FEED_SCREEN,
-              ANALYTICS_SHARE_POST_FEED_ID
-            )}
-            onPressComment={() => onPressComment(item)}
-            onPressBlock={() => onPressBlock(item)}
-            onPressDownVote={onPressDownVoteHandle}
-            onPressUpvote={onPressUpvoteHandle}
-            statusVote={voteStatus}
-            // loadingVote={loadingVote}
-            showScoreButton={true}
-            onPressScore={() => showScoreAlertDialog(item)}
-            isSelf={
-              item.anonimity
-                ? false
-                : selfUserId === item.actor.id
-            }
-          />
-        </View>
-        {isHaveComment && (
-          <View style={styles.contentReaction(getHeightReaction())}>
-            <React.Fragment>
-              <PreviewComment
-                user={item?.latest_reactions?.comment[0]?.user}
-                comment={item?.latest_reactions?.comment[0]?.data?.text}
-                image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url}
-                time={item?.latest_reactions?.comment[0]?.created_at}
-                totalComment={getCommentLength(item?.latest_reactions?.comment) - 1}
-                onPress={onPressComment}
+    <View style={[styles.cardContainer(handleCardContainer)]}>
+      <View style={styles.cardMain(frameHeight, showNavbar, searchHeight, bottomArea)}>
+        <Header props={item} height={headerHeight()} source={SOURCE_FEED_TAB} />
+        <View style={{ height: '100%' }} >
+          <View style={{ height: isHaveComment ? cardHeight() : fullCardHeight() }} >
+            {item.post_type === POST_TYPE_POLL && (
+              <ContentPoll
+                index={index}
+                message={item.message}
+                images_url={item.images_url}
+                polls={item.pollOptions}
+                onPress={() => onPress(item, index)}
+                item={item}
+                pollexpiredat={item.polls_expired_at}
+                multiplechoice={item.multiplechoice}
+                isalreadypolling={item.isalreadypolling}
+                onnewpollfetched={onNewPollFetched}
+                voteCount={item.voteCount}
+                topics={item?.topics}
               />
-              <Gap height={8} />
-            </React.Fragment>
+            )}
+
+            {item.post_type === POST_TYPE_LINK && (
+              <ContentLink
+                index={index}
+                og={item.og}
+                onPress={() => onPress(item)}
+                onHeaderPress={() => onPressDomain(item)}
+                onCardContentPress={() => navigateToLinkContextPage(item)}
+                score={item?.credderScore}
+                message={item?.message}
+                messageContainerStyle={{ paddingHorizontal: 10 }}
+                topics={item?.topics}
+              />
+            )}
+            {item.post_type === POST_TYPE_STANDARD && (
+              <Content
+                index={index}
+                message={item.message}
+                images_url={item.images_url}
+                onPress={onPress}
+                topics={item?.topics}
+              />
+            )}
           </View>
-        )}
+
+          <View style={styles.footerWrapper(getHeightFooter(), searchHeight)}>
+            <Footer
+              item={item}
+              totalComment={getCommentLength(item.latest_reactions.comment)}
+              totalVote={totalVote}
+              onPressShare={() => ShareUtils.shareFeeds(item,
+                ANALYTICS_SHARE_POST_FEED_SCREEN,
+                ANALYTICS_SHARE_POST_FEED_ID
+              )}
+              onPressComment={() => onPressComment(item)}
+              onPressBlock={() => onPressBlock(item)}
+              onPressDownVote={onPressDownVoteHandle}
+              onPressUpvote={onPressUpvoteHandle}
+              statusVote={voteStatus}
+              // loadingVote={loadingVote}
+              showScoreButton={true}
+              onPressScore={() => showScoreAlertDialog(item)}
+              isSelf={
+                item.anonimity
+                  ? false
+                  : selfUserId === item.actor.id
+              }
+            />
+          </View>
+          {isHaveComment && (
+            <View style={styles.contentReaction(getHeightReaction(), searchHeight)}>
+              <React.Fragment>
+                <PreviewComment
+                  user={item?.latest_reactions?.comment[0]?.user}
+                  comment={item?.latest_reactions?.comment[0]?.data?.text}
+                  image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url}
+                  time={item?.latest_reactions?.comment[0]?.created_at}
+                  totalComment={getCommentLength(item?.latest_reactions?.comment) - 1}
+                  onPress={onPressComment}
+                />
+                <Gap height={8} />
+              </React.Fragment>
+            </View>
+          )}
 
         </View>
-        
+
 
       </View>
     </View>
@@ -314,21 +349,25 @@ const RenderListFeed = (props) => {
 };
 
 const styles = StyleSheet.create({
-  cardContainer: () => ({
-    height: Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()  ,
+  cardContainer: (handleCardContainer) => ({
+    height: Dimensions.get('screen').height - useBottomTabBarHeight() - tabBarHeight,
     width: FULL_WIDTH,
-    backgroundColor: colors.white,
     borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
+    backgroundColor: 'white',
+    // eslint-disable-next-line no-nested-ternary
+    paddingTop: handleCardContainer(),
+
   }),
-  cardMain: ( showSearchbar, navbarHeight) => ({
-    height:  Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight() ,
-    width: '100%',
-    paddingVertical: Platform.OS === 'ios' && showSearchbar ? navbarHeight - 10 : 14
-  }),
-  footerWrapper: (h) => ({ height: '5%' }),
+  cardMain: (frameHeight, showSearchbar, navbarHeight, bottomArea) => {
+    return {
+      height: frameHeight - tabBarHeight - useBottomTabBarHeight() - navbarHeight - bottomArea,
+      width: '100%',
+    }
+  },
+  footerWrapper: (h) => ({ height: h }),
   contentReaction: (heightReaction) => ({
-    height: '20%',
+    height: heightReaction,
   }),
 });
 
@@ -349,4 +388,4 @@ RenderListFeed.propTypes = {
   searchHeight: PropTypes.number
 };
 
-export default React.memo (RenderListFeed);
+export default React.memo(RenderListFeed);
