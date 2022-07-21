@@ -85,7 +85,7 @@ const PreviewComment = ({
             </Text>
           </TouchableOpacity>
         </View>
-        <Gap height={SIZES.base} />
+        <Gap height={4} />
       </View>
       {totalComment >= 1 && (
         <TouchableOpacity style={styles.btnMore} onPress={onPress}>
