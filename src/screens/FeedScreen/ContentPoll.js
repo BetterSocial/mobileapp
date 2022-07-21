@@ -338,6 +338,8 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingLeft: 20,
     paddingRight: 20,
+    paddingBottom: 12
+
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
@@ -392,7 +394,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 0,
     marginTop: 16,
-    marginBottom: 8,
+    // marginBottom: 5,
   },
   pollOptionItemContainer: {
     backgroundColor: colors.lightgrey,
