@@ -26,21 +26,16 @@ import { withInteractionsManaged } from '../../components/WithInteractionManaged
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 
 let lastDragY = 0;
-let searchBarDebounce
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
   // const [initialLoading, setInitialLoading] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const [countStack, setCountStack] = React.useState(null);
-  const [lastId, setLastId] = React.useState('');
-  const [yourselfId, setYourselfId] = React.useState('');
   const [showNavbar, setShowNavbar] = React.useState(true)
   // const paddingContainer = React.useRef(new Animated.Value(Platform.OS === 'ios' ? 30 : 50)).current
-  const frameHeight = useSafeAreaFrame().height
   // const [time, setTime] = React.useState(new Date());
   // const [viewPostTimeIndex, setViewPostTimeIndex] = React.useState(0)
-  const [shouldSearchBarShown, setShouldSearchBarShown] = React.useState(0)
   const [postOffset, setPostOffset] = React.useState(0)
   // const [selectedFeed, setSelectedFeed] = React.useState(null)
   const offset = React.useRef(new Animated.Value(0)).current
@@ -49,11 +44,11 @@ const FeedScreen = (props) => {
   const [profileContext] = React.useContext(Context).profile;
   const bottomBarHeight = useBottomTabBarHeight();
   const [searchHeight, setSearchHeight] = React.useState(0)
-  const { height } = Dimensions.get('screen');
   const {interactionsComplete} = useAfterInteractions()
   let { feeds, timer, viewPostTimeIndex } = feedsContext;
   let {myProfile} = profileContext
-  const bottomHeight = useBottomTabBarHeight();
+    const contentHeight = (Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight) * 0.80
+
   const { bottom } = useSafeAreaInsets();
   const [isScroll, setIsScroll] = React.useState(false)
 
@@ -125,7 +120,7 @@ const FeedScreen = (props) => {
     })
   }
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', (e) => {
+    const unsubscribe = navigation.addListener('focus', () => {
       // getDataFeeds();
       showSearchBarAnimation()
     });
@@ -211,7 +206,7 @@ const FeedScreen = (props) => {
     getDataFeeds(postOffset);
   };
 
-  const onPress = (item, index) => {
+  const onPress = (item) => {
     props.navigation.navigate('PostDetailPage', {
       // index: index,
       isalreadypolling: item.isalreadypolling,
@@ -243,32 +238,32 @@ const FeedScreen = (props) => {
     getDataFeeds(0, true);
   };
 
-  const showSearchBar = (isShown) => {
-    return Animated.timing(offset, {
-      toValue: isShown ? 0 : -70,
-      duration: Platform.OS === 'ios' ? 30 : 50,
-      useNativeDriver: false,
-    }).start();
-  }
+  // const showSearchBar = (isShown) => {
+  //   return Animated.timing(offset, {
+  //     toValue: isShown ? 0 : -70,
+  //     duration: Platform.OS === 'ios' ? 30 : 50,
+  //     useNativeDriver: false,
+  //   }).start();
+  // }
 
-  let debounceSearchBar = (event) => {
-    let y = event.nativeEvent.contentOffset.y;
-    let dy = y - lastDragY;
+  // let debounceSearchBar = (event) => {
+  //   let y = event.nativeEvent.contentOffset.y;
+  //   let dy = y - lastDragY;
 
-    if(dy <= 0) {
-      clearTimeout(searchBarDebounce)
-      setShouldSearchBarShown(new Date().getTime())
-    }
-  }
+  //   if(dy <= 0) {
+  //     clearTimeout(searchBarDebounce)
+  //     setShouldSearchBarShown(new Date().getTime())
+  //   }
+  // }
 
   let handleOnScrollBeginDrag = (event) => {
     lastDragY = event.nativeEvent.contentOffset.y;
   };
 
-  let handleOnMomentumEnd = (event) => {
-    onWillSendViewPostTime(event)
-    debounceSearchBar(event)
-  }
+  // let handleOnMomentumEnd = (event) => {
+  //   onWillSendViewPostTime(event)
+  //   debounceSearchBar(event)
+  // }
 
   const showSearchBarAnimation = () => {
     InteractionManager.runAfterInteractions(() => {
@@ -313,14 +308,14 @@ const FeedScreen = (props) => {
   }, [offset])
 
 
-  let onWillSendViewPostTime = (event) => {
-    sendViewPost()
+  // let onWillSendViewPostTime = (event) => {
+  //   sendViewPost()
     
-    let y = event.nativeEvent.contentOffset.y;
-    let shownIndex = Math.ceil(y / dimen.size.FEED_CURRENT_ITEM_HEIGHT)
-    setViewPostTimeIndex(shownIndex, dispatch)
-    setTimer(new Date(), dispatch)
-  }
+  //   let y = event.nativeEvent.contentOffset.y;
+  //   let shownIndex = Math.ceil(y / dimen.size.FEED_CURRENT_ITEM_HEIGHT)
+  //   setViewPostTimeIndex(shownIndex, dispatch)
+  //   setTimer(new Date(), dispatch)
+  // }
 
   let handleSearchBarClicked = () => {
     sendViewPost()
@@ -339,24 +334,20 @@ const FeedScreen = (props) => {
     }
   }
 
-
   return (
     <SafeAreaProvider style={styles.container} forceInset={{ top: 'always' }}>
       <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
-      {/* <Animated.View style={{paddingTop: paddingContainer}}/> */}
       <TiktokScroll
-        contentHeight={Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight}
+        contentHeight={548}
         data={feeds}
-        onEndReach={onEndReach}
-        
-        // onMomentumScrollEnd={handleOnMomentumEnd}
+        onEndReach={onEndReach}        
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}
-        // onScrollBeginDrag={handleOnScrollBeginDrag}
+        searchHeight={searchHeight}
+        showSearchBar={showNavbar}
         refreshing={loading}>
         {({ item, index }) => {
-          // let dummyItemHeight = Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight
           if(item.dummy) return null
           return <RenderListFeed
             item={item}

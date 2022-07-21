@@ -209,7 +209,6 @@ const ContentPoll = ({
                 /*
                   TODO : Count percentage
                 */
-
                  multiplechoice ? (
                   <PollOptionsMultipleChoice
                     key={index}
@@ -289,7 +288,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blackgrey,
   },
   fletlist: { flex: 1 },
-  containerShowMessage: { justifyContent: 'center', flex: 1 },
+  containerShowMessage: { justifyContent: 'center', },
   imageList: { flex: 1, width: screenWidth - 32, borderRadius: 16 },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -332,11 +331,12 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   contentFeed: {
-    flex: 1,
-    marginTop: 12,
+    // flex: 1,
+    paddingTop: 12,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: COLORS.white,
+    paddingBottom: 12
+
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 0,
     marginTop: 16,
-    marginBottom: 8,
+    // marginBottom: 5,
   },
   pollOptionItemContainer: {
     backgroundColor: colors.lightgrey,

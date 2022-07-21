@@ -59,13 +59,15 @@ import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 const RootStack = createStackNavigator();
 
 export const RootNavigator = (props) => {
-  const initialStartup = useRecoilValue(InitialStartupAtom);
+  let initialStartup = useRecoilValue(InitialStartupAtom);
   const initialStartupAction = useRecoilCallback(initialStartupTask);
   const [clientState] = React.useContext(Context).client;
   const { client } = clientState;
 
   const create = useClientGetstream();
-
+  if(initialStartup && typeof initialStartup === 'string') {
+    initialStartup = JSON.parse(initialStartup)
+  }
   // const doGetAccessToken = async() => {
   //   const accessToken = await getAccessToken()
   //   setToken(accessToken)
@@ -84,10 +86,8 @@ export const RootNavigator = (props) => {
     };
   }, []);
 
-
   React.useEffect(() => {
-    console.log('initialStartup')
-    console.log(initialStartup)
+
     if (initialStartup.id !== null) {
       if (initialStartup.id !== '') {
         create();
