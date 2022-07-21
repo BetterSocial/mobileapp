@@ -208,7 +208,7 @@ const RenderListFeed = (props) => {
     <>
         <Header props={item} height={headerHeight()} source={SOURCE_FEED_TAB} />
         <View style={{height: '100%'}} >
-          <View style={{height: '80%', paddingVertical: 24}} >
+          <View style={{height: '80%'}} >
           {item.post_type === POST_TYPE_POLL && (
           <ContentPoll
             index={index}
@@ -297,7 +297,7 @@ const RenderListFeed = (props) => {
 };
 
 const styles = StyleSheet.create({
-  footerWrapper: () => ({ height: '5%', marginTop: '2%'}),
+  footerWrapper: () => ({ height: '5%', marginTop: '3%'}),
   contentReaction: () => ({
     height: '10%',
   }),
