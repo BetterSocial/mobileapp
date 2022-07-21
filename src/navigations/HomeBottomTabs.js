@@ -53,7 +53,7 @@ function HomeBottomTabs(props) {
   const [, dispatchProfile] = React.useContext(Context).profile;
   const [, followingDispatch] = React.useContext(Context).following;
 
-  const initialStartup = useRecoilValue(InitialStartupAtom);
+  let initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
@@ -63,6 +63,11 @@ function HomeBottomTabs(props) {
   const { feeds } = feedsContext;
   const LIMIT_FIRST_FEEDS = 1;
   const LIMIT_FIRST_NEWS = 3;
+
+  if(initialStartup && typeof initialStartup === 'string') {
+    initialStartup = JSON.parse(initialStartup)
+  }
+
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
@@ -273,7 +278,6 @@ function HomeBottomTabs(props) {
       unsubscribe();
     };
   }, []);
-
   React.useEffect(() => {
     if (otherProfileData !== null && initialStartup.id !== null) {
       navigation.navigate('OtherProfile', {

@@ -2,17 +2,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import { Dimensions, Platform, Share, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { getDeviceId, getModel, hasNotch } from 'react-native-device-info';
+import { Dimensions, StatusBar, StyleSheet, View } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
-import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaFrame } from 'react-native-safe-area-context';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
 import ContentPoll from './ContentPoll';
 import Header from './Header';
-import Log from '../../utils/log/Log';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
@@ -26,8 +24,7 @@ import {
 } from '../../utils/constants';
 import { Footer, Gap, PreviewComment } from '../../components';
 import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
-import { getCommentLength, getCountCommentWithChild } from '../../utils/getstream';
+import { getCommentLength } from '../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { showScoreAlertDialog } from '../../utils/Utils'
 
@@ -37,7 +34,6 @@ const tabBarHeight = StatusBar.currentHeight;
 
 
 
-const majorVersion = parseInt(Platform.Version, 10)
 
 const RenderListFeed = (props) => {
   const {
@@ -53,8 +49,6 @@ const RenderListFeed = (props) => {
     onPressDownVote,
     showNavbar,
     searchHeight,
-    bottomArea,
-    isScroll
   } = props;
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
@@ -63,11 +57,9 @@ const RenderListFeed = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
-  const [loadingVote, setLoadingVote] = React.useState(false);
+  // const [loadingVote, setLoadingVote] = React.useState(false);
   const bottomHeight = useBottomTabBarHeight();
-  const inset = useSafeAreaInsets()
   const frameHeight = useSafeAreaFrame().height
-  const iosMajorVersion = parseInt(Platform.Version, 10)
   const navigateToLinkContextPage = (item) => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -88,12 +80,12 @@ const RenderListFeed = (props) => {
     dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
     ;
 
-  const getHeightHeader = () => {
-    const h = (FULL_HEIGHT * 10) / 100
-    return h;
-    // return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) *0.1
+  // const getHeightHeader = () => {
+  //   const h = (FULL_HEIGHT * 10) / 100
+  //   return h;
+  //   // return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) *0.1
 
-  };
+  // };
 
   const onPressDownVoteHandle = async () => {
     // setLoadingVote(true);
@@ -163,12 +155,9 @@ const RenderListFeed = (props) => {
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
-        // setLoadingVote(false);
         return;
       }
-      // setLoadingVote(false);
     } catch (e) {
-      // setLoadingVote(false);
       return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     }
   };
@@ -206,13 +195,6 @@ const RenderListFeed = (props) => {
   React.useEffect(() => {
     initial();
   }, [item]);
-  const cardHeight = React.useCallback(() => {
-    if (showNavbar) {
-      return (frameHeight) * 0.70 - searchHeight
-
-    }
-    return (frameHeight) * 0.70
-  }, [showNavbar, frameHeight, searchHeight])
 
   const headerHeight = React.useCallback(() => {
     return (frameHeight) * 0.10
@@ -220,85 +202,54 @@ const RenderListFeed = (props) => {
 
   }, [showNavbar, frameHeight])
 
-  const fullCardHeight = React.useCallback(() => {
-    if (showNavbar) {
-      return (frameHeight) * 0.80 - searchHeight
-
-    }
-    return (frameHeight) * 0.80
-  }, [showNavbar, frameHeight, searchHeight])
-
-  const handleCardContainer = React.useCallback(() => {
-    if (Platform.OS === 'ios') {
-      if (showNavbar) {
-        if (isScroll) {
-          return searchHeight + bottomArea + 10
-        }
-        if (!hasNotch()) {
-          return bottomArea + 50
-
-        }
-        return bottomArea + 14
-
-      }
-      return bottomArea + 10
-
-    }
-    if (showNavbar) {
-      return bottomArea + searchHeight
-    }
-    return bottomArea
-
-
-  }, [showNavbar, searchHeight, bottomArea])
   const isHaveComment = getCommentLength(item.latest_reactions.comment) > 0
 
   return (
-    <View style={[styles.cardContainer(handleCardContainer)]}>
-      <View style={styles.cardMain(frameHeight, showNavbar, searchHeight, bottomArea)}>
+    <>
         <Header props={item} height={headerHeight()} source={SOURCE_FEED_TAB} />
-        <View style={{ height: '100%' }} >
-          <View style={{ height: isHaveComment ? cardHeight() : fullCardHeight() }} >
-            {item.post_type === POST_TYPE_POLL && (
-              <ContentPoll
-                index={index}
-                message={item.message}
-                images_url={item.images_url}
-                polls={item.pollOptions}
-                onPress={() => onPress(item, index)}
-                item={item}
-                pollexpiredat={item.polls_expired_at}
-                multiplechoice={item.multiplechoice}
-                isalreadypolling={item.isalreadypolling}
-                onnewpollfetched={onNewPollFetched}
-                voteCount={item.voteCount}
-                topics={item?.topics}
-              />
-            )}
+        <View style={{height: '100%'}} >
+          <View style={{height: '80%'}} >
+          {item.post_type === POST_TYPE_POLL && (
+          <ContentPoll
+            index={index}
+            message={item.message}
+            images_url={item.images_url}
+            polls={item.pollOptions}
+            onPress={() => onPress(item, index)}
+            item={item}
+            pollexpiredat={item.polls_expired_at}
+            multiplechoice={item.multiplechoice}
+            isalreadypolling={item.isalreadypolling}
+            onnewpollfetched={onNewPollFetched}
+            voteCount={item.voteCount}
+            topics={item?.topics}
+          />
+        )}
 
-            {item.post_type === POST_TYPE_LINK && (
-              <ContentLink
-                index={index}
-                og={item.og}
-                onPress={() => onPress(item)}
-                onHeaderPress={() => onPressDomain(item)}
-                onCardContentPress={() => navigateToLinkContextPage(item)}
-                score={item?.credderScore}
-                message={item?.message}
-                messageContainerStyle={{ paddingHorizontal: 10 }}
-                topics={item?.topics}
-              />
-            )}
-            {item.post_type === POST_TYPE_STANDARD && (
-              <Content
-                index={index}
-                message={item.message}
-                images_url={item.images_url}
-                onPress={onPress}
-                topics={item?.topics}
-              />
-            )}
+        {item.post_type === POST_TYPE_LINK && (
+          <ContentLink
+            index={index}
+            og={item.og}
+            onPress={() => onPress(item)}
+            onHeaderPress={() => onPressDomain(item)}
+            onCardContentPress={() => navigateToLinkContextPage(item)}
+            score={item?.credderScore}
+            message={item?.message}
+            messageContainerStyle={{paddingHorizontal: 10}}
+            topics={item?.topics}
+          />
+        )}
+        {item.post_type === POST_TYPE_STANDARD && (
+          <Content
+            index={index}
+            message={item.message}
+            images_url={item.images_url}
+            onPress={onPress}
+            topics={item?.topics}
+          />
+        )}
           </View>
+        
 
           <View style={styles.footerWrapper(getHeightFooter(), searchHeight)}>
             <Footer
@@ -341,33 +292,14 @@ const RenderListFeed = (props) => {
           )}
 
         </View>
-
-
-      </View>
-    </View>
+        </>
   );
 };
 
 const styles = StyleSheet.create({
-  cardContainer: (handleCardContainer) => ({
-    height: Dimensions.get('screen').height - useBottomTabBarHeight() - tabBarHeight,
-    width: FULL_WIDTH,
-    borderBottomWidth: 7,
-    borderBottomColor: colors.lightgrey,
-    backgroundColor: 'white',
-    // eslint-disable-next-line no-nested-ternary
-    paddingTop: handleCardContainer(),
-
-  }),
-  cardMain: (frameHeight, showSearchbar, navbarHeight, bottomArea) => {
-    return {
-      height: frameHeight - tabBarHeight - useBottomTabBarHeight() - navbarHeight - bottomArea,
-      width: '100%',
-    }
-  },
-  footerWrapper: (h) => ({ height: h }),
-  contentReaction: (heightReaction) => ({
-    height: heightReaction,
+  footerWrapper: () => ({ height: '5%', marginTop: '3%'}),
+  contentReaction: () => ({
+    height: '10%',
   }),
 });
 
