@@ -52,8 +52,8 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
     if (text.length > 650) {
       return (
         <View style={styles.textContainer}>
-          <Text style={styles.text(text)} numberOfLines={13}>
-            {getCaptionWithTopicStyle(text.substring(0, 500).trim(), navigation)}
+          <Text style={styles.text(text)} numberOfLines={9}>
+            {getCaptionWithTopicStyle(text.substring(0, 300).trim(), navigation)}
             <Text onPress={onPress} style={styles.seemore}>
               ...more
             </Text>
