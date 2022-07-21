@@ -47,10 +47,12 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
                     setRefreshToken(response.refresh_token);
                     streamChat(response.token).then(() => {
                         // navigation.dispatch(StackActions.replace('HomeTabs'));
-                        setStartupValue({
+                        let strObj = {
                             id: response.token,
                             deeplinkProfile: false
-                        })
+                        }
+                        strObj = JSON.stringify(strObj)
+                        setStartupValue(strObj)
                     })
                 } else {
                     removeLocalStorege('userId');
