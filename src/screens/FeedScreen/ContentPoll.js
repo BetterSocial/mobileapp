@@ -210,9 +210,7 @@ const ContentPoll = ({
 
             <View style={styles.pollOptionsContainer}>
               {polls.map((pollItem, index) => {
-                /*
-                  TODO : Count percentage
-                */
+
 
                 return multiplechoice ? (
                   <PollOptionsMultipleChoice
@@ -293,7 +291,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blackgrey,
   },
   fletlist: { flex: 1 },
-  containerShowMessage: { justifyContent: 'center', flex: 1 },
+  containerShowMessage: { justifyContent: 'center', },
   imageList: { flex: 1, width: screenWidth - 32, borderRadius: 16 },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -336,11 +334,10 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   contentFeed: {
-    flex: 1,
-    marginTop: 12,
+    // flex: 1,
+    paddingTop: 12,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: COLORS.white,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
