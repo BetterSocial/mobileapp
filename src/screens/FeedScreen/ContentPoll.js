@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   contentFeed: {
-    // flex: 1,
+    flex: 1,
     paddingTop: 12,
     paddingLeft: 20,
     paddingRight: 20,

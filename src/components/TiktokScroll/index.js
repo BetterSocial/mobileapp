@@ -5,6 +5,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors } from '../../utils/colors';
+import dimen from '../../utils/dimen';
 
 
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -14,27 +15,22 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   cardContainer: () => ({
-    height: 548,
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
     width: FULL_WIDTH,
     borderBottomWidth: 7,
     borderBottomColor: colors.lightgrey,
     backgroundColor: 'white',
-    maxHeight: 548
 
   }),
   cardMain: () => ({
-      height: 548 ,
+      height: dimen.size.FEED_CURRENT_ITEM_HEIGHT ,
       width: '100%',
-      maxHeight: 548 * 0.8
   }),
 });
 
 const TiktokScroll = (props) => {
   const {data, children, onRefresh, refreshing, onEndReach, contentHeight = 548, onScroll, onScrollBeginDrag, onMomentumScrollEnd, searchHeight, showSearchBar, ...otherProps} = props;
   const flatListRef = React.useRef();
-  const bottomTabbar = useBottomTabBarHeight()
-  const frameHeight = useSafeAreaFrame().height
-  const { bottom } = useSafeAreaInsets();
 
   return (
     <FlatList
@@ -56,8 +52,8 @@ const TiktokScroll = (props) => {
       ref={flatListRef}
       refreshing={refreshing}
       renderItem={({item ,index}) => (
-        <View style={[styles.cardContainer(bottomTabbar, index)]}>
-        <View style={styles.cardMain(frameHeight, bottomTabbar, showSearchBar, searchHeight, bottom)}>
+        <View style={[styles.cardContainer()]}>
+        <View style={styles.cardMain()}>
           {children({item, index})}
         </View>
       </View>
