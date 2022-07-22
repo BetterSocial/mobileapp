@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState, } from 'recoil';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -50,7 +50,7 @@ import {
   ProfileScreen,
 } from '../screens';
 import { Context } from '../context';
-import { InitialStartupAtom, initialStartupTask } from '../service/initialStartup';
+import { InitialStartupAtom } from '../service/initialStartup';
 import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
@@ -60,7 +60,7 @@ const RootStack = createStackNavigator();
 
 export const RootNavigator = (props) => {
   let initialStartup = useRecoilValue(InitialStartupAtom);
-  const initialStartupAction = useRecoilCallback(initialStartupTask);
+  const setInitialValue = useSetRecoilState(InitialStartupAtom)
   const [clientState] = React.useContext(Context).client;
   const { client } = clientState;
 
@@ -68,19 +68,15 @@ export const RootNavigator = (props) => {
   if(initialStartup && typeof initialStartup === 'string') {
     initialStartup = JSON.parse(initialStartup)
   }
-  // const doGetAccessToken = async() => {
-  //   const accessToken = await getAccessToken()
-  //   setToken(accessToken)
-  //   setTimeout(() => SplashScreen.hide(), 700)
-  //   return token
-  // }
+  const doGetAccessToken = async() => {
+    const accessToken = await getAccessToken()
+    setInitialValue({id: accessToken})
 
+  }
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
-
-    initialStartupAction();
-    // doGetAccessToken()
+    doGetAccessToken()
     return async () => {
       await client?.disconnectUser();
     };
@@ -100,7 +96,6 @@ export const RootNavigator = (props) => {
       SplashScreen.hide();
     }
   }, [initialStartup]);
-
   return (
     <View
       style={{
