@@ -3,9 +3,10 @@ import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import { Animated, Dimensions, InteractionManager, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { SafeAreaProvider, useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
-import { SafeAreaProvider, useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import BlockComponent from '../../components/BlockComponent';
 import RenderListFeed from './RenderList';
 import Search from './elements/Search';
@@ -22,8 +23,8 @@ import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../../context/actions/feeds';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 let lastDragY = 0;
 
@@ -44,37 +45,37 @@ const FeedScreen = (props) => {
   const [profileContext] = React.useContext(Context).profile;
   const bottomBarHeight = useBottomTabBarHeight();
   const [searchHeight, setSearchHeight] = React.useState(0)
-  const {interactionsComplete} = useAfterInteractions()
-  let { feeds, timer, viewPostTimeIndex } = feedsContext;
-  let {myProfile} = profileContext
-    const contentHeight = (Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight) * 0.80
+  const { interactionsComplete } = useAfterInteractions()
+  const { feeds, timer, viewPostTimeIndex } = feedsContext;
+  const { myProfile } = profileContext
+  const contentHeight = (Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight) * 0.80
 
   const { bottom } = useSafeAreaInsets();
   const [isScroll, setIsScroll] = React.useState(false)
 
   const getDataFeeds = async (offset = 0, useLoading) => {
     setCountStack(null);
-    if(useLoading) {
-          setLoading(true);
-    } 
+    if (useLoading) {
+      setLoading(true);
+    }
     try {
-      let query = `?offset=${offset}`
+      const query = `?offset=${offset}`
 
       const dataFeeds = await getMainFeed(query);
       if (dataFeeds.data.length > 0) {
-        let data = dataFeeds.data;
-        let dataWithDummy = [...data, {dummy : true}]
+        const { data } = dataFeeds;
+        const dataWithDummy = [...data, { dummy: true }]
         let saveData = {
           offset: dataFeeds.offset,
           data: dataWithDummy
-         
+
         }
         if (offset === 0) {
           // setMainFeeds(data, dispatch);
           setMainFeeds(dataWithDummy, dispatch);
           saveToCache(FEEDS_CACHE, saveData)
         } else {
-          let clonedFeeds = [...feeds]
+          const clonedFeeds = [...feeds]
           clonedFeeds.splice(feeds.length - 1, 0, ...data)
           saveData = {
             ...saveData,
@@ -97,20 +98,33 @@ const FeedScreen = (props) => {
     }
   };
 
+  const onDeleteBlockedPostCompleted = async (postId) => {
+    const postIndex = feeds.findIndex((item) => item.id === postId)
+    const clonedFeeds = [...feeds]
+    clonedFeeds.splice(postIndex, 1)
+    setMainFeeds(clonedFeeds, dispatch)
+  }
+
+  const onBlockCompleted = async (postId) => {
+    onDeleteBlockedPostCompleted(postId)
+
+    await getDataFeeds(0, true)
+  }
+
   React.useEffect(() => {
-    if(interactionsComplete) {
+    if (interactionsComplete) {
       analytics().logScreenView({
         screen_class: 'FeedScreen',
         screen_name: 'Feed Screen',
       });
-  
+
       checkCache()
     }
 
   }, [interactionsComplete]);
   const checkCache = () => {
     getSpecificCache(FEEDS_CACHE, (result) => {
-      if(result) {
+      if (result) {
         setMainFeeds(result.data, dispatch)
         setPostOffset(result.offset)
 
@@ -146,7 +160,7 @@ const FeedScreen = (props) => {
 
   const updateFeed = async (post, index) => {
     try {
-      let data = await getFeedDetail(post.activity_id);
+      const data = await getFeedDetail(post.activity_id);
       if (data) {
         setFeedByIndex(
           {
@@ -171,17 +185,17 @@ const FeedScreen = (props) => {
   };
 
   const sendViewPost = () => {
-    let currentTime = new Date()
-    let diffTime = currentTime.getTime() - timer.getTime()
-    let id = feeds[viewPostTimeIndex]?.id
-    if(id) viewTimePost(id, diffTime, SOURCE_FEED_TAB);
+    const currentTime = new Date()
+    const diffTime = currentTime.getTime() - timer.getTime()
+    const id = feeds[viewPostTimeIndex]?.id
+    if (id) viewTimePost(id, diffTime, SOURCE_FEED_TAB);
 
   };
 
-  let onNewPollFetched = (newPolls, index) => {
+  const onNewPollFetched = (newPolls, index) => {
     setFeedByIndex(
       {
-        index: index,
+        index,
         singleFeed: newPolls,
       },
       dispatch,
@@ -190,7 +204,7 @@ const FeedScreen = (props) => {
 
 
   const onPressDomain = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -213,8 +227,8 @@ const FeedScreen = (props) => {
       feedId: item.id,
       // refreshParent:  getDataFeeds,
       data: item,
-      isCaching:true
-      
+      isCaching: true
+
     });
   };
 
@@ -256,7 +270,7 @@ const FeedScreen = (props) => {
   //   }
   // }
 
-  let handleOnScrollBeginDrag = (event) => {
+  const handleOnScrollBeginDrag = (event) => {
     lastDragY = event.nativeEvent.contentOffset.y;
   };
 
@@ -277,15 +291,15 @@ const FeedScreen = (props) => {
       //   duration: 100,
       //   useNativeDriver: false,
       // }).start()
-    
+
     })
     setShowNavbar(true)
 
   }
-  let handleScrollEvent = React.useCallback((event) => {
+  const handleScrollEvent = React.useCallback((event) => {
     setIsScroll(true)
-    let y = event.nativeEvent.contentOffset.y;
-    let dy = y - lastDragY;
+    const {y} = event.nativeEvent.contentOffset;
+    const dy = y - lastDragY;
     if (dy + 20 <= 0) {
       showSearchBarAnimation()
 
@@ -301,7 +315,7 @@ const FeedScreen = (props) => {
         //   duration: 100,
         //   useNativeDriver: false,
         // }).start()
-        
+
       })
       setShowNavbar(false)
     }
@@ -310,14 +324,14 @@ const FeedScreen = (props) => {
 
   // let onWillSendViewPostTime = (event) => {
   //   sendViewPost()
-    
+
   //   let y = event.nativeEvent.contentOffset.y;
   //   let shownIndex = Math.ceil(y / dimen.size.FEED_CURRENT_ITEM_HEIGHT)
   //   setViewPostTimeIndex(shownIndex, dispatch)
   //   setTimer(new Date(), dispatch)
   // }
 
-  let handleSearchBarClicked = () => {
+  const handleSearchBarClicked = () => {
     sendViewPost()
 
     navigation.navigate('DiscoveryScreen', {
@@ -328,7 +342,7 @@ const FeedScreen = (props) => {
   }
 
   const saveSearchHeight = (height) => {
-    if(!searchHeight) {
+    if (!searchHeight) {
       setSearchHeight(Number(height))
 
     }
@@ -336,11 +350,11 @@ const FeedScreen = (props) => {
 
   return (
     <SafeAreaProvider style={styles.container} forceInset={{ top: 'always' }}>
-      <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked}/>
+      <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked} />
       <TiktokScroll
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
-        onEndReach={onEndReach}        
+        onEndReach={onEndReach}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}
         onScrollBeginDrag={handleOnScrollBeginDrag}
@@ -348,7 +362,7 @@ const FeedScreen = (props) => {
         showSearchBar={showNavbar}
         refreshing={loading}>
         {({ item, index }) => {
-          if(item.dummy) return null
+          if (item.dummy) return null
           return <RenderListFeed
             item={item}
             onNewPollFetched={onNewPollFetched}
@@ -369,13 +383,13 @@ const FeedScreen = (props) => {
         }}
       </TiktokScroll>
       <ButtonNewPost />
-      <BlockComponent ref={refBlockComponent} refresh={getDataFeeds} screen="screen_feed" />
+      <BlockComponent ref={refBlockComponent} refresh={onBlockCompleted} refreshAnonymous={onDeleteBlockedPostCompleted} screen="screen_feed" />
     </SafeAreaProvider>
 
   );
 };
 
-export default React.memo (withInteractionsManaged (FeedScreen));
+export default React.memo(withInteractionsManaged(FeedScreen));
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: {
@@ -384,7 +398,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: -1,
   },
-  dummyItem : (height) => ({
+  dummyItem: (height) => ({
     height,
     backgroundColor: COLORS.gray1,
   }),

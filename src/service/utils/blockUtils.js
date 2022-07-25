@@ -1,37 +1,37 @@
 import Toast from 'react-native-simple-toast';
 
-import {blockAnonymous, blockUser, blockDomain} from '../../service/blocking';
+import { blockAnonymous, blockDomain, blockUser } from "../blocking";
 
 const handleMessage = (reason = [], message = '', type = 'user') => {
     let successMessage = `The ${type} was blocked successfully. \nThanks for making BetterSocial better!`
-    if(reason.length > 0 || message.length > 0) {
+    if (reason.length > 0 || message.length > 0) {
         successMessage = 'Your report was filed & will be investigated'
     }
     return successMessage
 }
 
-const uiBlockPostAnonymous = async(postId, source, reason, message, callback) => {
+const uiBlockPostAnonymous = async (postId, source, reason, message, callback) => {
     const data = {
         postId,
         source,
         reason,
         message,
-        };
-    let result = await blockAnonymous(data);
-    console.log(result, 'sunat')
+    };
+    const result = await blockAnonymous(data);
 
     if (result.code === 200) {
-        callback()
         Toast.show(
             handleMessage(reason, message),
             Toast.LONG,
         );
+
+        if (callback) callback()
     } else {
         Toast.show(result.message, Toast.LONG);
     }
 }
 
-const uiBlockUser = async(postId, userId, source, reason, message, callback) => {
+const uiBlockUser = async (postId, userId, source, reason, message, callback) => {
     const data = {
         userId,
         postId,
@@ -39,19 +39,20 @@ const uiBlockUser = async(postId, userId, source, reason, message, callback) => 
         reason,
         message,
     };
-    let result = await blockUser(data);   
+    const result = await blockUser(data);
     if (result.code === 200) {
-        callback()
         Toast.show(
             handleMessage(reason, message),
             Toast.LONG,
         );
+
+        if (callback) callback()
     } else {
         Toast.show(result.message, Toast.LONG);
     }
 }
 
-const uiBlockDomain = async(domainId, reason, message, source, callback) => {
+const uiBlockDomain = async (domainId, reason, message, source, callback) => {
     const dataBlock = {
         domainId,
         reason,

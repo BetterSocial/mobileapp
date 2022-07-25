@@ -10,16 +10,16 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  TouchableWithoutFeedback,
+  View
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import ImageLayouter from './ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
 import { COLORS } from '../../../utils/theme';
-import { Gap } from '../../../components';
+import { Gap } from "../..";
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
@@ -29,9 +29,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const Content = ({ message, images_url, style, onPress, topics = [] }) => {
   const route = useRoute();
   const navigation = useNavigation();
-  const cekImage = () => {
-    return images_url !== null && images_url !== '' && images_url !== undefined;
-  };
+  const cekImage = () => images_url !== null && images_url !== '' && images_url !== undefined;
 
   const onImageClickedByIndex = (index) => {
     console.log(index);
@@ -96,15 +94,13 @@ const styles = StyleSheet.create({
     width: screenWidth - 32,
     borderRadius: 16,
   },
-  containerShowMessage: (currentRouteName) => {
-    return {
+  containerShowMessage: (currentRouteName) => ({
       justifyContent: 'center',
       alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
       flex: 1,
       paddingBottom: 10,
       minHeight: 100,
-    };
-  },
+    }),
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
