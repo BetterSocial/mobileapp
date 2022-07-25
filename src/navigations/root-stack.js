@@ -93,7 +93,9 @@ export const RootNavigator = (props) => {
         SplashScreen.hide();
       }, 700);
     } else {
-      SplashScreen.hide();
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 700);
     }
   }, [initialStartup]);
   return (
@@ -112,7 +114,7 @@ export const RootNavigator = (props) => {
         }}>
         {
           initialStartup.id !== null && initialStartup.id !== '' ? (
-          // token !== null && token !== '' ? (
+            // token !== null && token !== '' ? (
             <RootStack.Screen
               name="AuthenticatedStack"
               component={AuthenticatedNavigator}

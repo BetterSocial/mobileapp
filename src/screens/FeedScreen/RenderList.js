@@ -13,13 +13,15 @@ import Log from '../../utils/log/Log';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
-import { ANALYTICS_SHARE_POST_FEED_ID, ANALYTICS_SHARE_POST_FEED_SCREEN, SOURCE_FEED_TAB } from '../../utils/constants';
-import { Footer, Gap, PreviewComment } from '../../components';
 import {
+  ANALYTICS_SHARE_POST_FEED_ID,
+  ANALYTICS_SHARE_POST_FEED_SCREEN,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
+  SOURCE_FEED_TAB,
 } from '../../utils/constants';
+import { Footer, Gap, PreviewComment } from '../../components';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getCommentLength, getCountCommentWithChild } from '../../utils/getstream';
@@ -30,11 +32,11 @@ const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
-const getHeightHeader = () => {
+const getHeightHeader = () => 
   // let h = Math.floor((FULL_HEIGHT * 10) / 100);
   // return h;
-  return dimen.size.FEED_HEADER_HEIGHT
-};
+   dimen.size.FEED_HEADER_HEIGHT
+;
 
 const majorVersion = parseInt(Platform.Version, 10)
 
@@ -61,7 +63,7 @@ const RenderListFeed = (props) => {
   const [loadingVote, setLoadingVote] = React.useState(false);
   const bottomHeight = useBottomTabBarHeight();
   const navigateToLinkContextPage = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -71,15 +73,15 @@ const RenderListFeed = (props) => {
   };
 
   const getHeightFooter = () => {
-    let h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 7) / 100);
+    const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 7) / 100);
     return h;
   };
 
-  const getHeightReaction = () => {
+  const getHeightReaction = () => 
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
-    return dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
-  };
+     dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
+  ;
 
   const onPressDownVoteHandle = async () => {
     // setLoadingVote(true);
@@ -127,7 +129,7 @@ const RenderListFeed = (props) => {
     try {
       const processData = await onPressUpvote({
         activity_id: item.id,
-        status: status,
+        status,
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
@@ -145,7 +147,7 @@ const RenderListFeed = (props) => {
     try {
       const processData = await onPressDownVote({
         activity_id: item.id,
-        status: status,
+        status,
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
@@ -160,9 +162,9 @@ const RenderListFeed = (props) => {
   };
 
   const initial = () => {
-    let reactionCount = item.reaction_counts;
+    const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
-      let comment = reactionCount.comment;
+      const {comment} = reactionCount;
       handleVote(reactionCount);
       if (comment !== undefined) {
         if (comment > 0) {
@@ -258,8 +260,6 @@ const RenderListFeed = (props) => {
               item.anonimity
                 ? false
                 : selfUserId === item.actor.id
-                  ? true
-                  : false
             }
           />
         </View>
@@ -306,6 +306,4 @@ RenderListFeed.propTypes = {
   loading: PropTypes.bool,
 };
 
-export default React.memo (RenderListFeed, (prevProps, nextProps) => {
-  return prevProps.item === nextProps.item
-});
+export default React.memo (RenderListFeed, (prevProps, nextProps) => prevProps.item === nextProps.item);
