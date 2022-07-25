@@ -206,98 +206,98 @@ const RenderListFeed = (props) => {
 
   return (
     <>
-        <Header props={item} height={headerHeight()} source={SOURCE_FEED_TAB} />
-        <View style={{height: '100%'}} >
-          <View style={{height: '80%'}} >
+      <Header props={item} height={headerHeight()} source={SOURCE_FEED_TAB} />
+      <View style={{ height: '100%' }} >
+        <View style={{ height: '80%' }} >
           {item.post_type === POST_TYPE_POLL && (
-          <ContentPoll
-            index={index}
-            message={item.message}
-            images_url={item.images_url}
-            polls={item.pollOptions}
-            onPress={() => onPress(item, index)}
-            item={item}
-            pollexpiredat={item.polls_expired_at}
-            multiplechoice={item.multiplechoice}
-            isalreadypolling={item.isalreadypolling}
-            onnewpollfetched={onNewPollFetched}
-            voteCount={item.voteCount}
-            topics={item?.topics}
-          />
-        )}
-
-        {item.post_type === POST_TYPE_LINK && (
-          <ContentLink
-            index={index}
-            og={item.og}
-            onPress={() => onPress(item)}
-            onHeaderPress={() => onPressDomain(item)}
-            onCardContentPress={() => navigateToLinkContextPage(item)}
-            score={item?.credderScore}
-            message={item?.message}
-            messageContainerStyle={{paddingHorizontal: 10}}
-            topics={item?.topics}
-          />
-        )}
-        {item.post_type === POST_TYPE_STANDARD && (
-          <Content
-            index={index}
-            message={item.message}
-            images_url={item.images_url}
-            onPress={onPress}
-            topics={item?.topics}
-          />
-        )}
-          </View>
-        
-
-          <View style={styles.footerWrapper(getHeightFooter(), searchHeight)}>
-            <Footer
+            <ContentPoll
+              index={index}
+              message={item.message}
+              images_url={item.images_url}
+              polls={item.pollOptions}
+              onPress={() => onPress(item, index)}
               item={item}
-              totalComment={getCommentLength(item.latest_reactions.comment)}
-              totalVote={totalVote}
-              onPressShare={() => ShareUtils.shareFeeds(item,
-                ANALYTICS_SHARE_POST_FEED_SCREEN,
-                ANALYTICS_SHARE_POST_FEED_ID
-              )}
-              onPressComment={() => onPressComment(item)}
-              onPressBlock={() => onPressBlock(item)}
-              onPressDownVote={onPressDownVoteHandle}
-              onPressUpvote={onPressUpvoteHandle}
-              statusVote={voteStatus}
-              // loadingVote={loadingVote}
-              showScoreButton={true}
-              onPressScore={() => showScoreAlertDialog(item)}
-              isSelf={
-                item.anonimity
-                  ? false
-                  : selfUserId === item.actor.id
-              }
+              pollexpiredat={item.polls_expired_at}
+              multiplechoice={item.multiplechoice}
+              isalreadypolling={item.isalreadypolling}
+              onnewpollfetched={onNewPollFetched}
+              voteCount={item.voteCount}
+              topics={item?.topics}
             />
-          </View>
-          {isHaveComment && (
-            <View style={styles.contentReaction(getHeightReaction(), searchHeight)}>
-              <React.Fragment>
-                <PreviewComment
-                  user={item?.latest_reactions?.comment[0]?.user}
-                  comment={item?.latest_reactions?.comment[0]?.data?.text}
-                  image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url}
-                  time={item?.latest_reactions?.comment[0]?.created_at}
-                  totalComment={getCommentLength(item?.latest_reactions?.comment) - 1}
-                  onPress={onPressComment}
-                />
-                <Gap height={8} />
-              </React.Fragment>
-            </View>
           )}
 
+          {item.post_type === POST_TYPE_LINK && (
+            <ContentLink
+              index={index}
+              og={item.og}
+              onPress={() => onPress(item)}
+              onHeaderPress={() => onPressDomain(item)}
+              onCardContentPress={() => navigateToLinkContextPage(item)}
+              score={item?.credderScore}
+              message={item?.message}
+              messageContainerStyle={{ paddingHorizontal: 10 }}
+              topics={item?.topics}
+            />
+          )}
+          {item.post_type === POST_TYPE_STANDARD && (
+            <Content
+              index={index}
+              message={item.message}
+              images_url={item.images_url}
+              onPress={onPress}
+              topics={item?.topics}
+            />
+          )}
         </View>
-        </>
+
+
+        <View style={styles.footerWrapper(getHeightFooter(), searchHeight)}>
+          <Footer
+            item={item}
+            totalComment={getCommentLength(item.latest_reactions.comment)}
+            totalVote={totalVote}
+            onPressShare={() => ShareUtils.shareFeeds(item,
+              ANALYTICS_SHARE_POST_FEED_SCREEN,
+              ANALYTICS_SHARE_POST_FEED_ID
+            )}
+            onPressComment={() => onPressComment(item)}
+            onPressBlock={() => onPressBlock(item)}
+            onPressDownVote={onPressDownVoteHandle}
+            onPressUpvote={onPressUpvoteHandle}
+            statusVote={voteStatus}
+            // loadingVote={loadingVote}
+            showScoreButton={true}
+            onPressScore={() => showScoreAlertDialog(item)}
+            isSelf={
+              item.anonimity
+                ? false
+                : selfUserId === item.actor.id
+            }
+          />
+        </View>
+        {isHaveComment && (
+          <View style={styles.contentReaction(getHeightReaction(), searchHeight)}>
+            <React.Fragment>
+              <PreviewComment
+                user={item?.latest_reactions?.comment[0]?.user}
+                comment={item?.latest_reactions?.comment[0]?.data?.text}
+                image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url}
+                time={item?.latest_reactions?.comment[0]?.created_at}
+                totalComment={getCommentLength(item?.latest_reactions?.comment) - 1}
+                onPress={onPressComment}
+              />
+              <Gap height={8} />
+            </React.Fragment>
+          </View>
+        )}
+
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  footerWrapper: () => ({ height: '5%', marginTop: '3%'}),
+  footerWrapper: () => ({ height: '5%', marginTop: '3%' }),
   contentReaction: () => ({
     height: '10%',
   }),

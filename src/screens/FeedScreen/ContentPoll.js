@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import * as React from 'react';
 import SeeMore from 'react-native-see-more-inline';
 import {
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   contentFeed: {
-    // flex: 1,
+    flex: 1,
     paddingTop: 12,
     paddingLeft: 20,
     paddingRight: 20,
