@@ -4,7 +4,7 @@ import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import {
-  Platform, StatusBar, StyleSheet, Text,
+  Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -300,21 +300,27 @@ function HomeBottomTabs(props) {
           // showLabel: true,
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
+          tabStyle: {
+            // backgroundColor: 'red',
+            // paddingVertical: 5
+            // alignItems: 'center'
+          }
         }}
         screenOptions={({ navigation: screenOptionsNavigation }) => ({
           activeTintColor: colors.holytosca,
           tabBarLabel: () => (
-              <Text style={styles.label}>
-                {screenOptionsNavigation.isFocused() ? '\u2B24' : ''}
-              </Text>
+            <View style={[ styles.badge, { backgroundColor: screenOptionsNavigation.isFocused() ? colors.holytosca : 'transparent', borderRadius: 3.5 }]} />
           ),
         })}>
         <Tab.Screen
           name="ChannelList"
           component={ChannelListScreen}
+          
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <MemoHome fill={color} />,
+            tabBarIcon: ({ color }) => <View  >
+              <MemoHome fill={color} />
+            </View>,
             tabBarBadge: unReadMessage.total_unread_count
               ? unReadMessage.total_unread_count
               : null,
@@ -325,7 +331,7 @@ function HomeBottomTabs(props) {
           component={FeedScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <MemoFeed fill={color} />,
+            tabBarIcon: ({ color }) => <View  ><MemoFeed fill={color} /></View>,
             // unmountOnBlur: true
           }}
         />
@@ -359,11 +365,8 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  label: {
-    fontSize: 6,
-    color: colors.holytosca,
-    marginTop: -12,
-    marginBottom: 5,
-    alignSelf: 'center',
-  },
+  badge: {
+    height: 7, 
+    width: 7,
+  }
 });

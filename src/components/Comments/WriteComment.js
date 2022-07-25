@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     // alignItems: 'center',
     backgroundColor: colors.lightgrey,
-    marginLeft: 10,
+    marginLeft: 5,
     borderRadius: 8,
     paddingLeft: 6,
     paddingRight: 8,
