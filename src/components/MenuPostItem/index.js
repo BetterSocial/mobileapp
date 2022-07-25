@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -8,15 +9,15 @@ import {
 } from 'react-native';
 
 import MemoIc_arrow_right from '../../assets/icons/Ic_arrow_right';
-import {colors} from '../../utils/colors';
+import { colors } from '../../utils/colors';
 
-const MenuPostItem = ({icon, label, labelStyle, onPress, topic, listTopic}) => {
+const MenuPostItem = ({ icon, label, labelStyle, onPress, topic, listTopic }) => {
   if (topic) {
     return (
       <Pressable
         style={styles.containerTopic}
         onPress={onPress}
-        hitSlop={{bottom: 0, top: 0}}>
+        hitSlop={{ bottom: 0, top: 0 }}>
         <View style={styles.content}>
           <TouchableOpacity onPress={onPress}>{icon}</TouchableOpacity>
           {listTopic}
@@ -57,6 +58,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: 8,
   },
-  content: {flexDirection: 'row', alignItems: 'center'},
-  text: {marginLeft: 12},
+  content: { flexDirection: 'row', alignItems: 'center', flex: 1 },
+  text: { marginLeft: 12 },
 });

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import * as React from 'react';
 import SeeMore from 'react-native-see-more-inline';
 import {
@@ -46,15 +47,15 @@ const ContentPoll = ({
   voteCount = 0,
   topics = []
 }) => {
-  let modifiedPoll = polls.reduce(
+  const modifiedPoll = polls.reduce(
     (acc, current) => {
-      acc.totalpoll = acc.totalpoll + parseInt(current.counter);
+      acc.totalpoll += parseInt(current.counter);
       if (current.counter > acc.maxValue) {
         acc.maxValue = current.counter;
         acc.maxId = [];
         acc.maxId.push(current.polling_option_id);
       } else if (current.counter === acc.maxValue) {
-        let { maxId } = acc;
+        const { maxId } = acc;
         maxId.push(current.polling_option_id);
       }
 
@@ -63,14 +64,14 @@ const ContentPoll = ({
     { totalpoll: 0, maxId: [], maxValue: 0 },
   );
 
-  let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] =
+  const [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] =
     React.useState(-1);
-  let [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
-  let [isFetchingResultPoll, setIsFetchingResultPoll] = React.useState(false);
-  let [isAlreadyPolling, setIsAlreadyPolling] =
+  const [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
+  const [isFetchingResultPoll, setIsFetchingResultPoll] = React.useState(false);
+  const [isAlreadyPolling, setIsAlreadyPolling] =
     React.useState(isalreadypolling);
-  let route = useRoute();
-  let navigation = useNavigation()
+  const route = useRoute();
+  const navigation = useNavigation()
 
   React.useEffect(() => {
     if(singleChoiceSelectedIndex === -1) return
@@ -80,14 +81,14 @@ const ContentPoll = ({
     return onSeeResultsClicked()
   }, [singleChoiceSelectedIndex])
 
-  let isTouchableDisabled = route.name === 'PostDetailPage';
+  const isTouchableDisabled = route.name === 'PostDetailPage';
 
   let onSeeResultsClicked = () => {
     if (isFetchingResultPoll) {
       return;
     }
-    let newPolls = [...polls];
-    let newItem = { ...item };
+    const newPolls = [...polls];
+    const newItem = { ...item };
 
     if (multiplechoice) {
       newItem.isalreadypolling = true;
@@ -96,10 +97,10 @@ const ContentPoll = ({
         inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
       } else {
         setIsAlreadyPolling(true);
-        let selectedPolls = [];
+        const selectedPolls = [];
         for (let i = 0; i < multipleChoiceSelected.length; i++) {
-          let changedPollIndex = multipleChoiceSelected[i];
-          let selectedPoll = polls[changedPollIndex];
+          const changedPollIndex = multipleChoiceSelected[i];
+          const selectedPoll = polls[changedPollIndex];
           newPolls[changedPollIndex].counter =
             parseInt(selectedPoll.counter) + 1;
           selectedPolls.push(selectedPoll);
@@ -122,7 +123,7 @@ const ContentPoll = ({
       if (singleChoiceSelectedIndex === -1) {
         inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
       } else {
-        let selectedPoll = polls[singleChoiceSelectedIndex];
+        const selectedPoll = polls[singleChoiceSelectedIndex];
         newPolls[singleChoiceSelectedIndex].counter =
           parseInt(selectedPoll.counter) + 1;
         newItem.pollOptions = newPolls;
@@ -139,9 +140,7 @@ const ContentPoll = ({
     }
   };
 
-  let showSetResultsButton = () => {
-    return !isPollExpired(pollexpiredat) && !isAlreadyPolling;
-  };
+  const showSetResultsButton = () => !isPollExpired(pollexpiredat) && !isAlreadyPolling;
 
   const handleTextCaption = (text, onPress) => {
     getCaptionWithTopicStyle(text)
@@ -165,7 +164,7 @@ const ContentPoll = ({
     );
   };
 
-  const __renderSeeResultButton = () => {
+  const renderSeeResultButton = () => {
     if(isFetchingResultPoll) return 'Loading...'
     if(multiplechoice && multipleChoiceSelected.length > 0) return 'Submit'
 
@@ -192,15 +191,13 @@ const ContentPoll = ({
               horizontal={true}
               pagingEnabled={true}
               data={images_url}
-              renderItem={({ item, index }) => {
-                return (
+              renderItem={({ item, index }) => (
                   <Image
                     source={{ uri: item }}
                     style={styles.imageList}
                     resizeMode={'cover'}
                   />
-                );
-              }}
+                )}
               keyExtractor={({ item, index }) => index}
             />
           </View>
@@ -209,10 +206,11 @@ const ContentPoll = ({
             {handleTextCaption(message, onPress)}
 
             <View style={styles.pollOptionsContainer}>
-              {polls.map((pollItem, index) => {
-
-
-                return multiplechoice ? (
+              {polls.map((pollItem, index) => 
+                /*
+                  TODO : Count percentage
+                */
+                 multiplechoice ? (
                   <PollOptionsMultipleChoice
                     key={index}
                     item={pollItem}
@@ -240,8 +238,8 @@ const ContentPoll = ({
                     isalreadypolling={isAlreadyPolling}
                     onselected={(index) => setSingleChoiceSelectedIndex(index)}
                   />
-                );
-              })}
+                )
+              )}
             </View>
 
             <View style={styles.totalVotesContainer}>
@@ -263,7 +261,7 @@ const ContentPoll = ({
                 <View style={styles.seeresultscontainer}>
                   <TouchableOpacity onPress={onSeeResultsClicked}>
                     <Text style={styles.seeresultstext}>
-                      {__renderSeeResultButton()}
+                      {renderSeeResultButton()}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -484,15 +482,13 @@ const styles = StyleSheet.create({
     color: colors.holytosca,
     fontFamily: fonts.inter[500],
   },
-  textMedia: (text) => {
-    return {
+  textMedia: (text) => ({
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
       fontSize: FONT_SIZE_MEDIA,
       color: colors.black,
       lineHeight: 24,
-    };
-  },
+    }),
 
   seemore: {
     color: COLORS.blue,
