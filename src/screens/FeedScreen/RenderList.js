@@ -1,16 +1,15 @@
-/* eslint-disable arrow-body-style */
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import { Dimensions, StatusBar, StyleSheet, View } from 'react-native';
+import { Dimensions, Platform, Share, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
-import { useSafeAreaFrame } from 'react-native-safe-area-context';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
 import ContentPoll from './ContentPoll';
 import Header from './Header';
+import Log from '../../utils/log/Log';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
@@ -24,7 +23,8 @@ import {
 } from '../../utils/constants';
 import { Footer, Gap, PreviewComment } from '../../components';
 import { colors } from '../../utils/colors';
-import { getCommentLength } from '../../utils/getstream';
+import { fonts } from '../../utils/fonts';
+import { getCommentLength, getCountCommentWithChild } from '../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { showScoreAlertDialog } from '../../utils/Utils'
 
@@ -32,8 +32,13 @@ const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
+const getHeightHeader = () => 
+  // let h = Math.floor((FULL_HEIGHT * 10) / 100);
+  // return h;
+   dimen.size.FEED_HEADER_HEIGHT
+;
 
-
+const majorVersion = parseInt(Platform.Version, 10)
 
 const RenderListFeed = (props) => {
   const {
@@ -47,8 +52,6 @@ const RenderListFeed = (props) => {
     onPressUpvote,
     selfUserId,
     onPressDownVote,
-    showNavbar,
-    searchHeight,
   } = props;
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
@@ -57,9 +60,8 @@ const RenderListFeed = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
-  // const [loadingVote, setLoadingVote] = React.useState(false);
+  const [loadingVote, setLoadingVote] = React.useState(false);
   const bottomHeight = useBottomTabBarHeight();
-  const frameHeight = useSafeAreaFrame().height
   const navigateToLinkContextPage = (item) => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -71,21 +73,15 @@ const RenderListFeed = (props) => {
   };
 
   const getHeightFooter = () => {
-    const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 6) / 100);
+    const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 7) / 100);
     return h;
   };
-  const getHeightReaction = () =>
+
+  const getHeightReaction = () => 
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
-    dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
-    ;
-
-  // const getHeightHeader = () => {
-  //   const h = (FULL_HEIGHT * 10) / 100
-  //   return h;
-  //   // return (Dimensions.get('screen').height - tabBarHeight - useBottomTabBarHeight()) *0.1
-
-  // };
+     dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
+  ;
 
   const onPressDownVoteHandle = async () => {
     // setLoadingVote(true);
@@ -155,16 +151,20 @@ const RenderListFeed = (props) => {
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
+        // setLoadingVote(false);
         return;
       }
+      // setLoadingVote(false);
     } catch (e) {
+      // setLoadingVote(false);
       return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     }
   };
+
   const initial = () => {
     const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
-      const { comment } = reactionCount;
+      const {comment} = reactionCount;
       handleVote(reactionCount);
       if (comment !== undefined) {
         if (comment > 0) {
@@ -174,6 +174,7 @@ const RenderListFeed = (props) => {
       }
     }
   };
+
 
   const checkVotes = () => {
     const findUpvote = item && item.own_reactions && item.own_reactions.upvotes && item.own_reactions.upvotes.find((vote) => vote.user_id === selfUserId)
@@ -188,6 +189,7 @@ const RenderListFeed = (props) => {
       setVoteStatus('none')
     }
   }
+
   React.useEffect(() => {
     checkVotes()
   }, [item]);
@@ -195,63 +197,49 @@ const RenderListFeed = (props) => {
   React.useEffect(() => {
     initial();
   }, [item]);
-
-  const headerHeight = React.useCallback(() => {
-    return (frameHeight) * 0.10
-
-
-  }, [showNavbar, frameHeight])
-
-  const isHaveComment = getCommentLength(item.latest_reactions.comment) > 0
-
   return (
     <>
-      <Header props={item} height={headerHeight()} source={SOURCE_FEED_TAB} />
-      <View style={{ height: '100%' }} >
-        <View style={{ height: '80%' }} >
-          {item.post_type === POST_TYPE_POLL && (
-            <ContentPoll
-              index={index}
-              message={item.message}
-              images_url={item.images_url}
-              polls={item.pollOptions}
-              onPress={() => onPress(item, index)}
-              item={item}
-              pollexpiredat={item.polls_expired_at}
-              multiplechoice={item.multiplechoice}
-              isalreadypolling={item.isalreadypolling}
-              onnewpollfetched={onNewPollFetched}
-              voteCount={item.voteCount}
-              topics={item?.topics}
-            />
-          )}
+        <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB} />
+        {item.post_type === POST_TYPE_POLL && (
+          <ContentPoll
+            index={index}
+            message={item.message}
+            images_url={item.images_url}
+            polls={item.pollOptions}
+            onPress={() => onPress(item, index)}
+            item={item}
+            pollexpiredat={item.polls_expired_at}
+            multiplechoice={item.multiplechoice}
+            isalreadypolling={item.isalreadypolling}
+            onnewpollfetched={onNewPollFetched}
+            voteCount={item.voteCount}
+            topics={item?.topics}
+          />
+        )}
 
-          {item.post_type === POST_TYPE_LINK && (
-            <ContentLink
-              index={index}
-              og={item.og}
-              onPress={() => onPress(item)}
-              onHeaderPress={() => onPressDomain(item)}
-              onCardContentPress={() => navigateToLinkContextPage(item)}
-              score={item?.credderScore}
-              message={item?.message}
-              messageContainerStyle={{ paddingHorizontal: 10 }}
-              topics={item?.topics}
-            />
-          )}
-          {item.post_type === POST_TYPE_STANDARD && (
-            <Content
-              index={index}
-              message={item.message}
-              images_url={item.images_url}
-              onPress={onPress}
-              topics={item?.topics}
-            />
-          )}
-        </View>
-
-
-        <View style={styles.footerWrapper(getHeightFooter(), searchHeight)}>
+        {item.post_type === POST_TYPE_LINK && (
+          <ContentLink
+            index={index}
+            og={item.og}
+            onPress={() => onPress(item)}
+            onHeaderPress={() => onPressDomain(item)}
+            onCardContentPress={() => navigateToLinkContextPage(item)}
+            score={item?.credderScore}
+            message={item?.message}
+            messageContainerStyle={{paddingHorizontal: 10}}
+            topics={item?.topics}
+          />
+        )}
+        {item.post_type === POST_TYPE_STANDARD && (
+          <Content
+            index={index}
+            message={item.message}
+            images_url={item.images_url}
+            onPress={onPress}
+            topics={item?.topics}
+          />
+        )}
+        <View style={styles.footerWrapper(getHeightFooter())}>
           <Footer
             item={item}
             totalComment={getCommentLength(item.latest_reactions.comment)}
@@ -275,15 +263,15 @@ const RenderListFeed = (props) => {
             }
           />
         </View>
-        {isHaveComment && (
-          <View style={styles.contentReaction(getHeightReaction(), searchHeight)}>
+        {getCommentLength(item.latest_reactions.comment) > 0 && (
+          <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
-                user={item?.latest_reactions?.comment[0]?.user}
-                comment={item?.latest_reactions?.comment[0]?.data?.text}
-                image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url}
-                time={item?.latest_reactions?.comment[0]?.created_at}
-                totalComment={getCommentLength(item?.latest_reactions?.comment) - 1}
+                user={item.latest_reactions.comment[0].user}
+                comment={item.latest_reactions.comment[0].data.text}
+                image={item.latest_reactions.comment[0].user.data.profile_pic_url}
+                time={item.latest_reactions.comment[0].created_at}
+                totalComment={getCommentLength(item.latest_reactions.comment) - 1}
                 onPress={onPressComment}
               />
               <Gap height={8} />
@@ -291,15 +279,15 @@ const RenderListFeed = (props) => {
           </View>
         )}
 
-      </View>
-    </>
+</>
   );
 };
 
 const styles = StyleSheet.create({
-  footerWrapper: () => ({ height: '5%', marginTop: '3%' }),
-  contentReaction: () => ({
-    height: '10%',
+  footerWrapper: (h) => ({ height: h + 10, }),
+  contentReaction: (heightReaction) => ({
+    maxHeight: heightReaction,
+    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
   }),
 });
 
@@ -316,8 +304,6 @@ RenderListFeed.propTypes = {
   onPressUpvote: PropTypes.func,
   onPressDownVote: PropTypes.func,
   loading: PropTypes.bool,
-  showNavbar: PropTypes.number,
-  searchHeight: PropTypes.number
 };
 
-export default React.memo(RenderListFeed);
+export default React.memo (RenderListFeed, (prevProps, nextProps) => prevProps.item === nextProps.item);
