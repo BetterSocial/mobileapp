@@ -295,21 +295,15 @@ function HomeBottomTabs(props) {
       <StatusBar />
       <Tab.Navigator
         initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
-        // initialRouteName="Profile"
         tabBarOptions={{
-          // showLabel: true,
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
-          tabStyle: {
-            // backgroundColor: 'red',
-            // paddingVertical: 5
-            // alignItems: 'center'
-          }
+ 
         }}
         screenOptions={({ navigation: screenOptionsNavigation }) => ({
           activeTintColor: colors.holytosca,
           tabBarLabel: () => (
-            <View style={[ styles.badge, { backgroundColor: screenOptionsNavigation.isFocused() ? colors.holytosca : 'transparent', borderRadius: 3.5 }]} />
+            <View style={[ styles.badge, { backgroundColor: screenOptionsNavigation.isFocused() ? colors.holytosca : 'transparent' }]} />
           ),
         })}>
         <Tab.Screen
@@ -318,7 +312,7 @@ function HomeBottomTabs(props) {
           
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <View  >
+            tabBarIcon: ({ color }) => <View style={styles.center} >
               <MemoHome fill={color} />
             </View>,
             tabBarBadge: unReadMessage.total_unread_count
@@ -331,7 +325,7 @@ function HomeBottomTabs(props) {
           component={FeedScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <View  ><MemoFeed fill={color} /></View>,
+            tabBarIcon: ({ color }) => <View style={styles.center} ><MemoFeed fill={color} /></View>,
             // unmountOnBlur: true
           }}
         />
@@ -340,7 +334,9 @@ function HomeBottomTabs(props) {
           component={NewsScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <MemoNews fill={color} />,
+            tabBarIcon: ({ color }) => <View>
+              <MemoNews fill={color} />
+            </View>,
             // unmountOnBlur: true
           }}
         />
@@ -349,7 +345,9 @@ function HomeBottomTabs(props) {
           component={ProfileScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: () => <MemoProfileIcon loadingUser={loadingUser} uri={users.photoUrl} />,
+            tabBarIcon: () => <View style={styles.center} >
+              <MemoProfileIcon loadingUser={loadingUser} uri={users.photoUrl} />
+            </View>,
             // unmountOnBlur:true
           }}
         />
@@ -368,5 +366,11 @@ const styles = StyleSheet.create({
   badge: {
     height: 7, 
     width: 7,
+    position: 'absolute',
+    bottom: 3,
+    borderRadius: 3.5
+  },
+  center: {
+    alignItems: 'center', justifyContent: 'center'
   }
 });
