@@ -4,6 +4,7 @@ import { StyleSheet, TouchableNativeFeedback, View } from 'react-native';
 import Image from '../../../components/Image';
 import MemoIcAddCircle from '../../../assets/icons/ic_add_circle';
 import { DEFAULT_PROFILE_PIC_PATH } from '../../../utils/constants';
+import FastImage from 'react-native-fast-image';
 
 /**
  * @typedef {Object} ProfilePicturePropsParam
@@ -31,7 +32,7 @@ const ProfilePicture = ({ onImageContainerClick, profilePicPath, disabledAddIcon
                     ? `${profilePicPath}`
                     : DEFAULT_PROFILE_PIC_PATH,
                 }}
-                resizeMode="contain"
+                resizeMode={FastImage.resizeMode.stretch}
             />
             { __renderAddIcon() }
             </View>
