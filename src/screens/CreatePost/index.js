@@ -440,6 +440,7 @@ const CreatePost = () => {
       }
 
       setLoading(true);
+
       const data = {
         topics: listTopic,
         message,
@@ -453,6 +454,9 @@ const CreatePost = () => {
         duration_feed: postExpired[expiredSelect].value,
         images_url: dataImage,
       };
+
+      // console.log('data')
+      // console.log(data)      
 
       setLocationId(JSON.stringify(geoSelect));
       setDurationId(JSON.stringify(expiredSelect));
@@ -781,7 +785,8 @@ const CreatePost = () => {
             topicSearch.length > 0 && (
               <Card style={{ marginTop: -16 }}>
                 {topicSearch.map((item, index) => <TouchableNativeFeedback key={`topicSearch-${index}`} onPress={() => {
-                  const topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
+                  // const topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
+                  const topicItem = convertString(item.name, " ", "");
                   const topicItemWithSpace = topicItem.concat(' ');
                   const oldMessage = message;
                   const start = hastagPosition + 1;
@@ -804,7 +809,7 @@ const CreatePost = () => {
                       fontWeight: '500',
                       fontSize: 12,
                       lineHeight: 18
-                    }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
+                    }}>#{convertString(item.name, " ", "")}</Text>
                     {index !== topicSearch.length - 1 && (
                       <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
                     )}

@@ -164,7 +164,7 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
               <Card >
                 {topicSuggestion.map((item, index) => (
                     <TouchableNativeFeedback key={`topicSuggestions-${index}`} onPress={() => {
-                      let textTopic = capitalizeFirstText(convertString(item.name, " ", ""))
+                      let textTopic = convertString(item.name, " ", "")
                       textTopic += ' ';
                       setTopic(textTopic);
                       setTopicSuggestion([]);
@@ -177,7 +177,7 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
                           fontWeight: '500',
                           fontSize: 12,
                           lineHeight: 18
-                        }}>#{capitalizeFirstText(convertString(item.name, " ", ""))}</Text>
+                        }}>#{convertString(item.name, " ", "")}</Text>
                         {index !== topicSuggestion.length - 1 && (
                           <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
                         )}
