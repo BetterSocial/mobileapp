@@ -40,7 +40,7 @@ const Topics = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [minTopic] = React.useState(3);
   const [, dispatch] = React.useContext(Context).topics;
-
+  const [myTopic, setMyTopic] = React.useState({})
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Topics',
@@ -69,9 +69,12 @@ const Topics = () => {
     }
     setTopics(allTopics)
   }
-
-
   const handleSelectedLanguage = React.useCallback((val) => {
+    if(!myTopic[val]) {
+      setMyTopic({...myTopic, [val]: val})
+    } else {
+      setMyTopic({...myTopic, [val]: null})
+    }
     let copytopicSelected = [...topicSelected];
     const index = copytopicSelected.findIndex((data) => data === val);
     if (index > -1) {
@@ -93,43 +96,21 @@ const Topics = () => {
   };
 
 
-  const handleSelectedTopic = (indexChild, indexParent) => {
-    const {data} = topics[indexParent]
-    const updatedData = data.map((d, index) => {
-      if(index === indexChild) {
-        if(d.isActive) {
-          return {...d, isActive: false}
-        }
-        return {...d, isActive: true}
-      } 
-        return {...d}
-    } )
-    const newTopic = topics.map((topic, index) => {
-      if(index === indexParent) {
-        return {...topic, data: updatedData}
-      } 
-        return {...topic}
-      
-    })
-    setTopics(newTopic)
-    
-  }
 
-
-  const renderListTopics = (item, i, indexParent) => (
+  const renderListTopics = ({item, i}) => (
     <Pressable
     onPress={() =>
-      handleSelectedTopic(i, indexParent)
+      handleSelectedLanguage(item.topic_id)
     }
     key={i}
     style={
-      [styles.bgTopicSelectNotActive, {backgroundColor: item.isActive ? colors.bondi_blue : colors.concrete}]
+      [styles.bgTopicSelectNotActive, {backgroundColor: myTopic[item.topic_id] ? colors.bondi_blue : colors.concrete}]
     }
     >
     <Text>{item.icon}</Text>
     <Text
       style={
-        [styles.textTopicNotActive, {color: item.isActive ?  colors.white : colors.mine_shaft}]
+        [styles.textTopicNotActive, {color: myTopic[item.topic_id] ?  colors.white : colors.mine_shaft}]
       }>#{item.name}</Text>
   </Pressable>
   )
@@ -158,8 +139,8 @@ const Topics = () => {
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
         {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
-        {topics ? topics.map((topic, indexParent) => (
-          <View key={indexParent} style={styles.containerTopic}>
+        {topics ? topics.map((topic, index) => (
+          <View key={index} style={styles.containerTopic}>
           <Text style={styles.title}>{topic.name}</Text>
           <ScrollView
           showsHorizontalScrollIndicator={false}
@@ -170,11 +151,11 @@ const Topics = () => {
           >
             <FlatList 
             data={topic.data}
-            renderItem={({item, index}) => renderListTopics(item, index, indexParent) }
+            renderItem={renderListTopics}
             numColumns={Math.floor(topic.data.length / 3) + 1}
             nestedScrollEnabled 
             scrollEnabled={false}
-            extraData={topics}
+            extraData={topicSelected}
             maxToRenderPerBatch={2}
             updateCellsBatchingPeriod={10}
             removeClippedSubviews
