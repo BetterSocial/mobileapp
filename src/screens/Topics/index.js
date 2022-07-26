@@ -18,6 +18,7 @@ import {
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
 
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import {get} from '../../api/server';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
@@ -28,10 +29,9 @@ import StringConstant from '../../utils/string/StringConstant';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import { Header } from '../../components';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { globalReplaceAll } from '../../utils/Utils';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 
 const Topics = () => {
   const navigation = useNavigation();
@@ -61,7 +61,7 @@ const Topics = () => {
   }, []);
 
   const topicMapping = (data) => {
-    let allTopics = []
+    const allTopics = []
     if(data && typeof data ==='object') {
       Object.keys(data).map((attribute) => {
         allTopics.push({name: attribute, data: data[attribute].map((att) => ({topic_id: att.topic_id, name: att.name}))})
@@ -73,7 +73,7 @@ const Topics = () => {
 
   const handleSelectedLanguage = React.useCallback((val) => {
     let copytopicSelected = [...topicSelected];
-    let index = copytopicSelected.findIndex((data) => data === val);
+    const index = copytopicSelected.findIndex((data) => data === val);
     if (index > -1) {
       copytopicSelected = copytopicSelected.filter((data) => data !== val)
     } else {
@@ -92,32 +92,47 @@ const Topics = () => {
     }
   };
 
-  const isActive = React.useCallback((item) => {
-    const findTopic = topicSelected.find((topic) => topic === item.topic_id)
-    return findTopic
-  }, [topicSelected])
+
+  const handleSelectedTopic = (indexChild, indexParent) => {
+    const {data} = topics[indexParent]
+    const updatedData = data.map((d, index) => {
+      if(index === indexChild) {
+        if(d.isActive) {
+          return {...d, isActive: false}
+        }
+        return {...d, isActive: true}
+      } 
+        return {...d}
+    } )
+    const newTopic = topics.map((topic, index) => {
+      if(index === indexParent) {
+        return {...topic, data: updatedData}
+      } 
+        return {...topic}
+      
+    })
+    setTopics(newTopic)
+    
+  }
 
 
-  const renderListTopics = React.useCallback(({item, i}) => {
-    return (
-      <Pressable
-      onPress={() =>
-        handleSelectedLanguage(item.topic_id)
-      }
-      key={i}
+  const renderListTopics = (item, i, indexParent) => (
+    <Pressable
+    onPress={() =>
+      handleSelectedTopic(i, indexParent)
+    }
+    key={i}
+    style={
+      [styles.bgTopicSelectNotActive, {backgroundColor: item.isActive ? colors.bondi_blue : colors.concrete}]
+    }
+    >
+    <Text>{item.icon}</Text>
+    <Text
       style={
-        [styles.bgTopicSelectNotActive, {backgroundColor: isActive(item) ? colors.bondi_blue : colors.concrete}]
-      }
-      >
-      <Text>{item.icon}</Text>
-      <Text
-        style={
-          [styles.textTopicNotActive, {color: isActive(item) ?  colors.white : colors.mine_shaft}]
-        }>#{item.name}</Text>
-    </Pressable>
-    )
-  }, [topicSelected])
-
+        [styles.textTopicNotActive, {color: item.isActive ?  colors.white : colors.mine_shaft}]
+      }>#{item.name}</Text>
+  </Pressable>
+  )
   const onBack = () => {
     navigation.goBack()
   }
@@ -143,8 +158,8 @@ const Topics = () => {
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
         {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
-        {topics ? topics.map((topic, index) => (
-          <View key={index} style={styles.containerTopic}>
+        {topics ? topics.map((topic, indexParent) => (
+          <View key={indexParent} style={styles.containerTopic}>
           <Text style={styles.title}>{topic.name}</Text>
           <ScrollView
           showsHorizontalScrollIndicator={false}
@@ -155,11 +170,11 @@ const Topics = () => {
           >
             <FlatList 
             data={topic.data}
-            renderItem={renderListTopics}
+            renderItem={({item, index}) => renderListTopics(item, index, indexParent) }
             numColumns={Math.floor(topic.data.length / 3) + 1}
             nestedScrollEnabled 
             scrollEnabled={false}
-            extraData={topicSelected}
+            extraData={topics}
             maxToRenderPerBatch={2}
             updateCellsBatchingPeriod={10}
             removeClippedSubviews
@@ -178,7 +193,7 @@ const Topics = () => {
           }>{`${StringConstant.onboardingTopicsOthersCannotSee}`}</Text>
         <Button
           onPress={() => next()}
-          disabled={topicSelected.length >= minTopic ? false : true}
+          disabled={!(topicSelected.length >= minTopic)}
           style={topicSelected.length >= minTopic ? null : styles.button}>
           {topicSelected.length >= minTopic
             ? StringConstant.onboardingTopicsButtonStateNext
@@ -220,7 +235,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     height: 112,
-    width: width,
+    width,
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,
