@@ -162,7 +162,7 @@ const ChannelListScreen = ({ navigation }) => {
   
   return (
     <SafeAreaProvider style={{ height: '100%' }}>
-      <StatusBar backgroundColor="transparent" />
+      <StatusBar translucent={false} />
       <ScrollView >
         <View style={{ height: 52 }}>
           <Search

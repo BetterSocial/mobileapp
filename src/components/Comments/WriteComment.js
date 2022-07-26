@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 
 import {colors} from '../../utils/colors';
@@ -31,7 +32,7 @@ const WriteComment = ({
   let isSendButtonPressed = () => {
     return onPress();
   };
-
+  const isAndroid = Platform.OS === 'android'
   return (
     <View style={styles.columnContainer}>
       <View
@@ -58,7 +59,7 @@ const WriteComment = ({
           <TextInput
             ref={commentInputRef}
             placeholder={StringConstant.commentBoxDefaultPlaceholder}
-            multiline
+            // multiline={isAndroid}
             placeholderTextColor={colors.gray}
             style={styles.text}
             onChangeText={onChangeText}
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     // alignItems: 'center',
     backgroundColor: colors.lightgrey,
-    marginLeft: 10,
+    marginLeft: 8,
     borderRadius: 8,
     paddingLeft: 6,
     paddingRight: 8,

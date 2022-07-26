@@ -350,6 +350,8 @@ const FeedScreen = (props) => {
 
   return (
     <SafeAreaProvider style={styles.container} forceInset={{ top: 'always' }}>
+              <StatusBar translucent={false} />
+
       <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked} />
       <TiktokScroll
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
