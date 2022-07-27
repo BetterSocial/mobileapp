@@ -270,8 +270,8 @@ const ProfileScreen = ({ route }) => {
     const { success, message } = await requestExternalStoragePermission();
     if (success) {
       ImagePicker.openPicker({
-        width: 100,
-        height: 100,
+        width: 512,
+        height: 512,
         cropping: true,
         mediaType: 'photo',
         includeBase64: true
@@ -287,8 +287,8 @@ const ProfileScreen = ({ route }) => {
     const { success, message } = await requestCameraPermission();
     if (success) {
       ImagePicker.openCamera({
-        width: 100,
-        height: 100,
+        width: 512,
+        height: 512,
         cropping: true,
         mediaType: 'photo',
         includeBase64: true
