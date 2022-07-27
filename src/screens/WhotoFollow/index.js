@@ -17,6 +17,7 @@ import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview
 import { StackActions } from '@react-navigation/native';
 import { showMessage } from 'react-native-flash-message';
 import { useNavigation } from '@react-navigation/core';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import ItemUser from './elements/ItemUser';
@@ -25,6 +26,7 @@ import Loading from '../Loading';
 import { Button } from '../../components/Button';
 import { Context } from '../../context';
 import { Header } from '../../components';
+import { InitialStartupAtom } from '../../service/initialStartup';
 import { ProgressBar } from '../../components/ProgressBar';
 import { colors } from '../../utils/colors';
 import { get } from '../../api/server';
@@ -34,7 +36,7 @@ import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
 import { setImage } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 
 const VIEW_TYPE_LABEL = 1;
 const VIEW_TYPE_DATA = 2;
@@ -51,6 +53,8 @@ const WhotoFollow = () => {
   const [dataProvider, setDataProvider] = React.useState(null);
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
   const [layoutProvider, setLayoutProvider] = React.useState(() => { });
+
+  const setInitialValue = useSetRecoilState(InitialStartupAtom)
   const create = useClientGetstream();
 
   const navigation = useNavigation();
@@ -62,7 +66,7 @@ const WhotoFollow = () => {
     });
     setIsLoading(true);
 
-    let getWhoToFollowListUrl = `/who-to-follow/list?topics=${encodeURI(
+    const getWhoToFollowListUrl = `/who-to-follow/list?topics=${encodeURI(
       JSON.stringify(topics.topics),
     )}&locations=${encodeURI(JSON.stringify(localCommunity.local_community))}`;
     console.log('topics.topics');
@@ -84,7 +88,7 @@ const WhotoFollow = () => {
 
   React.useEffect(() => {
     if (users.length > 0) {
-      let dProvider = new DataProvider((row1, row2) => row1 !== row2);
+      const dProvider = new DataProvider((row1, row2) => row1 !== row2);
       setLayoutProvider(
         new LayoutProvider(
           (index) => {
@@ -134,18 +138,18 @@ const WhotoFollow = () => {
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
       );
-    } else {
+    } 
       return (
         <TouchableHighlight onPress={() => navigation.goBack()}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableHighlight>
       );
-    }
+    
   };
 
   const handleSelected = (value) => {
-    let copyFollowed = [...followed];
-    let index = followed.indexOf(value);
+    const copyFollowed = [...followed];
+    const index = followed.indexOf(value);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
@@ -177,11 +181,12 @@ const WhotoFollow = () => {
     const data = {
       users: {
         username: usersState.username,
-        human_id: usersState.userId,
-        country_code: usersState.countryCode,
+        // human_id: usersState.userId,
+        // country_code: usersState.countryCode,
 
         // human_id: 'randomString(16)',
-        // country_code: 'ID',
+        human_id: randomString(16),
+        country_code: 'ID',
         profile_pic_path: usersState.photo,
         status: 'A',
       },
@@ -206,7 +211,8 @@ const WhotoFollow = () => {
           setTimeout(() => {
             create();
             setImage(null, usersDispatch)
-            navigation.dispatch(StackActions.replace('HomeTabs'));
+            // navigation.dispatch(StackActions.replace('HomeTabs'));
+            setInitialValue({ id: res.token })
           }, 2000);
         } else {
           crashlytics().recordError(new Error(res));
@@ -242,7 +248,7 @@ const WhotoFollow = () => {
   };
 
   const rowRenderer = (type, item, index, extendedState) => {
-    let labelName = item.neighborhood ? item.neighborhood : item.name || ""
+    const labelName = item.neighborhood ? item.neighborhood : item.name || ""
     switch (type) {
       case VIEW_TYPE_LABEL:
         return <Label label={labelName} />;
@@ -350,7 +356,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     height: 90,
-    width: width,
+    width,
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,
