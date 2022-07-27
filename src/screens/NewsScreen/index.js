@@ -5,6 +5,7 @@ import {
   FlatList,
   InteractionManager,
   Platform,
+  StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
@@ -217,26 +218,10 @@ const NewsScreen = ({}) => {
 
   const keyExtractor = React.useCallback((item, index) => index.toString(), [])
 
-  // React.useEffect(() => {
-  //   InteractionManager.runAfterInteractions(() => {
-  //     setIsCompleteAnimation(true)
-  //   })
-  // })
-
-  // if(!isCompleteAnimation) {
-  //   return null
-  // }
-
-  // if (loading) {
-  //   return (
-  //     <View style={styles.containerLoading}>
-  //       <LoadingWithoutModal visible={loading} />
-  //     </View>
-  //   );
-  // }
 
   return (
     <SafeAreaProvider style={styles.container}>
+      <StatusBar translucent={false} />
       <Search animatedValue={offset} />
         <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
         <FlatList
