@@ -17,8 +17,10 @@ import {
   DISCOVERY_SET_LOADING_DATA_TOPIC,
   DISCOVERY_SET_LOADING_DATA_USER,
   DISCOVERY_SET_NEW_FOLLOWED_DOMAIN,
+  DISCOVERY_SET_NEW_FOLLOWED_TOPIC,
   DISCOVERY_SET_NEW_FOLLOWED_USER,
   DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN,
+  DISCOVERY_SET_NEW_UNFOLLOWED_TOPIC,
   DISCOVERY_SET_NEW_UNFOLLOWED_USER,
   DISCOVERY_SET_RECENT_SEARCH,
 } from '../Types';
@@ -231,6 +233,18 @@ const discoveryReducer = (state = discoveryState, action) => {
       return {
         ...state,
         unfollowedDomains: action.payload.newUnfollowedDomains,
+      };
+
+    case DISCOVERY_SET_NEW_FOLLOWED_TOPIC:
+      return {
+        ...state,
+        followedTopic: action.payload.newFollowedTopics,
+      };
+
+    case DISCOVERY_SET_NEW_UNFOLLOWED_TOPIC:
+      return {
+        ...state,
+        unfollowedTopic: action.payload.newUnfollowedTopics,
       };
     default:
       return state;
