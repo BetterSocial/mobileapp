@@ -38,7 +38,6 @@ import { getUserId } from '../utils/users';
 import {
   setMainFeeds, setTimer,
 } from '../context/actions/feeds';
-import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
 import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
@@ -49,8 +48,7 @@ function HomeBottomTabs(props) {
   const { navigation } = props;
   const isIos = Platform.OS === 'ios';
 
-  const [users, dispatchUser] = React.useContext(Context).users;
-  const [, dispatchProfile] = React.useContext(Context).profile;
+  const [myProfile, dispatchProfile] = React.useContext(Context).profile;
   const [, followingDispatch] = React.useContext(Context).following;
 
   let initialStartup = useRecoilValue(InitialStartupAtom);
@@ -103,18 +101,12 @@ function HomeBottomTabs(props) {
       console.log('Authorization status:', authStatus);
     }
   };
-
   const getProfile = async () => {
     try {
       const selfUserId = await getUserId();
       const profile = await getMyProfile(selfUserId);
-      setImageUrl(profile.data.profile_pic_path, dispatchUser);
-      const data = {
-        user_id: profile.data.user_id,
-        username: profile.data.username,
-      };
       saveToCache(PROFILE_CACHE, profile.data);
-      setMyProfileAction(data, dispatchProfile);
+      setMyProfileAction(profile.data, dispatchProfile);
       setLoadingUser(false);
     } catch (e) {
       setLoadingUser(false);
@@ -249,13 +241,8 @@ function HomeBottomTabs(props) {
       if (!res) {
         getProfile();
       } else {
-        const data = {
-          user_id: res.user_id,
-          username: res.username,
-        };
-        setMyProfileAction(data, dispatchProfile);
+        setMyProfileAction(res, dispatchProfile);
         setLoadingUser(false);
-        setImageUrl(res.profile_pic_path, dispatchUser);
       }
     });
   }, []);
@@ -346,7 +333,7 @@ function HomeBottomTabs(props) {
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: () => <View style={styles.center} >
-              <MemoProfileIcon loadingUser={loadingUser} uri={users.photoUrl} />
+              <MemoProfileIcon loadingUser={loadingUser} uri={myProfile.myProfile.profile_pic_path} />
             </View>,
             // unmountOnBlur:true
           }}

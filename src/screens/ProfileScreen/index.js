@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   Dimensions,
   LogBox,
-  SafeAreaView,
   Share,
   StatusBar,
   StyleSheet,
@@ -14,7 +13,6 @@ import {
   View,
 } from 'react-native';
 import { debounce } from 'lodash'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
@@ -47,7 +45,7 @@ import { colors } from '../../utils/colors';
 import { downVote, upVote } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import { getAccessToken } from '../../utils/token';
-import { getFeedDetail, getMainFeed } from '../../service/post';
+import { getFeedDetail } from '../../service/post';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
@@ -55,13 +53,13 @@ import {
   requestCameraPermission,
   requestExternalStoragePermission,
 } from '../../utils/permission';
-import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
-import { setImageUrl } from '../../context/actions/users';
+import { setFeedByIndex } from '../../context/actions/feeds';
 import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { setMyProfileAction } from '../../context/actions/setMyProfileAction';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -73,7 +71,7 @@ const ProfileScreen = ({ route }) => {
   const bottomSheetProfilePictureRef = React.useRef();
   const postRef = React.useRef(null);
   const flatListScrollRef = React.useRef(null);
-
+  const [myProfile, dispatchProfile] = React.useContext(Context).profile;
   const [token_JWT, setTokenJwt] = React.useState('');
   const [users, dispatch] = React.useContext(Context).users;
   const [myProfileFeed, myProfileDispatch] =
@@ -171,8 +169,10 @@ const ProfileScreen = ({ route }) => {
 
   const saveProfileState = (result) => {
     if (result && typeof result === 'object') {
+      
       setDataMain(result);
       setDataMainBio(result.bio)
+      setMyProfileAction(result, dispatchProfile)
       setLoadingContainer(false)
     }
 
@@ -357,7 +357,6 @@ const ProfileScreen = ({ route }) => {
         });
       });
   };
-
   const changeBio = () => {
     if (dataMain.bio !== null || dataMain.bio !== undefined) {
       setTempBio(dataMain.bio);
@@ -384,7 +383,7 @@ const ProfileScreen = ({ route }) => {
       .then((res) => {
         setIsLoadingUpdateBio(false);
         if (res.code === 200) {
-          fetchMyProfile(false);
+          fetchMyProfile();
           debounceModalClose()
         }
       })
