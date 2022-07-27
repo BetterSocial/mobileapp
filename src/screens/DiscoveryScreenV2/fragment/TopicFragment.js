@@ -1,7 +1,9 @@
+/* eslint-disable no-underscore-dangle */
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
+import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
@@ -14,6 +16,7 @@ import { colors } from '../../../utils/colors';
 import { convertTopicNameToTopicPageScreenParam } from '../../../utils/string/StringUtils';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
+import { putUserTopic } from '../../../service/topics';
 import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
@@ -39,7 +42,7 @@ const TopicFragment = () => {
     const isReady = useIsReady()
 
     // const { topics } = following
-    let topics = discovery.initialTopics
+    const topics = discovery.initialTopics
 
     const { isLoadingDiscoveryTopic, followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
 
@@ -53,14 +56,48 @@ const TopicFragment = () => {
         parseToken();
     }, []);
 
-    // React.useEffect(() => {
-    //     if(followedTopic.length > 0 || unfollowedTopic.length > 0) setIsFirstTimeOpen(false)
-    // },[ followedTopic, unfollowedTopic ])
+    const handleFollow = async (from, willFollow, item, index) => {
+        if (from === FROM_FOLLOWED_TOPIC_INITIAL) {
+            const newFollowedTopics = [...topics]
+            newFollowedTopics[index].user_id_follower = willFollow ? myId : null
+            DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch)
+        }
+
+        if (from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
+            const newFollowedTopics = [...topics]
+            newFollowedTopics[index].user_id_follower = willFollow ? myId : null
+            // const newInitialUnfollowedUsers = [...initialUnfollowedUsers]
+            // newInitialUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
+
+            // FollowingAction.setFollowingUsers(newFollowedTopics, followingDispatch)
+            DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch)
+            // setInitialUnfollowedUsers(newInitialUnfollowedUsers)
+        }
+
+        if (from === FROM_FOLLOWED_TOPIC) {
+            const newFollowedTopics = [...followedTopic]
+            newFollowedTopics[index].user_id_follower = willFollow ? myId : null
+
+            DiscoveryAction.setNewFollowedTopics(newFollowedTopics, discoveryDispatch)
+        }
+
+        if (from === FROM_UNFOLLOWED_TOPIC) {
+            const newUnFollowedTopic = [...unfollowedTopic]
+            newUnFollowedTopic[index].user_id_follower = willFollow ? myId : null
+
+            DiscoveryAction.setNewUnfollowedTopics(newUnFollowedTopic, discoveryDispatch)
+        }
+
+        const data = {
+            name: item.name
+        }
+
+        await putUserTopic(data);
+    }
+
 
     const __handleOnTopicPress = (item) => {
-        // console.log(item)
-
-        let navigationParam = {
+        const navigationParam = {
             id: convertTopicNameToTopicPageScreenParam(item.name)
         }
 
@@ -68,13 +105,11 @@ const TopicFragment = () => {
         navigation.push('TopicPageScreen', navigationParam)
     }
 
-    const __renderDiscoveryItem = (from, key, item, index) => {
-        // console.log('' + item.name)
-        // console.log('' + item?.user_id_follower)
-        return <View key={`${key}-${index}`} style={styles.domainContainer}>
+    const __renderDiscoveryItem = (from, key, item, index) =>
+        <View key={`${key}-${index}`} style={styles.domainContainer}>
             <DomainList
-                // handleSetFollow={() => __handleFollow(from, true, item, index)}
-                // handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+                handleSetFollow={() => handleFollow(from, true, item, index)}
+                handleSetUnFollow={() => handleFollow(from, false, item, index)}
                 key={`followedTopic-${index}`}
                 onPressBody={() => __handleOnTopicPress(item)}
                 isHashtag
@@ -85,7 +120,7 @@ const TopicFragment = () => {
                     description: null,
                 }} />
         </View>
-    }
+
 
     const __renderTopicItems = () => {
         if (isFirstTimeOpen) {
@@ -95,27 +130,21 @@ const TopicFragment = () => {
             // initialUnfollowedTopics.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC_INITIAL, "unfollowedTopicDiscovery", item, index)))
 
             // return renderArray
-            return [<DiscoveryTitleSeparator key="topic-title-separator" text='Suggested Topics' />].concat(topics.map((item, index) => {
-                return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery",
-                    // { ...item, user_id_follower: item.user_id_follower ? item.user_id_follower : myId },
-                    item,
-                    index)
-            }))
+            return [<DiscoveryTitleSeparator key="topic-title-separator" text='Suggested Topics' />].concat(topics.map((item, index) => __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery",
+                // { ...item, user_id_follower: item.user_id_follower ? item.user_id_follower : myId },
+                item,
+                index)))
         }
 
         return (
             <>
-                {followedTopic.map((item, index) => {
-                    return __renderDiscoveryItem(FROM_FOLLOWED_TOPIC, "followedTopicDiscovery", item, index)
-                })}
+                {followedTopic.map((item, index) => __renderDiscoveryItem(FROM_FOLLOWED_TOPIC, "followedTopicDiscovery", item, index))}
 
                 {unfollowedTopic.length > 0 && followedTopic.length > 0 &&
                     <View style={styles.unfollowedHeaderContainer}>
                         <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreTopics}</Text>
                     </View>}
-                {unfollowedTopic.map((item, index) => {
-                    return __renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC, "unfollowedTopicDiscovery", item, index)
-                })}
+                {unfollowedTopic.map((item, index) => __renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC, "unfollowedTopicDiscovery", item, index))}
             </>
         )
     }

@@ -34,7 +34,7 @@ const DiscoverySearch = ({ }) => {
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery
   const discoverySearchBarRef = React.useRef(null)
 
-  let { discoverySearchBarText } = generalComponent
+  const { discoverySearchBarText } = generalComponent
 
   const [isSearchIconShown, setIsSearchIconShown] = React.useState(false)
   const [isTextAvailable, setIsTextAvailable] = React.useState(false)
@@ -46,7 +46,7 @@ const DiscoverySearch = ({ }) => {
 
     , [])
 
-  let { isFocus } = discovery
+  const { isFocus } = discovery
 
 
   const __handleBackPress = () => {
@@ -88,7 +88,7 @@ const DiscoverySearch = ({ }) => {
   }
 
   const __handleOnSubmitEditing = (event) => {
-    let { text } = event?.nativeEvent
+    const { text } = event?.nativeEvent
     __handleSubmitSearchData(text)
   }
 
@@ -97,10 +97,10 @@ const DiscoverySearch = ({ }) => {
     DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
     __fetchDiscoveryData(text)
 
-    let result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
+    const result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
 
     if (!result) {
-      let itemToSave = JSON.stringify([text])
+      const itemToSave = JSON.stringify([text])
       DiscoveryAction.setDiscoveryRecentSearch([text], discoveryDispatch)
       return AsyncStorage.setItem(RECENT_SEARCH_TERMS, itemToSave)
     }
@@ -158,8 +158,6 @@ const DiscoverySearch = ({ }) => {
   }, [searchText])
 
   React.useEffect(() => {
-    console.log('discoverySearchBarText')
-    console.log(discoverySearchBarText)
     setSearchText(discoverySearchBarText)
   }, [discoverySearchBarText])
 
