@@ -4,11 +4,14 @@ import {
   useChannelPreviewDisplayAvatar,
 } from 'stream-chat-react-native';
 import { Image, StyleSheet, View, Text } from 'react-native';
-
+import FastImage from 'react-native-fast-image'
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
 import { Context } from '../../../context';
 import { getGroupMemberCount } from '../../../utils/string/StringUtils';
 import { setProfileChannel } from '../../../context/actions/setChannel';
+import ChatIcon from '../../../assets/chat-icon.png'
+import GroupIcon from '../../../assets/group-icon.png'
+import { colors } from '../../../utils/colors';
 
 const CustomPreviewAvatar = ({ channel }) => {
   const [, dispatch] = React.useContext(Context).channel;
@@ -23,8 +26,8 @@ const CustomPreviewAvatar = ({ channel }) => {
         source={{ uri: channel.data.image }}
         style={styles.image}
       />
-      <View style={styles.typeContainer} >
-          
+      <View style={styles.typeContainer('#55C2FF')} >
+          <Text style={styles.whiteText} >#</Text>
         </View>
       </View>
     );
@@ -35,8 +38,8 @@ const CustomPreviewAvatar = ({ channel }) => {
       return (
         <View style={styles.containerAvatar} >
         <Image source={{uri: channel?.data?.image}} style={styles.image} />
-        <View style={styles.typeContainer} >
-          
+        <View style={styles.typeContainer()} >
+          {/* <Text>Min</Text> */}
         </View>
         </View>
       );
@@ -48,8 +51,8 @@ const CustomPreviewAvatar = ({ channel }) => {
         source={{ uri: `data:image/jpg;base64,${channel?.data?.image}` }}
         style={styles.image}
       />
-      <View style={styles.typeContainer} >
-          
+      <View style={styles.typeContainer()} >
+          {/* <Text>Man</Text> */}
         </View>
       </View>
     );
@@ -60,8 +63,8 @@ const CustomPreviewAvatar = ({ channel }) => {
           source={DefaultChatGroupProfilePicture}
           style={styles.defaultGroupImage}
         />
-        <View style={styles.typeContainer} >
-          
+        <View style={styles.typeContainer()} >
+          <FastImage source={GroupIcon} style={styles.iconChatStyle} />
         </View>
       </View>
     );
@@ -69,8 +72,8 @@ const CustomPreviewAvatar = ({ channel }) => {
     return (
       <View style={styles.containerAvatar}>
         <ChannelAvatar channel={channel} />
-        <View style={styles.typeContainer} >
-          
+        <View style={styles.typeContainer()} >
+          <FastImage source={ChatIcon} style={styles.iconChatStyle} />
         </View>
       </View>
     );
@@ -95,13 +98,22 @@ const styles = StyleSheet.create({
   containerAvatar: {
     paddingLeft: 8,
   },
-    typeContainer: {
+    typeContainer: (background) => ({
     height: 20,
     width: 20,
-    backgroundColor: 'red',
+    backgroundColor: background || colors.bondi_blue,
     borderRadius: 10,
     position: 'absolute',
     bottom: -6,
-    right: 0
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }),
+  iconChatStyle: {
+    height: 13.5,
+    width: 13.5
+  },
+  whiteText: {
+    color: 'white'
   }
 });

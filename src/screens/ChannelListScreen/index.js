@@ -199,7 +199,7 @@ const ChannelListScreen = ({ navigation }) => {
                additionalData={listPostNotif}
                context={myContext}
                onSelectAdditionalData={goToFeedDetail}
-               
+               showBadgePostNotif
               />
       
             </Chat>
