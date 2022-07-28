@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Pressable, StyleSheet, Text, TouchableNativeFeedback, View } from "react-native"
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { useNavigation } from '@react-navigation/native';
 
 import BottomOverlayPagination from './pagination'
 import ButtonSign from '../../../../assets/icon-svg/button_sign.svg';
@@ -8,11 +9,25 @@ import MemoizedIcArrowRightTail from "../../../../assets/arrow/ic_arrow_right_ta
 import StringConstant from '../../../../utils/string/StringConstant'
 import dimen from "../../../../utils/dimen"
 import { COLORS } from "../../../../utils/theme"
+import { colors } from '../../../../utils/colors';
 import { fonts, normalizeFontSize } from "../../../../utils/fonts"
+import { openUrl } from '../../../../utils/Utils';
 
-const BottomOverlay = ({ count, handleLogin, index, isLogin, title, text, onNextSlide, textSvg }) => {
+const HUMAN_ID_URL = 'https://www.human-internet.org';
+const TERMS_URL = 'https://www.bettersocial.org/terms';
+const PRIVACY_URL = 'https://www.bettersocial.org/privacy';
+
+const BottomOverlay = ({ count, handleLogin, index, isLogin, title, onNextSlide, textSvg }) => {
     const goToHumanIdWeb = () => {
-        openUrl(HUMAN_ID_URL);
+        openUrl(HUMAN_ID_URL, true)
+    };
+
+    const goToTermsWeb = () => {
+        openUrl(TERMS_URL, true)
+    };
+
+    const goToPrivacyTerms = () => {
+        openUrl(PRIVACY_URL, true)
     };
 
     if (isLogin) return <View style={bottomOverlayStyles.loginContainer}>
@@ -20,8 +35,18 @@ const BottomOverlay = ({ count, handleLogin, index, isLogin, title, text, onNext
             <TouchableOpacity onPress={() => handleLogin()} style={bottomOverlayStyles.btnSign}>
                 <ButtonSign />
             </TouchableOpacity>
+            <Text style={bottomOverlayStyles.termsAndPrivacy}>
+                {` ${StringConstant.signInTermsAndPrivacyDetail}\n`}
+                <Text onPress={goToTermsWeb} style={bottomOverlayStyles.link}>
+                    {StringConstant.signInTermsLink}
+                </Text>
+                {` and `}
+                <Text onPress={goToPrivacyTerms} style={bottomOverlayStyles.link}>
+                    {StringConstant.signInPrivacy}
+                </Text>
+            </Text>
             <Text style={bottomOverlayStyles.desc}>
-                <Text onPress={goToHumanIdWeb} style={bottomOverlayStyles.humanID}>
+                <Text onPress={goToHumanIdWeb} style={bottomOverlayStyles.link}>
                     {StringConstant.signInScreenHumanIdBrand}
                 </Text>
                 {` ${StringConstant.signInScreenHumanIdDetail}`}
@@ -31,8 +56,6 @@ const BottomOverlay = ({ count, handleLogin, index, isLogin, title, text, onNext
 
     return <View style={bottomOverlayStyles.container}>
         <Text style={bottomOverlayStyles.title}>{title}</Text>
-        {/* {text} */}
-        {/* <View style={{backgroundColor: 'rgba(255,0,0,0.1)'}}> */}
         <View>
             {textSvg}
         </View>
@@ -68,7 +91,7 @@ const bottomOverlayStyles = StyleSheet.create({
     },
     btnSign: {
         alignSelf: 'center',
-        marginBottom: 39,
+        // marginBottom: 39,
     },
     container: {
         backgroundColor: 'white',
@@ -79,18 +102,34 @@ const bottomOverlayStyles = StyleSheet.create({
         flexDirection: 'column',
         zIndex: 10,
     },
+    containerBtnLogin : {
+        // backgroundColor: 'red',
+        // maxWidth: 321,
+        // alignSelf: 'center',
+        // flex: 1,
+    },
     desc: {
         fontWeight: '400',
         fontFamily: fonts.inter[400],
         lineHeight: 18,
         fontSize: 12,
         textAlign: 'center',
-        color: COLORS.gray,
-        marginTop: 16,
-        alignSelf: 'center'
+        color: COLORS.blackgrey,
+        marginTop: 38,
+        alignSelf: 'center',
     },
-    humanID: {
-        color: '#11243D',
+    termsAndPrivacy: {
+        fontWeight: '400',
+        fontFamily: fonts.inter[400],
+        lineHeight: 18,
+        fontSize: 12,
+        textAlign: 'center',
+        color: COLORS.blackgrey,
+        marginTop: 10,
+        alignSelf: 'center',
+    },
+    link: {
+        color: colors.blue,
         textDecorationLine: 'underline',
     },
     loginContainer: {
