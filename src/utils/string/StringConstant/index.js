@@ -2,7 +2,11 @@
 
 // Sign in
 const signInScreenHumanIdBrand = 'humanID';
-const signInScreenHumanIdDetail = 'is an independent non-profit guaranteeing\n your privacy. BetterSocial will receive absolutely zero\n personal information.';
+const signInScreenHumanIdDetail = 'is an independent non-profit guaranteeing\n your privacy. BetterSocial will receive no personal\ninformation.';
+const signInTermsAndPrivacyDetail = 'By continuing, you agree to our'
+const signInTermsLink = 'Terms'
+const signInPrivacy = 'Privacy Policy'
+
 
 // Onboarding - Choose Username
 const onboardingChooseUsernameHeadline = 'Choose your username';
@@ -98,8 +102,11 @@ const profileDeleteAccountAlertSubmit = 'Yes - Delete my account';
 const profileDeleteAccountSuccess = 'Success - your account has been deleted';
 
 export default {
+  signInPrivacy,
   signInScreenHumanIdBrand,
   signInScreenHumanIdDetail,
+  signInTermsAndPrivacyDetail,
+  signInTermsLink,
 
   splashScreenDeeplinkGetProfileNotFound,
 
