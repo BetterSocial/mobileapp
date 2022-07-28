@@ -40,7 +40,7 @@ import { setCapitalFirstLetter } from '../../utils/Utils';
 import { setImage, setUsername } from '../../context/actions/users';
 import { verifyUsername } from '../../service/users';
 
-const {width} = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
 const ChooseUsername = () => {
   const navigation = useNavigation();
@@ -149,12 +149,18 @@ const ChooseUsername = () => {
     }
   };
 
-  const onTextBlur = () => {
-    console.log('on blur')
+  const formatUsernameString = () => {
     let value = username.toLowerCase().replace(/[^a-z0-9-_]/g, '');
     value = setCapitalFirstLetter(value);
+    return value
+  }
+
+  const onTextBlur = () => {
+    console.log('on blur')
+    const value = formatUsernameString(username)
     setUsernameState(value);
   }
+
 
   const next = () => {
     if (username && username.length > 2 && typeFetch === 'available') {
@@ -298,7 +304,7 @@ const ChooseUsername = () => {
                   autoCorrect={false}
                   autoFocus
                 />
-                {messageTypeFetch(typeFetch, username)}
+                {messageTypeFetch(typeFetch, formatUsernameString(username))}
               </View>
             </View>
             {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
