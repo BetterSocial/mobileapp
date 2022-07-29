@@ -107,14 +107,16 @@ const styles = StyleSheet.create({
     bottom: -6,
     right: 0,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flex: 1,
   }),
   iconChatStyle: {
-    height: 13.5,
-    width: 13.5
+    height: 12,
+    width: 12
   },
   whiteText: {
     color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 12
   }
 });
