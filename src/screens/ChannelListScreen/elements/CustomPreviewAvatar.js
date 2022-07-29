@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     width: 13.5
   },
   whiteText: {
-    color: 'white'
+    color: 'white',
+    textAlign: 'center'
   }
 });
