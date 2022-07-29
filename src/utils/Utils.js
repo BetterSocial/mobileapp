@@ -1,6 +1,7 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import { Linking } from 'react-native';
+
 export const sanitizeUrlForLinking = (url) => {
   if (!/^https?:\/\//.test(url)) {
     url = `https://${url}`;
@@ -33,7 +34,7 @@ export const smartRender = (ElementOrComponentOrLiteral, props, fallback) => {
 };
 
 export const validationURL = (str) => {
-  var pattern = new RegExp(
+  const pattern = new RegExp(
     '^(https?:\\/\\/)?' + // protocol
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
     '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
@@ -46,25 +47,26 @@ export const validationURL = (str) => {
 };
 
 export const getUrl = (str) => {
-  let url = str.match(/(https?\:\/\/)?([^\.\s]+)?[^\.\s]+\.[^\s]+/gi);
+  const url = str.match(/(https?\:\/\/)?([^\.\s]+)?[^\.\s]+\.[^\s]+/gi);
   if (Array.isArray(url)) {
     return url[0];
-  } else {
+  } 
     return str;
-  }
+  
 };
 
 export const isContainUrl = (str) => {
-  let url = getUrl(str);
+  const url = getUrl(str);
   return validationURL(url);
 };
 
-export const openUrl = (url) => {
+export const openUrl = (url, force = false) => {
   if (url && typeof url === 'string') {
     Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
       } else {
+        if(force) return Linking.openURL(url);
         SimpleToast.show('Url is not supported', SimpleToast.SHORT);
       }
     });
@@ -85,9 +87,7 @@ export const removeWhiteSpace = (txt) => {
   }
 };
 
-export const shareUserLink = (username) => {
-  return `me.bettersocial.org/u/${username}`
-}
+export const shareUserLink = (username) => `me.bettersocial.org/u/${username}`
 
 export function isEmptyOrSpaces(str) {
   return str === null || str.match(/^ *$/) !== null;
@@ -102,8 +102,8 @@ export function showScoreAlertDialog(item) {
   }, {})
 
   let textScoreDetails = ''
-  for(let key in ordered) {
-    let value = ordered[key]
+  for(const key in ordered) {
+    const value = ordered[key]
     textScoreDetails += `${key} = ${value} \n`
   }
   
