@@ -12,6 +12,7 @@ import { setProfileChannel } from '../../../context/actions/setChannel';
 import ChatIcon from '../../../assets/chat-icon.png'
 import GroupIcon from '../../../assets/group-icon.png'
 import LocationIcon from '../../../assets/location-icon.png'
+import Hashtag from '../../../assets/hashtag.png'
 
 import { colors } from '../../../utils/colors';
 
@@ -30,7 +31,8 @@ const CustomPreviewAvatar = ({ channel }) => {
         style={styles.image}
       />
       <View style={styles.typeContainer('#55C2FF')} >
-          <Text style={styles.whiteText} >#</Text>
+          {/* <Text style={styles.whiteText} >#</Text> */}
+          <FastImage resizeMode='contain' style={styles.iconChatStyle} source={Hashtag} />
         </View>
       </View>
     );
