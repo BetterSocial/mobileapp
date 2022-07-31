@@ -42,6 +42,7 @@ import { unReadMessageState } from '../../context/reducers/unReadMessageReducer'
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 
 const theme = {
   messageSimple: {
@@ -200,6 +201,7 @@ const ChannelListScreen = ({ navigation }) => {
                context={myContext}
                onSelectAdditionalData={goToFeedDetail}
                showBadgePostNotif
+               PreviewUnreadCount={CustomPreviewUnreadCount}
               />
       
             </Chat>
