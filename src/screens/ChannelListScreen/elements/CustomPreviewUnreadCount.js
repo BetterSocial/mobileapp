@@ -22,15 +22,26 @@ const styles = StyleSheet.create({
 
 
 const CustomPreviewUnreadCount = (props) => {
-    console.log(props.unread, 'lalak')
-    return (
-        <>
+
+    if(props.channel.type === 'messaging') {
+         return (
+          <>
         {props.unread > 0 ? <View style={styles.unreadContainer} >
             <Text style={styles.unreadText} >{props.unread}</Text>
         </View> : null}
-       
         </>
     )
+    }
+    console.log(props.channel.isSeen, 'kimak')
+    return (
+        <>
+        {props.channel.isSeen === false ?  <View style={[styles.unreadContainer, {marginLeft: 'auto', marginRight: 4}]} >
+            
+        </View> : null}
+        </>
+    )
+
+   
 }
 
 export default CustomPreviewUnreadCount

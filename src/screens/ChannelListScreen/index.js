@@ -155,11 +155,10 @@ const ChannelListScreen = ({ navigation }) => {
   })
   }
 
-  const CustomPreviewMessage = (props) => (
-      <ChannelPreviewMessage
-        latestMessagePreview={{ ...props.latestMessagePreview }}
-      />
-    );
+
+  const countPostNotifComponent = (item) => (
+    <CustomPreviewUnreadCount channel={item} />
+  )
   
   return (
     <SafeAreaProvider style={{ height: '100%' }}>
@@ -202,6 +201,7 @@ const ChannelListScreen = ({ navigation }) => {
                onSelectAdditionalData={goToFeedDetail}
                showBadgePostNotif
                PreviewUnreadCount={CustomPreviewUnreadCount}
+               countPostNotif={countPostNotifComponent}
               />
       
             </Chat>
