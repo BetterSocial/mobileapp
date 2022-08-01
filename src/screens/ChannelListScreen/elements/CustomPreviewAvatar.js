@@ -31,13 +31,11 @@ const CustomPreviewAvatar = ({ channel }) => {
         style={styles.image}
       />
       <View style={styles.typeContainer('#55C2FF')} >
-          {/* <Text style={styles.whiteText} >#</Text> */}
           <FastImage resizeMode='contain' style={styles.iconChatStyle} source={Hashtag} />
         </View>
       </View>
     );
   }
-
 
   if (channel.data.channel_type === 2) {
     return (
@@ -46,7 +44,7 @@ const CustomPreviewAvatar = ({ channel }) => {
         source={{ uri: channel.data.image }}
         style={styles.image}
       />
-      <View style={styles.typeContainer('#55C2FF')} >
+      <View style={styles.typeContainer()} >
           <FastImage resizeMode='contain' source={LocationIcon} style={styles.iconChatStyle} />
         </View>
       </View>
