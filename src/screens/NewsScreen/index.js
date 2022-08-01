@@ -9,26 +9,26 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import RenderItem from './RenderItem';
 import Search from './Search';
 import ShareUtils from '../../utils/share'
-import {COLORS,} from '../../utils/theme';
-import {Context} from '../../context';
+import { COLORS, } from '../../utils/theme';
+import { Context } from '../../context';
 import { NEWS_CACHE } from '../../utils/cache/constant';
-import {downVoteDomain, upVoteDomain} from '../../service/vote';
-import {getDomainIdIFollow, getDomains} from '../../service/domain';
+import { downVoteDomain, upVoteDomain } from '../../service/vote';
+import { getDomainIdIFollow, getDomains } from '../../service/domain';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
-import {getUserId} from '../../utils/users';
-import {setIFollow, setNews} from '../../context/actions/news';
+import { getUserId } from '../../utils/users';
+import { setIFollow, setNews } from '../../context/actions/news';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-const NewsScreen = ({}) => {
+const NewsScreen = ({ }) => {
   const navigation = useNavigation();
   const refBlockDomainComponent = React.useRef(null);
   const offset = React.useRef(new Animated.Value(0)).current;
@@ -40,13 +40,13 @@ const NewsScreen = ({}) => {
   const [idBlock, setIdBlock] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
   const [newslist, dispatch] = React.useContext(Context).news;
-  const {interactionsComplete} = useAfterInteractions()
+  const { interactionsComplete } = useAfterInteractions()
   const [profileContext] = React.useContext(Context).profile;
-  let {myProfile} = profileContext
+  const { myProfile } = profileContext
   // const [isCompleteAnimation, setIsCompleteAnimation] = React.useState(false)
 
   const scrollRef = React.createRef();
-  let {news} = newslist;
+  const { news } = newslist;
   let lastDragY = 0;
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('blur', (e) => {
@@ -64,7 +64,7 @@ const NewsScreen = ({}) => {
 
 
   React.useEffect(() => {
-    if(interactionsComplete) {
+    if (interactionsComplete) {
       checkCache()
       getNewsIfollow();
     }
@@ -75,7 +75,7 @@ const NewsScreen = ({}) => {
     // setLoading(true)
     // offset.setValue(0)
     getSpecificCache(NEWS_CACHE, (cache) => {
-      if(cache) {
+      if (cache) {
         setNews(cache.data, dispatch);
         setPostOffset(cache.offset)
         setLoading(false);
@@ -86,18 +86,21 @@ const NewsScreen = ({}) => {
   }
 
   React.useEffect(() => {
-    if(interactionsComplete) {
-      if(domain !== '' && idBlock !== '') {
+    if (interactionsComplete) {
+      if (domain !== '' && idBlock !== '') {
         refBlockDomainComponent.current.openBlockDomain();
       }
     }
 
-  },[domain, idBlock, interactionsComplete])
+  }, [domain, idBlock, interactionsComplete])
 
   const initData = async (enableLoading) => {
-    if(enableLoading) setLoading(true);
+    console.log('initDaata')
+    if (enableLoading) setLoading(true);
     try {
-      let res = await getDomains();
+      const res = await getDomains();
+      console.log('domain')
+      console.log(res)
       saveToCache(NEWS_CACHE, res)
       setNews(res.data, dispatch);
       setPostOffset(res.offset)
@@ -110,7 +113,7 @@ const NewsScreen = ({}) => {
   const onRefresh = async () => {
     setRefreshing(true)
     try {
-      let res = await getDomains();
+      const res = await getDomains();
       setNews(res.data, dispatch);
       setPostOffset(res.offset)
       setRefreshing(false);
@@ -120,13 +123,13 @@ const NewsScreen = ({}) => {
   }
 
   const getNewsIfollow = async () => {
-    let res = await getDomainIdIFollow();
+    const res = await getDomainIdIFollow();
     setIFollow(res.data, dispatch);
   };
 
-  let handleScrollEvent = (event) => {
-    let y = event.nativeEvent.contentOffset.y;
-    let dy = y - lastDragY;
+  const handleScrollEvent = (event) => {
+    const { y } = event.nativeEvent.contentOffset;
+    const dy = y - lastDragY;
     if (dy + 20 <= 0) {
       InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
@@ -160,18 +163,19 @@ const NewsScreen = ({}) => {
     }
   };
 
-  let handleOnScrollBeginDrag = (event) => {
+  const handleOnScrollBeginDrag = (event) => {
     lastDragY = event.nativeEvent.contentOffset.y;
   };
 
   const comment = (item) => {
     navigation.navigate('DetailDomainScreen', {
-      item : {
+      item: {
         ...item,
         score: item?.domain?.credderScore,
         follower: 0,
       },
-      refreshNews: onRefresh});
+      refreshNews: onRefresh
+    });
   };
 
   const blockNews = (itemNews) => {
@@ -190,8 +194,8 @@ const NewsScreen = ({}) => {
   const loadMoreData = async () => {
     setRefreshing(true)
     try {
-      let res = await getDomains(postOffset);
-      let newNews = [...news, ...res.data];
+      const res = await getDomains(0);
+      const newNews = [...news, ...res.data];
       setPostOffset(res.offset)
       setNews(newNews, dispatch);
       saveToCache(NEWS_CACHE, newNews)
@@ -216,6 +220,36 @@ const NewsScreen = ({}) => {
     }
   };
 
+  const onBlockedDomain = (blockedDomain) => {
+    if (!blockedDomain.data) return
+
+    const { domain_page_id } = blockedDomain.data
+    getSpecificCache(NEWS_CACHE, (cache) => {
+      if (cache) {
+        if (!cache?.data) {
+          console.log('cache?.data')
+          console.log(cache?.data)
+          initData(true)
+          return
+        }
+
+        const filteredCache = cache.data.filter((item) => item.content.domain_page_id !== domain_page_id)
+
+        const newCache = { ...cache }
+        newCache.data = filteredCache
+        setNews(filteredCache, dispatch);
+        saveToCache(NEWS_CACHE, newCache)
+      } else {
+        console.log('from news')
+        console.log(news)
+        // const filteredNews = news?.filter((item) => item.id !== blockedDomain.domain_page_id)
+        // setNews(filteredNews, dispatch)
+        // saveToCache(NEWS_CACHE, filteredNews)
+        initData(true)
+      }
+    })
+  }
+
   const keyExtractor = React.useCallback((item, index) => index.toString(), [])
 
 
@@ -223,7 +257,7 @@ const NewsScreen = ({}) => {
     <SafeAreaProvider style={styles.container}>
       <StatusBar translucent={false} />
       <Search animatedValue={offset} />
-        <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
+      <Animated.View style={{ paddingTop: Platform.OS === 'android' ? paddingContainer : 0 }}>
         <FlatList
           ref={scrollRef}
           keyExtractor={keyExtractor}
@@ -240,28 +274,27 @@ const NewsScreen = ({}) => {
           updateCellsBatchingPeriod={10}
           windowSize={10}
           // onMomentumScrollEnd={setSelectedIndex}
-          renderItem={({item, index}) => {
-            return (
-              <RenderItem
-                key={index}
-                item={item}
-                onPressShare={ShareUtils.shareNews}
-                onPressComment={(itemNews) => comment(itemNews)}
-                onPressBlock={(itemNews) => blockNews(itemNews)}
-                onPressUpvote={(itemNews) => upvoteNews(itemNews)}
-                onPressDownVote={(itemNews) => downvoteNews(itemNews)}
-                selfUserId={myProfile.user_id}
-              />
-            );
-          }}
+          renderItem={({ item, index }) => (
+            <RenderItem
+              key={index}
+              item={item}
+              onPressShare={ShareUtils.shareNews}
+              onPressComment={(itemNews) => comment(itemNews)}
+              onPressBlock={(itemNews) => blockNews(itemNews)}
+              onPressUpvote={(itemNews) => upvoteNews(itemNews)}
+              onPressDownVote={(itemNews) => downvoteNews(itemNews)}
+              selfUserId={myProfile.user_id}
+            />
+          )}
         />
-        </Animated.View>
+      </Animated.View>
 
-        <BlockDomainComponent
-          ref={refBlockDomainComponent}
-          domain={domain}
-          domainId={idBlock}
-          screen="news_screen" />
+      <BlockDomainComponent
+        ref={refBlockDomainComponent}
+        domain={domain}
+        domainId={idBlock}
+        screen="news_screen"
+        getValueBlock={onBlockedDomain} />
     </SafeAreaProvider>
   );
 };
@@ -270,10 +303,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.gray6,
   },
-  containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  containerLoading: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   flatlistContainer: {
     paddingTop: 10
   }
 });
 
-export default React.memo( withInteractionsManaged (NewsScreen));
+export default React.memo(withInteractionsManaged(NewsScreen));
