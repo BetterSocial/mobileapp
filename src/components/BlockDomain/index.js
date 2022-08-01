@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import {InteractionManager, View} from 'react-native';
@@ -6,7 +7,7 @@ import BlockDomain from '../Blocking/BlockDomain';
 import ReportDomain from '../Blocking/ReportDomain';
 import SpecificIssue from '../Blocking/SpecificIssue';
 import blockUtils from '../../service/utils/blockUtils';
-import { getBlockedDomain } from '../../service/domain';
+import { checkBlockDomainPage, getBlockedDomain } from '../../service/domain';
 
 class BlockDomainComponent extends React.Component {
     constructor(props) {
@@ -79,10 +80,13 @@ class BlockDomainComponent extends React.Component {
             this.state.reportOption,
             this.state.messageReport,
             this.props.screen || "domain_screen",
-            () => {
-                getBlockedDomain(this.props.domainId).then((res) => {
-                    this.props.getValueBlock(res.data)
-                })
+            async () => {
+                // getBlockedDomain(this.props.domainId).then((res) => {
+                //     this.props.getValueBlock(res.data)
+                // })
+
+                const blockedDomain =  await checkBlockDomainPage(this.props.domainId)
+                this.props.getValueBlock(blockedDomain)
             }
         )
     }
