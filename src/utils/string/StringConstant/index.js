@@ -2,7 +2,7 @@
 
 // Sign in
 const signInScreenHumanIdBrand = 'humanID';
-const signInScreenHumanIdDetail = 'is an independent nonprofit guaranteeing\n your privacy. BetterSocial will receive no personal\ninformation.';
+const signInScreenHumanIdDetail = 'is an independent nonprofit guaranteeing\n your privacy. Better Social will receive no personal\ninformation.';
 const signInTermsAndPrivacyDetail = 'By continuing, you agree to our'
 const signInTermsLink = 'Terms'
 const signInPrivacy = 'Privacy Policy'
