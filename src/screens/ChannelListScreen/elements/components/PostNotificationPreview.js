@@ -143,8 +143,6 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
                 return 'Anonymous'
     }
 
-    console.log(item, 'itemman')
-
     const handleDate = () => calculateTime(item.data.last_message_at)
 
     const handleImage = () => {

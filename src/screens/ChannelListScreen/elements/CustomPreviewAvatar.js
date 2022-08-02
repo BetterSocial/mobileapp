@@ -3,7 +3,7 @@ import {
   ChannelAvatar,
   useChannelPreviewDisplayAvatar,
 } from 'stream-chat-react-native';
-import { Image, StyleSheet, View, Text } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image'
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
 import { Context } from '../../../context';
@@ -11,7 +11,6 @@ import { getGroupMemberCount } from '../../../utils/string/StringUtils';
 import { setProfileChannel } from '../../../context/actions/setChannel';
 import ChatIcon from '../../../assets/chat-icon.png'
 import GroupIcon from '../../../assets/group-icon.png'
-import LocationIcon from '../../../assets/location-icon.png'
 import Hashtag from '../../../assets/hashtag.png'
 
 import { colors } from '../../../utils/colors';
