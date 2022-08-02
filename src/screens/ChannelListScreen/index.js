@@ -43,6 +43,7 @@ import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
+import PostNotificationPreview from './elements/components/PostNotificationPreview';
 
 const theme = {
   messageSimple: {
@@ -202,6 +203,7 @@ const ChannelListScreen = ({ navigation }) => {
                showBadgePostNotif
                PreviewUnreadCount={CustomPreviewUnreadCount}
                countPostNotif={countPostNotifComponent}
+               postNotifComponent={(item, index) => <PostNotificationPreview item={item} index={index} onSelectAdditionalData={goToFeedDetail} showBadgePostNotif countPostNotif={countPostNotifComponent} />}
               />
       
             </Chat>

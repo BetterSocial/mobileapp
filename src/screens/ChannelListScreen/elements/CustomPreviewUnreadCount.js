@@ -32,7 +32,6 @@ const CustomPreviewUnreadCount = (props) => {
         </>
     )
     }
-    console.log(props.channel.isSeen, 'kimak')
     return (
         <>
         {props.channel.isSeen === false ?  <View style={[styles.unreadContainer, {marginLeft: 'auto', marginRight: 4}]} >
