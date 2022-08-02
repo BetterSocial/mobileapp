@@ -4,7 +4,6 @@ import {
   useChannelPreviewDisplayAvatar,
 } from 'stream-chat-react-native';
 import { Image, StyleSheet, View } from 'react-native';
-import FastImage from 'react-native-fast-image'
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
 import { Context } from '../../../context';
 import { getGroupMemberCount } from '../../../utils/string/StringUtils';
@@ -30,7 +29,7 @@ const CustomPreviewAvatar = ({ channel }) => {
         style={styles.image}
       />
       <View style={styles.typeContainer('#55C2FF')} >
-          <FastImage resizeMode='contain' style={styles.iconChatStyle} source={Hashtag} />
+          <Image resizeMode={'contain'} style={styles.iconChatStyle} source={Hashtag} />
         </View>
       </View>
     );
@@ -44,7 +43,7 @@ const CustomPreviewAvatar = ({ channel }) => {
         style={styles.image}
       />
       <View style={styles.typeContainer()} >
-          <FastImage resizeMode='contain' source={GroupIcon} style={styles.iconChatStyle} />
+          <Image resizeMode={'contain'} source={GroupIcon} style={styles.iconChatStyle} />
         </View>
       </View>
     );
@@ -81,7 +80,7 @@ const CustomPreviewAvatar = ({ channel }) => {
           style={styles.defaultGroupImage}
         />
         <View style={styles.typeContainer()} >
-          <FastImage resizeMode='contain' source={GroupIcon} style={styles.iconChatStyle} />
+          <Image resizeMode={'contain'} source={GroupIcon} style={styles.iconChatStyle} />
         </View>
       </View>
     );
@@ -90,14 +89,14 @@ const CustomPreviewAvatar = ({ channel }) => {
       <View style={styles.containerAvatar}>
         <ChannelAvatar channel={channel} />
         <View style={styles.typeContainer()} >
-          <FastImage resizeMode='contain' source={ChatIcon} style={styles.iconChatStyle} />
+          <Image resizeMode={'contain'} source={ChatIcon} style={styles.iconChatStyle} />
         </View>
       </View>
     );
   
 };
 
-export default CustomPreviewAvatar;
+export default React.memo (CustomPreviewAvatar);
 
 const styles = StyleSheet.create({
   image: {
