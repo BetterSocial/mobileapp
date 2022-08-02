@@ -1,44 +1,28 @@
 import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
-import crashlytics from '@react-native-firebase/crashlytics';
-import moment from 'moment'
-import { ActivityIndicator, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import {
   ChannelList,
-  ChannelPreviewMessage,
-  ChannelPreviewMessenger,
-  ChannelPreviewStatus,
   ChannelPreviewTitle,
   Chat,
-  DeepPartial,
-  OverlayProvider,
-  Streami18n,
-  Theme
-} from 'stream-chat-react-native';
-import { MessageSystem } from 'stream-chat-react-native-core'
+  Streami18n} from 'stream-chat-react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
-import FeedNotification from './elements/FeedNotification';
-import IconChatCheckMark from '../../assets/icon/IconChatCheckMark'
-import Loading from '../Loading';
+
 import Search from './elements/Search';
 import streamFeed from '../../utils/getstream/streamer'
 import {
-  CHANNEL_TYPE_GROUP_LOCATION,
   CHANNEL_TYPE_TOPIC,
 } from '../../utils/constants';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
-import { calculateTime } from '../../utils/time';
 import { getAccessToken } from '../../utils/token'
 import { getChatName } from '../../utils/string/StringUtils';
 import { getFeedNotification } from '../../service/feeds'
-import { getUserId } from '../../utils/users';
 import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
-import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';

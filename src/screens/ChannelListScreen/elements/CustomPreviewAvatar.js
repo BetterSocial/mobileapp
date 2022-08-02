@@ -45,7 +45,7 @@ const CustomPreviewAvatar = ({ channel }) => {
         style={styles.image}
       />
       <View style={styles.typeContainer()} >
-          <FastImage resizeMode='contain' source={LocationIcon} style={styles.iconChatStyle} />
+          <FastImage resizeMode='contain' source={GroupIcon} style={styles.iconChatStyle} />
         </View>
       </View>
     );
