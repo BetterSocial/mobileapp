@@ -28,6 +28,8 @@ import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 
 const theme = {
   messageSimple: {
@@ -52,11 +54,11 @@ const ChannelListScreen = ({ navigation }) => {
   const myContext = React.useContext(Context)
   const {interactionsComplete} = useAfterInteractions()
   const [profileContext] = React.useContext(Context).profile;
+  const [countComment, setCountComment] = React.useState({})
   const {myProfile} = profileContext
 
-  const [unReadMessage, dispatchUnReadMessage] =
+  const [unReadMessage] =
     React.useContext(Context).unReadMessage;
-  const connect = useClientGetstream();
   const filters = {
     members: { $in: [myProfile.user_id] },
     type: 'messaging',
@@ -99,29 +101,63 @@ const ChannelListScreen = ({ navigation }) => {
     const token = await getAccessToken()
     const client = streamFeed(token)
     const notif = client.feed('notification', myProfile.user_id, token)
-    notif.subscribe((data) => {
+    notif.subscribe(() => {
         getPostNotification()
 
     })
 
 }
 
-  // const setupClient = async () => {
-  //   try {
-  //     const id = await getUserId();
-  //     setUserId(id);
-  //   } catch (err) {
-  //     crashlytics().recordError(err);
-  //   }
-  // };
+React.useEffect(() => {
+  handleCacheComment()
+}, [])
+
+const handleCacheComment  = () => {
+    getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
+    if(cache) {
+      setCountComment(cache)
+    } else {
+      handleNotHaveCache()
+    }
+  })
+}
+
+const handleNotHaveCache = () => {
+  let comment = {}
+  listPostNotif.forEach((data) => {
+    comment = {...comment, [data.activity_id]: 0}
+  })
+  saveToCache(FEED_COMMENT_COUNT, comment)
+  setCountComment(comment)
+}
+
+const handleUpdateCache = (id, totalComment) => {
+  const updateReadCache = {...countComment, [id]: totalComment}
+  saveToCache(FEED_COMMENT_COUNT, updateReadCache)
+  setCountComment(updateReadCache)
+}
+
 
   const getPostNotification = async () => {
     const res = await getFeedNotification()
     if(res.success) {
         setListPostNotif(res.data)
+        
     }
 } 
 
+
+  const handleAmountCache = () => {
+        getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
+
+              if(cache) {
+                setCountComment(cache)
+              } 
+        })
+  }
+    React.useEffect(() => {
+      handleAmountCache()
+    },[])
   const customPreviewTitle = (props) => {
     const { name } = props.channel?.data;
 
@@ -134,17 +170,22 @@ const ChannelListScreen = ({ navigation }) => {
     );
   };
 
-  const goToFeedDetail = (item) => {
+  const goToFeedDetail = async (item) => {
+    // handleUpdateCache(item.activity_id, item.totalComment)
     navigation.navigate('PostDetailPage', {
-      feedId: item.activity_id
-  })
+      feedId: item.activity_id,
+      refreshCache: () => handleUpdateCache(item.activity_id, item.totalComment),
+      // refreshList
+    })
+   
+    // const get
   }
-
-
-  const countPostNotifComponent = (item) => (
-    <CustomPreviewUnreadCount channel={item} />
-  )
-  
+  const countPostNotifComponent = (item) => {
+    const readComment = countComment[item.activity_id]
+    return (
+      <CustomPreviewUnreadCount readComment={readComment} channel={item} />
+    )
+  }
   return (
     <SafeAreaProvider style={{ height: '100%' }}>
       <StatusBar translucent={false} />
@@ -180,14 +221,12 @@ const ChannelListScreen = ({ navigation }) => {
                 additionalFlatListProps={{
                   onEndReached: () => null,
                   refreshControl: null,
+                  extraData:{countComment},
                 }}
                additionalData={listPostNotif}
                context={myContext}
-               onSelectAdditionalData={goToFeedDetail}
-               showBadgePostNotif
                PreviewUnreadCount={CustomPreviewUnreadCount}
-               countPostNotif={countPostNotifComponent}
-               postNotifComponent={(item, index) => <PostNotificationPreview item={item} index={index} onSelectAdditionalData={goToFeedDetail} showBadgePostNotif  />}
+               postNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} showBadgePostNotif  />}
               />
       
             </Chat>

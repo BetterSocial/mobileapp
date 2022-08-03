@@ -220,4 +220,4 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
 }
 
 
-export default React.memo (PostNotificationPreview, (prevProps, nextProps) => prevProps.item === nextProps.item)
+export default React.memo (PostNotificationPreview)

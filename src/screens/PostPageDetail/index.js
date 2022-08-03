@@ -9,16 +9,17 @@ import { SOURCE_FEED_TAB, SOURCE_PDP } from '../../utils/constants';
 import { setFeedByIndex, setTimer } from '../../context/actions/feeds';
 import { viewTimePost } from '../../service/post'
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+
 const FeedsPostDetail = (props) => {
-    let [feedsContext, dispatch] = React.useContext(Context).feeds
-    let {index, feedId, refreshParent} = props.route.params
-    let navigation = useNavigation()
-    let [time, setTime] = React.useState(new Date().getTime())
-    let { feeds, timer } = feedsContext
-    let navigateToReplyView = (data, updateParent, findCommentAndUpdate) => {
-        let currentTime = new Date()
-        let feedDiffTime = currentTime.getTime() - timer.getTime()
-        let pdpDiffTime = currentTime.getTime() - time;
+    const [feedsContext, dispatch] = React.useContext(Context).feeds
+    const {index, feedId, refreshCache, refreshList} = props.route.params
+    const navigation = useNavigation()
+    const [time, setTime] = React.useState(new Date().getTime())
+    const { feeds, timer } = feedsContext
+    const navigateToReplyView = (data, updateParent, findCommentAndUpdate) => {
+        const currentTime = new Date()
+        const feedDiffTime = currentTime.getTime() - timer.getTime()
+        const pdpDiffTime = currentTime.getTime() - time;
 
         if(feedId) {
             viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
@@ -31,6 +32,11 @@ const FeedsPostDetail = (props) => {
         navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent, findCommentAndUpdate});
     }
 
+    React.useEffect(() => () => {
+            if(refreshCache && typeof refreshCache === 'function') {
+                refreshCache()
+            }
+        }, [])
 
     return(
         <View style={styles.container}>
