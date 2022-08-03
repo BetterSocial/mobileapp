@@ -8,20 +8,30 @@ import { useSetRecoilState } from 'recoil';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { InitialStartupAtom } from '../../service/initialStartup';
+import { demoVerifyUser } from '../../service/users';
+import { randomString } from '../../utils/string/StringUtils';
 import { removeLocalStorege, setAccessToken, setRefreshToken, setUserId } from '../../utils/token';
 import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { verifyUser } from '../../service/users';
 
 const heightBs = Dimensions.get('window').height * 0.6
 
 const DevDummyLogin = ({ resetClickTime = () => { } }) => {
     const { ENABLE_DEV_ONLY_FEATURE } = configEnv
 
-    console.log('ENABLE_DEV_ONLY_FEATURE')
-    console.log(ENABLE_DEV_ONLY_FEATURE)
     const [loading, setLoading] = React.useState(false);
     const [isShown, setIsShown] = React.useState(true)
+    const [dummyUsers] = React.useState([
+        // { name: "fajarism", humanId: "HQEGNQCHA8J1OIX4G2CP" },
+        // { name: "fajarismrandom01", humanId: "RNDM-RNDM-0001" },
+        // { name: "bas_v1-4", humanId: "KVL1JKD8VG6KMHUZ0RY5" },
+        // { name: "usupsuparma", humanId: "1G1H-1TUHI-7U9H7-572G21" },
+        // { name: "busanid", humanId: "TVGBYD1BI9YMXMAA6CQS" },
+        // { name: "agita", humanId: "I4K3M10FGR78EWQQDNQ2" },
+        // { name: "usupsu", humanId: "TVGBYD1BI9YMXMAA6CU53" },
+        { name: "Apple", humanId: "g53BCUA3uisOfAP9" },
+    ])
+
     const dummyLoginRbSheetRef = React.useRef(null)
     const navigation = useNavigation()
     const streamChat = useClientGetstream()
@@ -39,7 +49,7 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
         setLoading(true);
         const data = { appUserId, countryCode: 'ID' }
         setDataHumenId(data, dispatch);
-        verifyUser(appUserId)
+        demoVerifyUser(appUserId)
             .then(async (response) => {
                 setLoading(false);
                 if (response.data) {
@@ -67,73 +77,32 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
     };
 
     if (ENABLE_DEV_ONLY_FEATURE === "true" && isShown) return <View style={S.devTrialView}>
-        <Button
+        {/* <Button
             title="Dev Dummy Onboarding"
             onPress={() => {
-                setDataHumenId('ASDF-GHJK-QWER-1234', dispatch)
+                setDataHumenId(randomString(16), dispatch)
                 navigation.navigate('ChooseUsername')
             }}
-        />
+        /> */}
         <Button
-            title="Dev Dummy Login"
+            title="Demo Login"
             onPress={() => dummyLoginRbSheetRef.current.open()}
         />
         <Button
-            title="Close Dev Menu"
+            title="Close Demo Menu"
             onPress={closeDummyLogin}
         />
         <RBSheet height={heightBs} ref={dummyLoginRbSheetRef}>
             <Text>Choose an account you wish to login</Text>
-            <TouchableOpacity onPress={() => dummyLogin('HQEGNQCHA8J1OIX4G2CP')}>
-                <View style={S.divider} />
-                <Text style={S.dummyAccountItem}>
-                    fajarism : HQEGNQCHA8J1OIX4G2CP
-                </Text>
-                <View style={S.divider} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('RNDM-RNDM-0001')}>
-                <Text style={S.dummyAccountItem}>
-                    fajarismrandom01 : RNDM-RNDM-0001
-                </Text>
-                <View style={S.divider} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('NNDG-PRMN-0001')}>
-                <Text style={S.dummyAccountItem}>
-                    Nandangpermana : NNDG-PRMN-0001
-                </Text>
-                <View style={S.divider} />
-            </TouchableOpacity>
-            {/* <TouchableOpacity onPress={() => dummyLogin('KVL1JKD8VG6KMHUZ0RY8')}> */}
-            <TouchableOpacity onPress={() => dummyLogin('KVL1JKD8VG6KMHUZ0RY5')}>
-                <Text style={S.dummyAccountItem}>
-                    bas_v1-4 : KVL1JKD8VG6KMHUZ0RY5
-                </Text>
-                <View style={S.divider} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('1G1H-1TUHI-7U9H7-572G21')}>
-                <Text style={S.dummyAccountItem}>
-                    usupsuparma : P19FGPQGMSZ5VSHA0YSQ
-                </Text>
-                <View style={S.divider} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CQS')}>
-                <Text style={S.dummyAccountItem}>
-                    busanid : TVGBYD1BI9YMXMAA6CQS
-                </Text>
-                <View style={S.divider} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('I4K3M10FGR78EWQQDNQ2')}>
-                <Text style={S.dummyAccountItem}>
-                    agita : I4K3M10FGR78EWQQDNQ2
-                </Text>
-                <View style={S.divider} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => dummyLogin('TVGBYD1BI9YMXMAA6CU53')}>
-                <Text style={S.dummyAccountItem}>
-                    usupsu: TVGBYD1BI9YMXMAA6CU53
-                </Text>
-                <View style={S.divider} />
-            </TouchableOpacity>
+            {dummyUsers.map((item, index) => <View key={`dummyusers-${index}`}>
+                <TouchableOpacity onPress={() => dummyLogin(item.humanId)}>
+                    <View style={S.divider} />
+                    <Text style={S.dummyAccountItem}>
+                        {`${item.name}`}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            )}
         </RBSheet>
     </View>
 
