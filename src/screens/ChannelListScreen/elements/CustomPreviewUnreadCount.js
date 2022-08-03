@@ -36,11 +36,13 @@ const CustomPreviewUnreadCount = (props) => {
         if(!readComment || readComment > props.channel.totalComment) {
             readComment = 0
         }
+        const calculated = props.channel.totalComment - readComment
         return (
         <>
-        <View style={[styles.unreadContainer, {marginLeft: 'auto', marginRight: 4}]} >
+        {calculated > 0 ? <View style={[styles.unreadContainer, {marginLeft: 'auto', marginRight: 4}]} >
             <Text style={styles.unreadText} >{props.channel.totalComment - readComment}</Text>
-        </View>
+        </View> : null}
+        
         </>
     )
     }
