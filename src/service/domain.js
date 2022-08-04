@@ -21,6 +21,20 @@ export const getDetailDomains = async (domain) => {
     const res = await api.get(`/domain/domain/${domain}`);
     return res.data;
   } catch (error) {
+    console.log('error');
+    console.log(error);
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+
+export const getLinkContextScreenRelated = async (newsLinkId) => {
+  console.log('newsLinkId')
+  console.log(`/domain/link-context-screen/${newsLinkId}`)
+  try {
+    const res = await api.get(`/domain/link-context-screen/${newsLinkId}`);
+    return res.data;
+  } catch (error) {
     console.log(error);
     crashlytics().recordError(new Error(error));
     throw new Error(error);
