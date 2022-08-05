@@ -234,6 +234,7 @@ const NewsScreen = ({ }) => {
         }
 
         const filteredCache = cache.data.filter((item) => item.content.domain_page_id !== domain_page_id)
+        if(filteredCache.length === 0) return initData(true)
 
         const newCache = { ...cache }
         newCache.data = filteredCache

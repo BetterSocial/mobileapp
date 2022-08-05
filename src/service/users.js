@@ -1,4 +1,3 @@
-import config from 'react-native-config';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { BASE_URL } from '@env';
 
@@ -16,6 +15,19 @@ export const verifyUser = async (userId) => {
     console.log(error);
   }
 };
+
+export const demoVerifyUser = async (userId) => {
+  try {
+    const resApi = await api.post('/users/demo-verify-user', {
+      user_id: userId,
+    });
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    console.log(error);
+  }
+};
+
 export const verifyToken = async (token) => {
   try {
     const resApi = await api.post('/users/veryfy-token', {
