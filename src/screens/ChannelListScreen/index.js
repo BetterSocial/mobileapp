@@ -78,11 +78,11 @@ const ChannelListScreen = ({ navigation }) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
-    if(interactionsComplete && myProfile) {
+    if(myProfile) {
       callStreamFeed()
 
     }
-  }, [interactionsComplete, JSON.stringify(myProfile)])
+  }, [JSON.stringify(myProfile)])
   const callStreamFeed = async () => {
     const token = await getAccessToken()
     const client = streamFeed(token)

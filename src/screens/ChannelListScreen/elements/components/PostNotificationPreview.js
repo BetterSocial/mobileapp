@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, Image } from 'react-native'
 import { useTheme } from 'stream-chat-react-native-core/src/contexts/themeContext/ThemeContext';
 import { calculateTime } from 'stream-chat-react-native-core/src/components/ChannelList/customUtils';
 import ButtonHighlight from 'stream-chat-react-native-core/src/components/ChannelPreview/ButtonHighlight'
-import {Avatar} from 'stream-chat-react-native-core/src/components/Avatar/Avatar'
 import MemoIc_arrow_down_vote_on from '../../../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_on from '../../../../assets/arrow/Ic_upvote_on';
 import MemoIc_comment from '../../../../assets/icons/Ic_comment';
@@ -12,7 +11,7 @@ import MemoIc_block_inactive from '../../../../assets/block/Ic_block_inactive';
 import Imageblock from '../../../../assets/images/block.png'
 import {Context} from '../../../../context'
 
-import FeedIcon from '../../../../assets/images/feed-icon.png'
+import AvatarPostNotif from './AvatarPostNotif';
 
 const styles = StyleSheet.create({
     containerCard: {
@@ -112,7 +111,7 @@ const styles = StyleSheet.create({
 
 
 
-const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPostNotif, showBadgePostNotif}) => {
+const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPostNotif}) => {
     // const [profile] = context.profile
     const [profile] = React.useContext(Context).profile;
     const {myProfile} = profile
@@ -145,21 +144,11 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
 
     const handleDate = () => calculateTime(item.data.last_message_at)
 
-    const handleImage = () => {
-        if(item.isAnonym) {
-            return 'https://firebasestorage.googleapis.com/v0/b/bettersocial-dev.appspot.com/o/anonym.png?alt=media&token=5ffe7504-c0e7-4a0c-9cbb-3e7b7572886f'
-        }
-        return item.postMaker.data.profile_pic_url
-    }
-
-    const handleAvatar =  React.useMemo(() => (
-            <Avatar childrenType={<View style={styles.typeContainer} ><Image resizeMode='contain' source={FeedIcon} style={styles.iconStyle} /></View>} showType={showBadgePostNotif} size={48} image={handleImage()} />
-        ), [])
 
     return (
         <ButtonHighlight key={index} onPress={() => onSelectAdditionalData(item)}  style={[styles.containerCard, {borderBottomColor: border}]} >
             <View style={styles.row} >
-                {item.postMaker && item.postMaker.data ? handleAvatar : null}
+                {item.postMaker && item.postMaker.data ?<AvatarPostNotif item={item} /> : null}
             <View style={{flex: 1,  paddingLeft: 8}} >
                 <View style={styles.row} >
                 {item.postMaker && item.postMaker.data ? <Text numberOfLines={1} style={[styles.titleTextBig, {maxWidth: '85%'}]} >{item.postMaker.id === myProfile.user_id ? "Your post" : item.postMaker.data.username}: {item.titlePost}</Text> : null}
