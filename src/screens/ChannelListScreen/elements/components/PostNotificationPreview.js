@@ -152,10 +152,14 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
         return item.postMaker.data.profile_pic_url
     }
 
+    const handleAvatar =  React.useMemo(() => (
+            <Avatar childrenType={<View style={styles.typeContainer} ><Image resizeMode='contain' source={FeedIcon} style={styles.iconStyle} /></View>} showType={showBadgePostNotif} size={48} image={handleImage()} />
+        ), [])
+
     return (
         <ButtonHighlight key={index} onPress={() => onSelectAdditionalData(item)}  style={[styles.containerCard, {borderBottomColor: border}]} >
             <View style={styles.row} >
-                {item.postMaker && item.postMaker.data ? <Avatar childrenType={<View style={styles.typeContainer} ><Image resizeMode='contain' source={FeedIcon} style={styles.iconStyle} /></View>} showType={showBadgePostNotif} size={48} image={handleImage()} /> : null}
+                {item.postMaker && item.postMaker.data ? handleAvatar : null}
             <View style={{flex: 1,  paddingLeft: 8}} >
                 <View style={styles.row} >
                 {item.postMaker && item.postMaker.data ? <Text numberOfLines={1} style={[styles.titleTextBig, {maxWidth: '85%'}]} >{item.postMaker.id === myProfile.user_id ? "Your post" : item.postMaker.data.username}: {item.titlePost}</Text> : null}

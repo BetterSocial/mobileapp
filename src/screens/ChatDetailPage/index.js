@@ -31,11 +31,11 @@ const streami18n = new Streami18n({
   language: 'en',
 });
 
-const ChatDetailPage = () => {
+const ChatDetailPage = (props) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
-
+    const {refreshCache} = props.route.params
   const messageSystemCustom = (props) => {
     const { message, style } = props;
     // return <View style={{
@@ -100,6 +100,11 @@ const ChatDetailPage = () => {
   let connect = useClientGetstream();
   React.useEffect(() => {
     connect();
+    return () => {
+      if(refreshCache && typeof refreshCache === 'function') {
+        refreshCache()
+      }
+    }
   }, []);
   React.useEffect(() => {
     searchUserMessages(channelClient.channel?.cid);

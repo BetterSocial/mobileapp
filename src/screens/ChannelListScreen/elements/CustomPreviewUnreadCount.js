@@ -5,13 +5,13 @@ import { colors } from '../../../utils/colors'
 
 const styles = StyleSheet.create({
     unreadContainer: {
-        width: 20,
-        height: 20,
-        borderRadius: 10,
+        width: 24,
+        height: 24,
+        borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: colors.bondi_blue,
-        marginRight: 11
+        marginRight: 12
     },
     unreadText: {
         color: colors.white,
@@ -23,12 +23,23 @@ const styles = StyleSheet.create({
 
 const CustomPreviewUnreadCount = (props) => {
     let {readComment} = props
+    const {unread} =  props
+    
+    const handleBadge = () => {
+  
+        if(props.channel.state.messages <= 0) {
+            return (
+            //    
+            null
+            )
+        }
+    }
     if(props.channel.type === 'messaging') {
             return (
             <>
             {props.unread > 0 ? <View style={styles.unreadContainer} >
                 <Text style={styles.unreadText} >{props.unread}</Text>
-            </View> : null}
+            </View> : handleBadge()}
             </>
         )
     }
