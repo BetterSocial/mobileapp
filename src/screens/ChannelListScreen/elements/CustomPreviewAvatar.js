@@ -96,7 +96,7 @@ const CustomPreviewAvatar = ({ channel }) => {
   
 };
 
-export default React.memo (CustomPreviewAvatar);
+export default React.memo (CustomPreviewAvatar, (prevProps, nexProps) => prevProps.channel === nexProps.channel);
 
 const styles = StyleSheet.create({
   image: {
