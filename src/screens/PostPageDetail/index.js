@@ -12,7 +12,7 @@ import { withInteractionsManaged } from '../../components/WithInteractionManaged
 
 const FeedsPostDetail = (props) => {
     const [feedsContext, dispatch] = React.useContext(Context).feeds
-    const {index, feedId, refreshCache, refreshList} = props.route.params
+    const {feedId, refreshCache} = props.route.params
     const navigation = useNavigation()
     const [time, setTime] = React.useState(new Date().getTime())
     const { feeds, timer } = feedsContext
