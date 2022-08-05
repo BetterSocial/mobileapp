@@ -28,6 +28,7 @@ import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
+import PreviewMessage from './elements/CustomPreviewMessage';
 
 
 const ChannelListScreen = ({ navigation }) => {
@@ -93,25 +94,11 @@ const ChannelListScreen = ({ navigation }) => {
 
 }
 
-// const checkReadMessage = async () => {
-//      const token = await getAccessToken()
-//       const client = streamFeed(token)
-//       client.on('MESSAGE.READ', (callback) => {
-//         console.log(callback, 'callback')
-//       })
-// }
-// console.log(chatAmount, 'lakak')
 React.useEffect(() => {
   handleCacheComment()
 }, [])
 
 const handleCacheComment  = () => {
-    // const isHaveCache = Object.keys(feedAmount).length > 0
-    // console.log(isHaveCache, 'susu')
-    // if(!isHaveCache) {
-    //         handleNotHaveCache()
-
-    // }
     getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
     if(cache) {
       setCountComment(cache)
@@ -160,26 +147,7 @@ const handleUpdateCache = (id, totalComment) => {
     })
   }
 
-  const handleCacheChat = (data) => {
-    const filterChat = data.filter((chat) => chat.type === 'messaging' && chat.state.unreadCount === 0 && chat.state.messages.length === 0)
-        let chats = {}
-        filterChat.forEach((chat) => {
-          chats = {...chats, [chat.data.id]: 1}
-        })
-        getSpecificCache(CHAT_FOLLOWING_COUNT, (cache) => {
-          if(!cache) {
-              setCountChat(chats)
-          } else {
-            setCountChat(cache)
-          }
-        })
-        // setCountChat(chats)
-  }
-
-  const handleItemData = React.useCallback((data) => {
-    //  handleCacheChat(data)
-    console.log(data,'katak')
-  }, [])
+ 
 
   const countPostNotifComponent = (item) => {
     const readComment = countComment[item.activity_id]
@@ -199,13 +167,7 @@ const handleUpdateCache = (id, totalComment) => {
                   } else {
                     setChannel(channel, dispatch);
                     // ChannelScreen | ChatDetailPage
-                    navigation.navigate('ChatDetailPage', {
-                      refreshCache: () => {
-                      // const updateCache = {...countChat, [channel.data.id]: 0}
-                      // setCountChat(updateCache)
-                      // saveToCache(CHAT_FOLLOWING_COUNT, updateCache)
-                      }
-                    });
+                    navigation.navigate('ChatDetailPage');
                     
                   }
   }
@@ -239,8 +201,9 @@ const handleUpdateCache = (id, totalComment) => {
                additionalData={listPostNotif}
                context={myContext}
                PreviewUnreadCount={chatBadge}
+               PreviewMessage={PreviewMessage}
+               
                postNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} showBadgePostNotif  />}
-               itemData={handleItemData}
               />
       
             </Chat>

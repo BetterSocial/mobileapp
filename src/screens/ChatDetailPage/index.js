@@ -35,40 +35,34 @@ const ChatDetailPage = (props) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
-    const {refreshCache} = props.route.params
   const messageSystemCustom = (props) => {
-    const { message, style } = props;
-    // return <View style={{
-    //   width: Dimensions.get('window').width,
-    //   justifyContent: 'center',
-    //   alignItems: 'center'
-    // }}>
-    //   <Text>{message.text}</Text>
-    // </View>
+    const { message, channel } = props;
+    if(channel.data.channel_type === 2 || channel.data.channel_type === 3) return null
+
     if (message.is_add) {
       if (message.only_to_user_show) {
         if (message.only_to_user_show === clients.client.user.id) {
           return <CustomMessageSystem text={message.text} />
-        } else {
+        } 
           return <View />;
-        }
-      } else {
+        
+      } 
         if (message.disable_to_user === clients.client.user.id) {
           return <View />
-        } else {
+        } 
           return <CustomMessageSystem text={message.text} />
-        }
-      }
-    } else {
+        
+      
+    } 
       return <MessageSystem {...props} />
-    }
+    
 
 
   }
 
 
   const defaultActionsAllowed = (messageActionsProp) => {
-    let {
+    const {
       blockUser,
       canModifyMessage,
       copyMessage,
@@ -80,7 +74,7 @@ const ChatDetailPage = (props) => {
       retry,
     } = messageActionsProp;
 
-    let options = [];
+    const options = [];
 
     options.push(quotedReply);
     options.push(copyMessage);
@@ -97,14 +91,9 @@ const ChatDetailPage = (props) => {
 
     return options;
   };
-  let connect = useClientGetstream();
+  const connect = useClientGetstream();
   React.useEffect(() => {
     connect();
-    return () => {
-      if(refreshCache && typeof refreshCache === 'function') {
-        refreshCache()
-      }
-    }
   }, []);
   React.useEffect(() => {
     searchUserMessages(channelClient.channel?.cid);
@@ -119,9 +108,7 @@ const ChatDetailPage = (props) => {
     );
     setAsset(messages.results, dispatch);
   };
-  const testDate = (v) => {
-    return v;
-  };
+  const testDate = (v) => v;
 
   if (clients.client && channelClient.channel) {
     return (<SafeAreaView>
@@ -140,9 +127,7 @@ const ChatDetailPage = (props) => {
           MessageStatus={ChatStatusIcon}
           MessageSystem={props => messageSystemCustom(props)}
           // MessageContent={(props) => <CustomMessageContent {...props} />}
-          messageActions={(props) => {
-            return defaultActionsAllowed(props);
-          }}
+          messageActions={(props) => defaultActionsAllowed(props)}
           ReactionList={() => null}>
             <>
             <Header />
@@ -151,6 +136,7 @@ const ChatDetailPage = (props) => {
               <MessageList
                 tDateTimeParser={testDate}
                 InlineDateSeparator={CustomInlineDateSeparator}
+                
               />
  
             <MessageInput Input={InputMessage} />
@@ -175,13 +161,11 @@ const CustomMessageContent = (props) => {
 }
 
 const CustomInlineDateSeparator = ({ date }) => {
-  let newDate = moment(date).locale('en').format('MMMM D, YYYY');
+  const newDate = moment(date).locale('en').format('MMMM D, YYYY');
   return <Text style={[styles.date, styles.inlineDate]}>{newDate}</Text>;
 };
 
-const CustomDateHeader = () => {
-  return null;
-};
+const CustomDateHeader = () => null;
 
 export default withInteractionsManaged (ChatDetailPage);
 const styles = StyleSheet.create({
