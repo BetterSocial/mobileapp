@@ -58,7 +58,7 @@ const linkDetailPageOpenInBrowser = 'Open in browser';
 // Component
 const headerIosSkip = 'Skip';
 const searchModalTitle = 'Search';
-const searchModalPlaceholder = 'Search by ZIP, neighborhood or city';
+const searchModalPlaceholder = 'Search by neighborhood or city';
 const commentBoxDefaultPlaceholder = 'Add your reply';
 
 // General
@@ -102,84 +102,84 @@ const profileDeleteAccountAlertSubmit = 'Yes - Delete my account';
 const profileDeleteAccountSuccess = 'Success - your account has been deleted';
 
 export default {
-  signInPrivacy,
-  signInScreenHumanIdBrand,
-  signInScreenHumanIdDetail,
-  signInTermsAndPrivacyDetail,
-  signInTermsLink,
+    signInPrivacy,
+    signInScreenHumanIdBrand,
+    signInScreenHumanIdDetail,
+    signInTermsAndPrivacyDetail,
+    signInTermsLink,
 
-  splashScreenDeeplinkGetProfileNotFound,
+    splashScreenDeeplinkGetProfileNotFound,
 
-  onboardingChooseUsernameHeadline,
-  onboardingChooseUsernameSubHeadline,
-  onboardingChooseUsernameBlueBoxHint,
-  onboardingChooseUsernameButtonStateNext,
-  onboardingChooseUsernameErrorCannotBeEmpty,
-  onboardingChooseUsernameLabelCheckingAvailability,
-  onboardingChooseUsernameLabelMinimumChar,
-  onboardingChooseUsernameLabelMaximumChar,
-  onboardingChooseUsernameLabelJustANumber,
-  onboardingChooseUsernameLabelUserAvailable,
-  onboardingChooseUsernameLabelUserTaken,
+    onboardingChooseUsernameHeadline,
+    onboardingChooseUsernameSubHeadline,
+    onboardingChooseUsernameBlueBoxHint,
+    onboardingChooseUsernameButtonStateNext,
+    onboardingChooseUsernameErrorCannotBeEmpty,
+    onboardingChooseUsernameLabelCheckingAvailability,
+    onboardingChooseUsernameLabelMinimumChar,
+    onboardingChooseUsernameLabelMaximumChar,
+    onboardingChooseUsernameLabelJustANumber,
+    onboardingChooseUsernameLabelUserAvailable,
+    onboardingChooseUsernameLabelUserTaken,
 
-  onboardingLocalCommunityHeadline,
-  onboardingLocalCommunitySubHeadline,
-  onboardingLocalCommunityPrimaryLocationTitle,
-  onboardingLocalCommunityPrimaryLocationSubTitle,
-  onboardingLocalCommunitySecondaryLocationTitle,
-  onboardingLocalCommunitySecondaryLocationSubTitle,
+    onboardingLocalCommunityHeadline,
+    onboardingLocalCommunitySubHeadline,
+    onboardingLocalCommunityPrimaryLocationTitle,
+    onboardingLocalCommunityPrimaryLocationSubTitle,
+    onboardingLocalCommunitySecondaryLocationTitle,
+    onboardingLocalCommunitySecondaryLocationSubTitle,
 
-  onboardingTopicsHeadline,
-  onboardingTopicsSubHeadline,
-  onboardingTopicsOthersCannotSee,
-  onboardingTopicsButtonStateNext,
-  onboardingTopicsButtonStateChooseMore,
+    onboardingTopicsHeadline,
+    onboardingTopicsSubHeadline,
+    onboardingTopicsOthersCannotSee,
+    onboardingTopicsButtonStateNext,
+    onboardingTopicsButtonStateChooseMore,
 
-  postDetailPageSeeReplies,
+    postDetailPageSeeReplies,
 
-  createPostDone,
-  createPostFailedNoMessage,
-  createPostFailedGeneralError,
+    createPostDone,
+    createPostFailedNoMessage,
+    createPostFailedGeneralError,
 
-  chatTabHeaderPlaceholder,
-  chatTabHeaderCreateChatButtonText,
+    chatTabHeaderPlaceholder,
+    chatTabHeaderCreateChatButtonText,
 
-  newsTabHeaderPlaceholder,
-  newsTabHeaderCreatePostButtonText,
+    newsTabHeaderPlaceholder,
+    newsTabHeaderCreatePostButtonText,
 
-  linkDetailPageOpenInBrowser,
+    linkDetailPageOpenInBrowser,
 
-  headerIosSkip,
-  searchModalTitle,
-  searchModalPlaceholder,
-  commentBoxDefaultPlaceholder,
+    headerIosSkip,
+    searchModalTitle,
+    searchModalPlaceholder,
+    commentBoxDefaultPlaceholder,
 
-  generalAnonymousText,
+    generalAnonymousText,
 
-  domainCannotOpenURL,
-  credderTooltipText,
+    domainCannotOpenURL,
+    credderTooltipText,
 
-  cameraPermissionGranted,
-  cameraPermissionDenied,
-  cameraPermissionUnavailable,
-  externalStoragePermissionDenied,
-  externalStoragePermissionGranted,
-  externalStoragePermissionUnavailable,
+    cameraPermissionGranted,
+    cameraPermissionDenied,
+    cameraPermissionUnavailable,
+    externalStoragePermissionDenied,
+    externalStoragePermissionGranted,
+    externalStoragePermissionUnavailable,
 
-  failedCreateChannel,
+    failedCreateChannel,
 
-  downvoteFailedText,
-  upvoteFailedText,
+    downvoteFailedText,
+    upvoteFailedText,
 
-  discoveryMoreUsers,
-  discoveryMoreTopics,
-  discoveryMoreDomains,
-  discoveryMoreNews,
-  discoverySearchBarPlaceholder,
+    discoveryMoreUsers,
+    discoveryMoreTopics,
+    discoveryMoreDomains,
+    discoveryMoreNews,
+    discoverySearchBarPlaceholder,
 
-  profileDeleteAccountAlertMessage,
-  profileDeleteAccountAlertTitle,
-  profileDeleteAccountAlertCancel,
-  profileDeleteAccountAlertSubmit,
-  profileDeleteAccountSuccess,
+    profileDeleteAccountAlertMessage,
+    profileDeleteAccountAlertTitle,
+    profileDeleteAccountAlertCancel,
+    profileDeleteAccountAlertSubmit,
+    profileDeleteAccountSuccess,
 };
