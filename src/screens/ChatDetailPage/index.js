@@ -37,7 +37,7 @@ const ChatDetailPage = (props) => {
   const [, dispatch] = React.useContext(Context).groupChat;
   const messageSystemCustom = (props) => {
     const { message, channel } = props;
-    if(channel.data.channel_type === 2 || channel.data.channel_type === 3) return null
+    if(channel.data.channel_type === 2 || channel.data.channel_type === 3) return <CustomMessageSystem text={`${message.user.name} has joined the group`} />
 
     if (message.is_add) {
       if (message.only_to_user_show) {
