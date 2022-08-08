@@ -15,11 +15,11 @@ import Hashtag from '../../../assets/hashtag.png'
 import { colors } from '../../../utils/colors';
 
 const CustomPreviewAvatar = ({ channel }) => {
-  const [, dispatch] = React.useContext(Context).channel;
-  const dataChannel = useChannelPreviewDisplayAvatar(channel);
-  React.useEffect(() => {
-    setProfileChannel(dataChannel.images, dispatch);
-  }, [dataChannel]);
+  // const [, dispatch] = React.useContext(Context).channel;
+  // const dataChannel = useChannelPreviewDisplayAvatar(channel);
+  // React.useEffect(() => {
+  //   setProfileChannel(dataChannel.images, dispatch);
+  // }, [dataChannel]);
 
   if (channel.data.channel_type === 3) {
     return (
