@@ -80,7 +80,8 @@ const ChannelListScreen = ({ navigation }) => {
   React.useEffect(() => {
     if(myProfile) {
       callStreamFeed()
-
+      handleUnsubscribeNotif()
+      
     }
   }, [JSON.stringify(myProfile)])
   const callStreamFeed = async () => {
@@ -92,6 +93,15 @@ const ChannelListScreen = ({ navigation }) => {
 
     })
 
+}
+
+const handleUnsubscribeNotif = async () => {
+  const token = await getAccessToken()
+  const client = streamFeed(token)
+  const notif = client.feed('notification', myProfile.user_id, token)
+  return () => {
+    notif.unsubscribe()
+  }
 }
 
 React.useEffect(() => {

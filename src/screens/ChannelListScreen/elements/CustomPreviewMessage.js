@@ -11,4 +11,4 @@ const PreviewMessage = (props) => {
 
 
 
-export default PreviewMessage
+export default React.memo (PreviewMessage)
