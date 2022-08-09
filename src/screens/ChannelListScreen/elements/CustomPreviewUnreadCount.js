@@ -5,9 +5,9 @@ import { colors } from '../../../utils/colors'
 
 const styles = StyleSheet.create({
     unreadContainer: {
-        width: 24,
-        height: 24,
-        borderRadius: 12,
+        width: 20,
+        height: 20,
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: colors.bondi_blue,
@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     unreadText: {
         color: colors.white,
         textAlign:'center',
-        fontSize: 12
+        fontSize: 10,
+        fontFamily:'Inter'
     }
 })
 
