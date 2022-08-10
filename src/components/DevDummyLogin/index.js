@@ -29,7 +29,7 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
         { name: "busanid", humanId: "TVGBYD1BI9YMXMAA6CQS" },
         { name: "agita", humanId: "I4K3M10FGR78EWQQDNQ2" },
         { name: "usupsu", humanId: "TVGBYD1BI9YMXMAA6CU53" },
-        // { name: "Apple", humanId: "g53BCUA3uisOfAP9" },
+        { name: "Apple", humanId: "g53BCUA3uisOfAP9" },
     ])
 
     const dummyLoginRbSheetRef = React.useRef(null)
@@ -77,13 +77,13 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
     };
 
     if (ENABLE_DEV_ONLY_FEATURE === "true" && isShown) return <View style={S.devTrialView}>
-        {/* <Button
+        <Button
             title="Dev Dummy Onboarding"
             onPress={() => {
                 setDataHumenId(randomString(16), dispatch)
                 navigation.navigate('ChooseUsername')
             }}
-        /> */}
+        />
         <Button
             title="Demo Login"
             onPress={() => dummyLoginRbSheetRef.current.open()}
