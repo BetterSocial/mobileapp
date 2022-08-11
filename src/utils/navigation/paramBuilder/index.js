@@ -26,6 +26,32 @@ const linkContextScreenParamBuilder = (
 
 /**
  *
+ * @param {Object} item
+ * @param {String} domainName
+ * @param {String} image
+ * @param {String} domain_page_id
+ * @returns
+ */
+ const linkContextScreenSwitchScreenParam = (
+  item,
+  domainName,
+  image,
+  domain_page_id = '',
+) => ({
+  item: {
+    ...item,
+    domain: {
+      image,
+      name: domainName,
+    },
+    content: {
+      ...item.content
+    },
+  },
+});
+
+/**
+ *
  * @param {String} title
  * @param {String} image
  * @param {String} description
@@ -56,4 +82,5 @@ const newsDiscoveryContentParamBuilder = (
 export {
   newsDiscoveryContentParamBuilder,
   linkContextScreenParamBuilder,
+  linkContextScreenSwitchScreenParam
 };
