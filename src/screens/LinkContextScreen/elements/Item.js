@@ -5,21 +5,23 @@ import { useNavigation } from '@react-navigation/native';
 
 import BlockDomainComponent from '../../../components/BlockDomain';
 import { COLORS } from '../../../utils/theme';
-import { Content, Header, LinkContextScreenFooter } from './';
+import { Content, Header, LinkContextScreenFooter } from ".";
 import { downVoteDomain, upVoteDomain } from '../../../service/vote';
 import { fonts } from '../../../utils/fonts';
 import { getAccessToken } from '../../../utils/token';
+import { linkContextScreenParamBuilder, linkContextScreenSwitchScreenParam } from '../../../utils/navigation/paramBuilder';
 
 const LinkContextItem = ({
   item,
   showBackButton = true,
   setFollow,
   follow = false,
+  isFirstItem = false,
 }) => {
   const navigation = useNavigation();
-  let domainImage = item.domain.image;
-  let domainName = item.domain.name;
-  let postTime = item.time;
+  const domainImage = item.domain.image;
+  const domainName = item.domain.name;
+  const postTime = item.time;
 
   const refBlockDomainComponent = React.useRef(null);
   const [idFromToken, setIdFromToken] = React.useState('');
@@ -47,13 +49,17 @@ const LinkContextItem = ({
   };
 
   const onContentPressed = () => {
-    navigation.navigate('DetailDomainScreen', {
-      item: {
-        ...item,
-        score: item?.domain?.credderScore,
-        follower: 0,
-      }
-    });
+    // navigation.navigate('DetailDomainScreen', {
+    //   item: {
+    //     ...item,
+    //     score: item?.domain?.credderScore,
+    //     follower: 0,
+    //   }
+    // });
+
+    if(isFirstItem) return 
+    const param = linkContextScreenSwitchScreenParam(item, item?.domain?.name, item?.domain?.image, item?.domain?.domain_page_id)
+    navigation.push('LinkContextScreen', param)
   };
 
   React.useEffect(() => {
