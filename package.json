@@ -105,7 +105,8 @@
     "stream-chat": "4.2.0",
     "stream-chat-react-native": "github:agit26milan/stream-chat-react-native",
     "stream-chat-react-native-core": "github:agit26milan/stream-chat-react-native-core",
-    "toggle-switch-react-native": "^3.2.0"
+    "toggle-switch-react-native": "^3.2.0",
+    "uri-scheme": "^1.0.120"
   },
   "devDependencies": {
     "@babel/core": "7.13.10",
