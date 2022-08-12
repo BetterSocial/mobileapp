@@ -1,6 +1,7 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import { Linking } from 'react-native';
+import config from 'react-native-config'
 
 export const sanitizeUrlForLinking = (url) => {
     if (!/^https?:\/\//.test(url)) {
@@ -87,7 +88,7 @@ export const removeWhiteSpace = (txt) => {
     }
 };
 
-export const shareUserLink = (username) => `me.bettersocial.org/u/${username}`
+export const shareUserLink = (username) => `${config.SHARE_URL}/u/${username}`
 
 export function isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;
