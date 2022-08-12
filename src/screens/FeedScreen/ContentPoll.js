@@ -47,6 +47,9 @@ const ContentPoll = ({
   voteCount = 0,
   topics = []
 }) => {
+  console.log('vote count')
+  console.log(voteCount)
+
   const modifiedPoll = polls.reduce(
     (acc, current) => {
       acc.totalpoll += parseInt(current.counter);
@@ -94,7 +97,7 @@ const ContentPoll = ({
       newItem.isalreadypolling = true;
       newItem.refreshtoken = new Date().valueOf();
       if (multipleChoiceSelected.length === 0) {
-        inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
+        // inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
       } else {
         setIsAlreadyPolling(true);
         const selectedPolls = [];
@@ -104,10 +107,10 @@ const ContentPoll = ({
           newPolls[changedPollIndex].counter =
             parseInt(selectedPoll.counter) + 1;
           selectedPolls.push(selectedPoll);
-          inputSingleChoicePoll(
-            selectedPoll.polling_id,
-            selectedPoll.polling_option_id,
-          );
+          // inputSingleChoicePoll(
+          //   selectedPoll.polling_id,
+          //   selectedPoll.polling_option_id,
+          // );
         }
         newItem.pollOptions = newPolls;
         newItem.mypolling = selectedPolls;
@@ -121,7 +124,7 @@ const ContentPoll = ({
       newItem.refreshtoken = new Date().valueOf();
 
       if (singleChoiceSelectedIndex === -1) {
-        inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
+        // inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
       } else {
         const selectedPoll = polls[singleChoiceSelectedIndex];
         newPolls[singleChoiceSelectedIndex].counter =
@@ -224,6 +227,7 @@ const ContentPoll = ({
                     isalreadypolling={isAlreadyPolling}
                     maxpolls={modifiedPoll.maxId}
                     total={modifiedPoll.totalpoll}
+                    totalVotingUser={voteCount}
                   />
                 ) : (
                   <PollOptions

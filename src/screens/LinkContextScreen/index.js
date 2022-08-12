@@ -65,6 +65,8 @@ const LinkContextScreen = () => {
   React.useEffect(() => {
     const init = async () => {
       setLoading(true);
+      console.log(`getting data`)
+      console.log(item)
       const res = await getLinkContextScreenRelated(item?.content?.news_link_id);
       console.log(`res.data ${  res.data.length} ${res}`)
       if (res.data) {
@@ -147,6 +149,7 @@ const LinkContextScreen = () => {
               <LinkContextItem
                 item={featuredNewsFromFeed}
                 follow={follow}
+                isFirstItem={true}
                 setFollow={(follow) => setFollow(follow)}
               />
             );
@@ -158,6 +161,7 @@ const LinkContextScreen = () => {
                 item={singleItem}
                 showBackButton={false}
                 follow={follow}
+                isFirstItem={false}
                 setFollow={(follow) => setFollow(follow)}
               />
             );

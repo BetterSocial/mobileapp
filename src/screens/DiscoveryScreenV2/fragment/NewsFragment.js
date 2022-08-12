@@ -1,14 +1,11 @@
 import * as React from 'react';
-import { Keyboard, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
-import DomainList from '../../Followings/elements/RenderList';
-import Loading from '../../Loading';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import RenderItem from '../elements/RenderItem';
-import RenderNewsScreenItem from '../../../screens/NewsScreen/RenderItem';
 import share from '../../../utils/share';
 import useIsReady from '../../../hooks/useIsReady';
 import { Context } from '../../../context/Store'
@@ -20,14 +17,14 @@ import { withInteractionsManaged } from '../../../components/WithInteractionMana
 
 const NewsFragment = () => {
     const [myId, setMyId] = React.useState('')
-    const [discovery, discoveryDispatch] = React.useContext(Context).discovery
+    const [discovery] = React.useContext(Context).discovery
     const [defaultNews] = React.useContext(Context).news
 
     const isReady = useIsReady()
 
     const navigation = useNavigation()
 
-    const { isLoadingDiscoveryNews, news, isFirstTimeOpen, isFocus } = discovery
+    const { isLoadingDiscoveryNews, news, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -46,7 +43,7 @@ const NewsFragment = () => {
     const renderNewsItem = () => {
         if (isFirstTimeOpen) {
             return [<DiscoveryTitleSeparator key="news-title-separator" text="Suggested News" />].concat(defaultNews.news.map((item, index) => {
-                let onContentClicked = () => {
+                const onContentClicked = () => {
                     navigation.navigate('DetailDomainScreen', {
                         item: {
                             id: item.id,
@@ -57,12 +54,16 @@ const NewsFragment = () => {
                 }
 
                 // Disable on press content if view should be navigated to LinkContextScreen
-                if (!item.dummy) return <RenderItem key={`news-screen-item-${index}`} item={item} selfUserId={myId} onPressContent={onContentClicked} />
+                if (!item.dummy) return <RenderItem key={`news-screen-item-${index}`} 
+                    item={item} 
+                    selfUserId={myId} 
+                    // onPressContent={onContentClicked}
+                    />
             }))
         }
 
         return news.map((item, index) => {
-            let contentParam = newsDiscoveryContentParamBuilder(
+            const contentParam = newsDiscoveryContentParamBuilder(
                 item.title,
                 item.image,
                 item.description,
@@ -74,7 +75,7 @@ const NewsFragment = () => {
                 item?.newsLinkDomain?.credder_score
             )
 
-            let onContentClicked = () => {
+            const onContentClicked = () => {
                 navigation.navigate('DetailDomainScreen', {
                     item: {
                         id: item.post_id,
@@ -87,7 +88,8 @@ const NewsFragment = () => {
                 selfUserId={myId}
                 item={contentParam}
                 onPressShare={share.shareNews}
-                onPressContent={onContentClicked} />
+                // onPressContent={onContentClicked} 
+                />
         })
     }
 
