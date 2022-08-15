@@ -3,6 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import Image from '../../components/Image';
 
 import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
+import FastImage from 'react-native-fast-image';
 
 const index = ({image, style}) => {
   return (
@@ -11,6 +12,7 @@ const index = ({image, style}) => {
         <Image
           source={{uri: image}}
           style={StyleSheet.flatten([styles.image, StyleSheet.absoluteFillObject])}
+          resizeMode={FastImage.resizeMode.cover}
         />
       ) : (
         <MemoDomainProfilePicture width="24" height="24" />

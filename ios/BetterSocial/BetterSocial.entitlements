@@ -4,5 +4,10 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:linkdev.bettersocial.org/users</string>
+		<string>applinks:bettersocial.page.link/users</string>
+	</array>
 </dict>
 </plist>

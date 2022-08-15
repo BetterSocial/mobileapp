@@ -41,6 +41,7 @@ import {
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
 import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
+import UniversalLink from '../configs/UniversalLink';
 
 const Tab = createBottomTabNavigator();
 
@@ -61,7 +62,6 @@ function HomeBottomTabs(props) {
   const { feeds } = feedsContext;
   const LIMIT_FIRST_FEEDS = 1;
   const LIMIT_FIRST_NEWS = 3;
-
   if(initialStartup && typeof initialStartup === 'string') {
     initialStartup = JSON.parse(initialStartup)
   }
@@ -340,6 +340,7 @@ function HomeBottomTabs(props) {
         />
       </Tab.Navigator>
       <FirebaseConfig navigation={navigation} />
+      <UniversalLink navigation={navigation} />
     </SafeAreaView>
   );
 }
