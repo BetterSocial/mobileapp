@@ -28,6 +28,22 @@ export const demoVerifyUser = async (userId) => {
   }
 };
 
+/**
+ * 
+ * @param {String} query 
+ * @returns {import('../../types/service/UserService.typedef').UserSearchChatApiResponse | Boolean}
+ */
+export const searchChatUsers = async (query) => {
+  try {
+    const resApi = await api.get(`/users/chat/search?q=${query}`);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    console.log(error);
+    return false
+  }
+};
+
 export const verifyToken = async (token) => {
   try {
     const resApi = await api.post('/users/veryfy-token', {

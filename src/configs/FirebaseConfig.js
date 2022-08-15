@@ -3,6 +3,7 @@ import React from 'react'
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import { getUserId } from '../utils/users';
+
 const FirebaseConfig = (props) => {
     const { navigation } = props
     const USER = 'users'
@@ -40,7 +41,6 @@ const FirebaseConfig = (props) => {
 
     const handleBgDynamicLink = () => {
         dynamicLinks().getInitialLink().then((data) => {
-            console.log(data,'mantap')
             if (data) {
                 getUserProfile(data.url)
             }
@@ -49,7 +49,6 @@ const FirebaseConfig = (props) => {
 
     const handleFgDynamicLink = () => {
         dynamicLinks().onLink((link) => {
-            console.log(link, 'mantul')
             if (link) {
                 getUserProfile(link.url)
             }
