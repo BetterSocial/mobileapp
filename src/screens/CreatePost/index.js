@@ -69,6 +69,7 @@ import {
     requestCameraPermission,
     requestExternalStoragePermission,
 } from '../../utils/permission';
+import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -740,18 +741,31 @@ const CreatePost = () => {
                                         setPositionTopicSearch(position);
                                         searchTopic(textSeacrh);
                                         setPositionKeyboard('always')
+                                        console.log('detector enter');
                                     }
                                     else {
                                         setTopicSearch([]);
                                         setPositionKeyboard('never')
+                                        console.log('detectEnter', 'else detector enter');
                                     }
                                 }
                                 else {
                                     setTopicSearch([]);
                                     setPositionKeyboard('never')
+                                    const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
+                                    console.log('with space', textSeacrh);
+                                    console.log('after space', removeCharacterAfterSpace);
+                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic);
+                                    // console.log('textSearch: ', textSeacrh);
+                                    // if (listTopic.indexOf(textSeacrh) === -1) {
+                                    //     const newArr = [...listTopic, textSeacrh];
+                                    //     setListTopic(newArr);
+                                    // }
+                                    console.log('spaceStatus', 'else space status');
                                 }
                             }
                             else {
+                                console.log('tidak ada #', 'else terakhir');
                                 setTopicSearch([]);
                                 setPositionKeyboard('never')
                             }
@@ -776,7 +790,6 @@ const CreatePost = () => {
                         topicSearch.length > 0 && (
                             <Card style={{ marginTop: -16 }}>
                                 {topicSearch.map((item, index) => <TouchableNativeFeedback key={`topicSearch-${index}`} onPress={() => {
-                                    // const topicItem = capitalizeFirstText(convertString(item.name, " ", ""));
                                     const topicItem = convertString(item.name, " ", "");
                                     const topicItemWithSpace = topicItem.concat(' ');
                                     const oldMessage = message;
