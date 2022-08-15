@@ -1,40 +1,42 @@
 import * as React from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
+  ActivityIndicator,
+  Animated,
+  Pressable,
   StyleSheet,
   TextInput,
-  Animated,
-  Alert,
+  View,
 } from 'react-native';
 
-import MemoIcNewChat from '../../../assets/icons/ic_new_chat';
+import IcClearCircle from '../../../assets/icons/ic_clear_circle';
 import MemoIc_search from '../../../assets/icons/Ic_search';
-import StringConstant from '../../../utils/string/StringConstant';
-import {COLORS, FONTS, SIZES} from '../../../utils/theme';
+import { COLORS, FONTS, SIZES } from '../../../utils/theme';
 
-const Search = ({onPress, animatedValue, onChangeText, text}) => {
-  return (
-    <Animated.View style={styles.animatedViewContainer(animatedValue)}>
-      <View style={styles.wrapperSearch}>
-        <TextInput
-          value={text}
-          multiline={false}
-          placeholder={'Search Users'}
-          style={styles.input}
-          onChangeText={(t) => {
-            onChangeText(t);
-          }}
-          onSubmitEditing={(event) => onPress()}
-        />
-        <View style={styles.wrapperIcon}>
-          <MemoIc_search width={20} height={20} />
-        </View>
+const Search = ({ onPress, animatedValue, onChangeText, text, onClearText, isLoading = false }) => (
+  <Animated.View style={styles.animatedViewContainer(animatedValue)}>
+    <View style={styles.wrapperSearch}>
+      <TextInput
+        value={text}
+        multiline={false}
+        placeholder={'Search Users'}
+        style={styles.input}
+        onChangeText={(t) => {
+          onChangeText(t);
+        }}
+        onSubmitEditing={onPress}
+      />
+      <View style={styles.wrapperIcon}>
+        <MemoIc_search width={20} height={20} />
       </View>
-    </Animated.View>
-  );
-};
+      <View style={styles.wrapperSecondaryIcon}>
+        { isLoading && <ActivityIndicator style={styles.loader} color={COLORS.gray} />}
+        { !isLoading && <Pressable onPress={onClearText}>
+          <IcClearCircle width={20} height={20} />
+        </Pressable> }
+      </View>
+    </View>
+  </Animated.View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -49,6 +51,10 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.radius,
     alignSelf: 'center',
   },
+  loader: {
+    width: 20,
+    height: 20,
+  },
   wrapperButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -61,7 +67,9 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   input: {
-    marginLeft: 24,
+    marginLeft: 28,
+    marginRight: 28,
+    paddingEnd: 16,
     paddingStart: 16,
     lineHeight: 24,
     fontFamily: 'Inter',
@@ -69,10 +77,18 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 14,
     color: '#000000',
+    // backgroundColor: 'red'
   },
   wrapperIcon: {
     position: 'absolute',
     left: 8,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+  },
+  wrapperSecondaryIcon: {
+    position: 'absolute',
+    right: 8,
     top: 0,
     bottom: 0,
     justifyContent: 'center',
