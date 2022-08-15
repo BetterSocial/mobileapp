@@ -8,7 +8,7 @@
 #import <React/RCTRootView.h>
 #import <RNKeyEvent.h>
 #import <Firebase.h>
-
+#import <React/RCTLinkingManager.h>
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -17,7 +17,7 @@
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 #import "ReactNativeConfig.h"
-#import <React/RCTLinkingManager.h>
+
 
 
 static void InitializeFlipper(UIApplication *application) {

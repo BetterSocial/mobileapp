@@ -38,7 +38,6 @@ const Header = ({ image, domain, time, item }) => {
       },
     });
   };
-
   return (
     <GlobalButton buttonStyle={styles.noPl} onPress={onHeaderPressed}>
       <View style={styles.container}>
@@ -139,4 +138,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Header;
+export default React.memo (Header);
