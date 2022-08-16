@@ -14,6 +14,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import LinkContextItem from './elements/Item';
 import Loading from '../Loading';
 import PostArrowUp from '../../assets/images/post-arrow-up.png';
+import TopicPageLabel from '../../components/Label/TopicPageLabel';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
@@ -25,6 +26,9 @@ import {
   getLinkContextScreenRelated,
 } from '../../service/domain';
 import { setIFollow } from '../../context/actions/news';
+
+const VIEW_MAIN_NEWS_INDEX = 0
+const VIEW_RELATED_LINKS_LABEL = 1
 
 const LinkContextScreen = () => {
   const route = useRoute();
@@ -65,8 +69,6 @@ const LinkContextScreen = () => {
   React.useEffect(() => {
     const init = async () => {
       setLoading(true);
-      console.log(`getting data`)
-      console.log(item)
       const res = await getLinkContextScreenRelated(item?.content?.news_link_id);
       console.log(`res.data ${  res.data.length} ${res}`)
       if (res.data) {
@@ -76,7 +78,7 @@ const LinkContextScreen = () => {
           acc.push(newItem)
           return acc;
         }, []);
-        setData([{ dummy: true }, ...reducedData]);
+        setData([{ dummy: true }, { label: true }, ...reducedData]);
         setLoading(false);
       }
       setLoading(false);
@@ -144,7 +146,7 @@ const LinkContextScreen = () => {
           const singleItem = props.item;
           const { index } = props;
 
-          if (index === 0) {
+          if (index === VIEW_MAIN_NEWS_INDEX) {
             return (
               <LinkContextItem
                 item={featuredNewsFromFeed}
@@ -152,6 +154,12 @@ const LinkContextScreen = () => {
                 isFirstItem={true}
                 setFollow={(follow) => setFollow(follow)}
               />
+            );
+          }
+
+          if (index === VIEW_RELATED_LINKS_LABEL) {
+            return (
+              <TopicPageLabel label="Related Links" />
             );
           }
 

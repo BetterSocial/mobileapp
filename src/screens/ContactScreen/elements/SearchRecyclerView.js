@@ -11,7 +11,7 @@ import { searchChatUsers } from '../../../service/users'
 
 const VIEW_TYPE_LABEL = 1;
 const VIEW_TYPE_DATA = 2;
-const { width } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
 
 const SearchRecyclerView = ({ text, onHandleSelected, followed, selectedUsers, usernames, setLoading }) => {
     /**
@@ -24,7 +24,7 @@ const SearchRecyclerView = ({ text, onHandleSelected, followed, selectedUsers, u
     const [dataProvider, setDataProvider] = React.useState(null);
 
     React.useEffect(() => {
-        if(text.length < 1) return setUsers([])
+        if (text.length < 1) return setUsers([])
         searchUsers(text)
     }, [text])
 
@@ -34,14 +34,14 @@ const SearchRecyclerView = ({ text, onHandleSelected, followed, selectedUsers, u
 
         const response = await searchChatUsers(queryText)
         if (response) {
-            if(response.followed.length === 0 && response.moreUsers.length === 0) {
+            if (response.followed.length === 0 && response.moreUsers.length === 0) {
                 setUsers([{ viewtype: 'label', label: 'No users found' }])
-            } else if(response.followed.length === 0) {
+            } else if (response.followed.length === 0) {
                 setUsers([{ viewtype: 'label', label: `Users you don't follow` }, ...response.moreUsers])
-            } else if(response.moreUsers.length === 0) {
+            } else if (response.moreUsers.length === 0) {
                 setUsers([...response.followed])
             } else {
-                setUsers([...response.followed, { viewtype: 'label', label: 'More Users' }, ...response.moreUsers])
+                setUsers([...response.followed, { viewtype: 'label', label: `Users you don't follow` }, ...response.moreUsers])
             }
         }
 
@@ -134,7 +134,7 @@ const SearchRecyclerView = ({ text, onHandleSelected, followed, selectedUsers, u
 
         onHandleSelected(value, true)
     };
-    
+
     if (dataProvider !== null && layoutProvider !== null) return <RecyclerListView
         style={styles.recyclerview}
         layoutProvider={layoutProvider}
@@ -160,8 +160,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     recyclerview: {
-        height: '100%',
-        paddingBottom: 80,
+        // height: height - 180,
+        flex: 1,
     }
 })
 

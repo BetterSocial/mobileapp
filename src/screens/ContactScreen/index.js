@@ -2,6 +2,8 @@ import * as React from 'react';
 import {
   Alert,
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
   RefreshControl,
   SafeAreaView,
   StatusBar,
@@ -26,7 +28,8 @@ import { setChannel } from '../../context/actions/setChannel';
 import { userPopulate } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const {width} = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
+console.log(`contact screen height ${height}`)
 
 const ContactScreen = ({ navigation }) => {
   const [loading, setLoading] = React.useState(false);
@@ -137,9 +140,9 @@ const ContactScreen = ({ navigation }) => {
 
       const generatedChannelId = generateRandomId();
       const memberWithRoles = members.map((item) => ({
-          user_id: item,
-          channel_role: "channel_moderator",
-        }));
+        user_id: item,
+        channel_role: "channel_moderator",
+      }));
 
       if (findChannels.length > 0) {
         setChannel(findChannels[0], dispatchChannel);
@@ -169,23 +172,23 @@ const ContactScreen = ({ navigation }) => {
     }
   };
 
-  const rowRenderer = (type, item, index, extendedState) => 
-    // switch (type) {
-    // case VIEW_TYPE_LABEL:
-    //   return <Label label={item.name} />;
-    // case VIEW_TYPE_DATA:
-     (
-      <ItemUser
-        photo={item.profile_pic_path}
-        bio={item.bio}
-        username={item.username}
-        followed={extendedState.followed}
-        userid={item.user_id}
-        onPress={() => handleSelected(item)}
-      />
-    )
+  const rowRenderer = (type, item, index, extendedState) =>
+  // switch (type) {
+  // case VIEW_TYPE_LABEL:
+  //   return <Label label={item.name} />;
+  // case VIEW_TYPE_DATA:
+  (
+    <ItemUser
+      photo={item.profile_pic_path}
+      bio={item.bio}
+      username={item.username}
+      followed={extendedState.followed}
+      userid={item.user_id}
+      onPress={() => handleSelected(item)}
+    />
+  )
     // }
-  ;
+    ;
 
   const handleSelected = (value, fromSearchMode = false) => {
     const copyFollowed = [...followed];
@@ -244,7 +247,7 @@ const ContactScreen = ({ navigation }) => {
 
   const onSearchTextChange = (changedText) => {
     setText(changedText)
-    if(changedText.length > 0) {
+    if (changedText.length > 0) {
       debounced(changedText)
     } else {
       debounced.cancel()
@@ -256,59 +259,63 @@ const ContactScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
-      <Header
-        title={StringConstant.chatTabHeaderCreateChatButtonText}
-        containerStyle={styles.containerStyle}
-        subTitle={'Next'}
-        subtitleStyle={styles.subtitleStyle}
-        onPressSub={() => handleCreateChannel(selectedUsers)}
-        onPress={() => navigation.goBack()}
-      />
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}>
+        <StatusBar translucent={false} />
+        <Header
+          title={StringConstant.chatTabHeaderCreateChatButtonText}
+          containerStyle={styles.containerStyle}
+          subTitle={'Next'}
+          subtitleStyle={styles.subtitleStyle}
+          onPressSub={() => handleCreateChannel(selectedUsers)}
+          onPress={() => navigation.goBack()}
+        />
 
-      <Search
-        text={text}
-        style={styles.containerStyle}
-        onChangeText={onSearchTextChange}
-        onClearText={() => onSearchTextChange('')}
-        isLoading={isLoadingSearchResult}
+        <Search
+          text={text}
+          style={styles.containerStyle}
+          onChangeText={onSearchTextChange}
+          onClearText={() => onSearchTextChange('')}
+          isLoading={isLoadingSearchResult}
         // onPress={handleSearch}
-      />
+        />
 
-      <View>
-        {selectedUsers && (
-          <ContactPreview
-            users={selectedUsers}
-            onPress={(user) => handleSelected(user)}
+        <View>
+          {selectedUsers && (
+            <ContactPreview
+              users={selectedUsers}
+              onPress={(user) => handleSelected(user)}
+            />
+          )}
+        </View>
+
+        {isRecyclerViewShown && !isSearchMode && (
+          <RecyclerListView
+            style={styles.recyclerview}
+            layoutProvider={layoutProvider}
+            dataProvider={dataProvider}
+            extendedState={{
+              followed,
+            }}
+            rowRenderer={rowRenderer}
+            scrollViewProps={{
+              refreshControl: (
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              ),
+            }}
           />
         )}
-      </View>
 
-      {isRecyclerViewShown && !isSearchMode &&(
-        <RecyclerListView
-          style={styles.recyclerview}
-          layoutProvider={layoutProvider}
-          dataProvider={dataProvider}
-          extendedState={{
-            followed,
-          }}
-          rowRenderer={rowRenderer}
-          scrollViewProps={{
-            refreshControl: (
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            ),
-          }}
-        />
-      )}
-
-      {isSearchMode && <SearchRecyclerView 
-        text={debouncedText} 
-        followed={followed}
-        selectedUsers={selectedUsers}
-        usernames={usernames}
-        setLoading={setIsLoadingSearchResult}
-        onHandleSelected={(value, fromSearchMode) => handleSelected(value, fromSearchMode)}/>}
-      <Loading visible={loading} />
+        {isSearchMode && <SearchRecyclerView
+          text={debouncedText}
+          followed={followed}
+          selectedUsers={selectedUsers}
+          usernames={usernames}
+          setLoading={setIsLoadingSearchResult}
+          onHandleSelected={(value, fromSearchMode) => handleSelected(value, fromSearchMode)} />
+        }
+        <Loading visible={loading} />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -316,12 +323,13 @@ const ContactScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    flexDirection: 'column',
     backgroundColor: '#FFFFFF',
+    flex: 1,
   },
   recyclerview: {
-    paddingBottom: 80,
-    height: '100%',
+    // paddingBottom: 100,
+    // height: height - 180,
+    flex: 1,
   },
   containerStyle: {
     marginHorizontal: 16,
@@ -332,4 +340,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withInteractionsManaged (ContactScreen);
+export default withInteractionsManaged(ContactScreen);
