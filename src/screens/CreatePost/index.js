@@ -88,7 +88,8 @@ const CreatePost = () => {
     const [message, setMessage] = React.useState('');
     const [mediaStorage, setMediaStorage] = React.useState([]);
     const [listTopic, setListTopic] = React.useState([]);
-    const [isPollShown, setIsPollShown] = React.useState(false);
+    const [listTopicChat, setListTopicChat] = React.useState([])
+  const [isPollShown, setIsPollShown] = React.useState(false);
     const [polls, setPolls] = React.useState([...defaultPollItem]);
     const [isPollMultipleChoice, setIsPollMultipleChoice] = React.useState(false);
     const [linkPreviewMeta, setLinkPreviewMeta] = React.useState(null);
@@ -383,7 +384,9 @@ const CreatePost = () => {
 
     const removeTopic = (v) => {
         const newArr = listTopic.filter((e) => e !== v);
-        setListTopic(newArr);
+        const newChat = listTopicChat.filter((chat) => chat !== `topic_${v}`)
+    setListTopic(newArr);
+    setListTopicChat(newChat)
     };
     const onSetExpiredSelect = (v) => {
         setExpiredSelect(v);
@@ -424,9 +427,10 @@ const CreatePost = () => {
         return true;
     };
 
-    const onSaveTopic = (v) => {
-        console.log(v);
+    const onSaveTopic = (v, topicChat) => {
+        console.log(v, topicChat, 'lupana');
         setListTopic(v);
+    setListTopicChat(topicChat)
         sheetTopicRef.current.close();
     };
 
@@ -441,7 +445,7 @@ const CreatePost = () => {
             }
 
             setLoading(true);
-
+      console.log(listTopic, 'list topic')
             const data = {
                 topics: listTopic,
                 message,
@@ -457,7 +461,7 @@ const CreatePost = () => {
             };
 
             // console.log('data')
-            // console.log(data)      
+            // console.log(data)
 
             setLocationId(JSON.stringify(geoSelect));
             setDurationId(JSON.stringify(expiredSelect));
@@ -689,7 +693,7 @@ const CreatePost = () => {
         sheetTopicRef.current.open()
     }
 
-
+  console.log(listTopicChat, 'roros')
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />
@@ -799,7 +803,9 @@ const CreatePost = () => {
                                     const newMessage = s.insert(start, topicItemWithSpace);
                                     if (listTopic.indexOf(topicItem) === -1) {
                                         const newArr = [...listTopic, topicItem];
-                                        setListTopic(newArr);
+                                        const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
+                    setListTopic(newArr);
+                    setListTopicChat(newChatTopic)
                                     }
                                     setPositionKeyboard('never')
                                     handleHastag(newMessage, setFormatHastag)
@@ -925,10 +931,10 @@ const CreatePost = () => {
                     />
                     <SheetAddTopic
                         refTopic={sheetTopicRef}
-                        onAdd={(v) => onSaveTopic(v)}
-                        topics={listTopic}
+                        onAdd={(v, chatTopci) => onSaveTopic(v, chatTopci)}
+                        topics={listTopic}chatTopics={listTopicChat}
                         onClose={() => sheetTopicRef.current.close()}
-                        saveOnClose={(v) => setListTopic(v)}
+                        // saveOnClose={(v, chatTopic) => onSaveTopic(v, chatTopic)}
                     />
                     <SheetExpiredPost
                         refExpired={sheetExpiredRef}

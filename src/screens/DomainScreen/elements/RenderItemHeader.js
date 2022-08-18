@@ -51,12 +51,9 @@ const RenderItemHeader = ({ item, image, follow = false, follower = 0, handleFol
                 <Text style={styles.headerDomainName} numberOfLines={1}>{getname(item)}</Text>
                 <View style={styles.headerDateContainer}>
                     <Text style={styles.headerDomainDate} numberOfLines={1}>
-                        {/* {new Date(gettime(item)).toLocaleDateString()} */}
                         {calculateTime(item?.content?.created_at)}
                     </Text>
                     <View style={styles.point} />
-                    {/* <Memoic_globe height={normalize(13)} width={normalize(13)} /> */}
-                    {/* <View style={styles.point} /> */}
                     <MemoPeopleFollow height={normalize(13)} width={normalize(12)} />
                     <Gap style={{ width: 3.33 }} />
                     <Text style={styles.headerFollowerText}>{follower}</Text>

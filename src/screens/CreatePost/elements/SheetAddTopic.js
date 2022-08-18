@@ -12,9 +12,10 @@ import { fonts } from '../../../utils/fonts';
 import { getTopics } from '../../../service/topics';
 import { isEmptyOrSpaces } from '../../../utils/Utils';
 
-const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
+const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose, chatTopics }) => {
   const [dataTopic, setTopic] = React.useState('');
   const [listTopics, setlistTopics] = React.useState([]);
+  const [chatTopic, setChatTopic] = React.useState([])
   const [trigger, setTrigger] = React.useState(-1);
   const [topicSuggestion, setTopicSuggestion] = React.useState([]);
   const rbSheetHeight = 330
@@ -59,11 +60,12 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
         .catch(err => console.log(err));
     }
   }
-
+  console.log(chatTopic, 'jahat')
   const add = () => {
     const data = dataTopic.replace(/\s/g, '').toLowerCase();
     if (data !== '' && !listTopics.includes(data)) {
       setlistTopics((val) => [...val, data]);
+      setChatTopic((val) => [...val, `topic_${data}`])
       setTopic('');
     }
     setTopic('');
@@ -71,39 +73,43 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose }) => {
   };
   const removeTopic = (v) => {
     const newArr = listTopics.filter((e) => e !== v);
+    const newChatTopic = chatTopic.filter((chat) => chat !== `topic_${v}`)
     setlistTopics(newArr);
+    setChatTopic(newChatTopic)
   };
   const merge = () => {
     setlistTopics(topics);
+    setChatTopic(chatTopics)
   };
   const save = () => {
     const data = dataTopic.replace(/\s/g, '').toLowerCase();
     if (data === '') {
-      onAdd(listTopics);
+      onAdd(listTopics, chatTopic);
     } else if (!listTopics.includes(data)) {
         const newArr = [...listTopics, data];
-        onAdd(newArr);
+        const newChatTopic = [...chatTopic, `topic_${data}`]
+        onAdd(newArr, newChatTopic);
       }
     add();
     onClose();
   };
-  const onSwepDown = () => {
-    const data = dataTopic.replace(/\s/g, '').toLowerCase();
-    if (data === '') {
-      saveOnClose(listTopics);
-    } else if (!listTopics.includes(data)) {
-        const newArr = [...listTopics, data];
-        saveOnClose(newArr);
-      }
-    add();
-  };
+  // const onSwepDown = () => {
+  //   const data = dataTopic.replace(/\s/g, '').toLowerCase();
+  //   if (data === '') {
+  //     saveOnClose(listTopics);
+  //   } else if (!listTopics.includes(data)) {
+  //       const newArr = [...listTopics, data];
+  //       saveOnClose(newArr);
+  //     }
+  //   add();
+  // };
 
 
   return (
     <RBSheet
       height={rbSheetHeight}
       onOpen={merge}
-      onClose={onSwepDown}
+      // onClose={onSwepDown}
       ref={refTopic}
       closeOnDragDown={true}
       closeOnPressMask={true}

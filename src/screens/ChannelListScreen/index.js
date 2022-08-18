@@ -169,11 +169,11 @@ const handleUpdateCache = (id, totalComment) => {
   const chatBadge = (props) => (
     <CustomPreviewUnreadCount   {...props}  />
   )
-  const onSelectChat = (channel) => {
+  const onSelectChat = (channel, refreshList) => {
      if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
                     // toDo reset main feeds
                     setMainFeeds(null, dispatchFeed)
-                    navigation.navigate('TopicPageScreen', { id: channel.data.id });
+                    navigation.navigate('TopicPageScreen', { id: channel.data.id, refreshList });
                   } else {
                     setChannel(channel, dispatch);
                     // ChannelScreen | ChatDetailPage
