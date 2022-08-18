@@ -51,7 +51,6 @@ const TopicPageScreen = (props) => {
     };
     parseToken();
   }, []);
-  console.log(route.params, 'lalak')
   React.useEffect(() => {
     const initData = async () => {
       try {
