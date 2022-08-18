@@ -31,7 +31,7 @@ const LinkContextScreenFooter = ({
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
-          let upvote = item.latest_reactions.upvotes.filter(
+          const upvote = item.latest_reactions.upvotes.filter(
             (vote) => vote.user_id === selfUserId,
           );
           if (upvote !== undefined) {
@@ -41,7 +41,7 @@ const LinkContextScreenFooter = ({
         }
 
         if (item.latest_reactions.downvotes !== undefined) {
-          let downvotes = item.latest_reactions.downvotes.filter(
+          const downvotes = item.latest_reactions.downvotes.filter(
             (vote) => vote.user_id === selfUserId,
           );
           if (downvotes !== undefined) {
@@ -56,7 +56,7 @@ const LinkContextScreenFooter = ({
 
   React.useEffect(() => {
     const initialVote = () => {
-      let c = getCountVote(item);
+      const c = getCountVote(item);
       setTotalVote(c);
     };
     initialVote();
@@ -64,9 +64,9 @@ const LinkContextScreenFooter = ({
 
   React.useEffect(() => {
     const initial = () => {
-      let reactionCount = item?.reaction_counts || {};
+      const reactionCount = item?.reaction_counts || {};
       if (JSON.stringify(reactionCount) !== '{}') {
-        let comment = reactionCount?.comment;
+        const comment = reactionCount?.comment;
         if (comment !== undefined) {
           if (comment > 0) {
             setReaction(true);
@@ -79,7 +79,7 @@ const LinkContextScreenFooter = ({
   }, [item]);
 
   return (
-    <View style={{flex: 1}}>
+    <View>
       <View style={styles.wrapperFooter}>
         <Footer
           key={itemId}

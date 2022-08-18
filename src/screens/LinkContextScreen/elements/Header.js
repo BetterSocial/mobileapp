@@ -27,7 +27,7 @@ import {
   getDomainIdIFollow,
   unfollowDomain,
 } from '../../../service/domain';
-import { fonts } from '../../../utils/fonts';
+import { fonts, normalizeFontSize } from '../../../utils/fonts';
 
 const Header = ({
   item,
@@ -38,7 +38,7 @@ const Header = ({
   follow,
   setFollow,
 }) => {
-  let iddomain = item.content.domain_page_id;
+  const iddomain = item.content.domain_page_id;
   const navigation = useNavigation();
   const [dataFollow] = React.useState({
     domainId: iddomain,
@@ -46,9 +46,9 @@ const Header = ({
   });
 
   const [news, dispatch] = React.useContext(Context).news;
-  let { ifollow } = news;
+  const { ifollow } = news;
 
-  let onHeaderClicked = () => {
+  const onHeaderClicked = () => {
     navigation.push('DomainScreen', {
       item: {
         ...item,
@@ -59,13 +59,13 @@ const Header = ({
     });
   };
 
-  let onNavigationBack = () => {
+  const onNavigationBack = () => {
     navigation.goBack();
   };
 
   const getIFollow = async () => {
     if (ifollow.length === 0) {
-      let res = await getDomainIdIFollow();
+      const res = await getDomainIdIFollow();
       setIFollow(res.data, dispatch);
     } else {
       setFollow(JSON.stringify(ifollow).includes(iddomain));
@@ -95,9 +95,7 @@ const Header = ({
     console.log('handle unfollow');
     const res = await unfollowDomain(dataFollow);
     if (res.code === 200) {
-      let newListFollow = await ifollow.filter(function (obj) {
-        return obj.domain_id_followed !== iddomain;
-      });
+      const newListFollow = await ifollow.filter((obj) => obj.domain_id_followed !== iddomain);
       console.log('res unfollow');
       setIFollow(newListFollow, dispatch);
     } else {
@@ -135,24 +133,19 @@ const Header = ({
           <Text style={styles.headerDomainName} numberOfLines={1}>{name}</Text>
           <View style={styles.headerDomainDateContainer}>
             <Text style={styles.headerDomainDate} numberOfLines={1}>
-              {/* {new Date(time).toLocaleDateString()} */}
               {calculateTime(time)}
             </Text>
             <View style={styles.point} />
-            {/* <Memoic_globe height={13} width={13} /> */}
-            {/* <View style={styles.point} /> */}
             <MemoPeopleFollow height={13} width={12} />
-            <Gap style={{ width: 4 }} />
-            <Text
-              style={{
-                color: '#828282',
-                fontSize: 12,
-                fontFamily: fonts.inter[700],
-              }}>
-              12k
-            </Text>
+            <Gap style={{ width: 3.33 }} />
+            <Text style={styles.headerFollowerText}>12k</Text>
             <View style={styles.point} />
-            <FeedCredderRating containerStyle={styles.credderRating} scoreSize={12} score={item?.domain?.credderScore} />
+            <FeedCredderRating 
+              containerStyle={styles.credderRating} 
+              scoreSize={normalizeFontSize(12)} 
+              scoreStyle={{marginTop: normalizeFontSize(1.5)}}
+              score={item?.domain?.credderScore}
+              iconSize={16} />
           </View>
         </View>
       </Pressable>
@@ -175,21 +168,23 @@ const Header = ({
 
 const styles = StyleSheet.create({
   credderRating: {
-    height: 28,
+    height: 16,
     alignSelf: 'center',
     marginRight: 8,
   },
   headerDomainInfoContainer: {
     flex: 1,
-    alignContent: 'center',
+    // alignContent: 'center',
     justifyContent: 'center',
     marginRight: 8,
   },
   headerDomainDateContainer: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   headerContainer: {
+    display: 'flex',
+    // flex: 1,
     flexDirection: 'row',
     paddingRight: 20,
     alignItems: 'center',
@@ -199,35 +194,38 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     backgroundColor: COLORS.white,
   },
-  wrapperImage: (showBackButton = true) => {
-    return {
-      borderRadius: 45,
-      borderWidth: 0.2,
-      borderColor: 'rgba(0,0,0,0.5)',
-      width: 48,
-      height: 48,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginLeft: showBackButton ? 0 : 20,
-    };
-  },
+  wrapperImage: (showBackButton = true) => ({
+    borderRadius: 45,
+    borderWidth: 0.2,
+    borderColor: 'rgba(0,0,0,0.5)',
+    width: 48,
+    height: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: showBackButton ? 0 : 20,
+  }),
   image: {
     height: 48,
     width: 48,
     borderRadius: 45,
   },
   headerDomainName: {
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[600],
-    lineHeight: 16.9,
+    lineHeight: normalizeFontSize(16.9),
     color: '#000000',
   },
   headerDomainDate: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
-    lineHeight: 18,
+    fontSize: normalizeFontSize(12),
+    lineHeight: normalizeFontSize(18),
     color: '#828282',
     flexShrink: 1,
+  },
+  headerFollowerText: {
+    color: '#828282',
+    fontSize: 12,
+    fontFamily: fonts.inter[700],
   },
   domainItemTitle: {
     fontSize: 16,
