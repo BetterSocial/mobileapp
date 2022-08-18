@@ -28,6 +28,15 @@ const CustomPreviewUnreadCount = (props) => {
         if(props.channel.data.channel_type === 2) {
             return null
         }
+        if(props.channel.data.channel_type === 3) {
+            return (
+                <>
+                {props.channel.data.unread && props.channel.data.unread > 0 ? <View style={styles.unreadContainer} >
+                <Text style={styles.unreadText} >{props.channel.data.unread}</Text>
+            </View> : null}
+                </>
+            )
+        }
         return (
              <>
             {props.unread > 0 ? <View style={styles.unreadContainer} >

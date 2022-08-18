@@ -25,6 +25,7 @@ import { withInteractionsManaged } from '../../components/WithInteractionManaged
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
+  const {params} = route
   const [idLt, setIdLt] = React.useState('');
   const [topicName, setTopicName] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -50,12 +51,13 @@ const TopicPageScreen = (props) => {
     };
     parseToken();
   }, []);
-
+  console.log(route.params, 'lalak')
   React.useEffect(() => {
     const initData = async () => {
       try {
         setLoading(true)
         console.log(route.params.id)
+        const rawId = route.params.id
         const id = convertString(route.params.id, 'topic_', '');
         console.log('id: ', id);
         const topicName = convertString(id, '-', ' ')
@@ -71,7 +73,7 @@ const TopicPageScreen = (props) => {
           _resultGetTopicPages,
           _resultGetUserTopic,
         ] = await Promise.all([
-          getTopicPages(topicName),
+          getTopicPages(rawId),
           getUserTopic(query)
         ]
         )
@@ -91,6 +93,15 @@ const TopicPageScreen = (props) => {
 
     initData();
   }, []);
+
+  React.useEffect(() => () => {
+      updateCount()
+    }, [])
+  const updateCount = () => {
+     if(params.refreshList && typeof params.refreshList === 'function') {
+          params.refreshList()
+        }
+  }
 
   const refreshingData = async () => {
     try {
