@@ -18,19 +18,18 @@ const TopicPageLabel = ({ label }) => (
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        justifyContent: 'center',
         marginStart: 20,
         alignSelf: 'flex-start',
         backgroundColor: COLORS.white,
-        paddingVertical: 10,
+        height: normalize(29),
     },
     domainText: {
         fontSize: normalizeFontSize(18),
         fontFamily: fonts.inter[600],
-        lineHeight: normalize(19),
+        lineHeight: normalize(29),
         fontWeight: 'bold',
-        textAlign: 'left'
+        textAlign: 'left',
     },
     divider: {
         height: 1,
