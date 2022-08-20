@@ -153,7 +153,7 @@ const handleUpdateCache = (id, totalComment) => {
   const goToFeedDetail = async (item) => {
     navigation.navigate('PostDetailPage', {
       feedId: item.activity_id,
-      refreshCache: () => handleUpdateCache(item.activity_id, item.totalComment),
+      refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
     })
   }
 
