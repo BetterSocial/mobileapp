@@ -448,7 +448,7 @@ const PostPageDetailIdComponent = (props) => {
   React.useEffect(() => () => {
     updateFeed(true)
   }, [])
-
+  console.log(item, 'sukak')
   const __handleOnPressScore = () => {
     showScoreAlertDialog(item)
   }
@@ -531,7 +531,7 @@ const PostPageDetailIdComponent = (props) => {
               isLoading={loadingPost}
               refreshComment={handleRefreshComment}
               refreshChildComment={handleRefreshChildComment}
-              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost, findCommentAndUpdate)}
+              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost, findCommentAndUpdate, item)}
               findCommentAndUpdate={findCommentAndUpdate}
             />
           )}
