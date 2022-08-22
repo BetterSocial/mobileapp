@@ -17,7 +17,6 @@ const FeedsPostDetail = (props) => {
     const [time, setTime] = React.useState(new Date().getTime())
     const { feeds, timer } = feedsContext
     const navigateToReplyView = (data, updateParent, findCommentAndUpdate, dataFeed) => {
-        console.log(data, dataFeed, 'jamaah')
         const currentTime = new Date()
         const feedDiffTime = currentTime.getTime() - timer.getTime()
         const pdpDiffTime = currentTime.getTime() - time;

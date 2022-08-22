@@ -448,7 +448,7 @@ const PostPageDetailIdComponent = (props) => {
   React.useEffect(() => () => {
     updateFeed(true)
   }, [])
-  console.log(item, 'sukak')
+
   const __handleOnPressScore = () => {
     showScoreAlertDialog(item)
   }

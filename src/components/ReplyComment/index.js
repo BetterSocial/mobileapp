@@ -124,7 +124,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page,
       console.log(e);
     }
   };
-  console.log(item, 'bajak')
   const createComment = async () => {
     // setLoadingCMD(true);
     let sendPostNotif = false
