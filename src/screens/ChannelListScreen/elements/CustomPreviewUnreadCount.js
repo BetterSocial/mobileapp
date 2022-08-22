@@ -39,14 +39,15 @@ const CustomPreviewUnreadCount = (props) => {
         }
         return (
              <>
-            {props.unread > 0 ? <View style={styles.unreadContainer} >
-                <Text style={styles.unreadText} >{props.unread}</Text>
+             {/* {console.log(props.channel.state, 'kuku')} */}
+            {props.channel.state.unreadCount && props.channel.state.unreadCount > 0 ? <View style={styles.unreadContainer} >
+                <Text style={styles.unreadText} >{props.channel.state.unreadCount}</Text>
             </View> : null}
             </>
         )
     }
 
-    if(props.channel.type === 'messaging') {
+    if(props.channel.type === 'messaging' || props.channel.type === 'topics') {
             return (
             <>
             {handleBadgeMessage()}
