@@ -1,15 +1,13 @@
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const Label = ({label}) => {
-  return (
+const Label = ({label}) => (
     <View style={styles.headerList}>
       <Text style={styles.titleHeader}>
-        People in <Text style={styles.textBold}>{label}</Text> follow...
+        <Text style={styles.textBold}>{label}</Text>
       </Text>
     </View>
   );
-};
 
 export default Label;
 

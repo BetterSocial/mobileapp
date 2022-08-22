@@ -109,11 +109,11 @@ const OtherProfile = () => {
   const { feeds } = otherProfileFeeds
 
   const getOtherFeeds = async (userId, offset = 0) => {
-    let result = await getOtherFeedsInProfile(userId)
+    const result = await getOtherFeedsInProfile(userId)
     
     if (offset === 0) setOtherProfileFeed([...result.data, { dummy: true }], dispatchOtherProfile)
     else {
-      let clonedFeeds = [...feeds]
+      const clonedFeeds = [...feeds]
       clonedFeeds.splice(feeds.length - 1, 0, ...data)
       setOtherProfileFeed(clonedFeeds, dispatchOtherProfile)
     }
@@ -124,7 +124,7 @@ const OtherProfile = () => {
   React.useEffect(() => {
     create();
     setIsLoading(true);
-    let getJwtToken = async () => {
+    const getJwtToken = async () => {
       setTokenJwt(await getAccessToken());
     };
 
@@ -192,7 +192,7 @@ const OtherProfile = () => {
   };
 
   const handleSetUnFollow = async () => {
-    let data = {
+    const data = {
       user_id_follower: user_id,
       user_id_followed: other_id,
       follow_source: 'other-profile',
@@ -204,7 +204,7 @@ const OtherProfile = () => {
   };
 
   const handleSetFollow = async () => {
-    let data = {
+    const data = {
       user_id_follower: user_id,
       user_id_followed: other_id,
       follow_source: 'other-profile',
@@ -217,8 +217,7 @@ const OtherProfile = () => {
     }
   };
 
-  const __renderBio = (string) => {
-    return (
+  const __renderBio = (string) => (
       <View style={styles.containerBio}>
         {string === null || string === undefined ? (
           <Text>No Bio</Text>
@@ -232,7 +231,6 @@ const OtherProfile = () => {
         )}
       </View>
     );
-  };
 
   const __renderListHeader = () => {
     const __renderBlockIcon = () => {
@@ -383,7 +381,7 @@ const OtherProfile = () => {
 
   const createChannel = async () => {
     try {
-      let members = [other_id, user_id];
+      const members = [other_id, user_id];
       setIsLoading(true);
       const clientChat = await client.client;
       const filter = { type: 'messaging', members: { $eq: members } };
@@ -400,7 +398,7 @@ const OtherProfile = () => {
           generateRandomId(),
           {
             name: [profile.myProfile.username, username].join(', '),
-            members: members,
+            members,
           },
         );
         await channelChat.watch();
@@ -490,10 +488,10 @@ const OtherProfile = () => {
     handleBlocking(message);
   };
 
-  let onNewPollFetched = (newPolls, index) => {
+  const onNewPollFetched = (newPolls, index) => {
     setFeedByIndex(
       {
-        index: index,
+        index,
         singleFeed: newPolls,
       },
       dispatch,
@@ -503,7 +501,7 @@ const OtherProfile = () => {
   };
 
   const onPressDomain = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -514,14 +512,14 @@ const OtherProfile = () => {
 
   const onPress = (item, index) => {
     navigation.navigate('OtherProfilePostDetailPage', {
-      index: index,
+      index,
       isalreadypolling: item.isalreadypolling,
     });
   };
 
   const onPressComment = (index) => {
     navigation.navigate('OtherProfilePostDetailPage', {
-      index: index,
+      index,
     });
   };
 
@@ -536,7 +534,7 @@ const OtherProfile = () => {
 
   const updateFeed = async (post, index) => {
     try {
-      let data = await getFeedDetail(post.activity_id);
+      const data = await getFeedDetail(post.activity_id);
       if (data) {
         setFeedByIndex(
           {
@@ -580,15 +578,13 @@ const OtherProfile = () => {
           onScroll={handleScroll}
           onEndReach={__handleOnEndReached}
           snapToOffsets={(() => {
-            let posts = feeds.map((item, index) => {
-              return headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT)
-            })
+            const posts = feeds.map((item, index) => headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT))
             console.log(posts)
             return [headerHeightRef.current, ...posts]
           })()}
           ListHeaderComponent={
             <View onLayout={(event) => {
-              let headerHeightLayout = event.nativeEvent.layout.height
+              const headerHeightLayout = event.nativeEvent.layout.height
               headerHeightRef.current = headerHeightLayout
             }}>
               <View style={styles.content}>
@@ -604,10 +600,7 @@ const OtherProfile = () => {
             </View>
           }>
           {({ item, index }) => {
-
-            console.log('item.actor')
-            console.log(item.actor)
-            let dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight;
+            const dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight;
             if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
             return <View style={{ width: '100%' }}>
               <RenderItem
@@ -666,12 +659,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 20,
   },
-  dummyItem: (height) => {
-    return {
+  dummyItem: (height) => ({
       height,
 
-    }
-  },
+    }),
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -738,7 +729,7 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   tabs: {
-    width: width,
+    width,
     borderBottomColor: colors.alto,
     borderBottomWidth: 1,
     paddingLeft: 20,
@@ -815,7 +806,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabsFixed: {
-    width: width,
+    width,
     borderBottomColor: colors.alto,
     borderBottomWidth: 1,
     paddingLeft: 20,

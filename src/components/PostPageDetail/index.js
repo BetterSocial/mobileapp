@@ -2,37 +2,36 @@ import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
 import {
   Dimensions,
+  InteractionManager,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  View,
-  Keyboard,
-  InteractionManager
+  View
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useNavigation } from '@react-navigation/core';
 import { useRoute } from '@react-navigation/native'
 
-import BlockComponent from '../../components/BlockComponent';
-import ContainerComment from '../../components/Comments/ContainerComment';
+import BlockComponent from "../BlockComponent";
+import ContainerComment from "../Comments/ContainerComment";
 import Content from './elements/Content';
 import ContentLink from '../../screens/FeedScreen/ContentLink';
 import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
+import LoadingWithoutModal from "../LoadingWithoutModal";
 import Log from '../../utils/log/Log';
 import StringConstant from '../../utils/string/StringConstant';
-import WriteComment from '../../components/Comments/WriteComment';
+import WriteComment from "../Comments/WriteComment";
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
 import { FEEDS_CACHE } from '../../utils/cache/constant';
-import { Footer, Gap } from '../../components';
+import { Footer, Gap } from "..";
 import {
   POST_TYPE_LINK,
   POST_TYPE_POLL,
@@ -49,7 +48,7 @@ import { getMyProfile } from '../../service/profile';
 import { getSpecificCache } from '../../utils/cache';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { setMainFeeds, setTimer } from '../../context/actions/feeds';
+import { setFeedByIndex, setMainFeeds, setTimer } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
 
 const { width, height } = Dimensions.get('window');
@@ -72,14 +71,14 @@ const PostPageDetailIdComponent = (props) => {
   const [commentList, setCommentList] = React.useState([])
   const [time, setTime] = React.useState(new Date().getTime())
   const [item, setItem] = React.useState(null);
-  let navigation = useNavigation()
+  const navigation = useNavigation()
   const route = useRoute()
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
-  let [feedsContext, dispatch] = React.useContext(Context).feeds;
-  let { timer } = feedsContext
+  const [feedsContext, dispatch] = React.useContext(Context).feeds;
+  const { timer } = feedsContext
 
-  let { feedId, refreshParent,
+  const { feedId, refreshParent,
     navigateToReplyView = () => { } } = props
   React.useEffect(() => {
     if (item && item.latest_reactions && item.latest_reactions.comment) {
@@ -93,10 +92,10 @@ const PostPageDetailIdComponent = (props) => {
     setTotalVote(upvote - downvotes)
   };
   const initial = async () => {
-    let reactionCount = item.reaction_counts;
+    const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
-      let comment = reactionCount.comment;
+      const { comment } = reactionCount;
       handleVote(reactionCount);
       if (comment !== undefined) {
         if (comment > 0) {
@@ -106,13 +105,13 @@ const PostPageDetailIdComponent = (props) => {
           );
         }
       }
-      let upvote = reactionCount.upvotes;
+      const upvote = reactionCount.upvotes;
       if (upvote !== undefined) {
-        count = count + upvote;
+        count += upvote;
       }
-      let downvote = reactionCount.downvotes;
+      const downvote = reactionCount.downvotes;
       if (downvote !== undefined) {
-        count = count - downvote;
+        count -= downvote;
       }
       setTotalVote(count);
     }
@@ -121,7 +120,7 @@ const PostPageDetailIdComponent = (props) => {
   const getDetailFeed = async () => {
     if (!route.params.isCaching) {
       setLoading(true)
-      let data = await getFeedDetail(feedId);
+      const data = await getFeedDetail(feedId);
       setItem(data.data)
       setLoading(false)
 
@@ -148,7 +147,7 @@ const PostPageDetailIdComponent = (props) => {
 
   const updateFeed = async (isSort) => {
     try {
-      let data = await getFeedDetail(feedId);
+      const data = await getFeedDetail(feedId);
       let oldData = data.data
       if (isSort) {
         oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()) } }
@@ -161,9 +160,9 @@ const PostPageDetailIdComponent = (props) => {
       updateAllContent(oldData)
       Keyboard.dismiss()
       setTimeout(() => {
-        if(scrollViewRef && scrollViewRef.current) {
-          scrollViewRef.current.scrollTo({y: Dimensions.get('screen').height + 30, x: 0})
-        } 
+        if (scrollViewRef && scrollViewRef.current) {
+          scrollViewRef.current.scrollTo({ y: Dimensions.get('screen').height + 30, x: 0 })
+        }
       }, 300)
 
     } catch (e) {
@@ -183,7 +182,7 @@ const PostPageDetailIdComponent = (props) => {
     try {
       if (textComment.trim() !== '') {
 
-        let data = await createCommentParent(textComment, item.id, item.actor.id, true);
+        const data = await createCommentParent(textComment, item.id, item.actor.id, true);
         updateCachingComment(data.data)
         if (data.code === 200) {
           setTextComment('');
@@ -205,16 +204,16 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const onPressDomain = () => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
       item.og.domain_page_id,
     );
 
-    let currentTime = new Date()
-    let feedDiffTime = currentTime.getTime() - timer.getTime()
-    let pdpDiffTime = currentTime.getTime() - time;
+    const currentTime = new Date()
+    const feedDiffTime = currentTime.getTime() - timer.getTime()
+    const pdpDiffTime = currentTime.getTime() - time;
 
     if (feedId) {
       // viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
@@ -254,16 +253,16 @@ const PostPageDetailIdComponent = (props) => {
         if (type === 'upvote') {
           if (response.data) {
             return { ...feed, reaction_counts: { ...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes + 1, downvotes: voteStatus === 'downvote' ? feed.reaction_counts.downvotes - 1 : feed.reaction_counts.downvotes }, own_reactions: { ...feed.own_reactions, upvotes: typeof feed.own_reactions === 'object' ? data : feed.own_reactions.push(response.data), downvotes: voteStatus === 'downvote' ? feed.own_reactions.downvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : feed.own_reactions.downvotes } }
-          } else {
-            return { ...feed, reaction_counts: { ...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes - 1 }, own_reactions: { ...feed.own_reactions, upvotes: Array.isArray(feed.own_reactions.upvotes) ? feed.own_reactions.upvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : [] } }
           }
-        } else {
-          if (response.data) {
-            return { ...feed, reaction_counts: { ...feed.reaction_counts, downvotes: feed.reaction_counts.downvotes + 1, upvotes: voteStatus === 'upvote' ? feed.reaction_counts.upvotes - 1 : feed.reaction_counts.upvotes }, own_reactions: { ...feed.own_reactions, downvotes: typeof feed.own_reactions === 'object' ? data : feed.own_reactions.push(response.data), upvotes: voteStatus === 'upvote' ? feed.own_reactions.upvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : feed.own_reactions.upvotes } }
-          } else {
-            return { ...feed, reaction_counts: { ...feed.reaction_counts, downvotes: feed.reaction_counts.downvotes - 1 }, own_reactions: { ...feed.own_reactions, downvotes: Array.isArray(feed.own_reactions.downvotes) ? feed.own_reactions.downvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : [] } }
-          }
+          return { ...feed, reaction_counts: { ...feed.reaction_counts, upvotes: feed.reaction_counts.upvotes - 1 }, own_reactions: { ...feed.own_reactions, upvotes: Array.isArray(feed.own_reactions.upvotes) ? feed.own_reactions.upvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : [] } }
+
         }
+        if (response.data) {
+          return { ...feed, reaction_counts: { ...feed.reaction_counts, downvotes: feed.reaction_counts.downvotes + 1, upvotes: voteStatus === 'upvote' ? feed.reaction_counts.upvotes - 1 : feed.reaction_counts.upvotes }, own_reactions: { ...feed.own_reactions, downvotes: typeof feed.own_reactions === 'object' ? data : feed.own_reactions.push(response.data), upvotes: voteStatus === 'upvote' ? feed.own_reactions.upvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : feed.own_reactions.upvotes } }
+        }
+        return { ...feed, reaction_counts: { ...feed.reaction_counts, downvotes: feed.reaction_counts.downvotes - 1 }, own_reactions: { ...feed.own_reactions, downvotes: Array.isArray(feed.own_reactions.downvotes) ? feed.own_reactions.downvotes.filter((react) => react.user_id !== profile.myProfile.user_id) : [] } }
+
+
 
       }
       return { ...feed }
@@ -294,9 +293,9 @@ const PostPageDetailIdComponent = (props) => {
           const findComment = comment.latest_children.comment.map((comment1) => {
             if (comment1.id === newData.id) {
               return { ...comment1, ...newData }
-            } else {
-              return { ...comment1 }
             }
+            return { ...comment1 }
+
           })
           return { ...comment, latest_children: { ...comment.latest_children, comment: findComment } }
         }
@@ -331,7 +330,7 @@ const PostPageDetailIdComponent = (props) => {
   const setUpVote = async (status) => {
     const data = {
       activity_id: item.id,
-      status: status,
+      status,
       feed_group: 'main_feed',
     };
     const processData = await upVote(data);
@@ -340,7 +339,7 @@ const PostPageDetailIdComponent = (props) => {
   const setDownVote = async (status) => {
     const data = {
       activity_id: item.id,
-      status: status,
+      status,
       feed_group: 'main_feed',
     };
     const processData = await downVote(data);
@@ -349,26 +348,26 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const onNewPollFetched = (newPolls, index) => {
-    // setFeedByIndexProps(
-    //   {
-    //     index,
-    //     singleFeed: newPolls,
-    //   },
-    //   dispatch,
-    // );
+    setFeedByIndex(
+      {
+        index,
+        singleFeed: newPolls,
+      },
+      dispatch,
+    );
   };
 
   const navigateToLinkContextPage = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
       item.og.domain_page_id,
     );
 
-    let currentTime = new Date()
-    let feedDiffTime = currentTime.getTime() - timer.getTime()
-    let pdpDiffTime = currentTime.getTime() - time;
+    const currentTime = new Date()
+    const feedDiffTime = currentTime.getTime() - timer.getTime()
+    const pdpDiffTime = currentTime.getTime() - time;
 
     if (feedId) {
       viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
@@ -446,10 +445,8 @@ const PostPageDetailIdComponent = (props) => {
     checkVotes()
   }, [item])
 
-  React.useEffect(() => {
-    return () => {
-      updateFeed(true)
-    }
+  React.useEffect(() => () => {
+    updateFeed(true)
   }, [])
 
   const __handleOnPressScore = () => {
@@ -462,7 +459,7 @@ const PostPageDetailIdComponent = (props) => {
       {item ? <React.Fragment>
         <Header props={item} isBackButton={true} source={SOURCE_PDP} />
 
-        <ScrollView 
+        <ScrollView
           ref={scrollViewRef}
           showsVerticalScrollIndicator={false}
           style={styles.contentScrollView(totalComment)}
@@ -478,7 +475,8 @@ const PostPageDetailIdComponent = (props) => {
                 pollexpiredat={item.polls_expired_at}
                 multiplechoice={item.multiplechoice}
                 isalreadypolling={item.isalreadypolling}
-                // onnewpollfetched={onNewPollFetched}
+                // onnewpollfetched={() => {}}
+                onnewpollfetched={onNewPollFetched}
                 voteCount={item.voteCount}
                 topics={item?.topics}
               />
@@ -523,7 +521,7 @@ const PostPageDetailIdComponent = (props) => {
                 showScoreButton={true}
                 onPressScore={__handleOnPressScore}
                 onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
-                isSelf={profile.myProfile.user_id === item.actor.id ? true : false}
+                isSelf={profile.myProfile.user_id === item.actor.id}
               />
             </View>
           </View>
@@ -580,34 +578,32 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
   },
-  content: (h) => {
-    return {
-      width: width,
-      shadowColor: 'rgba(0,0,0,0.5)',
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.5,
-      backgroundColor: 'white',
-      borderBottomWidth: 1,
-      borderBottomColor: '#C4C4C4',
-      marginBottom: -1,
-      height: h - 170,
-    };
-  },
+  content: (h) => ({
+    width,
+    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#C4C4C4',
+    marginBottom: -1,
+    height: h - 170,
+  }),
   gap: { height: 16 },
   additionalContentStyle: (imageLength, h) => {
     if (imageLength > 0) {
       return {
         height: h * 0.5,
       };
-    } else {
-      return {};
     }
+    return {};
+
   },
   contentScrollView: (totalComment) => ({
-    height: height,
+    height,
     marginBottom: totalComment > 0 ? 82 : 0,
   }),
 });

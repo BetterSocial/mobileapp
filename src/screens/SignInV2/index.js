@@ -24,6 +24,7 @@ import {
   onSuccess,
 } from '@human-id/react-native-humanid';
 import { useNavigation } from '@react-navigation/core';
+import { useSetRecoilState } from 'recoil';
 
 import ButtonSign from '../../assets/icon-svg/button_sign.svg';
 import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
@@ -31,9 +32,11 @@ import DevDummyLogin from '../../components/DevDummyLogin';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
 import StringConstant from '../../utils/string/StringConstant';
+import getRemoteConfig from '../../service/getRemoteConfig';
 import useIsReady from '../../hooks/useIsReady';
 import { Context } from '../../context';
 import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
+import { InitialStartupAtom } from '../../service/initialStartup';
 import { checkToken } from '../../service/outh';
 import { fonts } from '../../utils/fonts';
 import { openUrl } from '../../utils/Utils';
@@ -47,8 +50,6 @@ import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { useSetRecoilState } from 'recoil';
-import { InitialStartupAtom } from '../../service/initialStartup';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;
@@ -57,6 +58,7 @@ const SignIn = () => {
   const [isCompleteSliding, setIsCompleteSliding] = React.useState(false);
   const [showComponent, setShowComponent] = React.useState(false)
   const [clickTime, setClickTime] = React.useState(0)
+  const [isDemoLoginEnabled, setIsDemoLoginEnabled] = React.useState(false)
   const setValueStartup = useSetRecoilState(InitialStartupAtom);
   // const isReady = useIsReady()
   const navigation = useNavigation();
@@ -141,6 +143,7 @@ const SignIn = () => {
       console.log('canceled');
     });
   }, []);
+
   const handleLogin = () => {
     logIn();
     analytics().logLogin({
@@ -152,8 +155,14 @@ const SignIn = () => {
     setShowComponent(true)
   }, 350)
 
+  const checkIsDemoLoginEnabled = async () => {
+    const isEnabled = await getRemoteConfig.isDemoLoginViewEnabled();
+    setIsDemoLoginEnabled(isEnabled)
+  }
+
   React.useEffect(() => {
     debounceShowComponent()
+    checkIsDemoLoginEnabled()
   }, [])
   // if (!isReady) return null
 
@@ -161,7 +170,7 @@ const SignIn = () => {
     <SafeAreaView style={S.container}>
       <StatusBar translucent={false} />
       <View style={S.containerSlideShow}>
-        {clickTime >= 7 ? <DevDummyLogin resetClickTime={resetClickTime} />  : null}
+        {clickTime >= 7 && isDemoLoginEnabled? <DevDummyLogin resetClickTime={resetClickTime} />  : null}
         <SlideShow onContainerPress={onClickContainer} onChangeNewIndex={handleSlideShow} handleLogin={handleLogin}/>
       </View>
     </SafeAreaView>

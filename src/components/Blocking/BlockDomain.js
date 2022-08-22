@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {StyleSheet, Text, View} from 'react-native';
 
 import ItemListLarge from './ItemListLarge';
 import {colors} from '../../utils/colors';

@@ -1,21 +1,22 @@
+/* eslint-disable arrow-body-style */
 import * as React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
 import Icon from 'react-native-vector-icons/Fontisto';
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
 
-const TopicItem = ({label, removeTopic, style}) => {
-  return (
-    <View style={[styles.containerTag, style]}>
+const TopicItem = ({ label, removeTopic, style, onTopicPress = () => { } }) => {
+  return <Pressable onPress={onTopicPress}>
+    <View style={[styles.containerTag, style]} >
       <Text style={styles.tag}>{label}</Text>
       <TouchableOpacity onPress={() => removeTopic(label)} style={styles.btn}>
         <Icon name="close" size={13.33} allowFontScaling={false} />
       </TouchableOpacity>
     </View>
-  );
-};
+  </Pressable>
+    ;
+}
 
 export default TopicItem;
 

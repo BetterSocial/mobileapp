@@ -4,7 +4,7 @@ import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import {
-  Platform, StatusBar, StyleSheet, Text,
+  Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -38,10 +38,10 @@ import { getUserId } from '../utils/users';
 import {
   setMainFeeds, setTimer,
 } from '../context/actions/feeds';
-import { setImageUrl } from '../context/actions/users';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
 import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
+import UniversalLink from '../configs/UniversalLink';
 
 const Tab = createBottomTabNavigator();
 
@@ -49,11 +49,10 @@ function HomeBottomTabs(props) {
   const { navigation } = props;
   const isIos = Platform.OS === 'ios';
 
-  const [users, dispatchUser] = React.useContext(Context).users;
-  const [, dispatchProfile] = React.useContext(Context).profile;
+  const [myProfile, dispatchProfile] = React.useContext(Context).profile;
   const [, followingDispatch] = React.useContext(Context).following;
 
-  const initialStartup = useRecoilValue(InitialStartupAtom);
+  let initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
@@ -63,6 +62,10 @@ function HomeBottomTabs(props) {
   const { feeds } = feedsContext;
   const LIMIT_FIRST_FEEDS = 1;
   const LIMIT_FIRST_NEWS = 3;
+  if(initialStartup && typeof initialStartup === 'string') {
+    initialStartup = JSON.parse(initialStartup)
+  }
+
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
@@ -98,18 +101,12 @@ function HomeBottomTabs(props) {
       console.log('Authorization status:', authStatus);
     }
   };
-
   const getProfile = async () => {
     try {
       const selfUserId = await getUserId();
       const profile = await getMyProfile(selfUserId);
-      setImageUrl(profile.data.profile_pic_path, dispatchUser);
-      const data = {
-        user_id: profile.data.user_id,
-        username: profile.data.username,
-      };
       saveToCache(PROFILE_CACHE, profile.data);
-      setMyProfileAction(data, dispatchProfile);
+      setMyProfileAction(profile.data, dispatchProfile);
       setLoadingUser(false);
     } catch (e) {
       setLoadingUser(false);
@@ -244,13 +241,8 @@ function HomeBottomTabs(props) {
       if (!res) {
         getProfile();
       } else {
-        const data = {
-          user_id: res.user_id,
-          username: res.username,
-        };
-        setMyProfileAction(data, dispatchProfile);
+        setMyProfileAction(res, dispatchProfile);
         setLoadingUser(false);
-        setImageUrl(res.profile_pic_path, dispatchUser);
       }
     });
   }, []);
@@ -273,7 +265,6 @@ function HomeBottomTabs(props) {
       unsubscribe();
     };
   }, []);
-
   React.useEffect(() => {
     if (otherProfileData !== null && initialStartup.id !== null) {
       navigation.navigate('OtherProfile', {
@@ -291,26 +282,26 @@ function HomeBottomTabs(props) {
       <StatusBar />
       <Tab.Navigator
         initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
-        // initialRouteName="Profile"
         tabBarOptions={{
-          // showLabel: true,
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
+ 
         }}
         screenOptions={({ navigation: screenOptionsNavigation }) => ({
           activeTintColor: colors.holytosca,
           tabBarLabel: () => (
-              <Text style={styles.label}>
-                {screenOptionsNavigation.isFocused() ? '\u2B24' : ''}
-              </Text>
+            <View style={[ styles.badge, { backgroundColor: screenOptionsNavigation.isFocused() ? colors.holytosca : 'transparent' }]} />
           ),
         })}>
         <Tab.Screen
           name="ChannelList"
           component={ChannelListScreen}
+          
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <MemoHome fill={color} />,
+            tabBarIcon: ({ color }) => <View style={styles.center} >
+              <MemoHome fill={color} />
+            </View>,
             tabBarBadge: unReadMessage.total_unread_count
               ? unReadMessage.total_unread_count
               : null,
@@ -321,7 +312,7 @@ function HomeBottomTabs(props) {
           component={FeedScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <MemoFeed fill={color} />,
+            tabBarIcon: ({ color }) => <View style={styles.center} ><MemoFeed fill={color} /></View>,
             // unmountOnBlur: true
           }}
         />
@@ -330,7 +321,9 @@ function HomeBottomTabs(props) {
           component={NewsScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <MemoNews fill={color} />,
+            tabBarIcon: ({ color }) => <View>
+              <MemoNews fill={color} />
+            </View>,
             // unmountOnBlur: true
           }}
         />
@@ -339,12 +332,15 @@ function HomeBottomTabs(props) {
           component={ProfileScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: () => <MemoProfileIcon loadingUser={loadingUser} uri={users.photoUrl} />,
+            tabBarIcon: () => <View style={styles.center} >
+              <MemoProfileIcon loadingUser={loadingUser} uri={myProfile.myProfile.profile_pic_path} />
+            </View>,
             // unmountOnBlur:true
           }}
         />
       </Tab.Navigator>
       <FirebaseConfig navigation={navigation} />
+      <UniversalLink navigation={navigation} />
     </SafeAreaView>
   );
 }
@@ -355,11 +351,14 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  label: {
-    fontSize: 6,
-    color: colors.holytosca,
-    marginTop: -12,
-    marginBottom: 5,
-    alignSelf: 'center',
+  badge: {
+    height: 7, 
+    width: 7,
+    position: 'absolute',
+    bottom: 3,
+    borderRadius: 3.5
   },
+  center: {
+    alignItems: 'center', justifyContent: 'center'
+  }
 });

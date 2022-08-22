@@ -6,6 +6,8 @@ export const getDomains = async (offset = 0, limit = 10) => {
   try {
     const url = `/domain?offset=${offset}&limit=${limit}`;
     const res = await api.get(url);
+    // console.log('res.data')
+    // console.log(res.data)
     return res.data;
   } catch (error) {
     console.log(error);
@@ -17,6 +19,20 @@ export const getDomains = async (offset = 0, limit = 10) => {
 export const getDetailDomains = async (domain) => {
   try {
     const res = await api.get(`/domain/domain/${domain}`);
+    return res.data;
+  } catch (error) {
+    console.log('error');
+    console.log(error);
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+
+export const getLinkContextScreenRelated = async (newsLinkId) => {
+  console.log('newsLinkId')
+  console.log(`/domain/link-context-screen/${newsLinkId}`)
+  try {
+    const res = await api.get(`/domain/link-context-screen/${newsLinkId}`);
     return res.data;
   } catch (error) {
     console.log(error);

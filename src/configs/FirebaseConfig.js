@@ -3,6 +3,7 @@ import React from 'react'
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import { getUserId } from '../utils/users';
+
 const FirebaseConfig = (props) => {
     const { navigation } = props
     const USER = 'users'
@@ -33,6 +34,8 @@ const FirebaseConfig = (props) => {
                     data
                 })
                 break
+            default:
+                return null
         }
     }
 

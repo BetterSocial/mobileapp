@@ -14,6 +14,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import LinkContextItem from './elements/Item';
 import Loading from '../Loading';
 import PostArrowUp from '../../assets/images/post-arrow-up.png';
+import TopicPageLabel from '../../components/Label/TopicPageLabel';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
@@ -22,15 +23,19 @@ import { getAccessToken } from '../../utils/token';
 import {
   getDetailDomains,
   getDomainIdIFollow,
+  getLinkContextScreenRelated,
 } from '../../service/domain';
 import { setIFollow } from '../../context/actions/news';
+
+const VIEW_MAIN_NEWS_INDEX = 0
+const VIEW_RELATED_LINKS_LABEL = 1
 
 const LinkContextScreen = () => {
   const route = useRoute();
 
-  let { item } = route.params;
-  let domainName = item.domain.name;
-  let iddomain = item.content.domain_page_id;
+  const { item } = route.params;
+  const domainName = item.domain.name;
+  const iddomain = item.content.domain_page_id;
 
   const navigation = useNavigation();
   const [dataDomain, setDataDomain] = React.useState(route.params.item);
@@ -43,7 +48,7 @@ const LinkContextScreen = () => {
   const [news, dispatch] = React.useContext(Context).news;
   const [featuredNewsFromFeed, setFeaturedNewsFromFeed] = React.useState(item);
 
-  let { ifollow } = news;
+  const { ifollow } = news;
 
   const animatedBottomAnchorContainerValue = React.useRef(
     new Animated.Value(0),
@@ -64,25 +69,16 @@ const LinkContextScreen = () => {
   React.useEffect(() => {
     const init = async () => {
       setLoading(true);
-      let res = await getDetailDomains(domainName);
-      // console.log('res.data ' + domainName)
-      if (res.code === 200) {
-        let reducedData = res.data.reduce((acc, currentItem) => {
-          let newItem = { ...currentItem }
+      const res = await getLinkContextScreenRelated(item?.content?.news_link_id);
+      console.log(`res.data ${  res.data.length} ${res}`)
+      if (res.data) {
+        const reducedData = res?.data?.results?.reduce((acc, currentItem) => {
+          const newItem = { ...currentItem }
           newItem.domain.credderScore = dataDomain?.domain?.credderScore
-
-          // console.log(`currentItem ${currentItem?.content?.news_link_id} vs ${item?.content?.news_link_id}`)
-
-          let currentNewsLinkId = currentItem?.content?.news_link_id
-          let featuredNewsLinkId = item?.content?.news_link_id
-          if(currentNewsLinkId !== undefined && featuredNewsLinkId !== undefined) {
-            if(currentNewsLinkId === featuredNewsLinkId) return acc
-          }
-
           acc.push(newItem)
           return acc;
         }, []);
-        setData([{ dummy: true }, ...reducedData]);
+        setData([{ dummy: true }, { label: true }, ...reducedData]);
         setLoading(false);
       }
       setLoading(false);
@@ -96,7 +92,7 @@ const LinkContextScreen = () => {
 
   const getIFollow = async () => {
     if (ifollow.length === 0) {
-      let res = await getDomainIdIFollow();
+      const res = await getDomainIdIFollow();
       setIFollow(res.data, dispatch);
     } else {
       // console.log(JSON.stringify(ifollow).includes(iddomain));
@@ -123,7 +119,7 @@ const LinkContextScreen = () => {
   };
 
   const handleOnScroll = (event) => {
-    let y = event.nativeEvent.contentOffset.y;
+    const {y} = event.nativeEvent.contentOffset;
     if (y > 50) {
       Animated.timing(animatedBottomAnchorContainerValue, {
         toValue: -(y - 50),
@@ -147,16 +143,23 @@ const LinkContextScreen = () => {
         onScroll={handleOnScroll}
         initialNumToRender={5}
         renderItem={(props) => {
-          let singleItem = props.item;
-          let { index } = props;
+          const singleItem = props.item;
+          const { index } = props;
 
-          if (index === 0) {
+          if (index === VIEW_MAIN_NEWS_INDEX) {
             return (
               <LinkContextItem
                 item={featuredNewsFromFeed}
                 follow={follow}
+                isFirstItem={true}
                 setFollow={(follow) => setFollow(follow)}
               />
+            );
+          }
+
+          if (index === VIEW_RELATED_LINKS_LABEL) {
+            return (
+              <TopicPageLabel label="Related Links" />
             );
           }
 
@@ -166,6 +169,7 @@ const LinkContextScreen = () => {
                 item={singleItem}
                 showBackButton={false}
                 follow={follow}
+                isFirstItem={false}
                 setFollow={(follow) => setFollow(follow)}
               />
             );
@@ -204,13 +208,11 @@ const styles = StyleSheet.create({
   height: (h) => ({
     height: h,
   }),
-  bottomAnchorContainer: (animatedValue) => {
-    return {
+  bottomAnchorContainer: (animatedValue) => ({
       position: 'absolute',
       bottom: animatedValue,
       alignSelf: 'center',
-    };
-  },
+    }),
   postArrowUpImage: {
     width: 48,
     height: 48,

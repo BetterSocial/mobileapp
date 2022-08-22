@@ -20,18 +20,19 @@ import { getTopicPages } from '../../service/topicPages';
 import { getUserId } from '../../utils/users';
 import { getUserTopic, putUserTopic } from '../../service/topics';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
+import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
+  const {params} = route
   const [idLt, setIdLt] = React.useState('');
   const [topicName, setTopicName] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [userId, setUserId] = React.useState('');
   const [topicId, setTopicId] = React.useState('');
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  let { feeds } = feedsContext;
+  const feeds = feedsContext.topicFeeds;
   const [isFollow, setIsFollow] = React.useState(false);
   const [userTopicName, setUserTopicName] = React.useState('');
 
@@ -50,33 +51,33 @@ const TopicPageScreen = (props) => {
     };
     parseToken();
   }, []);
-
   React.useEffect(() => {
     const initData = async () => {
       try {
         setLoading(true)
         console.log(route.params.id)
-        let id = convertString(route.params.id, 'topic_', '');
+        const rawId = route.params.id
+        const id = convertString(route.params.id, 'topic_', '');
         console.log('id: ', id);
-        let topicName = convertString(id, '-', ' ')
+        const topicName = convertString(id, '-', ' ')
         setTopicName(topicName);
         console.log('topicName: ', topicName);
 
-        let name = capitalizeFirstText(id);
-        let newName = convertString(name, '-', ' ');
+        const name = capitalizeFirstText(id);
+        const newName = convertString(name, '-', ' ');
         console.log('new Name: ', newName);
         setUserTopicName(newName);
-        let query = `?name=${convertString(topicName, '-', ' ')}`;
-        let [
+        const query = `?name=${convertString(topicName, '-', ' ')}`;
+        const [
           _resultGetTopicPages,
           _resultGetUserTopic,
         ] = await Promise.all([
-          getTopicPages(topicName),
+          getTopicPages(rawId),
           getUserTopic(query)
         ]
         )
         setTopicId(id);
-        setMainFeeds(_resultGetTopicPages.data, dispatch);
+        setTopicFeeds(_resultGetTopicPages.data, dispatch);
         console.log(_resultGetUserTopic);
         if (_resultGetUserTopic.data) {
           setIsFollow(true);
@@ -92,12 +93,21 @@ const TopicPageScreen = (props) => {
     initData();
   }, []);
 
+  React.useEffect(() => () => {
+      updateCount()
+    }, [])
+  const updateCount = () => {
+     if(params.refreshList && typeof params.refreshList === 'function') {
+          params.refreshList()
+        }
+  }
+
   const refreshingData = async () => {
     try {
       setLoading(true);
       const result = await getTopicPages(topicId);
-      let data = result.data;
-      setMainFeeds([...feeds, ...data], dispatch);
+      const {data} = result;
+      setTopicFeeds([...feeds, ...data], dispatch);
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -126,10 +136,10 @@ const TopicPageScreen = (props) => {
   const handleFollowTopic = async () => {
     try {
       setLoading(true);
-      let data = {
+      const data = {
         name: userTopicName
       }
-      let result = await putUserTopic(data);
+      const result = await putUserTopic(data);
       setIsFollow(result.data);
       setLoading(false)
     } catch (error) {
@@ -139,10 +149,10 @@ const TopicPageScreen = (props) => {
   }
 
 
-  let onNewPollFetched = (newPolls, index) => {
-    setFeedByIndex(
+  const onNewPollFetched = (newPolls, index) => {
+    setTopicFeedByIndex(
       {
-        index: index,
+        index,
         singleFeed: newPolls,
       },
       dispatch,
@@ -150,7 +160,7 @@ const TopicPageScreen = (props) => {
   };
 
   const onPressDomain = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -165,14 +175,14 @@ const TopicPageScreen = (props) => {
 
   const onPress = (item, index) => {
     props.navigation.navigate('PostDetailPage', {
-      index: index,
+      index,
       isalreadypolling: item.isalreadypolling,
     });
   };
 
   const onPressComment = (index) => {
     props.navigation.navigate('PostDetailPage', {
-      index: index,
+      index,
     });
   };
 
@@ -199,9 +209,9 @@ const TopicPageScreen = (props) => {
 
   const updateFeed = async (post, index) => {
     try {
-      let data = await getFeedDetail(post.activity_id);
+      const data = await getFeedDetail(post.activity_id);
       if (data) {
-        setFeedByIndex(
+        setTopicFeedByIndex(
           {
             singleFeed: data.data,
             index,
@@ -218,7 +228,7 @@ const TopicPageScreen = (props) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
       <StatusBar barStyle="dark-content" translucent={false} />
-      <Navigation domain={capitalizeFirstText(topicName)} onPress={() => handleFollowTopic()} isFollow={isFollow} />
+      <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
       <View style={{ flex: 1 }}>
         <ProfileTiktokScroll
           contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
@@ -227,9 +237,7 @@ const TopicPageScreen = (props) => {
           onRefresh={onRefresh}
           refreshing={loading}
           snapToOffsets={(() => {
-            let posts = feeds.map((item, index) => {
-              return headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)
-            })
+            const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
             // console.log('posts')
             // console.log(posts)
             return [headerHeightRef, ...posts]

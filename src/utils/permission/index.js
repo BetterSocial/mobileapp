@@ -56,12 +56,11 @@ import StringConstant from '../string/StringConstant';
 //   }
 // };
 
-export const requestCameraPermission = async () => {
-  try {
-    let result = await check(
+export const checkCameraPermission = async () => {
+   const result = await check(
       Platform.OS === 'android'
         ? PERMISSIONS.ANDROID.CAMERA
-        : PERMISSIONS.IOS.CAMERA,
+        : PERMISSIONS.IOS.CAMERA
     );
     let message = '';
     let success = false;
@@ -85,32 +84,37 @@ export const requestCameraPermission = async () => {
       default:
         break;
     }
-
-    if (result !== RESULTS.DENIED) {
-      return {
-        message,
-        success,
-      };
+    return {
+      success,
+      message,
+      result
     }
+}
 
-    let requestResult = await request(
-      Platform.OS === 'android'
-        ? PERMISSIONS.ANDROID.CAMERA
-        : PERMISSIONS.IOS.CAMERA,
-    );
-    if (requestResult === RESULTS.GRANTED) {
-      return {
-        message: StringConstant.cameraPermissionGranted,
-        success: true,
-      };
+export const requestCameraPermission = async () => {
+  try {
+    const {success, message, result} = await checkCameraPermission()
+    if(result === RESULTS.UNAVAILABLE || result === RESULTS.DENIED) {
+        const resultPermission = await request(
+        Platform.OS === 'android'
+          ? PERMISSIONS.ANDROID.CAMERA
+          : PERMISSIONS.IOS.CAMERA,
+      );
+        if(resultPermission === RESULTS.GRANTED) {
+          return {
+          success: true,
+          message: "",
+          result: resultPermission
+        }
+      }
     } else {
       return {
-        message: StringConstant.cameraPermissionDenied,
-        success: false,
-      };
+        success,
+        message,
+        result
+      }
     }
   } catch (err) {
-    console.warn(err);
     return {
       success: false,
       message: err,

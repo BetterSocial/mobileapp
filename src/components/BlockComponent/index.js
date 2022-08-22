@@ -1,6 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
-import {InteractionManager, View} from 'react-native';
+import { InteractionManager, View } from 'react-native';
 
 import BlockPostAnonymous from '../Blocking/BlockPostAnonymous';
 import BlockUser from '../Blocking/BlockUser';
@@ -8,19 +9,20 @@ import ReportPostAnonymous from '../Blocking/ReportPostAnonymous';
 import ReportUser from '../Blocking/ReportUser';
 import SpecificIssue from '../Blocking/SpecificIssue';
 import blockUtils from '../../service/utils/blockUtils';
-import {getUserId} from '../../utils/users';
+import { getUserId } from '../../utils/users';
 
 class BlockComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             messageReport: '',
-            myId : '',
+            myId: '',
             postId: '',
             reportOption: -1,
             userId: '',
             username: '',
-            reason: []
+            reason: [],
+            isAnonymous: false,
         };
 
         this.refBlockPostAnonymous = React.createRef();
@@ -41,9 +43,9 @@ class BlockComponent extends React.Component {
     componentDidMount() {
         this.__parseToken()
     }
-    
 
-    setDataToState(value){
+
+    setDataToState(value) {
         if (value.anonimity === true) {
             this.setState({
                 postId: value.id,
@@ -65,8 +67,10 @@ class BlockComponent extends React.Component {
         } else {
             this.setDataToState(value);
             if (value.anonimity) {
+                this.setState({ isAnonymous: true })
                 this.refBlockPostAnonymous.current.open();
             } else {
+                this.setState({ isAnonymous: false })
                 this.refBlockUser.current.open();
             }
         }
@@ -75,21 +79,21 @@ class BlockComponent extends React.Component {
     openReportAnonymousPost() {
         this.refBlockPostAnonymous().current.open()
     }
-    
+
     async __parseToken() {
         const id = await getUserId();
         if (id) {
             this.setState({
-                myId : id
+                myId: id
             })
         }
     };
 
     __onSelectBlocking(v) {
         if (v !== 1) {
-           InteractionManager.runAfterInteractions(() => {
-            this.refReportUser.current.open()
-           })
+            InteractionManager.runAfterInteractions(() => {
+                this.refReportUser.current.open()
+            })
         } else {
             this.__blockUser();
         }
@@ -120,7 +124,8 @@ class BlockComponent extends React.Component {
 
     __onSkipOnlyBlock() {
         this.refReportUser.current.close();
-        this.__blockUser();
+        if (this.state.isAnonymous) return this.__blockPostAnonymous();
+        return this.__blockUser();
     }
 
     __onIssue(v) {
@@ -131,30 +136,35 @@ class BlockComponent extends React.Component {
         })
 
         setTimeout(() => {
-            this.__blockUser();
+            this.refBlockUser.current.close()
+            this.refBlockPostAnonymous.current.close()
+
+            if (this.state.isAnonymous) return this.__blockPostAnonymous();
+            return this.__blockUser();
         }, 500);
     }
 
     __blockUser() {
-        let {postId, userId, messageReport, reason} = this.state
+        console.log('block user called')
+        const { postId, userId, messageReport, reason } = this.state
         blockUtils.uiBlockUser(
             postId,
             userId,
             this.props.screen || "screen_feed",
             reason,
             messageReport,
-            () => this.props.refresh('')
+            () => this.props.refresh(this.state.postId)
         )
     }
 
     __blockPostAnonymous() {
-        let {postId, messageReport, reason} = this.state
+        const { postId, messageReport, reason } = this.state
         blockUtils.uiBlockPostAnonymous(
             postId,
             this.props.screen || "screen_feed",
             reason,
             messageReport,
-            () => this.props.refresh('')
+            () => this.props.refreshAnonymous(this.state.postId)
         )
     }
 

@@ -18,6 +18,7 @@ import {
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
 
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import {get} from '../../api/server';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
@@ -28,10 +29,9 @@ import StringConstant from '../../utils/string/StringConstant';
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import { Header } from '../../components';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { globalReplaceAll } from '../../utils/Utils';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 
 const Topics = () => {
   const navigation = useNavigation();
@@ -40,7 +40,7 @@ const Topics = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [minTopic] = React.useState(3);
   const [, dispatch] = React.useContext(Context).topics;
-
+  const [myTopic, setMyTopic] = React.useState({})
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Topics',
@@ -61,7 +61,7 @@ const Topics = () => {
   }, []);
 
   const topicMapping = (data) => {
-    let allTopics = []
+    const allTopics = []
     if(data && typeof data ==='object') {
       Object.keys(data).map((attribute) => {
         allTopics.push({name: attribute, data: data[attribute].map((att) => ({topic_id: att.topic_id, name: att.name}))})
@@ -69,11 +69,14 @@ const Topics = () => {
     }
     setTopics(allTopics)
   }
-
-
   const handleSelectedLanguage = React.useCallback((val) => {
+    if(!myTopic[val]) {
+      setMyTopic({...myTopic, [val]: val})
+    } else {
+      setMyTopic({...myTopic, [val]: null})
+    }
     let copytopicSelected = [...topicSelected];
-    let index = copytopicSelected.findIndex((data) => data === val);
+    const index = copytopicSelected.findIndex((data) => data === val);
     if (index > -1) {
       copytopicSelected = copytopicSelected.filter((data) => data !== val)
     } else {
@@ -92,32 +95,25 @@ const Topics = () => {
     }
   };
 
-  const isActive = React.useCallback((item) => {
-    const findTopic = topicSelected.find((topic) => topic === item.topic_id)
-    return findTopic
-  }, [topicSelected])
 
 
-  const renderListTopics = React.useCallback(({item, i}) => {
-    return (
-      <Pressable
-      onPress={() =>
-        handleSelectedLanguage(item.topic_id)
-      }
-      key={i}
+  const renderListTopics = ({item, i}) => (
+    <Pressable
+    onPress={() =>
+      handleSelectedLanguage(item.topic_id)
+    }
+    key={i}
+    style={
+      [styles.bgTopicSelectNotActive, {backgroundColor: myTopic[item.topic_id] ? colors.bondi_blue : colors.concrete}]
+    }
+    >
+    <Text>{item.icon}</Text>
+    <Text
       style={
-        [styles.bgTopicSelectNotActive, {backgroundColor: isActive(item) ? colors.bondi_blue : colors.concrete}]
-      }
-      >
-      <Text>{item.icon}</Text>
-      <Text
-        style={
-          [styles.textTopicNotActive, {color: isActive(item) ?  colors.white : colors.mine_shaft}]
-        }>#{item.name}</Text>
-    </Pressable>
-    )
-  }, [topicSelected])
-
+        [styles.textTopicNotActive, {color: myTopic[item.topic_id] ?  colors.white : colors.mine_shaft}]
+      }>#{item.name}</Text>
+  </Pressable>
+  )
   const onBack = () => {
     navigation.goBack()
   }
@@ -178,7 +174,7 @@ const Topics = () => {
           }>{`${StringConstant.onboardingTopicsOthersCannotSee}`}</Text>
         <Button
           onPress={() => next()}
-          disabled={topicSelected.length >= minTopic ? false : true}
+          disabled={!(topicSelected.length >= minTopic)}
           style={topicSelected.length >= minTopic ? null : styles.button}>
           {topicSelected.length >= minTopic
             ? StringConstant.onboardingTopicsButtonStateNext
@@ -220,7 +216,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     height: 112,
-    width: width,
+    width,
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,

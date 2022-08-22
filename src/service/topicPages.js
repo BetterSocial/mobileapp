@@ -1,4 +1,5 @@
 import crashlytics from '@react-native-firebase/crashlytics';
+
 import api from './config';
 
 const getTopicPages = async (query) => {
@@ -8,7 +9,8 @@ const getTopicPages = async (query) => {
   } catch (error) {
     console.log(error);
     crashlytics().recordError(new Error(error));
-    throw new Error(error);
+    // throw new Error(error);
+    return []
   }
 };
 

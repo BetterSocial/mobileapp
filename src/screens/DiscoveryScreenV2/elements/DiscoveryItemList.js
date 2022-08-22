@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native'
-
+import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants'
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
+import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureEmptyState';
 
 const DomainList = (props) => {
   const { onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody, isDomain } = props
@@ -12,20 +13,19 @@ const DomainList = (props) => {
     event.preventDefault();
     onPressList(item)
   }
-
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => onPressBody(item)} style={styles.wrapProfile}>
         <View style={styles.card}>
           {!isHashtag ? <React.Fragment>
-            {item.image ? <Image
+            {item.image && typeof item.image === 'string' && item.image.length > 0 ? <Image
               source={{
                 uri: item.image,
               }}
               style={styles.profilepicture}
               width={48}
               height={48}
-            /> : <View style={styles.profilepicture} />}
+            /> : <MemoDomainProfilePicture width={48} height={48} />}
           </React.Fragment> : null}
 
           <View style={isHashtag ? styles.wrapTextProfileTopic : styles.wrapTextProfile}>
@@ -196,4 +196,4 @@ DomainList.defaultProps = {
   onPressBody: () => null
 }
 
-export default DomainList
+export default React.memo (DomainList)

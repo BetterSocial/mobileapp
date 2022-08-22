@@ -1,11 +1,11 @@
 import * as React from 'react';
 import Modal from 'react-native-modal';
 import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableNativeFeedback,
-  View,
+    Dimensions,
+    StyleSheet,
+    Text,
+    TouchableNativeFeedback,
+    View,
 } from 'react-native';
 
 import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
@@ -14,180 +14,188 @@ import StringConstant from '../../utils/string/StringConstant';
 import { displayFormattedSearchLocations } from '../../utils/string/StringUtils';
 
 const width = Dimensions.get('screen').width;
+import PropTypes from 'prop-types';
 
 const SearchModal = (props) => {
-  const textRef = React.useRef(null);
-  const [focus, setFocus] = React.useState(false);
+    const textRef = React.useRef(null);
+    const [focus, setFocus] = React.useState(false);
 
-  React.useEffect(() => {
-    if (props.isVisible) {
-    }
-  }, [props]);
+    React.useEffect(() => {
+        if (props.isVisible) {
+        }
+    }, [props]);
 
-  return (
-    <Modal
-      testID={'modal'}
-      isVisible={props.isVisible}
-      onSwipeComplete={props.onClose}
-      swipeDirection={['down']}
-      style={styles.view}>
-      <View style={styles.container}>
-        <View style={styles.space} />
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <TouchableNativeFeedback onPress={props.onClose}>
-              <CrossIcon width={18} height={18} fill="#000" />
-            </TouchableNativeFeedback>
-            <Text style={styles.textSearch}>
-              {StringConstant.searchModalTitle}
-            </Text>
-          </View>
-          <View style={styles.containerInput}>
-            <View style={{...styles.inputContainer, ...styles.containerInput}}>
-              <AutoFocusTextArea
-                keyboardAppearDelay={50}
-                autoCapitalize={'words'}
-                autoFocus={focus}
-                ref={textRef}
-                style={{...styles.searchInput, ...styles.textInput}}
-                onChangeText={props.onChangeText}
-                value={props.value}
-                placeholder={props.placeholder ? props.placeholder : ''}
-                placeholderTextColor="#BDBDBD"
-                multiline={false}
-                returnKeyType="search"
-              />
+    return (
+        <Modal
+            testID={'modal'}
+            isVisible={props.isVisible}
+            onSwipeComplete={props.onClose}
+            swipeDirection={['down']}
+            style={styles.view}>
+            <View style={styles.container}>
+                <View style={styles.space} />
+                <View style={styles.content}>
+                    <View style={styles.header}>
+                        <TouchableNativeFeedback onPress={props.onClose}>
+                            <CrossIcon width={18} height={18} fill="#000" />
+                        </TouchableNativeFeedback>
+                        <Text style={styles.textSearch}>
+                            {StringConstant.searchModalTitle}
+                        </Text>
+                    </View>
+                    <View style={styles.containerInput}>
+                        <View style={{ ...styles.inputContainer, ...styles.containerInput }}>
+                            <AutoFocusTextArea
+                                keyboardAppearDelay={50}
+                                autoCapitalize={'words'}
+                                autoFocus={focus}
+                                ref={textRef}
+                                style={{ ...styles.searchInput, ...styles.textInput }}
+                                onChangeText={props.onChangeText}
+                                value={props.value}
+                                placeholder={props.placeholder ? props.placeholder : ''}
+                                placeholderTextColor="#BDBDBD"
+                                multiline={false}
+                                returnKeyType="search"
+                            />
+                        </View>
+                        {props.isLoading ? <Text>Please wait...</Text> : null}
+
+                        {typeof props.options !== 'undefined' &&
+                            props.options.length > 0 ? (
+                            <View style={styles.box}>
+                                {props.options.map((value, index) => {
+                                    let firstLetter = value.neighborhood.split(' ');
+                                    let lastLetter = value.neighborhood.replace(
+                                        `${firstLetter[0]} `,
+                                        ' ',
+                                    );
+                                    return (
+                                        <TouchableNativeFeedback
+                                            key={index}
+                                            onPress={() => props.onSelect(value)}>
+                                            <View style={styles.list}>
+                                                {displayFormattedSearchLocations(props.value, value)}
+                                            </View>
+                                        </TouchableNativeFeedback>
+                                    );
+                                })}
+                            </View>
+                        ) : null}
+                    </View>
+                </View>
             </View>
-            {props.isLoading ? <Text>Please wait...</Text> : null}
-
-            {typeof props.options !== 'undefined' &&
-            props.options.length > 0 ? (
-              <View style={styles.box}>
-                {props.options.map((value, index) => {
-                  let firstLetter = value.neighborhood.split(' ');
-                  let lastLetter = value.neighborhood.replace(
-                    `${firstLetter[0]} `,
-                    ' ',
-                  );
-                  return (
-                    <TouchableNativeFeedback
-                      key={index}
-                      onPress={() => props.onSelect(value)}>
-                      <View style={styles.list}>
-                        {displayFormattedSearchLocations(props.value, value)}
-                      </View>
-                    </TouchableNativeFeedback>
-                  );
-                })}
-              </View>
-            ) : null}
-          </View>
-        </View>
-      </View>
-    </Modal>
-  );
+        </Modal>
+    );
 };
 const styles = StyleSheet.create({
-  view: {
-    justifyContent: 'flex-end',
-    margin: 0,
-  },
-  container: {
-    width: width,
-    flexDirection: 'column',
-    flex: 1,
-  },
-  space: {flex: 1},
-  content: {
-    backgroundColor: 'white',
-    flexDirection: 'column',
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    flex: 8,
-    width: width,
-    padding: 22,
-  },
-  contentTitle: {
-    fontSize: 20,
-    marginBottom: 12,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  textSearch: {
-    // fontFamily: 'SFProText-Regular',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 18,
-    textAlign: 'center',
-    letterSpacing: -0.28,
-    color: '#000000',
-    paddingLeft: 19,
-  },
-  inputContainer: {
-    height: 48,
-    width: width - 44,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#BDBDBD',
-    borderRadius: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 13,
-    marginTop: 26,
-  },
-  containerInput: {
-    position: 'relative',
-  },
-  searchInput: {
-    width: '90%',
-    height: 40,
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: 14,
-    letterSpacing: -0.28,
-    color: '#000000',
-    marginLeft: 5,
-  },
-  box: {
-    minHeight: 20,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    flexDirection: 'column',
-    marginBottom: 2,
-    position: 'absolute',
-    width: '100%',
-    top: 90,
-    zIndex: 2000,
-    elevation: 2000,
-  },
-  list: {
-    minHeight: 35,
-    paddingTop: 2,
-    paddingBottom: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  labelBold: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 14,
-    lineHeight: 17,
-    color: '#000000',
-    textTransform: 'capitalize',
-  },
-  label: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '600',
-    fontSize: 14,
-    lineHeight: 17,
-    color: '#000000',
-    textTransform: 'capitalize',
-  },
+    view: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
+    container: {
+        width: width,
+        flexDirection: 'column',
+        flex: 1,
+    },
+    space: { flex: 1 },
+    content: {
+        backgroundColor: 'white',
+        flexDirection: 'column',
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+        flex: 8,
+        width: width,
+        padding: 22,
+    },
+    contentTitle: {
+        fontSize: 20,
+        marginBottom: 12,
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    textSearch: {
+        // fontFamily: 'SFProText-Regular',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        fontSize: 18,
+        textAlign: 'center',
+        letterSpacing: -0.28,
+        color: '#000000',
+        paddingLeft: 19,
+    },
+    inputContainer: {
+        height: 48,
+        width: width - 44,
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
+        borderColor: '#BDBDBD',
+        borderRadius: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 13,
+        marginTop: 26,
+    },
+    containerInput: {
+        position: 'relative',
+    },
+    searchInput: {
+        width: '90%',
+        height: 40,
+        fontFamily: 'Inter',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        fontSize: 14,
+        letterSpacing: -0.28,
+        color: '#000000',
+        marginLeft: 5,
+    },
+    box: {
+        minHeight: 20,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 8,
+        flexDirection: 'column',
+        marginBottom: 2,
+        position: 'absolute',
+        width: '100%',
+        top: 90,
+        zIndex: 2000,
+        elevation: 2000,
+    },
+    list: {
+        minHeight: 35,
+        paddingTop: 2,
+        paddingBottom: 2,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    labelBold: {
+        fontFamily: 'Inter',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        fontSize: 14,
+        lineHeight: 17,
+        color: '#000000',
+        textTransform: 'capitalize',
+    },
+    label: {
+        fontFamily: 'Inter',
+        fontStyle: 'normal',
+        fontWeight: '600',
+        fontSize: 14,
+        lineHeight: 17,
+        color: '#000000',
+        textTransform: 'capitalize',
+    },
 });
+
+SearchModal.prototypes = {
+    isVisible: PropTypes.bool,
+    isLoading: PropTypes.bool,
+    options: PropTypes.array,
+}
+
 export default SearchModal;

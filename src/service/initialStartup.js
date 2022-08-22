@@ -13,12 +13,11 @@ export const InitialStartupAtom = atom({
   default: {
     id: null,
   },
-  effects_UNSTABLE: [
+  effects: [
     ({ setSelf, onSet }) => {
       // If there's a persisted value - set it on load
       const loadPersisted = async () => {
         const savedValue = await getUserId();
-
         if (savedValue !== null && savedValue !== '') {
           const verify = await verifyTokenGetstream();
           if (verify !== null && verify !== '') {

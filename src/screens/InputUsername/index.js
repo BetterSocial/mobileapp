@@ -40,7 +40,7 @@ import { setCapitalFirstLetter } from '../../utils/Utils';
 import { setImage, setUsername } from '../../context/actions/users';
 import { verifyUsername } from '../../service/users';
 
-const width = Dimensions.get('screen').width;
+const { width } = Dimensions.get('screen');
 
 const ChooseUsername = () => {
   const navigation = useNavigation();
@@ -94,7 +94,7 @@ const ChooseUsername = () => {
   };
 
   const handleOpenCamera = async () => {
-    let { success, message } = await requestCameraPermission();
+    const { success, message } = await requestCameraPermission();
     if (success) {
       launchCamera(
         {
@@ -115,7 +115,7 @@ const ChooseUsername = () => {
   };
 
   const handleOpenGallery = async () => {
-    let { success, message } = await requestExternalStoragePermission();
+    const { success, message } = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (res) => {
         if (res.base64) {
@@ -129,8 +129,8 @@ const ChooseUsername = () => {
   };
 
   const checkUsername = async (v) => {
-    let value = v.toLowerCase().replace(/[^a-z0-9-_]/g, '');
-    value = setCapitalFirstLetter(value);
+    const value = v.replace(/[^a-zA-Z0-9-_]/g, '');
+    // const value = setCapitalFirstLetter(v);
     setTypeFetch('typing');
     setUsernameState(value);
     if (value.length <= 15) {
@@ -148,6 +148,20 @@ const ChooseUsername = () => {
       setTypeFetch('max');
     }
   };
+
+  const formatUsernameString = () => {
+    let value = username.toLowerCase().replace(/[^a-z0-9-_]/g, '');
+    value = setCapitalFirstLetter(value);
+    return value
+  }
+
+  const onTextBlur = () => {
+    console.log('on blur')
+    const value = formatUsernameString(username)
+    setUsernameState(value);
+  }
+
+
   const next = () => {
     if (username && username.length > 2 && typeFetch === 'available') {
       setUsername(username, dispatch);
@@ -281,7 +295,8 @@ const ChooseUsername = () => {
               <View>
                 <Input
                   placeholder="Username"
-                  onChangeText={(v) => checkUsername(v)}
+                  onChangeText={checkUsername}
+                  onBlur={onTextBlur}
                   value={username}
                   autoCompleteType="username"
                   textContentType="username"
@@ -289,7 +304,7 @@ const ChooseUsername = () => {
                   autoCorrect={false}
                   autoFocus
                 />
-                {messageTypeFetch(typeFetch, username)}
+                {messageTypeFetch(typeFetch, formatUsernameString(username))}
               </View>
             </View>
             {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
@@ -424,7 +439,7 @@ const styles = StyleSheet.create({
   },
   textMessage: (color, marginTop) => ({
     fontSize: 12,
-    color: color,
+    color,
     fontFamily: fonts.inter[400],
     marginTop: marginTop ? 6 : 0,
   }),

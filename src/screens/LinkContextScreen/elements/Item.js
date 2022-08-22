@@ -1,25 +1,29 @@
 import * as React from 'react';
 import JWTDecode from 'jwt-decode';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import BlockDomainComponent from '../../../components/BlockDomain';
+import ContentRelated from './ContentRelated';
+import dimen from '../../../utils/dimen';
 import { COLORS } from '../../../utils/theme';
-import { Content, Header, LinkContextScreenFooter } from './';
+import { Content, Header, LinkContextScreenFooter } from ".";
 import { downVoteDomain, upVoteDomain } from '../../../service/vote';
 import { fonts } from '../../../utils/fonts';
 import { getAccessToken } from '../../../utils/token';
+import { linkContextScreenParamBuilder, linkContextScreenSwitchScreenParam } from '../../../utils/navigation/paramBuilder';
 
 const LinkContextItem = ({
   item,
   showBackButton = true,
   setFollow,
   follow = false,
+  isFirstItem = false,
 }) => {
   const navigation = useNavigation();
-  let domainImage = item.domain.image;
-  let domainName = item.domain.name;
-  let postTime = item.time;
+  const domainImage = item.domain.image;
+  const domainName = item.domain.name;
+  const postTime = item.time;
 
   const refBlockDomainComponent = React.useRef(null);
   const [idFromToken, setIdFromToken] = React.useState('');
@@ -47,13 +51,20 @@ const LinkContextItem = ({
   };
 
   const onContentPressed = () => {
-    navigation.navigate('DetailDomainScreen', {
-      item: {
-        ...item,
-        score: item?.domain?.credderScore,
-        follower: 0,
-      }
-    });
+    // navigation.navigate('DetailDomainScreen', {
+    //   item: {
+    //     ...item,
+    //     score: item?.domain?.credderScore,
+    //     follower: 0,
+    //   }
+    // });
+
+    if (isFirstItem && Linking.canOpenURL(item?.content?.news_url)) {
+      return Linking.openURL(item?.content?.news_url);
+    }
+
+    const param = linkContextScreenSwitchScreenParam(item, item?.domain?.name, item?.domain?.image, item?.domain?.domain_page_id)
+    navigation.push('LinkContextScreen', param)
   };
 
   React.useEffect(() => {
@@ -68,20 +79,18 @@ const LinkContextItem = ({
   }, []);
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView>
-        <Header
-          item={item}
-          name={domainName}
-          image={domainImage}
-          time={postTime}
-          onFollowDomainPressed={() => { }}
-          setFollow={setFollow}
-          follow={follow}
-          showBackButton={showBackButton}
-        />
-      </SafeAreaView>
-      <Content item={item} onContentPressed={onContentPressed} />
+    <View style={ isFirstItem ? styles.containerFirstItem : styles.containerRelated}>
+      <Header
+        item={item}
+        name={domainName}
+        image={domainImage}
+        time={postTime}
+        onFollowDomainPressed={() => { }}
+        setFollow={setFollow}
+        follow={follow}
+        showBackButton={showBackButton}
+      />
+      { isFirstItem ? <Content item={item} onContentPressed={onContentPressed} /> : <ContentRelated item={item} onContentPressed={onContentPressed} />}
       <LinkContextScreenFooter
         item={item}
         itemId={item.id}
@@ -93,9 +102,9 @@ const LinkContextItem = ({
       />
       <View
         style={{
-          height: 8,
+          height: 6,
           width: '100%',
-          backgroundColor: COLORS.gray1,
+          backgroundColor: COLORS.lightgrey,
         }}
       />
 
@@ -104,21 +113,18 @@ const LinkContextItem = ({
         domain={item.domain.name}
         domainId={item.domain.domain_page_id}
         screen="link_context_screen" />
-
-      {/* <View style={styles.bottomAnchorContainer}>
-        <Image source={PostArrowUp} style={styles.postArrowUpImage} />
-        <View style={styles.bottomAnchorTextContainer}>
-          <Text style={styles.bottomAnchorSwipeText}>
-            Swipe for related articles
-          </Text>
-        </View>
-      </View> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  containerFirstItem: {
+    backgroundColor: COLORS.white,
+    // flex: 1,
+    display: 'flex',
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT
+  },
+  containerRelated: {
     backgroundColor: COLORS.white,
     flex: 1,
   },

@@ -1,23 +1,26 @@
 import * as React from 'react';
-import uuid from 'react-native-uuid';
-import { Alert } from 'react-native';
-import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
 import {
+  Alert,
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
   RefreshControl,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
+import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
+import { debounce } from 'lodash';
 import { generateRandomId } from 'stream-chat-react-native-core';
 import { showMessage } from 'react-native-flash-message';
 
 import ContactPreview from './elements/ContactPreview';
 import Header from './elements/Header';
 import ItemUser from './elements/ItemUser';
+import SearchRecyclerView from './elements/SearchRecyclerView';
 import StringConstant from '../../utils/string/StringConstant';
-import { COLORS, SIZES } from '../../utils/theme';
+import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { Loading } from '../../components';
 import { Search } from './elements';
@@ -25,10 +28,10 @@ import { setChannel } from '../../context/actions/setChannel';
 import { userPopulate } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const width = Dimensions.get('screen').width;
+const { width, height } = Dimensions.get('screen');
+console.log(`contact screen height ${height}`)
 
 const ContactScreen = ({ navigation }) => {
-  const [selectedUsers, setSelectedUsers] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState([]);
   const [profile] = React.useContext(Context).profile;
@@ -38,10 +41,19 @@ const ContactScreen = ({ navigation }) => {
   const [layoutProvider, setLayoutProvider] = React.useState(() => { });
   const [refreshing, setRefreshing] = React.useState(false);
   const [dataProvider, setDataProvider] = React.useState(null);
-  const [followed, setFollowed] = React.useState([profile.myProfile.user_id]);
   const [cacheUsers, setCacheUser] = React.useState([]);
   const [text, setText] = React.useState(null);
+  const [debouncedText, setDebouncedText] = React.useState('');
+  const [followed, setFollowed] = React.useState([profile.myProfile.user_id]);
   const [usernames, setUsernames] = React.useState([profile.myProfile.username]);
+  const [selectedUsers, setSelectedUsers] = React.useState([]);
+  const [isSearchMode, setIsSearchMode] = React.useState(false)
+  const [isLoadingSearchResult, setIsLoadingSearchResult] = React.useState(false)
+
+  const debounced = React.useCallback(debounce((changedText) => {
+    // handleSearch(changedText)
+    setDebouncedText(changedText)
+  }, 1000), [])
 
   const VIEW_TYPE_LABEL = 1;
   const VIEW_TYPE_DATA = 2;
@@ -63,7 +75,7 @@ const ContactScreen = ({ navigation }) => {
 
   React.useEffect(() => {
     if (users.length > 0) {
-      let dProvider = new DataProvider((row1, row2) => row1 !== row2);
+      const dProvider = new DataProvider((row1, row2) => row1 !== row2);
       setLayoutProvider(
         new LayoutProvider(
           (index) => {
@@ -110,8 +122,8 @@ const ContactScreen = ({ navigation }) => {
         Alert.alert('Warning', 'Please choose min one user');
       }
       setLoading(true);
-      let members = followed;
-      let channelName = usernames;
+      const members = followed;
+      const channelName = usernames;
       let typeChannel = 0;
 
       if (members.length > 2) {
@@ -126,13 +138,11 @@ const ContactScreen = ({ navigation }) => {
       });
 
 
-      let generatedChannelId = generateRandomId();
-      let memberWithRoles = members.map((item, index) => {
-        return {
-          user_id: item,
-          channel_role: "channel_moderator",
-        }
-      });
+      const generatedChannelId = generateRandomId();
+      const memberWithRoles = members.map((item) => ({
+        user_id: item,
+        channel_role: "channel_moderator",
+      }));
 
       if (findChannels.length > 0) {
         setChannel(findChannels[0], dispatchChannel);
@@ -145,7 +155,7 @@ const ContactScreen = ({ navigation }) => {
             type_channel: typeChannel,
           },
         );
-        let err = await channelChat.create();
+        const err = await channelChat.create();
         await channelChat.addMembers(memberWithRoles)
         setChannel(channelChat, dispatchChannel);
       }
@@ -162,43 +172,44 @@ const ContactScreen = ({ navigation }) => {
     }
   };
 
-  const rowRenderer = (type, item, index, extendedState) => {
-    // switch (type) {
-    // case VIEW_TYPE_LABEL:
-    //   return <Label label={item.name} />;
-    // case VIEW_TYPE_DATA:
-    return (
-      <ItemUser
-        photo={item.profile_pic_path}
-        bio={item.bio}
-        username={item.username}
-        followed={extendedState.followed}
-        userid={item.user_id}
-        onPress={() => handleSelected(item)}
-      />
-    );
+  const rowRenderer = (type, item, index, extendedState) =>
+  // switch (type) {
+  // case VIEW_TYPE_LABEL:
+  //   return <Label label={item.name} />;
+  // case VIEW_TYPE_DATA:
+  (
+    <ItemUser
+      photo={item.profile_pic_path}
+      bio={item.bio}
+      username={item.username}
+      followed={extendedState.followed}
+      userid={item.user_id}
+      onPress={() => handleSelected(item)}
+    />
+  )
     // }
-  };
+    ;
 
-  const handleSelected = (value) => {
-    let copyFollowed = [...followed];
-    let copyUsername = [...usernames];
-    let copyUsers = [...selectedUsers];
-    let index = copyFollowed.indexOf(value.user_id);
+  const handleSelected = (value, fromSearchMode = false) => {
+    const copyFollowed = [...followed];
+    const copyUsername = [...usernames];
+    const copyUsers = [...selectedUsers];
+    const index = copyFollowed.indexOf(value.user_id);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
       copyFollowed.push(value.user_id);
     }
 
-    let indexName = copyUsername.indexOf(value.username);
+    const indexName = copyUsername.indexOf(value.username);
     if (indexName > -1) {
       copyUsername.splice(index, 1);
     } else {
       copyUsername.push(value.username);
     }
 
-    let indexSelectedUser = copyUsers.indexOf(value);
+    // const indexSelectedUser = copyUsers.indexOf(value);
+    const indexSelectedUser = copyUsers.findIndex((item) => item.user_id === value.user_id);
     if (indexSelectedUser > -1) {
       copyUsers.splice(indexSelectedUser, 1);
     } else {
@@ -210,7 +221,7 @@ const ContactScreen = ({ navigation }) => {
     setUsernames(copyUsername);
   };
 
-  const _onRefresh = React.useCallback(async () => {
+  const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
       const res = await userPopulate();
@@ -222,61 +233,89 @@ const ContactScreen = ({ navigation }) => {
     }
   }, []);
 
-  const _handleSearch = () => {
+  const handleSearch = (searchQuery) => {
     const newUsers = cacheUsers.filter(
-      (item) => item.username.toLowerCase().indexOf(text) > -1,
+      (item) => item.username.toLowerCase().indexOf(searchQuery) > -1,
     );
     setUsers(newUsers);
-    setText(null);
+    // setText(null);
   };
+
+  const setDefaultPopulateUsers = () => {
+    setUsers(cacheUsers)
+  }
+
+  const onSearchTextChange = (changedText) => {
+    setText(changedText)
+    if (changedText.length > 0) {
+      debounced(changedText)
+    } else {
+      debounced.cancel()
+      setDefaultPopulateUsers()
+    }
+
+    setIsSearchMode(changedText.length > 0)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent={false} />
-      <Header
-        title={StringConstant.chatTabHeaderCreateChatButtonText}
-        containerStyle={styles.containerStyle}
-        subTitle={'Next'}
-        subtitleStyle={styles.subtitleStyle}
-        onPressSub={() => handleCreateChannel(selectedUsers)}
-        onPress={() => navigation.goBack()}
-      />
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}>
+        <StatusBar translucent={false} />
+        <Header
+          title={StringConstant.chatTabHeaderCreateChatButtonText}
+          containerStyle={styles.containerStyle}
+          subTitle={'Next'}
+          subtitleStyle={styles.subtitleStyle}
+          onPressSub={() => handleCreateChannel(selectedUsers)}
+          onPress={() => navigation.goBack()}
+        />
 
-      <Search
-        text={text}
-        style={styles.containerStyle}
-        onChangeText={(t) => {
-          setText(t);
-        }}
-        onPress={() => _handleSearch()}
-      />
+        <Search
+          text={text}
+          style={styles.containerStyle}
+          onChangeText={onSearchTextChange}
+          onClearText={() => onSearchTextChange('')}
+          isLoading={isLoadingSearchResult}
+        // onPress={handleSearch}
+        />
 
-      <View>
-        {selectedUsers && (
-          <ContactPreview
-            users={selectedUsers}
-            onPress={(user) => handleSelected(user)}
+        <View>
+          {selectedUsers && (
+            <ContactPreview
+              users={selectedUsers}
+              onPress={(user) => handleSelected(user)}
+            />
+          )}
+        </View>
+
+        {isRecyclerViewShown && !isSearchMode && (
+          <RecyclerListView
+            style={styles.recyclerview}
+            layoutProvider={layoutProvider}
+            dataProvider={dataProvider}
+            extendedState={{
+              followed,
+            }}
+            rowRenderer={rowRenderer}
+            scrollViewProps={{
+              refreshControl: (
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              ),
+            }}
           />
         )}
-      </View>
 
-      {isRecyclerViewShown && (
-        <RecyclerListView
-          style={styles.recyclerview}
-          layoutProvider={layoutProvider}
-          dataProvider={dataProvider}
-          extendedState={{
-            followed,
-          }}
-          rowRenderer={rowRenderer}
-          scrollViewProps={{
-            refreshControl: (
-              <RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
-            ),
-          }}
-        />
-      )}
-      <Loading visible={loading} />
+        {isSearchMode && <SearchRecyclerView
+          text={debouncedText}
+          followed={followed}
+          selectedUsers={selectedUsers}
+          usernames={usernames}
+          setLoading={setIsLoadingSearchResult}
+          onHandleSelected={(value, fromSearchMode) => handleSelected(value, fromSearchMode)} />
+        }
+        <Loading visible={loading} />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -284,12 +323,13 @@ const ContactScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    flexDirection: 'column',
     backgroundColor: '#FFFFFF',
+    flex: 1,
   },
   recyclerview: {
-    paddingBottom: 80,
-    height: '100%',
+    // paddingBottom: 100,
+    // height: height - 180,
+    flex: 1,
   },
   containerStyle: {
     marginHorizontal: 16,
@@ -300,4 +340,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withInteractionsManaged (ContactScreen);
+export default withInteractionsManaged(ContactScreen);

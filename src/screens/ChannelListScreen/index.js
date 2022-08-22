@@ -1,64 +1,41 @@
 import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
-import crashlytics from '@react-native-firebase/crashlytics';
-import moment from 'moment'
-import { ActivityIndicator, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import {
   ChannelList,
-  ChannelPreviewMessage,
-  ChannelPreviewMessenger,
-  ChannelPreviewStatus,
   ChannelPreviewTitle,
   Chat,
-  DeepPartial,
-  OverlayProvider,
-  Streami18n,
-  Theme
-} from 'stream-chat-react-native';
-import { MessageSystem } from 'stream-chat-react-native-core'
+  Streami18n} from 'stream-chat-react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
-import FeedNotification from './elements/FeedNotification';
-import IconChatCheckMark from '../../assets/icon/IconChatCheckMark'
-import Loading from '../Loading';
 import Search from './elements/Search';
 import streamFeed from '../../utils/getstream/streamer'
 import {
-  CHANNEL_TYPE_GROUP_LOCATION,
   CHANNEL_TYPE_TOPIC,
 } from '../../utils/constants';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
-import { calculateTime } from '../../utils/time';
 import { getAccessToken } from '../../utils/token'
 import { getChatName } from '../../utils/string/StringUtils';
 import { getFeedNotification } from '../../service/feeds'
-import { getUserId } from '../../utils/users';
 import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
-import { unReadMessageState } from '../../context/reducers/unReadMessageReducer';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
-import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
+import PostNotificationPreview from './elements/components/PostNotificationPreview';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
+import PreviewMessage from './elements/CustomPreviewMessage';
 
-const theme = {
-  messageSimple: {
-    file: {
-      container: {
-        backgroundColor: 'red',
-      },
-    },
-  },
-};
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
     language: 'en',
   });
   const [listPostNotif, setListPostNotif] = React.useState([])
-  const [userId, setUserId] = React.useState('');
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
   const [, dispatchFeed] = React.useContext(Context).feeds;
@@ -66,11 +43,14 @@ const ChannelListScreen = ({ navigation }) => {
   const myContext = React.useContext(Context)
   const {interactionsComplete} = useAfterInteractions()
   const [profileContext] = React.useContext(Context).profile;
+  const [countComment, setCountComment] = React.useState({})
+  // const [countComment, setCountComment] = useRecoilState(commentChatState)
+  // const [countChat, setCountChat] = React.useState({})
   const {myProfile} = profileContext
+  const [countChat, setCountChat] = React.useState({})
 
-  const [unReadMessage, dispatchUnReadMessage] =
+  const [unReadMessage] =
     React.useContext(Context).unReadMessage;
-  const connect = useClientGetstream();
   const filters = {
     members: { $in: [myProfile.user_id] },
     type: 'messaging',
@@ -83,13 +63,7 @@ const ChannelListScreen = ({ navigation }) => {
     watch: true,
     presence: true,
   };
-
   const memoizedFilters = React.useMemo(() => filters, [myProfile.user_id]);
-
-  // React.useEffect(() => {
-  //   setupClient();
-
-  // }, [])
 
   React.useEffect(() => {
     if(interactionsComplete) {
@@ -104,41 +78,69 @@ const ChannelListScreen = ({ navigation }) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
-    if(interactionsComplete && myProfile) {
+    if(myProfile) {
       callStreamFeed()
-
+      handleUnsubscribeNotif()
+      
     }
-  }, [interactionsComplete, JSON.stringify(myProfile)])
+  }, [JSON.stringify(myProfile)])
   const callStreamFeed = async () => {
     const token = await getAccessToken()
     const client = streamFeed(token)
     const notif = client.feed('notification', myProfile.user_id, token)
-    notif.subscribe((data) => {
+    notif.subscribe(() => {
         getPostNotification()
 
     })
 
 }
 
-  // const setupClient = async () => {
-  //   try {
-  //     const id = await getUserId();
-  //     setUserId(id);
-  //   } catch (err) {
-  //     crashlytics().recordError(err);
-  //   }
-  // };
+const handleUnsubscribeNotif = async () => {
+  const token = await getAccessToken()
+  const client = streamFeed(token)
+  const notif = client.feed('notification', myProfile.user_id, token)
+  return () => {
+    notif.unsubscribe()
+  }
+}
+
+React.useEffect(() => {
+  handleCacheComment()
+}, [])
+
+const handleCacheComment  = () => {
+    getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
+    if(cache) {
+      setCountComment(cache)
+    } else {
+      handleNotHaveCache()
+    }
+  })
+}
+const handleNotHaveCache = () => {
+  let comment = {}
+  listPostNotif.forEach((data) => {
+    comment = {...comment, [data.activity_id]: 0}
+  })
+  saveToCache(FEED_COMMENT_COUNT, comment)
+  setCountComment(comment)
+}
+
+const handleUpdateCache = (id, totalComment) => {
+  const updateReadCache = {...countComment, [id]: totalComment}
+  saveToCache(FEED_COMMENT_COUNT, updateReadCache)
+  setCountComment(updateReadCache)
+}
+
 
   const getPostNotification = async () => {
     const res = await getFeedNotification()
     if(res.success) {
         setListPostNotif(res.data)
     }
-}
-
+} 
   const customPreviewTitle = (props) => {
     const { name } = props.channel?.data;
-
     return (
       <View style={{ paddingRight: 12 }}>
         <ChannelPreviewTitle
@@ -148,27 +150,45 @@ const ChannelListScreen = ({ navigation }) => {
     );
   };
 
-  const goToFeedDetail = (item) => {
+  const goToFeedDetail = async (item) => {
     navigation.navigate('PostDetailPage', {
-      feedId: item.activity_id
-  })
+      feedId: item.activity_id,
+      refreshCache: () => handleUpdateCache(item.activity_id, item.totalComment),
+    })
   }
 
-  const CustomPreviewMessage = (props) => (
-      <ChannelPreviewMessage
-        latestMessagePreview={{ ...props.latestMessagePreview }}
-      />
-    );
-  };
+ 
 
+  const countPostNotifComponent = (item) => {
+    const readComment = countComment[item.activity_id]
+    return (
+      <CustomPreviewUnreadCount readComment={readComment} channel={item} />
+    )
+  }
+  
+  const chatBadge = (props) => (
+    <CustomPreviewUnreadCount   {...props}  />
+  )
+  const onSelectChat = (channel, refreshList) => {
+     if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
+                    // toDo reset main feeds
+                    setMainFeeds(null, dispatchFeed)
+                    navigation.navigate('TopicPageScreen', { id: channel.data.id, refreshList });
+                  } else {
+                    setChannel(channel, dispatch);
+                    // ChannelScreen | ChatDetailPage
+                    navigation.navigate('ChatDetailPage');
+                    
+                  }
+  }
   return (
     <SafeAreaProvider style={{ height: '100%' }}>
-      <StatusBar backgroundColor="transparent" />
+      <StatusBar translucent={false} />
       <ScrollView >
         <View style={{ height: 52 }}>
           <Search
             animatedValue={0}
-            onPress={() => crashlytics().crash()}
+            onPress={() => navigation.navigate('ContactScreen')}
           />
         </View>
           {myProfile && myProfile.user_id && client.client ? (
@@ -179,30 +199,22 @@ const ChannelListScreen = ({ navigation }) => {
                 // Preview={CustomPreview}
                 PreviewStatus={ChannelStatusIcon}
                 PreviewTitle={customPreviewTitle}
-                onSelect={(channel) => {
-                  if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
-                    // toDo reset main feeds
-                    setMainFeeds(null, dispatchFeed)
-                    navigation.navigate('TopicPageScreen', { id: channel.data.id });
-                  } else {
-                    setChannel(channel, dispatch);
-                    // ChannelScreen | ChatDetailPage
-                    navigation.navigate('ChatDetailPage');
-                  }
-                }}
+                onSelect={onSelectChat}
                 sort={sort}
                 options={options}
                 maxUnreadCount={99}
                 additionalFlatListProps={{
                   onEndReached: () => null,
                   refreshControl: null,
+                  // extraData:{countComment},
                 }}
                additionalData={listPostNotif}
                context={myContext}
-               onSelectAdditionalData={goToFeedDetail}
-
+               PreviewUnreadCount={chatBadge}
+               PreviewMessage={PreviewMessage}
+               PostNotifComponent={({item ,index, refreshList}) => item ? <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)}  /> : null}
               />
-
+      
             </Chat>
           ) : (
             <View style={styles.content}>

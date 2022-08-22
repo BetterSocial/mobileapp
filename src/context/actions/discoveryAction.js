@@ -16,8 +16,10 @@ import {
   DISCOVERY_SET_LOADING_DATA_TOPIC,
   DISCOVERY_SET_LOADING_DATA_USER,
   DISCOVERY_SET_NEW_FOLLOWED_DOMAIN,
+  DISCOVERY_SET_NEW_FOLLOWED_TOPIC,
   DISCOVERY_SET_NEW_FOLLOWED_USER,
   DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN,
+  DISCOVERY_SET_NEW_UNFOLLOWED_TOPIC,
   DISCOVERY_SET_NEW_UNFOLLOWED_USER,
   DISCOVERY_SET_RECENT_SEARCH,
 } from '../Types';
@@ -238,6 +240,24 @@ const reset = async (dispatch) => {
   });
 };
 
+const setNewFollowedTopics = async (data, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_NEW_FOLLOWED_TOPIC,
+    payload: {
+      newFollowedTopics: data,
+    },
+  });
+};
+
+const setNewUnfollowedTopics = async (data, dispatch) => {
+  dispatch({
+    type: DISCOVERY_SET_NEW_UNFOLLOWED_TOPIC,
+    payload: {
+      newUnfollowedTopics: data,
+    },
+  });
+};
+
 const DiscoveryAction = {
   reset,
   setDiscoveryInitialDomains,
@@ -256,8 +276,10 @@ const DiscoveryAction = {
   setDiscoveryLoadingDataTopic,
   setDiscoveryLoadingDataUser,
   setNewFollowedDomains,
+  setNewFollowedTopics,
   setNewFollowedUsers,
   setNewUnfollowedDomains,
+  setNewUnfollowedTopics,
   setNewUnfollowedUsers,
   setDiscoveryRecentSearch,
 };

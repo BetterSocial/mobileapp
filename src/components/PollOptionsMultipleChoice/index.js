@@ -1,65 +1,64 @@
 import * as React from 'react';
-import {StyleSheet, TouchableNativeFeedback, View, Text} from 'react-native';
-
 import CheckBox from '@react-native-community/checkbox';
+import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 
+import IconPollMine from '../../assets/icon/IconPollMine';
+import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
+import {COLORS} from '../../utils/theme';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
-import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
-import IconPollMine from '../../assets/icon/IconPollMine';
 
-let PollOptionsMultipleChoice = ({
+const PollOptionsMultipleChoice = ({
   item,
   mypoll,
   index,
-  total,
+  // total,
   selectedindex,
   isexpired,
   isalreadypolling = false,
   maxpolls = [],
   onselected = (index) => {},
+  totalVotingUser = 0
 }) => {
-  let counter = item?.counter || 0;
-  let optionPercentage = total === 0 ? 0 : ((counter / total) * 100).toFixed(0);
+  console.log(totalVotingUser)
+  const counter = item?.counter || 0;
+  const optionPercentage = totalVotingUser === 0 ? 0 : ((counter / totalVotingUser) * 100).toFixed(0);
 
-  let isPollDisabled = () => isalreadypolling || isexpired;
+  const isPollDisabled = () => isalreadypolling || isexpired;
 
-  let selected = selectedindex.includes(index);
+  const selected = selectedindex.includes(index);
 
-  let isMyPoll = () => {
-    return mypoll.reduce((acc, current) => {
-      let isCurrentItemMyPoll =
+  const isMyPoll = () => mypoll.reduce((acc, current) => {
+      const isCurrentItemMyPoll =
         item?.polling_option_id === current?.polling_option_id;
       return acc || isCurrentItemMyPoll;
     }, false);
-  };
 
   // console.log(isMyPoll());
 
-  let onOptionsClicked = () => {
+  const onOptionsClicked = () => {
     if (isPollDisabled()) {
       return;
     }
     if (selected) {
-      let idx = selectedindex.indexOf(index);
-      let newSelectedIndex = [...selectedindex];
+      const idx = selectedindex.indexOf(index);
+      const newSelectedIndex = [...selectedindex];
       newSelectedIndex.splice(idx, 1);
       onselected(newSelectedIndex);
     } else {
-      let newSelectedIndex = [...selectedindex];
+      const newSelectedIndex = [...selectedindex];
       newSelectedIndex.push(index);
       onselected(newSelectedIndex);
     }
   };
 
-  let isPollNotEndedAndIsMax =
+  const isPollNotEndedAndIsMax =
     isalreadypolling && maxpolls.includes(item.polling_option_id);
 
-  let isPollNotEndedAndIsMine = isalreadypolling && isMyPoll() && !isexpired;
-  let isMax = maxpolls.includes(item.polling_option_id);
+  const isPollNotEndedAndIsMine = isalreadypolling && isMyPoll() && !isexpired;
+  const isMax = maxpolls.includes(item.polling_option_id);
 
-  let renderPercentageBar = () => {
+  const renderPercentageBar = () => {
     if (isexpired) {
       return (
         <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
@@ -68,23 +67,23 @@ let PollOptionsMultipleChoice = ({
       //   return (
       //     <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
       //   );
-    } else if (isalreadypolling) {
+    } if (isalreadypolling) {
       return (
         <View style={styles.percentageBar(optionPercentage, isMyPoll())} />
       );
     }
   };
 
-  let renderPollBadge = () => {
+  const renderPollBadge = () => {
     if (isMax && isexpired) {
       return (
         <IconPollWinnerBadge style={{marginRight: 9, alignSelf: 'center'}} />
       );
-    } else if (isPollNotEndedAndIsMine) {
+    } if (isPollNotEndedAndIsMine) {
       return <IconPollMine style={{marginRight: 9, alignSelf: 'center'}} />;
-    } else {
+    } 
       return <></>;
-    }
+    
   };
 
   return (
@@ -142,7 +141,7 @@ let styles = StyleSheet.create({
     backgroundColor: colors.lightgrey,
     marginBottom: 8,
     borderRadius: 8,
-    height: 56,
+    // height: 56,
     display: 'flex',
     flexDirection: 'row',
   },
@@ -150,7 +149,7 @@ let styles = StyleSheet.create({
     backgroundColor: colors.holytosca30percent,
     marginBottom: 8,
     borderRadius: 8,
-    height: 56,
+    // height: 56,
     display: 'flex',
     flexDirection: 'row',
   },
@@ -162,8 +161,7 @@ let styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignSelf: 'center',
   },
-  pollOptionItemText: (isexpired, isMax) => {
-    return {
+  pollOptionItemText: (isexpired, isMax) => ({
       flex: 1,
       color: colors.black,
       fontFamily: fonts.inter[400],
@@ -171,8 +169,7 @@ let styles = StyleSheet.create({
       marginTop: isMax ? 0 : isexpired ? 6 : 0,
       marginBottom: isMax ? 0 : isexpired ? 6 : 0,
       marginLeft: 0,
-    };
-  },
+    }),
   pollOptionItemPercentage: {
     alignSelf: 'center',
   },

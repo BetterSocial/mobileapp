@@ -3,7 +3,7 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
-import {Dot, Gap} from '../../components';
+import {Dot, Gap} from "..";
 import {calculateTime} from '../../utils/time';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
@@ -18,9 +18,9 @@ const PreviewComment = ({
 }) => {
   const navigation = useNavigation();
 
-  let openProfile = async () => {
-    let selfUserId = await getUserId();
-    if (selfUserId === user.id) {
+  const openProfile = async () => {
+    const selfUserId = await getUserId();
+    if (selfUserId === user?.id) {
       return navigation.navigate('ProfileScreen', {
         isNotFromHomeTab: true
       });
@@ -28,8 +28,8 @@ const PreviewComment = ({
     return navigation.navigate('OtherProfile', {
       data: {
         user_id: selfUserId,
-        other_id: user.id,
-        username: user.data.username,
+        other_id: user?.id,
+        username: user?.data?.username,
       },
     });
   };
@@ -60,7 +60,7 @@ const PreviewComment = ({
               style={styles.image}
             />
             <View style={styles.containerUsername}>
-              <Text style={styles.username}>{user.data.username}</Text>
+              <Text style={styles.username}>{user?.data?.username}</Text>
               <Gap width={4} />
               <Dot size={4} color={'#828282'} />
               <Gap width={4} />
@@ -85,7 +85,7 @@ const PreviewComment = ({
             </Text>
           </TouchableOpacity>
         </View>
-        <Gap height={SIZES.base} />
+        <Gap height={4} />
       </View>
       {totalComment >= 1 && (
         <TouchableOpacity style={styles.btnMore} onPress={onPress}>

@@ -1,33 +1,40 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {Dimensions, FlatList, StatusBar, StyleSheet} from 'react-native';
-
-import dimen from '../../utils/dimen';
+import {Dimensions, FlatList, StatusBar, StyleSheet, View} from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { colors } from '../../utils/colors';
+import dimen from '../../utils/dimen';
 
 
+const FULL_WIDTH = Dimensions.get('screen').width;
 
 const styles = StyleSheet.create({
   flatlistContainer: {
     paddingBottom: 0,
   },
+  cardContainer: () => ({
+    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
+    width: FULL_WIDTH,
+    borderBottomWidth: 7,
+    borderBottomColor: colors.lightgrey,
+    backgroundColor: 'white',
+
+  }),
+  cardMain: () => ({
+      height: dimen.size.FEED_CURRENT_ITEM_HEIGHT ,
+      width: '100%',
+  }),
 });
 
 const TiktokScroll = (props) => {
-  const {data, children, onRefresh, refreshing, onEndReach, contentHeight, onScroll, onScrollBeginDrag, onMomentumScrollEnd, ...otherProps} = props;
+  const {data, children, onRefresh, refreshing, onEndReach, contentHeight = 548, onScroll, onScrollBeginDrag, onMomentumScrollEnd, searchHeight, showSearchBar, ...otherProps} = props;
   const flatListRef = React.useRef();
-  const FULL_HEIGHT = Dimensions.get('screen').height;
-const tabBarHeight = StatusBar.currentHeight;
-const bottomHeight = useBottomTabBarHeight()
-const cardHeight = FULL_HEIGHT - tabBarHeight - bottomHeight
-  const __onViewambleItemsChanged = React.useCallback(({ viewableItems, changed}) => {
-    // console.log("Visible items are", viewableItems);
-    // console.log("Changed in this iteration", changed);
-  }, [])
 
   return (
     <FlatList
-      contentContainerStyle={styles.flatlistContainer}
+      contentContainerStyle={[styles.flatlistContainer, {paddingTop: showSearchBar ? searchHeight : 0}]}
       data={data}
       decelerationRate="fast"
       disableIntervalMomentum={true}
@@ -37,21 +44,26 @@ const cardHeight = FULL_HEIGHT - tabBarHeight - bottomHeight
       onScroll={onScroll}
       onScrollBeginDrag={onScrollBeginDrag}
       getItemLayout={(data, index) => ({
-        length: cardHeight, offset: cardHeight * index, index
+        length: contentHeight, offset: contentHeight * index, index
       })}
-      // onViewableItemsChanged={__onViewambleItemsChanged}
+    
       onMomentumScrollEnd={onMomentumScrollEnd}
       initialNumToRender={2}
       ref={flatListRef}
       refreshing={refreshing}
-      renderItem={children}
+      renderItem={({item ,index}) => (
+        <View style={[styles.cardContainer()]}>
+        <View style={styles.cardMain()}>
+          {children({item, index})}
+        </View>
+      </View>
+      )}
       scrollEventThrottle={1}
       showsVerticalScrollIndicator={false}
-      snapToAlignment="center"
+      snapToAlignment="start"
       snapToInterval={contentHeight}
       maxToRenderPerBatch={2}
       updateCellsBatchingPeriod={10}
-      removeClippedSubviews
       windowSize={10}
       {...otherProps}
     />
@@ -67,7 +79,8 @@ TiktokScroll.propTypes = {
   onScrollBeginDrag: PropTypes.func,
   onEndReach: PropTypes.func,
   onScroll: PropTypes.func,
-  onScrollBeginDrag: PropTypes.func
+  searchHeight: PropTypes.number,
+  showSearchBar: PropTypes.bool
 };
 
 TiktokScroll.defaultProps = {

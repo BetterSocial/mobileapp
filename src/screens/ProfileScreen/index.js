@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   Dimensions,
   LogBox,
-  SafeAreaView,
   Share,
   StatusBar,
   StyleSheet,
@@ -14,11 +13,11 @@ import {
   View,
 } from 'react-native';
 import { debounce } from 'lodash'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
@@ -46,7 +45,7 @@ import { colors } from '../../utils/colors';
 import { downVote, upVote } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import { getAccessToken } from '../../utils/token';
-import { getFeedDetail, getMainFeed } from '../../service/post';
+import { getFeedDetail } from '../../service/post';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
@@ -54,13 +53,13 @@ import {
   requestCameraPermission,
   requestExternalStoragePermission,
 } from '../../utils/permission';
-import { setFeedByIndex, setMainFeeds } from '../../context/actions/feeds';
-import { setImageUrl } from '../../context/actions/users';
+import { setFeedByIndex } from '../../context/actions/feeds';
 import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { setMyProfileAction } from '../../context/actions/setMyProfileAction';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -72,10 +71,10 @@ const ProfileScreen = ({ route }) => {
   const bottomSheetProfilePictureRef = React.useRef();
   const postRef = React.useRef(null);
   const flatListScrollRef = React.useRef(null);
-
-  let [token_JWT, setTokenJwt] = React.useState('');
-  let [users, dispatch] = React.useContext(Context).users;
-  let [myProfileFeed, myProfileDispatch] =
+  const [myProfile, dispatchProfile] = React.useContext(Context).profile;
+  const [token_JWT, setTokenJwt] = React.useState('');
+  const [users, dispatch] = React.useContext(Context).users;
+  const [myProfileFeed, myProfileDispatch] =
     React.useContext(Context).myProfileFeed;
   const [dataMain, setDataMain] = React.useState({});
   const [dataMainBio, setDataMainBio] = React.useState("");
@@ -103,10 +102,10 @@ const ProfileScreen = ({ route }) => {
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
   const { interactionsComplete } = useAfterInteractions()
-  let isNotFromHomeTab = route?.params?.isNotFromHomeTab
-  let bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
+  const isNotFromHomeTab = route?.params?.isNotFromHomeTab
+  const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
   const LIMIT_PROFILE_FEED = 1
-  let { feeds } = myProfileFeed;
+  const { feeds } = myProfileFeed;
 
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -170,18 +169,20 @@ const ProfileScreen = ({ route }) => {
 
   const saveProfileState = (result) => {
     if (result && typeof result === 'object') {
+      
       setDataMain(result);
       setDataMainBio(result.bio)
+      setMyProfileAction(result, dispatchProfile)
       setLoadingContainer(false)
     }
 
   }
 
   const getMyFeeds = async (offset = 0, limit = 10) => {
-    let result = await getSelfFeedsInProfile(offset, limit);
+    const result = await getSelfFeedsInProfile(offset, limit);
     if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
     else {
-      let clonedFeeds = [...feeds]
+      const clonedFeeds = [...feeds]
       clonedFeeds.splice(feeds.length - 1, 0, ...data)
       setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
@@ -266,30 +267,34 @@ const ProfileScreen = ({ route }) => {
   };
 
   const onOpenImageGalery = async () => {
-    let { success, message } = await requestExternalStoragePermission();
+    const { success, message } = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (res) => {
-        if (res.didCancel) {
-        } else {
-          setImage(res.base64);
-          handleUpdateImage('data:image/jpeg;base64,' + res.base64, 'gallery');
-        }
-      });
+      ImagePicker.openPicker({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo',
+        includeBase64: true
+      }).then((imageRes) => {
+         handleUpdateImage(`data:image/jpeg;base64,${  imageRes.data}`, 'gallery');
+      })
     } else {
       Toast.show(message, Toast.SHORT);
     }
   };
 
   const onOpenCamera = async () => {
-    let { success, message } = await requestCameraPermission();
+    const { success, message } = await requestCameraPermission();
     if (success) {
-      launchCamera({ mediaType: 'photo', includeBase64: true }, (res) => {
-        if (res.didCancel) {
-        } else {
-          setImage(res.base64);
-          handleUpdateImage('data:image/jpeg;base64,' + res.base64, 'camera');
-        }
-      });
+      ImagePicker.openCamera({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo',
+        includeBase64: true
+      }).then((imageRes) => {
+         handleUpdateImage(`data:image/jpeg;base64,${  imageRes.data}`, 'camera');
+      })
     } else {
       Toast.show(message, Toast.SHORT);
     }
@@ -309,8 +314,7 @@ const ProfileScreen = ({ route }) => {
     } else {
       setIsLoadingUpdateImageCamera(true);
     }
-
-    let data = {
+    const data = {
       profile_pic_path: value,
     };
 
@@ -353,7 +357,6 @@ const ProfileScreen = ({ route }) => {
         });
       });
   };
-
   const changeBio = () => {
     if (dataMain.bio !== null || dataMain.bio !== undefined) {
       setTempBio(dataMain.bio);
@@ -372,7 +375,7 @@ const ProfileScreen = ({ route }) => {
 
   const handleSaveBio = () => {
     setIsLoadingUpdateBio(true);
-    let data = {
+    const data = {
       bio: tempBio,
     };
     setDataMainBio(tempBio)
@@ -380,7 +383,7 @@ const ProfileScreen = ({ route }) => {
       .then((res) => {
         setIsLoadingUpdateBio(false);
         if (res.code === 200) {
-          fetchMyProfile(false);
+          fetchMyProfile();
           debounceModalClose()
         }
       })
@@ -403,8 +406,7 @@ const ProfileScreen = ({ route }) => {
     setTempBio(text);
   };
 
-  const renderBio = (string) => {
-    return (
+  const renderBio = (string) => (
       <GlobalButton buttonStyle={styles.bioText} onPress={() => changeBio()}>
         <View style={styles.containerBio}>
           {string === null || string === undefined ? (
@@ -420,10 +422,9 @@ const ProfileScreen = ({ route }) => {
         </View>
       </GlobalButton>
     );
-  };
 
   const onPressDomain = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -434,7 +435,7 @@ const ProfileScreen = ({ route }) => {
 
   const onPress = (item, index) => {
     navigation.navigate('ProfilePostDetailPage', {
-      index: index,
+      index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
       refreshParent: getMyFeeds
@@ -449,10 +450,10 @@ const ProfileScreen = ({ route }) => {
     });
   };
 
-  let onNewPollFetched = (newPolls, index) => {
+  const onNewPollFetched = (newPolls, index) => {
     setFeedByIndex(
       {
-        index: index,
+        index,
         singleFeed: newPolls,
       },
       dispatch,
@@ -470,7 +471,7 @@ const ProfileScreen = ({ route }) => {
 
   const updateFeed = async (post, index) => {
     try {
-      let data = await getFeedDetail(post.activity_id);
+      const data = await getFeedDetail(post.activity_id);
       if (data) {
         setFeedByIndex(
           {
@@ -496,10 +497,9 @@ const ProfileScreen = ({ route }) => {
     getMyFeeds(0, LIMIT_PROFILE_FEED)
   }
 
-  const renderHeader = React.useMemo(() => {
-    return (
+  const renderHeader = React.useMemo(() => (
       <View onLayout={(event) => {
-        let headerHeightLayout = event.nativeEvent.layout.height
+        const headerHeightLayout = event.nativeEvent.layout.height
         headerHeightRef.current = headerHeightLayout
       }}>
         <View style={styles.content}>
@@ -519,8 +519,7 @@ const ProfileScreen = ({ route }) => {
           </View>
         </View>
       </View>
-    )
-  }, [dataMain, dataMainBio])
+    ), [dataMain, dataMainBio])
 
   return (
     <>
@@ -541,16 +540,14 @@ const ProfileScreen = ({ route }) => {
           removeClippedSubviews
           windowSize={10}
           snapToOffsets={(() => {
-            let posts = feeds.map((item, index) => {
-              return headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT)
-            })
+            const posts = feeds.map((item, index) => headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT))
             return [0, ...posts]
           })()}
           ListHeaderComponent={
             renderHeader
           }>
           {({ item, index }) => {
-            let dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight - bottomBarHeight;
+            const dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight - bottomBarHeight;
             if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
             return <View style={{ width: '100%' }}>
               <RenderItem
@@ -622,12 +619,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 20,
   },
-  dummyItem: (height) => {
-    return {
+  dummyItem: (height) => ({
       height,
       backgroundColor: colors.white
-    }
-  },
+    }),
   postText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
@@ -663,7 +658,7 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   tabs: {
-    width: width,
+    width,
     borderBottomColor: colors.alto,
     borderBottomWidth: 1,
     paddingLeft: 20,
@@ -671,7 +666,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   tabsFixed: {
-    width: width,
+    width,
     borderBottomColor: colors.alto,
     borderBottomWidth: 1,
     paddingLeft: 20,

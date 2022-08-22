@@ -20,6 +20,19 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>org.bettersocial</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>devme.bettersocial.org</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -37,6 +50,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>This lets you using camera from your device securely.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Requires user location for better experience</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

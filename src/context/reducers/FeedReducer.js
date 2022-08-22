@@ -4,10 +4,13 @@ import {
   SET_FEED_BY_INDEX,
   SET_FEED_ON_SCREEN_FEED_INDEX,
   SET_FEED_TIMER,
+  SET_TOPIC_FEED,
+  SET_TOPIC_FEED_BY_INDEX,
 } from '../Types';
 
 const feedsState = {
   feeds: [],
+  topicFeeds: [],
   timer: new Date(),
   viewPostTimeIndex: 0,
 };
@@ -26,6 +29,21 @@ const feedsReducer = (state = feedsState, action) => {
       return {
         ...state,
         feeds: newFeeds,
+      };
+
+    case SET_TOPIC_FEED:
+      return {
+        ...state,
+        topicFeeds: action.payload,
+      };
+
+    case SET_TOPIC_FEED_BY_INDEX:
+      const newTopicFeeds = [...state.topicFeeds];
+      newTopicFeeds[action.payload.index] = action.payload.singleFeed;
+
+      return {
+        ...state,
+        topicFeeds: newTopicFeeds,
       };
 
     case SET_FEED_TIMER:

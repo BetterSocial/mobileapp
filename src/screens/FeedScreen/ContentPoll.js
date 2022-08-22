@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import * as React from 'react';
 import SeeMore from 'react-native-see-more-inline';
 import {
@@ -46,15 +47,18 @@ const ContentPoll = ({
   voteCount = 0,
   topics = []
 }) => {
-  let modifiedPoll = polls.reduce(
+  console.log('vote count')
+  console.log(voteCount)
+
+  const modifiedPoll = polls.reduce(
     (acc, current) => {
-      acc.totalpoll = acc.totalpoll + parseInt(current.counter);
+      acc.totalpoll += parseInt(current.counter);
       if (current.counter > acc.maxValue) {
         acc.maxValue = current.counter;
         acc.maxId = [];
         acc.maxId.push(current.polling_option_id);
       } else if (current.counter === acc.maxValue) {
-        let { maxId } = acc;
+        const { maxId } = acc;
         maxId.push(current.polling_option_id);
       }
 
@@ -63,14 +67,14 @@ const ContentPoll = ({
     { totalpoll: 0, maxId: [], maxValue: 0 },
   );
 
-  let [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] =
+  const [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] =
     React.useState(-1);
-  let [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
-  let [isFetchingResultPoll, setIsFetchingResultPoll] = React.useState(false);
-  let [isAlreadyPolling, setIsAlreadyPolling] =
+  const [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
+  const [isFetchingResultPoll, setIsFetchingResultPoll] = React.useState(false);
+  const [isAlreadyPolling, setIsAlreadyPolling] =
     React.useState(isalreadypolling);
-  let route = useRoute();
-  let navigation = useNavigation()
+  const route = useRoute();
+  const navigation = useNavigation()
 
   React.useEffect(() => {
     if(singleChoiceSelectedIndex === -1) return
@@ -80,33 +84,33 @@ const ContentPoll = ({
     return onSeeResultsClicked()
   }, [singleChoiceSelectedIndex])
 
-  let isTouchableDisabled = route.name === 'PostDetailPage';
+  const isTouchableDisabled = route.name === 'PostDetailPage';
 
   let onSeeResultsClicked = () => {
     if (isFetchingResultPoll) {
       return;
     }
-    let newPolls = [...polls];
-    let newItem = { ...item };
+    const newPolls = [...polls];
+    const newItem = { ...item };
 
     if (multiplechoice) {
       newItem.isalreadypolling = true;
       newItem.refreshtoken = new Date().valueOf();
       if (multipleChoiceSelected.length === 0) {
-        inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
+        // inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
       } else {
         setIsAlreadyPolling(true);
-        let selectedPolls = [];
+        const selectedPolls = [];
         for (let i = 0; i < multipleChoiceSelected.length; i++) {
-          let changedPollIndex = multipleChoiceSelected[i];
-          let selectedPoll = polls[changedPollIndex];
+          const changedPollIndex = multipleChoiceSelected[i];
+          const selectedPoll = polls[changedPollIndex];
           newPolls[changedPollIndex].counter =
             parseInt(selectedPoll.counter) + 1;
           selectedPolls.push(selectedPoll);
-          inputSingleChoicePoll(
-            selectedPoll.polling_id,
-            selectedPoll.polling_option_id,
-          );
+          // inputSingleChoicePoll(
+          //   selectedPoll.polling_id,
+          //   selectedPoll.polling_option_id,
+          // );
         }
         newItem.pollOptions = newPolls;
         newItem.mypolling = selectedPolls;
@@ -120,9 +124,9 @@ const ContentPoll = ({
       newItem.refreshtoken = new Date().valueOf();
 
       if (singleChoiceSelectedIndex === -1) {
-        inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
+        // inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
       } else {
-        let selectedPoll = polls[singleChoiceSelectedIndex];
+        const selectedPoll = polls[singleChoiceSelectedIndex];
         newPolls[singleChoiceSelectedIndex].counter =
           parseInt(selectedPoll.counter) + 1;
         newItem.pollOptions = newPolls;
@@ -139,9 +143,7 @@ const ContentPoll = ({
     }
   };
 
-  let showSetResultsButton = () => {
-    return !isPollExpired(pollexpiredat) && !isAlreadyPolling;
-  };
+  const showSetResultsButton = () => !isPollExpired(pollexpiredat) && !isAlreadyPolling;
 
   const handleTextCaption = (text, onPress) => {
     getCaptionWithTopicStyle(text)
@@ -165,7 +167,7 @@ const ContentPoll = ({
     );
   };
 
-  const __renderSeeResultButton = () => {
+  const renderSeeResultButton = () => {
     if(isFetchingResultPoll) return 'Loading...'
     if(multiplechoice && multipleChoiceSelected.length > 0) return 'Submit'
 
@@ -192,15 +194,13 @@ const ContentPoll = ({
               horizontal={true}
               pagingEnabled={true}
               data={images_url}
-              renderItem={({ item, index }) => {
-                return (
+              renderItem={({ item, index }) => (
                   <Image
                     source={{ uri: item }}
                     style={styles.imageList}
                     resizeMode={'cover'}
                   />
-                );
-              }}
+                )}
               keyExtractor={({ item, index }) => index}
             />
           </View>
@@ -209,12 +209,11 @@ const ContentPoll = ({
             {handleTextCaption(message, onPress)}
 
             <View style={styles.pollOptionsContainer}>
-              {polls.map((pollItem, index) => {
+              {polls.map((pollItem, index) => 
                 /*
                   TODO : Count percentage
                 */
-
-                return multiplechoice ? (
+                 multiplechoice ? (
                   <PollOptionsMultipleChoice
                     key={index}
                     item={pollItem}
@@ -228,6 +227,7 @@ const ContentPoll = ({
                     isalreadypolling={isAlreadyPolling}
                     maxpolls={modifiedPoll.maxId}
                     total={modifiedPoll.totalpoll}
+                    totalVotingUser={voteCount}
                   />
                 ) : (
                   <PollOptions
@@ -242,8 +242,8 @@ const ContentPoll = ({
                     isalreadypolling={isAlreadyPolling}
                     onselected={(index) => setSingleChoiceSelectedIndex(index)}
                   />
-                );
-              })}
+                )
+              )}
             </View>
 
             <View style={styles.totalVotesContainer}>
@@ -265,7 +265,7 @@ const ContentPoll = ({
                 <View style={styles.seeresultscontainer}>
                   <TouchableOpacity onPress={onSeeResultsClicked}>
                     <Text style={styles.seeresultstext}>
-                      {__renderSeeResultButton()}
+                      {renderSeeResultButton()}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blackgrey,
   },
   fletlist: { flex: 1 },
-  containerShowMessage: { justifyContent: 'center', flex: 1 },
+  containerShowMessage: { justifyContent: 'center', },
   imageList: { flex: 1, width: screenWidth - 32, borderRadius: 16 },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -337,10 +337,11 @@ const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    marginTop: 12,
+    paddingTop: 12,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: COLORS.white,
+    paddingBottom: 12
+
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
@@ -395,7 +396,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 0,
     marginTop: 16,
-    marginBottom: 8,
+    // marginBottom: 5,
   },
   pollOptionItemContainer: {
     backgroundColor: colors.lightgrey,
@@ -485,15 +486,13 @@ const styles = StyleSheet.create({
     color: colors.holytosca,
     fontFamily: fonts.inter[500],
   },
-  textMedia: (text) => {
-    return {
+  textMedia: (text) => ({
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
       fontSize: FONT_SIZE_MEDIA,
       color: colors.black,
       lineHeight: 24,
-    };
-  },
+    }),
 
   seemore: {
     color: COLORS.blue,
