@@ -131,7 +131,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
             return `${item.comments[0] 
                 && item.comments[0].actor 
                 && item.comments[0].actor.data 
-                && item.comments[0].actor.data.username} Replied to your comment`
+                && item.comments[0].actor.data.username} replied to your comment`
         }
         
             if(!item.isAnonym) {
