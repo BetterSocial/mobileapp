@@ -55,49 +55,68 @@ import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
+import { getSpecificCache } from '../utils/cache';
+import { PROFILE_CACHE } from '../utils/cache/constant';
+import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 
 const RootStack = createStackNavigator();
 
-export const RootNavigator = (props) => {
+export const RootNavigator = () => {
   let initialStartup = useRecoilValue(InitialStartupAtom);
   const setInitialValue = useSetRecoilState(InitialStartupAtom)
   const [clientState] = React.useContext(Context).client;
+  const [, dispatchProfile] = React.useContext(Context).profile;
   const { client } = clientState;
 
   const create = useClientGetstream();
   if(initialStartup && typeof initialStartup === 'string') {
     initialStartup = JSON.parse(initialStartup)
   }
-  const doGetAccessToken = async() => {
+  const doGetAccessToken = async () => {
     const accessToken = await getAccessToken()
     setInitialValue({id: accessToken})
 
   }
+
+  const getProfile = async () => {
+    getSpecificCache(PROFILE_CACHE, (res) => {
+      console.log(res, "response");
+      if (res) {
+        setMyProfileAction(res, dispatchProfile);
+      }
+  });
+  }
+
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
     doGetAccessToken()
+    getProfile();
+
     return async () => {
       await client?.disconnectUser();
     };
   }, []);
 
   React.useEffect(() => {
-
     if (initialStartup.id !== null) {
       if (initialStartup.id !== '') {
         create();
       }
-
-      setTimeout(() => {
-        SplashScreen.hide();
-      }, 700);
     } else {
       setTimeout(() => {
         SplashScreen.hide();
-      }, 700);
+      }, 1000);
     }
-  }, [initialStartup]);
+  }, [initialStartup, clientState]);
+
+  React.useState(() => {
+    if (clientState.client !== null) {
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 1000);
+    }
+  }, []);
   return (
     <View
       style={{

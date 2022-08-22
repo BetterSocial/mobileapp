@@ -5,11 +5,8 @@ import {
   Text,
   StyleSheet,
   Platform,
-  TouchableNativeFeedback,
-  TouchableHighlight,
   Dimensions,
   ScrollView,
-  TouchableOpacity,
   ActivityIndicator,
   FlatList,
   Pressable
@@ -18,18 +15,14 @@ import {
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
 
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import {get} from '../../api/server';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
-import {ChunkArray, chunkArrayCustom} from '../../utils/array/ChunkArray';
 import {ProgressBar} from '../../components/ProgressBar';
 import StringConstant from '../../utils/string/StringConstant';
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import { Header } from '../../components';
-import { globalReplaceAll } from '../../utils/Utils';
 
 const {width} = Dimensions.get('screen');
 
@@ -40,17 +33,19 @@ const Topics = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [minTopic] = React.useState(3);
   const [, dispatch] = React.useContext(Context).topics;
-  const [myTopic, setMyTopic] = React.useState({})
+  const [myTopic, setMyTopic] = React.useState({});
+
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Topics',
       screen_name: 'onb_select_topics',
     });
+
     setIsLoading(true);
     get({url: '/topics/list'})
       .then((res) => {
         setIsLoading(false);
-        if (res.status == 200) {
+        if (res.status === 200) {
           topicMapping(res.data.body)
           // setTopics(res.data.body);
         }
@@ -63,28 +58,30 @@ const Topics = () => {
   const topicMapping = (data) => {
     const allTopics = []
     if(data && typeof data ==='object') {
+      // eslint-disable-next-line array-callback-return
       Object.keys(data).map((attribute) => {
         allTopics.push({name: attribute, data: data[attribute].map((att) => ({topic_id: att.topic_id, name: att.name}))})
       })
     }
     setTopics(allTopics)
   }
-  const handleSelectedLanguage = React.useCallback((val) => {
+
+  const handleSelectedLanguage = (val) => {
     if(!myTopic[val]) {
       setMyTopic({...myTopic, [val]: val})
     } else {
       setMyTopic({...myTopic, [val]: null})
     }
-    let copytopicSelected = [...topicSelected];
-    const index = copytopicSelected.findIndex((data) => data === val);
+    let copyTopicSelected = [...topicSelected];
+    const index = copyTopicSelected.findIndex((data) => data === val);
     if (index > -1) {
-      copytopicSelected = copytopicSelected.filter((data) => data !== val)
+      copyTopicSelected = copyTopicSelected.filter((data) => data !== val)
     } else {
-      copytopicSelected.push(val);
+      copyTopicSelected.push(val);
     }
-    setTopicSelected(copytopicSelected);
-  }, [topicSelected])
-  
+    setTopicSelected(copyTopicSelected);
+  }
+
   const next = () => {
     if (topicSelected.length >= minTopic) {
       analytics().logEvent('onb_select_topics_add_btn', {
@@ -97,23 +94,25 @@ const Topics = () => {
 
 
 
-  const renderListTopics = ({item, i}) => (
-    <Pressable
-    onPress={() =>
-      handleSelectedLanguage(item.topic_id)
-    }
-    key={i}
-    style={
-      [styles.bgTopicSelectNotActive, {backgroundColor: myTopic[item.topic_id] ? colors.bondi_blue : colors.concrete}]
-    }
-    >
-    <Text>{item.icon}</Text>
-    <Text
-      style={
-        [styles.textTopicNotActive, {color: myTopic[item.topic_id] ?  colors.white : colors.mine_shaft}]
-      }>#{item.name}</Text>
-  </Pressable>
-  )
+  const renderListTopics = ({item, i}) => {
+    const onPress = React.useCallback(() => handleSelectedLanguage(item.topic_id), [topicSelected]);
+    return (
+      <Pressable
+        onPress={onPress}
+        key={i}
+        style={
+          [styles.bgTopicSelectNotActive, { backgroundColor: myTopic[item.topic_id] ? colors.bondi_blue : colors.concrete }]
+        }
+      >
+        <Text>{item.icon}</Text>
+        <Text
+          style={
+            [styles.textTopicNotActive, { color: myTopic[item.topic_id] ? colors.white : colors.mine_shaft }]
+          }>#{item.name}</Text>
+      </Pressable>
+    );
+  }
+
   const onBack = () => {
     navigation.goBack()
   }
@@ -122,9 +121,7 @@ const Topics = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" /> */}
       <Header onPress={onBack} />
-      {/* {renderHeader()} */}
       <View style={styles.containerProgress}>
         <ProgressBar isStatic={true} value={75} />
       </View>
@@ -149,11 +146,11 @@ const Topics = () => {
           contentContainerStyle={styles.containerContent}
           nestedScrollEnabled
           >
-            <FlatList 
+            <FlatList
             data={topic.data}
             renderItem={renderListTopics}
             numColumns={Math.floor(topic.data.length / 3) + 1}
-            nestedScrollEnabled 
+            nestedScrollEnabled
             scrollEnabled={false}
             extraData={topicSelected}
             maxToRenderPerBatch={2}
@@ -162,7 +159,7 @@ const Topics = () => {
             windowSize={10}
             keyExtractor={keyExtractor}
             />
-            
+
           </ScrollView>
         </View>
         )) : null}

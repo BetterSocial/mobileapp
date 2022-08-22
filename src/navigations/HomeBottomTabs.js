@@ -33,7 +33,7 @@ import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
 import { getFollowingTopic } from '../service/topics';
 import { getMainFeed } from '../service/post';
-import { getSpecificCache, saveToCache } from '../utils/cache';
+import { saveToCache } from '../utils/cache';
 import { getUserId } from '../utils/users';
 import {
   setMainFeeds, setTimer,
@@ -237,21 +237,14 @@ function HomeBottomTabs(props) {
   };
 
   React.useEffect(() => {
-    getSpecificCache(PROFILE_CACHE, (res) => {
-      if (!res) {
-        getProfile();
-      } else {
-        setMyProfileAction(res, dispatchProfile);
-        setLoadingUser(false);
-      }
-    });
-  }, []);
-
-  React.useEffect(() => {
     requestPermission();
     getDomain();
     getDataFeeds();
     getDiscoveryData();
+
+    if (myProfile?.user_id !== '') {
+      getProfile();
+    }
   }, []);
 
   React.useEffect(() => {
@@ -285,7 +278,7 @@ function HomeBottomTabs(props) {
         tabBarOptions={{
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
- 
+
         }}
         screenOptions={({ navigation: screenOptionsNavigation }) => ({
           activeTintColor: colors.holytosca,
@@ -296,7 +289,7 @@ function HomeBottomTabs(props) {
         <Tab.Screen
           name="ChannelList"
           component={ChannelListScreen}
-          
+
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: ({ color }) => <View style={styles.center} >
@@ -352,7 +345,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   badge: {
-    height: 7, 
+    height: 7,
     width: 7,
     position: 'absolute',
     bottom: 3,

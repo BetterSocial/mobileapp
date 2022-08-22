@@ -27,7 +27,7 @@ import { withInteractionsManaged } from '../../components/WithInteractionManaged
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
-import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
+import { FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 import PreviewMessage from './elements/CustomPreviewMessage';
 
 
@@ -44,10 +44,7 @@ const ChannelListScreen = ({ navigation }) => {
   const {interactionsComplete} = useAfterInteractions()
   const [profileContext] = React.useContext(Context).profile;
   const [countComment, setCountComment] = React.useState({})
-  // const [countComment, setCountComment] = useRecoilState(commentChatState)
-  // const [countChat, setCountChat] = React.useState({})
   const {myProfile} = profileContext
-  const [countChat, setCountChat] = React.useState({})
 
   const [unReadMessage] =
     React.useContext(Context).unReadMessage;
@@ -72,7 +69,6 @@ const ChannelListScreen = ({ navigation }) => {
         screen_name: 'Channel List',
       });
       getPostNotification()
-      // connect();
     }
 
   }, [interactionsComplete]);
@@ -81,9 +77,9 @@ const ChannelListScreen = ({ navigation }) => {
     if(myProfile) {
       callStreamFeed()
       handleUnsubscribeNotif()
-      
     }
   }, [JSON.stringify(myProfile)])
+
   const callStreamFeed = async () => {
     const token = await getAccessToken()
     const client = streamFeed(token)
@@ -138,7 +134,7 @@ const handleUpdateCache = (id, totalComment) => {
     if(res.success) {
         setListPostNotif(res.data)
     }
-} 
+}
   const customPreviewTitle = (props) => {
     const { name } = props.channel?.data;
     return (
@@ -157,7 +153,7 @@ const handleUpdateCache = (id, totalComment) => {
     })
   }
 
- 
+
 
   const countPostNotifComponent = (item) => {
     const readComment = countComment[item.activity_id]
@@ -165,7 +161,7 @@ const handleUpdateCache = (id, totalComment) => {
       <CustomPreviewUnreadCount readComment={readComment} channel={item} />
     )
   }
-  
+
   const chatBadge = (props) => (
     <CustomPreviewUnreadCount   {...props}  />
   )
@@ -178,9 +174,10 @@ const handleUpdateCache = (id, totalComment) => {
                     setChannel(channel, dispatch);
                     // ChannelScreen | ChatDetailPage
                     navigation.navigate('ChatDetailPage');
-                    
+
                   }
   }
+
   return (
     <SafeAreaProvider style={{ height: '100%' }}>
       <StatusBar translucent={false} />
@@ -196,7 +193,6 @@ const handleUpdateCache = (id, totalComment) => {
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
-                // Preview={CustomPreview}
                 PreviewStatus={ChannelStatusIcon}
                 PreviewTitle={customPreviewTitle}
                 onSelect={onSelectChat}
@@ -212,9 +208,9 @@ const handleUpdateCache = (id, totalComment) => {
                context={myContext}
                PreviewUnreadCount={chatBadge}
                PreviewMessage={PreviewMessage}
-               PostNotifComponent={({item ,index, refreshList}) => item ? <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)}  /> : null}
+               postNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} showBadgePostNotif  />}
               />
-      
+
             </Chat>
           ) : (
             <View style={styles.content}>
