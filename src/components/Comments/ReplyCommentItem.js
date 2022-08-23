@@ -118,7 +118,6 @@ const ReplyCommentItem = ({
   React.useEffect(() => {
     setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
   }, [JSON.stringify(comment.data)])
-
   return (
     <View
       style={styles.container({

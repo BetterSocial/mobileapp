@@ -30,7 +30,7 @@ import ButtonHightlight from '../ButtonHighlight';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
-const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page, dataFeed }) => {
+const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const [temporaryText, setTemporaryText] = React.useState('')
@@ -71,7 +71,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page,
       setIdComment(item.latest_children.comment.length)
     }
   }, [item]);
-  const getThisComment = async (newFeed) => {
+  const getThisComment = async () => {
     // let newItem = await getComment({
     //   feed: newFeed,
     //   level: level,
@@ -157,11 +157,11 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page,
 
   const navigationGoBack = () => navigation.goBack();
 
-  const saveNewComment = ({ data }) => {
+  const saveNewComment = () => {
     updateFeed()
   }
 
-  const saveParentComment = ({ data }) => {
+  const saveParentComment = () => {
     updateFeed()
   }
 
@@ -179,7 +179,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page,
       updateFeed()
     }
   }, [])
-
+  console.log(item, level, 'bukala')
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} style={styles.container}>
       <StatusBar translucent={false} />
@@ -216,7 +216,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page,
               const showChildrenCommentView = () => {
                 navigation.push('ReplyComment', {
                   item: itemReply,
-                  level: parseInt(level) + 1,
+                  level: 2,
                   indexFeed,
                   dataFeed
                 });
@@ -224,7 +224,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page,
               let isLastInParent = (index) => {
                 return index === (item.children_counts.comment || 0) - 1;
               };
-
               return (
                 <ContainerReply key={index}>
                   <ConnectorWrapper index={loadingCMD ? index + 1 : index}>
@@ -333,7 +332,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  containerReply: (hideLeftConnector) => ({
+  containerReply: () => ({
     borderLeftWidth: 1,
     width: '100%',
     // backgroundColor: 'red',

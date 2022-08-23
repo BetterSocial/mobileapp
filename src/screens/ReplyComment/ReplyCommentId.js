@@ -163,7 +163,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
 
     return unsubscribe
   }, [])
-
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
