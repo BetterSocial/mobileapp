@@ -1,19 +1,14 @@
 import * as  React from 'react';
-import { StatusBar, Text, View } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { StatusBar, View } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import Empty from './elements/Empty';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import TiktokScroll from '../../components/TiktokScroll/index';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
-import { Gap } from '../../components';
-import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
+import { convertString } from '../../utils/string/StringUtils';
 import { downVote, upVote } from '../../service/vote';
 import { getFeedDetail } from '../../service/post';
 import { getTopicPages } from '../../service/topicPages';
@@ -27,7 +22,6 @@ import removePrefixTopic from '../../utils/topics/removePrefixTopic';
 const TopicPageScreen = (props) => {
     const route = useRoute();
     const { params } = route
-    const [idLt, setIdLt] = React.useState('');
     const [topicName, setTopicName] = React.useState('');
     const [loading, setLoading] = React.useState(false);
     const [userId, setUserId] = React.useState('');
@@ -36,11 +30,9 @@ const TopicPageScreen = (props) => {
     const feeds = feedsContext.topicFeeds;
     const [isFollow, setIsFollow] = React.useState(false);
     const [userTopicName, setUserTopicName] = React.useState('');
-  const [offset, setOffset] = React.useState(0);
+    const [offset, setOffset] = React.useState(0);
 
     const refBlockComponent = React.useRef();
-    const refBlockDomain = React.useRef();
-    const refReportDomain = React.useRef();
     const [headerHeightRef, setHeaderHeightRef] = React.useState(0)
 
 
@@ -53,38 +45,28 @@ const TopicPageScreen = (props) => {
         };
         parseToken();
 
-    return () => {
-      setTopicFeeds([], dispatch)
-    }
-  }, []);React.useEffect(() => {
+        return () => {
+            setTopicFeeds([], dispatch)
+        }
+    }, []);
+    React.useEffect(() => {
         const initData = async () => {
             try {
                 setLoading(true)
                 console.log(route.params.id)
                 const topicWithPrefix = route.params.id
                 const id = removePrefixTopic(topicWithPrefix);
-                console.log('id: ', rawId);
-                // const topicName = convertString(id, '-', ' ')
                 setTopicName(id);
-                console.log('topicName: ', topicName);
-
-                const name = capitalizeFirstText(id);
-                const newName = convertString(name, '-', ' ');
-                console.log('new Name: ', newName);
-                setUserTopicName(newName);
+                setUserTopicName(id);
                 const query = `?name=${convertString(id, '-', ' ')}`;
-                //const [
-                  //  _resultGetTopicPages,
-                  //  _resultGetUserTopic,
-                //] = await Promise.all([
-                  //  getTopicPages(rawId),
-                  //  getUserTopic(query)
-                //]
-                //)
-                const _resultGetTopicPages = await getTopicPages(rawId)setTopicId(id);
-                setTopicFeeds(_resultGetTopicPages.data, dispatch);setOffset(_resultGetTopicPages.offset)
+                // eslint-disable-next-line no-underscore-dangle
+                const _resultGetTopicPages = await getTopicPages(id);
+                setTopicId(id);
+                setTopicFeeds(_resultGetTopicPages.data, dispatch);
+                setOffset(_resultGetTopicPages.offset)
 
-        const _resultGetUserTopic = await getUserTopic(query)
+                // eslint-disable-next-line no-underscore-dangle
+                const _resultGetUserTopic = await getUserTopic(query);
                 console.log(_resultGetUserTopic);
                 if (_resultGetUserTopic.data) {
                     setIsFollow(true);
@@ -113,10 +95,11 @@ const TopicPageScreen = (props) => {
         try {
             setLoading(true);
             const result = await getTopicPages(topicId, offsetParam);
-            const { data } = result;if(offsetParam === 0) {
-        setTopicFeeds(data, dispatch)
-      } else {
-            setTopicFeeds([...feeds, ...data], dispatch);}
+            const { data } = result; if (offsetParam === 0) {
+                setTopicFeeds(data, dispatch)
+            } else {
+                setTopicFeeds([...feeds, ...data], dispatch);
+            }
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -125,33 +108,17 @@ const TopicPageScreen = (props) => {
     }
 
     const onDeleteBlockedPostCompleted = async (postId) => {
-    const postIndex = feeds.findIndex((item) => item.id === postId)
-    const clonedFeeds = [...feeds]
-    clonedFeeds.splice(postIndex, 1)
-    setTopicFeeds(clonedFeeds, dispatch)
-  }
+        const postIndex = feeds.findIndex((item) => item.id === postId)
+        const clonedFeeds = [...feeds]
+        clonedFeeds.splice(postIndex, 1)
+        setTopicFeeds(clonedFeeds, dispatch)
+    }
 
-  const onBlockCompleted = async (postId) => {
-    onDeleteBlockedPostCompleted(postId)
+    const onBlockCompleted = async (postId) => {
+        onDeleteBlockedPostCompleted(postId)
 
-    await refreshingData(0)
-  }// React.useEffect(() => {
-    //   const init = async () => {
-    //     let id = convertString(route.params.id, 'topic_', '');
-
-    //     let name = capitalizeFirstText(id);
-    //     let newName = convertString(name, '-', ' ');
-    //     setUserTopicName(newName);
-    //     let query = `?name=${convertString(newName, '-', ' ')}`;
-    //     let result = await getUserTopic(query);
-
-    //     if (result.data) {
-    //       setIsFollow(true);
-    //     }
-    //   }
-    //   init()
-    // }, [])
-
+        await refreshingData(0)
+    }
 
     const handleFollowTopic = async () => {
         try {
@@ -167,7 +134,6 @@ const TopicPageScreen = (props) => {
             setLoading(false);
         }
     }
-
 
     const onNewPollFetched = (newPolls, index) => {
         setTopicFeedByIndex(
@@ -264,7 +230,7 @@ const TopicPageScreen = (props) => {
                     })()}>
                     {({ item, index }) => (
                         <MemoizedListComponent
-                            key={`topicitem-${index}`}item={item}
+                            key={`topicitem-${index}`} item={item}
                             onNewPollFetched={onNewPollFetched}
                             index={index}
                             onPressDomain={onPressDomain}
@@ -282,9 +248,9 @@ const TopicPageScreen = (props) => {
 
             </View>
             <BlockComponent ref={refBlockComponent}
-        refresh={onBlockCompleted}
-        refreshAnonymous={onDeleteBlockedPostCompleted}
-        screen="topic_screen" />
+                refresh={onBlockCompleted}
+                refreshAnonymous={onDeleteBlockedPostCompleted}
+                screen="topic_screen" />
         </View>
     );
 };
