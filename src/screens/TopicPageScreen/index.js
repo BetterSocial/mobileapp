@@ -35,6 +35,7 @@ const TopicPageScreen = (props) => {
   const feeds = feedsContext.topicFeeds;
   const [isFollow, setIsFollow] = React.useState(false);
   const [userTopicName, setUserTopicName] = React.useState('');
+  const [offset, setOffset] = React.useState(0);
 
   const refBlockComponent = React.useRef();
   const refBlockDomain = React.useRef();
@@ -50,6 +51,10 @@ const TopicPageScreen = (props) => {
       }
     };
     parseToken();
+
+    return () => {
+      setTopicFeeds([], dispatch)
+    }
   }, []);
   React.useEffect(() => {
     const initData = async () => {
@@ -58,7 +63,7 @@ const TopicPageScreen = (props) => {
         console.log(route.params.id)
         const rawId = route.params.id
         const id = convertString(route.params.id, 'topic_', '');
-        console.log('id: ', id);
+        console.log('id: ', rawId);
         const topicName = convertString(id, '-', ' ')
         setTopicName(topicName);
         console.log('topicName: ', topicName);
@@ -68,16 +73,20 @@ const TopicPageScreen = (props) => {
         console.log('new Name: ', newName);
         setUserTopicName(newName);
         const query = `?name=${convertString(topicName, '-', ' ')}`;
-        const [
-          _resultGetTopicPages,
-          _resultGetUserTopic,
-        ] = await Promise.all([
-          getTopicPages(rawId),
-          getUserTopic(query)
-        ]
-        )
+        // const [
+        //   _resultGetTopicPages,
+        //   _resultGetUserTopic,
+        // ] = await Promise.all([
+        //   getTopicPages(rawId),
+        //   getUserTopic(query)
+        // ]
+        // )
+        const _resultGetTopicPages = await getTopicPages(rawId)
         setTopicId(id);
         setTopicFeeds(_resultGetTopicPages.data, dispatch);
+        setOffset(_resultGetTopicPages.offset)
+
+        const _resultGetUserTopic = await getUserTopic(query)
         console.log(_resultGetUserTopic);
         if (_resultGetUserTopic.data) {
           setIsFollow(true);
@@ -102,17 +111,34 @@ const TopicPageScreen = (props) => {
         }
   }
 
-  const refreshingData = async () => {
+  const refreshingData = async (offsetParam = offset) => {
     try {
       setLoading(true);
-      const result = await getTopicPages(topicId);
+      const result = await getTopicPages(topicId, offsetParam);
       const {data} = result;
-      setTopicFeeds([...feeds, ...data], dispatch);
+      if(offsetParam === 0) {
+        setTopicFeeds(data, dispatch)
+      } else {
+        setTopicFeeds([...feeds, ...data], dispatch);        
+      }
       setLoading(false)
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
+  }
+
+  const onDeleteBlockedPostCompleted = async (postId) => {
+    const postIndex = feeds.findIndex((item) => item.id === postId)
+    const clonedFeeds = [...feeds]
+    clonedFeeds.splice(postIndex, 1)
+    setTopicFeeds(clonedFeeds, dispatch)
+  }
+
+  const onBlockCompleted = async (postId) => {
+    onDeleteBlockedPostCompleted(postId)
+
+    await refreshingData(0)
   }
 
   // React.useEffect(() => {
@@ -244,6 +270,7 @@ const TopicPageScreen = (props) => {
           })()}>
           {({ item, index }) => (
             <MemoizedListComponent
+              key={`topicitem-${index}`}
               item={item}
               onNewPollFetched={onNewPollFetched}
               index={index}
@@ -261,7 +288,10 @@ const TopicPageScreen = (props) => {
 
 
       </View>
-      <BlockComponent ref={refBlockComponent} refresh={refreshingData} screen="topic_screen" />
+      <BlockComponent ref={refBlockComponent} 
+        refresh={onBlockCompleted} 
+        refreshAnonymous={onDeleteBlockedPostCompleted} 
+        screen="topic_screen" />
     </View>
   );
 };
