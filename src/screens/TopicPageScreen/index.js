@@ -18,6 +18,7 @@ import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuild
 import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import RenderItem from '../ProfileScreen/elements/RenderItem';
 
 const TopicPageScreen = (props) => {
     const route = useRoute();
@@ -33,7 +34,7 @@ const TopicPageScreen = (props) => {
     const [offset, setOffset] = React.useState(0);
 
     const refBlockComponent = React.useRef();
-    const [headerHeightRef, setHeaderHeightRef] = React.useState(0)
+    const [headerHeightRef] = React.useState(0)
 
 
     React.useEffect(() => {
@@ -224,24 +225,25 @@ const TopicPageScreen = (props) => {
                     refreshing={loading}
                     snapToOffsets={(() => {
                         const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-                        // console.log('posts')
-                        // console.log(posts)
                         return [headerHeightRef, ...posts]
                     })()}>
                     {({ item, index }) => (
-                        <MemoizedListComponent
-                            key={`topicitem-${index}`} item={item}
-                            onNewPollFetched={onNewPollFetched}
-                            index={index}
-                            onPressDomain={onPressDomain}
-                            onPress={() => onPress(item, index)}
-                            onPressComment={() => onPressComment(index)}
-                            onPressBlock={() => onPressBlock(item)}
-                            onPressUpvote={(post) => setUpVote(post, index)}
-                            userId={userId}
-                            onPressDownVote={(post) => setDownVote(post, index)}
-                            loading={loading}
-                        />
+                        <View style={{ width: '100%' }}>
+                            <RenderItem
+                                bottomBar={false}
+                                item={item}
+                                index={index}
+                                onNewPollFetched={onNewPollFetched}
+                                onPressDomain={onPressDomain}
+                                onPress={() => onPress(item, index)}
+                                onPressComment={() => onPressComment(item, item.id)}
+                                onPressBlock={() => onPressBlock(item)}
+                                onPressUpvote={(post) => setUpVote(post, index)}
+                                selfUserId={userId}
+                                onPressDownVote={(post) =>
+                                    setDownVote(post, index)
+                                } />
+                        </View>
                     )}
                 </ProfileTiktokScroll>
 
