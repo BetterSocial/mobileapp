@@ -123,13 +123,10 @@ const PostPageDetailIdComponent = (props) => {
       const data = await getFeedDetail(feedId);
       setItem(data.data)
       setLoading(false)
-
     } else {
       setItem(route.params.data)
     }
-
   }
-
 
   const updateParentPost = (data) => {
     setItem(data)
@@ -531,7 +528,7 @@ const PostPageDetailIdComponent = (props) => {
               isLoading={loadingPost}
               refreshComment={handleRefreshComment}
               refreshChildComment={handleRefreshChildComment}
-              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost, findCommentAndUpdate)}
+              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost, findCommentAndUpdate, item)}
               findCommentAndUpdate={findCommentAndUpdate}
             />
           )}

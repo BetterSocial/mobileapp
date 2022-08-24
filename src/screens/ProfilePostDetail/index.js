@@ -11,8 +11,8 @@ const ProfilePostDetail = (props) => {
     let {index, feedId, refreshParent} = props.route.params
     let navigation = useNavigation()
 
-    let navigateToReplyView = (data, updateParent) => {
-        navigation.navigate('ReplyComment', {...data, updateParent});
+    let navigateToReplyView = (data, updateParent, findCommentAndUpdate, dataFeed) => {
+        navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent, findCommentAndUpdate, dataFeed});
     }
     
     React.useEffect(() => {

@@ -514,12 +514,15 @@ const OtherProfile = () => {
     navigation.navigate('OtherProfilePostDetailPage', {
       index,
       isalreadypolling: item.isalreadypolling,
+      feedId: item.id,
     });
   };
 
-  const onPressComment = (index) => {
+  const onPressComment = (item, index) => {
     navigation.navigate('OtherProfilePostDetailPage', {
       index,
+      isalreadypolling: item.isalreadypolling,
+      feedId: item.id,
     });
   };
 
@@ -610,7 +613,7 @@ const OtherProfile = () => {
                 onNewPollFetched={onNewPollFetched}
                 onPressDomain={onPressDomain}
                 onPress={() => onPress(item, index)}
-                onPressComment={() => onPressComment(index)}
+                onPressComment={() => onPressComment(item, item.id)}
                 onPressBlock={() => onPressBlock(item)}
                 onPressUpvote={(post) => setUpVote(post, index)}
                 selfUserId={yourselfId}

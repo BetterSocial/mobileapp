@@ -385,7 +385,10 @@ const FeedScreen = (props) => {
         }}
       </TiktokScroll>
       <ButtonNewPost />
-      <BlockComponent ref={refBlockComponent} refresh={onBlockCompleted} refreshAnonymous={onDeleteBlockedPostCompleted} screen="screen_feed" />
+      <BlockComponent ref={refBlockComponent} 
+        refresh={onBlockCompleted} 
+        refreshAnonymous={onDeleteBlockedPostCompleted} 
+        screen="screen_feed" />
     </SafeAreaProvider>
 
   );
