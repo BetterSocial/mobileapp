@@ -144,7 +144,6 @@ const Comment = ({
     parseToken();
   }, []);
 
-
   React.useEffect(() => {
     setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
     iVote()

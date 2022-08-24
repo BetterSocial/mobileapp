@@ -15,12 +15,12 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
-import Comment from '../../components/Comments/Comment';
-import ConnectorWrapper from '../../components/Comments/ConnectorWrapper';
-import LoadingComment from '../../components/LoadingComment';
-import ReplyCommentItem from '../../components/Comments/ReplyCommentItem';
+import Comment from "../Comments/Comment";
+import ConnectorWrapper from "../Comments/ConnectorWrapper";
+import LoadingComment from "../LoadingComment";
+import ReplyCommentItem from "../Comments/ReplyCommentItem";
 import StringConstant from '../../utils/string/StringConstant';
-import WriteComment from '../../components/Comments/WriteComment';
+import WriteComment from "../Comments/WriteComment";
 import { Context } from '../../context';
 import { colors } from '../../utils/colors';
 import { createChildComment } from '../../service/comment';
@@ -28,20 +28,18 @@ import { fonts } from '../../utils/fonts';
 import { getFeedDetail } from '../../service/post';
 import ButtonHightlight from '../ButtonHighlight';
 
-// import {temporaryComment} from '../../utils/string/LoadingComment';
-
-const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed }) => {
+const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed,updateReply,  itemParent }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const [temporaryText, setTemporaryText] = React.useState('')
   const [, setReaction] = React.useState(false);
   const [loadingCMD, setLoadingCMD] = React.useState(false);
-  let [users] = React.useContext(Context).users;
-  let [profile] = React.useContext(Context).profile;
+  const [users] = React.useContext(Context).users;
+  const [profile] = React.useContext(Context).profile;
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
-  const [childrenComment, setChildrenComment] = React.useState([])
+  // const [newItemParen, setNewItemParent] = React.useState(itemParent)
   const scrollViewRef = React.useRef(null)
   const [defaultData, setDefaultData] = React.useState({
     data: { count_downvote: 0, count_upvote: 0, text: textComment },
@@ -71,13 +69,8 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
       setIdComment(item.latest_children.comment.length)
     }
   }, [item]);
+
   const getThisComment = async () => {
-    // let newItem = await getComment({
-    //   feed: newFeed,
-    //   level: level,
-    //   idlevel1: itemProp.id,
-    //   idlevel2: itemProp.parent,
-    // });
     let comments = [];
     if (
       itemProp.latest_children &&
@@ -95,30 +88,25 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
 
   React.useEffect(() => {
     if(itemProp) {
-      getThisComment(itemProp);
+      getThisComment();
 
     }
   }, [itemProp]);
 
+  console.log(newCommentList, itemProp, 'komen')
   const updateFeed = async (isSort) => {
     try {
-      let data = await getFeedDetail(itemProp.activity_id);
+      const data = await getFeedDetail(item.activity_id);
       if (data) {
         let oldData = data.data
         if (isSort) {
           oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment } }
         }
-        getThisComment(oldData);
+
         if(updateParent) {
           updateParent(oldData)
         }
-        // setFeedByIndexProps(
-        //   {
-        //     singleFeed: oldData,
-        //     index: indexFeed,
-        //   },
-        //   dispatch,
-        // );
+
       }
     } catch (e) {
       console.log(e);
@@ -135,12 +123,22 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
     try {
       if (textComment.trim() !== '') {
-        let data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif, dataFeed.actor.id);
+        const data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif, dataFeed.actor.id);
+        // console.log(data, 'bajak')
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
-          // setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
+          const newComment = [...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }]
+          setNewCommentList(newComment)
+          // setNewItemParent({...itemParent, chakra: 1})
+          // setItem({...item, latest_children: {...item.latest_children, comment: newComment}})
+          // itemParent = {...itemParent, cuma: 0}
+          // setItem({})
+          // if(level > 1) {
+          //   setCommentLev2([...commentLev2, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
+          // }
+          // updateReply()
           // setLoadingCMD(false);
-          // await updateFeed(true)
+          await updateFeed(true)
         } else {
           Toast.show('Failed Comment', Toast.LONG);
           // setLoadingCMD(false);
@@ -157,29 +155,41 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
 
   const navigationGoBack = () => navigation.goBack();
 
-  const saveNewComment = () => {
-    updateFeed()
-  }
-
   const saveParentComment = () => {
     updateFeed()
   }
 
-  // React.useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     updateFeed(true)
-  //   })
 
-  //   return () => unsubscribe()
-  // }, [])
+  const updateReplyPost = (comment, itemParentProps, commentId) => {
 
-  React.useEffect(() => {
-    // updateFeed(true)
-    return () => {
-      updateFeed()
+    if(itemParentProps) {
+      const updateComment = itemParentProps.latest_children.comment.map((dComment) => {
+        if(dComment.id === commentId) {
+          return {...dComment, latest_children: {...dComment.latest_children, comment}, children_counts: {comment: comment.length}}
+        } 
+          return {...dComment}
+        
+      })
+      const replaceComment = {...itemParentProps, latest_children: {...itemParentProps.latest_children, comment: updateComment}}
+      setItem(replaceComment)
+      setNewCommentList(updateComment)
+
     }
-  }, [])
-  console.log(item, level, 'bukala')
+
+  }
+
+
+
+  React.useEffect(() => 
+    // updateFeed(true)
+     () => {
+      saveParentComment()
+      if(typeof updateReply === 'function') {
+       updateReply(newCommentList, itemParent, item.id)
+      }
+    }
+  , [newCommentList])
+
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} style={styles.container}>
       <StatusBar translucent={false} />
@@ -192,7 +202,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableOpacity>
           <Text style={styles.headerText}>
-            Reply to {itemProp.user.data.username}
+            Reply to {item.user.data.username}
           </Text>
           <View style={styles.btn} />
         </View>
@@ -203,10 +213,10 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
         <View style={styles.containerComment}>
           <ReplyCommentItem
             indexFeed={indexFeed}
-            user={itemProp.user}
+            user={item.user}
             comment={item}
-            time={itemProp.created_at}
-            photo={itemProp.user.data.profile_pic_url}
+            time={item.created_at}
+            photo={item.user.data.profile_pic_url}
             isLast={newCommentList.length <= 0}
             level={level}
             refreshComment={saveParentComment}
@@ -218,12 +228,15 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                   item: itemReply,
                   level: 2,
                   indexFeed,
-                  dataFeed
+                  dataFeed,
+                  updateParent,
+                  itemParent: itemProp,
+                  updateReply: (comment, parentProps, id) => updateReplyPost(comment, parentProps, id)
+                  // findCommentAndUpdate
+                  // updateParentReply: () => updateParentReplyFunc(newCommentList)
                 });
               };
-              let isLastInParent = (index) => {
-                return index === (item.children_counts.comment || 0) - 1;
-              };
+              const isLastInParent = (index) => index === (item.children_counts.comment || 0) - 1;
               return (
                 <ContainerReply key={index}>
                   <ConnectorWrapper index={loadingCMD ? index + 1 : index}>
@@ -234,17 +247,17 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                         time={itemReply.updated_at}
                         photo={itemReply.user.data.profile_pic_url}
                         isLast={
-                          // index === item.children_counts.comment - 1 &&
+                          // index === itemProp.children_counts.comment - 1 &&
                           // (itemReply.children_counts.comment || 0) === 0
                           level >= 2
                         }
-                        key={'r' + index}
+                        key={`r${  index}`}
                         user={itemReply.user}
                         comment={itemReply}
                         onPress={showChildrenCommentView}
                         level={parseInt(level) + 1}
                         loading={loadingCMD}
-                        refreshComment={saveNewComment}
+                        refreshComment={saveParentComment}
                    
 
                       // showLeftConnector
@@ -275,7 +288,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
             <ContainerReply>
               <ConnectorWrapper>
                 <View style={styles.childCommentWrapperLoading}>
-                  <LoadingComment commentText={textComment} user={itemProp.user} />
+                  <LoadingComment commentText={textComment} user={item.user} />
                 </View>
               </ConnectorWrapper>
             </ContainerReply>
@@ -296,8 +309,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     </KeyboardAvoidingView>
   );
 };
-const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key }) => {
-  return (
+const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key }) => (
     <View
       key={key}
       style={[
@@ -307,7 +319,6 @@ const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key 
       {children}
     </View>
   );
-};
 export default ReplyCommentId;
 
 const styles = StyleSheet.create({
