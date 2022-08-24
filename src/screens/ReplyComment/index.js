@@ -10,6 +10,7 @@ const ProfileReplyComment = (props) => {
   let itemProp = props.route.params.item;
   const updateParentPost = props.route.params.updateParent
   const level = props.route.params.level;
+  const dataFeed = props.route.params.dataFeed
   const findAndUpdateComment = props.route.params.findAndUpdateComment
   let [feeds, dispatch] = React.useContext(Context).feeds
   const feedIndex = () => {
@@ -19,7 +20,7 @@ const ProfileReplyComment = (props) => {
     }
     return 0
   }
-
+  console.log(dataFeed, 'jakal')
   return (
     <View style={styles.container}>
       <ReplyCommentComponent indexFeed={feedIndex()} 
@@ -30,6 +31,7 @@ const ProfileReplyComment = (props) => {
         setFeedByIndexProps={setFeedByIndex} 
         updateParent={updateParentPost}
         page={props.route.params.page}
+        dataFeed={dataFeed}
         />
     </View>
   )

@@ -25,14 +25,12 @@ import { Context } from '../../context';
 import { colors } from '../../utils/colors';
 import { createChildComment } from '../../service/comment';
 import { fonts } from '../../utils/fonts';
-import { getComment } from '../../utils/getstream/getComment';
 import { getFeedDetail } from '../../service/post';
-import { setFeedByIndex } from '../../context/actions/feeds';
 import ButtonHightlight from '../ButtonHighlight';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
-const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page }) => {
+const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page, dataFeed }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const [temporaryText, setTemporaryText] = React.useState('')
@@ -126,7 +124,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
       console.log(e);
     }
   };
-
   const createComment = async () => {
     // setLoadingCMD(true);
     let sendPostNotif = false
@@ -138,7 +135,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
     setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
     try {
       if (textComment.trim() !== '') {
-        let data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif);
+        let data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif, dataFeed.actor.id);
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
           // setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
@@ -221,6 +218,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent, page 
                   item: itemReply,
                   level: parseInt(level) + 1,
                   indexFeed,
+                  dataFeed
                 });
               };
               let isLastInParent = (index) => {

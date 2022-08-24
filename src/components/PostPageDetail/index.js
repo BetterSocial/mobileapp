@@ -531,7 +531,7 @@ const PostPageDetailIdComponent = (props) => {
               isLoading={loadingPost}
               refreshComment={handleRefreshComment}
               refreshChildComment={handleRefreshChildComment}
-              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost, findCommentAndUpdate)}
+              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost, findCommentAndUpdate, item)}
               findCommentAndUpdate={findCommentAndUpdate}
             />
           )}
