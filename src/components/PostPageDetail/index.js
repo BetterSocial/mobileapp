@@ -123,13 +123,10 @@ const PostPageDetailIdComponent = (props) => {
       const data = await getFeedDetail(feedId);
       setItem(data.data)
       setLoading(false)
-
     } else {
       setItem(route.params.data)
     }
-
   }
-
 
   const updateParentPost = (data) => {
     setItem(data)
