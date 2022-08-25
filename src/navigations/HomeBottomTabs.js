@@ -254,11 +254,23 @@ function HomeBottomTabs(props) {
     getDiscoveryData();
   }, []);
 
+  const handlePushNotif = (remoteMessage) => {
+    const {channel} = remoteMessage.data
+    if(channel.channel_type !== 3) {
+      if(isIos) {
+        pushNotifIos(remoteMessage)
+      } else {
+        pushNotifAndroid(remoteMessage)
+      }
+    }
+    console.log('tidak notif')
+  }
+
   React.useEffect(() => {
     createChannel();
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       // eslint-disable-next-line no-unused-expressions
-      !isIos ? pushNotifAndroid(remoteMessage) : pushNotifIos(remoteMessage);
+      handlePushNotif(remoteMessage)
     });
 
     return () => {
