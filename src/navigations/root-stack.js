@@ -30,6 +30,7 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
+import ReplyCommentLev3 from '../screens/ReplyComment2'
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
@@ -290,6 +291,11 @@ const AuthenticatedNavigator = () => {
         name="ReplyComment"
         component={ReplyComment}
         options={{ headerShown: false }}
+      />
+      <AuthenticatedStack.Screen 
+      name='ReplyCommentLev3'
+      component={ReplyCommentLev3 }
+      options={{headerShown: false}}
       />
       <AuthenticatedStack.Screen
         name="ProfileReplyComment"

@@ -96,20 +96,24 @@ const ReplyComment = ({
   return (
     <ContainerReply hideLeftConnector={hideLeftConnector}>
       {data.map((item, index) => {
-        const showCommentView = () =>
-          navigateToReplyView({
-            item: item,
-            level: 1,
-            indexFeed: indexFeed,
-          });
-
-        const showChildCommentView = () =>
+        const showCommentView = () => {
           navigateToReplyView({
             item: item,
             level: 2,
             indexFeed: indexFeed,
           });
+        }
+          
 
+        const showChildCommentView = () => {
+            navigateToReplyView({
+            item: item,
+            level: 2,
+            indexFeed: indexFeed,
+          });
+
+        }
+        
         return (
           <ConnectorWrapper key={`c-${index}`} index={index}>
             <View key={'c' + index} style={styles.levelOneCommentWrapper}>

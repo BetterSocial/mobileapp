@@ -107,9 +107,7 @@ const Comment = ({
   };
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
-    console.log('sontak',result)
     if(findCommentAndUpdate) {
-      console.log('masuklah')
       findCommentAndUpdate(comment.id, result.data, level)
     }
     // setTotalVote(
@@ -143,7 +141,6 @@ const Comment = ({
     };
     parseToken();
   }, []);
-
 
   React.useEffect(() => {
     setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
