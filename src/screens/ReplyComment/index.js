@@ -9,7 +9,7 @@ import { setFeedByIndex } from '../../context/actions/feeds';
 const ReplyComment = (props) => {
   // const [newComment, setNewComment] = React.useState([])
   let itemProp = props.route.params.item;
-  const {updateParent, findCommentAndUpdate, updateReply,  itemParent} = props.route.params
+  const {updateParent, findCommentAndUpdate, updateReply,  itemParent,  parentComment} = props.route.params
   const level = props.route.params.level;
   const dataFeed = props.route.params.dataFeed
   let [feeds, dispatch] = React.useContext(Context).feeds
@@ -35,6 +35,7 @@ const ReplyComment = (props) => {
         updateReply={updateReply}
         findCommentAndUpdate={findCommentAndUpdate}
          itemParent={itemParent}
+         parentComment={parentComment}
         />
     </View>
   )

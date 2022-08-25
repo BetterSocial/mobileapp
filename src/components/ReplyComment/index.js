@@ -39,7 +39,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
-  // const [newItemParen, setNewItemParent] = React.useState(itemParent)
   const scrollViewRef = React.useRef(null)
   const [defaultData, setDefaultData] = React.useState({
     data: { count_downvote: 0, count_upvote: 0, text: textComment },
@@ -111,6 +110,9 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
       console.log(e);
     }
   };
+    const saveParentComment = () => {
+    updateFeed()
+  }
   const createComment = async () => {
     // setLoadingCMD(true);
     let sendPostNotif = false
@@ -127,7 +129,11 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
         if (data.code === 200) {
           const newComment = [...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }]
           setNewCommentList(newComment)
-          setItem({...item, latest_children: {...item.latest_children, comment: newComment}})
+          if(typeof updateReply === 'function') {
+            updateReply(newComment, itemParent, item.id)
+          }
+                saveParentComment()
+          // setNewItemProp({...newItemProp, latest_children: {...newItemProp.latest_children, comment: newComment}})
           // setNewItemParent({...itemParent, chakra: 1})
           // setItem({...item, latest_children: {...item.latest_children, comment: newComment}})
           // itemParent = {...itemParent, cuma: 0}
@@ -154,12 +160,11 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
 
   const navigationGoBack = () => navigation.goBack();
 
-  const saveParentComment = () => {
-    updateFeed()
-  }
+
 
 
   const updateReplyPost = (comment, itemParentProps, commentId) => {
+    console.log(comment, itemParentProps, commentId, 'meme2')
     if(itemParentProps) {
       const updateComment = itemParentProps.latest_children.comment.map((dComment) => {
         if(dComment.id === commentId) {
@@ -176,17 +181,24 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
 
   }
 
-  console.log(item, newCommentList, 'meme1')
 
-  React.useEffect(() => 
-    // updateFeed(true)
-     () => {
-      saveParentComment()
-      if(typeof updateReply === 'function') {
-       updateReply(newCommentList, itemParent, item.id)
-      }
-    }
-  , [newCommentList])
+   const showChildrenCommentView = async (itemReply) => {
+                const itemParentProps = await {...itemProp, latest_children: {...itemProp.latest_children, comment: newCommentList}}
+                navigation.push('ReplyComment', {
+                  item: itemReply,
+                  level: 2,
+                  indexFeed,
+                  dataFeed,
+                  updateParent,
+                  itemParent: itemParentProps,
+                  updateReply: (comment, parentProps, id) => updateReplyPost(comment, parentProps, id)
+                  // findCommentAndUpdate
+                  // updateParentReply: () => updateParentReplyFunc(newCommentList)
+                });
+              };
+
+const isLastInParent = (index) => index === (item.children_counts.comment || 0) - 1;
+
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} style={styles.container}>
@@ -220,22 +232,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
             refreshComment={saveParentComment}
           />
           {newCommentList.length > 0 &&
-            newCommentList.map((itemReply, index) => {
-              const showChildrenCommentView = () => {
-                navigation.push('ReplyComment', {
-                  item: itemReply,
-                  level: 2,
-                  indexFeed,
-                  dataFeed,
-                  updateParent,
-                  itemParent: {...itemProp, latest_children: {...itemProp.latest_children, comment: newCommentList}},
-                  updateReply: (comment, parentProps, id) => updateReplyPost(comment, parentProps, id)
-                  // findCommentAndUpdate
-                  // updateParentReply: () => updateParentReplyFunc(newCommentList)
-                });
-              };
-              const isLastInParent = (index) => index === (item.children_counts.comment || 0) - 1;
-              return (
+            newCommentList.map((itemReply, index) => (
                 <ContainerReply key={index}>
                   <ConnectorWrapper index={loadingCMD ? index + 1 : index}>
                     <View style={styles.childCommentWrapper}>
@@ -252,7 +249,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                         key={`r${  index}`}
                         user={itemReply.user}
                         comment={itemReply}
-                        onPress={showChildrenCommentView}
+                        onPress={() => showChildrenCommentView(itemReply)}
                         level={parseInt(level) + 1}
                         loading={loadingCMD}
                         refreshComment={saveParentComment}
@@ -267,7 +264,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                               isLastInParent(index),
                             )}>
                             <View style={styles.connector} />
-                            <ButtonHightlight onPress={showChildrenCommentView}>
+                            <ButtonHightlight onPress={() => showChildrenCommentView(itemReply)}>
                               <Text style={styles.seeRepliesText}>
                                 {StringConstant.postDetailPageSeeReplies(
                                   itemReply.children_counts.comment || 0,
@@ -280,8 +277,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                     </View>
                   </ConnectorWrapper>
                 </ContainerReply>
-              );
-            })}
+              ))}
           {loadingCMD && (
             <ContainerReply>
               <ConnectorWrapper>

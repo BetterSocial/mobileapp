@@ -555,7 +555,7 @@ const PostPageDetailIdComponent = (props) => {
   );
 };
 
-export default PostPageDetailIdComponent;
+export default React.memo (PostPageDetailIdComponent);
 
 const styles = StyleSheet.create({
   container: {
