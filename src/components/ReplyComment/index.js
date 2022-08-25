@@ -93,7 +93,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     }
   }, [itemProp]);
 
-  console.log(newCommentList, itemProp, 'komen')
   const updateFeed = async (isSort) => {
     try {
       const data = await getFeedDetail(item.activity_id);
@@ -124,11 +123,11 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     try {
       if (textComment.trim() !== '') {
         const data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif, dataFeed.actor.id);
-        // console.log(data, 'bajak')
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
           const newComment = [...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }]
           setNewCommentList(newComment)
+          setItem({...item, latest_children: {...item.latest_children, comment: newComment}})
           // setNewItemParent({...itemParent, chakra: 1})
           // setItem({...item, latest_children: {...item.latest_children, comment: newComment}})
           // itemParent = {...itemParent, cuma: 0}
@@ -161,7 +160,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
 
 
   const updateReplyPost = (comment, itemParentProps, commentId) => {
-
     if(itemParentProps) {
       const updateComment = itemParentProps.latest_children.comment.map((dComment) => {
         if(dComment.id === commentId) {
@@ -178,7 +176,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
 
   }
 
-
+  console.log(item, newCommentList, 'meme1')
 
   React.useEffect(() => 
     // updateFeed(true)
@@ -230,7 +228,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                   indexFeed,
                   dataFeed,
                   updateParent,
-                  itemParent: itemProp,
+                  itemParent: {...itemProp, latest_children: {...itemProp.latest_children, comment: newCommentList}},
                   updateReply: (comment, parentProps, id) => updateReplyPost(comment, parentProps, id)
                   // findCommentAndUpdate
                   // updateParentReply: () => updateParentReplyFunc(newCommentList)
@@ -319,7 +317,7 @@ const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key 
       {children}
     </View>
   );
-export default ReplyCommentId;
+export default React.memo (ReplyCommentId);
 
 const styles = StyleSheet.create({
   container: {
