@@ -8,7 +8,7 @@ import Navigation from './elements/Navigation';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
-import { convertString } from '../../utils/string/StringUtils';
+import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
 import { downVote, upVote } from '../../service/vote';
 import { getFeedDetail } from '../../service/post';
 import { getTopicPages } from '../../service/topicPages';
