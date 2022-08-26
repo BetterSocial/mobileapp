@@ -255,7 +255,8 @@ function HomeBottomTabs(props) {
   }, []);
 
   const handlePushNotif = (remoteMessage) => {
-    const {channel} = remoteMessage.data
+    let {channel} = remoteMessage.data
+    channel = JSON.parse(channel)
     if(channel.channel_type !== 3) {
       if(isIos) {
         pushNotifIos(remoteMessage)
