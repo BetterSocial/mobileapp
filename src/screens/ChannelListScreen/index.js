@@ -53,7 +53,7 @@ const ChannelListScreen = ({ navigation }) => {
     React.useContext(Context).unReadMessage;
   const filters = {
     members: { $in: [myProfile.user_id] },
-    type: 'messaging',
+    type: {$in: ['messaging', 'topics']},
   };
   React.useEffect(() => { }, [unReadMessage]);
 
@@ -196,10 +196,12 @@ const handleUpdateCache = (id, totalComment) => {
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
+                // List={(props) => console.log(props, 'babah')}
                 // Preview={CustomPreview}
                 PreviewStatus={ChannelStatusIcon}
                 PreviewTitle={customPreviewTitle}
                 onSelect={onSelectChat}
+                //  channelRenderFilterFn={(channel) => console.log(channel, 'bahan')}
                 sort={sort}
                 options={options}
                 maxUnreadCount={99}
@@ -208,6 +210,7 @@ const handleUpdateCache = (id, totalComment) => {
                   refreshControl: null,
                   // extraData:{countComment},
                 }}
+                
                additionalData={listPostNotif}
                context={myContext}
                PreviewUnreadCount={chatBadge}
