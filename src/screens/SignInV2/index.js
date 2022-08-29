@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  BackHandler
 } from 'react-native';
 import { StackActions } from '@react-navigation/native';
 import { colors } from 'react-native-swiper-flatlist/src/themes';
@@ -165,6 +166,15 @@ const SignIn = () => {
     checkIsDemoLoginEnabled()
   }, [])
   // if (!isReady) return null
+
+  const preventBackButton = () => true
+
+  React.useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', preventBackButton)
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', preventBackButton)
+    }
+  }, [])
 
   return (
     <SafeAreaView style={S.container}>
