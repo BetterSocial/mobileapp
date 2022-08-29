@@ -56,6 +56,7 @@ import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
+import { verifyTokenGetstream } from '../service/users';
 
 const RootStack = createStackNavigator();
 
@@ -72,12 +73,21 @@ export const RootNavigator = (props) => {
   const doGetAccessToken = async() => {
     const accessToken = await getAccessToken()
     setInitialValue({id: accessToken})
-
   }
+
+  const doVerifyGetstreamToken = async() => {
+    const response = await verifyTokenGetstream();
+    if(!response) return
+
+    doGetAccessToken()
+  }
+
+
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
-    doGetAccessToken()
+    // doGetAccessToken()
+    doVerifyGetstreamToken()
     return async () => {
       await client?.disconnectUser();
     };
