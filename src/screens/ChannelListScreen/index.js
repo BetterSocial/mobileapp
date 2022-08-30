@@ -29,6 +29,7 @@ import PostNotificationPreview from './elements/components/PostNotificationPrevi
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 import PreviewMessage from './elements/CustomPreviewMessage';
+import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
 
 
 const ChannelListScreen = ({ navigation }) => {
@@ -43,19 +44,19 @@ const ChannelListScreen = ({ navigation }) => {
   const myContext = React.useContext(Context)
   const {interactionsComplete} = useAfterInteractions()
   const [profileContext] = React.useContext(Context).profile;
-  const [countComment, setCountComment] = React.useState({})
-  // const [countComment, setCountComment] = useRecoilState(commentChatState)
+  const [countReadComment, setCountReadComment] = React.useState({})
   // const [countChat, setCountChat] = React.useState({})
   const {myProfile} = profileContext
-  const [countChat, setCountChat] = React.useState({})
+  const [postCount, setPostCount] = React.useState(0)
 
-  const [unReadMessage] =
+  const [unReadMessage, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
+
   const filters = {
     members: { $in: [myProfile.user_id] },
     type: {$in: ['messaging', 'topics']},
   };
-  React.useEffect(() => { }, [unReadMessage]);
+  // React.useEffect(() => { }, [unReadMessage]);
 
   const sort = [{ last_message_at: -1 }];
   const options = {
@@ -111,7 +112,7 @@ React.useEffect(() => {
 const handleCacheComment  = () => {
     getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
     if(cache) {
-      setCountComment(cache)
+      setCountReadComment(cache)
     } else {
       handleNotHaveCache()
     }
@@ -123,15 +124,30 @@ const handleNotHaveCache = () => {
     comment = {...comment, [data.activity_id]: 0}
   })
   saveToCache(FEED_COMMENT_COUNT, comment)
-  setCountComment(comment)
+  setCountReadComment(comment)
 }
 
 const handleUpdateCache = (id, totalComment) => {
-  const updateReadCache = {...countComment, [id]: totalComment}
+  const updateReadCache = {...countReadComment, [id]: totalComment}
   saveToCache(FEED_COMMENT_COUNT, updateReadCache)
-  setCountComment(updateReadCache)
+  setCountReadComment(updateReadCache)
+}
+console.log(countReadComment, 'papana')
+const mappingUnreadCountPostNotif = (readComment = countReadComment) => {
+  if(listPostNotif.length > 0) {
+      const maping = listPostNotif.map((notif) => ({id: notif.activity_id, totalComment: notif.totalCommentBadge}))
+      const mapCount = maping.map((data) => ({
+            ...data,
+            totalComment: data.totalComment -( countReadComment[data.id] || 0)
+          }))
+      const countTotal = mapCount.map((count) => count.totalComment).reduce((a, b) => a + b)
+      const totalMessage = countTotal
+      dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage))
+  }
+
 }
 
+console.log(postCount, 'mamang')
 
   const getPostNotification = async () => {
     const res = await getFeedNotification()
@@ -157,10 +173,9 @@ const handleUpdateCache = (id, totalComment) => {
     })
   }
 
- 
 
   const countPostNotifComponent = (item) => {
-    const readComment = countComment[item.activity_id]
+    const readComment = countReadComment[item.activity_id]
     return (
       <CustomPreviewUnreadCount readComment={readComment} channel={item} />
     )
@@ -181,6 +196,11 @@ const handleUpdateCache = (id, totalComment) => {
                     
                   }
   }
+
+  React.useEffect(() => {
+    mappingUnreadCountPostNotif()
+  }, [listPostNotif, countReadComment])
+
   return (
     <SafeAreaProvider style={{ height: '100%' }}>
       <StatusBar translucent={false} />
@@ -208,7 +228,7 @@ const handleUpdateCache = (id, totalComment) => {
                 additionalFlatListProps={{
                   onEndReached: () => null,
                   refreshControl: null,
-                  // extraData:{countComment},
+                  // extraData:{countReadComment},
                 }}
                 
                additionalData={listPostNotif}

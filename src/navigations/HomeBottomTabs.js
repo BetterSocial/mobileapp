@@ -42,7 +42,6 @@ import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
 import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
 import UniversalLink from '../configs/UniversalLink';
-
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs(props) {
@@ -65,6 +64,7 @@ function HomeBottomTabs(props) {
   if(initialStartup && typeof initialStartup === 'string') {
     initialStartup = JSON.parse(initialStartup)
   }
+
 
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
@@ -264,7 +264,6 @@ function HomeBottomTabs(props) {
         pushNotifAndroid(remoteMessage)
       }
     }
-    console.log('tidak notif')
   }
 
   React.useEffect(() => {
@@ -289,6 +288,7 @@ function HomeBottomTabs(props) {
       });
     }
   }, [initialStartup, otherProfileData]);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -315,9 +315,7 @@ function HomeBottomTabs(props) {
             tabBarIcon: ({ color }) => <View style={styles.center} >
               <MemoHome fill={color} />
             </View>,
-            tabBarBadge: unReadMessage.total_unread_count
-              ? unReadMessage.total_unread_count
-              : null,
+            tabBarBadge: unReadMessage.total_unread_count + unReadMessage.unread_post
           }}
         />
         <Tab.Screen
