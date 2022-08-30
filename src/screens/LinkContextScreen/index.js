@@ -70,7 +70,6 @@ const LinkContextScreen = () => {
     const init = async () => {
       setLoading(true);
       const res = await getLinkContextScreenRelated(item?.content?.news_link_id);
-      console.log(`res.data ${  res.data.length} ${res}`)
       if (res.data) {
         const reducedData = res?.data?.results?.reduce((acc, currentItem) => {
           const newItem = { ...currentItem }

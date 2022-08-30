@@ -4,16 +4,11 @@ import SimpleToast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
-  Button,
-  Dimensions,
+  BackHandler,
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-  BackHandler
+  View
 } from 'react-native';
 import { StackActions } from '@react-navigation/native';
 import { colors } from 'react-native-swiper-flatlist/src/themes';
@@ -27,22 +22,15 @@ import {
 import { useNavigation } from '@react-navigation/core';
 import { useSetRecoilState } from 'recoil';
 
-import ButtonSign from '../../assets/icon-svg/button_sign.svg';
-import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
 import DevDummyLogin from '../../components/DevDummyLogin';
-import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
-import StringConstant from '../../utils/string/StringConstant';
 import getRemoteConfig from '../../service/getRemoteConfig';
-import useIsReady from '../../hooks/useIsReady';
 import { Context } from '../../context';
 import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
 import { InitialStartupAtom } from '../../service/initialStartup';
 import { checkToken } from '../../service/outh';
 import { fonts } from '../../utils/fonts';
-import { openUrl } from '../../utils/Utils';
 import {
-  removeLocalStorege,
   setAccessToken,
   setRefreshToken,
   setUserId,

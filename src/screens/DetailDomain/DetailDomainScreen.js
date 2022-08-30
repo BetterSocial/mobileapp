@@ -11,9 +11,11 @@ import {
   View
 } from 'react-native';
 
+import BlockDomainComponent from '../../components/BlockDomain';
 import ContainerComment from '../../components/Comments/ContainerComment';
 import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
 import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
+import Loading from '../Loading';
 import WriteComment from '../../components/Comments/WriteComment';
 import { COLORS } from '../../utils/theme';
 import { Footer } from '../../components';
@@ -26,7 +28,6 @@ import {
 import { getDomainDetailById } from '../../service/domain'
 import { getMyProfile } from '../../service/profile';
 import { getUserId } from '../../utils/users';
-import BlockDomainComponent from '../../components/BlockDomain';
 
 const { width, height } = Dimensions.get('window');
 
@@ -45,12 +46,13 @@ const DetailDomainScreen = (props) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [comments, setComments] = React.useState([])
+  const [isLoading, setIsLoading] = React.useState(true)
   const blockRef = React.useRef(null)
   const initial = () => {
-    let reactionCount = item.reaction_counts;
+    const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
-      let comment = reactionCount.comment;
+      const {comment} = reactionCount;
       if (comment !== undefined) {
         if (comment > 0) {
           setReaction(true);
@@ -61,13 +63,13 @@ const DetailDomainScreen = (props) => {
           );
         }
       }
-      let upvote = reactionCount.upvotes;
+      const upvote = reactionCount.upvotes;
       if (upvote !== undefined) {
-        count = count + upvote;
+        count += upvote;
       }
-      let downvote = reactionCount.downvotes;
+      const downvote = reactionCount.downvotes;
       if (downvote !== undefined) {
-        count = count - downvote;
+        count -= downvote;
       }
       setTotalVote(count);
     }
@@ -82,8 +84,10 @@ const DetailDomainScreen = (props) => {
   }, [item]);
 
   const getDomain = () => {
+    setIsLoading(true)
     getDomainDetailById(dataDomain.id).then((res) => {
       setItem(res)
+      setIsLoading(false)
     })
   }
 
@@ -112,7 +116,7 @@ const DetailDomainScreen = (props) => {
   const validationStatusVote = () => {
     if (item.reaction_counts !== undefined || null) {
       if (item.latest_reactions.upvotes !== undefined) {
-        let upvote = item.latest_reactions.upvotes.filter(
+        const upvote = item.latest_reactions.upvotes.filter(
           (vote) => vote.user_id === yourselfId,
         );
         if (upvote !== undefined) {
@@ -121,7 +125,7 @@ const DetailDomainScreen = (props) => {
       }
 
       if (item.latest_reactions.downvotes !== undefined) {
-        let downvotes = item.latest_reactions.downvotes.filter(
+        const downvotes = item.latest_reactions.downvotes.filter(
           (vote) => vote.user_id === yourselfId,
         );
         if (downvotes !== undefined) {
@@ -140,7 +144,7 @@ const DetailDomainScreen = (props) => {
   }, [item, yourselfId]);
 
   const fetchMyProfile = async () => {
-    var id = await getUserId();
+    const id = await getUserId();
     if (id) {
       const result = await getMyProfile(id);
       if (result.code === 200) {
@@ -158,7 +162,7 @@ const DetailDomainScreen = (props) => {
   const commentParent = async () => {
     try {
       if (textComment.trim() !== '') {
-        let data = await createCommentParent(textComment, item.id);
+        const data = await createCommentParent(textComment, item.id);
         setComments([...comments, data.data])
         if (data.code === 200) {
           setTextComment('');
@@ -231,6 +235,7 @@ const DetailDomainScreen = (props) => {
   const blockNews = () => {
     blockRef.current.refBlockDomain.current.open()
   };
+  if(isLoading) return <Loading />
   if(!item?.domain) return <View />
 
   return (
@@ -248,10 +253,7 @@ const DetailDomainScreen = (props) => {
       </SafeAreaView>
 
       {item ? <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}>
-
         <View style={styles.content}>
-
-
           <View>
             <DetailDomainScreenContent
               date={item.content.created_at}
@@ -330,7 +332,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   content: {
-    width: width,
+    width,
     borderRadius: 5,
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {
