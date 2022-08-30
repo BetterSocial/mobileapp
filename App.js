@@ -8,12 +8,11 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-
 import {RecoilRoot} from 'recoil';
+import { Platform, BackHandler } from 'react-native';
 import {RootNavigator} from './src/navigations/root-stack';
 import Store from './src/context/Store';
 import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
-import { Platform } from 'react-native';
 import { linking } from './src/navigations/linking';
 
 if(!__DEV__) {
@@ -26,6 +25,7 @@ const App = () => {
   const streami18n = new Streami18n({
     language: 'en',
   });
+  const navigationRef = React.useRef()
 
   // const requestPermission = async () => {
   //   const authStatus = await messaging().requestPermission();
@@ -92,12 +92,29 @@ const App = () => {
     // return unsubscribe;
   }, []);
 
+  const preventCloseApp = () => true
+
+  const backFunc = () => {
+      navigationRef.current.goBack()
+  }
+
+  const handleStateChange = () =>{
+        const isCanBack = navigationRef.current.canGoBack()
+        if(!isCanBack) {
+          BackHandler.addEventListener('hardwareBackPress', preventCloseApp)
+        } else {
+          BackHandler.removeEventListener('hardwareBackPress', preventCloseApp)
+          BackHandler.addEventListener('hardwareBackPress', backFunc)
+        }
+  }
+
+
   const newLocal = (
     <>
       <HumanIDProvider />
       <RecoilRoot>
         <Store>
-          <NavigationContainer linking={linking}>
+          <NavigationContainer onStateChange={handleStateChange}  ref={navigationRef} linking={linking}>
             <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
               <RootNavigator areaHeight={height} />
             </OverlayProvider>
