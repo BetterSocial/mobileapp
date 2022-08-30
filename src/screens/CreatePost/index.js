@@ -65,11 +65,11 @@ import { getSpecificCache } from '../../utils/cache';
 import { getTopics } from '../../service/topics';
 import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
 import { getUserId } from '../../utils/users';
+import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
 import {
     requestCameraPermission,
     requestExternalStoragePermission,
 } from '../../utils/permission';
-import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -693,7 +693,6 @@ const CreatePost = () => {
         sheetTopicRef.current.open()
     }
 
-  console.log(listTopicChat, 'roros')
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />

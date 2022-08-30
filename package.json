@@ -6,6 +6,7 @@
     "android:dev-debug": "npm run update-stream && cd android && ./gradlew clean && cd .. && ENVFILE=.env.development npx react-native run-android --variant=devdebug",
     "android:prod-debug": "npm run update-stream && cd android && ./gradlew clean && cd .. && ENVFILE=.env.production npx react-native run-android --variant=proddebug",
     "android:dev": "react-native run-android --variant=devDebug --appIdSuffix=dev",
+    "android:prod": "react-native run-android --variant=prodDebug --appIdSuffix=devprod",
     "build:apk-android-dev": "cd android && NODENV=development ENVFILE=.env.development ./gradlew assembledevrelease",
     "build:apk-android-dev-update-stream": "npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.development ./gradlew assembledevrelease",
     "build:apk-android-prod": "cd android && ENVFILE=.env.production ./gradlew assembleprodrelease",

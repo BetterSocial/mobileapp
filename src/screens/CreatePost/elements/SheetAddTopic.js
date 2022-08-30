@@ -60,7 +60,6 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose, chatTopi
         .catch(err => console.log(err));
     }
   }
-  console.log(chatTopic, 'jahat')
   const add = () => {
     const data = dataTopic.replace(/\s/g, '').toLowerCase();
     if (data !== '' && !listTopics.includes(data)) {

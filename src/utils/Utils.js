@@ -1,7 +1,7 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import { Linking } from 'react-native';
 import config from 'react-native-config'
+import { Linking } from 'react-native';
 
 export const sanitizeUrlForLinking = (url) => {
     if (!/^https?:\/\//.test(url)) {
@@ -121,11 +121,11 @@ export const locationValidation = (location) => {
 
     if (location.location_level.toLocaleLowerCase() === 'neighborhood') {
         return location.neighborhood;
-    } else if (location.location_level.toLocaleLowerCase() === 'city') {
+    } if (location.location_level.toLocaleLowerCase() === 'city') {
         return location.city;
-    } else if (location.location_level.toLocaleLowerCase() === 'state') {
+    } if (location.location_level.toLocaleLowerCase() === 'state') {
         return location.state;
-    } else {
+    } 
         return location.country;
-    }
+    
 }
