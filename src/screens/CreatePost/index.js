@@ -70,6 +70,8 @@ import {
     requestExternalStoragePermission,
 } from '../../utils/permission';
 import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
+import { Context } from '../../context';
+
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -84,6 +86,7 @@ const CreatePost = () => {
     const sheetGeoRef = React.useRef();
     const sheetPrivacyRef = React.useRef();
     const sheetBackRef = React.useRef();
+    const [client] = React.useContext(Context).client;
 
     const [message, setMessage] = React.useState('');
     const [mediaStorage, setMediaStorage] = React.useState([]);
@@ -434,6 +437,18 @@ const CreatePost = () => {
         sheetTopicRef.current.close();
     };
 
+    const handleSendNotifTopic = async () => {
+        const userId = await getUserId();
+        const clientChat = await client.client;
+        const defaultImage ='https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
+        for(let i = 0; i < listTopic.length; i++) {
+            const channel = clientChat.channel('topics', `topic_${listTopic[i]}`, {name: `#${listTopic[i]}`, members: [userId], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage})
+            channel.create()
+            channel.addMembers([userId])
+            channel.sendMessage({text: `#${listTopic[i]} new post`}, {skip_push: true})
+        }
+    }
+
     const postTopic = async () => {
         try {
             if (message === '') {
@@ -478,6 +493,7 @@ const CreatePost = () => {
             });
             const res = await createPost(data);
             if (res.code === 200) {
+                handleSendNotifTopic()
                 showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
