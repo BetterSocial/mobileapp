@@ -2,7 +2,6 @@ import React from 'react'
 import { View, Image, StyleSheet } from 'react-native'
 import {Avatar} from 'stream-chat-react-native-core/src/components/Avatar/Avatar'
 import FeedIcon from '../../../../assets/images/feed-icon.png'
-import useChannelList from '../../hooks/useChannelList'
 
 const styles = StyleSheet.create({
      iconStyle: {
@@ -28,10 +27,15 @@ const styles = StyleSheet.create({
 })
 
 const AvatarPostNotif = ({item}) => {
-    const {handleAvatarPostChat} = useChannelList()
+        const handleImage = () => {
+        if(item.isAnonym) {
+            return 'https://firebasestorage.googleapis.com/v0/b/bettersocial-dev.appspot.com/o/anonym.png?alt=media&token=5ffe7504-c0e7-4a0c-9cbb-3e7b7572886f'
+        }
+        return item.postMaker.data.profile_pic_url
+    }
 
     return (
-        <Avatar childrenType={<View style={styles.typeContainer} ><Image resizeMode='contain' source={FeedIcon} style={styles.iconStyle} /></View>} showType={true} size={48} image={handleAvatarPostChat(item)} />
+        <Avatar childrenType={<View style={styles.typeContainer} ><Image resizeMode='contain' source={FeedIcon} style={styles.iconStyle} /></View>} showType={true} size={48} image={handleImage()} />
     )
 }
 
