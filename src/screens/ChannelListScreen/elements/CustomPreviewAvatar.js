@@ -1,13 +1,10 @@
 import * as React from 'react';
 import {
   ChannelAvatar,
-  useChannelPreviewDisplayAvatar,
 } from 'stream-chat-react-native';
 import { Image, StyleSheet, View } from 'react-native';
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
-import { Context } from '../../../context';
 import { getGroupMemberCount } from '../../../utils/string/StringUtils';
-import { setProfileChannel } from '../../../context/actions/setChannel';
 import ChatIcon from '../../../assets/chat-icon.png'
 import GroupIcon from '../../../assets/group-icon.png'
 import Hashtag from '../../../assets/hashtag.png'
@@ -15,11 +12,6 @@ import Hashtag from '../../../assets/hashtag.png'
 import { colors } from '../../../utils/colors';
 
 const CustomPreviewAvatar = ({ channel }) => {
-  // const [, dispatch] = React.useContext(Context).channel;
-  // const dataChannel = useChannelPreviewDisplayAvatar(channel);
-  // React.useEffect(() => {
-  //   setProfileChannel(dataChannel.images, dispatch);
-  // }, [dataChannel]);
 
   if (channel.data.channel_type === 3) {
     return (
