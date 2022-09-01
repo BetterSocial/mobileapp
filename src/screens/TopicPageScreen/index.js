@@ -50,6 +50,7 @@ const TopicPageScreen = (props) => {
             setTopicFeeds([], dispatch)
         }
     }, []);
+
     React.useEffect(() => {
         const initData = async () => {
             try {
@@ -96,7 +97,8 @@ const TopicPageScreen = (props) => {
         try {
             setLoading(true);
             const result = await getTopicPages(topicId, offsetParam);
-            const { data } = result; if (offsetParam === 0) {
+            const { data } = result;
+            if (offsetParam === 0) {
                 setTopicFeeds(data, dispatch)
             } else {
                 setTopicFeeds([...feeds, ...data], dispatch);
@@ -222,11 +224,7 @@ const TopicPageScreen = (props) => {
                     data={feeds}
                     onEndReach={onEndReach}
                     onRefresh={onRefresh}
-                    refreshing={loading}
-                    snapToOffsets={(() => {
-                        const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-                        return [headerHeightRef, ...posts]
-                    })()}>
+                    refreshing={loading}>
                     {({ item, index }) => (
                         <View style={{ width: '100%' }}>
                             <RenderItem
