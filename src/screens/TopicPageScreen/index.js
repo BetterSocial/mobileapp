@@ -8,7 +8,7 @@ import Navigation from './elements/Navigation';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
-import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
+import { convertString } from '../../utils/string/StringUtils';
 import { downVote, upVote } from '../../service/vote';
 import { getFeedDetail } from '../../service/post';
 import { getTopicPages } from '../../service/topicPages';
@@ -37,46 +37,41 @@ const TopicPageScreen = (props) => {
     const [headerHeightRef] = React.useState(0)
 
 
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setUserId(id);
-      }
-    };
-    parseToken();
-  }, []);
-  React.useEffect(() => {
-    const initData = async () => {
-      try {
-        setLoading(true)
-        console.log(route.params.id)
-        const rawId = route.params.id
-        const id = convertString(route.params.id, 'topic_', '');
-        console.log('id: ', id);
-        const topicName = convertString(id, '-', ' ')
-        setTopicName(topicName);
-        console.log('topicName: ', topicName);
+    React.useEffect(() => {
+        const parseToken = async () => {
+            const id = await getUserId();
+            if (id) {
+                setUserId(id);
+            }
+        };
+        parseToken();
 
-        const name = capitalizeFirstText(id);
-        const newName = convertString(name, '-', ' ');
-        console.log('new Name: ', newName);
-        setUserTopicName(newName);
-        const query = `?name=${convertString(topicName, '-', ' ')}`;
-        const [
-          _resultGetTopicPages,
-          _resultGetUserTopic,
-        ] = await Promise.all([
-          getTopicPages(id, rawId),
-          getUserTopic(query)
-        ]
-        )
-        setTopicId(id);
-        setTopicFeeds(_resultGetTopicPages.data, dispatch);
-        console.log(_resultGetUserTopic);
-        if (_resultGetUserTopic.data) {
-          setIsFollow(true);
+        return () => {
+            setTopicFeeds([], dispatch)
         }
+    }, []);
+    React.useEffect(() => {
+        const initData = async () => {
+            try {
+                setLoading(true)
+                console.log(route.params.id)
+                const topicWithPrefix = route.params.id
+                const id = removePrefixTopic(topicWithPrefix);
+                setTopicName(id);
+                setUserTopicName(id);
+                const query = `?name=${id}`;
+                // eslint-disable-next-line no-underscore-dangle
+                const _resultGetTopicPages = await getTopicPages(id);
+                setTopicId(id);
+                setTopicFeeds(_resultGetTopicPages.data, dispatch);
+                setOffset(_resultGetTopicPages.offset)
+
+                // eslint-disable-next-line no-underscore-dangle
+                const _resultGetUserTopic = await getUserTopic(query);
+                console.log(_resultGetUserTopic);
+                if (_resultGetUserTopic.data) {
+                    setIsFollow(true);
+                }
 
                 setLoading(false)
             } catch (error) {
@@ -165,12 +160,12 @@ const TopicPageScreen = (props) => {
         refreshingData(feeds[feeds.length - 1]?.id);
     };
 
-  const onPress = (item, index) => {
-    props.navigation.navigate('PostDetailPage', {
-      feedId:item.id,
-      isalreadypolling: item.isalreadypolling,
-    });
-  };
+    const onPress = (item, index) => {
+        props.navigation.navigate('PostDetailPage', {
+            feedId: item.id,
+            isalreadypolling: item.isalreadypolling,
+        });
+    };
 
     const onPressComment = (index) => {
         props.navigation.navigate('PostDetailPage', {
@@ -216,41 +211,41 @@ const TopicPageScreen = (props) => {
         }
     };
 
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-      <StatusBar barStyle="dark-content" translucent={false} />
-      <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
-      <View style={{ flex: 1 }}>
-      
-        <ProfileTiktokScroll
-          contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
-          data={feeds}
-          onEndReach={onEndReach}
-          onRefresh={onRefresh}
-          refreshing={loading}
-          // snapToOffsets={(() => {
-          //   const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-          //   // console.log('posts')
-          //   // console.log(posts)
-          //   return [headerHeightRef, ...posts]
-          // })()}
-          >
-          {({ item, index }) => (
-            <MemoizedListComponent
-              item={item}
-              onNewPollFetched={onNewPollFetched}
-              index={index}
-              onPressDomain={onPressDomain}
-              onPress={() => onPress(item, index)}
-              onPressComment={() => onPressComment(index)}
-              onPressBlock={() => onPressBlock(item)}
-              onPressUpvote={(post) => setUpVote(post, index)}
-              userId={userId}
-              onPressDownVote={(post) => setDownVote(post, index)}
-              loading={loading}
-            />
-          )}
-        </ProfileTiktokScroll>
+
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+            <StatusBar barStyle="dark-content" translucent={false} />
+            <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
+            <View style={{ flex: 1 }}>
+                <ProfileTiktokScroll
+                    contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
+                    data={feeds}
+                    onEndReach={onEndReach}
+                    onRefresh={onRefresh}
+                    refreshing={loading}
+                    snapToOffsets={(() => {
+                        const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
+                        return [headerHeightRef, ...posts]
+                    })()}>
+                    {({ item, index }) => (
+                        <View style={{ width: '100%' }}>
+                            <RenderItem
+                                bottomBar={false}
+                                item={item}
+                                index={index}
+                                onNewPollFetched={onNewPollFetched}
+                                onPressDomain={onPressDomain}
+                                onPress={() => onPress(item, index)}
+                                onPressComment={() => onPressComment(item, item.id)}
+                                onPressBlock={() => onPressBlock(item)}
+                                onPressUpvote={(post) => setUpVote(post, index)}
+                                selfUserId={userId}
+                                onPressDownVote={(post) =>
+                                    setDownVote(post, index)
+                                } />
+                        </View>
+                    )}
+                </ProfileTiktokScroll>
 
 
             </View>
