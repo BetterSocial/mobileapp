@@ -82,7 +82,7 @@ export const RootNavigator = (props) => {
   const doVerifyGetstreamToken = async () => {
     try {
       const response = await verifyTokenGetstream();
-      if (!response) return
+      if (!response) return SplashScreen.hide()
     } catch (e) {
       SplashScreen.hide();
     }
