@@ -12,7 +12,6 @@ import Imageblock from '../../../../assets/images/block.png'
 import {Context} from '../../../../context'
 
 import AvatarPostNotif from './AvatarPostNotif';
-import useChannelList from '../../hooks/useChannelList';
 
 const styles = StyleSheet.create({
     containerCard: {
@@ -117,16 +116,31 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
     // const [profile] = context.profile
     const [profile] = React.useContext(Context).profile;
     const {myProfile} = profile
-    const {handleReplyCommentPostHook} = useChannelList()
+
     const {
         theme: {
           colors: { border, grey },
         },
       } = useTheme();
     
-    const handleReplyComment = async () => {
-      const message = await handleReplyCommentPostHook(item, myProfile)
-      return message
+    const handleReplyComment = () => {
+        const actorId = item.comments[0] && item.comments[0].actor && item.comments[0].actor.data && item.comments[0].actor.id
+        if(actorId === myProfile.user_id && !item.isAnonym) {
+            return "You"
+        } if(item.comments[0] && item.comments[0].reaction && item.comments[0].reaction.parent !== "" && !item.isAnonym) {
+            return `${item.comments[0] 
+                && item.comments[0].actor 
+                && item.comments[0].actor.data 
+                && item.comments[0].actor.data.username} replied to your comment`
+        }
+        
+            if(!item.isAnonym) {
+            return item.comments[0] 
+            && item.comments[0].actor 
+            && item.comments[0].actor.data 
+            && item.comments[0].actor.data.username
+            } 
+                return 'Anonymous'
     }
 
     const handleDate = () => calculateTime(item.data.last_message_at)

@@ -121,8 +121,6 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@react-native-community/eslint-config": "2.0.0",
-    "@testing-library/jest-native": "^4.0.11",
-    "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/react-native": "^7.2.0",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.23",
