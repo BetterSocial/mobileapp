@@ -42,7 +42,27 @@ const useChannelList = () => {
         return item.postMaker.data.profile_pic_url
     }
 
-    return {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook, handleAvatarPostChat}
+    const handleReplyCommentPostHook = (item, myProfile) => {
+        const actorId = item.comments[0] && item.comments[0].actor && item.comments[0].actor.data && item.comments[0].actor.id
+        if(actorId === myProfile.user_id && !item.isAnonym) {
+            return "You"
+        } if(item.comments[0] && item.comments[0].reaction && item.comments[0].reaction.parent !== "" && !item.isAnonym) {
+            return `${item.comments[0] 
+                && item.comments[0].actor 
+                && item.comments[0].actor.data 
+                && item.comments[0].actor.data.username} replied to your comment`
+        }
+        
+            if(!item.isAnonym) {
+            return item.comments[0] 
+            && item.comments[0].actor 
+            && item.comments[0].actor.data 
+            && item.comments[0].actor.data.username
+            } 
+            return 'Anonymous'
+    }
+
+    return {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook, handleAvatarPostChat, handleReplyCommentPostHook}
 }
 
 
