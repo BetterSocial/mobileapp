@@ -315,7 +315,7 @@ function HomeBottomTabs(props) {
             tabBarIcon: ({ color }) => <View style={styles.center} >
               <MemoHome fill={color} />
             </View>,
-            tabBarBadge: unReadMessage.total_unread_count + unReadMessage.unread_post
+            tabBarBadge: unReadMessage.total_unread_count + unReadMessage.unread_post > 0 ? unReadMessage.total_unread_count + unReadMessage.unread_post : null
           }}
         />
         <Tab.Screen
