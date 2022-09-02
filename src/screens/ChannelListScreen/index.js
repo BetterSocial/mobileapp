@@ -30,6 +30,7 @@ import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 import PreviewMessage from './elements/CustomPreviewMessage';
 import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
+import useChannelList from './hooks/useChannelList';
 
 
 const ChannelListScreen = ({ navigation }) => {
@@ -48,7 +49,7 @@ const ChannelListScreen = ({ navigation }) => {
   // const [countChat, setCountChat] = React.useState({})
   const {myProfile} = profileContext
   const [postCount, setPostCount] = React.useState(0)
-
+  const {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook} = useChannelList()
   const [unReadMessage, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
 
@@ -119,35 +120,19 @@ const handleCacheComment  = () => {
   })
 }
 const handleNotHaveCache = () => {
-  let comment = {}
-  listPostNotif.forEach((data) => {
-    comment = {...comment, [data.activity_id]: 0}
-  })
-  saveToCache(FEED_COMMENT_COUNT, comment)
+  const comment = handleNotHaveCacheHook(listPostNotif)
   setCountReadComment(comment)
 }
 
 const handleUpdateCache = (id, totalComment) => {
-  const updateReadCache = {...countReadComment, [id]: totalComment}
-  saveToCache(FEED_COMMENT_COUNT, updateReadCache)
+  const updateReadCache = handleUpdateCacheHook(countReadComment, id, totalComment)
   setCountReadComment(updateReadCache)
 }
-console.log(countReadComment, 'papana')
-const mappingUnreadCountPostNotif = (readComment = countReadComment) => {
-  if(listPostNotif.length > 0) {
-      const maping = listPostNotif.map((notif) => ({id: notif.activity_id, totalComment: notif.totalCommentBadge}))
-      const mapCount = maping.map((data) => ({
-            ...data,
-            totalComment: data.totalComment -( countReadComment[data.id] || 0)
-          }))
-      const countTotal = mapCount.map((count) => count.totalComment).reduce((a, b) => a + b)
-      const totalMessage = countTotal
-      dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage))
-  }
 
+const mappingUnreadCountPostNotif = () => {
+  const totalMessage = mappingUnreadCountPostNotifHook(listPostNotif, countReadComment)
+  dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage))
 }
-
-console.log(postCount, 'mamang')
 
   const getPostNotification = async () => {
     const res = await getFeedNotification()
