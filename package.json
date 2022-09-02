@@ -15,7 +15,7 @@
     "build:bundle-android-prod": "npm run update-env-prod && npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.production ./gradlew bundleprodrelease",
     "ios:dev-debug": "npm run update-env-dev && react-native run-ios --scheme 'BetterSocialDev' --simulator='iPhone 13'",
     "start": "npm run update-env-dev &&react-native start",
-    "test": "jest --verbose",
+    "test": "jest --verbose __tests__ src",
     "lint": "eslint .",
     "android:clean": "cd android && ./gradlew clean && ./gradlew cleanBuildCache",
     "reinstall": "rm -rf node_modules && yarn install",
@@ -165,6 +165,10 @@
     ],
     "moduleNameMapper": {
       "\\.svg": "<rootDir>/__mocks__/svgMock.ts"
-    }
+    },
+    "collectCoverageFrom": [
+      "__tests__",
+      "src/**/*.{js,jsx}"
+    ]
   }
 }
