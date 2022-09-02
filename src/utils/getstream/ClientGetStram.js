@@ -5,7 +5,7 @@ import config from 'react-native-config';
 import { Context } from '../../context';
 import { getAccessToken } from '../token';
 import { getMyProfile } from '../../service/profile';
-import { createClient, createChatClient } from '../../context/actions/createClient';
+import { createClient} from '../../context/actions/createClient';
 import {
   setUnReadMessage,
   setTotalUnReadMessage,
@@ -52,7 +52,6 @@ export const useClientGetstream = () => {
         dispatchUnReadMessage(setUnReadMessage(unRead));
         setMessage(chatClient);
         createClient(chatClient, dispatch);
-        createChatClient()
       }
     }
   };
