@@ -1,7 +1,3 @@
-import { Dimensions } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
-
 export const COLORS = {
   alto: '#E0E0E0',
   black: '#1E1F20',
@@ -53,8 +49,6 @@ export const SIZES = {
   body4: 12,
 
   // app dimensions
-  width,
-  height,
 };
 export const FONTS = {
   h1: { fontFamily: 'Inter-Black', fontSize: SIZES.h1, lineHeight: 36 },

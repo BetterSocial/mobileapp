@@ -20,14 +20,13 @@ import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import { COLORS } from '../../utils/theme';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
 import {
-  NO_POLL_UUID,
   getCaptionWithTopicStyle,
   getPollTime,
   isPollExpired,
 } from '../../utils/string/StringUtils';
-import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
 import { inputSingleChoicePoll } from '../../service/post';
 
 const { width: screenWidth } = Dimensions.get('window');
