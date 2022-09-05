@@ -163,7 +163,10 @@ let styles = StyleSheet.create({
 });
 
 
-const convertString = (str, from, to) => str.split(from).join(to);
+const convertString = (str, from, to) => {
+    if(str === null || str === undefined) return
+    return str.split(from).join(to);
+}
 
 /**
  * 
@@ -228,7 +231,7 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  */
 const getCaptionWithTopicStyle = (text, navigation) => {
     const route = useRoute()
-    const topicWithPrefix = route.params.id
+    const topicWithPrefix = route?.params?.id
     const id = removePrefixTopic(topicWithPrefix);
 
     text = reactStringReplace(text, /\B(\#[a-zA-Z0-9]+\b)(?!;)/, (match, index) =>

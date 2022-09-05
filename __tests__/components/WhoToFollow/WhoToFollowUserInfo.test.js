@@ -1,10 +1,7 @@
 import * as React from 'react'
-import Pressability from 'react-native/Libraries/Pressability/Pressability';
 import renderer from 'react-test-renderer'
-import usePressability from 'react-native/Libraries/Pressability/usePressability';
 
-import ItemUser from '../../src/screens/WhotoFollow/elements/ItemUser'
-import UserInfo from '../../src/screens/WhotoFollow/elements/UserInfo';
+import UserInfo from '../../../src/screens/WhotoFollow/elements/UserInfo'
 
 jest.useFakeTimers()
 
@@ -37,7 +34,5 @@ describe('Testing Who To Follow Item User', () => {
         />).toJSON()
 
         expect(tree).toMatchSnapshot()
-
-        expect(1).toBe(1)
     })
 })

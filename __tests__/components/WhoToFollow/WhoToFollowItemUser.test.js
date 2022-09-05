@@ -3,8 +3,6 @@ import Pressability from 'react-native/Libraries/Pressability/Pressability';
 import renderer from 'react-test-renderer'
 import usePressability from 'react-native/Libraries/Pressability/usePressability';
 
-import ItemUser from '../../src/screens/WhotoFollow/elements/ItemUser'
-
 jest.useFakeTimers()
 
 describe('Testing Who To Follow Item User', () => {

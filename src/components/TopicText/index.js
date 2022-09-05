@@ -7,7 +7,6 @@ import { fonts } from '../../utils/fonts'
 const TopicText = ({ text, navigation = null, currentTopic = null }) => {
     const onClick = () => {
         // Do navigation here
-        console.log(`topic ${text.replace('#', '')} vs ${currentTopic}`)
         if (!navigation || (currentTopic === text.replace('#', ''))) return
         navigation.push('TopicPageScreen', { id: text.replace('#', '') })
     }

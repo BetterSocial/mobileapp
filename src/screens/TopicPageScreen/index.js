@@ -26,7 +26,7 @@ import { withInteractionsManaged } from '../../components/WithInteractionManaged
 const TopicPageScreen = (props) => {
     const route = useRoute();
     const { params } = route
-    const [topicName, setTopicName] = React.useState('');
+    const [topicName, setTopicName] = React.useState(route?.params?.id);
     const [loading, setLoading] = React.useState(false);
     const [userId, setUserId] = React.useState('');
     const [topicId, setTopicId] = React.useState('');
@@ -59,7 +59,6 @@ const TopicPageScreen = (props) => {
         const initData = async () => {
             try {
                 setLoading(true)
-                console.log(route.params.id)
                 const topicWithPrefix = route.params.id
                 const id = removePrefixTopic(topicWithPrefix);
                 setTopicName(id);
@@ -73,7 +72,6 @@ const TopicPageScreen = (props) => {
 
                 // eslint-disable-next-line no-underscore-dangle
                 const _resultGetUserTopic = await getUserTopic(query);
-                console.log(_resultGetUserTopic);
                 if (_resultGetUserTopic.data) {
                     setIsFollow(true);
                 }
