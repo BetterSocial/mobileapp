@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
@@ -29,11 +30,8 @@ const FONT_SIZE_TEXT = 24
 const FONT_SIZE_TEXT_LONG = 16
 
 const Content = ({ message, images_url, style, onPress, topics = [] }) => {
-  const route = useRoute();
   const navigation = useNavigation();
-  const cekImage = () => {
-    return images_url !== null && images_url !== '' && images_url !== undefined;
-  };
+  const cekImage = () => images_url !== null && images_url !== '' && images_url !== undefined;
 
   const topicChipFontSize = message.length < 270 ? FONT_SIZE_TEXT : FONT_SIZE_TEXT_LONG;
 
@@ -62,16 +60,15 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
               text={getCaptionWithTopicStyle(text.substring(0, 650).trim())} />
         </View>
       );
-    } else {
+    } 
       return <View style={styles.textContainer}>
         <Text style={styles.text(text)} numberOfLines={14}>{getCaptionWithTopicStyle(text, navigation)}</Text>
         <TopicsChip topics={topics} fontSize={topicChipFontSize} text={text}/>
       </View>;
-    }
+    
   };
 
-  const handleTextMedia = (text, onPress) => {
-    return (
+  const handleTextMedia = (text, onPress) => (
       <View>
         <Text numberOfLines={4} style={styles.textMedia(text)}>
           {text.length < 180 ? (
@@ -89,10 +86,9 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
       </View>
 
     );
-  };
 
   return (
-    <Pressable  onPress={onPress} style={[styles.contentFeed, style]}>
+    <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       {cekImage() ? (
         images_url.length > 0 ? (
           <View style={styles.container}>
@@ -112,7 +108,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
             </View>
           </View>
         ) : (
-          <View style={styles.containerShowMessage(route.name)}>
+          <View style={styles.containerShowMessage()}>
             {handleText(message, onPress)}
           </View>
         )
@@ -143,17 +139,16 @@ const styles = StyleSheet.create({
     width: screenWidth - 32,
     borderRadius: 16,
   },
-  containerShowMessage: (currentRouteName) => {
-    return {
+  containerShowMessage: () => ({
       justifyContent: 'center',
-      alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
+      // alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
+      alignItems: 'center',
       flex: 1,
       paddingBottom: 10,
       minHeight: 100,
       paddingLeft: 20,
       paddingRight: 20,
-    };
-  },
+    }),
   text: (text) => {
     if (text.length < 270) {
       return {
@@ -172,15 +167,13 @@ const styles = StyleSheet.create({
       lineHeight: 24,
     };
   },
-  textMedia: (text) => {
-    return {
+  textMedia: (text) => ({
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
       fontSize: FONT_SIZE_MEDIA,
       color: colors.black,
       lineHeight: 24,
-    };
-  },
+    }),
 
   seemore: {
     color: COLORS.blue,

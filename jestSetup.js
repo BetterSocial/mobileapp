@@ -1,5 +1,6 @@
-import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { configure } from 'enzyme';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 configure({
     adapter: new Adapter(),
@@ -27,3 +28,5 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 // jest.mock('NativeAnimatedHelp');
 console.warn = jest.fn(mockConsoleMethod(console.warn));
 console.error = jest.fn(mockConsoleMethod(console.error));
+
+useBottomTabBarHeight = jest.fn()

@@ -298,7 +298,7 @@ const FeedScreen = (props) => {
   }
   const handleScrollEvent = React.useCallback((event) => {
     setIsScroll(true)
-    const {y} = event.nativeEvent.contentOffset;
+    const { y } = event.nativeEvent.contentOffset;
     const dy = y - lastDragY;
     if (dy + 20 <= 0) {
       showSearchBarAnimation()
@@ -350,7 +350,7 @@ const FeedScreen = (props) => {
 
   return (
     <SafeAreaProvider style={styles.container} forceInset={{ top: 'always' }}>
-              <StatusBar translucent={false} />
+      <StatusBar translucent={false} />
 
       <Search getSearchLayout={saveSearchHeight} animatedValue={offset} onContainerClicked={handleSearchBarClicked} />
       <TiktokScroll
@@ -385,9 +385,9 @@ const FeedScreen = (props) => {
         }}
       </TiktokScroll>
       <ButtonNewPost />
-      <BlockComponent ref={refBlockComponent} 
-        refresh={onBlockCompleted} 
-        refreshAnonymous={onDeleteBlockedPostCompleted} 
+      <BlockComponent ref={refBlockComponent}
+        refresh={onBlockCompleted}
+        refreshAnonymous={onDeleteBlockedPostCompleted}
         screen="screen_feed" />
     </SafeAreaProvider>
 
