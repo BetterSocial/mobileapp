@@ -7,8 +7,5 @@
   "verbose": true,
   "setupFilesAfterEnv": [
     "<rootDir>/__mocks__/jest-mock.ts"
-    ],
-  "globals": {
-    "window": {}
-  }
+    ]
 }

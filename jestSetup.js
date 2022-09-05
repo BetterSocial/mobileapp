@@ -28,5 +28,3 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 // jest.mock('NativeAnimatedHelp');
 console.warn = jest.fn(mockConsoleMethod(console.warn));
 console.error = jest.fn(mockConsoleMethod(console.error));
-
-useBottomTabBarHeight = jest.fn()

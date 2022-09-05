@@ -1,17 +1,20 @@
 import * as  React from 'react';
-import { StatusBar, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import { StreamChat } from 'stream-chat';
 import config from 'react-native-config';
+import { StatusBar, View } from 'react-native';
+import { StreamChat } from 'stream-chat';
+import { useRoute } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
+import RenderItem from '../ProfileScreen/elements/RenderItem';
 import dimen from '../../utils/dimen';
+import removePrefixTopic from '../../utils/topics/removePrefixTopic';
 import { Context } from '../../context';
 import { convertString } from '../../utils/string/StringUtils';
 import { downVote, upVote } from '../../service/vote';
+import { getAccessToken } from '../../utils/token';
 import { getFeedDetail } from '../../service/post';
 import { getTopicPages } from '../../service/topicPages';
 import { getUserId } from '../../utils/users';
@@ -19,9 +22,6 @@ import { getUserTopic, putUserTopic } from '../../service/topics';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import removePrefixTopic from '../../utils/topics/removePrefixTopic';
-import RenderItem from '../ProfileScreen/elements/RenderItem';
-import { getAccessToken } from '../../utils/token';
 
 const TopicPageScreen = (props) => {
     const route = useRoute();
@@ -180,7 +180,8 @@ const TopicPageScreen = (props) => {
     };
 
     const onEndReach = () => {
-        refreshingData(feeds[feeds.length - 1]?.id);
+        // refreshingData(feeds[feeds.length - 1]?.id);
+        refreshingData(offset);
     };
 
     const onPress = (item, index) => {
