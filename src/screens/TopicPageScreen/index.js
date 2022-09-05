@@ -51,7 +51,7 @@ const TopicPageScreen = (props) => {
         parseToken();
 
         return () => {
-            setTopicFeeds([], dispatch)
+            // setTopicFeeds([], dispatch)
         }
     }, []);
 
@@ -64,9 +64,9 @@ const TopicPageScreen = (props) => {
                 setTopicName(id);
                 setUserTopicName(id);
                 const query = `?name=${id}`;
+                setTopicId(id);
                 // eslint-disable-next-line no-underscore-dangle
                 const _resultGetTopicPages = await getTopicPages(id);
-                setTopicId(id);
                 setTopicFeeds(_resultGetTopicPages.data, dispatch);
                 setOffset(_resultGetTopicPages.offset)
 
@@ -100,7 +100,7 @@ const TopicPageScreen = (props) => {
     }, [])
 
     React.useEffect(() => {
-        if(userId !== '') {
+        if (userId !== '') {
             markRead()
         }
 
@@ -233,41 +233,41 @@ const TopicPageScreen = (props) => {
         }
     };
 
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-      <StatusBar barStyle="dark-content" translucent={false} />
-      <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
-      <View style={{ flex: 1 }}>
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+            <StatusBar barStyle="dark-content" translucent={false} />
+            <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
+            <View style={{ flex: 1 }}>
 
-        <ProfileTiktokScroll
-          contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
-          data={feeds}
-          onEndReach={onEndReach}
-          onRefresh={onRefresh}
-          refreshing={loading}
-          // snapToOffsets={(() => {
-          //   const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-          //   // console.log('posts')
-          //   // console.log(posts)
-          //   return [headerHeightRef, ...posts]
-          // })()}
-          >
-          {({ item, index }) => (
-            <MemoizedListComponent
-              item={item}
-              onNewPollFetched={onNewPollFetched}
-              index={index}
-              onPressDomain={onPressDomain}
-              onPress={() => onPress(item, index)}
-              onPressComment={() => onPressComment(index)}
-              onPressBlock={() => onPressBlock(item)}
-              onPressUpvote={(post) => setUpVote(post, index)}
-              userId={userId}
-              onPressDownVote={(post) => setDownVote(post, index)}
-              loading={loading}
-            />
-          )}
-        </ProfileTiktokScroll>
+                <ProfileTiktokScroll
+                    contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
+                    data={feeds}
+                    onEndReach={onEndReach}
+                    onRefresh={onRefresh}
+                    refreshing={loading}
+                // snapToOffsets={(() => {
+                //   const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
+                //   // console.log('posts')
+                //   // console.log(posts)
+                //   return [headerHeightRef, ...posts]
+                // })()}
+                >
+                    {({ item, index }) => (
+                        <MemoizedListComponent
+                            item={item}
+                            onNewPollFetched={onNewPollFetched}
+                            index={index}
+                            onPressDomain={onPressDomain}
+                            onPress={() => onPress(item, index)}
+                            onPressComment={() => onPressComment(index)}
+                            onPressBlock={() => onPressBlock(item)}
+                            onPressUpvote={(post) => setUpVote(post, index)}
+                            userId={userId}
+                            onPressDownVote={(post) => setDownVote(post, index)}
+                            loading={loading}
+                        />
+                    )}
+                </ProfileTiktokScroll>
 
 
             </View>
