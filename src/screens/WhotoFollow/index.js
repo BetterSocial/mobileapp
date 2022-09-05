@@ -36,10 +36,11 @@ import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
 import { setImage } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
-const {width} = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
-const VIEW_TYPE_LABEL = 1;
-const VIEW_TYPE_DATA = 2;
+const VIEW_TYPE_LABEL_TOPIC = 1;
+const VIEW_TYPE_LABEL_LOCATION = 2;
+const VIEW_TYPE_DATA = 3;
 
 const WhotoFollow = () => {
   const [users, setUsers] = React.useState([]);
@@ -69,12 +70,9 @@ const WhotoFollow = () => {
     const getWhoToFollowListUrl = `/who-to-follow/list?topics=${encodeURI(
       JSON.stringify(topics.topics),
     )}&locations=${encodeURI(JSON.stringify(localCommunity.local_community))}`;
-    console.log('topics.topics');
-    console.log(getWhoToFollowListUrl);
 
     get({ url: getWhoToFollowListUrl })
       .then((res) => {
-        console.log(res, 'user follow')
         setIsLoading(false);
         if (res.status === 200) {
           setUsers(res.data.body);
@@ -95,14 +93,18 @@ const WhotoFollow = () => {
             if (users.length < 1) {
               return 0;
             }
-            if (users[index].viewtype === 'label') {
-              return VIEW_TYPE_LABEL;
+            if (users[index].viewtype === 'labeltopic') {
+              return VIEW_TYPE_LABEL_TOPIC;
+            }
+            if (users[index].viewtype === 'labellocation') {
+              return VIEW_TYPE_LABEL_LOCATION;
             }
             return VIEW_TYPE_DATA;
           },
           (type, dim) => {
             switch (type) {
-              case VIEW_TYPE_LABEL:
+              case VIEW_TYPE_LABEL_TOPIC:
+              case VIEW_TYPE_LABEL_LOCATION:
                 dim.width = width;
                 dim.height = 40;
                 break;
@@ -128,7 +130,6 @@ const WhotoFollow = () => {
       setIsRecyclerViewShown(true);
     }
   }, [dataProvider]);
-  console.log(localCommunity, 'supro')
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
@@ -138,13 +139,13 @@ const WhotoFollow = () => {
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
       );
-    } 
-      return (
-        <TouchableHighlight onPress={() => navigation.goBack()}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
-        </TouchableHighlight>
-      );
-    
+    }
+    return (
+      <TouchableHighlight onPress={() => navigation.goBack()}>
+        <ArrowLeftIcon width={20} height={12} fill="#000" />
+      </TouchableHighlight>
+    );
+
   };
 
   const handleSelected = (value) => {
@@ -234,7 +235,6 @@ const WhotoFollow = () => {
         }
       })
       .catch((error) => {
-        console.log(error, 'bahan')
         crashlytics().recordError(new Error(error.response));
         setFetchRegister(false);
         showMessage({
@@ -246,11 +246,16 @@ const WhotoFollow = () => {
   };
 
   const rowRenderer = (type, item, index, extendedState) => {
-    const labelName = item.neighborhood ? item.neighborhood : item.name || ""
+    const labelTopicName = item.neighborhood ? item.neighborhood : item.name || ""
     switch (type) {
-      case VIEW_TYPE_LABEL:
-        return <Label label={labelName} />;
+      case VIEW_TYPE_LABEL_TOPIC:
+        return <Label label={`#${labelTopicName}`} />;
+      case VIEW_TYPE_LABEL_LOCATION:
+        return <Label label={`${item?.city || ""}`} />;
       case VIEW_TYPE_DATA:
+      default:
+        console.log('item')
+        console.log(item)
         return (
           <ItemUser
             photo={item.profile_pic_path}
