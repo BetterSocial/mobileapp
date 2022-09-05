@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Who To Follow Item User Match Snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 1,
+      "flexDirection": "row",
+    }
+  }
+>
+  <Image
+    source={
+      Object {
+        "uri": "https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png",
+      }
+    }
+    style={
+      Object {
+        "borderRadius": 48,
+        "height": 48,
+        "width": 48,
+      }
+    }
+  />
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "flexDirection": "column",
+        "marginLeft": 8,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignSelf": "flex-start",
+          "color": "#000000",
+          "fontFamily": "Poppins",
+          "fontSize": 14,
+          "fontStyle": "normal",
+          "fontWeight": "bold",
+          "lineHeight": 21,
+        }
+      }
+    >
+      Fajarismrandom01
+    </Text>
+    <Text
+      numberOfLines={1}
+      style={
+        Object {
+          "alignSelf": "flex-start",
+          "color": "#000000",
+          "fontSize": 14,
+          "lineHeight": 21,
+          "marginRight": 16,
+          "width": "100%",
+        }
+      }
+    />
+  </View>
+</View>
+`;
