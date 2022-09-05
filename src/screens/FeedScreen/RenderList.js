@@ -53,6 +53,11 @@ const RenderListFeed = (props) => {
     selfUserId,
     onPressDownVote,
   } = props;
+
+  console.log('item')
+  console.log(item)
+  console.log(index)
+  console.log(selfUserId)
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
@@ -61,7 +66,13 @@ const RenderListFeed = (props) => {
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
   const [loadingVote, setLoadingVote] = React.useState(false);
-  const bottomHeight = useBottomTabBarHeight();
+  // const bottomHeight = useBottomTabBarHeight();
+  let bottomHeight = 0
+  try {
+    bottomHeight = useBottomTabBarHeight()
+  } catch(e) {
+    
+  }
   const navigateToLinkContextPage = (item) => {
     const param = linkContextScreenParamBuilder(
       item,

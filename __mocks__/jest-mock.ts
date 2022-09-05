@@ -1,7 +1,8 @@
+import 'react-native-gesture-handler/jestSetup';
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as ReactNative from 'react-native';
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
-import 'react-native-gesture-handler/jestSetup';
 
 jest.doMock('@react-native-community/netinfo', () => ({
     getCurrentState: jest.fn(() => Promise.resolve()),
@@ -150,3 +151,5 @@ jest.mock('react-native-vector-icons/AntDesign', () => 'Icon');
 jest.mock('react-native-vector-icons/Ionicons', () => 'Icon');
 jest.mock('react-native-vector-icons/Octicons', () => 'Icon');
 jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon');
+jest.mock('react-native-simple-toast', () => jest.fn())
+jest.mock('react-native-image-crop-picker', () => jest.fn())

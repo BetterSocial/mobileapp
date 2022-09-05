@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-underscore-dangle */
 import * as React from 'react';
 import PropsTypes from 'prop-types';
 import { Avatar } from 'react-native-activity-feed';
@@ -8,14 +10,13 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  TouchableNativeFeedback,
-  TouchableOpacity,
   View
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
-import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
+import ElipsisIcon from '../../assets/icon/ElipsisIcon';
+// import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
@@ -40,11 +41,11 @@ import { viewTimePost } from '../../service/post';
 const { width: screenWidth } = Dimensions.get('window');
 
 const validationTimer = (timer, duration_feed) => {
-  let date1 = new Date(timer);
-  let date2 = new Date();
-  let totalFeed = 24 * duration_feed;
-  var hours = Math.abs(date1 - date2) / 36e5;
-  let total = (hours / totalFeed) * 100;
+  const date1 = new Date(timer);
+  const date2 = new Date();
+  const totalFeed = 24 * duration_feed;
+  const hours = Math.abs(date1 - date2) / 36e5;
+  const total = (hours / totalFeed) * 100;
   switch (true) {
     case total < 25:
       return <MemoEightyEight_hundred height={17} width={17} />;
@@ -71,7 +72,6 @@ const _renderAnonimity = ({
   location,
   isBackButton,
   height,
-  getSearchLayout,
   headerStyle
 }) => {
   const navigation = useNavigation();
@@ -149,18 +149,18 @@ const _renderProfileNormal = ({
 
   const { feeds, timer, viewPostTimeIndex } = feedsContext
 
-  let userId = actor?.id;
-  let { profile_pic_url, username } = actor?.data || {};
+  const userId = actor?.id;
+  const { profile_pic_url, username } = actor?.data || {};
   
-  let navigateToProfile = async () => {
+  const navigateToProfile = async () => {
     if (source) {
-      let currentTime = new Date().getTime()
-      let id = feeds[viewPostTimeIndex]?.id
+      const currentTime = new Date().getTime()
+      const id = feeds[viewPostTimeIndex]?.id
       if (id) viewTimePost(id, currentTime - timer.getTime(), source)
       setTimer(new Date(), dispatch)
     }
 
-    let selfUserId = await getUserId();
+    const selfUserId = await getUserId();
     if (selfUserId === userId) {
       return navigation.navigate('ProfileScreen', {
         isNotFromHomeTab: true
@@ -184,8 +184,8 @@ const _renderProfileNormal = ({
               <GlobalButton
                 onPress={() => {
                   if (source) {
-                    let currentTime = new Date().getTime()
-                    let id = feeds[viewPostTimeIndex]?.id
+                    const currentTime = new Date().getTime()
+                    const id = feeds[viewPostTimeIndex]?.id
                     if (id) viewTimePost(id, currentTime - timer.getTime(), source)
                     if (id && source === SOURCE_PDP) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
                     setTimer(new Date(), dispatch)
@@ -202,9 +202,7 @@ const _renderProfileNormal = ({
             <View style={{}}>
               <Avatar
                 source={
-                  profile_pic_url
-                    ? profile_pic_url
-                    : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+                  profile_pic_url || 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
                 }
                 size={dimen.size.FEED_HEADER_IMAGE_RADIUS}
                 noShadow
@@ -214,7 +212,7 @@ const _renderProfileNormal = ({
           <GlobalButton onPress={() => navigateToProfile()} style={[styles.containerFeedProfile, { paddingBottom: 5 }]}>
             <View style={[styles.containerFeedName, { alignItems: 'flex-end' }]}>
               <Text style={styles.feedUsername}>
-                {username ? username : 'no name specifics'}
+                {username || 'no name specifics'}
               </Text>
 
               <GlobalButton
@@ -251,7 +249,7 @@ const _renderProfileNormal = ({
 };
 
 const Header = ({ props, isBackButton = false, height, source = null, headerStyle }) => {
-  let { anonimity, time, privacy, duration_feed, expired_at, location, actor } =
+  const { anonimity, time, privacy, duration_feed, expired_at, location, actor } =
     props;
 
   if (anonimity) {
@@ -265,7 +263,7 @@ const Header = ({ props, isBackButton = false, height, source = null, headerStyl
       height,
       headerStyle
     });
-  } else {
+  } 
     return _renderProfileNormal({
       actor,
       time,
@@ -278,12 +276,12 @@ const Header = ({ props, isBackButton = false, height, source = null, headerStyl
       source,
       headerStyle
     });
-  }
+  
 };
 
 const styles = StyleSheet.create({
   heightHeader: (height) => ({
-    height: height,
+    height,
   }),
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -318,7 +316,7 @@ const styles = StyleSheet.create({
   containerFeedText: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 0,
+    // marginTop: 0,
     width: '100%',
     marginTop: 3
   },
