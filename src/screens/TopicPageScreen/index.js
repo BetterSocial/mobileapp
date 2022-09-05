@@ -1,6 +1,8 @@
 import * as  React from 'react';
 import { StatusBar, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { StreamChat } from 'stream-chat';
+import config from 'react-native-config';
 
 import BlockComponent from '../../components/BlockComponent';
 import MemoizedListComponent from './MemoizedListComponent';
@@ -19,6 +21,7 @@ import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds'
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
 import RenderItem from '../ProfileScreen/elements/RenderItem';
+import { getAccessToken } from '../../utils/token';
 
 const TopicPageScreen = (props) => {
     const route = useRoute();
@@ -32,6 +35,7 @@ const TopicPageScreen = (props) => {
     const [isFollow, setIsFollow] = React.useState(false);
     const [userTopicName, setUserTopicName] = React.useState('');
     const [offset, setOffset] = React.useState(0);
+    const [client] = React.useContext(Context).client;
 
     const refBlockComponent = React.useRef();
     const [headerHeightRef] = React.useState(0)
@@ -84,9 +88,26 @@ const TopicPageScreen = (props) => {
         initData();
     }, []);
 
+    const markRead = async () => {
+        const filter = { type: 'topics', members: { $in: [userId] }, id: route.params.id };
+        const sort = [{ last_message_at: -1 }];
+        const thisChannel = await client.client.queryChannels(filter, sort)
+        const countRead = await thisChannel[0]?.markRead()
+        return countRead
+    }
+
     React.useEffect(() => () => {
         updateCount()
+
     }, [])
+
+    React.useEffect(() => {
+        if(userId !== '') {
+            markRead()
+        }
+
+    }, [userId])
+
     const updateCount = () => {
         if (params.refreshList && typeof params.refreshList === 'function') {
             params.refreshList()

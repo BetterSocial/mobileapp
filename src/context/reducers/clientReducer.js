@@ -2,6 +2,7 @@ import {SET_CLIENT} from '../Types';
 
 const clientState = {
   client: null,
+  chatClient: null
 };
 const clientReducer = (state = clientState, action) => {
   switch (action.type) {

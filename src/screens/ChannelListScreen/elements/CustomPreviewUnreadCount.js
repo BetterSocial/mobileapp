@@ -25,10 +25,8 @@ const styles = StyleSheet.create({
 const CustomPreviewUnreadCount = (props) => {
     let {readComment} = props
     const handleBadgeMessage = () => {
-        if(props.channel.data.channel_type === 2) {
-            return null
-        }
-        if(props.channel.data.channel_type === 3) {
+
+        if(props.channel.data.channel_type === 3 || props.channel.data.channel_type === 2) {
             return (
                 <>
            {props.channel.state.unreadCount && props.channel.state.unreadCount > 0 ? <View style={styles.unreadContainer} >
