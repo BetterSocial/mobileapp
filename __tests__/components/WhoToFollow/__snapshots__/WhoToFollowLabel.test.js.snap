@@ -35,7 +35,6 @@ exports[`Label render correctly Match snapshot 1`] = `
           "fontStyle": "normal",
           "fontWeight": "bold",
           "lineHeight": 18,
-          "textTransform": "capitalize",
         }
       }
     >

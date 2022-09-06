@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
         marginBottom: 22,
         color: colors.black,
         paddingLeft: 17,
-        textTransform: 'capitalize',
+        // textTransform: 'capitalize',
     },
     textSmall: {
         fontFamily: 'Inter',
