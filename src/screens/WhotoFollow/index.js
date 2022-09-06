@@ -251,6 +251,7 @@ const WhotoFollow = () => {
       case VIEW_TYPE_LABEL_TOPIC:
         return <Label label={`#${labelTopicName}`} />;
       case VIEW_TYPE_LABEL_LOCATION:
+        console.log(`location ${item?.city}`)
         return <Label label={`${item?.city || ""}`} />;
       case VIEW_TYPE_DATA:
       default:

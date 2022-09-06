@@ -6,8 +6,9 @@ export const imageConst = {
   resizeMode: FastImage.resizeMode
 }
 
-export default function Image({ source, style, resizeMode = FastImage.resizeMode.contain}) {
+export default function Image({ source, style, resizeMode = FastImage.resizeMode.contain, ...anotherProps}) {
   return <FastImage
+    {...anotherProps}
     source={source}
     style={style}
     resizeMode={resizeMode}
