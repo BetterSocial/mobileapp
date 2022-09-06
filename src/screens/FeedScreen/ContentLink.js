@@ -14,9 +14,7 @@ import { smartRender } from '../../utils/Utils';
 const FONT_SIZE_TEXT = 16
 
 const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, score, message = "", messageContainerStyle = {}, topics = [] }) => {
-  console.log('og and item')
   const route = useRoute();
-  console.log(route?.name)
   const isTouchableDisabled = route?.name === 'PostDetailPage';
   const navigation = useNavigation()
 

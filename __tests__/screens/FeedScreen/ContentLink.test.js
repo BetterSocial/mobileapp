@@ -41,4 +41,14 @@ describe('Testing Feed Screen Content Link', () => {
         const tree = renderer.create(<Card domain={og.domain} date={og.date} description={og.description} domainImage={og.domainImage} image={og.image} title={og.title} url={og.url}/>).toJSON()
         expect(tree).toMatchSnapshot()
     })
+
+    it('Render fallback image if image is null', () => {
+        const {getByTestId} = render(<ContentLink og={og} />)
+        expect(getByTestId('contentLinkImageEmptyStateImage')).toBeTruthy()
+    })
+
+    it('Render content image if image is set', () => {
+        const {getByTestId} = render(<ContentLink og={{...og, image: 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'}} />)
+        expect(getByTestId('contentLinkImageUrlImage')).toBeTruthy()
+    })
 })
