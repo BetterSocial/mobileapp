@@ -1,9 +1,11 @@
 import * as React from 'react';
 import Svg, {Path, Rect} from 'react-native-svg';
 
+import TestIdConstant from '../../utils/testId';
+
 function DomainProfilePictureEmptyState(props) {
   return (
-    <Svg width="20" height="20" viewBox="0 0 100 100" fill="none" {...props}>
+    <Svg width="20" height="20" viewBox="0 0 100 100" fill="none" testID={TestIdConstant.iconDomainProfilePictureEmptyState} {...props}>
       <Path
         d="M0 50C0 22.3858 22.3858 0 50 0C77.6142 0 100 22.3858 100 50C100 77.6142 77.6142 100 50 100C22.3858 100 0 77.6142 0 50Z"
         fill="#2F80ED"
@@ -24,5 +26,5 @@ function DomainProfilePictureEmptyState(props) {
   );
 }
 
-const MemoDomainProfilePicture = React.memo(DomainProfilePictureEmptyState);
-export default MemoDomainProfilePicture;
+// const MemoDomainProfilePicture = React.memo(DomainProfilePictureEmptyState);
+export default DomainProfilePictureEmptyState;
