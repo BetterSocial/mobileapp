@@ -27,7 +27,7 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
 
   return (
     <View style={styles.contentFeed}>
-      <TouchableNativeFeedback testID='contentLinkContentPressable' disabled={isTouchableDisabled} onPress={onPress}>
+      <TouchableNativeFeedback disabled={isTouchableDisabled} onPress={onPress} testID='contentLinkContentPressable'>
         <>
           {renderMessageContentLink()}
           {smartRender(Card, {

@@ -3,7 +3,6 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
-  Image,
   Linking,
   StyleSheet,
   Text,
@@ -17,12 +16,12 @@ import Header from './CardHeader';
 import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
 import NewsEmptyState from '../../assets/images/news-empty-state.png'
 import TestIdConstant from '../../utils/testId';
+import Image, { imageConst } from '../Image';
 import { COLORS } from '../../utils/theme';
 import { FeedCredderRating } from '../CredderRating';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
-import { imageConst } from '../Image';
 import { sanitizeUrlForLinking } from '../../utils/Utils';
 
 const Card = (props) => {

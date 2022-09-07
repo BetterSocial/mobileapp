@@ -232,20 +232,29 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
           }
         }
       >
-        <Image
-          source={
-            Object {
-              "testUri": "../../../src/assets/images/news-empty-state.png",
-            }
-          }
+        <View
           style={
-            Object {
-              "height": "100%",
-              "width": "100%",
-            }
+            Array [
+              Object {
+                "overflow": "hidden",
+              },
+              Object {
+                "height": "100%",
+                "width": "100%",
+              },
+            ]
           }
-          testID="contentLinkImageEmptyStateImage"
-        />
+        >
+          <FastImageView
+            resizeMode="contain"
+            source={
+              Object {
+                "testUri": "../../../src/assets/images/news-empty-state.png",
+              }
+            }
+            testID="contentLinkImageEmptyStateImage"
+          />
+        </View>
       </View>
       <View>
         <Text
@@ -690,20 +699,29 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
             }
           }
         >
-          <Image
-            source={
-              Object {
-                "testUri": "../../../src/assets/images/news-empty-state.png",
-              }
-            }
+          <View
             style={
-              Object {
-                "height": "100%",
-                "width": "100%",
-              }
+              Array [
+                Object {
+                  "overflow": "hidden",
+                },
+                Object {
+                  "height": "100%",
+                  "width": "100%",
+                },
+              ]
             }
-            testID="contentLinkImageEmptyStateImage"
-          />
+          >
+            <FastImageView
+              resizeMode="contain"
+              source={
+                Object {
+                  "testUri": "../../../src/assets/images/news-empty-state.png",
+                }
+              }
+              testID="contentLinkImageEmptyStateImage"
+            />
+          </View>
         </View>
         <View>
           <Text
