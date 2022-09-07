@@ -4,8 +4,7 @@ import { ActivityIndicator, ScrollView, StatusBar, StyleSheet, View } from 'reac
 import {
   ChannelList,
   ChannelPreviewTitle,
-  Chat,
-  Streami18n} from 'stream-chat-react-native';
+  Chat} from 'stream-chat-react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
@@ -19,24 +18,21 @@ import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { getAccessToken } from '../../utils/token'
 import { getChatName } from '../../utils/string/StringUtils';
-import { getFeedNotification } from '../../service/feeds'
 import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
-import { getSpecificCache, saveToCache } from '../../utils/cache';
-import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 import PreviewMessage from './elements/CustomPreviewMessage';
 import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
 import useChannelList from './hooks/useChannelList';
 
 
 const ChannelListScreen = ({ navigation }) => {
-  const streami18n = new Streami18n({
-    language: 'en',
-  });
+  // const streami18n = new Streami18n({
+  //   language: 'en',
+  // });
   const [listPostNotif, setListPostNotif] = React.useState([])
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
@@ -50,7 +46,7 @@ const ChannelListScreen = ({ navigation }) => {
   const {myProfile} = profileContext
   const [postCount, setPostCount] = React.useState(0)
   const {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook, getPostNotificationHook, handleCacheCommentHook} = useChannelList()
-  const [unReadMessage, dispatchUnreadMessage] =
+  const [, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
 
   const filters = {
@@ -184,9 +180,9 @@ const mappingUnreadCountPostNotif = () => {
   }, [listPostNotif, countReadComment])
 
   return (
-    <SafeAreaProvider style={{ height: '100%' }}>
+    <SafeAreaProvider testID='chat-container' style={{ height: '100%' }}>
       <StatusBar translucent={false} />
-      <ScrollView >
+      <ScrollView  >
         <View style={{ height: 52 }}>
           <Search
             animatedValue={0}
@@ -194,8 +190,8 @@ const mappingUnreadCountPostNotif = () => {
           />
         </View>
           {myProfile && myProfile.user_id && client.client ? (
-            <View testID='chat-container' >
-              <Chat client={client.client} i18nInstance={streami18n}>
+            <View  >
+              <Chat client={client.client} >
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
@@ -240,4 +236,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default React.memo(withInteractionsManaged (ChannelListScreen))
+export default React.memo(ChannelListScreen)
