@@ -29,6 +29,8 @@ import PostNotificationPreview from './elements/components/PostNotificationPrevi
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 import PreviewMessage from './elements/CustomPreviewMessage';
+import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
+import useChannelList from './hooks/useChannelList';
 
 
 const ChannelListScreen = ({ navigation }) => {
@@ -43,19 +45,19 @@ const ChannelListScreen = ({ navigation }) => {
   const myContext = React.useContext(Context)
   const {interactionsComplete} = useAfterInteractions()
   const [profileContext] = React.useContext(Context).profile;
-  const [countComment, setCountComment] = React.useState({})
-  // const [countComment, setCountComment] = useRecoilState(commentChatState)
+  const [countReadComment, setCountReadComment] = React.useState({})
   // const [countChat, setCountChat] = React.useState({})
   const {myProfile} = profileContext
-  const [countChat, setCountChat] = React.useState({})
-
-  const [unReadMessage] =
+  const [postCount, setPostCount] = React.useState(0)
+  const {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook} = useChannelList()
+  const [unReadMessage, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
+
   const filters = {
     members: { $in: [myProfile.user_id] },
-    type: 'messaging',
+    type: {$in: ['messaging', 'topics']},
   };
-  React.useEffect(() => { }, [unReadMessage]);
+  // React.useEffect(() => { }, [unReadMessage]);
 
   const sort = [{ last_message_at: -1 }];
   const options = {
@@ -111,27 +113,26 @@ React.useEffect(() => {
 const handleCacheComment  = () => {
     getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
     if(cache) {
-      setCountComment(cache)
+      setCountReadComment(cache)
     } else {
       handleNotHaveCache()
     }
   })
 }
 const handleNotHaveCache = () => {
-  let comment = {}
-  listPostNotif.forEach((data) => {
-    comment = {...comment, [data.activity_id]: 0}
-  })
-  saveToCache(FEED_COMMENT_COUNT, comment)
-  setCountComment(comment)
+  const comment = handleNotHaveCacheHook(listPostNotif)
+  setCountReadComment(comment)
 }
 
 const handleUpdateCache = (id, totalComment) => {
-  const updateReadCache = {...countComment, [id]: totalComment}
-  saveToCache(FEED_COMMENT_COUNT, updateReadCache)
-  setCountComment(updateReadCache)
+  const updateReadCache = handleUpdateCacheHook(countReadComment, id, totalComment)
+  setCountReadComment(updateReadCache)
 }
 
+const mappingUnreadCountPostNotif = () => {
+  const totalMessage = mappingUnreadCountPostNotifHook(listPostNotif, countReadComment)
+  dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage))
+}
 
   const getPostNotification = async () => {
     const res = await getFeedNotification()
@@ -157,10 +158,9 @@ const handleUpdateCache = (id, totalComment) => {
     })
   }
 
- 
 
   const countPostNotifComponent = (item) => {
-    const readComment = countComment[item.activity_id]
+    const readComment = countReadComment[item.activity_id]
     return (
       <CustomPreviewUnreadCount readComment={readComment} channel={item} />
     )
@@ -181,6 +181,11 @@ const handleUpdateCache = (id, totalComment) => {
                     
                   }
   }
+
+  React.useEffect(() => {
+    mappingUnreadCountPostNotif()
+  }, [listPostNotif, countReadComment])
+
   return (
     <SafeAreaProvider style={{ height: '100%' }}>
       <StatusBar translucent={false} />
@@ -196,18 +201,21 @@ const handleUpdateCache = (id, totalComment) => {
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
+                // List={(props) => console.log(props, 'babah')}
                 // Preview={CustomPreview}
                 PreviewStatus={ChannelStatusIcon}
                 PreviewTitle={customPreviewTitle}
                 onSelect={onSelectChat}
+                //  channelRenderFilterFn={(channel) => console.log(channel, 'bahan')}
                 sort={sort}
                 options={options}
                 maxUnreadCount={99}
                 additionalFlatListProps={{
                   onEndReached: () => null,
                   refreshControl: null,
-                  // extraData:{countComment},
+                  // extraData:{countReadComment},
                 }}
+                
                additionalData={listPostNotif}
                context={myContext}
                PreviewUnreadCount={chatBadge}

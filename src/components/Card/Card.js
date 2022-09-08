@@ -4,21 +4,22 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
   Linking,
-  Pressable,
   StyleSheet,
   Text,
+  TouchableNativeFeedback,
   TouchableOpacity,
   View,
 } from 'react-native';
 
 import Gap from '../Gap';
+import NewsEmptyState from '../../assets/images/news-empty-state.png'
+import Image, { imageConst } from '../Image';
 import { COLORS } from '../../utils/theme';
 import { FeedCredderRating } from '../CredderRating';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { sanitizeUrlForLinking } from '../../utils/Utils';
-import Image, {imageConst} from '../Image';
 
 const Card = (props) => {
   const {
@@ -35,6 +36,18 @@ const Card = (props) => {
     url,
   } = props;
   // const styles = buildStylesheet('card', props.styles);
+  const renderImageComponent = () => {
+    if (image) return <Image testID="contentLinkImageUrlImage"
+      style={styles.image}
+      source={{ uri: image }}
+    />
+
+    return <Image testID="contentLinkImageEmptyStateImage"
+      style={styles.image}
+      source={NewsEmptyState}
+    />
+  }
+
   return (
     <View style={styles.container}>
       <View>
@@ -43,7 +56,7 @@ const Card = (props) => {
         </TouchableOpacity>
       </View>
       <View style={{ flex: 1 }}>
-        <Pressable onPress={onCardContentPress} style={{ flex: 1 }}>
+        <TouchableNativeFeedback onPress={onCardContentPress} style={{ flex: 1 }}>
           <View style={styles.content}>
             <View>
               <Text style={styles.title}>
@@ -51,10 +64,7 @@ const Card = (props) => {
               </Text>
             </View>
             <View style={{ flex: 1 }}>
-              <Image
-                style={styles.image}
-                source={image ? { uri: image } : null}
-              />
+              {renderImageComponent()}
             </View>
             <View>
               <Text style={styles.description}>
@@ -69,7 +79,7 @@ const Card = (props) => {
               </Text>
             </View>
           </View>
-        </Pressable>
+        </TouchableNativeFeedback>
       </View>
     </View>
   );

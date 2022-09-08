@@ -102,7 +102,7 @@ const PreviewComment = ({
   );
 };
 
-export default PreviewComment;
+export default React.memo (PreviewComment);
 
 const styles = StyleSheet.create({
   containerPreview: {paddingHorizontal: 20},

@@ -194,7 +194,7 @@ const NewsScreen = ({ }) => {
   const loadMoreData = async () => {
     setRefreshing(true)
     try {
-      const res = await getDomains(0);
+      const res = await getDomains(postOffset);
       const newNews = [...news, ...res.data];
       setPostOffset(res.offset)
       setNews(newNews, dispatch);

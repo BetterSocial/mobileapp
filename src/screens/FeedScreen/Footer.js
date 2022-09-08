@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {fonts} from '../../utils/fonts';
 import PropTypes from 'prop-types';
+import {fonts} from '../../utils/fonts';
 
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_arrow_upvote_off';
@@ -32,8 +32,7 @@ const Footer = ({
   totalComment = 0,
   statusVote = 'none',
   isSelf = false,
-}) => {
-  return (
+}) => (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
       <View style={[styles.rowSpaceBeetwen, styles.width(0.25)]}>
         <TouchableOpacity onPress={onPressShare} style={styles.widthFlex}>
@@ -70,7 +69,6 @@ const Footer = ({
       </View>
     </View>
   );
-};
 
 const styles = StyleSheet.create({
   container: {

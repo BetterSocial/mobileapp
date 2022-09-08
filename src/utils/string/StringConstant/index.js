@@ -70,7 +70,7 @@ const splashScreenDeeplinkGetProfileNotFound = (username) => `${username}'s prof
 
 // Domain Page
 const domainCannotOpenURL = 'Cannot open URL';
-const credderTooltipText = 'Credder.com is the world\'s largest news review platform. The credibility score is based on reviews by verified journalits.\nCredder & Better are entirely independent entities and Better has no influence on the scores provided.';
+const credderTooltipText = 'Credder.com is the world\'s largest news review platform. The credibility score is based on reviews by verified journalists.\nCredder & Better are entirely independent entities and Better has no influence on the scores provided.';
 
 // Permission
 const cameraPermissionGranted = 'You can use camera';

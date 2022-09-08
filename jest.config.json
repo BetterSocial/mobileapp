@@ -1,12 +1,11 @@
 {
   "preset": "react-native",
-  "transformIgnorePatterns": [],
+  "transformIgnorePatterns": [
+    "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|rollbar-react-native|@fortawesome|@react-native|@react-navigation)"
+  ],
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
   "verbose": true,
   "setupFilesAfterEnv": [
     "<rootDir>/__mocks__/jest-mock.ts"
-    ],
-  "globals": {
-    "window": {}
-  }
+    ]
 }

@@ -6,12 +6,12 @@ import { withInteractionsManaged } from '../../components/WithInteractionManaged
 import { Context } from '../../context';
 import { setFeedByIndex } from '../../context/actions/feeds';
 
-const ProfileReplyComment = (props) => {
+const ReplyComment = (props) => {
+  // const [newComment, setNewComment] = React.useState([])
   let itemProp = props.route.params.item;
-  const updateParentPost = props.route.params.updateParent
+  const {updateParent, findCommentAndUpdate, updateReply,  itemParent,  parentComment} = props.route.params
   const level = props.route.params.level;
   const dataFeed = props.route.params.dataFeed
-  const findAndUpdateComment = props.route.params.findAndUpdateComment
   let [feeds, dispatch] = React.useContext(Context).feeds
   const feedIndex = () => {
     if(feeds && Array.isArray(feeds)) {
@@ -20,7 +20,7 @@ const ProfileReplyComment = (props) => {
     }
     return 0
   }
-  console.log(dataFeed, 'jakal')
+
   return (
     <View style={styles.container}>
       <ReplyCommentComponent indexFeed={feedIndex()} 
@@ -29,9 +29,13 @@ const ProfileReplyComment = (props) => {
         feeds={feeds.feeds}
         level={level}
         setFeedByIndexProps={setFeedByIndex} 
-        updateParent={updateParentPost}
+        updateParent={updateParent}
         page={props.route.params.page}
         dataFeed={dataFeed}
+        updateReply={updateReply}
+        findCommentAndUpdate={findCommentAndUpdate}
+         itemParent={itemParent}
+         parentComment={parentComment}
         />
     </View>
   )
@@ -44,4 +48,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default withInteractionsManaged (ProfileReplyComment)
+export default withInteractionsManaged (ReplyComment)

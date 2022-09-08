@@ -2,7 +2,10 @@ import * as React from 'react';
 import moment from 'moment';
 import reactStringReplace from 'react-string-replace'
 import { StyleSheet, Text, View } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
+import TopicText from '../../components/TopicText';
+import removePrefixTopic from '../topics/removePrefixTopic';
 import { COLORS } from '../theme';
 import { fonts } from '../fonts';
 
@@ -160,7 +163,10 @@ let styles = StyleSheet.create({
 });
 
 
-const convertString = (str, from, to) => str.split(from).join(to);
+const convertString = (str, from, to) => {
+    if(str === null || str === undefined) return
+    return str.split(from).join(to);
+}
 
 /**
  * 
@@ -224,19 +230,12 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @returns 
  */
 const getCaptionWithTopicStyle = (text, navigation) => {
-    const onClick = (match) => {
-        // Do navigation here
-        if (!navigation) return
-        // console.log(`topic ${match}`)
-        navigation.navigate('TopicPageScreen', { id: match.replace('#', '') })
-    }
+    const route = useRoute()
+    const topicWithPrefix = route?.params?.id
+    const id = removePrefixTopic(topicWithPrefix);
 
     text = reactStringReplace(text, /\B(\#[a-zA-Z0-9]+\b)(?!;)/, (match, index) =>
-        // console.log(`${match} ${index}`)
-        // console.log(match)
-        <Text onPress={() => onClick(match)} style={{
-            color: COLORS.blue, fontFamily: fonts.inter[500]
-        }}>{match}</Text>
+        <TopicText navigation={navigation} text={match} currentTopic={id} />
     )
 
     return text

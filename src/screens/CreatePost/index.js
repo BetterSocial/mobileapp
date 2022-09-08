@@ -65,11 +65,12 @@ import { getSpecificCache } from '../../utils/cache';
 import { getTopics } from '../../service/topics';
 import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
 import { getUserId } from '../../utils/users';
+import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
 import {
     requestCameraPermission,
     requestExternalStoragePermission,
 } from '../../utils/permission';
-import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
+import { Context } from '../../context';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -99,6 +100,7 @@ const CreatePost = () => {
         hour: 0,
         minute: 0,
     });
+    const [myId, setMyId] = React.useState(null)
     const [expiredSelect, setExpiredSelect] = React.useState(0);
     const [postExpired, setPostExpired] = React.useState([
         {
@@ -150,8 +152,8 @@ const CreatePost = () => {
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
     const [formattedContent, setFormatHastag] = React.useState('');
-
-
+    const [client] = React.useContext(Context).client;
+    const [user] = React.useContext(Context).profile
 
     const listPostExpired = [
         {
@@ -372,8 +374,6 @@ const CreatePost = () => {
         const deleteItem = mediaStorage.filter((item) => item.id !== v);
         const index = mediaStorage.findIndex((item) => item.id === v)
         const newImageData = [...dataImage].splice(index)
-        console.log(newImageData.length)
-
         setDataImage(newImageData)
         setMediaStorage(deleteItem);
     };
@@ -445,7 +445,6 @@ const CreatePost = () => {
             }
 
             setLoading(true);
-      console.log(listTopic, 'list topic')
             const data = {
                 topics: listTopic,
                 message,
@@ -478,6 +477,7 @@ const CreatePost = () => {
             });
             const res = await createPost(data);
             if (res.code === 200) {
+                handleTopicChat(listTopic)
                 showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
@@ -533,6 +533,16 @@ const CreatePost = () => {
         );
 
     };
+
+    const handleTopicChat = async (topics) => {
+          const defaultImage ='https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
+         for(let i = 0; i < topics.length; i++) {
+            const channel = client.client.channel('topics', `topic_${topics[i]}`, {name: `#${topics[i]}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage})
+            channel.create()
+            channel.addMembers([user.myProfile.user_id])
+            channel.sendMessage({text: `#${topics[i]} new post`}, {skip_push: true})
+        }   
+    }
 
     const createPoll = () => {
         setIsPollShown(true);
@@ -693,7 +703,6 @@ const CreatePost = () => {
         sheetTopicRef.current.open()
     }
 
-  console.log(listTopicChat, 'roros')
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />

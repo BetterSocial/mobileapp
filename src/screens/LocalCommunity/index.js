@@ -26,11 +26,11 @@ import { Header } from '../../components';
 import { ProgressBar } from '../../components/ProgressBar';
 import { SearchModal } from '../../components/Search';
 import { colors } from '../../utils/colors';
+import { locationValidation } from '../../utils/Utils';
 import { post } from '../../api/server';
 import { setLocalCommunity } from '../../context/actions/localCommunity';
-import { locationValidation } from '../../utils/Utils';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 const LocalCommunity = () => {
     const navigation = useNavigation();
     const [search, setSearch] = React.useState('');
@@ -54,7 +54,7 @@ const LocalCommunity = () => {
 
     const handleSearch = (value) => {
         setIsLoading(true);
-        let params = {
+        const params = {
             name: value,
         };
         post({ url: '/location/list', params })
@@ -82,12 +82,10 @@ const LocalCommunity = () => {
         setSearch(text)
     }
 
-    const capitalizeFirstLetter = (string) => {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    };
+    const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
     const handleSelectedSearch = async (val, index) => {
-        let tempLocation = [...location];
+        const tempLocation = [...location];
         if (tempLocation.length <= 1) {
             tempLocation.push(val);
         } else {
@@ -95,8 +93,8 @@ const LocalCommunity = () => {
         }
         setSearch(capitalizeFirstLetter(val.neighborhood));
         setOptionsSearch([]);
-        let locLog = [];
-        let returnTempLocation = await tempLocation.map((item) => {
+        const locLog = [];
+        const returnTempLocation = await tempLocation.map((item) => {
             locLog.push({
                 location: `${item.city}, ${item.zip}`,
                 location_level: item.location_level,
@@ -106,7 +104,7 @@ const LocalCommunity = () => {
         await setLocation(tempLocation);
         await setLocationPost(returnTempLocation);
         await setLocationLog(locLog);
-        let a = '';
+        const a = '';
         a.toLocaleLowerCase()
     };
 
@@ -116,7 +114,7 @@ const LocalCommunity = () => {
                 setSearch('');
                 if (index === 0) {
                     return setIsVisibleFirstLocation(true);
-                } else if (index === 1) {
+                } if (index === 1) {
                     return setIsVisibleSecondLocation(true);
                 }
             }}>
@@ -135,13 +133,13 @@ const LocalCommunity = () => {
     );
 
     const handleDelete = async (val) => {
-        let tempLocation = [...location];
-        let index = tempLocation.findIndex((data) => data.location_id === val);
+        const tempLocation = [...location];
+        const index = tempLocation.findIndex((data) => data.location_id === val);
         if (index > -1) {
             tempLocation.splice(index, 1);
         }
-        let locLog = [];
-        let returnTempLocation = await tempLocation.map((item) => {
+        const locLog = [];
+        const returnTempLocation = await tempLocation.map((item) => {
             locLog.push({
                 location: `${item.city}, ${item.zip}`,
                 location_level: item.location_level,
@@ -220,7 +218,7 @@ const LocalCommunity = () => {
                     </TouchableNativeFeedback>
                 ) : null}
 
-                {/* second Location*/}
+                {/* second Location */}
                 {location.length === 1 ? (
                     <TouchableNativeFeedback onPress={() => onPressSecondLocation(true)}>
                         <View style={styles.card}>
@@ -250,7 +248,6 @@ const LocalCommunity = () => {
                 placeholder={StringConstant.searchModalPlaceholder}
                 options={optionsSearch}
                 onSelect={(val) => {
-                    console.log('onClick location:', val);
                     setIsVisibleFirstLocation(false);
                     setSearch('');
                     handleSelectedSearch(val, 0);
@@ -279,7 +276,7 @@ const LocalCommunity = () => {
                     We value privacy and do not ask for location tracking access
                 </Text>
                 <Button
-                    disabled={location.length >= 1 ? false : true}
+                    disabled={!(location.length >= 1)}
                     style={location.length >= 1 ? null : styles.button}
                     onPress={() => next()}>
                     NEXT
@@ -329,7 +326,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         height: 112,
-        width: width,
+        width,
         paddingLeft: 20,
         paddingRight: 20,
         paddingBottom: 20,
@@ -414,7 +411,7 @@ const styles = StyleSheet.create({
         marginBottom: 22,
         color: colors.black,
         paddingLeft: 17,
-        textTransform: 'capitalize',
+        // textTransform: 'capitalize',
     },
     textSmall: {
         fontFamily: 'Inter',

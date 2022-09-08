@@ -12,6 +12,7 @@ import { downVoteDomain, upVoteDomain } from '../../../service/vote';
 import { fonts } from '../../../utils/fonts';
 import { getAccessToken } from '../../../utils/token';
 import { linkContextScreenParamBuilder, linkContextScreenSwitchScreenParam } from '../../../utils/navigation/paramBuilder';
+import { openUrl } from '../../../utils/Utils';
 
 const LinkContextItem = ({
   item,
@@ -51,16 +52,9 @@ const LinkContextItem = ({
   };
 
   const onContentPressed = () => {
-    // navigation.navigate('DetailDomainScreen', {
-    //   item: {
-    //     ...item,
-    //     score: item?.domain?.credderScore,
-    //     follower: 0,
-    //   }
-    // });
-
-    if (isFirstItem && Linking.canOpenURL(item?.content?.news_url)) {
-      return Linking.openURL(item?.content?.news_url);
+    const url = item?.content?.news_url || item?.content?.url
+    if (isFirstItem && Linking.canOpenURL(url)) {
+      return openUrl(url, true)
     }
 
     const param = linkContextScreenSwitchScreenParam(item, item?.domain?.name, item?.domain?.image, item?.domain?.domain_page_id)
@@ -79,7 +73,7 @@ const LinkContextItem = ({
   }, []);
 
   return (
-    <View style={ isFirstItem ? styles.containerFirstItem : styles.containerRelated}>
+    <View style={isFirstItem ? styles.containerFirstItem : styles.containerRelated}>
       <Header
         item={item}
         name={domainName}
@@ -90,7 +84,7 @@ const LinkContextItem = ({
         follow={follow}
         showBackButton={showBackButton}
       />
-      { isFirstItem ? <Content item={item} onContentPressed={onContentPressed} /> : <ContentRelated item={item} onContentPressed={onContentPressed} />}
+      {isFirstItem ? <Content item={item} onContentPressed={onContentPressed} /> : <ContentRelated item={item} onContentPressed={onContentPressed} />}
       <LinkContextScreenFooter
         item={item}
         itemId={item.id}

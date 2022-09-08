@@ -62,7 +62,7 @@ const getCountCommentWithChild = (item) => {
 const getCommentLength = (comments) => {
   let commentLength = 0;
   if (comments && Array.isArray(comments)) {
-    commentLength = comments.length;
+    commentLength = comments?.length;
   }
   return commentLength;
 };

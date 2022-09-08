@@ -1,6 +1,7 @@
 import * as React from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import {
+  LogBox,
   Platform,
   SafeAreaView,
   StatusBar,
@@ -30,6 +31,7 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
+import ReplyCommentLev3 from '../screens/ReplyComment2'
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
@@ -55,6 +57,7 @@ import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
+import { verifyTokenGetstream } from '../service/users';
 
 const RootStack = createStackNavigator();
 
@@ -65,38 +68,52 @@ export const RootNavigator = (props) => {
   const { client } = clientState;
 
   const create = useClientGetstream();
-  if(initialStartup && typeof initialStartup === 'string') {
+  if (initialStartup && typeof initialStartup === 'string') {
     initialStartup = JSON.parse(initialStartup)
   }
-  const doGetAccessToken = async() => {
+  const doGetAccessToken = async () => {
     const accessToken = await getAccessToken()
-    setInitialValue({id: accessToken})
-
+    setInitialValue({ id: accessToken })
+    setTimeout(() => {
+      SplashScreen.hide()
+    }, 500)
   }
+
+  const doVerifyGetstreamToken = async () => {
+    try {
+      const response = await verifyTokenGetstream();
+      if (!response) return SplashScreen.hide()
+    } catch (e) {
+      SplashScreen.hide();
+    }
+    doGetAccessToken()
+  }
+
+
   React.useEffect(() => {
+    LogBox.ignoreAllLogs()
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
-    doGetAccessToken()
+    doVerifyGetstreamToken()
     return async () => {
       await client?.disconnectUser();
     };
   }, []);
 
   React.useEffect(() => {
-
     if (initialStartup.id !== null) {
       if (initialStartup.id !== '') {
         create();
+        // SplashScreen.hide()
       }
-
-      setTimeout(() => {
-        SplashScreen.hide();
-      }, 700);
     } else {
-      setTimeout(() => {
-        SplashScreen.hide();
-      }, 700);
+      // setTimeout(() => {
+      //   console.log('splash screen hide from else')
+      //   SplashScreen.hide();
+      // }, 700);
+      doVerifyGetstreamToken()
     }
+
   }, [initialStartup]);
   return (
     <View
@@ -289,6 +306,11 @@ const AuthenticatedNavigator = () => {
       <AuthenticatedStack.Screen
         name="ReplyComment"
         component={ReplyComment}
+        options={{ headerShown: false }}
+      />
+      <AuthenticatedStack.Screen
+        name='ReplyCommentLev3'
+        component={ReplyCommentLev3}
         options={{ headerShown: false }}
       />
       <AuthenticatedStack.Screen

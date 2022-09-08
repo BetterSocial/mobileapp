@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   Image,
   Pressable,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -109,7 +110,8 @@ const Header = ({
   };
 
   return (
-    <View style={styles.headerContainer}>
+    <SafeAreaView>
+      <View style={styles.headerContainer}>
       <Pressable onPress={onHeaderClicked} style={styles.leftRowContainer}>
         {showBackButton && (
           <TouchableOpacity
@@ -163,6 +165,8 @@ const Header = ({
         </TouchableOpacity>
       </View>
     </View>
+    </SafeAreaView>
+    
   );
 };
 

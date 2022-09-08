@@ -100,7 +100,7 @@ export const refreshToken = async () => {
     const resp = await api.get('/users/refresh-token', options);
     return resp.data;
   } catch (err) {
-    return err.response.status;
+    return err?.response?.data;
   }
 };
 

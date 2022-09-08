@@ -1,20 +1,20 @@
 import * as  React from 'react';
-import { StatusBar, Text, View } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import config from 'react-native-config';
+import { StatusBar, View } from 'react-native';
+import { StreamChat } from 'stream-chat';
+import { useRoute } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
-import BlockDomain from '../../components/Blocking/BlockDomain';
-import Empty from './elements/Empty';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
-import ReportDomain from '../../components/Blocking/ReportDomain';
-import TiktokScroll from '../../components/TiktokScroll/index';
+import RenderItem from '../ProfileScreen/elements/RenderItem';
 import dimen from '../../utils/dimen';
+import removePrefixTopic from '../../utils/topics/removePrefixTopic';
 import { Context } from '../../context';
-import { Gap } from '../../components';
-import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
+import { convertString } from '../../utils/string/StringUtils';
 import { downVote, upVote } from '../../service/vote';
+import { getAccessToken } from '../../utils/token';
 import { getFeedDetail } from '../../service/post';
 import { getTopicPages } from '../../service/topicPages';
 import { getUserId } from '../../utils/users';
@@ -24,245 +24,258 @@ import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds'
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const TopicPageScreen = (props) => {
-  const route = useRoute();
-  const {params} = route
-  const [idLt, setIdLt] = React.useState('');
-  const [topicName, setTopicName] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
-  const [userId, setUserId] = React.useState('');
-  const [topicId, setTopicId] = React.useState('');
-  const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  const feeds = feedsContext.topicFeeds;
-  const [isFollow, setIsFollow] = React.useState(false);
-  const [userTopicName, setUserTopicName] = React.useState('');
+    const route = useRoute();
+    const { params } = route
+    const [topicName, setTopicName] = React.useState(route?.params?.id);
+    const [loading, setLoading] = React.useState(false);
+    const [userId, setUserId] = React.useState('');
+    const [topicId, setTopicId] = React.useState('');
+    const [feedsContext, dispatch] = React.useContext(Context).feeds;
+    const feeds = feedsContext.topicFeeds;
+    const [isFollow, setIsFollow] = React.useState(false);
+    const [userTopicName, setUserTopicName] = React.useState('');
+    const [offset, setOffset] = React.useState(0);
+    const [client] = React.useContext(Context).client;
 
-  const refBlockComponent = React.useRef();
-  const refBlockDomain = React.useRef();
-  const refReportDomain = React.useRef();
-  const [headerHeightRef, setHeaderHeightRef] = React.useState(0)
+    const refBlockComponent = React.useRef();
+    const [headerHeightRef] = React.useState(0)
 
 
-  React.useEffect(() => {
-    const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setUserId(id);
-      }
-    };
-    parseToken();
-  }, []);
-  React.useEffect(() => {
-    const initData = async () => {
-      try {
-        setLoading(true)
-        console.log(route.params.id)
-        const rawId = route.params.id
-        const id = convertString(route.params.id, 'topic_', '');
-        console.log('id: ', id);
-        const topicName = convertString(id, '-', ' ')
-        setTopicName(topicName);
-        console.log('topicName: ', topicName);
+    React.useEffect(() => {
+        const parseToken = async () => {
+            const id = await getUserId();
+            if (id) {
+                setUserId(id);
+            }
+        };
+        parseToken();
 
-        const name = capitalizeFirstText(id);
-        const newName = convertString(name, '-', ' ');
-        console.log('new Name: ', newName);
-        setUserTopicName(newName);
-        const query = `?name=${convertString(topicName, '-', ' ')}`;
-        const [
-          _resultGetTopicPages,
-          _resultGetUserTopic,
-        ] = await Promise.all([
-          getTopicPages(rawId),
-          getUserTopic(query)
-        ]
-        )
-        setTopicId(id);
-        setTopicFeeds(_resultGetTopicPages.data, dispatch);
-        console.log(_resultGetUserTopic);
-        if (_resultGetUserTopic.data) {
-          setIsFollow(true);
+        return () => {
+            // setTopicFeeds([], dispatch)
+        }
+    }, []);
+
+    React.useEffect(() => {
+        const initData = async () => {
+            try {
+                setLoading(true)
+                const topicWithPrefix = route.params.id
+                const id = removePrefixTopic(topicWithPrefix);
+                setTopicName(id);
+                setUserTopicName(id);
+                const query = `?name=${id}`;
+                setTopicId(id);
+                // eslint-disable-next-line no-underscore-dangle
+                const _resultGetTopicPages = await getTopicPages(id);
+                setTopicFeeds(_resultGetTopicPages.data, dispatch);
+                setOffset(_resultGetTopicPages.offset)
+
+                // eslint-disable-next-line no-underscore-dangle
+                const _resultGetUserTopic = await getUserTopic(query);
+                if (_resultGetUserTopic.data) {
+                    setIsFollow(true);
+                }
+
+                setLoading(false)
+            } catch (error) {
+                console.log(error);
+                setLoading(false);
+            }
         }
 
-        setLoading(false)
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
+        initData();
+    }, []);
+
+    const markRead = async () => {
+        const filter = { type: 'topics', members: { $in: [userId] }, id: route.params.id };
+        const sort = [{ last_message_at: -1 }];
+        const thisChannel = await client.client.queryChannels(filter, sort)
+        const countRead = await thisChannel[0]?.markRead()
+        return countRead
     }
 
-    initData();
-  }, []);
+    React.useEffect(() => () => {
+        updateCount()
 
-  React.useEffect(() => () => {
-      updateCount()
     }, [])
-  const updateCount = () => {
-     if(params.refreshList && typeof params.refreshList === 'function') {
-          params.refreshList()
+
+    React.useEffect(() => {
+        if (userId !== '') {
+            markRead()
         }
-  }
 
-  const refreshingData = async () => {
-    try {
-      setLoading(true);
-      const result = await getTopicPages(topicId);
-      const {data} = result;
-      setTopicFeeds([...feeds, ...data], dispatch);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
+    }, [userId])
+
+    const updateCount = () => {
+        if (params.refreshList && typeof params.refreshList === 'function') {
+            params.refreshList()
+        }
     }
-  }
 
-  // React.useEffect(() => {
-  //   const init = async () => {
-  //     let id = convertString(route.params.id, 'topic_', '');
-
-  //     let name = capitalizeFirstText(id);
-  //     let newName = convertString(name, '-', ' ');
-  //     setUserTopicName(newName);
-  //     let query = `?name=${convertString(newName, '-', ' ')}`;
-  //     let result = await getUserTopic(query);
-
-  //     if (result.data) {
-  //       setIsFollow(true);
-  //     }
-  //   }
-  //   init()
-  // }, [])
-
-
-  const handleFollowTopic = async () => {
-    try {
-      setLoading(true);
-      const data = {
-        name: userTopicName
-      }
-      const result = await putUserTopic(data);
-      setIsFollow(result.data);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
+    const refreshingData = async (offsetParam = offset) => {
+        try {
+            setLoading(true);
+            const result = await getTopicPages(topicId, offsetParam);
+            const { data } = result;
+            if (offsetParam === 0) {
+                setTopicFeeds(data, dispatch)
+            } else {
+                setTopicFeeds([...feeds, ...data], dispatch);
+            }
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
     }
-  }
 
+    const onDeleteBlockedPostCompleted = async (postId) => {
+        const postIndex = feeds.findIndex((item) => item.id === postId)
+        const clonedFeeds = [...feeds]
+        clonedFeeds.splice(postIndex, 1)
+        setTopicFeeds(clonedFeeds, dispatch)
+    }
 
-  const onNewPollFetched = (newPolls, index) => {
-    setTopicFeedByIndex(
-      {
-        index,
-        singleFeed: newPolls,
-      },
-      dispatch,
-    );
-  };
+    const onBlockCompleted = async (postId) => {
+        onDeleteBlockedPostCompleted(postId)
 
-  const onPressDomain = (item) => {
-    const param = linkContextScreenParamBuilder(
-      item,
-      item.og.domain,
-      item.og.domainImage,
-      item.og.domain_page_id,
-    );
-    props.navigation.navigate('DomainScreen', param);
-  };
+        await refreshingData(0)
+    }
 
-  const onEndReach = () => {
-    refreshingData(feeds[feeds.length - 1]?.id);
-  };
+    const handleFollowTopic = async () => {
+        try {
+            setLoading(true);
+            const data = {
+                name: userTopicName
+            }
+            const result = await putUserTopic(data);
+            setIsFollow(result.data);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
 
-  const onPress = (item, index) => {
-    props.navigation.navigate('PostDetailPage', {
-      index,
-      isalreadypolling: item.isalreadypolling,
-    });
-  };
-
-  const onPressComment = (index) => {
-    props.navigation.navigate('PostDetailPage', {
-      index,
-    });
-  };
-
-  const onPressBlock = (value) => {
-    refBlockComponent.current.openBlockComponent(value)
-  };
-
-  const onRefresh = () => {
-    refreshingData();
-  };
-
-
-  const setUpVote = async (post, index) => {
-    const processVote = await upVote(post);
-    updateFeed(post, index);
-    return processVote;
-  };
-  const setDownVote = async (post, index) => {
-    const processVote = await downVote(post);
-    updateFeed(post, index);
-    return processVote
-  };
-
-
-  const updateFeed = async (post, index) => {
-    try {
-      const data = await getFeedDetail(post.activity_id);
-      if (data) {
+    const onNewPollFetched = (newPolls, index) => {
         setTopicFeedByIndex(
-          {
-            singleFeed: data.data,
-            index,
-          },
-          dispatch,
+            {
+                index,
+                singleFeed: newPolls,
+            },
+            dispatch,
         );
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    };
+
+    const onPressDomain = (item) => {
+        const param = linkContextScreenParamBuilder(
+            item,
+            item.og.domain,
+            item.og.domainImage,
+            item.og.domain_page_id,
+        );
+        props.navigation.navigate('DomainScreen', param);
+    };
+
+    const onEndReach = () => {
+        // refreshingData(feeds[feeds.length - 1]?.id);
+        refreshingData(offset);
+    };
+
+    const onPress = (item, index) => {
+        props.navigation.navigate('PostDetailPage', {
+            feedId: item.id,
+            isalreadypolling: item.isalreadypolling,
+        });
+    };
+
+    const onPressComment = (index) => {
+        props.navigation.navigate('PostDetailPage', {
+            index,
+        });
+    };
+
+    const onPressBlock = (value) => {
+        refBlockComponent.current.openBlockComponent(value)
+    };
+
+    const onRefresh = () => {
+        refreshingData();
+    };
 
 
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-      <StatusBar barStyle="dark-content" translucent={false} />
-      <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
-      <View style={{ flex: 1 }}>
-        <ProfileTiktokScroll
-          contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
-          data={feeds}
-          onEndReach={onEndReach}
-          onRefresh={onRefresh}
-          refreshing={loading}
-          snapToOffsets={(() => {
-            const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-            // console.log('posts')
-            // console.log(posts)
-            return [headerHeightRef, ...posts]
-          })()}>
-          {({ item, index }) => (
-            <MemoizedListComponent
-              item={item}
-              onNewPollFetched={onNewPollFetched}
-              index={index}
-              onPressDomain={onPressDomain}
-              onPress={() => onPress(item, index)}
-              onPressComment={() => onPressComment(index)}
-              onPressBlock={() => onPressBlock(item)}
-              onPressUpvote={(post) => setUpVote(post, index)}
-              userId={userId}
-              onPressDownVote={(post) => setDownVote(post, index)}
-              loading={loading}
-            />
-          )}
-        </ProfileTiktokScroll>
+    const setUpVote = async (post, index) => {
+        const processVote = await upVote(post);
+        updateFeed(post, index);
+        return processVote;
+    };
+    const setDownVote = async (post, index) => {
+        const processVote = await downVote(post);
+        updateFeed(post, index);
+        return processVote
+    };
 
 
-      </View>
-      <BlockComponent ref={refBlockComponent} refresh={refreshingData} screen="topic_screen" />
-    </View>
-  );
+    const updateFeed = async (post, index) => {
+        try {
+            const data = await getFeedDetail(post.activity_id);
+            if (data) {
+                setTopicFeedByIndex(
+                    {
+                        singleFeed: data.data,
+                        index,
+                    },
+                    dispatch,
+                );
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+            <StatusBar barStyle="dark-content" translucent={false} />
+            <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
+            <View style={{ flex: 1 }}>
+
+                <ProfileTiktokScroll
+                    contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
+                    data={feeds}
+                    onEndReach={onEndReach}
+                    onRefresh={onRefresh}
+                    refreshing={loading}
+                // snapToOffsets={(() => {
+                //   const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
+                //   // console.log('posts')
+                //   // console.log(posts)
+                //   return [headerHeightRef, ...posts]
+                // })()}
+                >
+                    {({ item, index }) => (
+                        <MemoizedListComponent
+                            item={item}
+                            onNewPollFetched={onNewPollFetched}
+                            index={index}
+                            onPressDomain={onPressDomain}
+                            onPress={() => onPress(item, index)}
+                            onPressComment={() => onPressComment(index)}
+                            onPressBlock={() => onPressBlock(item)}
+                            onPressUpvote={(post) => setUpVote(post, index)}
+                            userId={userId}
+                            onPressDownVote={(post) => setDownVote(post, index)}
+                            loading={loading}
+                        />
+                    )}
+                </ProfileTiktokScroll>
+
+
+            </View>
+            <BlockComponent ref={refBlockComponent}
+                refresh={onBlockCompleted}
+                refreshAnonymous={onDeleteBlockedPostCompleted}
+                screen="topic_screen" />
+        </View>
+    );
 };
 export default withInteractionsManaged(TopicPageScreen);

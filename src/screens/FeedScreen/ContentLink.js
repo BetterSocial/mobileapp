@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Card from '../../components/Card/Card';
@@ -14,24 +14,24 @@ import { smartRender } from '../../utils/Utils';
 const FONT_SIZE_TEXT = 16
 
 const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, score, message = "", messageContainerStyle = {}, topics = [] }) => {
-  let route = useRoute();
-  let isTouchableDisabled = route?.name === 'PostDetailPage';
-  let navigation = useNavigation()
+  console.log('og and item')
+  const route = useRoute();
+  console.log(route?.name)
+  const isTouchableDisabled = route?.name === 'PostDetailPage';
+  const navigation = useNavigation()
 
   const __renderMessageContentLink = () => {
-    let sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
+    const sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
     if (sanitizeUrl?.length === 0) return <></>
     return <View style={{ ...styles.messageContainer, ...messageContainerStyle }}>
       <Text style={styles.message} numberOfLines={3}>{getCaptionWithTopicStyle(sanitizeUrl, navigation)}</Text>
-      <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl}/>
+      <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl} />
     </View>
   }
 
   return (
-    <Pressable
-      disabled={isTouchableDisabled}
-      onPress={onPress}
-      style={styles.contentFeed}>
+    <View style={styles.contentFeed}>
+      <TouchableNativeFeedback testID='contentLinkContentPressable' disabled={isTouchableDisabled} onPress={onPress}>
       <>
         {__renderMessageContentLink()}
         {smartRender(Card, {
@@ -51,7 +51,32 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
           item
         })}
       </>
-    </Pressable>
+      </TouchableNativeFeedback>
+    </View>
+    // <Pressable
+    //   disabled={isTouchableDisabled}
+    //   onPress={onPress}
+    //   style={styles.contentFeed}>
+    //   <>
+    //     {__renderMessageContentLink()}
+    //     {smartRender(Card, {
+    //       domain: og.domain,
+    //       date: new Date(og.date).toLocaleDateString(),
+    //       domainImage:
+    //         og.domainImage !== ''
+    //           ? og.domainImage
+    //           : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
+    //       title: og.title,
+    //       description: og.description,
+    //       image: og.image,
+    //       url: og.url,
+    //       onHeaderPress,
+    //       onCardContentPress,
+    //       score,
+    //       item
+    //     })}
+    //   </>
+    // </Pressable>
   );
 };
 

@@ -57,13 +57,11 @@ const PostPageDetailIdComponent = (props) => {
   const [user] = React.useContext(Context).users;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true)
-  const [dataProfile, setDataProfile] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
   const [typeComment, setTypeComment] = React.useState('parent');
   const [totalComment, setTotalComment] = React.useState(0);
   const [totalVote, setTotalVote] = React.useState(0);
-  const [yourselfId, setYourselfId] = React.useState('');
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
@@ -123,13 +121,10 @@ const PostPageDetailIdComponent = (props) => {
       const data = await getFeedDetail(feedId);
       setItem(data.data)
       setLoading(false)
-
     } else {
       setItem(route.params.data)
     }
-
   }
-
 
   const updateParentPost = (data) => {
     setItem(data)
@@ -557,7 +552,7 @@ const PostPageDetailIdComponent = (props) => {
   );
 };
 
-export default PostPageDetailIdComponent;
+export default React.memo (PostPageDetailIdComponent);
 
 const styles = StyleSheet.create({
   container: {
