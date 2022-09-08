@@ -48,6 +48,31 @@ const getPollTime = (pollExpiredAtString) => {
 
 const isPollExpired = (pollExpiredAtString) => moment(pollExpiredAtString).diff(moment()) < 0;
 
+/**
+ * 
+ * @param {String} city 
+ * @param {String} state 
+ * @returns {String}
+ */
+const detectStateInCity = (city) => {
+    const stateDetectionRegex = /(?<=[a-zA-Z .],\s).+/
+    return city.match(stateDetectionRegex)
+}
+
+/**
+ * 
+ * @param {String} city 
+ * @param {String} state 
+ * @returns {String}
+ */
+const displayCityName = (city, state) => {
+    if (city === null || city === undefined || city === '') throw new Error('City must be defined')
+    if (state === null || state === undefined || state === '') throw new Error('State must be defined')
+    if (detectStateInCity(city)) return city
+
+    return `${city}, ${state}`
+}
+
 const displayFormattedSearchLocations = (searchQuery, locationObject) => {
     // console.log(searchQuery)
     // if (locationObject.country.toLowerCase() === searchQuery.toLowerCase()) {
@@ -59,9 +84,10 @@ const displayFormattedSearchLocations = (searchQuery, locationObject) => {
             : `, ${locationObject.zip}`;
 
     if (locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
+        const neighborhood = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
         return (
             <Text>
-                {`${locationObject.neighborhood}, ${locationObject.city}, `}
+                {`${neighborhood}${locationObject.city}, `}
                 <Text style={styles.bold}>{locationObject.state}</Text>
                 {`, ${locationObject.country}${zipString}`}
             </Text>
@@ -69,24 +95,29 @@ const displayFormattedSearchLocations = (searchQuery, locationObject) => {
     }
 
     if (locationObject.city.toLowerCase() === searchQuery.toLowerCase()) {
+        const {city, state} = locationObject
         const zipString =
             locationObject.zip === '' || locationObject.zip === undefined
                 ? ''
                 : `, ${locationObject.zip}`;
+
+        const cityDisplay = detectStateInCity(city) ? displayCityName(city, state) : city
+        const stateDisplay = detectStateInCity(city) ? `,` : `, ${state},`
         return (
             <Text>
                 {`${locationObject.neighborhood}, `}
-                <Text style={styles.bold}>{locationObject.city}</Text>
-                {`, ${locationObject.state}, ${locationObject.country}${zipString}`}
+                <Text style={styles.bold}>{cityDisplay}</Text>
+                {`${stateDisplay} ${locationObject.country}${zipString}`}
             </Text>
         );
     }
 
     if (locationObject.neighborhood.toLowerCase() === searchQuery.toLowerCase()) {
+        const cityState = displayCityName(locationObject?.city, locationObject?.state)
         return (
             <Text>
                 <Text style={styles.bold}>{locationObject.neighborhood}</Text>
-                {`, ${locationObject.city} , ${locationObject.state}, ${locationObject.country}${zipString}`}
+                {`, ${cityState}, ${locationObject.country}${zipString}`}
             </Text>
         );
     }
@@ -108,19 +139,18 @@ const displayFormattedSearchLocations = (searchQuery, locationObject) => {
         return <Text>{`${locationObject.state}, ${locationObject.country}${zipString}`}</Text>
     }
 
+    const cityState = displayCityName(locationObject?.city, locationObject?.state)
     if (locationObject.location_level === "City") {
-        return <Text>{`${locationObject.city} , ${locationObject.state}, ${locationObject.country}${zipString}`}</Text>
+        // return <Text>{`${locationObject.city} , ${locationObject.state}, ${locationObject.country}${zipString}`}</Text>
+        return <Text>{`${cityState}, ${locationObject.country}${zipString}`}</Text>
     }
 
-    // if (locationObject.neighborhood === null) {
-    //   return (
-    //     <Text>{`${locationObject.city}, ${locationObject.state}, ${locationObject.country}`}</Text>
-    //   );
-
-    // }
+    if (!locationObject.neighborhood) {
+        return <Text>{`${cityState}, ${locationObject.country}${zipString}`}</Text>
+    }
 
     return (
-        <Text>{`${locationObject.neighborhood}, ${locationObject.city}, ${locationObject.state}, ${locationObject.country}`}</Text>
+        <Text>{`${locationObject.neighborhood}, ${cityState}, ${locationObject.country}`}</Text>
     );
 };
 
@@ -164,7 +194,7 @@ let styles = StyleSheet.create({
 
 
 const convertString = (str, from, to) => {
-    if(str === null || str === undefined) return
+    if (str === null || str === undefined) return
     return str.split(from).join(to);
 }
 
@@ -257,4 +287,5 @@ export {
     NO_POLL_UUID,
     randomString,
     removeStringAfterSpace,
+    displayCityName
 };
