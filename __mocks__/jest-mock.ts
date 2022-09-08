@@ -3,6 +3,7 @@ import 'react-native-gesture-handler/jestSetup';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as ReactNative from 'react-native';
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+import {View} from 'react-native'
 
 jest.doMock('@react-native-community/netinfo', () => ({
     getCurrentState: jest.fn(() => Promise.resolve()),
@@ -73,6 +74,9 @@ jest.doMock('react-native', () => {
             StyleSheet: {
                 create: jest.fn((e) => e),
             },
+            Dimensions: {
+                get: () => jest.fn().mockReturnValue({ width: 414, height: 818 })
+            },
         },
         ReactNative,
     );
@@ -126,12 +130,12 @@ jest.mock('@react-navigation/core', () => ({
     ),
 }));
 
-jest.doMock('@react-navigation/native', () => {
-    return {
-        useNavigation: () => ({ setOptions: jest.fn() }),
-        createNavigatorFactory: jest.fn(),
-    };
-});
+// jest.doMock('@react-navigation/native', () => {
+//     return {
+//         useNavigation: () => ({ setOptions: jest.fn() }),
+//         createNavigatorFactory: jest.fn(),
+//     };
+// });
 // jest.mock('react-native-swiper-flatlist', () => jest.fn());
 jest.mock('react', () => {
     const originReact = jest.requireActual('react');
