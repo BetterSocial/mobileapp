@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PSL from 'psl'
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {
@@ -15,8 +16,9 @@ import {
     TouchableNativeFeedback,
     View
 } from 'react-native';
+import { OpenGraphParser } from 'react-native-opengraph-kit'
+import { debounce } from 'lodash';
 import { getLinkPreview } from 'link-preview-js';
-import { instanceOf } from 'prop-types';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
 import { useNavigation } from '@react-navigation/core';
@@ -46,12 +48,14 @@ import TopicItem from '../../components/TopicItem';
 import UserProfile from './elements/UserProfile';
 import handleHastag from '../../utils/hastag';
 import { Button, ButtonAddMedia } from '../../components/Button';
+import { Context } from '../../context';
 import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
 import { ShowingAudience, createPollPost, createPost } from '../../service/post';
 import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
+import { getDomainInfoInLinkPreview, getNewsLinkInfoInLinkPreview, getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
 import {
     getDurationId,
     getLocationId,
@@ -63,14 +67,12 @@ import {
 import { getMyProfile } from '../../service/profile';
 import { getSpecificCache } from '../../utils/cache';
 import { getTopics } from '../../service/topics';
-import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
 import { getUserId } from '../../utils/users';
 import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
 import {
     requestCameraPermission,
     requestExternalStoragePermission,
 } from '../../utils/permission';
-import { Context } from '../../context';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -90,7 +92,7 @@ const CreatePost = () => {
     const [mediaStorage, setMediaStorage] = React.useState([]);
     const [listTopic, setListTopic] = React.useState([]);
     const [listTopicChat, setListTopicChat] = React.useState([])
-  const [isPollShown, setIsPollShown] = React.useState(false);
+    const [isPollShown, setIsPollShown] = React.useState(false);
     const [polls, setPolls] = React.useState([...defaultPollItem]);
     const [isPollMultipleChoice, setIsPollMultipleChoice] = React.useState(false);
     const [linkPreviewMeta, setLinkPreviewMeta] = React.useState(null);
@@ -154,6 +156,14 @@ const CreatePost = () => {
     const [formattedContent, setFormatHastag] = React.useState('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile
+
+    const debounced = React.useCallback(debounce((changedText) => {
+        if (isContainUrl(changedText)) {
+            getPreviewUrl(getUrl(changedText));
+        } else {
+            setIsLinkPreviewShown(false);
+        }
+    }, 1000), [])
 
     const listPostExpired = [
         {
@@ -226,32 +236,37 @@ const CreatePost = () => {
 
     const getPreviewUrl = async (link) => {
         let newLink = link;
-        if (link.indexOf('https://') < 0) {
-            newLink = `https://${link}`;
+        // if (link.indexOf('https://') < 0) {
+        //     newLink = `https://${link}`;
+        // }
+
+        newLink = link.replace(/(^\w+:|^)\/\//, '');
+
+        let news = null
+        const data = await getDomainInfoInLinkPreview(newLink)
+        if (data) {
+            news = await getNewsLinkInfoInLinkPreview(newLink)
+            if (news) {
+                setLinkPreviewMeta({
+                    domain: data?.domain,
+                    domainImage: data?.domainImage,
+                    title: news?.title,
+                    description: news?.description,
+                    image: news?.image,
+                    url: news?.url,
+                });
+            } else {
+                setLinkPreviewMeta(null)
+            }
+        } else {
+            setLinkPreviewMeta(null)
         }
 
-        const data = await getLinkPreview(newLink);
-        if (data) {
-            setLinkPreviewMeta({
-                domain: data.siteName,
-                domainImage: data.favicons[0],
-                title: data.title,
-                description: data.description,
-                image: data.images[0],
-                url: data.url,
-            });
-        } else {
-            setLinkPreviewMeta(null);
-        }
-        setIsLinkPreviewShown(!!data);
+        setIsLinkPreviewShown(!!news)
     }
 
     React.useEffect(() => {
-        if (isContainUrl(message)) {
-            getPreviewUrl(getUrl(message));
-        } else {
-            setIsLinkPreviewShown(false);
-        }
+        debounced(message)
     }, [message]);
 
     const location = [
@@ -385,8 +400,8 @@ const CreatePost = () => {
     const removeTopic = (v) => {
         const newArr = listTopic.filter((e) => e !== v);
         const newChat = listTopicChat.filter((chat) => chat !== `topic_${v}`)
-    setListTopic(newArr);
-    setListTopicChat(newChat)
+        setListTopic(newArr);
+        setListTopicChat(newChat)
     };
     const onSetExpiredSelect = (v) => {
         setExpiredSelect(v);
@@ -428,9 +443,8 @@ const CreatePost = () => {
     };
 
     const onSaveTopic = (v, topicChat) => {
-        console.log(v, topicChat, 'lupana');
         setListTopic(v);
-    setListTopicChat(topicChat)
+        setListTopicChat(topicChat)
         sheetTopicRef.current.close();
     };
 
@@ -458,9 +472,6 @@ const CreatePost = () => {
                 duration_feed: postExpired[expiredSelect].value,
                 images_url: dataImage,
             };
-
-            // console.log('data')
-            // console.log(data)
 
             setLocationId(JSON.stringify(geoSelect));
             setDurationId(JSON.stringify(expiredSelect));
@@ -535,13 +546,13 @@ const CreatePost = () => {
     };
 
     const handleTopicChat = async (topics) => {
-          const defaultImage ='https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
-         for(let i = 0; i < topics.length; i++) {
-            const channel = client.client.channel('topics', `topic_${topics[i]}`, {name: `#${topics[i]}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage})
+        const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
+        for (let i = 0; i < topics.length; i++) {
+            const channel = client.client.channel('topics', `topic_${topics[i]}`, { name: `#${topics[i]}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
             channel.create()
             channel.addMembers([user.myProfile.user_id])
-            channel.sendMessage({text: `#${topics[i]} new post`}, {skip_push: true})
-        }   
+            channel.sendMessage({ text: `#${topics[i]} new post` }, { skip_push: true })
+        }
     }
 
     const createPoll = () => {
@@ -778,7 +789,6 @@ const CreatePost = () => {
                                 }
                             }
                             else {
-                                console.log('tidak ada #', 'else terakhir');
                                 setTopicSearch([]);
                                 setPositionKeyboard('never')
                             }
@@ -813,8 +823,8 @@ const CreatePost = () => {
                                     if (listTopic.indexOf(topicItem) === -1) {
                                         const newArr = [...listTopic, topicItem];
                                         const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
-                    setListTopic(newArr);
-                    setListTopicChat(newChatTopic)
+                                        setListTopic(newArr);
+                                        setListTopicChat(newChatTopic)
                                     }
                                     setPositionKeyboard('never')
                                     handleHastag(newMessage, setFormatHastag)
@@ -845,10 +855,10 @@ const CreatePost = () => {
                             og={
                                 linkPreviewMeta || {
                                     domain: '',
-                                    domainImage: '',
+                                    domainImage: null,
                                     title: '',
                                     description: '',
-                                    image: '',
+                                    image: null,
                                     url: '',
                                 }
                             }
@@ -941,9 +951,9 @@ const CreatePost = () => {
                     <SheetAddTopic
                         refTopic={sheetTopicRef}
                         onAdd={(v, chatTopci) => onSaveTopic(v, chatTopci)}
-                        topics={listTopic}chatTopics={listTopicChat}
+                        topics={listTopic} chatTopics={listTopicChat}
                         onClose={() => sheetTopicRef.current.close()}
-                        // saveOnClose={(v, chatTopic) => onSaveTopic(v, chatTopic)}
+                    // saveOnClose={(v, chatTopic) => onSaveTopic(v, chatTopic)}
                     />
                     <SheetExpiredPost
                         refExpired={sheetExpiredRef}

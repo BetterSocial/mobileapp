@@ -1,7 +1,6 @@
 import * as React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import {
   Linking,
   StyleSheet,
@@ -18,9 +17,6 @@ import NewsEmptyState from '../../assets/images/news-empty-state.png'
 import TestIdConstant from '../../utils/testId';
 import Image, { imageConst } from '../Image';
 import { COLORS } from '../../utils/theme';
-import { FeedCredderRating } from '../CredderRating';
-import { calculateTime } from '../../utils/time';
-import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { sanitizeUrlForLinking } from '../../utils/Utils';
 
