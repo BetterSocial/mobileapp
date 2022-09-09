@@ -1,35 +1,32 @@
-import {useRoute} from '@react-navigation/native';
 import * as React from 'react';
-import {Pressable, StyleSheet, TouchableOpacity} from 'react-native';
+import {Pressable, StyleSheet, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
+import {useRoute} from '@react-navigation/native';
 
-import {COLORS} from '../../../utils/theme';
-import {smartRender} from '../../../utils/Utils';
 import Card from '../../../components/Card/CardInLinkPreview';
+import {smartRender} from '../../../utils/Utils';
 
 const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress}) => {
-  let route = useRoute();
-  let isTouchableDisabled = route?.name === 'PostDetailPage';
+  const route = useRoute();
+  const isTouchableDisabled = route?.name === 'PostDetailPage';
 
   return (
-    <Pressable
-      disabled={isTouchableDisabled}
-      onPress={onPress}
-      style={styles.contentFeed}>
-      {smartRender(Card, {
-        domain: og.domain,
-        date: new Date(og.date).toLocaleDateString(),
-        domainImage:
-          og.domainImage !== ''
-            ? og.domainImage
-            : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-        title: og.title,
-        description: og.description,
-        image: og.image,
-        url: og.url,
-        onHeaderPress,
-        onCardContentPress,
-      })}
-    </Pressable>
+    <View style={styles.contentFeed}>
+      <TouchableNativeFeedback disabled={isTouchableDisabled} onPress={onPress} testID='contentLinkContentPressable'>
+        <>
+          {smartRender(Card, {
+            domain: og.domain,
+            date: new Date(og.date).toLocaleDateString(),
+            domainImage: og.domainImage,
+            title: og.title,
+            description: og.description,
+            image: og.image,
+            url: og.url,
+            onHeaderPress,
+            onCardContentPress,
+          })}
+        </>
+      </TouchableNativeFeedback>
+    </View>
   );
 };
 
@@ -39,8 +36,8 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     marginTop: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     marginHorizontal: 6,
   },
 });
