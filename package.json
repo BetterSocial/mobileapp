@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android:dev-debug": "npm run update-stream && cd android && ./gradlew clean && cd .. && ENVFILE=.env.development npx react-native run-android --variant=devdebug",
+    "android:dev-debug": "cd android && ./gradlew clean && cd .. && ENVFILE=.env.development npx react-native run-android --variant=devdebug",
     "android:prod-debug": "npm run update-stream && cd android && ./gradlew clean && cd .. && ENVFILE=.env.production npx react-native run-android --variant=proddebug",
     "android:dev": "react-native run-android --variant=devDebug --appIdSuffix=dev",
     "android:prod": "react-native run-android --variant=prodDebug --appIdSuffix=devprod",
@@ -124,8 +124,8 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@react-native-community/eslint-config": "2.0.0",
-    "@testing-library/react-native": "^9.1.0",
     "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/react-native": "^9.1.0",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.23",
     "@types/react": "^17.0.47",
