@@ -50,6 +50,7 @@ import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds, setTimer } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
+import { withInteractionsManaged } from '../WithInteractionManaged';
 
 const { width, height } = Dimensions.get('window');
 
@@ -552,7 +553,7 @@ const PostPageDetailIdComponent = (props) => {
   );
 };
 
-export default React.memo (PostPageDetailIdComponent);
+export default withInteractionsManaged  (React.memo (PostPageDetailIdComponent));
 
 const styles = StyleSheet.create({
   container: {

@@ -29,9 +29,7 @@ const WriteComment = ({
   let commentInputRef = React.useRef(null);
 
   let isCommentEnabled = value.length > 0;
-  let isSendButtonPressed = () => {
-    return onPress();
-  };
+  let isSendButtonPressed = () => onPress();
   const isAndroid = Platform.OS === 'android'
   return (
     <View style={styles.columnContainer}>
@@ -69,6 +67,7 @@ const WriteComment = ({
         <TouchableOpacity
           onPress={isSendButtonPressed}
           style={styles.btn(isCommentEnabled)}
+          disabled={!isCommentEnabled}
           >
          <MemoSendComment style={styles.icSendButton} />
         </TouchableOpacity>
@@ -93,8 +92,7 @@ const styles = StyleSheet.create({
     // zIndex: 1,
     paddingBottom: 14,
   },
-  replyToContainer: (inReplyCommentView) => {
-    return {
+  replyToContainer: (inReplyCommentView) => ({
       marginLeft: inReplyCommentView ? 90 : 60,
       fontFamily: fonts.inter[600],
       marginBottom: 11,
@@ -102,16 +100,14 @@ const styles = StyleSheet.create({
       lineHeight: 15,
       fontSize: 12,
       color: colors.gray,
-    };
-  },
+    }),
   replyToTitle: {
     fontFamily: fonts.inter[600],
     lineHeight: 15,
     fontSize: 12,
     color: colors.black,
   },
-  container: (inReplyCommentView) => {
-    return {
+  container: (inReplyCommentView) => ({
       flex: 1,
       backgroundColor: '#fff',
       width: '100%',
@@ -119,8 +115,7 @@ const styles = StyleSheet.create({
       paddingLeft: inReplyCommentView ? 50 : 20,
       flexDirection: 'row',
       zIndex: 100,
-    };
-  },
+    }),
   content: {
     display: 'flex',
     flexDirection: 'column',
@@ -133,9 +128,8 @@ const styles = StyleSheet.create({
     marginEnd: 8,
     flex: 1,
   },
-  btn: (isCommentEnabled) => {
-    return {
-      backgroundColor: colors.bondi_blue,
+  btn: (isCommentEnabled) => ({
+      backgroundColor: isCommentEnabled ? colors.bondi_blue : '#f2f2f2',
       borderRadius: 18,
       width: 35,
       height: 35,
@@ -143,8 +137,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       marginBottom: 1.5,
       alignSelf: 'flex-end',
-    };
-  },
+    }),
   btnText: {color: 'white', fontFamily: fonts.inter[400]},
   image: {
     width: 36,
@@ -166,8 +159,7 @@ const styles = StyleSheet.create({
   icSendButton: {
     alignSelf: 'center',
   },
-  connectorTop: (inReplyCommentView, showProfileConnector) => {
-    return {
+  connectorTop: (inReplyCommentView, showProfileConnector) => ({
       height: showProfileConnector ? 36 : 0,
       width: 1,
       backgroundColor: colors.gray1,
@@ -175,10 +167,8 @@ const styles = StyleSheet.create({
       top: 0,
       left: inReplyCommentView ? 60 : 30,
       zIndex: -100,
-    };
-  },
-  connectorBottom: (inReplyCommentView, showProfileConnector) => {
-    return {
+    }),
+  connectorBottom: (inReplyCommentView, showProfileConnector) => ({
       height: showProfileConnector ? 20 : 0,
       width: 1,
       backgroundColor: colors.gray1,
@@ -186,6 +176,5 @@ const styles = StyleSheet.create({
       top: 0,
       left: inReplyCommentView ? 60 : 30,
       zIndex: -100,
-    };
-  },
+    }),
 });
