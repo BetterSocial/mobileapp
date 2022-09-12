@@ -1,7 +1,6 @@
 import * as React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import {
   Linking,
   StyleSheet,
@@ -12,12 +11,12 @@ import {
 } from 'react-native';
 
 import Gap from '../Gap';
+import Header from './CardHeader';
+import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
 import NewsEmptyState from '../../assets/images/news-empty-state.png'
+import TestIdConstant from '../../utils/testId';
 import Image, { imageConst } from '../Image';
 import { COLORS } from '../../utils/theme';
-import { FeedCredderRating } from '../CredderRating';
-import { calculateTime } from '../../utils/time';
-import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { sanitizeUrlForLinking } from '../../utils/Utils';
 
@@ -51,12 +50,12 @@ const Card = (props) => {
   return (
     <View style={styles.container}>
       <View>
-        <TouchableOpacity onPress={() => onHeaderPress(item)}>
+        <TouchableOpacity onPress={() => onHeaderPress(item)} testID={TestIdConstant.contentLinkHeaderPress}>
           <Header domain={domain} image={domainImage} date={date} score={score} />
         </TouchableOpacity>
       </View>
       <View style={{ flex: 1 }}>
-        <TouchableNativeFeedback onPress={onCardContentPress} style={{ flex: 1 }}>
+        <TouchableNativeFeedback onPress={onCardContentPress} style={{ flex: 1 }} testID={TestIdConstant.contentLinkContentPress}>
           <View style={styles.content}>
             <View>
               <Text style={styles.title}>
@@ -71,7 +70,7 @@ const Card = (props) => {
                 {_.truncate(`${description}`, { length: 120 })}
                 {/* {description} */}
                 <Gap style={styles.width(2)} />
-                <Text
+                <Text testID={TestIdConstant.contentLinkOpenLinkPress}
                   onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
                   style={styles.link}>
                   Open Link
@@ -85,32 +84,6 @@ const Card = (props) => {
   );
 };
 
-const Header = ({ domain, image, date, score }) => (
-  <View style={styles.headerContainer}>
-    <View style={styles.headerImageContainer}>
-      <Image
-        style={[
-          { height: '100%', width: '100%', borderRadius: 45 },
-          StyleSheet.absoluteFillObject,
-        ]}
-        source={{ uri: image }}
-        resizeMode={imageConst.resizeMode.cover}
-      />
-    </View>
-    <Gap style={{ width: 0 }} />
-    <View style={styles.headerDomainDateContainer}>
-      <View style={styles.headerDomainDateRowContainer}>
-        <Text style={styles.cardHeaderDomainName} numberOfLines={1}>{domain}</Text>
-        <View style={styles.point} />
-        {/* <Text style={styles.cardHeaderDate} numberOfLines={1}>{date}</Text> */}
-        <Text style={styles.cardHeaderDate} numberOfLines={1}>{calculateTime(moment(date, 'DD MMM YYYY'))}</Text>
-        <View style={styles.point} />
-        <FeedCredderRating containerStyle={styles.credderRating} score={score} iconSize={16} scoreSize={12} />
-      </View>
-      {/* <MemoIc_rectangle_gradient height={10} width={180} /> */}
-    </View>
-  </View>
-);
 Card.propTypes = {
   domain: PropTypes.string,
   domainImage: PropTypes.string,
@@ -124,11 +97,6 @@ Card.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  credderRating: {
-    // height: 24,
-    height: 16,
-    alignSelf: 'center',
-  },
   link: {
     color: '#2f80ed',
     textDecorationLine: 'underline',
@@ -170,34 +138,6 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     flex: 1,
   },
-  headerContainer: {
-    flexDirection: 'row',
-    // paddingTop: 12,
-    paddingVertical: 8.5,
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  headerImageContainer: {
-    borderRadius: 45,
-    borderWidth: 0.2,
-    borderColor: 'rgba(0,0,0,0.5)',
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerDomainDateContainer: {
-    justifyContent: 'space-around',
-    marginLeft: 8,
-    flex: 1,
-    alignSelf: 'center',
-    // backgroundColor: 'red',
-  },
-  headerDomainDateRowContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 8,
-  },
   image: {
     width: '100%',
     height: '100%',
@@ -226,30 +166,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginTop: 5,
     lineHeight: 18,
-  },
-  point: {
-    width: 3,
-    height: 3,
-    borderRadius: 4,
-    marginTop: 1,
-    backgroundColor: colors.gray1,
-    marginLeft: 6,
-    marginRight: 6,
-  },
-  cardHeaderDomainName: {
-    fontSize: 14,
-    lineHeight: 16,
-    color: '#000000',
-    fontWeight: 'bold',
-    fontFamily: fonts.inter[600],
-    flexShrink: 1,
-    // marginLeft: 8,
-  },
-  cardHeaderDate: {
-    fontSize: 12,
-    color: COLORS.gray,
-    fontFamily: fonts.inter[400],
-    // lineHeight: 12.1,
   },
   openLinkText: {
     color: '#2f80ed',

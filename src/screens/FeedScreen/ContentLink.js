@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { Pressable, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import dimen from '../../utils/dimen';
 import { COLORS, SIZES } from '../../utils/theme';
-import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 import { smartRender } from '../../utils/Utils';
@@ -14,13 +12,11 @@ import { smartRender } from '../../utils/Utils';
 const FONT_SIZE_TEXT = 16
 
 const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, score, message = "", messageContainerStyle = {}, topics = [] }) => {
-  console.log('og and item')
   const route = useRoute();
-  console.log(route?.name)
   const isTouchableDisabled = route?.name === 'PostDetailPage';
   const navigation = useNavigation()
 
-  const __renderMessageContentLink = () => {
+  const renderMessageContentLink = () => {
     const sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
     if (sanitizeUrl?.length === 0) return <></>
     return <View style={{ ...styles.messageContainer, ...messageContainerStyle }}>
@@ -31,26 +27,23 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
 
   return (
     <View style={styles.contentFeed}>
-      <TouchableNativeFeedback testID='contentLinkContentPressable' disabled={isTouchableDisabled} onPress={onPress}>
-      <>
-        {__renderMessageContentLink()}
-        {smartRender(Card, {
-          domain: og.domain,
-          date: new Date(og.date).toLocaleDateString(),
-          domainImage:
-            og.domainImage !== ''
-              ? og.domainImage
-              : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-          title: og.title,
-          description: og.description,
-          image: og.image,
-          url: og.url,
-          onHeaderPress,
-          onCardContentPress,
-          score,
-          item
-        })}
-      </>
+      <TouchableNativeFeedback disabled={isTouchableDisabled} onPress={onPress} testID='contentLinkContentPressable'>
+        <>
+          {renderMessageContentLink()}
+          {smartRender(Card, {
+            domain: og.domain,
+            date: new Date(og.date).toLocaleDateString(),
+            domainImage: og.domainImage,
+            title: og.title,
+            description: og.description,
+            image: og.image,
+            url: og.url,
+            onHeaderPress,
+            onCardContentPress,
+            score,
+            item
+          })}
+        </>
       </TouchableNativeFeedback>
     </View>
     // <Pressable

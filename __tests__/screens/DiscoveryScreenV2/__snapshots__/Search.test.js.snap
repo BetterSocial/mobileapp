@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Discovery Screen V2 Testing Discovery Search Bar Match Snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "white",
+      "borderBottomColor": "#E0E0E0",
+      "borderBottomWidth": 1,
+      "flexDirection": "row",
+      "height": 48,
+      "marginTop": 0,
+      "paddingBottom": 7,
+      "paddingTop": 7,
+      "zIndex": 10,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "paddingLeft": 20,
+      }
+    }
+  >
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "flex": 1,
+          "justifyContent": "center",
+          "marginRight": 9,
+        }
+      }
+      testID="discoveryScreenBackArrow"
+    >
+      <View />
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "flex": 1,
+        "marginRight": 20,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignSelf": "center",
+          "backgroundColor": "#F5F5F5",
+          "borderRadius": 8,
+          "flex": 1,
+          "flexDirection": "row",
+          "height": 36,
+          "paddingRight": 8,
+        }
+      }
+    >
+      <TextInput
+        allowFontScaling={true}
+        autoFocus={true}
+        focusable={true}
+        multiline={false}
+        onBlur={[Function]}
+        onChangeText={[Function]}
+        onFocus={[Function]}
+        onSubmitEditing={[Function]}
+        placeholder="Search Better"
+        placeholderTextColor="#C4C4C4"
+        rejectResponderTermination={true}
+        returnKeyType="search"
+        style={
+          Object {
+            "alignSelf": "center",
+            "flex": 1,
+            "fontFamily": "Inter-Regular",
+            "fontSize": 14,
+            "height": 33,
+            "marginRight": 16,
+            "paddingBottom": 0,
+            "paddingStart": 8,
+            "paddingTop": 0,
+          }
+        }
+        testID="discoveryScreenSearchBar"
+        underlineColorAndroid="transparent"
+        value=""
+      />
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginRight": -20.5,
+            "opacity": 1,
+            "paddingLeft": 30,
+            "paddingRight": 30,
+            "zIndex": 1000,
+          }
+        }
+        testID="discoveryScreenClearButton"
+      >
+        <View
+          style={
+            Object {
+              "alignSelf": "center",
+              "justifyContent": "center",
+            }
+          }
+        >
+          <View />
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;
