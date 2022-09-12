@@ -138,7 +138,7 @@ const ReplyComment = (props) => {
           setLoadingCMD(false);
         }
       } else {
-        Toast.show('Comments are not empty', Toast.LONG);
+        // Toast.show('Comments are not empty', Toast.LONG);
         setLoadingCMD(false);
       }
     } catch (error) {

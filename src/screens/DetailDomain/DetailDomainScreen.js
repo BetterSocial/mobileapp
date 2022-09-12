@@ -171,7 +171,7 @@ const DetailDomainScreen = (props) => {
           Toast.show('Failed Comment', Toast.LONG);
         }
       } else {
-        Toast.show('Comments are not empty', Toast.LONG);
+        // Toast.show('Comments are not empty', Toast.LONG);
       }
     } catch (e) {
       Toast.show('Failed Comment', Toast.LONG);
