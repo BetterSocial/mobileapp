@@ -544,14 +544,13 @@ const CreatePost = () => {
         );
 
     };
-
     const handleTopicChat = async (topics) => {
         const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
         for (let i = 0; i < topics.length; i++) {
             const channel = client.client.channel('topics', `topic_${topics[i]}`, { name: `#${topics[i]}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
             channel.create()
             channel.addMembers([user.myProfile.user_id])
-            channel.sendMessage({ text: `#${topics[i]} new post` }, { skip_push: true })
+            channel.sendMessage({ text: `New posts by ${user.myProfile.username}` }, { skip_push: true })
         }
     }
 
@@ -765,12 +764,10 @@ const CreatePost = () => {
                                         setPositionTopicSearch(position);
                                         searchTopic(textSeacrh);
                                         setPositionKeyboard('always')
-                                        console.log('detector enter');
                                     }
                                     else {
                                         setTopicSearch([]);
                                         setPositionKeyboard('never')
-                                        console.log('detectEnter', 'else detector enter');
                                     }
                                 }
                                 else {
