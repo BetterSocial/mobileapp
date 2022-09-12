@@ -488,7 +488,7 @@ const CreatePost = () => {
             });
             const res = await createPost(data);
             if (res.code === 200) {
-                handleTopicChat(listTopic)
+                handleTopicChat()
                 showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
@@ -544,10 +544,12 @@ const CreatePost = () => {
         );
 
     };
+    console.log(listTopic, 'asmuel')
     const handleTopicChat = async (topics) => {
+        console.log(listTopic, 'topicman')
         const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
-        for (let i = 0; i < topics.length; i++) {
-            const channel = client.client.channel('topics', `topic_${topics[i]}`, { name: `#${topics[i]}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
+        for (let i = 0; i < listTopic.length; i++) {
+            const channel = client.client.channel('topics', `topic_${listTopic[i]}`, { name: `#${listTopic[i]}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
             channel.create()
             channel.addMembers([user.myProfile.user_id])
             channel.sendMessage({ text: `New posts by ${user.myProfile.username}` }, { skip_push: true })
