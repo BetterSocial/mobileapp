@@ -73,6 +73,8 @@ import {
     requestCameraPermission,
     requestExternalStoragePermission,
 } from '../../utils/permission';
+import { getUserForTagging } from '../../service/mention';
+import useHastagMention from './elements/useHastagMention';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -97,6 +99,28 @@ const CreatePost = () => {
     const [isPollMultipleChoice, setIsPollMultipleChoice] = React.useState(false);
     const [linkPreviewMeta, setLinkPreviewMeta] = React.useState(null);
     const [isLinkPreviewShown, setIsLinkPreviewShown] = React.useState(false);
+
+    const [audienceEstimations, setAudienceEstimations] = React.useState(0);
+    const [privacySelect, setPrivacySelect] = React.useState(0);
+    const [dataImage, setDataImage] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
+    const [typeUser, setTypeUser] = React.useState(false);
+    const [dataProfile, setDataProfile] = React.useState({});
+    const [geoList, setGeoList] = React.useState([]);
+    const [geoSelect, setGeoSelect] = React.useState(0);
+    const [topicSearch, setTopicSearch] = React.useState([]);
+    const [listUsersForTagging, setListUsersForTagging] = React.useState([]);
+    const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
+    const [locationId, setLocationId] = React.useState('');
+    const [positionEndCursor, setPositionEndCursor] = React.useState(0);
+    const [hastagPosition, setHastagPosition] = React.useState(0);
+    const [positionKeyboard, setPositionKeyboard] = React.useState('never')
+    const [formattedContent, setFormatHastag] = React.useState('');
+    const [textContent, handleStateHastag, handleStateMention] = useHastagMention('');
+    const [client] = React.useContext(Context).client;
+    const [user] = React.useContext(Context).profile;
+
+
     const [selectedTime, setSelectedTime] = React.useState({
         day: 1,
         hour: 0,
@@ -138,24 +162,6 @@ const CreatePost = () => {
             },
         },
     ]);
-
-    const [audienceEstimations, setAudienceEstimations] = React.useState(0);
-    const [privacySelect, setPrivacySelect] = React.useState(0);
-    const [dataImage, setDataImage] = React.useState([]);
-    const [loading, setLoading] = React.useState(false);
-    const [typeUser, setTypeUser] = React.useState(false);
-    const [dataProfile, setDataProfile] = React.useState({});
-    const [geoList, setGeoList] = React.useState([]);
-    const [geoSelect, setGeoSelect] = React.useState(0);
-    const [topicSearch, setTopicSearch] = React.useState([]);
-    const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
-    const [locationId, setLocationId] = React.useState('');
-    const [positionEndCursor, setPositionEndCursor] = React.useState(0);
-    const [hastagPosition, setHastagPosition] = React.useState(0);
-    const [positionKeyboard, setPositionKeyboard] = React.useState('never')
-    const [formattedContent, setFormatHastag] = React.useState('');
-    const [client] = React.useContext(Context).client;
-    const [user] = React.useContext(Context).profile
 
     const debounced = React.useCallback(debounce((changedText) => {
         if (isContainUrl(changedText)) {
@@ -702,6 +708,16 @@ const CreatePost = () => {
         }
     }
 
+    const searchUsersForTagging = async (name) => {
+        if (!isEmptyOrSpaces(name)) {
+            getUserForTagging(name)
+                .then(v => {
+                    setListUsersForTagging(v);
+                })
+                .catch(err => console.log(err));
+        }
+    }
+
     // eslint-disable-next-line no-extend-native, func-names
     String.prototype.insert = function (index, string) {
         if (index > 0) {
@@ -715,105 +731,22 @@ const CreatePost = () => {
         setPositionKeyboard('always')
         sheetTopicRef.current.open()
     }
-    const onCheckHashTag = (v) => {
-        const regex = v.match(/(^#|[^&]#)([a-z0-9]+)/gi)
-        if(regex && regex.length > 0) {
-            const topicWithoutHashtag = regex.map((topic) => topic.replace('#', ''))
-            const cleanTopic = topicWithoutHashtag.map((topic) => topic.replace(' ', ''))
-           
-            setListTopic(cleanTopic)
-             const position = v.lastIndexOf('#', positionEndCursor);
-             const spaceStatus = v.includes(' ', position);
-             const detectEnter = v.includes('\n', position);
-             if(!spaceStatus && !detectEnter) {
-                 searchTopic(cleanTopic[cleanTopic.length - 1])
-             } else {
-                setTopicSearch([])
-             }
-             console.log(spaceStatus, detectEnter, 'bakal')
-            
-        } 
-        setMessage(v)
-        handleHastag(v, setFormatHastag)
-        //  const isUseTag = v.lastIndexOf('#', positionEndCursor);
-        // if (v.includes('#')) {
-        //     // console.log(regex, 'papa')                            
-        //     const position = v.lastIndexOf('#', positionEndCursor);
-        //     const spaceStatus = v.includes(' ', position);
-        //     const detectEnter = v.includes('\n', position);
-        //     const textSeacrh = v.substring(position + 1);
-        //     setHastagPosition(position);
-        //     /**
-        //      * cari posisi kursor dimana
-        //      * cek apakah posisi sebelum kursor # atau bukan
-        //      * ambil semua value setelah posisi #
-        //      */
-        //     console.log('masuk boss', textSeacrh)
-        //     if (!spaceStatus) {
-        //         if (!detectEnter) {
-        //             setPositionTopicSearch(position);
-        //             searchTopic(textSeacrh);
-        //             setPositionKeyboard('always')
-        //         }
-        //         else {
-        //             setTopicSearch([]);
-        //             setPositionKeyboard('never')
-        //         }
-        //     }
-        //     else {
-        //         setTopicSearch([]);
-        //         setPositionKeyboard('never')
-        //         const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
-        //         console.log('with space', textSeacrh);
-        //         console.log('after space', removeCharacterAfterSpace);
-        //         insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic);
-        //         console.log('textSearch: ', textSeacrh);
-        //         if (listTopic.indexOf(textSeacrh) === -1) {
-        //             const newArr = [...listTopic, textSeacrh];
-        //             setListTopic(newArr);
-        //         }
-        //         console.log('spaceStatus', 'else space status');
-        //     }
-        // }
-        // else {
-        //     setTopicSearch([]);
-        //     setPositionKeyboard('never')
-        // }
-        // // setPositionKeyboard('never')
-        // handleHastag(v, setFormatHastag);
-        // setMessage(v);
+
+    const resetTopicSearch = () => setTopicSearch([]);
+
+    const resetListUsersForTagging = () => setListUsersForTagging([]);
+
+    const reformatStringByPosition = (str = '', strFromState = '') => {
+        const topicItem = convertString(str, " ", "");
+        const topicItemWithSpace = topicItem.concat(' ');
+        const oldMessage = strFromState;
+        const start = hastagPosition + 1;
+        const end = positionTopicSearch + 1;
+        const s = oldMessage.substring(0, end);
+        const newMessage = s.insert(start, topicItemWithSpace);
+        return newMessage;
     }
 
-    const handlePressItem = (item) => {
-        const oldMessage = message
-        const findHashtag = oldMessage.lastIndexOf('#', positionEndCursor)
-        const newMessage = oldMessage.substring(0, findHashtag + 1) + item.name
-        handleHastag(newMessage, setFormatHastag)
-        setMessage(newMessage)
-        listTopic[listTopic.length - 1] = item.name
-        setTopicSearch([])
-        // const indexMessage = oldMessage.indexOf('#', 0)
-        // console.log(indexMessage, oldMessage, 'nakal')
-    //    const topicItem = convertString(item.name, " ", "");
-    //                                 const topicItemWithSpace = topicItem.concat(' ');
-    //                                 const oldMessage = message;
-    //                                 const start = hastagPosition + 1;
-    //                                 const end = positionTopicSearch + 1;
-    //                                 const s = oldMessage.substring(0, end);
-    //                                 const newMessage = s.insert(start, topicItemWithSpace);
-    //                                 setListTopic([...listTopic, item.name])
-    //                                 // if (listTopic.indexOf(topicItem) === -1) {
-    //                                 //     const newArr = [...listTopic, topicItem];
-    //                                 //     const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
-    //                                 //     setListTopic(newArr);
-    //                                 //     setListTopicChat(newChatTopic)
-    //                                 // }
-    //                                 setPositionKeyboard('never')
-    //                                 handleHastag(newMessage, setFormatHastag)
-    //                                 setMessage(newMessage);
-    //                                 setTopicSearch([]);
-    }
-    console.log(listTopic, 'makan')
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />
@@ -846,7 +779,75 @@ const CreatePost = () => {
                         onSelectionChange={(e) => {
                             setPositionEndCursor(e.nativeEvent.selection.end);
                         }}
-                        onChangeText={onCheckHashTag}
+                        onChange={(v) => {
+                        }}
+                        onChangeText={(v) => {
+                            if (v.includes('#')) {
+                                const position = v.lastIndexOf('#', positionEndCursor);
+                                const spaceStatus = v.includes(' ', position);
+                                const detectEnter = v.includes('\n', position);
+                                const textSeacrh = v.substring(position + 1);
+                                setHastagPosition(position);
+                                /**
+                                 * cari posisi kursor dimana
+                                 * cek apakah posisi sebelum kursor # atau bukan
+                                 * ambil semua value setelah posisi #
+                                 */
+                                if (!spaceStatus) {
+                                    if (!detectEnter) {
+                                        setPositionTopicSearch(position);
+                                        searchTopic(textSeacrh);
+                                        setPositionKeyboard('always')
+                                        console.log('detector enter');
+                                    }
+                                    else {
+                                        resetTopicSearch();
+                                        setPositionKeyboard('never')
+                                        console.log('detectEnter', 'else detector enter');
+                                    }
+                                }
+                                else {
+                                    resetTopicSearch();
+                                    setPositionKeyboard('never')
+                                    const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
+                                    console.log('with space', textSeacrh);
+                                    console.log('after space', removeCharacterAfterSpace);
+                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic);
+                                }
+
+                                handleStateHastag(v);
+                            } else if (v.includes('@')) {
+                                const position = v.lastIndexOf('@', positionEndCursor);
+                                const spaceStatus = v.includes(' ', position);
+                                const detectEnter = v.includes('\n', position);
+                                const textSeacrh = v.substring(position + 1);
+                                setHastagPosition(position);
+                                if (!spaceStatus) {
+                                    if (!detectEnter) {
+                                        setPositionTopicSearch(position);
+                                        searchUsersForTagging(textSeacrh);
+                                        setPositionKeyboard('always')
+                                    }
+                                    else {
+                                        resetListUsersForTagging();
+                                        setPositionKeyboard('never')
+                                    }
+                                }
+                                else {
+                                    resetListUsersForTagging();
+                                    setPositionKeyboard('never')
+                                }
+                                handleStateMention(v);
+                            }
+                            else {
+                                resetTopicSearch();
+                                resetListUsersForTagging();
+                                setPositionKeyboard('never')
+                            }
+                            // setPositionKeyboard('never')
+                            // handleHastag(v, setFormatHastag);
+                            setMessage(v);
+                        }}
                         // value={message}
                         multiline={true}
                         style={styles.input}
@@ -857,32 +858,26 @@ const CreatePost = () => {
                         autoCapitalize={'none'}
 
                     >
-                        <Text>{formattedContent}</Text>
+                        <Text>{textContent}</Text>
                     </TextInput>
 
                     {
                         topicSearch.length > 0 && (
                             <Card style={{ marginTop: -16 }}>
                                 {topicSearch.map((item, index) => <TouchableNativeFeedback key={`topicSearch-${index}`} onPress={() => {
-                                    console.log(item, 'baban')
-                                    handlePressItem(item)
-                                    // const topicItem = convertString(item.name, " ", "");
-                                    // const topicItemWithSpace = topicItem.concat(' ');
-                                    // const oldMessage = message;
-                                    // const start = hastagPosition + 1;
-                                    // const end = positionTopicSearch + 1;
-                                    // const s = oldMessage.substring(0, end);
-                                    // const newMessage = s.insert(start, topicItemWithSpace);
-                                    // if (listTopic.indexOf(topicItem) === -1) {
-                                    //     const newArr = [...listTopic, topicItem];
-                                    //     const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
-                                    //     setListTopic(newArr);
-                                    //     setListTopicChat(newChatTopic)
-                                    // }
-                                    // setPositionKeyboard('never')
+                                    const topicItem = convertString(item.name, " ", "");
+                                    const newMessage = reformatStringByPosition(item.name, message);
+                                    if (listTopic.indexOf(topicItem) === -1) {
+                                        const newArr = [...listTopic, topicItem];
+                                        const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
+                                        setListTopic(newArr);
+                                        setListTopicChat(newChatTopic)
+                                    }
+                                    setPositionKeyboard('never')
                                     // handleHastag(newMessage, setFormatHastag)
-                                    // setMessage(newMessage);
-                                    // setTopicSearch([]);
+                                    handleStateHastag(newMessage);
+                                    setMessage(newMessage);
+                                    setTopicSearch([]);
                                 }}>
                                     <View style={{ marginBottom: 5 }} >
                                         <Text style={{
@@ -898,6 +893,35 @@ const CreatePost = () => {
                                     </View>
                                 </TouchableNativeFeedback>
                                 )}
+                            </Card>
+                        )
+                    }
+
+                    {
+                        listUsersForTagging.length > 0 && (
+                            <Card style={{ marginTop: -16 }}>
+                                {
+                                    listUsersForTagging.map((item, index) => <TouchableNativeFeedback key={`userTagging-${index}`} onPress={() => {
+                                        const newMessage = reformatStringByPosition(item.username, message);
+                                        setPositionKeyboard('never')
+                                        handleStateMention(newMessage);
+                                        setMessage(newMessage);
+                                        setTopicSearch([]);
+                                    }}>
+                                        <View style={{ marginBottom: 5 }} >
+                                            <Text style={{
+                                                color: '#000000',
+                                                fontFamily: fonts.inter[500],
+                                                fontWeight: '500',
+                                                fontSize: 12,
+                                                lineHeight: 18
+                                            }}>@{item.username}</Text>
+                                            {index !== topicSearch.length - 1 && (
+                                                <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
+                                            )}
+                                        </View>
+                                    </TouchableNativeFeedback>)
+                                }
                             </Card>
                         )
                     }

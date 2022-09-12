@@ -38,7 +38,19 @@ const TopicPageScreen = (props) => {
     const [client] = React.useContext(Context).client;
 
     const refBlockComponent = React.useRef();
-    const [headerHeightRef] = React.useState(0)
+    const [headerHeightRef] = React.useState(0);
+
+    React.useEffect(() => {
+        const initTopic = () => {
+            setTopicFeeds([], dispatch);
+        }
+
+        initTopic();
+
+        return () => {
+            setTopicFeeds([], dispatch)
+        }
+    }, []);
 
 
     React.useEffect(() => {
