@@ -83,19 +83,19 @@ const displayFormattedSearchLocations = (searchQuery, locationObject) => {
             ? ''
             : `, ${locationObject.zip}`;
 
-    if (locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
-        const neighborhood = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
-        return (
-            <Text>
-                {`${neighborhood}${locationObject.city}, `}
-                <Text style={styles.bold}>{locationObject.state}</Text>
-                {`, ${locationObject.country}${zipString}`}
-            </Text>
-        );
-    }
+    // if (locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
+    //     const neighborhood = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
+    //     return (
+    //         <Text>
+    //             {`${neighborhood}${locationObject.city}, `}
+    //             <Text style={styles.bold}>{locationObject.state}</Text>
+    //             {`, ${locationObject.country}${zipString}`}
+    //         </Text>
+    //     );
+    // }
 
-    if (locationObject.city.toLowerCase() === searchQuery.toLowerCase()) {
-        const {city, state} = locationObject
+    if (locationObject.city.toLowerCase() === searchQuery.toLowerCase() || locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
+        const { city, state } = locationObject
         const zipString =
             locationObject.zip === '' || locationObject.zip === undefined
                 ? ''
@@ -103,9 +103,11 @@ const displayFormattedSearchLocations = (searchQuery, locationObject) => {
 
         const cityDisplay = detectStateInCity(city) ? displayCityName(city, state) : city
         const stateDisplay = detectStateInCity(city) ? `,` : `, ${state},`
+
+        const neighborhood = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
         return (
             <Text>
-                {`${locationObject.neighborhood}, `}
+                {`${neighborhood}`}
                 <Text style={styles.bold}>{cityDisplay}</Text>
                 {`${stateDisplay} ${locationObject.country}${zipString}`}
             </Text>
