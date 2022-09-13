@@ -9,14 +9,16 @@ import ContentLink from '../FeedScreen/ContentLink';
 import ContentPoll from '../FeedScreen/ContentPoll';
 import Header from '../FeedScreen/Header';
 import ShareUtils from '../../utils/share'
+import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
-import { ANALYTICS_SHARE_POST_TOPIC_ID, ANALYTICS_SHARE_POST_TOPIC_SCREEN } from '../../utils/constants';
-import { Footer, Gap, PreviewComment } from '../../components';
 import {
+  ANALYTICS_SHARE_POST_TOPIC_ID,
+  ANALYTICS_SHARE_POST_TOPIC_SCREEN,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
 } from '../../utils/constants';
+import { Footer, Gap, PreviewComment } from '../../components';
 import { colors } from '../../utils/colors';
 import { getCountCommentWithChild } from '../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
@@ -25,11 +27,11 @@ const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
-const getHeightHeader = () => {
+const getHeightHeader = () => 
   // let h = Math.floor((FULL_HEIGHT * 10) / 100);
   // return h;
-  return dimen.size.FEED_HEADER_HEIGHT
-};
+   dimen.size.FEED_HEADER_HEIGHT
+;
 
 const RenderListFeed = (props) => {
   const {
@@ -53,7 +55,7 @@ const RenderListFeed = (props) => {
   const [isReaction, setReaction] = React.useState(false);
   const [loadingVote, setLoadingVote] = React.useState(false);
   const navigateToLinkContextPage = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -64,15 +66,15 @@ const RenderListFeed = (props) => {
 
   const getHeightFooter = () => {
     // let h = Math.floor(((FULL_HEIGHT) * 6.8) / 100);
-    let h = Math.floor(((FULL_HEIGHT - tabBarHeight) * 6.8) / 100);
+    const h = Math.floor(((FULL_HEIGHT - tabBarHeight) * 6.8) / 100);
     return h;
   };
 
-  const getHeightReaction = () => {
+  const getHeightReaction = () => 
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
-    return dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
-  };
+     dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
+  ;
 
   const onPressDownVoteHandle = async () => {
     setStatusDowvote((prev) => !prev);
@@ -112,7 +114,7 @@ const RenderListFeed = (props) => {
     if (data.downvotes > 0) {
       setVoteStatus('downvote');
       return setTotalVote(data.downvotes * -1);
-    } else if (data.upvotes > 0) {
+    } if (data.upvotes > 0) {
       setVoteStatus('upvote');
       return setTotalVote(data.upvotes);
     }
@@ -124,7 +126,7 @@ const RenderListFeed = (props) => {
     try {
       const processData = await onPressUpvote({
         activity_id: item.id,
-        status: status,
+        status,
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
@@ -141,7 +143,7 @@ const RenderListFeed = (props) => {
     try {
       const processData = await onPressDownVote({
         activity_id: item.id,
-        status: status,
+        status,
         feed_group: 'main_feed',
       });
       if (processData.code == 200) {
@@ -151,17 +153,17 @@ const RenderListFeed = (props) => {
       }
     } catch (e) {
       setLoadingVote(false);
-      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
+      return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     }
   };
 
   const initial = () => {
-    let reactionCount = item.reaction_counts;
+    const reactionCount = item.reaction_counts;
     if(item?.id === '06f2a0e0-850b-11ec-bbb5-123430d3b8d3') {
       console.log(item)
     }
     if (JSON.stringify(reactionCount) !== '{}') {
-      let comment = reactionCount?.comment;
+      const comment = reactionCount?.comment;
       handleVote(reactionCount);
       if (comment !== undefined) {
         if (comment > 0) {
@@ -178,7 +180,7 @@ const RenderListFeed = (props) => {
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
-          let upvote = item.latest_reactions.upvotes.filter(
+          const upvote = item.latest_reactions.upvotes.filter(
             (vote) => vote.user_id === userId,
           );
           if (upvote !== undefined) {
@@ -188,7 +190,7 @@ const RenderListFeed = (props) => {
         }
 
         if (item.latest_reactions.downvotes !== undefined) {
-          let downvotes = item.latest_reactions.downvotes.filter(
+          const downvotes = item.latest_reactions.downvotes.filter(
             (vote) => vote.user_id === userId,
           );
           if (downvotes !== undefined) {
@@ -261,8 +263,6 @@ const RenderListFeed = (props) => {
               item.anonimity
                 ? false
                 : userId === item?.actor?.id
-                  ? true
-                  : false
             }
           />
         </View>
