@@ -459,6 +459,8 @@ const CreatePost = () => {
             }
 
             setLoading(true);
+            // const topicWithoutHashtag = listTopic.map((topic) => topic.substring(1))
+            // console.log(topicWithoutHashtag, 'jaja')
             const data = {
                 topics: listTopic,
                 message,
@@ -510,7 +512,6 @@ const CreatePost = () => {
                 });
             }
         } catch (error) {
-            console.log(error);
             showMessage({
                 message: StringConstant.createPostFailedGeneralError,
                 type: 'danger',
@@ -544,9 +545,7 @@ const CreatePost = () => {
         );
 
     };
-    console.log(listTopic, 'asmuel')
-    const handleTopicChat = async (topics) => {
-        console.log(listTopic, 'topicman')
+    const handleTopicChat = async () => {
         const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
         for (let i = 0; i < listTopic.length; i++) {
             const channel = client.client.channel('topics', `topic_${listTopic[i]}`, { name: `#${listTopic[i]}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
@@ -714,6 +713,69 @@ const CreatePost = () => {
         setPositionKeyboard('always')
         sheetTopicRef.current.open()
     }
+    const onCheckHashTag = (v) => {
+        const regex = v.match(/(^#|[^&]#)([a-z0-9]+)/gi)
+        if(regex && regex.length > 0) {
+            // const newRegex = regex.map((regex: string) => regex?.substring(1))
+            // console.log(regex, 'makan')
+            const topicWithoutHashtag = regex.map((topic) => topic.replace('#', ''))
+            const cleanTopic = topicWithoutHashtag.map((topic) => topic.replace(' ', ''))
+            setListTopic(cleanTopic)
+        } else {
+            setListTopic([])
+        }
+        setMessage(v)
+        handleHastag(v, setFormatHastag)
+       
+      
+        // if (v.includes('#')) {
+        //     // console.log(regex, 'papa')                            
+        //     const position = v.lastIndexOf('#', positionEndCursor);
+        //     const spaceStatus = v.includes(' ', position);
+        //     const detectEnter = v.includes('\n', position);
+        //     const textSeacrh = v.substring(position + 1);
+        //     setHastagPosition(position);
+        //     /**
+        //      * cari posisi kursor dimana
+        //      * cek apakah posisi sebelum kursor # atau bukan
+        //      * ambil semua value setelah posisi #
+        //      */
+        //     console.log('masuk boss', textSeacrh)
+        //     if (!spaceStatus) {
+        //         if (!detectEnter) {
+        //             setPositionTopicSearch(position);
+        //             searchTopic(textSeacrh);
+        //             setPositionKeyboard('always')
+        //         }
+        //         else {
+        //             setTopicSearch([]);
+        //             setPositionKeyboard('never')
+        //         }
+        //     }
+        //     else {
+        //         setTopicSearch([]);
+        //         setPositionKeyboard('never')
+        //         const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
+        //         console.log('with space', textSeacrh);
+        //         console.log('after space', removeCharacterAfterSpace);
+        //         insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic);
+        //         console.log('textSearch: ', textSeacrh);
+        //         if (listTopic.indexOf(textSeacrh) === -1) {
+        //             const newArr = [...listTopic, textSeacrh];
+        //             setListTopic(newArr);
+        //         }
+        //         console.log('spaceStatus', 'else space status');
+        //     }
+        // }
+        // else {
+        //     setTopicSearch([]);
+        //     setPositionKeyboard('never')
+        // }
+        // // setPositionKeyboard('never')
+        // handleHastag(v, setFormatHastag);
+        // setMessage(v);
+    }
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -747,54 +809,7 @@ const CreatePost = () => {
                         onSelectionChange={(e) => {
                             setPositionEndCursor(e.nativeEvent.selection.end);
                         }}
-                        onChange={(v) => {
-                        }}
-                        onChangeText={(v) => {
-                            if (v.includes('#')) {
-                                const position = v.lastIndexOf('#', positionEndCursor);
-                                const spaceStatus = v.includes(' ', position);
-                                const detectEnter = v.includes('\n', position);
-                                const textSeacrh = v.substring(position + 1);
-                                setHastagPosition(position);
-                                /**
-                                 * cari posisi kursor dimana
-                                 * cek apakah posisi sebelum kursor # atau bukan
-                                 * ambil semua value setelah posisi #
-                                 */
-                                if (!spaceStatus) {
-                                    if (!detectEnter) {
-                                        setPositionTopicSearch(position);
-                                        searchTopic(textSeacrh);
-                                        setPositionKeyboard('always')
-                                    }
-                                    else {
-                                        setTopicSearch([]);
-                                        setPositionKeyboard('never')
-                                    }
-                                }
-                                else {
-                                    setTopicSearch([]);
-                                    setPositionKeyboard('never')
-                                    const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
-                                    console.log('with space', textSeacrh);
-                                    console.log('after space', removeCharacterAfterSpace);
-                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic);
-                                    // console.log('textSearch: ', textSeacrh);
-                                    // if (listTopic.indexOf(textSeacrh) === -1) {
-                                    //     const newArr = [...listTopic, textSeacrh];
-                                    //     setListTopic(newArr);
-                                    // }
-                                    console.log('spaceStatus', 'else space status');
-                                }
-                            }
-                            else {
-                                setTopicSearch([]);
-                                setPositionKeyboard('never')
-                            }
-                            // setPositionKeyboard('never')
-                            handleHastag(v, setFormatHastag);
-                            setMessage(v);
-                        }}
+                        onChangeText={onCheckHashTag}
                         // value={message}
                         multiline={true}
                         style={styles.input}
@@ -808,7 +823,7 @@ const CreatePost = () => {
                         <Text>{formattedContent}</Text>
                     </TextInput>
 
-                    {
+                    {/* {
                         topicSearch.length > 0 && (
                             <Card style={{ marginTop: -16 }}>
                                 {topicSearch.map((item, index) => <TouchableNativeFeedback key={`topicSearch-${index}`} onPress={() => {
@@ -846,10 +861,10 @@ const CreatePost = () => {
                                 )}
                             </Card>
                         )
-                    }
+                    } */}
 
 
-                    {isLinkPreviewShown && (
+                    {/* {isLinkPreviewShown && (
                         <ContentLink
                             og={
                                 linkPreviewMeta || {
@@ -862,7 +877,7 @@ const CreatePost = () => {
                                 }
                             }
                         />
-                    )}
+                    )} */}
 
                     {isPollShown && (
                         <CreatePollContainer
