@@ -720,12 +720,22 @@ const CreatePost = () => {
         if(regex && regex.length > 0) {
             const topicWithoutHashtag = regex.map((topic) => topic.replace('#', ''))
             const cleanTopic = topicWithoutHashtag.map((topic) => topic.replace(' ', ''))
-            searchTopic(cleanTopic[cleanTopic.length - 1])
+           
             setListTopic(cleanTopic)
+             const position = v.lastIndexOf('#', positionEndCursor);
+             const spaceStatus = v.includes(' ', position);
+             const detectEnter = v.includes('\n', position);
+             if(!spaceStatus && !detectEnter) {
+                 searchTopic(cleanTopic[cleanTopic.length - 1])
+             } else {
+                setTopicSearch([])
+             }
+             console.log(spaceStatus, detectEnter, 'bakal')
             
         } 
         setMessage(v)
         handleHastag(v, setFormatHastag)
+        //  const isUseTag = v.lastIndexOf('#', positionEndCursor);
         // if (v.includes('#')) {
         //     // console.log(regex, 'papa')                            
         //     const position = v.lastIndexOf('#', positionEndCursor);
