@@ -17,7 +17,7 @@ import {
     View
 } from 'react-native';
 import { OpenGraphParser } from 'react-native-opengraph-kit'
-import { debounce } from 'lodash';
+import { debounce, set } from 'lodash';
 import { getLinkPreview } from 'link-preview-js';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
@@ -438,7 +438,6 @@ const CreatePost = () => {
 
         return reducedPoll;
     };
-
     const onBack = () => {
         if (message || getReducedPoll().length > 0 || mediaStorage.length > 0) {
             sheetBackRef.current.open();
@@ -465,6 +464,8 @@ const CreatePost = () => {
             }
 
             setLoading(true);
+            // const topicWithoutHashtag = listTopic.map((topic) => topic.substring(1))
+            // console.log(topicWithoutHashtag, 'jaja')
             const data = {
                 topics: listTopic,
                 message,
@@ -494,7 +495,7 @@ const CreatePost = () => {
             });
             const res = await createPost(data);
             if (res.code === 200) {
-                handleTopicChat(listTopic)
+                handleTopicChat()
                 showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
@@ -516,7 +517,6 @@ const CreatePost = () => {
                 });
             }
         } catch (error) {
-            console.log(error);
             showMessage({
                 message: StringConstant.createPostFailedGeneralError,
                 type: 'danger',
@@ -550,17 +550,15 @@ const CreatePost = () => {
         );
 
     };
-
-    const handleTopicChat = async (topics) => {
+    const handleTopicChat = async () => {
         const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
-        for (let i = 0; i < topics.length; i++) {
-            const channel = client.client.channel('topics', `topic_${topics[i]}`, { name: `#${topics[i]}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
-            channel.create()
-            channel.addMembers([user.myProfile.user_id])
-            channel.sendMessage({ text: `#${topics[i]} new post` }, { skip_push: true })
-        }
+        listTopic.forEach(async(topic) => {
+            const channel = await client.client.channel('topics', `topic_${topic}`, { name: `#${topic}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
+            await channel.create()
+            await channel.addMembers([user.myProfile.user_id])
+            await channel.sendMessage({ text: `New posts by ${user.myProfile.username} & others` }, { skip_push: true })
+        })
     }
-
     const createPoll = () => {
         setIsPollShown(true);
         sheetMediaRef.current.close();
@@ -697,9 +695,13 @@ const CreatePost = () => {
 
 
     const searchTopic = async (name) => {
+        console.log(name, 'nama')
         if (!isEmptyOrSpaces(name)) {
+                    console.log(name, 'nama123')
+
             getTopics(name)
                 .then(v => {
+                    console.log(v, 'makan')
                     setTopicSearch(v.data);
                 })
                 .catch(err => console.log(err));
