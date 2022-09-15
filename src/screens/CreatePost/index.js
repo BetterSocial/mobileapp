@@ -17,7 +17,7 @@ import {
     View
 } from 'react-native';
 import { OpenGraphParser } from 'react-native-opengraph-kit'
-import { debounce } from 'lodash';
+import { debounce, set } from 'lodash';
 import { getLinkPreview } from 'link-preview-js';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
@@ -432,7 +432,6 @@ const CreatePost = () => {
 
         return reducedPoll;
     };
-
     const onBack = () => {
         if (message || getReducedPoll().length > 0 || mediaStorage.length > 0) {
             sheetBackRef.current.open();
@@ -547,14 +546,13 @@ const CreatePost = () => {
     };
     const handleTopicChat = async () => {
         const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
-        for (let i = 0; i < listTopic.length; i++) {
-            const channel = client.client.channel('topics', `topic_${listTopic[i]}`, { name: `#${listTopic[i]}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
-            channel.create()
-            channel.addMembers([user.myProfile.user_id])
-            channel.sendMessage({ text: `New posts by ${user.myProfile.username}` }, { skip_push: true })
-        }
+        listTopic.forEach(async(topic) => {
+            const channel = await client.client.channel('topics', `topic_${topic}`, { name: `#${topic}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
+            await channel.create()
+            await channel.addMembers([user.myProfile.user_id])
+            await channel.sendMessage({ text: `New posts by ${user.myProfile.username} & others` }, { skip_push: true })
+        })
     }
-
     const createPoll = () => {
         setIsPollShown(true);
         sheetMediaRef.current.close();
@@ -691,9 +689,13 @@ const CreatePost = () => {
 
 
     const searchTopic = async (name) => {
+        console.log(name, 'nama')
         if (!isEmptyOrSpaces(name)) {
+                    console.log(name, 'nama123')
+
             getTopics(name)
                 .then(v => {
+                    console.log(v, 'makan')
                     setTopicSearch(v.data);
                 })
                 .catch(err => console.log(err));
@@ -716,18 +718,14 @@ const CreatePost = () => {
     const onCheckHashTag = (v) => {
         const regex = v.match(/(^#|[^&]#)([a-z0-9]+)/gi)
         if(regex && regex.length > 0) {
-            // const newRegex = regex.map((regex: string) => regex?.substring(1))
-            // console.log(regex, 'makan')
             const topicWithoutHashtag = regex.map((topic) => topic.replace('#', ''))
             const cleanTopic = topicWithoutHashtag.map((topic) => topic.replace(' ', ''))
+            searchTopic(cleanTopic[cleanTopic.length - 1])
             setListTopic(cleanTopic)
-        } else {
-            setListTopic([])
-        }
+            
+        } 
         setMessage(v)
         handleHastag(v, setFormatHastag)
-       
-      
         // if (v.includes('#')) {
         //     // console.log(regex, 'papa')                            
         //     const position = v.lastIndexOf('#', positionEndCursor);
@@ -776,7 +774,36 @@ const CreatePost = () => {
         // setMessage(v);
     }
 
-
+    const handlePressItem = (item) => {
+        const oldMessage = message
+        const findHashtag = oldMessage.lastIndexOf('#', positionEndCursor)
+        const newMessage = oldMessage.substring(0, findHashtag + 1) + item.name
+        handleHastag(newMessage, setFormatHastag)
+        setMessage(newMessage)
+        listTopic[listTopic.length - 1] = item.name
+        setTopicSearch([])
+        // const indexMessage = oldMessage.indexOf('#', 0)
+        // console.log(indexMessage, oldMessage, 'nakal')
+    //    const topicItem = convertString(item.name, " ", "");
+    //                                 const topicItemWithSpace = topicItem.concat(' ');
+    //                                 const oldMessage = message;
+    //                                 const start = hastagPosition + 1;
+    //                                 const end = positionTopicSearch + 1;
+    //                                 const s = oldMessage.substring(0, end);
+    //                                 const newMessage = s.insert(start, topicItemWithSpace);
+    //                                 setListTopic([...listTopic, item.name])
+    //                                 // if (listTopic.indexOf(topicItem) === -1) {
+    //                                 //     const newArr = [...listTopic, topicItem];
+    //                                 //     const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
+    //                                 //     setListTopic(newArr);
+    //                                 //     setListTopicChat(newChatTopic)
+    //                                 // }
+    //                                 setPositionKeyboard('never')
+    //                                 handleHastag(newMessage, setFormatHastag)
+    //                                 setMessage(newMessage);
+    //                                 setTopicSearch([]);
+    }
+    console.log(listTopic, 'makan')
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />
@@ -823,27 +850,29 @@ const CreatePost = () => {
                         <Text>{formattedContent}</Text>
                     </TextInput>
 
-                    {/* {
+                    {
                         topicSearch.length > 0 && (
                             <Card style={{ marginTop: -16 }}>
                                 {topicSearch.map((item, index) => <TouchableNativeFeedback key={`topicSearch-${index}`} onPress={() => {
-                                    const topicItem = convertString(item.name, " ", "");
-                                    const topicItemWithSpace = topicItem.concat(' ');
-                                    const oldMessage = message;
-                                    const start = hastagPosition + 1;
-                                    const end = positionTopicSearch + 1;
-                                    const s = oldMessage.substring(0, end);
-                                    const newMessage = s.insert(start, topicItemWithSpace);
-                                    if (listTopic.indexOf(topicItem) === -1) {
-                                        const newArr = [...listTopic, topicItem];
-                                        const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
-                                        setListTopic(newArr);
-                                        setListTopicChat(newChatTopic)
-                                    }
-                                    setPositionKeyboard('never')
-                                    handleHastag(newMessage, setFormatHastag)
-                                    setMessage(newMessage);
-                                    setTopicSearch([]);
+                                    console.log(item, 'baban')
+                                    handlePressItem(item)
+                                    // const topicItem = convertString(item.name, " ", "");
+                                    // const topicItemWithSpace = topicItem.concat(' ');
+                                    // const oldMessage = message;
+                                    // const start = hastagPosition + 1;
+                                    // const end = positionTopicSearch + 1;
+                                    // const s = oldMessage.substring(0, end);
+                                    // const newMessage = s.insert(start, topicItemWithSpace);
+                                    // if (listTopic.indexOf(topicItem) === -1) {
+                                    //     const newArr = [...listTopic, topicItem];
+                                    //     const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
+                                    //     setListTopic(newArr);
+                                    //     setListTopicChat(newChatTopic)
+                                    // }
+                                    // setPositionKeyboard('never')
+                                    // handleHastag(newMessage, setFormatHastag)
+                                    // setMessage(newMessage);
+                                    // setTopicSearch([]);
                                 }}>
                                     <View style={{ marginBottom: 5 }} >
                                         <Text style={{
@@ -861,10 +890,10 @@ const CreatePost = () => {
                                 )}
                             </Card>
                         )
-                    } */}
+                    }
 
 
-                    {/* {isLinkPreviewShown && (
+                    {isLinkPreviewShown && (
                         <ContentLink
                             og={
                                 linkPreviewMeta || {
@@ -877,7 +906,7 @@ const CreatePost = () => {
                                 }
                             }
                         />
-                    )} */}
+                    )}
 
                     {isPollShown && (
                         <CreatePollContainer
