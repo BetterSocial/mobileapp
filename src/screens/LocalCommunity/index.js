@@ -53,11 +53,12 @@ const LocalCommunity = () => {
     }, []);
 
     const handleSearch = (value) => {
-        setIsLoading(true);
+        // setIsLoading(true);
         const params = {
             name: value,
         };
-        post({ url: '/location/list', params })
+        
+        post({ url: '/location/list_v2', params })
             .then((res) => {
                 setIsLoading(false);
                 if (res.status === 200) {
@@ -74,7 +75,10 @@ const LocalCommunity = () => {
     const onChangeLocationSearchText = (text) => {
         if (text.length >= 3) {
             doOnLocationSearchTextDebounce(text)
+            setOptionsSearch([])
+            setIsLoading(true)
         } else {
+            setIsLoading(false)
             doOnLocationSearchTextDebounce.cancel()
             setOptionsSearch([])
         }

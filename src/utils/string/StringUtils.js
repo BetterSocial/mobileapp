@@ -4,6 +4,7 @@ import reactStringReplace from 'react-string-replace'
 import { StyleSheet, Text, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
+import TextBold from '../../components/Text/TextBold';
 import TopicText from '../../components/TopicText';
 import removePrefixTopic from '../topics/removePrefixTopic';
 import { COLORS } from '../theme';
@@ -72,6 +73,14 @@ const displayCityName = (city, state) => {
 
     return `${city}, ${state}`
 }
+
+/**
+ * 
+ * @param {String} searchQuery 
+ * @param {String} location
+ * @returns {Boolean}
+ */
+const isLocationMatch = (searchQuery, location) => location.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1
 
 const displayFormattedSearchLocations = (searchQuery, locationObject) => {
     // console.log(searchQuery)
@@ -155,6 +164,68 @@ const displayFormattedSearchLocations = (searchQuery, locationObject) => {
         <Text>{`${locationObject.neighborhood}, ${cityState}, ${locationObject.country}`}</Text>
     );
 };
+
+const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
+    const { zip, neighborhood, city, state, country, location_level } = locationObject
+    console.log(`locationLevel ${location_level}`)
+
+    if (location_level === 'Country') {
+        if (isLocationMatch(searchQuery, country)) return <Text><TextBold text={country} /></Text>
+        return <Text>{country}</Text>
+    }
+    if (location_level === 'State') {
+        if (isLocationMatch(searchQuery, state)) return <Text><TextBold text={`${state}`} /></Text>
+        return <Text><TextBold text={`${state}`} /></Text>
+    }
+
+    const cityDisplay = detectStateInCity(city) ? displayCityName(city, state) : city
+    const stateDisplay = detectStateInCity(city) ? `` : `, ${state}`
+
+    const neighborhoodDisplay = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
+
+    if (location_level === 'City') {
+        if (isLocationMatch(searchQuery, city)) {
+            return (
+                <Text>
+                    <TextBold text={cityDisplay} />
+                    {`${stateDisplay}`}
+                </Text>
+            );
+        }
+
+        return (
+            <Text>
+                <TextBold text={cityDisplay} />
+                {`${stateDisplay}`}
+            </Text>
+        );
+    }
+
+    if (location_level === 'Neighborhood') {
+        if (isLocationMatch(searchQuery, neighborhood)) {
+            if (isLocationMatch(searchQuery, city)) {
+                return <Text>
+                    <TextBold text={`${neighborhoodDisplay}${cityDisplay}`} />
+                    {`${stateDisplay}`}
+                </Text>
+            }
+
+            return <Text>
+                <TextBold text={`${neighborhoodDisplay}`} />
+                {`${cityDisplay}${stateDisplay}`}
+            </Text>
+        }
+
+        return (
+            <Text>
+                {`${neighborhoodDisplay}`}
+                <TextBold text={`${cityDisplay}`} />
+                {`${stateDisplay}`}
+            </Text>
+        );
+    }
+}
+
 
 const getChatName = (usernames, me) => {
     if (!usernames) {
@@ -280,6 +351,7 @@ export {
     convertString,
     convertTopicNameToTopicPageScreenParam,
     displayFormattedSearchLocations,
+    displayFormattedSearchLocationsV2,
     getCaptionWithTopicStyle,
     getChatName,
     getGroupMemberCount,

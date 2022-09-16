@@ -12,7 +12,7 @@ import {
 import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
 import CrossIcon from '../../../assets/icons/cross.svg';
 import StringConstant from '../../utils/string/StringConstant';
-import { displayFormattedSearchLocations } from '../../utils/string/StringUtils';
+import { displayFormattedSearchLocations, displayFormattedSearchLocationsV2 } from '../../utils/string/StringUtils';
 
 const {width} = Dimensions.get('screen');
 
@@ -24,6 +24,8 @@ const SearchModal = (props) => {
         if (props.isVisible) {
         }
     }, [props]);
+
+    console.log(`==============`)
 
     return (
         <Modal
@@ -75,7 +77,8 @@ const SearchModal = (props) => {
                                             key={index}
                                             onPress={() => props.onSelect(value)}>
                                             <View style={styles.list}>
-                                                {displayFormattedSearchLocations(props.value, value)}
+                                                {/* {displayFormattedSearchLocations(props.value, value)} */}
+                                                {displayFormattedSearchLocationsV2(props.value, value)}
                                             </View>
                                         </TouchableNativeFeedback>
                                     )
