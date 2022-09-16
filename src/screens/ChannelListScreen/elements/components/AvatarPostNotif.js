@@ -1,8 +1,8 @@
 import React from 'react'
-import { View, Image, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import {Avatar} from 'stream-chat-react-native-core/src/components/Avatar/Avatar'
 import FeedIcon from '../../../../assets/images/feed-icon.png'
-
+import FastImage from 'react-native-fast-image'
 const styles = StyleSheet.create({
      iconStyle: {
         height: 12, width: 12,
@@ -35,7 +35,8 @@ const AvatarPostNotif = ({item}) => {
     }
 
     return (
-        <Avatar childrenType={<View style={styles.typeContainer} ><Image resizeMode='contain' source={FeedIcon} style={styles.iconStyle} /></View>} showType={true} size={48} image={handleImage()} />
+        <Avatar childrenType={<View style={styles.typeContainer} ><FastImage resizeMode={FastImage.resizeMode.contain} source={FeedIcon} style={styles.iconStyle} /></View>} showType={true} size={48} image={handleImage()} />
+
     )
 }
 

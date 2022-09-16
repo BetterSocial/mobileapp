@@ -1,35 +1,29 @@
 import * as React from 'react';
 import {
   ChannelAvatar,
-  useChannelPreviewDisplayAvatar,
 } from 'stream-chat-react-native';
-import { Image, StyleSheet, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
+
+import { StyleSheet, View } from 'react-native';
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
-import { Context } from '../../../context';
 import { getGroupMemberCount } from '../../../utils/string/StringUtils';
-import { setProfileChannel } from '../../../context/actions/setChannel';
 import ChatIcon from '../../../assets/chat-icon.png'
 import GroupIcon from '../../../assets/group-icon.png'
 import Hashtag from '../../../assets/hashtag.png'
-
 import { colors } from '../../../utils/colors';
 
 const CustomPreviewAvatar = ({ channel }) => {
-  // const [, dispatch] = React.useContext(Context).channel;
-  // const dataChannel = useChannelPreviewDisplayAvatar(channel);
-  // React.useEffect(() => {
-  //   setProfileChannel(dataChannel.images, dispatch);
-  // }, [dataChannel]);
+
 
   if (channel.data.channel_type === 3) {
     return (
       <View style={styles.containerAvatar} >
-      <Image
-        source={{ uri: channel.data.image }}
+      <FastImage
+        source={{ uri: channel.data.image, priority: FastImage.priority.normal }}
         style={styles.image}
       />
       <View style={styles.typeContainer('#55C2FF')} >
-          <Image resizeMode={'contain'} style={styles.iconChatStyle} source={Hashtag} />
+          <FastImage resizeMode={FastImage.resizeMode.contain} style={styles.iconChatStyle} source={Hashtag} />
         </View>
       </View>
     );
@@ -38,12 +32,12 @@ const CustomPreviewAvatar = ({ channel }) => {
   if (channel.data.channel_type === 2) {
     return (
       <View style={styles.containerAvatar} >
-      <Image
-        source={{ uri: channel.data.image }}
+      <FastImage
+        source={{ uri: channel.data.image, priority: FastImage.priority.normal }}
         style={styles.image}
       />
       <View style={styles.typeContainer()} >
-          <Image resizeMode={'contain'} source={GroupIcon} style={styles.iconChatStyle} />
+          <FastImage resizeMode={FastImage.resizeMode.contain} source={GroupIcon} style={styles.iconChatStyle} />
         </View>
       </View>
     );
@@ -53,7 +47,7 @@ const CustomPreviewAvatar = ({ channel }) => {
     if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
       return (
         <View style={styles.containerAvatar} >
-        <Image source={{uri: channel?.data?.image}} style={styles.image} />
+        <FastImage source={{uri: channel?.data?.image, priority: FastImage.priority.normal}} style={styles.image} />
         <View style={styles.typeContainer()} >
           {/* <Text>Min</Text> */}
         </View>
@@ -63,8 +57,8 @@ const CustomPreviewAvatar = ({ channel }) => {
 
     return (
       <View style={styles.containerAvatar} >
-      <Image
-        source={{ uri: `data:image/jpg;base64,${channel?.data?.image}` }}
+      <FastImage
+        source={{ uri: `data:image/jpg;base64,${channel?.data?.image}`, priority: FastImage.priority.normal }}
         style={styles.image}
       />
       <View style={styles.typeContainer()} >
@@ -75,12 +69,12 @@ const CustomPreviewAvatar = ({ channel }) => {
   } if (getGroupMemberCount(channel) > 2) {
     return (
       <View style={styles.containerAvatar}>
-        <Image
+        <FastImage
           source={DefaultChatGroupProfilePicture}
           style={styles.defaultGroupImage}
         />
         <View style={styles.typeContainer()} >
-          <Image resizeMode={'contain'} source={GroupIcon} style={styles.iconChatStyle} />
+          <FastImage resizeMode={FastImage.resizeMode.contain} source={GroupIcon} style={styles.iconChatStyle} />
         </View>
       </View>
     );
@@ -89,7 +83,7 @@ const CustomPreviewAvatar = ({ channel }) => {
       <View style={styles.containerAvatar}>
         <ChannelAvatar channel={channel} />
         <View style={styles.typeContainer()} >
-          <Image resizeMode={'contain'} source={ChatIcon} style={styles.iconChatStyle} />
+          <FastImage resizeMode={FastImage.resizeMode.contain} source={ChatIcon} style={styles.iconChatStyle} />
         </View>
       </View>
     );
