@@ -42,6 +42,7 @@ import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
 import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
 import UniversalLink from '../configs/UniversalLink';
+
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs(props) {
