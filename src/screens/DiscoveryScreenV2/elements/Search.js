@@ -49,8 +49,6 @@ const DiscoverySearch = () => {
 
   const { isFocus } = discovery
 
-  console.log(navigation)
-
   const __handleBackPress = () => {
     Keyboard.dismiss()
     if (navigation.canGoBack()) navigation.goBack()

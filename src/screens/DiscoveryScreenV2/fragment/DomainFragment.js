@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import * as React from 'react';
 import { Keyboard, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
@@ -50,13 +51,14 @@ const DomainFragment = () => {
     // },[ followedDomains, unfollowedDomains ])
 
     const __handleOnPressDomain = (item) => {
-        let navigationParam = {
+        const navigationParam = {
             item: {
                 content: {
                     domain_page_id: item.domain_page_id
                 },
                 domain: {
-                    image: item.logo
+                    image: item.logo,
+                    credderScore: item?.credder_score,
                 },
                 og: {
                     domain: item.domain_name,
@@ -71,26 +73,26 @@ const DomainFragment = () => {
     const __handleFollow = async (from, willFollow, item, index) => {
         // console.log(item)
         if (from === FROM_FOLLOWED_DOMAIN_INITIAL) {
-            let newFollowedDomains = [...domains]
+            const newFollowedDomains = [...domains]
             newFollowedDomains[index].user_id_follower = willFollow ? myId : null
 
             FollowingAction.setFollowingDomain(newFollowedDomains, followingDispatch)
         }
         if (from === FROM_FOLLOWED_DOMAIN) {
-            let newFollowedDomains = [...followedDomains]
+            const newFollowedDomains = [...followedDomains]
             newFollowedDomains[index].user_id_follower = willFollow ? myId : null
 
             DiscoveryAction.setNewFollowedDomains(newFollowedDomains, discoveryDispatch)
         }
 
         if (from === FROM_UNFOLLOWED_DOMAIN) {
-            let newUnfollowedDomains = [...unfollowedDomains]
+            const newUnfollowedDomains = [...unfollowedDomains]
             newUnfollowedDomains[index].user_id_follower = willFollow ? myId : null
 
             DiscoveryAction.setNewUnfollowedDomains(newUnfollowedDomains, discoveryDispatch)
         }
 
-        let data = {
+        const data = {
             domainId: item.domain_page_id,
             source: 'discoveryScreen',
         };
@@ -102,8 +104,7 @@ const DomainFragment = () => {
         }
     }
 
-    const __renderDiscoveryItem = (from, key, item, index) => {
-        return <View key={`${key}-${index}`} style={styles.domainContainer}>
+    const __renderDiscoveryItem = (from, key, item, index) => <View key={`${key}-${index}`} style={styles.domainContainer}>
             <DomainList isDomain={true}
                 onPressBody={() => __handleOnPressDomain(item)}
                 handleSetFollow={() => __handleFollow(from, true, item, index)}
@@ -116,26 +117,19 @@ const DomainFragment = () => {
                 }}
             />
         </View>
-    }
 
     const __renderDomainItems = () => {
-        if (isFirstTimeOpen) return [<DiscoveryTitleSeparator text="Suggested Domains" key="domain-title-separator" />].concat(domains.map((item, index) => {
-            return __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN_INITIAL, "followedDomainDiscovery", { ...item, user_id_follower: item.user_id_follower }, index)
-        }))
+        if (isFirstTimeOpen) return [<DiscoveryTitleSeparator text="Suggested Domains" key="domain-title-separator" />].concat(domains.map((item, index) => __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN_INITIAL, "followedDomainDiscovery", { ...item, user_id_follower: item.user_id_follower }, index)))
 
         return (
             <>
-                {followedDomains.map((item, index) => {
-                    return __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN, "followedDomainDiscovery", item, index)
-                })}
+                {followedDomains.map((item, index) => __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN, "followedDomainDiscovery", item, index))}
 
                 {unfollowedDomains.length > 0 && followedDomains.length > 0 &&
                     <View style={styles.unfollowedHeaderContainer}>
                         <Text style={styles.unfollowedHeaders}>{StringConstant.discoveryMoreDomains}</Text>
                     </View>}
-                {unfollowedDomains.map((item, index) => {
-                    return __renderDiscoveryItem(FROM_UNFOLLOWED_DOMAIN, "unfollowedDomainDiscovery", item, index)
-                })}
+                {unfollowedDomains.map((item, index) => __renderDiscoveryItem(FROM_UNFOLLOWED_DOMAIN, "unfollowedDomainDiscovery", item, index))}
             </>
         )
     }
