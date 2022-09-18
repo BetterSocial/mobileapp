@@ -56,7 +56,7 @@ const isPollExpired = (pollExpiredAtString) => moment(pollExpiredAtString).diff(
  * @returns {String}
  */
 const detectStateInCity = (city) => {
-    const stateDetectionRegex = /(?<=[a-zA-Z .],\s).+/
+    const stateDetectionRegex = /(?:\.)|,/g
     return city.match(stateDetectionRegex)
 }
 
