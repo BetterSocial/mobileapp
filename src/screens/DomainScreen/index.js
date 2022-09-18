@@ -32,7 +32,7 @@ import { unblokDomain } from '../../service/blocking';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const { height, width } = Dimensions.get('screen');
-let headerHeight = 0;
+const headerHeight = 0;
 
 const DomainScreen = () => {
   const route = useRoute();
@@ -53,16 +53,17 @@ const DomainScreen = () => {
   const tiktokScrollRef = React.useRef(null);
   const [headerHeightRef, setHeaderHeightRef] = React.useState(0)
 
-  // console.log(headerHeightRef)
+  console.log('dataDomain')
+  console.log(dataDomain)
 
-  let iddomain = dataDomain.content.domain_page_id;
+  const iddomain = dataDomain.content.domain_page_id;
   const [dataFollow] = React.useState({
     domainId: iddomain,
     source: 'domain_page',
   });
 
   const [news, dispatch] = React.useContext(Context).news;
-  let { ifollow } = news;
+  const { ifollow } = news;
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -93,7 +94,7 @@ const DomainScreen = () => {
 
   const getIFollow = async () => {
     if (ifollow.length === 0) {
-      let res = await getDomainIdIFollow();
+      const res = await getDomainIdIFollow();
       setIFollow(res.data, dispatch);
     } else {
       setFollow(JSON.stringify(ifollow).includes(iddomain));
@@ -102,14 +103,16 @@ const DomainScreen = () => {
 
   const init = async (withLoading = false) => {
 
-    let domainName = dataDomain.og.domain;
+    const domainName = dataDomain.og.domain;
     if (domainName != domainStore.selectedLastDomain) {
       if (withLoading) {
         setLoading(true);
       }
-      let result = await getProfileDomain(domain);
+      const result = await getProfileDomain(domain);
       if (result.code === 200) {
         setProfile(result.data);
+        console.log('result.data')
+        console.log(result.data)
         setProfileDomain(result.data, dispatchDomain);
       } else {
         Toast.show('Domain Not Found', Toast.LONG);
@@ -126,18 +129,13 @@ const DomainScreen = () => {
   };
 
   const getDomainFeed = async (offset) => {
-    console.log('postOffset')
-    console.log(postOffset)
-    let res = await getDetailDomains(`${dataDomain.og.domain}?offset=${postOffset}`);
-
-    console.log('res.data')
-    console.log(res.data.length)
+    const res = await getDetailDomains(`${dataDomain.og.domain}?offset=${postOffset}`);
 
     if (res.code === 200) {
       setDomainFollowers(res.followers);
       if (offset === 0) setDomainData([...res.data, { dummy: true }], dispatchDomain)
       else {
-        let clonedFeeds = [...feeds]
+        const clonedFeeds = [...feeds]
         clonedFeeds.splice(feeds.length - 1, 0, ...data)
         setDomainData(clonedFeeds, dispatchDomain);
       }
@@ -195,7 +193,7 @@ const DomainScreen = () => {
   const handleFollow = async () => {
     setFollow(true);
 
-    let newDomainFollowers = domainFollowers + 1;
+    const newDomainFollowers = domainFollowers + 1;
     setDomainFollowers(newDomainFollowers);
     const res = await followDomain(dataFollow);
     if (res.code === 200) {
@@ -214,13 +212,11 @@ const DomainScreen = () => {
   const handleUnfollow = async () => {
     setFollow(false);
 
-    let newDomainFollowers = domainFollowers - 1;
+    const newDomainFollowers = domainFollowers - 1;
     setDomainFollowers(newDomainFollowers);
     const res = await unfollowDomain(dataFollow);
     if (res.code === 200) {
-      let newListFollow = await ifollow.filter(function (obj) {
-        return obj.domain_id_followed !== iddomain;
-      });
+      const newListFollow = await ifollow.filter((obj) => obj.domain_id_followed !== iddomain);
 
       setIFollow(newListFollow, dispatch);
       init();
@@ -263,16 +259,14 @@ const DomainScreen = () => {
         data={domainStore.domains}
         onEndReach={__handleOnEndReached}
         snapToOffsets={(() => {
-          let posts = domainStore.domains.map((item, index) => {
-            return headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT)
-          })
+          const posts = domainStore.domains.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
           // console.log('posts')
           // console.log(posts)
           return [headerHeightRef, ...posts]
         })()}
         ListHeaderComponent={
           <View style={{ backgroundColor: 'transparent' }} onLayout={(event) => {
-            let headerHeightLayout = event.nativeEvent.layout.height
+            const headerHeightLayout = event.nativeEvent.layout.height
             setHeaderHeightRef(headerHeightLayout)
           }}>
             <Header
@@ -297,7 +291,7 @@ const DomainScreen = () => {
 
         {
           ({ item, index }) => {
-            let dummyItemHeight = height - dimen.size.DOMAIN_CURRENT_HEIGHT - 44 - 18 - StatusBar.currentHeight;
+            const dummyItemHeight = height - dimen.size.DOMAIN_CURRENT_HEIGHT - 44 - 18 - StatusBar.currentHeight;
             if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
             return (
               <RenderItem
@@ -382,12 +376,10 @@ const DomainScreen = () => {
 
 const styles = StyleSheet.create({
   list: { flex: 1 },
-  dummyItem: (height) => {
-    return {
+  dummyItem: (height) => ({
       height,
       backgroundColor: colors.gray1
-    }
-  },
+    }),
   container: {
     flex: 1,
     // backgroundColor: COLORS.gray1,
