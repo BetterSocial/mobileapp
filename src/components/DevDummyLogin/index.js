@@ -22,13 +22,13 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
     const [loading, setLoading] = React.useState(false);
     const [isShown, setIsShown] = React.useState(true)
     const [dummyUsers] = React.useState([
-        // { name: "fajarism", humanId: "HQEGNQCHA8J1OIX4G2CP" },
-        // { name: "fajarismrandom01", humanId: "RNDM-RNDM-0001" },
-        // { name: "bas_v1-4", humanId: "KVL1JKD8VG6KMHUZ0RY5" },
-        // { name: "usupsuparma", humanId: "1G1H-1TUHI-7U9H7-572G21" },
-        // { name: "busanid", humanId: "TVGBYD1BI9YMXMAA6CQS" },
-        // { name: "agita", humanId: "I4K3M10FGR78EWQQDNQ2" },
-        // { name: "usupsu", humanId: "P19FGPQGMSZ5VSHA0YSQR5" },
+        { name: "fajarism", humanId: "HQEGNQCHA8J1OIX4G2CP" },
+        { name: "fajarismrandom01", humanId: "RNDM-RNDM-0001" },
+        { name: "bas_v1-4", humanId: "KVL1JKD8VG6KMHUZ0RY5" },
+        { name: "usupsuparma", humanId: "1G1H-1TUHI-7U9H7-572G21" },
+        { name: "busanid", humanId: "TVGBYD1BI9YMXMAA6CQS" },
+        { name: "agita", humanId: "I4K3M10FGR78EWQQDNQ2" },
+        { name: "usupsu", humanId: "P19FGPQGMSZ5VSHA0YSQR5" },
         { name: "Demo Account", humanId: "g53BCUA3uisOfAP9" },
     ])
 

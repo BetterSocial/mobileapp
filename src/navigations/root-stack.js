@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useRecoilValue, useSetRecoilState, } from 'recoil';
+// import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -115,12 +116,13 @@ export const RootNavigator = (props) => {
     }
 
   }, [initialStartup]);
+
   return (
     <View
       style={{
         height: '100%',
       }}>
-      <StatusBar translucent backgroundColor="white" />
+      {/* <StatusBar translucent backgroundColor="white" /> */}
       <RootStack.Navigator
         screenOptions={{
           headerShown: false,
