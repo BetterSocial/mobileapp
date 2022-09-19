@@ -103,7 +103,7 @@ const App = () => {
         if(!isCanBack) {
           BackHandler.addEventListener('hardwareBackPress', preventCloseApp)
         } else {
-          BackHandler.removeEventListener('hardwareBackPress', preventCloseApp)
+          // BackHandler.removeEventListener('hardwareBackPress', preventCloseApp)
           BackHandler.addEventListener('hardwareBackPress', backFunc)
         }
   }
