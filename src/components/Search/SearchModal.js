@@ -33,6 +33,7 @@ const SearchModal = (props) => {
             isVisible={props.isVisible}
             onSwipeComplete={props.onClose}
             swipeDirection={['down']}
+            onBackButtonPress={props.onClose}
             style={styles.view}>
             <View style={styles.container}>
                 <View style={styles.space} />
