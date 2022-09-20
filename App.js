@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
 import {
   SafeAreaProvider,
+  SafeAreaView,
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
@@ -103,7 +104,6 @@ const App = () => {
         if(!isCanBack) {
           BackHandler.addEventListener('hardwareBackPress', preventCloseApp)
         } else {
-          // BackHandler.removeEventListener('hardwareBackPress', preventCloseApp)
           BackHandler.addEventListener('hardwareBackPress', backFunc)
         }
   }
@@ -131,7 +131,10 @@ const App = () => {
 
 const RootApp = () => (
   <SafeAreaProvider>
-    <App />
+    <SafeAreaView>
+        <App />
+
+    </SafeAreaView>
   </SafeAreaProvider>
 )
 
