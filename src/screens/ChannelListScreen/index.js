@@ -49,7 +49,7 @@ const ChannelListScreen = ({ navigation }) => {
   // const [countChat, setCountChat] = React.useState({})
   const {myProfile} = profileContext
   const [postCount, setPostCount] = React.useState(0)
-  const {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook} = useChannelList()
+  const {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook, getPostNotificationHook, handleCacheCommentHook} = useChannelList()
   const [unReadMessage, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
 
@@ -110,14 +110,13 @@ React.useEffect(() => {
   handleCacheComment()
 }, [])
 
-const handleCacheComment  = () => {
-    getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
-    if(cache) {
-      setCountReadComment(cache)
-    } else {
-      handleNotHaveCache()
-    }
-  })
+const handleCacheComment  = async () => {
+  const countCache = await handleCacheCommentHook()
+  if(countCache) {
+     setCountReadComment(countCache)
+  } else {
+    handleNotHaveCache()
+  }
 }
 const handleNotHaveCache = () => {
   const comment = handleNotHaveCacheHook(listPostNotif)
@@ -135,10 +134,8 @@ const mappingUnreadCountPostNotif = () => {
 }
 
   const getPostNotification = async () => {
-    const res = await getFeedNotification()
-    if(res.success) {
-        setListPostNotif(res.data)
-    }
+    const data = await getPostNotificationHook()
+    setListPostNotif(data)
 } 
   const customPreviewTitle = (props) => {
     const { name } = props.channel?.data;
@@ -197,7 +194,8 @@ const mappingUnreadCountPostNotif = () => {
           />
         </View>
           {myProfile && myProfile.user_id && client.client ? (
-            <Chat client={client.client} i18nInstance={streami18n}>
+            <View testID='chat-container' >
+              <Chat client={client.client} i18nInstance={streami18n}>
               <ChannelList
                 PreviewAvatar={CustomPreviewAvatar}
                 filters={memoizedFilters}
@@ -224,6 +222,8 @@ const mappingUnreadCountPostNotif = () => {
               />
       
             </Chat>
+            </View>
+            
           ) : (
             <View style={styles.content}>
               <ActivityIndicator size="small" color={COLORS.holyTosca} />

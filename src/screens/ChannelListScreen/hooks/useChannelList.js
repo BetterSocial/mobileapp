@@ -1,4 +1,5 @@
-import { saveToCache } from "../../../utils/cache"
+import { getFeedNotification } from "../../../service/feeds"
+import { getSpecificCache, saveToCache } from "../../../utils/cache"
 import { FEED_COMMENT_COUNT } from "../../../utils/cache/constant"
 
 
@@ -34,7 +35,22 @@ const useChannelList = () => {
         return updateReadCache
     }
 
-    return {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook}
+    const getPostNotificationHook = async () => {
+        const res = await getFeedNotification()
+        if(res.success) {
+            return res.data
+        }
+        return []
+    }
+
+    const handleCacheCommentHook  = () => new Promise((resolve) => {
+                getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
+                resolve(cache)
+            })
+        })
+    
+
+    return {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook, getPostNotificationHook, handleCacheCommentHook}
 
 }
 
