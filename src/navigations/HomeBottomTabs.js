@@ -292,13 +292,19 @@ function HomeBottomTabs(props) {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar />
       <Tab.Navigator
         initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
         tabBarOptions={{
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
+          safeAreaInsets: {
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }
  
         }}
         screenOptions={({ navigation: screenOptionsNavigation }) => ({
@@ -353,7 +359,7 @@ function HomeBottomTabs(props) {
       </Tab.Navigator>
       <FirebaseConfig navigation={navigation} />
       <UniversalLink navigation={navigation} />
-    </SafeAreaView>
+    </View>
   );
 }
 
