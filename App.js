@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FlashMessage from 'react-native-flash-message';
-import { StyleSheet, BackHandler } from 'react-native'
+import { StyleSheet, BackHandler, View } from 'react-native'
 import { HumanIDProvider } from '@human-id/react-native-humanid';
 import { NavigationContainer } from '@react-navigation/native';
 import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
@@ -23,13 +23,13 @@ if(!__DEV__) {
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: '100%'
+    flex: 1
   }
 })
 
 
 const App = () => {
-  const { bottom } = useSafeAreaInsets();
+  const { bottom, top } = useSafeAreaInsets();
   const {height} = useSafeAreaFrame()
   const streami18n = new Streami18n({
     language: 'en',
@@ -75,9 +75,12 @@ const App = () => {
       <RecoilRoot>
         <Store>
           <NavigationContainer onStateChange={handleStateChange}  ref={navigationRef} linking={linking}>
+            <View style={{paddingTop: top, paddingBottom: bottom}} >
             <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
               <RootNavigator areaHeight={height} />
             </OverlayProvider>
+            </View>
+            
           </NavigationContainer>
         </Store>
       </RecoilRoot>
@@ -90,11 +93,16 @@ const App = () => {
 };
 
 const RootApp = () => (
-  <SafeAreaProvider>
-    <SafeAreaView style={styles.container} >
-        <App />
-
-    </SafeAreaView>
+  
+  <SafeAreaProvider initialMetrics={{
+     insets: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+    }
+  }} >
+             <App />
   </SafeAreaProvider>
 )
 
