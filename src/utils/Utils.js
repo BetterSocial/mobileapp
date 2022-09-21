@@ -5,6 +5,8 @@ import psl from 'psl'
 import { Linking } from 'react-native';
 import { OpenGraphParser } from 'react-native-opengraph-kit'
 
+import StringConstant from './string/StringConstant';
+
 export const sanitizeUrlForLinking = (url) => {
     if (!/^https?:\/\//.test(url)) {
         url = `https://${url}`;
@@ -70,7 +72,7 @@ export const openUrl = (url, force = false) => {
                 Linking.openURL(url);
             } else {
                 if (force) return Linking.openURL(url);
-                SimpleToast.show('Url is not supported', SimpleToast.SHORT);
+                SimpleToast.show(StringConstant.generalCannotOpenLink, SimpleToast.SHORT);
             }
         });
     }
