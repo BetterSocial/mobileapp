@@ -186,7 +186,7 @@ const PostPageDetailIdComponent = (props) => {
           // Toast.show('Comment successful', Toast.LONG);
 
         } else {
-          Toast.show('Failed Comment', Toast.LONG);
+          Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
           setLoadingPost(false)
         }
       } else {
@@ -195,7 +195,7 @@ const PostPageDetailIdComponent = (props) => {
       }
     } catch (e) {
       setLoadingPost(false)
-      Toast.show('Failed Comment', Toast.LONG);
+      Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
   };
 

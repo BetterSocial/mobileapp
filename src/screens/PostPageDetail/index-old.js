@@ -67,9 +67,9 @@ const PostPageDetail = (props) => {
   const [loadingVote, setLoadingVote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false)
   const [commentList, setCommentList] = React.useState([]);
-  let navigation = useNavigation();
+  const navigation = useNavigation();
   
-  let [feeds, dispatch] = React.useContext(Context).feeds;
+  const [feeds, dispatch] = React.useContext(Context).feeds;
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -87,7 +87,7 @@ const PostPageDetail = (props) => {
 
   const scrollViewRef = React.useRef(null);
 
-  let {index} = props.route.params;
+  const {index} = props.route.params;
 
   const [item, setItem] = React.useState(feeds.feeds[index]);
 
@@ -98,7 +98,7 @@ const PostPageDetail = (props) => {
     }
   }, [JSON.stringify(feeds)]);
 
-  let navigateToReplyView = (data) => {
+  const navigateToReplyView = (data) => {
     navigation.navigate('ReplyComment', data);
 }
 
@@ -108,10 +108,10 @@ const PostPageDetail = (props) => {
     setTotalVote(upvote - downvotes)
   };
   const initial = () => {
-    let reactionCount = item.reaction_counts;
+    const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
-      let comment = reactionCount.comment;
+      const {comment} = reactionCount;
       handleVote(reactionCount);
       if (comment !== undefined) {
         if (comment > 0) {
@@ -121,13 +121,13 @@ const PostPageDetail = (props) => {
           );
         }
       }
-      let upvote = reactionCount.upvotes;
+      const upvote = reactionCount.upvotes;
       if (upvote !== undefined) {
-        count = count + upvote;
+        count += upvote;
       }
-      let downvote = reactionCount.downvotes;
+      const downvote = reactionCount.downvotes;
       if (downvote !== undefined) {
-        count = count - downvote;
+        count -= downvote;
       }
       setTotalVote(count);
     }
@@ -148,13 +148,13 @@ const PostPageDetail = (props) => {
 
   const userBlock = async () => {
     const data = {
-      userId: userId,
-      postId: postId,
+      userId,
+      postId,
       source: 'screen_post_detail',
       reason: reportOption,
       message: messageReport,
     };
-    let result = await blockUser(data);
+    const result = await blockUser(data);
     if (result.code === 200) {
       Toast.show(
         'The user was blocked successfully. \nThanks for making BetterSocial better!',
@@ -183,7 +183,7 @@ const PostPageDetail = (props) => {
     }, 500);
   };
   const fetchMyProfile = async () => {
-    let id = await getUserId();
+    const id = await getUserId();
     if (id) {
       const result = await getMyProfile(id);
       if (result.code === 200) {
@@ -196,7 +196,7 @@ const PostPageDetail = (props) => {
     if (value.anonimity === true) {
       setUsername('Anonymous');
       setPostId(value.id);
-      setUserId(value.actor.id + '-anonymous');
+      setUserId(`${value.actor.id  }-anonymous`);
     } else {
       setUsername(value.actor.data.username);
       setPostId(value.id);
@@ -206,7 +206,7 @@ const PostPageDetail = (props) => {
 
   const updateFeed = async (isSort) => {
     try {
-      let data = await getFeedDetail(item.id);
+      const data = await getFeedDetail(item.id);
       let oldData = data.data
       if(isSort) {
         oldData = {...oldData, latest_reactions: {...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix())} }
@@ -239,14 +239,14 @@ const PostPageDetail = (props) => {
     setLoadingPost(true)
     try {
       if (textComment.trim() !== '') {
-        let data = await createCommentParent(textComment, item.id);
+        const data = await createCommentParent(textComment, item.id);
         if (data.code === 200) {
           setTextComment('');
           updateFeed(true);
           // Toast.show('Comment successful', Toast.LONG);
           
         } else {
-          Toast.show('Failed Comment', Toast.LONG);
+          Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
           setLoadingPost(false)
         }
       } else {
@@ -255,12 +255,12 @@ const PostPageDetail = (props) => {
       }
     } catch (e) {
       setLoadingPost(false)
-      Toast.show('Failed Comment', Toast.LONG);
+      Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
   };
 
   const onPressDomain = () => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -276,7 +276,7 @@ const PostPageDetail = (props) => {
   const setUpVote = async (status) => {
     const data = {
       activity_id: item.id,
-      status: status,
+      status,
       feed_group: 'main_feed',
     };
     const processData = await upVote(data);
@@ -289,7 +289,7 @@ const PostPageDetail = (props) => {
   const setDownVote = async (status) => {
     const data = {
       activity_id: item.id,
-      status: status,
+      status,
       feed_group: 'main_feed',
     };
     const processData = await downVote(data);
@@ -311,7 +311,7 @@ const PostPageDetail = (props) => {
   };
 
   const navigateToLinkContextPage = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -384,11 +384,9 @@ const PostPageDetail = (props) => {
     checkVotes()
   }, [item, yourselfId])
 
-  React.useEffect(() => {
-    return () => {
+  React.useEffect(() => () => {
       updateFeed(true)
-    }
-  }, [])
+    }, [])
 
 
   return (
@@ -457,7 +455,7 @@ const PostPageDetail = (props) => {
                   refBlockUser.current.open();
                 }
               }}
-              isSelf={yourselfId === item.actor.id ? true : false}
+              isSelf={yourselfId === item.actor.id}
             />
           </View>
         </View>
@@ -530,9 +528,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
   },
-  content: (h) => {
-    return {
-      width: width,
+  content: (h) => ({
+      width,
       shadowColor: 'rgba(0,0,0,0.5)',
       shadowOffset: {
         width: 0,
@@ -544,20 +541,19 @@ const styles = StyleSheet.create({
       borderBottomColor: '#C4C4C4',
       marginBottom: -1,
       height: h - 120,
-    };
-  },
+    }),
   gap: {height: 16},
   additionalContentStyle: (imageLength, h) => {
     if (imageLength > 0) {
       return {
         height: h * 0.5,
       };
-    } else {
+    } 
       return {};
-    }
+    
   },
   contentScrollView: (totalComment) => ({
-    height: height,
+    height,
     marginBottom: totalComment > 0 ? 82 : 0,
   }),
 });
