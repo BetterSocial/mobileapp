@@ -6,7 +6,7 @@ import messaging from '@react-native-firebase/messaging';
 import {
   Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { useRecoilValue } from 'recoil';
@@ -48,7 +48,7 @@ const Tab = createBottomTabNavigator();
 function HomeBottomTabs(props) {
   const { navigation } = props;
   const isIos = Platform.OS === 'ios';
-
+  const {top, bottom} = useSafeAreaInsets()
   const [myProfile, dispatchProfile] = React.useContext(Context).profile;
   const [, followingDispatch] = React.useContext(Context).following;
 
@@ -293,17 +293,16 @@ function HomeBottomTabs(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar />
       <Tab.Navigator
         initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
         tabBarOptions={{
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
           safeAreaInsets: {
-              top: 0,
+              top:0,
               bottom: 0,
               left: 0,
-              right: 0,
+              right: 0
             }
  
         }}

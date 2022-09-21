@@ -126,14 +126,19 @@ export const RootNavigator = (props) => {
       <RootStack.Navigator
         screenOptions={{
           headerShown: false,
-          headerStyle: {
-            height: Platform.OS === 'ios' ? 64 : 56 + StatusBar.currentHeight,
-            paddingTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight,
-          },
+          safeAreaInsets: {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
+          }
+          // headerStyle: {
+          //   height: Platform.OS === 'ios' ? 64 : 56 + StatusBar.currentHeight,
+          //   paddingTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight,
+          // },
         }}>
         {
           initialStartup.id !== null && initialStartup.id !== '' ? (
-            // token !== null && token !== '' ? (
             <RootStack.Screen
               name="AuthenticatedStack"
               component={AuthenticatedNavigator}
