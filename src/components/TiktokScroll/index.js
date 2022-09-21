@@ -34,6 +34,7 @@ const TiktokScroll = (props) => {
 
   return (
     <FlatList
+      contentInsetAdjustmentBehavior='automatic'
       contentContainerStyle={[styles.flatlistContainer, {paddingTop: showSearchBar ? searchHeight : 0}]}
       data={data}
       decelerationRate="fast"
