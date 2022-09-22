@@ -31,6 +31,7 @@ import { InitialStartupAtom } from '../../service/initialStartup';
 import { checkToken } from '../../service/outh';
 import { fonts } from '../../utils/fonts';
 import {
+  removeLocalStorege,
   setAccessToken,
   setRefreshToken,
   setUserId,
@@ -168,8 +169,8 @@ const SignIn = () => {
     <SafeAreaView style={S.container}>
       <StatusBar translucent={false} />
       <View style={S.containerSlideShow}>
-        {clickTime >= 7 && isDemoLoginEnabled? <DevDummyLogin resetClickTime={resetClickTime} />  : null}
-        <SlideShow onContainerPress={onClickContainer} onChangeNewIndex={handleSlideShow} handleLogin={handleLogin}/>
+        {clickTime >= 7 && isDemoLoginEnabled ? <DevDummyLogin resetClickTime={resetClickTime} /> : null}
+        <SlideShow onContainerPress={onClickContainer} onChangeNewIndex={handleSlideShow} handleLogin={handleLogin} />
       </View>
     </SafeAreaView>
   );
