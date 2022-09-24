@@ -337,7 +337,7 @@ const getCaptionWithTopicStyle = (text, navigation) => {
     const topicWithPrefix = route?.params?.id
     const id = removePrefixTopic(topicWithPrefix);
 
-    text = reactStringReplace(text, /\B(\#[a-zA-Z0-9_-+]+\b)(?!;)/, (match, index) =>
+    text = reactStringReplace(text, /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/, (match, index) =>
         <TopicText navigation={navigation} text={match} currentTopic={id} />
     )
 
