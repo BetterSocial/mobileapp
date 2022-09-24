@@ -17,6 +17,7 @@ import ButtonAddParticipants from '../../components/Button/ButtonAddParticipants
 import EditGroup from './elements/EditGroup';
 import HeaderContact from '../../components/Header/HeaderContact';
 import Loading from '../Loading';
+import StringConstant from '../../utils/string/StringConstant';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {ProfileContact} from '../../components/Items';
@@ -25,7 +26,7 @@ import {getChatName} from '../../utils/string/StringUtils';
 import {requestExternalStoragePermission} from '../../utils/permission';
 import {uploadFile} from '../../service/file';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 
 const GroupSetting = ({navigation, route}) => {
   const [groupChatState] = React.useContext(Context).groupChat;
@@ -43,7 +44,7 @@ const GroupSetting = ({navigation, route}) => {
   const [urlImage, setUrlImage] = React.useState(channel?.data?.image);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  let isFocusChatName = route?.params?.focusChatName;
+  const isFocusChatName = route?.params?.focusChatName;
 
   const updateName = (text) => {
     setGroupName(text);
@@ -54,7 +55,7 @@ const GroupSetting = ({navigation, route}) => {
     if (changeImage) {
       if(withLoading) setIsLoading(true);
       try {
-        let res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
+        const res = await uploadFile(`data:image/jpeg;base64,${base64Profile}`);
         changeImageUrl = res.data.url;
       } catch (e) {
         setIsLoading(false);
@@ -64,32 +65,28 @@ const GroupSetting = ({navigation, route}) => {
 
     if (changeName || changeImage) {
       if(withLoading) setIsLoading(true);
-      let dataEdit = {
+      const dataEdit = {
         name: groupName,
         // ...(changeImage && {image: base64Profile}),
       };
       if (changeImage) {
         dataEdit.image = changeImageUrl;
-      } else {
-        if (channel?.data?.image) {
+      } else if (channel?.data?.image) {
           dataEdit.image = channel?.data?.image;
         }
-      }
 
       try {
         await channel.update(dataEdit);
         if(withNavigation) navigation.navigate('ChannelList');  
       } catch (e) {
         console.log(`error : ${e}`)
-        SimpleToast.show('Update chat information failed, please try again.')
+        SimpleToast.show(StringConstant.groupSettingUpdateFailed)
       }
       setIsLoading(false);
-    } else {
-      if(withNavigation) navigation.goBack();
-    }
+    } else if(withNavigation) navigation.goBack();
   };
   const lounchGalery = async () => {
-    let {success, message} = await requestExternalStoragePermission();
+    const {success, message} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary(
         {
@@ -171,7 +168,7 @@ const styles = StyleSheet.create({
   containerHeader: {marginLeft: 22, marginRight: 20},
   users: {
     paddingTop: 12,
-    width: width,
+    width,
   },
   countUser: {
     fontFamily: fonts.inter[600],

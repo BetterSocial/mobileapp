@@ -2,19 +2,20 @@ import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
 import {
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  SafeAreaView,
-  KeyboardAvoidingView,
-  Platform
+  View
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import ButtonHightlight from '../ButtonHighlight';
 import Comment from "../Comments/Comment";
 import ConnectorWrapper from "../Comments/ConnectorWrapper";
 import LoadingComment from "../LoadingComment";
@@ -26,7 +27,6 @@ import { colors } from '../../utils/colors';
 import { createChildComment } from '../../service/comment';
 import { fonts } from '../../utils/fonts';
 import { getFeedDetail } from '../../service/post';
-import ButtonHightlight from '../ButtonHighlight';
 
 const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed,updateReply,  itemParent }) => {
   const navigation = useNavigation();
@@ -145,7 +145,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
           // setLoadingCMD(false);
           await updateFeed(true)
         } else {
-          Toast.show('Failed Comment', Toast.LONG);
+          Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
           // setLoadingCMD(false);
         }
       } else {
@@ -153,7 +153,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
         // setLoadingCMD(false);
       }
     } catch (error) {
-      Toast.show('Failed Comment', Toast.LONG);
+      Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
       // setLoadingCMD(false);
     }
   };

@@ -16,6 +16,7 @@ import ContainerComment from '../../components/Comments/ContainerComment';
 import DetailDomainScreenContent from './elements/DetailDomainScreenContent';
 import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
 import Loading from '../Loading';
+import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import { COLORS } from '../../utils/theme';
 import { Footer } from '../../components';
@@ -168,13 +169,13 @@ const DetailDomainScreen = (props) => {
           setTextComment('');
           // Toast.show('Comment successful', Toast.LONG);
         } else {
-          Toast.show('Failed Comment', Toast.LONG);
+          Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
       } else {
         // Toast.show('Comments are not empty', Toast.LONG);
       }
     } catch (e) {
-      Toast.show('Failed Comment', Toast.LONG);
+      Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
   };
 

@@ -261,6 +261,7 @@ const NewsScreen = ({ }) => {
       <Animated.View style={{ paddingTop: Platform.OS === 'android' ? paddingContainer : 0 }}>
         <FlatList
           ref={scrollRef}
+          contentInsetAdjustmentBehavior='automatic'
           keyExtractor={keyExtractor}
           onScrollBeginDrag={handleOnScrollBeginDrag}
           onScroll={handleScrollEvent}

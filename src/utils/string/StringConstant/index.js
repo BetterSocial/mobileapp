@@ -101,6 +101,15 @@ const profileDeleteAccountAlertCancel = 'Cancel';
 const profileDeleteAccountAlertSubmit = 'Yes - Delete my account';
 const profileDeleteAccountSuccess = 'Success - your account has been deleted';
 
+// Comment
+const generalCommentFailed = 'Comment Failed';
+
+// Open Link
+const generalCannotOpenLink = 'URL is not supported';
+
+// Group Setting Page
+const groupSettingUpdateFailed = 'Update failed, please try again'
+
 export default {
     signInPrivacy,
     signInScreenHumanIdBrand,
@@ -182,4 +191,9 @@ export default {
     profileDeleteAccountAlertCancel,
     profileDeleteAccountAlertSubmit,
     profileDeleteAccountSuccess,
+
+    generalCommentFailed,
+    generalCannotOpenLink,
+
+    groupSettingUpdateFailed
 };

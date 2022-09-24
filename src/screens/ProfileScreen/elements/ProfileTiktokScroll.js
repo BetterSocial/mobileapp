@@ -36,6 +36,7 @@ class ProfileTiktokScroll extends React.Component {
       onEndReach, onScroll, ListHeaderComponent } = this.props;
     return (
       <FlatList
+        contentInsetAdjustmentBehavior='automatic'
         initialNumToRender={2}
         contentContainerStyle={styles.flatlistContainer}
         data={data}

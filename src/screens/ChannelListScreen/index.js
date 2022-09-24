@@ -189,7 +189,7 @@ const mappingUnreadCountPostNotif = () => {
   return (
     <SafeAreaProvider style={{ height: '100%' }}>
       <StatusBar translucent={false} />
-      <ScrollView >
+      <ScrollView contentInsetAdjustmentBehavior='automatic' >
         <View style={{ height: 52 }}>
           <Search
             animatedValue={0}

@@ -1,14 +1,14 @@
-import * as React from 'react';
-import moment from 'moment';
-import reactStringReplace from 'react-string-replace'
-import { StyleSheet, Text, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import moment from 'moment';
+import * as React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import reactStringReplace from 'react-string-replace'
 
 import TextBold from '../../components/Text/TextBold';
 import TopicText from '../../components/TopicText';
-import removePrefixTopic from '../topics/removePrefixTopic';
-import { COLORS } from '../theme';
 import { fonts } from '../fonts';
+import { COLORS } from '../theme';
+import removePrefixTopic from '../topics/removePrefixTopic';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 
@@ -337,7 +337,7 @@ const getCaptionWithTopicStyle = (text, navigation) => {
     const topicWithPrefix = route?.params?.id
     const id = removePrefixTopic(topicWithPrefix);
 
-    text = reactStringReplace(text, /\B(\#[a-zA-Z0-9]+\b)(?!;)/, (match, index) =>
+    text = reactStringReplace(text, /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/, (match, index) =>
         <TopicText navigation={navigation} text={match} currentTopic={id} />
     )
 

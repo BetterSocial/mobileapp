@@ -17,12 +17,13 @@ const handleHastagMention = (text, setFormattedContent) => {
     arrText.forEach(retLine => {
         const words = retLine.split(' ');
         const contentLength = words.length;
-        const format = /[ !#@$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\n]/;
+        const formatMention = /[ !#@$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\n]/;
+        const formatHashtag = /[ !#@$%^&*()=+\[\]{};':"\\|,.<>\/?\n]/;
         words.forEach((word, index) => {
             const randomId = generateRandomId();
             if (
-                (word.startsWith("@") && !format.test(word.substr(1))) ||
-                (word.startsWith("#") && !format.test(word.substr(1)))
+                (word.startsWith("@") && !formatMention.test(word.substr(1))) ||
+                (word.startsWith("#") && !formatHashtag.test(word.substr(1)))
             ) {
                 const mention = (
                     <Text key={randomId} style={styles.mention}>
