@@ -1,16 +1,16 @@
 import * as React from 'react';
+import { Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View } from 'react-native';
 import KeyEvent from 'react-native-keyevent';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import { Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View } from 'react-native';
 
-import Card from './Card';
-import TopicItem from '../../../components/TopicItem';
 import { Button } from '../../../components/Button';
-import { capitalizeFirstText, convertString } from '../../../utils/string/StringUtils';
+import TopicItem from '../../../components/TopicItem';
+import { getTopics } from '../../../service/topics';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
-import { getTopics } from '../../../service/topics';
+import { capitalizeFirstText, convertString } from '../../../utils/string/StringUtils';
 import { isEmptyOrSpaces } from '../../../utils/Utils';
+import Card from './Card';
 
 const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose, chatTopics }) => {
   const [dataTopic, setTopic] = React.useState('');
@@ -61,7 +61,7 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose, chatTopi
     }
   }
   const add = () => {
-    const data = dataTopic.replace(/\s/g, '').toLowerCase();
+    const data = dataTopic.replace(/\s/g, '')
     if (data !== '' && !listTopics.includes(data)) {
       setlistTopics((val) => [...val, data]);
       setChatTopic((val) => [...val, `topic_${data}`])
