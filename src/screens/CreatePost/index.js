@@ -552,7 +552,7 @@ const CreatePost = () => {
     };
     const handleTopicChat = async () => {
         const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
-        listTopic.forEach(async(topic) => {
+        listTopic.forEach(async (topic) => {
             const channel = await client.client.channel('topics', `topic_${topic}`, { name: `#${topic}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
             await channel.create()
             await channel.addMembers([user.myProfile.user_id])
@@ -697,7 +697,7 @@ const CreatePost = () => {
     const searchTopic = async (name) => {
         console.log(name, 'nama')
         if (!isEmptyOrSpaces(name)) {
-                    console.log(name, 'nama123')
+            console.log(name, 'nama123')
 
             getTopics(name)
                 .then(v => {
@@ -906,7 +906,7 @@ const CreatePost = () => {
                                         setPositionKeyboard('never')
                                         handleStateMention(newMessage);
                                         setMessage(newMessage);
-                                        setTopicSearch([]);
+                                        setListUsersForTagging([]);
                                     }}>
                                         <View style={{ marginBottom: 5 }} >
                                             <Text style={{
