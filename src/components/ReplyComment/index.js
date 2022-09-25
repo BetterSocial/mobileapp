@@ -32,16 +32,13 @@ import useReplyComment from './hooks/useReplyComment';
 const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed,updateReply,  itemParent }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
-  const [temporaryText, setTemporaryText] = React.useState('')
-  const [loadingCMD, setLoadingCMD] = React.useState(false);
-  const {getThisCommentHook, initReplyHook} = useReplyComment()
+  const {getThisCommentHook, setCommentHook, temporaryText, setTemporaryText, isLastInParentHook} = useReplyComment()
   const [users] = React.useContext(Context).users;
   const [profile] = React.useContext(Context).profile;
   const [item, setItem] = React.useState(itemProp);
-  const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
   const scrollViewRef = React.useRef(null)
-  const [defaultData, setDefaultData] = React.useState({
+  const [defaultData,] = React.useState({
     data: { count_downvote: 0, count_upvote: 0, text: textComment },
     id: newCommentList.length + 1, kind: "comment", updated_at: moment(),
     children_counts: { comment: 0 },
@@ -49,27 +46,13 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     user: { data: { ...itemProp.user.data, profile_pic_url: users.photoUrl, username: profile.myProfile.username }, id: itemProp.user.id }
   })
   const setComment = (text) => {
-    setTemporaryText(text)
+   setCommentHook(text)
   };
-
+  
   React.useEffect(() => {
-    if (!loadingCMD) {
-      setTextComment(temporaryText)
-    }
-  }, [temporaryText, loadingCMD])
+    setTextComment(temporaryText)
+  }, [temporaryText])
 
-  React.useEffect(() => {
-    initReply()
-  }, [item]);
-
-  const initReply = async () => {
-    console.log(item, 'bossman')
-      const commentId = await initReplyHook(item)
-      setIdComment(commentId)
-        // if (item.latest_children && item.latest_children.comment) {
-        //   setIdComment(item.latest_children.comment.length)
-        // }
-  }
 
   const getThisComment = async () => {
     const comments = await getThisCommentHook(itemProp)
@@ -106,13 +89,11 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     updateFeed()
   }
   const createComment = async () => {
-    // setLoadingCMD(true);
     let sendPostNotif = false
     if(page !== 'DetailDomainScreen') {
       sendPostNotif = true
     }
     setTemporaryText('')
-    setIdComment((prev) => prev + 1)
     setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
     try {
       if (textComment.trim() !== '') {
@@ -129,7 +110,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
           await updateFeed(true)
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
-          // setLoadingCMD(false);
         }
       } else {
         // Toast.show('Comments are not empty', Toast.LONG);
@@ -137,17 +117,12 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
       }
     } catch (error) {
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
-      // setLoadingCMD(false);
     }
   };
 
   const navigationGoBack = () => navigation.goBack();
 
-
-
-
   const updateReplyPost = (comment, itemParentProps, commentId) => {
-    console.log(comment, itemParentProps, commentId, 'meme2')
     if(itemParentProps) {
       const updateComment = itemParentProps.latest_children.comment.map((dComment) => {
         if(dComment.id === commentId) {
@@ -175,13 +150,10 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                   updateParent,
                   itemParent: itemParentProps,
                   updateReply: (comment, parentProps, id) => updateReplyPost(comment, parentProps, id)
-                  // findCommentAndUpdate
-                  // updateParentReply: () => updateParentReplyFunc(newCommentList)
                 });
-              };
+  };
 
-const isLastInParent = (index) => index === (item.children_counts.comment || 0) - 1;
-
+const isLastInParent = (index) => isLastInParentHook(index, item)
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} style={styles.container}>
@@ -217,7 +189,7 @@ const isLastInParent = (index) => index === (item.children_counts.comment || 0) 
           {newCommentList.length > 0 &&
             newCommentList.map((itemReply, index) => (
                 <ContainerReply key={index}>
-                  <ConnectorWrapper index={loadingCMD ? index + 1 : index}>
+                  <ConnectorWrapper index={index}>
                     <View style={styles.childCommentWrapper}>
                       <Comment
                         indexFeed={indexFeed}
@@ -234,11 +206,7 @@ const isLastInParent = (index) => index === (item.children_counts.comment || 0) 
                         comment={itemReply}
                         onPress={() => showChildrenCommentView(itemReply)}
                         level={parseInt(level) + 1}
-                        loading={loadingCMD}
                         refreshComment={saveParentComment}
-                   
-
-                      // showLeftConnector
                       />
                       {itemReply.children_counts.comment > 0 && (
                         <>
@@ -261,7 +229,7 @@ const isLastInParent = (index) => index === (item.children_counts.comment || 0) 
                   </ConnectorWrapper>
                 </ContainerReply>
               ))}
-          {loadingCMD && (
+          {/* {loadingCMD && (
             <ContainerReply>
               <ConnectorWrapper>
                 <View style={styles.childCommentWrapperLoading}>
@@ -269,7 +237,7 @@ const isLastInParent = (index) => index === (item.children_counts.comment || 0) 
                 </View>
               </ConnectorWrapper>
             </ContainerReply>
-          )}
+          )} */}
           {newCommentList.length > 0 ? <View style={styles.childLevelMainConnector} /> : null}
         </View>
       </ScrollView>

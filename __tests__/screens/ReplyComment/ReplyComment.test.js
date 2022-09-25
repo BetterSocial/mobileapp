@@ -1,6 +1,6 @@
 import React from 'react'
 import {render} from '@testing-library/react-native'
-import {renderHook} from '@testing-library/react-hooks'
+import {act, renderHook} from '@testing-library/react-hooks'
 import ReplyComment from '../../../src/screens/ReplyComment'
 import useReplyComment from '../../../src/components/ReplyComment/hooks/useReplyComment'
 
@@ -18,6 +18,9 @@ const itemProp = {
 
             }
         ]
+    },
+    children_counts: {
+        comment: 2
     }
 }
 
@@ -47,9 +50,20 @@ describe('hooks function should run correctly', () => {
         ])
     })
 
-    it('init reply hook should run correctly', () => {
+
+    it('handle temporary comment should run correctly', () => {
         const {result} = renderHook(() => useReplyComment())
-        expect(result.current.initReplyHook(itemProp)).toStrictEqual(itemProp.latest_children.comment.length)
+        act(() => {
+            result.current.setCommentHook('test')
+        })
+        expect(result.current.temporaryText).toStrictEqual('test')
+
+    })
+
+    it('isLastInParent should run correctly', () => {
+        const {result} = renderHook(() => useReplyComment())
+        expect(result.current.isLastInParentHook(1, itemProp)).toStrictEqual(true)
+        expect(result.current.isLastInParentHook(0, itemProp)).toStrictEqual(false)
     })
 
     // it('should update parent reply should run correctly', () => {

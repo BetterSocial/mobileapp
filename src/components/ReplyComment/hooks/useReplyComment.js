@@ -1,8 +1,19 @@
 import moment from "moment";
-
+import React from 'react'
 
 const useReplyComment = () => {
+    const [temporaryText, setTemporaryText] = React.useState('')
+      const [textComment, setTextComment] = React.useState('');
 
+    const setCommentHook = (text) => {
+      setTemporaryText(text)
+    };
+
+    const handleFirstTextCommentHook = () => {
+        setTextComment(temporaryText)
+
+    }
+  
     const getThisCommentHook = (itemProp) => { 
             let comments = [];
             if (
@@ -36,14 +47,10 @@ const useReplyComment = () => {
 
     }
 
-      const initReplyHook = (item) => {
-        if (item.latest_children && item.latest_children.comment) {
-          return item.latest_children.comment.length
-        }
-        return 0
-  }
+    const isLastInParentHook = (index, item) => index === (item.children_counts.comment || 0) - 1;
 
-    return {getThisCommentHook, updateReplyPostHook, initReplyHook}
+
+    return {getThisCommentHook, updateReplyPostHook, setTemporaryText, setCommentHook, temporaryText, handleFirstTextCommentHook, textComment, isLastInParentHook}
 }
 
 
