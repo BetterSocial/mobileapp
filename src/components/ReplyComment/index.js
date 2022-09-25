@@ -27,13 +27,14 @@ import { colors } from '../../utils/colors';
 import { createChildComment } from '../../service/comment';
 import { fonts } from '../../utils/fonts';
 import { getFeedDetail } from '../../service/post';
+import useReplyComment from './hooks/useReplyComment';
 
 const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed,updateReply,  itemParent }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const [temporaryText, setTemporaryText] = React.useState('')
-  const [, setReaction] = React.useState(false);
   const [loadingCMD, setLoadingCMD] = React.useState(false);
+  const {getThisCommentHook, initReplyHook} = useReplyComment()
   const [users] = React.useContext(Context).users;
   const [profile] = React.useContext(Context).profile;
   const [item, setItem] = React.useState(itemProp);
@@ -58,32 +59,23 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
   }, [temporaryText, loadingCMD])
 
   React.useEffect(() => {
-    const init = () => {
-      if (JSON.stringify(item.children_counts) !== '{}') {
-        setReaction(true);
-      }
-    };
-    init();
-    if (item.latest_children && item.latest_children.comment) {
-      setIdComment(item.latest_children.comment.length)
-    }
+    initReply()
   }, [item]);
 
+  const initReply = async () => {
+    console.log(item, 'bossman')
+      const commentId = await initReplyHook(item)
+      setIdComment(commentId)
+        // if (item.latest_children && item.latest_children.comment) {
+        //   setIdComment(item.latest_children.comment.length)
+        // }
+  }
+
   const getThisComment = async () => {
-    let comments = [];
-    if (
-      itemProp.latest_children &&
-      itemProp.latest_children.comment &&
-      Array.isArray(itemProp.latest_children.comment)
-    ) {
-      comments = itemProp.latest_children.comment.sort(
-        (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix(),
-      );
-    }
+    const comments = await getThisCommentHook(itemProp)
     setItem({ ...itemProp, latest_children: { comment: comments } });
     setNewCommentList(comments)
   };
-
 
   React.useEffect(() => {
     if(itemProp) {
@@ -133,16 +125,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
             updateReply(newComment, itemParent, item.id)
           }
                 saveParentComment()
-          // setNewItemProp({...newItemProp, latest_children: {...newItemProp.latest_children, comment: newComment}})
-          // setNewItemParent({...itemParent, chakra: 1})
-          // setItem({...item, latest_children: {...item.latest_children, comment: newComment}})
-          // itemParent = {...itemParent, cuma: 0}
-          // setItem({})
-          // if(level > 1) {
-          //   setCommentLev2([...commentLev2, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
-          // }
-          // updateReply()
-          // setLoadingCMD(false);
+         
           await updateFeed(true)
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
