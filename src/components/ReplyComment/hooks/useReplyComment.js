@@ -29,7 +29,6 @@ const useReplyComment = () => {
     }
 
       const updateReplyPostHook = (comment, itemParentProps, commentId) => {
-            console.log(comment, itemParentProps, commentId, 'meme2')
             if(itemParentProps) {
                 const updateComment = itemParentProps.latest_children.comment.map((dComment) => {
                     if(dComment.id === commentId) {
