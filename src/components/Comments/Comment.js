@@ -31,7 +31,6 @@ const Comment = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
-  refreshComment,
   findCommentAndUpdate
 }) => {
   const navigation = useNavigation();
@@ -64,7 +63,7 @@ const Comment = ({
       },
     });
   };
-
+  
   const onUpVote = async () => {
     if(statusVote === 'upvote') {
       setTotalVote((prevState) => prevState - 1)
@@ -110,16 +109,12 @@ const Comment = ({
     if(findCommentAndUpdate) {
       findCommentAndUpdate(comment.id, result.data, level)
     }
-    // setTotalVote(
-    //   result.data.data.count_upvote - result.data.data.count_downvote,
-    // );
     iVote();
   };
   const iVote = async () => {
     let result = await iVoteComment(comment.id);
     if (result.code === 200) {
       setStatusVote(result.data.action);
-      // if(refreshComment) refreshComment(result)
     }
   };
 
@@ -218,9 +213,7 @@ const Comment = ({
   );
 };
 
-export default React.memo (Comment, (prevProps, nextProps) => {
-  return prevProps.comment === nextProps.comment
-});
+export default React.memo (Comment, (prevProps, nextProps) => prevProps.comment === nextProps.comment);
 
 const styles = StyleSheet.create({
   vote: (count) => ({
@@ -241,7 +234,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
   },
-  container: ({isLast, style, level, isLastInParent, showLeftConnector}) => ({
+  container: ({isLast, style, level, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
     borderLeftColor: isLast

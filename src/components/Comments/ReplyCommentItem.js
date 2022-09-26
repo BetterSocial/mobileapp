@@ -4,7 +4,7 @@ import Toast from 'react-native-simple-toast';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import BlockComponent from '../../components/BlockComponent';
+import BlockComponent from "../BlockComponent";
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
@@ -31,7 +31,8 @@ const ReplyCommentItem = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
-  refreshComment
+  refreshComment,
+   updateVoteParent
 }) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
@@ -42,15 +43,15 @@ const ReplyCommentItem = ({
   );
   const [statusVote, setStatusVote] = React.useState('');
  
-  let onTextPress = () => {
+  const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
     }
     return onPress();
   };
 
-  let openProfile = async () => {
-    let selfUserId = await getUserId();
+  const openProfile = async () => {
+    const selfUserId = await getUserId();
     if (selfUserId === user.id) {
       return navigation.navigate('ProfileScreen', {
         isNotFromHomeTab: true
@@ -66,7 +67,7 @@ const ReplyCommentItem = ({
   };
 
   const onUpVote = async () => {
-    let dataVote = {
+    const dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
       status: 'upvote',
@@ -75,23 +76,25 @@ const ReplyCommentItem = ({
   };
 
   const onDownVote = async () => {
-    let dataVote = {
+    const dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
       status: 'downvote',
     };
     onVote(dataVote);
   };
-
   const onVote = async (dataVote) => {
-    let result = await voteComment(dataVote);
+    const result = await voteComment(dataVote);
+    if(updateVoteParent && typeof updateVoteParent === 'function') {
+      updateVoteParent(result, dataVote, comment)
+    }
     setTotalVote(result.data.data.count_upvote - result.data.data.count_downvote)
     iVote()
     if(refreshComment) refreshComment(result)
   };
 
   const iVote = async () => {
-    let result = await iVoteComment(comment.id);
+    const result = await iVoteComment(comment.id);
     if (result.code === 200) {
       setStatusVote(result.data.action);
     }
@@ -187,9 +190,7 @@ const ReplyCommentItem = ({
   );
 };
 
-export default React.memo (ReplyCommentItem, (prevProps, nextProps) => {
-  return prevProps === nextProps
-});
+export default React.memo (ReplyCommentItem, (prevProps, nextProps) => prevProps === nextProps);
 
 const styles = StyleSheet.create({
   vote: (count) => ({
