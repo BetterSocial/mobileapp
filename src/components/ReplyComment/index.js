@@ -149,6 +149,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
       setNewCommentList(updateComment)
   }
 
+
    const showChildrenCommentView = async (itemReply) => {
                 const itemParentProps = await {...itemProp, latest_children: {...itemProp.latest_children, comment: newCommentList}}
                 navigation.push('ReplyComment', {
@@ -162,6 +163,16 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                   updateVote: (data, dataVote) => updateVoteParentPost(data, dataVote, itemParentProps)
                 });
   };
+
+const findCommentAndUpdate = (id, data) => {
+  const newComment = newCommentList.map((comment) => {
+    if(comment.id === id) {
+      return {...comment, data: data.data}
+    }
+    return {...comment}
+  })
+  setNewCommentList(newComment)
+}
 
 const isLastInParent = (index) => isLastInParentHook(index, item)
   return (
@@ -217,7 +228,7 @@ const isLastInParent = (index) => isLastInParentHook(index, item)
                         onPress={() => showChildrenCommentView(itemReply)}
                         level={parseInt(level) + 1}
                         refreshComment={saveParentComment}
-                      
+                        findCommentAndUpdate={findCommentAndUpdate}
                       />
                       {itemReply.children_counts.comment > 0 && (
                         <>
