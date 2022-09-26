@@ -4,15 +4,15 @@ import { StyleSheet, Text } from 'react-native'
 import { COLORS } from '../../utils/theme'
 import { fonts } from '../../utils/fonts'
 
-const TopicText = ({ text, navigation = null, currentTopic = null }) => {
+const TaggingUserText = ({ text, navigation = null, currentTopic = null }) => {
     console.log(text);
     const onClick = () => {
         // Do navigation here
-        if (!navigation || (currentTopic === text.replace('#', ''))) return
-        navigation.push('TopicPageScreen', { id: text.replace('#', '') })
+        if (!navigation || (currentTopic === text.replace('@', ''))) return
+        navigation.push('OtherProfile', { id: text.replace('@', '') })
     }
 
-    return <Text testID='topicTextComponent' onPress={onClick} style={styles.text}>{text}</Text>
+    return <Text testID='TaggingUserTextComponent' onPress={onClick} style={styles.text}>{text}</Text>
 }
 
 const styles = StyleSheet.create({
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default TopicText
+export default TaggingUserText

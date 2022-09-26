@@ -3,6 +3,7 @@ import moment from 'moment';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import reactStringReplace from 'react-string-replace'
+import TaggingUserText from '../../components/TaggingUserText';
 
 import TextBold from '../../components/Text/TextBold';
 import TopicText from '../../components/TopicText';
@@ -340,6 +341,13 @@ const getCaptionWithTopicStyle = (text, navigation) => {
     text = reactStringReplace(text, /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/, (match, index) =>
         <TopicText navigation={navigation} text={match} currentTopic={id} />
     )
+
+    const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
+    text = reactStringReplace(text, validationTextHasAt, (match, index) =>
+        <TaggingUserText navigation={navigation} text={match} currentTopic={id} />
+    )
+
+
 
     return text
 }
