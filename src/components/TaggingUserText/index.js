@@ -7,9 +7,9 @@ import { fonts } from '../../utils/fonts'
 const TaggingUserText = ({ text, navigation = null, currentTopic = null }) => {
     console.log(text);
     const onClick = () => {
-        // Do navigation here
-        if (!navigation || (currentTopic === text.replace('@', ''))) return
-        navigation.push('OtherProfile', { id: text.replace('@', '') })
+        // comment sebentar
+        // if (!navigation || (currentTopic === text.replace('@', ''))) return
+        // navigation.push('OtherProfile', { id: text.replace('@', '') })
     }
 
     return <Text testID='TaggingUserTextComponent' onPress={onClick} style={styles.text}>{text}</Text>

@@ -28,7 +28,7 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
         { name: "usupsuparma", humanId: "1G1H-1TUHI-7U9H7-572G21" },
         { name: "busanid", humanId: "TVGBYD1BI9YMXMAA6CQS" },
         { name: "agita", humanId: "I4K3M10FGR78EWQQDNQ2" },
-        { name: "usupsu", humanId: "P19FGPQGMSZ5VSHA0YSQR5" },
+        { name: "alesha6", humanId: "P19FGPQGMSZ5VSHA0YSQR6" },
         { name: "Demo Account", humanId: "g53BCUA3uisOfAP9" },
     ])
 
