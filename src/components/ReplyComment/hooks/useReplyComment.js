@@ -48,8 +48,30 @@ const useReplyComment = () => {
 
     const isLastInParentHook = (index, item) => index === (item.children_counts.comment || 0) - 1;
 
+    const findCommentAndUpdateHook = (newCommentList, id, data) => {
+        const newComment = newCommentList.map((comment) => {
+            if(comment.id === id) {
+            return {...comment, data: data.data}
+            }
+            return {...comment}
+        })
+        return newComment
+    }
 
-    return {getThisCommentHook, updateReplyPostHook, setTemporaryText, setCommentHook, temporaryText, handleFirstTextCommentHook, textComment, isLastInParentHook}
+      const updateVoteParentPostHook = (data, dataVote, comment) => {
+      const updateComment = comment.latest_children.comment.map((dComment) => {
+        if(dComment.id === dataVote.activity_id) {
+          return {...dComment, data: data.data.data}
+        } 
+          return {...dComment}
+        
+      })
+      return updateComment
+  }
+
+
+
+    return {getThisCommentHook, updateReplyPostHook, setTemporaryText, setCommentHook, temporaryText, handleFirstTextCommentHook, textComment, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook}
 }
 
 

@@ -31,7 +31,7 @@ import useReplyComment from './hooks/useReplyComment';
 const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed,updateReply,  itemParent, updateVote }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
-  const {getThisCommentHook, setCommentHook, temporaryText, setTemporaryText, isLastInParentHook} = useReplyComment()
+  const {getThisCommentHook, setCommentHook, temporaryText, setTemporaryText, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook} = useReplyComment()
   const [users] = React.useContext(Context).users;
   const [profile] = React.useContext(Context).profile;
   const [item, setItem] = React.useState(itemProp);
@@ -138,14 +138,9 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     }
   }
 
-  const updateVoteParentPost = (data, dataVote, comment) => {
-      const updateComment = comment.latest_children.comment.map((dComment) => {
-        if(dComment.id === dataVote.activity_id) {
-          return {...dComment, data: data.data.data}
-        } 
-          return {...dComment}
-        
-      })
+  const updateVoteParentPost = async (data, dataVote, comment) => {
+    console.log(data,dataVote,comment, 'lalian')
+      const updateComment = await updateVoteParentPostHook(data, dataVote, comment)
       setNewCommentList(updateComment)
   }
 
@@ -164,13 +159,8 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                 });
   };
 
-const findCommentAndUpdate = (id, data) => {
-  const newComment = newCommentList.map((comment) => {
-    if(comment.id === id) {
-      return {...comment, data: data.data}
-    }
-    return {...comment}
-  })
+const findCommentAndUpdate = async (id, data) => {
+  const newComment = await findCommentAndUpdateHook(newCommentList, id, data)
   setNewCommentList(newComment)
 }
 
