@@ -4,7 +4,9 @@ import { generateRandomId } from 'stream-chat-react-native-core';
 
 import { fonts } from '../fonts';
 
-const handleHastagMention = (text, setFormattedContent) => {
+const handleHastagMention = (text, setFormattedContent, hashtags = []) => {
+    console.log('hashtags')
+    console.log(hashtags)
     const retLines = text.split("\n");
     const arrText = new Array();
     for (let i = 0; i < retLines.length; i++) {

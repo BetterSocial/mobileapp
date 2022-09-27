@@ -116,7 +116,7 @@ const CreatePost = () => {
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
     const [formattedContent, setFormatHastag] = React.useState('');
-    const [textContent, handleStateHastag, handleStateMention] = useHastagMention('');
+    const [textContent, handleStateHastag, handleStateMention, setHashtags] = useHastagMention('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
 
@@ -407,6 +407,7 @@ const CreatePost = () => {
         const newArr = listTopic.filter((e) => e !== v);
         const newChat = listTopicChat.filter((chat) => chat !== `topic_${v}`)
         setListTopic(newArr);
+        setHashtags(newArr);
         setListTopicChat(newChat)
     };
     const onSetExpiredSelect = (v) => {
@@ -450,6 +451,7 @@ const CreatePost = () => {
 
     const onSaveTopic = (v, topicChat) => {
         setListTopic(v);
+        setHashtags(v)
         setListTopicChat(topicChat)
         sheetTopicRef.current.close();
     };
@@ -783,6 +785,11 @@ const CreatePost = () => {
                         onChange={(v) => {
                         }}
                         onChangeText={(v) => {
+                            if(listTopic.length >= 5) {
+                                setMessage(v)
+                                return
+                            } 
+
                             if (v.includes('#')) {
                                 const position = v.lastIndexOf('#', positionEndCursor);
                                 const spaceStatus = v.includes(' ', position);
@@ -813,7 +820,7 @@ const CreatePost = () => {
                                     const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
                                     console.log('with space', textSeacrh);
                                     console.log('after space', removeCharacterAfterSpace);
-                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic);
+                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic, setHashtags);
                                 }
 
                                 handleStateHastag(v);
@@ -872,6 +879,7 @@ const CreatePost = () => {
                                         const newArr = [...listTopic, topicItem];
                                         const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
                                         setListTopic(newArr);
+                                        setHashtags(newArr)
                                         setListTopicChat(newChatTopic)
                                     }
                                     setPositionKeyboard('never')
