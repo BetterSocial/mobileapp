@@ -3,7 +3,7 @@ import moment from 'moment';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import Comment from '../../components/Comments/Comment';
+import Comment from "./Comment";
 import ConnectorWrapper from './ConnectorWrapper';
 import LoadingComment from '../LoadingComment';
 import StringConstant from '../../utils/string/StringConstant';
@@ -13,29 +13,22 @@ import ButtonHightlight from '../ButtonHighlight';
 
 const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate}) => {
   const navigation = useNavigation();
-  let isLast = (index, item) => {
-    return (
+  const isLast = (index, item) => (
       index === comments.length - 1 && (item.children_counts.comment || 0) === 0
     );
-  };
 
-  let isLastInParent = (index, item) => {
-    return index === comments.length - 1;
-  };
+  const isLastInParent = (index, item) => index === comments.length - 1;
 
-  let hideLeftConnector = (index, item) => {
-    return index === comments.length - 1;
-  };
+  const hideLeftConnector = (index, item) => index === comments.length - 1;
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />
-      {comments.map((item, index) => {
-        return (
+      {comments.map((item, index) => (
           <View key={index} >
-            <View key={'p' + index}>
+            <View key={`p${  index}`}>
               <Comment
                 indexFeed={indexFeed}
-                key={'p' + index}
+                key={`p${  index}`}
                 comment={item}
                 // username={item.user.data.username}
                 user={item.user}
@@ -45,9 +38,9 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                 isLast={isLast(index, item)}
                 isLastInParent={isLastInParent(index, item)}
                 onPress={() => navigateToReplyView({
-                  item: item,
+                  item,
                   level: 0,
-                  indexFeed: indexFeed,
+                  indexFeed,
                 })}
                 refreshComment={refreshComment}
                 findCommentAndUpdate={findCommentAndUpdate}
@@ -66,8 +59,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
               />
             )}
           </View>
-        );
-      })}
+        ))}
       {isLoading ? <LoadingComment /> : null}
     </View>
   );
@@ -83,43 +75,38 @@ const ReplyComment = ({
   navigateToReplyView,
   findCommentAndUpdate
 }) => {
-  let isLast = (item, index) => {
-    return (
+  const isLast = (item, index) => (
       index === countComment - 1 && (item.children_counts.comment || 0) === 0
     );
-  };
 
-  let isLastInParent = (index) => {
-    return index === countComment - 1;
-  };
+  const isLastInParent = (index) => index === countComment - 1;
 
   return (
     <ContainerReply hideLeftConnector={hideLeftConnector}>
       {data.map((item, index) => {
         const showCommentView = () => {
           navigateToReplyView({
-            item: item,
+            item,
             level: 2,
-            indexFeed: indexFeed,
+            indexFeed,
           });
         }
           
 
         const showChildCommentView = () => {
             navigateToReplyView({
-            item: item,
+            item,
             level: 2,
-            indexFeed: indexFeed,
+            indexFeed,
           });
 
         }
-        
         return (
           <ConnectorWrapper key={`c-${index}`} index={index}>
-            <View key={'c' + index} style={styles.levelOneCommentWrapper}>
+            <View key={`c${  index}`} style={styles.levelOneCommentWrapper}>
               <Comment
                 indexFeed={indexFeed}
-                key={'c' + index}
+                key={`c${  index}`}
                 comment={item}
                 // username={item.user.data.username}
                 user={item.user}
@@ -153,8 +140,7 @@ const ReplyComment = ({
     </ContainerReply>
   );
 };
-const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
-  return (
+const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => (
     <View
       style={[
         styles.containerReply(hideLeftConnector),
@@ -163,10 +149,7 @@ const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => {
       {children}
     </View>
   );
-};
-export default React.memo (ContainerComment, (prevProps, nextProps) => {
-  return prevProps.comments === nextProps.comments
-});
+export default React.memo (ContainerComment, (prevProps, nextProps) => prevProps.comments === nextProps.comments);
 
 const styles = StyleSheet.create({
   container: {

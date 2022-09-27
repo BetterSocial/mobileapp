@@ -1,21 +1,21 @@
-import * as React from 'react';
-import FlashMessage from 'react-native-flash-message';
-import { StyleSheet, BackHandler, View } from 'react-native'
 import { HumanIDProvider } from '@human-id/react-native-humanid';
 import { NavigationContainer } from '@react-navigation/native';
-import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
+import * as React from 'react';
+import { BackHandler, StyleSheet, View } from 'react-native'
+import FlashMessage from 'react-native-flash-message';
 import {
   SafeAreaProvider,
   SafeAreaView,
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-
 import {RecoilRoot} from 'recoil';
-import {RootNavigator} from './src/navigations/root-stack';
+import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
+
 import Store from './src/context/Store';
-import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
 import { linking } from './src/navigations/linking';
+import {RootNavigator} from './src/navigations/root-stack';
+import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
 
 if(!__DEV__) {
   console.log = function () {}
@@ -55,15 +55,20 @@ const App = () => {
 
   const preventCloseApp = () => true
 
+  // const preventCloseApp = () => true
+
   const backFunc = () => {
       navigationRef.current.goBack()
+      return true
   }
 
   const handleStateChange = () =>{
         const isCanBack = navigationRef.current.canGoBack()
         if(!isCanBack) {
+          BackHandler.removeEventListener('hardwareBackPress', backFunc)
           BackHandler.addEventListener('hardwareBackPress', preventCloseApp)
         } else {
+          BackHandler.removeEventListener('hardwareBackPress', preventCloseApp)
           BackHandler.addEventListener('hardwareBackPress', backFunc)
         }
   }

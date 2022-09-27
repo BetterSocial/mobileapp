@@ -19,9 +19,10 @@ export const chunkArrayCustom = (perChunk = 2, inputArray = []) => {
     return result
 };
 
-export const insertNewTopicIntoTopics = (newTopic, topics, setListTopic) => {
+export const insertNewTopicIntoTopics = (newTopic, topics, setListTopic, setHashtags) => {
     if (!topics.includes(newTopic)) {
         const newArr = [...topics, newTopic];
         setListTopic(newArr);
+        setHashtags(newArr)
     }
 }

@@ -78,7 +78,7 @@ const PostPageDetailIdComponent = (props) => {
   const { timer } = feedsContext
 
   const { feedId, refreshParent,
-    navigateToReplyView = () => { } } = props
+    navigateToReplyView } = props
   React.useEffect(() => {
     if (item && item.latest_reactions && item.latest_reactions.comment) {
       setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
@@ -282,6 +282,7 @@ const PostPageDetailIdComponent = (props) => {
     setMainFeeds(mappingData, dispatch)
   }
   const findCommentAndUpdate = (id, newData, level) => {
+    console.log(newData, id, 'sukali')
     let newCommenList = []
     if (level > 0) {
       const updatedComment = commentList.map((comment) => {
@@ -307,7 +308,6 @@ const PostPageDetailIdComponent = (props) => {
       })
       newCommenList = updatedComment
     }
-
     setCommentList(newCommenList)
     findReduxCommentAndUpdate(newCommenList)
   }
