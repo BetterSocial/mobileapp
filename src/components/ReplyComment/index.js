@@ -28,7 +28,7 @@ import { fonts } from '../../utils/fonts';
 import { getFeedDetail } from '../../service/post';
 import useReplyComment from './hooks/useReplyComment';
 
-const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed,updateReply,  itemParent, updateVote }) => {
+const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed,updateReply,  itemParent, updateVote, findCommentAndUpdate }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const {getThisCommentHook, setCommentHook, temporaryText, setTemporaryText, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook} = useReplyComment()
@@ -159,7 +159,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                 });
   };
 
-const findCommentAndUpdate = async (id, data) => {
+const findCommentAndUpdateHandle = async (id, data) => {
   const newComment = await findCommentAndUpdateHook(newCommentList, id, data)
   setNewCommentList(newComment)
 }
@@ -208,8 +208,6 @@ const isLastInParent = (index) => isLastInParentHook(index, item)
                         time={itemReply.updated_at}
                         photo={itemReply.user.data.profile_pic_url}
                         isLast={
-                          // index === itemProp.children_counts.comment - 1 &&
-                          // (itemReply.children_counts.comment || 0) === 0
                           level >= 2
                         }
                         key={`r${  index}`}
@@ -218,7 +216,8 @@ const isLastInParent = (index) => isLastInParentHook(index, item)
                         onPress={() => showChildrenCommentView(itemReply)}
                         level={parseInt(level) + 1}
                         refreshComment={saveParentComment}
-                        findCommentAndUpdate={findCommentAndUpdate}
+                        findCommentAndUpdate={findCommentAndUpdateHandle}
+                        updateVote={updateVote}
                       />
                       {itemReply.children_counts.comment > 0 && (
                         <>

@@ -31,7 +31,8 @@ const Comment = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
-  findCommentAndUpdate
+  findCommentAndUpdate,
+  updateVote
 }) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
@@ -107,7 +108,11 @@ const Comment = ({
   const onVote = async (dataVote) => {
     let result = await voteComment(dataVote);
     if(findCommentAndUpdate) {
+      console.log('masuklah', result.data)
       findCommentAndUpdate(comment.id, result.data, level)
+    }
+    if(updateVote) {
+      updateVote()
     }
     iVote();
   };

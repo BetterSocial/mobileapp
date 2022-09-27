@@ -25,10 +25,8 @@ const FeedsPostDetail = (props) => {
             viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
             viewTimePost(feedId, pdpDiffTime, SOURCE_PDP);
         }
-
         setTime(new Date().getTime())
         setTimer(new Date(), dispatch)
-
         navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent, findCommentAndUpdate, dataFeed});
     }
 
