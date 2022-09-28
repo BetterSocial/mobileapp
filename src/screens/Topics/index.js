@@ -5,12 +5,8 @@ import {
   Text,
   StyleSheet,
   Platform,
-  TouchableNativeFeedback,
-  TouchableHighlight,
   Dimensions,
   ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
   FlatList,
   Pressable
 } from 'react-native';
@@ -18,18 +14,15 @@ import {
 import {useNavigation} from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
 
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import {get} from '../../api/server';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
-import {ChunkArray, chunkArrayCustom} from '../../utils/array/ChunkArray';
 import {ProgressBar} from '../../components/ProgressBar';
 import StringConstant from '../../utils/string/StringConstant';
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import { Header } from '../../components';
-import { globalReplaceAll } from '../../utils/Utils';
+import { getSpecificCache } from '../../utils/cache';
+import { TOPICS_PICK } from '../../utils/cache/constant';
 
 const {width} = Dimensions.get('screen');
 
@@ -37,38 +30,31 @@ const Topics = () => {
   const navigation = useNavigation();
   const [topicSelected, setTopicSelected] = React.useState([]);
   const [topics, setTopics] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
   const [minTopic] = React.useState(3);
   const [, dispatch] = React.useContext(Context).topics;
   const [myTopic, setMyTopic] = React.useState({})
+  const [isPreload, setIspreload] = React.useState(true)
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Topics',
       screen_name: 'onb_select_topics',
     });
-    setIsLoading(true);
-    get({url: '/topics/list'})
-      .then((res) => {
-        setIsLoading(false);
-        if (res.status == 200) {
-          topicMapping(res.data.body)
-          // setTopics(res.data.body);
-        }
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
+
   }, []);
 
-  const topicMapping = (data) => {
-    const allTopics = []
-    if(data && typeof data ==='object') {
-      Object.keys(data).map((attribute) => {
-        allTopics.push({name: attribute, data: data[attribute].map((att) => ({topic_id: att.topic_id, name: att.name}))})
-      })
-    }
-    setTopics(allTopics)
+  const getCacheTopic = async () => {
+
+    getSpecificCache(TOPICS_PICK, (cache) => {
+      setTopics(cache)
+      setIspreload(false)
+    })
   }
+
+  React.useEffect(() => {
+    getCacheTopic()
+  }, [])
+
+
   const handleSelectedLanguage = React.useCallback((val) => {
     if(!myTopic[val]) {
       setMyTopic({...myTopic, [val]: val})
@@ -122,9 +108,8 @@ const Topics = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <MyStatusBar backgroundColor="#ffffff" barStyle="dark-content" /> */}
-      <Header onPress={onBack} />
-      {/* {renderHeader()} */}
+      {isPreload ? null : <React.Fragment>
+        <Header onPress={onBack} />
       <View style={styles.containerProgress}>
         <ProgressBar isStatic={true} value={75} />
       </View>
@@ -138,7 +123,6 @@ const Topics = () => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
-        {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
         {topics ? topics.map((topic, index) => (
           <View key={index} style={styles.containerTopic}>
           <Text style={styles.title}>{topic.name}</Text>
@@ -183,6 +167,8 @@ const Topics = () => {
               )}
         </Button>
       </View>
+        </React.Fragment>}
+      
     </SafeAreaView>
   );
 };

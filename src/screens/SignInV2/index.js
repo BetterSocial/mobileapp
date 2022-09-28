@@ -1,5 +1,4 @@
 import * as React from 'react';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import SimpleToast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -12,7 +11,6 @@ import {
 } from 'react-native';
 import { StackActions } from '@react-navigation/native';
 import { colors } from 'react-native-swiper-flatlist/src/themes';
-import { debounce } from 'lodash'
 import {
   logIn,
   onCancel,
@@ -26,7 +24,6 @@ import DevDummyLogin from '../../components/DevDummyLogin';
 import SlideShow from './elements/SlideShow';
 import getRemoteConfig from '../../service/getRemoteConfig';
 import { Context } from '../../context';
-import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
 import { InitialStartupAtom } from '../../service/initialStartup';
 import { checkToken } from '../../service/outh';
 import { fonts } from '../../utils/fonts';
@@ -40,26 +37,17 @@ import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import useSignin from './hooks/useSignin';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;
-  const [loading, setLoading] = React.useState(false);
-  const [slideShowIndex, setSlideShowIndex] = React.useState(0)
-  const [isCompleteSliding, setIsCompleteSliding] = React.useState(false);
-  const [showComponent, setShowComponent] = React.useState(false)
   const [clickTime, setClickTime] = React.useState(0)
   const [isDemoLoginEnabled, setIsDemoLoginEnabled] = React.useState(false)
   const setValueStartup = useSetRecoilState(InitialStartupAtom);
-  // const isReady = useIsReady()
+  const {getTopicsData} = useSignin()
   const navigation = useNavigation();
   const create = useClientGetstream();
 
-  const handleSlideShow = ({ index }, length) => {
-    setSlideShowIndex(index)
-    if (index === length - 1) {
-      setIsCompleteSliding(true);
-    }
-  };
 
   const onClickContainer = () => {
     setClickTime((prevState) => prevState + 1)
@@ -78,18 +66,16 @@ const SignIn = () => {
 
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
-      setLoading(true);
       checkToken(exchangeToken)
         .then((res) => {
           if (__DEV__) {
             console.log(res, 'response token')
           }
           if (res.success) {
-            const { appUserId, countryCode } = res.data;
+            const { appUserId } = res.data;
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
               .then((response) => {
-                setLoading(false);
                 if (response.data) {
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
@@ -106,15 +92,13 @@ const SignIn = () => {
                 setUserId(appUserId);
               })
               .catch((e) => {
-                setLoading(false);
+                console.log(e)
               });
           } else {
             SimpleToast.show(res.message, SimpleToast.SHORT)
           }
         })
         .catch((e) => {
-          // SimpleToast.show(`on checkt token catch` + e)
-          // console.log('on check token catch')
           if (__DEV__) {
             console.log('error');
             console.log(e);
@@ -141,9 +125,9 @@ const SignIn = () => {
     });
   };
 
-  const debounceShowComponent = debounce(() => {
-    setShowComponent(true)
-  }, 350)
+  React.useEffect(() => {
+    getTopicsData()
+  }, [])
 
   const checkIsDemoLoginEnabled = async () => {
     const isEnabled = await getRemoteConfig.isDemoLoginViewEnabled();
@@ -151,10 +135,8 @@ const SignIn = () => {
   }
 
   React.useEffect(() => {
-    debounceShowComponent()
     checkIsDemoLoginEnabled()
   }, [])
-  // if (!isReady) return null
 
   const preventBackButton = () => true
 
@@ -170,7 +152,7 @@ const SignIn = () => {
       <StatusBar translucent={false} />
       <View style={S.containerSlideShow}>
         {clickTime >= 7 && isDemoLoginEnabled ? <DevDummyLogin resetClickTime={resetClickTime} /> : null}
-        <SlideShow onContainerPress={onClickContainer} onChangeNewIndex={handleSlideShow} handleLogin={handleLogin} />
+        <SlideShow onContainerPress={onClickContainer}  handleLogin={handleLogin} />
       </View>
     </SafeAreaView>
   );
