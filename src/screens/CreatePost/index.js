@@ -698,13 +698,9 @@ const CreatePost = () => {
 
 
     const searchTopic = async (name) => {
-        console.log(name, 'nama')
         if (!isEmptyOrSpaces(name)) {
-            console.log(name, 'nama123')
-
             getTopics(name)
                 .then(v => {
-                    console.log(v, 'makan')
                     setTopicSearch(v.data);
                 })
                 .catch(err => console.log(err));
