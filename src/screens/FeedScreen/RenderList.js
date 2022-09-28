@@ -54,10 +54,6 @@ const RenderListFeed = (props) => {
     onPressDownVote,
   } = props;
 
-  // console.log('item')
-  // console.log(item)
-  // console.log(index)
-  // console.log(selfUserId)
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
