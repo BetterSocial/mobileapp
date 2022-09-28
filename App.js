@@ -55,8 +55,6 @@ const App = () => {
 
   const preventCloseApp = () => true
 
-  // const preventCloseApp = () => true
-
   const backFunc = () => {
       navigationRef.current.goBack()
       return true

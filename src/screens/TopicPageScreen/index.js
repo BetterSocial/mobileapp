@@ -1,27 +1,27 @@
+import { useNavigation, useRoute } from '@react-navigation/native';
 import * as  React from 'react';
-import config from 'react-native-config';
 import { StatusBar, View } from 'react-native';
+import config from 'react-native-config';
 import { StreamChat } from 'stream-chat';
-import { useRoute } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
-import MemoizedListComponent from './MemoizedListComponent';
-import Navigation from './elements/Navigation';
-import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
-import RenderItem from '../ProfileScreen/elements/RenderItem';
-import dimen from '../../utils/dimen';
-import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import { Context } from '../../context';
-import { convertString } from '../../utils/string/StringUtils';
-import { downVote, upVote } from '../../service/vote';
-import { getAccessToken } from '../../utils/token';
+import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
 import { getFeedDetail } from '../../service/post';
 import { getTopicPages } from '../../service/topicPages';
-import { getUserId } from '../../utils/users';
 import { getUserTopic, putUserTopic } from '../../service/topics';
+import { downVote, upVote } from '../../service/vote';
+import dimen from '../../utils/dimen';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { convertString } from '../../utils/string/StringUtils';
+import { getAccessToken } from '../../utils/token';
+import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import { getUserId } from '../../utils/users';
+import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
+import RenderItem from '../ProfileScreen/elements/RenderItem';
+import Navigation from './elements/Navigation';
+import MemoizedListComponent from './MemoizedListComponent';
 
 const TopicPageScreen = (props) => {
     const route = useRoute();
@@ -36,22 +36,57 @@ const TopicPageScreen = (props) => {
     const [userTopicName, setUserTopicName] = React.useState('');
     const [offset, setOffset] = React.useState(0);
     const [client] = React.useContext(Context).client;
+    const navigation = useNavigation()
 
     const refBlockComponent = React.useRef();
     const [headerHeightRef] = React.useState(0);
 
+    const initData = async () => {
+        try {
+            setLoading(true)
+            const topicWithPrefix = route.params.id
+            const id = removePrefixTopic(topicWithPrefix);
+            setTopicName(id);
+            setUserTopicName(id);
+            const query = `?name=${id}`;
+            setTopicId(id);
+            // eslint-disable-next-line no-underscore-dangle
+            const _resultGetTopicPages = await getTopicPages(id);
+            setTopicFeeds(_resultGetTopicPages.data, dispatch);
+            setOffset(_resultGetTopicPages.offset)
+
+            // eslint-disable-next-line no-underscore-dangle
+            const _resultGetUserTopic = await getUserTopic(query);
+            if (_resultGetUserTopic.data) {
+                setIsFollow(true);
+            }
+
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
     React.useEffect(() => {
-        const initTopic = () => {
-            setTopicFeeds([], dispatch);
-        }
+        const unsubscribe = navigation.addListener('focus', () => {
+            initData();
+        })
 
-        initTopic();
+        return unsubscribe
+    }, [navigation])
 
-        return () => {
-            setTopicFeeds([], dispatch)
-        }
-    }, []);
+    // React.useEffect(() => {
+    //     const initTopic = () => {
+    //         setTopicFeeds([], dispatch);
+    //     }
 
+    //     initTopic();
+
+    //     return () => {
+
+    //     }
+    // }, []);
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -60,42 +95,10 @@ const TopicPageScreen = (props) => {
                 setUserId(id);
             }
         };
+
         parseToken();
-
-        return () => {
-            // setTopicFeeds([], dispatch)
-        }
-    }, []);
-
-    React.useEffect(() => {
-        const initData = async () => {
-            try {
-                setLoading(true)
-                const topicWithPrefix = route.params.id
-                const id = removePrefixTopic(topicWithPrefix);
-                setTopicName(id);
-                setUserTopicName(id);
-                const query = `?name=${id}`;
-                setTopicId(id);
-                // eslint-disable-next-line no-underscore-dangle
-                const _resultGetTopicPages = await getTopicPages(id);
-                setTopicFeeds(_resultGetTopicPages.data, dispatch);
-                setOffset(_resultGetTopicPages.offset)
-
-                // eslint-disable-next-line no-underscore-dangle
-                const _resultGetUserTopic = await getUserTopic(query);
-                if (_resultGetUserTopic.data) {
-                    setIsFollow(true);
-                }
-
-                setLoading(false)
-            } catch (error) {
-                console.log(error);
-                setLoading(false);
-            }
-        }
-
         initData();
+        updateCount()
     }, []);
 
     const markRead = async () => {
@@ -105,11 +108,6 @@ const TopicPageScreen = (props) => {
         const countRead = await thisChannel[0]?.markRead()
         return countRead
     }
-
-    React.useEffect(() => () => {
-        updateCount()
-
-    }, [])
 
     React.useEffect(() => {
         if (userId !== '') {
@@ -194,7 +192,7 @@ const TopicPageScreen = (props) => {
         refreshingData(offset);
     };
 
-    const onPress = (item, index) => {
+    const onPress = (item) => {
         props.navigation.navigate('PostDetailPage', {
             feedId: item.id,
             isalreadypolling: item.isalreadypolling,

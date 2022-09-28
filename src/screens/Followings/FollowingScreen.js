@@ -96,8 +96,6 @@ function FollowingScreen(props) {
   }
 
   const backPress = () => {
-    // navigation.goBack()
-    // return true
     console.log('a')
     return false;
   }
