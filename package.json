@@ -45,6 +45,7 @@
     "@react-native-firebase/messaging": "11.3.1",
     "@react-native-firebase/remote-config": "11.1.2",
     "@react-navigation/bottom-tabs": "^5.11.15",
+    "@react-navigation/core": "^5.16.1",
     "@react-navigation/material-top-tabs": "^5.3.15",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
