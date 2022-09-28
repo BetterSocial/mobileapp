@@ -1,20 +1,16 @@
 import * as React from 'react';
-import SimpleToast from 'react-native-simple-toast';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
 import {
   Dimensions,
-  InteractionManager,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
   View
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useNavigation } from '@react-navigation/core';
 import { useRoute } from '@react-navigation/native'
 
@@ -25,18 +21,14 @@ import ContentLink from '../../screens/FeedScreen/ContentLink';
 import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from "../LoadingWithoutModal";
-import Log from '../../utils/log/Log';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from "../Comments/WriteComment";
-import dimen from '../../utils/dimen';
 import { Context } from '../../context';
-import { FEEDS_CACHE } from '../../utils/cache/constant';
 import { Footer, Gap } from "..";
 import {
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
-  SOURCE_FEED_TAB,
   SOURCE_PDP,
 } from '../../utils/constants';
 import { createCommentParent } from '../../service/comment';
@@ -44,14 +36,12 @@ import { downVote, upVote } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import { getCountCommentWithChildInDetailPage } from '../../utils/getstream';
 import { getFeedDetail, viewTimePost } from '../../service/post';
-import { getMyProfile } from '../../service/profile';
-import { getSpecificCache } from '../../utils/cache';
-import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setFeedByIndex, setMainFeeds, setTimer } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
 import { withInteractionsManaged } from '../WithInteractionManaged';
 import useReplyComment from '../ReplyComment/hooks/useReplyComment';
+import usePostDetail from './hooks/usePostDetail';
 
 const { width, height } = Dimensions.get('window');
 
@@ -77,9 +67,8 @@ const PostPageDetailIdComponent = (props) => {
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const { timer } = feedsContext
-  const {updateVoteLatestChildrenParentHook} = useReplyComment()
-  const { feedId, refreshParent,
-    navigateToReplyView } = props
+  const { feedId, navigateToReplyView } = props
+  const {updateVoteLatestChildrenHook} = usePostDetail()
   React.useEffect(() => {
     if (item && item.latest_reactions && item.latest_reactions.comment) {
       setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
@@ -412,11 +401,11 @@ const PostPageDetailIdComponent = (props) => {
   };
 
 
-  const handleRefreshComment = ({ data }) => {
+  const handleRefreshComment = () => {
     updateFeed()
   }
 
-  const handleRefreshChildComment = ({ parent, children }) => {
+  const handleRefreshChildComment = () => {
     updateFeed()
   }
 
@@ -445,16 +434,19 @@ const PostPageDetailIdComponent = (props) => {
     updateFeed(true)
   }, [])
 
-  const __handleOnPressScore = () => {
+  const handleOnPressScore = () => {
     showScoreAlertDialog(item)
   }
 
+  const updateVoteLatestChildren = async (dataUpdated) => {
+    const newComment = await updateVoteLatestChildrenHook(commentList, dataUpdated)
+    
+    setCommentList(newComment)
 
-  const updateVote = async () => {
-    const updatedComment = await updateVoteLatestChildrenParentHook()
   }
 
-  console.log(commentList, 'parani')
+
+  console.log(commentList, 'manakun1')
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} enabled style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -522,7 +514,7 @@ const PostPageDetailIdComponent = (props) => {
                 onPressComment={onCommentButtonClicked}
                 // loadingVote={loadingVote}
                 showScoreButton={true}
-                onPressScore={__handleOnPressScore}
+                onPressScore={handleOnPressScore}
                 onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
                 isSelf={profile.myProfile.user_id === item.actor.id}
               />
@@ -534,7 +526,7 @@ const PostPageDetailIdComponent = (props) => {
               isLoading={loadingPost}
               refreshComment={handleRefreshComment}
               refreshChildComment={handleRefreshChildComment}
-              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost, findCommentAndUpdate, item)}
+              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost, findCommentAndUpdate, item, updateVoteLatestChildren)}
               findCommentAndUpdate={findCommentAndUpdate}
             />
           )}

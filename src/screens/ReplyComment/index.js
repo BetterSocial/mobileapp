@@ -20,7 +20,6 @@ const ReplyComment = (props) => {
     }
     return 0
   }
-
   return (
     <View style={styles.container}>
       <ReplyCommentComponent indexFeed={feedIndex()} 
