@@ -28,10 +28,10 @@ import { fonts } from '../../utils/fonts';
 import { getFeedDetail } from '../../service/post';
 import useReplyComment from './hooks/useReplyComment';
 
-const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed,updateReply,  itemParent, updateVote, findCommentAndUpdate }) => {
+const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed,updateReply,  itemParent, updateVote, updateVoteLatestChildren }) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
-  const {getThisCommentHook, setCommentHook, temporaryText, setTemporaryText, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook} = useReplyComment()
+  const {getThisCommentHook, setCommentHook, temporaryText, setTemporaryText, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook, updateVoteLatestChildrenParentHook} = useReplyComment()
   const [users] = React.useContext(Context).users;
   const [profile] = React.useContext(Context).profile;
   const [item, setItem] = React.useState(itemProp);
@@ -139,11 +139,14 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
   }
 
   const updateVoteParentPost = async (data, dataVote, comment) => {
-    console.log(data,dataVote,comment, 'lalian')
-      const updateComment = await updateVoteParentPostHook(data, dataVote, comment)
+      const updateComment = await updateVoteParentPostHook(data, dataVote, comment, level)
       setNewCommentList(updateComment)
   }
 
+  const updateVoteLatestChildrenParent = async (response, dataVote, comment) => {
+    const commentList = await updateVoteLatestChildrenParentHook(response, dataVote, comment)
+    setNewCommentList(commentList)
+}
 
    const showChildrenCommentView = async (itemReply) => {
                 const itemParentProps = await {...itemProp, latest_children: {...itemProp.latest_children, comment: newCommentList}}
@@ -155,7 +158,8 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
                   updateParent,
                   itemParent: itemParentProps,
                   updateReply: (comment, parentProps, id) => updateReplyPost(comment, parentProps, id),
-                  updateVote: (data, dataVote) => updateVoteParentPost(data, dataVote, itemParentProps)
+                  updateVote: (data, dataVote) => updateVoteParentPost(data, dataVote, itemParentProps),
+                  updateVoteLatestChildren: (data, dataVote) => updateVoteLatestChildrenParent(data, dataVote, itemParentProps)
                 });
   };
 
@@ -217,7 +221,7 @@ const isLastInParent = (index) => isLastInParentHook(index, item)
                         level={parseInt(level) + 1}
                         refreshComment={saveParentComment}
                         findCommentAndUpdate={findCommentAndUpdateHandle}
-                        updateVote={updateVote}
+                        updateVote={updateVoteLatestChildren}
                       />
                       {itemReply.children_counts.comment > 0 && (
                         <>

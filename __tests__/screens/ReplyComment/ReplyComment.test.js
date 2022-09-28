@@ -167,4 +167,54 @@ describe('hooks function should run correctly', () => {
         expect(result.current.updateVoteParentPostHook(data, myDataVote, newComments)).toStrictEqual([{"activity_id": "029ec53e-281d-11ed-b3e4-0a6648bb8f8d", "data": {"count_downvote": 0, "count_upvote": 2, "text": "gulai"}, "id": "51d6e8b4-6ba2-4d5b-a843-a3adb58f9739"}])
 
     })
+
+    it('updateVoteLatestChildrenParentHook should run correctly', () => {
+        const {result} = renderHook(() => useReplyComment())
+        const response = {
+                data: {
+                count_downvote: 0,
+                count_upvote: 1,
+                text: "Baksp"
+            }
+        }
+        const dataVote = {
+            parent: "51d6e8b4-6ba2-4d5b-a843-a3adb58f9739",
+            id: "6fbdf69c-689d-4641-8130-bae29e916a90"
+        }
+
+        const comment = {
+            latest_children: {
+                comment: [
+                    {
+                        id: "51d6e8b4-6ba2-4d5b-a843-a3adb58f9739",
+                        latest_children: {
+                            comment: [
+                               {id: "6fbdf69c-689d-4641-8130-bae29e916a90", 
+                               data:  {
+                                    count_downvote: 0,
+                                    count_upvote: 1,
+                                    text: "Baksp"
+                                }}
+                            ]
+                        }
+
+                    }
+                ]
+            }
+        }
+        expect(result.current.updateVoteLatestChildrenParentHook(response, dataVote, comment)).toStrictEqual([{
+            "id": "51d6e8b4-6ba2-4d5b-a843-a3adb58f9739",
+            "latest_children": {
+                "comment": [
+                    {data: {
+                        "count_downvote": 0,
+                        "count_upvote": 1,
+                         "text": "Baksp",
+                    },
+                     "id": "6fbdf69c-689d-4641-8130-bae29e916a90",
+                }
+                ]
+            }
+        }])
+    })
 })

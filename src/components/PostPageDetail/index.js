@@ -51,6 +51,7 @@ import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuild
 import { setFeedByIndex, setMainFeeds, setTimer } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
 import { withInteractionsManaged } from '../WithInteractionManaged';
+import useReplyComment from '../ReplyComment/hooks/useReplyComment';
 
 const { width, height } = Dimensions.get('window');
 
@@ -76,7 +77,7 @@ const PostPageDetailIdComponent = (props) => {
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const { timer } = feedsContext
-
+  const {updateVoteLatestChildrenParentHook} = useReplyComment()
   const { feedId, refreshParent,
     navigateToReplyView } = props
   React.useEffect(() => {
@@ -282,7 +283,6 @@ const PostPageDetailIdComponent = (props) => {
     setMainFeeds(mappingData, dispatch)
   }
   const findCommentAndUpdate = (id, newData, level) => {
-    console.log(newData, id, 'sukali')
     let newCommenList = []
     if (level > 0) {
       const updatedComment = commentList.map((comment) => {
@@ -448,6 +448,13 @@ const PostPageDetailIdComponent = (props) => {
   const __handleOnPressScore = () => {
     showScoreAlertDialog(item)
   }
+
+
+  const updateVote = async () => {
+    const updatedComment = await updateVoteLatestChildrenParentHook()
+  }
+
+  console.log(commentList, 'parani')
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} enabled style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}

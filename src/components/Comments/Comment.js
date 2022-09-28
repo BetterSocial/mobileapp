@@ -112,7 +112,8 @@ const Comment = ({
       findCommentAndUpdate(comment.id, result.data, level)
     }
     if(updateVote) {
-      updateVote()
+      console.log('masukni')
+      updateVote(result.data, comment)
     }
     iVote();
   };

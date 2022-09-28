@@ -58,7 +58,7 @@ const useReplyComment = () => {
         return newComment
     }
 
-      const updateVoteParentPostHook = (data, dataVote, comment) => {
+    const updateVoteParentPostHook = (data, dataVote, comment) => {
       const updateComment = comment.latest_children.comment.map((dComment) => {
         if(dComment.id === dataVote.activity_id) {
           return {...dComment, data: data.data.data}
@@ -67,11 +67,32 @@ const useReplyComment = () => {
         
       })
       return updateComment
-  }
+    }
+
+      const updateVoteLatestChildrenParentHook = (response, dataVote, comment) => {
+        if(comment) {
+          const updateData = comment.latest_children.comment.map((dComment) => {
+            if(dComment.id === dataVote.parent) {
+              const mapChildren = dComment.latest_children.comment.map((child) => {
+                if(child.id === dataVote.id) {
+                  return {...child, data: response.data}
+                } 
+                  return {...child}
+                
+              })
+              return {...dComment, latest_children: {...dComment.latest_children, comment: mapChildren}}
+            }
+            return {...dComment}
+          })
+          return updateData
+        }
+          return []
+        
+    }
 
 
 
-    return {getThisCommentHook, updateReplyPostHook, setTemporaryText, setCommentHook, temporaryText, handleFirstTextCommentHook, textComment, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook}
+    return {getThisCommentHook, updateReplyPostHook, setTemporaryText, setCommentHook, temporaryText, handleFirstTextCommentHook, textComment, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook, updateVoteLatestChildrenParentHook}
 }
 
 
