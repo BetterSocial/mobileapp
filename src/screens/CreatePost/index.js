@@ -553,13 +553,21 @@ const CreatePost = () => {
         );
 
     };
+
+    const handleTextMessage = () => {
+       if(!typeUser) {
+        return `New posts by ${user.myProfile.username} & others`
+       }
+       return `New posts by Anonymous & others`
+    }
+
     const handleTopicChat = async () => {
         const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
         listTopic.forEach(async (topic) => {
             const channel = await client.client.channel('topics', `topic_${topic}`, { name: `#${topic}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
             await channel.create()
             await channel.addMembers([user.myProfile.user_id])
-            await channel.sendMessage({ text: `New posts by ${user.myProfile.username} & others` }, { skip_push: true })
+            await channel.sendMessage({ text: handleTextMessage() }, { skip_push: true })
         })
     }
     const createPoll = () => {
