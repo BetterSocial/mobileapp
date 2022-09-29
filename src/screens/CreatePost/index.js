@@ -567,7 +567,7 @@ const CreatePost = () => {
             const channel = await client.client.channel('topics', `topic_${topic}`, { name: `#${topic}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
             await channel.create()
             await channel.addMembers([user.myProfile.user_id])
-            await channel.sendMessage({ text: `New posts by Anonymous & others` }, { skip_push: true })
+            await channel.sendMessage({ text: handleTextMessage() }, { skip_push: true })
         })
     }
     const createPoll = () => {
