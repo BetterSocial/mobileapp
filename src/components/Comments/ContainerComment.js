@@ -33,7 +33,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                 time={item.created_at}
                 photo={item.user.data.profile_pic_url}
                 isLast={isLast(index, item)}
-                isLastInParent={isLastInParent(index, item)}
+                isLastInParent={isLastInParent(index)}
                 onPress={() => navigateToReplyView({
                   item,
                   level: 0,
