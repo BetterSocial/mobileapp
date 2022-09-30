@@ -88,6 +88,7 @@ const CreateGroupScreen = ({ navigation }) => {
         subtitleStyle={{ color: COLORS.holyTosca }}
         onPressSub={() => createNewChannel()}
         onPress={() => navigation.goBack()}
+        
       />
       <GroupName
         onPress={() => handleImageLibrary()}

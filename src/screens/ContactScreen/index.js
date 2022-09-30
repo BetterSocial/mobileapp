@@ -266,9 +266,9 @@ const ContactScreen = ({ navigation }) => {
           title={StringConstant.chatTabHeaderCreateChatButtonText}
           containerStyle={styles.containerStyle}
           subTitle={'Next'}
-          subtitleStyle={styles.subtitleStyle}
           onPressSub={() => handleCreateChannel(selectedUsers)}
           onPress={() => navigation.goBack()}
+          disabledNextBtn={selectedUsers.length <= 0}
         />
 
         <Search
@@ -334,10 +334,10 @@ const styles = StyleSheet.create({
   containerStyle: {
     marginHorizontal: 16,
   },
-  subtitleStyle: {
-    color: COLORS.holyTosca,
+  subtitleStyle: (selectedUsers) => ({
+    color: selectedUsers.length > 0 ? COLORS.holyTosca : COLORS.gray4,
     marginEnd: 8,
-  },
+  }),
 });
 
 export default withInteractionsManaged(ContactScreen);
