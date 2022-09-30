@@ -8,11 +8,11 @@ import { setFeedByIndex } from '../../context/actions/feeds';
 
 const ReplyComment = (props) => {
   // const [newComment, setNewComment] = React.useState([])
-  let itemProp = props.route.params.item;
-  const {updateParent, findCommentAndUpdate, updateReply,  itemParent,  parentComment,  updateVote} = props.route.params
-  const level = props.route.params.level;
-  const dataFeed = props.route.params.dataFeed
-  let [feeds, dispatch] = React.useContext(Context).feeds
+  const itemProp = props.route.params.item;
+  const {updateParent, findCommentAndUpdate, updateReply,  itemParent,  parentComment,  updateVote, updateVoteLatestChildren} = props.route.params
+  const {level} = props.route.params;
+  const {dataFeed} = props.route.params
+  const [feeds, dispatch] = React.useContext(Context).feeds
   const feedIndex = () => {
     if(feeds && Array.isArray(feeds)) {
       const findIndex = feeds.find((feed) => feed.id === itemProp.activity_id)
@@ -20,7 +20,6 @@ const ReplyComment = (props) => {
     }
     return 0
   }
-
   return (
     <View style={styles.container}>
       <ReplyCommentComponent indexFeed={feedIndex()} 
@@ -34,6 +33,7 @@ const ReplyComment = (props) => {
         dataFeed={dataFeed}
         updateReply={updateReply}
         updateVote={ updateVote}
+        updateVoteLatestChildren={updateVoteLatestChildren}
         findCommentAndUpdate={findCommentAndUpdate}
          itemParent={itemParent}
          parentComment={parentComment}

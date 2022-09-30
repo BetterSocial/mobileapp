@@ -16,7 +16,7 @@ const FeedsPostDetail = (props) => {
     const navigation = useNavigation()
     const [time, setTime] = React.useState(new Date().getTime())
     const { feeds, timer } = feedsContext
-    const navigateToReplyView = (data, updateParent, findCommentAndUpdate, dataFeed) => {
+    const navigateToReplyView = (data, updateParent, findCommentAndUpdate, dataFeed, updateVoteLatestChildren) => {
         const currentTime = new Date()
         const feedDiffTime = currentTime.getTime() - timer.getTime()
         const pdpDiffTime = currentTime.getTime() - time;
@@ -27,7 +27,7 @@ const FeedsPostDetail = (props) => {
         }
         setTime(new Date().getTime())
         setTimer(new Date(), dispatch)
-        navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent, findCommentAndUpdate, dataFeed});
+        navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent, findCommentAndUpdate, dataFeed, updateVoteLatestChildren});
     }
 
     React.useEffect(() => () => {
@@ -35,7 +35,6 @@ const FeedsPostDetail = (props) => {
                 refreshCache()
             }
         }, [])
-
     return(
         <View style={styles.container}>
             <PostPageDetailComponent 

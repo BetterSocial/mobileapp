@@ -42,15 +42,15 @@ const Comment = ({
   );
   const [statusVote, setStatusVote] = React.useState('none');
 
-  let onTextPress = () => {
+  const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
     }
-    return onPress();
+    return onPress()
   };
 
-  let openProfile = async () => {
-    let selfUserId = await getUserId();
+  const openProfile = async () => {
+    const selfUserId = await getUserId();
     if (selfUserId === user.id) {
       return navigation.navigate('ProfileScreen', {
         isNotFromHomeTab: true
@@ -78,7 +78,7 @@ const Comment = ({
       setTotalVote((prevState) => prevState + 1)
       setStatusVote('upvote')
     }
-    let dataVote = {
+    const dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
       status: 'upvote',
@@ -98,7 +98,7 @@ const Comment = ({
       setTotalVote((prevState) => prevState - 1)
       setStatusVote('downvote')
     }
-    let dataVote = {
+    const dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
       status: 'downvote',
@@ -106,18 +106,17 @@ const Comment = ({
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    let result = await voteComment(dataVote);
+    const result = await voteComment(dataVote);
     if(findCommentAndUpdate) {
-      console.log('masuklah', result.data)
       findCommentAndUpdate(comment.id, result.data, level)
     }
     if(updateVote) {
-      updateVote()
+      updateVote(result.data, comment, level)
     }
     iVote();
   };
   const iVote = async () => {
-    let result = await iVoteComment(comment.id);
+    const result = await iVoteComment(comment.id);
     if (result.code === 200) {
       setStatusVote(result.data.action);
     }
@@ -147,7 +146,7 @@ const Comment = ({
     iVote()
   }, [JSON.stringify(comment.data)])
 
-
+  console.log(level, 'manak')
   return (
     <View
       style={styles.container({

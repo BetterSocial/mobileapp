@@ -1,25 +1,23 @@
 import * as React from 'react';
-import moment from 'moment';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Comment from "./Comment";
 import ConnectorWrapper from './ConnectorWrapper';
 import LoadingComment from '../LoadingComment';
 import StringConstant from '../../utils/string/StringConstant';
-import {DATALOADING} from '../../utils/string/LoadingComment';
 import {colors} from '../../utils/colors';
 import ButtonHightlight from '../ButtonHighlight';
 
-const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate}) => {
+const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate, updateVoteLatestChildren}) => {
   const navigation = useNavigation();
   const isLast = (index, item) => (
       index === comments.length - 1 && (item.children_counts.comment || 0) === 0
     );
 
-  const isLastInParent = (index, item) => index === comments.length - 1;
+  const isLastInParent = (index) => index === comments.length - 1;
 
-  const hideLeftConnector = (index, item) => index === comments.length - 1;
+  const hideLeftConnector = (index) => index === comments.length - 1;
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />
@@ -30,13 +28,12 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                 indexFeed={indexFeed}
                 key={`p${  index}`}
                 comment={item}
-                // username={item.user.data.username}
                 user={item.user}
                 level={0}
                 time={item.created_at}
                 photo={item.user.data.profile_pic_url}
                 isLast={isLast(index, item)}
-                isLastInParent={isLastInParent(index, item)}
+                isLastInParent={isLastInParent(index)}
                 onPress={() => navigateToReplyView({
                   item,
                   level: 0,
@@ -69,7 +66,6 @@ const ReplyComment = ({
   indexFeed,
   data,
   countComment,
-  navigation,
   hideLeftConnector,
   refreshComment,
   navigateToReplyView,
