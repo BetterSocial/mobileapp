@@ -144,6 +144,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
   }
 
   const updateVoteLatestChildrenParent = async (response, dataVote, comment) => {
+    console.log(response, dataVote, comment, 'laka')
     const commentList = await updateVoteLatestChildrenParentHook(response, dataVote, comment)
     setNewCommentList(commentList)
 }

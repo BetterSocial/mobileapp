@@ -108,12 +108,10 @@ const Comment = ({
   const onVote = async (dataVote) => {
     const result = await voteComment(dataVote);
     if(findCommentAndUpdate) {
-      console.log('masuklah', result.data)
       findCommentAndUpdate(comment.id, result.data, level)
     }
     if(updateVote) {
-      console.log('masukni')
-      updateVote(result.data, comment)
+      updateVote(result.data, comment, level)
     }
     iVote();
   };
@@ -148,7 +146,7 @@ const Comment = ({
     iVote()
   }, [JSON.stringify(comment.data)])
 
-
+  console.log(level, 'manak')
   return (
     <View
       style={styles.container({

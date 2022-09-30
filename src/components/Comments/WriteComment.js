@@ -23,14 +23,11 @@ const WriteComment = ({
   username,
   inReplyCommentView = false,
   showProfileConnector = true,
-  loadingComment,
 }) => {
-  let [users] = React.useContext(Context).users;
-  let commentInputRef = React.useRef(null);
-
-  let isCommentEnabled = value.length > 0;
-  let isSendButtonPressed = () => onPress();
-  const isAndroid = Platform.OS === 'android'
+  const [profile] = React.useContext(Context).profile
+  const commentInputRef = React.useRef(null);
+  const isCommentEnabled = value.length > 0;
+  const isSendButtonPressed = () => onPress();
   return (
     <View style={styles.columnContainer}>
       <View
@@ -50,7 +47,7 @@ const WriteComment = ({
         <Image
           style={styles.image}
           source={{
-            uri: users.photoUrl,
+            uri: profile.myProfile.profile_pic_path,
           }}
         />
         <View style={styles.content}>

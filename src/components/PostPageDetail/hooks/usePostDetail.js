@@ -2,7 +2,7 @@
 
 const usePostDetail = () => {
 
-    const updateVoteLatestChildrenHook = (commentList, dataUpdated) => {
+    const updateVoteLatestChildrenLevel3 = (commentList, dataUpdated) => {
     const updateComment = commentList.map((comment) => {
       if(comment.activity_id === dataUpdated.activity_id) {
         const latestChildrenMap = comment.latest_children.comment.map((com) => {
@@ -25,7 +25,23 @@ const usePostDetail = () => {
     return updateComment
   }
 
-    return {updateVoteLatestChildrenHook}
+  const updateVoteChildrenLevel1 = (commentList, dataUpdated) => {
+          const newComment = commentList.map((myComment) => {
+        if(myComment.id === dataUpdated.parent) {
+          const newChild = myComment.latest_children.comment.map((child) => {
+            if(child.id === dataUpdated.id) {
+              return {...child, data: dataUpdated.data}
+            } 
+              return {...child}
+            
+          })
+          return {...myComment, latest_children: {comment: newChild}}
+        }
+        return {...newComment}
+      })
+  }
+
+    return {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1}
 }
 
 

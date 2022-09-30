@@ -35,7 +35,6 @@ const FeedsPostDetail = (props) => {
                 refreshCache()
             }
         }, [])
-        console.log(feeds, 'ruman')
     return(
         <View style={styles.container}>
             <PostPageDetailComponent 

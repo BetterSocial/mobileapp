@@ -68,7 +68,7 @@ const PostPageDetailIdComponent = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const { timer } = feedsContext
   const { feedId, navigateToReplyView } = props
-  const {updateVoteLatestChildrenHook} = usePostDetail()
+  const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail()
   React.useEffect(() => {
     if (item && item.latest_reactions && item.latest_reactions.comment) {
       setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
@@ -438,15 +438,22 @@ const PostPageDetailIdComponent = (props) => {
     showScoreAlertDialog(item)
   }
 
-  const updateVoteLatestChildren = async (dataUpdated) => {
-    const newComment = await updateVoteLatestChildrenHook(commentList, dataUpdated)
-    
-    setCommentList(newComment)
+  const updateVoteLatestChildren = async (dataUpdated, data, level) => {
+    if(level === 3) {
+      const newComment = await updateVoteLatestChildrenLevel3(commentList, dataUpdated)
+      setCommentList(newComment)
+    }
+    if(level ===1) {
+      const newComment = await updateVoteChildrenLevel1(commentList, dataUpdated)
+      console.log(newComment, 'manak')
+      // setCommentList(newComment)
+      // console.log('himan', newComment)
+    }
+   
 
   }
 
 
-  console.log(commentList, 'manakun1')
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} enabled style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
