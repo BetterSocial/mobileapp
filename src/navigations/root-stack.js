@@ -8,8 +8,9 @@ import {
   View,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useRecoilValue, useSetRecoilState, } from 'recoil';
+import { atom, useRecoilState, useRecoilValue, useSetRecoilState, } from 'recoil';
 
+import { useLocalChannelsFirst } from 'stream-chat-react-native';
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
@@ -58,17 +59,24 @@ import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 import { getSpecificCache } from '../utils/cache';
 import { PROFILE_CACHE } from '../utils/cache/constant';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
-
 const RootStack = createStackNavigator();
 
+const testAtom = atom({
+  key: 'testAtom',
+  default: null
+})
 export const RootNavigator = () => {
   let initialStartup = useRecoilValue(InitialStartupAtom);
   const setInitialValue = useSetRecoilState(InitialStartupAtom)
+  const [v, setTest] = useRecoilState(testAtom)
   const [clientState] = React.useContext(Context).client;
   const [, dispatchProfile] = React.useContext(Context).profile;
   const { client } = clientState;
 
   const create = useClientGetstream();
+  // console.tron.log(useLocalChannelsFirst);
+  useLocalChannelsFirst(setTest);
+
   if(initialStartup && typeof initialStartup === 'string') {
     initialStartup = JSON.parse(initialStartup)
   }
@@ -87,6 +95,7 @@ export const RootNavigator = () => {
   });
   }
 
+  // console.tron.log(data, 'data local');
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);

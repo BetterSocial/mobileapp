@@ -5,7 +5,8 @@ import {
   ChannelList,
   ChannelPreviewTitle,
   Chat,
-  Streami18n} from 'stream-chat-react-native';
+  Streami18n,
+} from 'stream-chat-react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
@@ -204,6 +205,7 @@ const handleUpdateCache = (id, totalComment) => {
                   refreshControl: null,
                   // extraData:{countComment},
                 }}
+                clientData={listPostNotif}
                additionalData={listPostNotif}
                context={myContext}
                PreviewUnreadCount={chatBadge}
