@@ -445,9 +445,7 @@ const PostPageDetailIdComponent = (props) => {
     }
     if(level ===1) {
       const newComment = await updateVoteChildrenLevel1(commentList, dataUpdated)
-      console.log(newComment, 'manak')
-      // setCommentList(newComment)
-      // console.log('himan', newComment)
+      setCommentList(newComment)
     }
    
 

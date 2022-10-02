@@ -146,7 +146,6 @@ const Comment = ({
     iVote()
   }, [JSON.stringify(comment.data)])
 
-  console.log(level, 'manak')
   return (
     <View
       style={styles.container({
