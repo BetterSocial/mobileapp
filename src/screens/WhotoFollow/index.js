@@ -130,23 +130,6 @@ const WhotoFollow = () => {
       setIsRecyclerViewShown(true);
     }
   }, [dataProvider]);
-  const renderHeader = () => {
-    if (Platform.OS === 'android') {
-      return (
-        <TouchableNativeFeedback
-          onPress={() => navigation.goBack()}
-          background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
-          <ArrowLeftIcon width={20} height={12} fill="#000" />
-        </TouchableNativeFeedback>
-      );
-    }
-    return (
-      <TouchableHighlight onPress={() => navigation.goBack()}>
-        <ArrowLeftIcon width={20} height={12} fill="#000" />
-      </TouchableHighlight>
-    );
-
-  };
 
   const handleSelected = (value) => {
     const copyFollowed = [...followed];
