@@ -28,6 +28,7 @@ const TopicPageScreen = (props) => {
     const { params } = route
     const [topicName, setTopicName] = React.useState(route?.params?.id);
     const [loading, setLoading] = React.useState(false);
+    const [isInitialLoading, setIsInitialLoading] = React.useState(true);
     const [userId, setUserId] = React.useState('');
     const [topicId, setTopicId] = React.useState('');
     const [feedsContext, dispatch] = React.useContext(Context).feeds;
@@ -43,6 +44,7 @@ const TopicPageScreen = (props) => {
 
     const initData = async () => {
         try {
+            setIsInitialLoading(true)
             setLoading(true)
             const topicWithPrefix = route.params.id
             const id = removePrefixTopic(topicWithPrefix);
@@ -62,6 +64,7 @@ const TopicPageScreen = (props) => {
             }
 
             setLoading(false)
+            setIsInitialLoading(false)
         } catch (error) {
             console.log(error);
             setLoading(false);
@@ -248,10 +251,9 @@ const TopicPageScreen = (props) => {
             <StatusBar barStyle="dark-content" translucent={false} />
             <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
             <View style={{ flex: 1 }}>
-
                 <ProfileTiktokScroll
                     contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
-                    data={feeds}
+                    data={isInitialLoading ? [] : feeds}
                     onEndReach={onEndReach}
                     onRefresh={onRefresh}
                     refreshing={loading}
