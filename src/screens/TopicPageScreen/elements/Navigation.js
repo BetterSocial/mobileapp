@@ -1,10 +1,8 @@
 import { useNavigation } from '@react-navigation/core';
 import * as React from 'react';
-import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
-import { Context } from '../../../context';
-import { setTopicFeeds } from '../../../context/actions/feeds';
 import dimen from '../../../utils/dimen';
 import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
 import { convertString } from '../../../utils/string/StringUtils';
@@ -12,12 +10,10 @@ import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
 
 const Navigation = ({ domain, onPress, isFollow = false }) => {
-  const [, dispatch] = React.useContext(Context).feeds
   const navigation = useNavigation();
   
   const backScreen = () => {
     navigation.goBack();
-    setTopicFeeds([], dispatch)
   };
 
   return (
