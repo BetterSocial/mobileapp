@@ -124,23 +124,20 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
       } = useTheme();
     
     const handleReplyComment = () => {
-        const actorId = item.comments[0] && item.comments[0].actor && item.comments[0].actor.data && item.comments[0].actor.id
-        if(actorId === myProfile.user_id && !item.isAnonym) {
-            return "You"
-        } if(item.comments[0] && item.comments[0].reaction && item.comments[0].reaction.parent !== "" && !item.isAnonym) {
-            return `${item.comments[0] 
-                && item.comments[0].actor 
-                && item.comments[0].actor.data 
-                && item.comments[0].actor.data.username} replied to your comment`
-        }
-        
+        const findComment = item.comments.find((data) => data.reaction.kind === 'comment')
+        if(findComment) {
+            const actorId = findComment.actor.data.id
+            if(actorId === myProfile.user_id && !item.isAnonym) {
+                return `You: ${findComment.reaction.data.text} `
+            }if(findComment.reaction.parent !== "" && !item.isAnonym) {
+                return findComment && findComment.actor && findComment.actor.data && `${findComment.actor.data.username  } replied to your comment: ${findComment.reaction.data.text} `
+            }
             if(!item.isAnonym) {
-            return item.comments[0] 
-            && item.comments[0].actor 
-            && item.comments[0].actor.data 
-            && item.comments[0].actor.data.username
-            } 
-                return 'Anonymous'
+                return findComment.actor.data && `${findComment.actor.data.username  }: ${findComment.reaction.data.text} `
+            }
+            return `Anonymous: ${findComment.reaction.data.text}` 
+        }
+        return "No comments yet"
     }
 
     const handleDate = () => calculateTime(item.data.last_message_at)
@@ -157,18 +154,9 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
 
                 </View>
                 <View style={[styles.replyContainer]} >
-                    {Array.isArray(item.comments) && item.comments.length > 0 ? <>
-                        <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey, marginTop: 'auto'}]} >
-                    <Text style={styles.titleText} >{handleReplyComment()}:
-                    </Text>
-                  
-                    {" "}
-                    {item.comments[0] 
-                    && item.comments[0].reaction 
-                    && item.comments[0].reaction.data 
-                    && item.comments[0].reaction.data.text} </Text></> : <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey}]} >No comments yet
+                    {Array.isArray(item.comments) && item.comments.length > 0 ?                    
+                    <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey, marginTop: 'auto'}]} >{handleReplyComment()}</Text> : <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey, marginTop: 'auto'}]} >No comments yet</Text>}
 
-                    </Text>}
         
                  
                     {countPostNotif && typeof countPostNotif === 'function' ? countPostNotif(item) : null}
