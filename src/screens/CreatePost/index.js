@@ -1,11 +1,9 @@
 import * as React from 'react';
-import PSL from 'psl'
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {
     Alert,
     BackHandler,
-    Platform,
     Pressable,
     SafeAreaView,
     ScrollView,
@@ -16,13 +14,12 @@ import {
     TouchableNativeFeedback,
     View
 } from 'react-native';
-import { OpenGraphParser } from 'react-native-opengraph-kit'
-import { debounce, set } from 'lodash';
-import { getLinkPreview } from 'link-preview-js';
+import { debounce } from 'lodash';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
 import { useNavigation } from '@react-navigation/core';
 
+import { openSettings } from 'react-native-permissions';
 import Card from './elements/Card';
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
@@ -46,13 +43,12 @@ import StringConstant from '../../utils/string/StringConstant';
 import Timer from '../../assets/icons/Ic_timer';
 import TopicItem from '../../components/TopicItem';
 import UserProfile from './elements/UserProfile';
-import handleHastag from '../../utils/hastag';
 import { Button, ButtonAddMedia } from '../../components/Button';
 import { Context } from '../../context';
 import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
 import { ShowingAudience, createPollPost, createPost } from '../../service/post';
-import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
+import { convertString } from '../../utils/string/StringUtils';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getDomainInfoInLinkPreview, getNewsLinkInfoInLinkPreview, getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
@@ -61,7 +57,6 @@ import {
     getLocationId,
     getPrivacyId,
     setDurationId,
-    setLocationId,
     setPrivacyId,
 } from '../../utils/setting';
 import { getMyProfile } from '../../service/profile';
@@ -366,7 +361,7 @@ const CreatePost = () => {
                 }
             });
         } else {
-            Toast.show(message, Toast.SHORT);
+            Alert.alert('Permission denied', 'Allow Better Social to access photos and media on your device ?', [{text: 'Open Settings', onPress: () => openSettings().then(() => sheetMediaRef.current.close())}, {text: 'Close'}])
         }
     };
 

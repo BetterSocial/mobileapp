@@ -15,8 +15,7 @@ const SheetMedia = ({
   takePhoto,
   createPoll,
   medias = [],
-}) => {
-  return (
+}) => (
     <RBSheet
       ref={refMedia}
       closeOnDragDown={true}
@@ -46,7 +45,6 @@ const SheetMedia = ({
       </View>
     </RBSheet>
   );
-};
 const List = ({icon, label, onPress}) => (
   <TouchableOpacity style={styles.list} onPress={onPress}>
     {icon}
