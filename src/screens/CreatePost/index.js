@@ -24,6 +24,7 @@ import {
 import { showMessage } from 'react-native-flash-message';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
+import { openSettings } from 'react-native-permissions';
 
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
 import Location from '../../assets/icons/Ic_location';
@@ -357,7 +358,7 @@ const CreatePost = () => {
                 }
             });
         } else {
-            Toast.show(message, Toast.SHORT);
+            Alert.alert('Permission denied', 'Please allow Better Social to access your photos', [{text: 'Open Settings', onPress: () => openSettings().then(() => sheetMediaRef.current.close())}, {text: 'Close'}])
         }
     };
 
