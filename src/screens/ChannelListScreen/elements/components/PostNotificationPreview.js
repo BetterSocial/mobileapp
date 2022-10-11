@@ -126,7 +126,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
     const handleReplyComment = () => {
         const findComment = item.comments.find((data) => data.reaction.kind === 'comment')
         if(findComment) {
-            const actorId = findComment.actor.data.id
+            const actorId = findComment.actor && findComment.actor.data && findComment.actor.data.id
             if(actorId === myProfile.user_id && !item.isAnonym) {
                 return `You: ${findComment.reaction.data.text} `
             }if(findComment.reaction.parent !== "" && !item.isAnonym) {
