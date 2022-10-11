@@ -23,6 +23,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
 import { useNavigation } from '@react-navigation/core';
 
+import { openSettings } from 'react-native-permissions';
 import Card from './elements/Card';
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
@@ -366,7 +367,7 @@ const CreatePost = () => {
                 }
             });
         } else {
-            Toast.show(message, Toast.SHORT);
+            Alert.alert('Permission denied', 'Please allow Better Social to access your photos', [{text: 'Open Settings', onPress: () => openSettings().then(() => sheetMediaRef.current.close())}, {text: 'Close'}])
         }
     };
 
