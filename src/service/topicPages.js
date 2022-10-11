@@ -2,9 +2,9 @@ import crashlytics from '@react-native-firebase/crashlytics';
 
 import api from './config';
 
-const getTopicPages = async (query, offset = 0, limit = 10) => {
+const getTopicPages = async (query, offset = 0) => {
   try {
-    const res = await api.get(`/topic-pages/${query}?offset=${offset}&limit=${limit}`);
+    const res = await api.get(`/topic-pages/${query}?offset=${offset}`);
     return res.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
