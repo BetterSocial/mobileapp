@@ -1,13 +1,9 @@
-import analytics from '@react-native-firebase/analytics';
-import { useNavigation } from '@react-navigation/core';
-import { getLinkPreview } from 'link-preview-js';
-import { debounce, set } from 'lodash';
-import PSL from 'psl'
 import * as React from 'react';
+import Toast from 'react-native-simple-toast';
+import analytics from '@react-native-firebase/analytics';
 import {
     Alert,
     BackHandler,
-    Platform,
     Pressable,
     SafeAreaView,
     ScrollView,
@@ -18,54 +14,24 @@ import {
     TouchableNativeFeedback,
     View
 } from 'react-native';
-import { showMessage } from 'react-native-flash-message';
+import { debounce } from 'lodash';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { OpenGraphParser } from 'react-native-opengraph-kit'
-import Toast from 'react-native-simple-toast';
+import { showMessage } from 'react-native-flash-message';
+import { useNavigation } from '@react-navigation/core';
 
-import MemoIc_hastag from '../../assets/icons/Ic_hastag';
-import Location from '../../assets/icons/Ic_location';
-import Timer from '../../assets/icons/Ic_timer';
-import MemoIc_user_group from '../../assets/icons/Ic_user_group';
-import MemoIc_world from '../../assets/icons/Ic_world';
-import ProfileDefault from '../../assets/images/ProfileDefault.png';
-import { Button, ButtonAddMedia } from '../../components/Button';
-import Gap from '../../components/Gap';
-import Header from '../../components/Header';
-import ListItem from '../../components/MenuPostItem';
-import TopicItem from '../../components/TopicItem';
-import { Context } from '../../context';
-import { getUserForTagging } from '../../service/mention';
-import { ShowingAudience, createPollPost, createPost } from '../../service/post';
-import { getMyProfile } from '../../service/profile';
-import { getTopics } from '../../service/topics';
-import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
-import { getSpecificCache } from '../../utils/cache';
-import { PROFILE_CACHE } from '../../utils/cache/constant';
-import { colors } from '../../utils/colors';
-import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
-import { fonts } from '../../utils/fonts';
-import handleHastag from '../../utils/hastag';
-import {
-    requestCameraPermission,
-    requestExternalStoragePermission,
-} from '../../utils/permission';
-import {
-    getDurationId,
-    getLocationId,
-    getPrivacyId,
-    setDurationId,
-    setLocationId,
-    setPrivacyId,
-} from '../../utils/setting';
-import StringConstant from '../../utils/string/StringConstant';
-import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
-import { getUserId } from '../../utils/users';
-import { getDomainInfoInLinkPreview, getNewsLinkInfoInLinkPreview, getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
-import Loading from '../Loading';
+import { openSettings } from 'react-native-permissions';
 import Card from './elements/Card';
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
+import Gap from '../../components/Gap';
+import Header from '../../components/Header';
+import ListItem from '../../components/MenuPostItem';
+import Loading from '../Loading';
+import Location from '../../assets/icons/Ic_location';
+import MemoIc_hastag from '../../assets/icons/Ic_hastag';
+import MemoIc_user_group from '../../assets/icons/Ic_user_group';
+import MemoIc_world from '../../assets/icons/Ic_world';
+import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import SheetAddTopic from './elements/SheetAddTopic';
 import SheetCloseBtn from './elements/SheetCloseBtn';
 import SheetExpiredPost from './elements/SheetExpiredPost';
@@ -73,8 +39,37 @@ import SheetGeographic from './elements/SheetGeographic';
 import SheetMedia from './elements/SheetMedia';
 import SheetPrivacy from './elements/SheetPrivacy';
 import ShowMedia from './elements/ShowMedia';
-import useHastagMention from './elements/useHastagMention';
+import StringConstant from '../../utils/string/StringConstant';
+import Timer from '../../assets/icons/Ic_timer';
+import TopicItem from '../../components/TopicItem';
 import UserProfile from './elements/UserProfile';
+import { Button, ButtonAddMedia } from '../../components/Button';
+import { Context } from '../../context';
+import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
+import { PROFILE_CACHE } from '../../utils/cache/constant';
+import { ShowingAudience, createPollPost, createPost } from '../../service/post';
+import { convertString } from '../../utils/string/StringUtils';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
+import { getDomainInfoInLinkPreview, getNewsLinkInfoInLinkPreview, getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
+import {
+    getDurationId,
+    getLocationId,
+    getPrivacyId,
+    setDurationId,
+    setPrivacyId,
+} from '../../utils/setting';
+import { getMyProfile } from '../../service/profile';
+import { getSpecificCache } from '../../utils/cache';
+import { getTopics } from '../../service/topics';
+import { getUserId } from '../../utils/users';
+import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
+import {
+    requestCameraPermission,
+    requestExternalStoragePermission,
+} from '../../utils/permission';
+import { getUserForTagging } from '../../service/mention';
+import useHastagMention from './elements/useHastagMention';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -116,11 +111,11 @@ const CreatePost = () => {
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
     const [formattedContent, setFormatHastag] = React.useState('');
-    const [textContent, handleStateHastag, handleStateMention, setHashtags] = useHastagMention('');
+    const [textContent, handleStateHastag, handleStateMention] = useHastagMention('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
-
-
+    const [taggingUsers, setTaggingUsers] = React.useState([])
+    const [allTaggingUser, setAllTaggingUser] = React.useState([])
     const [selectedTime, setSelectedTime] = React.useState({
         day: 1,
         hour: 0,
@@ -366,7 +361,7 @@ const CreatePost = () => {
                 }
             });
         } else {
-            Toast.show(message, Toast.SHORT);
+            Alert.alert('Permission denied', 'Allow Better Social to access photos and media on your device ?', [{text: 'Open Settings', onPress: () => openSettings().then(() => sheetMediaRef.current.close())}, {text: 'Close'}])
         }
     };
 
@@ -407,7 +402,6 @@ const CreatePost = () => {
         const newArr = listTopic.filter((e) => e !== v);
         const newChat = listTopicChat.filter((chat) => chat !== `topic_${v}`)
         setListTopic(newArr);
-        setHashtags(newArr);
         setListTopicChat(newChat)
     };
     const onSetExpiredSelect = (v) => {
@@ -444,14 +438,12 @@ const CreatePost = () => {
             sheetBackRef.current.open();
             return true;
         }
-        
         navigation.goBack();
         return true;
     };
 
     const onSaveTopic = (v, topicChat) => {
         setListTopic(v);
-        setHashtags(v)
         setListTopicChat(topicChat)
         sheetTopicRef.current.close();
     };
@@ -465,7 +457,7 @@ const CreatePost = () => {
                 });
                 return true;
             }
-
+            console.log(checkTaggingUser(), 'sunak')
             setLoading(true);
             // const topicWithoutHashtag = listTopic.map((topic) => topic.substring(1))
             // console.log(topicWithoutHashtag, 'jaja')
@@ -481,6 +473,7 @@ const CreatePost = () => {
                 location_id: locationId,
                 duration_feed: postExpired[expiredSelect].value,
                 images_url: dataImage,
+                tagUsers: checkTaggingUser()
             };
 
             setLocationId(JSON.stringify(geoSelect));
@@ -498,7 +491,9 @@ const CreatePost = () => {
             });
             const res = await createPost(data);
             if (res.code === 200) {
+                console.log(res, 'lakik')
                 handleTopicChat()
+                // handleSelectedTagUser()
                 showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
@@ -570,6 +565,16 @@ const CreatePost = () => {
             await channel.sendMessage({ text: handleTextMessage() }, { skip_push: true })
         })
     }
+
+    const checkTaggingUser = () => {
+        const mapTagUser = taggingUsers.map((data) => {
+           const findData = allTaggingUser.find((dataUser) => dataUser.username ===  data)
+           return findData.user_id
+        })
+        return mapTagUser
+    }
+
+
     const createPoll = () => {
         setIsPollShown(true);
         sheetMediaRef.current.close();
@@ -706,9 +711,13 @@ const CreatePost = () => {
 
 
     const searchTopic = async (name) => {
+        console.log(name, 'nama')
         if (!isEmptyOrSpaces(name)) {
+                    console.log(name, 'nama123')
+
             getTopics(name)
                 .then(v => {
+                    console.log(v, 'makan')
                     setTopicSearch(v.data);
                 })
                 .catch(err => console.log(err));
@@ -754,6 +763,30 @@ const CreatePost = () => {
         return newMessage;
     }
 
+   
+
+    
+
+    const handleTagUser = debounce(() => {
+         const regex = /(^|\W)(@[a-z\d][\w-]*)/ig
+        const findRegex = message.match(regex)
+        if(findRegex) {
+            const newMapRegex = findRegex.map((tagUser) => {
+                const newTagUser = tagUser.replace(/\s/g, '').replace('@', '')
+                return newTagUser
+            })
+            setTaggingUsers(newMapRegex)
+        } else {
+            setTaggingUsers([])
+        }
+    }, 500)
+
+
+    React.useEffect(() => {
+        handleTagUser()
+    }, [message])
+
+    console.log(message, 'nani')
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />
@@ -789,11 +822,6 @@ const CreatePost = () => {
                         onChange={(v) => {
                         }}
                         onChangeText={(v) => {
-                            if(listTopic.length >= 5) {
-                                setMessage(v)
-                                return
-                            } 
-
                             if (v.includes('#')) {
                                 const position = v.lastIndexOf('#', positionEndCursor);
                                 const spaceStatus = v.includes(' ', position);
@@ -824,7 +852,7 @@ const CreatePost = () => {
                                     const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
                                     console.log('with space', textSeacrh);
                                     console.log('after space', removeCharacterAfterSpace);
-                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic, setHashtags);
+                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic);
                                 }
 
                                 handleStateHastag(v);
@@ -883,7 +911,6 @@ const CreatePost = () => {
                                         const newArr = [...listTopic, topicItem];
                                         const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
                                         setListTopic(newArr);
-                                        setHashtags(newArr)
                                         setListTopicChat(newChatTopic)
                                     }
                                     setPositionKeyboard('never')
@@ -920,6 +947,12 @@ const CreatePost = () => {
                                         handleStateMention(newMessage);
                                         setMessage(newMessage);
                                         setListUsersForTagging([]);
+                                        const duplicateId = allTaggingUser.find((userData) => userData.user_id === item.user_id)
+                                        if(duplicateId) return
+                                        setAllTaggingUser([...allTaggingUser, item])
+                                        // console.log(item, 'julak')
+                                        // setTaggingUsers([...taggingUsers, item.use])
+                                        // console.log(item.username, 'kolak')
                                     }}>
                                         <View style={{ marginBottom: 5 }} >
                                             <Text style={{
