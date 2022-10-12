@@ -494,30 +494,28 @@ const CreatePost = () => {
                 anon: typeUser,
                 predicted_audience: audienceEstimations,
             });
+            navigation.navigate('HomeTabs', {
+                screen: 'Feed',
+                params: {
+                    refresh: true,
+                },
+            });
             const res = await createPost(data);
             if (res.code === 200) {
                 console.log(res, 'lakik')
                 handleTopicChat()
                 // handleSelectedTagUser()
-                showMessage({
-                    message: StringConstant.createPostDone,
-                    type: 'success',
-                });
+                // showMessage({
+                //     message: StringConstant.createPostDone,
+                //     type: 'success',
+                // });
                 setLoading(false);
-                setTimeout(() => {
-                    navigation.navigate('HomeTabs', {
-                        screen: 'Feed',
-                        params: {
-                            refresh: true,
-                        },
-                    });
-                }, 2000);
             } else {
                 setLoading(false);
-                showMessage({
-                    message: StringConstant.createPostFailedGeneralError,
-                    type: 'danger',
-                });
+                // showMessage({
+                //     message: StringConstant.createPostFailedGeneralError,
+                //     type: 'danger',
+                // });
             }
         } catch (error) {
             showMessage({
@@ -652,29 +650,27 @@ const CreatePost = () => {
         setLocationId(JSON.stringify(geoSelect));
         setDurationId(JSON.stringify(expiredSelect));
         setPrivacyId(JSON.stringify(privacySelect));
-
+        navigation.navigate('HomeTabs', {
+            screen: 'Feed',
+            params: {
+                    refresh: true,
+            },
+        });
         try {
             const response = await createPollPost(data);
             if (response.status) {
-                showMessage({
-                    message: StringConstant.createPostDone,
-                    type: 'success',
-                });
-                setTimeout(() => {
-                    navigation.navigate('HomeTabs', {
-                        screen: 'Feed',
-                        params: {
-                            refresh: true,
-                        },
-                    });
-                }, 1000);
+                // showMessage({
+                //     message: StringConstant.createPostDone,
+                //     type: 'success',
+                // });
+               
                 setLoading(false);
             } else {
                 setLoading(false);
-                showMessage({
-                    message: StringConstant.createPostFailedGeneralError,
-                    type: 'danger',
-                });
+                // showMessage({
+                //     message: StringConstant.createPostFailedGeneralError,
+                //     type: 'danger',
+                // });
             }
         } catch (e) {
             showMessage({
