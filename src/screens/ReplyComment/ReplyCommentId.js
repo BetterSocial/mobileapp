@@ -2,17 +2,18 @@ import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
 import {
+  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  SafeAreaView
+  View
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
+import ButtonHightlight from '../../components/ButtonHighlight';
 import Comment from '../../components/Comments/Comment';
 import ConnectorWrapper from '../../components/Comments/ConnectorWrapper';
 import LoadingComment from '../../components/LoadingComment';
@@ -26,7 +27,6 @@ import { fonts } from '../../utils/fonts';
 import { getComment } from '../../utils/getstream/getComment';
 import { getFeedDetail } from '../../service/post';
 import { setFeedByIndex } from '../../context/actions/feeds';
-import ButtonHightlight from '../../components/ButtonHighlight';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
@@ -36,8 +36,8 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
   const [temporaryText, setTemporaryText] = React.useState('')
   const [, setReaction] = React.useState(false);
   const [loadingCMD, setLoadingCMD] = React.useState(false);
-  let [users] = React.useContext(Context).users;
-  let [profile] = React.useContext(Context).profile;
+  const [users] = React.useContext(Context).users;
+  const [profile] = React.useContext(Context).profile;
 
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
@@ -72,9 +72,9 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
     }
   }, [item]);
   const getThisComment = async (newFeed) => {
-    let newItem = await getComment({
+    const newItem = await getComment({
       feed: newFeed,
-      level: level,
+      level,
       idlevel1: itemProp.id,
       idlevel2: itemProp.parent,
     });
@@ -97,7 +97,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
 
   const updateFeed = async (isSort) => {
     try {
-      let data = await getFeedDetail(itemProp.activity_id);
+      const data = await getFeedDetail(itemProp.activity_id);
       if (data) {
         let oldData = data.data
         if (isSort) {
@@ -127,21 +127,21 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
     setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
     try {
       if (textComment.trim() !== '') {
-        let data = await createChildComment(textComment, item.id, item.user.id);
+        const data = await createChildComment(textComment, item.id, item.user.id);
         if (data.code === 200) {
           // setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
           // setLoadingCMD(false);
           await updateFeed(true)
         } else {
-          Toast.show('Failed Comment', Toast.LONG);
+          Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
           // setLoadingCMD(false);
         }
       } else {
-        Toast.show('Comments are not empty', Toast.LONG);
+        // Toast.show('Comments are not empty', Toast.LONG);
         // setLoadingCMD(false);
       }
     } catch (error) {
-      Toast.show('Failed Comment', Toast.LONG);
+      Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
       // setLoadingCMD(false);
     }
   };
@@ -163,7 +163,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
 
     return unsubscribe
   }, [])
-
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
@@ -204,9 +203,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
                   indexFeed,
                 });
               };
-              let isLastInParent = (index) => {
-                return index === (item.children_counts.comment || 0) - 1;
-              };
+              const isLastInParent = (index) => index === (item.children_counts.comment || 0) - 1;
 
               return (
                 <ContainerReply key={index}>
@@ -222,7 +219,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
                           // (itemReply.children_counts.comment || 0) === 0
                           level >= 2
                         }
-                        key={'r' + index}
+                        key={`r${  index}`}
                         user={itemReply.user}
                         comment={itemReply}
                         onPress={showChildrenCommentView}
@@ -279,8 +276,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
     </View>
   );
 };
-const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key }) => {
-  return (
+const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key }) => (
     <View
       key={key}
       style={[
@@ -290,7 +286,6 @@ const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key 
       {children}
     </View>
   );
-};
 export default ReplyCommentId;
 
 const styles = StyleSheet.create({

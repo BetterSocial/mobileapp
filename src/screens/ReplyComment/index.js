@@ -6,12 +6,13 @@ import { withInteractionsManaged } from '../../components/WithInteractionManaged
 import { Context } from '../../context';
 import { setFeedByIndex } from '../../context/actions/feeds';
 
-const ProfileReplyComment = (props) => {
-  let itemProp = props.route.params.item;
-  const updateParentPost = props.route.params.updateParent
-  const level = props.route.params.level;
-  const findAndUpdateComment = props.route.params.findAndUpdateComment
-  let [feeds, dispatch] = React.useContext(Context).feeds
+const ReplyComment = (props) => {
+  // const [newComment, setNewComment] = React.useState([])
+  const itemProp = props.route.params.item;
+  const {updateParent, findCommentAndUpdate, updateReply,  itemParent,  parentComment,  updateVote, updateVoteLatestChildren} = props.route.params
+  const {level} = props.route.params;
+  const {dataFeed} = props.route.params
+  const [feeds, dispatch] = React.useContext(Context).feeds
   const feedIndex = () => {
     if(feeds && Array.isArray(feeds)) {
       const findIndex = feeds.find((feed) => feed.id === itemProp.activity_id)
@@ -19,7 +20,6 @@ const ProfileReplyComment = (props) => {
     }
     return 0
   }
-
   return (
     <View style={styles.container}>
       <ReplyCommentComponent indexFeed={feedIndex()} 
@@ -28,8 +28,15 @@ const ProfileReplyComment = (props) => {
         feeds={feeds.feeds}
         level={level}
         setFeedByIndexProps={setFeedByIndex} 
-        updateParent={updateParentPost}
+        updateParent={updateParent}
         page={props.route.params.page}
+        dataFeed={dataFeed}
+        updateReply={updateReply}
+        updateVote={ updateVote}
+        updateVoteLatestChildren={updateVoteLatestChildren}
+        findCommentAndUpdate={findCommentAndUpdate}
+         itemParent={itemParent}
+         parentComment={parentComment}
         />
     </View>
   )
@@ -42,4 +49,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default withInteractionsManaged (ProfileReplyComment)
+export default withInteractionsManaged (ReplyComment)

@@ -1,11 +1,12 @@
+/* eslint-disable no-underscore-dangle */
 import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Keyboard,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
+  TouchableNativeFeedback,
   TouchableOpacity,
   View
 } from 'react-native';
@@ -17,18 +18,17 @@ import DiscoveryRepo from '../../../service/discovery';
 import GeneralComponentAction from '../../../context/actions/generalComponentAction';
 import IconClear from '../../../assets/icon/IconClear';
 import MemoIc_arrow_back_white from '../../../assets/arrow/Ic_arrow_back_white';
-import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
+import TestIdConstant from '../../../utils/testId';
 import dimen from '../../../utils/dimen';
 import { COLORS, FONTS, SIZES } from '../../../utils/theme';
 import { Context } from '../../../context/Store';
 import { RECENT_SEARCH_TERMS } from '../../../utils/cache/constant';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
-import { withInteractionsManaged, withInteractionsManagedNoStatusBar } from '../../../components/WithInteractionManaged';
 
-const DiscoverySearch = ({ }) => {
+const DiscoverySearch = () => {
   const navigation = useNavigation()
   const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery
@@ -38,6 +38,7 @@ const DiscoverySearch = ({ }) => {
 
   const [isSearchIconShown, setIsSearchIconShown] = React.useState(false)
   const [isTextAvailable, setIsTextAvailable] = React.useState(false)
+  const [lastSearch, setLastSearch] = React.useState('')
   const [searchText, setSearchText] = React.useState(discoverySearchBarText)
 
   const debounced = React.useCallback(debounce((text) => {
@@ -47,7 +48,6 @@ const DiscoverySearch = ({ }) => {
     , [])
 
   const { isFocus } = discovery
-
 
   const __handleBackPress = () => {
     Keyboard.dismiss()
@@ -65,7 +65,7 @@ const DiscoverySearch = ({ }) => {
       DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
       debounced(text)
     } else {
-      if(text.length === 0) DiscoveryAction.setDiscoveryFirstTimeOpen(true, discoveryDispatch)
+      if (text.length === 0) DiscoveryAction.setDiscoveryFirstTimeOpen(true, discoveryDispatch)
       DiscoveryAction.setDiscoveryLoadingData(false, discoveryDispatch)
       debounced.cancel()
     }
@@ -93,6 +93,9 @@ const DiscoverySearch = ({ }) => {
   }
 
   const __handleSubmitSearchData = async (text) => {
+    if (text === lastSearch) return
+
+    setLastSearch(text)
     DiscoveryAction.setDiscoveryLoadingData(true, discoveryDispatch)
     DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
     __fetchDiscoveryData(text)
@@ -181,26 +184,22 @@ const DiscoverySearch = ({ }) => {
 
   return (
     <View style={styles.animatedViewContainer}>
-      <Pressable delayPressIn={0} onPress={__handleBackPress}
-        android_ripple={{
-          color: COLORS.gray1,
-          borderless: true,
-          radius: 20,
-        }}
-        style={styles.arrowContainer}>
-        <View style={styles.backArrow}>
-          <MemoIc_arrow_back_white width={20} height={12} fill={colors.black} style={{ alignSelf: 'center' }} />
-        </View>
-      </Pressable>
+      <View style={styles.arrowContainer}>
+        <TouchableNativeFeedback testID={TestIdConstant.discoveryScreenBackArrow} onPress={__handleBackPress}>
+          <View style={styles.backArrow}>
+            <MemoIc_arrow_back_white width={20} height={12} fill={colors.black} style={{ alignSelf: 'center' }} />
+          </View>
+        </TouchableNativeFeedback>
+      </View>
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
           {isSearchIconShown && <View style={styles.wrapperIcon}>
             <MemoIc_search width={16.67} height={16.67} />
           </View>
           }
-          {/* <Text style={styles.inputText}>{StringConstant.newsTabHeaderPlaceholder}</Text> */}
           <TextInput
             ref={discoverySearchBarRef}
+            testID={TestIdConstant.discoveryScreenSearchBar}
             focusable={true}
             autoFocus={true}
             // value={discoverySearchBarText}
@@ -215,7 +214,7 @@ const DiscoverySearch = ({ }) => {
             placeholderTextColor={COLORS.gray1}
             style={styles.input} />
 
-          <TouchableOpacity delayPressIn={0} onPress={__handleOnClearText} style={styles.clearIconContainer}
+          <TouchableOpacity testID={TestIdConstant.discoveryScreenClearButton} delayPressIn={0} onPress={__handleOnClearText} style={styles.clearIconContainer}
             android_ripple={{
               color: COLORS.gray1,
               borderless: true,
@@ -244,8 +243,6 @@ const styles = StyleSheet.create({
   clearIconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'red',
-    // marginRight: 9.5,
     marginRight: -20.5,
     paddingRight: 30,
     paddingLeft: 30,
@@ -285,19 +282,6 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
   },
-  // inputText: {
-  //   marginRight: 16,
-  //   paddingStart: 10,
-  //   flex: 1,
-  //   fontSize: 14,
-  //   fontFamily: fonts.inter[400],
-  //   height: 36,
-  //   alignSelf: 'center',
-  //   // paddingTop: 0,
-  //   // paddingBottom: 0,
-  //   color: COLORS.gray1,
-  //   alignSelf: 'center'
-  // },
   wrapperIcon: {
     marginLeft: 9.67,
     marginRight: 1.67,
@@ -307,7 +291,6 @@ const styles = StyleSheet.create({
   wrapperDeleteIcon: {
     alignSelf: 'center',
     justifyContent: 'center',
-    // marginRight: 9.5,
   },
   newPostText: {
     color: COLORS.holyTosca,
@@ -324,8 +307,6 @@ const styles = StyleSheet.create({
     paddingBottom: 7,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.alto,
-    // paddingLeft: 20,
-    // paddingRight: 20,
   },
 });
 

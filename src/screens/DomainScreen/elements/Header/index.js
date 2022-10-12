@@ -1,6 +1,5 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import {
   Image,
   Linking,
@@ -10,25 +9,16 @@ import {
   View,
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize'
-import { TouchableNativeFeedback } from 'react-native';
 
 import ActionButtonGroup from './elements/ActionButtonGroup';
 import CredderInfoGroup from './elements/CredderInfoGroup';
 import DomainFollowerNumber from './elements/DomainFollowerNumber';
-import GlobalButton from '../../../../components/Button/GlobalButton';
 import MemoDomainProfilePicture from '../../../../assets/icon/DomainProfilePictureEmptyState';
 import MemoIc_interface from '../../../../assets/icons/Ic_interface';
-import MemoIc_question_mark from '../../../../assets/icons/Ic_question_mark';
-import MemoIc_rectangle_gradient from '../../../../assets/Ic_rectangle_gradient';
 import StringConstant from '../../../../utils/string/StringConstant';
 import { COLORS, SIZES } from '../../../../utils/theme';
 import { Gap, SingleSidedShadowBox } from '../../../../components';
-import { colors } from '../../../../utils/colors';
 import { fonts, normalize, normalizeFontSize } from '../../../../utils/fonts';
-import { getSingularOrPluralText } from '../../../../utils/string/StringUtils';
-
-const lorem =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis.';
 
 const Header = ({
   image,
@@ -44,7 +34,7 @@ const Header = ({
   item
 }) => {
   const openDomainLink = async () => {
-    let isURL = await Linking.canOpenURL(`https://${domain}`);
+    const isURL = await Linking.canOpenURL(`https://${domain}`);
     console.log(isURL);
     if (isURL) {
       Linking.openURL(`https://${domain}`);

@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Label render correctly Match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#F2F2F2",
+      "flexDirection": "column",
+      "height": 40,
+      "justifyContent": "center",
+      "paddingLeft": 22,
+      "paddingRight": 22,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#4F4F4F",
+        "fontFamily": "Poppins",
+        "fontSize": 12,
+        "fontStyle": "normal",
+        "fontWeight": "normal",
+        "lineHeight": 18,
+      }
+    }
+  >
+    People in 
+    <Text
+      style={
+        Object {
+          "color": "#4F4F4F",
+          "fontFamily": "Poppins",
+          "fontSize": 12,
+          "fontStyle": "normal",
+          "fontWeight": "bold",
+          "lineHeight": 18,
+        }
+      }
+    >
+      #Veterans
+    </Text>
+     follow...
+  </Text>
+</View>
+`;

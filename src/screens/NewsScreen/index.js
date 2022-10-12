@@ -194,7 +194,7 @@ const NewsScreen = ({ }) => {
   const loadMoreData = async () => {
     setRefreshing(true)
     try {
-      const res = await getDomains(0);
+      const res = await getDomains(postOffset);
       const newNews = [...news, ...res.data];
       setPostOffset(res.offset)
       setNews(newNews, dispatch);
@@ -261,6 +261,7 @@ const NewsScreen = ({ }) => {
       <Animated.View style={{ paddingTop: Platform.OS === 'android' ? paddingContainer : 0 }}>
         <FlatList
           ref={scrollRef}
+          contentInsetAdjustmentBehavior='automatic'
           keyExtractor={keyExtractor}
           onScrollBeginDrag={handleOnScrollBeginDrag}
           onScroll={handleScrollEvent}

@@ -70,7 +70,7 @@ const splashScreenDeeplinkGetProfileNotFound = (username) => `${username}'s prof
 
 // Domain Page
 const domainCannotOpenURL = 'Cannot open URL';
-const credderTooltipText = 'Credder.com is the world\'s largest news review platform. The credibility score is based on reviews by verified journalits.\nCredder & Better are entirely independent entities and Better has no influence on the scores provided.';
+const credderTooltipText = 'Credder.com is the world\'s largest news review platform. The credibility score is based on reviews by verified journalists.\nCredder & Better are entirely independent entities and Better has no influence on the scores provided.';
 
 // Permission
 const cameraPermissionGranted = 'You can use camera';
@@ -100,6 +100,15 @@ const profileDeleteAccountAlertTitle = 'Delete Account Permanently';
 const profileDeleteAccountAlertCancel = 'Cancel';
 const profileDeleteAccountAlertSubmit = 'Yes - Delete my account';
 const profileDeleteAccountSuccess = 'Success - your account has been deleted';
+
+// Comment
+const generalCommentFailed = 'Comment Failed';
+
+// Open Link
+const generalCannotOpenLink = 'URL is not supported';
+
+// Group Setting Page
+const groupSettingUpdateFailed = 'Update failed, please try again'
 
 export default {
     signInPrivacy,
@@ -182,4 +191,9 @@ export default {
     profileDeleteAccountAlertCancel,
     profileDeleteAccountAlertSubmit,
     profileDeleteAccountSuccess,
+
+    generalCommentFailed,
+    generalCannotOpenLink,
+
+    groupSettingUpdateFailed
 };

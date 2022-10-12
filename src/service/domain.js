@@ -3,6 +3,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import api from './config';
 
 export const getDomains = async (offset = 0, limit = 10) => {
+  console.log(`offset ${offset}`)
   try {
     const url = `/domain?offset=${offset}&limit=${limit}`;
     const res = await api.get(url);

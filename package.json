@@ -3,18 +3,21 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android:dev-debug": "npm run update-env-dev && cd android && ./gradlew clean && cd .. && ENVFILE=.env.development npx react-native run-android --variant=devdebug",
-    "android:prod-debug": "npm run update-env-prod && npm run update-stream && cd android && ./gradlew clean && cd .. && ENVFILE=.env.production npx react-native run-android --variant=proddebug",
-    "android:dev": "npm run update-env-dev && react-native run-android --variant=devDebug --appIdSuffix=dev",
-    "build:apk-android-dev": "npm run update-env-dev && cd android && NODENV=development ENVFILE=.env.development ./gradlew assembledevrelease",
-    "build:apk-android-dev-update-stream": "npm run update-env-dev && npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.development ./gradlew assembledevrelease",
-    "build:apk-android-prod": "npm run update-env-prod && cd android && ENVFILE=.env.production ./gradlew assembleprodrelease",
-    "build:apk-android-prod-update-stream": "npm run update-env-prod && npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.production ./gradlew assembleprodrelease",
+    "android:dev-debug": "cd android && ./gradlew clean && cd .. && ENVFILE=.env.development npx react-native run-android --variant=devdebug",
+    "android:prod-debug": "npm run update-stream && cd android && ./gradlew clean && cd .. && ENVFILE=.env.production npx react-native run-android --variant=proddebug",
+    "android:dev": "react-native run-android --variant=devDebug --appIdSuffix=dev",
+    "android:prod": "react-native run-android --variant=prodDebug --appIdSuffix=devprod",
+    "build:apk-android-dev": "cd android && NODENV=development ENVFILE=.env.development ./gradlew assembledevrelease",
+    "build:apk-android-dev-update-stream": "npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.development ./gradlew assembledevrelease",
+    "build:apk-android-prod": "cd android && ENVFILE=.env.production ./gradlew assembleprodrelease",
+    "build:apk-android-prod-update-stream": "npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.production ./gradlew assembleprodrelease",
     "build:bundle-android-dev": "npm run update-env-dev && npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.development ./gradlew bundledevrelease",
-    "build:bundle-android-prod": "npm run update-env-prod && npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.production ./gradlew bundleprodrelease",
+    "build:bundle-android-prod": "cd android && ENVFILE=.env.production ./gradlew bundleprodrelease",
+    "build:bundle-android-prod-update-stream": "npm run update-env-prod && npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.production ./gradlew bundleprodrelease",
     "ios:dev-debug": "npm run update-env-dev && react-native run-ios --scheme 'BetterSocialDev' --simulator='iPhone 13'",
     "start": "npm run update-env-dev &&react-native start",
-    "test": "jest --verbose",
+    "test": "jest --verbose __tests__ src",
+    "testCoverage": "jest --verbose --coverage --collectCoverageFrom=\"./src/**\" __tests__ src",
     "lint": "eslint .",
     "android:clean": "cd android && ./gradlew clean && ./gradlew cleanBuildCache",
     "reinstall": "rm -rf node_modules && yarn install",
@@ -42,6 +45,7 @@
     "@react-native-firebase/messaging": "11.3.1",
     "@react-native-firebase/remote-config": "11.1.2",
     "@react-navigation/bottom-tabs": "^5.11.15",
+    "@react-navigation/core": "^5.16.1",
     "@react-navigation/material-top-tabs": "^5.3.15",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
@@ -53,6 +57,7 @@
     "link-preview-js": "^2.1.8",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "psl": "^1.9.0",
     "react": "18.0.0",
     "react-native": "0.64.3",
     "react-native-activity-feed": "^1.0.3",
@@ -77,6 +82,7 @@
     "react-native-keyevent": "^0.2.8",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-modal": "^11.7.0",
+    "react-native-opengraph-kit": "^3.0.1",
     "react-native-permissions": "^3.2.0",
     "react-native-push-notification": "^8.1.1",
     "react-native-raw-bottom-sheet": "^2.2.0",
@@ -120,7 +126,8 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@react-native-community/eslint-config": "2.0.0",
-    "@testing-library/react-native": "^7.2.0",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/react-native": "^9.1.0",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.23",
     "@types/react": "^17.0.47",
@@ -168,6 +175,10 @@
     ],
     "moduleNameMapper": {
       "\\.svg": "<rootDir>/__mocks__/svgMock.ts"
-    }
+    },
+    "collectCoverageFrom": [
+      "__tests__",
+      "src/**/*.{js,jsx}"
+    ]
   }
 }

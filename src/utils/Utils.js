@@ -1,7 +1,11 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import { Linking } from 'react-native';
 import config from 'react-native-config'
+import psl from 'psl'
+import { Linking } from 'react-native';
+import { OpenGraphParser } from 'react-native-opengraph-kit'
+
+import StringConstant from './string/StringConstant';
 
 export const sanitizeUrlForLinking = (url) => {
     if (!/^https?:\/\//.test(url)) {
@@ -68,7 +72,7 @@ export const openUrl = (url, force = false) => {
                 Linking.openURL(url);
             } else {
                 if (force) return Linking.openURL(url);
-                SimpleToast.show('Url is not supported', SimpleToast.SHORT);
+                SimpleToast.show(StringConstant.generalCannotOpenLink, SimpleToast.SHORT);
             }
         });
     }
@@ -121,11 +125,47 @@ export const locationValidation = (location) => {
 
     if (location.location_level.toLocaleLowerCase() === 'neighborhood') {
         return location.neighborhood;
-    } else if (location.location_level.toLocaleLowerCase() === 'city') {
+    } if (location.location_level.toLocaleLowerCase() === 'city') {
         return location.city;
-    } else if (location.location_level.toLocaleLowerCase() === 'state') {
+    } if (location.location_level.toLocaleLowerCase() === 'state') {
         return location.state;
-    } else {
-        return location.country;
     }
+    return location.country;
+
+}
+
+export const getDomainInfoInLinkPreview = async (link) => {
+    const urlWithoutProtocol = link.replace(/(^\w+:|^)\/\//, '');
+    if (validationURL(urlWithoutProtocol)) {
+        const urlDomainOnly = urlWithoutProtocol.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/igm)
+        const parsedUrl = psl.parse(urlDomainOnly[0] || urlWithoutProtocol)
+        // console.log('parsedUrl')
+        // console.log(parsedUrl)
+        const data = await OpenGraphParser.extractMeta(parsedUrl?.domain)
+        // console.log('og data')
+        // console.log(data)
+        if (Array.isArray(data)) return {
+            domain: parsedUrl?.domain,
+            domainImage: data[0]?.image
+        }
+        return null
+    }
+
+    return null
+}
+
+export const getNewsLinkInfoInLinkPreview = async (link) => {
+    const data = await OpenGraphParser.extractMeta(link)
+    console.log('og data news link')
+    console.log(data)
+    if (Array.isArray(data)) {
+        const { title, description, image, url } = data[0]
+        return {
+            title,
+            description,
+            image,
+            url
+        }
+    }
+    return null;
 }

@@ -7,10 +7,10 @@ import { fonts } from '../fonts';
 
 const handleMention = (text, setFormattedContent) => {
     const retLines = text.split("\n");
-    let arrText = new Array();
-    for (var i = 0; i < retLines.length; i++) {
+    const arrText = [];
+    for (let i = 0; i < retLines.length; i++) {
         arrText.push(retLines[i]);
-        if (i != retLines.length - 1) {
+        if (i !== retLines.length - 1) {
             arrText.push("\n");
         }
     }
@@ -18,7 +18,8 @@ const handleMention = (text, setFormattedContent) => {
     arrText.forEach(retLine => {
         const words = retLine.split(' ');
         const contentLength = words.length;
-        var format = /[ !#@$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\n]/;
+        const format = /[ !#@$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\n]/;
+        // eslint-disable-next-line consistent-return
         words.forEach((word, index) => {
             const randomId = generateRandomId();
             if ((word.startsWith('@') && !format.test(word.substr(1)))) {
@@ -35,9 +36,9 @@ const handleMention = (text, setFormattedContent) => {
             } else {
                 if (index !== contentLength - 1) {
                     return formattedText.push(word, ' ');
-                } else {
-                    return formattedText.push(word);
                 }
+                return formattedText.push(word);
+
             }
         });
     });

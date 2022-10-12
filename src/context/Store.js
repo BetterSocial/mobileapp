@@ -8,6 +8,7 @@ import { feedsReducer, feedsState } from './reducers/FeedReducer';
 import { followingReducer, followingState } from './reducers/followingReducer';
 import { generalComponentReducer, generalComponentState } from './reducers/generalComponentReducer';
 import { groupChatReducer, groupChatState } from './reducers/groupChat';
+import { initialStartupReducer, initialStartupState } from './reducers/intialStartupReducer';
 import {
   localCommunityReducer,
   localCommunityState,
@@ -25,7 +26,6 @@ import {
   unReadMessageState,
 } from './reducers/unReadMessageReducer';
 import { usersReducer, usersState } from './reducers/userReducer';
-import { initialStartupReducer, initialStartupState } from './reducers/intialStartupReducer';
 
 /**
  *
@@ -58,4 +58,5 @@ const Store = ({ children }) => {
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };
 export const Context = React.createContext(null);
+export const useAppContext =() => React.useContext(Context)
 export default Store;

@@ -7,7 +7,7 @@ import config from 'react-native-config';
 import { Context } from '../../context';
 import { getAccessToken } from '../token';
 import { getMyProfile } from '../../service/profile';
-import { createClient } from '../../context/actions/createClient';
+import { createClient} from '../../context/actions/createClient';
 import {
   setUnReadMessage,
   setTotalUnReadMessage,
@@ -33,7 +33,7 @@ export const useClientGetstream = () => {
           image: userData?.data.profile_pic_path ?? defaultImage,
           invisible: true,
         };
-        const chatClient = await new StreamChat(config.STREAM_API_KEY);
+        const chatClient = StreamChat.getInstance(config.STREAM_API_KEY);
         const res = await chatClient.connectUser(user, token);
         const unRead = {
           total_unread_count: res.me.total_unread_count,

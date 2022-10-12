@@ -1,9 +1,8 @@
 import * as React from 'react';
-
 import Svg, {Path} from 'react-native-svg';
 
 function Ic_arrow_back_white(props) {
-  let { iconColor } = props
+  const { iconColor } = props
 
   return (
     <Svg width="1em" height="1em" viewBox="0 0 20 12" fill="none" {...props}>

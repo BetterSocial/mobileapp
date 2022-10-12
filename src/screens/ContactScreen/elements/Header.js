@@ -3,23 +3,21 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TouchableHighlight,
-  TouchableNativeFeedback,
   View,
 } from 'react-native';
 
 import ArrowLeftIcon from '../../../../assets/icons/arrow-left.svg';
 import GlobalButton from '../../../components/Button/GlobalButton';
-import {fonts} from '../../../utils/fonts';
 import {COLORS, SIZES} from '../../../utils/theme';
+
 const Header = ({
   title,
   subTitle,
   onPress,
   titleStyle = {},
-  subtitleStyle = {},
   containerStyle = {},
   onPressSub,
+  disabledNextBtn
 }) => {
   const renderHeader = () => {
     if (Platform.OS === 'android') {
@@ -30,7 +28,7 @@ const Header = ({
           </View>
         </GlobalButton>
       );
-    } else {
+    } 
       return (
         <GlobalButton buttonStyle={styles.backContainer}  onPress={onPress}>
           <View style={styles.content(-8)}>
@@ -38,7 +36,7 @@ const Header = ({
           </View>
         </GlobalButton>
       );
-    }
+    
   };
   return (
     <View style={{...styles.container, ...containerStyle}}>
@@ -46,8 +44,8 @@ const Header = ({
       <View style={styles.containerTitle}>
         <Text style={{...styles.text, ...titleStyle}}>{title}</Text>
       </View>
-      <GlobalButton buttonStyle={styles.nextContainer} onPress={onPressSub}>
-        <Text style={{...styles.text, ...subtitleStyle}}>{subTitle}</Text>
+      <GlobalButton disabled={disabledNextBtn} buttonStyle={styles.nextContainer} onPress={onPressSub}>
+        <Text style={[styles.text, {color: disabledNextBtn ? COLORS.gray6: COLORS.holyTosca}]}>{subTitle}</Text>
       </GlobalButton>
     </View>
   );
@@ -64,7 +62,7 @@ const styles = StyleSheet.create({
   },
   content: (marginLeft) => ({
     padding: 10,
-    marginLeft: marginLeft,
+    marginLeft,
   }),
   text: {
     fontFamily: 'Inter',

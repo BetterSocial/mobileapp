@@ -1,27 +1,28 @@
 import * as React from 'react'
-import {StyleSheet, View} from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 
 import PostPageDetailComponent from '../../components/PostPageDetail'
-import {Context} from '../../context';
+import { Context } from '../../context';
 import { setFeedByIndex } from '../../context/actions/otherProfileFeed';
 
 const OtherProfilePostDetail = (props) => {
-    let [feeds, dispatch] = React.useContext(Context).otherProfileFeed
-    let {index} = props.route.params
-    let navigation = useNavigation()
+    const [feeds, dispatch] = React.useContext(Context).otherProfileFeed
+    const { index, feedId, refreshParent } = props.route.params
+    const navigation = useNavigation()
 
-    let navigateToReplyView = (data) => {
+    const navigateToReplyView = (data) => {
         navigation.navigate('OtherProfileReplyComment', data);
     }
-    
-    return(
+
+    return (
         <View style={styles.container}>
-            <PostPageDetailComponent index={index} 
-                feeds={feeds.feeds} 
-                dispatch={dispatch} 
+            <PostPageDetailComponent index={index}
+                feedId={feedId}
+                feeds={feeds.feeds}
+                dispatch={dispatch}
                 setFeedByIndexProps={setFeedByIndex}
-                navigateToReplyView={navigateToReplyView}/>
+                navigateToReplyView={navigateToReplyView} />
         </View>
     )
 }

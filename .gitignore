@@ -71,3 +71,6 @@ yarn.lock
 yarn.lock
 ./yarn.lock
 android/debug.keystore
+
+# Jest testing
+coverage

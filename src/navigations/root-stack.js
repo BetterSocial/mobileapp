@@ -1,6 +1,7 @@
 import * as React from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import {
+  LogBox,
   Platform,
   SafeAreaView,
   StatusBar,
@@ -8,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+// import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState, } from 'recoil';
 
 import { useLocalChannelsFirst } from 'stream-chat-react-native';
@@ -31,6 +33,7 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
+import ReplyCommentLev3 from '../screens/ReplyComment2'
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
@@ -56,9 +59,8 @@ import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
-import { getSpecificCache } from '../utils/cache';
-import { PROFILE_CACHE } from '../utils/cache/constant';
-import { setMyProfileAction } from '../context/actions/setMyProfileAction';
+import { verifyTokenGetstream } from '../service/users';
+
 const RootStack = createStackNavigator();
 
 const testAtom = atom({
@@ -70,38 +72,41 @@ export const RootNavigator = () => {
   const setInitialValue = useSetRecoilState(InitialStartupAtom)
   const [v, setTest] = useRecoilState(testAtom)
   const [clientState] = React.useContext(Context).client;
-  const [, dispatchProfile] = React.useContext(Context).profile;
   const { client } = clientState;
 
   const create = useClientGetstream();
-  // console.tron.log(useLocalChannelsFirst);
   useLocalChannelsFirst(setTest);
+
+  if (initialStartup && typeof initialStartup === 'string') {
+  // console.tron.log(useLocalChannelsFirst);
 
   if(initialStartup && typeof initialStartup === 'string') {
     initialStartup = JSON.parse(initialStartup)
   }
   const doGetAccessToken = async () => {
     const accessToken = await getAccessToken()
-    setInitialValue({id: accessToken})
-
+    setInitialValue({ id: accessToken })
+    setTimeout(() => {
+      SplashScreen.hide()
+    }, 500)
   }
 
-  const getProfile = async () => {
-    getSpecificCache(PROFILE_CACHE, (res) => {
-      console.log(res, "response");
-      if (res) {
-        setMyProfileAction(res, dispatchProfile);
-      }
-  });
+  const doVerifyGetstreamToken = async () => {
+    try {
+      const response = await verifyTokenGetstream();
+      if (!response) return SplashScreen.hide()
+    } catch (e) {
+      SplashScreen.hide();
+    }
+    doGetAccessToken()
   }
 
-  // console.tron.log(data, 'data local');
+
   React.useEffect(() => {
+    LogBox.ignoreAllLogs()
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
-    doGetAccessToken()
-    getProfile();
-
+    doVerifyGetstreamToken()
     return async () => {
       await client?.disconnectUser();
     };
@@ -111,38 +116,40 @@ export const RootNavigator = () => {
     if (initialStartup.id !== null) {
       if (initialStartup.id !== '') {
         create();
+        // SplashScreen.hide()
       }
     } else {
-      setTimeout(() => {
-        SplashScreen.hide();
-      }, 1000);
+      // setTimeout(() => {
+      //   console.log('splash screen hide from else')
+      //   SplashScreen.hide();
+      // }, 700);
+      doVerifyGetstreamToken()
     }
-  }, [initialStartup, clientState]);
 
-  React.useState(() => {
-    if (clientState.client !== null) {
-      setTimeout(() => {
-        SplashScreen.hide();
-      }, 1000);
-    }
-  }, []);
+  }, [initialStartup]);
+
   return (
     <View
       style={{
         height: '100%',
       }}>
-      <StatusBar translucent backgroundColor="white" />
+      {/* <StatusBar translucent backgroundColor="white" /> */}
       <RootStack.Navigator
         screenOptions={{
           headerShown: false,
-          headerStyle: {
-            height: Platform.OS === 'ios' ? 64 : 56 + StatusBar.currentHeight,
-            paddingTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight,
-          },
+          safeAreaInsets: {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
+          }
+          // headerStyle: {
+          //   height: Platform.OS === 'ios' ? 64 : 56 + StatusBar.currentHeight,
+          //   paddingTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight,
+          // },
         }}>
         {
           initialStartup.id !== null && initialStartup.id !== '' ? (
-            // token !== null && token !== '' ? (
             <RootStack.Screen
               name="AuthenticatedStack"
               component={AuthenticatedNavigator}
@@ -317,6 +324,11 @@ const AuthenticatedNavigator = () => {
       <AuthenticatedStack.Screen
         name="ReplyComment"
         component={ReplyComment}
+        options={{ headerShown: false }}
+      />
+      <AuthenticatedStack.Screen
+        name='ReplyCommentLev3'
+        component={ReplyCommentLev3}
         options={{ headerShown: false }}
       />
       <AuthenticatedStack.Screen

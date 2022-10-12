@@ -1,10 +1,15 @@
-import * as React from 'react';
+import { useRoute } from '@react-navigation/native';
 import moment from 'moment';
-import reactStringReplace from 'react-string-replace'
+import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import reactStringReplace from 'react-string-replace'
+import TaggingUserText from '../../components/TaggingUserText';
 
-import { COLORS } from '../theme';
+import TextBold from '../../components/Text/TextBold';
+import TopicText from '../../components/TopicText';
 import { fonts } from '../fonts';
+import { COLORS } from '../theme';
+import removePrefixTopic from '../topics/removePrefixTopic';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 
@@ -45,6 +50,39 @@ const getPollTime = (pollExpiredAtString) => {
 
 const isPollExpired = (pollExpiredAtString) => moment(pollExpiredAtString).diff(moment()) < 0;
 
+/**
+ * 
+ * @param {String} city 
+ * @param {String} state 
+ * @returns {String}
+ */
+const detectStateInCity = (city) => {
+    const stateDetectionRegex = /(?:\.)|,/g
+    return city.match(stateDetectionRegex)
+}
+
+/**
+ * 
+ * @param {String} city 
+ * @param {String} state 
+ * @returns {String}
+ */
+const displayCityName = (city, state) => {
+    if (city === null || city === undefined || city === '') throw new Error('City must be defined')
+    if (state === null || state === undefined || state === '') throw new Error('State must be defined')
+    if (detectStateInCity(city)) return city
+
+    return `${city}, ${state}`
+}
+
+/**
+ * 
+ * @param {String} searchQuery 
+ * @param {String} location
+ * @returns {Boolean}
+ */
+const isLocationMatch = (searchQuery, location) => location.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1
+
 const displayFormattedSearchLocations = (searchQuery, locationObject) => {
     // console.log(searchQuery)
     // if (locationObject.country.toLowerCase() === searchQuery.toLowerCase()) {
@@ -55,35 +93,43 @@ const displayFormattedSearchLocations = (searchQuery, locationObject) => {
             ? ''
             : `, ${locationObject.zip}`;
 
-    if (locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
-        return (
-            <Text>
-                {`${locationObject.neighborhood}, ${locationObject.city}, `}
-                <Text style={styles.bold}>{locationObject.state}</Text>
-                {`, ${locationObject.country}${zipString}`}
-            </Text>
-        );
-    }
+    // if (locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
+    //     const neighborhood = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
+    //     return (
+    //         <Text>
+    //             {`${neighborhood}${locationObject.city}, `}
+    //             <Text style={styles.bold}>{locationObject.state}</Text>
+    //             {`, ${locationObject.country}${zipString}`}
+    //         </Text>
+    //     );
+    // }
 
-    if (locationObject.city.toLowerCase() === searchQuery.toLowerCase()) {
+    if (locationObject.city.toLowerCase() === searchQuery.toLowerCase() || locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
+        const { city, state } = locationObject
         const zipString =
             locationObject.zip === '' || locationObject.zip === undefined
                 ? ''
                 : `, ${locationObject.zip}`;
+
+        const cityDisplay = detectStateInCity(city) ? displayCityName(city, state) : city
+        const stateDisplay = detectStateInCity(city) ? `,` : `, ${state},`
+
+        const neighborhood = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
         return (
             <Text>
-                {`${locationObject.neighborhood}, `}
-                <Text style={styles.bold}>{locationObject.city}</Text>
-                {`, ${locationObject.state}, ${locationObject.country}${zipString}`}
+                {`${neighborhood}`}
+                <Text style={styles.bold}>{cityDisplay}</Text>
+                {`${stateDisplay} ${locationObject.country}${zipString}`}
             </Text>
         );
     }
 
     if (locationObject.neighborhood.toLowerCase() === searchQuery.toLowerCase()) {
+        const cityState = displayCityName(locationObject?.city, locationObject?.state)
         return (
             <Text>
                 <Text style={styles.bold}>{locationObject.neighborhood}</Text>
-                {`, ${locationObject.city} , ${locationObject.state}, ${locationObject.country}${zipString}`}
+                {`, ${cityState}, ${locationObject.country}${zipString}`}
             </Text>
         );
     }
@@ -105,21 +151,82 @@ const displayFormattedSearchLocations = (searchQuery, locationObject) => {
         return <Text>{`${locationObject.state}, ${locationObject.country}${zipString}`}</Text>
     }
 
+    const cityState = displayCityName(locationObject?.city, locationObject?.state)
     if (locationObject.location_level === "City") {
-        return <Text>{`${locationObject.city} , ${locationObject.state}, ${locationObject.country}${zipString}`}</Text>
+        // return <Text>{`${locationObject.city} , ${locationObject.state}, ${locationObject.country}${zipString}`}</Text>
+        return <Text>{`${cityState}, ${locationObject.country}${zipString}`}</Text>
     }
 
-    // if (locationObject.neighborhood === null) {
-    //   return (
-    //     <Text>{`${locationObject.city}, ${locationObject.state}, ${locationObject.country}`}</Text>
-    //   );
-
-    // }
+    if (!locationObject.neighborhood) {
+        return <Text>{`${cityState}, ${locationObject.country}${zipString}`}</Text>
+    }
 
     return (
-        <Text>{`${locationObject.neighborhood}, ${locationObject.city}, ${locationObject.state}, ${locationObject.country}`}</Text>
+        <Text>{`${locationObject.neighborhood}, ${cityState}, ${locationObject.country}`}</Text>
     );
 };
+
+const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
+    const { zip, neighborhood, city, state, country, location_level } = locationObject
+    console.log(`locationLevel ${location_level}`)
+
+    if (location_level === 'Country') {
+        if (isLocationMatch(searchQuery, country)) return <Text><TextBold text={country} /></Text>
+        return <Text>{country}</Text>
+    }
+    if (location_level === 'State') {
+        if (isLocationMatch(searchQuery, state)) return <Text><TextBold text={`${state}`} /></Text>
+        return <Text><TextBold text={`${state}`} /></Text>
+    }
+
+    const cityDisplay = detectStateInCity(city) ? displayCityName(city, state) : city
+    const stateDisplay = detectStateInCity(city) ? `` : `, ${state}`
+
+    const neighborhoodDisplay = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
+
+    if (location_level === 'City') {
+        if (isLocationMatch(searchQuery, city)) {
+            return (
+                <Text>
+                    <TextBold text={cityDisplay} />
+                    {`${stateDisplay}`}
+                </Text>
+            );
+        }
+
+        return (
+            <Text>
+                <TextBold text={cityDisplay} />
+                {`${stateDisplay}`}
+            </Text>
+        );
+    }
+
+    if (location_level === 'Neighborhood') {
+        if (isLocationMatch(searchQuery, neighborhood)) {
+            if (isLocationMatch(searchQuery, city)) {
+                return <Text>
+                    <TextBold text={`${neighborhoodDisplay}${cityDisplay}`} />
+                    {`${stateDisplay}`}
+                </Text>
+            }
+
+            return <Text>
+                <TextBold text={`${neighborhoodDisplay}`} />
+                {`${cityDisplay}${stateDisplay}`}
+            </Text>
+        }
+
+        return (
+            <Text>
+                {`${neighborhoodDisplay}`}
+                <TextBold text={`${cityDisplay}`} />
+                {`${stateDisplay}`}
+            </Text>
+        );
+    }
+}
+
 
 const getChatName = (usernames, me) => {
     if (!usernames) {
@@ -160,7 +267,10 @@ let styles = StyleSheet.create({
 });
 
 
-const convertString = (str, from, to) => str.split(from).join(to);
+const convertString = (str, from, to) => {
+    if (str === null || str === undefined) return
+    return str.split(from).join(to);
+}
 
 /**
  * 
@@ -224,20 +334,20 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @returns 
  */
 const getCaptionWithTopicStyle = (text, navigation) => {
-    const onClick = (match) => {
-        // Do navigation here
-        if (!navigation) return
-        // console.log(`topic ${match}`)
-        navigation.navigate('TopicPageScreen', { id: match.replace('#', '') })
-    }
+    const route = useRoute()
+    const topicWithPrefix = route?.params?.id
+    const id = removePrefixTopic(topicWithPrefix);
 
-    text = reactStringReplace(text, /\B(\#[a-zA-Z0-9]+\b)(?!;)/, (match, index) =>
-        // console.log(`${match} ${index}`)
-        // console.log(match)
-        <Text onPress={() => onClick(match)} style={{
-            color: COLORS.blue, fontFamily: fonts.inter[500]
-        }}>{match}</Text>
+    text = reactStringReplace(text, /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/, (match, index) =>
+        <TopicText navigation={navigation} text={match} currentTopic={id} />
     )
+
+    const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
+    text = reactStringReplace(text, validationTextHasAt, (match, index) =>
+        <TaggingUserText navigation={navigation} text={match} currentTopic={id} />
+    )
+
+
 
     return text
 }
@@ -249,6 +359,7 @@ export {
     convertString,
     convertTopicNameToTopicPageScreenParam,
     displayFormattedSearchLocations,
+    displayFormattedSearchLocationsV2,
     getCaptionWithTopicStyle,
     getChatName,
     getGroupMemberCount,
@@ -258,4 +369,5 @@ export {
     NO_POLL_UUID,
     randomString,
     removeStringAfterSpace,
+    displayCityName
 };

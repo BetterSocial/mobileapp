@@ -1,16 +1,16 @@
-import * as React from 'react';
-import Animated from 'react-native-reanimated';
-import {BackHandler, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import * as React from 'react';
+import {BackHandler, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import Animated from 'react-native-reanimated';
 
-import DomainFragmentScreen from './elements/DomainFragmentScreen';
-import Followings from '.';
-import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
+import { withInteractionsManaged, withInteractionsManagedNoStatusBar } from '../../components/WithInteractionManaged';
 import {Context} from '../../context';
+import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction'
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction'
-import { withInteractionsManaged, withInteractionsManagedNoStatusBar } from '../../components/WithInteractionManaged';
+import DomainFragmentScreen from './elements/DomainFragmentScreen';
+import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
+import Followings from '.';
 
 function FollowingScreen(props) {
   const {navigation} = props
@@ -19,7 +19,7 @@ function FollowingScreen(props) {
   const TAB_FOLLOWING = 'TabFollowing'
   const TAB_DOMAIN = 'TabDomain'
   const isAndroid = Platform.OS === 'android'
-  let Tabs = createMaterialTopTabNavigator();
+  const Tabs = createMaterialTopTabNavigator();
   function MyTabBar({state, descriptors, navigation, position}) {
     return (
       <View style={S.toptabcontainer}>
@@ -72,9 +72,7 @@ function FollowingScreen(props) {
   }
 
 
-  const tabComponent = (tabProps) => {
-    return <MyTabBar {...tabProps} />
-  }
+  const tabComponent = (tabProps) => <MyTabBar {...tabProps} />
 
   const listenTab = (tabProps) => {
     const {route} = tabProps
@@ -98,8 +96,8 @@ function FollowingScreen(props) {
   }
 
   const backPress = () => {
-    navigation.goBack()
-    return true
+    console.log('a')
+    return false;
   }
 
   React.useEffect(() => {

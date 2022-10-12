@@ -3,8 +3,6 @@ import { Dimensions, StatusBar } from 'react-native';
 
 // const statusBarHeight = StatusBar.currentHeight;
 const { width, height } = Dimensions.get('screen');
-console.log('height');
-console.log(height);
 /**
  *
  * @param {int} size - Size to be normalized according to screen size
@@ -77,8 +75,6 @@ const size = {
   ONBOARDING_BETTER_LOGO_HEIGHT: normalizeDimenHeight(baseSize.ONBOARDING_BETTER_LOGO_HEIGHT, 837.68),
   ONBOARDING_BETTER_LOGO_WIDTH: normalizeDimenByWidth(baseSize.ONBOARDING_BETTER_LOGO_WIDTH),
 };
-
-console.log(size.TOPIC_CURRENT_ITEM_HEIGHT);
 
 export default {
   size,

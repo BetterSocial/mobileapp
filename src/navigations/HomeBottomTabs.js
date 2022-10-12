@@ -6,7 +6,7 @@ import messaging from '@react-native-firebase/messaging';
 import {
   Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { useRecoilValue } from 'recoil';
@@ -33,7 +33,7 @@ import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
 import { getFollowingTopic } from '../service/topics';
 import { getMainFeed } from '../service/post';
-import { saveToCache } from '../utils/cache';
+import { getSpecificCache, saveToCache } from '../utils/cache';
 import { getUserId } from '../utils/users';
 import {
   setMainFeeds, setTimer,
@@ -48,7 +48,7 @@ const Tab = createBottomTabNavigator();
 function HomeBottomTabs(props) {
   const { navigation } = props;
   const isIos = Platform.OS === 'ios';
-
+  const {top, bottom} = useSafeAreaInsets()
   const [myProfile, dispatchProfile] = React.useContext(Context).profile;
   const [, followingDispatch] = React.useContext(Context).following;
 
@@ -65,6 +65,7 @@ function HomeBottomTabs(props) {
   if(initialStartup && typeof initialStartup === 'string') {
     initialStartup = JSON.parse(initialStartup)
   }
+
 
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
@@ -237,21 +238,40 @@ function HomeBottomTabs(props) {
   };
 
   React.useEffect(() => {
+    getSpecificCache(PROFILE_CACHE, (res) => {
+      if (!res) {
+        getProfile();
+      } else {
+        setMyProfileAction(res, dispatchProfile);
+        setLoadingUser(false);
+      }
+    });
+  }, []);
+
+  React.useEffect(() => {
     requestPermission();
     getDomain();
     getDataFeeds();
     getDiscoveryData();
-
-    if (myProfile?.user_id !== '') {
-      getProfile();
-    }
   }, []);
+
+  const handlePushNotif = (remoteMessage) => {
+    let {channel} = remoteMessage.data
+    channel = JSON.parse(channel)
+    if(channel.channel_type !== 3) {
+      if(isIos) {
+        pushNotifIos(remoteMessage)
+      } else {
+        pushNotifAndroid(remoteMessage)
+      }
+    }
+  }
 
   React.useEffect(() => {
     createChannel();
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       // eslint-disable-next-line no-unused-expressions
-      !isIos ? pushNotifAndroid(remoteMessage) : pushNotifIos(remoteMessage);
+      handlePushNotif(remoteMessage)
     });
 
     return () => {
@@ -270,15 +290,20 @@ function HomeBottomTabs(props) {
     }
   }, [initialStartup, otherProfileData]);
 
+
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar />
+    <View style={styles.container}>
       <Tab.Navigator
         initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
         tabBarOptions={{
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
-
+          safeAreaInsets: {
+              top:0,
+              bottom: 0,
+              left: 0,
+              right: 0
+            }
         }}
         screenOptions={({ navigation: screenOptionsNavigation }) => ({
           activeTintColor: colors.holytosca,
@@ -295,9 +320,7 @@ function HomeBottomTabs(props) {
             tabBarIcon: ({ color }) => <View style={styles.center} >
               <MemoHome fill={color} />
             </View>,
-            tabBarBadge: unReadMessage.total_unread_count
-              ? unReadMessage.total_unread_count
-              : null,
+            tabBarBadge: unReadMessage.total_unread_count + unReadMessage.unread_post > 0 ? unReadMessage.total_unread_count + unReadMessage.unread_post : null
           }}
         />
         <Tab.Screen
@@ -334,7 +357,7 @@ function HomeBottomTabs(props) {
       </Tab.Navigator>
       <FirebaseConfig navigation={navigation} />
       <UniversalLink navigation={navigation} />
-    </SafeAreaView>
+    </View>
   );
 }
 

@@ -5,7 +5,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import CredderLogo from '../../../../../assets/icon/CredderLogo';
-import CredderRatingGreen from '../../../../../assets/icon/CredderRatingGreen';
 import MemoIc_question_mark from '../../../../../assets/icons/Ic_question_mark';
 import StringConstant from '../../../../../utils/string/StringConstant';
 import { COLORS } from '../../../../../utils/theme';
@@ -13,7 +12,7 @@ import {CredderRating} from '../../../../../components/CredderRating';
 import { fonts, normalize } from '../../../../../utils/fonts';
 
 const CredderInfoGroup = ({ description, score }) => {
-    let [isTooltipShown, setIsTooltipShown] = React.useState(false);
+    const [isTooltipShown, setIsTooltipShown] = React.useState(false);
 
     return <TouchableWithoutFeedback style={styles.container} onPress={() => setIsTooltipShown(true)}>
         <CredderRating score={score}/>

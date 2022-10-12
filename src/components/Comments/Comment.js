@@ -31,8 +31,8 @@ const Comment = ({
   level,
   showLeftConnector = true,
   disableOnTextPress = false,
-  refreshComment,
-  findCommentAndUpdate
+  findCommentAndUpdate,
+  updateVote
 }) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
@@ -42,15 +42,15 @@ const Comment = ({
   );
   const [statusVote, setStatusVote] = React.useState('none');
 
-  let onTextPress = () => {
+  const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
     }
-    return onPress();
+    return onPress()
   };
 
-  let openProfile = async () => {
-    let selfUserId = await getUserId();
+  const openProfile = async () => {
+    const selfUserId = await getUserId();
     if (selfUserId === user.id) {
       return navigation.navigate('ProfileScreen', {
         isNotFromHomeTab: true
@@ -64,7 +64,7 @@ const Comment = ({
       },
     });
   };
-
+  
   const onUpVote = async () => {
     if(statusVote === 'upvote') {
       setTotalVote((prevState) => prevState - 1)
@@ -78,7 +78,7 @@ const Comment = ({
       setTotalVote((prevState) => prevState + 1)
       setStatusVote('upvote')
     }
-    let dataVote = {
+    const dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
       status: 'upvote',
@@ -98,7 +98,7 @@ const Comment = ({
       setTotalVote((prevState) => prevState - 1)
       setStatusVote('downvote')
     }
-    let dataVote = {
+    const dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
       status: 'downvote',
@@ -106,22 +106,19 @@ const Comment = ({
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    let result = await voteComment(dataVote);
-    console.log('sontak',result)
+    const result = await voteComment(dataVote);
     if(findCommentAndUpdate) {
-      console.log('masuklah')
       findCommentAndUpdate(comment.id, result.data, level)
     }
-    // setTotalVote(
-    //   result.data.data.count_upvote - result.data.data.count_downvote,
-    // );
+    if(updateVote) {
+      updateVote(result.data, comment, level)
+    }
     iVote();
   };
   const iVote = async () => {
-    let result = await iVoteComment(comment.id);
+    const result = await iVoteComment(comment.id);
     if (result.code === 200) {
       setStatusVote(result.data.action);
-      // if(refreshComment) refreshComment(result)
     }
   };
 
@@ -144,12 +141,10 @@ const Comment = ({
     parseToken();
   }, []);
 
-
   React.useEffect(() => {
     setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
     iVote()
   }, [JSON.stringify(comment.data)])
-
 
   return (
     <View
@@ -221,9 +216,7 @@ const Comment = ({
   );
 };
 
-export default React.memo (Comment, (prevProps, nextProps) => {
-  return prevProps.comment === nextProps.comment
-});
+export default React.memo (Comment, (prevProps, nextProps) => prevProps.comment === nextProps.comment);
 
 const styles = StyleSheet.create({
   vote: (count) => ({
@@ -244,7 +237,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
   },
-  container: ({isLast, style, level, isLastInParent, showLeftConnector}) => ({
+  container: ({isLast, style, level, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
     borderLeftColor: isLast

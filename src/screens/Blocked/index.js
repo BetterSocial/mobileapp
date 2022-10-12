@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { View, Text, StyleSheet, BackHandler } from 'react-native'
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Tabbar from '../../components/Tabbar';
 import BlockedUserList from './elements/UserScreen';
 import BlockedDomainList from './elements/DomainScreen';
 import BlockedTopicList from './elements/TopicScreen';
-import {showHeaderProfile} from '../../context/actions/setMyProfileAction'
-import {Context} from '../../context';
+import { showHeaderProfile } from '../../context/actions/setMyProfileAction'
+import { Context } from '../../context';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+
 const styles = StyleSheet.create({
     containerTab: {
         flex: 1
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
 })
 
 const Blocked = (props) => {
-    const {navigation} = props
+    const { navigation } = props
     const TAB_BLOCKED_USER = 'tabBlockedUser'
     const TAB_BLOCKED_DOMAIN = 'tabBlockedDomain'
     const TAB_BLOCKED_TOPIC = 'tabBlockedTopic'
@@ -27,16 +28,16 @@ const Blocked = (props) => {
 
     const settingBackhandleAndroid = () => {
         BackHandler.addEventListener('hardwareBackPress', backPress)
-      }
-    
-      const removeBackHandleAndroid = () => {
+    }
+
+    const removeBackHandleAndroid = () => {
         BackHandler.removeEventListener('hardwareBackPress', backPress)
-      }
-    
-      const backPress = () => {
+    }
+
+    const backPress = () => {
         navigation.goBack()
         return true
-      }
+    }
 
     React.useEffect(() => {
         navigation.addListener('focus', () => {
@@ -55,36 +56,36 @@ const Blocked = (props) => {
 
     return (
         <View style={styles.containerTab} >
-                  <Tabs.Navigator
-        initialRouteName={TAB_BLOCKED_USER}
-        tabBar={myTabbar}
-        
-        >
-            <Tabs.Screen 
-            name={TAB_BLOCKED_USER}
-            component={BlockedUserList}
-            options={{
-                title: 'User',
-              }}
-            />
-            <Tabs.Screen 
-            name={TAB_BLOCKED_DOMAIN}
-            component={BlockedDomainList}
-            options={{
-                title: 'Domain',
-              }}
-            />
-            <Tabs.Screen 
+            <Tabs.Navigator
+                initialRouteName={TAB_BLOCKED_USER}
+                tabBar={myTabbar}
+
+            >
+                <Tabs.Screen
+                    name={TAB_BLOCKED_USER}
+                    component={BlockedUserList}
+                    options={{
+                        title: 'User',
+                    }}
+                />
+                <Tabs.Screen
+                    name={TAB_BLOCKED_DOMAIN}
+                    component={BlockedDomainList}
+                    options={{
+                        title: 'Domain',
+                    }}
+                />
+                {/* <Tabs.Screen 
             name={TAB_BLOCKED_TOPIC}
             component={BlockedTopicList}
             options={{
                 title: 'Topic',
               }}
-            />
-        </Tabs.Navigator>
+            /> */}
+            </Tabs.Navigator>
         </View>
     )
 }
 
 
-export default withInteractionsManaged (Blocked)
+export default withInteractionsManaged(Blocked)

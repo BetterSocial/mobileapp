@@ -1,7 +1,6 @@
-import api from './api';
+import api from "../service/config";
 
-export const get = ({url}) => {
-  return new Promise((resolve, reject) => {
+export const get = ({url}) => new Promise((resolve, reject) => {
     api
       .get(url)
       .then((res) => {
@@ -11,10 +10,8 @@ export const get = ({url}) => {
         reject(err);
       });
   });
-};
 
-export const post = ({url, params}) => {
-  return new Promise((resolve, reject) => {
+export const post = ({url, params}) => new Promise((resolve, reject) => {
     api
       .post(url, params)
       .then((res) => {
@@ -24,4 +21,3 @@ export const post = ({url, params}) => {
         reject(err);
       });
   });
-};

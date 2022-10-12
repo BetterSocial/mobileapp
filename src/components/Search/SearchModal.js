@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Modal from 'react-native-modal';
+import PropTypes from 'prop-types';
 import {
     Dimensions,
     StyleSheet,
@@ -11,10 +12,9 @@ import {
 import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
 import CrossIcon from '../../../assets/icons/cross.svg';
 import StringConstant from '../../utils/string/StringConstant';
-import { displayFormattedSearchLocations } from '../../utils/string/StringUtils';
+import { displayFormattedSearchLocations, displayFormattedSearchLocationsV2 } from '../../utils/string/StringUtils';
 
-const width = Dimensions.get('screen').width;
-import PropTypes from 'prop-types';
+const {width} = Dimensions.get('screen');
 
 const SearchModal = (props) => {
     const textRef = React.useRef(null);
@@ -25,12 +25,15 @@ const SearchModal = (props) => {
         }
     }, [props]);
 
+    console.log(`==============`)
+
     return (
         <Modal
             testID={'modal'}
             isVisible={props.isVisible}
             onSwipeComplete={props.onClose}
             swipeDirection={['down']}
+            onBackButtonPress={props.onClose}
             style={styles.view}>
             <View style={styles.container}>
                 <View style={styles.space} />
@@ -64,22 +67,23 @@ const SearchModal = (props) => {
                         {typeof props.options !== 'undefined' &&
                             props.options.length > 0 ? (
                             <View style={styles.box}>
-                                {props.options.map((value, index) => {
-                                    let firstLetter = value.neighborhood.split(' ');
-                                    let lastLetter = value.neighborhood.replace(
-                                        `${firstLetter[0]} `,
-                                        ' ',
-                                    );
-                                    return (
+                                {props.options.map((value, index) => 
+                                    // let firstLetter = value.neighborhood.split(' ');
+                                    // let lastLetter = value.neighborhood.replace(
+                                    //     `${firstLetter[0]} `,
+                                    //     ' ',
+                                    // );
+                                     (
                                         <TouchableNativeFeedback
                                             key={index}
                                             onPress={() => props.onSelect(value)}>
                                             <View style={styles.list}>
-                                                {displayFormattedSearchLocations(props.value, value)}
+                                                {/* {displayFormattedSearchLocations(props.value, value)} */}
+                                                {displayFormattedSearchLocationsV2(props.value, value)}
                                             </View>
                                         </TouchableNativeFeedback>
-                                    );
-                                })}
+                                    )
+                                )}
                             </View>
                         ) : null}
                     </View>
@@ -94,7 +98,7 @@ const styles = StyleSheet.create({
         margin: 0,
     },
     container: {
-        width: width,
+        width,
         flexDirection: 'column',
         flex: 1,
     },
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
         flex: 8,
-        width: width,
+        width,
         padding: 22,
     },
     contentTitle: {

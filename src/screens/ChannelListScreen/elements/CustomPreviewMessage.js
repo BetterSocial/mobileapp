@@ -16,8 +16,7 @@ const PreviewMessage = (props) => {
          <Text
               style={[{ color: '#7A7A7A' }]}
             >
-             {/* {console.log(props, 'sulak')} */}
-             {props.latestMessagePreview.messageObject && props.latestMessagePreview.messageObject.user && props.latestMessagePreview.messageObject.user.name} has joined the group
+             {props.latestMessagePreview.messageObject && props.latestMessagePreview.messageObject.text}
             </Text>
       </Text>
     )
