@@ -35,6 +35,7 @@ import Header from '../../components/Header';
 import ListItem from '../../components/MenuPostItem';
 import TopicItem from '../../components/TopicItem';
 import { Context } from '../../context';
+import { getLinkPreviewInfo } from '../../service/feeds';
 import { getUserForTagging } from '../../service/mention';
 import { ShowingAudience, createPollPost, createPost } from '../../service/post';
 import { getMyProfile } from '../../service/profile';
@@ -241,34 +242,26 @@ const CreatePost = () => {
     };
 
     const getPreviewUrl = async (link) => {
-        let newLink = link;
-        // if (link.indexOf('https://') < 0) {
-        //     newLink = `https://${link}`;
-        // }
+        const newLink = link;
 
-        newLink = link.replace(/(^\w+:|^)\/\//, '');
+        const urlWithoutProtocol = link.replace(/(^\w+:|^)\/\//, '');
+        const urlDomainOnly = urlWithoutProtocol.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/igm)
+        const parsedUrl = PSL.parse(urlDomainOnly[0] || urlWithoutProtocol)
 
-        let news = null
-        const data = await getDomainInfoInLinkPreview(newLink)
-        if (data) {
-            news = await getNewsLinkInfoInLinkPreview(newLink)
-            if (news) {
-                setLinkPreviewMeta({
-                    domain: data?.domain,
-                    domainImage: data?.domainImage,
-                    title: news?.title,
-                    description: news?.description,
-                    image: news?.image,
-                    url: news?.url,
-                });
-            } else {
-                setLinkPreviewMeta(null)
-            }
-        } else {
-            setLinkPreviewMeta(null)
-        }
-
-        setIsLinkPreviewShown(!!news)
+        const response = await getLinkPreviewInfo(parsedUrl?.domain, newLink)
+        if (response?.success) {
+            const data = response?.data
+            const { domain, meta } = data || {}
+            setLinkPreviewMeta({
+                domain: domain?.name,
+                domainImage: domain?.image,
+                title: meta?.title,
+                description: meta?.description,
+                image: meta?.image,
+                url: meta?.url
+            })
+        } else setLinkPreviewMeta(null)
+        setIsLinkPreviewShown(response?.success)
     }
 
     React.useEffect(() => {
@@ -444,7 +437,7 @@ const CreatePost = () => {
             sheetBackRef.current.open();
             return true;
         }
-        
+
         navigation.goBack();
         return true;
     };
@@ -555,10 +548,10 @@ const CreatePost = () => {
     };
 
     const handleTextMessage = () => {
-       if(!typeUser) {
-        return `New posts by ${user.myProfile.username} & others`
-       }
-       return `New posts by Anonymous & others`
+        if (!typeUser) {
+            return `New posts by ${user.myProfile.username} & others`
+        }
+        return `New posts by Anonymous & others`
     }
 
     const handleTopicChat = async () => {
@@ -789,10 +782,10 @@ const CreatePost = () => {
                         onChange={(v) => {
                         }}
                         onChangeText={(v) => {
-                            if(listTopic.length >= 5) {
+                            if (listTopic.length >= 5) {
                                 setMessage(v)
                                 return
-                            } 
+                            }
 
                             if (v.includes('#')) {
                                 const position = v.lastIndexOf('#', positionEndCursor);
