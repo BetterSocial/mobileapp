@@ -1,5 +1,6 @@
-import * as React from 'react';
 import analytics from '@react-native-firebase/analytics';
+import { useNavigation } from '@react-navigation/native';
+import * as React from 'react';
 import {
   Animated,
   FlatList,
@@ -10,23 +11,22 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
-import RenderItem from './RenderItem';
-import Search from './Search';
-import ShareUtils from '../../utils/share'
-import { COLORS, } from '../../utils/theme';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import { Context } from '../../context';
-import { NEWS_CACHE } from '../../utils/cache/constant';
-import { downVoteDomain, upVoteDomain } from '../../service/vote';
-import { getDomainIdIFollow, getDomains } from '../../service/domain';
-import { getSpecificCache, saveToCache } from '../../utils/cache';
-import { getUserId } from '../../utils/users';
 import { setIFollow, setNews } from '../../context/actions/news';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { getDomainIdIFollow, getDomains } from '../../service/domain';
+import { downVoteDomain, upVoteDomain } from '../../service/vote';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { NEWS_CACHE } from '../../utils/cache/constant';
+import ShareUtils from '../../utils/share'
+import { COLORS, } from '../../utils/theme';
+import { getUserId } from '../../utils/users';
+import RenderItem from './RenderItem';
+import Search from './Search';
 
 const NewsScreen = ({ }) => {
   const navigation = useNavigation();
@@ -99,8 +99,6 @@ const NewsScreen = ({ }) => {
     if (enableLoading) setLoading(true);
     try {
       const res = await getDomains();
-      console.log('domain')
-      console.log(res)
       saveToCache(NEWS_CACHE, res)
       setNews(res.data, dispatch);
       setPostOffset(res.offset)

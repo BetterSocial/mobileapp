@@ -1,12 +1,11 @@
 import * as React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
-import { COLORS } from '../../utils/theme'
 import { fonts } from '../../utils/fonts'
+import { COLORS } from '../../utils/theme'
 import { getUserId } from '../../utils/token'
 
 const TaggingUserText = ({ text, navigation = null, currentTopic = null, selfUserId = null, otherId = null }) => {
-    console.log('username', text);
     const username = text.replace('@', '');
 
 
