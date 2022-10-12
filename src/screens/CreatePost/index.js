@@ -463,7 +463,7 @@ const CreatePost = () => {
                 return true;
             }
             console.log(checkTaggingUser(), 'sunak')
-            setLoading(true);
+            // setLoading(true);
             // const topicWithoutHashtag = listTopic.map((topic) => topic.substring(1))
             // console.log(topicWithoutHashtag, 'jaja')
             const data = {
@@ -629,7 +629,7 @@ const CreatePost = () => {
     const isPollButtonDisabled = () => getReducedPoll().length < 2;
 
     const sendPollPost = async () => {
-        setLoading(true);
+        // setLoading(true);
 
         const data = {
             message,
