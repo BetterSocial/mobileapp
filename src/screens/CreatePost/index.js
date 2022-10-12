@@ -502,26 +502,15 @@ const CreatePost = () => {
             });
             await createPost(data);
             handleTopicChat()
-            // if (res.code === 200) {
-            //     console.log(res, 'lakik')
-            //     // handleSelectedTagUser()
-            //     // showMessage({
-            //     //     message: StringConstant.createPostDone,
-            //     //     type: 'success',
-            //     // });
-            //     setLoading(false);
-            // } else {
-            //     setLoading(false);
-            //     // showMessage({
-            //     //     message: StringConstant.createPostFailedGeneralError,
-            //     //     type: 'danger',
-            //     // });
-            // }
+            showMessage({
+                    message: StringConstant.createPostDone,
+                    type: 'success',
+                });
         } catch (error) {
-            // showMessage({
-            //     message: StringConstant.createPostFailedGeneralError,
-            //     type: 'danger',
-            // });
+            showMessage({
+                message: StringConstant.createPostFailedGeneralError,
+                type: 'danger',
+            });
             setLoading(false);
         }
     };
@@ -658,27 +647,15 @@ const CreatePost = () => {
         });
         try {
             await createPollPost(data);
-            // setLoading(false);
-            // if (response.status) {
-            //     // showMessage({
-            //     //     message: StringConstant.createPostDone,
-            //     //     type: 'success',
-            //     // });
-               
-            //     setLoading(false);
-            // } else {
-            //     setLoading(false);
-            //     // showMessage({
-            //     //     message: StringConstant.createPostFailedGeneralError,
-            //     //     type: 'danger',
-            //     // });
-            // }
+            showMessage({
+                    message: StringConstant.createPostDone,
+                    type: 'success',
+            });
         } catch (e) {
-            // showMessage({
-            //     message: StringConstant.createPostFailedGeneralError,
-            //     type: 'danger',
-            // });
-            // setLoading(false);
+            showMessage({
+                message: StringConstant.createPostFailedGeneralError,
+                type: 'danger',
+            });
         }
         analytics().logEvent('create_post', {
             id: 6,
