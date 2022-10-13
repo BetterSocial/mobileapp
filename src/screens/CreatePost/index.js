@@ -491,27 +491,12 @@ const CreatePost = () => {
             });
             await createPost(data);
             handleTopicChat()
-            // if (res.code === 200) {
-            //     console.log(res, 'lakik')
-            //     // handleSelectedTagUser()
-            //     // showMessage({
-            //     //     message: StringConstant.createPostDone,
-            //     //     type: 'success',
-            //     // });
-            //     setLoading(false);
-            // } else {
-            //     setLoading(false);
-            //     // showMessage({
-            //     //     message: StringConstant.createPostFailedGeneralError,
-            //     //     type: 'danger',
-            //     // });
-            // }
+            showMessage({
+                    message: StringConstant.createPostDone,
+                    type: 'success',
+                });
         } catch (error) {
-            // showMessage({
-            //     message: StringConstant.createPostFailedGeneralError,
-            //     type: 'danger',
-            // });
-            setLoading(false);
+            console.log(error)
         }
     };
 
@@ -647,27 +632,12 @@ const CreatePost = () => {
         });
         try {
             await createPollPost(data);
-            // setLoading(false);
-            // if (response.status) {
-            //     // showMessage({
-            //     //     message: StringConstant.createPostDone,
-            //     //     type: 'success',
-            //     // });
-               
-            //     setLoading(false);
-            // } else {
-            //     setLoading(false);
-            //     // showMessage({
-            //     //     message: StringConstant.createPostFailedGeneralError,
-            //     //     type: 'danger',
-            //     // });
-            // }
+            showMessage({
+                    message: StringConstant.createPostDone,
+                    type: 'success',
+            });
         } catch (e) {
-            // showMessage({
-            //     message: StringConstant.createPostFailedGeneralError,
-            //     type: 'danger',
-            // });
-            // setLoading(false);
+            console.log(e)
         }
         analytics().logEvent('create_post', {
             id: 6,
@@ -702,7 +672,6 @@ const CreatePost = () => {
 
 
     const searchTopic = async (name) => {
-        console.log(name, 'nama')
         if (!isEmptyOrSpaces(name)) {
                     console.log(name, 'nama123')
 
@@ -777,7 +746,6 @@ const CreatePost = () => {
         handleTagUser()
     }, [message])
 
-    console.log(message, 'nani')
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />
