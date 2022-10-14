@@ -325,6 +325,7 @@ const S = StyleSheet.create({
 
   pickerlabeltext: {
     marginBottom: 32,
+    textAlign: 'center'
   },
 
   bottombuttonrowcontainer: {
