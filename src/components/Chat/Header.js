@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     marginLeft: 18,
   },
   name: {
-    marginLeft: 10,
+    marginLeft: 11,
     fontFamily: fonts.inter[600],
     color: '#fff',
     fontSize: 14,
