@@ -5,8 +5,6 @@ import {
   Image,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -18,19 +16,18 @@ import { Context } from '../../context';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getChatName, getGroupMemberCount } from '../../utils/string/StringUtils';
-import { trimString } from '../../utils/string/TrimString';
 
-const Header = ({ }) => {
+const Header = () => {
   const navigation = useNavigation();
   const [channelClient] = React.useContext(Context).channel;
   const [profileContext] = React.useContext(Context).profile;
   const { channel } = channelClient;
 
-  let username = channelClient.channel?.data?.name;
+  const username = channelClient.channel?.data?.name;
 
-  let chatName = getChatName(username, profileContext.myProfile.username);
+  const chatName = getChatName(username, profileContext.myProfile.username);
 
-
+  console.log(channel, 'bahan')
   const renderHeaderImage = () => {
     if (channel?.data?.image) {
       if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
@@ -44,15 +41,15 @@ const Header = ({ }) => {
           style={styles.image}
         />
       );
-    } else if (getGroupMemberCount(channel) > 2) {
+    } if (getGroupMemberCount(channel) > 2) {
       return <Image source={DefaultGroupProfilePicture} style={styles.image} />;
-    } else {
+    } 
       return (
         <View style={styles.containerAvatar}>
-          <ChannelAvatar channel={channel} />
+          <ChannelAvatar size={42} channel={channel} />
         </View>
       );
-    }
+    
   };
 
   return (
