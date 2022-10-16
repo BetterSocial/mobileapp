@@ -11,6 +11,8 @@ import {
 } from 'react-native-safe-area-context';
 import {RecoilRoot} from 'recoil';
 import { OverlayProvider, Streami18n } from 'stream-chat-react-native';
+import { RecoilDebugObserver } from 'reactotron-recoil-plugin';
+import { reactotronInstance } from './src/libraries/reactotron/reactotronInstance';
 
 import Store from './src/context/Store';
 import { linking } from './src/navigations/linking';
@@ -36,7 +38,7 @@ const App = () => {
   });
   const navigationRef = React.useRef()
 
-  
+
 
   React.useEffect(() => {
 
@@ -76,6 +78,7 @@ const App = () => {
     <>
       <HumanIDProvider />
       <RecoilRoot>
+        <RecoilDebugObserver instance={reactotronInstance} />
         <Store>
           <NavigationContainer onStateChange={handleStateChange}  ref={navigationRef} linking={linking}>
             <View style={{paddingTop: top, paddingBottom: bottom}} >
@@ -83,7 +86,6 @@ const App = () => {
               <RootNavigator areaHeight={height} />
             </OverlayProvider>
             </View>
-            
           </NavigationContainer>
         </Store>
       </RecoilRoot>
@@ -96,7 +98,7 @@ const App = () => {
 };
 
 const RootApp = () => (
-  
+
   <SafeAreaProvider initialMetrics={{
      insets: {
         top: 0,

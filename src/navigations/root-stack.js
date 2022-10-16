@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 // import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { atom, useRecoilState, useRecoilValue, useSetRecoilState, } from 'recoil';
+import { useRecoilValue, useSetRecoilState, } from 'recoil';
 
 import { useLocalChannelsFirst } from 'stream-chat-react-native';
 import Blocked from '../screens/Blocked';
@@ -60,35 +60,26 @@ import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 import { verifyTokenGetstream } from '../service/users';
+import { channelListLocalAtom } from '../service/channelListLocal';
 
 const RootStack = createStackNavigator();
 
-const testAtom = atom({
-  key: 'testAtom',
-  default: null
-})
 export const RootNavigator = () => {
   let initialStartup = useRecoilValue(InitialStartupAtom);
-  const setInitialValue = useSetRecoilState(InitialStartupAtom)
-  const [v, setTest] = useRecoilState(testAtom)
+  const setInitialValue = useSetRecoilState(InitialStartupAtom);
+  const setLocalChannelData = useSetRecoilState(channelListLocalAtom);
   const [clientState] = React.useContext(Context).client;
   const { client } = clientState;
 
   const create = useClientGetstream();
-  useLocalChannelsFirst(setTest);
-
-  if (initialStartup && typeof initialStartup === 'string') {
-  // console.tron.log(useLocalChannelsFirst);
 
   if(initialStartup && typeof initialStartup === 'string') {
     initialStartup = JSON.parse(initialStartup)
   }
+
   const doGetAccessToken = async () => {
     const accessToken = await getAccessToken()
     setInitialValue({ id: accessToken })
-    setTimeout(() => {
-      SplashScreen.hide()
-    }, 500)
   }
 
   const doVerifyGetstreamToken = async () => {
@@ -107,6 +98,8 @@ export const RootNavigator = () => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
     doVerifyGetstreamToken()
+
+    useLocalChannelsFirst(setLocalChannelData);
     return async () => {
       await client?.disconnectUser();
     };
@@ -116,17 +109,21 @@ export const RootNavigator = () => {
     if (initialStartup.id !== null) {
       if (initialStartup.id !== '') {
         create();
-        // SplashScreen.hide()
       }
     } else {
-      // setTimeout(() => {
-      //   console.log('splash screen hide from else')
-      //   SplashScreen.hide();
-      // }, 700);
       doVerifyGetstreamToken()
     }
 
   }, [initialStartup]);
+
+  React.useEffect(() => {
+    if (clientState?.client) {
+      console.tron.log('masuk client');
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 700)
+    }
+  }, [clientState]);
 
   return (
     <View
