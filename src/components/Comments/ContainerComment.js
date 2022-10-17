@@ -24,7 +24,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
       {comments.map((item, index) => (
           <View key={index} >
             <View key={`p${  index}`}>
-              <Comment
+              {item.user ? <Comment
                 indexFeed={indexFeed}
                 key={`p${  index}`}
                 comment={item}
@@ -41,7 +41,8 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                 })}
                 refreshComment={refreshComment}
                 findCommentAndUpdate={findCommentAndUpdate}
-              />
+              /> : null}
+              
             </View>
             {item.children_counts.comment > 0 && (
               <ReplyComment
@@ -98,7 +99,8 @@ const ReplyComment = ({
 
         }
         return (
-          <ConnectorWrapper key={`c-${index}`} index={index}>
+          <React.Fragment key={`c-${index}`}>
+            {item.user ? <ConnectorWrapper  index={index}>
             <View key={`c${  index}`} style={styles.levelOneCommentWrapper}>
               <Comment
                 indexFeed={indexFeed}
@@ -130,7 +132,10 @@ const ReplyComment = ({
                 </>
               )}
             </View>
-          </ConnectorWrapper>
+          </ConnectorWrapper> : null}
+            
+          </React.Fragment>
+          
         );
       })}
     </ContainerReply>

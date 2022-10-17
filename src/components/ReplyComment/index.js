@@ -204,7 +204,8 @@ const isLastInParent = (index) => isLastInParentHook(index, item)
           />
           {newCommentList.length > 0 &&
             newCommentList.map((itemReply, index) => (
-                <ContainerReply key={index}>
+              <React.Fragment key={index}>
+                {itemReply.user ? <ContainerReply >
                   <ConnectorWrapper index={index}>
                     <View style={styles.childCommentWrapper}>
                       <Comment
@@ -243,7 +244,10 @@ const isLastInParent = (index) => isLastInParentHook(index, item)
                       )}
                     </View>
                   </ConnectorWrapper>
-                </ContainerReply>
+                </ContainerReply> : null}
+                
+              </React.Fragment>
+                
               ))}
           {newCommentList.length > 0 ? <View style={styles.childLevelMainConnector} /> : null}
         </View>

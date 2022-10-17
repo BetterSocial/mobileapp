@@ -1,5 +1,5 @@
 import {PermissionsAndroid, Platform} from 'react-native';
-import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {check, request, PERMISSIONS, RESULTS, openSettings} from 'react-native-permissions';
 import StringConstant from '../string/StringConstant';
 
 // export const requestCameraPermission = async () => {
@@ -124,7 +124,7 @@ export const requestCameraPermission = async () => {
 
 export const requestExternalStoragePermission = async () => {
   try {
-    let result = await check(
+    const result = await check(
       Platform.OS === 'android'
         ? PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
         : PERMISSIONS.IOS.PHOTO_LIBRARY,
@@ -159,7 +159,7 @@ export const requestExternalStoragePermission = async () => {
       };
     }
 
-    let requestResult = await request(
+    const requestResult = await request(
       Platform.OS === 'android'
         ? PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
         : PERMISSIONS.IOS.PHOTO_LIBRARY,
@@ -169,12 +169,12 @@ export const requestExternalStoragePermission = async () => {
         message: StringConstant.cameraPermissionGranted,
         success: true,
       };
-    } else {
+    } 
       return {
         message: StringConstant.cameraPermissionDenied,
         success: false,
       };
-    }
+    
   } catch (err) {
     console.warn(err);
     return {
