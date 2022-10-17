@@ -149,7 +149,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
                 {item.postMaker && item.postMaker.data ?<AvatarPostNotif item={item} /> : null}
             <View style={{flex: 1,  paddingLeft: 8, justifyContent: 'center'}} >
                 <View style={styles.row} >
-                {item.postMaker && item.postMaker.data ? <Text numberOfLines={1} style={[styles.titleTextBig, {maxWidth: '85%'}]} >{item.postMaker.id === myProfile.user_id ? "Your post" : item.postMaker.data.username}: {item.titlePost}</Text> : null}
+                {item.postMaker && item.postMaker.data ? <Text numberOfLines={1} style={[styles.titleTextBig, {maxWidth: '82%'}]} >{item.postMaker.id === myProfile.user_id ? "Your post" : item.postMaker.data.username}: {item.titlePost}</Text> : null}
                 <Text style={[styles.dateFont]} >{handleDate(item.comments[0] && item.comments[0].reaction)} </Text>
 
                 </View>
