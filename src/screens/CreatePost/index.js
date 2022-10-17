@@ -1,11 +1,16 @@
-import * as React from 'react';
-import PSL from 'psl'
-import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
+import { useNavigation } from '@react-navigation/core';
+import { debounce } from 'lodash';
+import PSL from 'psl'
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
+/* eslint-disable no-shadow */
+/* eslint-disable camelcase */
+/* eslint-disable no-use-before-define */
+import * as React from 'react';
 import {
     Alert,
     BackHandler,
-    Platform,
     Pressable,
     SafeAreaView,
     ScrollView,
@@ -16,25 +21,52 @@ import {
     TouchableNativeFeedback,
     View
 } from 'react-native';
-import { OpenGraphParser } from 'react-native-opengraph-kit'
-import { debounce, set } from 'lodash';
-import { getLinkPreview } from 'link-preview-js';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
-import { useNavigation } from '@react-navigation/core';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import Toast from 'react-native-simple-toast';
 
-import Card from './elements/Card';
-import ContentLink from './elements/ContentLink';
-import CreatePollContainer from './elements/CreatePollContainer';
-import Gap from '../../components/Gap';
-import Header from '../../components/Header';
-import ListItem from '../../components/MenuPostItem';
-import Loading from '../Loading';
-import Location from '../../assets/icons/Ic_location';
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
+import Location from '../../assets/icons/Ic_location';
+import Timer from '../../assets/icons/Ic_timer';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
+import { Button, ButtonAddMedia } from '../../components/Button';
+import Gap from '../../components/Gap';
+import Header from '../../components/Header';
+import ListItem from '../../components/MenuPostItem';
+import TopicItem from '../../components/TopicItem';
+import { Context } from '../../context';
+import { getLinkPreviewInfo } from '../../service/feeds';
+import { getUserForTagging } from '../../service/mention';
+import { ShowingAudience, createPollPost, createPost } from '../../service/post';
+import { getMyProfile } from '../../service/profile';
+import { getTopics } from '../../service/topics';
+import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
+import { getSpecificCache } from '../../utils/cache';
+import { PROFILE_CACHE } from '../../utils/cache/constant';
+import { colors } from '../../utils/colors';
+import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
+import { fonts } from '../../utils/fonts';
+import {
+    requestCameraPermission,
+    requestExternalStoragePermission,
+} from '../../utils/permission';
+import {
+    getDurationId,
+    getLocationId,
+    getPrivacyId,
+    setDurationId,
+    setPrivacyId,
+} from '../../utils/setting';
+import StringConstant from '../../utils/string/StringConstant';
+import { convertString } from '../../utils/string/StringUtils';
+import { getUserId } from '../../utils/users';
+import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
+import Loading from '../Loading';
+import Card from './elements/Card';
+import ContentLink from './elements/ContentLink';
+import CreatePollContainer from './elements/CreatePollContainer';
 import SheetAddTopic from './elements/SheetAddTopic';
 import SheetCloseBtn from './elements/SheetCloseBtn';
 import SheetExpiredPost from './elements/SheetExpiredPost';
@@ -42,39 +74,8 @@ import SheetGeographic from './elements/SheetGeographic';
 import SheetMedia from './elements/SheetMedia';
 import SheetPrivacy from './elements/SheetPrivacy';
 import ShowMedia from './elements/ShowMedia';
-import StringConstant from '../../utils/string/StringConstant';
-import Timer from '../../assets/icons/Ic_timer';
-import TopicItem from '../../components/TopicItem';
-import UserProfile from './elements/UserProfile';
-import handleHastag from '../../utils/hastag';
-import { Button, ButtonAddMedia } from '../../components/Button';
-import { Context } from '../../context';
-import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
-import { PROFILE_CACHE } from '../../utils/cache/constant';
-import { ShowingAudience, createPollPost, createPost } from '../../service/post';
-import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
-import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
-import { getDomainInfoInLinkPreview, getNewsLinkInfoInLinkPreview, getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
-import {
-    getDurationId,
-    getLocationId,
-    getPrivacyId,
-    setDurationId,
-    setLocationId,
-    setPrivacyId,
-} from '../../utils/setting';
-import { getMyProfile } from '../../service/profile';
-import { getSpecificCache } from '../../utils/cache';
-import { getTopics } from '../../service/topics';
-import { getUserId } from '../../utils/users';
-import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
-import {
-    requestCameraPermission,
-    requestExternalStoragePermission,
-} from '../../utils/permission';
-import { getUserForTagging } from '../../service/mention';
 import useHastagMention from './elements/useHastagMention';
+import UserProfile from './elements/UserProfile';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -115,7 +116,6 @@ const CreatePost = () => {
     const [positionEndCursor, setPositionEndCursor] = React.useState(0);
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
-    const [formattedContent, setFormatHastag] = React.useState('');
     const [textContent, handleStateHastag, handleStateMention] = useHastagMention('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
@@ -126,9 +126,8 @@ const CreatePost = () => {
         hour: 0,
         minute: 0,
     });
-    const [myId, setMyId] = React.useState(null)
     const [expiredSelect, setExpiredSelect] = React.useState(0);
-    const [postExpired, setPostExpired] = React.useState([
+    const [postExpired] = React.useState([
         {
             label: '24 hours',
             value: '1',
@@ -241,34 +240,26 @@ const CreatePost = () => {
     };
 
     const getPreviewUrl = async (link) => {
-        let newLink = link;
-        // if (link.indexOf('https://') < 0) {
-        //     newLink = `https://${link}`;
-        // }
+        const newLink = link;
 
-        newLink = link.replace(/(^\w+:|^)\/\//, '');
+        const urlWithoutProtocol = link.replace(/(^\w+:|^)\/\//, '');
+        const urlDomainOnly = urlWithoutProtocol.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/igm)
+        const parsedUrl = PSL.parse(urlDomainOnly[0] || urlWithoutProtocol)
 
-        let news = null
-        const data = await getDomainInfoInLinkPreview(newLink)
-        if (data) {
-            news = await getNewsLinkInfoInLinkPreview(newLink)
-            if (news) {
-                setLinkPreviewMeta({
-                    domain: data?.domain,
-                    domainImage: data?.domainImage,
-                    title: news?.title,
-                    description: news?.description,
-                    image: news?.image,
-                    url: news?.url,
-                });
-            } else {
-                setLinkPreviewMeta(null)
-            }
-        } else {
-            setLinkPreviewMeta(null)
-        }
-
-        setIsLinkPreviewShown(!!news)
+        const response = await getLinkPreviewInfo(parsedUrl?.domain, newLink)
+        if (response?.success) {
+            const data = response?.data
+            const { domain, meta } = data || {}
+            setLinkPreviewMeta({
+                domain: domain?.name,
+                domainImage: domain?.image,
+                title: meta?.title,
+                description: meta?.description,
+                image: meta?.image,
+                url: meta?.url
+            })
+        } else setLinkPreviewMeta(null)
+        setIsLinkPreviewShown(response?.success)
     }
 
     React.useEffect(() => {
@@ -538,10 +529,10 @@ const CreatePost = () => {
     };
 
     const handleTextMessage = () => {
-       if(!typeUser) {
-        return `New posts by ${user.myProfile.username} & others`
-       }
-       return `New posts by Anonymous & others`
+        if (!typeUser) {
+            return `New posts by ${user.myProfile.username} & others`
+        }
+        return `New posts by Anonymous & others`
     }
 
     const handleTopicChat = async () => {
@@ -789,7 +780,7 @@ const CreatePost = () => {
                         onSelectionChange={(e) => {
                             setPositionEndCursor(e.nativeEvent.selection.end);
                         }}
-                        onChange={(v) => {
+                        onChange={() => {
                         }}
                         onChangeText={(v) => {
                             if (v.includes('#')) {
