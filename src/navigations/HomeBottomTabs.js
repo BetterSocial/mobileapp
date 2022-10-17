@@ -304,7 +304,6 @@ function HomeBottomTabs(props) {
               left: 0,
               right: 0
             }
- 
         }}
         screenOptions={({ navigation: screenOptionsNavigation }) => ({
           activeTintColor: colors.holytosca,
@@ -315,7 +314,7 @@ function HomeBottomTabs(props) {
         <Tab.Screen
           name="ChannelList"
           component={ChannelListScreen}
-          
+
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: ({ color }) => <View style={styles.center} >
@@ -369,7 +368,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   badge: {
-    height: 7, 
+    height: 7,
     width: 7,
     position: 'absolute',
     bottom: 3,

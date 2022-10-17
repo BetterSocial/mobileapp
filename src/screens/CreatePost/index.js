@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
 import analytics from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/core';
 import { debounce } from 'lodash';
@@ -23,8 +25,8 @@ import {
 } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import Toast from 'react-native-simple-toast';
 import { openSettings } from 'react-native-permissions';
+import Toast from 'react-native-simple-toast';
 
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
 import Location from '../../assets/icons/Ic_location';
@@ -117,11 +119,12 @@ const CreatePost = () => {
     const [positionEndCursor, setPositionEndCursor] = React.useState(0);
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
-    const [textContent, handleStateHastag, handleStateMention] = useHastagMention('');
+    const [taggingUsers, setTaggingUsers] = React.useState([])
+    const [textContent, handleStateHastag, handleStateMention, setHashtags] = useHastagMention('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
-    const [taggingUsers, setTaggingUsers] = React.useState([])
-    const [allTaggingUser, setAllTaggingUser] = React.useState([])
+
+
     const [selectedTime, setSelectedTime] = React.useState({
         day: 1,
         hour: 0,
@@ -399,6 +402,7 @@ const CreatePost = () => {
         const newArr = listTopic.filter((e) => e !== v);
         const newChat = listTopicChat.filter((chat) => chat !== `topic_${v}`)
         setListTopic(newArr);
+        setHashtags(newArr);
         setListTopicChat(newChat)
     };
     const onSetExpiredSelect = (v) => {
@@ -435,12 +439,14 @@ const CreatePost = () => {
             sheetBackRef.current.open();
             return true;
         }
+        
         navigation.goBack();
         return true;
     };
 
     const onSaveTopic = (v, topicChat) => {
         setListTopic(v);
+        setHashtags(v)
         setListTopicChat(topicChat)
         sheetTopicRef.current.close();
     };
@@ -454,7 +460,6 @@ const CreatePost = () => {
                 });
                 return true;
             }
-            console.log(checkTaggingUser(), 'sunak')
             // setLoading(true);
             // const topicWithoutHashtag = listTopic.map((topic) => topic.substring(1))
             // console.log(topicWithoutHashtag, 'jaja')
@@ -470,7 +475,6 @@ const CreatePost = () => {
                 location_id: locationId,
                 duration_feed: postExpired[expiredSelect].value,
                 images_url: dataImage,
-                tagUsers: checkTaggingUser()
             };
 
             setLocationId(JSON.stringify(geoSelect));
@@ -545,16 +549,6 @@ const CreatePost = () => {
             await channel.sendMessage({ text: handleTextMessage() }, { skip_push: true })
         })
     }
-
-    const checkTaggingUser = () => {
-        const mapTagUser = taggingUsers.map((data) => {
-           const findData = allTaggingUser.find((dataUser) => dataUser.username ===  data)
-           return findData.user_id
-        })
-        return mapTagUser
-    }
-
-
     const createPoll = () => {
         setIsPollShown(true);
         sheetMediaRef.current.close();
@@ -676,11 +670,8 @@ const CreatePost = () => {
 
     const searchTopic = async (name) => {
         if (!isEmptyOrSpaces(name)) {
-                    console.log(name, 'nama123')
-
             getTopics(name)
                 .then(v => {
-                    console.log(v, 'makan')
                     setTopicSearch(v.data);
                 })
                 .catch(err => console.log(err));
@@ -725,10 +716,6 @@ const CreatePost = () => {
         const newMessage = s.insert(start, topicItemWithSpace);
         return newMessage;
     }
-
-   
-
-    
 
     const handleTagUser = debounce(() => {
          const regex = /(^|\W)(@[a-z\d][\w-]*)/ig
@@ -784,6 +771,11 @@ const CreatePost = () => {
                         onChange={() => {
                         }}
                         onChangeText={(v) => {
+                            if(listTopic.length >= 5) {
+                                setMessage(v)
+                                return
+                            } 
+
                             if (v.includes('#')) {
                                 const position = v.lastIndexOf('#', positionEndCursor);
                                 const spaceStatus = v.includes(' ', position);
@@ -814,7 +806,7 @@ const CreatePost = () => {
                                     const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
                                     console.log('with space', textSeacrh);
                                     console.log('after space', removeCharacterAfterSpace);
-                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic);
+                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic, setHashtags);
                                 }
 
                                 handleStateHastag(v);
@@ -873,6 +865,7 @@ const CreatePost = () => {
                                         const newArr = [...listTopic, topicItem];
                                         const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
                                         setListTopic(newArr);
+                                        setHashtags(newArr)
                                         setListTopicChat(newChatTopic)
                                     }
                                     setPositionKeyboard('never')
@@ -909,12 +902,6 @@ const CreatePost = () => {
                                         handleStateMention(newMessage);
                                         setMessage(newMessage);
                                         setListUsersForTagging([]);
-                                        const duplicateId = allTaggingUser.find((userData) => userData.user_id === item.user_id)
-                                        if(duplicateId) return
-                                        setAllTaggingUser([...allTaggingUser, item])
-                                        // console.log(item, 'julak')
-                                        // setTaggingUsers([...taggingUsers, item.use])
-                                        // console.log(item.username, 'kolak')
                                     }}>
                                         <View style={{ marginBottom: 5 }} >
                                             <Text style={{

@@ -2,7 +2,7 @@
  * @format
  */
 import 'react-native-gesture-handler';
-
+import './src/libraries/reactotron/reactotronInstance';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 // import { enableScreens } from 'react-native-screens';
