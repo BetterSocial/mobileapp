@@ -6,168 +6,152 @@ import {fonts} from '../../../utils/fonts';
 import Image from '../../../components/Image';
 
 const ImageLayouter = ({images = [], onimageclick, height}) => {
-  if (images.length === 1) {
+  console.log(images, 'sumat')
+  if (images.length === 1 || images.length > 2) {
     return (
-      <Pressable onPress={() => onimageclick(0)}>
+      <Pressable style={styles.imagelayout1} onPress={() => onimageclick(0)}>
         <Image
           source={{uri: images[0]}}
           style={styles.imagelayout1}
         />
       </Pressable>
     );
-  } else if (images.length === 2) {
+  } if (images.length === 2) {
     return (
       <View style={styles.twoPhotoLayout}>
-        {images.map((item, index) => {
-          return (
-            <View key={`image-layouter-${index}`} style={styles.twoPhotoItemLayout}>
-              <Pressable onPress={() => onimageclick(index)}>
+        {images.map((item, index) => (
+            <View key={`image-layouter-${index}`} style={[styles.twoPhotoItemLayout]}>
+              <Pressable style={styles.imagelayout2} onPress={() => onimageclick(index)}>
                 <Image
                   style={styles.imagelayout2}
                   source={{uri: item}}
                 />
               </Pressable>
             </View>
-          );
-        })}
+          ))}
       </View>
     );
-  } else if (images.length === 3) {
-    return (
-      <View style={styles.threePhotoLayout}>
-        <View style={styles.threePhotoTopLayout}>
-          <Pressable
-            onPress={() => onimageclick(0)}
-            style={styles.threePhotoTopFirstLayout}>
-            <Image
-              style={styles.imagelayout3}
-              source={{uri: images[0]}}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => onimageclick(1)}
-            style={styles.threePhotoTopSecondLayout}>
-            <Image
-              style={styles.imagelayout3}
-              source={{uri: images[1]}}
-            />
-          </Pressable>
-        </View>
-        <View style={styles.threePhotoBottomLayout}>
-          <Pressable onPress={() => onimageclick(2)}>
-            <Image
-              style={styles.imagelayout2}
-              source={{uri: images[2]}}
-            />
-          </Pressable>
-        </View>
-      </View>
-    );
-  } else if (images.length === 4) {
-    return (
-      <View style={styles.threePhotoLayout}>
-        <View style={styles.threePhotoTopLayout}>
-          <Pressable
-            onPress={() => onimageclick(0)}
-            style={styles.threePhotoTopFirstLayout}>
-            <Image
-              style={styles.imagelayout3}
-              source={{uri: images[0]}}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => onimageclick(1)}
-            style={styles.threePhotoTopSecondLayout}>
-            <Image
-              style={styles.imagelayout3}
-              source={{uri: images[1]}}
-            />
-          </Pressable>
-        </View>
-        <View style={styles.threePhotoTopLayout}>
-          <Pressable
-            onPress={() => onimageclick(2)}
-            style={styles.threePhotoTopFirstLayout}>
-            <Image
-              style={styles.imagelayout3}
-              source={{uri: images[2]}}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => onimageclick(3)}
-            style={styles.threePhotoTopSecondLayout}>
-            <Image
-              style={styles.imagelayout3}
-              source={{uri: images[3]}}
-            />
-          </Pressable>
-        </View>
-      </View>
-    );
-  } else if (images.length > 4) {
-    return (
-      <View style={styles.threePhotoLayout}>
-        <View style={styles.threePhotoTopLayout}>
-          <Pressable
-            onPress={() => onimageclick(0)}
-            style={styles.threePhotoTopFirstLayout}>
-            <Image
-              style={styles.imagelayout3}
-              source={{uri: images[0]}}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => onimageclick(1)}
-            style={styles.threePhotoTopSecondLayout}>
-            <Image
-              style={styles.imagelayout3}
-              source={{uri: images[1]}}
-            />
-          </Pressable>
-        </View>
-        <View style={styles.threePhotoTopLayout}>
-          <Pressable
-            onPress={() => onimageclick(2)}
-            style={styles.threePhotoTopFirstLayout}>
-            <Image
-              style={styles.imagelayout3}
-              source={{uri: images[2]}}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => onimageclick(3)}
-            style={styles.threePhotoTopSecondLayout}>
-            <View
-              style={{
-                backgroundColor: COLORS.blue,
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                opacity: 0.5,
-                zIndex: 1000,
-              }}
-            />
-            <Text
-              style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                top: '30%',
-                left: '40%',
-                fontSize: 36,
-                fontFamily: fonts.inter[700],
-                zIndex: 1000,
-                color: COLORS.white,
-              }}>{`${images.length - 3}+`}</Text>
-            <Image
-              style={styles.imagelayout3}
-              source={{uri: images[3]}}
-            />
-          </Pressable>
-        </View>
-      </View>
-    );
-  }
+  } 
+  // if (images.length > 2) {
+  //   return (
+  //     <View style={styles.threePhotoLayout}>
+
+  //       <View style={styles.threePhotoBottomLayout}>
+  //         <Pressable onPress={() => onimageclick(2)}>
+  //           <Image
+  //             style={styles.imagelayout1}
+  //             source={{uri: images[2]}}
+  //           />
+  //         </Pressable>
+  //       </View>
+  //     </View>
+  //   );
+  // } 
+  // if (images.length === 4) {
+  //   return (
+  //     <View style={styles.threePhotoLayout}>
+  //       <View style={styles.threePhotoTopLayout}>
+  //         <Pressable
+  //           onPress={() => onimageclick(0)}
+  //           style={[styles.threePhotoTopFirstLayout, styles.imagelayout3]}>
+  //           <Image
+  //             style={styles.imagelayout3}
+  //             source={{uri: images[0]}}
+  //           />
+  //         </Pressable>
+  //         <Pressable
+  //           onPress={() => onimageclick(1)}
+  //           style={[styles.threePhotoTopSecondLayout, styles.imagelayout3]}>
+  //           <Image
+  //             style={styles.imagelayout3}
+  //             source={{uri: images[1]}}
+  //           />
+  //         </Pressable>
+  //       </View>
+  //       <View style={styles.threePhotoTopLayout}>
+  //         <Pressable
+  //           onPress={() => onimageclick(2)}
+  //           style={[styles.threePhotoTopFirstLayout, styles.imagelayout3]}>
+  //           <Image
+  //             style={styles.imagelayout3}
+  //             source={{uri: images[2]}}
+  //           />
+  //         </Pressable>
+  //         <Pressable
+  //           onPress={() => onimageclick(3)}
+  //           style={[styles.threePhotoTopSecondLayout, styles.imagelayout3]}>
+  //           <Image
+  //             style={styles.imagelayout3}
+  //             source={{uri: images[3]}}
+  //           />
+  //         </Pressable>
+  //       </View>
+  //     </View>
+  //   );
+  // } if (images.length > 4) {
+  //   return (
+  //     <View style={styles.threePhotoLayout}>
+  //       <View style={styles.threePhotoTopLayout}>
+  //         <Pressable
+  //           onPress={() => onimageclick(0)}
+  //           style={styles.threePhotoTopFirstLayout}>
+  //           <Image
+  //             style={styles.imagelayout3}
+  //             source={{uri: images[0]}}
+  //           />
+  //         </Pressable>
+  //         <Pressable
+  //           onPress={() => onimageclick(1)}
+  //           style={styles.threePhotoTopSecondLayout}>
+  //           <Image
+  //             style={styles.imagelayout3}
+  //             source={{uri: images[1]}}
+  //           />
+  //         </Pressable>
+  //       </View>
+  //       <View style={styles.threePhotoTopLayout}>
+  //         <Pressable
+  //           onPress={() => onimageclick(2)}
+  //           style={styles.threePhotoTopFirstLayout}>
+  //           <Image
+  //             style={styles.imagelayout3}
+  //             source={{uri: images[2]}}
+  //           />
+  //         </Pressable>
+  //         <Pressable
+  //           onPress={() => onimageclick(3)}
+  //           style={styles.threePhotoTopSecondLayout}>
+  //           <View
+  //             style={{
+  //               backgroundColor: COLORS.blue,
+  //               position: 'absolute',
+  //               width: '100%',
+  //               height: '100%',
+  //               opacity: 0.5,
+  //               zIndex: 1000,
+  //             }}
+  //           />
+  //           <Text
+  //             style={{
+  //               position: 'absolute',
+  //               width: '100%',
+  //               height: '100%',
+  //               top: '30%',
+  //               left: '40%',
+  //               fontSize: 36,
+  //               fontFamily: fonts.inter[700],
+  //               zIndex: 1000,
+  //               color: COLORS.white,
+  //             }}>{`${images.length - 3}+`}</Text>
+  //           <Image
+  //             style={styles.imagelayout3}
+  //             source={{uri: images[3]}}
+  //           />
+  //         </Pressable>
+  //       </View>
+  //     </View>
+  //   );
+  // }
 
   return <></>;
 };
@@ -176,17 +160,16 @@ const styles = StyleSheet.create({
   imagelayout1: {
     maxHeight: 427,
     width: '100%',
-    resizeMode: 'cover',
+    height: '100%'
   },
 
   imagelayout2: {
     maxHeight: 405,
     width: '100%',
-    resizeMode: 'cover',
+    height: '100%'
   },
 
   imagelayout3: {
-    resizeMode: 'cover',
   },
 
   twoPhotoLayout: {

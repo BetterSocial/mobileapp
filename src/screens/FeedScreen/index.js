@@ -347,7 +347,7 @@ const FeedScreen = (props) => {
 
     }
   }
-
+  console.log(feeds, 'mantaps')
   return (
     <SafeAreaProvider style={styles.container} forceInset={{ top: 'always' }}>
       <StatusBar translucent={false} />

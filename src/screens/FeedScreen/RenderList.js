@@ -2,11 +2,10 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Dimensions, Platform, Share, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StatusBar, StyleSheet, View } from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
 
 import { Footer, Gap, PreviewComment } from '../../components';
-import { colors } from '../../utils/colors';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -16,9 +15,7 @@ import {
   SOURCE_FEED_TAB,
 } from '../../utils/constants';
 import dimen from '../../utils/dimen';
-import { fonts } from '../../utils/fonts';
-import { getCommentLength, getCountCommentWithChild } from '../../utils/getstream';
-import Log from '../../utils/log/Log';
+import { getCommentLength } from '../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
@@ -28,7 +25,6 @@ import ContentLink from './ContentLink';
 import ContentPoll from './ContentPoll';
 import Header from './Header';
 
-const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
@@ -38,7 +34,6 @@ const getHeightHeader = () =>
    dimen.size.FEED_HEADER_HEIGHT
 ;
 
-const majorVersion = parseInt(Platform.Version, 10)
 
 const RenderListFeed = (props) => {
   const {
@@ -63,12 +58,8 @@ const RenderListFeed = (props) => {
   const [isReaction, setReaction] = React.useState(false);
   const [loadingVote, setLoadingVote] = React.useState(false);
   // const bottomHeight = useBottomTabBarHeight();
-  let bottomHeight = 0
-  try {
-    bottomHeight = useBottomTabBarHeight()
-  } catch(e) {
-    
-  }
+  const bottomHeight = useBottomTabBarHeight()
+
   const navigateToLinkContextPage = (item) => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -204,6 +195,9 @@ const RenderListFeed = (props) => {
   React.useEffect(() => {
     initial();
   }, [item]);
+
+  
+
   return (
     <>
         <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB} />
