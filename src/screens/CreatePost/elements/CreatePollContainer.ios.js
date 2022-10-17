@@ -5,8 +5,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Picker,
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 
 import Modal from 'react-native-modal';
 // import {WheelPicker} from '@victorzimnikov/react-native-wheel-picker-android';
@@ -23,17 +23,17 @@ import MemoIc_arrow_right from '../../../assets/icons/Ic_arrow_right';
 export default function CreatePollContainer({
   onremoveallpoll = () => {},
   onaddpoll = () => {},
-  onremovesinglepoll = (index) => {},
-  onsinglepollchanged = (item, index) => {},
+  onremovesinglepoll = () => {},
+  onsinglepollchanged = () => {},
   ismultiplechoice = false,
-  onmultiplechoicechanged = (ismultiple) => {},
+  onmultiplechoicechanged = () => {},
   selectedtime = {day: 1, hour: 0, minute: 0},
-  ontimechanged = (timeobject) => {},
+  ontimechanged = () => {},
   polls,
   expiredobject = {day: 7, hour: 24},
 }) {
-  let arrayContentToString = (arr) => {
-    let newArray = arr.reduce((acc, current) => {
+  const arrayContentToString = (arr) => {
+    const newArray = arr.reduce((acc, current) => {
       acc.push(`${current}`);
       return acc;
     }, []);
@@ -41,41 +41,52 @@ export default function CreatePollContainer({
     return newArray;
   };
 
-  let days = arrayContentToString([...Array(expiredobject.day).keys()]);
-  let hour = arrayContentToString([...Array(expiredobject.hour).keys()]);
-  let minute = arrayContentToString([...Array(60).keys()]);
+  const days = arrayContentToString([...Array(expiredobject.day).keys()]);
+  const hour = arrayContentToString([...Array(expiredobject.hour).keys()]);
+  const minute = arrayContentToString([...Array(60).keys()]);
 
-  let [isDurationModalShown, setIsDurationModalShown] = React.useState(false);
-  let [pickerDay, setPickerDay] = React.useState(selectedtime.day);
-  let [pickerHour, setPickerHour] = React.useState(selectedtime.hour);
-  let [pickerMinute, setPickerMinute] = React.useState(selectedtime.minute);
+  const [isDurationModalShown, setIsDurationModalShown] = React.useState(false);
+  const [pickerDay, setPickerDay] = React.useState(selectedtime.day);
+  const [pickerHour, setPickerHour] = React.useState(selectedtime.hour);
+  const [pickerMinute, setPickerMinute] = React.useState(selectedtime.minute);
+
 
   const getDurationTimeText = () => {
-    let dayText = selectedtime.day > 0 ? `${selectedtime.day} Day(s)` : '';
-    let hourText =
-      selectedtime.hour > 0
-        ? `${selectedtime.day > 0 ? ', ' : ' '}${selectedtime.hour}h`
+    const dayText = pickerDay > 0 ? `${pickerDay} Day(s)` : '';
+    const hourText =
+      pickerHour > 0
+        ? `${pickerDay > 0 ? ', ' : ' '}${pickerHour}h`
         : '';
-    let minuteText =
-      selectedtime.minute > 0
-        ? `${selectedtime.hour > 0 ? ', ' : ' '}${selectedtime.minute}m`
+    const minuteText =
+      pickerMinute > 0
+        ? `${pickerHour > 0 ? ', ' : ' '}${pickerMinute}m`
         : '';
 
     return `${dayText}${hourText}${minuteText}`;
   };
-  const setDuration = () => {
-    let selectedTime = {...selectedtime};
-    selectedTime.day = pickerDay;
-    selectedTime.hour = pickerHour;
-    selectedTime.minute = pickerMinute;
-    ontimechanged(selectedTime);
-    setIsDurationModalShown(false);
-  };
+  // const setDuration = () => {
+  //   const selectedTime = {...selectedtime};
+  //   selectedTime.day = pickerDay;
+  //   selectedTime.hour = pickerHour;
+  //   selectedTime.minute = pickerMinute;
+  //   ontimechanged(selectedTime);
+  //   setIsDurationModalShown(false);
+  // };
 
+  const onSetTime = () => {
+      const selectedTime = {...selectedtime};
+                selectedTime.day = Number(pickerDay);
+                selectedTime.hour = Number(pickerHour);
+                selectedTime.minute = Number(pickerMinute);
+                console.log(selectedTime, 'jiji')
+                ontimechanged(selectedTime);
+                setIsDurationModalShown(false);
+  }
+
+  console.log(selectedtime,'day')
   return (
     <View style={S.createpollcontainer}>
-      {polls.map((item, index) => {
-        return (
+      {polls.map((item, index) => (
           <PollItem
             index={index}
             poll={item}
@@ -86,8 +97,7 @@ export default function CreatePollContainer({
               onsinglepollchanged(v, index);
             }}
           />
-        );
-      })}
+        ))}
 
       {polls.length < MAX_POLLING_ALLOWED && (
         <TouchableOpacity
@@ -126,47 +136,55 @@ export default function CreatePollContainer({
         <Text style={S.removepolltext}>Remove Poll</Text>
       </TouchableOpacity>
 
-      <Modal isVisible={isDurationModalShown} style={S.modalcontainer}>
+      <Modal isVisible={isDurationModalShown} >
         <View style={S.parentcolumncontainer}>
           <Text style={S.setdurationtext}>Set Duration</Text>
           <View style={S.modalrowcontainer}>
             <View style={S.pickercontainer}>
               <Text style={S.pickerlabeltext}>Days</Text>
               <View style={{}}>
-                <Picker
-                  data={days}
-                  selectedItem={selectedtime.day}
-                  indicatorColor={colors.holytosca}
-                  indicatorWidth={3}
-                  onItemSelected={(value) => setPickerDay(value)}
-                  isCyclic={true}
-                />
+                <Picker  
+                onValueChange={(itemValue) => {
+                  setPickerDay(itemValue)
+                }}
+                selectedValue={pickerDay}
+                >
+                  {days.map((day, index) => (
+                    <Picker.Item key={index} label={day} value={day} />
+                  ))}
+                </Picker>
               </View>
             </View>
             <View style={S.pickercontainer}>
               <Text style={S.pickerlabeltext}>Hours</Text>
               <View style={{}}>
                 <Picker
-                  data={hour}
-                  selectedItem={selectedtime.hour}
-                  indicatorColor={colors.holytosca}
-                  indicatorWidth={3}
-                  onItemSelected={(value) => setPickerHour(value)}
-                  isCyclic={true}
-                />
+                onValueChange={(itemValue) => {
+                  setPickerHour(itemValue)
+                  setPickerDay(0)
+                }}
+                selectedValue={pickerHour}
+                >
+                  {hour.map((h, index) => (
+                    <Picker.Item key={index} label={h} value={h} />
+                  ))}
+                </Picker>
               </View>
             </View>
             <View style={S.pickercontainer}>
               <Text style={S.pickerlabeltext}>Min</Text>
               <View style={{}}>
                 <Picker
-                  data={minute}
-                  selectedItem={selectedtime.minute}
-                  onItemSelected={(value) => setPickerMinute(value)}
-                  indicatorColor={colors.holytosca}
-                  indicatorWidth={3}
-                  isCyclic={true}
-                />
+                onValueChange={(itemValue) => {
+                  setPickerDay(0)
+                  setPickerMinute(itemValue)
+                }}
+                selectedValue={pickerMinute}
+                >
+                  {minute.map((m, index) => (
+                    <Picker.Item key={index} label={m} value={m} />
+                  ))}
+                </Picker>
               </View>
             </View>
           </View>
@@ -178,14 +196,7 @@ export default function CreatePollContainer({
             </TouchableOpacity>
             <TouchableOpacity
               style={S.buttoncontainer}
-              onPress={() => {
-                let selectedTime = {...selectedtime};
-                selectedTime.day = pickerDay;
-                selectedTime.hour = pickerHour;
-                selectedTime.minute = pickerMinute;
-                ontimechanged(selectedTime);
-                setIsDurationModalShown(false);
-              }}>
+              onPress={onSetTime}>
               <Text style={S.bottombuttontext}>Set</Text>
             </TouchableOpacity>
           </View>
@@ -280,6 +291,7 @@ const S = StyleSheet.create({
     flexDirection: 'column',
     display: 'flex',
     flex: 1,
+    paddingHorizontal: 0
   },
 
   parentcolumncontainer: {
@@ -287,8 +299,8 @@ const S = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'white',
     paddingVertical: 24,
-    paddingHorizontal: 38,
     borderRadius: 4,
+    paddingHorizontal: 12
   },
 
   modalrowcontainer: {
@@ -303,7 +315,7 @@ const S = StyleSheet.create({
     flexDirection: 'column',
     alignSelf: 'flex-start',
     flex: 1,
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
   },
 
   setdurationtext: {
@@ -313,6 +325,7 @@ const S = StyleSheet.create({
 
   pickerlabeltext: {
     marginBottom: 32,
+    textAlign: 'center'
   },
 
   bottombuttonrowcontainer: {

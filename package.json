@@ -44,6 +44,7 @@
     "@react-native-firebase/dynamic-links": "11.2.0",
     "@react-native-firebase/messaging": "11.3.1",
     "@react-native-firebase/remote-config": "11.1.2",
+    "@react-native-picker/picker": "^2.4.7",
     "@react-navigation/bottom-tabs": "^5.11.15",
     "@react-navigation/core": "^5.16.1",
     "@react-navigation/material-top-tabs": "^5.3.15",

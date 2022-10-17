@@ -25,8 +25,8 @@ export default function CreatePollContainer({
   polls,
   expiredobject = {day: 7, hour: 24},
 }) {
-  let arrayContentToString = (arr) => {
-    let newArray = arr.reduce((acc, current) => {
+  const arrayContentToString = (arr) => {
+    const newArray = arr.reduce((acc, current) => {
       acc.push(`${current}`);
       return acc;
     }, []);
@@ -34,22 +34,22 @@ export default function CreatePollContainer({
     return newArray;
   };
 
-  let days = arrayContentToString([...Array(expiredobject.day).keys()]);
-  let hour = arrayContentToString([...Array(expiredobject.hour).keys()]);
-  let minute = arrayContentToString([...Array(60).keys()]);
+  const days = arrayContentToString([...Array(expiredobject.day).keys()]);
+  const hour = arrayContentToString([...Array(expiredobject.hour).keys()]);
+  const minute = arrayContentToString([...Array(60).keys()]);
 
-  let [isDurationModalShown, setIsDurationModalShown] = React.useState(false);
-  let [pickerDay, setPickerDay] = React.useState(selectedtime.day);
-  let [pickerHour, setPickerHour] = React.useState(selectedtime.hour);
-  let [pickerMinute, setPickerMinute] = React.useState(selectedtime.minute);
+  const [isDurationModalShown, setIsDurationModalShown] = React.useState(false);
+  const [pickerDay, setPickerDay] = React.useState(selectedtime.day);
+  const [pickerHour, setPickerHour] = React.useState(selectedtime.hour);
+  const [pickerMinute, setPickerMinute] = React.useState(selectedtime.minute);
 
   const getDurationTimeText = () => {
-    let dayText = selectedtime.day > 0 ? `${selectedtime.day} Day(s)` : '';
-    let hourText =
+    const dayText = selectedtime.day > 0 ? `${selectedtime.day} Day(s)` : '';
+    const hourText =
       selectedtime.hour > 0
         ? `${selectedtime.day > 0 ? ', ' : ' '}${selectedtime.hour}h`
         : '';
-    let minuteText =
+    const minuteText =
       selectedtime.minute > 0
         ? `${selectedtime.hour > 0 ? ', ' : ' '}${selectedtime.minute}m`
         : '';
@@ -57,7 +57,7 @@ export default function CreatePollContainer({
     return `${dayText}${hourText}${minuteText}`;
   };
   const setDuration = () => {
-    let selectedTime = {...selectedtime};
+    const selectedTime = {...selectedtime};
     selectedTime.day = pickerDay;
     selectedTime.hour = pickerHour;
     selectedTime.minute = pickerMinute;
@@ -67,8 +67,7 @@ export default function CreatePollContainer({
 
   return (
     <View style={S.createpollcontainer}>
-      {polls.map((item, index) => {
-        return (
+      {polls.map((item, index) => (
           <PollItem
             index={index}
             poll={item}
@@ -79,8 +78,7 @@ export default function CreatePollContainer({
               onsinglepollchanged(v, index);
             }}
           />
-        );
-      })}
+        ))}
 
       {polls.length < MAX_POLLING_ALLOWED && (
         <TouchableOpacity
@@ -172,7 +170,7 @@ export default function CreatePollContainer({
             <TouchableOpacity
               style={S.buttoncontainer}
               onPress={() => {
-                let selectedTime = {...selectedtime};
+                const selectedTime = {...selectedtime};
                 selectedTime.day = pickerDay;
                 selectedTime.hour = pickerHour;
                 selectedTime.minute = pickerMinute;
