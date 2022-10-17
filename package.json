@@ -82,7 +82,7 @@
     "react-native-keyevent": "^0.2.8",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-modal": "^11.7.0",
-    "react-native-opengraph-kit": "^3.0.1",
+    "react-native-opengraph-kit": "3.0.1",
     "react-native-permissions": "^3.2.0",
     "react-native-push-notification": "^8.1.1",
     "react-native-raw-bottom-sheet": "^2.2.0",
@@ -110,9 +110,9 @@
     "react-string-replace": "^1.1.0",
     "recoil": "^0.5.2",
     "recyclerlistview": "^3.0.5",
-    "stream-chat": "4.2.0",
+    "stream-chat": "github:kevinnath1007/stream-chat-js",
     "stream-chat-react-native": "github:agit26milan/stream-chat-react-native",
-    "stream-chat-react-native-core": "github:agit26milan/stream-chat-react-native-core",
+    "stream-chat-react-native-core": "github:agit26milan/stream-chat-react-native-core#feat/async-storage",
     "toggle-switch-react-native": "^3.2.0",
     "uri-scheme": "^1.0.120"
   },
@@ -126,7 +126,7 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@react-native-community/eslint-config": "2.0.0",
-    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/react-hooks": "8.0.1",
     "@testing-library/react-native": "^9.1.0",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.23",
@@ -157,8 +157,12 @@
     "react-dom": "18.0.0",
     "react-test-renderer": "18.0.0",
     "reactotron-react-native": "5.0.2",
-    "reactotron-recoil-plugin": "1.1.0",
+    "reactotron-recoil-plugin": "^1.1.0",
     "ts-jest": "^27.0.2"
+  },
+  "resolutions": {
+    "stream-chat": "github:kevinnath1007/stream-chat-js",
+    "stream-chat-react-native-core": "github:agit26milan/stream-chat-react-native-core#feat/async-storage"
   },
   "jest": {
     "preset": "react-native",

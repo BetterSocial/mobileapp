@@ -12,7 +12,7 @@ export const InitialStartupAtom = atom({
   default: {
     id: null,
   },
-  effects: [
+  effects_UNSTABLE: [
     ({ setSelf, onSet }) => {
       // If there's a persisted value - set it on load
       const loadPersisted = async () => {

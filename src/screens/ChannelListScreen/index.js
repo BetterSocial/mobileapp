@@ -5,7 +5,8 @@ import {
   ChannelList,
   ChannelPreviewTitle,
   Chat,
-  Streami18n} from 'stream-chat-react-native';
+  Streami18n,
+} from 'stream-chat-react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
@@ -26,11 +27,13 @@ import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
-import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { getSpecificCache } from '../../utils/cache';
 import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 import PreviewMessage from './elements/CustomPreviewMessage';
 import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
 import useChannelList from './hooks/useChannelList';
+import { useRecoilValue } from 'recoil';
+import { channelListLocalAtom } from '../../service/channelListLocal';
 
 
 const ChannelListScreen = ({ navigation }) => {
@@ -52,12 +55,16 @@ const ChannelListScreen = ({ navigation }) => {
   const {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook} = useChannelList()
   const [unReadMessage, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
+  const channelListLocalValue = useRecoilValue(channelListLocalAtom);
 
   const filters = {
     members: { $in: [myProfile.user_id] },
     type: {$in: ['messaging', 'topics']},
   };
   // React.useEffect(() => { }, [unReadMessage]);
+
+  console.tron.log(myProfile, myProfile.user_id, client.client, 'testing profile');
+  console.tron.log(channelListLocalValue, 'bangsat');
 
   const sort = [{ last_message_at: -1 }];
   const options = {
@@ -74,7 +81,6 @@ const ChannelListScreen = ({ navigation }) => {
         screen_name: 'Channel List',
       });
       getPostNotification()
-      // connect();
     }
 
   }, [interactionsComplete]);
@@ -83,9 +89,9 @@ const ChannelListScreen = ({ navigation }) => {
     if(myProfile) {
       callStreamFeed()
       handleUnsubscribeNotif()
-      
     }
   }, [JSON.stringify(myProfile)])
+
   const callStreamFeed = async () => {
     const token = await getAccessToken()
     const client = streamFeed(token)
@@ -119,6 +125,7 @@ const handleCacheComment  = () => {
     }
   })
 }
+
 const handleNotHaveCache = () => {
   const comment = handleNotHaveCacheHook(listPostNotif)
   setCountReadComment(comment)
@@ -134,12 +141,13 @@ const mappingUnreadCountPostNotif = () => {
   dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage))
 }
 
-  const getPostNotification = async () => {
+const getPostNotification = async () => {
     const res = await getFeedNotification()
     if(res.success) {
         setListPostNotif(res.data)
     }
-} 
+}
+
   const customPreviewTitle = (props) => {
     const { name } = props.channel?.data;
     return (
@@ -158,17 +166,17 @@ const mappingUnreadCountPostNotif = () => {
     })
   }
 
-
   const countPostNotifComponent = (item) => {
     const readComment = countReadComment[item.activity_id]
     return (
       <CustomPreviewUnreadCount readComment={readComment} channel={item} />
     )
   }
-  
+
   const chatBadge = (props) => (
     <CustomPreviewUnreadCount   {...props}  />
   )
+
   const onSelectChat = (channel, refreshList) => {
      if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
                     // toDo reset main feeds
@@ -178,7 +186,7 @@ const mappingUnreadCountPostNotif = () => {
                     setChannel(channel, dispatch);
                     // ChannelScreen | ChatDetailPage
                     navigation.navigate('ChatDetailPage');
-                    
+
                   }
   }
 
@@ -210,19 +218,20 @@ const mappingUnreadCountPostNotif = () => {
                 sort={sort}
                 options={options}
                 maxUnreadCount={99}
+                clientData={channelListLocalValue}
                 additionalFlatListProps={{
                   onEndReached: () => null,
                   refreshControl: null,
                   // extraData:{countReadComment},
                 }}
-                
+
                additionalData={listPostNotif}
                context={myContext}
                PreviewUnreadCount={chatBadge}
                PreviewMessage={PreviewMessage}
-               PostNotifComponent={({item ,index, refreshList}) => item ? <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)}  /> : null}
+               postNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} showBadgePostNotif  />}
               />
-      
+
             </Chat>
           ) : (
             <View style={styles.content}>

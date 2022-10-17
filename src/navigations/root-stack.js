@@ -9,9 +9,10 @@ import {
   View,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useRecoilValue, useSetRecoilState, } from 'recoil';
 // import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecoilValue, useSetRecoilState, } from 'recoil';
 
+import { useLocalChannelsFirst } from 'stream-chat-react-native';
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
@@ -59,25 +60,26 @@ import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 import { verifyTokenGetstream } from '../service/users';
+import { channelListLocalAtom } from '../service/channelListLocal';
 
 const RootStack = createStackNavigator();
 
-export const RootNavigator = (props) => {
+export const RootNavigator = () => {
   let initialStartup = useRecoilValue(InitialStartupAtom);
-  const setInitialValue = useSetRecoilState(InitialStartupAtom)
+  const setInitialValue = useSetRecoilState(InitialStartupAtom);
+  const setLocalChannelData = useSetRecoilState(channelListLocalAtom);
   const [clientState] = React.useContext(Context).client;
   const { client } = clientState;
 
   const create = useClientGetstream();
-  if (initialStartup && typeof initialStartup === 'string') {
+
+  if(initialStartup && typeof initialStartup === 'string') {
     initialStartup = JSON.parse(initialStartup)
   }
+
   const doGetAccessToken = async () => {
     const accessToken = await getAccessToken()
     setInitialValue({ id: accessToken })
-    setTimeout(() => {
-      SplashScreen.hide()
-    }, 500)
   }
 
   const doVerifyGetstreamToken = async () => {
@@ -96,6 +98,8 @@ export const RootNavigator = (props) => {
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
     doVerifyGetstreamToken()
+
+    useLocalChannelsFirst(setLocalChannelData);
     return async () => {
       await client?.disconnectUser();
     };
@@ -105,17 +109,21 @@ export const RootNavigator = (props) => {
     if (initialStartup.id !== null) {
       if (initialStartup.id !== '') {
         create();
-        // SplashScreen.hide()
       }
     } else {
-      // setTimeout(() => {
-      //   console.log('splash screen hide from else')
-      //   SplashScreen.hide();
-      // }, 700);
       doVerifyGetstreamToken()
     }
 
   }, [initialStartup]);
+
+  React.useEffect(() => {
+    if (clientState?.client) {
+      console.tron.log('masuk client');
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 700)
+    }
+  }, [clientState]);
 
   return (
     <View
