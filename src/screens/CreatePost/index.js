@@ -1,13 +1,16 @@
 import analytics from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/core';
-import { getLinkPreview } from 'link-preview-js';
-import { debounce, set } from 'lodash';
+import { debounce } from 'lodash';
 import PSL from 'psl'
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
+/* eslint-disable no-shadow */
+/* eslint-disable camelcase */
+/* eslint-disable no-use-before-define */
 import * as React from 'react';
 import {
     Alert,
     BackHandler,
-    Platform,
     Pressable,
     SafeAreaView,
     ScrollView,
@@ -20,7 +23,6 @@ import {
 } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { OpenGraphParser } from 'react-native-opengraph-kit'
 import Toast from 'react-native-simple-toast';
 
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
@@ -46,7 +48,6 @@ import { PROFILE_CACHE } from '../../utils/cache/constant';
 import { colors } from '../../utils/colors';
 import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
 import { fonts } from '../../utils/fonts';
-import handleHastag from '../../utils/hastag';
 import {
     requestCameraPermission,
     requestExternalStoragePermission,
@@ -56,13 +57,12 @@ import {
     getLocationId,
     getPrivacyId,
     setDurationId,
-    setLocationId,
     setPrivacyId,
 } from '../../utils/setting';
 import StringConstant from '../../utils/string/StringConstant';
-import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
+import { convertString } from '../../utils/string/StringUtils';
 import { getUserId } from '../../utils/users';
-import { getDomainInfoInLinkPreview, getNewsLinkInfoInLinkPreview, getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
+import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
 import Loading from '../Loading';
 import Card from './elements/Card';
 import ContentLink from './elements/ContentLink';
@@ -116,20 +116,18 @@ const CreatePost = () => {
     const [positionEndCursor, setPositionEndCursor] = React.useState(0);
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
-    const [formattedContent, setFormatHastag] = React.useState('');
-    const [textContent, handleStateHastag, handleStateMention, setHashtags] = useHastagMention('');
+    const [textContent, handleStateHastag, handleStateMention] = useHastagMention('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
-
-
+    const [taggingUsers, setTaggingUsers] = React.useState([])
+    const [allTaggingUser, setAllTaggingUser] = React.useState([])
     const [selectedTime, setSelectedTime] = React.useState({
         day: 1,
         hour: 0,
         minute: 0,
     });
-    const [myId, setMyId] = React.useState(null)
     const [expiredSelect, setExpiredSelect] = React.useState(0);
-    const [postExpired, setPostExpired] = React.useState([
+    const [postExpired] = React.useState([
         {
             label: '24 hours',
             value: '1',
@@ -400,7 +398,6 @@ const CreatePost = () => {
         const newArr = listTopic.filter((e) => e !== v);
         const newChat = listTopicChat.filter((chat) => chat !== `topic_${v}`)
         setListTopic(newArr);
-        setHashtags(newArr);
         setListTopicChat(newChat)
     };
     const onSetExpiredSelect = (v) => {
@@ -437,14 +434,12 @@ const CreatePost = () => {
             sheetBackRef.current.open();
             return true;
         }
-
         navigation.goBack();
         return true;
     };
 
     const onSaveTopic = (v, topicChat) => {
         setListTopic(v);
-        setHashtags(v)
         setListTopicChat(topicChat)
         sheetTopicRef.current.close();
     };
@@ -458,8 +453,8 @@ const CreatePost = () => {
                 });
                 return true;
             }
-
-            setLoading(true);
+            console.log(checkTaggingUser(), 'sunak')
+            // setLoading(true);
             // const topicWithoutHashtag = listTopic.map((topic) => topic.substring(1))
             // console.log(topicWithoutHashtag, 'jaja')
             const data = {
@@ -474,6 +469,7 @@ const CreatePost = () => {
                 location_id: locationId,
                 duration_feed: postExpired[expiredSelect].value,
                 images_url: dataImage,
+                tagUsers: checkTaggingUser()
             };
 
             setLocationId(JSON.stringify(geoSelect));
@@ -489,35 +485,20 @@ const CreatePost = () => {
                 anon: typeUser,
                 predicted_audience: audienceEstimations,
             });
-            const res = await createPost(data);
-            if (res.code === 200) {
-                handleTopicChat()
-                showMessage({
+            navigation.navigate('HomeTabs', {
+                screen: 'Feed',
+                params: {
+                    refresh: true,
+                },
+            });
+            await createPost(data);
+            handleTopicChat()
+            showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
                 });
-                setLoading(false);
-                setTimeout(() => {
-                    navigation.navigate('HomeTabs', {
-                        screen: 'Feed',
-                        params: {
-                            refresh: true,
-                        },
-                    });
-                }, 2000);
-            } else {
-                setLoading(false);
-                showMessage({
-                    message: StringConstant.createPostFailedGeneralError,
-                    type: 'danger',
-                });
-            }
         } catch (error) {
-            showMessage({
-                message: StringConstant.createPostFailedGeneralError,
-                type: 'danger',
-            });
-            setLoading(false);
+            console.log(error)
         }
     };
 
@@ -563,6 +544,16 @@ const CreatePost = () => {
             await channel.sendMessage({ text: handleTextMessage() }, { skip_push: true })
         })
     }
+
+    const checkTaggingUser = () => {
+        const mapTagUser = taggingUsers.map((data) => {
+           const findData = allTaggingUser.find((dataUser) => dataUser.username ===  data)
+           return findData.user_id
+        })
+        return mapTagUser
+    }
+
+
     const createPoll = () => {
         setIsPollShown(true);
         sheetMediaRef.current.close();
@@ -614,7 +605,7 @@ const CreatePost = () => {
     const isPollButtonDisabled = () => getReducedPoll().length < 2;
 
     const sendPollPost = async () => {
-        setLoading(true);
+        // setLoading(true);
 
         const data = {
             message,
@@ -635,36 +626,20 @@ const CreatePost = () => {
         setLocationId(JSON.stringify(geoSelect));
         setDurationId(JSON.stringify(expiredSelect));
         setPrivacyId(JSON.stringify(privacySelect));
-
+        navigation.navigate('HomeTabs', {
+            screen: 'Feed',
+            params: {
+                    refresh: true,
+            },
+        });
         try {
-            const response = await createPollPost(data);
-            if (response.status) {
-                showMessage({
+            await createPollPost(data);
+            showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
-                });
-                setTimeout(() => {
-                    navigation.navigate('HomeTabs', {
-                        screen: 'Feed',
-                        params: {
-                            refresh: true,
-                        },
-                    });
-                }, 1000);
-                setLoading(false);
-            } else {
-                setLoading(false);
-                showMessage({
-                    message: StringConstant.createPostFailedGeneralError,
-                    type: 'danger',
-                });
-            }
-        } catch (e) {
-            showMessage({
-                message: StringConstant.createPostFailedGeneralError,
-                type: 'danger',
             });
-            setLoading(false);
+        } catch (e) {
+            console.log(e)
         }
         analytics().logEvent('create_post', {
             id: 6,
@@ -700,8 +675,11 @@ const CreatePost = () => {
 
     const searchTopic = async (name) => {
         if (!isEmptyOrSpaces(name)) {
+                    console.log(name, 'nama123')
+
             getTopics(name)
                 .then(v => {
+                    console.log(v, 'makan')
                     setTopicSearch(v.data);
                 })
                 .catch(err => console.log(err));
@@ -747,6 +725,29 @@ const CreatePost = () => {
         return newMessage;
     }
 
+   
+
+    
+
+    const handleTagUser = debounce(() => {
+         const regex = /(^|\W)(@[a-z\d][\w-]*)/ig
+        const findRegex = message.match(regex)
+        if(findRegex) {
+            const newMapRegex = findRegex.map((tagUser) => {
+                const newTagUser = tagUser.replace(/\s/g, '').replace('@', '')
+                return newTagUser
+            })
+            setTaggingUsers(newMapRegex)
+        } else {
+            setTaggingUsers([])
+        }
+    }, 500)
+
+
+    React.useEffect(() => {
+        handleTagUser()
+    }, [message])
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />
@@ -779,14 +780,9 @@ const CreatePost = () => {
                         onSelectionChange={(e) => {
                             setPositionEndCursor(e.nativeEvent.selection.end);
                         }}
-                        onChange={(v) => {
+                        onChange={() => {
                         }}
                         onChangeText={(v) => {
-                            if (listTopic.length >= 5) {
-                                setMessage(v)
-                                return
-                            }
-
                             if (v.includes('#')) {
                                 const position = v.lastIndexOf('#', positionEndCursor);
                                 const spaceStatus = v.includes(' ', position);
@@ -817,7 +813,7 @@ const CreatePost = () => {
                                     const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
                                     console.log('with space', textSeacrh);
                                     console.log('after space', removeCharacterAfterSpace);
-                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic, setHashtags);
+                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic);
                                 }
 
                                 handleStateHastag(v);
@@ -876,7 +872,6 @@ const CreatePost = () => {
                                         const newArr = [...listTopic, topicItem];
                                         const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
                                         setListTopic(newArr);
-                                        setHashtags(newArr)
                                         setListTopicChat(newChatTopic)
                                     }
                                     setPositionKeyboard('never')
@@ -913,6 +908,12 @@ const CreatePost = () => {
                                         handleStateMention(newMessage);
                                         setMessage(newMessage);
                                         setListUsersForTagging([]);
+                                        const duplicateId = allTaggingUser.find((userData) => userData.user_id === item.user_id)
+                                        if(duplicateId) return
+                                        setAllTaggingUser([...allTaggingUser, item])
+                                        // console.log(item, 'julak')
+                                        // setTaggingUsers([...taggingUsers, item.use])
+                                        // console.log(item.username, 'kolak')
                                     }}>
                                         <View style={{ marginBottom: 5 }} >
                                             <Text style={{
