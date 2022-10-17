@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   backbutton: {
-    paddingLeft: 24,
+    paddingLeft: 16,
     paddingEnd: 16,
     height: '100%',
     justifyContent: 'center'
