@@ -463,7 +463,7 @@ const CreatePost = () => {
                 return true;
             }
             console.log(checkTaggingUser(), 'sunak')
-            setLoading(true);
+            // setLoading(true);
             // const topicWithoutHashtag = listTopic.map((topic) => topic.substring(1))
             // console.log(topicWithoutHashtag, 'jaja')
             const data = {
@@ -494,37 +494,20 @@ const CreatePost = () => {
                 anon: typeUser,
                 predicted_audience: audienceEstimations,
             });
-            const res = await createPost(data);
-            if (res.code === 200) {
-                console.log(res, 'lakik')
-                handleTopicChat()
-                // handleSelectedTagUser()
-                showMessage({
+            navigation.navigate('HomeTabs', {
+                screen: 'Feed',
+                params: {
+                    refresh: true,
+                },
+            });
+            await createPost(data);
+            handleTopicChat()
+            showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
                 });
-                setLoading(false);
-                setTimeout(() => {
-                    navigation.navigate('HomeTabs', {
-                        screen: 'Feed',
-                        params: {
-                            refresh: true,
-                        },
-                    });
-                }, 2000);
-            } else {
-                setLoading(false);
-                showMessage({
-                    message: StringConstant.createPostFailedGeneralError,
-                    type: 'danger',
-                });
-            }
         } catch (error) {
-            showMessage({
-                message: StringConstant.createPostFailedGeneralError,
-                type: 'danger',
-            });
-            setLoading(false);
+            console.log(error)
         }
     };
 
@@ -631,7 +614,7 @@ const CreatePost = () => {
     const isPollButtonDisabled = () => getReducedPoll().length < 2;
 
     const sendPollPost = async () => {
-        setLoading(true);
+        // setLoading(true);
 
         const data = {
             message,
@@ -652,36 +635,20 @@ const CreatePost = () => {
         setLocationId(JSON.stringify(geoSelect));
         setDurationId(JSON.stringify(expiredSelect));
         setPrivacyId(JSON.stringify(privacySelect));
-
+        navigation.navigate('HomeTabs', {
+            screen: 'Feed',
+            params: {
+                    refresh: true,
+            },
+        });
         try {
-            const response = await createPollPost(data);
-            if (response.status) {
-                showMessage({
+            await createPollPost(data);
+            showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
-                });
-                setTimeout(() => {
-                    navigation.navigate('HomeTabs', {
-                        screen: 'Feed',
-                        params: {
-                            refresh: true,
-                        },
-                    });
-                }, 1000);
-                setLoading(false);
-            } else {
-                setLoading(false);
-                showMessage({
-                    message: StringConstant.createPostFailedGeneralError,
-                    type: 'danger',
-                });
-            }
-        } catch (e) {
-            showMessage({
-                message: StringConstant.createPostFailedGeneralError,
-                type: 'danger',
             });
-            setLoading(false);
+        } catch (e) {
+            console.log(e)
         }
         analytics().logEvent('create_post', {
             id: 6,
@@ -716,7 +683,6 @@ const CreatePost = () => {
 
 
     const searchTopic = async (name) => {
-        console.log(name, 'nama')
         if (!isEmptyOrSpaces(name)) {
                     console.log(name, 'nama123')
 
@@ -791,7 +757,6 @@ const CreatePost = () => {
         handleTagUser()
     }, [message])
 
-    console.log(message, 'nani')
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />
