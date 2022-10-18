@@ -2,7 +2,6 @@ import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {COLORS} from '../../../utils/theme';
 import Image from '../../../components/Image';
 
 const ImageLayouter = ({images = [], onimageclick}) => 
