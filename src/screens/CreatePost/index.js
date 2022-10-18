@@ -1,13 +1,14 @@
 /* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
+import analytics from '@react-native-firebase/analytics';
+import { useNavigation } from '@react-navigation/core';
+import { debounce } from 'lodash';
+import PSL from 'psl'
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
 /* eslint-disable no-use-before-define */
-import analytics from '@react-native-firebase/analytics';
-import { useNavigation } from '@react-navigation/core';
-import { debounce } from 'lodash';
-import PSL from 'psl'
 import * as React from 'react';
 import {
     Alert,
@@ -118,7 +119,7 @@ const CreatePost = () => {
     const [positionEndCursor, setPositionEndCursor] = React.useState(0);
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
-    const [, setTaggingUsers] = React.useState([])
+    const [taggingUsers, setTaggingUsers] = React.useState([])
     const [textContent, handleStateHastag, handleStateMention, setHashtags] = useHastagMention('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
@@ -342,7 +343,7 @@ const CreatePost = () => {
     };
 
     const uploadMediaFromLibrary = async () => {
-        const { success } = await requestExternalStoragePermission();
+        const { success, message } = await requestExternalStoragePermission();
         if (success) {
             launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (res) => {
                 if (res.didCancel) {
@@ -355,6 +356,8 @@ const CreatePost = () => {
                     setMediaStorage((val) => [...val, newArr]);
                     setDataImage((val) => [...val, res.base64]);
                     sheetMediaRef.current.close();
+                } else {
+                    // console.log(res);
                 }
             });
         } else {
@@ -457,7 +460,9 @@ const CreatePost = () => {
                 });
                 return true;
             }
-
+            // setLoading(true);
+            // const topicWithoutHashtag = listTopic.map((topic) => topic.substring(1))
+            // console.log(topicWithoutHashtag, 'jaja')
             const data = {
                 topics: listTopic,
                 message,
@@ -595,6 +600,8 @@ const CreatePost = () => {
     const isPollButtonDisabled = () => getReducedPoll().length < 2;
 
     const sendPollPost = async () => {
+        // setLoading(true);
+
         const data = {
             message,
             topics: ['poll'],
