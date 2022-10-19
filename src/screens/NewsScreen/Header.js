@@ -71,12 +71,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    paddingHorizontal: SIZES.base,
-    marginLeft: 12,
+    // paddingHorizontal: SIZES.base,
+    // marginLeft: 12,
     paddingTop: 8.5,
     paddingBottom: 8.5,
     display: 'flex',
-    // backgroundColor: 'red'
   },
   domain: {
     lineHeight: 14.52,
