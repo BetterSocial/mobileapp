@@ -85,7 +85,11 @@ const styles = StyleSheet.create({
     },
     replyContainer: {
         flexDirection: 'row',
-        marginTop: 3,
+        // marginTop: 3,
+        // backgroundColor: 'red',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 28,
     },
     iconStyle: {
         height: 12, width: 12,
@@ -155,7 +159,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
                 </View>
                 <View style={[styles.replyContainer]} >
                     {Array.isArray(item.comments) && item.comments.length > 0 ?                    
-                    <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey, marginTop: 'auto'}]} >{handleReplyComment()}</Text> : <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey, marginTop: 'auto'}]} >No comments yet</Text>}
+                    <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey}]} >{handleReplyComment()}</Text> : <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey, marginTop: 'auto'}]} >No comments yet</Text>}
 
         
                  
