@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useRecoilValue, useSetRecoilState, } from 'recoil';
-// import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
