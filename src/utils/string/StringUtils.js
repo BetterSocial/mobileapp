@@ -1,15 +1,15 @@
-import { useRoute } from '@react-navigation/native';
-import moment from 'moment';
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import moment from 'moment';
 import reactStringReplace from 'react-string-replace'
-import TaggingUserText from '../../components/TaggingUserText';
+import { StyleSheet, Text, View } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
+import TaggingUserText from '../../components/TaggingUserText';
 import TextBold from '../../components/Text/TextBold';
 import TopicText from '../../components/TopicText';
-import { fonts } from '../fonts';
-import { COLORS } from '../theme';
 import removePrefixTopic from '../topics/removePrefixTopic';
+import { COLORS } from '../theme';
+import { fonts } from '../fonts';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 
@@ -84,25 +84,10 @@ const displayCityName = (city, state) => {
 const isLocationMatch = (searchQuery, location) => location.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1
 
 const displayFormattedSearchLocations = (searchQuery, locationObject) => {
-    // console.log(searchQuery)
-    // if (locationObject.country.toLowerCase() === searchQuery.toLowerCase()) {
-    //   return <Text style={styles.bold}>{locationObject.country}</Text>;
-    // }
     const zipString =
         locationObject.zip === '' || locationObject.zip === undefined
             ? ''
             : `, ${locationObject.zip}`;
-
-    // if (locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
-    //     const neighborhood = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
-    //     return (
-    //         <Text>
-    //             {`${neighborhood}${locationObject.city}, `}
-    //             <Text style={styles.bold}>{locationObject.state}</Text>
-    //             {`, ${locationObject.country}${zipString}`}
-    //         </Text>
-    //     );
-    // }
 
     if (locationObject.city.toLowerCase() === searchQuery.toLowerCase() || locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
         const { city, state } = locationObject
@@ -167,8 +152,7 @@ const displayFormattedSearchLocations = (searchQuery, locationObject) => {
 };
 
 const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
-    const { zip, neighborhood, city, state, country, location_level } = locationObject
-    console.log(`locationLevel ${location_level}`)
+    const { neighborhood, city, state, country, location_level } = locationObject
 
     if (location_level === 'Country') {
         if (isLocationMatch(searchQuery, country)) return <Text><TextBold text={country} /></Text>
@@ -184,7 +168,7 @@ const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
 
     const neighborhoodDisplay = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
 
-    if (location_level === 'City') {
+    if (location_level.toLowerCase() === 'city') {
         if (isLocationMatch(searchQuery, city)) {
             return (
                 <Text>
