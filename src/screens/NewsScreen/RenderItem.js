@@ -23,7 +23,6 @@ const RenderItem = ({
 }) => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
-  const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [totalVote, setTotalVote] = React.useState(0);
 
   const onPressUpvoteNew = async (item) => {
@@ -70,7 +69,7 @@ const RenderItem = ({
 
   React.useEffect(() => {
     const initialVote = () => {
-      let c = getCountVote(item);
+      const c = getCountVote(item);
       setTotalVote(c);
     };
     initialVote();
@@ -79,14 +78,14 @@ const RenderItem = ({
 
   const validationStatusVote = () => {
       if (item.latest_reactions.upvotes !== undefined) {
-        let upvote = item.latest_reactions.upvotes.filter(
+        const upvote = item.latest_reactions.upvotes.filter(
           (vote) => vote.user_id === selfUserId,
         );
         if (upvote !== undefined) {
           setVoteStatus('upvote');
         }
       } else if (item.latest_reactions.downvotes !== undefined) {
-        let downvotes = item.latest_reactions.downvotes.filter(
+        const downvotes = item.latest_reactions.downvotes.filter(
           (vote) => vote.user_id === selfUserId,
         );
         if (downvotes !== undefined) {
@@ -103,7 +102,8 @@ const RenderItem = ({
 
   return (
     <View style={styles.container}>
-      <Header
+      <View style={{paddingHorizontal: 18}} >
+        <Header
         image={item.domain.image}
         domain={item.domain.name}
         time={item.content.created_at}
@@ -115,6 +115,7 @@ const RenderItem = ({
         description={item.content.description}
         url={item.content.url}
       />
+      </View>
       <Gap height={8} />
       <View style={styles.wrapperFooter}>
         <Footer
@@ -147,6 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(RenderItem, (prevProps, nextProps) => {
-  return prevProps.item === nextProps.item
-}) 
+export default React.memo(RenderItem, (prevProps, nextProps) => prevProps.item === nextProps.item) 

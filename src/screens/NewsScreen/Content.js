@@ -4,22 +4,22 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-import {Pressable} from 'react-native';
+Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
 import Image, {imageConst} from '../../components/Image';
-import {COLORS, FONTS, SIZES} from '../../utils/theme';
+import {COLORS, SIZES} from '../../utils/theme';
 import {NewsEmptyState} from '../../assets/images';
 import {fonts} from '../../utils/fonts';
 import {sanitizeUrlForLinking} from '../../utils/Utils';
+import FastImage from 'react-native-fast-image';
 
 const Content = (props) => {
   const navigation = useNavigation();
-  let {item, title, image, description, url, onContentClicked = undefined} = props;
+  const {item, title, image, description, url, onContentClicked = undefined} = props;
 
-  let onContentPressed = () => {
+  const onContentPressed = () => {
     if(onContentClicked) {
       return onContentClicked()
     }
@@ -31,12 +31,12 @@ const Content = (props) => {
 
   return (
     <Pressable onPress={onContentPressed}>
-      <View style={styles.container}>
+      <View >
         <View style={styles.base}>
           <Text style={styles.title}>{title}</Text>
         </View>
         <Gap height={SIZES.base} />
-        <View style={{paddingHorizontal: -SIZES.base}}>
+        <View >
           {image ? (
             <Image
               source={{uri: image, priority: imageConst.priority.normal}}
@@ -44,6 +44,7 @@ const Content = (props) => {
                 width: '100%',
                 height: 180,
               }}
+              resizeMode={FastImage.resizeMode.cover}
             />
           ) : (
             <Image
@@ -52,6 +53,7 @@ const Content = (props) => {
                 width: '100%',
                 height: 180,
               }}
+              resizeMode={FastImage.resizeMode.cover}
             />
           )}
         </View>
@@ -78,15 +80,12 @@ const Content = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // marginTop: SIZES.base,
-  },
   base: {
-    paddingHorizontal: SIZES.base,
+    // paddingHorizontal: SIZES.base,
   },
   content: {
-    marginLeft: 12,
-    marginRight: 12,
+    // marginLeft: 12,
+    // marginRight: 12,
     marginTop: 5,
     fontFamily: fonts.inter[400],
     fontSize: 12,
@@ -94,8 +93,8 @@ const styles = StyleSheet.create({
     color: COLORS.blackgrey,
   },
   title: {
-    marginLeft: 12,
-    marginRight: 12,
+    // marginLeft: 12,
+    // marginRight: 12,
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 17,
