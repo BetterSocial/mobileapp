@@ -1,19 +1,15 @@
 /* eslint-disable no-nested-ternary */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import SeeMore from 'react-native-see-more-inline';
 import {
   Dimensions,
-  FlatList,
-  Image,
   Platform,
   Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
 import ImageLayouter from './elements/ImageLayouter';
@@ -28,13 +24,11 @@ const { width: screenWidth } = Dimensions.get('window');
 const FONT_SIZE_MEDIA = 16
 const FONT_SIZE_TEXT = 24
 const FONT_SIZE_TEXT_LONG = 16
+const FONT_TOPIC = 12
 
 const Content = ({ message, images_url, style, onPress, topics = [] }) => {
   const navigation = useNavigation();
   const cekImage = () => images_url !== null && images_url !== '' && images_url !== undefined;
-
-  const topicChipFontSize = message.length < 270 ? FONT_SIZE_TEXT : FONT_SIZE_TEXT_LONG;
-
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -46,30 +40,16 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
     });
   };
 
-  const handleText = (text, onPress) => {
-    if (text.length > 650) {
-      return (
-        <View style={styles.textContainer}>
-          <Text style={styles.text(text)} numberOfLines={9}>
-            {getCaptionWithTopicStyle(text.substring(0, 300).trim(), navigation)}
-            <Text onPress={onPress} style={styles.seemore}>
-              ...more
-            </Text>
+  const handleText = (text, onPress) => (
+      <View style={styles.textContainer}>
+          <Text numberOfLines={12} style={styles.text(text)} >
+            {text}
           </Text>
-          <TopicsChip topics={topics} fontSize={topicChipFontSize} 
-              text={getCaptionWithTopicStyle(text.substring(0, 650).trim())} />
         </View>
-      );
-    } 
-      return <View style={styles.textContainer}>
-        <Text style={styles.text(text)} numberOfLines={14}>{getCaptionWithTopicStyle(text, navigation)}</Text>
-        <TopicsChip topics={topics} fontSize={topicChipFontSize} text={text}/>
-      </View>;
-    
-  };
+    );
 
   const handleTextMedia = (text, onPress) => (
-      <View>
+      <View  >
         <Text numberOfLines={4} style={styles.textMedia(text)}>
           {text.length < 180 ? (
             getCaptionWithTopicStyle(text, navigation)
@@ -82,7 +62,6 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
             </Text>
           )}
         </Text>
-        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} />
       </View>
 
     );
@@ -93,10 +72,7 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
         images_url.length > 0 ? (
           <View style={styles.container}>
             <View
-              style={{
-                paddingLeft: 20,
-                paddingRight: 20,
-              }}>
+              style={styles.containerFeedMedia}>
               {handleTextMedia(message, onPress)}
             </View>
             <Gap height={SIZES.base} />
@@ -106,6 +82,8 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
                 onimageclick={onImageClickedByIndex}
               />
             </View>
+            <View></View>
+
           </View>
         ) : (
           <View style={styles.containerShowMessage()}>
@@ -113,6 +91,9 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
           </View>
         )
       ) : null}
+      <View style={[styles.containerFeedMedia, {position: 'absolute', bottom: 0}]} >
+          <TopicsChip topics={topics} fontSize={FONT_TOPIC} />
+      </View>
     </Pressable>
   );
 };
@@ -140,34 +121,18 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   containerShowMessage: () => ({
-      justifyContent: 'center',
-      // alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
-      alignItems: 'center',
       flex: 1,
-      paddingBottom: 10,
-      minHeight: 100,
-      paddingLeft: 20,
-      paddingRight: 20,
+      paddingLeft: 16,
+      paddingRight: 16,
     }),
-  text: (text) => {
-    if (text.length < 270) {
-      return {
-        fontFamily: fonts.inter[400],
-        fontWeight: 'normal',
-        fontSize: FONT_SIZE_TEXT,
-        color: colors.black,
-        lineHeight: 44,
-      };
-    }
-    return {
-      fontFamily: fonts.inter[400],
+  text: () => ({
+       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
       fontSize: FONT_SIZE_TEXT_LONG,
       color: colors.black,
       lineHeight: 24,
-    };
-  },
-  textMedia: (text) => ({
+  }),
+  textMedia: () => ({
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
       fontSize: FONT_SIZE_MEDIA,
@@ -220,7 +185,7 @@ const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    marginTop: 12,
+    paddingTop: 18
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
@@ -272,5 +237,11 @@ const styles = StyleSheet.create({
     height: 32,
   },
   textContainer: {
+    flexShrink: 1,
+    flex: 1
   },
+  containerFeedMedia: {
+    paddingLeft: 20,
+    paddingRight: 20,
+  }
 });
