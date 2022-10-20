@@ -24,7 +24,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const FONT_SIZE_MEDIA = 16
 const FONT_SIZE_TEXT = 24
 const FONT_SIZE_TEXT_LONG = 16
-const FONT_TOPIC = 12
+const FONT_TOPIC = 14
 
 const Content = ({ message, images_url, style, onPress, topics = [] }) => {
   const navigation = useNavigation();
