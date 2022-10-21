@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {TouchableOpacity} from 'react-native';
+// import {TouchableOpacity} from 'react-native';
 import {
   ImageBackground,
   FlatList,
@@ -7,11 +7,12 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 
-import MemoIc_read from '../../assets/chats/Ic_read';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {calculateTime} from '../../utils/time';
@@ -19,14 +20,13 @@ import Dot from '../Dot';
 import ModalImageSingleDetail from './ModalImageSingleDetail';
 import ProfileMessage from './ProfileMessage';
 import ActionChat from './ActionChat';
-import {TouchableWithoutFeedback} from 'react-native';
+// import {TouchableWithoutFeedback} from 'react-native';
 
 const MessageWithImage = ({
   image,
   name,
   time,
   message,
-  read,
   isMe,
   attachments,
 }) => {

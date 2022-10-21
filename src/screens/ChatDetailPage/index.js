@@ -4,14 +4,11 @@ import {
   Channel,
   Chat,
   MessageContent,
-  MessageFooter,
   MessageInput,
   MessageList,
-  MessageSimple,
-  MessageStatus,
   Streami18n
 } from 'stream-chat-react-native';
-import { Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { MessageSystem, useMessageContext } from 'stream-chat-react-native-core'
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
@@ -22,7 +19,6 @@ import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { CustomMessageSystem } from '../../components';
 import { fonts } from '../../utils/fonts';
-import { getUserId } from '../../utils/token';
 import { setAsset, setParticipants } from '../../context/actions/groupChat';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';

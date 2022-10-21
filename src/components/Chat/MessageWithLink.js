@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableWithoutFeedback } from 'react-native';
 
 import Autolink from 'react-native-autolink';
 
-import MemoIc_read from '../../assets/chats/Ic_read';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { trimString } from '../../utils/string/TrimString';

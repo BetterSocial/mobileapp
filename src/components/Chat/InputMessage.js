@@ -23,8 +23,8 @@ const InputMessage = () => {
     appendText,
     sendMessage,
     toggleAttachmentPicker,
-    ImageUploadPreview,
     imageUploads,
+    s
   } = useMessageInputContext();
 
   const onChangeInput = (v) => {
