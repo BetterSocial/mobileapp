@@ -1,27 +1,27 @@
-import * as  React from 'react';
-import config from 'react-native-config';
-import { StatusBar, View } from 'react-native';
-import { StreamChat } from 'stream-chat';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import * as  React from 'react';
+import { StatusBar, View } from 'react-native';
+import config from 'react-native-config';
+import { StreamChat } from 'stream-chat';
 
 import BlockComponent from '../../components/BlockComponent';
-import MemoizedListComponent from './MemoizedListComponent';
-import Navigation from './elements/Navigation';
-import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
-import RenderItem from '../ProfileScreen/elements/RenderItem';
-import dimen from '../../utils/dimen';
-import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import { Context } from '../../context';
-import { convertString } from '../../utils/string/StringUtils';
-import { downVote, upVote } from '../../service/vote';
-import { getAccessToken } from '../../utils/token';
+import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
 import { getFeedDetail } from '../../service/post';
 import { getTopicPages } from '../../service/topicPages';
-import { getUserId } from '../../utils/users';
 import { getUserTopic, putUserTopic } from '../../service/topics';
+import { downVote, upVote } from '../../service/vote';
+import dimen from '../../utils/dimen';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { convertString } from '../../utils/string/StringUtils';
+import { getAccessToken } from '../../utils/token';
+import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import { getUserId } from '../../utils/users';
+import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
+import RenderItem from '../ProfileScreen/elements/RenderItem';
+import Navigation from './elements/Navigation';
+import MemoizedListComponent from './MemoizedListComponent';
 
 const TopicPageScreen = (props) => {
     const route = useRoute();
@@ -257,10 +257,12 @@ const TopicPageScreen = (props) => {
                     onEndReach={onEndReach}
                     onRefresh={onRefresh}
                     refreshing={loading}
-                    snapToOffsets={(() => {
-                        const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-                        return [headerHeightRef, ...posts]
-                    })()}
+                // snapToOffsets={(() => {
+                //   const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
+                //   // console.log('posts')
+                //   // console.log(posts)
+                //   return [headerHeightRef, ...posts]
+                // })()}
                 >
                     {({ item, index }) => (
                         <MemoizedListComponent
