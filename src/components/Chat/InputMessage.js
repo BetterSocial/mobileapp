@@ -5,9 +5,11 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  Image,
+  FlatList
 } from 'react-native';
 
-import {useMessageInputContext} from 'stream-chat-react-native';
+import {useChatContext, useMessageInputContext} from 'stream-chat-react-native';
 
 import MemoIc_emoji from '../../assets/icons/Ic_emoji';
 import MemoIc_Picture from '../../assets/icons/Ic_Picture';
@@ -23,9 +25,11 @@ const InputMessage = () => {
     appendText,
     sendMessage,
     toggleAttachmentPicker,
-    ImageUploadPreview,
     imageUploads,
+    closeAttachmentPicker
+
   } = useMessageInputContext();
+  const {isOnline} = useChatContext()
 
   const onChangeInput = (v) => {
     setText(v);
@@ -37,6 +41,11 @@ const InputMessage = () => {
     appendText(emoji);
     refEmoji.current.close();
   };
+
+  const handleSendMessage = () => {
+    sendMessage()
+    closeAttachmentPicker()
+  }
 
   return (
     <>
@@ -58,13 +67,28 @@ const InputMessage = () => {
             onPress={toggleAttachmentPicker}>
             <MemoIc_Picture width={20} height={20} />
           </TouchableOpacity>
-        </View>
         <TouchableOpacity
           style={styles.btn(text || imageUploads.length !== 0)}
-          onPress={sendMessage}>
+          disabled={imageUploads.length <= 0 || !isOnline}
+          onPress={handleSendMessage}>
           <IconSend style={styles.icSendButton} />
         </TouchableOpacity>
+        </View>
+ 
+        <View style={styles.previewPhotoContainer} >
+        <FlatList
+        horizontal
+        data={imageUploads}
+        renderItem={({item, index}) => (
+          <View key={index} >
+          <Image style={styles.imageStyle} resizeMode='contain'  source={{uri: item.url}} />
+        </View>
+        )}
+        />
+        </View>
+      
       </View>
+      
       <SheetEmoji
         ref={refEmoji}
         selectEmoji={(emoji) => onSelectImoji(emoji)}
@@ -78,9 +102,6 @@ export default InputMessage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    zIndex: 4,
   },
   btnEmoji: {
     paddingVertical: 7,
@@ -95,12 +116,12 @@ const styles = StyleSheet.create({
     paddingLeft: 6,
   },
   containerInput: {
-    flex: 1,
     backgroundColor: colors.lightgrey,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 9,
     borderRadius: 8,
+    zIndex: 4
   },
   input: {
     flex: 1,
@@ -115,4 +136,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 8,
   }),
+  previewPhotoContainer: {
+    marginTop: 5,
+    marginBottom: 5
+  },
+  imageStyle: {
+    height: 64,
+    width: 64
+  }
 });
