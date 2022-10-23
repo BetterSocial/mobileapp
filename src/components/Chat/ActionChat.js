@@ -8,8 +8,7 @@ import MemoIc_copy from '../../assets/chats/Ic_copy';
 import MemoIC_trash from '../../assets/chats/IC_trash';
 import {colors} from '../../utils/colors';
 
-const ActionChat = ({children, isMe, active, all}) => {
-  return (
+const ActionChat = ({children, isMe, active, all}) => (
     <View style={styles.container(active)}>
       {children}
       {active && (
@@ -34,7 +33,6 @@ const ActionChat = ({children, isMe, active, all}) => {
       )}
     </View>
   );
-};
 
 export default ActionChat;
 
