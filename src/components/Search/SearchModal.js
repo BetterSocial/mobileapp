@@ -12,20 +12,17 @@ import {
 import AutoFocusTextArea from '../TextArea/AutoFocusTextArea';
 import CrossIcon from '../../../assets/icons/cross.svg';
 import StringConstant from '../../utils/string/StringConstant';
-import { displayFormattedSearchLocations, displayFormattedSearchLocationsV2 } from '../../utils/string/StringUtils';
+import { displayFormattedSearchLocationsV2 } from '../../utils/string/StringUtils';
 
-const {width} = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
 const SearchModal = (props) => {
     const textRef = React.useRef(null);
-    const [focus, setFocus] = React.useState(false);
+    const [focus] = React.useState(false);
 
     React.useEffect(() => {
-        if (props.isVisible) {
-        }
-    }, [props]);
 
-    console.log(`==============`)
+    }, [props]);
 
     return (
         <Modal
@@ -67,22 +64,16 @@ const SearchModal = (props) => {
                         {typeof props.options !== 'undefined' &&
                             props.options.length > 0 ? (
                             <View style={styles.box}>
-                                {props.options.map((value, index) => 
-                                    // let firstLetter = value.neighborhood.split(' ');
-                                    // let lastLetter = value.neighborhood.replace(
-                                    //     `${firstLetter[0]} `,
-                                    //     ' ',
-                                    // );
-                                     (
-                                        <TouchableNativeFeedback
-                                            key={index}
-                                            onPress={() => props.onSelect(value)}>
-                                            <View style={styles.list}>
-                                                {/* {displayFormattedSearchLocations(props.value, value)} */}
-                                                {displayFormattedSearchLocationsV2(props.value, value)}
-                                            </View>
-                                        </TouchableNativeFeedback>
-                                    )
+                                {props.options.map((value, index) =>
+                                (
+                                    <TouchableNativeFeedback
+                                        key={index}
+                                        onPress={() => props.onSelect(value)}>
+                                        <View style={styles.list}>
+                                            {displayFormattedSearchLocationsV2(props.value, value)}
+                                        </View>
+                                    </TouchableNativeFeedback>
+                                )
                                 )}
                             </View>
                         ) : null}

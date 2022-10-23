@@ -10,7 +10,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import SeeMore from 'react-native-see-more-inline';
@@ -30,7 +29,7 @@ import {
 import { COLORS } from '../../utils/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
-const FONT_SIZE_MEDIA = 16
+const FONT_SIZE_MEDIA = 14
 
 const ContentPoll = ({
   message,

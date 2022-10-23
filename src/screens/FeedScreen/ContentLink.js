@@ -9,7 +9,7 @@ import { fonts } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 import { smartRender } from '../../utils/Utils';
 
-const FONT_SIZE_TEXT = 16
+const FONT_SIZE_TEXT = 14
 
 const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, score, message = "", messageContainerStyle = {}, topics = [] }) => {
   const route = useRoute();
