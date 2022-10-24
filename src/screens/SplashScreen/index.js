@@ -8,12 +8,8 @@ import { StackActions } from '@react-navigation/native';
 import { debounce } from 'lodash';
 import { useNavigation } from '@react-navigation/core';
 
-import following from '../../context/actions/following';
 import { Context } from '../../context/Store';
-import { getAccessToken } from '../../utils/token';
-import { getDomains, getFollowedDomain } from '../../service/domain';
 import { getFollowing, getProfileByUsername } from '../../service/profile';
-import { getFollowingTopic } from '../../service/topics';
 import { getUserId } from '../../utils/users';
 import { setNews } from '../../context/actions/news';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
