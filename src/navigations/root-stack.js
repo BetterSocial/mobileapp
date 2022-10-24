@@ -100,6 +100,7 @@ export const RootNavigator = () => {
     doVerifyGetstreamToken()
 
     useLocalChannelsFirst(setLocalChannelData);
+
     return async () => {
       await client?.disconnectUser();
     };
@@ -118,10 +119,9 @@ export const RootNavigator = () => {
 
   React.useEffect(() => {
     if (clientState?.client) {
-      console.tron.log('masuk client');
       setTimeout(() => {
         SplashScreen.hide();
-      }, 700)
+      }, 1500)
     }
   }, [clientState]);
 

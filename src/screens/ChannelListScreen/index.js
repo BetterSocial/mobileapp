@@ -63,9 +63,6 @@ const ChannelListScreen = ({ navigation }) => {
   };
   // React.useEffect(() => { }, [unReadMessage]);
 
-  console.tron.log(myProfile, myProfile.user_id, client.client, 'testing profile');
-  console.tron.log(channelListLocalValue, 'bangsat');
-
   const sort = [{ last_message_at: -1 }];
   const options = {
     state: true,
