@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -14,17 +15,18 @@ import {colors} from '../../../utils/colors';
 export default function PollItem({
   index = 0,
   poll,
-  onremovepoll = (index) => {},
-  onpollchanged = (item, index) => {},
+  onremovepoll = () => {},
+  onpollchanged = () => {},
   showdeleteicon,
   showcharactercount = false,
 }) {
-  let [isTextInputFocus, setIsTextInputFocus] = React.useState(false);
+  const [isTextInputFocus, setIsTextInputFocus] = React.useState(false);
 
   return (
     <View
       style={isTextInputFocus ? S.focuspollitemcontainer : S.pollitemcontainer}>
       <TextInput
+        placeholderTextColor={'#828282'}
         placeholder={`Choice ${index + 1}`}
         style={S.pollitemtextinput}
         onFocus={() => setIsTextInputFocus(true)}
@@ -76,6 +78,7 @@ const S = StyleSheet.create({
 
   pollitemtextinput: {
     flex: 1,
+    padding: Platform.OS === 'ios' ? 10 : 0
   },
 
   removepollcontainer: {

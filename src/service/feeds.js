@@ -13,3 +13,27 @@ export const getFeedNotification = async () => {
     throw new Error(String(e));
   }
 };
+
+export const getLinkPreviewInfo = async (domain, url) => {
+  try {
+    const response = await api.post('/feeds/open-graph', {
+      domain,
+      url
+    })
+
+    if (response?.status !== 200) return {
+      success: false,
+      message: response?.data?.message
+    }
+
+    return {
+      success: true,
+      data: response?.data?.data
+    }
+  } catch (e) {
+    return {
+      success: false,
+      message: e
+    }
+  }
+}

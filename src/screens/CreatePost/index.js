@@ -1,13 +1,18 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
 import analytics from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/core';
-import { getLinkPreview } from 'link-preview-js';
-import { debounce, set } from 'lodash';
+import { debounce } from 'lodash';
 import PSL from 'psl'
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
+/* eslint-disable no-shadow */
+/* eslint-disable camelcase */
+/* eslint-disable no-use-before-define */
 import * as React from 'react';
 import {
     Alert,
     BackHandler,
-    Platform,
     Pressable,
     SafeAreaView,
     ScrollView,
@@ -20,7 +25,7 @@ import {
 } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { OpenGraphParser } from 'react-native-opengraph-kit'
+import { openSettings } from 'react-native-permissions';
 import Toast from 'react-native-simple-toast';
 
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
@@ -35,6 +40,7 @@ import Header from '../../components/Header';
 import ListItem from '../../components/MenuPostItem';
 import TopicItem from '../../components/TopicItem';
 import { Context } from '../../context';
+import { getLinkPreviewInfo } from '../../service/feeds';
 import { getUserForTagging } from '../../service/mention';
 import { ShowingAudience, createPollPost, createPost } from '../../service/post';
 import { getMyProfile } from '../../service/profile';
@@ -45,7 +51,6 @@ import { PROFILE_CACHE } from '../../utils/cache/constant';
 import { colors } from '../../utils/colors';
 import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
 import { fonts } from '../../utils/fonts';
-import handleHastag from '../../utils/hastag';
 import {
     requestCameraPermission,
     requestExternalStoragePermission,
@@ -55,13 +60,12 @@ import {
     getLocationId,
     getPrivacyId,
     setDurationId,
-    setLocationId,
     setPrivacyId,
 } from '../../utils/setting';
 import StringConstant from '../../utils/string/StringConstant';
-import { capitalizeFirstText, convertString } from '../../utils/string/StringUtils';
+import { convertString } from '../../utils/string/StringUtils';
 import { getUserId } from '../../utils/users';
-import { getDomainInfoInLinkPreview, getNewsLinkInfoInLinkPreview, getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
+import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
 import Loading from '../Loading';
 import Card from './elements/Card';
 import ContentLink from './elements/ContentLink';
@@ -115,7 +119,7 @@ const CreatePost = () => {
     const [positionEndCursor, setPositionEndCursor] = React.useState(0);
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
-    const [formattedContent, setFormatHastag] = React.useState('');
+    const [taggingUsers, setTaggingUsers] = React.useState([])
     const [textContent, handleStateHastag, handleStateMention, setHashtags] = useHastagMention('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
@@ -126,9 +130,8 @@ const CreatePost = () => {
         hour: 0,
         minute: 0,
     });
-    const [myId, setMyId] = React.useState(null)
     const [expiredSelect, setExpiredSelect] = React.useState(0);
-    const [postExpired, setPostExpired] = React.useState([
+    const [postExpired] = React.useState([
         {
             label: '24 hours',
             value: '1',
@@ -241,34 +244,26 @@ const CreatePost = () => {
     };
 
     const getPreviewUrl = async (link) => {
-        let newLink = link;
-        // if (link.indexOf('https://') < 0) {
-        //     newLink = `https://${link}`;
-        // }
+        const newLink = link;
 
-        newLink = link.replace(/(^\w+:|^)\/\//, '');
+        const urlWithoutProtocol = link.replace(/(^\w+:|^)\/\//, '');
+        const urlDomainOnly = urlWithoutProtocol.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/igm)
+        const parsedUrl = PSL.parse(urlDomainOnly[0] || urlWithoutProtocol)
 
-        let news = null
-        const data = await getDomainInfoInLinkPreview(newLink)
-        if (data) {
-            news = await getNewsLinkInfoInLinkPreview(newLink)
-            if (news) {
-                setLinkPreviewMeta({
-                    domain: data?.domain,
-                    domainImage: data?.domainImage,
-                    title: news?.title,
-                    description: news?.description,
-                    image: news?.image,
-                    url: news?.url,
-                });
-            } else {
-                setLinkPreviewMeta(null)
-            }
-        } else {
-            setLinkPreviewMeta(null)
-        }
-
-        setIsLinkPreviewShown(!!news)
+        const response = await getLinkPreviewInfo(parsedUrl?.domain, newLink)
+        if (response?.success) {
+            const data = response?.data
+            const { domain, meta } = data || {}
+            setLinkPreviewMeta({
+                domain: domain?.name,
+                domainImage: domain?.image,
+                title: meta?.title,
+                description: meta?.description,
+                image: meta?.image,
+                url: meta?.url
+            })
+        } else setLinkPreviewMeta(null)
+        setIsLinkPreviewShown(response?.success)
     }
 
     React.useEffect(() => {
@@ -366,7 +361,7 @@ const CreatePost = () => {
                 }
             });
         } else {
-            Toast.show(message, Toast.SHORT);
+            Alert.alert('Permission denied', 'Allow Better Social to access photos and media on your device ?', [{text: 'Open Settings', onPress: () => openSettings().then(() => sheetMediaRef.current.close())}, {text: 'Close'}])
         }
     };
 
@@ -465,8 +460,7 @@ const CreatePost = () => {
                 });
                 return true;
             }
-
-            setLoading(true);
+            // setLoading(true);
             // const topicWithoutHashtag = listTopic.map((topic) => topic.substring(1))
             // console.log(topicWithoutHashtag, 'jaja')
             const data = {
@@ -496,35 +490,20 @@ const CreatePost = () => {
                 anon: typeUser,
                 predicted_audience: audienceEstimations,
             });
-            const res = await createPost(data);
-            if (res.code === 200) {
-                handleTopicChat()
-                showMessage({
+            navigation.navigate('HomeTabs', {
+                screen: 'Feed',
+                params: {
+                    refresh: true,
+                },
+            });
+            await createPost(data);
+            handleTopicChat()
+            showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
                 });
-                setLoading(false);
-                setTimeout(() => {
-                    navigation.navigate('HomeTabs', {
-                        screen: 'Feed',
-                        params: {
-                            refresh: true,
-                        },
-                    });
-                }, 2000);
-            } else {
-                setLoading(false);
-                showMessage({
-                    message: StringConstant.createPostFailedGeneralError,
-                    type: 'danger',
-                });
-            }
         } catch (error) {
-            showMessage({
-                message: StringConstant.createPostFailedGeneralError,
-                type: 'danger',
-            });
-            setLoading(false);
+            console.log(error)
         }
     };
 
@@ -555,10 +534,10 @@ const CreatePost = () => {
     };
 
     const handleTextMessage = () => {
-       if(!typeUser) {
-        return `New posts by ${user.myProfile.username} & others`
-       }
-       return `New posts by Anonymous & others`
+        if (!typeUser) {
+            return `New posts by ${user.myProfile.username} & others`
+        }
+        return `New posts by Anonymous & others`
     }
 
     const handleTopicChat = async () => {
@@ -621,7 +600,7 @@ const CreatePost = () => {
     const isPollButtonDisabled = () => getReducedPoll().length < 2;
 
     const sendPollPost = async () => {
-        setLoading(true);
+        // setLoading(true);
 
         const data = {
             message,
@@ -642,36 +621,20 @@ const CreatePost = () => {
         setLocationId(JSON.stringify(geoSelect));
         setDurationId(JSON.stringify(expiredSelect));
         setPrivacyId(JSON.stringify(privacySelect));
-
+        navigation.navigate('HomeTabs', {
+            screen: 'Feed',
+            params: {
+                    refresh: true,
+            },
+        });
         try {
-            const response = await createPollPost(data);
-            if (response.status) {
-                showMessage({
+            await createPollPost(data);
+            showMessage({
                     message: StringConstant.createPostDone,
                     type: 'success',
-                });
-                setTimeout(() => {
-                    navigation.navigate('HomeTabs', {
-                        screen: 'Feed',
-                        params: {
-                            refresh: true,
-                        },
-                    });
-                }, 1000);
-                setLoading(false);
-            } else {
-                setLoading(false);
-                showMessage({
-                    message: StringConstant.createPostFailedGeneralError,
-                    type: 'danger',
-                });
-            }
-        } catch (e) {
-            showMessage({
-                message: StringConstant.createPostFailedGeneralError,
-                type: 'danger',
             });
-            setLoading(false);
+        } catch (e) {
+            console.log(e)
         }
         analytics().logEvent('create_post', {
             id: 6,
@@ -754,6 +717,25 @@ const CreatePost = () => {
         return newMessage;
     }
 
+    const handleTagUser = debounce(() => {
+         const regex = /(^|\W)(@[a-z\d][\w-]*)/ig
+        const findRegex = message.match(regex)
+        if(findRegex) {
+            const newMapRegex = findRegex.map((tagUser) => {
+                const newTagUser = tagUser.replace(/\s/g, '').replace('@', '')
+                return newTagUser
+            })
+            setTaggingUsers(newMapRegex)
+        } else {
+            setTaggingUsers([])
+        }
+    }, 500)
+
+
+    React.useEffect(() => {
+        handleTagUser()
+    }, [message])
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />
@@ -786,7 +768,7 @@ const CreatePost = () => {
                         onSelectionChange={(e) => {
                             setPositionEndCursor(e.nativeEvent.selection.end);
                         }}
-                        onChange={(v) => {
+                        onChange={() => {
                         }}
                         onChangeText={(v) => {
                             if(listTopic.length >= 5) {
