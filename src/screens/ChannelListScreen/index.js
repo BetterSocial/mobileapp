@@ -121,7 +121,6 @@ const ChannelListScreen = ({ navigation }) => {
       }
     })
   }
-
   const handleNotHaveCache = () => {
     const comment = handleNotHaveCacheHook(listPostNotif)
     setCountReadComment(comment)
@@ -174,7 +173,6 @@ const ChannelListScreen = ({ navigation }) => {
 
   const onSelectChat = (channel, refreshList) => {
     if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
-      // toDo reset main feeds
       navigation.navigate('TopicPageScreen', { id: channel.data.id, refreshList });
     } else {
       setChannel(channel, dispatch);
@@ -212,7 +210,6 @@ const ChannelListScreen = ({ navigation }) => {
               sort={sort}
               options={options}
               maxUnreadCount={99}
-              clientData={channelListLocalValue}
               additionalFlatListProps={{
                 onEndReached: () => null,
                 refreshControl: null,
@@ -223,7 +220,7 @@ const ChannelListScreen = ({ navigation }) => {
               context={myContext}
               PreviewUnreadCount={chatBadge}
               PreviewMessage={PreviewMessage}
-              postNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} showBadgePostNotif />}
+              PostNotifComponent={({ item, index, refreshList }) => item ? <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} /> : null}
             />
 
           </Chat>
