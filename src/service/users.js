@@ -12,7 +12,6 @@ export const verifyUser = async (userId) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    console.log(error);
   }
 };
 
@@ -29,8 +28,8 @@ export const demoVerifyUser = async (userId) => {
 };
 
 /**
- * 
- * @param {String} query 
+ *
+ * @param {String} query
  * @returns {import('../../types/service/UserService.typedef').UserSearchChatApiResponse | Boolean}
  */
 export const searchChatUsers = async (query) => {

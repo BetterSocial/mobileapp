@@ -74,12 +74,13 @@ export const RootNavigator = () => {
   const create = useClientGetstream();
 
   if(initialStartup && typeof initialStartup === 'string') {
+    console.tron.log(initialStartup, 'root stack');
     initialStartup = JSON.parse(initialStartup)
   }
 
   const doGetAccessToken = async () => {
-    const accessToken = await getAccessToken()
-    setInitialValue({ id: accessToken })
+    const accessToken = await getAccessToken();
+    setInitialValue({ id: accessToken.id })
   }
 
   const doVerifyGetstreamToken = async () => {
@@ -100,6 +101,7 @@ export const RootNavigator = () => {
     doVerifyGetstreamToken()
 
     useLocalChannelsFirst(setLocalChannelData);
+
     return async () => {
       await client?.disconnectUser();
     };
@@ -118,10 +120,9 @@ export const RootNavigator = () => {
 
   React.useEffect(() => {
     if (clientState?.client) {
-      console.tron.log('masuk client');
       setTimeout(() => {
         SplashScreen.hide();
-      }, 700)
+      }, 1500)
     }
   }, [clientState]);
 

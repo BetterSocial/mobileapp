@@ -57,12 +57,15 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
                     setRefreshToken(response.refresh_token);
                     streamChat(response.token).then(() => {
                         // navigation.dispatch(StackActions.replace('HomeTabs'));
-                        let strObj = {
+                        // let strObj = {
+                        //     id: response.token,
+                        //     deeplinkProfile: false
+                        // }
+                        const testObj = {
                             id: response.token,
-                            deeplinkProfile: false
+                            deeplinkProfile:false
                         }
-                        strObj = JSON.stringify(strObj)
-                        setStartupValue(strObj)
+                        setStartupValue(testObj);
                     })
                 } else {
                     removeLocalStorege('userId');

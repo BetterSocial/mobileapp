@@ -246,6 +246,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
           }
         >
           <FastImageView
+            defaultSource={null}
             resizeMode="contain"
             source={
               Object {
@@ -713,6 +714,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
             }
           >
             <FastImageView
+              defaultSource={null}
               resizeMode="contain"
               source={
                 Object {

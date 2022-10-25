@@ -37,11 +37,15 @@ export const removeLocalStorege = async (value) => {
   }
 };
 
-const getAccessToken = async () => await AsyncStorage.getItem(KEY_ACCESS_TOKEN);
+const getAccessToken = async () => {
+  const accessToken = await AsyncStorage.getItem(KEY_ACCESS_TOKEN);
+  return JSON.parse(accessToken);
+};
 const clearLocalStorege = async () => await AsyncStorage.clear();
 
 const setAccessToken = async (token) => {
-  await AsyncStorage.setItem(KEY_ACCESS_TOKEN, token);
+  const value = JSON.stringify(token);
+  await AsyncStorage.setItem(KEY_ACCESS_TOKEN, value);
 };
 
 const removeAccessToken = () => {
