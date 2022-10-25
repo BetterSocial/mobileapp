@@ -1,23 +1,24 @@
-import * as React from 'react';
-import IconEn from 'react-native-vector-icons/Entypo';
-import {StyleSheet, Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import * as React from "react";
+import IconEn from "react-native-vector-icons/Entypo";
+import { StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-import BlockComponent from '../BlockComponent';
-import Image from '../Image';
-import MemoCommentReply from '../../assets/icon/CommentReply';
-import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
-import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
-import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
-import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import {FONTS} from '../../utils/theme';
-import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {getUserId} from '../../utils/users';
-import {iVoteComment, voteComment} from '../../service/vote';
-import { removeWhiteSpace } from '../../utils/Utils';
-import ButtonHightlight from '../ButtonHighlight';
+import BlockComponent from "../BlockComponent";
+import Image from "../Image";
+import MemoCommentReply from "../../assets/icon/CommentReply";
+import MemoIc_arrow_down_vote_off from "../../assets/arrow/Ic_downvote_off";
+import MemoIc_arrow_upvote_off from "../../assets/arrow/Ic_upvote_off";
+import MemoIc_downvote_on from "../../assets/arrow/Ic_downvote_on";
+import MemoIc_upvote_on from "../../assets/arrow/Ic_upvote_on";
+import { FONTS } from "../../utils/theme";
+import { calculateTime } from "../../utils/time";
+import { colors } from "../../utils/colors";
+import { fonts } from "../../utils/fonts";
+import { getUserId } from "../../utils/users";
+import { iVoteComment, voteComment } from "../../service/vote";
+import { removeWhiteSpace } from "../../utils/Utils";
+import ButtonHightlight from "../ButtonHighlight";
+import { formatHashtagMention } from "../../utils/hastag/hastagMention";
 
 const Comment = ({
   user,
@@ -32,31 +33,31 @@ const Comment = ({
   showLeftConnector = true,
   disableOnTextPress = false,
   findCommentAndUpdate,
-  updateVote
+  updateVote,
 }) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
-  const [yourselfId, setYourselfId] = React.useState('');
+  const [yourselfId, setYourselfId] = React.useState("");
   const [totalVote, setTotalVote] = React.useState(
-    comment.data.count_upvote - comment.data.count_downvote,
+    comment.data.count_upvote - comment.data.count_downvote
   );
-  const [statusVote, setStatusVote] = React.useState('none');
+  const [statusVote, setStatusVote] = React.useState("none");
 
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
     }
-    return onPress()
+    return onPress();
   };
 
   const openProfile = async () => {
     const selfUserId = await getUserId();
     if (selfUserId === user.id) {
-      return navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab: true
+      return navigation.navigate("ProfileScreen", {
+        isNotFromHomeTab: true,
       });
     }
-    return navigation.navigate('OtherProfile', {
+    return navigation.navigate("OtherProfile", {
       data: {
         user_id: selfUserId,
         other_id: user.id,
@@ -64,54 +65,54 @@ const Comment = ({
       },
     });
   };
-  
+
   const onUpVote = async () => {
-    if(statusVote === 'upvote') {
-      setTotalVote((prevState) => prevState - 1)
-      setStatusVote('none')
+    if (statusVote === "upvote") {
+      setTotalVote((prevState) => prevState - 1);
+      setStatusVote("none");
     }
-    if(statusVote === 'downvote') {
-      setTotalVote((prevState) => prevState +2)
-      setStatusVote('upvote')
+    if (statusVote === "downvote") {
+      setTotalVote((prevState) => prevState + 2);
+      setStatusVote("upvote");
     }
-    if(statusVote === 'none') {
-      setTotalVote((prevState) => prevState + 1)
-      setStatusVote('upvote')
+    if (statusVote === "none") {
+      setTotalVote((prevState) => prevState + 1);
+      setStatusVote("upvote");
     }
     const dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
-      status: 'upvote',
+      status: "upvote",
     };
     onVote(dataVote);
   };
   const onDownVote = async () => {
-    if(statusVote === 'upvote') {
-      setTotalVote((prevState) => prevState - 2)
-      setStatusVote('downvote')
+    if (statusVote === "upvote") {
+      setTotalVote((prevState) => prevState - 2);
+      setStatusVote("downvote");
     }
-    if(statusVote === 'downvote') {
-      setTotalVote((prevState) => prevState + 1)
-      setStatusVote('none')
+    if (statusVote === "downvote") {
+      setTotalVote((prevState) => prevState + 1);
+      setStatusVote("none");
     }
-    if(statusVote === 'none') {
-      setTotalVote((prevState) => prevState - 1)
-      setStatusVote('downvote')
+    if (statusVote === "none") {
+      setTotalVote((prevState) => prevState - 1);
+      setStatusVote("downvote");
     }
     const dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
-      status: 'downvote',
+      status: "downvote",
     };
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
     const result = await voteComment(dataVote);
-    if(findCommentAndUpdate) {
-      findCommentAndUpdate(comment.id, result.data, level)
+    if (findCommentAndUpdate) {
+      findCommentAndUpdate(comment.id, result.data, level);
     }
-    if(updateVote) {
-      updateVote(result.data, comment, level)
+    if (updateVote) {
+      updateVote(result.data, comment, level);
     }
     iVote();
   };
@@ -124,11 +125,11 @@ const Comment = ({
 
   const onBlockComponent = (comment) => {
     refBlockComponent.current.openBlockComponent({
-      anonimity : false,
-      actor : comment.user,
-      id : comment.id,
-    })
-  }
+      anonimity: false,
+      actor: comment.user,
+      id: comment.id,
+    });
+  };
 
   React.useEffect(() => {
     iVote();
@@ -142,9 +143,9 @@ const Comment = ({
   }, []);
 
   React.useEffect(() => {
-    setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
-    iVote()
-  }, [JSON.stringify(comment.data)])
+    setTotalVote(comment.data.count_upvote - comment.data.count_downvote);
+    iVote();
+  }, [JSON.stringify(comment.data)]);
 
   return (
     <View
@@ -154,14 +155,15 @@ const Comment = ({
         level,
         isLastInParent,
         showLeftConnector,
-      })}>
+      })}
+    >
       <ButtonHightlight onPress={openProfile}>
         <View style={styles.profile}>
           <Image
             source={
               photo
-                ? {uri: removeWhiteSpace(photo)}
-                : require('../../assets/images/ProfileDefault.png')
+                ? { uri: removeWhiteSpace(photo) }
+                : require("../../assets/images/ProfileDefault.png")
             }
             style={styles.image}
           />
@@ -172,7 +174,9 @@ const Comment = ({
         </View>
       </ButtonHightlight>
       <ButtonHightlight onPress={onTextPress}>
-        <Text style={styles.post}>{comment.data.text}</Text>
+        <Text style={styles.post}>
+          {formatHashtagMention(comment.data.text)}
+        </Text>
       </ButtonHightlight>
       <View style={styles.constainerFooter}>
         {isLast && level >= 2 ? (
@@ -185,14 +189,16 @@ const Comment = ({
         )}
         <ButtonHightlight
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
-          onPress={() => onBlockComponent(comment)}>
+          onPress={() => onBlockComponent(comment)}
+        >
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </ButtonHightlight>
 
         <ButtonHightlight
           style={[styles.arrowup, styles.btn]}
-          onPress={onDownVote}>
-          {statusVote === 'downvote' ? (
+          onPress={onDownVote}
+        >
+          {statusVote === "downvote" ? (
             <MemoIc_downvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_down_vote_off width={20} height={18} />
@@ -201,8 +207,9 @@ const Comment = ({
         <Text style={styles.vote(totalVote)}>{totalVote}</Text>
         <ButtonHightlight
           style={[styles.arrowdown, styles.btn]}
-          onPress={onUpVote}>
-          {statusVote === 'upvote'  ? (
+          onPress={onUpVote}
+        >
+          {statusVote === "upvote" ? (
             <MemoIc_upvote_on width={20} height={18} />
           ) : (
             <MemoIc_arrow_upvote_off width={20} height={18} />
@@ -210,83 +217,89 @@ const Comment = ({
         </ButtonHightlight>
       </View>
 
-      <BlockComponent ref={refBlockComponent} refresh={() => {}} screen={"feed_comment_item"}/>
-
+      <BlockComponent
+        ref={refBlockComponent}
+        refresh={() => {}}
+        screen={"feed_comment_item"}
+      />
     </View>
   );
 };
 
-export default React.memo (Comment, (prevProps, nextProps) => prevProps.comment === nextProps.comment);
+export default React.memo(
+  Comment,
+  (prevProps, nextProps) => prevProps.comment === nextProps.comment
+);
 
 const styles = StyleSheet.create({
   vote: (count) => ({
     ...FONTS.body3,
-    textAlign: 'center',
+    textAlign: "center",
     width: 26,
-    alignSelf: 'center',
-    color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4',
+    alignSelf: "center",
+    color: count > 0 ? "#00ADB5" : count < 0 ? "#FF2E63" : "#C4C4C4",
   }),
   btn: {
     // width: 30,
     height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   image: {
     width: 24,
     height: 24,
     borderRadius: 12,
   },
-  container: ({isLast, style, level, showLeftConnector}) => ({
-    width: '100%',
+  container: ({ isLast, style, level, showLeftConnector }) => ({
+    width: "100%",
     borderLeftWidth: showLeftConnector ? 1 : 0,
     borderLeftColor: isLast
       ? level === 0
         ? colors.gray1
-        : 'transparent'
+        : "transparent"
       : colors.gray1,
     ...style,
   }),
   username: {
     fontFamily: fonts.inter[700],
     fontSize: 12,
-    color: '#828282',
+    color: "#828282",
     lineHeight: 14,
     marginLeft: 16,
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: '#333333',
+    color: "#333333",
     marginLeft: 28,
   },
   profile: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginLeft: -13,
   },
   constainerFooter: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     marginTop: 11.13,
     marginBottom: 12,
     marginLeft: 30,
   },
   btnReply: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
     flex: 1,
   },
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
-    color: '#C4C4C4',
+    color: "#C4C4C4",
     marginLeft: 8.98,
     marginRight: 14,
   },
   btnBlock: (isMySelf) => ({
     paddingHorizontal: 14,
-    display: isMySelf ? 'none' : 'flex',
+    display: isMySelf ? "none" : "flex",
   }),
   arrowup: {
     paddingHorizontal: 14,
@@ -294,15 +307,15 @@ const styles = StyleSheet.create({
   arrowdown: {
     paddingHorizontal: 14,
   },
-  gap: {marginBottom: 8},
+  gap: { marginBottom: 8 },
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
-    color: '#828282',
+    color: "#828282",
     lineHeight: 12,
   },
   containerUsername: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

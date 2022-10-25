@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   Image,
   StyleSheet,
@@ -7,14 +7,14 @@ import {
   View,
   TouchableOpacity,
   Platform,
-} from 'react-native';
+  ActivityIndicator,
+} from "react-native";
 
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import StringConstant from '../../utils/string/StringConstant';
-import MemoSendComment from '../../assets/icon/IconSendComment';
-import {Context} from '../../context';
-import {ActivityIndicator} from 'react-native';
+import { colors } from "../../utils/colors";
+import { fonts } from "../../utils/fonts";
+import StringConstant from "../../utils/string/StringConstant";
+import MemoSendComment from "../../assets/icon/IconSendComment";
+import { Context } from "../../context";
 
 const WriteComment = ({
   value = null,
@@ -24,7 +24,7 @@ const WriteComment = ({
   inReplyCommentView = false,
   showProfileConnector = true,
 }) => {
-  const [profile] = React.useContext(Context).profile
+  const [profile] = React.useContext(Context).profile;
   const commentInputRef = React.useRef(null);
   const isCommentEnabled = value.length > 0;
   const isSendButtonPressed = () => onPress();
@@ -41,7 +41,7 @@ const WriteComment = ({
         <View
           style={styles.connectorBottom(
             inReplyCommentView,
-            showProfileConnector,
+            showProfileConnector
           )}
         />
         <Image
@@ -58,15 +58,16 @@ const WriteComment = ({
             placeholderTextColor={colors.gray}
             style={styles.text}
             onChangeText={onChangeText}
-            value={value}
-          />
+          >
+            <Text>{value}</Text>
+          </TextInput>
         </View>
         <TouchableOpacity
           onPress={isSendButtonPressed}
           style={styles.btn(isCommentEnabled)}
           disabled={!isCommentEnabled}
-          >
-         <MemoSendComment style={styles.icSendButton} />
+        >
+          <MemoSendComment style={styles.icSendButton} />
         </TouchableOpacity>
       </View>
     </View>
@@ -77,12 +78,12 @@ export default WriteComment;
 
 const styles = StyleSheet.create({
   columnContainer: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     backgroundColor: colors.white,
     flex: 1,
-    width: '100%',
-    position: 'absolute',
+    width: "100%",
+    position: "absolute",
     bottom: 0,
     borderTopWidth: 1,
     borderTopColor: colors.gray1,
@@ -90,14 +91,14 @@ const styles = StyleSheet.create({
     paddingBottom: 14,
   },
   replyToContainer: (inReplyCommentView) => ({
-      marginLeft: inReplyCommentView ? 90 : 60,
-      fontFamily: fonts.inter[600],
-      marginBottom: 11,
-      marginTop: 7,
-      lineHeight: 15,
-      fontSize: 12,
-      color: colors.gray,
-    }),
+    marginLeft: inReplyCommentView ? 90 : 60,
+    fontFamily: fonts.inter[600],
+    marginBottom: 11,
+    marginTop: 7,
+    lineHeight: 15,
+    fontSize: 12,
+    color: colors.gray,
+  }),
   replyToTitle: {
     fontFamily: fonts.inter[600],
     lineHeight: 15,
@@ -105,17 +106,17 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   container: (inReplyCommentView) => ({
-      flex: 1,
-      backgroundColor: '#fff',
-      width: '100%',
-      paddingRight: 10,
-      paddingLeft: inReplyCommentView ? 50 : 20,
-      flexDirection: 'row',
-      zIndex: 100,
-    }),
+    flex: 1,
+    backgroundColor: "#fff",
+    width: "100%",
+    paddingRight: 10,
+    paddingLeft: inReplyCommentView ? 50 : 20,
+    flexDirection: "row",
+    zIndex: 100,
+  }),
   content: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     // alignItems: 'center',
     backgroundColor: colors.lightgrey,
     marginLeft: 8,
@@ -126,16 +127,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   btn: (isCommentEnabled) => ({
-      backgroundColor: isCommentEnabled ? colors.bondi_blue : '#f2f2f2',
-      borderRadius: 18,
-      width: 35,
-      height: 35,
-      display: 'flex',
-      justifyContent: 'center',
-      marginBottom: 1.5,
-      alignSelf: 'flex-end',
-    }),
-  btnText: {color: 'white', fontFamily: fonts.inter[400]},
+    backgroundColor: isCommentEnabled ? colors.bondi_blue : "#f2f2f2",
+    borderRadius: 18,
+    width: 35,
+    height: 35,
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: 1.5,
+    alignSelf: "flex-end",
+  }),
+  btnText: { color: "white", fontFamily: fonts.inter[400] },
   image: {
     width: 36,
     height: 36,
@@ -154,24 +155,24 @@ const styles = StyleSheet.create({
     maxHeight: 100,
   },
   icSendButton: {
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   connectorTop: (inReplyCommentView, showProfileConnector) => ({
-      height: showProfileConnector ? 36 : 0,
-      width: 1,
-      backgroundColor: colors.gray1,
-      position: 'absolute',
-      top: 0,
-      left: inReplyCommentView ? 60 : 30,
-      zIndex: -100,
-    }),
+    height: showProfileConnector ? 36 : 0,
+    width: 1,
+    backgroundColor: colors.gray1,
+    position: "absolute",
+    top: 0,
+    left: inReplyCommentView ? 60 : 30,
+    zIndex: -100,
+  }),
   connectorBottom: (inReplyCommentView, showProfileConnector) => ({
-      height: showProfileConnector ? 20 : 0,
-      width: 1,
-      backgroundColor: colors.gray1,
-      position: 'absolute',
-      top: 0,
-      left: inReplyCommentView ? 60 : 30,
-      zIndex: -100,
-    }),
+    height: showProfileConnector ? 20 : 0,
+    width: 1,
+    backgroundColor: colors.gray1,
+    position: "absolute",
+    top: 0,
+    left: inReplyCommentView ? 60 : 30,
+    zIndex: -100,
+  }),
 });
