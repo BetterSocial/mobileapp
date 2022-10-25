@@ -26,8 +26,6 @@ const Header = () => {
   const username = channelClient.channel?.data?.name;
 
   const chatName = getChatName(username, profileContext.myProfile.username);
-
-  console.log(channel, 'bahan')
   const renderHeaderImage = () => {
     if (channel?.data?.image) {
       if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {

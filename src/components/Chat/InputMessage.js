@@ -16,6 +16,7 @@ import MemoIc_Picture from '../../assets/icons/Ic_Picture';
 import {colors} from '../../utils/colors';
 import IconSend from '../../assets/icon/IconSendComment';
 import SheetEmoji from './SheetEmoji';
+import { Context } from '../../context';
 
 const InputMessage = () => {
   const refEmoji = React.useRef(null);
@@ -26,9 +27,13 @@ const InputMessage = () => {
     sendMessage,
     toggleAttachmentPicker,
     imageUploads,
-    closeAttachmentPicker
+    closeAttachmentPicker,
+    selectedPicker,
+    setImageUploads,
 
   } = useMessageInputContext();
+    const [channelClient] = React.useContext(Context).channel;
+    const [client] = React.useContext(Context).client
   const {isOnline} = useChatContext()
 
   const onChangeInput = (v) => {
@@ -46,6 +51,32 @@ const InputMessage = () => {
     sendMessage()
     closeAttachmentPicker()
   }
+
+  const handleSendPhoto = async () => {
+      if(isOnline) {
+      const cameraPhoto = imageUploads.filter(image => image.file.source === 'camera')
+      if(cameraPhoto.length > 0) {
+                // eksekusei send message reset message upload
+          const channel = await client.client.channel('messaging', channelClient.channel.id)
+          await channel.create()
+          const imageAttachments = {
+            type: "image",
+            image_url: cameraPhoto[0].file.uri,
+          }
+        await channel.sendMessage({
+         attachments: [imageAttachments]
+    
+        })
+         const galleryPhoto = imageUploads.filter(image => image.file.source !== 'camera')
+        setImageUploads(galleryPhoto)
+       
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    handleSendPhoto()
+  }, [isOnline])
 
   return (
     <>
@@ -78,7 +109,7 @@ const InputMessage = () => {
         <View style={styles.previewPhotoContainer} >
         <FlatList
         horizontal
-        data={imageUploads}
+        data={imageUploads.filter((image) => image.file.source !== 'camera')}
         renderItem={({item, index}) => (
           <View key={index} >
           <Image style={styles.imageStyle} resizeMode='contain'  source={{uri: item.url}} />
