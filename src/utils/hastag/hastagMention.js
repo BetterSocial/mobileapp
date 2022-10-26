@@ -17,8 +17,8 @@ const formatHashtagMention = (text) => {
   arrText.forEach((retLine) => {
     const words = retLine.split(" ");
     const contentLength = words.length;
-    const formatMention = /[ !#@$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\n]/;
-    const formatHashtag = /[ !#@$%^&*()=+\[\]{};':"\\|,.<>\/?\n]/;
+    const formatMention = /[ !#@$%^&*()_+\-=\[\]{};':"\\|,<>\/?\n]/;
+    const formatHashtag = /[ !#@$%^&*()=+\[\]{};':"\\|,<>\/?\n]/;
     words.forEach((word, index) => {
       const randomId = generateRandomId();
       if (
