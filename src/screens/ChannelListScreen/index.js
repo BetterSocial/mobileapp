@@ -32,13 +32,6 @@ import { setMainFeeds } from '../../context/actions/feeds';
 import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
-import PostNotificationPreview from './elements/components/PostNotificationPreview';
-import { getSpecificCache } from '../../utils/cache';
-import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
-import PreviewMessage from './elements/CustomPreviewMessage';
-import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
-import useChannelList from './hooks/useChannelList';
 import { useRecoilValue } from 'recoil';
 import { channelListLocalAtom } from '../../service/channelListLocal';
 
