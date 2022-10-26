@@ -15,6 +15,7 @@ import { fonts } from "../../utils/fonts";
 import StringConstant from "../../utils/string/StringConstant";
 import MemoSendComment from "../../assets/icon/IconSendComment";
 import { Context } from "../../context";
+import TaggingInput from "../Tagging/TaggingInput";
 
 const WriteComment = ({
   value = null,
@@ -51,16 +52,11 @@ const WriteComment = ({
           }}
         />
         <View style={styles.content}>
-          <TextInput
+          <TaggingInput
             ref={commentInputRef}
-            placeholder={StringConstant.commentBoxDefaultPlaceholder}
-            // multiline={isAndroid}
-            placeholderTextColor={colors.gray}
-            style={styles.text}
             onChangeText={onChangeText}
-          >
-            <Text>{value}</Text>
-          </TextInput>
+            value={value}
+          />
         </View>
         <TouchableOpacity
           onPress={isSendButtonPressed}

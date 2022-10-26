@@ -4,11 +4,6 @@ import { generateRandomId } from "stream-chat-react-native-core";
 
 import { fonts } from "../fonts";
 
-const handleHastagMention = (text, setFormattedContent, hashtags = []) => {
-  const formattedText = formatHashtagMention(text);
-  setFormattedContent(formattedText);
-};
-
 const formatHashtagMention = (text) => {
   const retLines = text.split("\n");
   const arrText = new Array();
@@ -49,6 +44,11 @@ const formatHashtagMention = (text) => {
     });
   });
   return formattedText;
+};
+
+const handleHastagMention = (text, setFormattedContent) => {
+  const formattedText = formatHashtagMention(text);
+  setFormattedContent(formattedText);
 };
 
 const styles = StyleSheet.create({
