@@ -4,13 +4,11 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Text,
   Image,
   FlatList
 } from 'react-native';
-
+import FA from 'react-native-vector-icons/FontAwesome'
 import {useChatContext, useMessageInputContext} from 'stream-chat-react-native';
-
 import MemoIc_emoji from '../../assets/icons/Ic_emoji';
 import MemoIc_Picture from '../../assets/icons/Ic_Picture';
 import {colors} from '../../utils/colors';
@@ -47,6 +45,10 @@ const InputMessage = () => {
     closeAttachmentPicker()
   }
 
+  const handleDelete = (item, index) => {
+
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -81,6 +83,9 @@ const InputMessage = () => {
         data={imageUploads}
         renderItem={({item, index}) => (
           <View key={index} >
+            <TouchableOpacity onPress={() => handleDelete(item, index)} style={styles.containerDelete}  >
+              <FA name='trash' color={'white'} size={18} />
+            </TouchableOpacity>
           <Image style={styles.imageStyle} resizeMode='contain'  source={{uri: item.url}} />
         </View>
         )}
@@ -143,5 +148,8 @@ const styles = StyleSheet.create({
   imageStyle: {
     height: 64,
     width: 64
+  },
+  containerDelete: {
+    position: 'absolute', top: 0, right: 0, height: 25, width: 25, backgroundColor: colors.holytosca, alignItems: 'center', justifyContent:'center', zIndex: 100, borderRadius: 13
   }
 });
