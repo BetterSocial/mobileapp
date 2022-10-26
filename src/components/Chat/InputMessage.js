@@ -24,7 +24,8 @@ const InputMessage = () => {
     sendMessage,
     toggleAttachmentPicker,
     imageUploads,
-    closeAttachmentPicker
+    closeAttachmentPicker,
+    setImageUploads
 
   } = useMessageInputContext();
   const {isOnline} = useChatContext()
@@ -45,10 +46,10 @@ const InputMessage = () => {
     closeAttachmentPicker()
   }
 
-  const handleDelete = (item, index) => {
-
+  const handleDelete = (item) => {
+    const notDeleteImage = imageUploads.filter((image) => image.id !== item.id)
+    setImageUploads(notDeleteImage)
   }
-
   return (
     <>
       <View style={styles.container}>
@@ -83,7 +84,7 @@ const InputMessage = () => {
         data={imageUploads}
         renderItem={({item, index}) => (
           <View key={index} >
-            <TouchableOpacity onPress={() => handleDelete(item, index)} style={styles.containerDelete}  >
+            <TouchableOpacity onPress={() => handleDelete(item)} style={styles.containerDelete}  >
               <FA name='trash' color={'white'} size={18} />
             </TouchableOpacity>
           <Image style={styles.imageStyle} resizeMode='contain'  source={{uri: item.url}} />
