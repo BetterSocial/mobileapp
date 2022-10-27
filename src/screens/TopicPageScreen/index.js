@@ -1,27 +1,27 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
 import * as  React from 'react';
-import { StatusBar, View } from 'react-native';
 import config from 'react-native-config';
+import { StatusBar, View } from 'react-native';
 import { StreamChat } from 'stream-chat';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { Context } from '../../context';
-import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
-import { getFeedDetail } from '../../service/post';
-import { getTopicPages } from '../../service/topicPages';
-import { getUserTopic, putUserTopic } from '../../service/topics';
-import { downVote, upVote } from '../../service/vote';
-import dimen from '../../utils/dimen';
-import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { convertString } from '../../utils/string/StringUtils';
-import { getAccessToken } from '../../utils/token';
-import removePrefixTopic from '../../utils/topics/removePrefixTopic';
-import { getUserId } from '../../utils/users';
+import MemoizedListComponent from './MemoizedListComponent';
+import Navigation from './elements/Navigation';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from '../ProfileScreen/elements/RenderItem';
-import Navigation from './elements/Navigation';
-import MemoizedListComponent from './MemoizedListComponent';
+import dimen from '../../utils/dimen';
+import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import { Context } from '../../context';
+import { convertString } from '../../utils/string/StringUtils';
+import { downVote, upVote } from '../../service/vote';
+import { getAccessToken } from '../../utils/token';
+import { getFeedDetail } from '../../service/post';
+import { getTopicPages } from '../../service/topicPages';
+import { getUserId } from '../../utils/users';
+import { getUserTopic, putUserTopic } from '../../service/topics';
+import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
+import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const TopicPageScreen = (props) => {
     const route = useRoute();
@@ -78,18 +78,6 @@ const TopicPageScreen = (props) => {
 
         return unsubscribe
     }, [navigation])
-
-    // React.useEffect(() => {
-    //     const initTopic = () => {
-    //         setTopicFeeds([], dispatch);
-    //     }
-
-    //     initTopic();
-
-    //     return () => {
-
-    //     }
-    // }, []);
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -257,12 +245,14 @@ const TopicPageScreen = (props) => {
                     onEndReach={onEndReach}
                     onRefresh={onRefresh}
                     refreshing={loading}
-                // snapToOffsets={(() => {
-                //   const posts = feeds.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-                //   // console.log('posts')
-                //   // console.log(posts)
-                //   return [headerHeightRef, ...posts]
-                // })()}
+                    snapToOffsets={(() => {
+                        if (feeds) {
+                            const posts = feeds?.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
+                            return [headerHeightRef, ...posts]
+                        }
+
+                        return [headerHeightRef]
+                    })()}
                 >
                     {({ item, index }) => (
                         <MemoizedListComponent

@@ -28,7 +28,7 @@ import { channelListLocalAtom } from '../../service/channelListLocal';
 import { getAccessToken } from '../../utils/token'
 import { getChatName } from '../../utils/string/StringUtils';
 import { getFeedNotification } from '../../service/feeds'
-import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { getSpecificCache } from '../../utils/cache';
 import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
 import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
@@ -198,44 +198,42 @@ const ChannelListScreen = ({ navigation }) => {
             onPress={() => navigation.navigate('ContactScreen')}
           />
         </View>
-        {
-          myProfile && myProfile.user_id && client.client ? (
-            <Chat client={client.client} i18nInstance={streami18n}>
-              <ChannelList
-                PreviewAvatar={CustomPreviewAvatar}
-                filters={memoizedFilters}
-                // List={(props) => console.log(props, 'babah')}
-                // Preview={CustomPreview}
-                PreviewStatus={ChannelStatusIcon}
-                PreviewTitle={customPreviewTitle}
-                onSelect={onSelectChat}
-                //  channelRenderFilterFn={(channel) => console.log(channel, 'bahan')}
-                sort={sort}
-                options={options}
-                maxUnreadCount={99}
-                clientData={channelListLocalValue}
-                additionalFlatListProps={{
-                  onEndReached: () => null,
-                  refreshControl: null,
-                  // extraData:{countReadComment},
-                }}
+        {myProfile && myProfile.user_id && client.client ? (
+          <Chat client={client.client} i18nInstance={streami18n}>
+            <ChannelList
+              PreviewAvatar={CustomPreviewAvatar}
+              filters={memoizedFilters}
+              // List={(props) => console.log(props, 'babah')}
+              // Preview={CustomPreview}
+              PreviewStatus={ChannelStatusIcon}
+              PreviewTitle={customPreviewTitle}
+              onSelect={onSelectChat}
+              //  channelRenderFilterFn={(channel) => console.log(channel, 'bahan')}
+              sort={sort}
+              options={options}
+              maxUnreadCount={99}
+              clientData={channelListLocalValue}
+              additionalFlatListProps={{
+                onEndReached: () => null,
+                refreshControl: null,
+                // extraData:{countReadComment},
+              }}
 
-                additionalData={listPostNotif}
-                context={myContext}
-                PreviewUnreadCount={chatBadge}
-                PreviewMessage={PreviewMessage}
-                postNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} showBadgePostNotif />}
-              />
+              additionalData={listPostNotif}
+              context={myContext}
+              PreviewUnreadCount={chatBadge}
+              PreviewMessage={PreviewMessage}
+              postNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} showBadgePostNotif />}
+            />
 
-            </Chat>
-          ) : (
-            <View style={styles.content}>
-              <ActivityIndicator size="small" color={COLORS.holyTosca} />
-            </View>
-          )
-        }
-      </ScrollView >
-    </SafeAreaProvider >
+          </Chat>
+        ) : (
+          <View style={styles.content}>
+            <ActivityIndicator size="small" color={COLORS.holyTosca} />
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaProvider>
   );
 };
 
