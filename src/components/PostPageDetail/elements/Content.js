@@ -47,7 +47,7 @@ const Content = ({ message, images_url, style, onPress, topics = [], item, onNew
       <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
             <View style={[styles.contentFeed]}>
               <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
-              {ITEM && item.post_type === POST_TYPE_POLL ? 
+              {item && item.post_type === POST_TYPE_POLL ? 
               <ContentPoll 
               message={item.message}
                 images_url={item.images_url}
