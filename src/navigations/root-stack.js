@@ -73,10 +73,6 @@ export const RootNavigator = () => {
 
   const create = useClientGetstream();
 
-  if(initialStartup && typeof initialStartup === 'string') {
-    console.tron.log(initialStartup, 'root stack');
-    initialStartup = JSON.parse(initialStartup)
-  }
 
   const doGetAccessToken = async () => {
     const accessToken = await getAccessToken();

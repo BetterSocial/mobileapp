@@ -53,10 +53,7 @@ const removeAccessToken = () => {
 };
 
 const setRefreshToken = async (value) => {
-  try {
-    await AsyncStorage.setItem(KEY_REFRESH_TOKEN, value);
-  } catch (e) {
-  }
+      await AsyncStorage.setItem(KEY_REFRESH_TOKEN, JSON.stringify(value));
 };
 
 const getRefreshToken = async () => {
