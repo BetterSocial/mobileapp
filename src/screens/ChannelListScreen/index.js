@@ -196,39 +196,40 @@ const ChannelListScreen = ({ navigation }) => {
             onPress={() => navigation.navigate('ContactScreen')}
           />
         </View>
-        {myProfile && myProfile.user_id && client.client ? (
-          <Chat client={client.client} i18nInstance={streami18n}>
-            <ChannelList
-              PreviewAvatar={CustomPreviewAvatar}
-              filters={memoizedFilters}
-              // List={(props) => console.log(props, 'babah')}
-              // Preview={CustomPreview}
-              PreviewStatus={ChannelStatusIcon}
-              PreviewTitle={customPreviewTitle}
-              onSelect={onSelectChat}
-              //  channelRenderFilterFn={(channel) => console.log(channel, 'bahan')}
-              sort={sort}
-              options={options}
-              maxUnreadCount={99}
-              additionalFlatListProps={{
-                onEndReached: () => null,
-                refreshControl: null,
-                // extraData:{countReadComment},
-              }}
+          {myProfile && myProfile.user_id && client.client ? (
+            <Chat client={client.client} i18nInstance={streami18n}>
+              <ChannelList
+                PreviewAvatar={CustomPreviewAvatar}
+                filters={memoizedFilters}
+                // List={(props) => console.log(props, 'babah')}
+                // Preview={CustomPreview}
+                PreviewStatus={ChannelStatusIcon}
+                PreviewTitle={customPreviewTitle}
+                onSelect={onSelectChat}
+                //  channelRenderFilterFn={(channel) => console.log(channel, 'bahan')}
+                sort={sort}
+                options={options}
+                maxUnreadCount={99}
+                clientData={channelListLocalValue}
+                additionalFlatListProps={{
+                  onEndReached: () => null,
+                  refreshControl: null,
+                  // extraData:{countReadComment},
+                }}
 
-              additionalData={listPostNotif}
-              context={myContext}
-              PreviewUnreadCount={chatBadge}
-              PreviewMessage={PreviewMessage}
-              PostNotifComponent={({ item, index, refreshList }) => item ? <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} /> : null}
-            />
+               additionalData={listPostNotif}
+               context={myContext}
+               PreviewUnreadCount={chatBadge}
+               PreviewMessage={PreviewMessage}
+               PostNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item.item} index={index} onSelectAdditionalData={() => goToFeedDetail(item.item, refreshList)} showBadgePostNotif  />}
+              />
 
-          </Chat>
-        ) : (
-          <View style={styles.content}>
-            <ActivityIndicator size="small" color={COLORS.holyTosca} />
-          </View>
-        )}
+            </Chat>
+          ) : (
+            <View style={styles.content}>
+              <ActivityIndicator size="small" color={COLORS.holyTosca} />
+            </View>
+          )}
       </ScrollView>
     </SafeAreaProvider>
   );
