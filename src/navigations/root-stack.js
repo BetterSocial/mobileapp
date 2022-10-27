@@ -9,10 +9,10 @@ import {
   View,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useLocalChannelsFirst } from 'stream-chat-react-native';
 // import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilValue, useSetRecoilState, } from 'recoil';
 
-import { useLocalChannelsFirst } from 'stream-chat-react-native';
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
@@ -55,12 +55,12 @@ import {
 } from '../screens';
 import { Context } from '../context';
 import { InitialStartupAtom } from '../service/initialStartup';
+import { channelListLocalAtom } from '../service/channelListLocal';
 import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 import { verifyTokenGetstream } from '../service/users';
-import { channelListLocalAtom } from '../service/channelListLocal';
 
 const RootStack = createStackNavigator();
 
