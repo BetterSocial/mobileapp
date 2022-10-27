@@ -221,7 +221,7 @@ const ChannelListScreen = ({ navigation }) => {
                context={myContext}
                PreviewUnreadCount={chatBadge}
                PreviewMessage={PreviewMessage}
-               PostNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item.item} index={index} onSelectAdditionalData={() => goToFeedDetail(item.item, refreshList)} showBadgePostNotif  />}
+               PostNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item.item} index={index} onSelectAdditionalData={() => goToFeedDetail(item.item)} showBadgePostNotif  />}
               />
 
             </Chat>
