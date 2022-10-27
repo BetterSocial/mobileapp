@@ -12,8 +12,8 @@ describe('testing function related to the token', () => {
     expect(await getAccessToken()).toEqual('testToken');
   });
   it('Test Refresh Token', async () => {
-    await setRefreshToken('refreshToken');
-    expect(await getRefreshToken()).toEqual('refreshToken');
+    await setRefreshToken({id: '1234'});
+    expect(await getRefreshToken()).toEqual("{\"id\":\"1234\"}");
   });
 });
 it('Testing set userId', async () => {

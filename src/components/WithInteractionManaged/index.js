@@ -1,4 +1,5 @@
-import React, { ComponentType } from 'react'
+/* eslint-disable react/display-name */
+import React from 'react'
 import { StatusBar } from 'react-native'
 import { Transition, Transitioning } from 'react-native-reanimated'
 
