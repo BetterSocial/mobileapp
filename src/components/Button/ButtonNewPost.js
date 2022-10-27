@@ -17,9 +17,10 @@ const ButtonAddPost = () => {
 
   const { feeds, timer, viewPostTimeIndex } = feedsContext
 
+  // eslint-disable-next-line no-underscore-dangle
   const __handleOnAddPostButtonClicked = () => {
-    let currentTime = new Date().getTime()
-    let id = feeds[viewPostTimeIndex]?.id
+    const currentTime = new Date().getTime()
+    const id = feeds && feeds[viewPostTimeIndex]?.id
     if(id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
     navigator.navigate('CreatePost');
     setTimer(new Date(), dispatch)

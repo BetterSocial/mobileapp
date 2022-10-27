@@ -155,7 +155,7 @@ const _renderProfileNormal = ({
   const navigateToProfile = async () => {
     if (source) {
       const currentTime = new Date().getTime()
-      const id = feeds[viewPostTimeIndex]?.id
+      const id = feeds && feeds[viewPostTimeIndex]?.id
       if (id) viewTimePost(id, currentTime - timer.getTime(), source)
       setTimer(new Date(), dispatch)
     }
@@ -185,7 +185,7 @@ const _renderProfileNormal = ({
                 onPress={() => {
                   if (source) {
                     const currentTime = new Date().getTime()
-                    const id = feeds[viewPostTimeIndex]?.id
+                    const id = feeds && feeds[viewPostTimeIndex]?.id
                     if (id) viewTimePost(id, currentTime - timer.getTime(), source)
                     if (id && source === SOURCE_PDP) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
                     setTimer(new Date(), dispatch)
