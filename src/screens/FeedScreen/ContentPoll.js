@@ -33,19 +33,14 @@ const { width: screenWidth } = Dimensions.get('window');
 const FONT_SIZE_MEDIA = 16
 
 const ContentPoll = ({
-  message,
-  images_url,
   polls = [],
-  onPress,
   item,
   multiplechoice = false,
   onnewpollfetched,
   isalreadypolling,
   pollexpiredat,
   index = -1,
-  voteCount = 0,
-  topics = []
-}) => {
+  voteCount = 0}) => {
   const modifiedPoll = polls.reduce(
     (acc, current) => {
       acc.totalpoll += parseInt(current.counter);
@@ -80,7 +75,6 @@ const ContentPoll = ({
     return onSeeResultsClicked()
   }, [singleChoiceSelectedIndex])
 
-  const isTouchableDisabled = route.name === 'PostDetailPage';
 
   let onSeeResultsClicked = () => {
     if (isFetchingResultPoll) {
@@ -141,27 +135,6 @@ const ContentPoll = ({
 
   const showSetResultsButton = () => !isPollExpired(pollexpiredat) && !isAlreadyPolling;
 
-  const handleTextCaption = (text, onPress) => {
-    getCaptionWithTopicStyle(text)
-    return (
-      <View>
-        <Text numberOfLines={4} style={styles.textMedia(text)}>
-          {text.length < 180 ? (
-            getCaptionWithTopicStyle(text, navigation)
-          ) : (
-            <Text>
-              {getCaptionWithTopicStyle(`${text.substring(0, 165)}...`, navigation)}
-              {/* {`${getCaptionWithTopicStyle('#hashtag1', navigation)}`} */}
-              <Text onPress={onPress} style={styles.seemore}>
-                more
-              </Text>
-            </Text>
-          )}
-        </Text>
-        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} text={text.substring(0, 165)} />
-      </View>
-    );
-  };
 
   const renderSeeResultButton = () => {
     if(isFetchingResultPoll) return 'Loading...'
@@ -171,39 +144,7 @@ const ContentPoll = ({
   }
 
   return (
-    <Pressable
-      disabled={isTouchableDisabled}
-      onPress={onPress}
-      style={styles.contentFeed}>
-      {images_url !== null ? (
-        images_url.length > 0 ? (
-          <View style={styles.container}>
-            <SeeMore
-              seeLessText={' '}
-              numberOfLines={4}
-              linkStyle={styles.textContentFeed}>
-              {message}
-            </SeeMore>
-            <Gap height={16} />
-            <FlatList
-              style={styles.fletlist}
-              horizontal={true}
-              pagingEnabled={true}
-              data={images_url}
-              renderItem={({ item, index }) => (
-                  <Image
-                    source={{ uri: item }}
-                    style={styles.imageList}
-                    resizeMode={'cover'}
-                  />
-                )}
-              keyExtractor={({ item, index }) => index}
-            />
-          </View>
-        ) : (
-          <View style={styles.containerShowMessage}>
-            {handleTextCaption(message, onPress)}
-
+    <View style={styles.containerShowMessage}>
             <View style={styles.pollOptionsContainer}>
               {polls.map((pollItem, index) => 
                 /*
@@ -240,8 +181,7 @@ const ContentPoll = ({
                   />
                 )
               )}
-            </View>
-
+            </View>      
             <View style={styles.totalVotesContainer}>
               <Text style={styles.totalpolltext}>{`${voteCount} votes `}</Text>
               <View
@@ -268,10 +208,7 @@ const ContentPoll = ({
               )}
             </View>
           </View>
-        )
-      ) : null}
-    </Pressable>
-  );
+  )
 };
 
 export default ContentPoll;
@@ -289,7 +226,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blackgrey,
   },
   fletlist: { flex: 1 },
-  containerShowMessage: { justifyContent: 'center', },
+  containerShowMessage: { justifyContent: 'center', marginBottom: 30 },
   imageList: { flex: 1, width: screenWidth - 32, borderRadius: 16 },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -391,7 +328,6 @@ const styles = StyleSheet.create({
   pollOptionsContainer: {
     width: '100%',
     padding: 0,
-    marginTop: 16,
     // marginBottom: 5,
   },
   pollOptionItemContainer: {
@@ -482,7 +418,7 @@ const styles = StyleSheet.create({
     color: colors.holytosca,
     fontFamily: fonts.inter[500],
   },
-  textMedia: (text) => ({
+  textMedia: () => ({
       fontFamily: fonts.inter[400],
       fontWeight: 'normal',
       fontSize: FONT_SIZE_MEDIA,

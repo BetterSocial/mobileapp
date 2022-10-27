@@ -447,8 +447,6 @@ const PostPageDetailIdComponent = (props) => {
       const newComment = await updateVoteChildrenLevel1(commentList, dataUpdated)
       setCommentList(newComment)
     }
-   
-
   }
 
 
@@ -465,46 +463,19 @@ const PostPageDetailIdComponent = (props) => {
           style={styles.contentScrollView(totalComment)}
           nestedScrollEnabled={true}>
           <View style={styles.content(height)}>
-            {item && item.post_type === POST_TYPE_POLL && (
-              <ContentPoll
-                message={item.message}
-                images_url={item.images_url}
-                polls={item.pollOptions}
-                // onPress={() => { }}
-                item={item}
-                pollexpiredat={item.polls_expired_at}
-                multiplechoice={item.multiplechoice}
-                isalreadypolling={item.isalreadypolling}
-                // onnewpollfetched={() => {}}
-                onnewpollfetched={onNewPollFetched}
-                voteCount={item.voteCount}
-                topics={item?.topics}
-              />
-            )}
-
-            {item && item.post_type === POST_TYPE_LINK && (
-              <ContentLink
-                og={item.og}
-                onCardPress={onPressDomain}
-                onHeaderPress={onPressDomain}
-                onCardContentPress={() => navigateToLinkContextPage(item)}
-                message={item?.message}
-                score={item?.credderScore}
-                topics={item?.topics}
-              />
-            )}
-
-            {item && item.post_type === POST_TYPE_STANDARD && (
-              <Content
+             <Content
                 message={item.message}
                 images_url={item.images_url}
                 style={styles.additionalContentStyle(
                   item.images_url.length,
                   height,
                 )}
-                topics={item?.topics}
-              />
-            )}
+                topics={item?.topics} 
+                item={item}
+                onnewpollfetched={onNewPollFetched}
+
+                />
+           
             <Gap height={16} />
             <View style={{ height: 52, paddingHorizontal: 0, width: '100%' }}>
               <Footer

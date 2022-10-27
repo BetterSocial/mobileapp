@@ -1,16 +1,11 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import SeeMore from 'react-native-see-more-inline';
 import {
   Dimensions,
-  FlatList,
-  Image,
   Platform,
   Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
   View
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -23,11 +18,12 @@ import { Gap } from "../..";
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
+import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
+import { POST_TYPE_POLL } from '../../../utils/constants';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const Content = ({ message, images_url, style, onPress, topics = [] }) => {
-  const route = useRoute();
+const Content = ({ message, images_url, style, onPress, topics = [], item, onNewPollFetched }) => {
   const navigation = useNavigation();
   const cekImage = () => images_url !== null && images_url !== '' && images_url !== undefined;
 
@@ -43,34 +39,42 @@ const Content = ({ message, images_url, style, onPress, topics = [] }) => {
     });
   };
 
+  if(!cekImage) return null
+
   return (
-    <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
-      {cekImage() ? (
-        images_url.length > 0 ? (
-          <View style={styles.container}>
-            <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
-            <TopicsChip topics={topics} fontSize={16} text={message} />
-            <Gap height={16} />
-            <ImageLayouter
-              images={images_url}
+    <ScrollView>
+       <Pressable onPress={onPress} >
+      <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+            <View style={[styles.contentFeed]}>
+              <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
+              {ITEM && item.post_type === POST_TYPE_POLL ? 
+              <ContentPoll 
+              message={item.message}
+                images_url={item.images_url}
+                polls={item.pollOptions}
+                // onPress={() => { }}
+                item={item}
+                pollexpiredat={item.polls_expired_at}
+                multiplechoice={item.multiplechoice}
+                isalreadypolling={item.isalreadypolling}
+                // onnewpollfetched={() => {}}
+                onnewpollfetched={onNewPollFetched}
+                voteCount={item.voteCount}
+                topics={item?.topics}
+              /> : null}
+              
+  
+            </View>
+              <ImageLayouter
+              images={images_url || ''}
               onimageclick={onImageClickedByIndex}
             />
-          </View>
-        ) : (
-          // <View style={styles.containerShowMessage(route.name)}>
-          <ScrollView nestedScrollEnabled={true}>
-            <View>
-              {/* <SeeMore numberOfLines={10} linkStyle={styles.textContentFeed}>
-                {message}
-              </SeeMore> */}
-              <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
               <TopicsChip topics={topics} fontSize={16} text={message} />
-            </View>
           </ScrollView>
 
-        )
-      ) : null}
     </Pressable>
+    </ScrollView>
+   
   );
 };
 

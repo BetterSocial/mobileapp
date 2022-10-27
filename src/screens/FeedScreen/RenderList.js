@@ -207,7 +207,8 @@ const RenderListFeed = (props) => {
   return (
     <>
         <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB} />
-        {item.post_type === POST_TYPE_POLL && (
+
+        {/* {item.post_type === POST_TYPE_POLL && (
           <ContentPoll
             index={index}
             message={item.message}
@@ -222,7 +223,7 @@ const RenderListFeed = (props) => {
             voteCount={item.voteCount}
             topics={item?.topics}
           />
-        )}
+        )} */}
 
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -237,13 +238,17 @@ const RenderListFeed = (props) => {
             topics={item?.topics}
           />
         )}
-        {item.post_type === POST_TYPE_STANDARD && (
-          <Content
+        {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
+            <Content
             index={index}
             message={item.message}
             images_url={item.images_url}
             onPress={onPress}
             topics={item?.topics}
+            item={item}
+             onnewpollfetched={onNewPollFetched}
+            //  onPressDomain={() => onPressDomain(item)}
+            //  onCardContentPress={() => navigateToLinkContextPage(item)}
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
