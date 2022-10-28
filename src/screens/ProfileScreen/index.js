@@ -3,6 +3,7 @@ import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   LogBox,
   Share,
@@ -94,7 +95,6 @@ const ProfileScreen = ({ route }) => {
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
     React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
-  const [image, setImage] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
   const [loadingContainer, setLoadingContainer] = React.useState(true)
   const [yourselfId, setYourselfId] = React.useState('');
@@ -133,7 +133,7 @@ const ProfileScreen = ({ route }) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e) => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
       // getMyFeeds();
     });
     if (interactionsComplete) {
@@ -180,10 +180,11 @@ const ProfileScreen = ({ route }) => {
 
   const getMyFeeds = async (offset = 0, limit = 10) => {
     const result = await getSelfFeedsInProfile(offset, limit);
+    console.log(result, 'nakal')
     if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
     else {
-      const clonedFeeds = [...feeds]
-      clonedFeeds.splice(feeds.length - 1, 0, ...data)
+      const clonedFeeds = [...feeds, ...result.data]
+      // clonedFeeds.splice(feeds.length - 1, 0, ...data)
       setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
     setLoading(false)
@@ -196,17 +197,11 @@ const ProfileScreen = ({ route }) => {
       id: 'btn_share',
     });
     try {
-      const result = await Share.share({
+      await Share.share({
         message: shareUserLink(dataMain.username),
       });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-        } else {
-        }
-      } else if (result.action === Share.dismissedAction) {
-      }
     } catch (error) {
-      alert(error.message);
+      Alert.alert('Somethig wrong!', error.message)
     }
   };
 
@@ -248,19 +243,6 @@ const ProfileScreen = ({ route }) => {
     }
   };
 
-  const handleScroll = (event) => {
-    const currentOffset = event.nativeEvent.contentOffset.y;
-    if (currentOffset < 70) {
-      setOpacity(0);
-      setIsShowButton(false);
-    } else if (currentOffset >= 70 && currentOffset <= headerHeightRef.current) {
-      setIsShowButton(true);
-      setOpacity((currentOffset - 70) * (1 / 100));
-    } else if (currentOffset > headerHeightRef.current) {
-      setOpacity(1);
-      setIsShowButton(true);
-    }
-  };
 
   const toTop = () => {
     flatListScrollRef.current.scrollToTop()
@@ -490,7 +472,9 @@ const ProfileScreen = ({ route }) => {
     refBlockComponet.current.openBlockComponent(value);
   }
 
-  const __handleOnEndReached = () => getMyFeeds(postOffset)
+  const handleOnEndReached = () => {
+    getMyFeeds(postOffset)
+  }
 
   const handleRefresh = () => {
     setLoading(true)
@@ -531,18 +515,13 @@ const ProfileScreen = ({ route }) => {
           data={feeds}
           onRefresh={handleRefresh}
           refreshing={loading}
-          onScroll={handleScroll}
           ListFooterComponent={<ActivityIndicator />}
-          onEndReach={__handleOnEndReached}
+          onEndReach={handleOnEndReached}
           initialNumToRender={2}
           maxToRenderPerBatch={2}
           updateCellsBatchingPeriod={10}
           removeClippedSubviews
           windowSize={10}
-          snapToOffsets={(() => {
-            const posts = feeds.map((item, index) => headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT))
-            return [0, ...posts]
-          })()}
           ListHeaderComponent={
             renderHeader
           }>
