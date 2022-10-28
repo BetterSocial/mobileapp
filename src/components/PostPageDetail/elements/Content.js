@@ -3,18 +3,16 @@ import PropTypes from 'prop-types';
 import {
   Dimensions,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   View
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import ImageLayouter from './ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
 import { COLORS } from '../../../utils/theme';
-import { Gap } from "../..";
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
@@ -23,7 +21,7 @@ import { POST_TYPE_POLL } from '../../../utils/constants';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const Content = ({ message, images_url, style, onPress, topics = [], item, onNewPollFetched }) => {
+const Content = ({ message, images_url, topics = [], item,  onnewpollfetched }) => {
   const navigation = useNavigation();
   const cekImage = () => images_url !== null && images_url !== '' && images_url !== undefined;
 
@@ -42,9 +40,8 @@ const Content = ({ message, images_url, style, onPress, topics = [], item, onNew
   if(!cekImage) return null
 
   return (
-    <ScrollView>
-       <Pressable onPress={onPress} >
-      <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+
+      <ScrollView contentContainerStyle={{flexGrow: 1}}  showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
             <View style={[styles.contentFeed]}>
               <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
               {item && item.post_type === POST_TYPE_POLL ? 
@@ -52,13 +49,11 @@ const Content = ({ message, images_url, style, onPress, topics = [], item, onNew
               message={item.message}
                 images_url={item.images_url}
                 polls={item.pollOptions}
-                // onPress={() => { }}
                 item={item}
                 pollexpiredat={item.polls_expired_at}
                 multiplechoice={item.multiplechoice}
                 isalreadypolling={item.isalreadypolling}
-                // onnewpollfetched={() => {}}
-                onnewpollfetched={onNewPollFetched}
+                onnewpollfetched={ onnewpollfetched}
                 voteCount={item.voteCount}
                 topics={item?.topics}
               /> : null}
@@ -66,14 +61,12 @@ const Content = ({ message, images_url, style, onPress, topics = [], item, onNew
   
             </View>
               <ImageLayouter
-              images={images_url || ''}
+              images={images_url || []}
               onimageclick={onImageClickedByIndex}
             />
               <TopicsChip topics={topics} fontSize={16} text={message} />
           </ScrollView>
 
-    </Pressable>
-    </ScrollView>
    
   );
 };
@@ -158,6 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.black,
+    marginBottom: 10,
   },
   textComment: {
     fontFamily: fonts.inter[400],

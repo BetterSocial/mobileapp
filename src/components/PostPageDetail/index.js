@@ -17,8 +17,6 @@ import { useRoute } from '@react-navigation/native'
 import BlockComponent from "../BlockComponent";
 import ContainerComment from "../Comments/ContainerComment";
 import Content from './elements/Content';
-import ContentLink from '../../screens/FeedScreen/ContentLink';
-import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from "../LoadingWithoutModal";
 import StringConstant from '../../utils/string/StringConstant';
@@ -26,9 +24,6 @@ import WriteComment from "../Comments/WriteComment";
 import { Context } from '../../context';
 import { Footer, Gap } from "..";
 import {
-  POST_TYPE_LINK,
-  POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
   SOURCE_PDP,
 } from '../../utils/constants';
 import { createCommentParent } from '../../service/comment';
@@ -40,7 +35,6 @@ import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuild
 import { setFeedByIndex, setMainFeeds, setTimer } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
 import { withInteractionsManaged } from '../WithInteractionManaged';
-import useReplyComment from '../ReplyComment/hooks/useReplyComment';
 import usePostDetail from './hooks/usePostDetail';
 
 const { width, height } = Dimensions.get('window');
@@ -557,11 +551,10 @@ const styles = StyleSheet.create({
       height: 1,
     },
     shadowOpacity: 0.5,
-    backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#C4C4C4',
     marginBottom: -1,
-    height: h - 170,
+    height: h -180
   }),
   gap: { height: 16 },
   additionalContentStyle: (imageLength, h) => {
