@@ -62,9 +62,7 @@ function HomeBottomTabs(props) {
   const { feeds } = feedsContext;
   const LIMIT_FIRST_FEEDS = 1;
   const LIMIT_FIRST_NEWS = 3;
-  if(initialStartup && typeof initialStartup === 'string') {
-    initialStartup = JSON.parse(initialStartup)
-  }
+
 
 
   PushNotification.configure({

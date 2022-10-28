@@ -5,36 +5,35 @@ import {
   ChannelList,
   ChannelPreviewTitle,
   Chat,
-  Streami18n,
+  Streami18n
 } from 'stream-chat-react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useRecoilValue } from 'recoil';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
+import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
+import PostNotificationPreview from './elements/components/PostNotificationPreview';
+import PreviewMessage from './elements/CustomPreviewMessage';
 import Search from './elements/Search';
 import streamFeed from '../../utils/getstream/streamer'
+import useChannelList from './hooks/useChannelList';
 import {
   CHANNEL_TYPE_TOPIC,
 } from '../../utils/constants';
+import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
+import { channelListLocalAtom } from '../../service/channelListLocal';
 import { getAccessToken } from '../../utils/token'
 import { getChatName } from '../../utils/string/StringUtils';
 import { getFeedNotification } from '../../service/feeds'
+import { getSpecificCache } from '../../utils/cache';
 import { setChannel } from '../../context/actions/setChannel';
 import { setMainFeeds } from '../../context/actions/feeds';
+import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
-import PostNotificationPreview from './elements/components/PostNotificationPreview';
-import { getSpecificCache } from '../../utils/cache';
-import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
-import PreviewMessage from './elements/CustomPreviewMessage';
-import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
-import useChannelList from './hooks/useChannelList';
-import { useRecoilValue } from 'recoil';
-import { channelListLocalAtom } from '../../service/channelListLocal';
-
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -46,20 +45,20 @@ const ChannelListScreen = ({ navigation }) => {
   const [, dispatchFeed] = React.useContext(Context).feeds;
   const [profile] = React.useContext(Context).profile;
   const myContext = React.useContext(Context)
-  const {interactionsComplete} = useAfterInteractions()
+  const { interactionsComplete } = useAfterInteractions()
   const [profileContext] = React.useContext(Context).profile;
   const [countReadComment, setCountReadComment] = React.useState({})
   // const [countChat, setCountChat] = React.useState({})
-  const {myProfile} = profileContext
+  const { myProfile } = profileContext
   const [postCount, setPostCount] = React.useState(0)
-  const {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook} = useChannelList()
+  const { mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook } = useChannelList()
   const [unReadMessage, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
 
   const filters = {
     members: { $in: [myProfile.user_id] },
-    type: {$in: ['messaging', 'topics']},
+    type: { $in: ['messaging', 'topics'] },
   };
   // React.useEffect(() => { }, [unReadMessage]);
 
@@ -72,7 +71,7 @@ const ChannelListScreen = ({ navigation }) => {
   const memoizedFilters = React.useMemo(() => filters, [myProfile.user_id]);
 
   React.useEffect(() => {
-    if(interactionsComplete) {
+    if (interactionsComplete) {
       analytics().logScreenView({
         screen_class: 'ChannelListScreen',
         screen_name: 'Channel List',
@@ -83,7 +82,7 @@ const ChannelListScreen = ({ navigation }) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
-    if(myProfile) {
+    if (myProfile) {
       callStreamFeed()
       handleUnsubscribeNotif()
     }
@@ -94,57 +93,55 @@ const ChannelListScreen = ({ navigation }) => {
     const client = streamFeed(token)
     const notif = client.feed('notification', myProfile.user_id, token)
     notif.subscribe(() => {
-        getPostNotification()
+      getPostNotification()
 
     })
 
-}
-
-const handleUnsubscribeNotif = async () => {
-  const token = await getAccessToken()
-  const client = streamFeed(token)
-  const notif = client.feed('notification', myProfile.user_id, token)
-  return () => {
-    notif.unsubscribe()
   }
-}
 
-React.useEffect(() => {
-  handleCacheComment()
-}, [])
+  const handleUnsubscribeNotif = async () => {
+    const token = await getAccessToken()
+    const client = streamFeed(token)
+    const notif = client.feed('notification', myProfile.user_id, token)
+    return () => {
+      notif.unsubscribe()
+    }
+  }
 
-const handleCacheComment  = () => {
+  React.useEffect(() => {
+    handleCacheComment()
+  }, [])
+
+  const handleCacheComment = () => {
     getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
-    if(cache) {
-      setCountReadComment(cache)
-    } else {
-      handleNotHaveCache()
-    }
-  })
-}
+      if (cache) {
+        setCountReadComment(cache)
+      } else {
+        handleNotHaveCache()
+      }
+    })
+  }
+  const handleNotHaveCache = () => {
+    const comment = handleNotHaveCacheHook(listPostNotif)
+    setCountReadComment(comment)
+  }
 
-const handleNotHaveCache = () => {
-  const comment = handleNotHaveCacheHook(listPostNotif)
-  setCountReadComment(comment)
-}
+  const handleUpdateCache = (id, totalComment) => {
+    const updateReadCache = handleUpdateCacheHook(countReadComment, id, totalComment)
+    setCountReadComment(updateReadCache)
+  }
 
-const handleUpdateCache = (id, totalComment) => {
-  const updateReadCache = handleUpdateCacheHook(countReadComment, id, totalComment)
-  setCountReadComment(updateReadCache)
-}
+  const mappingUnreadCountPostNotif = () => {
+    const totalMessage = mappingUnreadCountPostNotifHook(listPostNotif, countReadComment)
+    dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage))
+  }
 
-const mappingUnreadCountPostNotif = () => {
-  const totalMessage = mappingUnreadCountPostNotifHook(listPostNotif, countReadComment)
-  dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage))
-}
-
-const getPostNotification = async () => {
+  const getPostNotification = async () => {
     const res = await getFeedNotification()
-    if(res.success) {
-        setListPostNotif(res.data)
+    if (res.success) {
+      setListPostNotif(res.data)
     }
-}
-
+  }
   const customPreviewTitle = (props) => {
     const { name } = props.channel?.data;
     return (
@@ -171,20 +168,18 @@ const getPostNotification = async () => {
   }
 
   const chatBadge = (props) => (
-    <CustomPreviewUnreadCount   {...props}  />
+    <CustomPreviewUnreadCount   {...props} />
   )
 
   const onSelectChat = (channel, refreshList) => {
-     if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
-                    // toDo reset main feeds
-                    setMainFeeds(null, dispatchFeed)
-                    navigation.navigate('TopicPageScreen', { id: channel.data.id, refreshList });
-                  } else {
-                    setChannel(channel, dispatch);
-                    // ChannelScreen | ChatDetailPage
-                    navigation.navigate('ChatDetailPage');
+    if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
+      navigation.navigate('TopicPageScreen', { id: channel.data.id, refreshList });
+    } else {
+      setChannel(channel, dispatch);
+      // ChannelScreen | ChatDetailPage
+      navigation.navigate('ChatDetailPage');
 
-                  }
+    }
   }
 
   React.useEffect(() => {
@@ -226,7 +221,7 @@ const getPostNotification = async () => {
                context={myContext}
                PreviewUnreadCount={chatBadge}
                PreviewMessage={PreviewMessage}
-               postNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} showBadgePostNotif  />}
+               PostNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item.item} index={index} onSelectAdditionalData={() => goToFeedDetail(item.item)} showBadgePostNotif  />}
               />
 
             </Chat>
@@ -246,4 +241,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default React.memo(withInteractionsManaged (ChannelListScreen))
+export default React.memo(withInteractionsManaged(ChannelListScreen))

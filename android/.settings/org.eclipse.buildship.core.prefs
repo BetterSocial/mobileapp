@@ -1,5 +1,5 @@
-arguments=--init-script /var/folders/z2/7cgyw4px4kn4t0yr7bpstb100000gn/T/init6326154247250645628.gradle --init-script /var/folders/z2/7cgyw4px4kn4t0yr7bpstb100000gn/T/init5010915683440558797.gradle
-auto.sync=false
+arguments=--init-script /var/folders/z2/7cgyw4px4kn4t0yr7bpstb100000gn/T/init4786938213551894807.gradle --init-script /var/folders/z2/7cgyw4px4kn4t0yr7bpstb100000gn/T/init10721757186069391889.gradle
+auto.sync=true
 build.scans.enabled=false
 connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)
 connection.project.dir=
