@@ -95,6 +95,7 @@ const ProfileScreen = ({ route }) => {
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
     React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
+  const [image, setImage] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
   const [loadingContainer, setLoadingContainer] = React.useState(true)
   const [yourselfId, setYourselfId] = React.useState('');
@@ -133,7 +134,7 @@ const ProfileScreen = ({ route }) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', () => {
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
       // getMyFeeds();
     });
     if (interactionsComplete) {
@@ -181,7 +182,7 @@ const ProfileScreen = ({ route }) => {
   const getMyFeeds = async (offset = 0, limit = 10) => {
     const result = await getSelfFeedsInProfile(offset, limit);
     console.log(result, 'nakal')
-    if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
+    if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch)
     else {
       const clonedFeeds = [...feeds, ...result.data]
       // clonedFeeds.splice(feeds.length - 1, 0, ...data)
@@ -243,6 +244,19 @@ const ProfileScreen = ({ route }) => {
     }
   };
 
+  const handleScroll = (event) => {
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    if (currentOffset < 70) {
+      setOpacity(0);
+      setIsShowButton(false);
+    } else if (currentOffset >= 70 && currentOffset <= headerHeightRef.current) {
+      setIsShowButton(true);
+      setOpacity((currentOffset - 70) * (1 / 100));
+    } else if (currentOffset > headerHeightRef.current) {
+      setOpacity(1);
+      setIsShowButton(true);
+    }
+  };
 
   const toTop = () => {
     flatListScrollRef.current.scrollToTop()
@@ -473,6 +487,7 @@ const ProfileScreen = ({ route }) => {
   }
 
   const handleOnEndReached = () => {
+    console.log('lasa',postOffset)
     getMyFeeds(postOffset)
   }
 
@@ -515,6 +530,7 @@ const ProfileScreen = ({ route }) => {
           data={feeds}
           onRefresh={handleRefresh}
           refreshing={loading}
+          onScroll={handleScroll}
           ListFooterComponent={<ActivityIndicator />}
           onEndReach={handleOnEndReached}
           initialNumToRender={2}
@@ -522,6 +538,10 @@ const ProfileScreen = ({ route }) => {
           updateCellsBatchingPeriod={10}
           removeClippedSubviews
           windowSize={10}
+          snapToOffsets={(() => {
+            const posts = feeds.map((item, index) => headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT))
+            return [0, ...posts]
+          })()}
           ListHeaderComponent={
             renderHeader
           }>

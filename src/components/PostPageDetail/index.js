@@ -545,12 +545,6 @@ const styles = StyleSheet.create({
   },
   content: (h) => ({
     width,
-    shadowColor: 'rgba(0,0,0,0.5)',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.5,
     borderBottomWidth: 1,
     borderBottomColor: '#C4C4C4',
     marginBottom: -1,
