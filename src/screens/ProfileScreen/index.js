@@ -3,6 +3,7 @@ import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   LogBox,
   Share,
@@ -180,10 +181,11 @@ const ProfileScreen = ({ route }) => {
 
   const getMyFeeds = async (offset = 0, limit = 10) => {
     const result = await getSelfFeedsInProfile(offset, limit);
-    if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
+    console.log(result, 'nakal')
+    if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch)
     else {
-      const clonedFeeds = [...feeds]
-      clonedFeeds.splice(feeds.length - 1, 0, ...data)
+      const clonedFeeds = [...feeds, ...result.data]
+      // clonedFeeds.splice(feeds.length - 1, 0, ...data)
       setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
     setLoading(false)
@@ -196,17 +198,11 @@ const ProfileScreen = ({ route }) => {
       id: 'btn_share',
     });
     try {
-      const result = await Share.share({
+      await Share.share({
         message: shareUserLink(dataMain.username),
       });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-        } else {
-        }
-      } else if (result.action === Share.dismissedAction) {
-      }
     } catch (error) {
-      alert(error.message);
+      Alert.alert('Somethig wrong!', error.message)
     }
   };
 
@@ -490,7 +486,10 @@ const ProfileScreen = ({ route }) => {
     refBlockComponet.current.openBlockComponent(value);
   }
 
-  const __handleOnEndReached = () => getMyFeeds(postOffset)
+  const handleOnEndReached = () => {
+    console.log('lasa',postOffset)
+    getMyFeeds(postOffset)
+  }
 
   const handleRefresh = () => {
     setLoading(true)
@@ -533,7 +532,7 @@ const ProfileScreen = ({ route }) => {
           refreshing={loading}
           onScroll={handleScroll}
           ListFooterComponent={<ActivityIndicator />}
-          onEndReach={__handleOnEndReached}
+          onEndReach={handleOnEndReached}
           initialNumToRender={2}
           maxToRenderPerBatch={2}
           updateCellsBatchingPeriod={10}
