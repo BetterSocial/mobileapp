@@ -11,15 +11,15 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
 import ImageLayouter from './ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
 import { COLORS } from '../../../utils/theme';
 import { Gap } from "../..";
+import { POST_TYPE_POLL } from '../../../utils/constants';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
-import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
-import { POST_TYPE_POLL } from '../../../utils/constants';
 
 const { width: screenWidth } = Dimensions.get('window');
 

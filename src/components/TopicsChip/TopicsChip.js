@@ -39,7 +39,9 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 12,
         position: 'absolute',
-        bottom: 0
+        bottom: 0,
+        paddingLeft: 16,
+        paddingRight: 16,
         // backgroundColor: colors.blue
     },
     topicItemContainer: {

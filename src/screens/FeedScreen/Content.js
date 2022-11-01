@@ -11,16 +11,16 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import ContentLink from './ContentLink';
+import ContentPoll from './ContentPoll';
 import Gap from '../../components/Gap';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import { COLORS, SIZES } from '../../utils/theme';
+import { POST_TYPE_LINK, POST_TYPE_POLL } from '../../utils/constants';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
-import ContentPoll from './ContentPoll';
-import { POST_TYPE_LINK, POST_TYPE_POLL } from '../../utils/constants';
-import ContentLink from './ContentLink';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -28,7 +28,7 @@ const FONT_SIZE_MEDIA = 16
 const FONT_SIZE_TEXT = 24
 const FONT_SIZE_TEXT_LONG = 16
 
-const Content = ({ message, images_url, style, onPress, topics = [], item, onNewPollFetched, onPressDomain,      onCardContentPress }) => {
+const Content = ({ message, images_url, style, onPress, topics = [], item, onNewPollFetched, onPressDomain, onCardContentPress }) => {
   const navigation = useNavigation();
 
 
@@ -65,40 +65,40 @@ const Content = ({ message, images_url, style, onPress, topics = [], item, onNew
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       <View style={styles.container}>
-            <View
-              style={styles.containerMainText}>
-              <Text style={styles.textMedia} numberOfLines={5} >
-                {message}
-              </Text>
-              
-            </View>
-            <View style={styles.containerMainText} >
-                {item && item.post_type === POST_TYPE_POLL? 
-                <ContentPoll 
-                message={item.message}
-                images_url={item.images_url}
-                polls={item.pollOptions}
-                onPress={() => onPress(item, index)}
-                item={item}
-                pollexpiredat={item.polls_expired_at}
-                multiplechoice={item.multiplechoice}
-                isalreadypolling={item.isalreadypolling}
-                onnewpollfetched={onNewPollFetched}
-                voteCount={item.voteCount}
-                topics={item?.topics}
-              /> : null}
-              
-              </View>
-            <Gap height={SIZES.base} />
-            <View style={styles.containerImage}>
-              <ImageLayouter
-                images={images_url}
-                onimageclick={onImageClickedByIndex}
-              />
-            </View>
-                    <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} />
+        <View
+          style={styles.containerMainText}>
+          <Text style={styles.textMedia} numberOfLines={5} >
+            {message}
+          </Text>
 
-          </View>
+        </View>
+        <View style={styles.containerMainText} >
+          {item && item.post_type === POST_TYPE_POLL ?
+            <ContentPoll
+              message={item.message}
+              images_url={item.images_url}
+              polls={item.pollOptions}
+              onPress={() => onPress(item, index)}
+              item={item}
+              pollexpiredat={item.polls_expired_at}
+              multiplechoice={item.multiplechoice}
+              isalreadypolling={item.isalreadypolling}
+              onnewpollfetched={onNewPollFetched}
+              voteCount={item.voteCount}
+              topics={item?.topics}
+            /> : null}
+
+        </View>
+        <Gap height={SIZES.base} />
+        <View style={styles.containerImage}>
+          <ImageLayouter
+            images={images_url}
+            onimageclick={onImageClickedByIndex}
+          />
+        </View>
+        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} />
+
+      </View>
     </Pressable>
   );
 };
@@ -147,10 +147,10 @@ const styles = StyleSheet.create({
   },
   textMedia: {
     fontFamily: fonts.inter[400],
-      fontWeight: 'normal',
-      fontSize: FONT_SIZE_MEDIA,
-      color: colors.black,
-      lineHeight: 24,
+    fontWeight: 'normal',
+    fontSize: FONT_SIZE_MEDIA,
+    color: colors.black,
+    lineHeight: 24,
   },
 
   seemore: {
@@ -252,8 +252,8 @@ const styles = StyleSheet.create({
   textContainer: {
   },
   containerMainText: {
-          paddingLeft: 16,
-                paddingRight: 16,
-                marginBottom: 7
+    paddingLeft: 16,
+    paddingRight: 16,
+    marginBottom: 7
   }
 });
