@@ -184,6 +184,7 @@ const TopicPageScreen = (props) => {
     };
 
     const onPress = (item) => {
+        console.log('onpresspostpagedetail')
         props.navigation.navigate('PostDetailPage', {
             feedId: item.id,
             isalreadypolling: item.isalreadypolling,

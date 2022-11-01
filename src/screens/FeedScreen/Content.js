@@ -28,7 +28,7 @@ const FONT_SIZE_MEDIA = 16
 const FONT_SIZE_TEXT = 24
 const FONT_SIZE_TEXT_LONG = 16
 
-const Content = ({ message, images_url, style, onPress, topics = [], item, onNewPollFetched, onPressDomain, onCardContentPress }) => {
+const Content = ({ message, images_url = [], style, onPress, topics = [], item, onNewPollFetched, onPressDomain, onCardContentPress }) => {
   const navigation = useNavigation();
 
 
@@ -68,7 +68,7 @@ const Content = ({ message, images_url, style, onPress, topics = [], item, onNew
         <View
           style={styles.containerMainText}>
           <Text style={styles.textMedia} numberOfLines={5} >
-            {message}
+            {getCaptionWithTopicStyle(message, navigation)}
           </Text>
 
         </View>
@@ -90,12 +90,12 @@ const Content = ({ message, images_url, style, onPress, topics = [], item, onNew
 
         </View>
         <Gap height={SIZES.base} />
-        <View style={styles.containerImage}>
+        {images_url.length > 0 && <View style={styles.containerImage}>
           <ImageLayouter
             images={images_url}
             onimageclick={onImageClickedByIndex}
           />
-        </View>
+        </View>}
         <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} />
 
       </View>
