@@ -96,7 +96,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
             onimageclick={onImageClickedByIndex}
           />
         </View>}
-        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} />
+        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} text={message}/>
 
       </View>
     </Pressable>
