@@ -246,7 +246,7 @@ const RenderListFeed = (props) => {
             onPress={onPress}
             topics={item?.topics}
             item={item}
-             onnewpollfetched={onNewPollFetched}
+            onNewPollFetched={onNewPollFetched}
             //  onPressDomain={() => onPressDomain(item)}
             //  onCardContentPress={() => navigateToLinkContextPage(item)}
           />

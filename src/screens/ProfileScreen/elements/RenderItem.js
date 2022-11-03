@@ -159,23 +159,6 @@ const Item = ({
     <View style={styles.cardContainer(bottomHeight)}>
       <Header headerStyle={{paddingHorizontal: 9}} props={item} height={getHeightHeader()} />
 
-      {item.post_type === POST_TYPE_POLL && (
-        <ContentPoll
-          index={index}
-          message={item.message}
-          images_url={item.images_url}
-          polls={item.pollOptions}
-          onPress={onPress}
-          item={item}
-          pollexpiredat={item.polls_expired_at}
-          multiplechoice={item.multiplechoice}
-          isalreadypolling={item.isalreadypolling}
-          onnewpollfetched={onNewPollFetched}
-          voteCount={item.voteCount}
-          topics={item?.topics}
-        />
-      )}
-
       {item.post_type === POST_TYPE_LINK && (
         <View style={{flex: 1}}>
           <ContentLink
@@ -191,13 +174,16 @@ const Item = ({
           />
         </View>
       )}
-      {item.post_type === POST_TYPE_STANDARD && (
+      {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
         <Content
-          index={index}
-          message={item.message}
-          images_url={item.images_url}
-          onPress={onPress}
-          topics={item?.topics}
+
+           index={index}
+            message={item.message}
+            images_url={item.images_url}
+            onPress={onPress}
+            topics={item?.topics}
+            item={item}
+            onNewPollFetched={onNewPollFetched}
         />
       )}
       <View style={styles.footerWrapper(getHeightFooter())}>
