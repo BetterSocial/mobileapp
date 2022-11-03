@@ -10,18 +10,18 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
+import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
 import ImageLayouter from './ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
 import { COLORS } from '../../../utils/theme';
+import { POST_TYPE_POLL } from '../../../utils/constants';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
-import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
-import { POST_TYPE_POLL } from '../../../utils/constants';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const Content = ({ message, images_url, topics = [], item,  onnewpollfetched }) => {
+const Content = ({ message, images_url = [], topics = [], item, onnewpollfetched }) => {
   const navigation = useNavigation();
   const cekImage = () => images_url !== null && images_url !== '' && images_url !== undefined;
 
@@ -37,37 +37,35 @@ const Content = ({ message, images_url, topics = [], item,  onnewpollfetched }) 
     });
   };
 
-  if(!cekImage) return null
+  if (!cekImage) return null
 
   return (
 
-      <ScrollView contentContainerStyle={{flexGrow: 1}}  showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
-            <View style={[styles.contentFeed]}>
-              <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
-              {item && item.post_type === POST_TYPE_POLL ? 
-              <ContentPoll 
-              message={item.message}
-                images_url={item.images_url}
-                polls={item.pollOptions}
-                item={item}
-                pollexpiredat={item.polls_expired_at}
-                multiplechoice={item.multiplechoice}
-                isalreadypolling={item.isalreadypolling}
-                onnewpollfetched={ onnewpollfetched}
-                voteCount={item.voteCount}
-                topics={item?.topics}
-              /> : null}
-              
-  
-            </View>
-              <ImageLayouter
-              images={images_url || []}
-              onimageclick={onImageClickedByIndex}
-            />
-              <TopicsChip topics={topics} fontSize={16} text={message} />
-          </ScrollView>
+    <ScrollView contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+      <View style={[styles.contentFeed]}>
+        <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
+        {item && item.post_type === POST_TYPE_POLL ?
+          <ContentPoll
+            message={item.message}
+            images_url={item.images_url}
+            polls={item.pollOptions}
+            item={item}
+            pollexpiredat={item.polls_expired_at}
+            multiplechoice={item.multiplechoice}
+            isalreadypolling={item.isalreadypolling}
+            onnewpollfetched={onnewpollfetched}
+            voteCount={item.voteCount}
+            topics={item?.topics}
+          /> : null}
+      </View>
+      {images_url.length > 0 && <ImageLayouter
+        images={images_url || []}
+        onimageclick={onImageClickedByIndex}
+      />}
+      <TopicsChip topics={topics} fontSize={16} text={message} />
+    </ScrollView>
 
-   
+
   );
 };
 
