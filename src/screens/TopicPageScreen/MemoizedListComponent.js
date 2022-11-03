@@ -27,11 +27,11 @@ const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
-const getHeightHeader = () => 
+const getHeightHeader = () =>
   // let h = Math.floor((FULL_HEIGHT * 10) / 100);
   // return h;
-   dimen.size.FEED_HEADER_HEIGHT
-;
+  dimen.size.FEED_HEADER_HEIGHT
+  ;
 
 const RenderListFeed = (props) => {
   const {
@@ -70,11 +70,11 @@ const RenderListFeed = (props) => {
     return h;
   };
 
-  const getHeightReaction = () => 
+  const getHeightReaction = () =>
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
-     dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
-  ;
+    dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
+    ;
 
   const onPressDownVoteHandle = async () => {
     setStatusDowvote((prev) => !prev);
@@ -159,7 +159,7 @@ const RenderListFeed = (props) => {
 
   const initial = () => {
     const reactionCount = item.reaction_counts;
-    if(item?.id === '06f2a0e0-850b-11ec-bbb5-123430d3b8d3') {
+    if (item?.id === '06f2a0e0-850b-11ec-bbb5-123430d3b8d3') {
       console.log(item)
     }
     if (JSON.stringify(reactionCount) !== '{}') {
@@ -211,39 +211,43 @@ const RenderListFeed = (props) => {
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
         <Header props={item} height={getHeightHeader()} />
-        {item.post_type === POST_TYPE_POLL && (
-          <ContentPoll
-            index={index}
-            message={item.message}
-            images_url={item.images_url}
-            polls={item.pollOptions}
-            onPress={() => onPress(item, index)}
-            item={item}
-            pollexpiredat={item.polls_expired_at}
-            multiplechoice={item.multiplechoice}
-            isalreadypolling={item.isalreadypolling}
-            onnewpollfetched={onNewPollFetched}
-            voteCount={item.voteCount}
-          />
-        )}
+        <View style={styles.contentContainer}>
+          {item.post_type === POST_TYPE_POLL && (
+            <View style={styles.pollPostContainer}>
+              <ContentPoll
+                index={index}
+                message={item.message}
+                images_url={item.images_url}
+                polls={item.pollOptions}
+                onPress={() => onPress(item, index)}
+                item={item}
+                pollexpiredat={item.polls_expired_at}
+                multiplechoice={item.multiplechoice}
+                isalreadypolling={item.isalreadypolling}
+                onnewpollfetched={onNewPollFetched}
+                voteCount={item.voteCount}
+              />
+            </View>
+          )}
 
-        {item.post_type === POST_TYPE_LINK && (
-          <ContentLink
-            index={index}
-            og={item.og}
-            onPress={() => onPress(item)}
-            onHeaderPress={() => onPressDomain(item)}
-            onCardContentPress={() => navigateToLinkContextPage(item)}
-          />
-        )}
-        {item.post_type === POST_TYPE_STANDARD && (
-          <Content
-            index={index}
-            message={item.message}
-            images_url={item.images_url}
-            onPress={onPress}
-          />
-        )}
+          {item.post_type === POST_TYPE_LINK && (
+            <ContentLink
+              index={index}
+              og={item.og}
+              onPress={() => onPress(item)}
+              onHeaderPress={() => onPressDomain(item)}
+              onCardContentPress={() => navigateToLinkContextPage(item)}
+            />
+          )}
+          {item.post_type === POST_TYPE_STANDARD && (
+            <Content
+              index={index}
+              message={item.message}
+              images_url={item.images_url}
+              onPress={onPress}
+            />
+          )}
+        </View>
         <View style={styles.footerWrapper(getHeightFooter())}>
           <Footer
             item={item}
@@ -304,6 +308,14 @@ const styles = StyleSheet.create({
     maxHeight: heightReaction,
     marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
   }),
+  contentContainer: {
+    flex: 1,
+  },
+  pollPostContainer: {
+    paddingTop: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
 });
 
 RenderListFeed.propTypes = {
