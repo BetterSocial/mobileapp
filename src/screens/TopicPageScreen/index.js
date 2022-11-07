@@ -22,13 +22,16 @@ import { getUserTopic, putUserTopic } from '../../service/topics';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { TOPIC_LIST } from '../../utils/cache/constant';
+import TiktokScroll from '../../components/TiktokScroll';
 
 const TopicPageScreen = (props) => {
     const route = useRoute();
     const { params } = route
     const [topicName, setTopicName] = React.useState(route?.params?.id);
     const [loading, setLoading] = React.useState(false);
-    const [isInitialLoading, setIsInitialLoading] = React.useState(true);
+    // const [isInitialLoading, setIsInitialLoading] = React.useState(true);
     const [userId, setUserId] = React.useState('');
     const [topicId, setTopicId] = React.useState('');
     const [feedsContext, dispatch] = React.useContext(Context).feeds;
@@ -38,36 +41,53 @@ const TopicPageScreen = (props) => {
     const [offset, setOffset] = React.useState(0);
     const [client] = React.useContext(Context).client;
     const navigation = useNavigation()
-
+    const [prevOffste, setPrevOffset] = React.useState(0)
     const refBlockComponent = React.useRef();
     const [headerHeightRef] = React.useState(0);
 
     const initData = async () => {
         try {
-            setIsInitialLoading(true)
-            setLoading(true)
+            // setIsInitialLoading(true)
+            // setLoading(true)
             const topicWithPrefix = route.params.id
             const id = removePrefixTopic(topicWithPrefix);
             setTopicName(id);
             setUserTopicName(id);
             const query = `?name=${id}`;
             setTopicId(id);
+            console.log(id, 'jolo')
             // eslint-disable-next-line no-underscore-dangle
-            const _resultGetTopicPages = await getTopicPages(id);
-            setTopicFeeds(_resultGetTopicPages.data, dispatch);
-            setOffset(_resultGetTopicPages.offset)
+            // const _resultGetTopicPages = await getTopicPages(id);
+            
+            getSpecificCache(`${TOPIC_LIST}_${id}`, async (cacheTopic) => {
+                console.log(cacheTopic, 'mantap')
+                if(!cacheTopic) {
+                     const resultGetTopicPages = await getTopicPages(id);
+                     saveToCache(`${TOPIC_LIST}_${id}`, resultGetTopicPages)
+                     setTopicFeeds(resultGetTopicPages.data, dispatch);
+                    setOffset(resultGetTopicPages.offset)
+                } else {
+                    setTopicFeeds(cacheTopic.data, dispatch);
+                    setOffset(cacheTopic.offset)
+                }
+                console.log( cacheTopic, 'lusa')
+            })
+            // console.log(_resultGetTopicPages , 'pola')
+            // setTopicFeeds(_resultGetTopicPages.data, dispatch);
+            // setOffset(_resultGetTopicPages.offset)
 
             // eslint-disable-next-line no-underscore-dangle
             const _resultGetUserTopic = await getUserTopic(query);
+            console.log(_resultGetUserTopic, 'banak')
             if (_resultGetUserTopic.data) {
                 setIsFollow(true);
             }
 
-            setLoading(false)
-            setIsInitialLoading(false)
+            // setLoading(false)
+            // setIsInitialLoading(false)
         } catch (error) {
             console.log(error);
-            setLoading(false);
+            // setLoading(false);
         }
     }
 
@@ -78,6 +98,10 @@ const TopicPageScreen = (props) => {
 
         return unsubscribe
     }, [navigation])
+
+    React.useEffect(() => () => {
+             setTopicFeeds([], dispatch);
+        }, [])
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -114,22 +138,36 @@ const TopicPageScreen = (props) => {
     }
 
     const refreshingData = async (offsetParam = offset) => {
-        try {
-            setLoading(true);
-            const result = await getTopicPages(topicId, offsetParam);
-            const { data } = result;
-            if (offsetParam === 0) {
-                setTopicFeeds(data, dispatch)
-            } else {
-                setTopicFeeds([...feeds, ...data], dispatch);
+        if(offset) {
+            try {
+                setLoading(true);
+                const result = await getTopicPages(topicId, offsetParam);
+                const { data } = result;
+                const topicWithPrefix = route.params.id
+                const id = removePrefixTopic(topicWithPrefix);
+                setOffset(result.offset)
+                console.log(result, 'makan')
+                if(result.code === 200) {
+                    if (offsetParam === 0) {
+                    saveToCache(`${TOPIC_LIST}_${id}`, result)
+                    setTopicFeeds(data, dispatch)
+                    } else {
+                    const joinData = [...feeds, ...data]
+                    const newResult = {...result, data: joinData}
+                    saveToCache(`${TOPIC_LIST}_${id}`, newResult)
+                    setTopicFeeds(joinData, dispatch);
+                    }
+                }
+            
+                setLoading(false)
+            } catch (error) {
+                console.log(error);
+                setLoading(false);
             }
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
         }
+            
+        
     }
-
     const onDeleteBlockedPostCompleted = async (postId) => {
         const postIndex = feeds.findIndex((item) => item.id === postId)
         const clonedFeeds = [...feeds]
@@ -180,11 +218,11 @@ const TopicPageScreen = (props) => {
 
     const onEndReach = () => {
         // refreshingData(feeds[feeds.length - 1]?.id);
+        console.log(offset, 'polo')
         refreshingData(offset);
     };
 
     const onPress = (item) => {
-        console.log('onpresspostpagedetail')
         props.navigation.navigate('PostDetailPage', {
             feedId: item.id,
             isalreadypolling: item.isalreadypolling,
@@ -202,7 +240,7 @@ const TopicPageScreen = (props) => {
     };
 
     const onRefresh = () => {
-        refreshingData();
+        refreshingData(0);
     };
 
 
@@ -240,20 +278,20 @@ const TopicPageScreen = (props) => {
             <StatusBar barStyle="dark-content" translucent={false} />
             <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
             <View style={{ flex: 1 }}>
-                <ProfileTiktokScroll
+                <TiktokScroll
                     contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
-                    data={isInitialLoading ? [] : feeds}
+                    data={feeds}
                     onEndReach={onEndReach}
                     onRefresh={onRefresh}
                     refreshing={loading}
-                    snapToOffsets={(() => {
-                        if (feeds) {
-                            const posts = feeds?.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-                            return [headerHeightRef, ...posts]
-                        }
+                    // snapToOffsets={(() => {
+                    //     if (feeds) {
+                    //         const posts = feeds?.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
+                    //         return [headerHeightRef, ...posts]
+                    //     }
 
-                        return [headerHeightRef]
-                    })()}
+                    //     return [headerHeightRef]
+                    // })()}
                 >
                     {({ item, index }) => (
                         <MemoizedListComponent
@@ -270,7 +308,7 @@ const TopicPageScreen = (props) => {
                             loading={loading}
                         />
                     )}
-                </ProfileTiktokScroll>
+                </TiktokScroll>
 
 
             </View>

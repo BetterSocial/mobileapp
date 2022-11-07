@@ -272,4 +272,10 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
+configurations.all {
+   resolutionStrategy {
+       force 'androidx.core:core:1.6.0'    //This is stable version right now.
+   }
+}
+
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
