@@ -37,9 +37,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         width: '100%',
-        marginTop: 12,
         position: 'absolute',
-        bottom: 0
+        bottom: 5,
+        paddingLeft: 16,
+        paddingRight: 16,
         // backgroundColor: colors.blue
     },
     topicItemContainer: {
@@ -47,13 +48,13 @@ const styles = StyleSheet.create({
         borderRadius: 14,
         overflow: 'hidden',
         marginEnd: 11,
-        marginBottom: 4,
+        marginTop: 5
     },
     topicText: {
         fontFamily: fonts.inter[500],
         paddingHorizontal: 13,
         paddingVertical: 4.5,
-        // fontSize: 12,
+        fontSize: 12,
         // lineHeight: 14.52,
         borderRadius: 14,
         color: colors.blue,

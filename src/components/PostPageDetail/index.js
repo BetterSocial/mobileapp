@@ -17,18 +17,14 @@ import { useRoute } from '@react-navigation/native'
 import BlockComponent from "../BlockComponent";
 import ContainerComment from "../Comments/ContainerComment";
 import Content from './elements/Content';
-import ContentLink from '../../screens/FeedScreen/ContentLink';
-import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from "../LoadingWithoutModal";
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from "../Comments/WriteComment";
+import usePostDetail from './hooks/usePostDetail';
 import { Context } from '../../context';
 import { Footer, Gap } from "..";
 import {
-  POST_TYPE_LINK,
-  POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
   SOURCE_PDP,
 } from '../../utils/constants';
 import { createCommentParent } from '../../service/comment';
@@ -40,8 +36,6 @@ import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuild
 import { setFeedByIndex, setMainFeeds, setTimer } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
 import { withInteractionsManaged } from '../WithInteractionManaged';
-import useReplyComment from '../ReplyComment/hooks/useReplyComment';
-import usePostDetail from './hooks/usePostDetail';
 
 const { width, height } = Dimensions.get('window');
 
@@ -68,10 +62,10 @@ const PostPageDetailIdComponent = (props) => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const { timer } = feedsContext
   const { feedId, navigateToReplyView } = props
-  const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail()
+  const { updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1 } = usePostDetail()
   React.useEffect(() => {
     if (item && item.latest_reactions && item.latest_reactions.comment) {
-      setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
+      setCommentList(item?.latest_reactions?.comment?.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
     }
   }, [item]);
 
@@ -81,29 +75,31 @@ const PostPageDetailIdComponent = (props) => {
     setTotalVote(upvote - downvotes)
   };
   const initial = async () => {
-    const reactionCount = item.reaction_counts;
-    if (JSON.stringify(reactionCount) !== '{}') {
-      let count = 0;
-      const { comment } = reactionCount;
-      handleVote(reactionCount);
-      if (comment !== undefined) {
-        if (comment > 0) {
-          setReaction(true);
-          setTotalComment(
-            getCountCommentWithChildInDetailPage(item.latest_reactions),
-          );
+    try {
+      const reactionCount = item.reaction_counts;
+      if (JSON.stringify(reactionCount) !== '{}') {
+        let count = 0;
+        const { comment } = reactionCount;
+        handleVote(reactionCount);
+        if (comment !== undefined) {
+          if (comment > 0) {
+            setReaction(true);
+            setTotalComment(
+              getCountCommentWithChildInDetailPage(item.latest_reactions),
+            );
+          }
         }
+        const upvote = reactionCount.upvotes;
+        if (upvote !== undefined) {
+          count += upvote;
+        }
+        const downvote = reactionCount.downvotes;
+        if (downvote !== undefined) {
+          count -= downvote;
+        }
+        setTotalVote(count);
       }
-      const upvote = reactionCount.upvotes;
-      if (upvote !== undefined) {
-        count += upvote;
-      }
-      const downvote = reactionCount.downvotes;
-      if (downvote !== undefined) {
-        count -= downvote;
-      }
-      setTotalVote(count);
-    }
+    } catch (e) { }
   };
 
   const getDetailFeed = async () => {
@@ -271,6 +267,7 @@ const PostPageDetailIdComponent = (props) => {
     })
     setMainFeeds(mappingData, dispatch)
   }
+
   const findCommentAndUpdate = (id, newData, level) => {
     let newCommenList = []
     if (level > 0) {
@@ -439,11 +436,11 @@ const PostPageDetailIdComponent = (props) => {
   }
 
   const updateVoteLatestChildren = async (dataUpdated, data, level) => {
-    if(level === 3) {
+    if (level === 3) {
       const newComment = await updateVoteLatestChildrenLevel3(commentList, dataUpdated)
       setCommentList(newComment)
     }
-    if(level ===1) {
+    if (level === 1) {
       const newComment = await updateVoteChildrenLevel1(commentList, dataUpdated)
       setCommentList(newComment)
     }
@@ -463,19 +460,19 @@ const PostPageDetailIdComponent = (props) => {
           style={styles.contentScrollView(totalComment)}
           nestedScrollEnabled={true}>
           <View style={styles.content(height)}>
-             <Content
-                message={item.message}
-                images_url={item.images_url}
-                style={styles.additionalContentStyle(
-                  item.images_url.length,
-                  height,
-                )}
-                topics={item?.topics} 
-                item={item}
-                onnewpollfetched={onNewPollFetched}
+            <Content
+              message={item.message}
+              images_url={item.images_url}
+              style={styles.additionalContentStyle(
+                item.images_url.length,
+                height,
+              )}
+              topics={item?.topics}
+              item={item}
+              onnewpollfetched={onNewPollFetched}
 
-                />
-           
+            />
+
             <Gap height={16} />
             <View style={{ height: 52, paddingHorizontal: 0, width: '100%' }}>
               <Footer
@@ -528,7 +525,7 @@ const PostPageDetailIdComponent = (props) => {
   );
 };
 
-export default withInteractionsManaged  (React.memo (PostPageDetailIdComponent));
+export default withInteractionsManaged(React.memo(PostPageDetailIdComponent));
 
 const styles = StyleSheet.create({
   container: {
@@ -551,17 +548,10 @@ const styles = StyleSheet.create({
   },
   content: (h) => ({
     width,
-    shadowColor: 'rgba(0,0,0,0.5)',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.5,
-    backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#C4C4C4',
     marginBottom: -1,
-    height: h - 170,
+    height: h - 180,
   }),
   gap: { height: 16 },
   additionalContentStyle: (imageLength, h) => {

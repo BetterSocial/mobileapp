@@ -5,7 +5,6 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Image from '../../../components/Image';
 
 const ImageLayouter = ({images = [], onimageclick}) => {
-  console.log(images.length % 2, 'toast')
   const handleImageWidth = (index) => {
     if(images.length > 2 && images.length % 2 === 0) {
       return {
