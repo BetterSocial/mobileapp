@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
@@ -10,23 +9,25 @@ import {
   Pressable,
   StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  View
+  View,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {TouchableWithoutFeedback} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import ImageLayouter from './ImageLayouter';
-import { COLORS } from '../../../utils/theme';
-import { Gap } from '../../../components';
-import { colors } from '../../../utils/colors';
-import { fonts } from '../../../utils/fonts';
+import {COLORS} from '../../../utils/theme';
+import {Gap} from '../../../components';
+import {colors} from '../../../utils/colors';
+import {fonts} from '../../../utils/fonts';
 
-const { width: screenWidth } = Dimensions.get('window');
+const {width: screenWidth} = Dimensions.get('window');
 
-const Content = ({ message, images_url, style, onPress }) => {
+const Content = ({message, images_url, style, onPress}) => {
   const route = useRoute();
   const navigation = useNavigation();
-  const cekImage = () => images_url !== null && images_url !== '' && images_url !== undefined;
+  const cekImage = () => {
+    return images_url !== null && images_url !== '' && images_url !== undefined;
+  };
 
   const onImageClickedByIndex = (index) => {
     console.log(index);
@@ -34,7 +35,7 @@ const Content = ({ message, images_url, style, onPress }) => {
       title: 'Photo',
       index,
       images: images_url.reduce((acc, current) => {
-        acc.push({ url: current });
+        acc.push({url: current});
         return acc;
       }, []),
     });
@@ -83,19 +84,21 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 16,
   },
-  fletlist: { flex: 1 },
+  fletlist: {flex: 1},
   imageList: {
     flex: 1,
     width: screenWidth - 32,
     borderRadius: 16,
   },
-  containerShowMessage: (currentRouteName) => ({
+  containerShowMessage: (currentRouteName) => {
+    return {
       justifyContent: 'center',
       alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
       flex: 1,
       paddingBottom: 10,
       minHeight: 100,
-    }),
+    };
+  },
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -177,7 +180,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
     backgroundColor: 'white',
     borderRadius: 8,
   },

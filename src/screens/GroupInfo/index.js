@@ -43,7 +43,6 @@ const GroupInfo = () => {
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
-  const [mappingMedia, setMappingMedia] = React.useState([])
 
   let username = channelState.channel?.data?.name;
   let createChat = channelState.channel?.data?.created_at;
@@ -200,16 +199,6 @@ const GroupInfo = () => {
     }
   };
 
-  React.useEffect(() => {
-    if(asset) {
-      const myMedia = []
-      asset.forEach((data) => {
-        myMedia.push(...data.message.attachments)
-      })
-      setMappingMedia(myMedia)
-    }
-  }, [asset])
-  
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -243,22 +232,20 @@ const GroupInfo = () => {
               <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
             </TouchableWithoutFeedback>
             <FlatList
-              data={mappingMedia}
+              data={asset}
               keyExtractor={(item, index) => index.toString()}
               style={styles.listImage(asset.length === 0)}
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({item, index}) => (
-               <>
-               {index > 10 ? null :  <Image
+                <Image
                   source={{
-                    uri: item.image_url,
+                    uri: item.message.attachments[0].image_url !== '' ? item.message.attachments[0] : undefined,
                   }}
                   width={80}
                   height={80}
                   style={styles.image(index === 0)}
-                />}
-               </>
+                />
               )}
             />
           </View>
