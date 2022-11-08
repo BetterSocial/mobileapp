@@ -84,13 +84,15 @@ const styles = StyleSheet.create({
     width: screenWidth - 32,
     borderRadius: 16,
   },
-  containerShowMessage: (currentRouteName) => ({
+  containerShowMessage: (currentRouteName) => {
+    return {
       justifyContent: 'center',
       alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
       flex: 1,
       paddingBottom: 10,
       minHeight: 100,
-    }),
+    };
+  },
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',

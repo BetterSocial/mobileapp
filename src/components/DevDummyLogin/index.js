@@ -19,6 +19,8 @@ const heightBs = Dimensions.get('window').height * 0.6
 const DevDummyLogin = ({ resetClickTime = () => { } }) => {
     const { ENABLE_DEV_ONLY_FEATURE } = configEnv
 
+    const [loading, setLoading] = React.useState(false);
+    const [isShown, setIsShown] = React.useState(true)
     const [dummyUsers] = React.useState([
         { name: "fajarism", humanId: "HQEGNQCHA8J1OIX4G2CP" },
         { name: "fajarismrandom01", humanId: "RNDM-RNDM-0001" },
@@ -44,17 +46,23 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
         if (ENABLE_DEV_ONLY_FEATURE === "true") {
             dummyLoginRbSheetRef.current.close();
         }
-
+        setLoading(true);
         const data = { appUserId, countryCode: 'ID' }
         console.log('data')
         console.log(data)
         setDataHumenId(data, dispatch);
         demoVerifyUser(appUserId)
             .then(async (response) => {
+                setLoading(false);
                 if (response.data) {
                     setAccessToken(response.token);
                     setRefreshToken(response.refresh_token);
                     streamChat(response.token).then(() => {
+                        // navigation.dispatch(StackActions.replace('HomeTabs'));
+                        // let strObj = {
+                        //     id: response.token,
+                        //     deeplinkProfile: false
+                        // }
                         const testObj = {
                             id: response.token,
                             deeplinkProfile:false
@@ -69,10 +77,11 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
             })
             .catch((e) => {
                 console.log(e);
+                setLoading(false);
             });
     };
 
-    if (ENABLE_DEV_ONLY_FEATURE === "true") return <View style={S.devTrialView}>
+    if (ENABLE_DEV_ONLY_FEATURE === "true" && isShown) return <View style={S.devTrialView}>
         <Button
             testID='dummyonboarding'
             title="Dev Dummy Onboarding"

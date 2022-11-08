@@ -28,6 +28,8 @@ import {
   GroupSetting,
   ProfileScreen
 } from '../screens';
+// import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import Blocked from '../screens/Blocked';
 import CreatePost from '../screens/CreatePost';
 import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
@@ -56,6 +58,7 @@ import WhotoFollow from '../screens/WhotoFollow';
 import { channelListLocalAtom } from '../service/channelListLocal';
 import { InitialStartupAtom } from '../service/initialStartup';
 import { verifyTokenGetstream } from '../service/users';
+
 import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
@@ -66,7 +69,7 @@ import HomeBottomTabs from './HomeBottomTabs';
 const RootStack = createStackNavigator();
 
 export const RootNavigator = () => {
-  const initialStartup = useRecoilValue(InitialStartupAtom);
+  let initialStartup = useRecoilValue(InitialStartupAtom);
   const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const setLocalChannelData = useSetRecoilState(channelListLocalAtom);
   const [clientState] = React.useContext(Context).client;

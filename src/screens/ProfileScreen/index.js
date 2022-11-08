@@ -4,7 +4,6 @@ import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {
   ActivityIndicator,
-  Alert,
   Dimensions,
   LogBox,
   Share,
@@ -12,7 +11,8 @@ import {
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View
+  View,
+  Alert
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { debounce } from 'lodash';
@@ -203,7 +203,7 @@ const ProfileScreen = ({ route }) => {
       id: 'btn_share',
     });
     try {
-      await Share.share({
+      const result = await Share.share({
         message: shareUserLink(dataMain.username),
       });
     } catch (error) {
@@ -561,7 +561,7 @@ const ProfileScreen = ({ route }) => {
           refreshing={loading}
           onScroll={handleScroll}
           ListFooterComponent={<ActivityIndicator />}
-          onEndReach={handleOnEndReached}
+          onEndReach={__handleOnEndReached}
           initialNumToRender={2}
           maxToRenderPerBatch={2}
           updateCellsBatchingPeriod={10}
