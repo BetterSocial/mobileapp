@@ -72,7 +72,7 @@ const InputMessage = () => {
           </TouchableOpacity>
         <TouchableOpacity
           style={styles.btn(text || imageUploads.length !== 0)}
-          disabled={imageUploads.length <= 0 || !isOnline}
+          // disabled={imageUploads.length <= 0 || !isOnline}
           onPress={handleSendMessage}>
           <IconSend style={styles.icSendButton} />
         </TouchableOpacity>
