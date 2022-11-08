@@ -31,7 +31,7 @@ const TopicPageScreen = (props) => {
     const { params } = route
     const [topicName, setTopicName] = React.useState(route?.params?.id);
     const [loading, setLoading] = React.useState(false);
-    // const [isInitialLoading, setIsInitialLoading] = React.useState(true);
+    const [isInitialLoading, setIsInitialLoading] = React.useState(true);
     const [userId, setUserId] = React.useState('');
     const [topicId, setTopicId] = React.useState('');
     const [feedsContext, dispatch] = React.useContext(Context).feeds;
@@ -41,13 +41,14 @@ const TopicPageScreen = (props) => {
     const [offset, setOffset] = React.useState(0);
     const [client] = React.useContext(Context).client;
     const navigation = useNavigation()
-    const [prevOffste, setPrevOffset] = React.useState(0)
+    // const [prevOffste, setPrevOffset] = React.useState(0)
     const refBlockComponent = React.useRef();
-    const [headerHeightRef] = React.useState(0);
+    // const [headerHeightRef] = React.useState(0);
 
     const initData = async () => {
+
         try {
-            // setIsInitialLoading(true)
+            setIsInitialLoading(true)
             // setLoading(true)
             const topicWithPrefix = route.params.id
             const id = removePrefixTopic(topicWithPrefix);
@@ -59,16 +60,20 @@ const TopicPageScreen = (props) => {
             // eslint-disable-next-line no-underscore-dangle
             // const _resultGetTopicPages = await getTopicPages(id);
             
-            getSpecificCache(`${TOPIC_LIST}_${id}`, async (cacheTopic) => {
+            await getSpecificCache(`${TOPIC_LIST}_${id}`, async (cacheTopic) => {
                 console.log(cacheTopic, 'mantap')
                 if(!cacheTopic) {
                      const resultGetTopicPages = await getTopicPages(id);
                      saveToCache(`${TOPIC_LIST}_${id}`, resultGetTopicPages)
                      setTopicFeeds(resultGetTopicPages.data, dispatch);
                     setOffset(resultGetTopicPages.offset)
+                                setIsInitialLoading(false)
+
                 } else {
                     setTopicFeeds(cacheTopic.data, dispatch);
                     setOffset(cacheTopic.offset)
+                                setIsInitialLoading(false)
+
                 }
                 console.log( cacheTopic, 'lusa')
             })
@@ -84,7 +89,6 @@ const TopicPageScreen = (props) => {
             }
 
             // setLoading(false)
-            // setIsInitialLoading(false)
         } catch (error) {
             console.log(error);
             // setLoading(false);
@@ -93,15 +97,14 @@ const TopicPageScreen = (props) => {
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
+            console.log('masuk pak')
             initData();
         })
 
         return unsubscribe
     }, [navigation])
 
-    React.useEffect(() => () => {
-             setTopicFeeds([], dispatch);
-        }, [])
+
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -218,11 +221,11 @@ const TopicPageScreen = (props) => {
 
     const onEndReach = () => {
         // refreshingData(feeds[feeds.length - 1]?.id);
-        console.log(offset, 'polo')
         refreshingData(offset);
     };
 
     const onPress = (item) => {
+        setTopicFeeds([], dispatch);
         props.navigation.navigate('PostDetailPage', {
             feedId: item.id,
             isalreadypolling: item.isalreadypolling,
@@ -272,7 +275,8 @@ const TopicPageScreen = (props) => {
             console.log(e);
         }
     };
-
+    console.log(isInitialLoading, 'lakao')
+    if(isInitialLoading) return null
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
             <StatusBar barStyle="dark-content" translucent={false} />
