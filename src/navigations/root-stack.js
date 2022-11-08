@@ -97,7 +97,7 @@ export const RootNavigator = () => {
     StatusBar.setBarStyle('dark-content', true);
     doVerifyGetstreamToken()
 
-    // useLocalChannelsFirst(setLocalChannelData);
+    useLocalChannelsFirst(setLocalChannelData);
 
     return async () => {
       await client?.disconnectUser();
