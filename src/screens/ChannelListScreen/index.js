@@ -16,7 +16,6 @@ import streamFeed from '../../utils/getstream/streamer'
 import {
   CHANNEL_TYPE_TOPIC,
 } from '../../utils/constants';
-import { FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { getAccessToken } from '../../utils/token'
@@ -31,6 +30,7 @@ import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
 import { getSpecificCache } from '../../utils/cache';
 import PreviewMessage from './elements/CustomPreviewMessage';
+import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 import useChannelList from './hooks/useChannelList';
 import { useRecoilValue } from 'recoil';
 import { channelListLocalAtom } from '../../service/channelListLocal';
@@ -49,8 +49,9 @@ const ChannelListScreen = ({ navigation }) => {
   const [profileContext] = React.useContext(Context).profile;
   const [countReadComment, setCountReadComment] = React.useState({})
   // const [countChat, setCountChat] = React.useState({})
-  const { myProfile } = profileContext
-  const { mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook } = useChannelList()
+  const {myProfile} = profileContext
+  const [postCount, setPostCount] = React.useState(0)
+  const {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook} = useChannelList()
   const [unReadMessage, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
@@ -96,20 +97,6 @@ const ChannelListScreen = ({ navigation }) => {
 
 }
 
-  React.useEffect(() => () => {
-      handleUnsubscribeNotif()
-
-    }, [])
-
-  const handleUnsubscribeNotif = async () => {
-    const token = await getAccessToken()
-    const clientFeed = streamFeed(token)
-    const notif = clientFeed.feed('notification', myProfile.user_id, token.id)
-    return () => {
-      notif.unsubscribe()
-    }
-  }
-}
 
 React.useEffect(() => {
   handleCacheComment()
@@ -227,7 +214,7 @@ const getPostNotification = async () => {
                context={myContext}
                PreviewUnreadCount={chatBadge}
                PreviewMessage={PreviewMessage}
-               PostNotifComponent={(item, index) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item.item} index={index} onSelectAdditionalData={() => goToFeedDetail(item.item)} showBadgePostNotif  />}
+               postNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item} index={index} onSelectAdditionalData={() => goToFeedDetail(item, refreshList)} showBadgePostNotif  />}
               />
 
             </Chat>

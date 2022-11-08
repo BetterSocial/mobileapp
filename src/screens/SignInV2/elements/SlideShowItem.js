@@ -84,22 +84,20 @@ const styles = StyleSheet.create({
     },
     container: {
         height: '100%',
-        width: width,
+        width,
     },
-    slideShowItemContainer: (backgroundColor, width) => {
-        return {
+    slideShowItemContainer: (backgroundColor, width) => ({
             justifyContent: 'center',
             flex: 1,
-            backgroundColor: backgroundColor,
+            backgroundColor,
             maxWidth: width,
             marginTop: -32,
-        }
-    },
+        }),
     onboardingForeground: {
         position: 'absolute',
         top: height > 640 ? 0 : 0,
         zIndex: 1,
-        width: width,
+        width,
         height: '100%',
         // resizeMode: 'contain'
         resizeMode: 'cover'
@@ -130,18 +128,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignSelf: 'center'
     },
-    text: (lineHeight) => {
-        return {
+    text: (lineHeight) => ({
             fontSize: 14.0,
-            lineHeight: lineHeight,
+            lineHeight,
             marginLeft: 12,
             marginRight: 12,
             marginTop: 16,
             fontFamily: fonts.inter[500],
             zIndex: 1000,
             textAlign: 'center',
-        }
-    },
+        }),
     topPartContainer: {
         flex: 1,
     }

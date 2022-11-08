@@ -70,7 +70,7 @@ import { traceMetricScreen } from '../libraries/performance/firebasePerformance'
 const RootStack = createStackNavigator();
 
 export const RootNavigator = () => {
-  const initialStartup = useRecoilValue(InitialStartupAtom);
+  let initialStartup = useRecoilValue(InitialStartupAtom);
   const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const setLocalChannelData = useSetRecoilState(channelListLocalAtom);
   const [clientState] = React.useContext(Context).client;

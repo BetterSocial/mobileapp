@@ -54,7 +54,6 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
         demoVerifyUser(appUserId)
             .then(async (response) => {
                 setLoading(false);
-                console.log(response, 'data')
                 if (response.data) {
                     setAccessToken(response.token);
                     setRefreshToken(response.refresh_token);

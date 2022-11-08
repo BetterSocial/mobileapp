@@ -30,20 +30,16 @@ import { showMessage } from 'react-native-flash-message';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { openSettings } from 'react-native-permissions';
 
-import ContentLink from './elements/ContentLink';
-import CreatePollContainer from './elements/CreatePollContainer';
-import CreatePostInput from '../../components/CreatePostInput';
-import Gap from '../../components/Gap';
-import Header from '../../components/Header';
-import ListItem from '../../components/MenuPostItem';
-import Loading from '../Loading';
-import Location from '../../assets/icons/Ic_location';
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
+import Location from '../../assets/icons/Ic_location';
 import Timer from '../../assets/icons/Ic_timer';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import { Button, ButtonAddMedia } from '../../components/Button';
+import Gap from '../../components/Gap';
+import Header from '../../components/Header';
+import ListItem from '../../components/MenuPostItem';
 import TopicItem from '../../components/TopicItem';
 import { Context } from '../../context';
 import { getLinkPreviewInfo } from '../../service/feeds';
@@ -55,13 +51,13 @@ import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
 import { getSpecificCache } from '../../utils/cache';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
 import { colors } from '../../utils/colors';
-import { convertString } from '../../utils/string/StringUtils';
-import { fonts, normalizeFontSize } from '../../utils/fonts';
 import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
+import { fonts, normalizeFontSize } from '../../utils/fonts';
 import {
     requestCameraPermission,
     requestExternalStoragePermission,
 } from '../../utils/permission';
+
 import {
     getDurationId,
     getLocationId,
@@ -75,6 +71,10 @@ import { getUserId } from '../../utils/users';
 import WarningAnimatedMessage from '../../components/WarningAnimateMessage';
 import StringConstant from '../../utils/string/StringConstant';
 import Card from './elements/Card';
+import { convertString } from '../../utils/string/StringUtils';
+import Loading from '../Loading';
+import ContentLink from './elements/ContentLink';
+import CreatePollContainer from './elements/CreatePollContainer';
 import SheetAddTopic from './elements/SheetAddTopic';
 import SheetCloseBtn from './elements/SheetCloseBtn';
 import SheetExpiredPost from './elements/SheetExpiredPost';
