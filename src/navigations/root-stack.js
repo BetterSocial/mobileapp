@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -25,6 +26,7 @@ import HomeBottomTabs from './HomeBottomTabs';
 import ImageViewerScreen from '../screens/ImageViewer';
 import LinkContextScreen from '../screens/LinkContextScreen';
 import LocalCommunity from '../screens/LocalCommunity';
+import NetworkStatusIndicator from '../components/NetworkStatusIndicator';
 import OtherProfile from '../screens/OtherProfile';
 import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
 import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
@@ -73,7 +75,6 @@ export const RootNavigator = () => {
 
   const create = useClientGetstream();
 
-
   const doGetAccessToken = async () => {
     const accessToken = await getAccessToken();
     setInitialValue({ id: accessToken.id })
@@ -96,7 +97,7 @@ export const RootNavigator = () => {
     StatusBar.setBarStyle('dark-content', true);
     doVerifyGetstreamToken()
 
-    useLocalChannelsFirst(setLocalChannelData);
+    // useLocalChannelsFirst(setLocalChannelData);
 
     return async () => {
       await client?.disconnectUser();
@@ -122,11 +123,14 @@ export const RootNavigator = () => {
     }
   }, [clientState]);
 
+  const hideNetworkStatusIfInOnboarding = initialStartup?.id === null || initialStartup?.id === ''
+
   return (
     <View
       style={{
         height: '100%',
       }}>
+      <NetworkStatusIndicator initialStartup={initialStartup} hide={hideNetworkStatusIfInOnboarding}/>
       {/* <StatusBar translucent backgroundColor="white" /> */}
       <RootStack.Navigator
         screenOptions={{
