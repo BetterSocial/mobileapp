@@ -1,6 +1,6 @@
+import { useNavigation, useRoute } from '@react-navigation/native';
 /* eslint-disable no-nested-ternary */
 import * as React from 'react';
-import SeeMore from 'react-native-see-more-inline';
 import {
   Dimensions,
   FlatList,
@@ -13,13 +13,13 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import SeeMore from 'react-native-see-more-inline';
 
 import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import { COLORS } from '../../utils/theme';
+import { inputSingleChoicePoll } from '../../service/post';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import {
@@ -27,7 +27,7 @@ import {
   getPollTime,
   isPollExpired,
 } from '../../utils/string/StringUtils';
-import { inputSingleChoicePoll } from '../../service/post';
+import { COLORS } from '../../utils/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 const FONT_SIZE_MEDIA = 16

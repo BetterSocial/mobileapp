@@ -146,7 +146,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
 
     const handleDate = () => calculateTime(item.data.last_message_at)
 
-    
+
     return (
         <ButtonHighlight key={index} onPress={() => onSelectAdditionalData(item)}  style={[styles.containerCard, {borderBottomColor: border}]} >
             <View style={[styles.row]} >
