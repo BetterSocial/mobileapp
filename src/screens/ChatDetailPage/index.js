@@ -6,10 +6,7 @@ import {
   MessageContent,
   MessageInput,
   MessageList,
-  MessageSimple,
-  MessageStatus,
-  Streami18n,
-  useMessageInputContext
+  Streami18n
 } from 'stream-chat-react-native';
 import { Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { MessageSystem, useMessageContext } from 'stream-chat-react-native-core'
@@ -95,8 +92,10 @@ const ChatDetailPage = () => {
 
     return options;
   };
-
-
+  const connect = useClientGetstream();
+  React.useEffect(() => {
+    connect();
+  }, []);
   React.useEffect(() => {
     searchUserMessages(channelClient.channel?.cid);
     setParticipants(channelClient.channel?.state?.members, dispatch);
@@ -111,6 +110,7 @@ const ChatDetailPage = () => {
     setAsset(messages.results, dispatch);
   };
   const testDate = (v) => v;
+
   if (clients.client && channelClient.channel) {
     return (<SafeAreaView>
       <StatusBar backgroundColor="white" translucent={false} />
@@ -139,9 +139,8 @@ const ChatDetailPage = () => {
                 InlineDateSeparator={CustomInlineDateSeparator}
 
               />
- 
-            <MessageInput watchers={channelClient.watch} Input={InputMessage} />
-   
+
+            <MessageInput Input={InputMessage} />
             </View>
             </>
 
@@ -155,6 +154,12 @@ const ChatDetailPage = () => {
 
 
 
+const CustomMessageContent = (props) => {
+  const message = useMessageContext()
+  return <MessageContent {...props} message={message}
+    MessageFooter={(props) => <ChatStatusIcon {...props} />}
+  />
+}
 
 const CustomInlineDateSeparator = ({ date }) => {
   const newDate = moment(date).locale('en').format('MMMM D, YYYY');
