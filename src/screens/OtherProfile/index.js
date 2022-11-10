@@ -1,42 +1,33 @@
+/* eslint-disable no-underscore-dangle */
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {
   Dimensions,
   Image,
   InteractionManager,
   SafeAreaView,
-  ScrollView,
   Share,
   StatusBar,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
   View,
+  TouchableOpacity
 } from 'react-native';
-import { FlatFeed, StreamApp } from 'react-native-activity-feed';
-import { STREAM_API_KEY, STREAM_APP_ID } from '@env';
 import { generateRandomId } from 'stream-chat-react-native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
 import { useRoute } from '@react-navigation/native';
 
-import ArrowLeftIcon from '../../assets/icons/images/arrow-left.svg';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
-import BlockDomain from '../../components/Blocking/BlockDomain';
 import BlockProfile from '../../components/Blocking/BlockProfile';
-import BlockUser from '../../components/Blocking/BlockUser';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
-import Loading from '../Loading';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
-import RenderActivity from './elements/RenderActivity';
 import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
-import ShareIcon from '../../assets/icons/images/share.svg';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
@@ -69,7 +60,6 @@ const OtherProfile = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const scrollViewReff = React.useRef(null);
   const postRef = React.useRef(null);
   const blockUserRef = React.useRef();
   const reportUserRef = React.useRef();
@@ -84,7 +74,6 @@ const OtherProfile = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
-  const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
   const [tokenJwt, setTokenJwt] = React.useState('');
   const [reason, setReason] = React.useState([]);
   const [yourselfId, setYourselfId] = React.useState('');
@@ -249,17 +238,24 @@ const OtherProfile = () => {
       )
     }
 
+    const handleOpenFollowerUser = () => {
+      SimpleToast.show(`For privacy reasons, you cannot see who follows ${dataMain.username}`, SimpleToast.LONG)
+    }
+
     const __renderFollowerDetail = () => {
       if (blockStatus.blocker) return <></>
       return (
         <React.Fragment>
           <View style={styles.wrapFollower}>
-            <View style={styles.wrapRow}>
-              <Text style={styles.textTotal}>
+            <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
+              <React.Fragment>
+                     <Text style={styles.textTotal}>
                 {dataMain.follower_symbol}
               </Text>
               <Text style={styles.textFollow}>{getSingularOrPluralText(dataMain.follower_symbol, "Follower", "Followers")}</Text>
-            </View>
+              </React.Fragment>
+   
+            </TouchableOpacity>
             {user_id === dataMain.user_id ? <View style={styles.following}>
               <TouchableNativeFeedback
                 onPress={() =>
