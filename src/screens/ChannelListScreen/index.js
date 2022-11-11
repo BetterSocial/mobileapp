@@ -21,7 +21,7 @@ import useChannelList from './hooks/useChannelList';
 import {
   CHANNEL_TYPE_TOPIC,
 } from '../../utils/constants';
-import { CHAT_FOLLOWING_COUNT, FEED_COMMENT_COUNT } from '../../utils/cache/constant';
+import { FEED_COMMENT_COUNT } from '../../utils/cache/constant';
 import { COLORS } from '../../utils/theme';
 import { Context } from '../../context';
 import { channelListLocalAtom } from '../../service/channelListLocal';
@@ -30,7 +30,6 @@ import { getChatName } from '../../utils/string/StringUtils';
 import { getFeedNotification } from '../../service/feeds'
 import { getSpecificCache } from '../../utils/cache';
 import { setChannel } from '../../context/actions/setChannel';
-import { setMainFeeds } from '../../context/actions/feeds';
 import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
@@ -42,7 +41,6 @@ const ChannelListScreen = ({ navigation }) => {
   const [listPostNotif, setListPostNotif] = React.useState([])
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
-  const [, dispatchFeed] = React.useContext(Context).feeds;
   const [profile] = React.useContext(Context).profile;
   const myContext = React.useContext(Context)
   const { interactionsComplete } = useAfterInteractions()
@@ -50,7 +48,6 @@ const ChannelListScreen = ({ navigation }) => {
   const [countReadComment, setCountReadComment] = React.useState({})
   // const [countChat, setCountChat] = React.useState({})
   const { myProfile } = profileContext
-  const [postCount, setPostCount] = React.useState(0)
   const { mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook } = useChannelList()
   const [unReadMessage, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
@@ -82,16 +79,16 @@ const ChannelListScreen = ({ navigation }) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
+    console.log(myProfile, 'profile')
     if (myProfile) {
       callStreamFeed()
-      handleUnsubscribeNotif()
     }
   }, [JSON.stringify(myProfile)])
 
   const callStreamFeed = async () => {
     const token = await getAccessToken()
-    const client = streamFeed(token)
-    const notif = client.feed('notification', myProfile.user_id, token)
+    const clientFeed = streamFeed(token)
+    const notif = clientFeed.feed('notification', myProfile.user_id, token.id)
     notif.subscribe(() => {
       getPostNotification()
 
@@ -99,10 +96,15 @@ const ChannelListScreen = ({ navigation }) => {
 
   }
 
+  React.useEffect(() => () => {
+      handleUnsubscribeNotif()
+
+    }, [])
+
   const handleUnsubscribeNotif = async () => {
     const token = await getAccessToken()
-    const client = streamFeed(token)
-    const notif = client.feed('notification', myProfile.user_id, token)
+    const clientFeed = streamFeed(token)
+    const notif = clientFeed.feed('notification', myProfile.user_id, token.id)
     return () => {
       notif.unsubscribe()
     }
@@ -221,7 +223,7 @@ const ChannelListScreen = ({ navigation }) => {
                context={myContext}
                PreviewUnreadCount={chatBadge}
                PreviewMessage={PreviewMessage}
-               PostNotifComponent={(item, index, refreshList) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item.item} index={index} onSelectAdditionalData={() => goToFeedDetail(item.item)} showBadgePostNotif  />}
+               PostNotifComponent={(item, index) => <PostNotificationPreview countPostNotif={countPostNotifComponent} item={item.item} index={index} onSelectAdditionalData={() => goToFeedDetail(item.item)} showBadgePostNotif  />}
               />
 
             </Chat>

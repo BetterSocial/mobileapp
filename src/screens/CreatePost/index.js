@@ -123,6 +123,7 @@ const CreatePost = () => {
     const [textContent, handleStateHastag, handleStateMention, setHashtags] = useHastagMention('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
+    const [allTaggingUser, setAllTaggingUser] = React.useState([])
 
 
     const [selectedTime, setSelectedTime] = React.useState({
@@ -451,6 +452,14 @@ const CreatePost = () => {
         sheetTopicRef.current.close();
     };
 
+       const checkTaggingUser = () => {
+        const mapTagUser = taggingUsers.map((data) => {
+           const findData = allTaggingUser.find((dataUser) => dataUser.username ===  data)
+           return findData.user_id
+        })
+        return mapTagUser
+    }
+
     const postTopic = async () => {
         try {
             if (message === '') {
@@ -475,6 +484,7 @@ const CreatePost = () => {
                 location_id: locationId,
                 duration_feed: postExpired[expiredSelect].value,
                 images_url: dataImage,
+                tagUsers: checkTaggingUser()
             };
 
             setLocationId(JSON.stringify(geoSelect));
@@ -601,7 +611,7 @@ const CreatePost = () => {
 
     const sendPollPost = async () => {
         // setLoading(true);
-
+        console.log(checkTaggingUser(),'maman')
         const data = {
             message,
             topics: ['poll'],
@@ -616,6 +626,7 @@ const CreatePost = () => {
             polls: getReducedPoll(),
             pollsduration: selectedTime,
             multiplechoice: isPollMultipleChoice,
+            tagUsers: checkTaggingUser()
         };
 
         setLocationId(JSON.stringify(geoSelect));
@@ -902,6 +913,9 @@ const CreatePost = () => {
                                         handleStateMention(newMessage);
                                         setMessage(newMessage);
                                         setListUsersForTagging([]);
+                                         const duplicateId = allTaggingUser.find((userData) => userData.user_id === item.user_id)
+                                        if(duplicateId) return
+                                        setAllTaggingUser([...allTaggingUser, item])
                                     }}>
                                         <View style={{ marginBottom: 5 }} >
                                             <Text style={{
