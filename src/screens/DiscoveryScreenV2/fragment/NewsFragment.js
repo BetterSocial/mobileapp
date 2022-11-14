@@ -15,7 +15,7 @@ import { getUserId } from '../../../utils/users';
 import { newsDiscoveryContentParamBuilder } from '../../../utils/navigation/paramBuilder';
 import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
-const NewsFragment = () => {
+const NewsFragment = ({ isLoadingDiscoveryNews = false }) => {
     const [myId, setMyId] = React.useState('')
     const [discovery] = React.useContext(Context).discovery
     const [defaultNews] = React.useContext(Context).news
@@ -24,7 +24,7 @@ const NewsFragment = () => {
 
     const navigation = useNavigation()
 
-    const { isLoadingDiscoveryNews, news, isFirstTimeOpen } = discovery
+    const { news, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -54,11 +54,11 @@ const NewsFragment = () => {
                 }
 
                 // Disable on press content if view should be navigated to LinkContextScreen
-                if (!item.dummy) return <RenderItem key={`news-screen-item-${index}`} 
-                    item={item} 
-                    selfUserId={myId} 
-                    // onPressContent={onContentClicked}
-                    />
+                if (!item.dummy) return <RenderItem key={`news-screen-item-${index}`}
+                    item={item}
+                    selfUserId={myId}
+                // onPressContent={onContentClicked}
+                />
             }))
         }
 
@@ -88,12 +88,12 @@ const NewsFragment = () => {
                 selfUserId={myId}
                 item={contentParam}
                 onPressShare={share.shareNews}
-                // onPressContent={onContentClicked} 
-                />
+            // onPressContent={onContentClicked} 
+            />
         })
     }
 
-    if(!isReady) return <></>
+    if (!isReady) return <></>
 
     if (isLoadingDiscoveryNews) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (news.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
@@ -131,5 +131,5 @@ const styles = StyleSheet.create({
     }
 })
 
-export default withInteractionsManaged(NewsFragment)
-// export default NewsFragment
+// export default withInteractionsManaged(NewsFragment)
+export default NewsFragment

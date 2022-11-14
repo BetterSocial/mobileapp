@@ -23,9 +23,8 @@ const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
 const FROM_UNFOLLOWED_TOPIC = 'fromunfollowedtopics';
 const FROM_UNFOLLOWED_TOPIC_INITIAL = 'fromunfollowedtopicsinitial';
 
-const TopicFragment = () => {
+const TopicFragment = ({ isLoadingDiscoveryTopic = false }) => {
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
-    const [following, followingDispatch] = React.useContext(Context).following
 
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
@@ -33,7 +32,7 @@ const TopicFragment = () => {
     const isReady = useIsReady()
 
     const topics = discovery.initialTopics
-    const { isLoadingDiscoveryTopic, followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
+    const { followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -133,7 +132,7 @@ const TopicFragment = () => {
         <Text style={styles.noDataFoundText}>No Topics found</Text>
     </View>
 
-    return <View>
+    return <View >
         <RecentSearch shown={isFirstTimeOpen} />
         {__renderTopicItems()}
     </View>
@@ -167,4 +166,5 @@ const styles = StyleSheet.create({
     }
 })
 
-export default withInteractionsManaged(TopicFragment)
+// export default withInteractionsManaged(TopicFragment)
+export default TopicFragment

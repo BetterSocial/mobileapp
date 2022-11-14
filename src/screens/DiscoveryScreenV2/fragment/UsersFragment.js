@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
@@ -5,7 +6,6 @@ import { useNavigation } from '@react-navigation/native'
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import DiscoveryTitleSeparator from '../elements/DiscoveryTitleSeparator';
 import DomainList from '../elements/DiscoveryItemList';
-import FollowingAction from '../../../context/actions/following';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
@@ -16,16 +16,23 @@ import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
 import { setFollow, setUnFollow } from '../../../service/profile';
-import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const FROM_FOLLOWED_USERS = 'fromfollowedusers';
 const FROM_FOLLOWED_USERS_INITIAL = 'fromfollowedusersinitial';
 const FROM_UNFOLLOWED_USERS = 'fromunfollowedusers';
 const FROM_UNFOLLOWED_USERS_INITIAL = 'fromunfollowedusersinitial';
 
-const UsersFragment = () => {
+const UsersFragment = ({
+    isLoadingDiscoveryUser = false,
+    isFirstTimeOpen,
+    followedUsers = [],
+    setFollowedUsers = () => { },
+    unfollowedUsers = [],
+    setUnfollowedUsers = () => { },
+    setSearchText = () => { },
+    setIsFirstTimeOpen = () => { }
+}) => {
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
-    const [following, followingDispatch] = React.useContext(Context).following
 
     const navigation = useNavigation()
 
@@ -41,8 +48,6 @@ const UsersFragment = () => {
     const isReady = useIsReady()
 
     const users = discovery.initialUsers
-
-    const { isLoadingDiscoveryUser, followedUsers, unfollowedUsers, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -91,14 +96,14 @@ const UsersFragment = () => {
             const newFollowedUsers = [...followedUsers]
             newFollowedUsers[index].user_id_follower = willFollow ? myId : null
 
-            DiscoveryAction.setNewFollowedUsers(newFollowedUsers, discoveryDispatch)
+            setFollowedUsers(newFollowedUsers)
         }
 
         if (from === FROM_UNFOLLOWED_USERS) {
             const newUnfollowedUsers = [...unfollowedUsers]
             newUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
 
-            DiscoveryAction.setNewUnfollowedUsers(newUnfollowedUsers, discoveryDispatch)
+            setUnfollowedUsers(newUnfollowedUsers)
         }
 
         const data = {
@@ -111,21 +116,21 @@ const UsersFragment = () => {
         console.log(data)
 
         if (willFollow) {
-            const result = await setFollow(data);
+            await setFollow(data);
         } else {
-            const result = await setUnFollow(data);
+            await setUnFollow(data);
         }
     }
 
     const renderDiscoveryItem = (from, key, item, index) => <DomainList key={`${key}-${index}`} onPressBody={() => handleOnPress(item)}
-            handleSetFollow={() => handleFollow(from, true, item, index)}
-            handleSetUnFollow={() => handleFollow(from, false, item, index)}
-            item={{
-                name: item.username,
-                image: item.profile_pic_path,
-                isunfollowed: item.user_id_follower === null,
-                description: item.bio
-            }} />
+        handleSetFollow={() => handleFollow(from, true, item, index)}
+        handleSetUnFollow={() => handleFollow(from, false, item, index)}
+        item={{
+            name: item.username,
+            image: item.profile_pic_path,
+            isunfollowed: item.user_id_follower === null,
+            description: item.bio
+        }} />
 
     const renderUsersItem = () => {
         if (isFirstTimeOpen) {
@@ -166,8 +171,10 @@ const UsersFragment = () => {
         <Text style={styles.noDataFoundText}>No users found</Text>
     </View>
 
-    return <View>
-        <RecentSearch shown={isFirstTimeOpen} />
+    return <View >
+        <RecentSearch shown={isFirstTimeOpen}
+            setSearchText={setSearchText}
+            setIsFirstTimeOpen={setIsFirstTimeOpen} />
         {renderUsersItem()}
     </View>
 
@@ -198,8 +205,11 @@ const styles = StyleSheet.create({
     unfollowedHeaders: {
         fontFamily: fonts.inter[600],
         marginLeft: 20,
+    },
+    containerHidden: {
+        display: 'none'
     }
 })
 
-export default withInteractionsManaged(UsersFragment)
-// export default UsersFragment
+// export default withInteractionsManaged(UsersFragment)
+export default UsersFragment

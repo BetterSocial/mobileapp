@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useLocalChannelsFirst } from 'stream-chat-react-native';
+// import { useLocalChannelsFirst } from 'stream-chat-react-native';
 // import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilValue, useSetRecoilState, } from 'recoil';
 
@@ -96,7 +96,7 @@ export const RootNavigator = () => {
     StatusBar.setBarStyle('dark-content', true);
     doVerifyGetstreamToken()
 
-    useLocalChannelsFirst(setLocalChannelData);
+    // useLocalChannelsFirst(setLocalChannelData);
 
     return async () => {
       await client?.disconnectUser();
