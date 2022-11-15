@@ -52,7 +52,6 @@ const ChannelListScreen = ({ navigation }) => {
   const [unReadMessage, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
-
   const filters = {
     members: { $in: [myProfile.user_id] },
     type: { $in: ['messaging', 'topics'] },
@@ -79,7 +78,6 @@ const ChannelListScreen = ({ navigation }) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
-    console.log(myProfile, 'profile')
     if (myProfile) {
       callStreamFeed()
     }
