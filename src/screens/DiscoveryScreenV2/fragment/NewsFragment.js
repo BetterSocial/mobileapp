@@ -136,5 +136,4 @@ const styles = StyleSheet.create({
     }
 })
 
-// export default withInteractionsManaged(NewsFragment)
 export default NewsFragment

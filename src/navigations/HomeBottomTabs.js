@@ -5,11 +5,9 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import {
   Platform,
-  StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
 
@@ -55,7 +53,6 @@ const Tab = createBottomTabNavigator();
 function HomeBottomTabs(props) {
   const { navigation } = props;
   const isIos = Platform.OS === 'ios';
-  const {top, bottom} = useSafeAreaInsets()
   const [myProfile, dispatchProfile] = React.useContext(Context).profile;
   const [, followingDispatch] = React.useContext(Context).following;
 
@@ -261,10 +258,10 @@ function HomeBottomTabs(props) {
   }, []);
 
   const handlePushNotif = (remoteMessage) => {
-    let {channel} = remoteMessage.data
+    let { channel } = remoteMessage.data
     channel = JSON.parse(channel)
-    if(channel.channel_type !== 3) {
-      if(isIos) {
+    if (channel.channel_type !== 3) {
+      if (isIos) {
         pushNotifIos(remoteMessage)
       } else {
         pushNotifAndroid(remoteMessage)
@@ -304,16 +301,16 @@ function HomeBottomTabs(props) {
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
           safeAreaInsets: {
-              top:0,
-              bottom: 0,
-              left: 0,
-              right: 0
-            }
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
+          }
         }}
         screenOptions={({ navigation: screenOptionsNavigation }) => ({
           activeTintColor: colors.holytosca,
           tabBarLabel: () => (
-            <View style={[ styles.badge, { backgroundColor: screenOptionsNavigation.isFocused() ? colors.holytosca : 'transparent' }]} />
+            <View style={[styles.badge, { backgroundColor: screenOptionsNavigation.isFocused() ? colors.holytosca : 'transparent' }]} />
           ),
         })}>
         <Tab.Screen

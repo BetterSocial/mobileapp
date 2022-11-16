@@ -211,5 +211,4 @@ const styles = StyleSheet.create({
     }
 })
 
-// export default withInteractionsManaged(UsersFragment)
 export default UsersFragment
