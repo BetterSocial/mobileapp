@@ -15,16 +15,19 @@ import { getUserId } from '../../../utils/users';
 import { newsDiscoveryContentParamBuilder } from '../../../utils/navigation/paramBuilder';
 import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
-const NewsFragment = ({ isLoadingDiscoveryNews = false }) => {
+const NewsFragment = ({
+    isLoadingDiscoveryNews = false,
+    isFirstTimeOpen,
+    setSearchText = () => { },
+    setIsFirstTimeOpen = () => { },
+    news = []
+}) => {
     const [myId, setMyId] = React.useState('')
-    const [discovery] = React.useContext(Context).discovery
     const [defaultNews] = React.useContext(Context).news
 
     const isReady = useIsReady()
 
     const navigation = useNavigation()
-
-    const { news, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -101,7 +104,9 @@ const NewsFragment = ({ isLoadingDiscoveryNews = false }) => {
     </View>
 
     return <View>
-        <RecentSearch shown={isFirstTimeOpen} />
+        <RecentSearch shown={isFirstTimeOpen}
+            setSearchText={setSearchText}
+            setIsFirstTimeOpen={setIsFirstTimeOpen} />
         {renderNewsItem()}
         <View style={styles.padding} />
     </View>

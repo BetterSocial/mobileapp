@@ -89,7 +89,7 @@ const DiscoveryScreenV2 = ({ route }) => {
 
         DiscoveryRepo.fetchDiscoveryDataNews(text).then(async (data) => {
             if (data.success) {
-                setDiscoveryDataNews(data)
+                setDiscoveryDataNews(data?.news)
             }
 
             setIsLoadingDiscovery((prevState) => ({
@@ -132,7 +132,9 @@ const DiscoveryScreenV2 = ({ route }) => {
             return <NewsFragment isLoadingDiscoveryNews={isLoadingDiscovery.news}
                 hidden={selectedScreen !== DISCOVERY_TAB_NEWS}
                 isFirstTimeOpen={isFirstTimeOpen}
-                setIsFirstTimeOpen={setIsFirstTimeOpen} />
+                setIsFirstTimeOpen={setIsFirstTimeOpen}
+                setSearchText={setSearchText}
+                news={discoveryDataNews} />
 
         return <></>
     }

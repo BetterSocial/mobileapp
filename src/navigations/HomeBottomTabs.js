@@ -4,12 +4,15 @@ import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import {
-  Platform, StatusBar, StyleSheet, View,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import { useRecoilValue } from 'recoil';
+
 import DiscoveryAction from '../context/actions/discoveryAction';
 import DiscoveryRepo from '../service/discovery';
 import FirebaseConfig from '../configs/FirebaseConfig';
@@ -17,6 +20,7 @@ import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
+import UniversalLink from '../configs/UniversalLink';
 import following from '../context/actions/following';
 import {
   ChannelListScreen,
@@ -26,8 +30,12 @@ import {
 } from '../screens';
 import { Context } from '../context';
 import {
-  FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS,
+  FEEDS_CACHE,
+  NEWS_CACHE,
+  PROFILE_CACHE,
+  RECENT_SEARCH_TERMS,
 } from '../utils/cache/constant';
+import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
 import { colors } from '../utils/colors';
 import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
@@ -36,12 +44,11 @@ import { getMainFeed } from '../service/post';
 import { getSpecificCache, saveToCache } from '../utils/cache';
 import { getUserId } from '../utils/users';
 import {
-  setMainFeeds, setTimer,
+  setMainFeeds,
+  setTimer,
 } from '../context/actions/feeds';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
-import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
-import UniversalLink from '../configs/UniversalLink';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,7 +59,7 @@ function HomeBottomTabs(props) {
   const [myProfile, dispatchProfile] = React.useContext(Context).profile;
   const [, followingDispatch] = React.useContext(Context).following;
 
-  let initialStartup = useRecoilValue(InitialStartupAtom);
+  const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
