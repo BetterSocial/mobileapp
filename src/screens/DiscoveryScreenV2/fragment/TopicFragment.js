@@ -167,5 +167,4 @@ const styles = StyleSheet.create({
     }
 })
 
-// export default withInteractionsManaged(TopicFragment)
 export default TopicFragment

@@ -180,5 +180,4 @@ const styles = StyleSheet.create({
     }
 })
 
-// export default withInteractionsManaged(DomainFragment)
 export default DomainFragment
