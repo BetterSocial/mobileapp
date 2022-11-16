@@ -23,7 +23,7 @@ const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
 const FROM_UNFOLLOWED_TOPIC = 'fromunfollowedtopics';
 const FROM_UNFOLLOWED_TOPIC_INITIAL = 'fromunfollowedtopicsinitial';
 
-const TopicFragment = ({ isLoadingDiscoveryTopic = false }) => {
+const TopicFragment = ({ isLoadingDiscoveryTopic = false, followedTopic = [], unfollowedTopic = [], isFirstTimeOpen, setIsFirstTimeOpen, setSearchText, setFollowedTopic, setUnfollowedTopic }) => {
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
 
     const navigation = useNavigation()
@@ -32,7 +32,6 @@ const TopicFragment = ({ isLoadingDiscoveryTopic = false }) => {
     const isReady = useIsReady()
 
     const topics = discovery.initialTopics
-    const { followedTopic, unfollowedTopic, isFirstTimeOpen } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -62,14 +61,14 @@ const TopicFragment = ({ isLoadingDiscoveryTopic = false }) => {
             const newFollowedTopics = [...followedTopic]
             newFollowedTopics[index].user_id_follower = willFollow ? myId : null
 
-            DiscoveryAction.setNewFollowedTopics(newFollowedTopics, discoveryDispatch)
+            setFollowedTopic(newFollowedTopics)
         }
 
         if (from === FROM_UNFOLLOWED_TOPIC) {
             const newUnFollowedTopic = [...unfollowedTopic]
             newUnFollowedTopic[index].user_id_follower = willFollow ? myId : null
 
-            DiscoveryAction.setNewUnfollowedTopics(newUnFollowedTopic, discoveryDispatch)
+            setUnfollowedTopic(newUnFollowedTopic)
         }
 
         const data = {
@@ -133,7 +132,9 @@ const TopicFragment = ({ isLoadingDiscoveryTopic = false }) => {
     </View>
 
     return <View >
-        <RecentSearch shown={isFirstTimeOpen} />
+        <RecentSearch shown={isFirstTimeOpen}
+            setSearchText={setSearchText}
+            setIsFirstTimeOpen={setIsFirstTimeOpen} />
         {__renderTopicItems()}
     </View>
 }

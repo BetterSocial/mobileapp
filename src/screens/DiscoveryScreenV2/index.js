@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import { Keyboard, ScrollView, StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -29,14 +30,17 @@ const DiscoveryScreenV2 = ({ route }) => {
     });
     const [discoveryDataFollowedUsers, setDiscoveryDataFollowedUsers] = React.useState([]);
     const [discoveryDataUnfollowedUsers, setDiscoveryDataUnfollowedUsers] = React.useState([]);
-    const [discoveryDataTopics, setDiscoveryDataTopics] = React.useState([]);
-    const [discoveryDataDomains, setDiscoveryDataDomains] = React.useState([]);
+    const [discoveryDataFollowedTopics, setDiscoveryDataFollowedTopics] = React.useState([]);
+    const [discoveryDataUnfollowedTopics, setDiscoveryDataUnfollowedTopics] = React.useState([]);
+    const [discoveryDataFollowedDomains, setDiscoveryDataFollowedDomains] = React.useState([]);
+    const [discoveryDataUnfollowedDomains, setDiscoveryDataUnfollowedDomains] = React.useState([]);
     const [discoveryDataNews, setDiscoveryDataNews] = React.useState([]);
     const [searchText, setSearchText] = React.useState("");
     const [isFocus, setIsFocus] = React.useState(true);
     const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true);
 
     const [, discoveryDispatch] = React.useContext(Context).discovery
+    const cancelTokenRef = React.useRef(axios.CancelToken.source())
 
     const handleScroll = React.useCallback(() => {
         Keyboard.dismiss()
@@ -54,10 +58,11 @@ const DiscoveryScreenV2 = ({ route }) => {
     }, [])
 
     const fetchDiscoveryData = async (text) => {
-        DiscoveryRepo.fetchDiscoveryDataUser(text).then(async (data) => {
+        const cancelToken = cancelTokenRef?.current?.token
+        DiscoveryRepo.fetchDiscoveryDataUser(text, { cancelToken }).then(async (data) => {
             if (data.success) {
-                setDiscoveryDataFollowedUsers(data?.followedUsers)
-                setDiscoveryDataUnfollowedUsers(data?.unfollowedUsers)
+                setDiscoveryDataFollowedUsers(data?.followedUsers || [])
+                setDiscoveryDataUnfollowedUsers(data?.unfollowedUsers || [])
             }
             setIsLoadingDiscovery((prevState) => ({
                 ...prevState,
@@ -65,9 +70,10 @@ const DiscoveryScreenV2 = ({ route }) => {
             }))
         })
 
-        DiscoveryRepo.fetchDiscoveryDataDomain(text).then(async (data) => {
+        DiscoveryRepo.fetchDiscoveryDataDomain(text, { cancelToken }).then(async (data) => {
             if (data.success) {
-                setDiscoveryDataDomains(data)
+                setDiscoveryDataFollowedDomains(data?.followedDomains || [])
+                setDiscoveryDataUnfollowedDomains(data?.unfollowedDomains || [])
             }
 
             setIsLoadingDiscovery((prevState) => ({
@@ -76,9 +82,10 @@ const DiscoveryScreenV2 = ({ route }) => {
             }))
         })
 
-        DiscoveryRepo.fetchDiscoveryDataTopic(text).then(async (data) => {
+        DiscoveryRepo.fetchDiscoveryDataTopic(text, { cancelToken }).then(async (data) => {
             if (data.success) {
-                setDiscoveryDataTopics(data)
+                setDiscoveryDataFollowedTopics(data?.followedTopic)
+                setDiscoveryDataUnfollowedTopics(data?.unfollowedTopic)
             }
 
             setIsLoadingDiscovery((prevState) => ({
@@ -87,7 +94,7 @@ const DiscoveryScreenV2 = ({ route }) => {
             }))
         })
 
-        DiscoveryRepo.fetchDiscoveryDataNews(text).then(async (data) => {
+        DiscoveryRepo.fetchDiscoveryDataNews(text, { cancelToken }).then(async (data) => {
             if (data.success) {
                 setDiscoveryDataNews(data?.news)
             }
@@ -97,6 +104,11 @@ const DiscoveryScreenV2 = ({ route }) => {
                 news: false
             }))
         })
+    }
+
+    const onCancelToken = () => {
+        cancelTokenRef?.current?.cancel()
+        cancelTokenRef.current = axios.CancelToken.source()
     }
 
     // React.useEffect(() => {
@@ -114,19 +126,31 @@ const DiscoveryScreenV2 = ({ route }) => {
                 setFollowedUsers={setDiscoveryDataFollowedUsers}
                 setUnfollowedUsers={setDiscoveryDataUnfollowedUsers}
                 setSearchText={setSearchText}
-                 />
+            />
 
         if (selectedScreen === DISCOVERY_TAB_TOPICS)
             return <TopicFragment isLoadingDiscoveryTopic={isLoadingDiscovery.topic}
                 hidden={selectedScreen !== DISCOVERY_TAB_TOPICS}
                 isFirstTimeOpen={isFirstTimeOpen}
-                setIsFirstTimeOpen={setIsFirstTimeOpen} />
+                setIsFirstTimeOpen={setIsFirstTimeOpen}
+                followedTopic={discoveryDataFollowedTopics}
+                unfollowedTopic={discoveryDataUnfollowedTopics}
+                setFollowedTopic={setDiscoveryDataFollowedTopics}
+                setUnfollowedTopic={setDiscoveryDataUnfollowedTopics}
+                setSearchText={setSearchText}
+            />
 
         if (selectedScreen === DISCOVERY_TAB_DOMAINS)
             return <DomainFragment isLoadingDiscoveryDomain={isLoadingDiscovery.domain}
                 hidden={selectedScreen !== DISCOVERY_TAB_DOMAINS}
                 isFirstTimeOpen={isFirstTimeOpen}
-                setIsFirstTimeOpen={setIsFirstTimeOpen} />
+                setIsFirstTimeOpen={setIsFirstTimeOpen}
+                followedDomains={discoveryDataFollowedDomains}
+                unfollowedDomains={discoveryDataUnfollowedDomains}
+                setFollowedDomains={setDiscoveryDataFollowedDomains}
+                setUnfollowedDomains={setDiscoveryDataUnfollowedDomains}
+                setSearchText={setSearchText}
+            />
 
         if (selectedScreen === DISCOVERY_TAB_NEWS)
             return <NewsFragment isLoadingDiscoveryNews={isLoadingDiscovery.news}
@@ -147,7 +171,8 @@ const DiscoveryScreenV2 = ({ route }) => {
             isFocus={isFocus}
             setIsFocus={setIsFocus}
             setIsFirstTimeOpen={setIsFirstTimeOpen}
-            fetchDiscoveryData={fetchDiscoveryData} />
+            fetchDiscoveryData={fetchDiscoveryData}
+            onCancelToken={onCancelToken} />
         <DiscoveryTab selectedScreen={selectedScreen} onChangeScreen={(index) => setSelectedScreen(index)} />
         <ScrollView
             style={styles.fragmentContainer}

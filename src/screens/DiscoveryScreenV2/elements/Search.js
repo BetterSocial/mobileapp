@@ -13,8 +13,6 @@ import { debounce } from 'lodash'
 import { useNavigation } from '@react-navigation/core'
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
-import DiscoveryRepo from '../../../service/discovery';
-import GeneralComponentAction from '../../../context/actions/generalComponentAction';
 import IconClear from '../../../assets/icon/IconClear';
 import MemoIcArrowBackWhite from '../../../assets/arrow/Ic_arrow_back_white';
 import MemoIcSearch from '../../../assets/icons/Ic_search';
@@ -34,7 +32,8 @@ const DiscoverySearch = ({
   isFocus = true,
   setIsFocus = () => { },
   setIsFirstTimeOpen = () => { },
-  fetchDiscoveryData = () => { }
+  fetchDiscoveryData = () => { },
+  onCancelToken = () => { }
 }) => {
   const navigation = useNavigation()
   const [, discoveryDispatch] = React.useContext(Context).discovery
@@ -69,13 +68,13 @@ const DiscoverySearch = ({
   }
 
   const debounceChangeText = (text) => {
+    onCancelToken()
     if (text.length > 2) {
       setAllLoading(true)
-      // DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
       setIsFirstTimeOpen(false)
       debounced(text)
     } else {
-      if (text.length === 0) setIsFirstTimeOpen(true)
+      setIsFirstTimeOpen(true)
       setAllLoading(false)
       debounced.cancel()
     }
@@ -105,7 +104,6 @@ const DiscoverySearch = ({
 
     setLastSearch(text)
     setAllLoading(true)
-    // DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
     setIsFirstTimeOpen(false)
     fetchDiscoveryData(text)
 

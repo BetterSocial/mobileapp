@@ -22,7 +22,7 @@ const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
 const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
 const FROM_UNFOLLOWED_DOMAIN = 'fromunfolloweddomains';
 
-const DomainFragment = ({ isLoadingDiscoveryDomain, isFirstTimeOpen }) => {
+const DomainFragment = ({ isLoadingDiscoveryDomain, isFirstTimeOpen, followedDomains, unfollowedDomains, setFollowedDomains, setUnfollowedDomains, setSearchText, setIsFirstTimeOpen }) => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
@@ -33,7 +33,6 @@ const DomainFragment = ({ isLoadingDiscoveryDomain, isFirstTimeOpen }) => {
 
     // const { domains } = following
     const domains = discovery.initialDomains
-    const { followedDomains, unfollowedDomains } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -81,14 +80,16 @@ const DomainFragment = ({ isLoadingDiscoveryDomain, isFirstTimeOpen }) => {
             const newFollowedDomains = [...followedDomains]
             newFollowedDomains[index].user_id_follower = willFollow ? myId : null
 
-            DiscoveryAction.setNewFollowedDomains(newFollowedDomains, discoveryDispatch)
+            // DiscoveryAction.setNewFollowedDomains(newFollowedDomains, discoveryDispatch)
+            setFollowedDomains(newFollowedDomains)
         }
 
         if (from === FROM_UNFOLLOWED_DOMAIN) {
             const newUnfollowedDomains = [...unfollowedDomains]
             newUnfollowedDomains[index].user_id_follower = willFollow ? myId : null
 
-            DiscoveryAction.setNewUnfollowedDomains(newUnfollowedDomains, discoveryDispatch)
+            // DiscoveryAction.setNewUnfollowedDomains(newUnfollowedDomains, discoveryDispatch)
+            setUnfollowedDomains(newUnfollowedDomains)
         }
 
         const data = {
@@ -141,7 +142,9 @@ const DomainFragment = ({ isLoadingDiscoveryDomain, isFirstTimeOpen }) => {
     </View>
 
     return <View >
-        <RecentSearch shown={isFirstTimeOpen} />
+        <RecentSearch shown={isFirstTimeOpen}
+            setSearchText={setSearchText}
+            setIsFirstTimeOpen={setIsFirstTimeOpen} />
         {__renderDomainItems()}
     </View>
 }
