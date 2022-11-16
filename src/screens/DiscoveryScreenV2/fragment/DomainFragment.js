@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import { Keyboard, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
@@ -17,13 +17,12 @@ import { colors } from '../../../utils/colors';
 import { followDomain, unfollowDomain } from '../../../service/domain';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
-import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
 const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
 const FROM_UNFOLLOWED_DOMAIN = 'fromunfolloweddomains';
 
-const DomainFragment = () => {
+const DomainFragment = ({ isLoadingDiscoveryDomain, isFirstTimeOpen, followedDomains, unfollowedDomains, setFollowedDomains, setUnfollowedDomains, setSearchText, setIsFirstTimeOpen }) => {
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
     // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
@@ -34,7 +33,6 @@ const DomainFragment = () => {
 
     // const { domains } = following
     const domains = discovery.initialDomains
-    const { isLoadingDiscoveryDomain, followedDomains, unfollowedDomains, isFirstTimeOpen = true } = discovery
 
     React.useEffect(() => {
         const parseToken = async () => {
@@ -69,7 +67,7 @@ const DomainFragment = () => {
 
         navigation.push('DomainScreen', navigationParam)
     }
-    
+
     const __handleFollow = async (from, willFollow, item, index) => {
         // console.log(item)
         if (from === FROM_FOLLOWED_DOMAIN_INITIAL) {
@@ -82,14 +80,16 @@ const DomainFragment = () => {
             const newFollowedDomains = [...followedDomains]
             newFollowedDomains[index].user_id_follower = willFollow ? myId : null
 
-            DiscoveryAction.setNewFollowedDomains(newFollowedDomains, discoveryDispatch)
+            // DiscoveryAction.setNewFollowedDomains(newFollowedDomains, discoveryDispatch)
+            setFollowedDomains(newFollowedDomains)
         }
 
         if (from === FROM_UNFOLLOWED_DOMAIN) {
             const newUnfollowedDomains = [...unfollowedDomains]
             newUnfollowedDomains[index].user_id_follower = willFollow ? myId : null
 
-            DiscoveryAction.setNewUnfollowedDomains(newUnfollowedDomains, discoveryDispatch)
+            // DiscoveryAction.setNewUnfollowedDomains(newUnfollowedDomains, discoveryDispatch)
+            setUnfollowedDomains(newUnfollowedDomains)
         }
 
         const data = {
@@ -98,25 +98,25 @@ const DomainFragment = () => {
         };
 
         if (willFollow) {
-            const res = await followDomain(data);
+            await followDomain(data);
         } else {
-            const res = await unfollowDomain(data);
+            await unfollowDomain(data);
         }
     }
 
     const __renderDiscoveryItem = (from, key, item, index) => <View key={`${key}-${index}`} style={styles.domainContainer}>
-            <DomainList isDomain={true}
-                onPressBody={() => __handleOnPressDomain(item)}
-                handleSetFollow={() => __handleFollow(from, true, item, index)}
-                handleSetUnFollow={() => __handleFollow(from, false, item, index)}
-                item={{
-                    name: item.domain_name,
-                    image: item.logo,
-                    isunfollowed: item.user_id_follower === null,
-                    description: item.short_description || null
-                }}
-            />
-        </View>
+        <DomainList isDomain={true}
+            onPressBody={() => __handleOnPressDomain(item)}
+            handleSetFollow={() => __handleFollow(from, true, item, index)}
+            handleSetUnFollow={() => __handleFollow(from, false, item, index)}
+            item={{
+                name: item.domain_name,
+                image: item.logo,
+                isunfollowed: item.user_id_follower === null,
+                description: item.short_description || null
+            }}
+        />
+    </View>
 
     const __renderDomainItems = () => {
         if (isFirstTimeOpen) return [<DiscoveryTitleSeparator text="Suggested Domains" key="domain-title-separator" />].concat(domains.map((item, index) => __renderDiscoveryItem(FROM_FOLLOWED_DOMAIN_INITIAL, "followedDomainDiscovery", { ...item, user_id_follower: item.user_id_follower }, index)))
@@ -134,15 +134,17 @@ const DomainFragment = () => {
         )
     }
 
-    if(!isReady) return <></>
+    if (!isReady) return <></>
 
     if (isLoadingDiscoveryDomain) return <View style={styles.fragmentContainer}><LoadingWithoutModal /></View>
     if (followedDomains.length === 0 && unfollowedDomains.length === 0 && !isFirstTimeOpen) return <View style={styles.noDataFoundContainer}>
         <Text style={styles.noDataFoundText}>No Domains found</Text>
     </View>
 
-    return <View>
-        <RecentSearch shown={isFirstTimeOpen} />
+    return <View >
+        <RecentSearch shown={isFirstTimeOpen}
+            setSearchText={setSearchText}
+            setIsFirstTimeOpen={setIsFirstTimeOpen} />
         {__renderDomainItems()}
     </View>
 }
@@ -178,5 +180,5 @@ const styles = StyleSheet.create({
     }
 })
 
-export default withInteractionsManaged(DomainFragment)
-// export default DomainFragment
+// export default withInteractionsManaged(DomainFragment)
+export default DomainFragment

@@ -32,6 +32,7 @@ describe('Testing Discovery Screen V2', () => {
         it('Change text when given', () => {
             const discoveryDispatch = jest.fn()
             const generalDispatch = jest.fn()
+            const setSearchText = jest.fn()
 
             const contextValue = {
                 generalComponent: [generalComponentState, generalDispatch],
@@ -40,12 +41,12 @@ describe('Testing Discovery Screen V2', () => {
 
             const { getByTestId, getByText } = render(
                 <Context.Provider value={contextValue}>
-                    <DiscoverySearch />
+                    <DiscoverySearch setSearchText={setSearchText}/>
                 </Context.Provider>
             )
 
             fireEvent.changeText(getByTestId(TestIdConstant.discoveryScreenSearchBar), 'Coba')
-            expect(discoveryDispatch).toBeCalled()
+            expect(setSearchText).toBeCalled()
         })
     })
 })
