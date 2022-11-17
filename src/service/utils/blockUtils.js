@@ -17,18 +17,21 @@ const uiBlockPostAnonymous = async (postId, source, reason, message, callback) =
         reason,
         message,
     };
-    const result = await blockAnonymous(data);
-
-    if (result.code === 200) {
-        Toast.show(
+    try {
+              await blockAnonymous(data);
+                 Toast.show(
             handleMessage(reason, message),
             Toast.LONG,
         );
 
         if (callback) callback()
-    } else {
-        Toast.show(result.message, Toast.LONG);
+ 
+    } catch(e) {
+                Toast.show(String(e.message), Toast.LONG);
+
     }
+
+
 }
 
 const uiBlockUser = async (postId, userId, source, reason, message, callback) => {
@@ -39,17 +42,19 @@ const uiBlockUser = async (postId, userId, source, reason, message, callback) =>
         reason,
         message,
     };
-    const result = await blockUser(data);
-    if (result.code === 200) {
+    try {
+        await blockUser(data);
         Toast.show(
             handleMessage(reason, message),
             Toast.LONG,
         );
+                if (callback) callback()
 
-        if (callback) callback()
-    } else {
-        Toast.show(result.message, Toast.LONG);
+
+    } catch(e) {
+         Toast.show(String(e.message), Toast.LONG);
     }
+
 }
 
 const uiBlockDomain = async (domainId, reason, message, source, callback) => {
@@ -59,17 +64,19 @@ const uiBlockDomain = async (domainId, reason, message, source, callback) => {
         message,
         source,
     };
-    const result = await blockDomain(dataBlock);
-    if (result.code === 200) {
-        callback();
-        Toast.show(
+    try {
+            await blockDomain(dataBlock);
+             Toast.show(
             handleMessage(reason, message, 'domain'),
             Toast.LONG,
         );
-    } else {
-        Toast.show('Your report was filed & will be investigated', Toast.LONG);
+ 
+    }catch (e) {
+         Toast.show(
+            String(e.message),
+            Toast.LONG,
+        );
     }
-    console.log('result block user ', result);
 }
 
 
