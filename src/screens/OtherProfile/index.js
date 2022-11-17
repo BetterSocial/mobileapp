@@ -187,7 +187,7 @@ const OtherProfile = () => {
       follow_source: 'other-profile',
     };
     const result = await setUnFollow(data);
-    if (result.code == 200) {
+    if (result.code === 200) {
       fetchOtherProfile(username);
     }
   };
@@ -200,8 +200,17 @@ const OtherProfile = () => {
     };
 
     const result = await setFollow(data);
-
+    // prepopulated follow
+    const textOwnUser = `${username} started following you. Send them a message now`;
+    const textTargetUser = `You started following ${other_id}. Send them a message now.`;
     if (result.code === 200) {
+      const chat = await client.client.channel('messaging', `${user_id}-${other_id}`, { name: `${user_id}-${other_id}`, type_channel: 0 })
+      chat.create()
+      chat.addMembers([user_id, other_id], {
+        text: textOwnUser
+      })
+
+
       fetchOtherProfile(username);
     }
   };
