@@ -80,14 +80,14 @@ const RenderItem = ({
 
   const validationStatusVote = () => {
       if (item.latest_reactions.upvotes !== undefined) {
-        let upvote = item.latest_reactions.upvotes.filter(
+        const upvote = item.latest_reactions.upvotes.filter(
           (vote) => vote.user_id === selfUserId,
         );
         if (upvote !== undefined) {
           setVoteStatus('upvote');
         }
       } else if (item.latest_reactions.downvotes !== undefined) {
-        let downvotes = item.latest_reactions.downvotes.filter(
+        const downvotes = item.latest_reactions.downvotes.filter(
           (vote) => vote.user_id === selfUserId,
         );
         if (downvotes !== undefined) {
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     elevation: 0.0,
     borderColor: COLORS.gray,
     paddingBottom: 16,
-    marginHorizontal: SIZES.base,
+    marginHorizontal: 16,
   },
   wrapperFooter: {
     // marginHorizontal: SIZES.base,

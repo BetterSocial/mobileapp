@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useLocalChannelsFirst } from 'stream-chat-react-native';
-// import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilValue, useSetRecoilState, } from 'recoil';
 
 import Blocked from '../screens/Blocked';
