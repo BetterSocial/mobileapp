@@ -52,6 +52,7 @@ import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { createChannel } from '../../service/chat';
 
 const { width, height } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -202,14 +203,32 @@ const OtherProfile = () => {
     const result = await setFollow(data);
     // prepopulated follow
     const textOwnUser = `${username} started following you. Send them a message now`;
-    const textTargetUser = `You started following ${other_id}. Send them a message now.`;
+    const textTargetUser = `You started following ${profile.myProfile.username}. Send them a message now.`;
     if (result.code === 200) {
-      const chat = await client.client.channel('messaging', `${user_id}-${other_id}`, { name: `${user_id}-${other_id}`, type_channel: 0 })
-      chat.create()
-      chat.addMembers([user_id, other_id], {
-        text: textOwnUser
-      })
-
+      console.log('masuk man 1', client )
+      try {
+        const makeChannel = await createChannel('messaging', [user_id, other_id], [profile.myProfile.username, username].join(', '))
+        makeChannel.addMembers([user_id, other_id], {
+                  text: textOwnUser,
+        other_text: textTargetUser,
+        is_from_prepopulated: true,
+        system_user: user_id
+        })
+      //   const clientChat = await client.client;
+      //   const connectClient = clientChat.connectUser()
+      //   const chat = await clientChat.client.channel('messaging', generateRandomId(), { name: `${[profile.myProfile.username, username].join(', ')}`, type_channel: 0,                    created_by_id: user_id,      })
+      // console.log(chat, 'masuk man2')
+      // chat.create()
+      // chat.addMembers([user_id, other_id], {
+      //   text: textOwnUser,
+      //   other_text: textTargetUser,
+      //   is_from_prepopulated: true,
+      //   system_user: user_id
+      // })
+      console.log('masuk man')
+      } catch (e) {
+        console.log(e, 'eman')
+      }
 
       fetchOtherProfile(username);
     }
@@ -317,7 +336,7 @@ const OtherProfile = () => {
       return (
         <React.Fragment>
           <GlobalButton
-            onPress={createChannel}>
+            onPress={onCreateChannel}>
             <View style={styles.btnMsg}>
               <EnveloveBlueIcon
                 width={20}
@@ -384,7 +403,7 @@ const OtherProfile = () => {
     flatListRef.current.scrollToTop();
   };
 
-  const createChannel = async () => {
+  const onCreateChannel = async () => {
     try {
       const members = [other_id, user_id];
       setIsLoading(true);
@@ -432,7 +451,7 @@ const OtherProfile = () => {
       data = { ...data, message };
     }
     const blockingUser = await blockUser(data);
-    if (blockingUser.code == 200) {
+    if (blockingUser.code === 200) {
       blockUserRef.current.close();
       specificIssueRef.current.close();
       reportUserRef.current.close();
