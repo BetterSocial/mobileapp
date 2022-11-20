@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import {StreamChat} from 'stream-chat';
 import Config from 'react-native-config';
 import {STREAM_API_KEY} from '@env';
