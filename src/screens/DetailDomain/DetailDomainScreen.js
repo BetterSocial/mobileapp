@@ -53,7 +53,7 @@ const DetailDomainScreen = (props) => {
     const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
-      const {comment} = reactionCount;
+      const { comment } = reactionCount;
       if (comment !== undefined) {
         if (comment > 0) {
           setReaction(true);
@@ -86,7 +86,8 @@ const DetailDomainScreen = (props) => {
 
   const getDomain = () => {
     setIsLoading(true)
-    getDomainDetailById(dataDomain.id).then((res) => {
+    const id = dataDomain?.og?.news_feed_id || dataDomain?.id
+    getDomainDetailById(id).then((res) => {
       setItem(res)
       setIsLoading(false)
     })
@@ -135,7 +136,7 @@ const DetailDomainScreen = (props) => {
       }
     }
   };
-  
+
   React.useEffect(() => {
 
     if (item) {
@@ -150,9 +151,9 @@ const DetailDomainScreen = (props) => {
       const result = await getMyProfile(id);
       if (result.code === 200) {
         setDataProfile(result.data);
-        setLoading(false);
+        // setLoading(false);
       }
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -163,7 +164,7 @@ const DetailDomainScreen = (props) => {
   const commentParent = async () => {
     try {
       if (textComment.trim() !== '') {
-        const data = await createCommentParent(textComment, item.id);
+        const data = await createCommentParent(textComment, item.id, '', false);
         setComments([...comments, data.data])
         if (data.code === 200) {
           setTextComment('');
@@ -236,8 +237,8 @@ const DetailDomainScreen = (props) => {
   const blockNews = () => {
     blockRef.current.refBlockDomain.current.open()
   };
-  if(isLoading) return <Loading />
-  if(!item?.domain) return <View />
+  if (isLoading) return <Loading />
+  if (!item?.domain) return <View />
 
   return (
     <View style={styles.container}>
@@ -245,7 +246,7 @@ const DetailDomainScreen = (props) => {
       <SafeAreaView>
         <DetailDomainScreenHeader
           domain={item.domain.name}
-          time={item.content.created_at}
+          time={item?.content?.created_at}
           image={item.domain.image}
           onFollowDomainPressed={() => { }}
           score={dataDomain?.score}
@@ -257,13 +258,13 @@ const DetailDomainScreen = (props) => {
         <View style={styles.content}>
           <View>
             <DetailDomainScreenContent
-              date={item.content.created_at}
-              description={item.content.description}
+              date={item?.content?.created_at}
+              description={item?.content?.description}
               domain={item.domain}
               domainImage={item.domain.image}
-              image={item.content.image}
-              title={item.content.title}
-              url={item.content.url}
+              image={item?.content?.image}
+              title={item?.content?.title}
+              url={item?.content?.url}
             />
             <View style={styles.footerWrapper}>
               <Footer
@@ -299,12 +300,12 @@ const DetailDomainScreen = (props) => {
           }}
         />
       )}
-         <BlockDomainComponent 
-     ref={blockRef}
-     domain={item.domain.name}
-     domainId={item.domain.domain_page_id}
+      <BlockDomainComponent
+        ref={blockRef}
+        domain={item.domain.name}
+        domainId={item.domain.domain_page_id}
 
-     />
+      />
     </View>
   );
 };

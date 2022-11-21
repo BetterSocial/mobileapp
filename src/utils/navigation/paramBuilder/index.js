@@ -32,7 +32,7 @@ const linkContextScreenParamBuilder = (
  * @param {String} domain_page_id
  * @returns
  */
- const linkContextScreenSwitchScreenParam = (
+const linkContextScreenSwitchScreenParam = (
   item,
   domainName,
   image,
@@ -62,8 +62,9 @@ const linkContextScreenParamBuilder = (
  * @returns
  */
 const newsDiscoveryContentParamBuilder = (
-  title, image, description, url, domainImage, domainName, createdAt, newsLinkId, credderScore,
+  title, image, description, url, domainImage, domainName, createdAt, newsLinkId, credderScore, id
 ) => ({
+  id,
   domain: {
     image: domainImage,
     name: domainName,

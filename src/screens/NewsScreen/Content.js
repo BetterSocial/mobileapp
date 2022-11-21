@@ -1,10 +1,12 @@
 import * as React from 'react';
+import FastImage from 'react-native-fast-image';
 import {
   Linking,
+  Pressable,
   StyleSheet,
   Text,
-  View,
-Pressable} from 'react-native';
+  View
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Gap from '../../components/Gap';
@@ -13,7 +15,6 @@ import {COLORS, SIZES} from '../../utils/theme';
 import {NewsEmptyState} from '../../assets/images';
 import {fonts} from '../../utils/fonts';
 import {sanitizeUrlForLinking} from '../../utils/Utils';
-import FastImage from 'react-native-fast-image';
 
 const Content = (props) => {
   const navigation = useNavigation();

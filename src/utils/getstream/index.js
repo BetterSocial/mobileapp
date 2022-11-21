@@ -70,7 +70,7 @@ const getCommentLength = (comments) => {
 const getCountCommentWithChildInDetailPage = (item) => {
   let count = 0;
   const reactionCountLevelOne = item.comment;
-  count += item.comment.length;
+  count += item?.comment?.length || 0;
   reactionCountLevelOne.forEach((itemLevelOne, index) => {
     if (itemLevelOne.latest_children.comment !== undefined) {
       const reactionLevelTwo = itemLevelOne.latest_children.comment;
