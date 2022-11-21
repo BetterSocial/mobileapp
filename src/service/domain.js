@@ -30,8 +30,6 @@ export const getDetailDomains = async (domain) => {
 };
 
 export const getLinkContextScreenRelated = async (newsLinkId) => {
-  console.log('newsLinkId')
-  console.log(`/domain/link-context-screen/${newsLinkId}`)
   try {
     const res = await api.get(`/domain/link-context-screen/${newsLinkId}`);
     return res.data;

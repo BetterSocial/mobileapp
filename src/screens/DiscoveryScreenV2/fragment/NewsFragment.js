@@ -75,7 +75,8 @@ const NewsFragment = ({
                 item?.newsLinkDomain?.domain_name || item?.site_name,
                 item.createdAt,
                 item.news_link_id,
-                item?.newsLinkDomain?.credder_score
+                item?.newsLinkDomain?.credder_score,
+                item?.post_id
             )
 
             const onContentClicked = () => {
