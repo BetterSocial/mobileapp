@@ -196,8 +196,8 @@ const OtherProfile = () => {
     const data = {
       user_id_follower: user_id,
       user_id_followed: other_id,
-      username_follower: username,
-      username_followed: profile.myProfile.username,
+      username_follower: profile.myProfile.username,
+      username_followed: username,
       follow_source: 'other-profile',
     };
 
