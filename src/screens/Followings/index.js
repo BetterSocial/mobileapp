@@ -10,12 +10,9 @@ import { useNavigation } from '@react-navigation/core';
 import { useRoute } from '@react-navigation/native';
 
 import DomainList from './elements/RenderList';
-import Loading from '../Loading';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getFollowing, setFollow, setUnFollow } from '../../service/profile';
-import { getUserId } from '../../utils/users';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -59,7 +56,7 @@ const Followings = () => {
   };
 
   const goToOtherProfile = (value) => {
-    let data = {
+    const data = {
       user_id,
       other_id: value.user_id_followed,
       username: value.user.username,
@@ -69,39 +66,39 @@ const Followings = () => {
   };
 
   const handleSetUnFollow = async (index) => {
-    let newDataFollowing = [...dataFollowing];
-    let singleDataFollowing = newDataFollowing[index];
+    const newDataFollowing = [...dataFollowing];
+    const singleDataFollowing = newDataFollowing[index];
     newDataFollowing[index].isunfollowed = true;
     setDataFollowing(newDataFollowing);
 
-    let data = {
+    const data = {
       user_id_follower: user_id,
       user_id_followed: singleDataFollowing.user.user_id,
       follow_source: 'other-profile',
     };
 
-    const result = await setUnFollow(data);
+   await setUnFollow(data);
   };
 
   const handleSetFollow = async (index) => {
-    let newDataFollowing = [...dataFollowing];
-    let singleDataFollowing = newDataFollowing[index];
+    const newDataFollowing = [...dataFollowing];
+    const singleDataFollowing = newDataFollowing[index];
     delete newDataFollowing[index].isunfollowed;
     setDataFollowing(newDataFollowing);
 
-    let data = {
+    const data = {
       user_id_follower: user_id,
       user_id_followed: singleDataFollowing.user.user_id,
+      username_follower: username,
+      username_followed: singleDataFollowing.user.username,
       follow_source: 'other-profile',
     };
-    const result = await setFollow(data);
+    await setFollow(data);
   };
 
-  const renderItem = ({ item, index }) => {
-    return (
+  const renderItem = ({ item, index }) => (
       <DomainList item={item} onPressBody={() => goToOtherProfile(item)} handleSetFollow={() => handleSetFollow(index)} handleSetUnFollow={() => handleSetUnFollow(index)} />
     );
-  };
 
 
   return (
@@ -152,7 +149,7 @@ const styles = StyleSheet.create({
     top: 10,
   },
   tabs: {
-    width: width,
+    width,
     borderBottomColor: colors.alto,
     borderBottomWidth: 1,
     paddingLeft: 20,

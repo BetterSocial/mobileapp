@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { StreamChat } from 'stream-chat';
-import {
-  useLocalChannelList} from 'stream-chat-react-native-core';
 import jwtDecode from 'jwt-decode';
 import config from 'react-native-config';
 import { Context } from '../../context';

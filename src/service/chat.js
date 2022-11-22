@@ -1,7 +1,6 @@
 /* eslint-disable no-useless-catch */
 import {StreamChat} from 'stream-chat';
 import Config from 'react-native-config';
-import {STREAM_API_KEY} from '@env';
 import {getAccessToken} from '../utils/token';
 import {getUserId} from '../utils/users';
 
@@ -10,25 +9,25 @@ const createChannel = async (
   channelType,
   members,
   channelName,
-  image = null,
+
 ) => {
+  console.log(members, 'manak')
   try {
     const token = await getAccessToken();
     const id = await getUserId();
-    let user = {
-      id: id,
+    const user = {
+      id,
     };
-    await chatClient.connectUser(user, token);
+    await chatClient.connectUser(user, token.id);
     const channel = chatClient.channel(channelType, {
-      members: members,
       name: channelName,
+      members
       //   image: null,
     });
-    let res = await channel.create();
-    // let res = await channel.watch();
-    // console.log(res);
-    return res.channel;
+    await channel.create();
+    return channel
   } catch (error) {
+    console.log('manak', error)
     throw error;
   }
 };
