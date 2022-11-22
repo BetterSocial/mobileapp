@@ -88,10 +88,10 @@ export const setFollow = async (data) => new Promise( async (resolve, reject) =>
   const chat = await createChannel('messaging', [data.user_id_followed, data.user_id_follower], `${data.username_followed},${data.username_follower}`)
   chat.update({
     name: `${data.username_followed},${data.username_follower}`
-  }, {text: textOwnUser, 
+  }, {text: textTargetUser, 
     system_user:data.user_id_follower,
     is_from_prepopulated: true,
-    other_text: textTargetUser}, {skip_push: true})
+    other_text: textOwnUser}, {skip_push: true})
   api
     .post('/profiles/set-following', data)
     .then((res) => {
