@@ -1,3 +1,4 @@
+import { createChannel } from './chat';
 import api from './config';
 
 export const getMyProfile = async (userId) => new Promise((resolve, reject) => {
@@ -81,7 +82,16 @@ export const setUnFollow = async (data) => new Promise((resolve, reject) => {
     });
 });
 
-export const setFollow = async (data) => new Promise((resolve, reject) => {
+export const setFollow = async (data) => new Promise( async (resolve, reject) => {
+  const textTargetUser= `${data.username_follower} started following you. Send them a message now`;
+  const textOwnUser = `You started following ${data.username_followed}. Send them a message now.`;
+  const chat = await createChannel('messaging', [data.user_id_followed, data.user_id_follower], `${data.username_followed},${data.username_follower}`)
+  chat.update({
+    name: `${data.username_followed},${data.username_follower}`
+  }, {text: textOwnUser, 
+    system_user:data.user_id_follower,
+    is_from_prepopulated: true,
+    other_text: textTargetUser}, {skip_push: true})
   api
     .post('/profiles/set-following', data)
     .then((res) => {
