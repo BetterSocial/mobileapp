@@ -11,13 +11,12 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import ContentLink from './ContentLink';
 import ContentPoll from './ContentPoll';
 import Gap from '../../components/Gap';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import { COLORS, SIZES } from '../../utils/theme';
-import { POST_TYPE_LINK, POST_TYPE_POLL } from '../../utils/constants';
+import { POST_TYPE_POLL } from '../../utils/constants';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
@@ -62,14 +61,35 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
 
   //   );
 
+  const renderHandleTextContent = () => {
+    if(images_url.length > 0 || item.post_type === POST_TYPE_POLL) {
+      return (
+        <View>
+          <Text style={styles.textMedia} numberOfLines={5} >
+            {getCaptionWithTopicStyle(message, navigation)}
+          </Text>
+        </View>
+      )
+    }
+    return (
+     <View>
+      {topics.length > 0 ? <Text numberOfLines={15} style={styles.textMedia} >
+            {getCaptionWithTopicStyle(message, navigation)}
+          </Text> :  <Text style={styles.textMedia} >
+            {getCaptionWithTopicStyle(message, navigation)}
+          </Text>}
+      
+     </View>
+    )
+  }
+
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       <View style={styles.container}>
         <View
           style={styles.containerMainText}>
-          <Text style={styles.textMedia} numberOfLines={5} >
-            {getCaptionWithTopicStyle(message, navigation)}
-          </Text>
+          {renderHandleTextContent()}
+          
 
         </View>
         <View style={styles.containerMainText} >
@@ -96,7 +116,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
             onimageclick={onImageClickedByIndex}
           />
         </View>}
-        <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} text={message}/>
+        <TopicsChip topics={topics} fontSize={14} text={message}/>
 
       </View>
     </Pressable>

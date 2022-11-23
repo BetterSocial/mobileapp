@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { colors } from "../../utils/colors"
 import { fonts } from "../../utils/fonts"
 
-const TopicsChip = ({ topics = [], fontSize = 24, text = '' }) => {
+const TopicsChip = ({ topics = [], fontSize = 24, text = '', isPdp }) => {
     const navigation = useNavigation()
 
     const onTopicPress = (topic) => {
@@ -14,7 +14,7 @@ const TopicsChip = ({ topics = [], fontSize = 24, text = '' }) => {
 
     if (topics.length === 0) return <></>
 
-    return <View style={styles.topicContainer}>
+    return <View style={!isPdp ? styles.topicContainer : styles.topicContainerPdp}>
         {topics.map((item, index) => {
             if(text.indexOf(`#${item}`) < 0) return <View key={`topicContainer-${index}`} style={styles.topicItemContainer}>
                 <Pressable
@@ -42,6 +42,11 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
         paddingRight: 16,
         // backgroundColor: colors.blue
+    },
+    topicContainerPdp: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width: '100%',
     },
     topicItemContainer: {
         backgroundColor: colors.lightgrey,

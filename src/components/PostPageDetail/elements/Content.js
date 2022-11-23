@@ -40,8 +40,8 @@ const Content = ({ message, images_url = [], topics = [], item, onnewpollfetched
   if (!cekImage) return null
 
   return (
-
-    <ScrollView contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+    <>
+     <ScrollView contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
       <View style={[styles.contentFeed]}>
         <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
         {item && item.post_type === POST_TYPE_POLL ?
@@ -57,13 +57,20 @@ const Content = ({ message, images_url = [], topics = [], item, onnewpollfetched
             voteCount={item.voteCount}
             topics={item?.topics}
           /> : null}
+
       </View>
       {images_url.length > 0 && <ImageLayouter
         images={images_url || []}
         onimageclick={onImageClickedByIndex}
       />}
-      <TopicsChip topics={topics} fontSize={16} text={message} />
+
     </ScrollView>
+          <View style={styles.topicContainer} >
+              <TopicsChip isPdp={true} topics={topics} fontSize={14} text={message} />
+
+        </View>
+    </>
+   
 
 
   );
@@ -84,8 +91,18 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingLeft: 20,
     paddingRight: 20,
+    paddingBottom: 80,
     backgroundColor: COLORS.white,
-    // backgroundColor: COLORS.red,
+  },
+  topicContainer : {
+    height: 110,
+    backgroundColor: 'transparent',
+    marginTop: -110,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 10,
+    justifyContent: 'flex-end'
+    
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
