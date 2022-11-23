@@ -62,7 +62,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   //   );
 
   const renderHandleTextContent = () => {
-    if(images_url.length > 0 || item.post_type === POST_TYPE_POLL) {
+    if(images_url.length > 0 || item && item.post_type === POST_TYPE_POLL) {
       return (
         <View style={{height: '90%', }}>
           <Text style={styles.textMedia}  >
