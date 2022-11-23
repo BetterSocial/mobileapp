@@ -64,16 +64,16 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   const renderHandleTextContent = () => {
     if(images_url.length > 0 || item.post_type === POST_TYPE_POLL) {
       return (
-        <View>
-          <Text style={styles.textMedia} numberOfLines={5} >
+        <View style={{height: '90%', }}>
+          <Text style={styles.textMedia}  >
             {getCaptionWithTopicStyle(message, navigation)}
           </Text>
         </View>
       )
     }
     return (
-     <View>
-      {topics.length > 0 ? <Text numberOfLines={15} style={styles.textMedia} >
+     <View style={{height: '90%' }} >
+      {topics.length > 0 ? <Text  style={styles.textMedia} >
             {getCaptionWithTopicStyle(message, navigation)}
           </Text> :  <Text style={styles.textMedia} >
             {getCaptionWithTopicStyle(message, navigation)}
@@ -89,11 +89,9 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
         <View
           style={styles.containerMainText}>
           {renderHandleTextContent()}
-          
-
         </View>
-        <View style={styles.containerMainText} >
           {item && item.post_type === POST_TYPE_POLL ?
+           <View style={styles.containerMainText} >
             <ContentPoll
               message={item.message}
               images_url={item.images_url}
@@ -106,19 +104,23 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
               onnewpollfetched={onNewPollFetched}
               voteCount={item.voteCount}
               topics={item?.topics}
-            /> : null}
+            /> 
+                    </View>
 
-        </View>
-        <Gap height={SIZES.base} />
-        {images_url.length > 0 && <View style={styles.containerImage}>
+            : null}
+
+        {/* <Gap height={SIZES.base} /> */}
+       
+      </View>
+       {images_url.length > 0 && <View style={styles.containerImage}>
           <ImageLayouter
             images={images_url}
             onimageclick={onImageClickedByIndex}
           />
         </View>}
-        <TopicsChip topics={topics} fontSize={14} text={message}/>
 
-      </View>
+              <TopicsChip topics={topics} fontSize={14} text={message}/>
+
     </Pressable>
   );
 };
@@ -135,7 +137,9 @@ export default Content;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    // backgroundColor: 'yellow',
+    height: '50%'
     // backgroundColor: 'red'
   },
   containerImage: {
@@ -171,6 +175,8 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE_MEDIA,
     color: colors.black,
     lineHeight: 24,
+    flex: 1,
+    flexWrap: 'wrap'
   },
 
   seemore: {
@@ -274,6 +280,7 @@ const styles = StyleSheet.create({
   containerMainText: {
     paddingLeft: 16,
     paddingRight: 16,
-    marginBottom: 7
+    height: '100%'
+    // marginBottom: 7
   }
 });

@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: 'row', 
     flexWrap: 'wrap', 
-    // backgroundColor:'blue', 
     height: '100%', 
     alignItems: 'center', 
     justifyContent: 'center',
