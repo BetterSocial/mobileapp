@@ -33,7 +33,8 @@ const UsersFragment = ({
     setIsFirstTimeOpen = () => { }
 }) => {
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
-
+    const [following, followingDispatch] = React.useContext(Context).following
+    const [profile] = React.useContext(Context).profile
     const navigation = useNavigation()
 
     const [myId, setMyId] = React.useState('')
@@ -70,6 +71,7 @@ const UsersFragment = ({
     }
 
     const handleFollow = async (from, willFollow, item, index) => {
+        console.log(item, 'bakan')
         if (from === FROM_FOLLOWED_USERS_INITIAL) {
             const newFollowedUsers = [...users]
             newFollowedUsers[index].user_id_follower = willFollow ? myId : null
@@ -105,20 +107,21 @@ const UsersFragment = ({
 
             setUnfollowedUsers(newUnfollowedUsers)
         }
-
+    
         const data = {
             user_id_follower: myId,
             user_id_followed: item.user_id,
+            username_follower: profile.myProfile.username,
+            username_followed: item.username,
             follow_source: 'discoveryScreen',
         };
 
-        console.log('data')
-        console.log(data)
+
 
         if (willFollow) {
             await setFollow(data);
         } else {
-            await setUnFollow(data);
+             await setUnFollow(data);
         }
     }
 

@@ -187,7 +187,7 @@ const OtherProfile = () => {
       follow_source: 'other-profile',
     };
     const result = await setUnFollow(data);
-    if (result.code == 200) {
+    if (result.code === 200) {
       fetchOtherProfile(username);
     }
   };
@@ -196,12 +196,17 @@ const OtherProfile = () => {
     const data = {
       user_id_follower: user_id,
       user_id_followed: other_id,
+      username_follower: profile.myProfile.username,
+      username_followed: username,
       follow_source: 'other-profile',
     };
 
     const result = await setFollow(data);
-
+    // prepopulated follow
+    // const textOwnUser = `${username} started following you. Send them a message now`;
+    // const textTargetUser = `You started following ${profile.myProfile.username}. Send them a message now.`;
     if (result.code === 200) {
+
       fetchOtherProfile(username);
     }
   };
@@ -308,7 +313,7 @@ const OtherProfile = () => {
       return (
         <React.Fragment>
           <GlobalButton
-            onPress={createChannel}>
+            onPress={onCreateChannel}>
             <View style={styles.btnMsg}>
               <EnveloveBlueIcon
                 width={20}
@@ -375,7 +380,7 @@ const OtherProfile = () => {
     flatListRef.current.scrollToTop();
   };
 
-  const createChannel = async () => {
+  const onCreateChannel = async () => {
     try {
       const members = [other_id, user_id];
       setIsLoading(true);
@@ -423,7 +428,7 @@ const OtherProfile = () => {
       data = { ...data, message };
     }
     const blockingUser = await blockUser(data);
-    if (blockingUser.code == 200) {
+    if (blockingUser.code === 200) {
       blockUserRef.current.close();
       specificIssueRef.current.close();
       reportUserRef.current.close();

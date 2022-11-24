@@ -1,29 +1,21 @@
 /* eslint-disable no-nested-ternary */
 import * as React from 'react';
-import SeeMore from 'react-native-see-more-inline';
 import {
   Dimensions,
-  FlatList,
-  Image,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
-import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import { COLORS } from '../../utils/theme';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import {
-  getCaptionWithTopicStyle,
   getPollTime,
   isPollExpired,
 } from '../../utils/string/StringUtils';

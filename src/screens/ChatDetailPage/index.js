@@ -30,12 +30,13 @@ const streami18n = new Streami18n({
   language: 'en',
 });
 
-const ChatDetailPage = (props) => {
+const ChatDetailPage = () => {
   const [clients] = React.useContext(Context).client;
   const [channelClient] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
 
   const messageSystemCustom = (props) => {
+
     const { message, channel } = props;
     if(channel?.data.channel_type === 2 || channel?.data.channel_type === 3) return <CustomMessageSystem text={`${message.user.name} has joined the group`} />
 
@@ -47,15 +48,18 @@ const ChatDetailPage = (props) => {
           return <View />;
 
       }
-        if (message.disable_to_user === clients.client.user.id) {
+      if (message.disable_to_user === clients.client.user.id) {
           return <View />
-        }
-          return <CustomMessageSystem text={message.text} />
+      }
+      return <CustomMessageSystem text={message.text} />
 
 
     }
-      return <MessageSystem {...props} />
+    if(message.system_user === clients.client.user.id) {
+      return null
 
+    }
+    return <MessageSystem {...props} />
 
 
   }

@@ -21,12 +21,12 @@ import ConnectorWrapper from "../Comments/ConnectorWrapper";
 import ReplyCommentItem from "../Comments/ReplyCommentItem";
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from "../Comments/WriteComment";
+import useReplyComment from './hooks/useReplyComment';
 import { Context } from '../../context';
 import { colors } from '../../utils/colors';
 import { createChildComment } from '../../service/comment';
 import { fonts } from '../../utils/fonts';
 import { getFeedDetail } from '../../service/post';
-import useReplyComment from './hooks/useReplyComment';
 
 const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed,updateReply,  itemParent, updateVote, updateVoteLatestChildren }) => {
   const navigation = useNavigation();
@@ -144,7 +144,6 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
   }
 
   const updateVoteLatestChildrenParent = async (response, dataVote, comment) => {
-    console.log(response, dataVote, comment, 'laka')
     const commentList = await updateVoteLatestChildrenParentHook(response, dataVote, comment)
     setNewCommentList(commentList)
 }
