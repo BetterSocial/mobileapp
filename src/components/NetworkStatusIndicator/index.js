@@ -1,7 +1,8 @@
-import React from 'react'
+import * as React from 'react'
+import Netinfo, { useNetInfo } from '@react-native-community/netinfo'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { colors } from 'react-native-swiper-flatlist/src/themes'
-import { useNetInfo } from '@react-native-community/netinfo'
+import { debounce } from 'lodash'
 
 import LoadingWithoutModal from '../LoadingWithoutModal'
 import { COLORS } from '../../utils/theme'
@@ -12,12 +13,29 @@ import { COLORS } from '../../utils/theme'
  * @returns 
  */
 const NetworkStatusIndicator = ({ hide = false }) => {
+    const [isInternetReachable, setIsInternetReachable] = React.useState(true);
+    const internetStatusDebounced = React.useCallback(debounce(() => {
+        setIsInternetReachable(false)
+    }, 3000)
+
+        , [])
+
     const netInfo = useNetInfo()
-    console.log(netInfo)
+
+    React.useEffect(() => {
+        const { isInternetReachable: isReachable } = netInfo
+        if (!isReachable) {
+            internetStatusDebounced()
+        } else {
+            internetStatusDebounced.cancel()
+            setIsInternetReachable(true)
+        }
+
+    }, [netInfo?.isInternetReachable])
 
     if (hide) return <></>
 
-    if (!netInfo?.isInternetReachable) return <View testID='network-status-indicator' style={styles.container}>
+    if (!isInternetReachable) return <View testID='network-status-indicator' style={styles.container}>
         <LoadingWithoutModal />
         <View style={styles.bottomContainer}>
             <Text style={styles.text}>No Internet Connection</Text>
