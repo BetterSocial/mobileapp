@@ -129,7 +129,7 @@ export const RootNavigator = () => {
       style={{
         height: '100%',
       }}>
-      <NetworkStatusIndicator initialStartup={initialStartup} hide={hideNetworkStatusIfInOnboarding}/>
+      <NetworkStatusIndicator hide={false} />
       {/* <StatusBar translucent backgroundColor="white" /> */}
       <RootStack.Navigator
         screenOptions={{
