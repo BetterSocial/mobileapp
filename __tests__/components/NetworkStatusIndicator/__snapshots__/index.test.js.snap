@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Network Status Indicator Component Match Snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "rgba(0,0,0,0.3)",
+      "bottom": 0,
+      "height": "100%",
+      "left": 0,
+      "position": "absolute",
+      "right": 0,
+      "top": 0,
+      "width": "100%",
+      "zIndex": 100,
+    }
+  }
+  testID="network-status-indicator"
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(0, 0, 0, 0.22)",
+          "borderRadius": 10,
+          "padding": 50,
+        }
+      }
+    >
+      <ActivityIndicator
+        animating={true}
+        color="#00ADB5"
+        hidesWhenStopped={true}
+        size="large"
+      />
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#FF2E63",
+        "bottom": 0,
+        "display": "flex",
+        "flexDirection": "row",
+        "justifyContent": "center",
+        "left": 0,
+        "padding": 16,
+        "position": "absolute",
+        "right": 0,
+        "width": "100%",
+        "zIndex": 100,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignSelf": "center",
+          "color": "#FFFFFF",
+          "marginEnd": 8,
+        }
+      }
+    >
+      No Internet Connection
+    </Text>
+  </View>
+</View>
+`;
