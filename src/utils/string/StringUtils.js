@@ -333,23 +333,27 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @param {Any} navigation 
  * @returns 
  */
-const getCaptionWithTopicStyle = (text, navigation) => {
+const getCaptionWithTopicStyle = (text, navigation, substringEnd) => {
     const route = useRoute()
     const topicWithPrefix = route?.params?.id
     const id = removePrefixTopic(topicWithPrefix);
+    const topicTegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/
+    const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
 
-    text = reactStringReplace(text, /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/, (match, index) =>
+    text = reactStringReplace(text, topicTegex, (match, index) =>
         <TopicText navigation={navigation} text={match} currentTopic={id} />
     )
 
-    const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
     text = reactStringReplace(text, validationTextHasAt, (match, index) =>
         <TaggingUserText navigation={navigation} text={match} currentTopic={id} />
     )
+    if(substringEnd && typeof substringEnd === 'number') {
+            text[text.length - 1] = text[text.length - 1].substring(0,substringEnd)
+    }
+
+    return text 
 
 
-
-    return text
 }
 
 const removeStringAfterSpace = str => str.split(' ')[0]
