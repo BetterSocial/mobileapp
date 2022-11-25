@@ -1,5 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { useNavigation } from '@react-navigation/core';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
