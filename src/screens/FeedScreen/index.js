@@ -20,9 +20,8 @@ import { FEEDS_CACHE } from '../../utils/cache/constant';
 import { downVote, upVote } from '../../service/vote';
 import { getFeedDetail, getMainFeed, viewTimePost } from '../../service/post';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
-import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { setFeedByIndex, setMainFeeds, setTimer, setViewPostTimeIndex } from '../../context/actions/feeds';
+import { setFeedByIndex, setMainFeeds, setTimer } from '../../context/actions/feeds';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
@@ -43,12 +42,10 @@ const FeedScreen = (props) => {
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const [profileContext] = React.useContext(Context).profile;
-  const bottomBarHeight = useBottomTabBarHeight();
   const [searchHeight, setSearchHeight] = React.useState(0)
   const { interactionsComplete } = useAfterInteractions()
   const { feeds, timer, viewPostTimeIndex } = feedsContext;
   const { myProfile } = profileContext
-  const contentHeight = (Dimensions.get('screen').height - StatusBar.currentHeight - bottomBarHeight) * 0.80
 
   const { bottom } = useSafeAreaInsets();
   const [isScroll, setIsScroll] = React.useState(false)

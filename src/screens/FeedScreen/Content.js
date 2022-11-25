@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import * as React from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import PropTypes from 'prop-types';
 import {
   Dimensions,
@@ -12,10 +13,9 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 import ContentPoll from './ContentPoll';
-import Gap from '../../components/Gap';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import { COLORS, SIZES } from '../../utils/theme';
+import { COLORS } from '../../utils/theme';
 import { POST_TYPE_POLL } from '../../utils/constants';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
@@ -29,8 +29,10 @@ const FONT_SIZE_TEXT_LONG = 16
 
 const Content = ({ message, images_url = [], style, onPress, topics = [], item, onNewPollFetched, onPressDomain, onCardContentPress }) => {
   const navigation = useNavigation();
-
-
+  const devHeight = Dimensions.get('screen').height
+  const substringPostImage = devHeight /2.25 - (40 * 4)
+  const substringNoImageNoTopic = devHeight/1.25 - (40 * 4)
+   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -43,43 +45,26 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   };
 
 
-  // const handleTextMedia = (text, onPress) => (
-  //     <View>
-  //       <Text numberOfLines={4} style={styles.textMedia}>
-  //         {text.length < 180 ? (
-  //           getCaptionWithTopicStyle(text, navigation)
-  //         ) : (
-  //           <Text>
-  //             {`${text.substring(0, 165)}...`}
-  //             <Text onPress={onPress} style={styles.seemore}>
-  //               more
-  //             </Text>
-  //           </Text>
-  //         )}
-  //       </Text>
-  //     </View>
-
-  //   );
 
   const renderHandleTextContent = () => {
-    if(images_url.length > 0 || item.post_type === POST_TYPE_POLL) {
+    if(images_url.length > 0 || item && item.post_type === POST_TYPE_POLL) {
       return (
-        <View style={{height: '90%', }}>
-          <Text style={styles.textMedia}  >
-            {getCaptionWithTopicStyle(message, navigation)}
+        <View style={{ height: '100%', flexDirection: 'row' }}>
+          <Text  style={styles.textMedia}  >
+            {getCaptionWithTopicStyle(message, navigation, substringPostImage)} {message.length > substringPostImage ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
           </Text>
         </View>
       )
     }
     return (
-     <View style={{height: '90%' }} >
-      {topics.length > 0 ? <Text  style={styles.textMedia} >
-            {getCaptionWithTopicStyle(message, navigation)}
-          </Text> :  <Text style={styles.textMedia} >
-            {getCaptionWithTopicStyle(message, navigation)}
+      <View style={{flex: 1}} >
+        {topics.length > 0 ? <Text style={styles.textMedia} >
+            {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic)} {message.length > substringNoImageTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+          </Text> :  <Text  style={styles.textMedia} >
+            {getCaptionWithTopicStyle(message, navigation, substringNoImageNoTopic)} {message.length > substringNoImageNoTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
           </Text>}
-      
-     </View>
+         
+      </View>
     )
   }
 
@@ -90,7 +75,12 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
           style={styles.containerMainText}>
           {renderHandleTextContent()}
         </View>
-          {item && item.post_type === POST_TYPE_POLL ?
+          
+
+        {/* <Gap height={SIZES.base} /> */}
+       
+      </View>
+      {item && item.post_type === POST_TYPE_POLL ?
            <View style={styles.containerMainText} >
             <ContentPoll
               message={item.message}
@@ -108,10 +98,6 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
                     </View>
 
             : null}
-
-        {/* <Gap height={SIZES.base} /> */}
-       
-      </View>
        {images_url.length > 0 && <View style={styles.containerImage}>
           <ImageLayouter
             images={images_url}
@@ -137,10 +123,8 @@ export default Content;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // backgroundColor: 'yellow',
-    height: '50%'
-    // backgroundColor: 'red'
+    overflow: 'hidden',
+    flex: 1
   },
   containerImage: {
     flex: 1,
@@ -176,7 +160,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     lineHeight: 24,
     flex: 1,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
 
   seemore: {
