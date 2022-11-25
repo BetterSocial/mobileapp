@@ -216,7 +216,6 @@ const ChannelListScreen = ({ navigation }) => {
                   refreshControl: null,
                   // extraData:{countReadComment},
                 }}
-
                additionalData={listPostNotif}
                context={myContext}
                PreviewUnreadCount={chatBadge}

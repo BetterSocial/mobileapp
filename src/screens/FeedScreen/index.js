@@ -184,7 +184,7 @@ const FeedScreen = (props) => {
   const sendViewPost = () => {
     const currentTime = new Date()
     const diffTime = currentTime.getTime() - timer.getTime()
-    const id = feeds[viewPostTimeIndex]?.id
+    const id = feeds && feeds[viewPostTimeIndex]?.id
     if (id) viewTimePost(id, diffTime, SOURCE_FEED_TAB);
 
   };

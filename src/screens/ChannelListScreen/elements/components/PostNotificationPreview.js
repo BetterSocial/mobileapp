@@ -85,11 +85,7 @@ const styles = StyleSheet.create({
     },
     replyContainer: {
         flexDirection: 'row',
-        // marginTop: 3,
-        // backgroundColor: 'red',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 28,
+        marginTop: 3,
     },
     iconStyle: {
         height: 12, width: 12,
@@ -144,22 +140,26 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
         return "No comments yet"
     }
 
-    const handleDate = () => calculateTime(item.data.last_message_at)
+    const handleDate = () => {
+        if(item.data && item.data.last_message_at) {
+            calculateTime(item.data.last_message_at)
 
-    
+        }
+        return null
+    }
     return (
         <ButtonHighlight key={index} onPress={() => onSelectAdditionalData(item)}  style={[styles.containerCard, {borderBottomColor: border}]} >
             <View style={[styles.row]} >
                 {item.postMaker && item.postMaker.data ?<AvatarPostNotif item={item} /> : null}
             <View style={{flex: 1,  paddingLeft: 8, justifyContent: 'center'}} >
                 <View style={styles.row} >
-                {item.postMaker && item.postMaker.data ? <Text numberOfLines={1} style={[styles.titleTextBig, {maxWidth: '82%'}]} >{item.postMaker.id === myProfile.user_id ? "Your post" : item.postMaker.data.username}: {item.titlePost}</Text> : null}
-                <Text style={[styles.dateFont]} >{handleDate(item.comments[0] && item.comments[0].reaction)} </Text>
+                {item.postMaker && item.postMaker.data ? <Text numberOfLines={1} style={[styles.titleTextBig, {maxWidth: '85%'}]} >{item.postMaker.id === myProfile.user_id ? "Your post" : item.postMaker.data.username}: {item.titlePost}</Text> : null}
+                <Text style={[styles.dateFont]} >{handleDate()} </Text>
 
                 </View>
                 <View style={[styles.replyContainer]} >
                     {Array.isArray(item.comments) && item.comments.length > 0 ?                    
-                    <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey}]} >{handleReplyComment()}</Text> : <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey, marginTop: 'auto'}]} >No comments yet</Text>}
+                    <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey, marginTop: 'auto'}]} >{handleReplyComment()}</Text> : <Text numberOfLines={1} style={[styles.subtitleStyle, {color: grey, marginTop: 'auto'}]} >No comments yet</Text>}
 
         
                  
