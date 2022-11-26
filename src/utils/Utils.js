@@ -169,3 +169,19 @@ export const getNewsLinkInfoInLinkPreview = async (link) => {
     }
     return null;
 }
+
+/**
+ * 
+ * @param {String} text 
+ * @param {String[]} topics 
+ * @returns {String[]}
+ */
+ export const filterAllTopics = (text, topics = []) => {
+    const topicsFromText = text.match(/#(\w+)\b/gi) || []
+    const topicsFromTextWithoutHashtag = topicsFromText.reduce((acc, next) => {
+        acc.push(next.slice(1))
+        return acc
+    }, [])
+
+    return [...new Set([...topicsFromTextWithoutHashtag, ...topics])]
+}
