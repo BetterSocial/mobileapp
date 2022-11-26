@@ -1,10 +1,8 @@
 import * as React from 'react'
-import Netinfo, { useNetInfo } from '@react-native-community/netinfo'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
-import { colors } from 'react-native-swiper-flatlist/src/themes'
 import { debounce } from 'lodash'
+import { useNetInfo } from '@react-native-community/netinfo'
 
-import LoadingWithoutModal from '../LoadingWithoutModal'
 import { COLORS } from '../../utils/theme'
 
 /**
@@ -36,8 +34,8 @@ const NetworkStatusIndicator = ({ hide = false }) => {
     if (hide) return <></>
 
     if (!isInternetReachable) return <View testID='network-status-indicator' style={styles.container}>
-        <LoadingWithoutModal />
         <View style={styles.bottomContainer}>
+            <ActivityIndicator color={COLORS.white} size={14} />
             <Text style={styles.text}>No Internet Connection</Text>
         </View>
     </View>
@@ -48,14 +46,11 @@ const NetworkStatusIndicator = ({ hide = false }) => {
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        top: 0,
         bottom: 0,
         right: 0,
         left: 0,
-        height: '100%',
         width: '100%',
         zIndex: 100,
-        backgroundColor: COLORS.black30percent
     },
     bottomContainer: {
         position: 'absolute',
@@ -64,7 +59,7 @@ const styles = StyleSheet.create({
         right: 0,
         width: '100%',
         zIndex: 100,
-        padding: 16,
+        padding: 4,
         backgroundColor: COLORS.red,
         display: 'flex',
         flexDirection: 'row',
@@ -74,7 +69,8 @@ const styles = StyleSheet.create({
     text: {
         color: COLORS.white,
         alignSelf: 'center',
-        marginEnd: 8
+        marginEnd: 8,
+        marginStart: 8,
     }
 })
 
