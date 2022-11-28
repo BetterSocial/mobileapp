@@ -22,7 +22,7 @@ import {
   onCancel,
   onError,
   onSuccess,
-} from '@human-id/react-native-humanid';
+} from '@human-internet/react-native-humanid';
 import { useNavigation } from '@react-navigation/core';
 
 import ButtonSign from '../../assets/icon-svg/button_sign.svg';
@@ -30,7 +30,6 @@ import ButtonSignDisabled from '../../assets/icon-svg/button_sign_disabled.svg';
 import Loading from '../Loading';
 import SlideShow from './elements/SlideShow';
 import StringConstant from '../../utils/string/StringConstant';
-import useIsReady from '../../hooks/useIsReady';
 import { Context } from '../../context';
 import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
 import { checkToken } from '../../service/outh';

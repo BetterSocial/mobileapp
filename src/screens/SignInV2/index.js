@@ -16,7 +16,7 @@ import {
   onCancel,
   onError,
   onSuccess,
-} from '@human-id/react-native-humanid';
+} from '@human-internet/react-native-humanid';
 import { useNavigation } from '@react-navigation/core';
 import { useSetRecoilState } from 'recoil';
 
@@ -106,15 +106,12 @@ const SignIn = () => {
         });
     });
     onError((message) => {
-      console.log('on general error')
       crashlytics().recordError(new Error(message));
-      console.log('error message', message);
     });
     onCancel(() => {
       analytics().logEvent('cencel_auth_humanid', {
         id: '1',
       });
-      console.log('canceled');
     });
   }, []);
 

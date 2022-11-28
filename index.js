@@ -3,14 +3,10 @@
  */
 import 'react-native-gesture-handler';
 import './src/libraries/reactotron/reactotronInstance';
-import PushNotification from 'react-native-push-notification';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 // import { enableScreens } from 'react-native-screens';
-import SimpleToast from 'react-native-simple-toast';
 import config from 'react-native-config'
-import messaging from '@react-native-firebase/messaging';
 import { AppRegistry } from 'react-native';
-import { configureHumanID } from '@human-id/react-native-humanid';
+import { configureHumanID } from '@human-internet/react-native-humanid';
 
 import App from './App';
 import AppIcon from './src/components/AppIcon';

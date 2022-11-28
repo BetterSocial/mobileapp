@@ -1,4 +1,4 @@
-import { HumanIDProvider } from '@human-id/react-native-humanid';
+import { HumanIDProvider } from '@human-internet/react-native-humanid';
 import { NavigationContainer } from '@react-navigation/native';
 import * as React from 'react';
 import { BackHandler, StyleSheet, View } from 'react-native'

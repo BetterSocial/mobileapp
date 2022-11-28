@@ -1,22 +1,11 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 import useFeed from '../../src/screens/FeedScreen/hooks/useFeed'
 
-// jest.mock('@react-navigation/native', () => ({
-//   useNavigation: () => ({ navigate: jest.fn() }),
-// }));
-
-// jest.mock('react', () => ({
-//     useState: jest.fn()
-// }))
-
 jest.mock('@react-navigation/bottom-tabs', () => ({
   useBottomTabBarHeight: jest.fn(),
 }));
 
-// jest.mock('react', () => ({
-//   ...jest.requireActual('react'),
-//   useState: jest.fn(),
-// }))
+
 
 describe('Logic feed should run correctly', () => {
      const itemUpvote = {
