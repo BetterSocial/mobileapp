@@ -1,23 +1,23 @@
-import {Linking} from 'react-native'
-import {  act } from '@testing-library/react-hooks';
+import { Linking } from 'react-native'
+import { act } from '@testing-library/react-hooks';
 import { waitFor } from '@testing-library/react-native';
-import {sanitizeUrlForLinking, setCapitalFirstLetter, openUrl, removeWhiteSpace, globalReplaceAll, validationURL, getUrl} from '../../src/utils/Utils'
+import { sanitizeUrlForLinking, setCapitalFirstLetter, openUrl, removeWhiteSpace, globalReplaceAll, validationURL, getUrl } from '../../src/utils/Utils'
 
 jest.mock('react-native-simple-toast', () => ({
     SHORT: jest.fn()
 }))
 
 
-   function mockSuccessLinking() {
-      const canOpenURL = jest
+function mockSuccessLinking() {
+    const canOpenURL = jest
         .spyOn(Linking, 'canOpenURL')
         .mockImplementation(() => Promise.resolve(true));
-      const openURL = jest
+    const openURL = jest
         .spyOn(Linking, 'openURL')
         .mockImplementation(() => Promise.resolve(true));
 
-      return { canOpenURL, openURL };
-    }
+    return { canOpenURL, openURL };
+}
 
 describe('Utils function run correctly', () => {
     it('sanitizeUrlForLinking should run correctly', () => {

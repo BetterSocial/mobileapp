@@ -177,7 +177,7 @@ export const getNewsLinkInfoInLinkPreview = async (link) => {
  * @returns {String[]}
  */
  export const filterAllTopics = (text, topics = []) => {
-    const topicsFromText = text.match(/#(\w+)\b/gi) || []
+    const topicsFromText = text.match(/#([a-zA-Z0-9-_]+)\b/gi) || []
     const topicsFromTextWithoutHashtag = topicsFromText.reduce((acc, next) => {
         acc.push(next.slice(1))
         return acc
