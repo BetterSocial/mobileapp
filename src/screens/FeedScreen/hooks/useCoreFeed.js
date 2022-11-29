@@ -60,6 +60,7 @@ const { feeds, timer, viewPostTimeIndex } = feedsContext;
       return dataFeeds
     } catch (e) {
       setLoading(false);
+      return e
     }
   };
 
@@ -70,10 +71,11 @@ const onDeleteBlockedPostCompleted = async (postId) => {
     setMainFeeds(clonedFeeds, dispatch)
   }
 
-    const onBlockCompleted = async (postId) => {
+const onBlockCompleted = async (postId) => {
     onDeleteBlockedPostCompleted(postId)
 
-    await getDataFeeds(0, true)
+    const resp = await getDataFeeds(0, true)
+    return resp
   }
 
     const checkCacheFeed = () => {
