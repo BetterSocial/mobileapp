@@ -31,7 +31,6 @@ const Footer = ({
   totalVote = 0,
   totalComment = 0,
   statusVote = 'none',
-  isSelf = false,
 }) => (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
       <View style={[styles.rowSpaceBeetwen, styles.width(0.25)]}>
