@@ -9,14 +9,13 @@ import DomainList from '../elements/DiscoveryItemList';
 import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import StringConstant from '../../../utils/string/StringConstant';
+import useChatClientHook from '../../../utils/getstream/useChatClientHook';
 import useIsReady from '../../../hooks/useIsReady';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
-import { putUserTopic } from '../../../service/topics';
-import { withInteractionsManaged } from '../../../components/WithInteractionManaged';
 
 const FROM_FOLLOWED_TOPIC = 'fromfollowedtopics';
 const FROM_FOLLOWED_TOPIC_INITIAL = 'fromfollowedtopicsinitial';
@@ -25,6 +24,7 @@ const FROM_UNFOLLOWED_TOPIC_INITIAL = 'fromunfollowedtopicsinitial';
 
 const TopicFragment = ({ isLoadingDiscoveryTopic = false, followedTopic = [], unfollowedTopic = [], isFirstTimeOpen, setIsFirstTimeOpen, setSearchText, setFollowedTopic, setUnfollowedTopic }) => {
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
+    const { followTopic } = useChatClientHook()
 
     const navigation = useNavigation()
     const [myId, setMyId] = React.useState('')
@@ -71,11 +71,7 @@ const TopicFragment = ({ isLoadingDiscoveryTopic = false, followedTopic = [], un
             setUnfollowedTopic(newUnFollowedTopic)
         }
 
-        const data = {
-            name: item.name
-        }
-
-        await putUserTopic(data);
+        followTopic(item?.name)
     }
 
 
