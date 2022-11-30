@@ -5,8 +5,6 @@ jest.mock('@react-navigation/bottom-tabs', () => ({
   useBottomTabBarHeight: jest.fn(),
 }));
 
-
-
 describe('Logic feed should run correctly', () => {
      const itemUpvote = {
             own_reactions: {

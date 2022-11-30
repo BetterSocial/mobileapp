@@ -3,10 +3,12 @@ import axios from 'axios';
 
 import Store from '../../src/context/Store'
 import useCoreFeed from '../../src/screens/FeedScreen/hooks/useCoreFeed'
-import {saveToCache, getSpecificCache} from '../../src/utils/cache'
-import {setMainFeeds, setTimer} from '../../src/context/actions/feeds'
+import {getSpecificCache} from '../../src/utils/cache'
 
-jest.mock('../../src/utils/cache')
+jest.mock('../../src/utils/cache', () => ({
+    saveToCache: jest.fn(),
+    getSpecificCache: jest.fn()
+}))
 jest.mock('../../src/context/actions/feeds')
 jest.mock('react-native-safe-area-context', () => {
     const inset = { top: 0, right: 0, bottom: 0, left: 0 }
@@ -18,7 +20,7 @@ jest.mock('react-native-safe-area-context', () => {
     useSafeAreaInsets: jest.fn().mockImplementation(() => inset),
   }
 });
-
+    
 jest.mock('axios')
 describe('Main Feed should run correctly', () => {
     const responseMock = {
@@ -37,6 +39,10 @@ describe('Main Feed should run correctly', () => {
             ],
             offset: 10
         }
+
+    afterEach(() => {
+    jest.restoreAllMocks();
+  });
     it('saveSearchHeight should run correctly', () => {
 
         const {result} = renderHook(() => useCoreFeed(), { wrapper: Store})
@@ -48,37 +54,30 @@ describe('Main Feed should run correctly', () => {
     })
 
     it('getDataFeeds should run correctly', async () => {
+        const {result} = renderHook(() => useCoreFeed(), { wrapper: Store})
+        axios.get.mockResolvedValue(responseMock)
+        act(() => {
+            const resp = result.current.getDataFeeds(10, false)
+            expect(resp).resolves.toEqual(responseMock)
+
+        })
         
-        const {result} = renderHook(() => useCoreFeed(), { wrapper: Store})
-        axios.get.mockResolvedValue(responseMock)
-         const query = `?offset=20`
-         act(async() => {
-            const resp = await result.current.getDataFeeds(query)
-            expect(resp).toEqual(responseMock)
-            expect(result.current.postOffset).toEqual(20)
-            expect(saveToCache).toHaveBeenCalled(1)
-            expect(setMainFeeds).toHaveBeenCalledTimes(1)
-            expect(setTimer).toHaveBeenCalled(1)
-         })
-     
-
-    })
-    it('checkCacheFeed should run correctly', () => {
-        const {result} = renderHook(() => useCoreFeed(), { wrapper: Store})
-        act(async() => {
-            await result.current.checkCacheFeed()
-            expect(getSpecificCache).toHaveBeenCalled(1)
-        })
     })
 
-    it('onBlockCompleted should run correctly', () => {
+    it('checkCacheFeed should run correctly', async () => {
+        const {result} = renderHook(() => useCoreFeed(), { wrapper: Store})
+        act(() => {
+            result.current.checkCacheFeed()
+        })
+        expect(getSpecificCache).toHaveBeenCalledTimes(1)
+    })
+
+    it('onBlockCompleted should run correctly', async () => {
         const {result} = renderHook(() => useCoreFeed(), { wrapper: Store})
         axios.get.mockResolvedValue(responseMock)
-        act(async() => {
-            const resp = await result.current.onBlockCompleted()
-            expect(resp).toEqual(responseMock)
-            expect(setMainFeeds).toHaveBeenCalled(1)
+        act(() => {
+            const resp = result.current.onBlockCompleted()
+            expect(resp).resolves.toEqual(responseMock)
         })
-
     })
 })

@@ -19,8 +19,8 @@ const [profileContext] = React.useContext(Context).profile;
 const [searchHeight, setSearchHeight] = React.useState(0)
 
 const { feeds, timer, viewPostTimeIndex } = feedsContext;
-  const { myProfile } = profileContext
-    const { bottom } = useSafeAreaInsets();
+const { myProfile } = profileContext
+const { bottom } = useSafeAreaInsets();
 
   const getDataFeeds = async (offsetFeed = 0, useLoading) => {
     setCountStack(null);
@@ -57,7 +57,7 @@ const { feeds, timer, viewPostTimeIndex } = feedsContext;
       setPostOffset(dataFeeds.offset)
       setTimer(new Date(), dispatch)
       setLoading(false);
-      return dataFeeds
+      return getMainFeed(query)
     } catch (e) {
       setLoading(false);
       return e
@@ -65,17 +65,18 @@ const { feeds, timer, viewPostTimeIndex } = feedsContext;
   };
 
 const onDeleteBlockedPostCompleted = async (postId) => {
-    const postIndex = feeds.findIndex((item) => item.id === postId)
-    const clonedFeeds = [...feeds]
-    clonedFeeds.splice(postIndex, 1)
-    setMainFeeds(clonedFeeds, dispatch)
+    if(postId) {
+      const postIndex = feeds.findIndex((item) => item.id === postId)
+      const clonedFeeds = [...feeds]
+      clonedFeeds.splice(postIndex, 1)
+      setMainFeeds(clonedFeeds, dispatch)
+    }
   }
 
 const onBlockCompleted = async (postId) => {
     onDeleteBlockedPostCompleted(postId)
 
-    const resp = await getDataFeeds(0, true)
-    return resp
+    return getDataFeeds(0, true)
   }
 
     const checkCacheFeed = () => {
@@ -165,7 +166,9 @@ const onBlockCompleted = async (postId) => {
     updateFeed,
     setUpVote,
     setDownVote,
-    saveSearchHeight
+    saveSearchHeight,
+    setMainFeeds,
+    feeds
   }
 }
 
