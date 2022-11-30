@@ -90,7 +90,6 @@ const useContentPoll = ({polls}) => {
       );
       return modifPoll
     }
-    console.log(modifiedPoll(), 'lana')
 
   return {
     renderSeeResultButton,

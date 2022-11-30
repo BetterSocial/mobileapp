@@ -13,7 +13,7 @@ import {COLORS} from '../../utils/theme';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
 import IconPollMine from '../../assets/icon/IconPollMine';
 
-let PollOptions = ({
+const PollOptions = ({
   mypoll,
   poll,
   index,
@@ -22,56 +22,57 @@ let PollOptions = ({
   isexpired = false,
   isalreadypolling = false,
   maxpolls = [],
-  onselected = (index) => {},
+  onselected = () => {},
 }) => {
-  let counter = poll?.counter || 10;
-  let optionPercentage = total === 0 ? 0 : (counter / total) * 100;
+  const counter = poll?.counter || 10;
+  const optionPercentage = total === 0 ? 0 : (counter / total) * 100;
 
-  let isPollDisabled = () => isexpired || isalreadypolling;
-  let onPollPressed = () => {
+  const isPollDisabled = () => isexpired || isalreadypolling;
+  const onPollPressed = () => {
     if (isalreadypolling) {
       return;
     }
     onselected(index);
   };
 
-  let isMyPoll = () => mypoll?.polling_option_id === poll?.polling_option_id;
-  let isPollNotEndedAndIsMax =
+  const isMyPoll = () => mypoll?.polling_option_id === poll?.polling_option_id;
+  const isPollNotEndedAndIsMax =
     isalreadypolling && maxpolls.includes(poll.polling_option_id);
 
-  let isPollNotEndedAndIsMine = isalreadypolling && isMyPoll();
-  let isMax = maxpolls.includes(poll.polling_option_id);
+  const isPollNotEndedAndIsMine = isalreadypolling && isMyPoll();
+  const isMax = maxpolls.includes(poll.polling_option_id);
 
-  let renderPercentageBar = () => {
+  const renderPercentageBar = () => {
     if (isexpired) {
       return (
         <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
       );
-    } else if (isPollNotEndedAndIsMax) {
+    } if (isPollNotEndedAndIsMax) {
       return (
         <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
       );
-    } else if (isalreadypolling) {
+    } if (isalreadypolling) {
       return (
         <View style={styles.percentageBar(optionPercentage, isMyPoll())} />
       );
     }
   };
 
-  let renderPollBadge = () => {
+  const renderPollBadge = () => {
     if (isMax) {
       return (
         <IconPollWinnerBadge style={{marginRight: 9, alignSelf: 'center'}} />
       );
-    } else if (isPollNotEndedAndIsMine) {
+    } if (isPollNotEndedAndIsMine) {
       return <IconPollMine style={{marginRight: 9, alignSelf: 'center'}} />;
-    } else {
+    } 
       return <></>;
-    }
+    
   };
 
   return (
     <TouchableNativeFeedback
+      testID='option'
       style={{backgroundColor: 'red'}}
       disabled={isPollDisabled()}
       onPress={onPollPressed}>
@@ -142,15 +143,13 @@ let styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 16,
   },
-  pollOptionItemText: (isexpired, ismax) => {
-    return {
+  pollOptionItemText: (isexpired, ismax) => ({
       flex: 1,
       color: colors.black,
       fontFamily: fonts.inter[400],
       marginStart: 0,
       alignSelf: 'center',
-    };
-  },
+    }),
   pollOptionItemPercentage: {},
   percentageBar: (percent, isMyPoll = false) => {
     if (!percent) {

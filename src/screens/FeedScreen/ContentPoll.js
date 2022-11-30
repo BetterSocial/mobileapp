@@ -103,7 +103,7 @@ const ContentPoll = ({
                 pollexpiredat,
               )}`}</Text>
               {showSetResultsButton(pollexpiredat) && (
-                <View style={styles.seeresultscontainer}>
+                <View testID='resultButton' style={styles.seeresultscontainer}>
                   <TouchableOpacity onPress={onClickSubmit}>
                     <Text style={styles.seeresultstext}>
                       {renderSeeResultButtonHandle()}
