@@ -1,15 +1,14 @@
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-unused-vars */
-import analytics from '@react-native-firebase/analytics';
-import { useNavigation } from '@react-navigation/core';
-import { debounce } from 'lodash';
-import PSL from 'psl'
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
 /* eslint-disable no-use-before-define */
 import * as React from 'react';
+import PSL from 'psl'
+import Toast from 'react-native-simple-toast';
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
+import analytics from '@react-native-firebase/analytics';
 import {
     Alert,
     BackHandler,
@@ -23,53 +22,24 @@ import {
     TouchableNativeFeedback,
     View
 } from 'react-native';
-import { showMessage } from 'react-native-flash-message';
+import { debounce } from 'lodash';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { openSettings } from 'react-native-permissions';
-import Toast from 'react-native-simple-toast';
+import { showMessage } from 'react-native-flash-message';
+import { useNavigation } from '@react-navigation/core';
 
-import MemoIc_hastag from '../../assets/icons/Ic_hastag';
-import Location from '../../assets/icons/Ic_location';
-import Timer from '../../assets/icons/Ic_timer';
-import MemoIc_user_group from '../../assets/icons/Ic_user_group';
-import MemoIc_world from '../../assets/icons/Ic_world';
-import ProfileDefault from '../../assets/images/ProfileDefault.png';
-import { Button, ButtonAddMedia } from '../../components/Button';
-import Gap from '../../components/Gap';
-import Header from '../../components/Header';
-import ListItem from '../../components/MenuPostItem';
-import TopicItem from '../../components/TopicItem';
-import { Context } from '../../context';
-import { getLinkPreviewInfo } from '../../service/feeds';
-import { getUserForTagging } from '../../service/mention';
-import { ShowingAudience, createPollPost, createPost } from '../../service/post';
-import { getMyProfile } from '../../service/profile';
-import { getTopics } from '../../service/topics';
-import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
-import { getSpecificCache } from '../../utils/cache';
-import { PROFILE_CACHE } from '../../utils/cache/constant';
-import { colors } from '../../utils/colors';
-import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
-import { fonts } from '../../utils/fonts';
-import {
-    requestCameraPermission,
-    requestExternalStoragePermission,
-} from '../../utils/permission';
-import {
-    getDurationId,
-    getLocationId,
-    getPrivacyId,
-    setDurationId,
-    setPrivacyId,
-} from '../../utils/setting';
-import StringConstant from '../../utils/string/StringConstant';
-import { convertString } from '../../utils/string/StringUtils';
-import { getUserId } from '../../utils/users';
-import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
-import Loading from '../Loading';
 import Card from './elements/Card';
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
+import Gap from '../../components/Gap';
+import Header from '../../components/Header';
+import ListItem from '../../components/MenuPostItem';
+import Loading from '../Loading';
+import Location from '../../assets/icons/Ic_location';
+import MemoIc_hastag from '../../assets/icons/Ic_hastag';
+import MemoIc_user_group from '../../assets/icons/Ic_user_group';
+import MemoIc_world from '../../assets/icons/Ic_world';
+import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import SheetAddTopic from './elements/SheetAddTopic';
 import SheetCloseBtn from './elements/SheetCloseBtn';
 import SheetExpiredPost from './elements/SheetExpiredPost';
@@ -77,8 +47,38 @@ import SheetGeographic from './elements/SheetGeographic';
 import SheetMedia from './elements/SheetMedia';
 import SheetPrivacy from './elements/SheetPrivacy';
 import ShowMedia from './elements/ShowMedia';
-import useHastagMention from './elements/useHastagMention';
+import StringConstant from '../../utils/string/StringConstant';
+import Timer from '../../assets/icons/Ic_timer';
+import TopicItem from '../../components/TopicItem';
 import UserProfile from './elements/UserProfile';
+import useHastagMention from './elements/useHastagMention';
+import { Button, ButtonAddMedia } from '../../components/Button';
+import { Context } from '../../context';
+import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
+import { PROFILE_CACHE } from '../../utils/cache/constant';
+import { ShowingAudience, createPollPost, createPost } from '../../service/post';
+import { colors } from '../../utils/colors';
+import { convertString } from '../../utils/string/StringUtils';
+import { filterAllTopics, getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
+import { fonts } from '../../utils/fonts';
+import {
+    getDurationId,
+    getLocationId,
+    getPrivacyId,
+    setDurationId,
+    setPrivacyId,
+} from '../../utils/setting';
+import { getLinkPreviewInfo } from '../../service/feeds';
+import { getMyProfile } from '../../service/profile';
+import { getSpecificCache } from '../../utils/cache';
+import { getTopics } from '../../service/topics';
+import { getUserForTagging } from '../../service/mention';
+import { getUserId } from '../../utils/users';
+import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
+import {
+    requestCameraPermission,
+    requestExternalStoragePermission,
+} from '../../utils/permission';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -552,7 +552,9 @@ const CreatePost = () => {
 
     const handleTopicChat = async () => {
         const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
-        listTopic.forEach(async (topic) => {
+        const allTopics = filterAllTopics(message, listTopic)
+
+        allTopics.forEach(async (topic) => {
             const channel = await client.client.channel('topics', `topic_${topic}`, { name: `#${topic}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
             await channel.create()
             await channel.addMembers([user.myProfile.user_id])
