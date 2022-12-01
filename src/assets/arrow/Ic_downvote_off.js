@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
-function Ic_downvote_off(props) {
+function IcDownVoteOff(props) {
   return (
     <Svg width="22" height="12" viewBox="0 0 22 22" fill="none" {...props}>
       <Path
@@ -14,5 +14,4 @@ function Ic_downvote_off(props) {
   );
 }
 
-const MemoIc_downvote_off = React.memo(Ic_downvote_off);
-export default MemoIc_downvote_off;
+export default IcDownVoteOff;

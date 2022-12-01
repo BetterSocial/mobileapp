@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
-function Ic_arrow_back(props) {
+function IcArrowBack(props) {
   return (
     <Svg width="1em" height="1em" viewBox="0 0 20 12" fill="none" {...props}>
       <Path
@@ -14,5 +14,4 @@ function Ic_arrow_back(props) {
   );
 }
 
-const MemoIc_arrow_back = React.memo(Ic_arrow_back);
-export default MemoIc_arrow_back;
+export default IcArrowBack;

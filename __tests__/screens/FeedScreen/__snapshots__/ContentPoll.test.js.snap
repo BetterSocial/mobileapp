@@ -1,0 +1,215 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Content poll should smae as snapshot should same as snapshot 1`] = `
+<View
+  style={
+    Object {
+      "justifyContent": "center",
+      "marginBottom": 30,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "padding": 0,
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "backgroundColor": "#F5F5F5",
+          "borderRadius": 8,
+          "display": "flex",
+          "flexDirection": "row",
+          "marginBottom": 8,
+        }
+      }
+      testID="multiple"
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "#C4C4C4",
+            "borderRadius": 6,
+            "height": "100%",
+            "left": 0,
+            "position": "absolute",
+            "top": 0,
+            "width": "0%",
+          }
+        }
+      />
+      <View
+        style={
+          Object {
+            "alignSelf": "center",
+            "display": "flex",
+            "flexDirection": "row",
+            "paddingHorizontal": 16,
+            "paddingVertical": 8,
+            "width": "100%",
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "alignSelf": "center",
+              "color": "#000000",
+              "flex": 1,
+              "fontFamily": "Inter-Regular",
+              "marginBottom": 6,
+              "marginLeft": 0,
+              "marginTop": 6,
+            }
+          }
+        >
+          bahaya123
+        </Text>
+        <Text
+          style={
+            Object {
+              "alignSelf": "center",
+            }
+          }
+        >
+          0%
+        </Text>
+      </View>
+    </View>
+    <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "backgroundColor": "#F5F5F5",
+          "borderRadius": 8,
+          "display": "flex",
+          "flexDirection": "row",
+          "marginBottom": 8,
+        }
+      }
+      testID="multiple"
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "#55C2FF",
+            "borderRadius": 6,
+            "height": "100%",
+            "left": 0,
+            "position": "absolute",
+            "top": 0,
+            "width": "50%",
+          }
+        }
+      />
+      <View
+        style={
+          Object {
+            "alignSelf": "center",
+            "display": "flex",
+            "flexDirection": "row",
+            "paddingHorizontal": 16,
+            "paddingVertical": 8,
+            "width": "100%",
+          }
+        }
+      >
+        <View />
+        <Text
+          style={
+            Object {
+              "alignSelf": "center",
+              "color": "#000000",
+              "flex": 1,
+              "fontFamily": "Inter-Regular",
+              "marginBottom": 0,
+              "marginLeft": 0,
+              "marginTop": 0,
+            }
+          }
+        >
+          bahaya1
+        </Text>
+        <Text
+          style={
+            Object {
+              "alignSelf": "center",
+            }
+          }
+        >
+          50%
+        </Text>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "display": "flex",
+        "flexDirection": "row",
+        "marginBottom": 10,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignSelf": "center",
+          "color": "#828282",
+          "fontFamily": "Inter-Regular",
+          "fontSize": 12,
+          "lineHeight": 16,
+        }
+      }
+    >
+      2 votes 
+    </Text>
+    <View
+      style={
+        Object {
+          "alignSelf": "center",
+          "backgroundColor": "#828282",
+          "borderRadius": 4,
+          "height": 4,
+          "width": 4,
+        }
+      }
+    />
+    <Text
+      style={
+        Object {
+          "alignSelf": "center",
+          "color": "#828282",
+          "flex": 1,
+          "fontFamily": "Inter-Regular",
+          "fontSize": 12,
+          "lineHeight": 16,
+        }
+      }
+    >
+       Poll closed 2d ago
+    </Text>
+  </View>
+</View>
+`;

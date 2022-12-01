@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
-function Ic_arrow_back_white(props) {
+function IcArrowBackWhite(props) {
   const { iconColor } = props
 
   return (
@@ -17,5 +17,4 @@ function Ic_arrow_back_white(props) {
   );
 }
 
-const MemoIc_arrow_back_white = React.memo(Ic_arrow_back_white);
-export default MemoIc_arrow_back_white;
+export default IcArrowBackWhite

@@ -97,6 +97,19 @@ const useFeed = () => {
     setStatusDowvote((prev) => !prev);
   };
 
+  const handleTextCountStyle = () => {
+    if(totalVote > 0) {
+      return '#00ADB5'
+    }
+    if(totalVote < 0) {
+      return '#FF2E63'
+    } 
+
+    return '#C4C4C4'
+  };
+
+
+
 
   return {
     handleVote,
@@ -116,6 +129,7 @@ const useFeed = () => {
     initialSetup,
     onPressUpvoteHook,
     onPressDownVoteHook,
+    handleTextCountStyle,
   }
 }
 

@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import PropsTypes from 'prop-types';
 import { Avatar } from 'react-native-activity-feed';
 import {
@@ -80,7 +81,7 @@ const _renderAnonimity = ({
 
   return (
     <SafeAreaView>
-      <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
+      <View testID='anonymHeader' style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
             <View style={[styles.btn]}>
@@ -177,7 +178,7 @@ const _renderProfileNormal = ({
 
   return (
     <SafeAreaView>
-      <View style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
+      <View testID='defaultHeader' style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
             <View style={styles.btn}>
