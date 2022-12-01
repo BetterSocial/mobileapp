@@ -65,9 +65,8 @@ describe('Content poll should smae as snapshot', () => {
 
     it('total vote text should be existed', () => {
          const  onnewpollfetched = jest.fn()
-        const {getAllByText, debug} = render(<ContentPoll item={item} onnewpollfetched={onnewpollfetched} multiplechoice={false} pollexpiredat={'2022-11-29T01:24:25.170Z'} voteCount={item.voteCount} isalreadypolling={false} polls={item.pollOptions} />);
-        expect(getAllByText('2 votes')).toHaveLength(1)
-        debug('lakik')
+        const {getAllByText} = render(<ContentPoll item={item} onnewpollfetched={onnewpollfetched} multiplechoice={false} pollexpiredat={'2022-11-29T01:24:25.170Z'} voteCount={item.voteCount} isalreadypolling={false} polls={item.pollOptions} />);
+        expect(getAllByText(`${item.voteCount} votes`)).toHaveLength(1)
     })
 
 })
