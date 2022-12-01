@@ -1,4 +1,4 @@
-import {render, cleanup} from '@testing-library/react-native'
+import {render, cleanup, fireEvent} from '@testing-library/react-native'
 import * as React from 'react'
 import Footer from '../../../src/screens/FeedScreen/Footer'
 
@@ -36,4 +36,24 @@ describe('Footer Feed component should be correct', () => {
         expect(getAllByTestId('downvoteOff')).toHaveLength(1)
 
     })
+
+    it('onPressShare should call on press button', () => {
+        const onShareFunc = jest.fn()
+        const onPressUpvote = jest.fn()
+        const onPressDownvote = jest.fn()
+        const onComment = jest.fn()
+        const onBlock = jest.fn()
+        const {getByTestId} = render(<Footer statusVote={'none'} onPressShare={onShareFunc} onPressUpvote={onPressUpvote} onPressBlock={onBlock} onPressComment={onComment} onPressDownVote={onPressDownvote} />)
+        fireEvent.press(getByTestId('onShare'))
+        expect(onShareFunc).toHaveBeenCalledTimes(1)
+        fireEvent.press(getByTestId('onComment'))
+        expect(onComment).toHaveBeenCalledTimes(1)
+        fireEvent.press(getByTestId('onUpvote'))
+        expect(onPressUpvote).toHaveBeenCalledTimes(1)
+        fireEvent.press(getByTestId('onDownvote'))
+        expect(onPressDownvote).toHaveBeenCalledTimes(1)
+        fireEvent.press(getByTestId('onBlock'))
+        expect(onBlock).toHaveBeenCalledTimes(1)
+    })
+
 })

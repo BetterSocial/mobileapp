@@ -35,10 +35,10 @@ const Footer = ({
 }) => (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
       <View style={[styles.rowSpaceBeetwen, styles.width(0.25)]}>
-        <TouchableOpacity onPress={onPressShare} style={styles.widthFlex}>
+        <TouchableOpacity testID='onShare' onPress={onPressShare} style={styles.widthFlex}>
           <MemoIcShare height={20} width={20} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onPressComment} style={styles.widthFlex}>
+        <TouchableOpacity testID='onComment' onPress={onPressComment} style={styles.widthFlex}>
           <MemoIcComment height={20} width={20} />
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressComment} style={styles.widthFlex}>
@@ -46,10 +46,10 @@ const Footer = ({
         </TouchableOpacity>
       </View>
       <View style={[styles.rowSpaceBeetwen, styles.width(0.25)]}>
-        <TouchableOpacity onPress={() => onPressBlock(item)}>
+        <TouchableOpacity testID='onBlock' onPress={() => onPressBlock(item)}>
           <MemoIcBlockInactive height={18} width={18} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onPressDownVote(item)}>
+        <TouchableOpacity testID='onDownvote' onPress={() => onPressDownVote(item)}>
           {statusVote === 'downvote' ? (
             <View testID='downvoteOn' >
               <MemoIcArrowDownVoteOn width={18} height={18} />
@@ -63,7 +63,7 @@ const Footer = ({
 
         <Text style={styles.textCount(totalVote)}>{totalVote}</Text>
 
-        <TouchableOpacity onPress={() => onPressUpvote(item)}>
+        <TouchableOpacity testID='onUpvote' onPress={() => onPressUpvote(item)}>
           {statusVote === 'upvote' ? (
             <View testID='upvoteOn'>
               <MemoIcArrowUpvoteOn  width={18} height={18} />
