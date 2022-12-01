@@ -41,7 +41,7 @@ const Content = ({ message, images_url = [], topics = [], item, onnewpollfetched
 
   return (
     <>
-     <ScrollView contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+     <ScrollView contentContainerStyle={{flexGrow: 1, paddingBottom: 40}} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
       <View style={[styles.contentFeed]}>
         <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
         {item && item.post_type === POST_TYPE_POLL ?
