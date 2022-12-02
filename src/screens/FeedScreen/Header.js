@@ -30,40 +30,70 @@ import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNin
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import dimen from '../../utils/dimen';
-import { Context } from '../../context';
 import { PRIVACY_PUBLIC, SOURCE_FEED_TAB, SOURCE_PDP } from '../../utils/constants';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
-import { getUserId } from '../../utils/users';
 import { setTimer } from '../../context/actions/feeds';
 import { viewTimePost } from '../../service/post';
+import useFeedHeader from './hooks/useFeedHeader';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const validationTimer = (timer, duration_feed) => {
+export const validationTimer = (timer, duration_feed) => {
   const date1 = new Date(timer);
   const date2 = new Date();
   const totalFeed = 24 * duration_feed;
   const hours = Math.abs(date1 - date2) / 36e5;
   const total = (hours / totalFeed) * 100;
+  console.log(total)
   switch (true) {
     case total < 25:
-      return <MemoEightyEight_hundred height={17} width={17} />;
+      return (
+        <View testID='25' >
+          <MemoEightyEight_hundred height={17} width={17} />;
+        </View>
+      )
     case total < 38:
-      return <MemoSeventyFive_eightySeven height={17} width={17} />;
+      return (
+        <View testID='36' >
+          <MemoSeventyFive_eightySeven height={17} width={17} />
+        </View>
+      );
     case total < 50:
-      return <MemoSixtyThree_seventyFour height={17} width={17} />;
+      return (
+        <View testID='50' >
+          <MemoSixtyThree_seventyFour height={17} width={17} />
+        </View>
+      );
     case total < 63:
-      return <MemoFivety_sixtyTwo height={17} width={17} />;
+      return (
+        <View testID='63' >
+          <MemoFivety_sixtyTwo height={17} width={17} />
+        </View>
+      );
     case total < 75:
-      return <MemoThirtySeven_fourtyNine height={17} width={17} />;
+      return (
+        <View testID='75' >
+          <MemoThirtySeven_fourtyNine height={17} width={17} />;
+        </View>
+      )
     case total < 88:
-      return <MemoTwentyFive_thirtySix height={17} width={17} />;
+      return (
+        <View testID='80' >
+          <MemoTwentyFive_thirtySix height={17} width={17} />
+        </View>
+      );
     default:
-      return <MemoOne height={17} width={17} />;
+      return (
+        <View testID='full' >
+          <MemoOne height={17} width={17} />
+        </View>
+      );
   }
 };
+
+
 
 const _renderAnonimity = ({
   time,
@@ -78,14 +108,14 @@ const _renderAnonimity = ({
   const navigation = useNavigation();
   
 
-
   return (
     <SafeAreaView>
       <View testID='anonymHeader' style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
-            <View style={[styles.btn]}>
+            <View testID='haveBackButton' style={[styles.btn]}>
               <GlobalButton
+                testID='onBack'
                 onPress={() => {
                   navigation.goBack();
                 }}>
@@ -145,61 +175,25 @@ const _renderProfileNormal = ({
   source,
   headerStyle
 }) => {
-  const navigation = useNavigation();
-  const [feedsContext, dispatch] = React.useContext(Context).feeds
+  const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({actor, source})
 
-  const { feeds, timer, viewPostTimeIndex } = feedsContext
-
-  const userId = actor?.id;
-  const { profile_pic_url, username } = actor?.data || {};
   
-  const navigateToProfile = async () => {
-    if (source) {
-      const currentTime = new Date().getTime()
-      const id = feeds && feeds[viewPostTimeIndex]?.id
-      if (id) viewTimePost(id, currentTime - timer.getTime(), source)
-      setTimer(new Date(), dispatch)
-    }
-
-    const selfUserId = await getUserId();
-    if (selfUserId === userId) {
-      return navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
-    }
-    return navigation.navigate('OtherProfile', {
-      data: {
-        user_id: selfUserId,
-        other_id: userId,
-        username,
-      },
-    });
-  };
 
   return (
     <SafeAreaView>
       <View testID='defaultHeader' style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
-            <View style={styles.btn}>
+            <View testID='haveBackButton' style={styles.btn}>
               <GlobalButton
-                onPress={() => {
-                  if (source) {
-                    const currentTime = new Date().getTime()
-                    const id = feeds && feeds[viewPostTimeIndex]?.id
-                    if (id) viewTimePost(id, currentTime - timer.getTime(), source)
-                    if (id && source === SOURCE_PDP) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
-                    setTimer(new Date(), dispatch)
-                  }
-
-                  navigation.goBack();
-                }}>
+                testID='onBack'
+                onPress={onBackNormalUser}>
                 <MemoIc_arrow_back height={20} width={20} />
               </GlobalButton>
             </View>
           ) : null}
           <GlobalButton
-            onPress={() => navigateToProfile()}>
+            onPress={navigateToProfile}>
             <View style={{}}>
               <Avatar
                 source={
@@ -210,7 +204,7 @@ const _renderProfileNormal = ({
               />
             </View>
           </GlobalButton>
-          <GlobalButton onPress={() => navigateToProfile()} style={[styles.containerFeedProfile, { paddingBottom: 5 }]}>
+          <GlobalButton onPress={navigateToProfile} style={[styles.containerFeedProfile, { paddingBottom: 5 }]}>
             <View style={[styles.containerFeedName, { alignItems: 'flex-end' }]}>
               <Text style={styles.feedUsername}>
                 {username || 'no name specifics'}

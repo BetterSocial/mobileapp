@@ -40,9 +40,6 @@ const ContentPoll = ({
 
   }
 
-  const onClickSubmit = () => {
-    onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index)
-  }
 
   React.useEffect(() => {
     initialSetup()
@@ -58,6 +55,7 @@ const ContentPoll = ({
                 */
                  multiplechoice ? (
                   <PollOptionsMultipleChoice
+                    testID='componentMultipleChoice'
                     key={indexPoll}
                     item={pollItem}
                     index={indexPoll}
@@ -104,7 +102,7 @@ const ContentPoll = ({
               )}`}</Text>
               {showSetResultsButton(pollexpiredat) && (
                 <View testID='resultButton' style={styles.seeresultscontainer}>
-                  <TouchableOpacity onPress={onClickSubmit}>
+                  <TouchableOpacity onPress={() =>  onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index)}>
                     <Text style={styles.seeresultstext}>
                       {renderSeeResultButtonHandle()}
                     </Text>
