@@ -17,10 +17,9 @@ const PollOptionsMultipleChoice = ({
   isexpired,
   isalreadypolling = false,
   maxpolls = [],
-  onselected = (index) => {},
+  onselected = () => {},
   totalVotingUser = 0
 }) => {
-  console.log(totalVotingUser)
   const counter = item?.counter || 0;
   const optionPercentage = totalVotingUser === 0 ? 0 : ((counter / totalVotingUser) * 100).toFixed(0);
 
@@ -52,8 +51,6 @@ const PollOptionsMultipleChoice = ({
     }
   };
 
-  const isPollNotEndedAndIsMax =
-    isalreadypolling && maxpolls.includes(item.polling_option_id);
 
   const isPollNotEndedAndIsMine = isalreadypolling && isMyPoll() && !isexpired;
   const isMax = maxpolls.includes(item.polling_option_id);
@@ -63,10 +60,6 @@ const PollOptionsMultipleChoice = ({
       return (
         <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
       );
-      // } else if (isPollNotEndedAndIsMax) {
-      //   return (
-      //     <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
-      //   );
     } if (isalreadypolling) {
       return (
         <View style={styles.percentageBar(optionPercentage, isMyPoll())} />
@@ -88,6 +81,7 @@ const PollOptionsMultipleChoice = ({
 
   return (
     <TouchableNativeFeedback
+      testID='multiple'
       disabled={isPollDisabled()}
       onPress={onOptionsClicked}>
       <View
@@ -97,13 +91,7 @@ const PollOptionsMultipleChoice = ({
             ? styles.pollOptionItemContainerActive
             : styles.pollOptionItemContainer
         }>
-        {/* <View
-          style={styles.percentageBar(
-            optionPercentage,
-            isMyPoll(),
-            isPollDisabled(),
-          )}
-        /> */}
+
         {renderPercentageBar()}
         <View style={styles.pollOptionTextContainer}>
           {isPollDisabled() ? (

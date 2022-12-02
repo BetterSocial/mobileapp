@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
-function Ic_arrow_turn_right(props) {
+function IcArrowTurnRight(props) {
   return (
     <Svg width="1em" height="1em" viewBox="0 0 20 20" fill="none" {...props}>
       <Path
@@ -14,5 +14,4 @@ function Ic_arrow_turn_right(props) {
   );
 }
 
-const MemoIc_arrow_turn_right = React.memo(Ic_arrow_turn_right);
-export default MemoIc_arrow_turn_right;
+export default IcArrowTurnRight;

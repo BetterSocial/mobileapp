@@ -1,30 +1,26 @@
 import * as  React from 'react';
-import config from 'react-native-config';
 import { StatusBar, View } from 'react-native';
-import { StreamChat } from 'stream-chat';
+import { useChannelContext } from 'stream-chat-react-native-core';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
-import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
-import RenderItem from '../ProfileScreen/elements/RenderItem';
+import TiktokScroll from '../../components/TiktokScroll';
 import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
+import useChatClientHook from '../../utils/getstream/useChatClientHook';
 import { Context } from '../../context';
-import { convertString } from '../../utils/string/StringUtils';
+import { TOPIC_LIST } from '../../utils/cache/constant';
 import { downVote, upVote } from '../../service/vote';
-import { getAccessToken } from '../../utils/token';
 import { getFeedDetail } from '../../service/post';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { getTopicPages } from '../../service/topicPages';
 import { getUserId } from '../../utils/users';
-import { getUserTopic, putUserTopic } from '../../service/topics';
+import { getUserTopic } from '../../service/topics';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { getSpecificCache, saveToCache } from '../../utils/cache';
-import { TOPIC_LIST } from '../../utils/cache/constant';
-import TiktokScroll from '../../components/TiktokScroll';
 
 const TopicPageScreen = (props) => {
     const route = useRoute();
@@ -41,9 +37,9 @@ const TopicPageScreen = (props) => {
     const [offset, setOffset] = React.useState(0);
     const [client] = React.useContext(Context).client;
     const navigation = useNavigation()
-    // const [prevOffste, setPrevOffset] = React.useState(0)
     const refBlockComponent = React.useRef();
-    // const [headerHeightRef] = React.useState(0);
+
+    const { followTopic } = useChatClientHook()
 
     const initData = async () => {
 
@@ -56,26 +52,23 @@ const TopicPageScreen = (props) => {
             setUserTopicName(id);
             const query = `?name=${id}`;
             setTopicId(id);
-            console.log(id, 'jolo')
             // eslint-disable-next-line no-underscore-dangle
             // const _resultGetTopicPages = await getTopicPages(id);
-            
+
             await getSpecificCache(`${TOPIC_LIST}_${id}`, async (cacheTopic) => {
-                console.log(cacheTopic, 'mantap')
-                if(!cacheTopic) {
-                     const resultGetTopicPages = await getTopicPages(id);
-                     saveToCache(`${TOPIC_LIST}_${id}`, resultGetTopicPages)
-                     setTopicFeeds(resultGetTopicPages.data, dispatch);
+                if (!cacheTopic) {
+                    const resultGetTopicPages = await getTopicPages(id);
+                    saveToCache(`${TOPIC_LIST}_${id}`, resultGetTopicPages)
+                    setTopicFeeds(resultGetTopicPages.data, dispatch);
                     setOffset(resultGetTopicPages.offset)
-                                setIsInitialLoading(false)
+                    setIsInitialLoading(false)
 
                 } else {
                     setTopicFeeds(cacheTopic.data, dispatch);
                     setOffset(cacheTopic.offset)
-                                setIsInitialLoading(false)
+                    setIsInitialLoading(false)
 
                 }
-                console.log( cacheTopic, 'lusa')
             })
             // console.log(_resultGetTopicPages , 'pola')
             // setTopicFeeds(_resultGetTopicPages.data, dispatch);
@@ -83,7 +76,6 @@ const TopicPageScreen = (props) => {
 
             // eslint-disable-next-line no-underscore-dangle
             const _resultGetUserTopic = await getUserTopic(query);
-            console.log(_resultGetUserTopic, 'banak')
             if (_resultGetUserTopic.data) {
                 setIsFollow(true);
             }
@@ -97,7 +89,6 @@ const TopicPageScreen = (props) => {
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            console.log('masuk pak')
             initData();
         })
 
@@ -141,7 +132,7 @@ const TopicPageScreen = (props) => {
     }
 
     const refreshingData = async (offsetParam = offset) => {
-        if(offset) {
+        if (offset) {
             try {
                 setLoading(true);
                 const result = await getTopicPages(topicId, offsetParam);
@@ -149,27 +140,26 @@ const TopicPageScreen = (props) => {
                 const topicWithPrefix = route.params.id
                 const id = removePrefixTopic(topicWithPrefix);
                 setOffset(result.offset)
-                console.log(result, 'makan')
-                if(result.code === 200) {
+                if (result.code === 200) {
                     if (offsetParam === 0) {
-                    saveToCache(`${TOPIC_LIST}_${id}`, result)
-                    setTopicFeeds(data, dispatch)
+                        saveToCache(`${TOPIC_LIST}_${id}`, result)
+                        setTopicFeeds(data, dispatch)
                     } else {
-                    const joinData = [...feeds, ...data]
-                    const newResult = {...result, data: joinData}
-                    saveToCache(`${TOPIC_LIST}_${id}`, newResult)
-                    setTopicFeeds(joinData, dispatch);
+                        const joinData = [...feeds, ...data]
+                        const newResult = { ...result, data: joinData }
+                        saveToCache(`${TOPIC_LIST}_${id}`, newResult)
+                        setTopicFeeds(joinData, dispatch);
                     }
                 }
-            
+
                 setLoading(false)
             } catch (error) {
                 console.log(error);
                 setLoading(false);
             }
         }
-            
-        
+
+
     }
     const onDeleteBlockedPostCompleted = async (postId) => {
         const postIndex = feeds.findIndex((item) => item.id === postId)
@@ -187,11 +177,8 @@ const TopicPageScreen = (props) => {
     const handleFollowTopic = async () => {
         try {
             setLoading(true);
-            const data = {
-                name: userTopicName
-            }
-            const result = await putUserTopic(data);
-            setIsFollow(result.data);
+            const followed = await followTopic(userTopicName)
+            setIsFollow(followed);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -275,8 +262,7 @@ const TopicPageScreen = (props) => {
             console.log(e);
         }
     };
-    console.log(isInitialLoading, 'lakao')
-    if(isInitialLoading) return null
+    if (isInitialLoading) return null
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
             <StatusBar barStyle="dark-content" translucent={false} />
@@ -288,14 +274,14 @@ const TopicPageScreen = (props) => {
                     onEndReach={onEndReach}
                     onRefresh={onRefresh}
                     refreshing={loading}
-                    // snapToOffsets={(() => {
-                    //     if (feeds) {
-                    //         const posts = feeds?.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-                    //         return [headerHeightRef, ...posts]
-                    //     }
+                // snapToOffsets={(() => {
+                //     if (feeds) {
+                //         const posts = feeds?.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
+                //         return [headerHeightRef, ...posts]
+                //     }
 
-                    //     return [headerHeightRef]
-                    // })()}
+                //     return [headerHeightRef]
+                // })()}
                 >
                     {({ item, index }) => (
                         <MemoizedListComponent

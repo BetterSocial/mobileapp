@@ -17,5 +17,4 @@ const IcArrowRightTail = (props) => (
   </Svg>
 )
 
-const MemoizedIcArrowRightTail = React.memo(IcArrowRightTail)
-export default MemoizedIcArrowRightTail
+export default IcArrowRightTail

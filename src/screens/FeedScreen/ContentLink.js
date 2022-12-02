@@ -46,30 +46,6 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
         </>
       </TouchableNativeFeedback>
     </View>
-    // <Pressable
-    //   disabled={isTouchableDisabled}
-    //   onPress={onPress}
-    //   style={styles.contentFeed}>
-    //   <>
-    //     {__renderMessageContentLink()}
-    //     {smartRender(Card, {
-    //       domain: og.domain,
-    //       date: new Date(og.date).toLocaleDateString(),
-    //       domainImage:
-    //         og.domainImage !== ''
-    //           ? og.domainImage
-    //           : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-    //       title: og.title,
-    //       description: og.description,
-    //       image: og.image,
-    //       url: og.url,
-    //       onHeaderPress,
-    //       onCardContentPress,
-    //       score,
-    //       item
-    //     })}
-    //   </>
-    // </Pressable>
   );
 };
 
