@@ -11,35 +11,40 @@ const useFeedHeader = ({actor,
 
   source,
 }) => {
-     const navigation = useNavigation();
+    const navigation = useNavigation();
     const [feedsContext, dispatch] = React.useContext(Context).feeds
     const { feeds, timer, viewPostTimeIndex } = feedsContext
 
-    const userId = actor?.id;
+    const userId = actor?.data?.human_id;
     const { username, profile_pic_url } = actor?.data || {};
-    
-    const navigateToProfile = async () => {
-        if (source) {
-        const currentTime = new Date().getTime()
-        const id = feeds && feeds[viewPostTimeIndex]?.id
-        if (id) viewTimePost(id, currentTime - timer.getTime(), source)
-        setTimer(new Date(), dispatch)
-        }
 
-        const selfUserId = await getUserId();
-        if (selfUserId === userId) {
-        return navigation.navigate('ProfileScreen', {
+    const handleNavigate = (selfUserId) => {
+           if (selfUserId === userId) {
+          return navigation.navigate('ProfileScreen', {
             isNotFromHomeTab: true
-        });
+          });
         }
         return navigation.navigate('OtherProfile', {
-        data: {
-            user_id: selfUserId,
-            other_id: userId,
-            username,
-        },
+            data: {
+                user_id: selfUserId,
+                other_id: userId,
+                username,
+            },
         });
+        } 
+
+    const navigateToProfile = async () => {
+        if (source) {
+            const currentTime = new Date().getTime()
+            const id = feeds && feeds[viewPostTimeIndex]?.id
+            if (id) viewTimePost(id, currentTime - timer.getTime(), source)
+            setTimer(new Date(), dispatch)
+        }
+        const selfUserId = await getUserId();
+        handleNavigate(selfUserId)
     };
+
+   
 
     const onBackNormalUser = () => {
         if (source) {
@@ -63,7 +68,8 @@ const useFeedHeader = ({actor,
     userId,
     profile_pic_url,
     dispatch,
-    onBackNormalUser
+    onBackNormalUser,
+    handleNavigate
   }
 }
 

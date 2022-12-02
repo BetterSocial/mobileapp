@@ -30,12 +30,10 @@ import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNin
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import dimen from '../../utils/dimen';
-import { PRIVACY_PUBLIC, SOURCE_FEED_TAB, SOURCE_PDP } from '../../utils/constants';
+import { PRIVACY_PUBLIC } from '../../utils/constants';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
-import { setTimer } from '../../context/actions/feeds';
-import { viewTimePost } from '../../service/post';
 import useFeedHeader from './hooks/useFeedHeader';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -46,12 +44,11 @@ export const validationTimer = (timer, duration_feed) => {
   const totalFeed = 24 * duration_feed;
   const hours = Math.abs(date1 - date2) / 36e5;
   const total = (hours / totalFeed) * 100;
-  console.log(total)
   switch (true) {
     case total < 25:
       return (
         <View testID='25' >
-          <MemoEightyEight_hundred height={17} width={17} />;
+          <MemoEightyEight_hundred height={17} width={17} />
         </View>
       )
     case total < 38:
@@ -75,7 +72,7 @@ export const validationTimer = (timer, duration_feed) => {
     case total < 75:
       return (
         <View testID='75' >
-          <MemoThirtySeven_fourtyNine height={17} width={17} />;
+          <MemoThirtySeven_fourtyNine height={17} width={17} />
         </View>
       )
     case total < 88:
@@ -176,7 +173,6 @@ const _renderProfileNormal = ({
   headerStyle
 }) => {
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({actor, source})
-
   
 
   return (

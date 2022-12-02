@@ -43,9 +43,7 @@ describe('Header feed should run correctly', () => {
 
     it('validationTimer function should run correctly', () => {
         const expiredAtOneDay = moment().add('day',1)
-        const expiredAtHalfDay = moment().add('hour',12)
         const {getAllByTestId} = render(<Header props={{anonimity: false, duration_feed: 1, expired_at: expiredAtOneDay}}  />, {wrapper: Store})
-        const {getAllByTestId:getTestHalfDay} = render(<Header props={{anonimity: false, duration_feed: 1, expired_at: expiredAtHalfDay}}  />, {wrapper: Store})
         expect(getAllByTestId('full')).toHaveLength(1)
     })
 

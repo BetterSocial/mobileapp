@@ -1,4 +1,4 @@
-import {render, cleanup} from '@testing-library/react-native'
+import {render, cleanup, fireEvent} from '@testing-library/react-native'
 import * as React from 'react'
 import ContentPoll from '../../../src/screens/FeedScreen/ContentPoll'
 import { getPollTime } from '../../../src/utils/string/StringUtils'
@@ -45,7 +45,7 @@ describe('Content poll should smae as snapshot', () => {
 
     it('poll multiplechoice component should be show', () => {
         const  onnewpollfetched = jest.fn()
-        const {getAllByTestId} = render(<ContentPoll item={item} onnewpollfetched={onnewpollfetched} multiplechoice={item.multiplechoice} pollexpiredat={item.polls_expired_at} voteCount={item.voteCount} isalreadypolling={item.isalreadypolling} polls={item.pollOptions} />);
+        const {getAllByTestId, getByTestId} = render(<ContentPoll item={item} onnewpollfetched={onnewpollfetched} multiplechoice={item.multiplechoice} pollexpiredat={item.polls_expired_at} voteCount={item.voteCount} isalreadypolling={item.isalreadypolling} polls={item.pollOptions} />);
         expect(getAllByTestId('multiple')).toHaveLength(2)
     })
 
