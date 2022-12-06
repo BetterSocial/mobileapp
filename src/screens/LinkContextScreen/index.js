@@ -7,7 +7,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -21,9 +21,8 @@ import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import { getAccessToken } from '../../utils/token';
 import {
-  getDetailDomains,
   getDomainIdIFollow,
-  getLinkContextScreenRelated,
+  getLinkContextScreenRelated
 } from '../../service/domain';
 import { setIFollow } from '../../context/actions/news';
 
@@ -53,6 +52,9 @@ const LinkContextScreen = () => {
   const animatedBottomAnchorContainerValue = React.useRef(
     new Animated.Value(0),
   ).current;
+
+  console.log('item')
+  console.log(item?.latest_reactions?.comment)
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -118,7 +120,7 @@ const LinkContextScreen = () => {
   };
 
   const handleOnScroll = (event) => {
-    const {y} = event.nativeEvent.contentOffset;
+    const { y } = event.nativeEvent.contentOffset;
     if (y > 50) {
       Animated.timing(animatedBottomAnchorContainerValue, {
         toValue: -(y - 50),
@@ -208,10 +210,10 @@ const styles = StyleSheet.create({
     height: h,
   }),
   bottomAnchorContainer: (animatedValue) => ({
-      position: 'absolute',
-      bottom: animatedValue,
-      alignSelf: 'center',
-    }),
+    position: 'absolute',
+    bottom: animatedValue,
+    alignSelf: 'center',
+  }),
   postArrowUpImage: {
     width: 48,
     height: 48,

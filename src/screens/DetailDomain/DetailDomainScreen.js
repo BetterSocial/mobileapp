@@ -2,12 +2,10 @@ import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import {
   Dimensions,
-  InteractionManager,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
   View
 } from 'react-native';
 
@@ -19,16 +17,18 @@ import Loading from '../Loading';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import { COLORS } from '../../utils/theme';
+import { Context } from '../../context';
 import { Footer } from '../../components';
 import { createCommentParent } from '../../service/comment';
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import {
-  getCountCommentWithChildInDetailPage,
+  getCountCommentWithChildInDetailPage
 } from '../../utils/getstream';
-import { getDomainDetailById } from '../../service/domain'
+import { getDomainDetailById } from '../../service/domain';
 import { getMyProfile } from '../../service/profile';
 import { getUserId } from '../../utils/users';
+import { updateComment } from '../../context/actions/news';
 
 const { width, height } = Dimensions.get('window');
 
@@ -49,6 +49,9 @@ const DetailDomainScreen = (props) => {
   const [comments, setComments] = React.useState([])
   const [isLoading, setIsLoading] = React.useState(true)
   const blockRef = React.useRef(null)
+
+  const [, dispatch] = React.useContext(Context).news
+
   const initial = () => {
     const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
@@ -84,8 +87,8 @@ const DetailDomainScreen = (props) => {
     }
   }, [item]);
 
-  const getDomain = () => {
-    setIsLoading(true)
+  const getDomain = (withLoading = true) => {
+    if (withLoading) setIsLoading(true)
     const id = dataDomain?.og?.news_feed_id || dataDomain?.id
     getDomainDetailById(id).then((res) => {
       setItem(res)
@@ -141,7 +144,7 @@ const DetailDomainScreen = (props) => {
 
     if (item) {
       validationStatusVote();
-      setComments(item.latest_reactions.comment)
+      setComments(item?.latest_reactions?.comment || [])
     }
   }, [item, yourselfId]);
 
@@ -165,10 +168,12 @@ const DetailDomainScreen = (props) => {
     try {
       if (textComment.trim() !== '') {
         const data = await createCommentParent(textComment, item.id, '', false);
-        setComments([...comments, data.data])
-        if (data.code === 200) {
+        setComments([data?.data, ...comments])
+        if (data?.code === 200) {
           setTextComment('');
           // Toast.show('Comment successful', Toast.LONG);
+          updateComment(data?.data, item?.id, dispatch)
+          setTotalComment((prev) => (parseInt(prev, 10) + 1))
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
