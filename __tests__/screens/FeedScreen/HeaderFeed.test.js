@@ -1,10 +1,8 @@
 import * as React from 'react'
 import {render, cleanup, fireEvent} from '@testing-library/react-native'
 import moment from 'moment'
-import Header, {validationTimer} from '../../../src/screens/FeedScreen/Header'
+import Header from '../../../src/screens/FeedScreen/Header'
 import Store from '../../../src/context/Store'
-import * as service from '../../../src/service/post'
-import userHeaderFeed from '../../../src/screens/FeedScreen/hooks/useFeedHeader'
 
 jest.mock('react-native-activity-feed/node_modules/react-native-image-crop-picker', () => ({
     openPicker: () => jest.fn()

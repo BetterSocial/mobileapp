@@ -45,7 +45,7 @@ const PollOptions = ({
   const renderPercentageBar = () => {
     if (isexpired) {
       return (
-        <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
+        <View testID='isExpiredPollOption' style={styles.expiredPercentageBar(optionPercentage, isMax)} />
       );
     } if (isPollNotEndedAndIsMax) {
       return (
@@ -53,7 +53,7 @@ const PollOptions = ({
       );
     } if (isalreadypolling) {
       return (
-        <View style={styles.percentageBar(optionPercentage, isMyPoll())} />
+        <View testID='isAlreadyPollingOption' style={styles.percentageBar(optionPercentage, isMyPoll())} />
       );
     }
   };

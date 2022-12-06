@@ -1,14 +1,15 @@
+/* eslint-disable import/no-named-as-default */
 import * as React from 'react';
 import CheckBox from '@react-native-community/checkbox';
 import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 
 import IconPollMine from '../../assets/icon/IconPollMine';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
-import {COLORS} from '../../utils/theme';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import usePollOptionMultiple from './hooks/usePollOptionMultiple';
 
-const PollOptionsMultipleChoice = ({
+export const PollOptionsMultipleChoice = ({
   item,
   mypoll,
   index,
@@ -20,62 +21,42 @@ const PollOptionsMultipleChoice = ({
   onselected = () => {},
   totalVotingUser = 0
 }) => {
-  const counter = item?.counter || 0;
-  const optionPercentage = totalVotingUser === 0 ? 0 : ((counter / totalVotingUser) * 100).toFixed(0);
-
-  const isPollDisabled = () => isalreadypolling || isexpired;
-
-  const selected = selectedindex.includes(index);
-
-  const isMyPoll = () => mypoll.reduce((acc, current) => {
-      const isCurrentItemMyPoll =
-        item?.polling_option_id === current?.polling_option_id;
-      return acc || isCurrentItemMyPoll;
-    }, false);
-
-  // console.log(isMyPoll());
-
-  const onOptionsClicked = () => {
-    if (isPollDisabled()) {
-      return;
-    }
-    if (selected) {
-      const idx = selectedindex.indexOf(index);
-      const newSelectedIndex = [...selectedindex];
-      newSelectedIndex.splice(idx, 1);
-      onselected(newSelectedIndex);
-    } else {
-      const newSelectedIndex = [...selectedindex];
-      newSelectedIndex.push(index);
-      onselected(newSelectedIndex);
-    }
-  };
-
-
-  const isPollNotEndedAndIsMine = isalreadypolling && isMyPoll() && !isexpired;
-  const isMax = maxpolls.includes(item.polling_option_id);
+  const {  onOptionsClicked, optionPercentage, isPollDisabled, selected, isMyPoll, isPollNotEndedAndIsMine, isMax, handleStyleBar} = usePollOptionMultiple({
+    item,
+    mypoll,
+    index,
+    selectedindex,
+    isexpired,
+    isalreadypolling,
+    maxpolls,
+    onselected,
+    totalVotingUser 
+  })
 
   const renderPercentageBar = () => {
     if (isexpired) {
       return (
-        <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
+        <View testID='isExpired' style={[styles.barStyle, {width: `${handleStyleBar(optionPercentage)}%`, backgroundColor:isMax ? colors.bondi_blue : colors.gray1}]}  />
       );
     } if (isalreadypolling) {
       return (
-        <View style={styles.percentageBar(optionPercentage, isMyPoll())} />
+        <View testID='isAlreadyPolling' style={[styles.barStyle, {width: `${handleStyleBar(optionPercentage)}%`, backgroundColor: isMyPoll() ? colors.bondi_blue : colors.gray1}]} />
       );
     }
+    return null
   };
 
   const renderPollBadge = () => {
     if (isMax && isexpired) {
       return (
-        <IconPollWinnerBadge style={{marginRight: 9, alignSelf: 'center'}} />
+       <View testID='pollWinner' >
+         <IconPollWinnerBadge style={{marginRight: 9, alignSelf: 'center'}} />
+       </View>
       );
     } if (isPollNotEndedAndIsMine) {
-      return <IconPollMine style={{marginRight: 9, alignSelf: 'center'}} />;
+      return <View testID='isPollNotEndedAndIsMine' ><IconPollMine style={{marginRight: 9, alignSelf: 'center'}} /></View>
     } 
-      return <></>;
+      return <View testID='nonePoll' />;
     
   };
 
@@ -98,6 +79,7 @@ const PollOptionsMultipleChoice = ({
             renderPollBadge()
           ) : (
             <CheckBox
+              testID='checkbox'
               value={selected}
               tintColors={{true: colors.holytosca, false: colors.black}}
               onChange={onOptionsClicked}
@@ -108,6 +90,7 @@ const PollOptionsMultipleChoice = ({
           </Text>
           {isPollDisabled() && (
             <Text
+            testID='optionPercentage'
               style={
                 styles.pollOptionItemPercentage
               }>{`${optionPercentage}%`}</Text>
@@ -161,46 +144,6 @@ let styles = StyleSheet.create({
   pollOptionItemPercentage: {
     alignSelf: 'center',
   },
-  percentageBar: (percent, isMyPoll = false, isPollDisabled = false) => {
-    if (!percent) {
-      percent = 0;
-    }
-    if (percent > 100) {
-      percent = 100;
-    }
-
-    // if (!isPollDisabled) {
-    //   percent = 0;
-    // }
-
-    return {
-      width: `${percent}%`,
-      height: '100%',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      borderRadius: 6,
-      backgroundColor: isMyPoll ? colors.bondi_blue : colors.gray1,
-    };
-  },
-  expiredPercentageBar: (percent, isMax = false) => {
-    if (!percent) {
-      percent = 0;
-    }
-    if (percent > 100) {
-      percent = 100;
-    }
-
-    return {
-      width: `${percent}%`,
-      height: '100%',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      borderRadius: 6,
-      backgroundColor: isMax ? COLORS.blueSea : colors.gray1,
-    };
-  },
   totalpolltext: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
@@ -229,6 +172,13 @@ let styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
+  barStyle: {
+     height: '100%',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      borderRadius: 6,
+  }
 });
 
 export default PollOptionsMultipleChoice;
