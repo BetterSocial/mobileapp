@@ -6,12 +6,11 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
-  View,
+  View
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useLocalChannelsFirst } from 'stream-chat-react-native';
-import { useRecoilValue, useSetRecoilState, } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -34,7 +33,7 @@ import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
 import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
-import ReplyCommentLev3 from '../screens/ReplyComment2'
+import ReplyCommentLev3 from '../screens/ReplyComment2';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
@@ -52,7 +51,7 @@ import {
   GroupInfo,
   GroupMedia,
   GroupSetting,
-  ProfileScreen,
+  ProfileScreen
 } from '../screens';
 import { Context } from '../context';
 import { InitialStartupAtom } from '../service/initialStartup';
