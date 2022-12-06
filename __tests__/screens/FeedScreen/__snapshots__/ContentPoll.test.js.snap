@@ -208,7 +208,7 @@ exports[`Content poll should smae as snapshot should same as snapshot 1`] = `
         }
       }
     >
-       Poll closed 6d ago
+       Poll closed 7d ago
     </Text>
   </View>
 </View>
