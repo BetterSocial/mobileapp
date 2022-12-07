@@ -4,7 +4,7 @@ import { generateRandomId } from 'stream-chat-react-native-core';
 
 import { fonts } from '../fonts';
 
-const handleHastagMention = (text, hashtags = []) => {
+const handleHastagMention = (text = '', hashtags = []) => {
     const retLines = text.split("\n");
     const arrText = new Array();
     for (let i = 0; i < retLines.length; i++) {
@@ -13,6 +13,7 @@ const handleHastagMention = (text, hashtags = []) => {
             arrText.push("\n");
         }
     }
+
     const formattedText = [];
     arrText.forEach(retLine => {
         const words = retLine.split(' ');
@@ -21,27 +22,26 @@ const handleHastagMention = (text, hashtags = []) => {
         const formatHashtag = /[ !#@$%^&*()=+\[\]{};':"\\|,.<>\/?\n]/;
         words.forEach((word, index) => {
             const randomId = generateRandomId();
+            const mention = (
+                <Text key={randomId} style={styles.mention}>
+                    {word}
+                </Text>
+            )
+            const isNotInContentLength = index !== contentLength - 1
+
             if (
                 (word.startsWith("@") && !formatMention.test(word.substr(1))) ||
-                (word.startsWith("#") && !formatHashtag.test(word.substr(1)))
+                (word.startsWith("#") && !formatHashtag.test(word.substr(1)) && hashtags.includes(word.substr(1)))
             ) {
-                const mention = (
-                    <Text key={randomId} style={styles.mention}>
-                        {word}
-                    </Text>
-                );
-                if (index !== contentLength - 1) {
-                    formattedText.push(mention, ' ');
-                } else {
-                    formattedText.push(mention);
-                }
-            } else {
-                if (index !== contentLength - 1) {
-                    return formattedText.push(word, ' ');
-                }
-                return formattedText.push(word);
-
+                return formattedText.push(mention, isNotInContentLength ? ' ' : '');
             }
+
+            if ((word.startsWith("#") && !formatHashtag.test(word.substr(1)))) {
+                return formattedText.push(mention, isNotInContentLength ? ' ' : '');
+            }
+
+            return formattedText.push(word, isNotInContentLength ? ' ' : '');
+
         });
     });
     return formattedText

@@ -115,7 +115,7 @@ const CreatePost = () => {
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
     const [taggingUsers, setTaggingUsers] = React.useState([])
-    const [textContent, handleStateHastag, handleStateMention, setHashtags] = useHastagMention('');
+    const { setHashtags } = useHastagMention('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
     const [allTaggingUser, setAllTaggingUser] = React.useState([])
@@ -762,7 +762,7 @@ const CreatePost = () => {
                         allTaggedUser={allTaggingUser}
                         setAllTaggedUser={setAllTaggingUser}
                     />
-                    
+
                     {isLinkPreviewShown && (
                         <ContentLink
                             og={

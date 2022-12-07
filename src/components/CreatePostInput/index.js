@@ -1,5 +1,7 @@
 import * as React from 'react';
+import axios from 'axios';
 import { StyleSheet, Text, TextInput } from 'react-native';
+import { debounce } from 'lodash';
 
 import MentionSuggestions from './elements/MentionSuggestions';
 import TopicSuggestions from './elements/TopicSuggestions';
@@ -27,18 +29,49 @@ const CreatePostInput = ({
     const [hashtagPosition, setHashtagPosition] = React.useState(0)
     const [positionTopicSearch, setPositionTopicSearch] = React.useState(0)
 
-    const [textContent, handleStateHashtag, handleStateMention, setHashtags] = useHastagMention('');
+    const { formattedText, handleStateHashtag, handleStateMention, setHashtags, updateHashtag } = useHastagMention('');
+
+    React.useEffect(() => {
+        console.log('use effect topic')
+        console.log(topics)
+        const newPostText = detectIfTopicsAlreadyInPost()
+        setHashtags(topics)
+        updateHashtag(newPostText, topics)
+    }, [topics])
+
+    const detectIfTopicsAlreadyInPost = () => {
+        let newPostText = message
+        topics.forEach((topic) => {
+            if (!newPostText.includes(`#${topic}`)) newPostText += ` #${topic}`
+        })
+
+        setMessage(newPostText)
+        return newPostText
+    }
+
+    const cancelTokenRef = React.useRef(axios.CancelToken.source())
+
+    const searchTopicDebounced = React.useCallback(debounce((name) => {
+        searchTopic(name)
+    }, 500), [])
+
+    const searchUserDebounced = React.useCallback(debounce((name) => {
+        searchUsersForTagging(name)
+    }, 500), [])
 
     const resetTopicSearch = () => setTopicSearch([])
     const resetListUsersForTagging = () => setUserTaggingSearch([])
 
     const searchTopic = async (name) => {
         if (!isEmptyOrSpaces(name)) {
-            getTopics(name)
+            const cancelToken = cancelTokenRef.current.token
+            getTopics(name, { cancelToken })
                 .then(v => {
                     setTopicSearch(v.data);
                 })
                 .catch(err => console.log(err));
+        } else {
+            resetTopicSearch()
         }
     }
 
@@ -52,7 +85,14 @@ const CreatePostInput = ({
                     setUserTaggingSearch(v);
                 })
                 .catch(err => console.log(err));
+        } else {
+            resetListUsersForTagging()
         }
+    }
+
+    const cancelAllRequest = () => {
+        cancelTokenRef?.current?.cancel()
+        cancelTokenRef.current = axios.CancelToken.source()
     }
 
 
@@ -61,67 +101,56 @@ const CreatePostInput = ({
             setMessage(v)
             return
         }
+        const positionHashtag = v.lastIndexOf('#', positionEndCursor);
+        const positionMention = v.lastIndexOf('@', positionEndCursor);
 
-        if (v.includes('#')) {
-            const position = v.lastIndexOf('#', positionEndCursor);
-            const spaceStatus = v.includes(' ', position);
-            const detectEnter = v.includes('\n', position);
-            const textSeacrh = v.substring(position + 1);
-            setHashtagPosition(position);
+        if (v.includes('#') && (positionHashtag > positionMention)) {
+            const spaceStatus = v.includes(' ', positionHashtag);
+            const detectEnter = v.includes('\n', positionHashtag);
+            const textSearch = v.substring(positionHashtag + 1);
+            setHashtagPosition(positionHashtag);
             /**
              * cari posisi kursor dimana
              * cek apakah posisi sebelum kursor # atau bukan
              * ambil semua value setelah posisi #
              */
-            if (!spaceStatus) {
-                if (!detectEnter) {
-                    setPositionTopicSearch(position);
-                    searchTopic(textSeacrh);
-                    setPositionKeyboard('always')
-                }
-                else {
-                    resetTopicSearch();
-                    setPositionKeyboard('never')
-                }
-            }
-            else {
+            if (!spaceStatus && !detectEnter) {
+                setPositionTopicSearch(positionHashtag);
+                // searchTopic(textSeacrh);
+                searchTopicDebounced(textSearch)
+                setPositionKeyboard('always')
+            } else {
                 resetTopicSearch();
                 setPositionKeyboard('never')
-                const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
+                cancelAllRequest()
+                const removeCharacterAfterSpace = textSearch.split(' ')[0];
                 const newTopics = joinTopicIntoTopicList(removeCharacterAfterSpace, topics)
                 setTopics(newTopics)
                 setHashtags(newTopics)
             }
 
             handleStateHashtag(v);
-        } else if (v.includes('@')) {
-            const position = v.lastIndexOf('@', positionEndCursor);
-            const spaceStatus = v.includes(' ', position);
-            const detectEnter = v.includes('\n', position);
-            const textSeacrh = v.substring(position + 1);
-            setHashtagPosition(position);
-            console.log(`${spaceStatus} vs ${detectEnter}`)
-            if (!spaceStatus) {
-                if (!detectEnter) {
-                    setPositionTopicSearch(position);
-                    searchUsersForTagging(textSeacrh);
-                    setPositionKeyboard('always')
-                }
-                else {
-                    resetListUsersForTagging();
-                    setPositionKeyboard('never')
-                }
-            }
-            else {
+        } else if (v.includes('@') && (positionMention > positionHashtag)) {
+            const spaceStatus = v.includes(' ', positionMention);
+            const detectEnter = v.includes('\n', positionMention);
+            const textSearch = v.substring(positionMention + 1);
+            setHashtagPosition(positionMention);
+            if (!spaceStatus && !detectEnter) {
+                setPositionTopicSearch(positionMention);
+                // searchUsersForTagging(textSearch);
+                searchUserDebounced(textSearch)
+                setPositionKeyboard('always')
+            } else {
                 resetListUsersForTagging();
                 setPositionKeyboard('never')
+                cancelAllRequest()
             }
             handleStateMention(v);
-        }
-        else {
+        } else {
             resetTopicSearch();
             resetListUsersForTagging();
             setPositionKeyboard('never')
+            cancelAllRequest()
         }
         setMessage(v);
     }
@@ -142,7 +171,7 @@ const CreatePostInput = ({
             autoCapitalize={'none'}
 
         >
-            <Text>{textContent}</Text>
+            <Text>{formattedText}</Text>
         </TextInput>
         <TopicSuggestions message={message}
             handleStateHashtag={handleStateHashtag}
