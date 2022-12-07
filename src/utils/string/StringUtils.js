@@ -1,14 +1,12 @@
-import { useRoute } from '@react-navigation/native';
-import moment from 'moment';
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import reactStringReplace from 'react-string-replace'
-import TaggingUserText from '../../components/TaggingUserText';
+import moment from 'moment';
+import reactStringReplace from 'react-string-replace';
+import { StyleSheet, Text } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
+import TaggingUserText from '../../components/TaggingUserText';
 import TextBold from '../../components/Text/TextBold';
 import TopicText from '../../components/TopicText';
-import { fonts } from '../fonts';
-import { COLORS } from '../theme';
 import removePrefixTopic from '../topics/removePrefixTopic';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
@@ -333,25 +331,30 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @param {Any} navigation 
  * @returns 
  */
-const getCaptionWithTopicStyle = (text, navigation, substringEnd) => {
+const getCaptionWithTopicStyle = (text, navigation, substringEnd, topics = []) => {
     const route = useRoute()
     const topicWithPrefix = route?.params?.id
     const id = removePrefixTopic(topicWithPrefix);
-    const topicTegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/
+    const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/
     const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
 
-    text = reactStringReplace(text, topicTegex, (match, index) =>
-        <TopicText navigation={navigation} text={match} currentTopic={id} />
-    )
+    text = reactStringReplace(text, topicRegex, (match) => {
+        if(topics?.indexOf(match?.replace('#', '')) > -1) return <TopicText navigation={navigation} text={match} currentTopic={id} />
+        return match
+    })
 
-    text = reactStringReplace(text, validationTextHasAt, (match, index) =>
+    // text = reactStringReplace(text, topicTegex, (match, index) =>
+    //     <TopicText navigation={navigation} text={match} currentTopic={id} />
+    // )
+
+    text = reactStringReplace(text, validationTextHasAt, (match) =>
         <TaggingUserText navigation={navigation} text={match} currentTopic={id} />
     )
-    if(substringEnd && typeof substringEnd === 'number') {
-            text[text.length - 1] = text[text.length - 1].substring(0,substringEnd)
+    if (substringEnd && typeof substringEnd === 'number') {
+        text[text.length - 1] = text[text.length - 1].substring(0, substringEnd)
     }
 
-    return text 
+    return text
 
 
 }

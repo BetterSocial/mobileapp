@@ -37,40 +37,43 @@ const Content = ({ message, images_url = [], topics = [], item, onnewpollfetched
     });
   };
 
+  const devHeight = Dimensions.get('screen').height
+  const substringNoImageTopic = devHeight / 1.25 - (40 * 7)
+  console.log(item?.topics)
   if (!cekImage) return null
 
   return (
     <>
-     <ScrollView contentContainerStyle={{flexGrow: 1, paddingBottom: 40}} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
-      <View style={[styles.contentFeed]}>
-        <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation)}</Text>
-        {item && item.post_type === POST_TYPE_POLL ?
-          <ContentPoll
-            message={item.message}
-            images_url={item.images_url}
-            polls={item.pollOptions}
-            item={item}
-            pollexpiredat={item.polls_expired_at}
-            multiplechoice={item.multiplechoice}
-            isalreadypolling={item.isalreadypolling}
-            onnewpollfetched={onnewpollfetched}
-            voteCount={item.voteCount}
-            topics={item?.topics}
-          /> : null}
-
-      </View>
-      {images_url.length > 0 && <ImageLayouter
-        images={images_url || []}
-        onimageclick={onImageClickedByIndex}
-      />}
-
-    </ScrollView>
-          <View style={styles.topicContainer} >
-              <TopicsChip isPdp={true} topics={topics} fontSize={14} text={message} />
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+        <View style={[styles.contentFeed]}>
+          <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation,  substringNoImageTopic, item?.topics)}</Text>
+          {item && item.post_type === POST_TYPE_POLL ?
+            <ContentPoll
+              message={item.message}
+              images_url={item.images_url}
+              polls={item.pollOptions}
+              item={item}
+              pollexpiredat={item.polls_expired_at}
+              multiplechoice={item.multiplechoice}
+              isalreadypolling={item.isalreadypolling}
+              onnewpollfetched={onnewpollfetched}
+              voteCount={item.voteCount}
+              topics={item?.topics}
+            /> : null}
 
         </View>
+        {images_url.length > 0 && <ImageLayouter
+          images={images_url || []}
+          onimageclick={onImageClickedByIndex}
+        />}
+
+      </ScrollView>
+      <View style={styles.topicContainer} >
+        <TopicsChip isPdp={true} topics={topics} fontSize={14} text={message} />
+
+      </View>
     </>
-   
+
 
 
   );
@@ -94,7 +97,7 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
     backgroundColor: COLORS.white,
   },
-  topicContainer : {
+  topicContainer: {
     height: 110,
     backgroundColor: 'transparent',
     marginTop: -110,
@@ -102,7 +105,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingBottom: 10,
     justifyContent: 'flex-end'
-    
+
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],

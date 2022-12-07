@@ -1,4 +1,5 @@
 import crashlytics from '@react-native-firebase/crashlytics';
+
 import api from './config';
 
 const getUserTopic = async (query) => {
@@ -32,9 +33,15 @@ const getFollowingTopic = async () => {
     }
 };
 
-const getTopics = async (name) => {
+/**
+ * 
+ * @param {string} name 
+ * @param {import('axios').AxiosRequestConfig} axiosOptions 
+ * @returns 
+ */
+const getTopics = async (name, axiosOptions = {}) => {
     try {
-        const result = await api.get(`/topics/?name=${name}`);
+        const result = await api.get(`/topics/?name=${name}`, axiosOptions);
         return result.data;
     } catch (e) {
         throw new Error(e);

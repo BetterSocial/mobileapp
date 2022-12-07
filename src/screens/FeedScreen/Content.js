@@ -1,6 +1,5 @@
-/* eslint-disable no-nested-ternary */
 import * as React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
 import {
   Dimensions,
@@ -8,8 +7,9 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { useNavigation } from '@react-navigation/native';
 
 import ContentPoll from './ContentPoll';
@@ -44,14 +44,12 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
     });
   };
 
-
-
   const renderHandleTextContent = () => {
     if(images_url.length > 0 || item && item.post_type === POST_TYPE_POLL) {
       return (
         <View style={{ height: '100%', flexDirection: 'row' }}>
           <Text  style={styles.textMedia}  >
-            {getCaptionWithTopicStyle(message, navigation, substringPostImage)} {message.length > substringPostImage ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+            {getCaptionWithTopicStyle(message, navigation, substringPostImage, item?.topics)} {message.length > substringPostImage ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
           </Text>
         </View>
       )
@@ -59,9 +57,9 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
     return (
       <View style={{flex: 1}} >
         {topics.length > 0 ? <Text style={styles.textMedia} >
-            {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic)} {message.length > substringNoImageTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+            {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic, item?.topics)} {message.length > substringNoImageTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
           </Text> :  <Text  style={styles.textMedia} >
-            {getCaptionWithTopicStyle(message, navigation, substringNoImageNoTopic)} {message.length > substringNoImageNoTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+            {getCaptionWithTopicStyle(message, navigation, substringNoImageNoTopic, item?.topics)} {message.length > substringNoImageNoTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
           </Text>}
          
       </View>
