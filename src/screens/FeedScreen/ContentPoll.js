@@ -55,7 +55,6 @@ const ContentPoll = ({
                 */
                  multiplechoice ? (
                   <PollOptionsMultipleChoice
-                    testID='componentMultipleChoice'
                     key={indexPoll}
                     item={pollItem}
                     index={indexPoll}
@@ -259,23 +258,6 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontFamily: fonts.inter[400],
   },
-  percentageBar: (percent) => {
-    if (!percent) {
-      percent = 0;
-    }
-    if (percent > 100) {
-      percent = 100;
-    }
-
-    return {
-      width: `${percent}%`,
-      height: '100%',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      backgroundColor: colors.bondi_blue,
-    };
-  },
   totalpolltext: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
@@ -321,13 +303,13 @@ const styles = StyleSheet.create({
     color: colors.holytosca,
     fontFamily: fonts.inter[500],
   },
-  textMedia: () => ({
-      fontFamily: fonts.inter[400],
+  textMedia: {
+    fontFamily: fonts.inter[400],
       fontWeight: 'normal',
       fontSize: FONT_SIZE_MEDIA,
       color: colors.black,
       lineHeight: 24,
-    }),
+  },
 
   seemore: {
     color: COLORS.blue,

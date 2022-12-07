@@ -31,7 +31,16 @@ const { bottom } = useSafeAreaInsets();
       const query = `?offset=${offsetFeed}`
 
       const dataFeeds = await getMainFeed(query);
-      if (dataFeeds.data.length > 0) {
+      handleDataFeeds(dataFeeds, offsetFeed)
+    } catch (e) {
+      setLoading(false);
+      return e
+    }
+  };
+
+const handleDataFeeds = (dataFeeds, offsetFeed = 0) => {
+  console.log(dataFeeds, 'nakal')
+   if (dataFeeds.data.length > 0) {
         const { data } = dataFeeds;
         const dataWithDummy = [...data, { dummy: true }]
         let saveData = {
@@ -57,12 +66,7 @@ const { bottom } = useSafeAreaInsets();
       setPostOffset(dataFeeds.offset)
       setTimer(new Date(), dispatch)
       setLoading(false);
-      return getMainFeed(query)
-    } catch (e) {
-      setLoading(false);
-      return e
-    }
-  };
+}
 
 const onDeleteBlockedPostCompleted = async (postId) => {
     if(postId) {
@@ -94,7 +98,16 @@ const onBlockCompleted = async (postId) => {
     const updateFeed = async (post, index) => {
     try {
       const data = await getFeedDetail(post.activity_id);
-      if (data) {
+      handleUpdateFeed(data, index)
+    } catch (e) {
+        if(axios.isAxiosError(e)) {
+            throw e.response.data
+        }
+    }
+  };
+
+  const handleUpdateFeed = (data, index) => {
+    if (data) {
         setFeedByIndex(
           {
             singleFeed: data.data,
@@ -103,18 +116,13 @@ const onBlockCompleted = async (postId) => {
           dispatch,
         );
       }
-    } catch (e) {
-        if(axios.isAxiosError(e)) {
-            throw e.response.data
-        }
-    }
-  };
+  }
 
     const setUpVote = async (post, index) => {
         try {
-            const processVote = await upVote(post);
+            await upVote(post);
             updateFeed(post, index);
-            return processVote;
+
         }catch (e) {
             if(axios.isAxiosError(e)) {
                 throw e.response.data
@@ -126,9 +134,8 @@ const onBlockCompleted = async (postId) => {
 
     const setDownVote = async (post, index) => {
         try {
-            const processVote = await downVote(post);
+            await downVote(post);
             updateFeed(post, index);
-            return processVote
         } catch (e) {
             if(axios.isAxiosError(e)) {
                 throw e.response.data
@@ -168,7 +175,9 @@ const onBlockCompleted = async (postId) => {
     setDownVote,
     saveSearchHeight,
     setMainFeeds,
-    feeds
+    feeds,
+    handleDataFeeds,
+    handleUpdateFeed
   }
 }
 

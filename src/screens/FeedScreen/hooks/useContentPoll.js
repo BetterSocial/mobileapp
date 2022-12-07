@@ -72,6 +72,7 @@ const useContentPoll = ({polls}) => {
   };
 
     const modifiedPoll = () => {
+      console.log(polls, 'balak')
       const modifPoll = polls.reduce(
         (acc, current) => {
           acc.totalpoll += Number(current.counter);
@@ -88,7 +89,19 @@ const useContentPoll = ({polls}) => {
         },
         { totalpoll: 0, maxId: [], maxValue: 0 },
       );
+      console.log(modifPoll, 'lala')
       return modifPoll
+    }
+
+  const handleStyleBar = (percent) => {
+      let newPercent = percent
+      if(!percent){
+        newPercent = 0
+      }
+      if(percent > 100) {
+       newPercent = 100
+      }
+      return newPercent
     }
 
   return {
@@ -102,7 +115,8 @@ const useContentPoll = ({polls}) => {
     setMultipleChoiceSelected,
     onSeeResultsClicked,
     modifiedPoll,
-    newPoll
+    newPoll,
+    handleStyleBar
   }
 }
 

@@ -13,7 +13,7 @@ import {COLORS} from '../../utils/theme';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
 import IconPollMine from '../../assets/icon/IconPollMine';
 
-const PollOptions = ({
+export const PollOptions = ({
   mypoll,
   poll,
   index,
@@ -26,7 +26,6 @@ const PollOptions = ({
 }) => {
   const counter = poll?.counter || 10;
   const optionPercentage = total === 0 ? 0 : (counter / total) * 100;
-
   const isPollDisabled = () => isexpired || isalreadypolling;
   const onPollPressed = () => {
     if (isalreadypolling) {
@@ -45,15 +44,15 @@ const PollOptions = ({
   const renderPercentageBar = () => {
     if (isexpired) {
       return (
-        <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
+        <View testID='isExpiredPollOption' style={styles.expiredPercentageBar(optionPercentage, isMax)} />
       );
     } if (isPollNotEndedAndIsMax) {
       return (
-        <View style={styles.expiredPercentageBar(optionPercentage, isMax)} />
+        <View testID='isPollNotEndedAndIsMax' style={styles.expiredPercentageBar(optionPercentage, isMax)} />
       );
     } if (isalreadypolling) {
       return (
-        <View style={styles.percentageBar(optionPercentage, isMyPoll())} />
+        <View testID='isAlreadyPollingOption' style={styles.percentageBar(optionPercentage, isMyPoll())} />
       );
     }
   };
@@ -113,7 +112,7 @@ const PollOptions = ({
   );
 };
 
-let styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   pollOptionsContainer: {
     width: '100%',
     padding: 0,
