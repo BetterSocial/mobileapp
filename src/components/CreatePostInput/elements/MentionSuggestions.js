@@ -30,6 +30,7 @@ const MentionSuggestions = ({
     }
 
     const onMentionSuggestionClicked = (item) => {
+        console.log('clicked')
         const newMessage = reformatStringByPosition(item.username, message);
         setPositionKeyboard('never')
         handleStateMention(newMessage);
@@ -44,7 +45,9 @@ const MentionSuggestions = ({
 
     return <Card style={styles.cardContainer}>
         {
-            userSearch.map((item, index) => <TouchableNativeFeedback key={`userTagging-${index}`} onPress={() => onMentionSuggestionClicked}>
+            userSearch.map((item, index) => <TouchableNativeFeedback
+                key={`userTagging-${index}`}
+                onPress={() => onMentionSuggestionClicked(item)}>
                 <View style={styles.suggestionContainer} >
                     <Text style={styles.suggestions}>@{item.username}</Text>
                     {index !== userSearch.length - 1 && (

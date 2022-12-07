@@ -28,12 +28,11 @@ const CreatePostInput = ({
     const [userTaggingSearch, setUserTaggingSearch] = React.useState([])
     const [hashtagPosition, setHashtagPosition] = React.useState(0)
     const [positionTopicSearch, setPositionTopicSearch] = React.useState(0)
+    const [lastTopicInCursor, setLastTopicInCursor] = React.useState('')
 
     const { formattedText, handleStateHashtag, handleStateMention, setHashtags, updateHashtag } = useHastagMention('');
 
     React.useEffect(() => {
-        console.log('use effect topic')
-        console.log(topics)
         const newPostText = detectIfTopicsAlreadyInPost()
         setHashtags(topics)
         updateHashtag(newPostText, topics)
@@ -95,8 +94,22 @@ const CreatePostInput = ({
         cancelTokenRef.current = axios.CancelToken.source()
     }
 
+    const isTopicInDeletedText = () => {
+        console.log(`text deletion in ${lastTopicInCursor}`)
+        if (lastTopicInCursor === '') return
+
+        const newTopics = [...topics]
+
+        newTopics.splice(newTopics?.lastIndexOf(lastTopicInCursor), 1)
+        console.log(newTopics)
+        setTopics(newTopics)
+    }
+
+    // console.log('lastTopicInCursor')
+    // console.log(lastTopicInCursor)
 
     const handlePostTextChanged = (v) => {
+        setMessage(v);
         if (topics.length >= 5) {
             setMessage(v)
             return
@@ -116,20 +129,25 @@ const CreatePostInput = ({
              */
             if (!spaceStatus && !detectEnter) {
                 setPositionTopicSearch(positionHashtag);
-                // searchTopic(textSeacrh);
                 searchTopicDebounced(textSearch)
                 setPositionKeyboard('always')
+                setLastTopicInCursor(textSearch)
             } else {
                 resetTopicSearch();
                 setPositionKeyboard('never')
                 cancelAllRequest()
                 const removeCharacterAfterSpace = textSearch.split(' ')[0];
-                const newTopics = joinTopicIntoTopicList(removeCharacterAfterSpace, topics)
-                setTopics(newTopics)
-                setHashtags(newTopics)
+                const hashtagLastCharIndex = positionHashtag + removeCharacterAfterSpace?.length
+                if (hashtagLastCharIndex === positionEndCursor - 1) {
+                    const newTopics = joinTopicIntoTopicList(removeCharacterAfterSpace, topics)
+                    setTopics(newTopics)
+                    setHashtags(newTopics)
+                }
+
+                setLastTopicInCursor('')
             }
 
-            handleStateHashtag(v);
+            handleStateHashtag(v, positionEndCursor);
         } else if (v.includes('@') && (positionMention > positionHashtag)) {
             const spaceStatus = v.includes(' ', positionMention);
             const detectEnter = v.includes('\n', positionMention);
@@ -137,7 +155,6 @@ const CreatePostInput = ({
             setHashtagPosition(positionMention);
             if (!spaceStatus && !detectEnter) {
                 setPositionTopicSearch(positionMention);
-                // searchUsersForTagging(textSearch);
                 searchUserDebounced(textSearch)
                 setPositionKeyboard('always')
             } else {
@@ -152,13 +169,15 @@ const CreatePostInput = ({
             setPositionKeyboard('never')
             cancelAllRequest()
         }
-        setMessage(v);
     }
 
     return <>
         <TextInput
             onSelectionChange={(e) => {
                 setPositionEndCursor(e.nativeEvent.selection.end);
+            }}
+            onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent?.key === 'Backspace') isTopicInDeletedText()
             }}
             onChangeText={handlePostTextChanged}
             // value={message}

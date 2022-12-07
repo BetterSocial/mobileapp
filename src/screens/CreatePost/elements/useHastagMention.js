@@ -6,9 +6,9 @@ const useHastagMention = (initial = '') => {
     const [formattedText, setFormattedText] = React.useState(initial);
     const [hashtags, setHashtags] = React.useState([])
 
-    const handleStateHashtag = (text) => {
+    const handleStateHashtag = (text, cursorPosition = -1) => {
         // handleHastagMention(text, setState, hashtags);
-        setFormattedText(handleHastagMention(text, hashtags))
+        setFormattedText(handleHastagMention(text, hashtags, cursorPosition))
     }
 
     const updateHashtag = (text, hashtagsProp) => {
