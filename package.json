@@ -18,7 +18,7 @@
     "start": "react-native start",
     "test": "jest --verbose __tests__ src",
     "testCoverage": "jest --verbose --coverage --collectCoverageFrom=\"./src/**\" __tests__ src",
-    "test:update-snapshot": "jest --verbose __tests__ src -u",
+    "test:update-snapshot": "jest __tests__ src -u",
     "lint": "eslint .",
     "android:clean": "cd android && ./gradlew clean && ./gradlew cleanBuildCache",
     "reinstall": "rm -rf node_modules && yarn install",

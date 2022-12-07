@@ -1,15 +1,14 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import Content from './Content';
 import Gap from '../../components/Gap';
 import Header from './Header';
-import {COLORS, SIZES} from '../../utils/theme';
-import {Footer} from '../../components';
+import { COLORS, SIZES } from '../../utils/theme';
+import { Footer } from '../../components';
 import {
-  getCountComment,
   getCountCommentWithChild,
-  getCountVote,
+  getCountVote
 } from '../../utils/getstream';
 
 const RenderItem = ({
