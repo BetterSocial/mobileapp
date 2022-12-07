@@ -57,7 +57,6 @@ import { PROFILE_CACHE } from '../../utils/cache/constant';
 import { ShowingAudience, createPollPost, createPost } from '../../service/post';
 import { colors } from '../../utils/colors';
 import { convertString } from '../../utils/string/StringUtils';
-import { filterAllTopics, getUrl, isContainUrl } from '../../utils/Utils';
 import { fonts } from '../../utils/fonts';
 import {
     getDurationId,
@@ -69,6 +68,7 @@ import {
 import { getLinkPreviewInfo } from '../../service/feeds';
 import { getMyProfile } from '../../service/profile';
 import { getSpecificCache } from '../../utils/cache';
+import { getUrl, isContainUrl } from '../../utils/Utils';
 import { getUserId } from '../../utils/users';
 import {
     requestCameraPermission,
@@ -552,7 +552,7 @@ const CreatePost = () => {
 
     const handleTopicChat = async () => {
         const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
-        const allTopics = filterAllTopics(message, listTopic)
+        const allTopics = listTopic
 
         allTopics.forEach(async (topic) => {
             const channel = await client.client.channel('topics', `topic_${topic}`, { name: `#${topic}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
