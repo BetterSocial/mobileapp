@@ -4,9 +4,7 @@ import { generateRandomId } from 'stream-chat-react-native-core';
 
 import { fonts } from '../fonts';
 
-const handleHastagMention = (text, setFormattedContent, hashtags = []) => {
-    console.log('hashtags')
-    console.log(hashtags)
+const handleHastagMention = (text = '', hashtags = [], cursorPosition = -1) => {
     const retLines = text.split("\n");
     const arrText = new Array();
     for (let i = 0; i < retLines.length; i++) {
@@ -15,6 +13,7 @@ const handleHastagMention = (text, setFormattedContent, hashtags = []) => {
             arrText.push("\n");
         }
     }
+
     const formattedText = [];
     arrText.forEach(retLine => {
         const words = retLine.split(' ');
@@ -23,30 +22,43 @@ const handleHastagMention = (text, setFormattedContent, hashtags = []) => {
         const formatHashtag = /[ !#@$%^&*()=+\[\]{};':"\\|,.<>\/?\n]/;
         words.forEach((word, index) => {
             const randomId = generateRandomId();
+            const mention = (
+                <Text key={randomId} style={styles.mention}>
+                    {word}
+                </Text>
+            )
+            const isNotInContentLength = index !== contentLength - 1
+
+            /**
+             * Check if each word is mention OR
+             * each hashtag is included in hashtags defined in topic box
+             * This will ensure automatic style change if there are any addition or deletion in topic box
+             */
             if (
                 (word.startsWith("@") && !formatMention.test(word.substr(1))) ||
-                (word.startsWith("#") && !formatHashtag.test(word.substr(1)))
+                (word.startsWith("#") && !formatHashtag.test(word.substr(1)) && hashtags.includes(word.substr(1)))
             ) {
-                const mention = (
-                    <Text key={randomId} style={styles.mention}>
-                        {word}
-                    </Text>
-                );
-                if (index !== contentLength - 1) {
-                    formattedText.push(mention, ' ');
-                } else {
-                    formattedText.push(mention);
-                }
-            } else {
-                if (index !== contentLength - 1) {
-                    return formattedText.push(word, ' ');
-                }
-                return formattedText.push(word);
-
+                return formattedText.push(mention, isNotInContentLength ? ' ' : '');
             }
+
+            /**
+             * Check if hashtag is being typed, change the style if it is.
+             */
+            if ((word.startsWith("#") && !formatHashtag.test(word.substr(1)))) {
+                const wordLastIndexInWholeText = text?.lastIndexOf(word) + word?.length
+                if (wordLastIndexInWholeText - 1 === cursorPosition) {
+                    return formattedText.push(mention, isNotInContentLength ? ' ' : '');
+                }
+            }
+
+            /**
+             * Return plain text otherwise
+             */
+            return formattedText.push(word, isNotInContentLength ? ' ' : '');
+
         });
     });
-    setFormattedContent(formattedText);
+    return formattedText
 };
 
 const styles = StyleSheet.create({

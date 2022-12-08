@@ -26,3 +26,8 @@ export const insertNewTopicIntoTopics = (newTopic, topics, setListTopic, setHash
         setHashtags(newArr)
     }
 }
+
+export const joinTopicIntoTopicList = (newTopic = '', topics = []) => {
+    if (!topics?.includes(newTopic)) return [...topics, newTopic]
+    return topics
+}

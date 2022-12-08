@@ -1,29 +1,29 @@
-import analytics from '@react-native-firebase/analytics';
-import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
+import analytics from '@react-native-firebase/analytics';
 import {
   Animated,
   FlatList,
   InteractionManager,
   Platform,
   StatusBar,
-  StyleSheet,
+  StyleSheet
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { Context } from '../../context';
-import { setIFollow, setNews } from '../../context/actions/news';
-import { useAfterInteractions } from '../../hooks/useAfterInteractions';
-import { getDomainIdIFollow, getDomains } from '../../service/domain';
-import { downVoteDomain, upVoteDomain } from '../../service/vote';
-import { getSpecificCache, saveToCache } from '../../utils/cache';
-import { NEWS_CACHE } from '../../utils/cache/constant';
-import ShareUtils from '../../utils/share'
-import { COLORS, } from '../../utils/theme';
 import RenderItem from './RenderItem';
 import Search from './Search';
+import ShareUtils from '../../utils/share';
+import { COLORS } from '../../utils/theme';
+import { Context } from '../../context';
+import { NEWS_CACHE } from '../../utils/cache/constant';
+import { downVoteDomain, upVoteDomain } from '../../service/vote';
+import { getDomainIdIFollow, getDomains } from '../../service/domain';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { setIFollow, setNews } from '../../context/actions/news';
+import { useAfterInteractions } from '../../hooks/useAfterInteractions';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const NewsScreen = () => {
   const navigation = useNavigation();

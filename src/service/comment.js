@@ -42,4 +42,4 @@ const createChildComment = async (text, reactionId, useridFeed, sendPostNotif, p
   }
 };
 
-export {createCommentParent, createChildComment};
+export { createCommentParent, createChildComment };
