@@ -24,8 +24,7 @@ import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 const { width: screenWidth } = Dimensions.get('window');
 
 const FONT_SIZE_MEDIA = 16
-const FONT_SIZE_TEXT = 24
-const FONT_SIZE_TEXT_LONG = 16
+
 
 const Content = ({ message, images_url = [], style, onPress, topics = [], item, onNewPollFetched, onPressDomain, onCardContentPress }) => {
   const navigation = useNavigation();
@@ -47,7 +46,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   const renderHandleTextContent = () => {
     if(images_url.length > 0 || item && item.post_type === POST_TYPE_POLL) {
       return (
-        <View style={{ height: '100%', flexDirection: 'row' }}>
+        <View testID='postTypePoll' style={{ height: '100%', flexDirection: 'row' }}>
           <Text  style={styles.textMedia}  >
             {getCaptionWithTopicStyle(message, navigation, substringPostImage, item?.topics)} {message.length > substringPostImage ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
           </Text>
@@ -55,7 +54,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
       )
     }
     return (
-      <View style={{flex: 1}} >
+      <View testID='postTypeStatus' style={{flex: 1}} >
         {topics.length > 0 ? <Text style={styles.textMedia} >
             {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic, item?.topics)} {message.length > substringNoImageTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
           </Text> :  <Text  style={styles.textMedia} >
@@ -84,7 +83,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
               message={item.message}
               images_url={item.images_url}
               polls={item.pollOptions}
-              onPress={() => onPress(item, index)}
+              // onPress={() => onPress(item, index)}
               item={item}
               pollexpiredat={item.polls_expired_at}
               multiplechoice={item.multiplechoice}
@@ -119,7 +118,7 @@ Content.propTypes = {
 
 export default Content;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
     flex: 1
@@ -131,25 +130,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: screenWidth - 32,
     borderRadius: 16,
-  },
-
-  text: (text) => {
-    if (text.length < 270) {
-      return {
-        fontFamily: fonts.inter[400],
-        fontWeight: 'normal',
-        fontSize: FONT_SIZE_TEXT,
-        color: colors.black,
-        lineHeight: 44,
-      };
-    }
-    return {
-      fontFamily: fonts.inter[400],
-      fontWeight: 'normal',
-      fontSize: FONT_SIZE_TEXT_LONG,
-      color: colors.black,
-      lineHeight: 24,
-    };
   },
   textMedia: {
     fontFamily: fonts.inter[400],
