@@ -29,7 +29,7 @@ const FeedsPostDetail = (props) => {
         setTimer(new Date(), dispatch)
         navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent, findCommentAndUpdate, dataFeed, updateVoteLatestChildren});
     }
-
+    console.log(feeds, feedId, 'laman')
     React.useEffect(() => () => {
             if(refreshCache && typeof refreshCache === 'function') {
                 refreshCache()
