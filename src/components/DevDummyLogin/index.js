@@ -49,7 +49,6 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
         setDataHumenId(data, dispatch);
         demoVerifyUser(appUserId)
             .then(async (response) => {
-   
                 if (response.data) {
                     setAccessToken(response.token);
                     setRefreshToken(response.refresh_token);

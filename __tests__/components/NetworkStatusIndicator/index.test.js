@@ -1,38 +1,41 @@
 import * as React from 'react';
-import renderer from 'react-test-renderer';
-import { render } from '@testing-library/react-native';
-import { useNetInfo } from '@react-native-community/netinfo'
+import { render, cleanup } from '@testing-library/react-native';
+import { useState } from 'react';
 
 import NetworkStatusIndicator from '../../../src/components/NetworkStatusIndicator';
 
+const mockNetInfo = jest.fn().mockImplementation({isInternetReachable: false})
+
 jest.mock('@react-native-community/netinfo', () => ({
-    useNetInfo: jest.fn()
+    useNetInfo: () => ({
+        netInfo: mockNetInfo
+    })
+}))
+
+jest.mock('react', ()=>({
+  ...jest.requireActual('react'),
+  useState: jest.fn()
 }))
 
 describe("Testing Network Status Indicator Component", () => {
+    beforeEach(() => {
+        useState.mockImplementation(jest.requireActual('react').useState);
+    })
+    afterEach(cleanup)
+
     it("Match Snapshot", () => {
-        // useNetInfo.mockReturnValueOnce({ isInternetReachable: false})
-        // const tree = renderer.create(<NetworkStatusIndicator hide={false} />).toJSON()
-        // expect(tree).toMatchSnapshot()
-        expect(true).toBeTruthy()
+        const {toJSON} = render(<NetworkStatusIndicator   />)
+        expect(toJSON).toMatchSnapshot()
     })
 
-    // it("Hide if hide props is true", () => {
-    //     useNetInfo.mockReturnValueOnce({ isInternetReachable: false})
-    //     const { queryByTestId } = render(<NetworkStatusIndicator hide={true} />)
-    //     expect(queryByTestId('network-status-indicator')).toBeFalsy()
-    // })
+    it('props hide should run correctly', () => {
+        const {getAllByTestId} = render(<NetworkStatusIndicator hide={true}   />)
+        expect(getAllByTestId('isHide')).toHaveLength(1)
+    })
 
-    // it("Do not show Network Indicator if Netinfo is true ", () => {
-    //     useNetInfo.mockReturnValueOnce({ isInternetReachable: true})
+    it('internet not available should occur', () => {
+        const {getAllByTestId} = render(<NetworkStatusIndicator hide={false}  />)
+        expect(getAllByTestId('internet-not-available')).toHaveLength(1)
 
-    //     const { queryByTestId } = render(<NetworkStatusIndicator hide={false} />)
-    //     expect(queryByTestId('network-status-indicator')).toBeFalsy()
-    // })
-
-    // it("Shows network indicator if Netinfo is false", () => {
-    //     useNetInfo.mockReturnValueOnce({ isInternetReachable: false})
-    //     const { queryByTestId } = render(<NetworkStatusIndicator hide={false} />)
-    //     expect(queryByTestId('network-status-indicator')).toBeTruthy()
-    // })
+    })
 })
