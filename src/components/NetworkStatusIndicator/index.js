@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
-import { debounce } from 'lodash'
 import { useNetInfo } from '@react-native-community/netinfo'
 
 import { COLORS } from '../../utils/theme'
@@ -11,36 +10,19 @@ import { COLORS } from '../../utils/theme'
  * @returns 
  */
 const NetworkStatusIndicator = ({ hide = false }) => {
-    const [isInternetReachable, setIsInternetReachable] = React.useState(true);
-    const internetStatusDebounced = React.useCallback(debounce(() => {
-        setIsInternetReachable(false)
-    }, 3000)
 
-        , [])
+    const {isInternetReachable} = useNetInfo()
 
-    const netInfo = useNetInfo()
+    if (hide) return <View testID='isHide' />
 
-    React.useEffect(() => {
-        const { isInternetReachable: isReachable } = netInfo
-        if (!isReachable) {
-            internetStatusDebounced()
-        } else {
-            internetStatusDebounced.cancel()
-            setIsInternetReachable(true)
-        }
-
-    }, [netInfo?.isInternetReachable])
-
-    if (hide) return <></>
-
-    if (!isInternetReachable) return <View testID='network-status-indicator' style={styles.container}>
-        <View style={styles.bottomContainer}>
+    if (!isInternetReachable) return <View testID='internet-not-available' style={styles.container}>
+        <View  style={styles.bottomContainer}>
             <ActivityIndicator color={COLORS.white} size={14} />
             <Text style={styles.text}>No Internet Connection</Text>
         </View>
     </View>
 
-    return <></>
+    return null
 }
 
 const styles = StyleSheet.create({
