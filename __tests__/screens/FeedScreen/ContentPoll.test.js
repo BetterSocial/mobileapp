@@ -1,4 +1,4 @@
-import {render, cleanup, fireEvent, act, waitFor} from '@testing-library/react-native'
+import {render, cleanup, fireEvent} from '@testing-library/react-native'
 import moment from 'moment'
 import * as React from 'react'
 import ContentPoll from '../../../src/screens/FeedScreen/ContentPoll'
