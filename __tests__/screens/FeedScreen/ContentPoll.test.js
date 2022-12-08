@@ -121,7 +121,7 @@ describe('Content poll should same as snapshot', () => {
 
     it('optionPercentage should occur', async () => {
         const  onnewpollfetched = jest.fn()
-        const {getAllByTestId, getAllByText} = render(<ContentPoll item={item} onnewpollfetched={onnewpollfetched} multiplechoice={item.multiplechoice} pollexpiredat={item.polls_expired_at} voteCount={item.voteCount} isalreadypolling={item.isalreadypolling} polls={item.pollOptions} />);
+        const {getAllByTestId} = render(<ContentPoll item={item} onnewpollfetched={onnewpollfetched} multiplechoice={item.multiplechoice} pollexpiredat={item.polls_expired_at} voteCount={item.voteCount} isalreadypolling={item.isalreadypolling} polls={item.pollOptions} />);
         const mockOnOptionsClicked = jest.fn()
         jest.spyOn(usePollMultiple, 'usePollOptionMultiple').mockImplementation(() => ({
             onOptionsClicked: mockOnOptionsClicked,
@@ -132,7 +132,7 @@ describe('Content poll should same as snapshot', () => {
 
     it('checkbolx poll should occured', () => {
         const  onnewpollfetched = jest.fn()
-        const {getAllByTestId, getAllByText} = render(<ContentPoll item={item} onnewpollfetched={onnewpollfetched} multiplechoice={item.multiplechoice} pollexpiredat={moment().add(2, 'day')} voteCount={item.voteCount} isalreadypolling={false} polls={item.pollOptions} />);
+        const {getAllByTestId} = render(<ContentPoll item={item} onnewpollfetched={onnewpollfetched} multiplechoice={item.multiplechoice} pollexpiredat={moment().add(2, 'day')} voteCount={item.voteCount} isalreadypolling={false} polls={item.pollOptions} />);
         expect(getAllByTestId('checkbox')).toHaveLength(2)
         const mockOnOptionsClicked = jest.fn()
         jest.spyOn(usePollMultiple, 'usePollOptionMultiple').mockImplementation(() => ({
@@ -164,7 +164,7 @@ describe('Content poll should same as snapshot', () => {
 
     it('expired date text should correct', () => {
         const  onnewpollfetched = jest.fn()
-        const {getAllByText,debug} = render(<ContentPoll item={itemNotMultiple} onnewpollfetched={onnewpollfetched} multiplechoice={itemNotMultiple.multiplechoice} pollexpiredat={moment().subtract(2, 'day')} voteCount={itemNotMultiple.voteCount} isalreadypolling={true} polls={itemNotMultiple.pollOptions} />);
+        const {getAllByText} = render(<ContentPoll item={itemNotMultiple} onnewpollfetched={onnewpollfetched} multiplechoice={itemNotMultiple.multiplechoice} pollexpiredat={moment().subtract(2, 'day')} voteCount={itemNotMultiple.voteCount} isalreadypolling={true} polls={itemNotMultiple.pollOptions} />);
         expect(getAllByText('Poll closed 2d ago')).toHaveLength(1)
     })
 
