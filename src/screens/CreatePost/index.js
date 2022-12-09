@@ -111,7 +111,6 @@ const CreatePost = () => {
     const [listUsersForTagging, setListUsersForTagging] = React.useState([]);
     const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
     const [locationId, setLocationId] = React.useState('');
-    // const [positionEndCursor, setPositionEndCursor] = React.useState(0);
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
     const [taggingUsers, setTaggingUsers] = React.useState([])

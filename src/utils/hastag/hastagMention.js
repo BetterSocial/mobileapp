@@ -27,17 +27,6 @@ const handleHastagMention = (text = '', hashtags = [], setHashtagState = null, c
                 </Text>
             }
 
-            // const word = match?.substring(1)
-            // const wordLastIndexInWholeText = text?.lastIndexOf(word) + word?.length
-            // const isTyping = cursorPosition === wordLastIndexInWholeText - 1
-            // if (isTyping) {
-            //     return <Text key={generateRandomId()} style={styles.mention}>
-            //         {match}
-            //     </Text>
-            // }
-
-            // return match
-
             return <Text key={generateRandomId()} style={styles.mention}>
                 {match}
             </Text>
