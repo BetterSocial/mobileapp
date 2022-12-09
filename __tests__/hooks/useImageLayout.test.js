@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react-hooks'
+import { renderHook } from '@testing-library/react-hooks'
 import useImageLayout from '../../src/screens/FeedScreen/hooks/useImageLayout'
 
 describe('useImageLayout should run correctly', () => {
