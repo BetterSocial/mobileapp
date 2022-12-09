@@ -1,7 +1,8 @@
-import React from 'react'
+import React from 'react';
+
 import { inputSingleChoicePoll } from '../../../service/post';
 import {
-  isPollExpired,
+  isPollExpired
 } from '../../../utils/string/StringUtils';
 
 const useContentPoll = ({polls}) => {
