@@ -1,7 +1,8 @@
-import React from 'react'
+import React from 'react';
+
 import { inputSingleChoicePoll } from '../../../service/post';
 import {
-  isPollExpired,
+  isPollExpired
 } from '../../../utils/string/StringUtils';
 
 const useContentPoll = ({polls}) => {
@@ -72,7 +73,6 @@ const useContentPoll = ({polls}) => {
   };
 
     const modifiedPoll = () => {
-      console.log(polls, 'balak')
       const modifPoll = polls.reduce(
         (acc, current) => {
           acc.totalpoll += Number(current.counter);
@@ -89,7 +89,6 @@ const useContentPoll = ({polls}) => {
         },
         { totalpoll: 0, maxId: [], maxValue: 0 },
       );
-      console.log(modifPoll, 'lala')
       return modifPoll
     }
 
