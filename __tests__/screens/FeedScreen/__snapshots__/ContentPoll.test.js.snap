@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Content poll should smae as snapshot should same as snapshot 1`] = `
+exports[`Content poll should same as snapshot should same as snapshot 1`] = `
 <View
   style={
     Object {
@@ -40,16 +40,21 @@ exports[`Content poll should smae as snapshot should same as snapshot 1`] = `
     >
       <View
         style={
-          Object {
-            "backgroundColor": "#C4C4C4",
-            "borderRadius": 6,
-            "height": "100%",
-            "left": 0,
-            "position": "absolute",
-            "top": 0,
-            "width": "0%",
-          }
+          Array [
+            Object {
+              "borderRadius": 6,
+              "height": "100%",
+              "left": 0,
+              "position": "absolute",
+              "top": 0,
+            },
+            Object {
+              "backgroundColor": "#C4C4C4",
+              "width": "0%",
+            },
+          ]
         }
+        testID="isExpired"
       />
       <View
         style={
@@ -63,6 +68,9 @@ exports[`Content poll should smae as snapshot should same as snapshot 1`] = `
           }
         }
       >
+        <View
+          testID="nonePoll"
+        />
         <Text
           style={
             Object {
@@ -84,6 +92,7 @@ exports[`Content poll should smae as snapshot should same as snapshot 1`] = `
               "alignSelf": "center",
             }
           }
+          testID="optionPercentage"
         >
           0%
         </Text>
@@ -112,16 +121,21 @@ exports[`Content poll should smae as snapshot should same as snapshot 1`] = `
     >
       <View
         style={
-          Object {
-            "backgroundColor": "#55C2FF",
-            "borderRadius": 6,
-            "height": "100%",
-            "left": 0,
-            "position": "absolute",
-            "top": 0,
-            "width": "50%",
-          }
+          Array [
+            Object {
+              "borderRadius": 6,
+              "height": "100%",
+              "left": 0,
+              "position": "absolute",
+              "top": 0,
+            },
+            Object {
+              "backgroundColor": "#00ADB5",
+              "width": "50%",
+            },
+          ]
         }
+        testID="isExpired"
       />
       <View
         style={
@@ -135,7 +149,11 @@ exports[`Content poll should smae as snapshot should same as snapshot 1`] = `
           }
         }
       >
-        <View />
+        <View
+          testID="pollWinner"
+        >
+          <View />
+        </View>
         <Text
           style={
             Object {
@@ -157,6 +175,7 @@ exports[`Content poll should smae as snapshot should same as snapshot 1`] = `
               "alignSelf": "center",
             }
           }
+          testID="optionPercentage"
         >
           50%
         </Text>
@@ -208,7 +227,7 @@ exports[`Content poll should smae as snapshot should same as snapshot 1`] = `
         }
       }
     >
-       Poll closed 8d ago
+       Poll closed 11d ago
     </Text>
   </View>
 </View>
