@@ -1,8 +1,9 @@
+/* eslint-disable no-param-reassign */
 import axios from 'axios';
 import configEnv from 'react-native-config';
-import { BASE_URL, BASE_URL_DEV } from '@env';
 
 import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from '../utils/token';
+import { trackingHttpMetric } from '../libraries/performance/firebasePerformance';
 
 const baseURL = configEnv.BASE_URL
 
@@ -11,20 +12,39 @@ const api = axios.create({
   timeout: 3000,
   headers: { 'content-type': 'application/json' },
 });
+
 api.interceptors.request.use(
   async (config) => {
     const token = await getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token.id}`;
     }
+
+    console.log(config.method.toUpperCase())
+    const httpMetric = await trackingHttpMetric(config.url, config.method.toUpperCase());
+    await httpMetric.start();
+
+    config.metadata = { httpMetric };
     return config;
   },
   (error) => Promise.reject(error),
 );
 
 api.interceptors.response.use(
-  (response) => response,
+  async (response) => {
+    const { httpMetric } = response.config.metadata;
+
+    httpMetric.setHttpResponseCode(response.status);
+    httpMetric.setResponseContentType(response.headers['content-type']);
+    await httpMetric.stop();
+
+    return response;
+  },
   async (error) => {
+    const { httpMetric } = error.config.metadata;
+    httpMetric.setHttpResponseCode(error.response.status);
+    httpMetric.setResponseContentType(error.response.headers['content-type']);
+
     if (error?.response?.status === 401 && error?.response?.config?.url !== '/users/refresh-token') {
       const token = await getRefreshToken();
       const refreshApi = axios.create({
@@ -32,6 +52,7 @@ api.interceptors.response.use(
         timeout: 3000,
         headers: { 'content-type': 'application/json', 'authorization': `Bearer ${token}` },
       });
+
       return refreshApi.get('/users/refresh-token').then((refreshResponse) => {
         const data = refreshResponse?.data?.data
         if (data?.token) {
@@ -41,7 +62,9 @@ api.interceptors.response.use(
         }
         return Promise.reject(error)
       }, (refreshError) => {
-        console.log('refreshError')
+        if (__DEV__) {
+          console.log('refreshError:', refreshError);
+        }
         return Promise.reject(error)
       })
     }

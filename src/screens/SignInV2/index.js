@@ -131,7 +131,7 @@ const SignIn = () => {
 
   const checkIsDemoLoginEnabled = async () => {
     const isEnabled = await getRemoteConfig.isDemoLoginViewEnabled();
-    setIsDemoLoginEnabled(isEnabled)
+    setIsDemoLoginEnabled(true)
   }
 
   React.useEffect(() => {
