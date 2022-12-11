@@ -18,6 +18,7 @@
     "start": "npm run update-env-dev &&react-native start",
     "test": "jest --verbose __tests__ src",
     "testCoverage": "jest --verbose --coverage --collectCoverageFrom=\"./src/**\" __tests__ src",
+    "test:update-snapshot": "jest __tests__ src -u",
     "lint": "eslint .",
     "android:clean": "cd android && ./gradlew clean && ./gradlew cleanBuildCache",
     "reinstall": "rm -rf node_modules && yarn install",
@@ -30,13 +31,14 @@
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.12",
-    "@human-id/react-native-humanid": "^2.0.1",
+    "@human-id/react-native-humanid": "^2.3.1",
+    "@human-internet/react-native-humanid": "^2.4.2",
     "@react-native-async-storage/async-storage": "^1.15.2",
     "@react-native-community/blur": "^3.6.0",
     "@react-native-community/cameraroll": "^4.0.3",
     "@react-native-community/checkbox": "^0.5.8",
     "@react-native-community/masked-view": "^0.1.10",
-    "@react-native-community/netinfo": "^6.0.0",
+    "@react-native-community/netinfo": "6.0.0",
     "@react-native-community/push-notification-ios": "^1.10.1",
     "@react-native-firebase/analytics": "11.3.1",
     "@react-native-firebase/app": "11.3.1",
@@ -58,10 +60,11 @@
     "jwt-decode": "^3.1.2",
     "link-preview-js": "^2.1.8",
     "lodash": "^4.17.21",
+    "metro-config": "^0.73.3",
     "moment": "^2.29.1",
     "psl": "^1.9.0",
     "react": "18.0.0",
-    "react-native": "0.64.3",
+    "react-native": "0.64.4",
     "react-native-activity-feed": "^1.0.3",
     "react-native-autolink": "^4.0.0",
     "react-native-bundle-splitter": "^2.2.1",
@@ -131,7 +134,7 @@
     "@testing-library/react-hooks": "8.0.1",
     "@testing-library/react-native": "^9.1.0",
     "@types/enzyme-adapter-react-16": "^1.0.6",
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^29.2.3",
     "@types/react": "^17.0.47",
     "@types/react-native": "^0.64.10",
     "babel-jest": "^27.0.2",
@@ -160,7 +163,7 @@
     "react-test-renderer": "18.0.0",
     "reactotron-react-native": "5.0.2",
     "reactotron-recoil-plugin": "^1.1.0",
-    "ts-jest": "^27.0.2"
+    "ts-jest": "^29.0.3"
   },
   "resolutions": {
     "stream-chat": "github:kevinnath1007/stream-chat-js",
@@ -176,7 +179,7 @@
       "<rootDir>/src"
     ],
     "moduleNameMapper": {
-      "\\.svg": "<rootDir>/__mocks__/svgMock.ts"
+      "\\.svg": "<rootDir>/__mocks__/svgMock.js"
     },
     "collectCoverageFrom": [
       "__tests__",

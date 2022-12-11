@@ -23,11 +23,54 @@ const API_URL = {
 /**
  *
  * @param {String} query
+ * @param {import('axios').AxiosRequestConfig} axiosOptions
  * @return {FetchDiscoveryDataResponse}
  */
-const fetchDiscoveryDataUser = async (query) => {
+const fetchDiscoveryDataUser = async (query, axiosOptions = {}) => {
   try {
-    const response = await api.get(`/discovery/user/?q=${encodeURIComponent(query)}`);
+    const response = await api.get(`/discovery/user/?q=${encodeURIComponent(query)}`, axiosOptions);
+    if (response?.data?.success) {
+      return response?.data;
+    }
+    return {
+      success: false,
+      message: response?.data?.message,
+    };
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+/**
+ *
+ * @param {String} query
+ * @param {import('axios').AxiosRequestConfig} axiosOptions
+ * @return {FetchDiscoveryDataResponse}
+ */
+const fetchDiscoveryDataDomain = async (query, axiosOptions = {}) => {
+  try {
+    const response = await api.get(`/discovery/domain/?q=${encodeURIComponent(query)}`, axiosOptions);
+    if (response?.data?.success) {
+      return response?.data;
+    }
+    return {
+      success: false,
+      message: response.data.message,
+    };
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+/**
+ *
+ * @param {String} query
+ * @param {import('axios').AxiosRequestConfig} axiosOptions
+ * @return {FetchDiscoveryDataResponse}
+ */
+const fetchDiscoveryDataTopic = async (query, axiosOptions = {}) => {
+  try {
+    const response = await api.get(`/discovery/topic/?q=${encodeURIComponent(query)}`, axiosOptions);
     if (response.data.success) {
       return response.data;
     }
@@ -43,51 +86,12 @@ const fetchDiscoveryDataUser = async (query) => {
 /**
  *
  * @param {String} query
+ * @param {import('axios').AxiosRequestConfig} axiosOptions
  * @return {FetchDiscoveryDataResponse}
  */
-const fetchDiscoveryDataDomain = async (query) => {
+const fetchDiscoveryDataNews = async (query, axiosOptions = {}) => {
   try {
-    const response = await api.get(`/discovery/domain/?q=${encodeURIComponent(query)}`);
-    if (response.data.success) {
-      return response.data;
-    }
-    return {
-      success: false,
-      message: response.data.message,
-    };
-  } catch (error) {
-    crashlytics().recordError(new Error(error));
-    throw new Error(error);
-  }
-};
-/**
- *
- * @param {String} query
- * @return {FetchDiscoveryDataResponse}
- */
-const fetchDiscoveryDataTopic = async (query) => {
-  try {
-    const response = await api.get(`/discovery/topic/?q=${encodeURIComponent(query)}`);
-    if (response.data.success) {
-      return response.data;
-    }
-    return {
-      success: false,
-      message: response.data.message,
-    };
-  } catch (error) {
-    crashlytics().recordError(new Error(error));
-    throw new Error(error);
-  }
-};
-/**
- *
- * @param {String} query
- * @return {FetchDiscoveryDataResponse}
- */
-const fetchDiscoveryDataNews = async (query) => {
-  try {
-    const response = await api.get(`/discovery/news/?q=${encodeURIComponent(query)}`);
+    const response = await api.get(`/discovery/news/?q=${encodeURIComponent(query)}`, axiosOptions);
     if (response.data.success) {
       return response.data;
     }

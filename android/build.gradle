@@ -5,10 +5,11 @@ buildscript {
         googlePlayServicesVersion = "+" // default: "+"
         firebaseMessagingVersion = "21.1.0" // default: "21.1.0"
 
-        buildToolsVersion = "29.0.2"
+        buildToolsVersion = "30.0.3"
         minSdkVersion = 21
-        compileSdkVersion = 32
-        targetSdkVersion = 32
+        compileSdkVersion = 31
+        targetSdkVersion = 31
+
     }
     repositories {
         google()
@@ -16,7 +17,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath('com.android.tools.build:gradle:3.6.4')
+        classpath('com.android.tools.build:gradle:4.1.0')
         classpath('com.google.gms:google-services:4.3.4')
         classpath 'com.google.firebase:perf-plugin:1.4.2'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.1'

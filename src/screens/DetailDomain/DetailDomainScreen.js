@@ -2,12 +2,10 @@ import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import {
   Dimensions,
-  InteractionManager,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
   View
 } from 'react-native';
 
@@ -19,16 +17,18 @@ import Loading from '../Loading';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import { COLORS } from '../../utils/theme';
+import { Context } from '../../context';
 import { Footer } from '../../components';
 import { createCommentParent } from '../../service/comment';
 import { downVoteDomain, upVoteDomain } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import {
-  getCountCommentWithChildInDetailPage,
+  getCountCommentWithChildInDetailPage
 } from '../../utils/getstream';
-import { getDomainDetailById } from '../../service/domain'
+import { getDomainDetailById } from '../../service/domain';
 import { getMyProfile } from '../../service/profile';
 import { getUserId } from '../../utils/users';
+import { updateComment } from '../../context/actions/news';
 
 const { width, height } = Dimensions.get('window');
 
@@ -49,11 +49,14 @@ const DetailDomainScreen = (props) => {
   const [comments, setComments] = React.useState([])
   const [isLoading, setIsLoading] = React.useState(true)
   const blockRef = React.useRef(null)
+
+  const [, dispatch] = React.useContext(Context).news
+
   const initial = () => {
     const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
-      const {comment} = reactionCount;
+      const { comment } = reactionCount;
       if (comment !== undefined) {
         if (comment > 0) {
           setReaction(true);
@@ -84,9 +87,10 @@ const DetailDomainScreen = (props) => {
     }
   }, [item]);
 
-  const getDomain = () => {
-    setIsLoading(true)
-    getDomainDetailById(dataDomain.id).then((res) => {
+  const getDomain = (withLoading = true) => {
+    if (withLoading) setIsLoading(true)
+    const id = dataDomain?.og?.news_feed_id || dataDomain?.id
+    getDomainDetailById(id).then((res) => {
       setItem(res)
       setIsLoading(false)
     })
@@ -135,12 +139,12 @@ const DetailDomainScreen = (props) => {
       }
     }
   };
-  
+
   React.useEffect(() => {
 
     if (item) {
       validationStatusVote();
-      setComments(item.latest_reactions.comment)
+      setComments(item?.latest_reactions?.comment || [])
     }
   }, [item, yourselfId]);
 
@@ -150,9 +154,9 @@ const DetailDomainScreen = (props) => {
       const result = await getMyProfile(id);
       if (result.code === 200) {
         setDataProfile(result.data);
-        setLoading(false);
+        // setLoading(false);
       }
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -163,11 +167,13 @@ const DetailDomainScreen = (props) => {
   const commentParent = async () => {
     try {
       if (textComment.trim() !== '') {
-        const data = await createCommentParent(textComment, item.id);
-        setComments([...comments, data.data])
-        if (data.code === 200) {
+        const data = await createCommentParent(textComment, item.id, '', false);
+        setComments([data?.data, ...comments])
+        if (data?.code === 200) {
           setTextComment('');
           // Toast.show('Comment successful', Toast.LONG);
+          updateComment(data?.data, item?.id, dispatch)
+          setTotalComment((prev) => (parseInt(prev, 10) + 1))
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
@@ -236,8 +242,8 @@ const DetailDomainScreen = (props) => {
   const blockNews = () => {
     blockRef.current.refBlockDomain.current.open()
   };
-  if(isLoading) return <Loading />
-  if(!item?.domain) return <View />
+  if (isLoading) return <Loading />
+  if (!item?.domain) return <View />
 
   return (
     <View style={styles.container}>
@@ -245,7 +251,7 @@ const DetailDomainScreen = (props) => {
       <SafeAreaView>
         <DetailDomainScreenHeader
           domain={item.domain.name}
-          time={item.content.created_at}
+          time={item?.content?.created_at}
           image={item.domain.image}
           onFollowDomainPressed={() => { }}
           score={dataDomain?.score}
@@ -257,13 +263,13 @@ const DetailDomainScreen = (props) => {
         <View style={styles.content}>
           <View>
             <DetailDomainScreenContent
-              date={item.content.created_at}
-              description={item.content.description}
+              date={item?.content?.created_at}
+              description={item?.content?.description}
               domain={item.domain}
               domainImage={item.domain.image}
-              image={item.content.image}
-              title={item.content.title}
-              url={item.content.url}
+              image={item?.content?.image}
+              title={item?.content?.title}
+              url={item?.content?.url}
             />
             <View style={styles.footerWrapper}>
               <Footer
@@ -299,12 +305,12 @@ const DetailDomainScreen = (props) => {
           }}
         />
       )}
-         <BlockDomainComponent 
-     ref={blockRef}
-     domain={item.domain.name}
-     domainId={item.domain.domain_page_id}
+      <BlockDomainComponent
+        ref={blockRef}
+        domain={item.domain.name}
+        domainId={item.domain.domain_page_id}
 
-     />
+      />
     </View>
   );
 };

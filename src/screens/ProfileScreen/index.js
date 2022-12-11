@@ -496,7 +496,6 @@ const ProfileScreen = ({ route }) => {
     setLoading(true)
     getMyFeeds(0, LIMIT_PROFILE_FEED)
   }
-
   const renderHeader = React.useMemo(() => (
       <View onLayout={(event) => {
         const headerHeightLayout = event.nativeEvent.layout.height
@@ -507,6 +506,7 @@ const ProfileScreen = ({ route }) => {
           <FollowInfoRow
             follower={dataMain.follower_symbol}
             following={dataMain.following_symbol}
+
             onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)} />
 
           {renderBio(dataMainBio)}

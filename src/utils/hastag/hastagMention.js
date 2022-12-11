@@ -1,52 +1,47 @@
 import * as React from 'react';
+import reactStringReplace from 'react-string-replace';
 import { StyleSheet, Text } from 'react-native';
 import { generateRandomId } from 'stream-chat-react-native-core';
 
 import { fonts } from '../fonts';
 
-const handleHastagMention = (text, setFormattedContent, hashtags = []) => {
-    console.log('hashtags')
-    console.log(hashtags)
-    const retLines = text.split("\n");
-    const arrText = new Array();
-    for (let i = 0; i < retLines.length; i++) {
-        arrText.push(retLines[i]);
-        if (i != retLines.length - 1) {
-            arrText.push("\n");
-        }
-    }
-    const formattedText = [];
-    arrText.forEach(retLine => {
-        const words = retLine.split(' ');
-        const contentLength = words.length;
-        const formatMention = /[ !#@$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\n]/;
-        const formatHashtag = /[ !#@$%^&*()=+\[\]{};':"\\|,.<>\/?\n]/;
-        words.forEach((word, index) => {
-            const randomId = generateRandomId();
-            if (
-                (word.startsWith("@") && !formatMention.test(word.substr(1))) ||
-                (word.startsWith("#") && !formatHashtag.test(word.substr(1)))
-            ) {
-                const mention = (
-                    <Text key={randomId} style={styles.mention}>
-                        {word}
-                    </Text>
-                );
-                if (index !== contentLength - 1) {
-                    formattedText.push(mention, ' ');
-                } else {
-                    formattedText.push(mention);
-                }
-            } else {
-                if (index !== contentLength - 1) {
-                    return formattedText.push(word, ' ');
-                }
-                return formattedText.push(word);
+const handleHastagMention = (text = '', hashtags = [], setHashtagState = null, cursorPosition = -1) => {
 
+    const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/g
+    const mentionRegex = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
+
+    const topicOccurence = []
+    const reactStringHashtags = reactStringReplace(
+        text,
+        topicRegex,
+        (match) => {
+            const isHashtagUnique = !topicOccurence?.includes(match?.substring(1))
+            const isHashtagInTopic = hashtags?.includes(match?.substring(1))
+
+            if (topicOccurence?.length > 4 || !isHashtagUnique) return match
+
+            if (isHashtagInTopic || isHashtagUnique) {
+                topicOccurence?.push(match?.substring(1))
+                return <Text key={generateRandomId()} style={styles.mention}>
+                    {`${match}`}
+                </Text>
             }
-        });
-    });
-    setFormattedContent(formattedText);
+
+            return <Text key={generateRandomId()} style={styles.mention}>
+                {match}
+            </Text>
+        })
+
+
+    const reactStringMention = reactStringReplace(
+        reactStringHashtags,
+        mentionRegex,
+        (match) => <Text key={generateRandomId()} style={styles.mention}>
+            {match}
+        </Text>)
+
+    setHashtagState(topicOccurence)
+    return reactStringMention
 };
 
 const styles = StyleSheet.create({

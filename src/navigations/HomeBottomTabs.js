@@ -4,12 +4,13 @@ import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import {
-  Platform, StatusBar, StyleSheet, View,
+  Platform,
+  StyleSheet,
+  View,
 } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import { useRecoilValue } from 'recoil';
+
 import DiscoveryAction from '../context/actions/discoveryAction';
 import DiscoveryRepo from '../service/discovery';
 import FirebaseConfig from '../configs/FirebaseConfig';
@@ -17,6 +18,7 @@ import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
 import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
+import UniversalLink from '../configs/UniversalLink';
 import following from '../context/actions/following';
 import {
   ChannelListScreen,
@@ -26,8 +28,12 @@ import {
 } from '../screens';
 import { Context } from '../context';
 import {
-  FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS,
+  FEEDS_CACHE,
+  NEWS_CACHE,
+  PROFILE_CACHE,
+  RECENT_SEARCH_TERMS,
 } from '../utils/cache/constant';
+import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
 import { colors } from '../utils/colors';
 import { getDomains, getFollowedDomain } from '../service/domain';
 import { getFollowing, getMyProfile } from '../service/profile';
@@ -36,23 +42,21 @@ import { getMainFeed } from '../service/post';
 import { getSpecificCache, saveToCache } from '../utils/cache';
 import { getUserId } from '../utils/users';
 import {
-  setMainFeeds, setTimer,
+  setMainFeeds,
+  setTimer,
 } from '../context/actions/feeds';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
-import { InitialStartupAtom, otherProfileAtom } from '../service/initialStartup';
-import UniversalLink from '../configs/UniversalLink';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs(props) {
   const { navigation } = props;
   const isIos = Platform.OS === 'ios';
-  const {top, bottom} = useSafeAreaInsets()
   const [myProfile, dispatchProfile] = React.useContext(Context).profile;
   const [, followingDispatch] = React.useContext(Context).following;
 
-  let initialStartup = useRecoilValue(InitialStartupAtom);
+  const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
@@ -254,10 +258,10 @@ function HomeBottomTabs(props) {
   }, []);
 
   const handlePushNotif = (remoteMessage) => {
-    let {channel} = remoteMessage.data
+    let { channel } = remoteMessage.data
     channel = JSON.parse(channel)
-    if(channel.channel_type !== 3) {
-      if(isIos) {
+    if (channel.channel_type !== 3) {
+      if (isIos) {
         pushNotifIos(remoteMessage)
       } else {
         pushNotifAndroid(remoteMessage)
@@ -297,16 +301,16 @@ function HomeBottomTabs(props) {
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
           safeAreaInsets: {
-              top:0,
-              bottom: 0,
-              left: 0,
-              right: 0
-            }
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
+          }
         }}
         screenOptions={({ navigation: screenOptionsNavigation }) => ({
           activeTintColor: colors.holytosca,
           tabBarLabel: () => (
-            <View style={[ styles.badge, { backgroundColor: screenOptionsNavigation.isFocused() ? colors.holytosca : 'transparent' }]} />
+            <View style={[styles.badge, { backgroundColor: screenOptionsNavigation.isFocused() ? colors.holytosca : 'transparent' }]} />
           ),
         })}>
         <Tab.Screen

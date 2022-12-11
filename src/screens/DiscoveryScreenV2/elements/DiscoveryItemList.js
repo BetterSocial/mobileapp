@@ -9,10 +9,6 @@ import MemoDomainProfilePicture from '../../../assets/icon/DomainProfilePictureE
 const DomainList = (props) => {
   const { onPressList, item, isHashtag, handleSetFollow, handleSetUnFollow, onPressBody, isDomain } = props
 
-  const handlePress = (event) => {
-    event.preventDefault();
-    onPressList(item)
-  }
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => onPressBody(item)} style={styles.wrapProfile}>

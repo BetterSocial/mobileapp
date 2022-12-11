@@ -1,41 +1,36 @@
-import analytics from '@react-native-firebase/analytics';
-import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
+import analytics from '@react-native-firebase/analytics';
 import {
   Animated,
   FlatList,
   InteractionManager,
   Platform,
   StatusBar,
-  StyleSheet,
-  View,
+  StyleSheet
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
-import LoadingWithoutModal from '../../components/LoadingWithoutModal';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { Context } from '../../context';
-import { setIFollow, setNews } from '../../context/actions/news';
-import { useAfterInteractions } from '../../hooks/useAfterInteractions';
-import { getDomainIdIFollow, getDomains } from '../../service/domain';
-import { downVoteDomain, upVoteDomain } from '../../service/vote';
-import { getSpecificCache, saveToCache } from '../../utils/cache';
-import { NEWS_CACHE } from '../../utils/cache/constant';
-import ShareUtils from '../../utils/share'
-import { COLORS, } from '../../utils/theme';
-import { getUserId } from '../../utils/users';
 import RenderItem from './RenderItem';
 import Search from './Search';
+import ShareUtils from '../../utils/share';
+import { COLORS } from '../../utils/theme';
+import { Context } from '../../context';
+import { NEWS_CACHE } from '../../utils/cache/constant';
+import { downVoteDomain, upVoteDomain } from '../../service/vote';
+import { getDomainIdIFollow, getDomains } from '../../service/domain';
+import { getSpecificCache, saveToCache } from '../../utils/cache';
+import { setIFollow, setNews } from '../../context/actions/news';
+import { useAfterInteractions } from '../../hooks/useAfterInteractions';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const NewsScreen = ({ }) => {
+const NewsScreen = () => {
   const navigation = useNavigation();
   const refBlockDomainComponent = React.useRef(null);
   const offset = React.useRef(new Animated.Value(0)).current;
   const paddingContainer = React.useRef(new Animated.Value(50)).current
-  const [loading, setLoading] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [yourselfId, setYourselfId] = React.useState('');
   const [domain, setDomain] = React.useState('');
   const [idBlock, setIdBlock] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
@@ -49,7 +44,7 @@ const NewsScreen = ({ }) => {
   const { news } = newslist;
   let lastDragY = 0;
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', (e) => {
+    const unsubscribe = navigation.addListener('blur', () => {
       offset.setValue(0)
       // checkCache()
     });
@@ -72,13 +67,10 @@ const NewsScreen = ({ }) => {
   }, [interactionsComplete]);
 
   const checkCache = () => {
-    // setLoading(true)
-    // offset.setValue(0)
     getSpecificCache(NEWS_CACHE, (cache) => {
       if (cache) {
         setNews(cache.data, dispatch);
         setPostOffset(cache.offset)
-        setLoading(false);
       } else {
         initData(true)
       }
@@ -94,17 +86,15 @@ const NewsScreen = ({ }) => {
 
   }, [domain, idBlock, interactionsComplete])
 
-  const initData = async (enableLoading) => {
-    console.log('initDaata')
-    if (enableLoading) setLoading(true);
+  const initData = async () => {
     try {
       const res = await getDomains();
       saveToCache(NEWS_CACHE, res)
       setNews(res.data, dispatch);
       setPostOffset(res.offset)
-      setLoading(false);
+      // setLoading(false);
     } catch (error) {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -190,33 +180,25 @@ const NewsScreen = ({ }) => {
   };
 
   const loadMoreData = async () => {
-    setRefreshing(true)
+    if(postOffset > 0) {
+      setRefreshing(true)
+    }
     try {
       const res = await getDomains(postOffset);
       const newNews = [...news, ...res.data];
+      const data = {
+        ...res,
+        data: newNews
+      }
       setPostOffset(res.offset)
       setNews(newNews, dispatch);
-      saveToCache(NEWS_CACHE, newNews)
+      saveToCache(NEWS_CACHE, data)
       setRefreshing(false)
-      // setLoading(false);
     } catch (error) {
       setRefreshing(false)
-      // setLoading(false);
     }
   };
 
-  const setSelectedIndex = (event) => {
-    // width of the view size
-    const viewSize = event.nativeEvent.layoutMeasurement.height / 2;
-    // get current position of the scroll view
-    const contentOffSet = event.nativeEvent.contentOffset.y;
-    const selectedIndex = Math.floor(contentOffSet / viewSize);
-    const last = news.length - 1;
-    if (selectedIndex === last) {
-      const lastId = news[news.length - 1].id;
-      loadMoreData(lastId);
-    }
-  };
 
   const onBlockedDomain = (blockedDomain) => {
     if (!blockedDomain.data) return
@@ -225,8 +207,6 @@ const NewsScreen = ({ }) => {
     getSpecificCache(NEWS_CACHE, (cache) => {
       if (cache) {
         if (!cache?.data) {
-          console.log('cache?.data')
-          console.log(cache?.data)
           initData(true)
           return
         }
@@ -239,8 +219,6 @@ const NewsScreen = ({ }) => {
         setNews(filteredCache, dispatch);
         saveToCache(NEWS_CACHE, newCache)
       } else {
-        console.log('from news')
-        console.log(news)
         // const filteredNews = news?.filter((item) => item.id !== blockedDomain.domain_page_id)
         // setNews(filteredNews, dispatch)
         // saveToCache(NEWS_CACHE, filteredNews)
@@ -273,6 +251,8 @@ const NewsScreen = ({ }) => {
           maxToRenderPerBatch={2}
           updateCellsBatchingPeriod={10}
           windowSize={10}
+          // onEndReachedThreshold={0.8}
+          
           // onMomentumScrollEnd={setSelectedIndex}
           renderItem={({ item, index }) => (
             <RenderItem

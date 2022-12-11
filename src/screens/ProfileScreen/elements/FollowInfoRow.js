@@ -5,7 +5,7 @@ import GlobalButton from '../../../components/Button/GlobalButton';
 import { colors } from '../../../utils/colors';
 import { fonts } from '../../../utils/fonts';
 import { getSingularOrPluralText } from '../../../utils/string/StringUtils';
-
+import SimpleToast from 'react-native-simple-toast';
 /**
  * 
  * @typedef {Function} OnFollowingContainerClicked   
@@ -25,8 +25,12 @@ import { getSingularOrPluralText } from '../../../utils/string/StringUtils';
  * @returns 
  */
 const FollowInfoRow = ({ follower, following, onFollowingContainerClicked}) => {
-    return <View style={styles.wrapFollower}>
-        <GlobalButton buttonStyle={{paddingHorizontal: 0}} >
+    const openFollower = () => {
+        SimpleToast.show(`For privacy reasons, you cannot see who follows you`, SimpleToast.LONG)
+    }
+    return (
+        <View style={styles.wrapFollower}>
+        <GlobalButton onPress={openFollower} buttonStyle={{paddingHorizontal: 0}} >
         <View style={styles.wrapRow}>
             <Text style={styles.textTotal}>
                 {follower}
@@ -46,6 +50,7 @@ const FollowInfoRow = ({ follower, following, onFollowingContainerClicked}) => {
         </GlobalButton>
   
     </View>
+    )
 }
 
 let styles = StyleSheet.create({

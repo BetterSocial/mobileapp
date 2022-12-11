@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Card from '../../components/Card/Card';
@@ -16,11 +16,14 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
   const isTouchableDisabled = route?.name === 'PostDetailPage';
   const navigation = useNavigation()
 
+  const devHeight = Dimensions.get('screen').height
+   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
+
   const renderMessageContentLink = () => {
     const sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
     if (sanitizeUrl?.length === 0) return <></>
     return <View style={{ ...styles.messageContainer, ...messageContainerStyle }}>
-      <Text style={styles.message} numberOfLines={3}>{getCaptionWithTopicStyle(sanitizeUrl, navigation)}</Text>
+      <Text style={styles.message} numberOfLines={3}>{getCaptionWithTopicStyle(sanitizeUrl, navigation, substringNoImageTopic, item?.topics)}</Text>
       <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl} />
     </View>
   }
@@ -46,30 +49,6 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
         </>
       </TouchableNativeFeedback>
     </View>
-    // <Pressable
-    //   disabled={isTouchableDisabled}
-    //   onPress={onPress}
-    //   style={styles.contentFeed}>
-    //   <>
-    //     {__renderMessageContentLink()}
-    //     {smartRender(Card, {
-    //       domain: og.domain,
-    //       date: new Date(og.date).toLocaleDateString(),
-    //       domainImage:
-    //         og.domainImage !== ''
-    //           ? og.domainImage
-    //           : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
-    //       title: og.title,
-    //       description: og.description,
-    //       image: og.image,
-    //       url: og.url,
-    //       onHeaderPress,
-    //       onCardContentPress,
-    //       score,
-    //       item
-    //     })}
-    //   </>
-    // </Pressable>
   );
 };
 

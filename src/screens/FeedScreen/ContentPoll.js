@@ -1,33 +1,24 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
 /* eslint-disable no-nested-ternary */
 import * as React from 'react';
 import {
   Dimensions,
-  FlatList,
-  Image,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import SeeMore from 'react-native-see-more-inline';
 
-import Gap from '../../components/Gap';
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
-import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import { inputSingleChoicePoll } from '../../service/post';
+import { COLORS } from '../../utils/theme';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import {
-  getCaptionWithTopicStyle,
   getPollTime,
   isPollExpired,
 } from '../../utils/string/StringUtils';
-import { COLORS } from '../../utils/theme';
+import useContentPoll from './hooks/useContentPoll';
 
 const { width: screenWidth } = Dimensions.get('window');
 const FONT_SIZE_MEDIA = 16
@@ -41,120 +32,32 @@ const ContentPoll = ({
   pollexpiredat,
   index = -1,
   voteCount = 0}) => {
-  const modifiedPoll = polls.reduce(
-    (acc, current) => {
-      acc.totalpoll += parseInt(current.counter);
-      if (current.counter > acc.maxValue) {
-        acc.maxValue = current.counter;
-        acc.maxId = [];
-        acc.maxId.push(current.polling_option_id);
-      } else if (current.counter === acc.maxValue) {
-        const { maxId } = acc;
-        maxId.push(current.polling_option_id);
-      }
+      
+  const {renderSeeResultButton, isAlreadyPolling, singleChoiceSelectedIndex, setSingleChoiceSelectedIndex, multipleChoiceSelected, setMultipleChoiceSelected, showSetResultsButton, onSeeResultsClicked, modifiedPoll} = useContentPoll({isalreadypolling, polls})
+    
+  const initialSetup = () => {
+    if(multiplechoice) onSeeResultsClicked(item,  multiplechoice, onnewpollfetched, index)
 
-      return acc;
-    },
-    { totalpoll: 0, maxId: [], maxValue: 0 },
-  );
-
-  const [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] =
-    React.useState(-1);
-  const [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
-  const [isFetchingResultPoll, setIsFetchingResultPoll] = React.useState(false);
-  const [isAlreadyPolling, setIsAlreadyPolling] =
-    React.useState(isalreadypolling);
-  const route = useRoute();
-  const navigation = useNavigation()
-
-  React.useEffect(() => {
-    if(singleChoiceSelectedIndex === -1) return
-    if(isAlreadyPolling) return
-    if(multiplechoice) return
-
-    return onSeeResultsClicked()
-  }, [singleChoiceSelectedIndex])
-
-
-  let onSeeResultsClicked = () => {
-    if (isFetchingResultPoll) {
-      return;
-    }
-    const newPolls = [...polls];
-    const newItem = { ...item };
-
-    if (multiplechoice) {
-      newItem.isalreadypolling = true;
-      newItem.refreshtoken = new Date().valueOf();
-      if (multipleChoiceSelected.length === 0) {
-        // inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
-      } else {
-        setIsAlreadyPolling(true);
-        const selectedPolls = [];
-        for (let i = 0; i < multipleChoiceSelected.length; i++) {
-          const changedPollIndex = multipleChoiceSelected[i];
-          const selectedPoll = polls[changedPollIndex];
-          newPolls[changedPollIndex].counter =
-            parseInt(selectedPoll.counter) + 1;
-          selectedPolls.push(selectedPoll);
-          // inputSingleChoicePoll(
-          //   selectedPoll.polling_id,
-          //   selectedPoll.polling_option_id,
-          // );
-        }
-        newItem.pollOptions = newPolls;
-        newItem.mypolling = selectedPolls;
-        if(multipleChoiceSelected.length > 0) newItem.voteCount++;
-      }
-
-      onnewpollfetched(newItem, index);
-      setIsAlreadyPolling(true);
-    } else {
-      newItem.isalreadypolling = true;
-      newItem.refreshtoken = new Date().valueOf();
-
-      if (singleChoiceSelectedIndex === -1) {
-        // inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
-      } else {
-        const selectedPoll = polls[singleChoiceSelectedIndex];
-        newPolls[singleChoiceSelectedIndex].counter =
-          parseInt(selectedPoll.counter) + 1;
-        newItem.pollOptions = newPolls;
-        newItem.mypolling = selectedPoll;
-        newItem.voteCount++;
-        inputSingleChoicePoll(
-          selectedPoll.polling_id,
-          selectedPoll.polling_option_id,
-        );
-      }
-
-      onnewpollfetched(newItem, index);
-      setIsAlreadyPolling(true);
-    }
-  };
-
-  const showSetResultsButton = () => !isPollExpired(pollexpiredat) && !isAlreadyPolling;
-
-
-  const renderSeeResultButton = () => {
-    if(isFetchingResultPoll) return 'Loading...'
-    if(multiplechoice && multipleChoiceSelected.length > 0) return 'Submit'
-
-    return 'See Results'
   }
 
+
+  React.useEffect(() => {
+    initialSetup()
+  }, [singleChoiceSelectedIndex])
+
+  const renderSeeResultButtonHandle = () => renderSeeResultButton(multiplechoice, multipleChoiceSelected)
   return (
     <View style={styles.containerShowMessage}>
             <View style={styles.pollOptionsContainer}>
-              {polls.map((pollItem, index) => 
+              {polls.map((pollItem, indexPoll) => 
                 /*
                   TODO : Count percentage
                 */
                  multiplechoice ? (
                   <PollOptionsMultipleChoice
-                    key={index}
+                    key={indexPoll}
                     item={pollItem}
-                    index={index}
+                    index={indexPoll}
                     mypoll={item?.mypolling}
                     selectedindex={multipleChoiceSelected}
                     onselected={(indexes) => {
@@ -162,22 +65,22 @@ const ContentPoll = ({
                     }}
                     isexpired={isPollExpired(pollexpiredat)}
                     isalreadypolling={isAlreadyPolling}
-                    maxpolls={modifiedPoll.maxId}
-                    total={modifiedPoll.totalpoll}
+                    maxpolls={modifiedPoll(polls).maxId}
+                    total={modifiedPoll(polls).totalpoll}
                     totalVotingUser={voteCount}
                   />
                 ) : (
                   <PollOptions
-                    key={index}
+                    key={indexPoll}
                     poll={pollItem}
                     mypoll={item?.mypolling}
-                    index={index}
+                    index={indexPoll}
                     selectedindex={singleChoiceSelectedIndex}
-                    total={modifiedPoll.totalpoll}
-                    maxpolls={modifiedPoll.maxId}
+                    total={modifiedPoll(polls).totalpoll}
+                    maxpolls={modifiedPoll(polls).maxId}
                     isexpired={isPollExpired(pollexpiredat)}
                     isalreadypolling={isAlreadyPolling}
-                    onselected={(index) => setSingleChoiceSelectedIndex(index)}
+                    onselected={(indexSelected) => setSingleChoiceSelectedIndex(indexSelected)}
                   />
                 )
               )}
@@ -196,12 +99,11 @@ const ContentPoll = ({
               <Text style={styles.polltime}>{` ${getPollTime(
                 pollexpiredat,
               )}`}</Text>
-
-              {showSetResultsButton() && (
-                <View style={styles.seeresultscontainer}>
-                  <TouchableOpacity onPress={onSeeResultsClicked}>
+              {showSetResultsButton(pollexpiredat) && (
+                <View testID='resultButton' style={styles.seeresultscontainer}>
+                  <TouchableOpacity onPress={() =>  onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index)}>
                     <Text style={styles.seeresultstext}>
-                      {renderSeeResultButton()}
+                      {renderSeeResultButtonHandle()}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -356,23 +258,6 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontFamily: fonts.inter[400],
   },
-  percentageBar: (percent) => {
-    if (!percent) {
-      percent = 0;
-    }
-    if (percent > 100) {
-      percent = 100;
-    }
-
-    return {
-      width: `${percent}%`,
-      height: '100%',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      backgroundColor: colors.bondi_blue,
-    };
-  },
   totalpolltext: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
@@ -418,13 +303,13 @@ const styles = StyleSheet.create({
     color: colors.holytosca,
     fontFamily: fonts.inter[500],
   },
-  textMedia: () => ({
-      fontFamily: fonts.inter[400],
+  textMedia: {
+    fontFamily: fonts.inter[400],
       fontWeight: 'normal',
       fontSize: FONT_SIZE_MEDIA,
       color: colors.black,
       lineHeight: 24,
-    }),
+  },
 
   seemore: {
     color: COLORS.blue,

@@ -1,44 +1,20 @@
+import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import SplashScreen from 'react-native-splash-screen';
 import {
   LogBox,
   Platform,
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  View,
+  View
 } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useRecoilValue, useSetRecoilState, } from 'recoil';
-
+import SplashScreen from 'react-native-splash-screen';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useLocalChannelsFirst } from 'stream-chat-react-native';
-import Blocked from '../screens/Blocked';
-import ChooseUsername from '../screens/InputUsername';
-import CreatePost from '../screens/CreatePost';
-import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
-import DomainScreen from '../screens/DomainScreen';
-import FollowingScreen from '../screens/Followings/FollowingScreen';
+
 import Header from '../components/Header';
-import HelpCenter from '../screens/WebView/HelpCenter';
-import HomeBottomTabs from './HomeBottomTabs';
-import ImageViewerScreen from '../screens/ImageViewer';
-import LinkContextScreen from '../screens/LinkContextScreen';
-import LocalCommunity from '../screens/LocalCommunity';
-import OtherProfile from '../screens/OtherProfile';
-import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
-import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
-import PostDetailPage from '../screens/PostPageDetail';
-import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
-import ProfilePostDetail from '../screens/ProfilePostDetail';
-import ProfileReplyComment from '../screens/ProfileReplyComment';
-import ReplyComment from '../screens/ReplyComment';
-import ReplyCommentLev3 from '../screens/ReplyComment2'
-import Settings from '../screens/Settings';
-import SignIn from '../screens/SignInV2';
-import TermsAndCondition from '../screens/WebView/TermsAndCondition';
-import TopicPageScreen from '../screens/TopicPageScreen';
-import Topics from '../screens/Topics';
-import WhotoFollow from '../screens/WhotoFollow';
+import NetworkStatusIndicator from '../components/NetworkStatusIndicator';
+import { Context } from '../context';
 import {
   AddParticipant,
   ChannelScreen,
@@ -50,17 +26,42 @@ import {
   GroupInfo,
   GroupMedia,
   GroupSetting,
-  ProfileScreen,
+  ProfileScreen
 } from '../screens';
-import { Context } from '../context';
+import Blocked from '../screens/Blocked';
+import CreatePost from '../screens/CreatePost';
+import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
+import DomainScreen from '../screens/DomainScreen';
+import FollowingScreen from '../screens/Followings/FollowingScreen';
+import ImageViewerScreen from '../screens/ImageViewer';
+import ChooseUsername from '../screens/InputUsername';
+import LinkContextScreen from '../screens/LinkContextScreen';
+import LocalCommunity from '../screens/LocalCommunity';
+import OtherProfile from '../screens/OtherProfile';
+import OtherProfilePostDetail from '../screens/OtherProfilePostDetail';
+import OtherProfileReplyComment from '../screens/OtherProfileReplyComment';
+import PostDetailPage from '../screens/PostPageDetail';
+import ProfilePostDetail from '../screens/ProfilePostDetail';
+import ProfileReplyComment from '../screens/ProfileReplyComment';
+import ReplyComment from '../screens/ReplyComment';
+import ReplyCommentLev3 from '../screens/ReplyComment2';
+import Settings from '../screens/Settings';
+import SignIn from '../screens/SignInV2';
+import TopicPageScreen from '../screens/TopicPageScreen';
+import Topics from '../screens/Topics';
+import HelpCenter from '../screens/WebView/HelpCenter';
+import PrivacyPolicies from '../screens/WebView/PrivacyPolicies';
+import TermsAndCondition from '../screens/WebView/TermsAndCondition';
+import WhotoFollow from '../screens/WhotoFollow';
+import { channelListLocalAtom } from '../service/channelListLocal';
 import { InitialStartupAtom } from '../service/initialStartup';
+import { verifyTokenGetstream } from '../service/users';
 import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
-import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
-import { verifyTokenGetstream } from '../service/users';
-import { channelListLocalAtom } from '../service/channelListLocal';
+import { getAccessToken } from '../utils/token';
 import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
+import HomeBottomTabs from './HomeBottomTabs';
 
 const RootStack = createStackNavigator();
 
@@ -73,7 +74,6 @@ export const RootNavigator = () => {
   const perf = React.useRef(null);
 
   const create = useClientGetstream();
-
 
   const doGetAccessToken = async () => {
     const accessToken = await getAccessToken();
@@ -140,11 +140,14 @@ export const RootNavigator = () => {
     }
   }, [clientState]);
 
+  const hideNetworkStatusIfInOnboarding = initialStartup?.id === null || initialStartup?.id === ''
+
   return (
     <View
       style={{
         height: '100%',
       }}>
+      <NetworkStatusIndicator hide={false} />
       {/* <StatusBar translucent backgroundColor="white" /> */}
       <RootStack.Navigator
         screenOptions={{

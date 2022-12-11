@@ -1,5 +1,5 @@
-/* eslint-disable no-nested-ternary */
 import * as React from 'react';
+/* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
 import {
   Dimensions,
@@ -7,20 +7,19 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { useNavigation } from '@react-navigation/native';
 
-import Gap from '../../components/Gap';
+import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import { COLORS, SIZES } from '../../utils/theme';
+import { COLORS } from '../../utils/theme';
+import { POST_TYPE_POLL } from '../../utils/constants';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
-import ContentPoll from './ContentPoll';
-import { POST_TYPE_LINK, POST_TYPE_POLL } from '../../utils/constants';
-import ContentLink from './ContentLink';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -28,10 +27,12 @@ const FONT_SIZE_MEDIA = 16
 const FONT_SIZE_TEXT = 24
 const FONT_SIZE_TEXT_LONG = 16
 
-const Content = ({ message, images_url, style, onPress, topics = [], item, onNewPollFetched, onPressDomain,      onCardContentPress }) => {
+const Content = ({ message, images_url = [], style, onPress, topics = [], item, onNewPollFetched, onPressDomain, onCardContentPress }) => {
   const navigation = useNavigation();
-
-
+  const devHeight = Dimensions.get('screen').height
+  const substringPostImage = devHeight /2.25 - (40 * 4)
+  const substringNoImageNoTopic = devHeight/1.25 - (40 * 4)
+   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -43,62 +44,67 @@ const Content = ({ message, images_url, style, onPress, topics = [], item, onNew
     });
   };
 
-
-  // const handleTextMedia = (text, onPress) => (
-  //     <View>
-  //       <Text numberOfLines={4} style={styles.textMedia}>
-  //         {text.length < 180 ? (
-  //           getCaptionWithTopicStyle(text, navigation)
-  //         ) : (
-  //           <Text>
-  //             {`${text.substring(0, 165)}...`}
-  //             <Text onPress={onPress} style={styles.seemore}>
-  //               more
-  //             </Text>
-  //           </Text>
-  //         )}
-  //       </Text>
-  //     </View>
-
-  //   );
+  const renderHandleTextContent = () => {
+    if(images_url.length > 0 || item && item.post_type === POST_TYPE_POLL) {
+      return (
+        <View style={{ height: '100%', flexDirection: 'row' }}>
+          <Text  style={styles.textMedia}  >
+            {getCaptionWithTopicStyle(message, navigation, substringPostImage, item?.topics)} {message.length > substringPostImage ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+          </Text>
+        </View>
+      )
+    }
+    return (
+      <View style={{flex: 1}} >
+        {topics.length > 0 ? <Text style={styles.textMedia} >
+            {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic, item?.topics)} {message.length > substringNoImageTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+          </Text> :  <Text  style={styles.textMedia} >
+            {getCaptionWithTopicStyle(message, navigation, substringNoImageNoTopic, item?.topics)} {message.length > substringNoImageNoTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+          </Text>}
+         
+      </View>
+    )
+  }
 
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       <View style={styles.container}>
-            <View
-              style={styles.containerMainText}>
-              <Text style={styles.textMedia} numberOfLines={5} >
-                {message}
-              </Text>
-              
-            </View>
-            <View style={styles.containerMainText} >
-                {item && item.post_type === POST_TYPE_POLL? 
-                <ContentPoll 
-                message={item.message}
-                images_url={item.images_url}
-                polls={item.pollOptions}
-                onPress={() => onPress(item, index)}
-                item={item}
-                pollexpiredat={item.polls_expired_at}
-                multiplechoice={item.multiplechoice}
-                isalreadypolling={item.isalreadypolling}
-                onnewpollfetched={onNewPollFetched}
-                voteCount={item.voteCount}
-                topics={item?.topics}
-              /> : null}
-              
-              </View>
-            <Gap height={SIZES.base} />
-            <View style={styles.containerImage}>
-              <ImageLayouter
-                images={images_url}
-                onimageclick={onImageClickedByIndex}
-              />
-            </View>
-                    <TopicsChip topics={topics} fontSize={FONT_SIZE_MEDIA} />
+        <View
+          style={styles.containerMainText}>
+          {renderHandleTextContent()}
+        </View>
+          
 
-          </View>
+        {/* <Gap height={SIZES.base} /> */}
+       
+      </View>
+      {item && item.post_type === POST_TYPE_POLL ?
+           <View style={styles.containerMainText} >
+            <ContentPoll
+              message={item.message}
+              images_url={item.images_url}
+              polls={item.pollOptions}
+              onPress={() => onPress(item, index)}
+              item={item}
+              pollexpiredat={item.polls_expired_at}
+              multiplechoice={item.multiplechoice}
+              isalreadypolling={item.isalreadypolling}
+              onnewpollfetched={onNewPollFetched}
+              voteCount={item.voteCount}
+              topics={item?.topics}
+            /> 
+                    </View>
+
+            : null}
+       {images_url.length > 0 && <View style={styles.containerImage}>
+          <ImageLayouter
+            images={images_url}
+            onimageclick={onImageClickedByIndex}
+          />
+        </View>}
+
+              <TopicsChip topics={topics} fontSize={14} text={message}/>
+
     </Pressable>
   );
 };
@@ -115,8 +121,8 @@ export default Content;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // backgroundColor: 'red'
+    overflow: 'hidden',
+    flex: 1
   },
   containerImage: {
     flex: 1,
@@ -147,10 +153,12 @@ const styles = StyleSheet.create({
   },
   textMedia: {
     fontFamily: fonts.inter[400],
-      fontWeight: 'normal',
-      fontSize: FONT_SIZE_MEDIA,
-      color: colors.black,
-      lineHeight: 24,
+    fontWeight: 'normal',
+    fontSize: FONT_SIZE_MEDIA,
+    color: colors.black,
+    lineHeight: 24,
+    flex: 1,
+    flexWrap: 'wrap',
   },
 
   seemore: {
@@ -252,8 +260,9 @@ const styles = StyleSheet.create({
   textContainer: {
   },
   containerMainText: {
-          paddingLeft: 16,
-                paddingRight: 16,
-                marginBottom: 7
+    paddingLeft: 16,
+    paddingRight: 16,
+    height: '100%'
+    // marginBottom: 7
   }
 });

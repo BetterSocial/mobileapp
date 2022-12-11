@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { getFollowingTopic, putUserTopic } from '../../../../service/topics';
+
 import DomainList from '../RenderList';
 import SuggestionTopic from './SuggestionTopic';
 import TopicHeader from './TopicHeader';
+import useChatClientHook from '../../../../utils/getstream/useChatClientHook';
+import { getFollowingTopic } from '../../../../service/topics';
 
 const styles = StyleSheet.create({
   flatlistContainer: {
@@ -17,6 +19,7 @@ const styles = StyleSheet.create({
 const TopicFragmentScreen = ({ navigation }) => {
   const [listTopics, setListTopics] = React.useState([])
   const [loading, setLoading] = React.useState(true)
+  const { followTopic } = useChatClientHook()
 
   const handleGetTopic = async () => {
     setLoading(true)
@@ -33,9 +36,9 @@ const TopicFragmentScreen = ({ navigation }) => {
     const mappingData = listTopics.map((list, listIndex) => {
       if (index === listIndex) {
         return { ...list, isunfollowed: true }
-      } else {
+      } 
         return { ...list }
-      }
+      
     })
     setListTopics(mappingData)
     updateFollow(data)
@@ -45,19 +48,16 @@ const TopicFragmentScreen = ({ navigation }) => {
     const mappingData = listTopics.map((list, listIndex) => {
       if (index === listIndex) {
         return { ...list, isunfollowed: false }
-      } else {
+      } 
         return { ...list }
-      }
+      
     })
     setListTopics(mappingData)
     updateFollow(data)
   }
 
   const updateFollow = async (data) => {
-    const dataSend = {
-      name: data.name
-    }
-    const response = await putUserTopic(dataSend)
+    followTopic(data?.name)
   }
 
   React.useEffect(() => {

@@ -1,9 +1,8 @@
 import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Keyboard, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Keyboard, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
-import DiscoveryRepo from '../../../service/discovery';
 import GeneralComponentAction from '../../../context/actions/generalComponentAction';
 import IconClear from '../../../assets/icon/IconClear';
 import RecentSearchItems from './RecentSearchItem';
@@ -21,32 +20,40 @@ import { fonts } from '../../../utils/fonts';
  * @param {RecentSearchOptions} param
  */
 const RecentSearch = (param) => {
-    const { shown = true } = param
-    const [isShown, setIsShown] = React.useState(shown)
+    const {
+        shown = true,
+        setSearchText = () => { },
+        setIsFirstTimeOpen = () => { }
+    } = param
 
-    const [generalComponent, generalComponentDispatch] = React.useContext(Context).generalComponent
     const [discovery, discoveryDispatch] = React.useContext(Context).discovery
+
+    const [isShown, setIsShown] = React.useState(shown)
+    const [items, setItems] = React.useState(discovery.recentSearch)
 
     React.useEffect(() => {
         setIsShown(shown)
+        return () => {
+            setIsShown(false)
+        }
     }, [shown])
 
     React.useEffect(() => {
         setItems(discovery.recentSearch)
+        return () => {
+            setItems([])
+        }
     }, [discovery.recentSearch])
 
-
-    const [items, setItems] = React.useState(discovery.recentSearch)
-
-    const __manipulateSearchTermsOrder = async (search) => {
-        let result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
-        if(!result) return
+    const manipulateSearchTermsOrder = async (search) => {
+        const result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
+        if (!result) return
 
         let resultArray = JSON.parse(result)
         // console.log(`resultArray.length < 1 ${resultArray.length <= 1}` )
-        if(resultArray.length <= 1) return
+        if (resultArray.length <= 1) return
 
-        let itemIndex = resultArray.indexOf(search)
+        const itemIndex = resultArray.indexOf(search)
         resultArray = [search].concat(resultArray)
         resultArray.splice(itemIndex + 1, 1)
         DiscoveryAction.setDiscoveryRecentSearch(resultArray, discoveryDispatch)
@@ -55,17 +62,17 @@ const RecentSearch = (param) => {
 
     }
 
-    const __fetchDiscoveryData = async (search) => {
-        GeneralComponentAction.setDiscoverySearchBar(search, generalComponentDispatch)
-        DiscoveryAction.setDiscoveryFirstTimeOpen(false, discoveryDispatch)
+    const fetchDiscoveryData = async (search) => {
+        setSearchText(search)
+        setIsFirstTimeOpen(false)
         Keyboard.dismiss()
-        __manipulateSearchTermsOrder(search)
+        manipulateSearchTermsOrder(search)
     }
 
-    const __handleClearRecentSearch = async () => {
+    const handleClearRecentSearch = async () => {
         setIsShown(false)
         // Remove from context here
-        let response = await AsyncStorage.removeItem(RECENT_SEARCH_TERMS, () => {
+        await AsyncStorage.removeItem(RECENT_SEARCH_TERMS, () => {
             console.log('response asdadadasd')
         })
 
@@ -75,19 +82,11 @@ const RecentSearch = (param) => {
     if (isShown && items.length > 0) return <View style={styles.recentContainer}>
         <View style={styles.recentTitleContainer}>
             <Text style={styles.recentTitle}>Recent</Text>
-            <TouchableOpacity delayPressIn={0} style={styles.iconClear} onPress={__handleClearRecentSearch}
-                // android_ripple={{
-                //     borderless: true,
-                //     radius: 15,
-                //     color: colors.gray1,
-                // }}
-                >
+            <TouchableOpacity delayPressIn={0} style={styles.iconClear} onPress={handleClearRecentSearch}>
                 <IconClear fill={colors.black} />
             </TouchableOpacity>
         </View>
-        {items.map((item, index) => {
-            return <RecentSearchItems key={`recentSearch-${index}`} text={item} onItemClicked={() => __fetchDiscoveryData(item)} />
-        })}
+        {items.map((item, index) => <RecentSearchItems key={`recentSearch-${index}`} text={item} onItemClicked={() => fetchDiscoveryData(item)} />)}
     </View>
 
     return <></>

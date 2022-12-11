@@ -1,15 +1,14 @@
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-unused-vars */
-import analytics from '@react-native-firebase/analytics';
-import { useNavigation } from '@react-navigation/core';
-import { debounce } from 'lodash';
-import PSL from 'psl'
+import * as React from 'react';
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
 /* eslint-disable no-use-before-define */
-import * as React from 'react';
+import PSL from 'psl';
+import Toast from 'react-native-simple-toast';
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
+import analytics from '@react-native-firebase/analytics';
 import {
     Alert,
     BackHandler,
@@ -19,57 +18,26 @@ import {
     StatusBar,
     StyleSheet,
     Text,
-    TextInput,
-    TouchableNativeFeedback,
     View
 } from 'react-native';
-import { showMessage } from 'react-native-flash-message';
+import { debounce } from 'lodash';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { openSettings } from 'react-native-permissions';
-import Toast from 'react-native-simple-toast';
+import { showMessage } from 'react-native-flash-message';
+import { useNavigation } from '@react-navigation/core';
 
-import MemoIc_hastag from '../../assets/icons/Ic_hastag';
-import Location from '../../assets/icons/Ic_location';
-import Timer from '../../assets/icons/Ic_timer';
-import MemoIc_user_group from '../../assets/icons/Ic_user_group';
-import MemoIc_world from '../../assets/icons/Ic_world';
-import ProfileDefault from '../../assets/images/ProfileDefault.png';
-import { Button, ButtonAddMedia } from '../../components/Button';
+import ContentLink from './elements/ContentLink';
+import CreatePollContainer from './elements/CreatePollContainer';
+import CreatePostInput from '../../components/CreatePostInput';
 import Gap from '../../components/Gap';
 import Header from '../../components/Header';
 import ListItem from '../../components/MenuPostItem';
-import TopicItem from '../../components/TopicItem';
-import { Context } from '../../context';
-import { getLinkPreviewInfo } from '../../service/feeds';
-import { getUserForTagging } from '../../service/mention';
-import { ShowingAudience, createPollPost, createPost } from '../../service/post';
-import { getMyProfile } from '../../service/profile';
-import { getTopics } from '../../service/topics';
-import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
-import { getSpecificCache } from '../../utils/cache';
-import { PROFILE_CACHE } from '../../utils/cache/constant';
-import { colors } from '../../utils/colors';
-import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
-import { fonts } from '../../utils/fonts';
-import {
-    requestCameraPermission,
-    requestExternalStoragePermission,
-} from '../../utils/permission';
-import {
-    getDurationId,
-    getLocationId,
-    getPrivacyId,
-    setDurationId,
-    setPrivacyId,
-} from '../../utils/setting';
-import StringConstant from '../../utils/string/StringConstant';
-import { convertString } from '../../utils/string/StringUtils';
-import { getUserId } from '../../utils/users';
-import { getUrl, isContainUrl, isEmptyOrSpaces } from '../../utils/Utils';
 import Loading from '../Loading';
-import Card from './elements/Card';
-import ContentLink from './elements/ContentLink';
-import CreatePollContainer from './elements/CreatePollContainer';
+import Location from '../../assets/icons/Ic_location';
+import MemoIc_hastag from '../../assets/icons/Ic_hastag';
+import MemoIc_user_group from '../../assets/icons/Ic_user_group';
+import MemoIc_world from '../../assets/icons/Ic_world';
+import ProfileDefault from '../../assets/images/ProfileDefault.png';
 import SheetAddTopic from './elements/SheetAddTopic';
 import SheetCloseBtn from './elements/SheetCloseBtn';
 import SheetExpiredPost from './elements/SheetExpiredPost';
@@ -77,8 +45,35 @@ import SheetGeographic from './elements/SheetGeographic';
 import SheetMedia from './elements/SheetMedia';
 import SheetPrivacy from './elements/SheetPrivacy';
 import ShowMedia from './elements/ShowMedia';
-import useHastagMention from './elements/useHastagMention';
+import StringConstant from '../../utils/string/StringConstant';
+import Timer from '../../assets/icons/Ic_timer';
+import TopicItem from '../../components/TopicItem';
 import UserProfile from './elements/UserProfile';
+import useHastagMention from './elements/useHastagMention';
+import { Button, ButtonAddMedia } from '../../components/Button';
+import { Context } from '../../context';
+import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
+import { PROFILE_CACHE } from '../../utils/cache/constant';
+import { ShowingAudience, createPollPost, createPost } from '../../service/post';
+import { colors } from '../../utils/colors';
+import { convertString } from '../../utils/string/StringUtils';
+import { fonts } from '../../utils/fonts';
+import {
+    getDurationId,
+    getLocationId,
+    getPrivacyId,
+    setDurationId,
+    setPrivacyId
+} from '../../utils/setting';
+import { getLinkPreviewInfo } from '../../service/feeds';
+import { getMyProfile } from '../../service/profile';
+import { getSpecificCache } from '../../utils/cache';
+import { getUrl, isContainUrl } from '../../utils/Utils';
+import { getUserId } from '../../utils/users';
+import {
+    requestCameraPermission,
+    requestExternalStoragePermission
+} from '../../utils/permission';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -116,13 +111,13 @@ const CreatePost = () => {
     const [listUsersForTagging, setListUsersForTagging] = React.useState([]);
     const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
     const [locationId, setLocationId] = React.useState('');
-    const [positionEndCursor, setPositionEndCursor] = React.useState(0);
     const [hastagPosition, setHastagPosition] = React.useState(0);
     const [positionKeyboard, setPositionKeyboard] = React.useState('never')
     const [taggingUsers, setTaggingUsers] = React.useState([])
-    const [textContent, handleStateHastag, handleStateMention, setHashtags] = useHastagMention('');
+    const { setHashtags } = useHastagMention('');
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
+    const [allTaggingUser, setAllTaggingUser] = React.useState([])
 
 
     const [selectedTime, setSelectedTime] = React.useState({
@@ -361,7 +356,7 @@ const CreatePost = () => {
                 }
             });
         } else {
-            Alert.alert('Permission denied', 'Allow Better Social to access photos and media on your device ?', [{text: 'Open Settings', onPress: () => openSettings().then(() => sheetMediaRef.current.close())}, {text: 'Close'}])
+            Alert.alert('Permission denied', 'Allow Better Social to access photos and media on your device ?', [{ text: 'Open Settings', onPress: () => openSettings().then(() => sheetMediaRef.current.close()) }, { text: 'Close' }])
         }
     };
 
@@ -439,7 +434,7 @@ const CreatePost = () => {
             sheetBackRef.current.open();
             return true;
         }
-        
+
         navigation.goBack();
         return true;
     };
@@ -448,8 +443,21 @@ const CreatePost = () => {
         setListTopic(v);
         setHashtags(v)
         setListTopicChat(topicChat)
+        console.log(v)
+        console.log(topicChat)
+        // setMessage((prev) => {
+        //     handleStateHastag(`prev ${topic}`)
+        // })
         sheetTopicRef.current.close();
     };
+
+    const checkTaggingUser = () => {
+        const mapTagUser = taggingUsers.map((data) => {
+            const findData = allTaggingUser.find((dataUser) => dataUser.username === data)
+            return findData.user_id
+        })
+        return mapTagUser
+    }
 
     const postTopic = async () => {
         try {
@@ -475,6 +483,7 @@ const CreatePost = () => {
                 location_id: locationId,
                 duration_feed: postExpired[expiredSelect].value,
                 images_url: dataImage,
+                tagUsers: checkTaggingUser()
             };
 
             setLocationId(JSON.stringify(geoSelect));
@@ -499,9 +508,9 @@ const CreatePost = () => {
             await createPost(data);
             handleTopicChat()
             showMessage({
-                    message: StringConstant.createPostDone,
-                    type: 'success',
-                });
+                message: StringConstant.createPostDone,
+                type: 'success',
+            });
         } catch (error) {
             console.log(error)
         }
@@ -542,7 +551,9 @@ const CreatePost = () => {
 
     const handleTopicChat = async () => {
         const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png'
-        listTopic.forEach(async (topic) => {
+        const allTopics = listTopic
+
+        allTopics.forEach(async (topic) => {
             const channel = await client.client.channel('topics', `topic_${topic}`, { name: `#${topic}`, members: [user.myProfile.user_id], channel_type: 3, channel_image: defaultImage, channelImage: defaultImage, image: defaultImage })
             await channel.create()
             await channel.addMembers([user.myProfile.user_id])
@@ -601,7 +612,7 @@ const CreatePost = () => {
 
     const sendPollPost = async () => {
         // setLoading(true);
-
+        console.log(checkTaggingUser(), 'maman')
         const data = {
             message,
             topics: ['poll'],
@@ -616,6 +627,7 @@ const CreatePost = () => {
             polls: getReducedPoll(),
             pollsduration: selectedTime,
             multiplechoice: isPollMultipleChoice,
+            tagUsers: checkTaggingUser()
         };
 
         setLocationId(JSON.stringify(geoSelect));
@@ -624,14 +636,14 @@ const CreatePost = () => {
         navigation.navigate('HomeTabs', {
             screen: 'Feed',
             params: {
-                    refresh: true,
+                refresh: true,
             },
         });
         try {
             await createPollPost(data);
             showMessage({
-                    message: StringConstant.createPostDone,
-                    type: 'success',
+                message: StringConstant.createPostDone,
+                type: 'success',
             });
         } catch (e) {
             console.log(e)
@@ -666,28 +678,6 @@ const CreatePost = () => {
         return <View />;
     };
 
-
-
-    const searchTopic = async (name) => {
-        if (!isEmptyOrSpaces(name)) {
-            getTopics(name)
-                .then(v => {
-                    setTopicSearch(v.data);
-                })
-                .catch(err => console.log(err));
-        }
-    }
-
-    const searchUsersForTagging = async (name) => {
-        if (!isEmptyOrSpaces(name)) {
-            getUserForTagging(name)
-                .then(v => {
-                    setListUsersForTagging(v);
-                })
-                .catch(err => console.log(err));
-        }
-    }
-
     // eslint-disable-next-line no-extend-native, func-names
     String.prototype.insert = function (index, string) {
         if (index > 0) {
@@ -702,10 +692,6 @@ const CreatePost = () => {
         sheetTopicRef.current.open()
     }
 
-    const resetTopicSearch = () => setTopicSearch([]);
-
-    const resetListUsersForTagging = () => setListUsersForTagging([]);
-
     const reformatStringByPosition = (str = '', strFromState = '') => {
         const topicItem = convertString(str, " ", "");
         const topicItemWithSpace = topicItem.concat(' ');
@@ -718,9 +704,9 @@ const CreatePost = () => {
     }
 
     const handleTagUser = debounce(() => {
-         const regex = /(^|\W)(@[a-z\d][\w-]*)/ig
+        const regex = /(^|\W)(@[a-z\d][\w-]*)/ig
         const findRegex = message.match(regex)
-        if(findRegex) {
+        if (findRegex) {
             const newMapRegex = findRegex.map((tagUser) => {
                 const newTagUser = tagUser.replace(/\s/g, '').replace('@', '')
                 return newTagUser
@@ -764,163 +750,17 @@ const CreatePost = () => {
                         }}
                     />
                     <Gap style={styles.height(8)} />
-                    <TextInput
-                        onSelectionChange={(e) => {
-                            setPositionEndCursor(e.nativeEvent.selection.end);
-                        }}
-                        onChange={() => {
-                        }}
-                        onChangeText={(v) => {
-                            if(listTopic.length >= 5) {
-                                setMessage(v)
-                                return
-                            } 
-
-                            if (v.includes('#')) {
-                                const position = v.lastIndexOf('#', positionEndCursor);
-                                const spaceStatus = v.includes(' ', position);
-                                const detectEnter = v.includes('\n', position);
-                                const textSeacrh = v.substring(position + 1);
-                                setHastagPosition(position);
-                                /**
-                                 * cari posisi kursor dimana
-                                 * cek apakah posisi sebelum kursor # atau bukan
-                                 * ambil semua value setelah posisi #
-                                 */
-                                if (!spaceStatus) {
-                                    if (!detectEnter) {
-                                        setPositionTopicSearch(position);
-                                        searchTopic(textSeacrh);
-                                        setPositionKeyboard('always')
-                                        console.log('detector enter');
-                                    }
-                                    else {
-                                        resetTopicSearch();
-                                        setPositionKeyboard('never')
-                                        console.log('detectEnter', 'else detector enter');
-                                    }
-                                }
-                                else {
-                                    resetTopicSearch();
-                                    setPositionKeyboard('never')
-                                    const removeCharacterAfterSpace = textSeacrh.split(' ')[0];
-                                    console.log('with space', textSeacrh);
-                                    console.log('after space', removeCharacterAfterSpace);
-                                    insertNewTopicIntoTopics(removeCharacterAfterSpace, listTopic, setListTopic, setHashtags);
-                                }
-
-                                handleStateHastag(v);
-                            } else if (v.includes('@')) {
-                                const position = v.lastIndexOf('@', positionEndCursor);
-                                const spaceStatus = v.includes(' ', position);
-                                const detectEnter = v.includes('\n', position);
-                                const textSeacrh = v.substring(position + 1);
-                                setHastagPosition(position);
-                                if (!spaceStatus) {
-                                    if (!detectEnter) {
-                                        setPositionTopicSearch(position);
-                                        searchUsersForTagging(textSeacrh);
-                                        setPositionKeyboard('always')
-                                    }
-                                    else {
-                                        resetListUsersForTagging();
-                                        setPositionKeyboard('never')
-                                    }
-                                }
-                                else {
-                                    resetListUsersForTagging();
-                                    setPositionKeyboard('never')
-                                }
-                                handleStateMention(v);
-                            }
-                            else {
-                                resetTopicSearch();
-                                resetListUsersForTagging();
-                                setPositionKeyboard('never')
-                            }
-                            // setPositionKeyboard('never')
-                            // handleHastag(v, setFormatHastag);
-                            setMessage(v);
-                        }}
-                        // value={message}
-                        multiline={true}
-                        style={styles.input}
-                        textAlignVertical="top"
-                        placeholder={
-                            'What’s on your mind?\nRemember to be respectful .\nDownvotes  & Blocks harm all your posts’ visibility.'
-                        }
-                        autoCapitalize={'none'}
-
-                    >
-                        <Text>{textContent}</Text>
-                    </TextInput>
-
-                    {
-                        topicSearch.length > 0 && (
-                            <Card style={{ marginTop: -16 }}>
-                                {topicSearch.map((item, index) => <TouchableNativeFeedback key={`topicSearch-${index}`} onPress={() => {
-                                    const topicItem = convertString(item.name, " ", "");
-                                    const newMessage = reformatStringByPosition(item.name, message);
-                                    if (listTopic.indexOf(topicItem) === -1) {
-                                        const newArr = [...listTopic, topicItem];
-                                        const newChatTopic = [...listTopicChat, `${`topic_${topicItem}`}`]
-                                        setListTopic(newArr);
-                                        setHashtags(newArr)
-                                        setListTopicChat(newChatTopic)
-                                    }
-                                    setPositionKeyboard('never')
-                                    // handleHastag(newMessage, setFormatHastag)
-                                    handleStateHastag(newMessage);
-                                    setMessage(newMessage);
-                                    setTopicSearch([]);
-                                }}>
-                                    <View style={{ marginBottom: 5 }} >
-                                        <Text style={{
-                                            color: '#000000',
-                                            fontFamily: fonts.inter[500],
-                                            fontWeight: '500',
-                                            fontSize: 12,
-                                            lineHeight: 18
-                                        }}>#{convertString(item.name, " ", "")}</Text>
-                                        {index !== topicSearch.length - 1 && (
-                                            <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
-                                        )}
-                                    </View>
-                                </TouchableNativeFeedback>
-                                )}
-                            </Card>
-                        )
-                    }
-
-                    {
-                        listUsersForTagging.length > 0 && (
-                            <Card style={{ marginTop: -16 }}>
-                                {
-                                    listUsersForTagging.map((item, index) => <TouchableNativeFeedback key={`userTagging-${index}`} onPress={() => {
-                                        const newMessage = reformatStringByPosition(item.username, message);
-                                        setPositionKeyboard('never')
-                                        handleStateMention(newMessage);
-                                        setMessage(newMessage);
-                                        setListUsersForTagging([]);
-                                    }}>
-                                        <View style={{ marginBottom: 5 }} >
-                                            <Text style={{
-                                                color: '#000000',
-                                                fontFamily: fonts.inter[500],
-                                                fontWeight: '500',
-                                                fontSize: 12,
-                                                lineHeight: 18
-                                            }}>@{item.username}</Text>
-                                            {index !== topicSearch.length - 1 && (
-                                                <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
-                                            )}
-                                        </View>
-                                    </TouchableNativeFeedback>)
-                                }
-                            </Card>
-                        )
-                    }
-
+                    <CreatePostInput
+                        setMessage={setMessage}
+                        setPositionKeyboard={setPositionKeyboard}
+                        setTopics={setListTopic}
+                        topics={listTopic}
+                        message={message}
+                        setTopicChats={setListTopicChat}
+                        topicChats={listTopicChat}
+                        allTaggedUser={allTaggingUser}
+                        setAllTaggedUser={setAllTaggingUser}
+                    />
 
                     {isLinkPreviewShown && (
                         <ContentLink
