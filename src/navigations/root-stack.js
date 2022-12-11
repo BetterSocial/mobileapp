@@ -63,15 +63,17 @@ import { fonts } from '../utils/fonts';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 import { getAccessToken } from '../utils/token';
 import HomeBottomTabs from './HomeBottomTabs';
+import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
 
 const RootStack = createStackNavigator();
 
 export const RootNavigator = () => {
-  let initialStartup = useRecoilValue(InitialStartupAtom);
+  const initialStartup = useRecoilValue(InitialStartupAtom);
   const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const setLocalChannelData = useSetRecoilState(channelListLocalAtom);
   const [clientState] = React.useContext(Context).client;
   const { client } = clientState;
+  const perf = React.useRef(null);
 
   const create = useClientGetstream();
 
@@ -83,15 +85,28 @@ export const RootNavigator = () => {
   const doVerifyGetstreamToken = async () => {
     try {
       const response = await verifyTokenGetstream();
-      if (!response) return SplashScreen.hide()
+      if (!response) {
+        SplashScreen.hide();
+
+        if (perf.current) {
+          perf.current.stop();
+        }
+      }
     } catch (e) {
       SplashScreen.hide();
+
+      if (perf.current) {
+        perf.current.stop();
+      }
     }
     doGetAccessToken()
   }
 
 
   React.useEffect(() => {
+    traceMetricScreen('loading_splashscreen').then(fnCallback => {
+      perf.current = fnCallback;
+    });
     LogBox.ignoreAllLogs()
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
@@ -119,6 +134,10 @@ export const RootNavigator = () => {
     if (clientState?.client) {
       setTimeout(() => {
         SplashScreen.hide();
+
+        if (perf.current) {
+          perf.current.stop();
+        }
       }, 1500)
     }
   }, [clientState]);

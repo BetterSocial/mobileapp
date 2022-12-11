@@ -1,7 +1,9 @@
+/* eslint-disable no-param-reassign */
 import axios from 'axios';
 import configEnv from 'react-native-config';
 
 import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from '../utils/token';
+import { trackingHttpMetric } from '../libraries/performance/firebasePerformance';
 
 const baseURL = configEnv.BASE_URL
 

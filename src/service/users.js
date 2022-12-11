@@ -1,8 +1,6 @@
 import crashlytics from '@react-native-firebase/crashlytics';
-import { BASE_URL } from '@env';
-
 import api from './config';
-import { getRefreshToken, setAccessToken, setRefreshToken } from '../utils/token';
+import { getRefreshToken } from '../utils/token';
 
 export const verifyUser = async (userId) => {
   try {
@@ -12,6 +10,7 @@ export const verifyUser = async (userId) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
+    return error.response.data;
   }
 };
 
@@ -20,10 +19,11 @@ export const demoVerifyUser = async (userId) => {
     const resApi = await api.post('/users/demo-verify-user', {
       user_id: userId,
     });
+
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -38,7 +38,6 @@ export const searchChatUsers = async (query) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    console.log(error);
     return false
   }
 };
@@ -52,7 +51,7 @@ export const verifyToken = async (token) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    console.log(error);
+    return error.response.data;
   }
 };
 export const verifyUsername = async (username) => {
@@ -63,7 +62,7 @@ export const verifyUsername = async (username) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    console.log(error);
+    return error.response.data;
   }
 };
 export const registerUser = async (data) => {
@@ -122,7 +121,7 @@ export const userPopulate = async () => {
     return resApi.data.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -132,6 +131,7 @@ export const getBlockedUserList = async () => {
     return getBlockList.data;
   } catch (e) {
     crashlytics().recordError(new Error(e));
+    return e.response.data;
   }
 };
 
@@ -140,8 +140,6 @@ export const deleteAccount = async () => {
     const result = await api.post('/users/delete');
     return result.data;
   } catch (e) {
-    console.log('e')
-    console.log(e)
     crashlytics().recordError(new Error(e));
     return null
   }
