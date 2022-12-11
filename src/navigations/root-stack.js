@@ -8,8 +8,8 @@ import {
   StyleSheet,
   View
 } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState, } from 'recoil';
+
 import { useLocalChannelsFirst } from 'stream-chat-react-native';
 
 import Header from '../components/Header';
@@ -70,7 +70,7 @@ import { traceMetricScreen } from '../libraries/performance/firebasePerformance'
 const RootStack = createStackNavigator();
 
 export const RootNavigator = () => {
-  let initialStartup = useRecoilValue(InitialStartupAtom);
+  const initialStartup = useRecoilValue(InitialStartupAtom);
   const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const setLocalChannelData = useSetRecoilState(channelListLocalAtom);
   const [clientState] = React.useContext(Context).client;
