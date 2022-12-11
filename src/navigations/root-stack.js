@@ -65,11 +65,12 @@ import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 import { getAccessToken } from '../utils/token';
 import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
 import HomeBottomTabs from './HomeBottomTabs';
+import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
 
 const RootStack = createStackNavigator();
 
 export const RootNavigator = () => {
-  let initialStartup = useRecoilValue(InitialStartupAtom);
+  const initialStartup = useRecoilValue(InitialStartupAtom);
   const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const setLocalChannelData = useSetRecoilState(channelListLocalAtom);
   const [clientState] = React.useContext(Context).client;
