@@ -12,8 +12,7 @@ import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 
 const Header = ({ title, onPress, titleStyle = {}, containerStyle = {}, isCenter }) => {
-  const renderHeader = () => {
-    return (
+  const renderHeader = () => (
       <View style={styles.buttonBackContainerIos} >
         <View style={styles.content}>
         <TouchableOpacity style={styles.backPadding}  onPress={onPress}>
@@ -26,13 +25,11 @@ const Header = ({ title, onPress, titleStyle = {}, containerStyle = {}, isCenter
         </View>
       </View>
     );
-  };
 
 
   return (
     <View style={{ ...styles.container, ...containerStyle }}>
       {renderHeader()}
-      {/* {renderText()} */}
       <View style={styles.gap} />
     </View>
   );
