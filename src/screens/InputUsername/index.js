@@ -150,9 +150,13 @@ const ChooseUsername = () => {
   };
 
   const formatUsernameString = () => {
-    let value = username.toLowerCase().replace(/[^a-z0-9-_]/g, '');
-    value = setCapitalFirstLetter(value);
-    return value
+    if(username && typeof username === 'string') {
+      let value = username.toLowerCase().replace(/[^a-z0-9-_]/g, '');
+      value = setCapitalFirstLetter(value);
+      return value
+    }
+    return ''
+   
   }
 
   const onTextBlur = () => {
