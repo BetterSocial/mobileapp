@@ -1,5 +1,5 @@
 import React from 'react'
-import {render, cleanup, fireEvent} from '@testing-library/react-native'
+import {render, cleanup} from '@testing-library/react-native'
 import PDP from '../../../src/screens/PostPageDetail'
 import Store from '../../../src/context/Store'
 

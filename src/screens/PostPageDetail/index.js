@@ -26,7 +26,7 @@ const FeedsPostDetail = (props) => {
                 feedId={feedId}
                 dispatch={dispatch} 
                 setFeedByIndexProps={setFeedByIndex}
-                navigateToReplyView={(data, updateParent, findCommentAndUpdate, dataFeed, updateVoteLatestChildren) => navigateToReplyView(data, updateParent, findCommentAndUpdate, dataFeed, updateVoteLatestChildren)}
+                navigateToReplyView={navigateToReplyView}
                 page={props.route.name}
                 />
         </View>

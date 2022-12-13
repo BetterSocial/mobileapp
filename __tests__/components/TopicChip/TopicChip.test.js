@@ -19,8 +19,8 @@ describe('It should be run correctly', () => {
     afterEach(cleanup)
 
     it('should match snapshot', () => {
-        expect(toJSON).toMatchSnapshot()
         const {toJSON} = render(<TopicChip topics={topics} />)
+        expect(toJSON).toMatchSnapshot()
     })
 
     it('onPress chip should open navigation', () => {

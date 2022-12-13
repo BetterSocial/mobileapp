@@ -10,7 +10,7 @@ const useMainPdp = (props) => {
     const {feedId, refreshCache} = props.route.params
     const navigation = useNavigation()
     const [time, setTime] = React.useState(new Date().getTime())
-    const { feeds, timer } = feedsContext
+    const { timer } = feedsContext
         const navigateToReplyView = (data, updateParent, findCommentAndUpdate, dataFeed, updateVoteLatestChildren) => {
         const currentTime = new Date()
         const feedDiffTime = currentTime.getTime() - timer.getTime()
