@@ -62,6 +62,7 @@ const SignIn = () => {
       screen_class: 'SignIn',
       screen_name: 'SignIn',
     });
+    setDataHumenId(null, dispatch);
   });
 
   React.useEffect(() => {
