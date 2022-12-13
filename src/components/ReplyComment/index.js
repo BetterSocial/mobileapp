@@ -98,7 +98,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
     try {
       if (textComment.trim() !== '') {
-        const data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif, dataFeed.actor.id);
+        const data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif, dataFeed?.actor?.id);
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
           const newComment = [...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }]

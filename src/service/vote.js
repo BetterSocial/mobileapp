@@ -10,9 +10,8 @@ export const upVote = async (data) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    console.log(e);
     SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
-    return error.response.data;
+    return error
   }
 };
 
@@ -22,9 +21,8 @@ export const downVote = async (data) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    console.log(e);
     SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
-    return error.response.data;
+    return error
   }
 };
 export const upVoteDomain = async (data) => {
@@ -34,7 +32,7 @@ export const upVoteDomain = async (data) => {
   } catch (error) {
     crashlytics().recordError(new Error(error));
     SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
-    return error.response.data;
+    return error
   }
 };
 
@@ -45,7 +43,7 @@ export const downVoteDomain = async (data) => {
   } catch (error) {
     crashlytics().recordError(new Error(error));
     SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
-    return error.response.data;
+    return error
   }
 };
 export const voteComment = async (data) => {
@@ -55,7 +53,7 @@ export const voteComment = async (data) => {
   } catch (error) {
     console.log('error ', error);
     crashlytics().recordError(new Error(error));
-    return error.response.data;
+    return error
   }
 };
 export const iVoteComment = async (id) => {
@@ -63,8 +61,7 @@ export const iVoteComment = async (id) => {
     const resApi = await api.get(`/activity/i_vote_comment?id=${id}`);
     return resApi.data;
   } catch (error) {
-    console.log('error ', error);
     crashlytics().recordError(new Error(error));
-    return error.response.data;
+    return error
   }
 };
