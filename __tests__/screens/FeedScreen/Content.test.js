@@ -1,7 +1,7 @@
 import React from 'react'
-import {render, cleanup, fireEvent} from '@testing-library/react-native'
+import {render, cleanup} from '@testing-library/react-native'
 
-import Content, {styles} from '../../../src/screens/FeedScreen/Content'
+import Content from '../../../src/screens/FeedScreen/Content'
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),

@@ -3,7 +3,6 @@ import { render, cleanup } from '@testing-library/react-native';
 import PDP from '../../../src/components/PostPageDetail';
 import Store from '../../../src/context/Store';
 
-
 jest.mock('react-native-activity-feed/node_modules/react-native-image-crop-picker', () => ({
     openPicker: jest.fn()
 }))
@@ -13,6 +12,7 @@ jest.mock('../../../src/hooks/useAfterInteractions', () => ({
         transitionRef: {current: {animateNextTransition: jest.fn()}}, interactionsComplete: true
     })
 }))
+
 
 const mockedGoBack = jest.fn()
 
@@ -45,12 +45,18 @@ describe('PDP component should run correctly', () => {
             location: "Everywhere",
             message: "#dia #dian #diam ",
             object: "{\"feed_group\":\"main_feed\",\"message\":\"#dia #dian #diam \",\"profile_pic_path\":\"https://res.cloudinary.com/hpjivutj2/image/upload/v1660620884/nrfnzuhcrozz9v34ngv3.jpg\",\"real_name\":null,\"topics\":[\"dia\",\"dian\"],\"username\":\"Fajarism\",\"verb\":\"tweet\"}",
-            origin: null
+            origin: null, 
+            actor: {
+               created_at: "2022-06-10T13:11:53.385703Z",
+                id: "c6c91b04-795c-404e-b012-ea28813a2007",
+                updated_at: "2022-07-29T12:54:03.879150Z"
+            }
             }
         ],
         navigateToReplyView: jest.fn(),
         page: "PostDetailPage",
-        setFeedByIndexProps: jest.fn()
+        setFeedByIndexProps: jest.fn(),
+        route: {}
     }
 
     afterEach(cleanup)
