@@ -203,7 +203,7 @@ const ProfileScreen = ({ route }) => {
       id: 'btn_share',
     });
     try {
-      const result = await Share.share({
+      await Share.share({
         message: shareUserLink(dataMain.username),
       });
     } catch (error) {
@@ -561,7 +561,7 @@ const ProfileScreen = ({ route }) => {
           refreshing={loading}
           onScroll={handleScroll}
           ListFooterComponent={<ActivityIndicator />}
-          onEndReach={__handleOnEndReached}
+          onEndReach={handleOnEndReached}
           initialNumToRender={2}
           maxToRenderPerBatch={2}
           updateCellsBatchingPeriod={10}
