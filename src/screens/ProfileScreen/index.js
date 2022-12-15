@@ -109,6 +109,7 @@ const ProfileScreen = ({ route }) => {
 
   const { feeds } = myProfileFeed;
 
+  // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -136,8 +137,11 @@ const ProfileScreen = ({ route }) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
-      // getMyFeeds();
+      if (__DEV__) {
+        console.log(e);
+      }
     });
+
     if (interactionsComplete) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
       getAccessToken().then((val) => {
@@ -185,7 +189,7 @@ const ProfileScreen = ({ route }) => {
     if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch)
     else {
       const clonedFeeds = [...feeds]
-      clonedFeeds.splice(feeds.length - 1, 0, ...data)
+      clonedFeeds.splice(feeds.length - 1, 0)
       setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
     setLoading(false)
@@ -198,17 +202,11 @@ const ProfileScreen = ({ route }) => {
       id: 'btn_share',
     });
     try {
-      const result = await Share.share({
+      await Share.share({
         message: shareUserLink(dataMain.username),
       });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-        } else {
-        }
-      } else if (result.action === Share.dismissedAction) {
-      }
     } catch (error) {
-      alert(error.message);
+      Alert.alert(error.message);
     }
   };
 
@@ -219,10 +217,10 @@ const ProfileScreen = ({ route }) => {
     navigation.navigate('Settings');
   };
 
-  const goToFollowings = (user_id, username) => {
+  const goToFollowings = (userId, username) => {
     navigation.navigate('Followings', {
       screen: 'TabFollowing',
-      params: { user_id, username },
+      params: { user_id: userId, username },
     });
   };
 
@@ -488,9 +486,9 @@ const ProfileScreen = ({ route }) => {
     }
   };
 
-  const onPressBlock = (value) => {
-    refBlockComponet.current.openBlockComponent(value);
-  }
+  // const onPressBlock = (value) => {
+  //   refBlockComponet.current.openBlockComponent(value);
+  // }
 
   const handleOnEndReached = () => {
     getMyFeeds(postOffset)
@@ -567,7 +565,7 @@ const ProfileScreen = ({ route }) => {
           refreshing={loading}
           onScroll={handleScroll}
           ListFooterComponent={<ActivityIndicator />}
-          onEndReach={__handleOnEndReached}
+          onEndReach={handleOnEndReached}
           initialNumToRender={2}
           maxToRenderPerBatch={2}
           updateCellsBatchingPeriod={10}
@@ -592,7 +590,6 @@ const ProfileScreen = ({ route }) => {
                 onPressDomain={onPressDomain}
                 onPress={() => onPress(item, index)}
                 onPressComment={() => onPressComment(item, item.id)}
-                onPressBlock={() => onPressBlock(item)}
                 onPressUpvote={(post) => setUpVote(post, index)}
                 selfUserId={yourselfId}
                 onHeaderOptionClicked={onHeaderOptionClicked}
