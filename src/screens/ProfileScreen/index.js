@@ -3,7 +3,6 @@ import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {
   ActivityIndicator,
-  Alert,
   Dimensions,
   LogBox,
   Share,
@@ -12,6 +11,7 @@ import {
   Text,
   TouchableNativeFeedback,
   View,
+  Alert
 } from 'react-native';
 import { debounce } from 'lodash'
 import { showMessage } from 'react-native-flash-message';
@@ -72,33 +72,30 @@ const ProfileScreen = ({ route }) => {
   const bottomSheetProfilePictureRef = React.useRef();
   const postRef = React.useRef(null);
   const flatListScrollRef = React.useRef(null);
-  const [myProfile, dispatchProfile] = React.useContext(Context).profile;
-  const [token_JWT, setTokenJwt] = React.useState('');
-  const [users, dispatch] = React.useContext(Context).users;
+  const [, dispatchProfile] = React.useContext(Context).profile;
+  const [, setTokenJwt] = React.useState('');
+  const [, dispatch] = React.useContext(Context).users;
   const [myProfileFeed, myProfileDispatch] =
     React.useContext(Context).myProfileFeed;
   const [dataMain, setDataMain] = React.useState({});
   const [dataMainBio, setDataMainBio] = React.useState("");
   const [errorBio, setErrorBio] = React.useState('');
   const [isChangeRealName, setIsChangeRealName] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
-  const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [userId, setUserId] = React.useState(null);
+  const [, setUserId] = React.useState(null);
   const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] =
     React.useState(false);
   const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
     React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
-  const [image, setImage] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
   const [loadingContainer, setLoadingContainer] = React.useState(true)
-  const [yourselfId, setYourselfId] = React.useState('');
+  const [yourselfId, ] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
@@ -108,6 +105,7 @@ const ProfileScreen = ({ route }) => {
   const LIMIT_PROFILE_FEED = 1
   const { feeds } = myProfileFeed;
 
+  // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -135,8 +133,11 @@ const ProfileScreen = ({ route }) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
-      // getMyFeeds();
+      if (__DEV__) {
+        console.log(e);
+      }
     });
+
     if (interactionsComplete) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
       getAccessToken().then((val) => {
@@ -170,7 +171,7 @@ const ProfileScreen = ({ route }) => {
 
   const saveProfileState = (result) => {
     if (result && typeof result === 'object') {
-      
+
       setDataMain(result);
       setDataMainBio(result.bio)
       setMyProfileAction(result, dispatchProfile)
@@ -181,11 +182,10 @@ const ProfileScreen = ({ route }) => {
 
   const getMyFeeds = async (offset = 0, limit = 10) => {
     const result = await getSelfFeedsInProfile(offset, limit);
-    console.log(result, 'nakal')
-    if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch)
+    if (offset === 0) setMyProfileFeed([...result.data, { dummy: true }], myProfileDispatch)
     else {
-      const clonedFeeds = [...feeds, ...result.data]
-      // clonedFeeds.splice(feeds.length - 1, 0, ...data)
+      const clonedFeeds = [...feeds]
+      clonedFeeds.splice(feeds.length - 1, 0)
       setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
     setLoading(false)
@@ -202,7 +202,7 @@ const ProfileScreen = ({ route }) => {
         message: shareUserLink(dataMain.username),
       });
     } catch (error) {
-      Alert.alert('Somethig wrong!', error.message)
+      Alert.alert(error.message);
     }
   };
 
@@ -213,10 +213,10 @@ const ProfileScreen = ({ route }) => {
     navigation.navigate('Settings');
   };
 
-  const goToFollowings = (user_id, username) => {
+  const goToFollowings = (userId, username) => {
     navigation.navigate('Followings', {
       screen: 'TabFollowing',
-      params: { user_id, username },
+      params: { user_id: userId, username },
     });
   };
 
@@ -482,14 +482,7 @@ const ProfileScreen = ({ route }) => {
     }
   };
 
-  const onPressBlock = (value) => {
-    refBlockComponet.current.openBlockComponent(value);
-  }
-
-  const handleOnEndReached = () => {
-    console.log('lasa',postOffset)
-    getMyFeeds(postOffset)
-  }
+  const handleOnEndReached = () => getMyFeeds(postOffset)
 
   const handleRefresh = () => {
     setLoading(true)
@@ -557,7 +550,6 @@ const ProfileScreen = ({ route }) => {
                 onPressDomain={onPressDomain}
                 onPress={() => onPress(item, index)}
                 onPressComment={() => onPressComment(item, item.id)}
-                onPressBlock={() => onPressBlock(item)}
                 onPressUpvote={(post) => setUpVote(post, index)}
                 selfUserId={yourselfId}
                 onPressDownVote={(post) =>
@@ -618,8 +610,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 20,
   },
-  dummyItem: (height) => ({
-      height,
+  dummyItem: (heightItem) => ({
+      height: heightItem,
       backgroundColor: colors.white
     }),
   postText: {

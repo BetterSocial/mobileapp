@@ -604,7 +604,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                   }
                 }
               >
-                Jan 1, 2006
+                Jan 6, 0001
               </Text>
               <View
                 style={

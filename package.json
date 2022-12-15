@@ -15,7 +15,7 @@
     "build:bundle-android-prod": "cd android && ENVFILE=.env.production ./gradlew bundleprodrelease",
     "build:bundle-android-prod-update-stream": "npm run update-env-prod && npm run update-stream && cd android && ./gradlew clean && ENVFILE=.env.production ./gradlew bundleprodrelease",
     "ios:dev-debug": "npm run update-env-dev && react-native run-ios --scheme 'BetterSocialDev' --simulator='iPhone 13'",
-    "start": "react-native start",
+    "start": "npm run update-env-dev &&react-native start",
     "test": "jest --verbose __tests__ src",
     "testCoverage": "jest --verbose --coverage --collectCoverageFrom=\"./src/**\" __tests__ src",
     "test:update-snapshot": "jest __tests__ src -u",
@@ -45,6 +45,7 @@
     "@react-native-firebase/crashlytics": "11.2.0",
     "@react-native-firebase/dynamic-links": "11.2.0",
     "@react-native-firebase/messaging": "11.3.1",
+    "@react-native-firebase/perf": "11.3.1",
     "@react-native-firebase/remote-config": "11.1.2",
     "@react-native-picker/picker": "^2.4.7",
     "@react-navigation/bottom-tabs": "^5.11.15",
@@ -110,7 +111,7 @@
     "react-native-vector-icons": "^8.1.0",
     "react-native-version-number": "^0.3.6",
     "react-native-walkthrough-tooltip": "^1.2.0",
-    "react-native-webview": "^11.4.0",
+    "react-native-webview": "^11.26.0",
     "react-string-replace": "^1.1.0",
     "recoil": "^0.5.2",
     "recyclerlistview": "^3.0.5",
@@ -166,7 +167,7 @@
   },
   "resolutions": {
     "stream-chat": "github:kevinnath1007/stream-chat-js",
-    "stream-chat-react-native-core": "github:agit26milan/stream-chat-react-native-core#feat/async-storage"
+    "stream-chat-react-native-core": "github:agit26milan/stream-chat-react-native-core"
   },
   "jest": {
     "preset": "react-native",
