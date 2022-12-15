@@ -1,17 +1,15 @@
 import * as React from 'react';
-import {ActivityIndicator, Modal, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 
 import {COLORS} from '../../utils/theme';
 
-const LoadingWithoutModal = () => {
-  return (
+const LoadingWithoutModal = () => (
     <View style={styles.container}>
       <View style={styles.content}>
         <ActivityIndicator size="large" color={COLORS.holyTosca} />
       </View>
     </View>
   );
-};
 
 export default LoadingWithoutModal;
 

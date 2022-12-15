@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -26,7 +25,7 @@ const MenuPostItem = ({ icon, label, labelStyle, onPress, topic, listTopic }) =>
     );
   }
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity testID='notopic' style={styles.container} onPress={onPress}>
       <View style={styles.content}>
         {icon}
         <Text style={[styles.text, labelStyle]}>{label}</Text>
