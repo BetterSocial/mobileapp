@@ -23,7 +23,7 @@ const ImageLayouter = ({ images = [], onimageclick }) => {
     return (
       <View style={styles.twoPhotoLayout}>
         {images.map((item, index) => (
-            <View key={index} style={styles.twoPhotoItemLayout}>
+            <View key={item} style={styles.twoPhotoItemLayout}>
               <Pressable onPress={pressableFn(index)}>
                 <Image
                   style={styles.imagelayout2}
@@ -34,7 +34,8 @@ const ImageLayouter = ({ images = [], onimageclick }) => {
           ))}
       </View>
     );
-  } if (images.length === 3) {
+  }
+  if (images.length === 3) {
     return (
       <View style={styles.threePhotoLayout}>
         <View style={styles.threePhotoTopLayout}>
@@ -107,7 +108,8 @@ const ImageLayouter = ({ images = [], onimageclick }) => {
         </View>
       </View>
     );
-  } if (images.length > 4) {
+  }
+  if (images.length > 4) {
     return (
       <View style={styles.threePhotoLayout}>
         <View style={styles.threePhotoTopLayout}>

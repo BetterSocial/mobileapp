@@ -482,10 +482,6 @@ const ProfileScreen = ({ route }) => {
     }
   };
 
-  // const onPressBlock = (value) => {
-  //   refBlockComponet.current.openBlockComponent(value);
-  // }
-
   const handleOnEndReached = () => getMyFeeds(postOffset)
 
   const handleRefresh = () => {
