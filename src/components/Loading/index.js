@@ -2,8 +2,7 @@ import * as React from 'react';
 import {StyleSheet, View, Modal, ActivityIndicator} from 'react-native';
 import {COLORS} from '../../utils/theme';
 
-const Loading = ({visible}) => {
-  return (
+const Loading = ({visible}) => (
     <Modal transparent visible={visible}>
       <View style={styles.container}>
         <View style={styles.content}>
@@ -12,7 +11,6 @@ const Loading = ({visible}) => {
       </View>
     </Modal>
   );
-};
 
 export default Loading;
 

@@ -1,4 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks'
+// eslint-disable-next-line import/no-named-as-default
 import usePollOptionMultiple from '../../src/components/PollOptionsMultipleChoice/hooks/usePollOptionMultiple'
 
 

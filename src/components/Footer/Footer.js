@@ -35,30 +35,30 @@ const Footer = ({
   const handleBlockUi = () => {
     if (isSelf) {
       return null;
-    } else {
+    } 
       if (blockStatus && blockStatus.blocker) {
         return null;
-      } else {
+      } 
         return (
-          <TouchableOpacity style={styles.btn} onPress={onPressBlock}>
+          <TouchableOpacity testID='onPressBlock' style={styles.btn} onPress={onPressBlock}>
             <View style={styles.btnBlock}>
               <MemoIc_block_inactive height={22} width={22} />
             </View>
           </TouchableOpacity>
         );
-      }
-    }
+      
+    
   };
 
-  const __renderShowScoreUI = () => {
-    if(false && showScoreButton) {
-      return <TouchableOpacity style={styles.btn} onPress={onPressScore}>
-        <View style={styles.btnComment}>
-          <MemoIcCreatePoll height={24} width={25}/>
-        </View>
-      </TouchableOpacity>
-    } else return <></>
-  }
+  // const __renderShowScoreUI = () => {
+  //   if(false && showScoreButton) {
+  //     return <TouchableOpacity style={styles.btn} onPress={onPressScore}>
+  //       <View style={styles.btnComment}>
+  //         <MemoIcCreatePoll height={24} width={25}/>
+  //       </View>
+  //     </TouchableOpacity>
+  //   } return <></>
+  // }
 
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
@@ -93,10 +93,11 @@ const Footer = ({
           </View>
         </TouchableOpacity>
       )}
-      {__renderShowScoreUI()}
+      {/* {__renderShowScoreUI()} */}
       <View style={styles.rightGroupContainer}>
         {handleBlockUi()}
         <TouchableOpacity
+          testID='downVoteBtn'
           disabled={loadingVote}
           style={styles.btn}
           onPress={onPressDownVote}>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native"
 import { useNavigation } from '@react-navigation/native';
 
 import { colors } from "../../utils/colors"
@@ -17,14 +17,16 @@ const TopicsChip = ({ topics = [], fontSize = 24, text = '', isPdp }) => {
     return <View style={!isPdp ? styles.topicContainer : styles.topicContainerPdp}>
         {topics.map((item, index) => {
             if(text.indexOf(`#${item}`) < 0) return <View key={`topicContainer-${index}`} style={styles.topicItemContainer}>
-                <Pressable
-                    android_ripple={{
-                        borderless: false,
-                        color: colors.gray1
-                    }}
+                <TouchableOpacity
+                    testID='topic-chip'
+                    activeOpacity={1}
+                    // android_ripple={{
+                    //     borderless: false,
+                    //     color: colors.gray1
+                    // }}
                     onPress={() => onTopicPress(item)}>
                     <Text style={{ ...styles.topicText, fontSize }}>#{item}</Text>
-                </Pressable>
+                </TouchableOpacity>
             </View>
         })}
     </View>

@@ -3,40 +3,11 @@ import FastImage from 'react-native-fast-image';
 
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Image from '../../../components/Image';
+import useImageLayout from '../hooks/useImageLayout';
 
 const ImageLayouter = ({images = [], onimageclick}) => {
-  console.log(images.length % 2, 'toast')
-  const handleImageWidth = (index) => {
-    if(images.length > 2 && images.length % 2 === 0) {
-      return {
-        height: '50%',
-        width: '50%'
-      }
-    }
-    if(images.length > 2 && images.length % 2 === 1) {
-      if(index === images.length -  1) {
-        return {
-          height: '50%',
-          width: '100%'
-        }
-      }
-      return {
-          height: '50%',
-          width: '50%'
-        }
-    }
-    if(images.length === 2) {
-      return {
-        height: '100%',
-        width: '50%'
-      }
-    }
-     return {
-        height: '100%',
-        width: '100%'
-      }
- 
-  }
+  const {handleImageWidth} = useImageLayout()
+
   return (
     <>
    <View  style={styles.imageContainer}  >
@@ -44,7 +15,8 @@ const ImageLayouter = ({images = [], onimageclick}) => {
         <React.Fragment key={index} >
 
           {index > 3 ? null : <Pressable
-            style={handleImageWidth(index)}
+            testID='press'
+            style={handleImageWidth(images, index)}
             onPress={() => onimageclick(index)}
             >
               {index ===  3 && images.length - 4 > 0 ? <View style={styles.backdropBg} >

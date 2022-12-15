@@ -143,14 +143,10 @@ describe('Main Feed should run correctly', () => {
     it('setDownVote should run correctly', () => {
         const {result} = renderHook(() => useCoreFeed(), { wrapper: Store}) 
         const spyDownvote = jest.spyOn(vote, 'downVote')
-        // const updateFeed = jest.fn()
          act(() => {
             result.current.setDownVote(responseMock.data[0])
         })
-        // jest.spyOn(useCoreFeedAll, 'useCoreFeed').mockImplementation(() => ({updateFeed }))
-        expect(spyDownvote).toHaveBeenCalled()
-        // expect(spy1).toHaveBeenCalled()
-       
+        expect(spyDownvote).toHaveBeenCalled()       
        
     })
 
