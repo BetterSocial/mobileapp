@@ -3,13 +3,12 @@ import moment from 'moment';
 import {
   Channel,
   Chat,
-  MessageContent,
   MessageInput,
   MessageList,
   Streami18n
 } from 'stream-chat-react-native';
-import { Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { MessageSystem, useMessageContext } from 'stream-chat-react-native-core'
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { MessageSystem } from 'stream-chat-react-native-core'
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
@@ -151,15 +150,6 @@ const ChatDetailPage = () => {
   }
   return <View />;
 };
-
-
-
-const CustomMessageContent = (props) => {
-  const message = useMessageContext()
-  return <MessageContent {...props} message={message}
-    MessageFooter={(props) => <ChatStatusIcon {...props} />}
-  />
-}
 
 const CustomInlineDateSeparator = ({ date }) => {
   const newDate = moment(date).locale('en').format('MMMM D, YYYY');

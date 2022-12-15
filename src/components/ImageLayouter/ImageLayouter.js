@@ -4,39 +4,42 @@ import Image from '../Image';
 import { fonts } from '../../utils/fonts';
 import { COLORS } from '../../utils/theme';
 
-const ImageLayouter = ({ images = [], onimageclick, height }) => {
+const ImageLayouter = ({ images = [], onimageclick }) => {
+  const pressableFn = (index) => () => {
+    onimageclick(index);
+  }
   if (images.length === 1) {
     return (
-      <Pressable onPress={() => onimageclick(0)}>
+      <Pressable onPress={pressableFn(0)}>
         <Image
           source={{ uri: images[0] }}
           style={styles.imagelayout1}
         />
       </Pressable>
     );
-  } else if (images.length === 2) {
+  }
+
+  if (images.length === 2) {
     return (
       <View style={styles.twoPhotoLayout}>
-        {images.map((item, index) => {
-          return (
-            <View style={styles.twoPhotoItemLayout}>
-              <Pressable onPress={() => onimageclick(index)}>
+        {images.map((item, index) => (
+            <View key={index} style={styles.twoPhotoItemLayout}>
+              <Pressable onPress={pressableFn(index)}>
                 <Image
                   style={styles.imagelayout2}
                   source={{ uri: item }}
                 />
               </Pressable>
             </View>
-          );
-        })}
+          ))}
       </View>
     );
-  } else if (images.length === 3) {
+  } if (images.length === 3) {
     return (
       <View style={styles.threePhotoLayout}>
         <View style={styles.threePhotoTopLayout}>
           <Pressable
-            onPress={() => onimageclick(0)}
+            onPress={pressableFn(0)}
             style={styles.threePhotoTopFirstLayout}>
             <Image
               style={styles.imagelayout3}
@@ -44,7 +47,7 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             />
           </Pressable>
           <Pressable
-            onPress={() => onimageclick(1)}
+            onPress={pressableFn(1)}
             style={styles.threePhotoTopSecondLayout}>
             <Image
               style={styles.imagelayout3}
@@ -53,7 +56,7 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
           </Pressable>
         </View>
         <View style={styles.threePhotoBottomLayout}>
-          <Pressable onPress={() => onimageclick(2)}>
+          <Pressable onPress={pressableFn(2)}>
             <Image
               style={styles.imagelayout2}
               source={{ uri: images[2] }}
@@ -62,12 +65,13 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
         </View>
       </View>
     );
-  } else if (images.length === 4) {
+  }
+  if (images.length === 4) {
     return (
       <View style={styles.threePhotoLayout}>
         <View style={styles.threePhotoTopLayout}>
           <Pressable
-            onPress={() => onimageclick(0)}
+            onPress={pressableFn(0)}
             style={styles.threePhotoTopFirstLayout}>
             <Image
               style={styles.imagelayout3}
@@ -75,7 +79,7 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             />
           </Pressable>
           <Pressable
-            onPress={() => onimageclick(1)}
+            onPress={pressableFn(1)}
             style={styles.threePhotoTopSecondLayout}>
             <Image
               style={styles.imagelayout3}
@@ -85,7 +89,7 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
         </View>
         <View style={styles.threePhotoTopLayout}>
           <Pressable
-            onPress={() => onimageclick(2)}
+            onPress={pressableFn(2)}
             style={styles.threePhotoTopFirstLayout}>
             <Image
               style={styles.imagelayout3}
@@ -93,7 +97,7 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             />
           </Pressable>
           <Pressable
-            onPress={() => onimageclick(3)}
+            onPress={pressableFn(3)}
             style={styles.threePhotoTopSecondLayout}>
             <Image
               style={styles.imagelayout3}
@@ -103,12 +107,12 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
         </View>
       </View>
     );
-  } else if (images.length > 4) {
+  } if (images.length > 4) {
     return (
       <View style={styles.threePhotoLayout}>
         <View style={styles.threePhotoTopLayout}>
           <Pressable
-            onPress={() => onimageclick(0)}
+            onPress={pressableFn(0)}
             style={styles.threePhotoTopFirstLayout}>
             <Image
               style={styles.imagelayout3}
@@ -116,7 +120,7 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             />
           </Pressable>
           <Pressable
-            onPress={() => onimageclick(1)}
+            onPress={pressableFn(1)}
             style={styles.threePhotoTopSecondLayout}>
             <Image
               style={styles.imagelayout3}
@@ -126,7 +130,7 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
         </View>
         <View style={styles.threePhotoTopLayout}>
           <Pressable
-            onPress={() => onimageclick(2)}
+            onPress={pressableFn(2)}
             style={styles.threePhotoTopFirstLayout}>
             <Image
               style={styles.imagelayout3}
@@ -134,7 +138,7 @@ const ImageLayouter = ({ images = [], onimageclick, height }) => {
             />
           </Pressable>
           <Pressable
-            onPress={() => onimageclick(3)}
+            onPress={pressableFn(3)}
             style={styles.threePhotoTopSecondLayout}>
             <View
               style={{
