@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import MemoIcCreatePoll from '../../assets/icons/ic_create_poll';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_down_vote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
@@ -10,9 +9,7 @@ import MemoIc_arrow_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../assets/icons/Ic_comment';
 import MemoIc_share from '../../assets/icons/Ic_share';
-import MemoPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
-import { ENABLE_DEV_ONLY_FEATURE } from '../../utils/constants';
-import {FONTS, SIZES} from '../../utils/theme';
+import {FONTS} from '../../utils/theme';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
@@ -25,19 +22,17 @@ const Footer = ({
   statusVote = 'none',
   onPressDownVote,
   onPressUpvote,
-  onPressScore,
   totalVote,
   disableComment = false,
   blockStatus,
   loadingVote,
-  showScoreButton = false,
 }) => {
   const handleBlockUi = () => {
     if (isSelf) {
-      return null;
+      return <View testID='isself' />;
     } 
       if (blockStatus && blockStatus.blocker) {
-        return null;
+        return <View testID='blocker' />;
       } 
         return (
           <TouchableOpacity testID='onPressBlock' style={styles.btn} onPress={onPressBlock}>
@@ -69,13 +64,13 @@ const Footer = ({
           </View>
         </TouchableOpacity>
         {disableComment ? (
-          <View style={styles.btn}>
+          <View testID='disableComment' style={styles.btn}>
             <View style={styles.btnComment}>
               <MemoIc_comment height={24} width={25} />
             </View>
           </View>
         ) : (
-          <TouchableOpacity style={styles.btn} onPress={onPressComment}>
+          <TouchableOpacity testID='availableComment' style={styles.btn} onPress={onPressComment}>
             <View style={styles.btnComment}>
               <MemoIc_comment height={24} width={25} />
             </View>

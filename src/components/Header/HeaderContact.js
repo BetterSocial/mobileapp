@@ -3,8 +3,6 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TouchableHighlight,
-  TouchableNativeFeedback,
   View,
 } from 'react-native';
 
@@ -12,6 +10,7 @@ import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS, SIZES} from '../../utils/theme';
 import GlobalButton from '../Button/GlobalButton';
+
 const HeaderContact = ({
   title,
   subTitle,
@@ -25,20 +24,20 @@ const HeaderContact = ({
     if (Platform.OS === 'android') {
       return (
         <GlobalButton buttonStyle={styles.noPaddingLeft} onPress={onPress}>
-          <View style={styles.content(-4)}>
+          <View testID='android' style={styles.content(-4)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
         </GlobalButton>
       );
-    } else {
+    } 
       return (
         <GlobalButton buttonStyle={styles.noPaddingLeft} onPress={onPress}>
-          <View style={styles.content(-8)}>
+          <View testID='ios' style={styles.content(-8)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
         </GlobalButton>
       );
-    }
+    
   };
   return (
     <View style={[styles.container, containerStyle]}>
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
   },
   content: (marginLeft) => ({
     padding: 10,
-    marginLeft: marginLeft,
+    marginLeft,
   }),
   text: {
     color: COLORS.black,

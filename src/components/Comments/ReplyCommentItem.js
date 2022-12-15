@@ -1,7 +1,6 @@
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
-import Toast from 'react-native-simple-toast';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import BlockComponent from "../BlockComponent";
@@ -13,7 +12,7 @@ import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import {FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
-import {downVote, iVoteComment, voteComment} from '../../service/vote';
+import {iVoteComment, voteComment} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import { removeWhiteSpace } from '../../utils/Utils';
@@ -47,9 +46,10 @@ const ReplyCommentItem = ({
     if (level >= 2 || disableOnTextPress) {
       return;
     }
-    return onPress();
+    if(onPress) {
+      onPress()
+    }
   };
-
   const openProfile = async () => {
     const selfUserId = await getUserId();
     if (selfUserId === user.id) {
@@ -100,11 +100,11 @@ const ReplyCommentItem = ({
     }
   };
 
-  const onBlock = (comment) => {
+  const onBlock = (commentBlock) => {
     refBlockComponent.current.openBlockComponent({
       anonimity : false,
-      actor : comment.user,
-      id : comment.id,
+      actor : commentBlock.user,
+      id : commentBlock.id,
     })
   }
   React.useEffect(() => {
@@ -146,7 +146,7 @@ const ReplyCommentItem = ({
           </View>
         </View>
       </ButtonHightlight>
-      <ButtonHightlight onPress={onTextPress}>
+      <ButtonHightlight testID='ontextpress'  onPress={onTextPress}>
         <Text style={styles.post}>{comment.data.text}</Text>
       </ButtonHightlight>
       <View style={styles.constainerFooter}>

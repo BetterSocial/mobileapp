@@ -4,6 +4,7 @@ import {COLORS} from '../../utils/theme';
 
 const Dot = ({size = 4, color}) => (
   <View
+    testID='dot'
     style={[styles.point, {width: size, height: size, backgroundColor: color}]}
   />
 );

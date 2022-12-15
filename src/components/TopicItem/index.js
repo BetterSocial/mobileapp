@@ -7,10 +7,10 @@ import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 
 const TopicItem = ({ label, removeTopic, style, onTopicPress = () => { } }) => {
-  return <Pressable onPress={onTopicPress}>
+  return <Pressable testID='topicPress' onPress={onTopicPress}>
     <View style={[styles.containerTag, style]} >
       <Text style={styles.tag}>{label}</Text>
-      <TouchableOpacity onPress={() => removeTopic(label)} style={styles.btn}>
+      <TouchableOpacity testID='removeTopic' onPress={() => removeTopic(label)} style={styles.btn}>
         <Icon name="close" size={13.33} allowFontScaling={false} />
       </TouchableOpacity>
     </View>

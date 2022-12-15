@@ -1,13 +1,11 @@
 import React from 'react'
-import { View, StyleSheet, Text, Animated } from 'react-native'
+import { View, StyleSheet, Animated } from 'react-native'
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
-import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 
 import PropTypes from 'prop-types';
 import { colors, } from '../../utils/colors'
 import { fonts } from '../../utils/fonts'
-import { calculateTime } from '../../utils/time';
 
 
 
@@ -63,7 +61,7 @@ const styles = StyleSheet.create({
 })
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
 
-const LoadingComment = ({user, commentText, isLoading}) => {
+const LoadingComment = () => {
     const avatarRef = React.createRef()
     const firstLineRef = React.createRef()
     const secondLineRef = React.createRef()

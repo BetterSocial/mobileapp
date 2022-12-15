@@ -10,10 +10,6 @@
         "plugin:react/recommended",
         "prettier"
     ],
-    "rules": {
-        "quotes": [2, "single", {"avoidEscape": true}],
-        "comma-dangle": ["error", "always-multiline"]
-    },
     "parserOptions": {
         "ecmaVersion": 12,
         "sourceType": "module",
@@ -30,7 +26,10 @@
         "no-console": "off",
         "import/prefer-default-export": "off",
         "no-use-before-define": "warn",
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "camelcase": "off",
+        "import/no-extraneous-dependencies": "off",
+        "no-nested-ternary": "off"
     },
     "globals": {
         "__DEV__": true
