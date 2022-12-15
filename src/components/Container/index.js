@@ -8,10 +8,12 @@ const styles = StyleSheet.create({
     }
 })
 
+export const isDeviceIos = () => Platform.OS === 'ios'
+
+
 const Container = (props) => {
-    const isIos = Platform.OS === 'ios'
     const {children} = props
-    if(isIos) {
+    if(isDeviceIos()) {
         return (
             <SafeAreaView style={styles.container} >
                 {children}

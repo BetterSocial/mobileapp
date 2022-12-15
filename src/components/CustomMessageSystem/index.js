@@ -1,9 +1,8 @@
 import React from 'react'
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text } from 'react-native';
 import { fonts } from '../../utils/fonts';
 
-const index = ({ text }) => {
-  return (<View style={{
+const index = ({ text }) => (<View style={{
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 16,
@@ -25,8 +24,6 @@ const index = ({ text }) => {
       }}>{text}</Text>
     </View>
   </View>
-  );
-
-}
+  )
 
 export default index

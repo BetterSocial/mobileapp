@@ -5,7 +5,6 @@ import { COLORS } from '../../../src/utils/theme';
 
 
 describe('Dot should run correctly', () => {
-// value, index, select, onSelect, icon, desc
     afterEach(cleanup)
     it('should match snapshot', () => {
   
