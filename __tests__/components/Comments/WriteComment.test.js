@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Text } from 'react-native';
 import { render, cleanup, fireEvent } from '@testing-library/react-native';
 import WriteComment, {styles} from '../../../src/components/Comments/WriteComment';
 import Store from '../../../src/context/Store';
@@ -7,12 +6,6 @@ import { fonts } from '../../../src/utils/fonts';
 import { colors } from '../../../src/utils/colors';
 
 describe('WriteComment should run correctly', () => {
-//       value = null,
-//   onPress,
-//   onChangeText,
-//   username,
-//   inReplyCommentView = false,
-//   showProfileConnector = true,
     afterEach(cleanup)
     it('should match snapshot', () => {
         const onPress = jest.fn()
@@ -27,35 +20,6 @@ describe('WriteComment should run correctly', () => {
         fireEvent.press(getByTestId('iscommentenable'))
         expect(onPress).toHaveBeenCalled()
     })
-//  btn: (isCommentEnabled) => ({
-//       backgroundColor: isCommentEnabled ? colors.bondi_blue : '#f2f2f2',
-//       borderRadius: 18,
-//       width: 35,
-//       height: 35,
-//       display: 'flex',
-//       justifyContent: 'center',
-//       marginBottom: 1.5,
-//       alignSelf: 'flex-end',
-//     }),
-
-//  connectorTop: (inReplyCommentView, showProfileConnector) => ({
-//       height: showProfileConnector ? 36 : 0,
-//       width: 1,
-//       backgroundColor: colors.gray1,
-//       position: 'absolute',
-//       top: 0,
-//       left: inReplyCommentView ? 60 : 30,
-//       zIndex: -100,
-//     }),
-//   connectorBottom: (inReplyCommentView, showProfileConnector) => ({
-//       height: showProfileConnector ? 20 : 0,
-//       width: 1,
-//       backgroundColor: colors.gray1,
-//       position: 'absolute',
-//       top: 0,
-//       left: inReplyCommentView ? 60 : 30,
-//       zIndex: -100,
-//     }),
 
     it('styles should run correctly', () => {
         expect(styles.replyToContainer(true)).toEqual({

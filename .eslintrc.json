@@ -28,7 +28,8 @@
         "no-use-before-define": "warn",
         "react/prop-types": "off",
         "camelcase": "off",
-        "import/no-extraneous-dependencies": "off"
+        "import/no-extraneous-dependencies": "off",
+        "no-nested-ternary": "off"
     },
     "globals": {
         "__DEV__": true
