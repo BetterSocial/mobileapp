@@ -487,9 +487,7 @@ const ProfileScreen = ({ route }) => {
     }
   };
 
-  const handleOnEndReached = () => {
-    getMyFeeds(postOffset)
-  }
+  const handleOnEndReached = () => getMyFeeds(postOffset)
 
   const handleRefresh = () => {
     setLoading(true)
