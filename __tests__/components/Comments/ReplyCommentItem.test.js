@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render, cleanup } from '@testing-library/react-native';
+import { render, cleanup, fireEvent } from '@testing-library/react-native';
 import ReplyCommentItem from '../../../src/components/Comments/ReplyCommentItem';
 
 jest.mock('react-native/Libraries/Pressability/usePressability')
@@ -23,7 +23,7 @@ describe('ReplyCommentItem should run correctly', () => {
         children_counts: {},
         created_at: "2022-12-12T12:58:01.801974Z",
         data: {
-            count_downvote: 0,
+            count_downvote: 1,
         count_upvote: 0,
         isNotSeen: true,
         text: "Good to see u"
@@ -50,25 +50,15 @@ describe('ReplyCommentItem should run correctly', () => {
 
         user_id: "f19ce509-e8ae-405f-91cf-ed19ce1ed96e"
        }
-    
-//       user,
-//   comment,
-//   onPress,
-//   isLast = false,
-//   isLastInParent = false,
-//   time,
-//   style,
-//   photo,
-//   level,
-//   showLeftConnector = true,
-//   disableOnTextPress = false,
-//   refreshComment,
-//    updateVoteParent
+
     it('should match snapshot', () => {
         const onPress = jest.fn()
         const refreshComment = jest.fn()
         const {toJSON, getAllByText} = render(<ReplyCommentItem comment={comments} user={user} onPress={onPress} isLast={false} isLastInParent={false} time={'26/08/2022'} photo='https://detil.jpg' level={0} refreshComment={refreshComment} showLeftConnector={false} disableOnTextPress={false} />)
         expect(toJSON).toMatchSnapshot()
-
+        expect(getAllByText('-1')).toHaveLength(1)
+        // jest.setTimeout(1000)
+        // fireEvent.press(getByTestId('ontextpress'))
+        // expect(onPress).toHaveBeenCalled()
     })
 })

@@ -25,7 +25,7 @@ const ButtonHightlight = (props) => {
 
 
     return (
-        <ButtonAnimated {...props} style={[style, {opacity: opacity}]} onPress={onPressClick}  >
+        <ButtonAnimated {...props} testID={props.testID} style={[style, {opacity}]} onPress={onPressClick}  >
             {children}
         </ButtonAnimated>
     )
