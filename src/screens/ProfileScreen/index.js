@@ -203,15 +203,9 @@ const ProfileScreen = ({ route }) => {
       id: 'btn_share',
     });
     try {
-      const result = await Share.share({
+      await Share.share({
         message: shareUserLink(dataMain.username),
       });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-        } else {
-        }
-      } else if (result.action === Share.dismissedAction) {
-      }
     } catch (error) {
       Alert.alert(error.message);
     }
