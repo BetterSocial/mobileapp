@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
@@ -7,7 +7,7 @@ import dimen from '../../utils/dimen';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context'
 import {SOURCE_FEED_TAB} from '../../utils/constants';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {fonts} from '../../utils/fonts';
 import { setTimer } from '../../context/actions/feeds';
 import { viewTimePost } from '../../service/post';
 
@@ -28,6 +28,7 @@ const ButtonAddPost = () => {
 
   return (
     <TouchableOpacity
+      testID='onpress'
       style={styles.container}
       onPress={__handleOnAddPostButtonClicked}>
       <MemoIc_pencil
