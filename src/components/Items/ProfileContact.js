@@ -4,17 +4,14 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  TouchableNativeFeedback,
   View,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 
-const ProfileContact = ({photo, fullname, onPress, select}) => {
-  return (
+const ProfileContact = ({photo, fullname, onPress, select}) => (
     <Pressable
       onPress={onPress}
       android_ripple={{
@@ -25,14 +22,13 @@ const ProfileContact = ({photo, fullname, onPress, select}) => {
       style={styles.pressable}>
       <View style={styles.container}>
         <View style={styles.profile}>
-          <Image style={styles.image} source={{uri: photo !== '' ? photo : undefined}} />
+          <Image testID='image' style={styles.image} source={{uri: photo !== '' ? photo : undefined}} />
           <Text style={styles.fullname}>{fullname}</Text>
         </View>
-        {select && <MemoIc_Checklist />}
+        {select && <View testID='selected' ><MemoIc_Checklist /></View>}
       </View>
     </Pressable>
   );
-};
 
 export default ProfileContact;
 

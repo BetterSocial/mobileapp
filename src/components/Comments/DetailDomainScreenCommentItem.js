@@ -25,23 +25,22 @@ const DetailDomainScreenCommentItem = ({
   showLeftConnector = true,
   disableOnTextPress = false,
   onVoteUp,
-  onVoteDown,
-  voteStatus,
-  totalVotes
-}) => {
+  onVoteDown}) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
 
-  let onTextPress = () => {
+  const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       return;
     }
-    return onPress();
+    if(onPress) {
+      onPress();
+    }
   };
 
-  let openProfile = async () => {
-    let selfUserId = await getUserId();
+  const openProfile = async () => {
+    const selfUserId = await getUserId();
     if (selfUserId === user.id) {
       return navigation.navigate('ProfileScreen', {
         isNotFromHomeTab: true
@@ -144,7 +143,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
   },
-  container: ({isLast, style, level, isLastInParent, showLeftConnector}) => ({
+  container: ({isLast, style, level, isLastInParent}) => ({
     width: '100%',
     borderLeftWidth: isLastInParent ? 0 : 1,
     borderLeftColor: isLast

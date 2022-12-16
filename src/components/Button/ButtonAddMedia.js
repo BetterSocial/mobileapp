@@ -3,13 +3,11 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import {colors} from '../../utils/colors';
 
-const ButtonAddMedia = ({onPress, style, label, labelStyle}) => {
-  return (
+const ButtonAddMedia = ({onPress, style, label, labelStyle}) => (
     <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
       <Text style={labelStyle}>{label}</Text>
     </TouchableOpacity>
   );
-};
 
 export default ButtonAddMedia;
 

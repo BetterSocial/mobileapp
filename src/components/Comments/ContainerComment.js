@@ -9,7 +9,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import {colors} from '../../utils/colors';
 import ButtonHightlight from '../ButtonHighlight';
 
-const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate, updateVoteLatestChildren}) => {
+const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate}) => {
   const navigation = useNavigation();
   const isLast = (index, item) => (
       index === comments.length - 1 && (item.children_counts.comment || 0) === 0
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderLeftColor: '#C4C4C4',
   },
-  containerReply: (hideLeftConnector) => ({
+  containerReply: () => ({
     borderLeftWidth: 1,
   }),
   seeRepliesContainer: (isLast) => ({

@@ -7,8 +7,7 @@ import FlatListItem from '../../../components/FlatListItem';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
-const SheetGeographic = ({geoRef, data, select, onSelect}) => {
-  return (
+const SheetGeographic = ({geoRef, data, select, onSelect}) => (
     <RBSheet
       ref={geoRef}
       closeOnDragDown={true}
@@ -31,7 +30,6 @@ const SheetGeographic = ({geoRef, data, select, onSelect}) => {
       </View>
     </RBSheet>
   );
-};
 
 export default SheetGeographic;
 
