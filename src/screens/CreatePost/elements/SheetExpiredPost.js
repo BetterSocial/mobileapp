@@ -7,8 +7,7 @@ import FlatListItem from '../../../components/FlatListItem';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
-const SheetExpiredPost = ({refExpired, data, select, onSelect}) => {
-  return (
+const SheetExpiredPost = ({refExpired, data, select, onSelect}) => (
     <RBSheet
       ref={refExpired}
       closeOnDragDown={true}
@@ -31,7 +30,6 @@ const SheetExpiredPost = ({refExpired, data, select, onSelect}) => {
       </View>
     </RBSheet>
   );
-};
 
 export default SheetExpiredPost;
 
