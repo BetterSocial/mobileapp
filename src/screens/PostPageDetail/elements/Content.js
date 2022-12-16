@@ -7,8 +7,7 @@ import {
   Pressable,
   StyleSheet,
   View
-} from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native';
+,TouchableWithoutFeedback} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import ImageLayouter from './ImageLayouter';
@@ -22,9 +21,7 @@ const {width: screenWidth} = Dimensions.get('window');
 const Content = ({message, images_url, style, onPress}) => {
   const route = useRoute();
   const navigation = useNavigation();
-  const cekImage = () => {
-    return images_url !== null && images_url !== '' && images_url !== undefined;
-  };
+  const cekImage = () => images_url && images_url !== '';
 
   const onImageClickedByIndex = (index) => {
     console.log(index);
@@ -87,15 +84,13 @@ const styles = StyleSheet.create({
     width: screenWidth - 32,
     borderRadius: 16,
   },
-  containerShowMessage: (currentRouteName) => {
-    return {
+  containerShowMessage: (currentRouteName) => ({
       justifyContent: 'center',
       alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
       flex: 1,
       paddingBottom: 10,
       minHeight: 100,
-    };
-  },
+    }),
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
