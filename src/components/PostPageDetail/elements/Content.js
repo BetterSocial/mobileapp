@@ -23,7 +23,7 @@ const { width: screenWidth } = Dimensions.get('window');
 
 const Content = ({ message, images_url = [], topics = [], item, onnewpollfetched }) => {
   const navigation = useNavigation();
-  const cekImage = () => images_url !== null && images_url !== '' && images_url !== undefined;
+  const cekImage = () => images_url  && images_url !== '' ;
 
   const onImageClickedByIndex = (index) => {
     console.log(index);

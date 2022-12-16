@@ -72,7 +72,7 @@ const NewsScreen = () => {
         setNews(cache.data, dispatch);
         setPostOffset(cache.offset)
       } else {
-        initData(true)
+        initData()
       }
     })
   }
@@ -207,22 +207,22 @@ const NewsScreen = () => {
     getSpecificCache(NEWS_CACHE, (cache) => {
       if (cache) {
         if (!cache?.data) {
-          initData(true)
+          initData()
           return
         }
 
         const filteredCache = cache.data.filter((item) => item.content.domain_page_id !== domain_page_id)
-        if(filteredCache.length === 0) return initData(true)
+        if(filteredCache.length === 0) {
+          initData()
+          return
+        }
 
         const newCache = { ...cache }
         newCache.data = filteredCache
         setNews(filteredCache, dispatch);
         saveToCache(NEWS_CACHE, newCache)
       } else {
-        // const filteredNews = news?.filter((item) => item.id !== blockedDomain.domain_page_id)
-        // setNews(filteredNews, dispatch)
-        // saveToCache(NEWS_CACHE, filteredNews)
-        initData(true)
+        initData()
       }
     })
   }

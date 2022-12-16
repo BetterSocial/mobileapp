@@ -72,6 +72,7 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
 
     if (ENABLE_DEV_ONLY_FEATURE === "true") return <View style={S.devTrialView}>
         <Button
+            testID='dummyonboarding'
             title="Dev Dummy Onboarding"
             onPress={() => {
                 setDataHumenId(randomString(16), dispatch)
@@ -79,10 +80,12 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
             }}
         />
         <Button
+            testID='demologin'
             title="Demo Login"
             onPress={() => dummyLoginRbSheetRef.current.open()}
         />
         <Button
+            testID='closedemo'
             title="Close Demo Menu"
             onPress={closeDummyLogin}
         />

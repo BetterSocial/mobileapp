@@ -7,8 +7,7 @@ import FlatListItem from '../../../components/FlatListItem';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
-const SheetPrivacy = ({privacyRef, data, select, onSelect}) => {
-  return (
+const SheetPrivacy = ({privacyRef, data, select, onSelect}) => (
     <RBSheet
       ref={privacyRef}
       closeOnDragDown={true}
@@ -33,7 +32,6 @@ const SheetPrivacy = ({privacyRef, data, select, onSelect}) => {
       </View>
     </RBSheet>
   );
-};
 
 export default SheetPrivacy;
 

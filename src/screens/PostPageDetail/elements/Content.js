@@ -4,13 +4,9 @@ import PropTypes from 'prop-types';
 import SeeMore from 'react-native-see-more-inline';
 import {
   Dimensions,
-  FlatList,
-  Image,
   Platform,
   Pressable,
   StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
   View
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';

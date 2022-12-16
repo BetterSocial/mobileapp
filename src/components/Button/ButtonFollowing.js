@@ -3,15 +3,13 @@ import { View, TouchableNativeFeedback, Text, StyleSheet } from 'react-native';
 import { colors } from '../../utils/colors'
 import { fonts } from '../../utils/fonts'
 
-const ButtonFollowing = ({ handleSetUnFollow }) => {
-  return (
+const ButtonFollowing = ({ handleSetUnFollow }) => (
     <TouchableNativeFeedback onPress={handleSetUnFollow}>
       <View style={styles.buttonFollowing}>
         <Text style={styles.textButtonFollowing}>Following</Text>
       </View>
     </TouchableNativeFeedback>
   )
-}
 
 const styles = StyleSheet.create({
   buttonFollowing: {
