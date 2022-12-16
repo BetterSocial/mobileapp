@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, TouchableNativeFeedback, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
 const Btn = (props) => {
-  let disable = props.disabled ? props.disabled : false;
-  let disabledStyle = props.disabled ? styles.disabledbutton : {};
+  const disable = props.disabled ? props.disabled : false;
+  const disabledStyle = props.disabled ? styles.disabledbutton : {};
   return (
     <TouchableOpacity disabled={disable} onPress={props.onPress}>
       <View style={{...styles.button, ...props.style, ...disabledStyle}}>
