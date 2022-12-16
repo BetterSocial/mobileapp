@@ -1,17 +1,21 @@
 import * as React from 'react';
-import { render, cleanup, fireEvent } from '@testing-library/react-native';
+import { render, cleanup } from '@testing-library/react-native';
 import ReplyCommentItem from '../../../src/components/Comments/ReplyCommentItem';
 
+jest.mock('react-native')
 jest.mock('react-native/Libraries/Pressability/usePressability')
 jest.mock('react-native/Libraries/Components/Pressable/Pressable')
+
+jest.useFakeTimers()
+
 describe('ReplyCommentItem should run correctly', () => {
     afterEach(cleanup)
     const user = {
         created_at: "2022-06-10T13:11:47.095310Z",
         data: {
             human_id: "HQEGNQCHA8J1OIX4G2CP",
-        profile_pic_url: "https://res.cloudinary.com/hpjivutj2/image/upload/v1660620884/nrfnzuhcrozz9v34ngv3.jpg",
-        username: "Fajarism"
+            profile_pic_url: "https://res.cloudinary.com/hpjivutj2/image/upload/v1660620884/nrfnzuhcrozz9v34ngv3.jpg",
+            username: "Fajarism"
         },
         id: "f19ce509-e8ae-405f-91cf-ed19ce1ed96e",
         updated_at: "2022-08-16T03:34:45.197566Z"
@@ -23,7 +27,7 @@ describe('ReplyCommentItem should run correctly', () => {
         children_counts: {},
         created_at: "2022-12-12T12:58:01.801974Z",
         data: {
-            count_downvote: 1,
+            count_downvote: 2,
         count_upvote: 0,
         isNotSeen: true,
         text: "Good to see u"
@@ -56,9 +60,6 @@ describe('ReplyCommentItem should run correctly', () => {
         const refreshComment = jest.fn()
         const {toJSON, getAllByText} = render(<ReplyCommentItem comment={comments} user={user} onPress={onPress} isLast={false} isLastInParent={false} time={'26/08/2022'} photo='https://detil.jpg' level={0} refreshComment={refreshComment} showLeftConnector={false} disableOnTextPress={false} />)
         expect(toJSON).toMatchSnapshot()
-        expect(getAllByText('-1')).toHaveLength(1)
-        // jest.setTimeout(1000)
-        // fireEvent.press(getByTestId('ontextpress'))
-        // expect(onPress).toHaveBeenCalled()
+        expect(getAllByText('-2')).toHaveLength(1)
     })
 })
