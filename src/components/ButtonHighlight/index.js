@@ -7,7 +7,7 @@ const ButtonHightlight = (props) => {
     const [opacity] = React.useState(new Animated.Value(100))
     const ButtonAnimated = Animated.createAnimatedComponent(Pressable)
 
-    const onPressClick = () => {
+    const onPressClick = React.useCallback(() => {
         Animated.timing(opacity, {
             toValue: 0.2,
             duration: 100,
@@ -21,11 +21,11 @@ const ButtonHightlight = (props) => {
             }
            
         })
-    }
+    }, [onPress])
 
 
     return (
-        <ButtonAnimated {...props} testID={props.testID} style={[style, {opacity}]} onPress={onPressClick}  >
+        <ButtonAnimated {...props} accessibilityLabel={props.testID} testID={props.testID} style={[style, {opacity}]} onPress={onPressClick}  >
             {children}
         </ButtonAnimated>
     )

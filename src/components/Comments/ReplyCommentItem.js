@@ -147,7 +147,7 @@ const ReplyCommentItem = ({
         </View>
       </ButtonHightlight>
       <ButtonHightlight testID='ontextpress'  onPress={onTextPress}>
-        <Text style={styles.post}>{comment.data.text}</Text>
+        <Text testID='commentText' style={styles.post}>{comment.data.text}</Text>
       </ButtonHightlight>
       <View style={styles.constainerFooter}>
         {isLast && level >= 2 ? (
