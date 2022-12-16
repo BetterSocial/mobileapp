@@ -6,7 +6,6 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  Platform,
 } from 'react-native';
 
 import {colors} from '../../utils/colors';
@@ -14,7 +13,6 @@ import {fonts} from '../../utils/fonts';
 import StringConstant from '../../utils/string/StringConstant';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import {Context} from '../../context';
-import {ActivityIndicator} from 'react-native';
 
 const WriteComment = ({
   value = null,
@@ -52,6 +50,7 @@ const WriteComment = ({
         />
         <View style={styles.content}>
           <TextInput
+            testID='changeinput'
             ref={commentInputRef}
             placeholder={StringConstant.commentBoxDefaultPlaceholder}
             // multiline={isAndroid}
@@ -62,6 +61,7 @@ const WriteComment = ({
           />
         </View>
         <TouchableOpacity
+          testID='iscommentenable'
           onPress={isSendButtonPressed}
           style={styles.btn(isCommentEnabled)}
           disabled={!isCommentEnabled}
@@ -75,7 +75,7 @@ const WriteComment = ({
 
 export default WriteComment;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   columnContainer: {
     display: 'flex',
     flexDirection: 'column',

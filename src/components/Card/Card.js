@@ -12,10 +12,9 @@ import {
 
 import Gap from '../Gap';
 import Header from './CardHeader';
-import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
 import NewsEmptyState from '../../assets/images/news-empty-state.png'
 import TestIdConstant from '../../utils/testId';
-import Image, { imageConst } from '../Image';
+import Image from '../Image';
 import { COLORS } from '../../utils/theme';
 import { fonts } from '../../utils/fonts';
 import { sanitizeUrlForLinking } from '../../utils/Utils';

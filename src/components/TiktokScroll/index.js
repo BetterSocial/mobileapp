@@ -53,7 +53,7 @@ const TiktokScroll = (props) => {
       ref={flatListRef}
       refreshing={refreshing}
       renderItem={({item ,index}) => (
-        <View style={[styles.cardContainer()]}>
+        <View testID='dataScroll' style={[styles.cardContainer()]}>
         <View style={styles.cardMain()}>
           {children({item, index})}
         </View>

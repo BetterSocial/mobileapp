@@ -26,7 +26,6 @@ import { createChildComment } from '../../service/comment';
 import { fonts } from '../../utils/fonts';
 import { getComment } from '../../utils/getstream/getComment';
 import { getFeedDetail } from '../../service/post';
-import { setFeedByIndex } from '../../context/actions/feeds';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 

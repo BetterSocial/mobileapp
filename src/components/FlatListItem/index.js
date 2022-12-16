@@ -10,6 +10,7 @@ const FlatListItem = ({value, index, select, onSelect, icon, desc}) => {
   if (icon) {
     return (
       <TouchableOpacity
+        testID='onselect'
         style={styles.container}
         onPress={() => onSelect(index)}>
         <View style={styles.contentText}>
@@ -26,10 +27,10 @@ const FlatListItem = ({value, index, select, onSelect, icon, desc}) => {
     );
   }
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onSelect(index)}>
+    <TouchableOpacity testID='noicon' style={styles.container} onPress={() => onSelect(index)}>
       <Text style={styles.label}>{value}</Text>
       {index === select && (
-        <Icon name="check-circle" color={colors.bondi_blue} size={20} />
+        <Icon testID='circle-icon' name="check-circle" color={colors.bondi_blue} size={20} />
       )}
     </TouchableOpacity>
   );

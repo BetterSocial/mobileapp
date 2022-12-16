@@ -1,5 +1,4 @@
 import * as React from 'react';
-import moment from 'moment';
 import { StyleSheet, Text, View } from 'react-native';
 
 import Gap from '../Gap';
@@ -7,12 +6,10 @@ import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmpt
 import TestIdConstant from '../../utils/testId';
 import Image, { imageConst } from '../Image';
 import { COLORS } from '../../utils/theme';
-import { FeedCredderRating } from '../CredderRating';
-import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 
-const Header = ({ domain, image = null, date, score }) => {
+const Header = ({ domain, image = null }) => {
     const renderHeaderImage = () => {
         if (image) return <Image
             testID={TestIdConstant.iconDomainProfilePicture}

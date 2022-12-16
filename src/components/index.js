@@ -5,7 +5,6 @@ import Loading from './Loading';
 import PreviewComment from './PreviewComment';
 import Dot from './Dot';
 import Gap from './Gap';
-import DomainHeader from './DomainHeader';
 import Header from './Header';
 import CustomMessageSystem from './CustomMessageSystem';
 import Skeleton from './Skeleton';
@@ -18,7 +17,6 @@ export {
   PreviewComment,
   Dot,
   Gap,
-  DomainHeader,
   Header,
   CustomMessageSystem,
   Skeleton,

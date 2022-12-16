@@ -1,11 +1,9 @@
 import * as React from 'react';
 import {Dimensions, StyleSheet, TextInput} from 'react-native';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 
-const Input = ({...props}) => {
-  return <TextInput style={styles.input} {...props} />;
-};
+const Input = ({...props}) => <TextInput style={styles.input} {...props} />;
 
 export default Input;
 
