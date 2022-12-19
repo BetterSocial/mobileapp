@@ -84,6 +84,7 @@ import ShowMedia from './elements/ShowMedia';
 import useHastagMention from './elements/useHastagMention';
 import UserProfile from './elements/UserProfile';
 
+
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
