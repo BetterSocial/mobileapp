@@ -12,6 +12,7 @@ import analytics from '@react-native-firebase/analytics';
 import {
     Alert,
     BackHandler,
+    Dimensions,
     Pressable,
     SafeAreaView,
     ScrollView,
@@ -74,6 +75,7 @@ import {
     requestCameraPermission,
     requestExternalStoragePermission
 } from '../../utils/permission';
+import WarningAnimatedMessage from '../../components/WarningAnimateMessage';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -721,7 +723,7 @@ const CreatePost = () => {
     React.useEffect(() => {
         handleTagUser()
     }, [message])
-
+    console.log(typeUser, 'luna2')
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />
@@ -894,6 +896,8 @@ const CreatePost = () => {
 
             </ScrollView>
             <Loading visible={loading} />
+            <WarningAnimatedMessage isSHow={typeUser} />
+
         </SafeAreaView>
     );
 };
@@ -904,6 +908,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        position: 'relative',
     },
     input: {
         backgroundColor: colors.lightgrey,
