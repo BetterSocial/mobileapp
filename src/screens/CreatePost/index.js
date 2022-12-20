@@ -18,7 +18,8 @@ import {
     StatusBar,
     StyleSheet,
     Text,
-    View
+    View,
+    Animated
 } from 'react-native';
 import { debounce } from 'lodash';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -98,7 +99,6 @@ const CreatePost = () => {
     const [isPollMultipleChoice, setIsPollMultipleChoice] = React.useState(false);
     const [linkPreviewMeta, setLinkPreviewMeta] = React.useState(null);
     const [isLinkPreviewShown, setIsLinkPreviewShown] = React.useState(false);
-
     const [audienceEstimations, setAudienceEstimations] = React.useState(0);
     const [privacySelect, setPrivacySelect] = React.useState(0);
     const [dataImage, setDataImage] = React.useState([]);
@@ -118,7 +118,7 @@ const CreatePost = () => {
     const [client] = React.useContext(Context).client;
     const [user] = React.useContext(Context).profile;
     const [allTaggingUser, setAllTaggingUser] = React.useState([])
-
+    const animatedReminder = React.useRef(new Animated.Value(0)).current
 
     const [selectedTime, setSelectedTime] = React.useState({
         day: 1,
@@ -281,14 +281,6 @@ const CreatePost = () => {
                 setDataProfile(result.data);
                 setLoading(false);
                 handleLocation(result.data)
-                // await result.data.locations.map((res) => {
-                //   location.push({
-                //     location_id: res.location_id,
-                //     neighborhood: res.neighborhood,
-                //   });
-                // });
-                // console.log('Locations: ', location);
-                // setGeoList(location);
             }
 
             setLoading(false);
@@ -305,6 +297,7 @@ const CreatePost = () => {
             }
         })
     }, [])
+
 
     const handleLocation = async (res) => {
         await res.locations.map((res) => {
@@ -443,11 +436,6 @@ const CreatePost = () => {
         setListTopic(v);
         setHashtags(v)
         setListTopicChat(topicChat)
-        console.log(v)
-        console.log(topicChat)
-        // setMessage((prev) => {
-        //     handleStateHastag(`prev ${topic}`)
-        // })
         sheetTopicRef.current.close();
     };
 
@@ -468,9 +456,6 @@ const CreatePost = () => {
                 });
                 return true;
             }
-            // setLoading(true);
-            // const topicWithoutHashtag = listTopic.map((topic) => topic.substring(1))
-            // console.log(topicWithoutHashtag, 'jaja')
             const data = {
                 topics: listTopic,
                 message,
@@ -612,7 +597,6 @@ const CreatePost = () => {
 
     const sendPollPost = async () => {
         // setLoading(true);
-        console.log(checkTaggingUser(), 'maman')
         const data = {
             message,
             topics: ['poll'],
@@ -722,6 +706,19 @@ const CreatePost = () => {
         handleTagUser()
     }, [message])
 
+    React.useEffect(() => {
+        if(typeUser) {
+            Animated.sequence([
+                Animated.timing(animatedReminder, {
+                    toValue: 1,
+                    useNativeDriver: true
+                })
+            ]).start()
+        } else {
+            animatedReminder.setValue(0)
+        }
+    }, [typeUser])
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar translucent={false} />
@@ -761,7 +758,12 @@ const CreatePost = () => {
                         allTaggedUser={allTaggingUser}
                         setAllTaggedUser={setAllTaggingUser}
                     />
-
+                    {typeUser && (
+                    <Animated.View style={[{opacity: animatedReminder}, styles.reminderContainer]} >
+                        <Text style={styles.whiteText} >Even when anonymous, you can be blocked by others.</Text>
+                    </Animated.View>
+                    )}
+                   
                     {isLinkPreviewShown && (
                         <ContentLink
                             og={
@@ -950,4 +952,16 @@ const styles = StyleSheet.create({
     height: (height) => ({
         height,
     }),
+    reminderContainer: {
+        backgroundColor: '#2F80ED',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 7,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10
+
+    },
+    whiteText: {
+        color: 'white'
+    }
 });
