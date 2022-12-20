@@ -24,7 +24,7 @@ const WarningAnimatedMessage = ({isSHow, top = 100, left = 110}) => {
                         duration: 1000,
                         easing: Easing.ease,
                         useNativeDriver: true,
-                        delay: 5000
+                        delay: 8000
                     })
                 ]).start(() => {
                     setIsRunAnimated(false)
