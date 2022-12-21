@@ -59,7 +59,7 @@ import { PROFILE_CACHE } from '../../utils/cache/constant';
 import { ShowingAudience, createPollPost, createPost } from '../../service/post';
 import { colors } from '../../utils/colors';
 import { convertString } from '../../utils/string/StringUtils';
-import { fonts } from '../../utils/fonts';
+import { fonts, normalizeFontSize } from '../../utils/fonts';
 import {
     getDurationId,
     getLocationId,
@@ -967,6 +967,8 @@ const styles = StyleSheet.create({
 
     },
     whiteText: {
-        color: 'white'
+        color: 'white',
+        fontSize: normalizeFontSize(12),
+        textAlign: 'center'
     }
 });

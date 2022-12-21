@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
 import IconPollMine from '../../assets/icon/IconPollMine';
@@ -72,7 +72,6 @@ export const PollOptions = ({
   return (
     <TouchableNativeFeedback
       testID='option'
-      style={{backgroundColor: 'red'}}
       disabled={isPollDisabled()}
       onPress={onPollPressed}>
       <View
@@ -139,7 +138,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    paddingVertical: 16,
+    paddingVertical: 12,
     paddingHorizontal: 16,
   },
   pollOptionItemText: (isexpired, ismax) => ({
@@ -148,8 +147,12 @@ export const styles = StyleSheet.create({
       fontFamily: fonts.inter[400],
       marginStart: 0,
       alignSelf: 'center',
+      fontSize: normalizeFontSize(16)
+
     }),
-  pollOptionItemPercentage: {},
+  pollOptionItemPercentage: {
+    fontSize: normalizeFontSize(16)
+  },
   percentageBar: (percent, isMyPoll = false) => {
     if (!percent) {
       percent = 0;
@@ -188,7 +191,7 @@ export const styles = StyleSheet.create({
   },
   totalpolltext: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 16,
     color: colors.blackgrey,
   },
