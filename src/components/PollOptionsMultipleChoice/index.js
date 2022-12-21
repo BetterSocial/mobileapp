@@ -6,7 +6,7 @@ import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 import IconPollMine from '../../assets/icon/IconPollMine';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
 import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import usePollOptionMultiple from './hooks/usePollOptionMultiple';
 
 export const PollOptionsMultipleChoice = ({
@@ -140,13 +140,16 @@ let styles = StyleSheet.create({
       marginTop: isMax ? 0 : isexpired ? 6 : 0,
       marginBottom: isMax ? 0 : isexpired ? 6 : 0,
       marginLeft: 0,
+      fontSize: normalizeFontSize(16)
     }),
   pollOptionItemPercentage: {
     alignSelf: 'center',
+    fontSize: normalizeFontSize(16)
+
   },
   totalpolltext: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 16,
     color: colors.blackgrey,
   },
