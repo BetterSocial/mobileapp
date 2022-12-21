@@ -49,10 +49,9 @@ const ContentPoll = ({
   return (
     <View style={styles.containerShowMessage}>
             <View style={styles.pollOptionsContainer}>
-              {polls.map((pollItem, indexPoll) => 
-                /*
-                  TODO : Count percentage
-                */
+              <Text style={styles.voteFont} >All votes are anonymous - even to the poll’s author!</Text>
+              <View style={styles.pollContainer} >
+                {polls.map((pollItem, indexPoll) => 
                  multiplechoice ? (
                   <PollOptionsMultipleChoice
                     key={indexPoll}
@@ -84,6 +83,7 @@ const ContentPoll = ({
                   />
                 )
               )}
+              </View>
             </View>      
             <View style={styles.totalVotesContainer}>
               <Text style={styles.totalpolltext}>{`${voteCount} votes `}</Text>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blackgrey,
   },
   fletlist: { flex: 1 },
-  containerShowMessage: { justifyContent: 'center', marginBottom: 30 },
+  containerShowMessage: { justifyContent: 'center', marginBottom: 30, paddingVertical: 10 },
   imageList: { flex: 1, width: screenWidth - 32, borderRadius: 16 },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -314,4 +314,12 @@ const styles = StyleSheet.create({
   seemore: {
     color: COLORS.blue,
   },
+  pollContainer: {
+    paddingTop: 10
+  },
+  voteFont: {
+    fontSize: 12,
+    color: '#828282',
+    marginLeft: 2
+  }
 });

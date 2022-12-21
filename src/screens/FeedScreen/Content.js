@@ -31,7 +31,10 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   const devHeight = Dimensions.get('screen').height
   const substringPostImage = devHeight /2.25 - (40 * 4)
   const substringNoImageNoTopic = devHeight/1.25 - (40 * 4)
-   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
+  const substringNoImageTopic = devHeight/1.25 - (40 * 7)
+  const substringPostPoll = devHeight /3 - (40 * 4)
+
+  
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -44,21 +47,23 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   };
 
   const renderHandleTextContent = () => {
-    if(images_url.length > 0 || item && item.post_type === POST_TYPE_POLL) {
+    if(images_url.length > 0) {
       return (
         <View testID='postTypePoll' style={{ height: '100%', flexDirection: 'row' }}>
+ 
           <Text  style={styles.textMedia}  >
-            {getCaptionWithTopicStyle(message, navigation, substringPostImage, item?.topics)} {message.length > substringPostImage ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+            {getCaptionWithTopicStyle(message, navigation, substringPostImage, item?.topics)} {message.length > substringPostImage ? <Text style={{color: '#2F80ED'}} >More...</Text>: null}
           </Text>
         </View>
       )
     }
+    
     return (
       <View testID='postTypeStatus' style={{flex: 1}} >
         {topics.length > 0 ? <Text style={styles.textMedia} >
-            {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic, item?.topics)} {message.length > substringNoImageTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+            {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic, item?.topics)} {message.length > substringNoImageTopic ? <Text style={{color: '#2F80ED'}} >More...</Text>: null}
           </Text> :  <Text  style={styles.textMedia} >
-            {getCaptionWithTopicStyle(message, navigation, substringNoImageNoTopic, item?.topics)} {message.length > substringNoImageNoTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+            {getCaptionWithTopicStyle(message, navigation, substringNoImageNoTopic, item?.topics)} {message.length > substringNoImageNoTopic ? <Text style={{color: '#2F80ED'}} >More...</Text>: null}
           </Text>}
          
       </View>
@@ -73,12 +78,11 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
           {renderHandleTextContent()}
         </View>
           
-
-        {/* <Gap height={SIZES.base} /> */}
-       
       </View>
       {item && item.post_type === POST_TYPE_POLL ?
            <View style={styles.containerMainText} >
+           {message && typeof message === 'string' && message.length > 0 ? <Text style={[styles.textMedia]} >{message.substring(0, substringPostPoll)} <Text style={{color: '#2F80ED'}} >More...</Text> </Text> : null}
+
             <ContentPoll
               message={item.message}
               images_url={item.images_url}
