@@ -23,17 +23,36 @@ import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const FONT_SIZE_MEDIA = 16
 
 
-const Content = ({ message, images_url = [], style, onPress, topics = [], item, onNewPollFetched, onPressDomain, onCardContentPress }) => {
+const Content = ({ message, images_url = [], style, onPress, topics = [], item, onNewPollFetched }) => {
   const navigation = useNavigation();
   const devHeight = Dimensions.get('screen').height
   const substringPostImage = devHeight /2.25 - (40 * 4)
   const substringNoImageNoTopic = devHeight/1.25 - (40 * 4)
   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
-  const substringPostPoll = devHeight /3 - (40 * 3)
+  const substringPostPoll = devHeight /3.3 - (40 * 5)
+  const substringPostPoll3 = devHeight /3 - (40 * 4)
+  const substringPostPoll2 = devHeight /3 - (40 * 3)
+  const substringPostPoll1 = devHeight /3 - (40 * 2)
 
+
+  const handleSubstring = () => {
+    if(item.pollOptions && Array.isArray(item.pollOptions)) {
+      if(item.pollOptions.length === 4) {
+        return substringPostPoll
+      }
+      if(item.pollOptions.length === 3) {
+          return substringPostPoll3
+      }
+      if(item.pollOptions.length === 2) {
+          return substringPostPoll2
+      }
+      return substringPostPoll1
+    }
+    return 0
+
+  }
   
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
@@ -79,9 +98,10 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
         </View>
           
       </View>
+      {console.log(item.pollOptions, 'lalak')}
       {item && item.post_type === POST_TYPE_POLL ?
            <View style={styles.containerMainText} >
-           {message && typeof message === 'string' && message.length > 0 ? <Text style={[styles.textMedia]} >{message.substring(0, substringPostPoll)} <Text style={{color: '#2F80ED'}} >More...</Text> </Text> : null}
+           {message && typeof message === 'string' && message.length > 0 ? <Text style={[styles.textMedia]} >{message.substring(0, handleSubstring())} <Text style={{color: '#2F80ED'}} >More...</Text> </Text> : null}
 
             <ContentPoll
               message={item.message}
