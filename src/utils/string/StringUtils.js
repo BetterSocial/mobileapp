@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import * as React from 'react';
 import moment from 'moment';
 import reactStringReplace from 'react-string-replace';
@@ -166,7 +167,6 @@ const displayFormattedSearchLocations = (searchQuery, locationObject) => {
 
 const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
     const { zip, neighborhood, city, state, country, location_level } = locationObject
-    console.log(`locationLevel ${location_level}`)
 
     if (location_level === 'Country') {
         if (isLocationMatch(searchQuery, country)) return <Text><TextBold text={country} /></Text>
@@ -309,7 +309,6 @@ const randomString = (length) => {
         result += characters.charAt(Math.floor(Math.random() *
             charactersLength));
     }
-    console.log(result)
     return result;
 }
 
@@ -337,15 +336,11 @@ const getCaptionWithTopicStyle = (text, navigation, substringEnd, topics = []) =
     const id = removePrefixTopic(topicWithPrefix);
     const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/
     const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
-
+    substringEnd = Math.round(substringEnd)
     text = reactStringReplace(text, topicRegex, (match) => {
         if(topics?.indexOf(match?.replace('#', '')) > -1) return <TopicText navigation={navigation} text={match} currentTopic={id} />
         return match
     })
-
-    // text = reactStringReplace(text, topicTegex, (match, index) =>
-    //     <TopicText navigation={navigation} text={match} currentTopic={id} />
-    // )
 
     text = reactStringReplace(text, validationTextHasAt, (match) =>
         <TaggingUserText navigation={navigation} text={match} currentTopic={id} />
@@ -353,7 +348,6 @@ const getCaptionWithTopicStyle = (text, navigation, substringEnd, topics = []) =
     if (substringEnd && typeof substringEnd === 'number') {
         text[text.length - 1] = text[text.length - 1].substring(0, substringEnd)
     }
-
     return text
 
 
