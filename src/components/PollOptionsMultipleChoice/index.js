@@ -128,7 +128,7 @@ let styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    paddingVertical: 8,
+    paddingVertical: 4,
     paddingHorizontal: 16,
     alignSelf: 'center',
   },
