@@ -18,7 +18,7 @@ import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import { COLORS } from '../../utils/theme';
 import { POST_TYPE_POLL } from '../../utils/constants';
 import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
+import { fonts, normalizeFontSize } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -32,7 +32,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   const substringPostImage = devHeight /2.25 - (40 * 4)
   const substringNoImageNoTopic = devHeight/1.25 - (40 * 4)
   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
-  const substringPostPoll = devHeight /3 - (40 * 4)
+  const substringPostPoll = devHeight /3 - (40 * 3)
 
   
   const onImageClickedByIndex = (index) => {
@@ -106,7 +106,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
           />
         </View>}
 
-              <TopicsChip topics={topics} fontSize={14} text={message}/>
+              <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={message}/>
 
     </Pressable>
   );
@@ -138,7 +138,7 @@ export const styles = StyleSheet.create({
   textMedia: {
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
-    fontSize: FONT_SIZE_MEDIA,
+    fontSize: normalizeFontSize(16),
     color: colors.black,
     lineHeight: 24,
     flex: 1,
@@ -166,7 +166,7 @@ export const styles = StyleSheet.create({
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     color: colors.black,
   },
   containerFeedText: {
@@ -194,26 +194,26 @@ export const styles = StyleSheet.create({
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
-    fontSize: 24,
+    fontSize: normalizeFontSize(26),
     lineHeight: 24,
     color: colors.black,
   },
   textComment: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 18,
     color: colors.gray,
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 24,
     color: colors.black,
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 24,
     color: colors.gray,
   },

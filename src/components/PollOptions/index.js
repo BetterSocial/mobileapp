@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
 import IconPollMine from '../../assets/icon/IconPollMine';
@@ -148,8 +148,12 @@ export const styles = StyleSheet.create({
       fontFamily: fonts.inter[400],
       marginStart: 0,
       alignSelf: 'center',
+      fontSize: normalizeFontSize(16)
+
     }),
-  pollOptionItemPercentage: {},
+  pollOptionItemPercentage: {
+    fontSize: normalizeFontSize(16)
+  },
   percentageBar: (percent, isMyPoll = false) => {
     if (!percent) {
       percent = 0;
@@ -188,7 +192,7 @@ export const styles = StyleSheet.create({
   },
   totalpolltext: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 16,
     color: colors.blackgrey,
   },
