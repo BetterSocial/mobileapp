@@ -32,7 +32,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   const substringPostImage = devHeight /2.25 - (40 * 4)
   const substringNoImageNoTopic = devHeight/1.25 - (40 * 4)
   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
-  const substringPostPoll = devHeight /3 - (40 * 3)
+  const substringPostPoll = devHeight /3 - (40 * 4)
 
   
   const onImageClickedByIndex = (index) => {

@@ -72,7 +72,6 @@ export const PollOptions = ({
   return (
     <TouchableNativeFeedback
       testID='option'
-      style={{backgroundColor: 'red'}}
       disabled={isPollDisabled()}
       onPress={onPollPressed}>
       <View
@@ -139,7 +138,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    paddingVertical: 16,
+    paddingVertical: 12,
     paddingHorizontal: 16,
   },
   pollOptionItemText: (isexpired, ismax) => ({
