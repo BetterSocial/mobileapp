@@ -37,7 +37,7 @@ const TiktokScroll = (props) => {
       contentInsetAdjustmentBehavior='automatic'
       contentContainerStyle={[styles.flatlistContainer, {paddingTop: showSearchBar ? searchHeight : 0}]}
       data={data}
-      decelerationRate="normal"
+      decelerationRate="fast"
       disableIntervalMomentum={true}
       keyExtractor={(item) => item.id}
       onEndReached={onEndReach}
