@@ -2,20 +2,19 @@ import * as React from 'react';
 import { StreamChat } from 'stream-chat';
 import jwtDecode from 'jwt-decode';
 import config from 'react-native-config';
+import { useRecoilState } from 'recoil';
 import { Context } from '../../context';
 import { getAccessToken } from '../token';
 import { getMyProfile } from '../../service/profile';
 import { createClient} from '../../context/actions/createClient';
-import {
-  setUnReadMessage,
-  setTotalUnReadMessage,
-} from '../../context/actions/unReadMessageAction';
+import { unreadMessageAtom } from '../../model/getStream/unreadMessage';
 import { setMessage } from '../firebase/setMessaging';
+
 
 const defaultImage = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png';
 export const useClientGetstream = () => {
   const [client, dispatch] = React.useContext(Context).client;
-  const [unReadMessage, dispatchUnReadMessage] = React.useContext(Context).unReadMessage;
+  const [unReadMessage, dispatchUnReadMessage] = useRecoilState(unreadMessageAtom);
   const create = async (tokenResult) => {
     try {
       if (!client.client) {
@@ -39,19 +38,21 @@ export const useClientGetstream = () => {
             total_unread_count: res.me.total_unread_count,
             unread_channels: res.me.unread_channels,
             unread_count: res.me.unread_count,
+            unread_post: 0
           };
           chatClient.on((event) => {
             if (event.total_unread_count !== undefined) {
-              dispatchUnReadMessage(
-                setTotalUnReadMessage(event.total_unread_count),
-              );
+              dispatchUnReadMessage({
+                ...unReadMessage,
+                total_unread_count: event.total_unread_count
+              });
             }
 
             if (event.unread_channels !== undefined) {
               // console.log(event.unread_channels);
             }
           });
-          dispatchUnReadMessage(setUnReadMessage(unRead));
+          dispatchUnReadMessage(unRead);
           setMessage(chatClient);
           createClient(chatClient, dispatch);
         }

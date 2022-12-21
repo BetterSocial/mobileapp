@@ -8,7 +8,7 @@ import {
   Streami18n
 } from 'stream-chat-react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
@@ -33,6 +33,7 @@ import { setChannel } from '../../context/actions/setChannel';
 import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { unreadMessageAtom } from '../../model/getStream/unreadMessage';
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -49,8 +50,7 @@ const ChannelListScreen = ({ navigation }) => {
   // const [countChat, setCountChat] = React.useState({})
   const { myProfile } = profileContext
   const { mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook } = useChannelList()
-  const [unReadMessage, dispatchUnreadMessage] =
-    React.useContext(Context).unReadMessage;
+  const [unReadMessage, dispatchUnreadMessage] = useRecoilState(unreadMessageAtom);
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
   const filters = {
     members: { $in: [myProfile.user_id] },
@@ -133,7 +133,7 @@ const ChannelListScreen = ({ navigation }) => {
 
   const mappingUnreadCountPostNotif = () => {
     const totalMessage = mappingUnreadCountPostNotifHook(listPostNotif, countReadComment)
-    dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage))
+    dispatchUnreadMessage({ ...unReadMessage, unread_post: totalMessage })
   }
 
   const getPostNotification = async () => {

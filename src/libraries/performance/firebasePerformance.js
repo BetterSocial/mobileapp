@@ -22,6 +22,9 @@ export const trackingHttpMetric = async (url, urlMethods, args) => {
 export const traceMetricScreen = async (loggingEvent) => {
   // Define & start a trace
   try {
+    if (__DEV__) {
+      console.log('metric screen :', loggingEvent);
+    }
     const trace = await perf().startTrace(loggingEvent);
 
     // Stop the trace

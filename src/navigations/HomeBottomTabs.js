@@ -47,6 +47,7 @@ import {
 } from '../context/actions/feeds';
 import { setMyProfileAction } from '../context/actions/setMyProfileAction';
 import { setNews } from '../context/actions/news';
+import { unreadMessageAtom } from '../model/getStream/unreadMessage';
 
 const Tab = createBottomTabNavigator();
 
@@ -61,7 +62,7 @@ function HomeBottomTabs(props) {
   const [, newsDispatch] = React.useContext(Context).news;
   const [feedsContext, dispatchFeeds] = React.useContext(Context).feeds;
   const [, discoveryDispatch] = React.useContext(Context).discovery;
-  const [unReadMessage] = React.useContext(Context).unReadMessage;
+  const unReadMessage = useRecoilValue(unreadMessageAtom);
   const [loadingUser, setLoadingUser] = React.useState(true);
   const { feeds } = feedsContext;
   const LIMIT_FIRST_FEEDS = 1;
