@@ -147,11 +147,11 @@ export const styles = StyleSheet.create({
       fontFamily: fonts.inter[400],
       marginStart: 0,
       alignSelf: 'center',
-      fontSize: normalizeFontSize(16)
+      fontSize: normalizeFontSize(14)
 
     }),
   pollOptionItemPercentage: {
-    fontSize: normalizeFontSize(16)
+    fontSize: normalizeFontSize(14)
   },
   percentageBar: (percent, isMyPoll = false) => {
     if (!percent) {
