@@ -86,7 +86,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
       </View>
       {item && item.post_type === POST_TYPE_POLL ?
            <View style={styles.containerMainText} >
-           {message && typeof message === 'string' && message.length > 0 ? <Text style={[styles.textMedia]} >{message.substring(0, handleSubstring())} <Text style={{color: '#2F80ED'}} >More...</Text> </Text> : null}
+           {message && typeof message === 'string' && message.length > 0 ? <Text style={[styles.textMedia]} >{message.substring(0, handleSubstring())} {message.length > handleSubstring() && <Text style={{color: '#2F80ED'}} >More...</Text>} </Text> : null}
 
             <ContentPoll
               message={item.message}
