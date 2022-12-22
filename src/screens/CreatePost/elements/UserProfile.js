@@ -24,7 +24,7 @@ const UserProfile = ({typeUser, setTypeUser, username, photo, onPress}) => {
           </View>
         </View>
       );
-    } else {
+    } 
       return (
         <TouchableOpacity style={styles.profile} onPress={() => onPress()}>
           <Image source={photo} width={32} height={32} style={styles.image} />
@@ -34,10 +34,11 @@ const UserProfile = ({typeUser, setTypeUser, username, photo, onPress}) => {
           </View>
         </TouchableOpacity>
       );
-    }
+    
   };
   return (
-    <View style={styles.container}>
+    <>
+      <View style={styles.container}>
       {userProfile()}
       <ToggleSwitch
         isOn={typeUser}
@@ -49,6 +50,9 @@ const UserProfile = ({typeUser, setTypeUser, username, photo, onPress}) => {
         onToggle={() => setTypeUser(!typeUser)}
       />
     </View>
+     
+    </>
+    
   );
 };
 
@@ -85,4 +89,9 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: 16,
   },
+  containerMessage: {
+    flex: 1,
+    alignItems: 'flex-end',
+    // backgroundColor: 'red'
+  }
 });

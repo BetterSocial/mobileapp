@@ -13,7 +13,7 @@ import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
 import { COLORS } from '../../utils/theme';
 import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
+import { fonts, normalizeFontSize } from '../../utils/fonts';
 import {
   getPollTime,
   isPollExpired,
@@ -49,10 +49,9 @@ const ContentPoll = ({
   return (
     <View style={styles.containerShowMessage}>
             <View style={styles.pollOptionsContainer}>
-              {polls.map((pollItem, indexPoll) => 
-                /*
-                  TODO : Count percentage
-                */
+              <Text style={styles.voteFont} >All votes are anonymous - even to the poll’s author!</Text>
+              <View style={styles.pollContainer} >
+                {polls.map((pollItem, indexPoll) => 
                  multiplechoice ? (
                   <PollOptionsMultipleChoice
                     key={indexPoll}
@@ -84,6 +83,7 @@ const ContentPoll = ({
                   />
                 )
               )}
+              </View>
             </View>      
             <View style={styles.totalVotesContainer}>
               <Text style={styles.totalpolltext}>{`${voteCount} votes `}</Text>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blackgrey,
   },
   fletlist: { flex: 1 },
-  containerShowMessage: { justifyContent: 'center', marginBottom: 30 },
+  containerShowMessage: { justifyContent: 'flex-start', marginBottom: 0, paddingVertical: 0, height: '80%' },
   imageList: { flex: 1, width: screenWidth - 32, borderRadius: 16 },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     color: colors.black,
   },
   containerFeedText: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   },
   feedDate: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     color: colors.black,
     lineHeight: 18,
   },
@@ -180,26 +180,26 @@ const styles = StyleSheet.create({
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
-    fontSize: 24,
+    fontSize: normalizeFontSize(24),
     lineHeight: 24,
     color: colors.black,
   },
   textComment: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 18,
     color: colors.gray,
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 24,
     color: colors.black,
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 24,
     color: colors.gray,
   },
@@ -260,14 +260,14 @@ const styles = StyleSheet.create({
   },
   totalpolltext: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 16,
     color: colors.blackgrey,
     alignSelf: 'center',
   },
   polltime: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 16,
     color: colors.blackgrey,
     alignSelf: 'center',
@@ -302,11 +302,12 @@ const styles = StyleSheet.create({
   seeresultstext: {
     color: colors.holytosca,
     fontFamily: fonts.inter[500],
+    fontSize: normalizeFontSize(14)
   },
   textMedia: {
     fontFamily: fonts.inter[400],
       fontWeight: 'normal',
-      fontSize: FONT_SIZE_MEDIA,
+      fontSize: normalizeFontSize(FONT_SIZE_MEDIA),
       color: colors.black,
       lineHeight: 24,
   },
@@ -314,4 +315,12 @@ const styles = StyleSheet.create({
   seemore: {
     color: COLORS.blue,
   },
+  pollContainer: {
+    paddingTop: 10
+  },
+  voteFont: {
+    fontSize: normalizeFontSize(12),
+    color: '#828282',
+    marginLeft: 2
+  }
 });

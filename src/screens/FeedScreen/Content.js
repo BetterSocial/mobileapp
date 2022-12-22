@@ -18,20 +18,28 @@ import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import { COLORS } from '../../utils/theme';
 import { POST_TYPE_POLL } from '../../utils/constants';
 import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
+import { fonts, normalizeFontSize } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const FONT_SIZE_MEDIA = 16
 
 
-const Content = ({ message, images_url = [], style, onPress, topics = [], item, onNewPollFetched, onPressDomain, onCardContentPress }) => {
+const Content = ({ message, images_url = [], style, onPress, topics = [], item, onNewPollFetched }) => {
   const navigation = useNavigation();
   const devHeight = Dimensions.get('screen').height
+  const devWidth = Dimensions.get('screen').width
+  const medianDimen1 = devWidth/ devHeight
   const substringPostImage = devHeight /2.25 - (40 * 4)
   const substringNoImageNoTopic = devHeight/1.25 - (40 * 4)
-   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
+  const substringNoImageTopic = devHeight/1.25 - (40 * 7)
+
+
+
+  const handleSubstring = () => medianDimen1 * 200
+
+  
+  
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -44,21 +52,23 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   };
 
   const renderHandleTextContent = () => {
-    if(images_url.length > 0 || item && item.post_type === POST_TYPE_POLL) {
+    if(images_url.length > 0) {
       return (
         <View testID='postTypePoll' style={{ height: '100%', flexDirection: 'row' }}>
+ 
           <Text  style={styles.textMedia}  >
-            {getCaptionWithTopicStyle(message, navigation, substringPostImage, item?.topics)} {message.length > substringPostImage ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+            {getCaptionWithTopicStyle(message, navigation, substringPostImage, item?.topics)} {message.length > substringPostImage ? <Text style={{color: '#2F80ED'}} >More...</Text>: null}
           </Text>
         </View>
       )
     }
+    
     return (
       <View testID='postTypeStatus' style={{flex: 1}} >
         {topics.length > 0 ? <Text style={styles.textMedia} >
-            {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic, item?.topics)} {message.length > substringNoImageTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+            {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic, item?.topics)} {message.length > substringNoImageTopic ? <Text style={{color: '#2F80ED'}} >More...</Text>: null}
           </Text> :  <Text  style={styles.textMedia} >
-            {getCaptionWithTopicStyle(message, navigation, substringNoImageNoTopic, item?.topics)} {message.length > substringNoImageNoTopic ? <Text style={{color: colors.bondi_blue}} >See More...</Text>: null}
+            {getCaptionWithTopicStyle(message, navigation, substringNoImageNoTopic, item?.topics)} {message.length > substringNoImageNoTopic ? <Text style={{color: '#2F80ED'}} >More...</Text>: null}
           </Text>}
          
       </View>
@@ -73,12 +83,11 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
           {renderHandleTextContent()}
         </View>
           
-
-        {/* <Gap height={SIZES.base} /> */}
-       
       </View>
       {item && item.post_type === POST_TYPE_POLL ?
            <View style={styles.containerMainText} >
+           {message && typeof message === 'string' && message.length > 0 ? <Text style={[styles.textMedia]} >{message.substring(0, handleSubstring())} {message.length > handleSubstring() && <Text style={{color: '#2F80ED'}} >More...</Text>} </Text> : null}
+
             <ContentPoll
               message={item.message}
               images_url={item.images_url}
@@ -102,7 +111,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
           />
         </View>}
 
-              <TopicsChip topics={topics} fontSize={14} text={message}/>
+              <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={message}/>
 
     </Pressable>
   );
@@ -121,7 +130,8 @@ export default Content;
 export const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    flex: 1
+    flex: 1,
+    paddingVertical: 5
   },
   containerImage: {
     flex: 1,
@@ -134,7 +144,7 @@ export const styles = StyleSheet.create({
   textMedia: {
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
-    fontSize: FONT_SIZE_MEDIA,
+    fontSize: normalizeFontSize(14),
     color: colors.black,
     lineHeight: 24,
     flex: 1,
@@ -162,7 +172,7 @@ export const styles = StyleSheet.create({
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     color: colors.black,
   },
   containerFeedText: {
@@ -186,30 +196,30 @@ export const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    marginTop: 12,
+    marginTop: 0,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
-    fontSize: 24,
+    fontSize: normalizeFontSize(26),
     lineHeight: 24,
     color: colors.black,
   },
   textComment: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 18,
     color: colors.gray,
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 24,
     color: colors.black,
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 24,
     color: colors.gray,
   },
@@ -242,7 +252,9 @@ export const styles = StyleSheet.create({
   containerMainText: {
     paddingLeft: 16,
     paddingRight: 16,
-    height: '100%'
+    height: '100%',
+        // backgroundColor: 'red'
+
     // marginBottom: 7
   }
 });
