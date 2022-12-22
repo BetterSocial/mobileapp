@@ -28,31 +28,17 @@ const { width: screenWidth } = Dimensions.get('window');
 const Content = ({ message, images_url = [], style, onPress, topics = [], item, onNewPollFetched }) => {
   const navigation = useNavigation();
   const devHeight = Dimensions.get('screen').height
+  const devWidth = Dimensions.get('screen').width
+  const medianDimen1 = devWidth/ devHeight
   const substringPostImage = devHeight /2.25 - (40 * 4)
   const substringNoImageNoTopic = devHeight/1.25 - (40 * 4)
   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
-  const substringPostPoll = devHeight /3.3 - (40 * 5)
-  const substringPostPoll3 = devHeight /3 - (40 * 4)
-  const substringPostPoll2 = devHeight /3 - (40 * 3)
-  const substringPostPoll1 = devHeight /3 - (40 * 2)
 
 
-  const handleSubstring = () => {
-    if(item.pollOptions && Array.isArray(item.pollOptions)) {
-      if(item.pollOptions.length === 4) {
-        return substringPostPoll
-      }
-      if(item.pollOptions.length === 3) {
-          return substringPostPoll3
-      }
-      if(item.pollOptions.length === 2) {
-          return substringPostPoll2
-      }
-      return substringPostPoll1
-    }
-    return 0
 
-  }
+  const handleSubstring = () => medianDimen1 * 200
+
+  
   
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
@@ -98,7 +84,6 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
         </View>
           
       </View>
-      {console.log(item.pollOptions, 'lalak')}
       {item && item.post_type === POST_TYPE_POLL ?
            <View style={styles.containerMainText} >
            {message && typeof message === 'string' && message.length > 0 ? <Text style={[styles.textMedia]} >{message.substring(0, handleSubstring())} <Text style={{color: '#2F80ED'}} >More...</Text> </Text> : null}
@@ -145,7 +130,8 @@ export default Content;
 export const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    flex: 1
+    flex: 1,
+    paddingVertical: 5
   },
   containerImage: {
     flex: 1,
@@ -158,7 +144,7 @@ export const styles = StyleSheet.create({
   textMedia: {
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
-    fontSize: normalizeFontSize(16),
+    fontSize: normalizeFontSize(14),
     color: colors.black,
     lineHeight: 24,
     flex: 1,
@@ -210,7 +196,7 @@ export const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    marginTop: 12,
+    marginTop: 0,
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
@@ -266,7 +252,9 @@ export const styles = StyleSheet.create({
   containerMainText: {
     paddingLeft: 16,
     paddingRight: 16,
-    height: '100%'
+    height: '100%',
+        // backgroundColor: 'red'
+
     // marginBottom: 7
   }
 });

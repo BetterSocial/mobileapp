@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
 import {Dot, Gap} from "..";
 import {calculateTime} from '../../utils/time';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 
 const PreviewComment = ({
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   }),
   username: {
     fontFamily: fonts.inter[700],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     color: '#828282',
     marginLeft: SIZES.base,
   },
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   btnMore: {marginStart: 8},
   commenttext: {
     fontFamily: fonts.inter[400],
-    fontSize: 16,
+    fontSize: normalizeFontSize(14),
     lineHeight: 19.36,
     color: COLORS.greyseries,
   },

@@ -140,11 +140,11 @@ let styles = StyleSheet.create({
       marginTop: isMax ? 0 : isexpired ? 6 : 0,
       marginBottom: isMax ? 0 : isexpired ? 6 : 0,
       marginLeft: 0,
-      fontSize: normalizeFontSize(16)
+      fontSize: normalizeFontSize(14)
     }),
   pollOptionItemPercentage: {
     alignSelf: 'center',
-    fontSize: normalizeFontSize(16)
+    fontSize: normalizeFontSize(14)
 
   },
   totalpolltext: {
