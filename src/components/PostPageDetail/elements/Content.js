@@ -16,7 +16,7 @@ import TopicsChip from '../../TopicsChip/TopicsChip';
 import { COLORS } from '../../../utils/theme';
 import { POST_TYPE_POLL } from '../../../utils/constants';
 import { colors } from '../../../utils/colors';
-import { fonts } from '../../../utils/fonts';
+import { fonts, normalizeFontSize } from '../../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -69,7 +69,7 @@ const Content = ({ message, images_url = [], topics = [], item, onnewpollfetched
 
       </ScrollView>
       <View style={styles.topicContainer} >
-        <TopicsChip isPdp={true} topics={topics} fontSize={14} text={message} />
+        <TopicsChip isPdp={true} topics={topics} fontSize={normalizeFontSize(14)} text={message} />
 
       </View>
     </>
@@ -109,27 +109,27 @@ const styles = StyleSheet.create({
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
-    fontSize: 16,
+    fontSize: normalizeFontSize(14),
     lineHeight: 24,
     color: colors.black,
     marginBottom: 10,
   },
   textComment: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 18,
     color: colors.gray,
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 24,
     color: colors.black,
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 24,
     color: colors.gray,
   },
