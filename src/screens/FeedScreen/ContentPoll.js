@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blackgrey,
   },
   fletlist: { flex: 1 },
-  containerShowMessage: { justifyContent: 'center', marginBottom: 30, paddingVertical: 10 },
+  containerShowMessage: { justifyContent: 'flex-start', marginBottom: 0, paddingVertical: 0, height: '80%' },
   imageList: { flex: 1, width: screenWidth - 32, borderRadius: 16 },
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -302,6 +302,7 @@ const styles = StyleSheet.create({
   seeresultstext: {
     color: colors.holytosca,
     fontFamily: fonts.inter[500],
+    fontSize: normalizeFontSize(14)
   },
   textMedia: {
     fontFamily: fonts.inter[400],
