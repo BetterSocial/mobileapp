@@ -1,5 +1,6 @@
 import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
+import Toast from 'react-native-toast-message';
 
 import StringConstant from '../utils/string/StringConstant';
 import api from './config';
@@ -9,7 +10,14 @@ import { FIRST_VOTE } from '../utils/cache/constant';
 const handleToast = (type) => {
     getSpecificCache(FIRST_VOTE, (cache) => {
     if(!cache) {
-        SimpleToast.show(`Post ${type || ''}.\nYour upvotes & downvotes are private`, SimpleToast.SHORT)
+       Toast.show({
+            type: 'center',
+            text1: `Post ${type}.`,
+            text2: 'Your upvotes & downvotes are private',
+            autoHide: true,
+            visibilityTime: 8000,
+            position: 'bottom',
+    });
     }
   })
 }
