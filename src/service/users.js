@@ -1,8 +1,7 @@
 import crashlytics from '@react-native-firebase/crashlytics';
-import { BASE_URL } from '@env';
 
 import api from './config';
-import { getRefreshToken, setAccessToken, setRefreshToken } from '../utils/token';
+import { getRefreshToken } from '../utils/token';
 
 export const verifyUser = async (userId) => {
   try {
