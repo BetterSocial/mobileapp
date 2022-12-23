@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import Toast from 'react-native-toast-message';
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Context } from '../../../context';
@@ -17,6 +19,7 @@ const [postOffset, setPostOffset] = React.useState(0)
 const [feedsContext, dispatch] =  React.useContext(Context).feeds;
 const [profileContext] = React.useContext(Context).profile;
 const [searchHeight, setSearchHeight] = React.useState(0)
+const [isLastPage, setIsLastPage] = React.useState(false)
 
 const { feeds, timer, viewPostTimeIndex } = feedsContext;
 const { myProfile } = profileContext
@@ -24,6 +27,7 @@ const { bottom } = useSafeAreaInsets();
 
   const getDataFeeds = async (offsetFeed = 0, useLoading) => {
     setCountStack(null);
+    setIsLastPage(false)
     if (useLoading) {
       setLoading(true);
     }
@@ -31,6 +35,10 @@ const { bottom } = useSafeAreaInsets();
       const query = `?offset=${offsetFeed}`
 
       const dataFeeds = await getMainFeed(query);
+      if(Array.isArray(dataFeeds.data) && dataFeeds.data.length <= 0) {
+        setLoading(false)
+        return setIsLastPage(true)
+      }
       handleDataFeeds(dataFeeds, offsetFeed)
     } catch (e) {
       setLoading(false);
@@ -150,6 +158,18 @@ const onBlockCompleted = async (postId) => {
 
     }
   }
+
+  React.useEffect(() => {
+    if(isLastPage) {
+      Toast.show({
+            type: 'center',
+            text1: `You’ve seen all posts - What about putting your phone aside for a bit?`,
+            autoHide: true,
+            visibilityTime: 8000,
+            position: 'bottom',
+    });
+    }
+  }, [isLastPage])
 
   return {
     getDataFeeds,
