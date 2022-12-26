@@ -158,7 +158,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
             }
             return false
         }
-        if(item.block >= 2) {
+        if(item.block >= 2 && item.upvote <= 0 ) {
             return true
         }
         return  false
