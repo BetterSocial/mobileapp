@@ -15,7 +15,7 @@ import {
   logIn,
   onCancel,
   onError,
-  onSuccess,
+  onSuccess
 } from '@human-internet/react-native-humanid';
 import { useNavigation } from '@react-navigation/core';
 import { useSetRecoilState } from 'recoil';
@@ -23,6 +23,7 @@ import { useSetRecoilState } from 'recoil';
 import DevDummyLogin from '../../components/DevDummyLogin';
 import SlideShow from './elements/SlideShow';
 import getRemoteConfig from '../../service/getRemoteConfig';
+import useSignin from './hooks/useSignin';
 import { Context } from '../../context';
 import { InitialStartupAtom } from '../../service/initialStartup';
 import { checkToken } from '../../service/outh';
@@ -31,13 +32,12 @@ import {
   removeLocalStorege,
   setAccessToken,
   setRefreshToken,
-  setUserId,
+  setUserId
 } from '../../utils/token';
 import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import useSignin from './hooks/useSignin';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;

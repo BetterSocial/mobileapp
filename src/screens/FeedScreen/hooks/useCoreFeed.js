@@ -1,15 +1,15 @@
-
-import React from 'react'
+import React from 'react';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { Context } from '../../../context';
+import { FEEDS_CACHE } from '../../../utils/cache/constant';
+import { downVote, upVote } from '../../../service/vote';
 import { getFeedDetail, getMainFeed } from '../../../service/post';
 import { getSpecificCache, saveToCache } from '../../../utils/cache';
-import { FEEDS_CACHE } from '../../../utils/cache/constant';
 import { setFeedByIndex, setMainFeeds, setTimer } from '../../../context/actions/feeds';
-import { upVote, downVote } from '../../../service/vote';
 
 const useCoreFeed = () => {
 const [loading, setLoading] = React.useState(false);
