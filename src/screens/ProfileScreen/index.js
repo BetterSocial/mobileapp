@@ -44,10 +44,10 @@ import {
   updateImageProfile
 } from '../../service/profile';
 import { colors } from '../../utils/colors';
+import { deletePost, getFeedDetail } from '../../service/post';
 import { downVote, upVote } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import { getAccessToken } from '../../utils/token';
-import { getFeedDetail } from '../../service/post';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
@@ -497,6 +497,7 @@ const ProfileScreen = ({ route }) => {
   }
 
   const onHeaderOptionClicked = (item) => {
+    console.log(item?.id)
     setSelectedPostForOption(item)
     setIsOptionModalOpen(true)
   }
@@ -516,10 +517,12 @@ const ProfileScreen = ({ route }) => {
   const onDeletePost = async () => {
     setIsOptionModalOpen(false)
     removePostByIdFromContext()
-    setTimeout(() => {
+
+    const response = await deletePost(selectedPostForOption?.id)
+    if (response?.success) {
       Toast.show('Post was permanently deleted')
-    }, 1000)
-    // getMyFeeds()
+    }
+    getMyFeeds()
   }
 
   const renderHeader = React.useMemo(() => (

@@ -1,4 +1,3 @@
-import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
 
 import api from './config';
@@ -102,3 +101,15 @@ export const viewTimePost = async (id, time, source) => {
     return error;
   }
 };
+
+export const deletePost = async (postId) => {
+  try {
+    const resApi = await api.delete(`/activity/${postId}`);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(error?.response?.data);
+    console.log('delete post error');
+    console.log(error);
+    return error;
+  }
+}

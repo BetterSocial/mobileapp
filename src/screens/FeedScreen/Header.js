@@ -136,7 +136,7 @@ const _renderAnonimity = ({
               <Text style={[styles.feedUsername]}>Anonymous</Text>
             </View>
             {showAnonymousOption && <GlobalButton
-              buttonStyle={{ position: 'absolute', right: 0, top: -8}}
+              buttonStyle={{ position: 'absolute', right: 0, top: -8 }}
               onPress={onHeaderOptionClicked}>
               <View style={{ zIndex: 1000 }}>
                 <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
@@ -265,7 +265,7 @@ const Header = ({ props, isBackButton = false, height, source = null, headerStyl
       height,
       headerStyle,
       showAnonymousOption,
-      onHeaderOptionClicked
+      onHeaderOptionClicked: () => onHeaderOptionClicked(props)
     });
   }
   return _renderProfileNormal({
