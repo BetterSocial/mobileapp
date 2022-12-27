@@ -65,7 +65,6 @@ import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 import { getAccessToken } from '../utils/token';
 import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
 import HomeBottomTabs from './HomeBottomTabs';
-import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
 
 const RootStack = createStackNavigator();
 

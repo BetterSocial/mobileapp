@@ -144,13 +144,13 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
     // const [profile] = context.profile
     const [profile] = React.useContext(Context).profile;
     const {myProfile} = profile
+        //   console.log(item, 'bahan')
 
     const {
         theme: {
           colors: { border, grey },
         },
       } = useTheme();
-
     const showNotification = () => {
         if(item.block > 0 && item.upvote > 0) {
             if(item.block / item.upvote >= 0.25 && item.block >=2) {
