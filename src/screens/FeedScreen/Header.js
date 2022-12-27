@@ -1,7 +1,6 @@
+import * as React from 'react';
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
-import * as React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import PropsTypes from 'prop-types';
 import { Avatar } from 'react-native-activity-feed';
 import {
@@ -13,14 +12,15 @@ import {
   Text,
   View
 } from 'react-native';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { useNavigation } from '@react-navigation/native';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import ElipsisIcon from '../../assets/icon/ElipsisIcon';
-// import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
+// import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
 import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
@@ -30,11 +30,11 @@ import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNin
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import dimen from '../../utils/dimen';
+import useFeedHeader from './hooks/useFeedHeader';
 import { PRIVACY_PUBLIC } from '../../utils/constants';
 import { calculateTime } from '../../utils/time';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
-import useFeedHeader from './hooks/useFeedHeader';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -100,10 +100,12 @@ const _renderAnonimity = ({
   location,
   isBackButton,
   height,
-  headerStyle
+  headerStyle,
+  showAnonymousOption = false,
+  onHeaderOptionClicked = () => { }
 }) => {
   const navigation = useNavigation();
-  
+
 
   return (
     <SafeAreaView>
@@ -133,6 +135,13 @@ const _renderAnonimity = ({
             <View style={[styles.containerFeedName, { alignItems: 'center' }]}>
               <Text style={[styles.feedUsername]}>Anonymous</Text>
             </View>
+            {showAnonymousOption && <GlobalButton
+              buttonStyle={{ position: 'absolute', right: 0, top: -8}}
+              onPress={onHeaderOptionClicked}>
+              <View style={{ zIndex: 1000 }}>
+                <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+              </View>
+            </GlobalButton>}
             <View style={styles.containerFeedText}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
@@ -170,10 +179,11 @@ const _renderProfileNormal = ({
   isBackButton,
   height,
   source,
-  headerStyle
+  headerStyle,
+  onHeaderOptionClicked = () => { }
 }) => {
-  const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({actor, source})
-  
+  const { navigateToProfile, username, profile_pic_url, onBackNormalUser } = useFeedHeader({ actor, source })
+
 
   return (
     <SafeAreaView>
@@ -207,9 +217,10 @@ const _renderProfileNormal = ({
               </Text>
 
               <GlobalButton
-                buttonStyle={{ marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center' }}>
+                buttonStyle={{ marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center' }}
+                onPress={onHeaderOptionClicked}>
                 <View style={{ zIndex: 1000 }}>
-                  <ElipsisIcon width={4} height={12} fill={colors.blackgrey} />
+                  <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
                 </View>
               </GlobalButton>
             </View>
@@ -239,7 +250,7 @@ const _renderProfileNormal = ({
   );
 };
 
-const Header = ({ props, isBackButton = false, height, source = null, headerStyle }) => {
+const Header = ({ props, isBackButton = false, height, source = null, headerStyle, onHeaderOptionClicked = () => { }, showAnonymousOption = false }) => {
   const { anonimity, time, privacy, duration_feed, expired_at, location, actor } =
     props;
 
@@ -252,22 +263,25 @@ const Header = ({ props, isBackButton = false, height, source = null, headerStyl
       location,
       isBackButton,
       height,
-      headerStyle
+      headerStyle,
+      showAnonymousOption,
+      onHeaderOptionClicked
     });
-  } 
-    return _renderProfileNormal({
-      actor,
-      time,
-      privacy,
-      duration_feed,
-      expired_at,
-      location,
-      isBackButton,
-      height,
-      source,
-      headerStyle
-    });
-  
+  }
+  return _renderProfileNormal({
+    actor,
+    time,
+    privacy,
+    duration_feed,
+    expired_at,
+    location,
+    isBackButton,
+    height,
+    source,
+    headerStyle,
+    onHeaderOptionClicked: () => onHeaderOptionClicked(props)
+  });
+
 };
 
 const styles = StyleSheet.create({
@@ -401,4 +415,4 @@ Header.propsTypes = {
   isBackButton: PropsTypes.bool,
 };
 
-export default React.memo (Header);
+export default React.memo(Header);

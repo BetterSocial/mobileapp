@@ -4,8 +4,10 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
 <View
   style={
     Object {
-      "justifyContent": "center",
-      "marginBottom": 30,
+      "height": "80%",
+      "justifyContent": "flex-start",
+      "marginBottom": 0,
+      "paddingVertical": 0,
     }
   }
 >
@@ -17,168 +19,191 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
       }
     }
   >
-    <View
-      accessible={true}
-      focusable={false}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
+    <Text
       style={
         Object {
-          "backgroundColor": "#F5F5F5",
-          "borderRadius": 8,
-          "display": "flex",
-          "flexDirection": "row",
-          "marginBottom": 8,
+          "color": "#828282",
+          "fontSize": NaN,
+          "marginLeft": 2,
         }
       }
-      testID="multiple"
+    >
+      All votes are anonymous - even to the poll’s author!
+    </Text>
+    <View
+      style={
+        Object {
+          "paddingTop": 10,
+        }
+      }
     >
       <View
-        style={
-          Array [
-            Object {
-              "borderRadius": 6,
-              "height": "100%",
-              "left": 0,
-              "position": "absolute",
-              "top": 0,
-            },
-            Object {
-              "backgroundColor": "#C4C4C4",
-              "width": "0%",
-            },
-          ]
-        }
-        testID="isExpired"
-      />
-      <View
+        accessible={true}
+        focusable={false}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "alignSelf": "center",
+            "backgroundColor": "#F5F5F5",
+            "borderRadius": 8,
             "display": "flex",
             "flexDirection": "row",
-            "paddingHorizontal": 16,
-            "paddingVertical": 8,
-            "width": "100%",
+            "marginBottom": 8,
           }
         }
+        testID="multiple"
       >
         <View
-          testID="nonePoll"
+          style={
+            Array [
+              Object {
+                "borderRadius": 6,
+                "height": "100%",
+                "left": 0,
+                "position": "absolute",
+                "top": 0,
+              },
+              Object {
+                "backgroundColor": "#C4C4C4",
+                "width": "0%",
+              },
+            ]
+          }
+          testID="isExpired"
         />
-        <Text
+        <View
           style={
             Object {
               "alignSelf": "center",
-              "color": "#000000",
-              "flex": 1,
-              "fontFamily": "Inter-Regular",
-              "marginBottom": 6,
-              "marginLeft": 0,
-              "marginTop": 6,
+              "display": "flex",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+              "paddingVertical": 4,
+              "width": "100%",
             }
           }
         >
-          bahaya123
-        </Text>
-        <Text
-          style={
-            Object {
-              "alignSelf": "center",
+          <View
+            testID="nonePoll"
+          />
+          <Text
+            style={
+              Object {
+                "alignSelf": "center",
+                "color": "#000000",
+                "flex": 1,
+                "fontFamily": "Inter-Regular",
+                "fontSize": NaN,
+                "marginBottom": 6,
+                "marginLeft": 0,
+                "marginTop": 6,
+              }
             }
-          }
-          testID="optionPercentage"
-        >
-          0%
-        </Text>
+          >
+            bahaya123
+          </Text>
+          <Text
+            style={
+              Object {
+                "alignSelf": "center",
+                "fontSize": NaN,
+              }
+            }
+            testID="optionPercentage"
+          >
+            0%
+          </Text>
+        </View>
       </View>
-    </View>
-    <View
-      accessible={true}
-      focusable={false}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        Object {
-          "backgroundColor": "#F5F5F5",
-          "borderRadius": 8,
-          "display": "flex",
-          "flexDirection": "row",
-          "marginBottom": 8,
-        }
-      }
-      testID="multiple"
-    >
       <View
-        style={
-          Array [
-            Object {
-              "borderRadius": 6,
-              "height": "100%",
-              "left": 0,
-              "position": "absolute",
-              "top": 0,
-            },
-            Object {
-              "backgroundColor": "#00ADB5",
-              "width": "50%",
-            },
-          ]
-        }
-        testID="isExpired"
-      />
-      <View
+        accessible={true}
+        focusable={false}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "alignSelf": "center",
+            "backgroundColor": "#F5F5F5",
+            "borderRadius": 8,
             "display": "flex",
             "flexDirection": "row",
-            "paddingHorizontal": 16,
-            "paddingVertical": 8,
-            "width": "100%",
+            "marginBottom": 8,
           }
         }
+        testID="multiple"
       >
         <View
-          testID="pollWinner"
+          style={
+            Array [
+              Object {
+                "borderRadius": 6,
+                "height": "100%",
+                "left": 0,
+                "position": "absolute",
+                "top": 0,
+              },
+              Object {
+                "backgroundColor": "#00ADB5",
+                "width": "50%",
+              },
+            ]
+          }
+          testID="isExpired"
+        />
+        <View
+          style={
+            Object {
+              "alignSelf": "center",
+              "display": "flex",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+              "paddingVertical": 4,
+              "width": "100%",
+            }
+          }
         >
-          <View />
+          <View
+            testID="pollWinner"
+          >
+            <View />
+          </View>
+          <Text
+            style={
+              Object {
+                "alignSelf": "center",
+                "color": "#000000",
+                "flex": 1,
+                "fontFamily": "Inter-Regular",
+                "fontSize": NaN,
+                "marginBottom": 0,
+                "marginLeft": 0,
+                "marginTop": 0,
+              }
+            }
+          >
+            bahaya1
+          </Text>
+          <Text
+            style={
+              Object {
+                "alignSelf": "center",
+                "fontSize": NaN,
+              }
+            }
+            testID="optionPercentage"
+          >
+            50%
+          </Text>
         </View>
-        <Text
-          style={
-            Object {
-              "alignSelf": "center",
-              "color": "#000000",
-              "flex": 1,
-              "fontFamily": "Inter-Regular",
-              "marginBottom": 0,
-              "marginLeft": 0,
-              "marginTop": 0,
-            }
-          }
-        >
-          bahaya1
-        </Text>
-        <Text
-          style={
-            Object {
-              "alignSelf": "center",
-            }
-          }
-          testID="optionPercentage"
-        >
-          50%
-        </Text>
       </View>
     </View>
   </View>
@@ -197,7 +222,7 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           "alignSelf": "center",
           "color": "#828282",
           "fontFamily": "Inter-Regular",
-          "fontSize": 12,
+          "fontSize": NaN,
           "lineHeight": 16,
         }
       }
@@ -222,12 +247,12 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
           "color": "#828282",
           "flex": 1,
           "fontFamily": "Inter-Regular",
-          "fontSize": 12,
+          "fontSize": NaN,
           "lineHeight": 16,
         }
       }
     >
-       Poll closed 14d ago
+       Poll closed 28d ago
     </Text>
   </View>
 </View>
