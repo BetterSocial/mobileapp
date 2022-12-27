@@ -8,8 +8,8 @@ import {
   StyleSheet,
   View
 } from 'react-native';
-import { useRecoilValue, useSetRecoilState, } from 'recoil';
-
+import SplashScreen from 'react-native-splash-screen';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useLocalChannelsFirst } from 'stream-chat-react-native';
 
 import Header from '../components/Header';
