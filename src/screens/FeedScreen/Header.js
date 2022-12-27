@@ -265,7 +265,7 @@ const Header = ({ props, isBackButton = false, height, source = null, headerStyl
       height,
       headerStyle,
       showAnonymousOption,
-      onHeaderOptionClicked: () => onHeaderOptionClicked(props)
+      onHeaderOptionClicked
     });
   }
   return _renderProfileNormal({

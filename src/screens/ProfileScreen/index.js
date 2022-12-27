@@ -497,7 +497,6 @@ const ProfileScreen = ({ route }) => {
   }
 
   const onHeaderOptionClicked = (item) => {
-    console.log(item?.id)
     setSelectedPostForOption(item)
     setIsOptionModalOpen(true)
   }

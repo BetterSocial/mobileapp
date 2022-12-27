@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/core';
 
 import Content from '../../FeedScreen/Content';
 import ContentLink from '../../FeedScreen/ContentLink';
-import ContentPoll from '../../FeedScreen/ContentPoll';
 import Header from '../../FeedScreen/Header';
 import ShareUtils from '../../../utils/share';
 import dimen from '../../../utils/dimen';
@@ -168,23 +167,6 @@ const Item = ({
         height={getHeightHeader()}
         onHeaderOptionClicked={onHeaderOptionClicked}
         showAnonymousOption={showAnonymousOption} />
-
-      {item.post_type === POST_TYPE_POLL && (
-        <ContentPoll
-          index={index}
-          message={item.message}
-          images_url={item.images_url}
-          polls={item.pollOptions}
-          onPress={onPress}
-          item={item}
-          pollexpiredat={item.polls_expired_at}
-          multiplechoice={item.multiplechoice}
-          isalreadypolling={item.isalreadypolling}
-          onnewpollfetched={onNewPollFetched}
-          voteCount={item.voteCount}
-          topics={item?.topics}
-        />
-      )}
 
       {item.post_type === POST_TYPE_LINK && (
         <View style={{ flex: 1 }}>
