@@ -975,7 +975,7 @@ const styles = StyleSheet.create({
     },
     whiteText: {
         color: 'white',
-        fontSize: normalizeFontSize(12),
+        fontSize: normalizeFontSize(10),
         textAlign: 'center'
     }
 });
