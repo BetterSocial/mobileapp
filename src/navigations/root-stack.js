@@ -60,7 +60,7 @@ import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 import { getAccessToken } from '../utils/token';
-import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
+// import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
 import HomeBottomTabs from './HomeBottomTabs';
 
 const RootStack = createStackNavigator();
@@ -102,9 +102,9 @@ export const RootNavigator = () => {
 
 
   React.useEffect(() => {
-    traceMetricScreen('loading_splashscreen').then(fnCallback => {
-      perf.current = fnCallback;
-    });
+    // traceMetricScreen('loading_splashscreen').then(fnCallback => {
+    //   perf.current = fnCallback;
+    // });
     LogBox.ignoreAllLogs()
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
