@@ -245,7 +245,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
             </View>  : null
             }
             </View>
-            {showNotification() &&  <View style={styles.blockMention} >
+            {item.postMaker.id === myProfile.user_id &&  showNotification() &&  <View style={styles.blockMention} >
             <View style={styles.containerIcon} >
             <View style={styles.iconBlockContainer} >
                 <FastImage source={BlockIcon} resizeMode={FastImage.resizeMode.contain} style={styles.iconBlockContainer} />
@@ -261,8 +261,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
                 </Text>
             </View>
             
-            </View> }
-               
+            </View>}
         </ButtonHighlight>
     )
 }
