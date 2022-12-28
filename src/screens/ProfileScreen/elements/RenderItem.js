@@ -81,6 +81,8 @@ const Item = ({
   onCardContentPress,
   index = -1,
   bottomBar = true,
+  onHeaderOptionClicked = () => { }
+
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -157,7 +159,7 @@ const Item = ({
 
   return (
     <View style={styles.cardContainer(bottomHeight)}>
-      <Header headerStyle={{paddingHorizontal: 9}} props={item} height={getHeightHeader()} />
+      <Header onHeaderOptionClicked={onHeaderOptionClicked} headerStyle={{paddingHorizontal: 9}} props={item} height={getHeightHeader()} />
 
       {item.post_type === POST_TYPE_LINK && (
         <View style={{flex: 1}}>
