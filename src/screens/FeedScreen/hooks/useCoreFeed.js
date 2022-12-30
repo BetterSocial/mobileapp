@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import Toast from 'react-native-toast-message';
+import SimpleToast from 'react-native-simple-toast';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -161,13 +161,8 @@ const onBlockCompleted = async (postId) => {
 
   React.useEffect(() => {
     if(isLastPage) {
-      Toast.show({
-            type: 'center',
-            text1: `You’ve seen all posts - What about putting your phone aside for a bit?`,
-            autoHide: true,
-            visibilityTime: 8000,
-            position: 'bottom',
-    });
+      SimpleToast.show('You’ve seen all posts - What about putting your phone aside for a bit?', SimpleToast.LONG)
+
     }
   }, [isLastPage])
 
