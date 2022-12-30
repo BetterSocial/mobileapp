@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   Dimensions,
   LogBox,
-  Share,
   StatusBar,
   StyleSheet,
   Text,
@@ -31,6 +30,7 @@ import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
+import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
@@ -57,7 +57,6 @@ import {
 import { setFeedByIndex } from '../../context/actions/feeds';
 import { setMyProfileAction } from '../../context/actions/setMyProfileAction';
 import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
-import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
@@ -201,14 +200,8 @@ const ProfileScreen = ({ route }) => {
     analytics().logEvent('profile_screen_btn_share', {
       id: 'btn_share',
     });
-    try {
-      await Share.share({
-        message: shareUserLink(dataMain.username),
-      });
-    } catch (error) {
-      Alert.alert(error.message);
-    }
-  };
+    ShareUtils.shareUserLink(dataMain.username)
+  }
 
   const goToSettings = () => {
     analytics().logEvent('profile_screen_btn_settings', {

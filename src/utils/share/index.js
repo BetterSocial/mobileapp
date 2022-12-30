@@ -1,6 +1,26 @@
 import analytics from '@react-native-firebase/analytics';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import { Share } from 'react-native';
+import config, { Config } from 'react-native-config';
+import { Alert, Share } from 'react-native';
+
+const buildShare = async (message) => {
+    try {
+        const result = await Share.share({
+            message
+        });
+        if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+                // shared with activity type of result.activityType
+            } else {
+                // shared
+            }
+        } else if (result.action === Share.dismissedAction) {
+            // dismissed
+        }
+    } catch (error) {
+        Alert.alert(error.message);
+    }
+}
 
 const shareDomain = (item) => {
     console.log('Share in domain')
@@ -14,43 +34,26 @@ const sharePostInTopic = async (item, analyticsLogEvent, analyticsId) => {
     analytics().logEvent(analyticsLogEvent, {
         id: analyticsId,
     });
-    await buildShare(item)
+    await buildShare(`${Config.SHARE_URL}/p/${item?.id}`)
 }
 
 const sharePostInProfile = async (item, analyticsLogEvent, analyticsId) => {
     analytics().logEvent(analyticsLogEvent, {
         id: analyticsId,
     });
-    await buildShare(item)
+    await buildShare(`${Config.SHARE_URL}/p/${item?.id}`)
 }
 
 const shareFeeds = async (item, analyticsLogEvent, analyticsId) => {
     analytics().logEvent(analyticsLogEvent, {
         id: analyticsId,
     });
-    await buildShare(item)
+    await buildShare(`${Config.SHARE_URL}/p/${item?.id}`)
 }
 
-const buildShare = async(item) => {
-    try {
-        const result = await Share.share({
-            message: await buildLink(item),
-        });
-        if (result.action === Share.sharedAction) {
-            if (result.activityType) {
-            // shared with activity type of result.activityType
-            } else {
-            // shared
-            }
-        } else if (result.action === Share.dismissedAction) {
-          // dismissed
-        }
-    } catch (error) {
-        alert(error.message);
-    }
-}
+const shareUserLink = (username) => buildShare(`${config.SHARE_URL}/u/${username}`)
 
-const buildLink = async(item) => {
+const buildLink = async (item) => {
     const link = await dynamicLinks().buildLink({
         link: `https://dev.bettersocial.org/${item}`,
         domainUriPrefix: 'https://bettersocialapp.page.link',
@@ -69,15 +72,18 @@ const buildLink = async(item) => {
             packageName: 'org.bettersocial.dev',
         },
     },
-    'SHORT',
+        'SHORT',
     );
     return link;
 }
 
-export default {
+const ShareUtils = {
     shareDomain,
     shareFeeds,
     shareNews,
     sharePostInProfile,
-    sharePostInTopic
+    sharePostInTopic,
+    shareUserLink,
 }
+
+export default ShareUtils

@@ -1,26 +1,26 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import PropTypes from 'prop-types';
 import React from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
+import { StatusBar, StyleSheet, View } from 'react-native';
 
-import { Footer, Gap, PreviewComment } from '../../components';
+import Content from './Content';
+import ContentLink from './ContentLink';
+import Header from './Header';
+import ShareUtils from '../../utils/share';
+import StringConstant from '../../utils/string/StringConstant';
+import useFeed from './hooks/useFeed';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_FEED_SCREEN,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
-  SOURCE_FEED_TAB,
+  SOURCE_FEED_TAB
 } from '../../utils/constants';
+import { Footer, Gap, PreviewComment } from '../../components';
 import { getCommentLength } from '../../utils/getstream';
-import ShareUtils from '../../utils/share'
-import StringConstant from '../../utils/string/StringConstant';
-import { showScoreAlertDialog } from '../../utils/Utils'
-import Content from './Content';
-import ContentLink from './ContentLink';
-import Header from './Header';
-import useFeed from './hooks/useFeed';
+import { showScoreAlertDialog } from '../../utils/Utils';
 
 const tabBarHeight = StatusBar.currentHeight;
 
@@ -123,6 +123,7 @@ const RenderListFeed = (props) => {
               ANALYTICS_SHARE_POST_FEED_SCREEN,
               ANALYTICS_SHARE_POST_FEED_ID
             )}
+            // onPressShare={() => {}}
             onPressComment={() => onPressComment(item)}
             onPressBlock={() => onPressBlock(item)}
             onPressDownVote={onPressDownVoteHandle}
