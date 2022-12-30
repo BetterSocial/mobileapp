@@ -1,7 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'com.google.firebase.firebase-perf'
+// apply plugin: 'com.google.firebase.firebase-perf'
 
 import com.android.build.OutputFile
 
@@ -151,8 +151,8 @@ android {
         applicationId "org.bettersocial"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 191
-        versionName "1.9.1"
+        versionCode 194
+        versionName "1.9.4"
     }
     splits {
         abi {

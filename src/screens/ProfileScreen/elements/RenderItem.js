@@ -23,7 +23,7 @@ import { getCountCommentWithChild } from '../../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../../utils/navigation/paramBuilder';
 import { showScoreAlertDialog } from '../../../utils/Utils';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const getHeightReaction = () => {
   const h = Math.floor((height * 12) / 100);
@@ -60,7 +60,7 @@ const getCountComment = (item) => {
   const reactionCount = item.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
-    const { comment } = reactionCount;
+    const {comment} = reactionCount;
     if (comment !== undefined) {
       count = comment;
     }
@@ -81,8 +81,8 @@ const Item = ({
   onCardContentPress,
   index = -1,
   bottomBar = true,
-  showAnonymousOption = false,
   onHeaderOptionClicked = () => { }
+
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -90,14 +90,10 @@ const Item = ({
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
-  const [contentHeight, setContentHeight] = React.useState(0);
-
-  const navigation = useNavigation();
-
   const [feeds, dispatch] = React.useContext(Context).feeds;
-
+  const navigation = useNavigation();
+  const [contentHeight, setContentHeight] = React.useState(0);
   const bottomHeight = bottomBar ? useBottomTabBarHeight() : 0;
-
   // const bottomHeight = 0;
 
   React.useEffect(() => {
@@ -163,11 +159,7 @@ const Item = ({
 
   return (
     <View style={styles.cardContainer(bottomHeight)}>
-      <Header headerStyle={{ paddingHorizontal: 9 }}
-        props={item}
-        height={getHeightHeader()}
-        onHeaderOptionClicked={onHeaderOptionClicked}
-        showAnonymousOption={showAnonymousOption} />
+      <Header onHeaderOptionClicked={onHeaderOptionClicked} headerStyle={{paddingHorizontal: 9}} props={item} height={getHeightHeader()} />
 
       {item.post_type === POST_TYPE_POLL && (
         <ContentPoll
@@ -187,7 +179,7 @@ const Item = ({
       )}
 
       {item.post_type === POST_TYPE_LINK && (
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <ContentLink
             index={index}
             og={item.og}
@@ -218,9 +210,9 @@ const Item = ({
           totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
           isSelf={true}
-          onPressShare={() => ShareUtils.sharePostInProfile(item,
-            ANALYTICS_SHARE_POST_PROFILE_SCREEN,
-            ANALYTICS_SHARE_POST_PROFILE_ID
+          onPressShare={() => ShareUtils.sharePostInProfile(item, 
+              ANALYTICS_SHARE_POST_PROFILE_SCREEN,  
+              ANALYTICS_SHARE_POST_PROFILE_ID
           )}
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
@@ -318,9 +310,9 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
     // paddingHorizontal: 9
   }),
-  paddingHorizontal: { paddingHorizontal: 20 },
-  lineAffterFooter: { backgroundColor: '#C4C4C4', height: 1 },
-  footerWrapper: (h) => ({ height: h, paddingHorizontal: 0 }),
+  paddingHorizontal: {paddingHorizontal: 20},
+  lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
+  footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
   contentReaction: (heightReaction) => ({
     height: heightReaction
   }),

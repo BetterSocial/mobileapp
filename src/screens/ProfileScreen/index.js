@@ -4,7 +4,6 @@ import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {
   ActivityIndicator,
-  Alert,
   Dimensions,
   LogBox,
   Share,
@@ -497,7 +496,6 @@ const ProfileScreen = ({ route }) => {
   }
 
   const onHeaderOptionClicked = (item) => {
-    console.log(item?.id)
     setSelectedPostForOption(item)
     setIsOptionModalOpen(true)
   }

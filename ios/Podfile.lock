@@ -29,6 +29,9 @@ PODS:
   - Firebase/Messaging (7.10.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 7.10.0)
+  - Firebase/Performance (7.10.0):
+    - Firebase/CoreOnly
+    - FirebasePerformance (~> 7.10.0)
   - Firebase/RemoteConfig (7.10.0):
     - Firebase/CoreOnly
     - FirebaseRemoteConfig (~> 7.10.0)
@@ -77,6 +80,15 @@ PODS:
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Reachability (~> 7.0)
     - GoogleUtilities/UserDefaults (~> 7.0)
+  - FirebasePerformance (7.10.0):
+    - FirebaseCore (~> 7.0)
+    - FirebaseInstallations (~> 7.0)
+    - FirebaseRemoteConfig (~> 7.0)
+    - GoogleDataTransport (~> 8.4)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/ISASwizzler (~> 7.0)
+    - GoogleUtilities/MethodSwizzler (~> 7.0)
+    - Protobuf (~> 3.12)
   - FirebaseRemoteConfig (7.10.0):
     - FirebaseABTesting (~> 7.0)
     - FirebaseCore (~> 7.0)
@@ -194,6 +206,7 @@ PODS:
   - Permission-PhotoLibrary (3.6.1):
     - RNPermissions
   - PromisesObjC (1.2.12)
+  - Protobuf (3.21.7)
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -407,6 +420,9 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.4.1):
     - React-Core
+  - react-native-simple-toast (1.1.4):
+    - React-Core
+    - Toast (~> 4.0.0)
   - react-native-splash-screen (3.3.0):
     - React-Core
   - react-native-version-number (0.3.6):
@@ -512,6 +528,10 @@ PODS:
     - RNFBApp
   - RNFBMessaging (11.3.1):
     - Firebase/Messaging (= 7.10.0)
+    - React-Core
+    - RNFBApp
+  - RNFBPerf (11.2.0):
+    - Firebase/Performance (= 7.10.0)
     - React-Core
     - RNFBApp
   - RNFBRemoteConfig (11.1.2):
@@ -637,6 +657,7 @@ DEPENDENCIES:
   - react-native-keyevent (from `../node_modules/react-native-keyevent`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-simple-toast (from `../node_modules/react-native-simple-toast`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-version-number (from `../node_modules/react-native-version-number`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -664,6 +685,7 @@ DEPENDENCIES:
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBDynamicLinks (from `../node_modules/@react-native-firebase/dynamic-links`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
+  - "RNFBPerf (from `../node_modules/@react-native-firebase/perf`)"
   - "RNFBRemoteConfig (from `../node_modules/@react-native-firebase/remote-config`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -693,6 +715,7 @@ SPEC REPOS:
     - FirebaseInstallations
     - FirebaseInstanceID
     - FirebaseMessaging
+    - FirebasePerformance
     - FirebaseRemoteConfig
     - Flipper
     - Flipper-DoubleConversion
@@ -709,6 +732,7 @@ SPEC REPOS:
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
+    - Protobuf
     - SDWebImage
     - SDWebImageWebPCoder
     - Toast
@@ -772,6 +796,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-simple-toast:
+    :path: "../node_modules/react-native-simple-toast"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
   react-native-version-number:
@@ -826,6 +852,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/dynamic-links"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
+  RNFBPerf:
+    :path: "../node_modules/@react-native-firebase/perf"
   RNFBRemoteConfig:
     :path: "../node_modules/@react-native-firebase/remote-config"
   RNFS:
@@ -871,6 +899,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: a58d4f72ec5861840b84df489f2668d970df558a
   FirebaseInstanceID: ad5135045a498d7775903efd39762d2cdfa1be27
   FirebaseMessaging: 76b3058cef7f339cf10db196e03bbbb2165fb5d7
+  FirebasePerformance: 4dc33e0b7baa36b88474c9edb439088ef1b17f3c
   FirebaseRemoteConfig: 2841e353accfe688150781deebeb245e3fe16c2f
   Flipper: 1bd2db48dcc31e4b167b9a33ec1df01c2ded4893
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
@@ -891,6 +920,7 @@ SPEC CHECKSUMS:
   Permission-Camera: bf6791b17c7f614b6826019fcfdcc286d3a107f6
   Permission-PhotoLibrary: 5b34ca67279f7201ae109cef36f9806a6596002d
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  Protobuf: f4128517d7a42302e106cc3afe614ee3a7513e94
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: f85fa00af016059cf88b90b8f8ff9a6af9e4b6c3
   RCTTypeSafety: 5279aaf0fb1ad715cbbbbee32d5c98c72598bc9c
@@ -911,6 +941,7 @@ SPEC CHECKSUMS:
   react-native-keyevent: f8728b8c73dbfbcb4d2c56d9e78be082c673c456
   react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
+  react-native-simple-toast: 8ee5d23f0b92b935ab7434cdb65159ce12dfb4b7
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
   react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
@@ -938,6 +969,7 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: 31a039911500bf1a3a7fd15c5df3c4a413a542d6
   RNFBDynamicLinks: dc131812ecfbd48c4359046a957b1f38348d53de
   RNFBMessaging: 9445f07d4ffb0bf149daa230ed5f5e52c5edd14b
+  RNFBPerf: 35a424771cf3712390cb4acf054455279e8583e8
   RNFBRemoteConfig: 4f1fdad0c86324fdf593443699484305e826e314
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
