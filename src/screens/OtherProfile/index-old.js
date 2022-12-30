@@ -6,7 +6,6 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
-  Share,
   StatusBar,
   StyleSheet,
   Text,
@@ -50,7 +49,7 @@ import { setFeedByIndex, setOtherProfileFeed } from '../../context/actions/other
 import { trimString } from '../../utils/string/TrimString';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 
-const {width} = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
 const OtherProfile = () => {
   const navigation = useNavigation();
@@ -140,24 +139,7 @@ const OtherProfile = () => {
     }
   };
 
-  const onShare = async () => {
-    try {
-      const result = await Share.share({
-        message: ShareUtils.shareUserLink(dataMain.username),
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  const onShare = async () => ShareUtils.shareUserLink(dataMain.username);
 
   const handleSetUnFollow = async () => {
     const data = {
@@ -186,19 +168,19 @@ const OtherProfile = () => {
   };
 
   const renderBio = (string) => (
-      <View style={styles.containerBio}>
-        {string === null || string === undefined ? (
-          <Text>No Bio</Text>
-        ) : (
-          <Text linkStyle={styles.seeMore}>
-            {trimString(string, 121)}{' '}
-            {string.length > 121 ? (
-              <Text style={{ color: colors.blue }}>see more</Text>
-            ) : null}
-          </Text>
-        )}
-      </View>
-    );
+    <View style={styles.containerBio}>
+      {string === null || string === undefined ? (
+        <Text>No Bio</Text>
+      ) : (
+        <Text linkStyle={styles.seeMore}>
+          {trimString(string, 121)}{' '}
+          {string.length > 121 ? (
+            <Text style={{ color: colors.blue }}>see more</Text>
+          ) : null}
+        </Text>
+      )}
+    </View>
+  );
 
   const handleScroll = (event) => {
     postRef.current.measure((x, y, width, height, pagex, pagey) => {
@@ -538,21 +520,21 @@ const OtherProfile = () => {
                       </View>
                       <View style={styles.containerFlatFeed}>
                         {feeds.map((item, index) => (
-                            <RenderItem
-                              bottomBar={false}
-                              item={item}
-                              index={index}
-                              onNewPollFetched={onNewPollFetched}
-                              onPressDomain={onPressDomain}
-                              onPress={() => onPress(item, index)}
-                              onPressComment={() => onPressComment(index)}
-                              onPressBlock={onBlockReaction}
-                              onPressUpvote={(post) => setUpVote(post, index)}
-                              selfUserId={user_id}
-                              onPressDownVote={(post) =>
-                                setDownVote(post, index)
-                              } />
-                          ))}
+                          <RenderItem
+                            bottomBar={false}
+                            item={item}
+                            index={index}
+                            onNewPollFetched={onNewPollFetched}
+                            onPressDomain={onPressDomain}
+                            onPress={() => onPress(item, index)}
+                            onPressComment={() => onPressComment(index)}
+                            onPressBlock={onBlockReaction}
+                            onPressUpvote={(post) => setUpVote(post, index)}
+                            selfUserId={user_id}
+                            onPressDownVote={(post) =>
+                              setDownVote(post, index)
+                            } />
+                        ))}
                       </View>
                     </View>
                   )}
