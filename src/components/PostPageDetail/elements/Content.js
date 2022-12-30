@@ -23,7 +23,7 @@ import { POST_TYPE_POLL } from '../../../utils/constants';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const Content = ({ message, images_url, style, onPress, topics = [], item, onNewPollFetched }) => {
+const Content = ({ message, images_url, topics = [], item, onnewpollfetched }) => {
   const navigation = useNavigation();
   const cekImage = () => images_url  && images_url !== '' ;
 
