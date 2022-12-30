@@ -1,24 +1,22 @@
 import * as React from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {
   ActivityIndicator,
-  Alert,
   Dimensions,
   LogBox,
-  Share,
   StatusBar,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View,
+  View
 } from 'react-native';
-import { debounce } from 'lodash'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { debounce } from 'lodash';
 import { showMessage } from 'react-native-flash-message';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ImagePicker from 'react-native-image-crop-picker';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
@@ -31,6 +29,7 @@ import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
+import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
@@ -40,7 +39,7 @@ import {
   getSelfFeedsInProfile,
   removeImageProfile,
   updateBioProfile,
-  updateImageProfile,
+  updateImageProfile
 } from '../../service/profile';
 import { colors } from '../../utils/colors';
 import { downVote, upVote } from '../../service/vote';
@@ -52,15 +51,14 @@ import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import {
   requestCameraPermission,
-  requestExternalStoragePermission,
+  requestExternalStoragePermission
 } from '../../utils/permission';
 import { setFeedByIndex } from '../../context/actions/feeds';
+import { setMyProfileAction } from '../../context/actions/setMyProfileAction';
 import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
-import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { setMyProfileAction } from '../../context/actions/setMyProfileAction';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -170,7 +168,7 @@ const ProfileScreen = ({ route }) => {
 
   const saveProfileState = (result) => {
     if (result && typeof result === 'object') {
-      
+
       setDataMain(result);
       setDataMainBio(result.bio)
       setMyProfileAction(result, dispatchProfile)
@@ -181,7 +179,6 @@ const ProfileScreen = ({ route }) => {
 
   const getMyFeeds = async (offset = 0, limit = 10) => {
     const result = await getSelfFeedsInProfile(offset, limit);
-    console.log(result, 'nakal')
     if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch)
     else {
       const clonedFeeds = [...feeds, ...result.data]
@@ -197,14 +194,8 @@ const ProfileScreen = ({ route }) => {
     analytics().logEvent('profile_screen_btn_share', {
       id: 'btn_share',
     });
-    try {
-      await Share.share({
-        message: shareUserLink(dataMain.username),
-      });
-    } catch (error) {
-      Alert.alert('Somethig wrong!', error.message)
-    }
-  };
+    ShareUtils.shareUserLink(dataMain.username)
+  }
 
   const goToSettings = () => {
     analytics().logEvent('profile_screen_btn_settings', {
@@ -272,7 +263,7 @@ const ProfileScreen = ({ route }) => {
         mediaType: 'photo',
         includeBase64: true
       }).then((imageRes) => {
-         handleUpdateImage(`data:image/jpeg;base64,${  imageRes.data}`, 'gallery');
+        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
       })
     } else {
       Toast.show(message, Toast.SHORT);
@@ -289,7 +280,7 @@ const ProfileScreen = ({ route }) => {
         mediaType: 'photo',
         includeBase64: true
       }).then((imageRes) => {
-         handleUpdateImage(`data:image/jpeg;base64,${  imageRes.data}`, 'camera');
+        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'camera');
       })
     } else {
       Toast.show(message, Toast.SHORT);
@@ -403,21 +394,21 @@ const ProfileScreen = ({ route }) => {
   };
 
   const renderBio = (string) => (
-      <GlobalButton buttonStyle={styles.bioText} onPress={() => changeBio()}>
-        <View style={styles.containerBio}>
-          {string === null || string === undefined ? (
-            <Text style={{ color: colors.blue }}>Add Bio</Text>
-          ) : (
-            <Text style={styles.seeMore}>
-              {trimString(string, 121)}{' '}
-              {string.length > 121 ? (
-                <Text style={{ color: colors.blue }}>see more</Text>
-              ) : null}
-            </Text>
-          )}
-        </View>
-      </GlobalButton>
-    );
+    <GlobalButton buttonStyle={styles.bioText} onPress={() => changeBio()}>
+      <View style={styles.containerBio}>
+        {string === null || string === undefined ? (
+          <Text style={{ color: colors.blue }}>Add Bio</Text>
+        ) : (
+          <Text style={styles.seeMore}>
+            {trimString(string, 121)}{' '}
+            {string.length > 121 ? (
+              <Text style={{ color: colors.blue }}>see more</Text>
+            ) : null}
+          </Text>
+        )}
+      </View>
+    </GlobalButton>
+  );
 
   const onPressDomain = (item) => {
     const param = linkContextScreenParamBuilder(
@@ -487,7 +478,7 @@ const ProfileScreen = ({ route }) => {
   }
 
   const handleOnEndReached = () => {
-    console.log('lasa',postOffset)
+    console.log('lasa', postOffset)
     getMyFeeds(postOffset)
   }
 
@@ -496,29 +487,29 @@ const ProfileScreen = ({ route }) => {
     getMyFeeds(0, LIMIT_PROFILE_FEED)
   }
   const renderHeader = React.useMemo(() => (
-      <View onLayout={(event) => {
-        const headerHeightLayout = event.nativeEvent.layout.height
-        headerHeightRef.current = headerHeightLayout
-      }}>
-        <View style={styles.content}>
-          <ProfilePicture onImageContainerClick={changeImage} profilePicPath={dataMain.profile_pic_path} />
-          <FollowInfoRow
-            follower={dataMain.follower_symbol}
-            following={dataMain.following_symbol}
+    <View onLayout={(event) => {
+      const headerHeightLayout = event.nativeEvent.layout.height
+      headerHeightRef.current = headerHeightLayout
+    }}>
+      <View style={styles.content}>
+        <ProfilePicture onImageContainerClick={changeImage} profilePicPath={dataMain.profile_pic_path} />
+        <FollowInfoRow
+          follower={dataMain.follower_symbol}
+          following={dataMain.following_symbol}
 
-            onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)} />
+          onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)} />
 
-          {renderBio(dataMainBio)}
-        </View>
-        <View>
-          <View style={styles.tabs} ref={postRef}>
-            <Text style={styles.postText}>
-              Posts
-            </Text>
-          </View>
+        {renderBio(dataMainBio)}
+      </View>
+      <View>
+        <View style={styles.tabs} ref={postRef}>
+          <Text style={styles.postText}>
+            Posts
+          </Text>
         </View>
       </View>
-    ), [dataMain, dataMainBio])
+    </View>
+  ), [dataMain, dataMainBio])
 
   return (
     <>
@@ -619,9 +610,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   dummyItem: (height) => ({
-      height,
-      backgroundColor: colors.white
-    }),
+    height,
+    backgroundColor: colors.white
+  }),
   postText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,

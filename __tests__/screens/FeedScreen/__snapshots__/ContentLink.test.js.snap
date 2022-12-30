@@ -78,6 +78,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
               },
             ]
           }
+          testID="gap"
         />
         <View
           style={
@@ -284,6 +285,7 @@ exports[`Testing Feed Screen Content Link Card Matches Snapshot 1`] = `
                 },
               ]
             }
+            testID="gap"
           />
           <Text
             onPress={[Function]}
@@ -354,6 +356,7 @@ exports[`Testing Feed Screen Content Link CardHeader Matches Snapshot 1`] = `
         },
       ]
     }
+    testID="gap"
   />
   <View
     style={
@@ -546,6 +549,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                 },
               ]
             }
+            testID="gap"
           />
           <View
             style={
@@ -752,6 +756,7 @@ exports[`Testing Feed Screen Content Link ContentLink Matches Snapshot 1`] = `
                   },
                 ]
               }
+              testID="gap"
             />
             <Text
               onPress={[Function]}
