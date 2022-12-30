@@ -1,109 +1,252 @@
 import * as React from 'react';
-import FastImage from 'react-native-fast-image';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { fonts } from '../../../utils/fonts';
+import { COLORS } from '../../../utils/theme';
 
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import Image from '../../../components/Image';
-
-const ImageLayouter = ({images = [], onimageclick}) => {
-  const handleImageWidth = (index) => {
-    
-    if(images.length > 2 && images.length % 2 === 0) {
-      return {
-        height: '50%',
-        width: '50%',
-      }
-    }
-    if(images.length > 2 && images.length % 2 === 1) {
-      if(index === images.length -  1) {
-        return {
-          height: '50%',
-          width: '100%'
-        }
-      }
-      return {
-          height: '50%',
-          width: '50%'
-        }
-    }
-    if(images.length === 2) {
-      return {
-        height: '100%',
-        width: '50%'
-      }
-    }
-     return {
-        height: '100%',
-        width: '100%'
-      }
- 
+const ImageLayouter = ({ images = [], onimageclick }) => {
+  if (images.length === 1) {
+    return (
+      <Pressable onPress={() => onimageclick(0)}>
+        <Image
+          source={{ uri: images[0] }}
+          style={styles.imagelayout1}
+          width={'100%'}
+          height={305}
+        />
+      </Pressable>
+    );
+  } else if (images.length === 2) {
+    return (
+      <View style={styles.twoPhotoLayout}>
+        {images.map((item, index) => {
+          return (
+            <View style={styles.twoPhotoItemLayout}>
+              <Pressable onPress={() => onimageclick(index)}>
+                <Image
+                  style={styles.imagelayout2}
+                  source={{ uri: item }}
+                  width={'100%'}
+                  height={305}
+                />
+              </Pressable>
+            </View>
+          );
+        })}
+      </View>
+    );
+  } else if (images.length === 3) {
+    return (
+      <View style={styles.threePhotoLayout}>
+        <View style={styles.threePhotoTopLayout}>
+          <Pressable
+            onPress={() => onimageclick(0)}
+            style={styles.threePhotoTopFirstLayout}>
+            <Image
+              style={styles.imagelayout3}
+              source={{ uri: images[0] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+          <Pressable
+            onPress={() => onimageclick(1)}
+            style={styles.threePhotoTopSecondLayout}>
+            <Image
+              style={styles.imagelayout3}
+              source={{ uri: images[1] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+        </View>
+        <View style={styles.threePhotoBottomLayout}>
+          <Pressable onPress={() => onimageclick(2)}>
+            <Image
+              style={styles.imagelayout2}
+              source={{ uri: images[2] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+        </View>
+      </View>
+    );
+  } else if (images.length === 4) {
+    return (
+      <View style={styles.threePhotoLayout}>
+        <View style={styles.threePhotoTopLayout}>
+          <Pressable
+            onPress={() => onimageclick(0)}
+            style={styles.threePhotoTopFirstLayout}>
+            <Image
+              style={styles.imagelayout3}
+              source={{ uri: images[0] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+          <Pressable
+            onPress={() => onimageclick(1)}
+            style={styles.threePhotoTopSecondLayout}>
+            <Image
+              style={styles.imagelayout3}
+              source={{ uri: images[1] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+        </View>
+        <View style={styles.threePhotoTopLayout}>
+          <Pressable
+            onPress={() => onimageclick(2)}
+            style={styles.threePhotoTopFirstLayout}>
+            <Image
+              style={styles.imagelayout3}
+              source={{ uri: images[2] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+          <Pressable
+            onPress={() => onimageclick(3)}
+            style={styles.threePhotoTopSecondLayout}>
+            <Image
+              style={styles.imagelayout3}
+              source={{ uri: images[3] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+        </View>
+      </View>
+    );
+  } else if (images.length > 4) {
+    return (
+      <View style={styles.threePhotoLayout}>
+        <View style={styles.threePhotoTopLayout}>
+          <Pressable
+            onPress={() => onimageclick(0)}
+            style={styles.threePhotoTopFirstLayout}>
+            <Image
+              style={styles.imagelayout3}
+              source={{ uri: images[0] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+          <Pressable
+            onPress={() => onimageclick(1)}
+            style={styles.threePhotoTopSecondLayout}>
+            <Image
+              style={styles.imagelayout3}
+              source={{ uri: images[1] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+        </View>
+        <View style={styles.threePhotoTopLayout}>
+          <Pressable
+            onPress={() => onimageclick(2)}
+            style={styles.threePhotoTopFirstLayout}>
+            <Image
+              style={styles.imagelayout3}
+              source={{ uri: images[2] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+          <Pressable
+            onPress={() => onimageclick(3)}
+            style={styles.threePhotoTopSecondLayout}>
+            <View
+              style={{
+                backgroundColor: COLORS.blue,
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                opacity: 0.5,
+                zIndex: 1000,
+              }}
+            />
+            <Text
+              style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                top: '30%',
+                left: '40%',
+                fontSize: 36,
+                fontFamily: fonts.inter[700],
+                zIndex: 1000,
+                color: COLORS.white,
+              }}>{`${images.length - 3}+`}</Text>
+            <Image
+              style={styles.imagelayout3}
+              source={{ uri: images[3] }}
+              width={'100%'}
+              height={'100%'}
+            />
+          </Pressable>
+        </View>
+      </View>
+    );
   }
 
-  const renderImages = ({item, index}) => (
-    <React.Fragment key={index} >
-
-          {index > 3 ? null : <Pressable
-            style={handleImageWidth(index)}
-            onPress={() => onimageclick(index)}
-            >
-              {index ===  3 && images.length - 4 > 0 ? <View style={styles.backdropBg} >
-                <Text style={styles.allImageFont} >{images.length - 4}+ </Text>
-              </View> : null}
-              <React.Fragment>
-                <Image 
-              source={{uri: item}}
-              style={{height: 305, width: '100%'}}
-              resizeMode={FastImage.resizeMode.cover}
-              />
-              </React.Fragment>
-        </Pressable>}
-          
-        </React.Fragment>
-  )
-
-  return (
-    <>
-   <View  style={styles.imageContainer}  >
-    <FlatList 
-    data={images}
-    numColumns={2}
-    renderItem={renderImages}
-    />
-   </View>
-   
-   </>
-  )
-}
+  return <></>;
+};
 
 const styles = StyleSheet.create({
-  imageContainer: {
-    flexDirection: 'row', 
-    flexWrap: 'wrap', 
-    // backgroundColor:'blue', 
-    height: '100%', 
-    alignItems: 'center', 
-    justifyContent: 'center',
+  imagelayout1: {
+    maxHeight: 305,
+    width: '100%',
+    resizeMode: 'cover',
   },
-  imageItem: {
-    height: `50%` , 
-    width: '50%',
+
+  imagelayout2: {
+    maxHeight: 305,
+    width: '100%',
+    resizeMode: 'cover',
   },
-  imageStyle: {
-    height: '100%', width: '100%'
+
+  imagelayout3: {
+    resizeMode: 'cover',
   },
-  backdropBg: {
-    position: 'absolute', 
-    backgroundColor: 'black', 
-    height: '100%', 
-    width: '100%', 
-    zIndex: 1, opacity: 0.5,
-    justifyContent: 'center',
-    alignItems: 'center'
+
+  twoPhotoLayout: {
+    width: '100%',
+    height: 305,
+    display: 'flex',
+    flexDirection: 'row',
   },
-  allImageFont: {
-    fontSize: 32,
-    color:'white',
-    fontWeight: 'bold'
-  }
+
+  threePhotoLayout: {
+    width: '100%',
+    height: 305,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+
+  threePhotoTopLayout: {
+    flex: 1,
+    marginBottom: 2,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+
+  threePhotoTopFirstLayout: { flex: 1, marginRight: 2 },
+  threePhotoTopSecondLayout: { flex: 1 },
+  threePhotoTopSecondBlurLayout: { flex: 1, backgroundColor: COLORS.blue },
+
+  threePhotoBottomLayout: {
+    flex: 1,
+  },
+
+  twoPhotoItemLayout: {
+    flex: 1,
+    height: 305,
+    marginHorizontal: 1,
+  },
 });
 
 export default ImageLayouter;

@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+// apply plugin: 'com.google.firebase.firebase-perf'
 
 import com.android.build.OutputFile
 
@@ -136,11 +137,11 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 def keystorePropertiesFile = rootProject.file("keystore.properties");
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-    
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     ndkVersion "22.0.7026061"
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -150,8 +151,8 @@ android {
         applicationId "org.bettersocial"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 191
-        versionName "1.9.1"
+        versionCode 194
+        versionName "1.9.4"
     }
     splits {
         abi {

@@ -1,11 +1,12 @@
 import { HumanIDProvider } from '@human-internet/react-native-humanid';
 import { NavigationContainer } from '@react-navigation/native';
 import * as React from 'react';
-import { BackHandler, StyleSheet, View } from 'react-native'
+import Toast from 'react-native-toast-message';
+
+import { BackHandler, View } from 'react-native'
 import FlashMessage from 'react-native-flash-message';
 import {
   SafeAreaProvider,
-  SafeAreaView,
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
@@ -18,16 +19,12 @@ import Store from './src/context/Store';
 import { linking } from './src/navigations/linking';
 import {RootNavigator} from './src/navigations/root-stack';
 import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
+import {toastConfig} from './src/configs/ToastConfig'
 
 if(!__DEV__) {
   console.log = function () {}
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-})
 
 
 const App = () => {
@@ -89,6 +86,7 @@ const App = () => {
           </NavigationContainer>
         </Store>
       </RecoilRoot>
+      <Toast config={toastConfig} />
       <FlashMessage position="top" />
     </>
   );

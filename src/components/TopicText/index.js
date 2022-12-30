@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
-import { COLORS } from '../../utils/theme'
 import { fonts } from '../../utils/fonts'
+import { COLORS } from '../../utils/theme'
 
 const TopicText = ({ text, navigation = null, currentTopic = null }) => {
 
@@ -18,7 +18,7 @@ const TopicText = ({ text, navigation = null, currentTopic = null }) => {
 const styles = StyleSheet.create({
     text: {
         color: COLORS.blue,
-        fontFamily: fonts.inter[500],
+        fontFamily: fonts.inter[500]
     }
 })
 

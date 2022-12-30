@@ -3,7 +3,6 @@ import moment from 'moment';
 import {
   FlatList,
   Image,
-  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -18,8 +17,8 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
 import Header from '../../components/Header';
+// eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
@@ -37,19 +36,16 @@ const GroupInfo = () => {
   const [groupChatState, groupPatchDispatch] =
     React.useContext(Context).groupChat;
   const {participants, asset} = groupChatState;
-  const [channelState, dispatch] = React.useContext(Context).channel;
+  const [channelState, ] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
   const {channel, profileChannel} = channelState;
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
-  const [mappingMedia, setMappingMedia] = React.useState([])
 
-  let username = channelState.channel?.data?.name;
-  let createChat = channelState.channel?.data?.created_at;
-  let countUser = Object.entries(participants).length;
-
-  console.log(username)
+  const username = channelState.channel?.data?.name;
+  const createChat = channelState.channel?.data?.created_at;
+  const countUser = Object.entries(participants).length;
 
   const serializeMembersList = (result = []) => {
     if (typeof result !== 'object') {
@@ -60,8 +56,8 @@ const GroupInfo = () => {
       return {};
     }
 
-    let membersObject = {};
-    result.forEach((item, index) => {
+    const membersObject = {};
+    result.forEach((item, ) => {
       membersObject[item.user_id] = item;
     });
     return membersObject;
@@ -69,24 +65,24 @@ const GroupInfo = () => {
 
   const getMembersList = async () => {
     try {
-      let result = await channel.queryMembers({});
-      let serializedMember = serializeMembersList(result.members);
+      const result = await channel.queryMembers({});
+      const serializedMember = serializeMembersList(result.members);
       setParticipants(serializedMember, groupPatchDispatch);
-      setIsLoadingMembers(false);  
+      setIsLoadingMembers(false);
     } catch(e) {
-      console.log(e)
+      if (__DEV__) {
+        console.log(e);
+      }
       setIsLoadingMembers(false)
     }
   };
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      console.log('route.parms.from')
-      console.log(route?.params?.from)
       if (route?.params?.from === 'AddParticipant') {
         setIsLoadingMembers(true);
         getMembersList();
-      }  
+      }
     })
 
     return unsubscribe;
@@ -116,7 +112,7 @@ const GroupInfo = () => {
             source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
           />
         );
-      } else {
+      }
         return (
           <View style={styles.containerAvatar}>
             <Image
@@ -125,7 +121,7 @@ const GroupInfo = () => {
             />
           </View>
         );
-      }
+
     }
     return (
       <View style={styles.btnUpdatePhoto}>
@@ -134,7 +130,7 @@ const GroupInfo = () => {
     );
   };
 
-  let chatName = getChatName(username, profile.myProfile.username);
+  const chatName = getChatName(username, profile.myProfile.username);
 
   const onProfilePressed = (data) => {
     if (profile.myProfile.user_id === participants[data].user_id) {
@@ -167,9 +163,9 @@ const GroupInfo = () => {
   const uploadImageBase64 = async (res) => {
     try {
       setIsUploadingImage(true);
-      let result = await uploadFile(`data:image/jpeg;base64,${res.base64}`);
+      const result = await uploadFile(`data:image/jpeg;base64,${res.base64}`);
       setUploadedImage(result.data.url);
-      let dataEdit = {
+      const dataEdit = {
         name: chatName,
         image: result.data.url,
       };
@@ -182,7 +178,7 @@ const GroupInfo = () => {
   };
 
   const launchGallery = async () => {
-    let {success, message} = await requestExternalStoragePermission();
+    const {success, } = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary(
         {
@@ -200,16 +196,17 @@ const GroupInfo = () => {
     }
   };
 
-  React.useEffect(() => {
-    if(asset) {
-      const myMedia = []
-      asset.forEach((data) => {
-        myMedia.push(...data.message.attachments)
-      })
-      setMappingMedia(myMedia)
-    }
-  }, [asset])
-  
+  const renderItem = ({item, index}) => (
+    <Image
+      source={{
+        uri: item.message.attachments[0].image_url !== '' ? item.message.attachments[0] : undefined,
+      }}
+      width={80}
+      height={80}
+      style={styles.image(index === 0)}
+    />
+  )
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -243,23 +240,12 @@ const GroupInfo = () => {
               <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
             </TouchableWithoutFeedback>
             <FlatList
-              data={mappingMedia}
+              data={asset}
               keyExtractor={(item, index) => index.toString()}
               style={styles.listImage(asset.length === 0)}
               horizontal
               showsHorizontalScrollIndicator={false}
-              renderItem={({item, index}) => (
-               <>
-               {index > 10 ? null :  <Image
-                  source={{
-                    uri: item.image_url,
-                  }}
-                  width={80}
-                  height={80}
-                  style={styles.image(index === 0)}
-                />}
-               </>
-              )}
+              renderItem={renderItem}
             />
           </View>
           <View style={styles.lineTop} />

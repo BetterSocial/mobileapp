@@ -25,6 +25,7 @@ import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import FollowInfoRow from './elements/FollowInfoRow';
 import GlobalButton from '../../components/Button/GlobalButton';
+import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
@@ -42,10 +43,10 @@ import {
   updateImageProfile
 } from '../../service/profile';
 import { colors } from '../../utils/colors';
+import { deletePost, getFeedDetail } from '../../service/post';
 import { downVote, upVote } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import { getAccessToken } from '../../utils/token';
-import { getFeedDetail } from '../../service/post';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
@@ -70,42 +71,44 @@ const ProfileScreen = ({ route }) => {
   const bottomSheetProfilePictureRef = React.useRef();
   const postRef = React.useRef(null);
   const flatListScrollRef = React.useRef(null);
-  const [myProfile, dispatchProfile] = React.useContext(Context).profile;
-  const [token_JWT, setTokenJwt] = React.useState('');
-  const [users, dispatch] = React.useContext(Context).users;
+  const refBlockComponent = React.useRef();
+  const headerHeightRef = React.useRef(0);
+
+  const [, dispatchProfile] = React.useContext(Context).profile;
+  const [, dispatch] = React.useContext(Context).users;
   const [myProfileFeed, myProfileDispatch] =
     React.useContext(Context).myProfileFeed;
+
+  const [, setTokenJwt] = React.useState('');
   const [dataMain, setDataMain] = React.useState({});
   const [dataMainBio, setDataMainBio] = React.useState("");
   const [errorBio, setErrorBio] = React.useState('');
   const [isChangeRealName, setIsChangeRealName] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
-  const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [userId, setUserId] = React.useState(null);
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] =
-    React.useState(false);
-  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
-    React.useState(false);
+  const [, setUserId] = React.useState(null);
+  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = React.useState(false);
+  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
-  const [image, setImage] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
   const [loadingContainer, setLoadingContainer] = React.useState(true)
-  const [yourselfId, setYourselfId] = React.useState('');
+  const [yourselfId,] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const refBlockComponent = React.useRef();
-  const headerHeightRef = React.useRef(0);
+  const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false)
+  const [selectedPostForOption, setSelectedPostForOption] = React.useState(null)
+
   const { interactionsComplete } = useAfterInteractions()
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab
   const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
   const LIMIT_PROFILE_FEED = 1
+
   const { feeds } = myProfileFeed;
 
+  // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -133,8 +136,11 @@ const ProfileScreen = ({ route }) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
-      // getMyFeeds();
+      if (__DEV__) {
+        console.log(e);
+      }
     });
+
     if (interactionsComplete) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
       getAccessToken().then((val) => {
@@ -181,8 +187,8 @@ const ProfileScreen = ({ route }) => {
     const result = await getSelfFeedsInProfile(offset, limit);
     if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch)
     else {
-      const clonedFeeds = [...feeds, ...result.data]
-      // clonedFeeds.splice(feeds.length - 1, 0, ...data)
+      const clonedFeeds = [...feeds]
+      clonedFeeds.splice(feeds.length - 1, 0)
       setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
     setLoading(false)
@@ -204,10 +210,10 @@ const ProfileScreen = ({ route }) => {
     navigation.navigate('Settings');
   };
 
-  const goToFollowings = (user_id, username) => {
+  const goToFollowings = (userId, username) => {
     navigation.navigate('Followings', {
       screen: 'TabFollowing',
-      params: { user_id, username },
+      params: { user_id: userId, username },
     });
   };
 
@@ -473,12 +479,7 @@ const ProfileScreen = ({ route }) => {
     }
   };
 
-  const onPressBlock = (value) => {
-    refBlockComponet.current.openBlockComponent(value);
-  }
-
   const handleOnEndReached = () => {
-    console.log('lasa', postOffset)
     getMyFeeds(postOffset)
   }
 
@@ -486,6 +487,35 @@ const ProfileScreen = ({ route }) => {
     setLoading(true)
     getMyFeeds(0, LIMIT_PROFILE_FEED)
   }
+
+  const onHeaderOptionClicked = (item) => {
+    setSelectedPostForOption(item)
+    setIsOptionModalOpen(true)
+  }
+
+  const onHeaderOptionClosed = () => {
+    setSelectedPostForOption(null)
+    setIsOptionModalOpen(false)
+  }
+
+  const removePostByIdFromContext = () => {
+    const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id)
+    const newData = [...feeds]
+    newData?.splice(deletedIndex, 1)
+    setMyProfileFeed(newData, myProfileDispatch)
+  }
+
+  const onDeletePost = async () => {
+    setIsOptionModalOpen(false)
+    removePostByIdFromContext()
+
+    const response = await deletePost(selectedPostForOption?.id)
+    if (response?.success) {
+      Toast.show('Post was permanently deleted')
+    }
+    getMyFeeds()
+  }
+
   const renderHeader = React.useMemo(() => (
     <View onLayout={(event) => {
       const headerHeightLayout = event.nativeEvent.layout.height
@@ -548,9 +578,10 @@ const ProfileScreen = ({ route }) => {
                 onPressDomain={onPressDomain}
                 onPress={() => onPress(item, index)}
                 onPressComment={() => onPressComment(item, item.id)}
-                onPressBlock={() => onPressBlock(item)}
                 onPressUpvote={(post) => setUpVote(post, index)}
                 selfUserId={yourselfId}
+                onHeaderOptionClicked={onHeaderOptionClicked}
+                showAnonymousOption={true}
                 onPressDownVote={(post) =>
                   setDownVote(post, index)
                 } />
@@ -593,6 +624,9 @@ const ProfileScreen = ({ route }) => {
         ) : null}
 
         <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
+        <PostOptionModal isOpen={isPostOptionModalOpen}
+          onClose={onHeaderOptionClosed}
+          onDeleteClicked={onDeletePost} />
       </SafeAreaProvider> : null}
 
     </>
@@ -609,8 +643,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 20,
   },
-  dummyItem: (height) => ({
-    height,
+  dummyItem: (heightItem) => ({
+    height: heightItem,
     backgroundColor: colors.white
   }),
   postText: {

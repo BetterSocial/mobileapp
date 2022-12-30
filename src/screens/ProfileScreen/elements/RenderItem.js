@@ -1,8 +1,8 @@
 import * as React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {Dimensions, Share, StyleSheet, View} from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import {useNavigation} from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 
 import Content from '../../FeedScreen/Content';
 import ContentLink from '../../FeedScreen/ContentLink';
@@ -15,52 +15,52 @@ import {
   ANALYTICS_SHARE_POST_PROFILE_SCREEN,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
+  POST_TYPE_STANDARD
 } from '../../../utils/constants';
-import {Context} from '../../../context';
-import {Footer, Gap, PreviewComment} from '../../../components';
-import {getCountCommentWithChild} from '../../../utils/getstream';
-import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder'
+import { Context } from '../../../context';
+import { Footer, PreviewComment } from '../../../components';
+import { getCountCommentWithChild } from '../../../utils/getstream';
+import { linkContextScreenParamBuilder } from '../../../utils/navigation/paramBuilder';
 import { showScoreAlertDialog } from '../../../utils/Utils';
 
 const {width, height} = Dimensions.get('window');
 
 const getHeightReaction = () => {
-  let h = Math.floor((height * 12) / 100);
+  const h = Math.floor((height * 12) / 100);
   return h;
 };
 
 const getHeightHeader = () => {
-  let h = Math.floor((height * 8.3) / 100);
+  const h = Math.floor((height * 8.3) / 100);
   return h;
 };
 
 const getHeightFooter = () => {
-  let h = Math.floor((height * 6.8) / 100);
+  const h = Math.floor((height * 6.8) / 100);
   return h;
 };
 
 const getCountVote = (item) => {
-  let reactionCount = item.reaction_counts;
+  const reactionCount = item.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
-    let upvote = reactionCount?.upvotes;
+    const upvote = reactionCount?.upvotes;
     if (upvote !== undefined) {
-      count = count + upvote;
+      count += upvote;
     }
-    let downvote = reactionCount?.downvotes;
+    const downvote = reactionCount?.downvotes;
     if (downvote !== undefined) {
-      count = count - downvote;
+      count -= downvote;
     }
   }
   return count;
 };
 
 const getCountComment = (item) => {
-  let reactionCount = item.reaction_counts;
+  const reactionCount = item.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
-    let comment = reactionCount.comment;
+    const {comment} = reactionCount;
     if (comment !== undefined) {
       count = comment;
     }
@@ -81,6 +81,8 @@ const Item = ({
   onCardContentPress,
   index = -1,
   bottomBar = true,
+  onHeaderOptionClicked = () => { }
+
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -96,9 +98,9 @@ const Item = ({
 
   React.useEffect(() => {
     const initial = () => {
-      let reactionCount = item.reaction_counts;
+      const reactionCount = item.reaction_counts;
       if (JSON.stringify(reactionCount) !== '{}') {
-        let comment = reactionCount?.comment;
+        const comment = reactionCount?.comment;
         if (comment !== undefined) {
           if (comment > 0) {
             setReaction(true);
@@ -111,7 +113,7 @@ const Item = ({
   }, [item]);
 
   const navigateToLinkContextPage = (item) => {
-    let param = linkContextScreenParamBuilder(
+    const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
@@ -124,7 +126,7 @@ const Item = ({
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
-          let upvote = item.latest_reactions.upvotes.filter(
+          const upvote = item.latest_reactions.upvotes.filter(
             (vote) => vote.user_id === selfUserId,
           );
           if (upvote !== undefined) {
@@ -134,7 +136,7 @@ const Item = ({
         }
 
         if (item.latest_reactions.downvotes !== undefined) {
-          let downvotes = item.latest_reactions.downvotes.filter(
+          const downvotes = item.latest_reactions.downvotes.filter(
             (vote) => vote.user_id === selfUserId,
           );
           if (downvotes !== undefined) {
@@ -149,7 +151,7 @@ const Item = ({
 
   React.useEffect(() => {
     const initialVote = () => {
-      let c = getCountVote(item);
+      const c = getCountVote(item);
       setTotalVote(c);
     };
     initialVote();
@@ -157,7 +159,28 @@ const Item = ({
 
   return (
     <View style={styles.cardContainer(bottomHeight)}>
-      <Header headerStyle={{paddingHorizontal: 9}} props={item} height={getHeightHeader()} />
+      <Header 
+        onHeaderOptionClicked={onHeaderOptionClicked} 
+        headerStyle={{paddingHorizontal: 9}} 
+        props={item} height={getHeightHeader()} 
+        showAnonymousOption={true}/>
+
+      {item.post_type === POST_TYPE_POLL && (
+        <ContentPoll
+          index={index}
+          message={item.message}
+          images_url={item.images_url}
+          polls={item.pollOptions}
+          onPress={onPress}
+          item={item}
+          pollexpiredat={item.polls_expired_at}
+          multiplechoice={item.multiplechoice}
+          isalreadypolling={item.isalreadypolling}
+          onnewpollfetched={onNewPollFetched}
+          voteCount={item.voteCount}
+          topics={item?.topics}
+        />
+      )}
 
       {item.post_type === POST_TYPE_LINK && (
         <View style={{flex: 1}}>
@@ -174,16 +197,15 @@ const Item = ({
           />
         </View>
       )}
-      {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
+      {item.post_type === POST_TYPE_STANDARD && (
         <Content
-
-           index={index}
-            message={item.message}
-            images_url={item.images_url}
-            onPress={onPress}
-            topics={item?.topics}
-            item={item}
-            onNewPollFetched={onNewPollFetched}
+          index={index}
+          message={item.message}
+          images_url={item.images_url}
+          onPress={onPress}
+          topics={item?.topics}
+          item={item}
+          onNewPollFetched={onNewPollFetched}
         />
       )}
       <View style={styles.footerWrapper(getHeightFooter())}>
