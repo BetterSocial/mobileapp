@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {
@@ -11,14 +12,13 @@ import {
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View,
+  View
 } from 'react-native';
-import { debounce } from 'lodash'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { debounce } from 'lodash';
 import { showMessage } from 'react-native-flash-message';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ImagePicker from 'react-native-image-crop-picker';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
@@ -40,7 +40,7 @@ import {
   getSelfFeedsInProfile,
   removeImageProfile,
   updateBioProfile,
-  updateImageProfile,
+  updateImageProfile
 } from '../../service/profile';
 import { colors } from '../../utils/colors';
 import { downVote, upVote } from '../../service/vote';
@@ -52,15 +52,15 @@ import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import {
   requestCameraPermission,
-  requestExternalStoragePermission,
+  requestExternalStoragePermission
 } from '../../utils/permission';
 import { setFeedByIndex } from '../../context/actions/feeds';
+import { setMyProfileAction } from '../../context/actions/setMyProfileAction';
 import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
 import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { setMyProfileAction } from '../../context/actions/setMyProfileAction';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -181,7 +181,6 @@ const ProfileScreen = ({ route }) => {
 
   const getMyFeeds = async (offset = 0, limit = 10) => {
     const result = await getSelfFeedsInProfile(offset, limit);
-    console.log(result, 'nakal')
     if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch)
     else {
       const clonedFeeds = [...feeds, ...result.data]

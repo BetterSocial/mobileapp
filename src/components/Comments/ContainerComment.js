@@ -1,32 +1,40 @@
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import SimpleToast from 'react-native-simple-toast';
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
+import ButtonHightlight from '../ButtonHighlight';
 import Comment from "./Comment";
 import ConnectorWrapper from './ConnectorWrapper';
 import LoadingComment from '../LoadingComment';
 import StringConstant from '../../utils/string/StringConstant';
-import {colors} from '../../utils/colors';
-import ButtonHightlight from '../ButtonHighlight';
+import { colors } from '../../utils/colors';
 
-const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate}) => {
+const ContainerComment = ({ comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate }) => {
   const navigation = useNavigation();
   const isLast = (index, item) => (
-      index === comments.length - 1 && (item.children_counts.comment || 0) === 0
-    );
+    index === comments.length - 1 && (item.children_counts.comment || 0) === 0
+  );
 
   const isLastInParent = (index) => index === comments.length - 1;
 
   const hideLeftConnector = (index) => index === comments.length - 1;
+
+  const onCommentLongPressed = (item) => {
+    console.log(item)
+    SimpleToast.show('show alert')
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />
       {comments.map((item, index) => (
-          <View key={index} >
-            <View key={`p${  index}`}>
+        <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item)}>
+          <View >
+            <View key={`p${index}`}>
               {item.user ? <Comment
                 indexFeed={indexFeed}
-                key={`p${  index}`}
+                key={`p${index}`}
                 comment={item}
                 user={item.user}
                 level={0}
@@ -42,7 +50,7 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                 refreshComment={refreshComment}
                 findCommentAndUpdate={findCommentAndUpdate}
               /> : null}
-              
+
             </View>
             {item.children_counts.comment > 0 && (
               <ReplyComment
@@ -52,12 +60,13 @@ const ContainerComment = ({comments, indexFeed, isLoading, refreshComment, refre
                 navigation={navigation}
                 indexFeed={indexFeed}
                 navigateToReplyView={navigateToReplyView}
-                refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
+                refreshComment={(children) => refreshChildComment({ parent: item, children: children.data })}
                 findCommentAndUpdate={findCommentAndUpdate}
               />
             )}
           </View>
-        ))}
+        </TouchableWithoutFeedback>
+      ))}
       {isLoading ? <LoadingComment /> : null}
     </View>
   );
@@ -73,8 +82,8 @@ const ReplyComment = ({
   findCommentAndUpdate
 }) => {
   const isLast = (item, index) => (
-      index === countComment - 1 && (item.children_counts.comment || 0) === 0
-    );
+    index === countComment - 1 && (item.children_counts.comment || 0) === 0
+  );
 
   const isLastInParent = (index) => index === countComment - 1;
 
@@ -88,10 +97,10 @@ const ReplyComment = ({
             indexFeed,
           });
         }
-          
+
 
         const showChildCommentView = () => {
-            navigateToReplyView({
+          navigateToReplyView({
             item,
             level: 2,
             indexFeed,
@@ -100,57 +109,57 @@ const ReplyComment = ({
         }
         return (
           <React.Fragment key={`c-${index}`}>
-            {item.user ? <ConnectorWrapper  index={index}>
-            <View key={`c${  index}`} style={styles.levelOneCommentWrapper}>
-              <Comment
-                indexFeed={indexFeed}
-                key={`c${  index}`}
-                comment={item}
-                // username={item.user.data.username}
-                user={item.user}
-                level={1}
-                photo={item.user.data.profile_pic_url}
-                time={item.created_at}
-                onPress={showCommentView}
-                isLast={isLast(item, index)}
-                refreshComment={refreshComment}
-                findCommentAndUpdate={findCommentAndUpdate}
-              />
-              {item.children_counts.comment > 0 && (
-                <>
-                  <View
-                    style={styles.seeRepliesContainer(isLastInParent(index))}>
-                    <View style={styles.connector} />
-                    <ButtonHightlight onPress={showChildCommentView}>
-                      <Text style={styles.seeRepliesText}>
-                        {StringConstant.postDetailPageSeeReplies(
-                          item.children_counts.comment || 0,
-                        )}
-                      </Text>
-                    </ButtonHightlight>
-                  </View>
-                </>
-              )}
-            </View>
-          </ConnectorWrapper> : null}
-            
+            {item.user ? <ConnectorWrapper index={index}>
+              <View key={`c${index}`} style={styles.levelOneCommentWrapper}>
+                <Comment
+                  indexFeed={indexFeed}
+                  key={`c${index}`}
+                  comment={item}
+                  // username={item.user.data.username}
+                  user={item.user}
+                  level={1}
+                  photo={item.user.data.profile_pic_url}
+                  time={item.created_at}
+                  onPress={showCommentView}
+                  isLast={isLast(item, index)}
+                  refreshComment={refreshComment}
+                  findCommentAndUpdate={findCommentAndUpdate}
+                />
+                {item.children_counts.comment > 0 && (
+                  <>
+                    <View
+                      style={styles.seeRepliesContainer(isLastInParent(index))}>
+                      <View style={styles.connector} />
+                      <ButtonHightlight onPress={showChildCommentView}>
+                        <Text style={styles.seeRepliesText}>
+                          {StringConstant.postDetailPageSeeReplies(
+                            item.children_counts.comment || 0,
+                          )}
+                        </Text>
+                      </ButtonHightlight>
+                    </View>
+                  </>
+                )}
+              </View>
+            </ConnectorWrapper> : null}
+
           </React.Fragment>
-          
+
         );
       })}
     </ContainerReply>
   );
 };
-const ContainerReply = ({children, isGrandchild, hideLeftConnector}) => (
-    <View
-      style={[
-        styles.containerReply(hideLeftConnector),
-        {borderColor: isGrandchild ? '#fff' : colors.gray1},
-      ]}>
-      {children}
-    </View>
-  );
-export default React.memo (ContainerComment, (prevProps, nextProps) => prevProps.comments === nextProps.comments);
+const ContainerReply = ({ children, isGrandchild, hideLeftConnector }) => (
+  <View
+    style={[
+      styles.containerReply(hideLeftConnector),
+      { borderColor: isGrandchild ? '#fff' : colors.gray1 },
+    ]}>
+    {children}
+  </View>
+);
+export default React.memo(ContainerComment, (prevProps, nextProps) => prevProps.comments === nextProps.comments);
 
 const styles = StyleSheet.create({
   container: {
