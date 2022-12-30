@@ -48,6 +48,8 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
         }
         setLoading(true);
         const data = { appUserId, countryCode: 'ID' }
+        console.log('data')
+        console.log(data)
         setDataHumenId(data, dispatch);
         demoVerifyUser(appUserId)
             .then(async (response) => {

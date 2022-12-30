@@ -486,10 +486,6 @@ const ProfileScreen = ({ route }) => {
     }
   };
 
-  // const onPressBlock = (value) => {
-  //   refBlockComponet.current.openBlockComponent(value);
-  // }
-
   const handleOnEndReached = () => {
     getMyFeeds(postOffset)
   }
@@ -654,8 +650,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 20,
   },
-  dummyItem: (height) => ({
-    height,
+  dummyItem: (heightItem) => ({
+    height: heightItem,
     backgroundColor: colors.white
   }),
   postText: {

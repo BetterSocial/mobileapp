@@ -76,7 +76,6 @@
 
 import axios from 'axios';
 import configEnv from 'react-native-config';
-import { BASE_URL, BASE_URL_DEV } from '@env';
 
 import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from '../utils/token';
 
