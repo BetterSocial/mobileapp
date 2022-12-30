@@ -10,14 +10,6 @@ const handleToast = () => {
     getSpecificCache(FIRST_VOTE, (cache) => {
     if(!cache) {
       SimpleToast.show('Your upvotes & downvotes are private', SimpleToast.LONG)
-    //    Toast.show({
-    //         type: 'center',
-    //         text1: `Post ${type}.`,
-    //         text2: 'Your upvotes & downvotes are private',
-    //         autoHide: true,
-    //         visibilityTime: 8000,
-    //         position: 'bottom',
-    // });
     }
   })
 }
@@ -29,7 +21,7 @@ const saveCacheVote = () => {
 export const upVote = async (data) => {
   try {
     const resApi = await api.post('/activity/upvote', data);
-    handleToast('upvotes')
+    handleToast()
     saveCacheVote()
     return resApi.data;
   } catch (error) {
@@ -43,7 +35,7 @@ export const downVote = async (data) => {
   try {
 
     const resApi = await api.post('/activity/downvote', data);
-    handleToast('downvotes')
+    handleToast()
     saveCacheVote()
     return resApi.data;
   } catch (error) {
