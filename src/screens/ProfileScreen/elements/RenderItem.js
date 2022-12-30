@@ -159,7 +159,11 @@ const Item = ({
 
   return (
     <View style={styles.cardContainer(bottomHeight)}>
-      <Header onHeaderOptionClicked={onHeaderOptionClicked} headerStyle={{paddingHorizontal: 9}} props={item} height={getHeightHeader()} />
+      <Header 
+        onHeaderOptionClicked={onHeaderOptionClicked} 
+        headerStyle={{paddingHorizontal: 9}} 
+        props={item} height={getHeightHeader()} 
+        showAnonymousOption={true}/>
 
       {item.post_type === POST_TYPE_POLL && (
         <ContentPoll
