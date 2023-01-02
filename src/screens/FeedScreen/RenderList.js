@@ -42,35 +42,38 @@ const RenderListFeed = (props) => {
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook()
-    await postApiDownvote(!statusDownvote);
+    let newStatus = !statusDownvote
+    if(voteStatus === 'upvote') {
+      newStatus = true
+    }
+
+    await postApiDownvote(newStatus);
   };
 
   const onPressUpvoteHandle = async () => {
     onPressUpvoteHook()
-    await postApiUpvote(!statusUpvote);
+     let newStatus = !statusUpvote
+    if(voteStatus === 'downvote') {
+      newStatus = true
+    }
+    await postApiUpvote(newStatus);
   };
 
   const postApiUpvote = async (status) => {
-    try {
      await onPressUpvote({
         activity_id: item.id,
         status,
         feed_group: 'main_feed',
+        voteStatus
       });
-    } catch (e) {
-      SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
-    }
   };
   const postApiDownvote = async (status) => {
-    try {
-     await onPressDownVote({
+      await onPressDownVote({
         activity_id: item.id,
         status,
         feed_group: 'main_feed',
+        voteStatus
       });
-    } catch (e) {
-      SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
-    }
   };
 
 

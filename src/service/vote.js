@@ -6,10 +6,10 @@ import api from './config';
 import { FIRST_VOTE } from '../utils/cache/constant';
 import { getSpecificCache, saveToCache } from '../utils/cache';
 
-const handleToast = () => {
+const handleToast = (type) => {
     getSpecificCache(FIRST_VOTE, (cache) => {
     if(!cache) {
-      SimpleToast.show('Your upvotes & downvotes are private', SimpleToast.LONG)
+      SimpleToast.show(`Post ${type}. Your upvotes & downvotes are private`, SimpleToast.LONG)
     }
   })
 }
@@ -18,11 +18,12 @@ const saveCacheVote = () => {
   saveToCache(FIRST_VOTE, { isVote: true })
 }
 
-export const upVote = async (data) => {
+export const upVote = async (data, callback) => {
   try {
     const resApi = await api.post('/activity/upvote', data);
-    handleToast()
+    handleToast('upvoted')
     saveCacheVote()
+    if(callback) callback()
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -31,12 +32,13 @@ export const upVote = async (data) => {
   }
 };
 
-export const downVote = async (data) => {
+export const downVote = async (data, callback) => {
   try {
 
     const resApi = await api.post('/activity/downvote', data);
-    handleToast()
+    handleToast('downvoted')
     saveCacheVote()
+    if(callback) callback()
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -70,7 +72,6 @@ export const voteComment = async (data) => {
     const resApi = await api.post('/activity/vote_comment', data);
     return resApi.data;
   } catch (error) {
-    console.log('error ', error);
     crashlytics().recordError(new Error(error));
     return error
   }

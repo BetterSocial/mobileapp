@@ -165,24 +165,7 @@ const Item = ({
         props={item} height={getHeightHeader()} 
         showAnonymousOption={true}/>
 
-      {item.post_type === POST_TYPE_POLL && (
-        <ContentPoll
-          index={index}
-          message={item.message}
-          images_url={item.images_url}
-          polls={item.pollOptions}
-          onPress={onPress}
-          item={item}
-          pollexpiredat={item.polls_expired_at}
-          multiplechoice={item.multiplechoice}
-          isalreadypolling={item.isalreadypolling}
-          onnewpollfetched={onNewPollFetched}
-          voteCount={item.voteCount}
-          topics={item?.topics}
-        />
-      )}
-
-      {item.post_type === POST_TYPE_LINK && (
+      {item.post_type === POST_TYPE_LINK  && (
         <View style={{flex: 1}}>
           <ContentLink
             index={index}
@@ -197,7 +180,7 @@ const Item = ({
           />
         </View>
       )}
-      {item.post_type === POST_TYPE_STANDARD && (
+      {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
         <Content
           index={index}
           message={item.message}

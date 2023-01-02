@@ -511,7 +511,7 @@ const ProfileScreen = ({ route }) => {
 
     const response = await deletePost(selectedPostForOption?.id)
     if (response?.success) {
-      Toast.show('Post was permanently deleted')
+      Toast.show('Post was permanently deleted', Toast.LONG)
     }
     getMyFeeds()
   }
