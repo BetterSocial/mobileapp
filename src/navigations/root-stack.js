@@ -66,7 +66,7 @@ import { Analytics } from '../libraries/analytics/firebaseAnalytics';
 
 const RootStack = createStackNavigator();
 
-export const RootNavigator = () => {
+export const RootNavigator = (props) => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const setLocalChannelData = useSetRecoilState(channelListLocalAtom);
@@ -182,7 +182,6 @@ const AuthenticatedStack = createStackNavigator();
 const AuthenticatedNavigator = () => {
   const [profileState] = React.useContext(Context).profile;
   const isIos = Platform.OS === 'ios';
-
   return (
     <AuthenticatedStack.Navigator initialRouteName="HomeTabs">
       <AuthenticatedStack.Screen

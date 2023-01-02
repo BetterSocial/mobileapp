@@ -1,7 +1,11 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable consistent-return */
 import PropTypes from 'prop-types';
 import React from 'react'
 import SimpleToast from 'react-native-simple-toast'
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import messaging from '@react-native-firebase/messaging';
+import PushNotification from 'react-native-push-notification';
 
 import StringConstant from '../utils/string/StringConstant';
 import { POST_CHECK_AUTHOR_BLOCKED, POST_CHECK_AUTHOR_NOT_FOLLOWING, POST_CHECK_FEED_EXPIRED, POST_CHECK_FEED_NOT_FOUND } from '../utils/constants';
@@ -36,6 +40,33 @@ const FirebaseConfig = (props) => {
     }
 
     const USER = 'users'
+
+      PushNotification.configure({
+    // (required) Called when a remote is received or opened, or local notification is opened
+    onNotification(notification) {
+      console.log('NOTIFICATION:', notification);
+      // process the notification
+      // (required) Called when a remote is received or opened, or local notification is opened
+      notification.finish(PushNotificationIOS.FetchResult.NoData);
+    },
+
+    // (optional) Called when the user fails to register for remote notifications.
+    // Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+    onRegistrationError(err) {
+      console.error(err.message, err);
+    },
+    // IOS ONLY (optional): default: all - Permissions to register.
+    permissions: {
+      alert: true,
+      badge: true,
+      sound: true,
+    },
+    // Should the initial notification be popped automatically
+    // default: true
+    popInitialNotification: true,
+    requestPermissions: true,
+  });
+
     const getUserProfile = async (url) => {
         if (url && typeof url === 'string') {
             const userId = await getUserId()

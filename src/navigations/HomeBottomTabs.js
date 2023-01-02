@@ -5,12 +5,13 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import {
   Platform,
+  // Platform,
   StyleSheet,
   View,
 } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
-
+// import messaging from '@react-native-firebase/messaging';
 import DiscoveryAction from '../context/actions/discoveryAction';
 import DiscoveryRepo from '../service/discovery';
 import FirebaseConfig from '../configs/FirebaseConfig';
@@ -72,9 +73,7 @@ function HomeBottomTabs(props) {
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
-      if (__DEV__) {
-        console.log('NOTIFICATION:', notification);
-      }
+      console.log('NOTIFICATION:', notification);
       // process the notification
       // (required) Called when a remote is received or opened, or local notification is opened
       notification.finish(PushNotificationIOS.FetchResult.NoData);
@@ -102,7 +101,7 @@ function HomeBottomTabs(props) {
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED
       || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    if (enabled && __DEV__) {
+    if (enabled) {
       console.log('Authorization status:', authStatus);
     }
   };
@@ -167,9 +166,7 @@ function HomeBottomTabs(props) {
   };
 
   const pushNotifIos = (message) => {
-    if (__DEV__) {
-      console.log(message.messageId, 'message');
-    }
+    console.log(message.messageId, 'message')
     PushNotificationIOS.addNotificationRequest({
       // alertBody: message.notification.body,
       // alertTitle: message.notification.title
@@ -180,6 +177,7 @@ function HomeBottomTabs(props) {
   }
 
   const pushNotifAndroid = (remoteMessage) => {
+    console.log(remoteMessage, 'remote')
     PushNotification.localNotification({
       id: '123',
       title: remoteMessage.notification.title,
@@ -198,11 +196,7 @@ function HomeBottomTabs(props) {
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
       },
-      (created) => {
-        if (__DEV__) {
-          console.log(`createChannel returned '${created}'`);
-        }
-      }, // (optional) callback returns whether the channel was created, false means it already existed.
+      (created) => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
     );
   };
 
@@ -259,16 +253,16 @@ function HomeBottomTabs(props) {
   }, []);
 
   React.useEffect(() => {
-    requestPermission();
+    // requestPermission();
     getDomain();
     getDataFeeds();
     getDiscoveryData();
   }, []);
 
   const handlePushNotif = (remoteMessage) => {
-    let { channel } = remoteMessage.data
-    channel = JSON.parse(channel)
-    if (channel.channel_type !== 3) {
+    const { data } = remoteMessage
+    console.log(data, '')
+    if (data.channel_type !== 3) {
       if (isIos) {
         pushNotifIos(remoteMessage)
       } else {
@@ -280,6 +274,7 @@ function HomeBottomTabs(props) {
   React.useEffect(() => {
     createChannel();
     const unsubscribe = messaging().onMessage((remoteMessage) => {
+      console.log(remoteMessage, 'remote message')
       // eslint-disable-next-line no-unused-expressions
       handlePushNotif(remoteMessage)
     });
