@@ -42,12 +42,21 @@ const RenderListFeed = (props) => {
 
   const onPressDownVoteHandle = async () => {
     onPressDownVoteHook()
-    await postApiDownvote(!statusDownvote);
+    let newStatus = !statusDownvote
+    if(voteStatus === 'upvote') {
+      newStatus = true
+    }
+
+    await postApiDownvote(newStatus);
   };
 
   const onPressUpvoteHandle = async () => {
     onPressUpvoteHook()
-    await postApiUpvote(!statusUpvote);
+     let newStatus = !statusUpvote
+    if(voteStatus === 'downvote') {
+      newStatus = true
+    }
+    await postApiUpvote(newStatus);
   };
 
   const postApiUpvote = async (status) => {
