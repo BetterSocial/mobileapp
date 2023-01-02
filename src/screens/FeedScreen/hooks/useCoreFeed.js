@@ -126,29 +126,14 @@ const onBlockCompleted = async (postId) => {
   }
 
     const setUpVote = async (post, index) => {
-        try {
-            await upVote(post);
-            updateFeed(post, index);
-
-        }catch (e) {
-            if(axios.isAxiosError(e)) {
-                throw e.response.data
-            }
-            return e
-        }
+      await upVote(post);
+            // updateFeed(post, index);
 
   };
 
     const setDownVote = async (post, index) => {
-        try {
-            await downVote(post);
-            updateFeed(post, index);
-        } catch (e) {
-            if(axios.isAxiosError(e)) {
-                throw e.response.data
-            }
-            return e
-        }
+      await downVote(post);
+            // updateFeed(post, index);
     
   };
 

@@ -6,10 +6,10 @@ import api from './config';
 import { FIRST_VOTE } from '../utils/cache/constant';
 import { getSpecificCache, saveToCache } from '../utils/cache';
 
-const handleToast = () => {
+const handleToast = (type) => {
     getSpecificCache(FIRST_VOTE, (cache) => {
     if(!cache) {
-      SimpleToast.show('Your upvotes & downvotes are private', SimpleToast.LONG)
+      SimpleToast.show(`Post ${type}.\nYour upvotes & downvotes are private`, SimpleToast.LONG)
     }
   })
 }
@@ -21,7 +21,7 @@ const saveCacheVote = () => {
 export const upVote = async (data) => {
   try {
     const resApi = await api.post('/activity/upvote', data);
-    handleToast()
+    handleToast('upvoted')
     saveCacheVote()
     return resApi.data;
   } catch (error) {
@@ -35,7 +35,7 @@ export const downVote = async (data) => {
   try {
 
     const resApi = await api.post('/activity/downvote', data);
-    handleToast()
+    handleToast('downvoted')
     saveCacheVote()
     return resApi.data;
   } catch (error) {

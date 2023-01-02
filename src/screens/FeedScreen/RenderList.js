@@ -51,26 +51,18 @@ const RenderListFeed = (props) => {
   };
 
   const postApiUpvote = async (status) => {
-    try {
      await onPressUpvote({
         activity_id: item.id,
         status,
         feed_group: 'main_feed',
       });
-    } catch (e) {
-      SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
-    }
   };
   const postApiDownvote = async (status) => {
-    try {
-     await onPressDownVote({
+      await onPressDownVote({
         activity_id: item.id,
         status,
         feed_group: 'main_feed',
       });
-    } catch (e) {
-      SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
-    }
   };
 
 
