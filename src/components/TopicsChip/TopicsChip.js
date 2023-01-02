@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         width: '100%',
-                marginLeft: 16
+                // marginLeft: 16
 
     },
     topicItemContainer: {

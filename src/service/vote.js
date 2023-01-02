@@ -9,7 +9,7 @@ import { getSpecificCache, saveToCache } from '../utils/cache';
 const handleToast = (type) => {
     getSpecificCache(FIRST_VOTE, (cache) => {
     if(!cache) {
-      SimpleToast.show(`Post ${type}.\nYour upvotes & downvotes are private`, SimpleToast.LONG)
+      SimpleToast.show(`Post ${type}. Your upvotes & downvotes are private`, SimpleToast.LONG)
     }
   })
 }
