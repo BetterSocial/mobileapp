@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native"
 import { useNavigation } from '@react-navigation/native';
 
 import { colors } from "../../utils/colors"
-import { fonts } from "../../utils/fonts"
+import { fonts, normalizeFontSize } from "../../utils/fonts"
 
 const TopicsChip = ({ topics = [], fontSize = 24, text = '', isPdp }) => {
     const navigation = useNavigation()
@@ -41,13 +41,16 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 12,
         position: 'absolute',
-        bottom: 0
+        bottom: 0,
+        marginLeft: 16
         // backgroundColor: colors.blue
     },
     topicContainerPdp: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         width: '100%',
+                // marginLeft: 16
+
     },
     topicItemContainer: {
         backgroundColor: colors.lightgrey,
