@@ -55,6 +55,7 @@ const RenderListFeed = (props) => {
         activity_id: item.id,
         status,
         feed_group: 'main_feed',
+        voteStatus
       });
   };
   const postApiDownvote = async (status) => {
@@ -62,6 +63,7 @@ const RenderListFeed = (props) => {
         activity_id: item.id,
         status,
         feed_group: 'main_feed',
+        voteStatus
       });
   };
 
