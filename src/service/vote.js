@@ -23,12 +23,9 @@ export const upVote = async (data, callback) => {
     const resApi = await api.post('/activity/upvote', data);
     handleToast('upvoted')
     saveCacheVote()
-        console.log('baka3', resApi)
-
     if(callback) callback()
     return resApi.data;
   } catch (error) {
-    console.log(error, 'baka')
     crashlytics().recordError(new Error(error));
     SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     return error
@@ -41,12 +38,9 @@ export const downVote = async (data, callback) => {
     const resApi = await api.post('/activity/downvote', data);
     handleToast('downvoted')
     saveCacheVote()
-    console.log('baka2', resApi)
     if(callback) callback()
     return resApi.data;
   } catch (error) {
-        console.log(error, 'baka1')
-
     crashlytics().recordError(new Error(error));
     SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     return error
@@ -78,7 +72,6 @@ export const voteComment = async (data) => {
     const resApi = await api.post('/activity/vote_comment', data);
     return resApi.data;
   } catch (error) {
-    console.log('error ', error);
     crashlytics().recordError(new Error(error));
     return error
   }
