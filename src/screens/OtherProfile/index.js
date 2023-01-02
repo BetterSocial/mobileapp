@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {
@@ -6,15 +5,15 @@ import {
   Image,
   InteractionManager,
   SafeAreaView,
-  Share,
   StatusBar,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { generateRandomId } from 'stream-chat-react-native';
+/* eslint-disable no-underscore-dangle */
 import { useNavigation } from '@react-navigation/core';
 import { useRoute } from '@react-navigation/native';
 
@@ -28,6 +27,7 @@ import ProfileHeader from '../ProfileScreen/elements/ProfileHeader';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from '../ProfileScreen/elements/RenderItem';
 import ReportUser from '../../components/Blocking/ReportUser';
+import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
@@ -37,7 +37,7 @@ import {
   getOtherFeedsInProfile,
   getOtherProfile,
   setFollow,
-  setUnFollow,
+  setUnFollow
 } from '../../service/profile';
 import { colors } from '../../utils/colors';
 import { downVote, upVote } from '../../service/vote';
@@ -48,7 +48,6 @@ import { getSingularOrPluralText } from '../../utils/string/StringUtils';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import { setChannel } from '../../context/actions/setChannel';
 import { setFeedByIndex, setOtherProfileFeed } from '../../context/actions/otherProfileFeed';
-import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
@@ -161,24 +160,7 @@ const OtherProfile = () => {
     }
   };
 
-  const onShare = async () => {
-    try {
-      const result = await Share.share({
-        message: shareUserLink(username),
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  const onShare = async () => ShareUtils.shareUserLink(username)
 
   const handleSetUnFollow = async () => {
     const data = {

@@ -1,3 +1,4 @@
+import { useNavigation, useRoute } from '@react-navigation/native';
 /* eslint-disable no-nested-ternary */
 import * as React from 'react';
 import {
@@ -8,10 +9,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import SeeMore from 'react-native-see-more-inline';
 
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
 import { COLORS } from '../../utils/theme';
+import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import { inputSingleChoicePoll } from '../../service/post';
 import { colors } from '../../utils/colors';
 import { fonts, normalizeFontSize } from '../../utils/fonts';
 import {

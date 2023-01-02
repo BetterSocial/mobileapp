@@ -1,9 +1,8 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import config from 'react-native-config'
-import psl from 'psl'
+import psl from 'psl';
 import { Linking } from 'react-native';
-import { OpenGraphParser } from 'react-native-opengraph-kit'
+import { OpenGraphParser } from 'react-native-opengraph-kit';
 
 import StringConstant from './string/StringConstant';
 
@@ -91,8 +90,6 @@ export const removeWhiteSpace = (txt) => {
         return txt.trim();
     }
 };
-
-export const shareUserLink = (username) => `${config.SHARE_URL}/u/${username}`
 
 export function isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;

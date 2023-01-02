@@ -1,24 +1,22 @@
 import * as React from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import analytics from '@react-native-firebase/analytics';
 import {
   ActivityIndicator,
-  Alert,
   Dimensions,
   LogBox,
-  Share,
   StatusBar,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View,
+  View
 } from 'react-native';
-import { debounce } from 'lodash'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { debounce } from 'lodash';
 import { showMessage } from 'react-native-flash-message';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ImagePicker from 'react-native-image-crop-picker';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
@@ -27,10 +25,12 @@ import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import FollowInfoRow from './elements/FollowInfoRow';
 import GlobalButton from '../../components/Button/GlobalButton';
+import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
 import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
+import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
 import { Context } from '../../context';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
@@ -40,27 +40,26 @@ import {
   getSelfFeedsInProfile,
   removeImageProfile,
   updateBioProfile,
-  updateImageProfile,
+  updateImageProfile
 } from '../../service/profile';
 import { colors } from '../../utils/colors';
+import { deletePost, getFeedDetail } from '../../service/post';
 import { downVote, upVote } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
 import { getAccessToken } from '../../utils/token';
-import { getFeedDetail } from '../../service/post';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { getUserId } from '../../utils/users';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
 import {
   requestCameraPermission,
-  requestExternalStoragePermission,
+  requestExternalStoragePermission
 } from '../../utils/permission';
 import { setFeedByIndex } from '../../context/actions/feeds';
+import { setMyProfileAction } from '../../context/actions/setMyProfileAction';
 import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
-import { shareUserLink } from '../../utils/Utils';
 import { trimString } from '../../utils/string/TrimString';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { setMyProfileAction } from '../../context/actions/setMyProfileAction';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -72,42 +71,44 @@ const ProfileScreen = ({ route }) => {
   const bottomSheetProfilePictureRef = React.useRef();
   const postRef = React.useRef(null);
   const flatListScrollRef = React.useRef(null);
-  const [myProfile, dispatchProfile] = React.useContext(Context).profile;
-  const [token_JWT, setTokenJwt] = React.useState('');
-  const [users, dispatch] = React.useContext(Context).users;
+  const refBlockComponent = React.useRef();
+  const headerHeightRef = React.useRef(0);
+
+  const [, dispatchProfile] = React.useContext(Context).profile;
+  const [, dispatch] = React.useContext(Context).users;
   const [myProfileFeed, myProfileDispatch] =
     React.useContext(Context).myProfileFeed;
+
+  const [, setTokenJwt] = React.useState('');
   const [dataMain, setDataMain] = React.useState({});
   const [dataMainBio, setDataMainBio] = React.useState("");
   const [errorBio, setErrorBio] = React.useState('');
   const [isChangeRealName, setIsChangeRealName] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
   const [isLoadingRemoveImage, setIsLoadingRemoveImage] = React.useState(false);
   const [isLoadingUpdateBio, setIsLoadingUpdateBio] = React.useState(false);
-  const [isOffsetScroll, setIsOffsetScroll] = React.useState(false);
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
   const [tempBio, setTempBio] = React.useState('');
   const [tempFullName, setTempFullName] = React.useState('');
-  const [userId, setUserId] = React.useState(null);
-  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] =
-    React.useState(false);
-  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] =
-    React.useState(false);
+  const [, setUserId] = React.useState(null);
+  const [isLoadingUpdateImageGalery, setIsLoadingUpdateImageGalery] = React.useState(false);
+  const [isLoadingUpdateImageCamera, setIsLoadingUpdateImageCamera] = React.useState(false);
   const [errorChangeRealName, setErrorChangeRealName] = React.useState('');
-  const [image, setImage] = React.useState('');
   const [postOffset, setPostOffset] = React.useState(0)
   const [loadingContainer, setLoadingContainer] = React.useState(true)
-  const [yourselfId, setYourselfId] = React.useState('');
+  const [yourselfId,] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const refBlockComponent = React.useRef();
-  const headerHeightRef = React.useRef(0);
+  const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false)
+  const [selectedPostForOption, setSelectedPostForOption] = React.useState(null)
+
   const { interactionsComplete } = useAfterInteractions()
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab
   const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
   const LIMIT_PROFILE_FEED = 1
+
   const { feeds } = myProfileFeed;
 
+  // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (interactionsComplete) {
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -135,8 +136,11 @@ const ProfileScreen = ({ route }) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e) => {
-      // getMyFeeds();
+      if (__DEV__) {
+        console.log(e);
+      }
     });
+
     if (interactionsComplete) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
       getAccessToken().then((val) => {
@@ -170,7 +174,7 @@ const ProfileScreen = ({ route }) => {
 
   const saveProfileState = (result) => {
     if (result && typeof result === 'object') {
-      
+
       setDataMain(result);
       setDataMainBio(result.bio)
       setMyProfileAction(result, dispatchProfile)
@@ -181,11 +185,10 @@ const ProfileScreen = ({ route }) => {
 
   const getMyFeeds = async (offset = 0, limit = 10) => {
     const result = await getSelfFeedsInProfile(offset, limit);
-    console.log(result, 'nakal')
     if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch)
     else {
-      const clonedFeeds = [...feeds, ...result.data]
-      // clonedFeeds.splice(feeds.length - 1, 0, ...data)
+      const clonedFeeds = [...feeds]
+      clonedFeeds.splice(feeds.length - 1, 0)
       setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
     setLoading(false)
@@ -197,14 +200,8 @@ const ProfileScreen = ({ route }) => {
     analytics().logEvent('profile_screen_btn_share', {
       id: 'btn_share',
     });
-    try {
-      await Share.share({
-        message: shareUserLink(dataMain.username),
-      });
-    } catch (error) {
-      Alert.alert('Somethig wrong!', error.message)
-    }
-  };
+    ShareUtils.shareUserLink(dataMain.username)
+  }
 
   const goToSettings = () => {
     analytics().logEvent('profile_screen_btn_settings', {
@@ -213,10 +210,10 @@ const ProfileScreen = ({ route }) => {
     navigation.navigate('Settings');
   };
 
-  const goToFollowings = (user_id, username) => {
+  const goToFollowings = (userId, username) => {
     navigation.navigate('Followings', {
       screen: 'TabFollowing',
-      params: { user_id, username },
+      params: { user_id: userId, username },
     });
   };
 
@@ -272,7 +269,7 @@ const ProfileScreen = ({ route }) => {
         mediaType: 'photo',
         includeBase64: true
       }).then((imageRes) => {
-         handleUpdateImage(`data:image/jpeg;base64,${  imageRes.data}`, 'gallery');
+        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'gallery');
       })
     } else {
       Toast.show(message, Toast.SHORT);
@@ -289,7 +286,7 @@ const ProfileScreen = ({ route }) => {
         mediaType: 'photo',
         includeBase64: true
       }).then((imageRes) => {
-         handleUpdateImage(`data:image/jpeg;base64,${  imageRes.data}`, 'camera');
+        handleUpdateImage(`data:image/jpeg;base64,${imageRes.data}`, 'camera');
       })
     } else {
       Toast.show(message, Toast.SHORT);
@@ -403,21 +400,21 @@ const ProfileScreen = ({ route }) => {
   };
 
   const renderBio = (string) => (
-      <GlobalButton buttonStyle={styles.bioText} onPress={() => changeBio()}>
-        <View style={styles.containerBio}>
-          {string === null || string === undefined ? (
-            <Text style={{ color: colors.blue }}>Add Bio</Text>
-          ) : (
-            <Text style={styles.seeMore}>
-              {trimString(string, 121)}{' '}
-              {string.length > 121 ? (
-                <Text style={{ color: colors.blue }}>see more</Text>
-              ) : null}
-            </Text>
-          )}
-        </View>
-      </GlobalButton>
-    );
+    <GlobalButton buttonStyle={styles.bioText} onPress={() => changeBio()}>
+      <View style={styles.containerBio}>
+        {string === null || string === undefined ? (
+          <Text style={{ color: colors.blue }}>Add Bio</Text>
+        ) : (
+          <Text style={styles.seeMore}>
+            {trimString(string, 121)}{' '}
+            {string.length > 121 ? (
+              <Text style={{ color: colors.blue }}>see more</Text>
+            ) : null}
+          </Text>
+        )}
+      </View>
+    </GlobalButton>
+  );
 
   const onPressDomain = (item) => {
     const param = linkContextScreenParamBuilder(
@@ -482,12 +479,7 @@ const ProfileScreen = ({ route }) => {
     }
   };
 
-  const onPressBlock = (value) => {
-    refBlockComponet.current.openBlockComponent(value);
-  }
-
   const handleOnEndReached = () => {
-    console.log('lasa',postOffset)
     getMyFeeds(postOffset)
   }
 
@@ -495,30 +487,59 @@ const ProfileScreen = ({ route }) => {
     setLoading(true)
     getMyFeeds(0, LIMIT_PROFILE_FEED)
   }
+
+  const onHeaderOptionClicked = (item) => {
+    setSelectedPostForOption(item)
+    setIsOptionModalOpen(true)
+  }
+
+  const onHeaderOptionClosed = () => {
+    setSelectedPostForOption(null)
+    setIsOptionModalOpen(false)
+  }
+
+  const removePostByIdFromContext = () => {
+    const deletedIndex = feeds?.findIndex((find) => selectedPostForOption?.id === find?.id)
+    const newData = [...feeds]
+    newData?.splice(deletedIndex, 1)
+    setMyProfileFeed(newData, myProfileDispatch)
+  }
+
+  const onDeletePost = async () => {
+    setIsOptionModalOpen(false)
+    removePostByIdFromContext()
+
+    const response = await deletePost(selectedPostForOption?.id)
+    if (response?.success) {
+      Toast.show('Post was permanently deleted')
+    }
+    getMyFeeds()
+  }
+
   const renderHeader = React.useMemo(() => (
-      <View onLayout={(event) => {
-        const headerHeightLayout = event.nativeEvent.layout.height
-        headerHeightRef.current = headerHeightLayout
-      }}>
-        <View style={styles.content}>
-          <ProfilePicture onImageContainerClick={changeImage} profilePicPath={dataMain.profile_pic_path} />
-          <FollowInfoRow
-            follower={dataMain.follower_symbol}
-            following={dataMain.following_symbol}
+    <View onLayout={(event) => {
+      const headerHeightLayout = event.nativeEvent.layout.height
+      headerHeightRef.current = headerHeightLayout
+    }}>
+      <View style={styles.content}>
+        <ProfilePicture onImageContainerClick={changeImage} profilePicPath={dataMain.profile_pic_path} />
+        <FollowInfoRow
+          follower={dataMain.follower_symbol}
+          following={dataMain.following_symbol}
 
-            onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)} />
+          onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)} />
 
-          {renderBio(dataMainBio)}
-        </View>
-        <View>
-          <View style={styles.tabs} ref={postRef}>
-            <Text style={styles.postText}>
-              Posts
-            </Text>
-          </View>
+        {renderBio(dataMainBio)}
+      </View>
+      <View>
+        <View style={styles.tabs} ref={postRef}>
+          <Text style={styles.postText}>
+            Posts
+          </Text>
         </View>
       </View>
-    ), [dataMain, dataMainBio])
+    </View>
+  ), [dataMain, dataMainBio])
 
   return (
     <>
@@ -557,9 +578,10 @@ const ProfileScreen = ({ route }) => {
                 onPressDomain={onPressDomain}
                 onPress={() => onPress(item, index)}
                 onPressComment={() => onPressComment(item, item.id)}
-                onPressBlock={() => onPressBlock(item)}
                 onPressUpvote={(post) => setUpVote(post, index)}
                 selfUserId={yourselfId}
+                onHeaderOptionClicked={onHeaderOptionClicked}
+                showAnonymousOption={true}
                 onPressDownVote={(post) =>
                   setDownVote(post, index)
                 } />
@@ -602,6 +624,9 @@ const ProfileScreen = ({ route }) => {
         ) : null}
 
         <BlockComponent ref={refBlockComponent} refresh={getMyFeeds} screen="my_profile" />
+        <PostOptionModal isOpen={isPostOptionModalOpen}
+          onClose={onHeaderOptionClosed}
+          onDeleteClicked={onDeletePost} />
       </SafeAreaProvider> : null}
 
     </>
@@ -618,10 +643,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 20,
   },
-  dummyItem: (height) => ({
-      height,
-      backgroundColor: colors.white
-    }),
+  dummyItem: (heightItem) => ({
+    height: heightItem,
+    backgroundColor: colors.white
+  }),
   postText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,

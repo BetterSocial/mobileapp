@@ -1,4 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks'
+
 import useContentPoll from '../../src/screens/FeedScreen/hooks/useContentPoll'
 
 describe('Content poll function should run correctly', () => {
@@ -46,7 +47,7 @@ describe('Content poll function should run correctly', () => {
     it('showSetResultsButton should run correctly', () => {
         const {result} = renderHook(() => useContentPoll({polls}))
         const expiredDate = '2022-11-25T02:14:14.499Z'
-        const notExpiredDare = '2022-12-29T02:14:14.499Z'
+        const notExpiredDare = '2023-12-29T02:14:14.499Z'
         act(() => {
             result.current.setIsAlreadyPolling(false)
         })

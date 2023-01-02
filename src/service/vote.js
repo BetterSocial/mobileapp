@@ -3,25 +3,25 @@ import crashlytics from '@react-native-firebase/crashlytics';
 
 import StringConstant from '../utils/string/StringConstant';
 import api from './config';
-import { getSpecificCache, saveToCache } from '../utils/cache';
 import { FIRST_VOTE } from '../utils/cache/constant';
+import { getSpecificCache, saveToCache } from '../utils/cache';
 
-const handleToast = (type) => {
+const handleToast = () => {
     getSpecificCache(FIRST_VOTE, (cache) => {
     if(!cache) {
-        SimpleToast.show(`Post ${type || ''}.\nYour upvotes & downvotes are private`, SimpleToast.SHORT)
+      SimpleToast.show('Your upvotes & downvotes are private', SimpleToast.LONG)
     }
   })
 }
 
 const saveCacheVote = () => {
-  saveToCache(FIRST_VOTE, {isVote: true})
+  saveToCache(FIRST_VOTE, { isVote: true })
 }
 
 export const upVote = async (data) => {
   try {
     const resApi = await api.post('/activity/upvote', data);
-    handleToast('upvotes')
+    handleToast()
     saveCacheVote()
     return resApi.data;
   } catch (error) {
@@ -35,7 +35,7 @@ export const downVote = async (data) => {
   try {
 
     const resApi = await api.post('/activity/downvote', data);
-    handleToast('downvotes')
+    handleToast()
     saveCacheVote()
     return resApi.data;
   } catch (error) {

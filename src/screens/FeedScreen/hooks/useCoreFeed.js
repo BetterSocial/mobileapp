@@ -1,13 +1,15 @@
-
-import React from 'react'
+import React from 'react';
 import axios from 'axios';
+import SimpleToast from 'react-native-simple-toast';
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { Context } from '../../../context';
+import { FEEDS_CACHE } from '../../../utils/cache/constant';
+import { downVote, upVote } from '../../../service/vote';
 import { getFeedDetail, getMainFeed } from '../../../service/post';
 import { getSpecificCache, saveToCache } from '../../../utils/cache';
-import { FEEDS_CACHE } from '../../../utils/cache/constant';
 import { setFeedByIndex, setMainFeeds, setTimer } from '../../../context/actions/feeds';
-import { upVote, downVote } from '../../../service/vote';
 
 const useCoreFeed = () => {
 const [loading, setLoading] = React.useState(false);
@@ -17,6 +19,7 @@ const [postOffset, setPostOffset] = React.useState(0)
 const [feedsContext, dispatch] =  React.useContext(Context).feeds;
 const [profileContext] = React.useContext(Context).profile;
 const [searchHeight, setSearchHeight] = React.useState(0)
+const [isLastPage, setIsLastPage] = React.useState(false)
 
 const { feeds, timer, viewPostTimeIndex } = feedsContext;
 const { myProfile } = profileContext
@@ -24,6 +27,7 @@ const { bottom } = useSafeAreaInsets();
 
   const getDataFeeds = async (offsetFeed = 0, useLoading) => {
     setCountStack(null);
+    setIsLastPage(false)
     if (useLoading) {
       setLoading(true);
     }
@@ -31,6 +35,10 @@ const { bottom } = useSafeAreaInsets();
       const query = `?offset=${offsetFeed}`
 
       const dataFeeds = await getMainFeed(query);
+      if(Array.isArray(dataFeeds.data) && dataFeeds.data.length <= 0) {
+        setLoading(false)
+        return setIsLastPage(true)
+      }
       handleDataFeeds(dataFeeds, offsetFeed)
     } catch (e) {
       setLoading(false);
@@ -39,7 +47,6 @@ const { bottom } = useSafeAreaInsets();
   };
 
 const handleDataFeeds = (dataFeeds, offsetFeed = 0) => {
-  console.log(dataFeeds, 'nakal')
    if (dataFeeds.data.length > 0) {
         const { data } = dataFeeds;
         const dataWithDummy = [...data, { dummy: true }]
@@ -151,6 +158,13 @@ const onBlockCompleted = async (postId) => {
 
     }
   }
+
+  React.useEffect(() => {
+    if(isLastPage) {
+      SimpleToast.show('You’ve seen all posts - What about putting your phone aside for a bit?', SimpleToast.LONG)
+
+    }
+  }, [isLastPage])
 
   return {
     getDataFeeds,
