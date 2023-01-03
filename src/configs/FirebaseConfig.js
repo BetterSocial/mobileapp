@@ -45,6 +45,18 @@ const FirebaseConfig = (props) => {
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
       console.log('NOTIFICATION:', notification);
+      if(notification.data.type === 'messaging') {
+        const cid = `${notification.data.type}-${notification.data.id}`
+        // const channel = {
+        //   id: notification.data.id,
+        //   cid
+        // }
+        // setChannel(channel, dispatch);
+        // navigation.navigate('ChatDetailPage');
+              // setChannel(notification.data, dispatch);
+              // navigation.navigate('ChatDetailPage');
+
+      }
       // process the notification
       // (required) Called when a remote is received or opened, or local notification is opened
       notification.finish(PushNotificationIOS.FetchResult.NoData);

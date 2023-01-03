@@ -379,8 +379,9 @@ const AuthenticatedNavigator = () => {
 // region UnauthenticatedStack
 const UnauthenticatedStack = createStackNavigator();
 
-const UnauthenticatedNavigator = () => (
+const UnauthenticatedNavigator = (props) => (
   <UnauthenticatedStack.Navigator>
+    {console.log(props, 'mimin1')}
     <UnauthenticatedStack.Screen
       name="SignIn"
       component={SignIn}

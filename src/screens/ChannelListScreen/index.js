@@ -174,9 +174,11 @@ const ChannelListScreen = ({ navigation }) => {
   )
 
   const onSelectChat = (channel, refreshList) => {
+    console.log(channel, 'usu')
     if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
       navigation.navigate('TopicPageScreen', { id: channel.data.id, refreshList });
     } else {
+      console.log(channel, 'luli')
       setChannel(channel, dispatch);
       // ChannelScreen | ChatDetailPage
       navigation.navigate('ChatDetailPage');
