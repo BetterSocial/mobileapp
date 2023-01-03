@@ -124,61 +124,16 @@ const onBlockCompleted = async (postId) => {
         );
       }
   }
-  const updateVoteData = (indexPost, type, post, myUpvote) => {
-    const newFeed = feeds || []
-    const myFeed = newFeed.map((data, index) => {
-      if(index === indexPost) {
-        if(type === 'upvote') {
-         if(post.status === false) {
-          return {
-              ...data,
-            own_reactions: {...data.own_reactions, upvotes: data.own_reactions.upvotes ? data.own_reactions.upvotes.filter((postList) => postList.activity_id !== post.activity_id) : []}
-            }
-         }
-         let newData = data.own_reactions.upvotes
-         if(!Array.isArray(newData)) {
-          newData = []
-         }
-         newData.push(myUpvote.data)
-          return {
-            ...data,
-            own_reactions: {...data.own_reactions, upvotes: newData, downvotes: data.own_reactions.downvotes ? data.own_reactions.downvotes.filter((postList) => postList.activity_id !== post.activity_id) : []}
-         }
-       
-        } 
-          if(post.status === true) {
-          let newData = data.own_reactions.downvotes
-          if(!Array.isArray(newData)) {
-            newData = []
-          }
-         newData.push(myUpvote.data)
-          return {
-              ...data,
-              own_reactions: {...data.own_reactions, downvotes: newData, upvotes: data.own_reactions.upvotes ? data.own_reactions.upvotes.filter((postList) => postList.activity_id !== post.activity_id) : []},
-            }
-         }
-  
-          return {
-            ...data,
-            own_reactions: {...data.own_reactions, downvotes: data.own_reactions.downvotes ? data.own_reactions.downvotes.filter((postList) => postList.activity_id !== post.activity_id) : []}
-          } 
-        
-         
-      }
-      return {...data}
-    })
-    myFeed[indexPost].reaction_counts.upvotes =  myFeed[indexPost].own_reactions.upvotes.length
-    myFeed[indexPost].reaction_counts.downvotes =  myFeed[indexPost].own_reactions.downvotes.length
-    setMainFeeds(myFeed, dispatch)
-  }
     const setUpVote = async (post, index) => {
-      const myUpvote = await upVote(post);
-      updateVoteData(index, 'upvote', post, myUpvote)
+      await upVote(post);
+      // updateVoteData(index, 'upvote', post, myUpvote)
+      updateFeed(post, index);
   };
 
     const setDownVote = async (post, index) => {
-      const myDownVote = await downVote(post);
-      updateVoteData(index, 'downvote', post, myDownVote)
+      await downVote(post);
+      // updateVoteData(index, 'downvote', post, myDownVote)
+      updateFeed(post, index);
     
   };
 
