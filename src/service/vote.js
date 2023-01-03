@@ -7,9 +7,10 @@ import { FIRST_VOTE } from '../utils/cache/constant';
 import { getSpecificCache, saveToCache } from '../utils/cache';
 
 const handleToast = (type) => {
+    const message = type === 'upvoted' ? 'upvotes' : 'downvotes'
     getSpecificCache(FIRST_VOTE, (cache) => {
     if(!cache) {
-      SimpleToast.show(`Post ${type}. Your upvotes & downvotes are private`, SimpleToast.LONG)
+      SimpleToast.show(`Post ${type}. All ${message} are private.`, SimpleToast.LONG)
     }
   })
 }
