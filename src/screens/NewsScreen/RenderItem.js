@@ -74,7 +74,6 @@ const RenderItem = ({
     initialVote();
   }, [item]);
 
-
   const validationStatusVote = () => {
       if (item.latest_reactions.upvotes !== undefined) {
         const upvote = item.latest_reactions.upvotes.filter(

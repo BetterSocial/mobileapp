@@ -1,17 +1,16 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
-import Image from '../../components/Image';
+import FastImage from 'react-native-fast-image';
+import Image from "../Image";
 
 import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
-import FastImage from 'react-native-fast-image';
 
-const index = ({image, style}) => {
-  return (
+const index = ({image, style}) => (
     <View style={[styles.wrapperImage, style]}>
       {image ? (
         <Image
           source={{uri: image}}
-          style={StyleSheet.flatten([styles.image, StyleSheet.absoluteFillObject])}
+          style={styles.image}
           resizeMode={FastImage.resizeMode.cover}
         />
       ) : (
@@ -19,7 +18,6 @@ const index = ({image, style}) => {
       )}
     </View>
   );
-};
 
 const styles = StyleSheet.create({
   wrapperImage: {
