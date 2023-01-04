@@ -10,7 +10,7 @@ const index = ({image, style}) => (
       {image ? (
         <Image
           source={{uri: image}}
-          style={StyleSheet.flatten([styles.image, StyleSheet.absoluteFillObject])}
+          style={styles.image}
           resizeMode={FastImage.resizeMode.cover}
         />
       ) : (

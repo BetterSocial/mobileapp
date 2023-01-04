@@ -108,6 +108,7 @@ const Footer = ({
         <Text style={styles.vote(totalVote)}>{totalVote}</Text>
 
         <TouchableOpacity
+          testID='pressUpvote'
           disabled={loadingVote}
           style={styles.btn}
           onPress={onPressUpvote}>
