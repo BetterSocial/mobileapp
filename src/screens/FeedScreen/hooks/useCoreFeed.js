@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import SimpleToast from 'react-native-simple-toast';
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Context } from '../../../context';
@@ -17,6 +19,7 @@ const [postOffset, setPostOffset] = React.useState(0)
 const [feedsContext, dispatch] =  React.useContext(Context).feeds;
 const [profileContext] = React.useContext(Context).profile;
 const [searchHeight, setSearchHeight] = React.useState(0)
+const [isLastPage, setIsLastPage] = React.useState(false)
 
 const { feeds, timer, viewPostTimeIndex } = feedsContext;
 const { myProfile } = profileContext
@@ -24,6 +27,7 @@ const { bottom } = useSafeAreaInsets();
 
   const getDataFeeds = async (offsetFeed = 0, useLoading) => {
     setCountStack(null);
+    setIsLastPage(false)
     if (useLoading) {
       setLoading(true);
     }
@@ -31,6 +35,10 @@ const { bottom } = useSafeAreaInsets();
       const query = `?offset=${offsetFeed}`
 
       const dataFeeds = await getMainFeed(query);
+      if(Array.isArray(dataFeeds.data) && dataFeeds.data.length <= 0) {
+        setLoading(false)
+        return setIsLastPage(true)
+      }
       handleDataFeeds(dataFeeds, offsetFeed)
     } catch (e) {
       setLoading(false);
@@ -116,31 +124,16 @@ const onBlockCompleted = async (postId) => {
         );
       }
   }
-
     const setUpVote = async (post, index) => {
-        try {
-            await upVote(post);
-            updateFeed(post, index);
-
-        }catch (e) {
-            if(axios.isAxiosError(e)) {
-                throw e.response.data
-            }
-            return e
-        }
-
+      await upVote(post);
+      // updateVoteData(index, 'upvote', post, myUpvote)
+      updateFeed(post, index);
   };
 
     const setDownVote = async (post, index) => {
-        try {
-            await downVote(post);
-            updateFeed(post, index);
-        } catch (e) {
-            if(axios.isAxiosError(e)) {
-                throw e.response.data
-            }
-            return e
-        }
+      await downVote(post);
+      // updateVoteData(index, 'downvote', post, myDownVote)
+      updateFeed(post, index);
     
   };
 
@@ -150,6 +143,13 @@ const onBlockCompleted = async (postId) => {
 
     }
   }
+
+  React.useEffect(() => {
+    if(isLastPage) {
+      SimpleToast.show('You’ve seen all posts - What about putting your phone aside for a bit?', SimpleToast.LONG)
+
+    }
+  }, [isLastPage])
 
   return {
     getDataFeeds,

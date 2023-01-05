@@ -3,26 +3,28 @@ import crashlytics from '@react-native-firebase/crashlytics';
 
 import StringConstant from '../utils/string/StringConstant';
 import api from './config';
-import { getSpecificCache, saveToCache } from '../utils/cache';
 import { FIRST_VOTE } from '../utils/cache/constant';
+import { getSpecificCache, saveToCache } from '../utils/cache';
 
 const handleToast = (type) => {
+    const message = type === 'upvoted' ? 'upvotes' : 'downvotes'
     getSpecificCache(FIRST_VOTE, (cache) => {
     if(!cache) {
-        SimpleToast.show(`Post ${type || ''}.\nYour upvotes & downvotes are private`, SimpleToast.SHORT)
+      SimpleToast.show(`Post ${type}. All ${message} are private.`, SimpleToast.LONG)
     }
   })
 }
 
 const saveCacheVote = () => {
-  saveToCache(FIRST_VOTE, {isVote: true})
+  saveToCache(FIRST_VOTE, { isVote: true })
 }
 
-export const upVote = async (data) => {
+export const upVote = async (data, callback) => {
   try {
     const resApi = await api.post('/activity/upvote', data);
-    handleToast('upvotes')
+    handleToast('upvoted')
     saveCacheVote()
+    if(callback) callback()
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -31,12 +33,13 @@ export const upVote = async (data) => {
   }
 };
 
-export const downVote = async (data) => {
+export const downVote = async (data, callback) => {
   try {
 
     const resApi = await api.post('/activity/downvote', data);
-    handleToast('downvotes')
+    handleToast('downvoted')
     saveCacheVote()
+    if(callback) callback()
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -70,7 +73,6 @@ export const voteComment = async (data) => {
     const resApi = await api.post('/activity/vote_comment', data);
     return resApi.data;
   } catch (error) {
-    console.log('error ', error);
     crashlytics().recordError(new Error(error));
     return error
   }

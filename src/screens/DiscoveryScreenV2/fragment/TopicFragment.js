@@ -14,6 +14,7 @@ import useIsReady from '../../../hooks/useIsReady';
 import { COLORS } from '../../../utils/theme';
 import { Context } from '../../../context/Store'
 import { colors } from '../../../utils/colors';
+import { convertTopicNameToTopicPageScreenParam } from '../../../utils/string/StringUtils';
 import { fonts } from '../../../utils/fonts';
 import { getUserId } from '../../../utils/users';
 
@@ -27,10 +28,19 @@ const TopicFragment = ({ isLoadingDiscoveryTopic = false, followedTopic = [], un
     const { followTopic } = useChatClientHook()
 
     const navigation = useNavigation()
+
+    // const [initialFollowedTopics, setInitialFollowedTopics] = React.useState(
+    //     discovery.initialTopics.filter((item) => item.user_id_follower !== null)
+    // )
+    // const [initialUnfollowedTopics, setInitiaUnfollowedTopics] = React.useState(
+    //     discovery.initialTopics.filter((item) => item.user_id_follower === null)
+    // )
     const [myId, setMyId] = React.useState('')
+    // const [isFirstTimeOpen, setIsFirstTimeOpen] = React.useState(true)
 
     const isReady = useIsReady()
 
+    // const { topics } = following
     const topics = discovery.initialTopics
 
     React.useEffect(() => {
@@ -53,8 +63,12 @@ const TopicFragment = ({ isLoadingDiscoveryTopic = false, followedTopic = [], un
         if (from === FROM_UNFOLLOWED_TOPIC_INITIAL) {
             const newFollowedTopics = [...topics]
             newFollowedTopics[index].user_id_follower = willFollow ? myId : null
+            // const newInitialUnfollowedUsers = [...initialUnfollowedUsers]
+            // newInitialUnfollowedUsers[index].user_id_follower = willFollow ? myId : null
 
+            // FollowingAction.setFollowingUsers(newFollowedTopics, followingDispatch)
             DiscoveryAction.setDiscoveryInitialTopics(newFollowedTopics, discoveryDispatch)
+            // setInitialUnfollowedUsers(newInitialUnfollowedUsers)
         }
 
         if (from === FROM_FOLLOWED_TOPIC) {
@@ -77,9 +91,10 @@ const TopicFragment = ({ isLoadingDiscoveryTopic = false, followedTopic = [], un
 
     const __handleOnTopicPress = (item) => {
         const navigationParam = {
-            id: item?.name
+            id: convertTopicNameToTopicPageScreenParam(item.name)
         }
 
+        console.log(navigationParam)
         navigation.push('TopicPageScreen', navigationParam)
     }
 
@@ -102,7 +117,14 @@ const TopicFragment = ({ isLoadingDiscoveryTopic = false, followedTopic = [], un
 
     const __renderTopicItems = () => {
         if (isFirstTimeOpen) {
+            // let renderArray = []
+            // initialFollowedTopics.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery", item, index)))
+            // renderArray.push(<DiscoveryTitleSeparator key="topic-title-separator" text='Suggested Topics' />)
+            // initialUnfollowedTopics.map((item, index) => renderArray.push(__renderDiscoveryItem(FROM_UNFOLLOWED_TOPIC_INITIAL, "unfollowedTopicDiscovery", item, index)))
+
+            // return renderArray
             return [<DiscoveryTitleSeparator key="topic-title-separator" text='Suggested Topics' />].concat(topics.map((item, index) => __renderDiscoveryItem(FROM_FOLLOWED_TOPIC_INITIAL, "followedTopicDiscovery",
+                // { ...item, user_id_follower: item.user_id_follower ? item.user_id_follower : myId },
                 item,
                 index)))
         }
