@@ -2,9 +2,9 @@
 import React from 'react'
 
 const useItemNews = () => {
-      const [statusUpvote, setStatusUpvote] = React.useState(false);
-          const [totalVote, setTotalVote] = React.useState(0);
-            const [voteStatus, setVoteStatus] = React.useState('none');
+    const [statusUpvote, setStatusUpvote] = React.useState(false);
+    const [totalVote, setTotalVote] = React.useState(0);
+    const [voteStatus, setVoteStatus] = React.useState('none');
 
     const onPressUpvoteNew = async (item, onPressUpvote) => {
     await onPressUpvote({
