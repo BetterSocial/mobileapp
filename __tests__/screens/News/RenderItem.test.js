@@ -101,7 +101,41 @@ describe('RenderItem news should run correctly', () => {
         const {getByTestId} = render(<RenderItem item={item} onPressBlock={onPressBlock} onPressComment={onPressComment} onPressDownVote={onPressDownVote} onPressShare={onPressShare} onPressUpvote={onUpvote} />, {wrapper: Store})
         fireEvent.press(getByTestId('pressUpvote'))
         expect(onUpvote).toHaveBeenCalled()
-        // expect(setState).toHaveBeenCalled()
 
     })
+
+    it('press downvote should be call', () => {
+        const onPressBlock = jest.fn()
+        const onPressComment = jest.fn()
+        const onPressDownVote = jest.fn()
+        const onPressShare = jest.fn()
+        const onUpvote = jest.fn()
+        const {getByTestId, getAllByTestId} = render(<RenderItem item={item} onPressBlock={onPressBlock} onPressComment={onPressComment} onPressDownVote={onPressDownVote} onPressShare={onPressShare} onPressUpvote={onUpvote} />, {wrapper: Store})
+        expect(getAllByTestId('downvoteOff')).toHaveLength(1)
+        fireEvent.press(getByTestId('downVoteBtn'))
+        expect(onPressDownVote).toHaveBeenCalled()
+    })
+
+    it('onShare should run correctly', () => {
+        const onPressBlock = jest.fn()
+        const onPressComment = jest.fn()
+        const onPressDownVote = jest.fn()
+        const onPressShare = jest.fn()
+        const onUpvote = jest.fn()
+        const {getByTestId} = render(<RenderItem item={item} onPressBlock={onPressBlock} onPressComment={onPressComment} onPressDownVote={onPressDownVote} onPressShare={onPressShare} onPressUpvote={onUpvote} />, {wrapper: Store})
+        fireEvent.press(getByTestId('shareBtn'))
+        expect(onPressShare).toHaveBeenCalled()
+    })
+    it('onComment should run correctly', () => {
+        const onPressBlock = jest.fn()
+        const onPressComment = jest.fn()
+        const onPressDownVote = jest.fn()
+        const onPressShare = jest.fn()
+        const onUpvote = jest.fn()
+        const {getByTestId} = render(<RenderItem item={item} onPressBlock={onPressBlock} onPressComment={onPressComment} onPressDownVote={onPressDownVote} onPressShare={onPressShare} onPressUpvote={onUpvote} />, {wrapper: Store})
+        fireEvent.press(getByTestId('availableComment'))
+        expect(onPressComment).toHaveBeenCalled()
+    })
+
+
 })
