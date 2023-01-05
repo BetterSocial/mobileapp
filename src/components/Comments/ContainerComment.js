@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import ButtonHightlight from '../ButtonHighlight';
@@ -43,9 +43,20 @@ const ContainerComment = ({
   const onCommentLongPressed = async (item, level = 0) => {
     const selfId = await getUserId()
     if (selfId === item?.user_id) {
-      setIsCommentOptionModalShown(true)
+      // setIsCommentOptionModalShown(true)
       setSelectedCommentForDelete(item)
       setSelectedCommentLevelForDelete(level)
+      Alert.alert('', StringConstant.feedDeleteCommentConfirmation, [
+        {
+          text: 'No, cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Yes',
+          style: 'destructive',
+          onPress: onDeleteCommentClicked
+        }
+      ])
     }
   }
 
