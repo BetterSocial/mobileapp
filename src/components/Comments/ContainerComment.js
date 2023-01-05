@@ -5,13 +5,33 @@ import { useNavigation } from '@react-navigation/native';
 
 import ButtonHightlight from '../ButtonHighlight';
 import Comment from "./Comment";
+import CommentOptionModal from '../Modal/CommentOptionModal';
 import ConnectorWrapper from './ConnectorWrapper';
 import LoadingComment from '../LoadingComment';
 import StringConstant from '../../utils/string/StringConstant';
+import usePostContextHook, { CONTEXT_SOURCE } from '../../hooks/usePostContextHooks';
 import { colors } from '../../utils/colors';
+import { deleteComment } from '../../service/comment';
+import { getUserId } from '../../utils/users';
 
-const ContainerComment = ({ comments, indexFeed, isLoading, refreshComment, refreshChildComment, navigateToReplyView, findCommentAndUpdate }) => {
+const ContainerComment = ({
+  feedId,
+  comments,
+  indexFeed,
+  isLoading,
+  refreshComment,
+  refreshChildComment,
+  navigateToReplyView,
+  findCommentAndUpdate,
+  updateParentPost = () => { },
+  contextSource = CONTEXT_SOURCE.FEEDS }) => {
   const navigation = useNavigation();
+  const [isCommentOptionModalShown, setIsCommentOptionModalShown] = React.useState(false)
+  const [selectedCommentForDelete, setSelectedCommentForDelete] = React.useState(null)
+  const [selectedCommentLevelForDelete, setSelectedCommentLevelForDelete] = React.useState(0)
+
+  const { deleteCommentFromContext } = usePostContextHook(contextSource)
+
   const isLast = (index, item) => (
     index === comments.length - 1 && (item.children_counts.comment || 0) === 0
   );
@@ -20,16 +40,35 @@ const ContainerComment = ({ comments, indexFeed, isLoading, refreshComment, refr
 
   const hideLeftConnector = (index) => index === comments.length - 1;
 
-  const onCommentLongPressed = (item) => {
-    console.log(item)
-    SimpleToast.show('show alert')
+  const onCommentLongPressed = async (item, level = 0) => {
+    const selfId = await getUserId()
+    if (selfId === item?.user_id) {
+      setIsCommentOptionModalShown(true)
+      setSelectedCommentForDelete(item)
+      setSelectedCommentLevelForDelete(level)
+    }
+  }
+
+  const onCommentOptionModalClosed = () => {
+    setSelectedCommentForDelete(null)
+    setIsCommentOptionModalShown(false)
+  }
+
+  const onDeleteCommentClicked = async () => {
+    setIsCommentOptionModalShown(false)
+    const response = await deleteComment(selectedCommentForDelete?.id)
+    if (response?.success) {
+      deleteCommentFromContext(feedId, selectedCommentForDelete?.id, selectedCommentForDelete, updateParentPost)
+      refreshComment()
+      SimpleToast.show('Comment has been deleted successfully')
+    }
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.lineBeforeProfile} />
       {comments.map((item, index) => (
-        <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item)}>
+        <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item, 0)}>
           <View >
             <View key={`p${index}`}>
               {item.user ? <Comment
@@ -52,21 +91,25 @@ const ContainerComment = ({ comments, indexFeed, isLoading, refreshComment, refr
               /> : null}
 
             </View>
-            {item.children_counts.comment > 0 && (
+            {item?.children_counts?.comment > 0 && (
               <ReplyComment
                 hideLeftConnector={hideLeftConnector(index, item)}
-                data={item.latest_children.comment}
-                countComment={item.children_counts.comment}
+                data={item?.latest_children?.comment}
+                countComment={item?.children_counts?.comment}
                 navigation={navigation}
                 indexFeed={indexFeed}
                 navigateToReplyView={navigateToReplyView}
                 refreshComment={(children) => refreshChildComment({ parent: item, children: children.data })}
                 findCommentAndUpdate={findCommentAndUpdate}
+                onCommentLongPressed={onCommentLongPressed}
               />
             )}
           </View>
         </TouchableWithoutFeedback>
       ))}
+      <CommentOptionModal isOpen={isCommentOptionModalShown}
+        onClose={onCommentOptionModalClosed}
+        onDeleteClicked={onDeleteCommentClicked} />
       {isLoading ? <LoadingComment /> : null}
     </View>
   );
@@ -79,7 +122,8 @@ const ReplyComment = ({
   hideLeftConnector,
   refreshComment,
   navigateToReplyView,
-  findCommentAndUpdate
+  findCommentAndUpdate,
+  onCommentLongPressed = () => { }
 }) => {
   const isLast = (item, index) => (
     index === countComment - 1 && (item.children_counts.comment || 0) === 0
@@ -110,37 +154,39 @@ const ReplyComment = ({
         return (
           <React.Fragment key={`c-${index}`}>
             {item.user ? <ConnectorWrapper index={index}>
-              <View key={`c${index}`} style={styles.levelOneCommentWrapper}>
-                <Comment
-                  indexFeed={indexFeed}
-                  key={`c${index}`}
-                  comment={item}
-                  // username={item.user.data.username}
-                  user={item.user}
-                  level={1}
-                  photo={item.user.data.profile_pic_url}
-                  time={item.created_at}
-                  onPress={showCommentView}
-                  isLast={isLast(item, index)}
-                  refreshComment={refreshComment}
-                  findCommentAndUpdate={findCommentAndUpdate}
-                />
-                {item.children_counts.comment > 0 && (
-                  <>
-                    <View
-                      style={styles.seeRepliesContainer(isLastInParent(index))}>
-                      <View style={styles.connector} />
-                      <ButtonHightlight onPress={showChildCommentView}>
-                        <Text style={styles.seeRepliesText}>
-                          {StringConstant.postDetailPageSeeReplies(
-                            item.children_counts.comment || 0,
-                          )}
-                        </Text>
-                      </ButtonHightlight>
-                    </View>
-                  </>
-                )}
-              </View>
+              <TouchableWithoutFeedback onLongPress={() => onCommentLongPressed(item, 1)}>
+                <View key={`c${index}`} style={styles.levelOneCommentWrapper}>
+                  <Comment
+                    indexFeed={indexFeed}
+                    key={`c${index}`}
+                    comment={item}
+                    // username={item.user.data.username}
+                    user={item.user}
+                    level={1}
+                    photo={item.user.data.profile_pic_url}
+                    time={item.created_at}
+                    onPress={showCommentView}
+                    isLast={isLast(item, index)}
+                    refreshComment={refreshComment}
+                    findCommentAndUpdate={findCommentAndUpdate}
+                  />
+                  {item.children_counts.comment > 0 && (
+                    <>
+                      <View
+                        style={styles.seeRepliesContainer(isLastInParent(index))}>
+                        <View style={styles.connector} />
+                        <ButtonHightlight onPress={showChildCommentView}>
+                          <Text style={styles.seeRepliesText}>
+                            {StringConstant.postDetailPageSeeReplies(
+                              item.children_counts.comment || 0,
+                            )}
+                          </Text>
+                        </ButtonHightlight>
+                      </View>
+                    </>
+                  )}
+                </View>
+              </TouchableWithoutFeedback>
             </ConnectorWrapper> : null}
 
           </React.Fragment>
@@ -159,7 +205,8 @@ const ContainerReply = ({ children, isGrandchild, hideLeftConnector }) => (
     {children}
   </View>
 );
-export default React.memo(ContainerComment, (prevProps, nextProps) => prevProps.comments === nextProps.comments);
+// export default React.memo(ContainerComment, (prevProps, nextProps) => prevProps.comments === nextProps.comments);
+export default ContainerComment
 
 const styles = StyleSheet.create({
   container: {

@@ -1,12 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
-import Image from '../../components/Image';
-
-import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
 import FastImage from 'react-native-fast-image';
+import { StyleSheet, View } from 'react-native';
 
-const index = ({image, style}) => {
-  return (
+import Image from "../Image";
+import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
+
+const index = ({image, style}) => (
     <View style={[styles.wrapperImage, style]}>
       {image ? (
         <Image
@@ -19,7 +18,6 @@ const index = ({image, style}) => {
       )}
     </View>
   );
-};
 
 const styles = StyleSheet.create({
   wrapperImage: {
