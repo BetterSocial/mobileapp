@@ -42,4 +42,19 @@ const createChildComment = async (text, reactionId, useridFeed, sendPostNotif, p
   }
 };
 
-export { createCommentParent, createChildComment };
+const deleteComment = async (reactionId) => {
+  try {
+    const payload = {
+      reaction_id: reactionId
+    }
+
+    const resApi = await api.post('/activity/delete-reaction', payload)
+    return resApi?.data
+  } catch (error) {
+    console.log(error);
+    crashlytics().recordError(error.response.data);
+    throw new Error(error);
+  }
+}
+
+export { createCommentParent, createChildComment, deleteComment };
