@@ -10,6 +10,7 @@ import {
   getCountCommentWithChild,
   getCountVote
 } from '../../utils/getstream';
+import useItemNews from './hooks/useItemNews';
 
 const RenderItem = ({
   item,
@@ -20,51 +21,8 @@ const RenderItem = ({
   onPressUpvote = () => {},
   selfUserId,
 }) => {
-  const [voteStatus, setVoteStatus] = React.useState('none');
-  const [statusUpvote, setStatusUpvote] = React.useState(false);
-  const [totalVote, setTotalVote] = React.useState(0);
 
-  const onPressUpvoteNew = async (item) => {
-    await onPressUpvote({
-      activity_id: item.id,
-      status: !statusUpvote,
-      feed_group: 'domain',
-      domain: item.domain.name,
-    });
-    if (voteStatus === 'none') {
-      setVoteStatus('upvote');
-      setTotalVote((vote) => vote + 1)
-    } 
-    if(voteStatus === 'upvote') {
-      setVoteStatus('none')
-      setTotalVote((vote) => vote - 1)
-    }
-    if(voteStatus === 'downvote') {
-      setVoteStatus('upvote')
-      setTotalVote((vote) => vote + 2)
-    }
-  }
-
-  const onPressDownVoteHandle = async () => {
-    await onPressDownVote({
-      activity_id: item.id,
-      status: !statusUpvote,
-      feed_group: 'domain',
-      domain: item.domain.name,
-    });
-    if (voteStatus === 'none') {
-      setVoteStatus('downvote');
-      setTotalVote((vote) => vote - 1)
-    } 
-    if(voteStatus === 'downvote') {
-      setVoteStatus('none')
-      setTotalVote((vote) => vote + 1)
-    }
-    if(voteStatus === 'upvote') {
-      setVoteStatus('downvote')
-      setTotalVote((vote) => vote - 2)
-    }
-  }
+  const {onPressDownVoteHandle, onPressUpvoteNew, voteStatus, totalVote, setTotalVote, validationStatusVote} = useItemNews()
 
   React.useEffect(() => {
     const initialVote = () => {
@@ -75,28 +33,8 @@ const RenderItem = ({
   }, [item]);
 
 
-  const validationStatusVote = () => {
-      if (item.latest_reactions.upvotes !== undefined) {
-        const upvote = item.latest_reactions.upvotes.filter(
-          (vote) => vote.user_id === selfUserId,
-        );
-        if (upvote !== undefined) {
-          setVoteStatus('upvote');
-        }
-      } else if (item.latest_reactions.downvotes !== undefined) {
-        const downvotes = item.latest_reactions.downvotes.filter(
-          (vote) => vote.user_id === selfUserId,
-        );
-        if (downvotes !== undefined) {
-          setVoteStatus('downvote');
-        }
-      } else {
-        setVoteStatus('none')
-      }    
-  };
-
   React.useEffect(() => {
-    validationStatusVote();
+    validationStatusVote(item, selfUserId)
   }, [item, selfUserId]);
 
   return (
@@ -123,8 +61,8 @@ const RenderItem = ({
           onPressShare={() => onPressShare(item)}
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
-          onPressDownVote={onPressDownVoteHandle}
-          onPressUpvote={() => onPressUpvoteNew(item)}
+          onPressDownVote={() => onPressDownVoteHandle(item, onPressDownVote)}
+          onPressUpvote={() => onPressUpvoteNew(item, onPressUpvote)}
           statusVote={voteStatus}
         />
       </View>

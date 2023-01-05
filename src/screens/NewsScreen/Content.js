@@ -31,7 +31,7 @@ const Content = (props) => {
   };
 
   return (
-    <Pressable onPress={onContentPressed}>
+    <Pressable testID='press' onPress={onContentPressed}>
       <View >
         <View style={styles.base}>
           <Text style={styles.title}>{title}</Text>
@@ -45,7 +45,7 @@ const Content = (props) => {
                 width: '100%',
                 height: 180,
               }}
-              resizeMode={FastImage.resizeMode.cover}
+              resizeMode={imageConst.resizeMode.cover}
             />
           ) : (
             <Image
@@ -54,7 +54,7 @@ const Content = (props) => {
                 width: '100%',
                 height: 180,
               }}
-              resizeMode={FastImage.resizeMode.cover}
+              resizeMode={imageConst.resizeMode.co}
             />
           )}
         </View>
@@ -62,6 +62,7 @@ const Content = (props) => {
           <Text style={styles.content}>
             {description}{' '}
             <Text
+              testID='textPress'
               onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
               style={{
                 color: COLORS.blue,
