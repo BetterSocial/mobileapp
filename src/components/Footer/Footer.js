@@ -58,7 +58,7 @@ const Footer = ({
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
       <View style={styles.leftGroupContainer}>
-        <TouchableOpacity style={styles.btn} onPress={onPressShare}>
+        <TouchableOpacity testID='shareBtn' style={styles.btn} onPress={onPressShare}>
           <View style={styles.btnShare}>
             <MemoIc_share height={20} width={22} />
           </View>
@@ -98,9 +98,14 @@ const Footer = ({
           onPress={onPressDownVote}>
           <View style={styles.btnDownvote}>
             {statusVote === 'downvote' ? (
-              <MemoIc_arrow_down_vote_on width={20} height={18} />
+              <View testID='downvoteOn' >
+                <MemoIc_arrow_down_vote_on width={20} height={18} />
+              </View>
             ) : (
-              <MemoIc_arrow_down_vote_off width={20} height={18} />
+              <View testID='downvoteOff' >
+                  <MemoIc_arrow_down_vote_off width={20} height={18} />
+
+              </View>
             )}
           </View>
         </TouchableOpacity>
@@ -114,9 +119,13 @@ const Footer = ({
           onPress={onPressUpvote}>
           <View style={styles.btnUpvote}>
             {statusVote === 'upvote' ? (
-              <MemoIc_arrow_upvote_on width={20} height={18} />
+              <View testID='votingUpOn' >
+                <MemoIc_arrow_upvote_on width={20} height={18} />
+              </View>
             ) : (
-              <MemoIc_arrow_upvote_off width={20} height={18} />
+              <View testID='votingUpOff' >
+                <MemoIc_arrow_upvote_off width={20} height={18} />
+              </View>
             )}
           </View>
         </TouchableOpacity>
