@@ -55,7 +55,6 @@ import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import WhotoFollow from '../screens/WhotoFollow';
 import { channelListLocalAtom } from '../service/channelListLocal';
 import { InitialStartupAtom } from '../service/initialStartup';
-import { verifyTokenGetstream } from '../service/users';
 import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
@@ -80,27 +79,6 @@ export const RootNavigator = () => {
     setInitialValue({ id: accessToken.id })
   }
 
-  const doVerifyGetstreamToken = async () => {
-    try {
-      const response = await verifyTokenGetstream();
-      if (!response) {
-        SplashScreen.hide();
-
-        if (perf.current) {
-          perf.current.stop();
-        }
-      }
-    } catch (e) {
-      SplashScreen.hide();
-
-      if (perf.current) {
-        perf.current.stop();
-      }
-    }
-    doGetAccessToken()
-  }
-
-
   React.useEffect(() => {
     traceMetricScreen('loading_splashscreen').then(fnCallback => {
       perf.current = fnCallback;
@@ -108,8 +86,8 @@ export const RootNavigator = () => {
     LogBox.ignoreAllLogs()
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
-    doVerifyGetstreamToken()
 
+    doGetAccessToken();
     useLocalChannelsFirst(setLocalChannelData);
 
     return async () => {
@@ -123,7 +101,11 @@ export const RootNavigator = () => {
         create();
       }
     } else {
-      doVerifyGetstreamToken()
+      SplashScreen.hide();
+
+      if (perf.current) {
+        perf.current.stop();
+      }
     }
 
   }, [initialStartup]);
@@ -140,7 +122,7 @@ export const RootNavigator = () => {
     }
   }, [clientState]);
 
-  const hideNetworkStatusIfInOnboarding = initialStartup?.id === null || initialStartup?.id === ''
+  // const hideNetworkStatusIfInOnboarding = initialStartup?.id === null || initialStartup?.id === ''
 
   return (
     <View
