@@ -1,6 +1,6 @@
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import BlockComponent from '../BlockComponent';
@@ -46,7 +46,9 @@ const Comment = ({
     if (level >= 2 || disableOnTextPress) {
       return;
     }
-    return onPress()
+    if(onPress && typeof onPress === 'function') {
+      onPress()
+    }
   };
 
   const openProfile = async () => {
@@ -176,12 +178,14 @@ const Comment = ({
       </ButtonHightlight>
       <View style={styles.constainerFooter}>
         {isLast && level >= 2 ? (
-          <View style={styles.gap} />
+          <View testID='level2' style={styles.gap} />
         ) : (
+          <TouchableOpacity onPress={onPress} testID='memoComment' >
           <ButtonHightlight style={styles.btnReply} onPress={onPress}>
             <MemoCommentReply />
             <Text style={styles.btnReplyText}>Reply</Text>
           </ButtonHightlight>
+          </TouchableOpacity>
         )}
         <ButtonHightlight
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
