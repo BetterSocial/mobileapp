@@ -44,10 +44,8 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     latest_children: {},
     user: { data: { ...itemProp.user.data, profile_pic_url: users.photoUrl, username: profile.myProfile.username }, id: itemProp.user.id }
   })
-  const setComment = (text) => {
-    setCommentHook(text)
-  };
 
+  
   React.useEffect(() => {
     setTextComment(temporaryText)
   }, [temporaryText])
@@ -176,11 +174,12 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
       <SafeAreaView>
         <View style={styles.header}>
           <TouchableOpacity
+            testID='backButton'
             onPress={navigationGoBack}
             style={styles.backArrow}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>
+          <Text testID='usernameText' style={styles.headerText}>
             Reply to {item.user.data.username}
           </Text>
           <View style={styles.btn} />
@@ -255,7 +254,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
         inReplyCommentView={true}
         showProfileConnector={newCommentList.length > 0}
         username={item.user.data.username}
-        onChangeText={setComment}
+        onChangeText={setCommentHook}
         onPress={() => createComment()}
         // onPress={() => console.log('level ', level)}
         value={temporaryText}
@@ -264,19 +263,19 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     </KeyboardAvoidingView>
   );
 };
-const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key }) => (
-  <View
-    key={key}
-    style={[
-      styles.containerReply(hideLeftConnector),
-      { borderColor: isGrandchild ? 'transparent' : colors.gray1 },
-    ]}>
-    {children}
-  </View>
-);
-export default React.memo(ReplyCommentId);
+export const ContainerReply = ({ children, isGrandchild = true, key }) => (
+    <View
+      key={key}
+      style={[
+        styles.containerReply,
+        { borderColor: isGrandchild ? 'transparent' : colors.gray1 },
+      ]}>
+      {children}
+    </View>
+  );
+export default React.memo (ReplyCommentId);
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     height: 'auto',
     flex: 1,
@@ -298,12 +297,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  containerReply: () => ({
-    borderLeftWidth: 1,
+  containerReply: {
+     borderLeftWidth: 1,
     width: '100%',
     // backgroundColor: 'red',
     // flex: 1,
-  }),
+  },
   seeRepliesContainer: (isLast) => ({
     display: 'flex',
     flexDirection: 'row',

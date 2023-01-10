@@ -13,6 +13,8 @@ import usePostContextHook, { CONTEXT_SOURCE } from '../../hooks/usePostContextHo
 import { colors } from '../../utils/colors';
 import { deleteComment } from '../../service/comment';
 import { getUserId } from '../../utils/users';
+import useReplyComment from './hooks/useReplyComment';
+import useContainerComment from './hooks/useContainerComment';
 
 const ContainerComment = ({
   feedId,
@@ -29,16 +31,10 @@ const ContainerComment = ({
   const [isCommentOptionModalShown, setIsCommentOptionModalShown] = React.useState(false)
   const [selectedCommentForDelete, setSelectedCommentForDelete] = React.useState(null)
   const [selectedCommentLevelForDelete, setSelectedCommentLevelForDelete] = React.useState(0)
+      const {isLast, isLastInParent, hideLeftConnector} = useContainerComment()
 
   const { deleteCommentFromContext } = usePostContextHook(contextSource)
 
-  const isLast = (index, item) => (
-    index === comments.length - 1 && (item.children_counts.comment || 0) === 0
-  );
-
-  const isLastInParent = (index) => index === comments.length - 1;
-
-  const hideLeftConnector = (index) => index === comments.length - 1;
 
   const onCommentLongPressed = async (item, level = 0) => {
     const selfId = await getUserId()
@@ -90,14 +86,14 @@ const ContainerComment = ({
                 level={0}
                 time={item.created_at}
                 photo={item.user.data.profile_pic_url}
-                isLast={isLast(index, item)}
-                isLastInParent={isLastInParent(index)}
+                isLast={isLast(index, item, comments)}
+                isLastInParent={isLastInParent(index, comments)}
                 onPress={() => navigateToReplyView({
                   item,
                   level: 0,
                   indexFeed,
                 })}
-                refreshComment={refreshComment}
+                // refreshComment={refreshComment}
                 findCommentAndUpdate={findCommentAndUpdate}
               /> : null}
 
@@ -126,21 +122,18 @@ const ContainerComment = ({
   );
 };
 
-const ReplyComment = ({
+export const ReplyComment = ({
   indexFeed,
   data,
   countComment,
   hideLeftConnector,
-  refreshComment,
   navigateToReplyView,
   findCommentAndUpdate,
   onCommentLongPressed = () => { }
 }) => {
-  const isLast = (item, index) => (
-    index === countComment - 1 && (item.children_counts.comment || 0) === 0
-  );
+    const {isLast, isLastInParent} = useReplyComment()
 
-  const isLastInParent = (index) => index === countComment - 1;
+
 
   return (
     <ContainerReply hideLeftConnector={hideLeftConnector}>
@@ -177,14 +170,14 @@ const ReplyComment = ({
                     photo={item.user.data.profile_pic_url}
                     time={item.created_at}
                     onPress={showCommentView}
-                    isLast={isLast(item, index)}
-                    refreshComment={refreshComment}
+                    isLast={isLast(item, index, countComment)}
+                    // refreshComment={refreshComment}
                     findCommentAndUpdate={findCommentAndUpdate}
                   />
                   {item.children_counts.comment > 0 && (
                     <>
                       <View
-                        style={styles.seeRepliesContainer(isLastInParent(index))}>
+                        style={styles.seeRepliesContainer(isLastInParent(index, countComment))}>
                         <View style={styles.connector} />
                         <ButtonHightlight onPress={showChildCommentView}>
                           <Text style={styles.seeRepliesText}>
@@ -207,19 +200,22 @@ const ReplyComment = ({
     </ContainerReply>
   );
 };
-const ContainerReply = ({ children, isGrandchild, hideLeftConnector }) => (
+export const ContainerReply = ({ children, isGrandchild, hideLeftConnector }) => (
   <View
     style={[
-      styles.containerReply(hideLeftConnector),
+      styles.containerReply,
       { borderColor: isGrandchild ? '#fff' : colors.gray1 },
     ]}>
     {children}
   </View>
 );
 // export default React.memo(ContainerComment, (prevProps, nextProps) => prevProps.comments === nextProps.comments);
-export default ContainerComment
 
-const styles = StyleSheet.create({
+export const isEqual = (prevProps, nextProps) => prevProps.comments === nextProps.comments
+
+export default React.memo (ContainerComment, isEqual);
+
+export const styles = StyleSheet.create({
   container: {
     paddingLeft: 30,
     paddingRight: 8,
@@ -229,9 +225,9 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderLeftColor: '#C4C4C4',
   },
-  containerReply: () => ({
-    borderLeftWidth: 1,
-  }),
+  containerReply: {
+      borderLeftWidth: 1,
+  },
   seeRepliesContainer: (isLast) => ({
     display: 'flex',
     flexDirection: 'row',
