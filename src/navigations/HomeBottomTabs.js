@@ -296,7 +296,7 @@ function HomeBottomTabs(props) {
   return (
     <View style={styles.container}>
       <Tab.Navigator
-        initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
+        initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'Feed'}
         tabBarOptions={{
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,
@@ -313,18 +313,6 @@ function HomeBottomTabs(props) {
             <View style={[styles.badge, { backgroundColor: screenOptionsNavigation.isFocused() ? colors.holytosca : 'transparent' }]} />
           ),
         })}>
-        <Tab.Screen
-          name="ChannelList"
-          component={ChannelListScreen}
-
-          options={{
-            activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <View style={styles.center} >
-              <MemoHome fill={color} />
-            </View>,
-            tabBarBadge: unReadMessage.total_unread_count + unReadMessage.unread_post > 0 ? unReadMessage.total_unread_count + unReadMessage.unread_post : null
-          }}
-        />
         <Tab.Screen
           name="Feed"
           component={FeedScreen}
@@ -343,6 +331,18 @@ function HomeBottomTabs(props) {
               <MemoNews fill={color} />
             </View>,
             // unmountOnBlur: true
+          }}
+        />
+        <Tab.Screen
+          name="ChannelList"
+          component={ChannelListScreen}
+
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: ({ color }) => <View style={styles.center} >
+              <MemoHome fill={color} />
+            </View>,
+            tabBarBadge: unReadMessage.total_unread_count + unReadMessage.unread_post > 0 ? unReadMessage.total_unread_count + unReadMessage.unread_post : null
           }}
         />
         <Tab.Screen

@@ -226,7 +226,7 @@ const ChannelListScreen = ({ navigation }) => {
             </Chat>
           ) : (
             <View style={styles.content}>
-              <ActivityIndicator size="small" color={COLORS.holyTosca} />
+              <ActivityIndicator size="small" color={COLORS.red} />
             </View>
           )}
       </ScrollView>
