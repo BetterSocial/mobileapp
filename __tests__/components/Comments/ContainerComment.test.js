@@ -428,25 +428,3 @@ describe('useReplyComment', () => {
         expect(result.current.isLastInParent(0, 1)).toBeTruthy()
     })
 })
-
-//   const isLastInParent = (index, comments) => index === comments.length - 1;
-    // const isLast = (item, index, countComment) => (
-    //   index === countComment - 1 && (item.children_counts.comment || 0) === 0
-    // );
-
-// const useContainerComment = () => {
-//       const isLast = (index, item, comments) => (
-        // 0 === 1 -1 
-//       index === comments.length - 1 && (item.children_counts.comment || 0) === 0
-//     );
-
-//   const isLastInParent = (index, comments) => index === comments.length - 1;
-
-//   const hideLeftConnector = (index, comments) => index === comments.length - 1;
-
-//   return {
-//     isLast,
-//     isLastInParent,
-//     hideLeftConnector
-//   }
-// }
