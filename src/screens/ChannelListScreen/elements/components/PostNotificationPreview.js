@@ -10,8 +10,10 @@ import MemoIc_comment from '../../../../assets/icons/Ic_comment';
 import MemoIc_block_inactive from '../../../../assets/block/Ic_block_inactive';
 import Imageblock from '../../../../assets/images/block.png'
 import {Context} from '../../../../context'
-
+import BlockIcon from '../../../../assets/block.png'
 import AvatarPostNotif from './AvatarPostNotif';
+import FastImage from 'react-native-fast-image';
+import { normalizeFontSize } from '../../../../utils/fonts';
 
 const styles = StyleSheet.create({
     containerCard: {
@@ -106,7 +108,33 @@ const styles = StyleSheet.create({
         flex: 1,
         borderWidth: 1,
         borderColor: 'white'
+    },
+    blockMention: {
+        backgroundColor: '#FF2E63',
+        paddingHorizontal: 16,
+        paddingVertical: 6,
+        flexDirection: 'row'
+    },
+    iconBlockContainer : {
+     height: 28,
+     width: 28,
+
+    },
+    iconBlockStyle: {
+        height: 12, width: 12,
+    },
+    containerIcon: {width:48,  alignItems: 'center', justifyContent: 'center'},
+    errorTitleText: {
+        fontSize: normalizeFontSize(12),
+        fontWeight: 'bold',
+        color: 'white'
+    },
+        errorSubtitleText: {
+        fontSize: normalizeFontSize(10),
+        fontWeight: '400',
+        color: 'white'
     }
+    
 })
 
 
@@ -122,7 +150,19 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
           colors: { border, grey },
         },
       } = useTheme();
-    
+
+    const showNotification = () => {
+        if(item.block > 0 && item.upvote > 0) {
+            if(item.block / item.upvote >= 0.25 && item.block >=2) {
+                return true
+            }
+            return false
+        }
+        if(item.block >= 2 && item.upvote <= 0 ) {
+            return true
+        }
+        return  false
+    }  
     const handleReplyComment = () => {
         const findComment = item.comments.find((data) => data.reaction.kind === 'comment')
         if(findComment) {
@@ -148,8 +188,9 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
         return null
     }
     return (
-        <ButtonHighlight key={index} onPress={() => onSelectAdditionalData(item)}  style={[styles.containerCard, {borderBottomColor: border}]} >
-            <View style={[styles.row]} >
+        <ButtonHighlight key={index} onPress={() => onSelectAdditionalData(item)}   >
+            <View style={[styles.containerCard, {borderBottomColor: border}]}>
+                <View style={[styles.row]} >
                 {item.postMaker && item.postMaker.data ?<AvatarPostNotif item={item} /> : null}
             <View style={{flex: 1,  paddingLeft: 8, justifyContent: 'center'}} >
                 <View style={styles.row} >
@@ -203,7 +244,24 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
                 
             </View>  : null
             }
-                
+            </View>
+            {item.postMaker.id === myProfile.user_id &&  showNotification() &&  <View style={styles.blockMention} >
+            <View style={styles.containerIcon} >
+            <View style={styles.iconBlockContainer} >
+                <FastImage source={BlockIcon} resizeMode={FastImage.resizeMode.contain} style={styles.iconBlockContainer} />
+            </View>
+       
+            </View>
+                 <View>
+                <Text style={styles.errorTitleText} >
+                    Your post is getting you blocked by others
+                </Text>
+                <Text style={styles.errorSubtitleText} >
+                    Consider deleting to avoid harming future posts’ visibility
+                </Text>
+            </View>
+            
+            </View>}
         </ButtonHighlight>
     )
 }

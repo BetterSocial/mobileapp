@@ -3,25 +3,27 @@ import PropTypes from 'prop-types';
 import {
   Dimensions,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   View
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
 import ImageLayouter from './ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
 import { COLORS } from '../../../utils/theme';
-import { POST_TYPE_POLL } from '../../../utils/constants';
+import { Gap } from "../..";
 import { colors } from '../../../utils/colors';
-import { fonts } from '../../../utils/fonts';
+import { fonts, normalizeFontSize } from '../../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
+import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
+import { POST_TYPE_POLL } from '../../../utils/constants';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const Content = ({ message, images_url = [], topics = [], item, onnewpollfetched }) => {
+const Content = ({ message, images_url, topics = [], item, onnewpollfetched }) => {
   const navigation = useNavigation();
   const cekImage = () => images_url  && images_url !== '' ;
 
@@ -69,7 +71,7 @@ const Content = ({ message, images_url = [], topics = [], item, onnewpollfetched
 
       </ScrollView>
       <View style={styles.topicContainer} >
-        <TopicsChip isPdp={true} topics={topics} fontSize={14} text={message} />
+        <TopicsChip isPdp={true} topics={topics} fontSize={normalizeFontSize(14)} text={message} />
 
       </View>
     </>
@@ -89,6 +91,63 @@ Content.propTypes = {
 export default Content;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingBottom: 16,
+  },
+  fletlist: { flex: 1 },
+  imageList: {
+    flex: 1,
+    width: screenWidth - 32,
+    borderRadius: 16,
+  },
+  containerShowMessage: (currentRouteName) => ({
+      justifyContent: 'center',
+      alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
+      flex: 1,
+      paddingBottom: 10,
+      minHeight: 100,
+    }),
+  rowSpaceBeetwen: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  rowCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  containerFeedProfile: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginLeft: 13,
+  },
+
+  feedUsername: {
+    fontFamily: fonts.inter[600],
+    fontWeight: 'bold',
+    fontSize: 14,
+    color: colors.black,
+  },
+  containerFeedText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  feedDate: {
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    color: colors.black,
+    lineHeight: 18,
+  },
+  point: {
+    width: 4,
+    height: 4,
+    borderRadius: 4,
+    backgroundColor: colors.gray,
+    marginLeft: 8,
+    marginRight: 8,
+  },
   contentFeed: {
     flex: 1,
     marginTop: 12,
@@ -109,27 +168,26 @@ const styles = StyleSheet.create({
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
-    fontSize: 16,
+    fontSize: normalizeFontSize(14),
     lineHeight: 24,
     color: colors.black,
-    marginBottom: 10,
   },
   textComment: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 18,
     color: colors.gray,
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 24,
     color: colors.black,
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     lineHeight: 24,
     color: colors.gray,
   },

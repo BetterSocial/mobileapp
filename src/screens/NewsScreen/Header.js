@@ -38,8 +38,9 @@ const Header = ({ image, domain, time, item }) => {
       },
     });
   };
+
   return (
-    <GlobalButton buttonStyle={styles.noPl} onPress={onHeaderPressed}>
+    <GlobalButton testID='headerBtn' buttonStyle={styles.noPl} onPress={onHeaderPressed}>
       <View style={styles.container}>
         <Avatar image={image} style={styles.avatar} />
         <Gap width={8} />
