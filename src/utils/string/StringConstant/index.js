@@ -110,6 +110,9 @@ const generalCannotOpenLink = 'URL is not supported';
 // Group Setting Page
 const groupSettingUpdateFailed = 'Update failed, please try again'
 
+// Feed
+const feedDeleteCommentConfirmation = 'Do you want to delete your comment?'
+
 export default {
     signInPrivacy,
     signInScreenHumanIdBrand,
@@ -195,5 +198,6 @@ export default {
     generalCommentFailed,
     generalCannotOpenLink,
 
-    groupSettingUpdateFailed
+    groupSettingUpdateFailed,
+    feedDeleteCommentConfirmation
 };

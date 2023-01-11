@@ -1,36 +1,37 @@
-import * as React from 'react'
-import {StyleSheet, View} from 'react-native'
+import * as React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
-import PostPageDetailComponent from '../../components/PostPageDetail'
-import {Context} from '../../context';
+import PostPageDetailComponent from '../../components/PostPageDetail';
+import { CONTEXT_SOURCE } from '../../hooks/usePostContextHooks';
+import { Context } from '../../context';
 import { setFeedByIndex } from '../../context/actions/myProfileFeed';
 
 const ProfilePostDetail = (props) => {
-    let [feeds, dispatch] = React.useContext(Context).feeds
-    let {index, feedId, refreshParent} = props.route.params
-    let navigation = useNavigation()
+    const [feedsContext, dispatch] = React.useContext(Context).myProfileFeed
+    const { index, feedId, refreshParent } = props.route.params
+    const navigation = useNavigation()
+    const {feeds} = feedsContext
 
-    let navigateToReplyView = (data, updateParent, findCommentAndUpdate, dataFeed) => {
-        navigation.navigate('ReplyComment', {...data, page: props.route.name, updateParent, findCommentAndUpdate, dataFeed});
+    const navigateToReplyView = (data, updateParent, findCommentAndUpdate, dataFeed) => {
+        navigation.navigate('ReplyComment', { ...data, page: props.route.name, updateParent, findCommentAndUpdate, dataFeed });
     }
-    
-    React.useEffect(() => {
-        return () => {
-            if(refreshParent) {
-                refreshParent()
-            }
+
+    React.useEffect(() => () => {
+        if (refreshParent) {
+            refreshParent()
         }
     }, [])
-    
-    return(
+
+    return (
         <View style={styles.container}>
-            <PostPageDetailComponent 
-                feedId={feedId} 
-                feeds={feeds.feeds} 
-                dispatch={dispatch} 
+            <PostPageDetailComponent
+                feedId={feedId}
+                feeds={feeds}
+                dispatch={dispatch}
                 setFeedByIndexProps={setFeedByIndex}
-                navigateToReplyView={navigateToReplyView}/>
+                navigateToReplyView={navigateToReplyView}
+                contextSource={CONTEXT_SOURCE.PROFILE_FEEDS} />
         </View>
     )
 }
