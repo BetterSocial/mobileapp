@@ -20,6 +20,7 @@ import { linking } from './src/navigations/linking';
 import {RootNavigator} from './src/navigations/root-stack';
 import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
 import {toastConfig} from './src/configs/ToastConfig'
+import { Analytics } from './src/libraries/analytics/firebaseAnalytics';
 
 if(!__DEV__) {
   console.log = function () {}
@@ -33,12 +34,10 @@ const App = () => {
   const streami18n = new Streami18n({
     language: 'en',
   });
-  const navigationRef = React.useRef()
-
-
+  const navigationRef = React.useRef();
+  const routeNameRef = React.useRef();
 
   React.useEffect(() => {
-
     const init = async () => {
       try {
         fetchRemoteConfig();
@@ -48,6 +47,7 @@ const App = () => {
         }
       }
     };
+
     init();
     // return unsubscribe;
   }, []);
@@ -68,20 +68,45 @@ const App = () => {
           BackHandler.removeEventListener('hardwareBackPress', preventCloseApp)
           BackHandler.addEventListener('hardwareBackPress', backFunc)
         }
+
+        // log event
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.current?.getCurrentRoute?.()?.name;
+
+        if (currentRouteName && previousRouteName !== currentRouteName) {
+          Analytics.trackingScreen(currentRouteName);
+        }
+
+        if (__DEV__) {
+          console.log('current screen name: ', currentRouteName);
+          console.tron.log('current screen name: ', currentRouteName);
+        }
+
+        routeNameRef.current = currentRouteName;
   }
 
+  const onReadyState = () => {
+    if (navigationRef.current) {
+      routeNameRef.current = navigationRef.current?.getCurrentRoute?.()?.name;
+    }
+  }
 
-  const newLocal = (
+  return (
     <>
       <HumanIDProvider />
       <RecoilRoot>
-        <RecoilDebugObserver instance={reactotronInstance} />
+        {__DEV__ ? <RecoilDebugObserver instance={reactotronInstance} /> : null}
         <Store>
-          <NavigationContainer onStateChange={handleStateChange}  ref={navigationRef} linking={linking}>
+          <NavigationContainer
+            onReady={onReadyState}
+            onStateChange={handleStateChange}
+            ref={navigationRef}
+            linking={linking}
+          >
             <View style={{paddingTop: top, paddingBottom: bottom}} >
-            <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
-              <RootNavigator areaHeight={height} />
-            </OverlayProvider>
+              <OverlayProvider bottomInset={bottom} i18nInstance={streami18n}>
+                <RootNavigator areaHeight={height} />
+              </OverlayProvider>
             </View>
           </NavigationContainer>
         </Store>
@@ -89,9 +114,6 @@ const App = () => {
       <Toast config={toastConfig} />
       <FlashMessage position="top" />
     </>
-  );
-  return (
-    newLocal
   );
 };
 
