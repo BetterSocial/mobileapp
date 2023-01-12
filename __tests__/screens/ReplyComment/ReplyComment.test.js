@@ -1,8 +1,17 @@
 import React from 'react'
-import {render} from '@testing-library/react-native'
+import {fireEvent, render} from '@testing-library/react-native'
 import {act, renderHook} from '@testing-library/react-hooks'
 import ReplyComment from '../../../src/screens/ReplyComment'
 import useReplyComment from '../../../src/components/ReplyComment/hooks/useReplyComment'
+
+const mockGoBack = jest.fn()
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useNavigation: () => ({ goBack: mockGoBack, push: jest.fn() }),
+  useRoute: () => ({
+    params: {}
+  }),
+}));
 
 const itemProp = {
     latest_children: {
@@ -217,4 +226,144 @@ describe('hooks function should run correctly', () => {
             }
         }])
     })
+
+    it('handleFirstTextCommentHook should run correctly', async () => {
+             const {result} = renderHook(() => useReplyComment())
+             await result.current.setTemporaryText('test agite')
+             await result.current.handleFirstTextCommentHook()
+             expect(result.current.textComment).toEqual('test agite')
+    })
+
+    it('updateVoteParentPostHook should run correctly', () => {
+        const data = {
+            data : {
+                data: {
+                    text: 'bola bola'
+                }
+            }
+        }
+
+        const dataVote = {
+            activity_id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11'
+        }
+
+        const dataVote2 = {
+            activity_id: '123'
+        }
+
+        const comment = {
+            latest_children: {
+                comment: [
+                    {id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11', data: {text: 'agita'}}
+                ]
+            }
+        }
+
+            const {result} = renderHook(() => useReplyComment())
+            expect(result.current.updateVoteParentPostHook(data, dataVote, comment)).toEqual([{id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11', data: {text: 'bola bola'}}])
+            expect(result.current.updateVoteParentPostHook(data, dataVote2, comment)).toEqual([{id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11', data: {text: 'agita'}}])
+
+
+    })
+
+    it('updateVoteLatestChildrenParentHook should run correctly', () => {
+        const comment = {
+            latest_children: {
+                comment: [
+                    {id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11', latest_children: {comment: [{id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11', data: {text: 'agita'}}]}}
+                ]
+            }
+        }
+        const dataVote = {
+            activity_id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11',
+            parent: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11',
+            id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11'
+        }
+        const dataVote2 = {
+            activity_id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11',
+            parent: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11',
+            id: '123'
+        }
+        const dataVote3 = {
+               activity_id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11',
+            parent: '123',
+            id: 'bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11'
+        }
+        const response = {
+            data: {
+                text: 'madurasa'
+            }
+        }
+        const comment2 = null
+        const {result} = renderHook(() => useReplyComment())
+        expect(result.current.updateVoteLatestChildrenParentHook(response, dataVote, comment)).toEqual( [
+        {
+            "id": "bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11",
+            "latest_children":  {
+                "comment": [
+                {
+                    "data":  {
+                        "text": "madurasa",
+                    },
+                    "id": "bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11",
+                    },
+                ],
+            },
+        },
+            ])
+            expect(result.current.updateVoteLatestChildrenParentHook(response, dataVote2, comment)).toEqual([
+                {
+                    "id": "bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11",
+                    "latest_children":  {
+                        "comment": [
+                        {
+                            "data":  {
+                                "text": "agita",
+                            },
+                            "id": "bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11",
+                            },
+                        ],
+                    },
+                },
+            ])
+            expect(result.current.updateVoteLatestChildrenParentHook(response, dataVote3, comment)).toEqual([
+                {
+                    "id": "bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11",
+                    "latest_children":  {
+                        "comment": [
+                        {
+                            "data":  {
+                                "text": "agita",
+                            },
+                            "id": "bea7567e-38f1-11ed-8bdd-0e4b8d0e7a11",
+                            },
+                        ],
+                    },
+                },
+            ])
+
+            expect(result.current.updateVoteLatestChildrenParentHook(response, dataVote3, comment2)).toEqual([])
+
+
+            })
+
+        it('updateReplyPostHook should run correctly', () => {
+            const oldComment = [{text:'agita'}]
+            const commentId = '123'
+            const commenId2 = '1234'
+            const newComment = [{text: 'superman'}]
+            const itemParentProps = {
+                latest_children: {
+                    comment: [{  id: '123',latest_children: {comment: oldComment}, children_counts: {comment: oldComment.length}}],
+                  
+                }
+            }
+            const {result} = renderHook(() => useReplyComment())
+            expect(result.current.updateReplyPostHook(newComment, itemParentProps, commentId)).toEqual({"replaceComment": {"latest_children": {"comment": [{"children_counts": {"comment": 1}, "id": "123", "latest_children": {"comment": [{"text": "superman"}]}}]}}, "updateComment": [{"children_counts": {"comment": 1}, "id": "123", "latest_children": {"comment": [{"text": "superman"}]}}]})
+            expect(result.current.updateReplyPostHook(newComment, itemParentProps, commenId2)).toEqual({"replaceComment": {"latest_children": {"comment": [{"children_counts": {"comment": 1}, "id": "123", "latest_children": {"comment": [{"text": "agita"}]}}]}}, "updateComment": [{"children_counts": {"comment": 1}, "id": "123", "latest_children": {"comment": [{"text": "agita"}]}}]})
+        })
+
+        
+
 })
+

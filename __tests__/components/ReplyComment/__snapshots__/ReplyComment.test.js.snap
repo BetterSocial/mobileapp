@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Reply comment should run correctly ContainerReply component should run correctly 1`] = `[Function]`;
+
+exports[`Reply comment should run correctly should match snapshot 1`] = `[Function]`;
