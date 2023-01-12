@@ -37,7 +37,6 @@ const Comment = ({
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
-  console.log(comment, 'bilaboong')
   const {totalVote, setTotalVote, statusVote, setStatusVote, onUpVote, onDownVote, iVote} = useComment({comment, findCommentAndUpdate, level, updateVote})
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
