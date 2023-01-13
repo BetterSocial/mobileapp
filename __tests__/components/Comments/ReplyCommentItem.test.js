@@ -1,12 +1,16 @@
 import * as React from 'react';
-import { render, cleanup } from '@testing-library/react-native';
+import { render, cleanup, fireEvent } from '@testing-library/react-native';
 import ReplyCommentItem from '../../../src/components/Comments/ReplyCommentItem';
+import * as serviceVote from '../../../src/service/vote'
+import * as serviceUser from '../../../src/utils/users'
 
 jest.mock('react-native')
 jest.mock('react-native/Libraries/Pressability/usePressability')
 jest.mock('react-native/Libraries/Components/Pressable/Pressable')
 
 jest.useFakeTimers()
+
+
 
 describe('ReplyCommentItem should run correctly', () => {
     afterEach(cleanup)
@@ -62,4 +66,50 @@ describe('ReplyCommentItem should run correctly', () => {
         expect(toJSON).toMatchSnapshot()
         expect(getAllByText('-2')).toHaveLength(1)
     })
+
+    it('ontextpress function should run correctly and the children text should correct', () => {
+            const onPress = jest.fn()
+            const refreshComment = jest.fn()
+            const spyConsole = jest.spyOn(console, 'log')
+            const {getByTestId} = render(<ReplyCommentItem comment={comments} user={user} onPress={onPress} isLast={false} isLastInParent={false} time={'26/08/2022'} photo='https://detil.jpg' level={0} refreshComment={refreshComment} showLeftConnector={false} disableOnTextPress={false} />)
+            fireEvent.press(getByTestId('ontextpress'))
+            expect(onPress).toHaveBeenCalled()
+            const {getByTestId: getLevelMore2} = render(<ReplyCommentItem comment={comments} user={user} onPress={onPress} isLast={false} isLastInParent={false} time={'26/08/2022'} photo='https://detil.jpg' level={2} refreshComment={refreshComment} showLeftConnector={false} disableOnTextPress={false} />)
+            fireEvent.press(getLevelMore2('ontextpress'))
+            expect(spyConsole).toHaveBeenCalled()
+    })
+    it('replyBtn should run correctly', () => {
+        const onPress = jest.fn()
+        const refreshComment = jest.fn()
+        const {getByTestId} = render(<ReplyCommentItem comment={comments} user={user} onPress={onPress} isLast={false} isLastInParent={false} time={'26/08/2022'} photo='https://detil.jpg' level={0} refreshComment={refreshComment} showLeftConnector={false} disableOnTextPress={false} />)
+        fireEvent.press(getByTestId('replyBtn'))
+        expect(onPress).toHaveBeenCalled()
+    })
+
+    it('downcoteBtn should run correctly', () => {
+             const onPress = jest.fn()
+             const spyDownvote = jest.spyOn(serviceVote, 'voteComment')
+        const refreshComment = jest.fn()
+        const {getByTestId} = render(<ReplyCommentItem comment={comments} user={user} onPress={onPress} isLast={false} isLastInParent={false} time={'26/08/2022'} photo='https://detil.jpg' level={0} refreshComment={refreshComment} showLeftConnector={false} disableOnTextPress={false} />)
+        fireEvent.press(getByTestId('downvoteBtn'))
+        expect(spyDownvote).toHaveBeenCalled()
+    })
+    it('upvoteBtn should run correctly', () => {
+        const onPress = jest.fn()
+        const spyDownvote = jest.spyOn(serviceVote, 'voteComment')
+        const refreshComment = jest.fn()
+        const {getByTestId} = render(<ReplyCommentItem comment={comments} user={user} onPress={onPress} isLast={false} isLastInParent={false} time={'26/08/2022'} photo='https://detil.jpg' level={0} refreshComment={refreshComment} showLeftConnector={false} disableOnTextPress={false} />)
+        fireEvent.press(getByTestId('upvotebtn'))
+        expect(spyDownvote).toHaveBeenCalled()
+    })
+
+    it('onOpenProfile should run correctly', () => {
+        const onPress = jest.fn()
+        const spyUser = jest.spyOn(serviceUser, 'getUserId')
+        const refreshComment = jest.fn()
+        const {getByTestId} = render(<ReplyCommentItem comment={comments} user={user} onPress={onPress} isLast={false} isLastInParent={false} time={'26/08/2022'} photo='https://detil.jpg' level={0} refreshComment={refreshComment} showLeftConnector={false} disableOnTextPress={false} />)
+        fireEvent.press(getByTestId('profileOpen'))
+        expect(spyUser).toHaveBeenCalled()
+    })
+
 })

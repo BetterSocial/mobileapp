@@ -1,6 +1,6 @@
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import BlockComponent from "../BlockComponent";
@@ -44,7 +44,8 @@ const ReplyCommentItem = ({
  
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
-      return;
+      console.log('no callback')
+      return
     }
     if(onPress) {
       onPress()
@@ -130,7 +131,8 @@ const ReplyCommentItem = ({
         isLastInParent,
         showLeftConnector,
       })}>
-      <ButtonHightlight onPress={openProfile}>
+        <TouchableOpacity activeOpacity={1}  onPress={openProfile} testID='profileOpen' >
+          <ButtonHightlight onPress={openProfile}>
         <View style={styles.profile}>
           <Image
             source={
@@ -146,25 +148,36 @@ const ReplyCommentItem = ({
           </View>
         </View>
       </ButtonHightlight>
-      <ButtonHightlight testID='ontextpress'  onPress={onTextPress}>
-        <Text testID='commentText' style={styles.post}>{comment.data.text}</Text>
-      </ButtonHightlight>
+        </TouchableOpacity>
+      
+      <TouchableOpacity activeOpacity={1} testID='ontextpress'  onPress={onTextPress} >
+          <ButtonHightlight  onPress={onTextPress} >
+            <Text testID='commentText' style={styles.post}>{comment.data.text}</Text>
+          </ButtonHightlight>
+      </TouchableOpacity>
+     
       <View style={styles.constainerFooter}>
         {isLast && level >= 2 ? (
           <View style={styles.gap} />
         ) : (
-          <ButtonHightlight style={styles.btnReply} onPress={onPress}>
+          <TouchableOpacity testID='replyBtn' activeOpacity={1} onPress={onPress} >
+            <ButtonHightlight style={styles.btnReply} onPress={onPress}>
             <MemoCommentReply />
             <Text style={styles.btnReplyText}>Reply</Text>
           </ButtonHightlight>
+          </TouchableOpacity>
         )}
-        <ButtonHightlight
+       <TouchableOpacity  onPress={() => onBlock(comment)} testID='btnBlock' activeOpacity={1}  >
+         <ButtonHightlight
+         onPress={() => onBlock(comment)}
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
-          onPress={() => onBlock(comment)}>
+          >
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </ButtonHightlight>
+       </TouchableOpacity>
 
-        <ButtonHightlight
+       <TouchableOpacity   onPress={onDownVote} testID='downvoteBtn' >
+         <ButtonHightlight
           style={[styles.arrowup, styles.btn]}
           onPress={onDownVote}>
           {statusVote === 'downvote' ? (
@@ -173,16 +186,19 @@ const ReplyCommentItem = ({
             <MemoIc_arrow_down_vote_off width={20} height={18} />
           )}
         </ButtonHightlight>
+       </TouchableOpacity>
         <Text style={styles.vote(totalVote)}>{totalVote}</Text>
-        <ButtonHightlight
-          style={[styles.arrowdown, styles.btn]}
-          onPress={onUpVote}>
-          {statusVote === 'upvote' ? (
-            <MemoIc_upvote_on width={20} height={18} />
-          ) : (
-            <MemoIc_arrow_upvote_off width={20} height={18} />
-          )}
-        </ButtonHightlight>
+            <TouchableOpacity   onPress={onUpVote} testID='upvotebtn' activeOpacity={1} >
+                <ButtonHightlight
+                  style={[styles.arrowdown, styles.btn]}
+                  onPress={onUpVote}>
+                  {statusVote === 'upvote' ? (
+                    <MemoIc_upvote_on width={20} height={18} />
+                  ) : (
+                    <MemoIc_arrow_upvote_off width={20} height={18} />
+                  )}
+                </ButtonHightlight>
+            </TouchableOpacity>
       </View>
 
       <BlockComponent ref={refBlockComponent} refresh={() => {} } screen="reply_screen"/>
