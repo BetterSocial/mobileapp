@@ -6,12 +6,16 @@ import { setMyProfileFeed } from '../context/actions/myProfileFeed'
 
 export const CONTEXT_SOURCE = {
     FEEDS: 'feeds',
-    PROFILE_FEEDS: 'profile_feeds'
+    PROFILE_FEEDS: 'profile_feeds',
+    OTHER_PROFILE_FEEDS: 'other_profile_feeds'
 }
 
 const usePostContextHook = (source = CONTEXT_SOURCE.FEEDS) => {
     let feedsContext
     let dispatch
+
+    console.log(source)
+
     switch (source) {
         case CONTEXT_SOURCE.FEEDS:
             [feedsContext, dispatch] = React.useContext(Context).feeds
@@ -19,6 +23,10 @@ const usePostContextHook = (source = CONTEXT_SOURCE.FEEDS) => {
 
         case CONTEXT_SOURCE.PROFILE_FEEDS:
             [feedsContext, dispatch] = React.useContext(Context).myProfileFeed
+            break;
+
+        case CONTEXT_SOURCE.OTHER_PROFILE_FEEDS:
+            [feedsContext, dispatch] = React.useContext(Context).otherProfileFeed
             break;
 
         default:

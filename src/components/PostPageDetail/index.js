@@ -468,7 +468,7 @@ const PostPageDetailIdComponent = (props) => {
               message={item.message}
               images_url={item.images_url}
               style={styles.additionalContentStyle(
-                item.images_url.length,
+                item?.images_url?.length,
                 height,
               )}
               topics={item?.topics}

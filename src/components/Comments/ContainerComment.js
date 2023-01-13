@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 
 import ButtonHightlight from '../ButtonHighlight';
 import Comment from "./Comment";
-import CommentOptionModal from '../Modal/CommentOptionModal';
 import ConnectorWrapper from './ConnectorWrapper';
 import LoadingComment from '../LoadingComment';
 import StringConstant from '../../utils/string/StringConstant';
@@ -14,7 +13,7 @@ import useReplyComment from './hooks/useReplyComment';
 import usePostContextHook, { CONTEXT_SOURCE } from '../../hooks/usePostContextHooks';
 import { colors } from '../../utils/colors';
 import { deleteComment } from '../../service/comment';
-import { getUserId } from '../../utils/token';
+import { getUserId } from '../../utils/users';
 
 const ContainerComment = ({
   feedId,
@@ -27,9 +26,8 @@ const ContainerComment = ({
   findCommentAndUpdate,
   updateParentPost = () => { },
   contextSource = CONTEXT_SOURCE.FEEDS }) => {
-    
+
   const navigation = useNavigation();
-  const [isCommentOptionModalShown, setIsCommentOptionModalShown] = React.useState(false)
   const [selectedCommentForDelete, setSelectedCommentForDelete] = React.useState(null)
   const [selectedCommentLevelForDelete, setSelectedCommentLevelForDelete] = React.useState(0)
 
@@ -39,7 +37,6 @@ const ContainerComment = ({
   const onCommentLongPressed = async (item, level = 0) => {
     const selfId = await getUserId()
     if (selfId === item?.user_id) {
-      // setIsCommentOptionModalShown(true)
       setSelectedCommentForDelete(item)
       setSelectedCommentLevelForDelete(level)
       Alert.alert('', StringConstant.feedDeleteCommentConfirmation, [
@@ -50,22 +47,16 @@ const ContainerComment = ({
         {
           text: 'Yes',
           style: 'destructive',
-          onPress: onDeleteCommentClicked
+          onPress: () => onDeleteCommentClicked(item)
         }
       ])
     }
   }
 
-  const onCommentOptionModalClosed = () => {
-    setSelectedCommentForDelete(null)
-    setIsCommentOptionModalShown(false)
-  }
-
-  const onDeleteCommentClicked = async () => {
-    setIsCommentOptionModalShown(false)
-    const response = await deleteComment(selectedCommentForDelete?.id)
+  const onDeleteCommentClicked = async (item) => {
+    const response = await deleteComment(item?.id)
     if (response?.success) {
-      deleteCommentFromContext(feedId, selectedCommentForDelete?.id, selectedCommentForDelete, updateParentPost)
+      deleteCommentFromContext(feedId, item?.id, selectedCommentLevelForDelete, updateParentPost)
       refreshComment()
       SimpleToast.show('Comment has been deleted successfully')
     }
@@ -114,9 +105,6 @@ const ContainerComment = ({
           </View>
         </TouchableWithoutFeedback>
       ))}
-      <CommentOptionModal isOpen={isCommentOptionModalShown}
-        onClose={onCommentOptionModalClosed}
-        onDeleteClicked={onDeleteCommentClicked} />
       {isLoading ? <LoadingComment /> : null}
     </View>
   );

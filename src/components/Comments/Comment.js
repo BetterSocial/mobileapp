@@ -98,8 +98,8 @@ const Comment = ({
         isLastInParent,
         showLeftConnector,
       })}>
-      <TouchableOpacity onPress={openProfile} testID='openProfile' >
-        <ButtonHightlight styles={{ alignSelf: 'flex-start' }} onPress={openProfile}>
+      <TouchableOpacity onPress={openProfile} testID='openProfile' style={styles.flexStartContainer}>
+        <ButtonHightlight style={styles.flexStartContainer} onPress={openProfile}>
           <View style={styles.profile}>
             <Image
               source={
@@ -116,8 +116,8 @@ const Comment = ({
           </View>
         </ButtonHightlight>
       </TouchableOpacity>
-      <TouchableOpacity activeOpacity={1} testID='textPress' onPress={onTextPress} >
-        <ButtonHightlight styles={{ alignSelf: 'flex-start' }} onPress={onTextPress}>
+      <TouchableOpacity activeOpacity={1} testID='textPress' onPress={onTextPress} style={styles.flexStartContainer} >
+        <ButtonHightlight style={styles.flexStartContainer} onPress={onTextPress}>
           <Text style={styles.post}>{comment.data.text}</Text>
         </ButtonHightlight>
       </TouchableOpacity>
@@ -200,6 +200,9 @@ const styles = StyleSheet.create({
       : colors.gray1,
     ...style,
   }),
+  flexStartContainer: {
+    alignSelf: 'flex-start'
+  },
   username: {
     fontFamily: fonts.inter[700],
     fontSize: 12,
@@ -217,6 +220,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: -13,
     alignSelf: 'flex-start',
+    // backgroundColor: 'red'
   },
   constainerFooter: {
     flexDirection: 'row',
