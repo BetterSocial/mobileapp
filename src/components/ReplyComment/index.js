@@ -25,11 +25,11 @@ import { fonts } from '../../utils/fonts';
 
 const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed, updateReply, itemParent, updateVote, updateVoteLatestChildren }) => {
   const navigation = useNavigation();
-  const {getThisCommentHook, setCommentHook, temporaryText, setTemporaryText, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook, updateVoteLatestChildrenParentHook, textComment, setTextComment, newCommentList, setNewCommentList, defaultData, setItem, item, showChildrenCommentView, updateFeed, scrollViewRef, createComment } = useReplyComment({itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page})
+  const { getThisCommentHook, setCommentHook, temporaryText, setTemporaryText, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook, updateVoteLatestChildrenParentHook, textComment, setTextComment, newCommentList, setNewCommentList, defaultData, setItem, item, showChildrenCommentView, updateFeed, scrollViewRef, createComment } = useReplyComment({ itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page })
 
 
   React.useEffect(() => {
-    if(setTextComment && typeof setTextComment === 'function') {
+    if (setTextComment && typeof setTextComment === 'function') {
       setTextComment(temporaryText)
     }
   }, [temporaryText])
@@ -49,11 +49,11 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
   }, [itemProp]);
 
 
-const navigationGoBack = () => navigation.goBack();
+  const navigationGoBack = () => navigation.goBack();
 
 
 
-if(!item) return null
+  if (!item) return null
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} style={styles.container}>
       <StatusBar translucent={false} />
@@ -105,7 +105,7 @@ if(!item) return null
                         user={itemReply.user}
                         comment={itemReply}
                         onPress={() => showChildrenCommentView(itemReply)}
-                        level={parseInt(level) + 1}
+                        level={parseInt(level, 10) + 1}
                         refreshComment={updateFeed}
                         findCommentAndUpdate={findCommentAndUpdateHook}
                         updateVote={updateVoteLatestChildren}
@@ -151,16 +151,17 @@ if(!item) return null
   );
 };
 export const ContainerReply = ({ children, isGrandchild = true, key }) => (
-    <View
-      key={key}
-      style={[
-        styles.containerReply,
-        { borderColor: isGrandchild ? 'transparent' : colors.gray1 },
-      ]}>
-      {children}
-    </View>
-  );
-export default React.memo (ReplyCommentId);
+  <View
+    key={key}
+    style={[
+      styles.containerReply,
+      { borderColor: isGrandchild ? 'transparent' : colors.gray1 },
+    ]}>
+    {children}
+  </View>
+);
+
+export default React.memo(ReplyCommentId);
 
 export const styles = StyleSheet.create({
   container: {
@@ -185,9 +186,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerReply: {
-     borderLeftWidth: 1,
+    borderLeftWidth: 1,
     width: '100%',
-    // backgroundColor: 'red',
     // flex: 1,
   },
   seeRepliesContainer: (isLast) => ({

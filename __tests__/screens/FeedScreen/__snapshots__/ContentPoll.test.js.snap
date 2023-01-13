@@ -1,0 +1,259 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Content poll should same as snapshot should same as snapshot 1`] = `
+<View
+  style={
+    Object {
+      "height": "80%",
+      "justifyContent": "flex-start",
+      "marginBottom": 0,
+      "paddingVertical": 0,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "padding": 0,
+        "width": "100%",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#828282",
+          "fontSize": NaN,
+          "marginLeft": 2,
+        }
+      }
+    >
+      All votes are anonymous - even to the poll’s author!
+    </Text>
+    <View
+      style={
+        Object {
+          "paddingTop": 10,
+        }
+      }
+    >
+      <View
+        accessible={true}
+        focusable={false}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "backgroundColor": "#F5F5F5",
+            "borderRadius": 8,
+            "display": "flex",
+            "flexDirection": "row",
+            "marginBottom": 8,
+          }
+        }
+        testID="multiple"
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "borderRadius": 6,
+                "height": "100%",
+                "left": 0,
+                "position": "absolute",
+                "top": 0,
+              },
+              Object {
+                "backgroundColor": "#C4C4C4",
+                "width": "0%",
+              },
+            ]
+          }
+          testID="isExpired"
+        />
+        <View
+          style={
+            Object {
+              "alignSelf": "center",
+              "display": "flex",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+              "paddingVertical": 4,
+              "width": "100%",
+            }
+          }
+        >
+          <View
+            testID="nonePoll"
+          />
+          <Text
+            style={
+              Object {
+                "alignSelf": "center",
+                "color": "#000000",
+                "flex": 1,
+                "fontFamily": "Inter-Regular",
+                "fontSize": NaN,
+                "marginBottom": 6,
+                "marginLeft": 0,
+                "marginTop": 6,
+              }
+            }
+          >
+            bahaya123
+          </Text>
+          <Text
+            style={
+              Object {
+                "alignSelf": "center",
+                "fontSize": NaN,
+              }
+            }
+            testID="optionPercentage"
+          >
+            0%
+          </Text>
+        </View>
+      </View>
+      <View
+        accessible={true}
+        focusable={false}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "backgroundColor": "#F5F5F5",
+            "borderRadius": 8,
+            "display": "flex",
+            "flexDirection": "row",
+            "marginBottom": 8,
+          }
+        }
+        testID="multiple"
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "borderRadius": 6,
+                "height": "100%",
+                "left": 0,
+                "position": "absolute",
+                "top": 0,
+              },
+              Object {
+                "backgroundColor": "#00ADB5",
+                "width": "50%",
+              },
+            ]
+          }
+          testID="isExpired"
+        />
+        <View
+          style={
+            Object {
+              "alignSelf": "center",
+              "display": "flex",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+              "paddingVertical": 4,
+              "width": "100%",
+            }
+          }
+        >
+          <View
+            testID="pollWinner"
+          >
+            <View />
+          </View>
+          <Text
+            style={
+              Object {
+                "alignSelf": "center",
+                "color": "#000000",
+                "flex": 1,
+                "fontFamily": "Inter-Regular",
+                "fontSize": NaN,
+                "marginBottom": 0,
+                "marginLeft": 0,
+                "marginTop": 0,
+              }
+            }
+          >
+            bahaya1
+          </Text>
+          <Text
+            style={
+              Object {
+                "alignSelf": "center",
+                "fontSize": NaN,
+              }
+            }
+            testID="optionPercentage"
+          >
+            50%
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "display": "flex",
+        "flexDirection": "row",
+        "marginBottom": 10,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignSelf": "center",
+          "color": "#828282",
+          "fontFamily": "Inter-Regular",
+          "fontSize": NaN,
+          "lineHeight": 16,
+        }
+      }
+    >
+      2 votes 
+    </Text>
+    <View
+      style={
+        Object {
+          "alignSelf": "center",
+          "backgroundColor": "#828282",
+          "borderRadius": 4,
+          "height": 4,
+          "width": 4,
+        }
+      }
+    />
+    <Text
+      style={
+        Object {
+          "alignSelf": "center",
+          "color": "#828282",
+          "flex": 1,
+          "fontFamily": "Inter-Regular",
+          "fontSize": NaN,
+          "lineHeight": 16,
+        }
+      }
+    >
+       Poll closed 45d ago
+    </Text>
+  </View>
+</View>
+`;
