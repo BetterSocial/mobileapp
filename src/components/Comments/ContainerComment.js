@@ -100,13 +100,13 @@ const ContainerComment = ({
             </View>
             {item?.children_counts?.comment > 0 && (
               <ReplyComment
-                hideLeftConnector={hideLeftConnector(index, item)}
-                data={item?.latest_children?.comment}
-                countComment={item?.children_counts?.comment}
+                hideLeftConnector={hideLeftConnector(index, item, comments)}
+                data={item.latest_children.comment}
+                countComment={item.children_counts.comment}
                 navigation={navigation}
                 indexFeed={indexFeed}
                 navigateToReplyView={navigateToReplyView}
-                refreshComment={(children) => refreshChildComment({ parent: item, children: children.data })}
+                // refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
                 findCommentAndUpdate={findCommentAndUpdate}
                 onCommentLongPressed={onCommentLongPressed}
               />
