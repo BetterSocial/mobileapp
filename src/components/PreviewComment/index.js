@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import {COLORS, FONTS, SIZES} from '../../utils/theme';
-import {Dot, Gap} from "..";
-import {calculateTime} from '../../utils/time';
-import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {getUserId} from '../../utils/users';
+import { COLORS, FONTS, SIZES } from '../../utils/theme';
+import { Dot, Gap } from "..";
+import { calculateTime } from '../../utils/time';
+import { fonts, normalizeFontSize } from '../../utils/fonts';
+import { getUserId } from '../../utils/users';
 
 const PreviewComment = ({
   comment,
@@ -34,17 +34,19 @@ const PreviewComment = ({
     });
   };
 
+  if (!user) return <></>
+
   return (
     <View style={styles.containerPreview}>
       <View style={styles.lineBeforeProfile} />
       <View style={styles.container(totalComment)}>
         <TouchableOpacity style={styles.profileTouchable} onPress={openProfile}>
-          <View style={{left: -16}} />
+          <View style={{ left: -16 }} />
           <View style={styles.profile}>
             <Image
               source={
                 image
-                  ? {uri: image, cache: 'reload'}
+                  ? { uri: image, cache: 'reload' }
                   : require('../../assets/images/ProfileDefault.png')
               }
               loadingIndicatorSource={
@@ -76,8 +78,8 @@ const PreviewComment = ({
           </SeeMore> */}
           <TouchableOpacity onPress={onPress}>
             <Text style={styles.commenttext} numberOfLines={3} ellipsizeMode='tail'>
-              {`${comment.substring(0, 100).trim()} `}
-              {comment.length > 100 ? (
+              {`${comment?.substring(0, 100).trim()} `}
+              {comment?.length > 100 ? (
                 <Text style={styles.seemore}>more</Text>
               ) : (
                 <></>
@@ -93,19 +95,18 @@ const PreviewComment = ({
             style={{
               color: COLORS.blue,
               ...FONTS.body4,
-            }}>{`${totalComment} more ${
-            totalComment > 1 ? 'replies' : 'reply'
-          }`}</Text>
+            }}>{`${totalComment} more ${totalComment > 1 ? 'replies' : 'reply'
+              }`}</Text>
         </TouchableOpacity>
       )}
     </View>
   );
 };
 
-export default React.memo (PreviewComment);
+export default React.memo(PreviewComment);
 
 const styles = StyleSheet.create({
-  containerPreview: {paddingHorizontal: 20},
+  containerPreview: { paddingHorizontal: 20 },
   text: {
     marginStart: 20,
   },
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // marginTop: -8.5,
   },
-  btnMore: {marginStart: 8},
+  btnMore: { marginStart: 8 },
   commenttext: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
@@ -157,5 +158,5 @@ const styles = StyleSheet.create({
   seemore: {
     color: COLORS.blue,
   },
-  profileTouchable: {marginLeft: -12},
+  profileTouchable: { marginLeft: -12 },
 });
