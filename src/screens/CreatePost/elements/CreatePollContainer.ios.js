@@ -78,12 +78,10 @@ export default function CreatePollContainer({
                 selectedTime.day = Number(pickerDay);
                 selectedTime.hour = Number(pickerHour);
                 selectedTime.minute = Number(pickerMinute);
-                console.log(selectedTime, 'jiji')
                 ontimechanged(selectedTime);
                 setIsDurationModalShown(false);
   }
 
-  console.log(selectedtime,'day')
   return (
     <View style={S.createpollcontainer}>
       {polls.map((item, index) => (
@@ -143,7 +141,7 @@ export default function CreatePollContainer({
             <View style={S.pickercontainer}>
               <Text style={S.pickerlabeltext}>Days</Text>
               <View style={{}}>
-                <Picker  
+                <Picker
                 onValueChange={(itemValue) => {
                   setPickerDay(itemValue)
                 }}

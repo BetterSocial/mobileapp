@@ -30,7 +30,6 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent,
   };
 
   const onVoteUp = async (item) => {
-    // console.log(item, 'sapila')
     await upVoteDomain({
       activity_id: item.id,
       feed_group: 'domain',
@@ -39,7 +38,7 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent,
     if (voteStatus === 'none') {
       setVoteStatus('upvote');
       setTotalVote((vote) => vote + 1)
-    } 
+    }
     if(voteStatus === 'upvote') {
       setVoteStatus('none')
       setTotalVote((vote) => vote - 1)
@@ -58,11 +57,10 @@ const DetailDomainScreenContainerComment = ({ comments, indexFeed, updateParent,
       feed_group: 'domain',
       domain: item.domain.name,
     });
-    // console.log('masumlam1')
     if (voteStatus === 'none') {
       setVoteStatus('downvote');
       setTotalVote((vote) => vote - 1)
-    } 
+    }
     if(voteStatus === 'downvote') {
       setVoteStatus('none')
       setTotalVote((vote) => vote + 1)
@@ -168,7 +166,7 @@ const ReplyComment = ({
             level: 2,
             indexFeed: indexFeed,
             updateParent: updateParent
-            
+
           });
 
         return (

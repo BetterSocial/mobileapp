@@ -16,14 +16,12 @@ import { SlideShowItem } from './SlideShowItem';
 import { fonts, normalizeFontSize, scaleFontSize } from '../../../utils/fonts';
 
 const { width: screenWidth, fontScale, scale } = Dimensions.get('window');
-console.log(screenWidth)
-console.log('\n')
 
 const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin, onContainerPress = () => {} }) => {
   const [index, setIndex] = React.useState(0)
 
   const flatListRef = React.useRef(null)
-  
+
   const data = [
     {
       illustrations: FgOnboarding1,
@@ -141,7 +139,7 @@ const SlideShow = ({ onChangeNewIndex = (newIndex) => { }, handleLogin, onContai
       index={0}
       data={data}
       scroll
-      renderItem={({ item, index }) => 
+      renderItem={({ item, index }) =>
       <SlideShowItem index={index}
       onPressContainer={onContainerPress}
       key={`slideshowitem-${index}`}

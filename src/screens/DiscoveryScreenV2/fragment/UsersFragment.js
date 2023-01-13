@@ -71,7 +71,6 @@ const UsersFragment = ({
     }
 
     const handleFollow = async (from, willFollow, item, index) => {
-        console.log(item, 'bakan')
         if (from === FROM_FOLLOWED_USERS_INITIAL) {
             const newFollowedUsers = [...users]
             newFollowedUsers[index].user_id_follower = willFollow ? myId : null
@@ -107,7 +106,7 @@ const UsersFragment = ({
 
             setUnfollowedUsers(newUnfollowedUsers)
         }
-    
+
         const data = {
             user_id_follower: myId,
             user_id_followed: item.user_id,

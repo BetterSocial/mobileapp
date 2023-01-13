@@ -12,7 +12,6 @@ import { fonts, normalizeFontSize } from '../../../utils/fonts';
 const { height, width, fontScale } = Dimensions.get('screen')
 
 export const SlideShowItem = ({ children, count, handleLogin, illustration, index, isLogin, title, text, textSvg, onNextSlide = () => { }, onPressContainer = () => {} }) => {
-    // console.log(height)
     const __renderForeground = () => {
         if (index < 4) return (
             <TouchableWithoutFeedback onPress={onPressContainer} >
@@ -33,7 +32,7 @@ export const SlideShowItem = ({ children, count, handleLogin, illustration, inde
     const __renderBackground = () => {
         // if (index < 4) return <Image source={BgOnboarding} style={styles.onboardingBackground} />
         if (index < 4) return <></>
-        return <TouchableWithoutFeedback onPress={onPressContainer} > 
+        return <TouchableWithoutFeedback onPress={onPressContainer} >
             <View style={styles.onboardingBackgroundTopContainer}>
             <Image source={BgOnboardingTop} style={styles.onboardingBackgroundTop} />
             <View style={styles.brandLoginContainer}>
@@ -56,13 +55,13 @@ export const SlideShowItem = ({ children, count, handleLogin, illustration, inde
             {__renderForeground()}
             {__renderBackground()}
         </View>
-        <BottomOverlay count={count} 
-            handleLogin={handleLogin} 
-            isLogin={isLogin} 
+        <BottomOverlay count={count}
+            handleLogin={handleLogin}
+            isLogin={isLogin}
             text={text}
             textSvg={textSvg}
-            title={title} 
-            index={index} 
+            title={title}
+            index={index}
             onNextSlide={__onNextSlide} />
     </View>
 }
@@ -114,11 +113,11 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         position: 'absolute',
     },
-    onboardingBackgroundTopContainer: { 
-        width: '100%', 
-        height: '100%', 
-        display: 'flex', 
-        justifyContent: 'center' 
+    onboardingBackgroundTopContainer: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center'
     },
     title: {
         fontSize: 18,

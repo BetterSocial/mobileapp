@@ -116,7 +116,9 @@ api.interceptors.response.use(
         }
         return Promise.reject(error)
       }, (refreshError) => {
-        console.log('refreshError')
+        if (__DEV__) {
+          console.log('refreshError: ', refreshError);
+        }
         return Promise.reject(error)
       })
     }

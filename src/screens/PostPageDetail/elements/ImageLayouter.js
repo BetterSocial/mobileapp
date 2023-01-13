@@ -4,7 +4,6 @@ import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
 
 const ImageLayouter = ({images = [], onimageclick}) => {
-  console.log(images);
   if (images.length === 1) {
     return (
       <Pressable onPress={() => onimageclick(0)}>
@@ -20,9 +19,8 @@ const ImageLayouter = ({images = [], onimageclick}) => {
     return (
       <View style={styles.twoPhotoLayout}>
         {images.map((item, index) => {
-          console.log(`item ${item}`);
           return (
-            <View style={styles.twoPhotoItemLayout}>
+            <View key={index} style={styles.twoPhotoItemLayout}>
               <Pressable onPress={() => onimageclick(index)}>
                 <Image
                   style={styles.imagelayout2}

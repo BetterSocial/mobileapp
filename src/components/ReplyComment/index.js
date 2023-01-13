@@ -143,9 +143,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
         username={item.user.data.username}
         onChangeText={setCommentHook}
         onPress={() => createComment()}
-        // onPress={() => console.log('level ', level)}
         value={temporaryText}
-      // loadingComment={loadingCMD}
       />
     </KeyboardAvoidingView>
   );

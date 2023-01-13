@@ -22,12 +22,6 @@ import { fetchRemoteConfig } from './src/utils/FirebaseUtil';
 import {toastConfig} from './src/configs/ToastConfig'
 import { Analytics } from './src/libraries/analytics/firebaseAnalytics';
 
-if(!__DEV__) {
-  console.log = function () {}
-}
-
-
-
 const App = () => {
   const { bottom, top } = useSafeAreaInsets();
   const {height} = useSafeAreaFrame()

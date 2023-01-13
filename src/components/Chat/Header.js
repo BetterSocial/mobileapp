@@ -42,13 +42,13 @@ const Header = () => {
       );
     } if (getGroupMemberCount(channel) > 2) {
       return <Image source={DefaultGroupProfilePicture} style={styles.image} />;
-    } 
+    }
       return (
         <View style={styles.containerAvatar}>
           <ChannelAvatar size={42} channel={channel} />
         </View>
       );
-    
+
   };
 
   return (

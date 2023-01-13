@@ -77,9 +77,6 @@ const TopicPageScreen = (props) => {
 
                 }
             })
-            // console.log(_resultGetTopicPages , 'pola')
-            // setTopicFeeds(_resultGetTopicPages.data, dispatch);
-            // setOffset(_resultGetTopicPages.offset)
 
             // eslint-disable-next-line no-underscore-dangle
             const _resultGetUserTopic = await getUserTopic(query);
@@ -89,7 +86,9 @@ const TopicPageScreen = (props) => {
 
             // setLoading(false)
         } catch (error) {
-            console.log(error);
+            if (__DEV__) {
+                console.log(error);
+            }
             // setLoading(false);
         }
     }
@@ -160,7 +159,9 @@ const TopicPageScreen = (props) => {
 
                 setLoading(false)
             } catch (error) {
-                console.log(error);
+                if (__DEV__) {
+                    console.log(error);
+                }
                 setLoading(false);
             }
         }
@@ -187,7 +188,9 @@ const TopicPageScreen = (props) => {
             setIsFollow(followed);
             setLoading(false)
         } catch (error) {
-            console.log(error);
+            if (__DEV__) {
+                console.log(error);
+            }
             setLoading(false);
         }
     }
@@ -265,7 +268,9 @@ const TopicPageScreen = (props) => {
                 );
             }
         } catch (e) {
-            console.log(e);
+            if (__DEV__) {
+                console.log(e);
+            }
         }
     };
     if (isInitialLoading) return null

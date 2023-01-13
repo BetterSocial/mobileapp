@@ -16,7 +16,7 @@ import { fonts } from '../../../utils/fonts';
  * @property {Boolean}[shown = true] shown
  */
 /**
- * 
+ *
  * @param {RecentSearchOptions} param
  */
 const RecentSearch = (param) => {
@@ -50,7 +50,6 @@ const RecentSearch = (param) => {
         if (!result) return
 
         let resultArray = JSON.parse(result)
-        // console.log(`resultArray.length < 1 ${resultArray.length <= 1}` )
         if (resultArray.length <= 1) return
 
         const itemIndex = resultArray.indexOf(search)
@@ -72,9 +71,7 @@ const RecentSearch = (param) => {
     const handleClearRecentSearch = async () => {
         setIsShown(false)
         // Remove from context here
-        await AsyncStorage.removeItem(RECENT_SEARCH_TERMS, () => {
-            console.log('response asdadadasd')
-        })
+        await AsyncStorage.removeItem(RECENT_SEARCH_TERMS)
 
         DiscoveryAction.setDiscoveryRecentSearch([], discoveryDispatch)
     }

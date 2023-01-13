@@ -234,12 +234,9 @@ const WhotoFollow = () => {
       case VIEW_TYPE_LABEL_TOPIC:
         return <Label label={`#${labelTopicName}`} />;
       case VIEW_TYPE_LABEL_LOCATION:
-        console.log(`location ${item?.city}`)
         return <Label label={`${item?.city || ""}`} />;
       case VIEW_TYPE_DATA:
       default:
-        console.log('item')
-        console.log(item)
         return (
           <ItemUser
             photo={item.profile_pic_path}

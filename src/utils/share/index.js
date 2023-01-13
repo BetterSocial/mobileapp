@@ -23,11 +23,15 @@ const buildShare = async (message) => {
 }
 
 const shareDomain = (item) => {
-    console.log('Share in domain')
+    if (__DEV__) {
+        console.log('Share in domain', item)
+    }
 }
 
 const shareNews = (item) => {
-    console.log('Share in news')
+    if (__DEV__) {
+        console.log('Share in news', item)
+    }
 }
 
 const sharePostInTopic = async (item, analyticsLogEvent, analyticsId) => {

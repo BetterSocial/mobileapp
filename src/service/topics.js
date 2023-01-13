@@ -7,7 +7,6 @@ const getUserTopic = async (query) => {
         const res = await api.get(`/topics/follow${query}`);
         return res.data;
     } catch (error) {
-        console.log(error);
         crashlytics().recordError(new Error(error));
         throw new Error(error);
     }
@@ -18,7 +17,6 @@ const putUserTopic = async (data) => {
         const res = await api.put('/topics/follow', data);
         return res.data;
     } catch (error) {
-        console.log(error);
         crashlytics().recordError(new Error(error));
         throw new Error(error);
     }
@@ -34,10 +32,10 @@ const getFollowingTopic = async () => {
 };
 
 /**
- * 
- * @param {string} name 
- * @param {import('axios').AxiosRequestConfig} axiosOptions 
- * @returns 
+ *
+ * @param {string} name
+ * @param {import('axios').AxiosRequestConfig} axiosOptions
+ * @returns
  */
 const getTopics = async (name, axiosOptions = {}) => {
     try {

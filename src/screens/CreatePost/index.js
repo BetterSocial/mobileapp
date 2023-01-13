@@ -343,7 +343,7 @@ const CreatePost = () => {
         const { success, message } = await requestExternalStoragePermission();
         if (success) {
             launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (res) => {
-                if (res.didCancel) {
+                if (res.didCancel && __DEV__) {
                     console.log('User cancelled image picker');
                 } else if (res.uri) {
                     const newArr = {
@@ -366,7 +366,7 @@ const CreatePost = () => {
         const { success, message } = await requestCameraPermission();
         if (success) {
             launchCamera({ mediaType: 'photo', includeBase64: true }, (res) => {
-                if (res.didCancel) {
+                if (res.didCancel && __DEV__) {
                     console.log('User cancelled image picker');
                 } else if (res.uri) {
                     const newArr = {
@@ -506,7 +506,9 @@ const CreatePost = () => {
                 type: 'success',
             });
         } catch (error) {
-            console.log(error)
+            if (__DEV__) {
+                console.log(error);
+            }
         }
     };
 
@@ -639,7 +641,9 @@ const CreatePost = () => {
                 type: 'success',
             });
         } catch (e) {
-            console.log(e)
+            if (__DEV__) {
+                console.log(e);
+            }
         }
         analytics().logEvent('create_post', {
             id: 6,
@@ -772,7 +776,7 @@ const CreatePost = () => {
                         <Text style={styles.whiteText} >Even when anonymous, you can be blocked by others.</Text>
                     </Animated.View>
                     )}
-                   
+
                     {isLinkPreviewShown && (
                         <ContentLink
                             og={

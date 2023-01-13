@@ -173,7 +173,9 @@ const GroupInfo = () => {
       await channel.update(dataEdit);
       setIsUploadingImage(false);
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 

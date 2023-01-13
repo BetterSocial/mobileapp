@@ -3,15 +3,12 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import api from './config';
 
 export const getDomains = async (offset = 0, limit = 10) => {
-  console.log(`offset ${offset}`)
+
   try {
     const url = `/domain?offset=${offset}&limit=${limit}`;
     const res = await api.get(url);
-    // console.log('res.data')
-    // console.log(res.data)
     return res.data;
   } catch (error) {
-    console.log(error);
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }
@@ -22,8 +19,6 @@ export const getDetailDomains = async (domain) => {
     const res = await api.get(`/domain/domain/${domain}`);
     return res.data;
   } catch (error) {
-    console.log('error');
-    console.log(error);
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }
@@ -34,7 +29,6 @@ export const getLinkContextScreenRelated = async (newsLinkId) => {
     const res = await api.get(`/domain/link-context-screen/${newsLinkId}`);
     return res.data;
   } catch (error) {
-    console.log(error);
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }
@@ -45,7 +39,6 @@ export const getProfileDomain = async (name) => {
     const res = await api.get(`/domain/profile-domain/${name}`);
     return res.data;
   } catch (error) {
-    console.log(error);
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }
@@ -55,7 +48,6 @@ export const followDomain = async (data) => {
     const res = await api.post('/domain/follow', data);
     return res.data;
   } catch (error) {
-    console.log(JSON.stringify(error));
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }

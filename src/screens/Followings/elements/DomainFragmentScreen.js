@@ -94,12 +94,11 @@ const DomainFragmentScreen = ({navigation}) => {
       item.image,
       item.domainId
     )
-    console.log(param, 'hijack')
     navigation.navigate('DomainScreen', param)
   }
 
   return (
-      <FlatList 
+      <FlatList
       data={listFollowDomain}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item, index}) => <DomainList onPressBody={goToDomainPage} handleSetFollow={() => handleFollow(index, item)} handleSetUnFollow={() => handleUnfollow(index, item)} item={item} />}
@@ -108,7 +107,7 @@ const DomainFragmentScreen = ({navigation}) => {
       style={styles.containerStyle}
       />
 
-     
+
   )
 };
 

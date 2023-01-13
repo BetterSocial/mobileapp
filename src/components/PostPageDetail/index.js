@@ -174,7 +174,9 @@ const PostPageDetailIdComponent = (props) => {
       }, 300)
 
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 
