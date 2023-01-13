@@ -29,7 +29,7 @@ const Search = ({onPress, animatedValue}) => {
 
   return (
     <Animated.View style={[styles.animatedViewContainer(animatedValue), {position: Platform.OS === 'android' ? 'absolute' : 'relative'}]}>
-      <Pressable style={styles.pressableContainer} onPress={__handleOnContainerPress}>
+      <Pressable testID='containerPress' style={styles.pressableContainer} onPress={__handleOnContainerPress}>
         <View style={styles.wrapperSearch}>
           <View style={styles.wrapperIcon}>
             <MemoIc_search width={16.67} height={16.67} />
