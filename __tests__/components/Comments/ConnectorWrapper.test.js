@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { render, cleanup } from '@testing-library/react-native';
+import { cleanup, render } from '@testing-library/react-native';
+
 import ConnectorWrapper, {styles} from '../../../src/components/Comments/ConnectorWrapper';
 import { colors } from '../../../src/utils/colors';
+
+jest.useFakeTimers()
 
 describe('Connector Wrapper should run correctly', () => {
     it('should match snapshot', () => {
