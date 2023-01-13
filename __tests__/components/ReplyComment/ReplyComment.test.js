@@ -4,7 +4,6 @@ import { View } from 'react-native';
 
 import ReplyComment, {styles, ContainerReply} from '../../../src/components/ReplyComment'
 import Store from '../../../src/context/Store';
-import * as CommentService  from '../../../src/service/comment';
 import  useReplyComment from '../../../src/components/ReplyComment/hooks/useReplyComment'
 import * as replyFunc from '../../../src/components/ReplyComment/hooks/useReplyComment'
 
