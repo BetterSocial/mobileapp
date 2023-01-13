@@ -63,6 +63,7 @@ import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 // import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
+import { Analytics } from '../libraries/analytics/firebaseAnalytics';
 
 const RootStack = createStackNavigator();
 
@@ -82,10 +83,14 @@ export const RootNavigator = () => {
   }
 
   React.useEffect(() => {
+    // logging section
     traceMetricScreen('loading_splashscreen').then(fnCallback => {
       perf.current = fnCallback;
     });
-    LogBox.ignoreAllLogs()
+    Analytics.logEvent('splashscreen');
+    LogBox.ignoreAllLogs();
+
+    // statusbar
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
 
