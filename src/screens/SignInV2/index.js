@@ -93,7 +93,9 @@ const SignIn = () => {
                 setUserId(appUserId);
               })
               .catch((e) => {
-                console.log(e)
+                if (__DEV__) {
+                  console.log(e)
+                }
               });
           } else {
             SimpleToast.show(res.message, SimpleToast.SHORT)

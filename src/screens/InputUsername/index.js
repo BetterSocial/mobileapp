@@ -156,11 +156,10 @@ const ChooseUsername = () => {
       return value
     }
     return ''
-   
+
   }
 
   const onTextBlur = () => {
-    console.log('on blur')
     const value = formatUsernameString(username)
     setUsernameState(value);
   }
@@ -322,7 +321,7 @@ const ChooseUsername = () => {
               {StringConstant.onboardingChooseUsernameBlueBoxHint}
             </Text>
               </View>
-            
+
           </Animated.View> */}
 
           </View>

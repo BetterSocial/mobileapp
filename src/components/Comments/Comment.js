@@ -40,7 +40,6 @@ const Comment = ({
   const {totalVote, setTotalVote, statusVote, setStatusVote, onUpVote, onDownVote, iVote} = useComment({comment, findCommentAndUpdate, level, updateVote})
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
-      console.log('level2')
       return;
     }
     if(onPress && typeof onPress === 'function') {
@@ -63,7 +62,7 @@ const Comment = ({
       },
     });
   };
-  
+
 
   const onBlockComponent = (comment) => {
     refBlockComponent.current.openBlockComponent({
@@ -137,7 +136,7 @@ const Comment = ({
           onPress={() => onBlockComponent(comment)}>
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </ButtonHightlight>
-       
+
         <TouchableOpacity activeOpacity={1} onPress={onDownVote} testID='btnDownvote' >
            <ButtonHightlight
           style={[styles.arrowup, styles.btn]}
@@ -149,7 +148,7 @@ const Comment = ({
           )}
         </ButtonHightlight>
         </TouchableOpacity>
-       
+
         <Text style={styles.vote(totalVote)}>{totalVote}</Text>
         <TouchableOpacity activeOpacity={1} testID='upvoteBtn' >
              <ButtonHightlight
@@ -162,7 +161,7 @@ const Comment = ({
           )}
         </ButtonHightlight>
         </TouchableOpacity>
-       
+
       </View>
 
       <BlockComponent ref={refBlockComponent} refresh={() => {}} screen={"feed_comment_item"}/>

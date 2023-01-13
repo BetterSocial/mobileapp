@@ -14,7 +14,6 @@ export const saveToCache = (cacheKey, jsonData) => {
         };
         AsyncStorage.setItem(CACHE_NAME, JSON.stringify(dataSave));
       }
-      // console.log(result, jsonData);
     });
   }
 };

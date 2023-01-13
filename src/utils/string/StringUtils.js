@@ -50,9 +50,9 @@ const getPollTime = (pollExpiredAtString) => {
 const isPollExpired = (pollExpiredAtString) => moment(pollExpiredAtString).diff(moment()) < 0;
 
 /**
- * 
- * @param {String} city 
- * @param {String} state 
+ *
+ * @param {String} city
+ * @param {String} state
  * @returns {String}
  */
 const detectStateInCity = (city) => {
@@ -61,9 +61,9 @@ const detectStateInCity = (city) => {
 }
 
 /**
- * 
- * @param {String} city 
- * @param {String} state 
+ *
+ * @param {String} city
+ * @param {String} state
  * @returns {String}
  */
 const displayCityName = (city, state) => {
@@ -75,18 +75,14 @@ const displayCityName = (city, state) => {
 }
 
 /**
- * 
- * @param {String} searchQuery 
+ *
+ * @param {String} searchQuery
  * @param {String} location
  * @returns {Boolean}
  */
 const isLocationMatch = (searchQuery, location) => location.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1
 
 const displayFormattedSearchLocations = (searchQuery, locationObject) => {
-    // console.log(searchQuery)
-    // if (locationObject.country.toLowerCase() === searchQuery.toLowerCase()) {
-    //   return <Text style={styles.bold}>{locationObject.country}</Text>;
-    // }
     const zipString =
         locationObject.zip === '' || locationObject.zip === undefined
             ? ''
@@ -271,8 +267,8 @@ const convertString = (str, from, to) => {
 }
 
 /**
- * 
- * @param {String} topic 
+ *
+ * @param {String} topic
  * @returns {String}
  */
 const convertTopicNameToTopicPageScreenParam = (topic) => {
@@ -282,7 +278,7 @@ const convertTopicNameToTopicPageScreenParam = (topic) => {
 }
 
 const capitalizeFirstText = (str) => {
-    // split the above string into an array of strings 
+    // split the above string into an array of strings
     // whenever a blank space is encountered
 
     const arr = str.split(" ");
@@ -295,8 +291,8 @@ const capitalizeFirstText = (str) => {
 
     }
 
-    // Join all the elements of the array back into a string 
-    // using a blankspace as a separator 
+    // Join all the elements of the array back into a string
+    // using a blankspace as a separator
     const str2 = arr.join(" ");
     return str2;
 }
@@ -313,11 +309,11 @@ const randomString = (length) => {
 }
 
 /**
- * 
- * @param {Number} number 
- * @param {String} singularText 
- * @param {String} pluralText 
- * @returns 
+ *
+ * @param {Number} number
+ * @param {String} singularText
+ * @param {String} pluralText
+ * @returns
  */
 const getSingularOrPluralText = (number, singularText, pluralText) => {
     if (number === 1) return singularText
@@ -325,10 +321,10 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
 }
 
 /**
- * 
- * @param {String} text 
- * @param {Any} navigation 
- * @returns 
+ *
+ * @param {String} text
+ * @param {Any} navigation
+ * @returns
  */
 const getCaptionWithTopicStyle = (text, navigation, substringEnd, topics = []) => {
     const route = useRoute()

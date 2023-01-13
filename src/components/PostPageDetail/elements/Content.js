@@ -28,7 +28,6 @@ const Content = ({ message, images_url, topics = [], item, onnewpollfetched }) =
   const cekImage = () => images_url  && images_url !== '' ;
 
   const onImageClickedByIndex = (index) => {
-    console.log(index);
     navigation.push('ImageViewer', {
       title: 'Photo',
       index,
@@ -41,7 +40,6 @@ const Content = ({ message, images_url, topics = [], item, onnewpollfetched }) =
 
   const devHeight = Dimensions.get('screen').height
   const substringNoImageTopic = devHeight / 1.25 - (40 * 7)
-  console.log(item?.topics)
   if (!cekImage) return null
 
   return (

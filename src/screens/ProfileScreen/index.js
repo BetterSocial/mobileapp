@@ -475,7 +475,9 @@ const ProfileScreen = ({ route }) => {
         );
       }
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 

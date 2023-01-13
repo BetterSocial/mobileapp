@@ -69,7 +69,6 @@ const DomainFragment = ({ isLoadingDiscoveryDomain, isFirstTimeOpen, followedDom
     }
 
     const __handleFollow = async (from, willFollow, item, index) => {
-        // console.log(item)
         if (from === FROM_FOLLOWED_DOMAIN_INITIAL) {
             const newFollowedDomains = [...domains]
             newFollowedDomains[index].user_id_follower = willFollow ? myId : null

@@ -6,7 +6,9 @@ const clientStream = (userToken) => {
     const client = connect(config.STREAM_API_KEY, userToken.id, config.STREAM_APP_ID);
     return client;
   } catch (e) {
-    console.log(e,'erroe')
+    if (__DEV__) {
+      console.log('error client stream connect: ', e);
+    }
   }
 
 };

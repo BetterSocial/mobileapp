@@ -7,7 +7,6 @@ export const createPost = async (data) => {
     const resApi = await api.post('/activity/post', data);
     return resApi.data;
   } catch (error) {
-    console.log(error)
     crashlytics().recordError(error.response.data);
   }
 };
@@ -35,7 +34,6 @@ export const createFeedToken = async (data) => new Promise(async (resolve, rejec
     resolve(resApi.data);
   } catch (error) {
     crashlytics().recordError(error.response.data);
-    // console.log(error);
     reject(error);
   }
 });
@@ -47,7 +45,6 @@ export const ShowingAudience = async (privacy, location) => {
     );
     return resApi.data;
   } catch (error) {
-    console.log(error);
     crashlytics().recordError(new Error(error));
   }
 };
@@ -80,8 +77,6 @@ export const inputSingleChoicePoll = async (polling_id, polling_option_id) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(error.response.data);
-    console.log('vote error');
-    console.log(error);
     return error;
   }
 };
@@ -97,7 +92,6 @@ export const viewTimePost = async (id, time, source) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(error.response.data);
-    // console.log(error);
     return error;
   }
 };
@@ -108,8 +102,9 @@ export const deletePost = async (postId) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(error?.response?.data);
-    console.log('delete post error');
-    console.log(error);
+    if (__DEV__) {
+      console.log('delete post error: ', error);
+    }
     return error;
   }
 }

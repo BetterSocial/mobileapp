@@ -36,7 +36,7 @@ describe('useComment should run correctly', () => {
             user_id: "c6c91b04-795c-404e-b012-ea28813a2006"
         }
     const level = 1
-   
+
 
     it('iVote function should run correctly', async () => {
         const spy = jest.spyOn(serviceVote,'iVoteComment')
@@ -50,7 +50,7 @@ describe('useComment should run correctly', () => {
     it('upvote status none should run correctly', async () => {
          const updateVote = jest.fn()
         const findCommentAndUpdate = jest.fn()
-        const spy = jest.spyOn(serviceVote, 'voteComment')        
+        const spy = jest.spyOn(serviceVote, 'voteComment')
         const {result} = renderHook(() => useComment({comment, level, updateVote, findCommentAndUpdate}))
         expect(result.current.statusVote).toEqual('none')
 
@@ -80,7 +80,6 @@ describe('useComment should run correctly', () => {
         expect(spy).toHaveBeenCalled()
         expect(result.current.statusVote).toEqual('downvote')
         expect(result.current.totalVote).toEqual(-1)
-        //         console.log(result.current.statusVote, 'lupa')
 
     })
 

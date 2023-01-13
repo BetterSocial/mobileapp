@@ -98,7 +98,7 @@ const OtherProfile = () => {
 
   const getOtherFeeds = async (userId, offset = 0) => {
     const result = await getOtherFeedsInProfile(userId)
-    
+
     if (offset === 0) setOtherProfileFeed([...result.data, { dummy: true }], dispatchOtherProfile)
     else {
       const clonedFeeds = [...feeds]
@@ -241,7 +241,7 @@ const OtherProfile = () => {
               </Text>
               <Text style={styles.textFollow}>{getSingularOrPluralText(dataMain.follower_symbol, "Follower", "Followers")}</Text>
               </React.Fragment>
-   
+
             </TouchableOpacity>
             {user_id === dataMain.user_id ? <View style={styles.following}>
               <TouchableNativeFeedback
@@ -391,7 +391,9 @@ const OtherProfile = () => {
       setTimeout(() => setIsLoading(false), 400)
       // setIsLoading(false)
     } catch (e) {
-      console.log(e)
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 
@@ -531,7 +533,9 @@ const OtherProfile = () => {
         );
       }
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 
@@ -565,7 +569,6 @@ const OtherProfile = () => {
           onEndReach={__handleOnEndReached}
           snapToOffsets={(() => {
             const posts = feeds.map((item, index) => headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT))
-            console.log(posts)
             return [headerHeightRef.current, ...posts]
           })()}
           ListHeaderComponent={

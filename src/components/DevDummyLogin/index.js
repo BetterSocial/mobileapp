@@ -48,8 +48,6 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
         }
         setLoading(true);
         const data = { appUserId, countryCode: 'ID' }
-        console.log('data')
-        console.log(data)
         setDataHumenId(data, dispatch);
         demoVerifyUser(appUserId)
             .then(async (response) => {
@@ -75,7 +73,9 @@ const DevDummyLogin = ({ resetClickTime = () => { } }) => {
                 setUserId(appUserId);
             })
             .catch((e) => {
-                console.log(e);
+                if (__DEV__) {
+                    console.log(e);
+                }
                 setLoading(false);
             });
     };

@@ -91,9 +91,7 @@ const styles = StyleSheet.create({
 })
 
 const BlockedList = (props) => {
-    const {onPressList, item, isHashtag, handleSetBlock, handleSetUnblock, onPressBody} = props
-
-  console.log('taiman', item)
+    const {item, isHashtag, handleSetBlock, handleSetUnblock, onPressBody} = props
 
     const hanldeImage = (uri) => {
       if(uri && typeof uri === 'string') {
@@ -105,22 +103,22 @@ const BlockedList = (props) => {
               style={styles.profilepicture}
               width={48}
               height={48}
-            /> 
+            />
         )
       }
       return (
-        <View style={[styles.profilepicture, {backgroundColor: colors.gray1}]} /> 
+        <View style={[styles.profilepicture, {backgroundColor: colors.gray1}]} />
       )
     }
 
     return (
- 
+
         <View style={styles.card}>
           <GlobalButton onPress={() => onPressBody(item)} style={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
               {hanldeImage(item.image)}
             </React.Fragment> : null}
-            
+
             <View style={styles.wrapTextProfile}>
               <Text style={styles.textProfileUsername}>
                 {isHashtag && "#"}{item.name || 'Anonymous'}

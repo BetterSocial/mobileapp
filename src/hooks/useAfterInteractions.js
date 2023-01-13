@@ -11,7 +11,6 @@ export const useAfterInteractions = () => {
 
   const debounceComplete = () => {
     setTimeout(() => {
-      // console.log(setInteractionsComplete, 'fak');
       setInteractionsComplete(true);
     }, 100);
   };

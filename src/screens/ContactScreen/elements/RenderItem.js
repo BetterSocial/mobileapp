@@ -14,7 +14,6 @@ const RenderItem = ({item, selectedUsers, onChange, index}) => {
     <TouchableNativeFeedback
       key={item.user_id}
       onPress={() => {
-        console.log(item.user_id);
         onChange(item.user_id);
       }}>
       <View

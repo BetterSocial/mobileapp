@@ -12,8 +12,6 @@ const BlockedDomainList = (props) => {
     const userId = getUserId();
 
     const handleBlockDomain = async (data) => {
-      // blockDomain(data)
-      // console.log(data, 'data block')
       const dataBlock = {
         domainId: data.domain_page_id,
         reason: [],
@@ -32,7 +30,7 @@ const BlockedDomainList = (props) => {
         setListBlockedDomain(mapping)
       }
        }
-    
+
        const handleUnblockDomain = async (data) => {
         const processUnblockDomain = await unblokDomain(data)
         if(processUnblockDomain.status) {
@@ -84,7 +82,7 @@ const BlockedDomainList = (props) => {
         }
         navigation.setOptions({
           title,
-        }); 
+        });
        }
 
     React.useEffect(() => {
@@ -96,7 +94,7 @@ const BlockedDomainList = (props) => {
     }, [listBlockedDomaun])
 
     return (
-        <FlatList 
+        <FlatList
         data={listBlockedDomaun}
         renderItem={({item ,index}) => <BlockedList handleSetBlock={() => handleBlockDomain(item)} handleSetUnblock={() => handleUnblockDomain(item)} onPressBody={() => goToDetailDomain(item)} item={item} />}
         keyExtractor={(item, index) => index.toString()}

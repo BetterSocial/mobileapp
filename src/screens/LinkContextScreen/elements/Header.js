@@ -75,7 +75,6 @@ const Header = ({
 
   const handleFollow = async () => {
     setFollow(true);
-    console.log('handle follow');
     const res = await followDomain(dataFollow);
     if (res.code === 200) {
       addIFollowByID(
@@ -84,23 +83,17 @@ const Header = ({
         },
         dispatch,
       );
-
-      console.log('res follow');
     } else {
-      console.log('error follow domain');
       setFollow(false);
     }
   };
   const handleUnFollow = async () => {
     setFollow(false);
-    console.log('handle unfollow');
     const res = await unfollowDomain(dataFollow);
     if (res.code === 200) {
       const newListFollow = await ifollow.filter((obj) => obj.domain_id_followed !== iddomain);
-      console.log('res unfollow');
       setIFollow(newListFollow, dispatch);
     } else {
-      console.log('error unfollow domain');
       setFollow(true);
     }
   };
@@ -142,9 +135,9 @@ const Header = ({
             <Gap style={{ width: 3.33 }} />
             <Text style={styles.headerFollowerText}>12k</Text>
             <View style={styles.point} />
-            <FeedCredderRating 
-              containerStyle={styles.credderRating} 
-              scoreSize={normalizeFontSize(12)} 
+            <FeedCredderRating
+              containerStyle={styles.credderRating}
+              scoreSize={normalizeFontSize(12)}
               scoreStyle={{marginTop: normalizeFontSize(1.5)}}
               score={item?.domain?.credderScore}
               iconSize={16} />
@@ -166,7 +159,7 @@ const Header = ({
       </View>
     </View>
     </SafeAreaView>
-    
+
   );
 };
 

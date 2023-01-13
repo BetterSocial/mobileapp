@@ -71,8 +71,6 @@ const Settings = () => {
     // TODO :change this to delete account API call
     setIsLoadingDeletingAccount(true)
     const response = await deleteAccount()
-    console.log('response')
-    console.log(response.status)
     if (response.status === 'success') {
       logout()
       Toast.show(StringConstant.profileDeleteAccountSuccess, Toast.SHORT);

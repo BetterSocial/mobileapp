@@ -27,7 +27,6 @@ const Header = () => {
 
   const chatName = getChatName(username, profileContext.myProfile.username);
 
-  console.log(channel, 'bahan')
   const renderHeaderImage = () => {
     if (channel?.data?.image) {
       if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
@@ -43,13 +42,13 @@ const Header = () => {
       );
     } if (getGroupMemberCount(channel) > 2) {
       return <Image source={DefaultGroupProfilePicture} style={styles.image} />;
-    } 
+    }
       return (
         <View style={styles.containerAvatar}>
           <ChannelAvatar size={42} channel={channel} />
         </View>
       );
-    
+
   };
 
   return (

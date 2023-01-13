@@ -53,9 +53,6 @@ const LinkContextScreen = () => {
     new Animated.Value(0),
   ).current;
 
-  console.log('item')
-  console.log(item?.latest_reactions?.comment)
-
   React.useEffect(() => {
     const parseToken = async () => {
       const value = await getAccessToken();
@@ -64,7 +61,6 @@ const LinkContextScreen = () => {
         setIdFromToken(decoded.user_id);
       }
     };
-    // console.log('parseToken')
     parseToken();
   }, []);
 
@@ -96,7 +92,6 @@ const LinkContextScreen = () => {
       const res = await getDomainIdIFollow();
       setIFollow(res.data, dispatch);
     } else {
-      // console.log(JSON.stringify(ifollow).includes(iddomain));
       setFollow(JSON.stringify(ifollow).includes(iddomain));
     }
   };

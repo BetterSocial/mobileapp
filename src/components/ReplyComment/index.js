@@ -45,7 +45,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     user: { data: { ...itemProp.user.data, profile_pic_url: users.photoUrl, username: profile.myProfile.username }, id: itemProp.user.id }
   })
 
-  
+
   React.useEffect(() => {
     setTextComment(temporaryText)
   }, [temporaryText])
@@ -80,7 +80,9 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
 
       }
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
   const saveParentComment = () => {
@@ -256,9 +258,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
         username={item.user.data.username}
         onChangeText={setCommentHook}
         onPress={() => createComment()}
-        // onPress={() => console.log('level ', level)}
         value={temporaryText}
-      // loadingComment={loadingCMD}
       />
     </KeyboardAvoidingView>
   );

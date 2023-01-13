@@ -53,9 +53,6 @@ const DomainScreen = () => {
   const tiktokScrollRef = React.useRef(null);
   const [headerHeightRef, setHeaderHeightRef] = React.useState(0)
 
-  console.log('dataDomain')
-  console.log(dataDomain)
-
   const iddomain = dataDomain.content.domain_page_id;
   const [dataFollow] = React.useState({
     domainId: iddomain,
@@ -111,8 +108,6 @@ const DomainScreen = () => {
       const result = await getProfileDomain(domain);
       if (result.code === 200) {
         setProfile(result.data);
-        console.log('result.data')
-        console.log(result.data)
         setProfileDomain(result.data, dispatchDomain);
       } else {
         Toast.show('Domain Not Found', Toast.LONG);
@@ -260,8 +255,6 @@ const DomainScreen = () => {
         onEndReach={__handleOnEndReached}
         snapToOffsets={(() => {
           const posts = domainStore.domains.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-          // console.log('posts')
-          // console.log(posts)
           return [headerHeightRef, ...posts]
         })()}
         ListHeaderComponent={

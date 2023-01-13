@@ -75,7 +75,9 @@ const CreateGroupScreen = ({ navigation }) => {
       await createChannel('messaging', members, groupName);
       alert('success create group');
     } catch (error) {
-      console.log(error)
+      if (__DEV__) {
+        console.log(error);
+      }
     }
   };
 
@@ -89,7 +91,7 @@ const CreateGroupScreen = ({ navigation }) => {
         subtitleStyle={{ color: COLORS.holyTosca }}
         onPressSub={() => createNewChannel()}
         onPress={() => navigation.goBack()}
-        
+
       />
       <GroupName
         onPress={() => handleImageLibrary()}

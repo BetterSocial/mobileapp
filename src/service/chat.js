@@ -11,7 +11,6 @@ const createChannel = async (
   channelName,
 
 ) => {
-  console.log(members, 'manak')
   try {
     const token = await getAccessToken();
     const id = await getUserId();
@@ -27,7 +26,6 @@ const createChannel = async (
     await channel.create();
     return channel
   } catch (error) {
-    console.log('manak', error)
     throw error;
   }
 };

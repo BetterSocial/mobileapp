@@ -136,11 +136,8 @@ export const getDomainInfoInLinkPreview = async (link) => {
     if (validationURL(urlWithoutProtocol)) {
         const urlDomainOnly = urlWithoutProtocol.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/igm)
         const parsedUrl = psl.parse(urlDomainOnly[0] || urlWithoutProtocol)
-        // console.log('parsedUrl')
-        // console.log(parsedUrl)
         const data = await OpenGraphParser.extractMeta(parsedUrl?.domain)
-        // console.log('og data')
-        // console.log(data)
+
         if (Array.isArray(data)) return {
             domain: parsedUrl?.domain,
             domainImage: data[0]?.image
@@ -152,9 +149,7 @@ export const getDomainInfoInLinkPreview = async (link) => {
 }
 
 export const getNewsLinkInfoInLinkPreview = async (link) => {
-    const data = await OpenGraphParser.extractMeta(link)
-    console.log('og data news link')
-    console.log(data)
+    const data = await OpenGraphParser.extractMeta(link);
     if (Array.isArray(data)) {
         const { title, description, image, url } = data[0]
         return {
@@ -168,9 +163,9 @@ export const getNewsLinkInfoInLinkPreview = async (link) => {
 }
 
 /**
- * 
- * @param {String} text 
- * @param {String[]} topics 
+ *
+ * @param {String} text
+ * @param {String[]} topics
  * @returns {String[]}
  */
  export const filterAllTopics = (text, topics = []) => {
