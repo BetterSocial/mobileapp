@@ -17,6 +17,7 @@ import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getUserId } from '../../utils/users';
 import { removeWhiteSpace } from '../../utils/Utils';
+import BlockComponent from '../BlockComponent';
 
 const Comment = ({
   user,
@@ -163,7 +164,11 @@ const Comment = ({
         </TouchableOpacity>
 
       </View>
-    </View>
+
+      <BlockComponent ref={refBlockComponent} refresh={() => {}} screen={"feed_comment_item"}/>
+
+      </View>
+
   );
 };
 

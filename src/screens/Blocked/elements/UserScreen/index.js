@@ -15,7 +15,7 @@ const BlockedUserList = (props) => {
             other_id: value.user_id_followed,
             username: value.user.username,
           };
-      
+
           navigation.navigate('OtherProfile', {data});
     }
 
