@@ -22,7 +22,7 @@ import LoadingWithoutModal from "../LoadingWithoutModal";
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from "../Comments/WriteComment";
 import usePostDetail from './hooks/usePostDetail';
-import { CONTEXT_SOURCE } from '../../hooks/usePostContextHooks';
+import usePostContextHook, { CONTEXT_SOURCE } from '../../hooks/usePostContextHooks';
 import { Context } from '../../context';
 import { Footer, Gap } from "..";
 import {
@@ -41,6 +41,10 @@ import { withInteractionsManaged } from '../WithInteractionManaged';
 const { width, height } = Dimensions.get('window');
 
 const PostPageDetailIdComponent = (props) => {
+  const { feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS } = props
+  let feedsContext
+  let dispatch
+
   const [user] = React.useContext(Context).users;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true)
@@ -60,10 +64,27 @@ const PostPageDetailIdComponent = (props) => {
   const route = useRoute()
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
-  const [feedsContext, dispatch] = React.useContext(Context).feeds;
+  [feedsContext, dispatch] = React.useContext(Context).feeds;
   const { timer } = feedsContext
-  const { feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS } = props
   const { updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1 } = usePostDetail()
+  const { updateFeedContext } = usePostContextHook(contextSource)
+
+  switch (contextSource) {
+    case CONTEXT_SOURCE.FEEDS:
+      [feedsContext, dispatch] = React.useContext(Context).feeds
+      break;
+
+    case CONTEXT_SOURCE.OTHER_PROFILE_FEEDS:
+      [feedsContext, dispatch] = React.useContext(Context).otherProfileFeed
+      break;
+
+    case CONTEXT_SOURCE.PROFILE_FEEDS:
+      [feedsContext, dispatch] = React.useContext(Context).myProfileFeed
+      break;
+
+    default:
+      break;
+  }
 
   React.useEffect(() => {
     if (item && item?.latest_reactions) {
@@ -227,7 +248,8 @@ const PostPageDetailIdComponent = (props) => {
         }
         return { ...feed }
       })
-      setMainFeeds(mappingData, dispatch)
+      // setMainFeeds(mappingData, dispatch)
+      updateFeedContext(mappingData)
     }
 
   }
@@ -256,7 +278,8 @@ const PostPageDetailIdComponent = (props) => {
       }
       return { ...feed }
     })
-    setMainFeeds(mappingData, dispatch)
+    // setMainFeeds(mappingData, dispatch)
+    updateFeedContext(mappingData)
   }
 
   const updateCachingComment = (comment) => {
@@ -272,7 +295,8 @@ const PostPageDetailIdComponent = (props) => {
       }
       return { ...feed }
     })
-    setMainFeeds(mappingData, dispatch)
+    // setMainFeeds(mappingData, dispatch)
+    updateFeedContext(mappingData)
   }
   const findCommentAndUpdate = (id, newData, level) => {
     let newCommenList = []
@@ -311,7 +335,8 @@ const PostPageDetailIdComponent = (props) => {
       }
       return { ...feed }
     })
-    setMainFeeds(mappingData, dispatch)
+    // setMainFeeds(mappingData, dispatch)
+    updateFeedContext(mappingData)
   }
 
 
@@ -470,7 +495,7 @@ const PostPageDetailIdComponent = (props) => {
               message={item.message}
               images_url={item.images_url}
               style={styles.additionalContentStyle(
-                item.images_url.length,
+                item?.images_url?.length,
                 height,
               )}
               topics={item?.topics}

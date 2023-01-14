@@ -49,6 +49,7 @@ import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuild
 import { setChannel } from '../../context/actions/setChannel';
 import { setFeedByIndex, setOtherProfileFeed } from '../../context/actions/otherProfileFeed';
 import { trimString } from '../../utils/string/TrimString';
+import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
@@ -92,6 +93,7 @@ const OtherProfile = () => {
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
 
   const create = useClientGetstream();
+  const { interactionsComplete } = useAfterInteractions()
 
   const { params } = route;
   const { feeds } = otherProfileFeeds
@@ -108,6 +110,13 @@ const OtherProfile = () => {
 
     setPostOffset(result.offset)
   }
+
+
+  React.useEffect(() => {
+    if (interactionsComplete) {
+      fetchOtherProfile(params?.data?.username)
+    };
+  }, [interactionsComplete]);
 
   React.useEffect(() => {
     create();
@@ -194,19 +203,19 @@ const OtherProfile = () => {
   };
 
   const __renderBio = (string) => (
-      <View style={styles.containerBio}>
-        {string === null || string === undefined ? (
-          <Text>No Bio</Text>
-        ) : (
-          <Text linkStyle={styles.seeMore}>
-            {trimString(string, 121)}{' '}
-            {string.length > 121 ? (
-              <Text style={{ color: colors.blue }}>see more</Text>
-            ) : null}
-          </Text>
-        )}
-      </View>
-    );
+    <View style={styles.containerBio}>
+      {string === null || string === undefined ? (
+        <Text>No Bio</Text>
+      ) : (
+        <Text linkStyle={styles.seeMore}>
+          {trimString(string, 121)}{' '}
+          {string.length > 121 ? (
+            <Text style={{ color: colors.blue }}>see more</Text>
+          ) : null}
+        </Text>
+      )}
+    </View>
+  );
 
   const __renderListHeader = () => {
     const __renderBlockIcon = () => {
@@ -236,10 +245,10 @@ const OtherProfile = () => {
           <View style={styles.wrapFollower}>
             <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
               <React.Fragment>
-                     <Text style={styles.textTotal}>
-                {dataMain.follower_symbol}
-              </Text>
-              <Text style={styles.textFollow}>{getSingularOrPluralText(dataMain.follower_symbol, "Follower", "Followers")}</Text>
+                <Text style={styles.textTotal}>
+                  {dataMain.follower_symbol}
+                </Text>
+                <Text style={styles.textFollow}>{getSingularOrPluralText(dataMain.follower_symbol, "Follower", "Followers")}</Text>
               </React.Fragment>
 
             </TouchableOpacity>
@@ -649,9 +658,9 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   dummyItem: (height) => ({
-      height,
+    height,
 
-    }),
+  }),
   header: {
     flexDirection: 'row',
     alignItems: 'center',

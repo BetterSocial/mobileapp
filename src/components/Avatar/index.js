@@ -5,19 +5,19 @@ import { StyleSheet, View } from 'react-native';
 import Image from "../Image";
 import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
 
-const index = ({ image, style }) => (
-  <View style={[styles.wrapperImage, style]}>
-    {image ? (
-      <Image
-        source={{ uri: image }}
-        style={styles.image}
-        resizeMode={FastImage.resizeMode.cover}
-      />
-    ) : (
-      <MemoDomainProfilePicture width="24" height="24" />
-    )}
-  </View>
-);
+const index = ({image, style}) => (
+    <View style={[styles.wrapperImage, style]}>
+      {image ? (
+        <Image
+          source={{uri: image}}
+          style={styles.image}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+      ) : (
+        <MemoDomainProfilePicture width="24" height="24" />
+      )}
+    </View>
+  );
 
 const styles = StyleSheet.create({
   wrapperImage: {
