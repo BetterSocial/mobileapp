@@ -76,7 +76,7 @@ const CreateGroupScreen = ({ navigation }) => {
       alert('success create group');
     } catch (error) {
       if (__DEV__) {
-        console.log(error);
+        console.log('create new channel error: ', error);
       }
     }
   };
