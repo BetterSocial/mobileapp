@@ -1,5 +1,4 @@
 import * as React from 'react';
-import analytics from '@react-native-firebase/analytics';
 import { ActivityIndicator, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import {
   ChannelList,
@@ -49,7 +48,7 @@ const ChannelListScreen = ({ navigation }) => {
   // const [countChat, setCountChat] = React.useState({})
   const { myProfile } = profileContext
   const { mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook } = useChannelList()
-  const [unReadMessage, dispatchUnreadMessage] =
+  const [, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
   const filters = {
@@ -68,10 +67,6 @@ const ChannelListScreen = ({ navigation }) => {
 
   React.useEffect(() => {
     if (interactionsComplete) {
-      analytics().logScreenView({
-        screen_class: 'ChannelListScreen',
-        screen_name: 'Channel List',
-      });
       getPostNotification()
     }
 

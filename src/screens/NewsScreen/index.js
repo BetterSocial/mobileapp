@@ -1,5 +1,4 @@
 import * as React from 'react';
-import analytics from '@react-native-firebase/analytics';
 import {
   Animated,
   FlatList,
@@ -47,11 +46,6 @@ const NewsScreen = () => {
     const unsubscribe = navigation.addListener('blur', () => {
       offset.setValue(0)
       // checkCache()
-    });
-
-    analytics().logScreenView({
-      screen_class: 'FeedScreen',
-      screen_name: 'Feed',
     });
 
     return () => unsubscribe();
@@ -252,7 +246,7 @@ const NewsScreen = () => {
           updateCellsBatchingPeriod={10}
           windowSize={10}
           // onEndReachedThreshold={0.8}
-          
+
           // onMomentumScrollEnd={setSelectedIndex}
           renderItem={({ item, index }) => (
             <RenderItem

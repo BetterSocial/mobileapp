@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
-import analytics from '@react-native-firebase/analytics';
 
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
@@ -23,6 +22,7 @@ import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import { Header } from '../../components';
 import { getSpecificCache } from '../../utils/cache';
 import { TOPICS_PICK } from '../../utils/cache/constant';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const {width} = Dimensions.get('screen');
 
@@ -32,15 +32,8 @@ const Topics = () => {
   const [topics, setTopics] = React.useState([]);
   const [minTopic] = React.useState(3);
   const [, dispatch] = React.useContext(Context).topics;
-  const [myTopic, setMyTopic] = React.useState({})
-  const [isPreload, setIspreload] = React.useState(true)
-  React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'Topics',
-      screen_name: 'onb_select_topics',
-    });
-
-  }, []);
+  const [myTopic, setMyTopic] = React.useState({});
+  const [isPreload, setIspreload] = React.useState(true);
 
   const getCacheTopic = async () => {
 
@@ -70,10 +63,10 @@ const Topics = () => {
     }
     setTopicSelected(copytopicSelected);
   }, [topicSelected])
-  
+
   const next = () => {
     if (topicSelected.length >= minTopic) {
-      analytics().logEvent('onb_select_topics_add_btn', {
+      Analytics.logEvent('onb_select_topics_add_btn', {
         onb_topics_selected: topicSelected,
       });
       setTopicsContext(topicSelected, dispatch);
@@ -133,11 +126,11 @@ const Topics = () => {
           contentContainerStyle={styles.containerContent}
           nestedScrollEnabled
           >
-            <FlatList 
+            <FlatList
             data={topic.data}
             renderItem={renderListTopics}
             numColumns={Math.floor(topic.data.length / 3) + 1}
-            nestedScrollEnabled 
+            nestedScrollEnabled
             scrollEnabled={false}
             extraData={topicSelected}
             maxToRenderPerBatch={2}
@@ -146,7 +139,7 @@ const Topics = () => {
             windowSize={10}
             keyExtractor={keyExtractor}
             />
-            
+
           </ScrollView>
         </View>
         )) : null}
@@ -168,7 +161,7 @@ const Topics = () => {
         </Button>
       </View>
         </React.Fragment>}
-      
+
     </SafeAreaView>
   );
 };

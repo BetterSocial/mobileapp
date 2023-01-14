@@ -1,15 +1,11 @@
 import * as React from 'react';
 import _ from 'lodash';
-import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Toast from 'react-native-simple-toast';
-import analytics from '@react-native-firebase/analytics';
 import {
   Animated,
-  Dimensions,
   Image,
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -39,8 +35,7 @@ import {
 import { setCapitalFirstLetter } from '../../utils/Utils';
 import { setImage, setUsername } from '../../context/actions/users';
 import { verifyUsername } from '../../service/users';
-
-const { width } = Dimensions.get('screen');
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const ChooseUsername = () => {
   const navigation = useNavigation();
@@ -48,7 +43,6 @@ const ChooseUsername = () => {
   const [users, dispatch] = React.useContext(Context).users;
   const [username, setUsernameState] = React.useState('');
   const [typeFetch, setTypeFetch] = React.useState('');
-  const [showInfo, setShowInfo] = React.useState(false)
   const [fadeInfo] = React.useState(new Animated.Value(0))
 
   const verifyUsernameDebounce = React.useCallback(_.debounce(async (text) => {
@@ -79,15 +73,8 @@ const ChooseUsername = () => {
     }).start()
   }
 
-  React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'ChooseUsername',
-      screen_name: 'onb_user_profilepic',
-    });
-  }, []);
-
   const onPhoto = () => {
-    analytics().logEvent('btn_take_photo_profile', {
+    Analytics.logEvent('btn_take_photo_profile', {
       id: 2,
     });
     bottomSheetChooseImageRef.current.open();
@@ -135,7 +122,7 @@ const ChooseUsername = () => {
     setUsernameState(value);
     if (value.length <= 15) {
       if (value.length > 2) {
-        if (isNaN(v)) {
+        if (Number.isNaN(v)) {
           setTypeFetch('fetch');
           verifyUsernameDebounce(value)
         } else {
@@ -165,6 +152,7 @@ const ChooseUsername = () => {
   }
 
 
+  // eslint-disable-next-line consistent-return
   const next = () => {
     if (username && username.length > 2 && typeFetch === 'available') {
       setUsername(username, dispatch);

@@ -1,7 +1,6 @@
 import * as React from 'react';
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
-import analytics from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/core';
 import { debounce } from 'lodash';
 import PSL from 'psl'
@@ -47,11 +46,8 @@ import { Button, ButtonAddMedia } from '../../components/Button';
 import TopicItem from '../../components/TopicItem';
 import { Context } from '../../context';
 import { getLinkPreviewInfo } from '../../service/feeds';
-import { getUserForTagging } from '../../service/mention';
 import { ShowingAudience, createPollPost, createPost } from '../../service/post';
 import { getMyProfile } from '../../service/profile';
-import { getTopics } from '../../service/topics';
-import { insertNewTopicIntoTopics } from '../../utils/array/ChunkArray';
 import { getSpecificCache } from '../../utils/cache';
 import { PROFILE_CACHE } from '../../utils/cache/constant';
 import { colors } from '../../utils/colors';
@@ -73,7 +69,6 @@ import { getUrl, isContainUrl } from '../../utils/Utils';
 import { getUserId } from '../../utils/users';
 import WarningAnimatedMessage from '../../components/WarningAnimateMessage';
 import StringConstant from '../../utils/string/StringConstant';
-import Card from './elements/Card';
 import SheetAddTopic from './elements/SheetAddTopic';
 import SheetCloseBtn from './elements/SheetCloseBtn';
 import SheetExpiredPost from './elements/SheetExpiredPost';
@@ -83,6 +78,7 @@ import SheetPrivacy from './elements/SheetPrivacy';
 import ShowMedia from './elements/ShowMedia';
 import useHastagMention from './elements/useHastagMention';
 import UserProfile from './elements/UserProfile';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
@@ -321,10 +317,6 @@ const CreatePost = () => {
 
     React.useEffect(() => {
         fetchMyProfile();
-        analytics().logScreenView({
-            screen_class: 'ChooseUsername',
-            screen_name: 'ChooseUsername',
-        });
     }, []);
 
     React.useEffect(() => {
@@ -483,7 +475,7 @@ const CreatePost = () => {
             setLocationId(JSON.stringify(geoSelect));
             setDurationId(JSON.stringify(expiredSelect));
             setPrivacyId(JSON.stringify(privacySelect));
-            analytics().logEvent('create_post', {
+            Analytics.logEvent('create_post', {
                 id: 6,
                 newpost_reach: geoList[geoSelect].neighborhood,
                 newpost_privacy: listPrivacy[privacySelect].label,
@@ -645,7 +637,7 @@ const CreatePost = () => {
                 console.log(e);
             }
         }
-        analytics().logEvent('create_post', {
+        Analytics.logEvent('create_post', {
             id: 6,
             newpost_reach: geoList[geoSelect].neighborhood,
             newpost_privacy: listPrivacy[privacySelect].label,

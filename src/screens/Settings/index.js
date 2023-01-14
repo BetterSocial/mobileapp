@@ -1,6 +1,5 @@
 import * as React from 'react';
 import VersionNumber from 'react-native-version-number';
-import analytics from '@react-native-firebase/analytics';
 import {
   Dimensions,
   SafeAreaView,
@@ -10,7 +9,7 @@ import {
   View
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
-
+import analytics from '@react-native-firebase/analytics'
 import Header from '../../components/Header';
 import Loading from '../Loading';
 import ProfileSettingItem from './element/ProfileSettingItem';

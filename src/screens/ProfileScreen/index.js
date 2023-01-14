@@ -1,7 +1,6 @@
 import * as React from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
-import analytics from '@react-native-firebase/analytics';
 import {
   ActivityIndicator,
   Dimensions,
@@ -60,6 +59,7 @@ import { setMyProfileFeed } from '../../context/actions/myProfileFeed';
 import { trimString } from '../../utils/string/TrimString';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -112,20 +112,16 @@ const ProfileScreen = ({ route }) => {
   React.useEffect(() => {
     if (interactionsComplete) {
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-      analytics().logScreenView({
-        screen_class: 'ProfileScreen',
-        screen_name: 'ProfileScreen',
-      });
-      analytics().logEvent('myprofile_begin_view', {
+      Analytics.logEvent('myprofile_begin_view', {
         id: 'profile_begin',
         myprofile_begin_view: Date.now(),
       });
       return () => {
-        analytics().logEvent('myprofile_end_view', {
+        Analytics.logEvent('myprofile_end_view', {
           id: 'myprofile_end_view',
           myprofile_end_view: Date.now(),
         });
-        analytics().logEvent('myprofile_begin_view', {
+        Analytics.logEvent('myprofile_begin_view', {
           id: 'profile_begin',
           myprofile_begin_view: Date.now(),
         });
@@ -196,14 +192,14 @@ const ProfileScreen = ({ route }) => {
 
 
   const onShare = async () => {
-    analytics().logEvent('profile_screen_btn_share', {
+    Analytics.logEvent('profile_screen_btn_share', {
       id: 'btn_share',
     });
     ShareUtils.shareUserLink(dataMain.username)
   }
 
   const goToSettings = () => {
-    analytics().logEvent('profile_screen_btn_settings', {
+    Analytics.logEvent('profile_screen_btn_settings', {
       id: 'btn_settings',
     });
     navigation.navigate('Settings');

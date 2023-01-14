@@ -2,7 +2,6 @@ import * as React from 'react';
 import { View, Text, FlatList, StatusBar } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { launchImageLibrary } from 'react-native-image-picker';
-import analytics from '@react-native-firebase/analytics';
 
 import { createChannel } from '../../service/chat';
 
@@ -13,6 +12,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import Header from './elements/Header';
 import { getUserId } from '../../utils/users';
 import { requestExternalStoragePermission } from '../../utils/permission';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const DUMMY = [
   {
@@ -46,13 +46,13 @@ const CreateGroupScreen = ({ navigation }) => {
   }, []);
 
   const handleImageLibrary = async () => {
-    analytics().logEvent('btn_take_photo_profile', {
+    Analytics.logEvent('btn_take_photo_profile', {
       id: 2,
     });
-    let { success, message } = await requestExternalStoragePermission();
+    const { success, message } = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary({ mediaType: 'photo' }, (res) => {
-        let image = {
+        const image = {
           uri: res.uri,
           type: res.type, // or photo.type
           name: res.fileName,
@@ -76,10 +76,22 @@ const CreateGroupScreen = ({ navigation }) => {
       alert('success create group');
     } catch (error) {
       if (__DEV__) {
-        console.log(error);
+        console.log('create new channel error: ', error);
       }
     }
   };
+
+  const renderItem = ({ item, index }) => (
+    <View
+      key={index}
+      style={{ flexDirection: 'row', marginBottom: SIZES.base * 2 }}>
+      <Avatar image={item.icon} />
+      <Gap width={SIZES.base} />
+      <View style={{ justifyContent: 'center' }}>
+        <Text>{item.name}</Text>
+      </View>
+    </View>
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -106,19 +118,7 @@ const CreateGroupScreen = ({ navigation }) => {
       <View style={{ marginHorizontal: 16, marginTop: SIZES.base }}>
         <FlatList
           data={DUMMY}
-          renderItem={({ item, index }) => {
-            return (
-              <View
-                key={index}
-                style={{ flexDirection: 'row', marginBottom: SIZES.base * 2 }}>
-                <Avatar image={item.icon} />
-                <Gap width={SIZES.base} />
-                <View style={{ justifyContent: 'center' }}>
-                  <Text>{item.name}</Text>
-                </View>
-              </View>
-            );
-          }}
+          renderItem={renderItem}
         />
       </View>
     </View>
