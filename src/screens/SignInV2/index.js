@@ -1,6 +1,5 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
   BackHandler,
@@ -10,6 +9,7 @@ import {
   View
 } from 'react-native';
 import { StackActions } from '@react-navigation/native';
+// eslint-disable-next-line import/no-unresolved
 import { colors } from 'react-native-swiper-flatlist/src/themes';
 import {
   logIn,
@@ -38,6 +38,7 @@ import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;
@@ -58,10 +59,6 @@ const SignIn = () => {
   }
 
   React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'SignIn',
-      screen_name: 'SignIn',
-    });
     setDataHumenId(null, dispatch);
   });
 
@@ -112,7 +109,7 @@ const SignIn = () => {
       crashlytics().recordError(new Error(message));
     });
     onCancel(() => {
-      analytics().logEvent('cencel_auth_humanid', {
+      Analytics.logEvent('cencel_auth_humanid', {
         id: '1',
       });
     });
@@ -120,7 +117,7 @@ const SignIn = () => {
 
   const handleLogin = () => {
     logIn();
-    analytics().logLogin({
+    Analytics.logLogin({
       method: 'humanid',
     });
   };

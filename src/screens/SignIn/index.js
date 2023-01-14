@@ -43,6 +43,7 @@ import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -106,7 +107,7 @@ const SignIn = () => {
       crashlytics().recordError(new Error(message));
     });
     onCancel(() => {
-      analytics().logEvent('cencel_auth_humanid', {
+      Analytics.logEvent('cencel_auth_humanid', {
         id: '1',
       });
     });
@@ -116,7 +117,7 @@ const SignIn = () => {
       return;
     }
     logIn();
-    analytics().logLogin({
+    Analytics.logLogin({
       method: 'humanid',
     });
   };

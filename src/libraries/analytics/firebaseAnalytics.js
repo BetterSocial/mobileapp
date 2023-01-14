@@ -14,6 +14,11 @@ const FirebaseAnalytics = () => ({
         screen_class: routeName
       });
     },
+    logLogin(method) {
+      analytics().logLogin({
+        method,
+      });
+    },
     setUserProperties(property) {
       analytics().setUserProperties(property);
     },

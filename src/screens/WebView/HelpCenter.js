@@ -1,25 +1,14 @@
 import * as React from 'react';
-import analytics from '@react-native-firebase/analytics';
 import { ActivityIndicator, SafeAreaView, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { useNavigation } from '@react-navigation/core';
 
 import Header from '../../components/Header';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const HelpCenter = () => {
-  const navigator = useNavigation();
-  React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'HelpCenter',
-      screen_name: 'HelpCenter',
-    });
-  }, []);
-
-  return (
+const HelpCenter = ({navigation}) => (
     <View style={styles.container}>
       <SafeAreaView>
-      <Header title="Help Center" onPress={() => navigator.goBack()}  />
+      <Header title="Help Center" onPress={() => navigation.goBack()}  />
       </SafeAreaView>
       <WebView
         androidHardwareAccelerationDisabled={false}
@@ -35,7 +24,6 @@ const HelpCenter = () => {
       />
     </View>
   );
-};
 
 export default withInteractionsManaged(React.memo(HelpCenter));
 

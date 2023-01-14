@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import VersionNumber from 'react-native-version-number';
-import analytics from '@react-native-firebase/analytics';
 import {
   Alert,
   Dimensions,
@@ -43,12 +42,6 @@ const Settings = () => {
   const [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
   const [, feedDispatch] = React.useContext(Context).feeds;
 
-  React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'Settings',
-      screen_name: 'Settings',
-    });
-  }, []);
   const logout = () => {
     removeAllCache()
     resetProfileFeed(myProfileDispatch)

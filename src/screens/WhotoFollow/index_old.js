@@ -15,7 +15,6 @@ import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/core';
 import {StackActions} from '@react-navigation/native';
 import crashlytics from '@react-native-firebase/crashlytics';
-import analytics from '@react-native-firebase/analytics';
 
 import Loading from '../Loading';
 import {get} from '../../api/server';
@@ -28,8 +27,9 @@ import {Context} from '../../context';
 import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
 import {colors} from '../../utils/colors';
 import ListUser from './elements/ListUser';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
-const width = Dimensions.get('screen').width;
+const { width } = Dimensions.get('screen');
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
@@ -48,10 +48,6 @@ const WhotoFollow = () => {
   const navigation = useNavigation();
 
   React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'WhotoFollow',
-      screen_name: 'onb_select_follows',
-    });
     setIsLoading(true);
     get({url: '/who-to-follow/list'})
       .then((res) => {
@@ -75,18 +71,18 @@ const WhotoFollow = () => {
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableNativeFeedback>
       );
-    } else {
+    }
       return (
         <TouchableHighlight onPress={() => navigation.goBack()}>
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableHighlight>
       );
-    }
+
   };
 
   const handleSelected = (value) => {
-    let copyFollowed = [...followed];
-    let index = copyFollowed.indexOf(value);
+    const copyFollowed = [...followed];
+    const index = copyFollowed.indexOf(value);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
@@ -113,7 +109,7 @@ const WhotoFollow = () => {
 
   const register = () => {
     setFetchRegister(true);
-    analytics().logEvent('onb_select_follows_btn_add', {
+    Analytics.logEvent('onb_select_follows_btn_add', {
       onb_whofollow_users_selected: followed,
     });
     const data = {
@@ -251,7 +247,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     height: 90,
-    width: width,
+    width,
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,
