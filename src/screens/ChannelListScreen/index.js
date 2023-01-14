@@ -32,6 +32,7 @@ import { setChannel } from '../../context/actions/setChannel';
 import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { traceMetricScreen } from '../../libraries/performance/firebasePerformance';
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -56,7 +57,7 @@ const ChannelListScreen = ({ navigation }) => {
     type: { $in: ['messaging', 'topics'] },
   };
   // React.useEffect(() => { }, [unReadMessage]);
-
+  const perf = React.useRef(null);
   const sort = [{ last_message_at: -1 }];
   const options = {
     state: true,
@@ -64,6 +65,12 @@ const ChannelListScreen = ({ navigation }) => {
     presence: true,
   };
   const memoizedFilters = React.useMemo(() => filters, [myProfile.user_id]);
+
+  React.useEffect(() => {
+    traceMetricScreen('loading_channelList', fnCallback => {
+      perf.current = fnCallback
+    });
+  }, []);
 
   React.useEffect(() => {
     if (interactionsComplete) {
@@ -181,6 +188,12 @@ const ChannelListScreen = ({ navigation }) => {
     mappingUnreadCountPostNotif()
   }, [listPostNotif, countReadComment])
 
+  const onChannelVisible = () => {
+    if (perf.current) {
+      perf.current.stop();
+    }
+  }
+
   return (
     <SafeAreaProvider style={{ height: '100%' }}>
       <StatusBar translucent={false} />
@@ -204,6 +217,7 @@ const ChannelListScreen = ({ navigation }) => {
                 //  channelRenderFilterFn={(channel) => console.log(channel, 'bahan')}
                 sort={sort}
                 options={options}
+                onChannelVisible={onChannelVisible}
                 maxUnreadCount={99}
                 clientData={channelListLocalValue}
                 additionalFlatListProps={{

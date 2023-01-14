@@ -15,9 +15,7 @@ const FirebaseAnalytics = () => ({
       });
     },
     logLogin(method) {
-      analytics().logLogin({
-        method,
-      });
+      analytics().logLogin({ method });
     },
     setUserProperties(property) {
       analytics().setUserProperties(property);

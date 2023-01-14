@@ -1,7 +1,4 @@
 {
-  "plugins": [
-    ["module:react-native-dotenv"]
-  ],
     "env": {
       "development": {
         "plugins": [
@@ -17,12 +14,5 @@
         "plugins": ["transform-remove-console"]
       }
     }
-  
+
 }
-// {
-//   "plugins": [
-//     [
-//       "module:react-native-dotenv"
-//     ]
-//   ]
-// }

@@ -117,9 +117,7 @@ const SignIn = () => {
 
   const handleLogin = () => {
     logIn();
-    Analytics.logLogin({
-      method: 'humanid',
-    });
+    Analytics.logLogin('humanid');
   };
 
   React.useEffect(() => {

@@ -7,12 +7,10 @@ const CreatePollComponent = lazy(() =>
     : import('./CreatePollContainer.android'),
 );
 
-const CreatePollContainer = (props) => {
-  return (
+const CreatePollContainer = (props) => (
     <Suspense fallback={<View />}>
-      <CreatePollComponent {...proe.ps} />
+      <CreatePollComponent {...props} />
     </Suspense>
   );
-};
 
 export default CreatePollContainer;

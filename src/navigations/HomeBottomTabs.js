@@ -322,6 +322,15 @@ function HomeBottomTabs(props) {
           ),
         })}>
         <Tab.Screen
+          name="Feed"
+          component={FeedScreen}
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: ({ color }) => <View style={styles.center} ><MemoFeed fill={color} /></View>,
+            // unmountOnBlur: true
+          }}
+        />
+        <Tab.Screen
           name="ChannelList"
           component={ChannelListScreen}
 
@@ -331,15 +340,6 @@ function HomeBottomTabs(props) {
               <MemoHome fill={color} />
             </View>,
             tabBarBadge: unReadMessage.total_unread_count + unReadMessage.unread_post > 0 ? unReadMessage.total_unread_count + unReadMessage.unread_post : null
-          }}
-        />
-        <Tab.Screen
-          name="Feed"
-          component={FeedScreen}
-          options={{
-            activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <View style={styles.center} ><MemoFeed fill={color} /></View>,
-            // unmountOnBlur: true
           }}
         />
         <Tab.Screen
