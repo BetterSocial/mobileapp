@@ -19,15 +19,15 @@ const ReplyCommentLev3 = (props) => {
     }
     return 0
   }
-  console.log(String(updateReply), 'kukuk')
+
   return (
     <View style={styles.container}>
-      <ReplyCommentComponent indexFeed={feedIndex()} 
+      <ReplyCommentComponent indexFeed={feedIndex()}
         itemProp={itemProp}
         dispatch={dispatch}
         feeds={feeds.feeds}
         level={level}
-        setFeedByIndexProps={setFeedByIndex} 
+        setFeedByIndexProps={setFeedByIndex}
         updateParent={updateParent}
         page={props.route.params.page}
         dataFeed={dataFeed}

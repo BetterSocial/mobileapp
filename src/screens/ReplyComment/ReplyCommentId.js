@@ -115,7 +115,9 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
         // );
       }
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 
@@ -268,9 +270,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
         username={item.user.data.username}
         onChangeText={(v) => setComment(v)}
         onPress={() => createComment()}
-        // onPress={() => console.log('level ', level)}
         value={temporaryText}
-      // loadingComment={loadingCMD}
       />
     </View>
   );

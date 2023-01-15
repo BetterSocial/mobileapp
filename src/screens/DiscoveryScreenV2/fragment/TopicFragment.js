@@ -94,7 +94,6 @@ const TopicFragment = ({ isLoadingDiscoveryTopic = false, followedTopic = [], un
             id: convertTopicNameToTopicPageScreenParam(item.name)
         }
 
-        console.log(navigationParam)
         navigation.push('TopicPageScreen', navigationParam)
     }
 

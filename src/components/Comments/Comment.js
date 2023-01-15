@@ -36,10 +36,9 @@ const Comment = ({
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
-  const { totalVote, setTotalVote, statusVote, setStatusVote, onUpVote, onDownVote, iVote } = useComment({ comment, findCommentAndUpdate, level, updateVote })
+  const { totalVote, setTotalVote, statusVote, onUpVote, onDownVote, iVote } = useComment({ comment, findCommentAndUpdate, level, updateVote })
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
-      console.log('level2')
       return;
     }
     if (onPress && typeof onPress === 'function') {
@@ -63,7 +62,7 @@ const Comment = ({
     });
   };
 
-  const onBlockComponent = (comment) => {
+  const onBlockComponent = () => {
     refBlockComponent.current.openBlockComponent({
       anonimity : false,
       actor : comment.user,
@@ -103,6 +102,7 @@ const Comment = ({
               source={
                 photo
                   ? { uri: removeWhiteSpace(photo) }
+                  // eslint-disable-next-line global-require
                   : require('../../assets/images/ProfileDefault.png')
               }
               style={styles.image}
@@ -132,7 +132,7 @@ const Comment = ({
         )}
         <ButtonHightlight
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
-          onPress={() => onBlockComponent(comment)}>
+          onPress={() => onBlockComponent()}>
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </ButtonHightlight>
 

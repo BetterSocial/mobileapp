@@ -49,7 +49,6 @@ const DiscoveryScreenV2 = ({ route }) => {
 
     React.useEffect(() => {
         const unsubscribe = (() => {
-            // console.log('coba')
             DiscoveryAction.setDiscoveryFirstTimeOpen(true, discoveryDispatch)
             DiscoveryAction.setDiscoveryFocus(true, discoveryDispatch)
         })

@@ -57,7 +57,9 @@ export const useClientGetstream = () => {
         }
       }
     } catch (e) {
-      console.log('error create stream chat', e)
+      if (__DEV__) {
+        console.log('error create stream chat', e);
+      }
     }
   };
 

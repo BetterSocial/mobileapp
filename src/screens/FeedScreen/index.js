@@ -1,5 +1,4 @@
 import * as React from 'react';
-import analytics from '@react-native-firebase/analytics';
 import { Animated, InteractionManager, StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -46,11 +45,6 @@ const {getDataFeeds, postOffset, loading, setShowNavbar, showNavbar, myProfile, 
 
   React.useEffect(() => {
     if (interactionsComplete) {
-      analytics().logScreenView({
-        screen_class: 'FeedScreen',
-        screen_name: 'Feed Screen',
-      });
-
         checkCacheFeed()
     }
 
@@ -64,11 +58,11 @@ const {getDataFeeds, postOffset, loading, setShowNavbar, showNavbar, myProfile, 
     return unsubscribe;
   }, [navigation]);
 
-  
+
   const setUpVoteHandle = async (post, index) => {
    setUpVote(post, index)
   };
-  
+
   const setDownVoteHandle = async (post, index) => {
     setDownVote(post, index)
   };

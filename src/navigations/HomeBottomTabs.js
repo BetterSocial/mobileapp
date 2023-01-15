@@ -72,7 +72,9 @@ function HomeBottomTabs(props) {
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
-      console.log('NOTIFICATION:', notification);
+      if (__DEV__) {
+        console.log('NOTIFICATION:', notification);
+      }
       // process the notification
       // (required) Called when a remote is received or opened, or local notification is opened
       notification.finish(PushNotificationIOS.FetchResult.NoData);
@@ -100,7 +102,7 @@ function HomeBottomTabs(props) {
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED
       || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    if (enabled) {
+    if (enabled && __DEV__) {
       console.log('Authorization status:', authStatus);
     }
   };
@@ -165,7 +167,9 @@ function HomeBottomTabs(props) {
   };
 
   const pushNotifIos = (message) => {
-    console.log(message.messageId, 'message')
+    if (__DEV__) {
+      console.log(message.messageId, 'message');
+    }
     PushNotificationIOS.addNotificationRequest({
       // alertBody: message.notification.body,
       // alertTitle: message.notification.title
@@ -194,7 +198,11 @@ function HomeBottomTabs(props) {
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
       },
-      (created) => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
+      (created) => {
+        if (__DEV__) {
+          console.log(`createChannel returned '${created}'`);
+        }
+      }, // (optional) callback returns whether the channel was created, false means it already existed.
     );
   };
 
@@ -314,6 +322,15 @@ function HomeBottomTabs(props) {
           ),
         })}>
         <Tab.Screen
+          name="Feed"
+          component={FeedScreen}
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: ({ color }) => <View style={styles.center} ><MemoFeed fill={color} /></View>,
+            // unmountOnBlur: true
+          }}
+        />
+        <Tab.Screen
           name="ChannelList"
           component={ChannelListScreen}
 
@@ -323,15 +340,6 @@ function HomeBottomTabs(props) {
               <MemoHome fill={color} />
             </View>,
             tabBarBadge: unReadMessage.total_unread_count + unReadMessage.unread_post > 0 ? unReadMessage.total_unread_count + unReadMessage.unread_post : null
-          }}
-        />
-        <Tab.Screen
-          name="Feed"
-          component={FeedScreen}
-          options={{
-            activeTintColor: colors.holytosca,
-            tabBarIcon: ({ color }) => <View style={styles.center} ><MemoFeed fill={color} /></View>,
-            // unmountOnBlur: true
           }}
         />
         <Tab.Screen

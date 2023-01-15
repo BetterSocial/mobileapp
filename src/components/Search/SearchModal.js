@@ -25,8 +25,6 @@ const SearchModal = (props) => {
         }
     }, [props]);
 
-    console.log(`==============`)
-
     return (
         <Modal
             testID={'modal'}
@@ -67,7 +65,7 @@ const SearchModal = (props) => {
                         {typeof props.options !== 'undefined' &&
                             props.options.length > 0 ? (
                             <View style={styles.box}>
-                                {props.options.map((value, index) => 
+                                {props.options.map((value, index) =>
                                     // let firstLetter = value.neighborhood.split(' ');
                                     // let lastLetter = value.neighborhood.replace(
                                     //     `${firstLetter[0]} `,

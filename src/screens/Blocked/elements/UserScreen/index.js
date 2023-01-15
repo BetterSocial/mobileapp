@@ -30,7 +30,7 @@ const BlockedUserList = (props) => {
             other_id: value.user_id_followed,
             username: value.user.username,
           };
-      
+
           navigation.navigate('OtherProfile', {data});
     }
 
@@ -39,7 +39,7 @@ const BlockedUserList = (props) => {
         if(blocked.user_id_blocked === data.user_id_blocked) {
             return {...blocked, isUnblocked: false }
         }
-        return {...blocked} 
+        return {...blocked}
     })
     let dataSend = {
         userId: data.user_id_blocked,
@@ -52,12 +52,11 @@ const BlockedUserList = (props) => {
    }
 
    const handleUnblockUser = async (data) => {
-    console.log('susan',data , listBlockedUser,)
     const mappingData = listBlockedUser.map((blocked) => {
         if(blocked.user_id_blocked === data.user_id_blocked) {
             return {...blocked, isUnblocked: true }
         }
-        return {...blocked} 
+        return {...blocked}
     })
     let dataSend = {
         userId: data.user_id_blocked,
@@ -65,7 +64,7 @@ const BlockedUserList = (props) => {
       };
       setListBlockedUser(mappingData)
 
-      const blockingUser = await unblockUserApi(dataSend);
+      await unblockUserApi(dataSend);
       // console.log(blockingUser, 'suratan')
       // if(blockingUser.code === 200) {
       //   // setListBlockedUser(mappingData)
@@ -82,7 +81,7 @@ const BlockedUserList = (props) => {
     }
     navigation.setOptions({
       title,
-    }); 
+    });
    }
 
 
@@ -94,7 +93,7 @@ const BlockedUserList = (props) => {
         handleTabbarName()
     }, [listBlockedUser])
     return (
-        <FlatList 
+        <FlatList
         data={listBlockedUser}
         renderItem={({item ,index}) => <BlockedList handleSetBlock={() => handleBlockUser(item)} handleSetUnblock={() => handleUnblockUser(item)} onPressBody={() => goToDetailUser(item)} item={item} />}
         keyExtractor={(item, index) => index.toString()}

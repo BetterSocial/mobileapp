@@ -239,7 +239,9 @@ const OtherProfile = () => {
       setTimeout(() => setIsLoading(false), 400)
       // setIsLoading(false)
     } catch (e) {
-      console.log(e)
+      if (__DEV__) {
+        console.log('create channel error: ', e);
+      }
     }
   };
 
@@ -279,7 +281,9 @@ const OtherProfile = () => {
         reportUserRef.current.close();
       }
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log('unblock user error: ', e);
+      }
     }
   };
 
@@ -365,7 +369,9 @@ const OtherProfile = () => {
         );
       }
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log('update feed error: ', e);
+      }
     }
   };
 

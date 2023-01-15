@@ -34,7 +34,6 @@ describe('testing filter all topics', () => {
         const text = `Hi this is hashtag in text only #hi-there #Hispanics`
         const topics = ['whats-up']
         const result = filterAllTopics(text, topics)
-        console.log(result[0])
         expect(result.length).toBe(3)
         expect(result[0]).toBe('hi-there')
         expect(result[1]).toBe('Hispanics')

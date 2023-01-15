@@ -145,7 +145,9 @@ class BlockComponent extends React.Component {
     }
 
     __blockUser() {
-        console.log('block user called')
+        if (__DEV__) {
+            console.log('block user called');
+        }
         const { postId, userId, messageReport, reason } = this.state
         blockUtils.uiBlockUser(
             postId,

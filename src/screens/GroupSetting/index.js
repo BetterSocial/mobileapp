@@ -77,9 +77,11 @@ const GroupSetting = ({navigation, route}) => {
 
       try {
         await channel.update(dataEdit);
-        if(withNavigation) navigation.navigate('ChannelList');  
+        if(withNavigation) navigation.navigate('ChannelList');
       } catch (e) {
-        console.log(`error : ${e}`)
+        if (__DEV__) {
+          console.log(`error : ${e}`)
+        }
         SimpleToast.show(StringConstant.groupSettingUpdateFailed)
       }
       setIsLoading(false);

@@ -78,7 +78,11 @@ const CreatePostInput = ({
                 .then(v => {
                     setTopicSearch(v.data);
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    if (__DEV__) {
+                        console.log('get topics error: ', err);
+                    }
+                });
         } else {
             resetTopicSearch()
         }
@@ -90,7 +94,11 @@ const CreatePostInput = ({
                 .then(v => {
                     setUserTaggingSearch(v);
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    if (__DEV__) {
+                        console.log('get topics error: ', err);
+                    }
+                });
         } else {
             resetListUsersForTagging()
         }

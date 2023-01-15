@@ -26,13 +26,13 @@ class ProfileTiktokScroll extends React.Component {
     })
   }
 
-  __onViewableItemsChanged({ viewableItems, changed }) {
-    // console.log("Visible items are", viewableItems);
-    // console.log("Changed in this iteration", changed);
-  }
+  // __onViewableItemsChanged({ viewableItems, changed }) {
+  //   console.log("Visible items are", viewableItems);
+  //   console.log("Changed in this iteration", changed);
+  // }
 
   render() {
-    const { data, children, onRefresh, refreshing, 
+    const { data, children, onRefresh, refreshing,
       onEndReach, onScroll, ListHeaderComponent } = this.props;
     return (
       <FlatList
@@ -62,7 +62,7 @@ class ProfileTiktokScroll extends React.Component {
           minimumViewTime: 100,
           itemVisiblePercentThreshold: 80
         }}
-        onViewableItemsChanged={this.__onViewableItemsChanged}
+        // onViewableItemsChanged={this.__onViewableItemsChanged}
         { ...this.props}
       />
     );

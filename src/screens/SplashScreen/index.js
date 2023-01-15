@@ -55,15 +55,15 @@ const SplashScreen = () => {
         const verify = await verifyTokenGetstream();
         if (verify !== null && verify !== '') {
           create();
-          // console.log('user id');
-          // console.log(id);
           return id;
         }
         return null;
       }
       return null;
     } catch (e) {
-      console.log('doVerifyUser ', e);
+      if (__DEV__) {
+        console.log('doVerifyUser ', e);
+      }
       return null;
     }
   };

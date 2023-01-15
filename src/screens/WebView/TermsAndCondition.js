@@ -2,24 +2,13 @@ import * as React from 'react';
 import {ActivityIndicator, StyleSheet, View, SafeAreaView} from 'react-native';
 
 import {WebView} from 'react-native-webview';
-import {useNavigation} from '@react-navigation/core';
-import analytics from '@react-native-firebase/analytics';
 import Header from '../../components/Header';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-const TermsAndCondition = () => {
-  const navigator = useNavigation();
-  React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'TermsAndCondition',
-      screen_name: 'TermsAndCondition',
-    });
-  }, []);
 
-
-  return (
+const TermsAndCondition = ({navigation}) => (
     <View style={styles.container}>
       <SafeAreaView>
-      <Header title="Terms & Condition" onPress={() => navigator.goBack()} />
+      <Header title="Terms & Condition" onPress={() => navigation.goBack()} />
 
       </SafeAreaView>
       <WebView
@@ -34,9 +23,8 @@ const TermsAndCondition = () => {
       />
     </View>
   );
-};
 
-export default withInteractionsManaged (React.memo (TermsAndCondition))
+export default withInteractionsManaged(TermsAndCondition);
 
 const styles = StyleSheet.create({
   container: {

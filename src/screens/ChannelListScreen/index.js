@@ -1,5 +1,4 @@
 import * as React from 'react';
-import analytics from '@react-native-firebase/analytics';
 import { ActivityIndicator, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import {
   ChannelList,
@@ -33,6 +32,7 @@ import { setChannel } from '../../context/actions/setChannel';
 import { setTotalUnreadPostNotif } from '../../context/actions/unReadMessageAction';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { traceMetricScreen } from '../../libraries/performance/firebasePerformance';
 
 const ChannelListScreen = ({ navigation }) => {
   const streami18n = new Streami18n({
@@ -49,7 +49,7 @@ const ChannelListScreen = ({ navigation }) => {
   // const [countChat, setCountChat] = React.useState({})
   const { myProfile } = profileContext
   const { mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook } = useChannelList()
-  const [unReadMessage, dispatchUnreadMessage] =
+  const [, dispatchUnreadMessage] =
     React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
   const filters = {
@@ -57,7 +57,7 @@ const ChannelListScreen = ({ navigation }) => {
     type: { $in: ['messaging', 'topics'] },
   };
   // React.useEffect(() => { }, [unReadMessage]);
-
+  const perf = React.useRef(null);
   const sort = [{ last_message_at: -1 }];
   const options = {
     state: true,
@@ -67,11 +67,13 @@ const ChannelListScreen = ({ navigation }) => {
   const memoizedFilters = React.useMemo(() => filters, [myProfile.user_id]);
 
   React.useEffect(() => {
+    traceMetricScreen('loading_channelList', fnCallback => {
+      perf.current = fnCallback
+    });
+  }, []);
+
+  React.useEffect(() => {
     if (interactionsComplete) {
-      analytics().logScreenView({
-        screen_class: 'ChannelListScreen',
-        screen_name: 'Channel List',
-      });
       getPostNotification()
     }
 
@@ -186,6 +188,12 @@ const ChannelListScreen = ({ navigation }) => {
     mappingUnreadCountPostNotif()
   }, [listPostNotif, countReadComment])
 
+  const onChannelVisible = () => {
+    if (perf.current) {
+      perf.current.stop();
+    }
+  }
+
   return (
     <SafeAreaProvider style={{ height: '100%' }}>
       <StatusBar translucent={false} />
@@ -209,6 +217,7 @@ const ChannelListScreen = ({ navigation }) => {
                 //  channelRenderFilterFn={(channel) => console.log(channel, 'bahan')}
                 sort={sort}
                 options={options}
+                onChannelVisible={onChannelVisible}
                 maxUnreadCount={99}
                 clientData={channelListLocalValue}
                 additionalFlatListProps={{
