@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, FlatList } from 'react-native'
+import { Text, FlatList } from 'react-native'
 import BlockedList from '../RenderList'
 
 const dummyData = [
@@ -11,8 +11,7 @@ const dummyData = [
     }
 ]
 
-const BlockedTopicList = () => {
-    return (
+const BlockedTopicList = () => (
         <FlatList 
         data={dummyData}
         renderItem={({item ,index}) => <BlockedList isHashtag item={item}  />}
@@ -20,7 +19,6 @@ const BlockedTopicList = () => {
 
         />
     )
-}
 
 
 export default React.memo (BlockedTopicList)

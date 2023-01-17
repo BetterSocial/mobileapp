@@ -100,32 +100,34 @@ const BlockedList = (props) => {
         return (
           <Image
               source={{
-                uri: uri,
+                uri,
               }}
               style={styles.profilepicture}
               width={48}
               height={48}
+              testID='images'
             /> 
         )
       }
       return (
-        <View style={[styles.profilepicture, {backgroundColor: colors.gray1}]} /> 
+        <View testID='noimage' style={[styles.profilepicture, {backgroundColor: colors.gray1}]} /> 
       )
     }
 
     return (
  
         <View style={styles.card}>
-          <GlobalButton onPress={() => onPressBody(item)} style={styles.wrapProfile}>
+          <GlobalButton testID='pressbody' onPress={() => onPressBody(item)} style={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
               {hanldeImage(item.image)}
             </React.Fragment> : null}
             
             <View style={styles.wrapTextProfile}>
-              <Text style={styles.textProfileUsername}>
+              <Text testID='name' style={styles.textProfileUsername}>
                 {isHashtag && "#"}{item.name || 'Anonymous'}
               </Text>
               <Text
+                testID='desc'
                 style={styles.textProfileFullName}
                 numberOfLines={1}
                 ellipsizeMode={'tail'}>
@@ -134,13 +136,13 @@ const BlockedList = (props) => {
             </View>
           </GlobalButton>
           {item.isUnblocked ? (
-            <GlobalButton onPress={handleSetBlock}>
+            <GlobalButton testID='isUnblock' onPress={handleSetBlock}>
               <View style={styles.buttonBlockUser}>
                 <Text style={styles.textButtonBlockUser}>Block</Text>
               </View>
             </GlobalButton>
           ) : (
-            <GlobalButton  onPress={handleSetUnblock}>
+            <GlobalButton testID='isBlock'  onPress={handleSetUnblock}>
               <View style={styles.buttonBlock}>
                 <Text style={styles.textButtonBlock}>Blocked</Text>
               </View>
@@ -158,10 +160,10 @@ BlockedList.propTypes = {
 }
 
 BlockedList.defaultProps = {
-  onPressList: () => null,
-  handleSetBlock: () => null,
-  handleSetUnblock: () => null,
-  onPressBody: () => null
+  onPressList: () => {},
+  handleSetBlock: () => {},
+  handleSetUnblock: () => {},
+  onPressBody: () => {}
 }
 
 export default BlockedList
