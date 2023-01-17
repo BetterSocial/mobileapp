@@ -1,6 +1,7 @@
 import React from 'react'
 import {render} from '@testing-library/react-native'
 import BlockedUser from "../../../src/screens/Blocked/elements/UserScreen"
+import BlockedList from "../../../src/screens/Blocked/elements/RenderList"
 
 describe('Block user should run correctly', () => {
     const mockUserBlock = [
@@ -36,4 +37,11 @@ describe('Block user should run correctly', () => {
         const {toJSON} = render(<BlockedUser navigation={navigation} />)
         expect(toJSON).toMatchSnapshot()
     })
+
+    // it('onPressBody should move to detail user', () => {
+    //     const onPressBody = jest.fn()
+    //     const onPressList = jest.fn()
+
+    //     const {} = render(<BlockedList onPressBody={onPressBody} onPressList={onPressList} />)
+    // })
 })
