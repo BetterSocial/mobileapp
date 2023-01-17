@@ -30,7 +30,6 @@
     "update-env-prod": "doppler secrets download --no-file --format env-no-quotes --config prd > .env.production"
   },
   "dependencies": {
-    "@human-id/react-native-humanid": "^2.3.1",
     "@human-internet/react-native-humanid": "^2.4.4",
     "@react-native-async-storage/async-storage": "^1.15.2",
     "@react-native-community/blur": "^3.6.0",

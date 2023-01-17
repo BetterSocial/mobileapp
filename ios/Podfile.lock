@@ -772,7 +772,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   human-id-react-native-humanid:
-    :path: "../node_modules/@human-id/react-native-humanid"
+    :path: "../node_modules/@human-internet/react-native-humanid"
   Permission-Camera:
     :path: "../node_modules/react-native-permissions/ios/Camera"
   Permission-PhotoLibrary:
