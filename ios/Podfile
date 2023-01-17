@@ -3,76 +3,13 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '11.4'
 
-def remove_duplicated_frameworks(app_pod_name, installer)
-    test_targets = get_test_targets(app_pod_name, installer)
-    puts "Detected test targets: #{test_targets}"
-
-    puts "Removing duplicated frameworks from OTHER_LDFLAGS"
-    targets = installer.aggregate_targets.select { |x| !test_targets.include?(x.name) }
-
-    # Checks each pair of targets if they have common pods. Duplicates are removed from the first one's xcconfig.
-    for i in 0..targets.size-1 do
-        target = targets[i]
-        remainingAppPodTargets = targets[i+1..targets.size-1].flat_map(&:pod_targets)
-
-        target.xcconfigs.each do |config_name, config_file|
-            # Removes all frameworks which exist in other pods
-            remainingAppPodTargets
-                .flat_map { |pod_target| get_framework_names(pod_target) }
-                .each { |framework| config_file.frameworks.delete(framework) }
-
-            # Saves updated xcconfig
-            xcconfig_path = target.xcconfig_path(config_name)
-            config_file.save_as(xcconfig_path)
-        end
-    end
-end
-
-def get_test_targets(app_pod_name, installer)
-    main_target_name = app_pod_name.gsub("Pods-", "")
-
-    installer.aggregate_targets
-        .find { |x| x.name == app_pod_name }
-        .user_project
-        .targets
-        .select { |x| x.test_target_type? }
-        .flat_map { |x| ["Pods-#{x}", "Pods-#{main_target_name}-#{x}"] }
-        .select { |x| installer.aggregate_targets.map(&:name).include?(x) }
-        .uniq
-end
-
-def get_framework_names(pod_target)
-    frameworkNames = pod_target.specs.flat_map do |spec|
-        # We should take framework names from 'vendored_frameworks'.
-        # If it's not defined, we use 'spec.name' instead.
-        #
-        # spec.name can be defined like Framework/Something - we take the first part
-        # because that's what appears in OTHER_LDFLAGS.
-        frameworkPaths = unless spec.attributes_hash['ios'].nil?
-            then spec.attributes_hash['ios']['vendored_frameworks']
-            else spec.attributes_hash['vendored_frameworks']
-            end || [spec.name.split(/\//, 2).first]
-
-        map_paths_to_filenames(frameworkPaths)
-    end
-
-    frameworkNames.uniq
-end
-
-def map_paths_to_filenames(paths)
-    Array(paths).map(&:to_s).map do |filename|
-        extension = File.extname filename
-        File.basename filename, extension
-    end
-end
-
 target 'BetterSocial' do
   config = use_native_modules!
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(:path => config["reactNativePath"], :hermes_enabled => true)
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
@@ -96,7 +33,7 @@ target 'BetterSocial' do
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
   # use_flipper!
-#   use_flipper!({ 'Flipper' => '0.143.0' })
+  use_flipper!({ 'Flipper-Folly' => '2.5.3', 'Flipper' => '0.87.0', 'Flipper-RSocket' => '1.3.1' })
   # use_flipper!({ "Flipper-DoubleConversion" => "1.1.7" })
   post_install do |installer|
     flipper_post_install(installer)
