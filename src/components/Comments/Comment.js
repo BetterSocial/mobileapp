@@ -3,7 +3,6 @@ import IconEn from 'react-native-vector-icons/Entypo';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import BlockComponent from '../BlockComponent';
 import ButtonHightlight from '../ButtonHighlight';
 import Image from '../Image';
 import MemoCommentReply from '../../assets/icon/CommentReply';
@@ -64,12 +63,11 @@ const Comment = ({
     });
   };
 
-
   const onBlockComponent = (comment) => {
     refBlockComponent.current.openBlockComponent({
-      anonimity: false,
-      actor: comment.user,
-      id: comment.id,
+      anonimity : false,
+      actor : comment.user,
+      id : comment.id,
     })
   }
 
@@ -85,7 +83,7 @@ const Comment = ({
   }, []);
 
   React.useEffect(() => {
-    setTotalVote(comment.data.count_upvote - comment.data.count_downvote)
+    setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
     iVote()
   }, [JSON.stringify(comment.data)])
 
@@ -190,7 +188,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
   },
-  container: ({ isLast, style, level, showLeftConnector }) => ({
+  container: ({isLast, style, level, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
     borderLeftColor: isLast
@@ -220,7 +218,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: -13,
     alignSelf: 'flex-start',
-    // backgroundColor: 'red'
   },
   constainerFooter: {
     flexDirection: 'row',
@@ -252,7 +249,7 @@ const styles = StyleSheet.create({
   arrowdown: {
     paddingHorizontal: 14,
   },
-  gap: { marginBottom: 8 },
+  gap: {marginBottom: 8},
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
@@ -262,6 +259,5 @@ const styles = StyleSheet.create({
   containerUsername: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'flex-start'
   },
 });

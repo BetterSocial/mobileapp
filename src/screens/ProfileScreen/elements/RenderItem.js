@@ -23,7 +23,7 @@ import { getCountCommentWithChild } from '../../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../../utils/navigation/paramBuilder';
 import { showScoreAlertDialog } from '../../../utils/Utils';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const getHeightReaction = () => {
   const h = Math.floor((height * 12) / 100);
@@ -60,7 +60,7 @@ const getCountComment = (item) => {
   const reactionCount = item.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
-    const {comment} = reactionCount;
+    const { comment } = reactionCount;
     if (comment !== undefined) {
       count = comment;
     }
@@ -105,9 +105,12 @@ const Item = ({
           if (comment > 0) {
             setReaction(true);
             setPreviewComment(item.latest_reactions.comment[0]);
+            return
           }
         }
       }
+
+      setReaction(false)
     };
     initial();
   }, [item]);
@@ -159,14 +162,14 @@ const Item = ({
 
   return (
     <View style={styles.cardContainer(bottomHeight)}>
-      <Header 
-        onHeaderOptionClicked={onHeaderOptionClicked} 
-        headerStyle={{paddingHorizontal: 9}} 
-        props={item} height={getHeightHeader()} 
-        showAnonymousOption={true}/>
+      <Header
+        onHeaderOptionClicked={onHeaderOptionClicked}
+        headerStyle={{ paddingHorizontal: 9 }}
+        props={item} height={getHeightHeader()}
+        showAnonymousOption={true} />
 
-      {item.post_type === POST_TYPE_LINK  && (
-        <View style={{flex: 1}}>
+      {item.post_type === POST_TYPE_LINK && (
+        <View style={{ flex: 1 }}>
           <ContentLink
             index={index}
             og={item.og}
@@ -197,9 +200,9 @@ const Item = ({
           totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
           isSelf={true}
-          onPressShare={() => ShareUtils.sharePostInProfile(item, 
-              ANALYTICS_SHARE_POST_PROFILE_SCREEN,  
-              ANALYTICS_SHARE_POST_PROFILE_ID
+          onPressShare={() => ShareUtils.sharePostInProfile(item,
+            ANALYTICS_SHARE_POST_PROFILE_SCREEN,
+            ANALYTICS_SHARE_POST_PROFILE_ID
           )}
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
@@ -258,10 +261,10 @@ const Item = ({
         <View style={styles.contentReaction(getHeightReaction())}>
           <View style={styles.lineAffterFooter} />
           <PreviewComment
-            user={previewComment.user}
-            comment={previewComment.data.text}
-            image={previewComment.user.data.profile_pic_url}
-            time={previewComment.created_at}
+            user={previewComment?.user}
+            comment={previewComment?.data?.text}
+            image={previewComment?.user.data?.profile_pic_url}
+            time={previewComment?.created_at}
             totalComment={getCountCommentWithChild(item) - 1}
             onPress={onPressComment}
           />
@@ -280,6 +283,7 @@ function compare(prevProps, nextProps) {
 
 const RenderItem = React.memo(Item, compare);
 export default RenderItem;
+// export default Item
 
 const styles = StyleSheet.create({
   cardContainer: (bottomHeight) => ({
@@ -297,9 +301,9 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
     // paddingHorizontal: 9
   }),
-  paddingHorizontal: {paddingHorizontal: 20},
-  lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
-  footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
+  paddingHorizontal: { paddingHorizontal: 20 },
+  lineAffterFooter: { backgroundColor: '#C4C4C4', height: 1 },
+  footerWrapper: (h) => ({ height: h, paddingHorizontal: 0 }),
   contentReaction: (heightReaction) => ({
     height: heightReaction
   }),

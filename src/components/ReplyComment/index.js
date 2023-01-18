@@ -188,7 +188,6 @@ export const styles = StyleSheet.create({
   containerReply: {
     borderLeftWidth: 1,
     width: '100%',
-    // backgroundColor: 'red',
     // flex: 1,
   },
   seeRepliesContainer: (isLast) => ({

@@ -35,9 +35,9 @@
             android:pathPrefix="/"/>
         </intent-filter>
       </activity>
-      <activity
-      android:exported="true"
-      android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+<!--      <activity-->
+<!--      android:exported="true"-->
+<!--      android:name="com.facebook.react.devsupport.DevSettingsActivity" />-->
     </application>
 
 </manifest>

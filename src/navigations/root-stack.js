@@ -1,5 +1,4 @@
 import * as React from 'react';
-import SplashScreen from 'react-native-splash-screen';
 import {
   LogBox,
   Platform,
@@ -8,9 +7,10 @@ import {
   StyleSheet,
   View
 } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useLocalChannelsFirst } from 'stream-chat-react-native';
+import SplashScreen from 'react-native-splash-screen';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useLocalChannelsFirst } from 'stream-chat-react-native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -60,11 +60,10 @@ import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
-import { verifyTokenGetstream } from '../service/users';
-
 // import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-// import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
+import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
+import { Analytics } from '../libraries/analytics/firebaseAnalytics';
 
 const RootStack = createStackNavigator();
 
@@ -83,36 +82,19 @@ export const RootNavigator = () => {
     setInitialValue({ id: accessToken.id })
   }
 
-  const doVerifyGetstreamToken = async () => {
-    try {
-      const response = await verifyTokenGetstream();
-      if (!response) {
-        SplashScreen.hide();
-
-        if (perf.current) {
-          perf.current.stop();
-        }
-      }
-    } catch (e) {
-      SplashScreen.hide();
-
-      if (perf.current) {
-        perf.current.stop();
-      }
-    }
-    doGetAccessToken()
-  }
-
-
   React.useEffect(() => {
-    // traceMetricScreen('loading_splashscreen').then(fnCallback => {
-    //   perf.current = fnCallback;
-    // });
-    LogBox.ignoreAllLogs()
+    // logging section
+    traceMetricScreen('loading_splashscreen').then(fnCallback => {
+      perf.current = fnCallback;
+    });
+    Analytics.logEvent('splashscreen');
+    LogBox.ignoreAllLogs();
+
+    // statusbar
     StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
-    doVerifyGetstreamToken()
 
+    doGetAccessToken();
     useLocalChannelsFirst(setLocalChannelData);
 
     return async () => {
@@ -126,7 +108,11 @@ export const RootNavigator = () => {
         create();
       }
     } else {
-      doVerifyGetstreamToken()
+      SplashScreen.hide();
+
+      if (perf.current) {
+        perf.current.stop();
+      }
     }
 
   }, [initialStartup]);
@@ -143,7 +129,7 @@ export const RootNavigator = () => {
     }
   }, [clientState]);
 
-  const hideNetworkStatusIfInOnboarding = initialStartup?.id === null || initialStartup?.id === ''
+  // const hideNetworkStatusIfInOnboarding = initialStartup?.id === null || initialStartup?.id === ''
 
   return (
     <View

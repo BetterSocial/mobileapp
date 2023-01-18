@@ -30,10 +30,10 @@ const ContainerComment = ({
   const navigation = useNavigation();
   const [selectedCommentForDelete, setSelectedCommentForDelete] = React.useState(null)
   const [selectedCommentLevelForDelete, setSelectedCommentLevelForDelete] = React.useState(0)
+  const { isLast, isLastInParent, hideLeftConnector } = useContainerComment()
 
   const { deleteCommentFromContext } = usePostContextHook(contextSource)
 
-  const { isLast, isLastInParent, hideLeftConnector } = useContainerComment()
   const onCommentLongPressed = async (item, level = 0) => {
     const selfId = await getUserId()
     if (selfId === item?.user_id) {
@@ -97,7 +97,7 @@ const ContainerComment = ({
                 navigation={navigation}
                 indexFeed={indexFeed}
                 navigateToReplyView={navigateToReplyView}
-                refreshComment={(children) => refreshChildComment({ parent: item, children: children.data })}
+                // refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
                 findCommentAndUpdate={findCommentAndUpdate}
                 onCommentLongPressed={onCommentLongPressed}
               />
