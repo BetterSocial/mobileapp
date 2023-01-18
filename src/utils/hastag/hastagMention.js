@@ -1,15 +1,14 @@
 import * as React from 'react';
 import reactStringReplace from 'react-string-replace';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text} from 'react-native';
 import { generateRandomId } from 'stream-chat-react-native-core';
 
 import { fonts } from '../fonts';
 
-const handleHastagMention = (text = '', hashtags = [], setHashtagState = null, cursorPosition = -1) => {
+const handleHastagMention = (text = '', hashtags = [], setHashtagState = () => {}, cursorPosition = -1) => {
 
     const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/g
     const mentionRegex = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
-
     const topicOccurence = []
     const reactStringHashtags = reactStringReplace(
         text,
@@ -17,7 +16,6 @@ const handleHastagMention = (text = '', hashtags = [], setHashtagState = null, c
         (match) => {
             const isHashtagUnique = !topicOccurence?.includes(match?.substring(1))
             const isHashtagInTopic = hashtags?.includes(match?.substring(1))
-
             if (topicOccurence?.length > 4 || !isHashtagUnique) return match
 
             if (isHashtagInTopic || isHashtagUnique) {
@@ -39,8 +37,10 @@ const handleHastagMention = (text = '', hashtags = [], setHashtagState = null, c
         (match) => <Text key={generateRandomId()} style={styles.mention}>
             {match}
         </Text>)
+    if(setHashtagState && typeof setHashtagState === 'function') {
+            setHashtagState(topicOccurence)
 
-    setHashtagState(topicOccurence)
+    } 
     return reactStringMention
 };
 
