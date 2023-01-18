@@ -34,16 +34,9 @@ const TopicSuggestions = ({
     const onTopicSuggestionClicked = (item) => {
         const topicItem = convertString(item.name, " ", "");
         const newMessage = reformatStringByPosition(item.name, message);
-        if (topics.indexOf(topicItem) === -1) {
-            const newArr = [...topics, topicItem];
-            const newChatTopic = [...topicChats, `${`topic_${topicItem}`}`]
-            setTopics(newArr);
-            setHashtags(newArr)
-            setTopicChats(newChatTopic)
-        }
+        topics.splice(topics.length - 1, 1, topicItem)
         setPositionKeyboard('never')
         handleStateHashtag(newMessage);
-        setMessage(newMessage);
         setTopicSearch([]);
     }
 
