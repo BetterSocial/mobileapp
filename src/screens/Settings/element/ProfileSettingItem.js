@@ -15,14 +15,12 @@ import { fonts } from "../../../utils/fonts";
  * @param {ProfileSettingItemProps} props
  * @returns 
  */
-const ProfileSettingItem = ({ text, onPress, }) => {
-    return <TouchableOpacity onPress={onPress} >
+const ProfileSettingItem = ({ text, onPress, ...props }) => <TouchableOpacity onPress={onPress} {...props} >
         <View style={styles.card}>
             <Text style={styles.textCard}>{text}</Text>
             <ChevronRightIcon width={6.67} height={11.67} fill="#000" />
         </View>
     </TouchableOpacity>
-}
 
 const styles = StyleSheet.create({
     card: {
