@@ -120,7 +120,6 @@ const CreatePostInput = ({
         newTopics.splice(newTopics?.lastIndexOf(lastTopicInCursor), 1)
         setTopics(newTopics)
     }
-
     const handlePostTextChanged = (v) => {
         setMessage(v);
         // updateHashtag(v, topics, setTopics, positionEndCursor)
