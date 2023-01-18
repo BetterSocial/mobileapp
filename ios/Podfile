@@ -3,20 +3,20 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '11.4'
 
-# def find_and_replace(dir, findstr, replacestr)
-#   Dir[dir].each do |name|
-#       text = File.read(name)
-#       replace = text.gsub(findstr,replacestr)
-#
-#       if text != replace
-#           puts "Fix: " + name
-#           system("chmod +w " + name)
-#           File.open(name, "w") { |file| file.puts replace }
-#           STDOUT.flush
-#       end
-#   end
-#   Dir[dir + '*/'].each(&method(:find_and_replace))
-# end
+def find_and_replace(dir, findstr, replacestr)
+  Dir[dir].each do |name|
+      text = File.read(name)
+      replace = text.gsub(findstr,replacestr)
+
+      if text != replace
+          puts "Fix: " + name
+          system("chmod +w " + name)
+          File.open(name, "w") { |file| file.puts replace }
+          STDOUT.flush
+      end
+  end
+  Dir[dir + '*/'].each(&method(:find_and_replace))
+end
 
 target 'BetterSocial' do
   config = use_native_modules!
@@ -53,6 +53,9 @@ target 'BetterSocial' do
   post_install do |installer|
     flipper_post_install(installer)
     react_native_post_install(installer)
+
+    find_and_replace("Pods/RCT-Folly/folly/synchronization/DistributedMutex-inl.h",
+          "  atomic_notify_one(state);", "  folly::atomic_notify_one(state);")
 #     remove_duplicated_frameworks('Pods-BetterSocial', installer)
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
