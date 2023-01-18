@@ -12,24 +12,21 @@ import {
   View
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
-import { useRoute } from '@react-navigation/native'
+import { useRoute } from '@react-navigation/native';
 
 import BlockComponent from "../BlockComponent";
 import ContainerComment from "../Comments/ContainerComment";
 import Content from './elements/Content';
-import ContentLink from '../../screens/FeedScreen/ContentLink';
-import ContentPoll from '../../screens/FeedScreen/ContentPoll';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from "../LoadingWithoutModal";
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from "../Comments/WriteComment";
+import usePostDetail from './hooks/usePostDetail';
+import usePostContextHook, { CONTEXT_SOURCE } from '../../hooks/usePostContextHooks';
 import { Context } from '../../context';
 import { Footer, Gap } from "..";
 import {
-  POST_TYPE_LINK,
-  POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
-  SOURCE_PDP,
+  SOURCE_PDP
 } from '../../utils/constants';
 import { createCommentParent } from '../../service/comment';
 import { downVote, upVote } from '../../service/vote';
@@ -40,12 +37,14 @@ import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuild
 import { setFeedByIndex, setMainFeeds, setTimer } from '../../context/actions/feeds';
 import { showScoreAlertDialog } from '../../utils/Utils';
 import { withInteractionsManaged } from '../WithInteractionManaged';
-import useReplyComment from '../ReplyComment/hooks/useReplyComment';
-import usePostDetail from './hooks/usePostDetail';
 
 const { width, height } = Dimensions.get('window');
 
 const PostPageDetailIdComponent = (props) => {
+  const { feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS } = props
+  let feedsContext
+  let dispatch
+
   const [user] = React.useContext(Context).users;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true)
@@ -65,13 +64,36 @@ const PostPageDetailIdComponent = (props) => {
   const route = useRoute()
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
-  const [feedsContext, dispatch] = React.useContext(Context).feeds;
+  [feedsContext, dispatch] = React.useContext(Context).feeds;
   const { timer } = feedsContext
-  const { feedId, navigateToReplyView } = props
-  const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail()
+  const { updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1 } = usePostDetail()
+  const { updateFeedContext } = usePostContextHook(contextSource)
+
+  switch (contextSource) {
+    case CONTEXT_SOURCE.FEEDS:
+      [feedsContext, dispatch] = React.useContext(Context).feeds
+      break;
+
+    case CONTEXT_SOURCE.OTHER_PROFILE_FEEDS:
+      [feedsContext, dispatch] = React.useContext(Context).otherProfileFeed
+      break;
+
+    case CONTEXT_SOURCE.PROFILE_FEEDS:
+      [feedsContext, dispatch] = React.useContext(Context).myProfileFeed
+      break;
+
+    default:
+      break;
+  }
+
   React.useEffect(() => {
-    if (item && item.latest_reactions && item.latest_reactions.comment) {
-      setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
+    if (item && item?.latest_reactions) {
+      if (!item?.latest_reactions?.comment) setCommentList([])
+      else setCommentList(item.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()))
+
+      setTotalComment(
+        getCountCommentWithChildInDetailPage(item.latest_reactions),
+      );
     }
   }, [item]);
 
@@ -81,7 +103,7 @@ const PostPageDetailIdComponent = (props) => {
     setTotalVote(upvote - downvotes)
   };
   const initial = async () => {
-    const reactionCount = item.reaction_counts;
+    const reactionCount = item?.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
       const { comment } = reactionCount;
@@ -134,9 +156,9 @@ const PostPageDetailIdComponent = (props) => {
   const updateFeed = async (isSort) => {
     try {
       const data = await getFeedDetail(feedId);
-      let oldData = data.data
+      let oldData = { ...data.data }
       if (isSort) {
-        oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()) } }
+        oldData = { ...oldData, latest_reactions: { ...oldData?.latest_reactions, comment: oldData?.latest_reactions?.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()) } }
       }
       setLoadingPost(false)
       if (data) {
@@ -224,7 +246,8 @@ const PostPageDetailIdComponent = (props) => {
         }
         return { ...feed }
       })
-      setMainFeeds(mappingData, dispatch)
+      // setMainFeeds(mappingData, dispatch)
+      updateFeedContext(mappingData)
     }
 
   }
@@ -253,7 +276,8 @@ const PostPageDetailIdComponent = (props) => {
       }
       return { ...feed }
     })
-    setMainFeeds(mappingData, dispatch)
+    // setMainFeeds(mappingData, dispatch)
+    updateFeedContext(mappingData)
   }
 
   const updateCachingComment = (comment) => {
@@ -269,7 +293,8 @@ const PostPageDetailIdComponent = (props) => {
       }
       return { ...feed }
     })
-    setMainFeeds(mappingData, dispatch)
+    // setMainFeeds(mappingData, dispatch)
+    updateFeedContext(mappingData)
   }
   const findCommentAndUpdate = (id, newData, level) => {
     let newCommenList = []
@@ -308,7 +333,8 @@ const PostPageDetailIdComponent = (props) => {
       }
       return { ...feed }
     })
-    setMainFeeds(mappingData, dispatch)
+    // setMainFeeds(mappingData, dispatch)
+    updateFeedContext(mappingData)
   }
 
 
@@ -439,11 +465,11 @@ const PostPageDetailIdComponent = (props) => {
   }
 
   const updateVoteLatestChildren = async (dataUpdated, data, level) => {
-    if(level === 3) {
+    if (level === 3) {
       const newComment = await updateVoteLatestChildrenLevel3(commentList, dataUpdated)
       setCommentList(newComment)
     }
-    if(level ===1) {
+    if (level === 1) {
       const newComment = await updateVoteChildrenLevel1(commentList, dataUpdated)
       setCommentList(newComment)
     }
@@ -463,19 +489,19 @@ const PostPageDetailIdComponent = (props) => {
           style={styles.contentScrollView(totalComment)}
           nestedScrollEnabled={true}>
           <View style={styles.content(height)}>
-             <Content
-                message={item.message}
-                images_url={item.images_url}
-                style={styles.additionalContentStyle(
-                  item.images_url.length,
-                  height,
-                )}
-                topics={item?.topics} 
-                item={item}
-                onnewpollfetched={onNewPollFetched}
+            <Content
+              message={item.message}
+              images_url={item.images_url}
+              style={styles.additionalContentStyle(
+                item?.images_url?.length,
+                height,
+              )}
+              topics={item?.topics}
+              item={item}
+              onnewpollfetched={onNewPollFetched}
 
-                />
-           
+            />
+
             <Gap height={16} />
             <View style={{ height: 52, paddingHorizontal: 0, width: '100%' }}>
               <Footer
@@ -498,12 +524,15 @@ const PostPageDetailIdComponent = (props) => {
           </View>
           {isReaction && commentList && (
             <ContainerComment
+              feedId={feedId}
               comments={commentList}
               isLoading={loadingPost}
               refreshComment={handleRefreshComment}
               refreshChildComment={handleRefreshChildComment}
               navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost, findCommentAndUpdate, item, updateVoteLatestChildren)}
               findCommentAndUpdate={findCommentAndUpdate}
+              updateParentPost={updateParentPost}
+              contextSource={contextSource}
             />
           )}
         </ScrollView >
@@ -528,7 +557,7 @@ const PostPageDetailIdComponent = (props) => {
   );
 };
 
-export default withInteractionsManaged  (React.memo (PostPageDetailIdComponent));
+export default withInteractionsManaged(PostPageDetailIdComponent);
 
 const styles = StyleSheet.create({
   container: {

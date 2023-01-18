@@ -1,12 +1,13 @@
-import * as React from 'react'
-import {StyleSheet, View} from 'react-native'
+import * as React from 'react';
+import { StyleSheet, View } from 'react-native';
 
 // import PostPageDetailComponent from '../../components/PostPageDetail'
-import PostPageDetailComponent from '../../components/PostPageDetail'
-import {Context} from '../../context';
+import PostPageDetailComponent from '../../components/PostPageDetail';
+import useMainPdp from './hooks/useMainPdp';
+import { CONTEXT_SOURCE } from '../../hooks/usePostContextHooks';
+import { Context } from '../../context';
 import { setFeedByIndex } from '../../context/actions/feeds';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import useMainPdp from './hooks/useMainPdp';
 
 const FeedsPostDetail = (props) => {
     const [feedsContext, dispatch] = React.useContext(Context).feeds
@@ -28,6 +29,7 @@ const FeedsPostDetail = (props) => {
                 setFeedByIndexProps={setFeedByIndex}
                 navigateToReplyView={navigateToReplyView}
                 page={props.route.name}
+                contextSource={CONTEXT_SOURCE.FEEDS}
                 />
         </View>
     )

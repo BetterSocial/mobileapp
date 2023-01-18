@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 
 import PostPageDetailComponent from '../../components/PostPageDetail'
+import { CONTEXT_SOURCE } from '../../hooks/usePostContextHooks';
 import { Context } from '../../context';
 import { setFeedByIndex } from '../../context/actions/otherProfileFeed';
 
@@ -22,7 +23,8 @@ const OtherProfilePostDetail = (props) => {
                 feeds={feeds.feeds}
                 dispatch={dispatch}
                 setFeedByIndexProps={setFeedByIndex}
-                navigateToReplyView={navigateToReplyView} />
+                navigateToReplyView={navigateToReplyView}
+                contextSource={CONTEXT_SOURCE.OTHER_PROFILE_FEEDS} />
         </View>
     )
 }

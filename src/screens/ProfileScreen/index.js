@@ -155,7 +155,6 @@ const ProfileScreen = ({ route }) => {
       })
     }
 
-
     return () => unsubscribe();
   }, [interactionsComplete]);
 
@@ -720,3 +719,4 @@ const styles = StyleSheet.create({
   }
 });
 export default React.memo(withInteractionsManaged(ProfileScreen));
+// export default withInteractionsManaged(ProfileScreen);

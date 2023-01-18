@@ -1,9 +1,8 @@
 import 'react-native-gesture-handler/jestSetup';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as ReactNative from 'react-native';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
-import {View} from 'react-native'
 
 jest.doMock('@react-native-community/netinfo', () => ({
     getCurrentState: jest.fn(() => Promise.resolve()),
@@ -73,6 +72,7 @@ jest.doMock('react-native', () => {
             },
             StyleSheet: {
                 create: jest.fn((e) => e),
+                flatten: jest.fn((e) => e)
             },
             Dimensions: {
                 get: () => jest.fn().mockReturnValue({ width: 414, height: 818 })

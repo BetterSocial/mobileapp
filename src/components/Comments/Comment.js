@@ -1,23 +1,22 @@
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import BlockComponent from '../BlockComponent';
+import ButtonHightlight from '../ButtonHighlight';
 import Image from '../Image';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
-import {FONTS} from '../../utils/theme';
-import {calculateTime} from '../../utils/time';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
-import {getUserId} from '../../utils/users';
-import { removeWhiteSpace } from '../../utils/Utils';
-import ButtonHightlight from '../ButtonHighlight';
 import useComment from './hooks/useComment';
+import { FONTS } from '../../utils/theme';
+import { calculateTime } from '../../utils/time';
+import { colors } from '../../utils/colors';
+import { fonts } from '../../utils/fonts';
+import { getUserId } from '../../utils/users';
+import { removeWhiteSpace } from '../../utils/Utils';
 
 const Comment = ({
   user,
@@ -37,14 +36,13 @@ const Comment = ({
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
-  console.log(comment, 'bilaboong')
-  const {totalVote, setTotalVote, statusVote, setStatusVote, onUpVote, onDownVote, iVote} = useComment({comment, findCommentAndUpdate, level, updateVote})
+  const { totalVote, setTotalVote, statusVote, setStatusVote, onUpVote, onDownVote, iVote } = useComment({ comment, findCommentAndUpdate, level, updateVote })
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
       console.log('level2')
       return;
     }
-    if(onPress && typeof onPress === 'function') {
+    if (onPress && typeof onPress === 'function') {
       onPress()
     }
   };
@@ -64,7 +62,6 @@ const Comment = ({
       },
     });
   };
-  
 
   const onBlockComponent = (comment) => {
     refBlockComponent.current.openBlockComponent({
@@ -99,82 +96,78 @@ const Comment = ({
         isLastInParent,
         showLeftConnector,
       })}>
-     <TouchableOpacity onPress={openProfile} testID='openProfile' >
-       <ButtonHightlight onPress={openProfile}>
-        <View style={styles.profile}>
-          <Image
-            source={
-              photo
-                ? {uri: removeWhiteSpace(photo)}
-                : require('../../assets/images/ProfileDefault.png')
-            }
-            style={styles.image}
-          />
-          <View style={styles.containerUsername}>
-            <Text style={styles.username}>{user.data.username} •</Text>
-            <Text style={styles.time}> {calculateTime(time)}</Text>
+      <TouchableOpacity onPress={openProfile} testID='openProfile' style={styles.flexStartContainer}>
+        <ButtonHightlight style={styles.flexStartContainer} onPress={openProfile}>
+          <View style={styles.profile}>
+            <Image
+              source={
+                photo
+                  ? { uri: removeWhiteSpace(photo) }
+                  : require('../../assets/images/ProfileDefault.png')
+              }
+              style={styles.image}
+            />
+            <View style={styles.containerUsername}>
+              <Text style={styles.username}>{user.data.username} •</Text>
+              <Text style={styles.time}> {calculateTime(time)}</Text>
+            </View>
           </View>
-        </View>
-      </ButtonHightlight>
-     </TouchableOpacity>
-      <TouchableOpacity activeOpacity={1} testID='textPress' onPress={onTextPress} >
-        <ButtonHightlight onPress={onTextPress}>
-        <Text style={styles.post}>{comment.data.text}</Text>
-      </ButtonHightlight>
+        </ButtonHightlight>
+      </TouchableOpacity>
+      <TouchableOpacity activeOpacity={1} testID='textPress' onPress={onTextPress} style={styles.flexStartContainer} >
+        <ButtonHightlight style={styles.flexStartContainer} onPress={onTextPress}>
+          <Text style={styles.post}>{comment.data.text}</Text>
+        </ButtonHightlight>
       </TouchableOpacity>
       <View style={styles.constainerFooter}>
         {isLast && level >= 2 ? (
           <View testID='level2' style={styles.gap} />
         ) : (
           <TouchableOpacity activeOpacity={1} onPress={onPress} testID='memoComment' >
-          <ButtonHightlight style={styles.btnReply} onPress={onPress}>
-            <MemoCommentReply />
-            <Text style={styles.btnReplyText}>Reply</Text>
-          </ButtonHightlight>
+            <ButtonHightlight style={styles.btnReply} onPress={onPress}>
+              <MemoCommentReply />
+              <Text style={styles.btnReplyText}>Reply</Text>
+            </ButtonHightlight>
           </TouchableOpacity>
         )}
-           <ButtonHightlight
+        <ButtonHightlight
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
           onPress={() => onBlockComponent(comment)}>
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </ButtonHightlight>
-       
+
         <TouchableOpacity activeOpacity={1} onPress={onDownVote} testID='btnDownvote' >
-           <ButtonHightlight
-          style={[styles.arrowup, styles.btn]}
-          onPress={onDownVote}>
-          {statusVote === 'downvote' ? (
-            <MemoIc_downvote_on width={20} height={18} />
-          ) : (
-            <MemoIc_arrow_down_vote_off width={20} height={18} />
-          )}
-        </ButtonHightlight>
+          <ButtonHightlight
+            style={[styles.arrowup, styles.btn]}
+            onPress={onDownVote}>
+            {statusVote === 'downvote' ? (
+              <MemoIc_downvote_on width={20} height={18} />
+            ) : (
+              <MemoIc_arrow_down_vote_off width={20} height={18} />
+            )}
+          </ButtonHightlight>
         </TouchableOpacity>
-       
+
         <Text style={styles.vote(totalVote)}>{totalVote}</Text>
         <TouchableOpacity activeOpacity={1} testID='upvoteBtn' >
-             <ButtonHightlight
-          style={[styles.arrowdown, styles.btn]}
-          onPress={onUpVote}>
-          {statusVote === 'upvote'  ? (
-            <MemoIc_upvote_on width={20} height={18} />
-          ) : (
-            <MemoIc_arrow_upvote_off width={20} height={18} />
-          )}
-        </ButtonHightlight>
+          <ButtonHightlight
+            style={[styles.arrowdown, styles.btn]}
+            onPress={onUpVote}>
+            {statusVote === 'upvote' ? (
+              <MemoIc_upvote_on width={20} height={18} />
+            ) : (
+              <MemoIc_arrow_upvote_off width={20} height={18} />
+            )}
+          </ButtonHightlight>
         </TouchableOpacity>
-       
+
       </View>
-
-      <BlockComponent ref={refBlockComponent} refresh={() => {}} screen={"feed_comment_item"}/>
-
     </View>
   );
 };
 
 export const isEqual = (prevProps, nextProps) => prevProps.comment === nextProps.comment
-
-export default React.memo (Comment, isEqual);
+export default React.memo(Comment);
 
 const styles = StyleSheet.create({
   vote: (count) => ({
@@ -205,6 +198,9 @@ const styles = StyleSheet.create({
       : colors.gray1,
     ...style,
   }),
+  flexStartContainer: {
+    alignSelf: 'flex-start'
+  },
   username: {
     fontFamily: fonts.inter[700],
     fontSize: 12,
@@ -221,6 +217,7 @@ const styles = StyleSheet.create({
   profile: {
     flexDirection: 'row',
     marginLeft: -13,
+    alignSelf: 'flex-start',
   },
   constainerFooter: {
     flexDirection: 'row',

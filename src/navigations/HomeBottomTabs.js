@@ -296,7 +296,7 @@ function HomeBottomTabs(props) {
   return (
     <View style={styles.container}>
       <Tab.Navigator
-        initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'ChannelList'}
+        initialRouteName={initialStartup !== null && otherProfileData?.user_id === initialStartup.id ? 'Profile' : 'Feed'}
         tabBarOptions={{
           activeTintColor: colors.holytosca,
           inactiveTintColor: colors.gray1,

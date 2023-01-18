@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import Image from "../Image";
+import { StyleSheet, View } from 'react-native';
 
+import Image from "../Image";
 import MemoDomainProfilePicture from '../../assets/icon/DomainProfilePictureEmptyState';
 
 const index = ({image, style}) => (
