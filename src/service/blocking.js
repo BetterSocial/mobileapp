@@ -1,4 +1,5 @@
 import crashlytics from '@react-native-firebase/crashlytics';
+import axios from 'axios';
 
 import api from './config';
 
@@ -41,13 +42,13 @@ export const unblokDomain = async (data) => {
     return error.response.data;
   }
 }
-export const unblockUserApi = async (data) => new Promise((resolve, reject) => {
-  api
-    .post('/users/unblock', data)
-    .then((response) => {
-      resolve(response.data);
-    })
-    .catch((e) => {
-      reject(e.response.data);
-    });
-});
+export const unblockUserApi = async (data) => {
+    try {
+    const response = await api.post('/users/unblock', data)
+    return response.data
+  } catch(e) {
+    if(axios.isAxiosError(e)) {
+      return e.response
+    }
+  }
+}
