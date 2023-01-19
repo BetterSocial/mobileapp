@@ -50,8 +50,6 @@ const useContentPoll = ({polls}) => {
       newItem.refreshtoken = new Date().valueOf();
 
       if (singleChoiceSelectedIndex === -1) {
-                console.log('pali5')
-
         // inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
       } else {
         const selectedPoll = polls[singleChoiceSelectedIndex];

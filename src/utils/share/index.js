@@ -1,7 +1,7 @@
-import analytics from '@react-native-firebase/analytics';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
+// import dynamicLinks from '@react-native-firebase/dynamic-links';
 import config, { Config } from 'react-native-config';
 import { Alert, Share } from 'react-native';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const buildShare = async (message) => {
     try {
@@ -23,29 +23,33 @@ const buildShare = async (message) => {
 }
 
 const shareDomain = (item) => {
-    console.log('Share in domain')
+    if (__DEV__) {
+        console.log('Share in domain', item)
+    }
 }
 
 const shareNews = (item) => {
-    console.log('Share in news')
+    if (__DEV__) {
+        console.log('Share in news', item)
+    }
 }
 
 const sharePostInTopic = async (item, analyticsLogEvent, analyticsId) => {
-    analytics().logEvent(analyticsLogEvent, {
+    Analytics.logEvent(analyticsLogEvent, {
         id: analyticsId,
     });
     await buildShare(`${Config.SHARE_URL}/p/${item?.id}`)
 }
 
 const sharePostInProfile = async (item, analyticsLogEvent, analyticsId) => {
-    analytics().logEvent(analyticsLogEvent, {
+    Analytics.logEvent(analyticsLogEvent, {
         id: analyticsId,
     });
     await buildShare(`${Config.SHARE_URL}/p/${item?.id}`)
 }
 
 const shareFeeds = async (item, analyticsLogEvent, analyticsId) => {
-    analytics().logEvent(analyticsLogEvent, {
+    Analytics.logEvent(analyticsLogEvent, {
         id: analyticsId,
     });
     await buildShare(`${Config.SHARE_URL}/p/${item?.id}`)
@@ -53,29 +57,29 @@ const shareFeeds = async (item, analyticsLogEvent, analyticsId) => {
 
 const shareUserLink = (username) => buildShare(`${config.SHARE_URL}/u/${username}`)
 
-const buildLink = async (item) => {
-    const link = await dynamicLinks().buildLink({
-        link: `https://dev.bettersocial.org/${item}`,
-        domainUriPrefix: 'https://bettersocialapp.page.link',
-        analytics: {
-            campaign: 'banner',
-        },
-        navigation: {
-            forcedRedirectEnabled: false,
-        },
-        // ios: {
-        //   bundleId: '',
-        //   // customScheme: 'giftit',
-        //   appStoreId: '',
-        // },
-        android: {
-            packageName: 'org.bettersocial.dev',
-        },
-    },
-        'SHORT',
-    );
-    return link;
-}
+// const buildLink = async (item) => {
+//     const link = await dynamicLinks().buildLink({
+//         link: `https://dev.bettersocial.org/${item}`,
+//         domainUriPrefix: 'https://bettersocialapp.page.link',
+//         analytics: {
+//             campaign: 'banner',
+//         },
+//         navigation: {
+//             forcedRedirectEnabled: false,
+//         },
+//         // ios: {
+//         //   bundleId: '',
+//         //   // customScheme: 'giftit',
+//         //   appStoreId: '',
+//         // },
+//         android: {
+//             packageName: 'org.bettersocial.dev',
+//         },
+//     },
+//         'SHORT',
+//     );
+//     return link;
+// }
 
 const ShareUtils = {
     shareDomain,

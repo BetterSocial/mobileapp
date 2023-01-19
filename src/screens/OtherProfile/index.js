@@ -400,7 +400,9 @@ const OtherProfile = () => {
       setTimeout(() => setIsLoading(false), 400)
       // setIsLoading(false)
     } catch (e) {
-      console.log(e)
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 
@@ -540,7 +542,9 @@ const OtherProfile = () => {
         );
       }
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 
@@ -574,7 +578,6 @@ const OtherProfile = () => {
           onEndReach={__handleOnEndReached}
           snapToOffsets={(() => {
             const posts = feeds.map((item, index) => headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT))
-            console.log(posts)
             return [headerHeightRef.current, ...posts]
           })()}
           ListHeaderComponent={

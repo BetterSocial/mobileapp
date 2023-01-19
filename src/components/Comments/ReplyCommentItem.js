@@ -41,10 +41,10 @@ const ReplyCommentItem = ({
     comment.data.count_upvote - comment.data.count_downvote,
   );
   const [statusVote, setStatusVote] = React.useState('');
- 
+
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
-      console.log('no callback')
+      console.log('')
       return
     }
     if(onPress) {
@@ -149,13 +149,13 @@ const ReplyCommentItem = ({
         </View>
       </ButtonHightlight>
         </TouchableOpacity>
-      
+
       <TouchableOpacity activeOpacity={1} testID='ontextpress'  onPress={onTextPress} >
           <ButtonHightlight  onPress={onTextPress} >
             <Text testID='commentText' style={styles.post}>{comment.data.text}</Text>
           </ButtonHightlight>
       </TouchableOpacity>
-     
+
       <View style={styles.constainerFooter}>
         {isLast && level >= 2 ? (
           <View style={styles.gap} />

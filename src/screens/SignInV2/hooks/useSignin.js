@@ -10,7 +10,7 @@ const useSignin = () => {
         }
         saveToCache(TOPICS_PICK, allTopics)
     }
-    
+
     const getTopicsData = () => {
         get({url: '/topics/list'}).then((res) => {
         if (res.status === 200) {
@@ -18,7 +18,9 @@ const useSignin = () => {
         }
       })
       .catch((e) => {
-        console.log(e)
+        if (__DEV__) {
+          console.log('topics error: ', e)
+        }
       });
     }
 

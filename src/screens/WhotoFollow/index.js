@@ -1,25 +1,19 @@
 import * as React from 'react';
-import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
   ActivityIndicator,
   Dimensions,
-  Platform,
   RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
-  TouchableHighlight,
-  TouchableNativeFeedback,
   View,
 } from 'react-native';
 import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
-import { StackActions } from '@react-navigation/native';
 import { showMessage } from 'react-native-flash-message';
 import { useNavigation } from '@react-navigation/core';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
@@ -30,11 +24,11 @@ import { InitialStartupAtom } from '../../service/initialStartup';
 import { ProgressBar } from '../../components/ProgressBar';
 import { colors } from '../../utils/colors';
 import { get } from '../../api/server';
-import { randomString } from '../../utils/string/StringUtils';
 import { registerUser } from '../../service/users';
 import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
 import { setImage } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const { width } = Dimensions.get('screen');
 
@@ -61,10 +55,6 @@ const WhotoFollow = () => {
   const navigation = useNavigation();
 
   React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'WhotoFollow',
-      screen_name: 'onb_select_follows',
-    });
     setIsLoading(true);
 
     const getWhoToFollowListUrl = `/who-to-follow/list?topics=${encodeURI(
@@ -159,7 +149,7 @@ const WhotoFollow = () => {
 
   const register = () => {
     setFetchRegister(true);
-    analytics().logEvent('onb_select_follows_btn_add', {
+    Analytics.logEvent('onb_select_follows_btn_add', {
       onb_whofollow_users_selected: followed,
     });
     const data = {
@@ -234,12 +224,9 @@ const WhotoFollow = () => {
       case VIEW_TYPE_LABEL_TOPIC:
         return <Label label={`#${labelTopicName}`} />;
       case VIEW_TYPE_LABEL_LOCATION:
-        console.log(`location ${item?.city}`)
         return <Label label={`${item?.city || ""}`} />;
       case VIEW_TYPE_DATA:
       default:
-        console.log('item')
-        console.log(item)
         return (
           <ItemUser
             photo={item.profile_pic_path}

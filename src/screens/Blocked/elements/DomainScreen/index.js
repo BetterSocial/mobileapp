@@ -33,7 +33,7 @@ const BlockedDomainList = (props) => {
     }, [listBlockedDomaun])
 
     return (
-        <FlatList 
+        <FlatList
         data={listBlockedDomaun}
         renderItem={({item}) => <BlockedList handleSetBlock={() => handleBlockDomain(item)} handleSetUnblock={() => handleUnblockDomain(item)} onPressBody={() => goToDetailDomain(item)} item={item} />}
         keyExtractor={(item, index) => index.toString()}

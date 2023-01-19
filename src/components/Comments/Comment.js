@@ -17,6 +17,7 @@ import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { getUserId } from '../../utils/users';
 import { removeWhiteSpace } from '../../utils/Utils';
+import BlockComponent from '../BlockComponent';
 
 const Comment = ({
   user,
@@ -39,7 +40,7 @@ const Comment = ({
   const { totalVote, setTotalVote, statusVote, setStatusVote, onUpVote, onDownVote, iVote } = useComment({ comment, findCommentAndUpdate, level, updateVote })
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
-      console.log('level2')
+      console.log('')
       return;
     }
     if (onPress && typeof onPress === 'function') {
@@ -162,7 +163,11 @@ const Comment = ({
         </TouchableOpacity>
 
       </View>
-    </View>
+
+      <BlockComponent ref={refBlockComponent} refresh={() => {}} screen={"feed_comment_item"}/>
+
+      </View>
+
   );
 };
 

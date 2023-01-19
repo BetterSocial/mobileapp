@@ -28,8 +28,7 @@ import { setChannel } from '../../context/actions/setChannel';
 import { userPopulate } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
-const { width, height } = Dimensions.get('screen');
-console.log(`contact screen height ${height}`)
+const { width } = Dimensions.get('screen');
 
 const ContactScreen = ({ navigation }) => {
   const [loading, setLoading] = React.useState(false);

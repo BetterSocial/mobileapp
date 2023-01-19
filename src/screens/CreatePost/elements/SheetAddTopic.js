@@ -24,7 +24,6 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose, chatTopi
 
   React.useEffect(() => {
     KeyEvent.onKeyUpListener((keyEvent) => {
-      // console.log(`key ${keyEvent.keyCode}`);
       onKeyUp(keyEvent.keyCode);
     });
 
@@ -57,7 +56,11 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose, chatTopi
             }
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          if (__DEV__) {
+            console.log(err);
+          }
+        });
     }
   }
   const add = () => {

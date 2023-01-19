@@ -75,8 +75,11 @@ const usePostContextHook = (source = CONTEXT_SOURCE.FEEDS) => {
         if (updateCallback && typeof (updateCallback) === 'function') updateCallback(feed)
     }
 
-    const deleteCommentFromContextByIndex = (feedIndex, commentId, level) => {
-
+    const deleteCommentFromContextByIndex = (feedIndex) => {
+        if (__DEV__) {
+            console.log(feedIndex)
+            console.log(feeds[feedIndex])
+        }
     }
 
     return {

@@ -47,7 +47,6 @@ export const verifyToken = async (token) => {
     const resApi = await api.post('/users/veryfy-token', {
       token,
     });
-    // console.log(resApi.data);
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));

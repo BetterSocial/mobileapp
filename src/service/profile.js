@@ -8,8 +8,9 @@ export const getMyProfile = async (userId) => new Promise((resolve, reject) => {
       resolve(res.data);
     })
     .catch((err) => {
-      console.log('ERR GET MY PROFILE');
-      console.log(err);
+      if (__DEV__) {
+        console.log('get my profile: ', err);
+      }
       reject(err);
     });
 });
@@ -88,7 +89,7 @@ export const setFollow = async (data) => new Promise( async (resolve, reject) =>
   const chat = await createChannel('messaging', [data.user_id_followed, data.user_id_follower], `${data.username_followed},${data.username_follower}`)
   chat.update({
     name: `${data.username_followed},${data.username_follower}`
-  }, {text: textTargetUser, 
+  }, {text: textTargetUser,
     system_user:data.user_id_follower,
     is_from_prepopulated: true,
     other_text: textOwnUser}, {skip_push: true})
@@ -136,9 +137,9 @@ export const updateBioProfile = async (userID, data) => new Promise((resolve, re
 });
 
 export const getProfileByUsername = async (username) => {
-  // if (__DEV__) {
+  if (__DEV__) {
   console.log(`username ${username}`);
-  // }
+  }
   return new Promise((resolve, reject) => {
     if (!username) {
       return reject();
@@ -148,7 +149,6 @@ export const getProfileByUsername = async (username) => {
       .get(`/profiles/get-profile/${username}`)
       .then((res) => resolve(res.data))
       .catch((err) => {
-        console.log(err);
         reject(err);
       });
   });
@@ -159,7 +159,6 @@ export const getSelfFeedsInProfile = async (offset = 0) => new Promise((resolve,
     .get(`/profiles/self-feeds?offset=${offset}`)
     .then((res) => resolve(res.data))
     .catch((err) => {
-      console.log(err);
       reject(err);
     });
 });
@@ -169,7 +168,6 @@ export const getOtherFeedsInProfile = async (userId, offset = 0) => new Promise(
     .get(`/profiles/feeds/${userId}?offset=${offset}`)
     .then((res) => resolve(res.data))
     .catch((err) => {
-      console.log(err);
       reject(err);
     });
 });

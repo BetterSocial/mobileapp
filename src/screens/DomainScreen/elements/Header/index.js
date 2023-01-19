@@ -35,7 +35,6 @@ const Header = ({
 }) => {
   const openDomainLink = async () => {
     const isURL = await Linking.canOpenURL(`https://${domain}`);
-    console.log(isURL);
     if (isURL) {
       Linking.openURL(`https://${domain}`);
     } else {
@@ -80,8 +79,8 @@ const Header = ({
         {/* Lorem Ipsum Dolor sit amet, consectetur adipiscing elit. Praesent placerat erat tellus, non consequat mi sollicitudin quis. */}
       </Text>
       <Gap height={normalize(10)} />
-      <ActionButtonGroup 
-        follow={follow} 
+      <ActionButtonGroup
+        follow={follow}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         isBlocked={isBlocked}
@@ -109,7 +108,7 @@ const styles = StyleSheet.create({
   wrapperDomain: { flexDirection: 'row', marginTop: 8 },
   iconDomain: { marginStart: 8, justifyContent: 'center' },
   domainNameContainer: {
-    width: '100%', 
+    width: '100%',
   },
   domain: {
     fontSize: normalizeFontSize(24),

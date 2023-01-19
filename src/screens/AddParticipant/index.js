@@ -164,8 +164,6 @@ const AddParticipant = ({ navigation }) => {
     handleSelectedName(item.username)
   }
 
-  console.log(followedName)
-
   const rowRenderer = (type, item, index, extendedState) => {
     return (
       <ProfileContact

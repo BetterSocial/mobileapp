@@ -1,7 +1,5 @@
 import * as React from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import SimpleToast from 'react-native-simple-toast';
-import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
   Button,
@@ -11,10 +9,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { StackActions } from '@react-navigation/native';
+// eslint-disable-next-line import/no-unresolved
 import { colors } from 'react-native-swiper-flatlist/src/themes';
 import { debounce } from 'lodash'
 import {
@@ -45,18 +43,19 @@ import { setDataHumenId } from '../../context/actions/users';
 import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const SignIn = () => {
   const navigation = useNavigation();
   const [, dispatch] = React.useContext(Context).users;
   const [loading, setLoading] = React.useState(false);
-  const [slideShowIndex, setSlideShowIndex] = React.useState(0)
+  const [, setSlideShowIndex] = React.useState(0)
   const [isCompleteSliding, setIsCompleteSliding] = React.useState(false);
   const create = useClientGetstream();
   const HUMAN_ID_URL = 'https://www.human-id.org/';
   const heightBs = Dimensions.get('window').height * 0.6
   const dummyLoginRbSheetRef = React.useRef(null);
-  const [showComponent, setShowComponent] = React.useState(false)
+  const [, setShowComponent] = React.useState(false)
   const handleSlideShow = ({ index }, length) => {
     setSlideShowIndex(index)
     if (index === length - 1) {
@@ -69,33 +68,17 @@ const SignIn = () => {
   };
 
   React.useEffect(() => {
-    analytics().logScreenView({
-      screen_class: 'SignIn',
-      screen_name: 'SignIn',
-    });
-  });
-  React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
       setLoading(true);
-      console.log('onSuccess')
-      console.log(exchangeToken)
       checkToken(exchangeToken)
         .then((res) => {
-          // console.log('on Res')
-          console.log(res, 'response token')
           if (res.data) {
-            const { appUserId, countryCode } = res.data;
-            console.log(appUserId, 'resak')
+            const { appUserId } = res.data;
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
-              // verifyUser('1G1H-1TUHI-7U9H7-572G2')
               .then((response) => {
-                // SimpleToast.show(`on verify res` + JSON.stringify(response.data))
-                // console.log('on verify res')
-                console.log(response.data, appUserId, 'response data')
                 setLoading(false);
                 if (response.data) {
-                  console.log('on verify res data')
                   create();
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
@@ -107,32 +90,26 @@ const SignIn = () => {
                 setUserId(appUserId);
               })
               .catch((e) => {
-                // SimpleToast.show(`on verify token catch` + e)
-                // console.log('on verify catch')
+                if (__DEV__) {
+                  console.log('verify user getstream error: ', e);
+                }
                 setLoading(false);
               });
-          } else {
-            // SimpleToast.show(`else data`)
-            console.log("else data")
           }
         })
         .catch((e) => {
-          // SimpleToast.show(`on checkt token catch` + e)
-          // console.log('on check token catch')
-          console.log('error');
-          console.log(e);
+          if (__DEV__) {
+            console.log('error token: ', e);
+          }
         });
     });
     onError((message) => {
-      console.log('on general error')
       crashlytics().recordError(new Error(message));
-      console.log('error message', message);
     });
     onCancel(() => {
-      analytics().logEvent('cencel_auth_humanid', {
+      Analytics.logEvent('cencel_auth_humanid', {
         id: '1',
       });
-      console.log('canceled');
     });
   }, []);
   const handleLogin = () => {
@@ -140,7 +117,7 @@ const SignIn = () => {
       return;
     }
     logIn();
-    analytics().logLogin({
+    Analytics.logLogin({
       method: 'humanid',
     });
   };
@@ -150,15 +127,13 @@ const SignIn = () => {
       dummyLoginRbSheetRef.current.close();
     }
     setLoading(true);
-    let data = { appUserId, countryCode: 'ID' }
+    const data = { appUserId, countryCode: 'ID' }
     setDataHumenId(data, dispatch);
     verifyUser(appUserId)
       // verifyUser('1G1H-1TUHI-7U9H7-572G2')
       .then(async (response) => {
         setLoading(false);
-        // SimpleToast.show(`on verify res` + JSON.stringify(response))
-        // console.log('on verify res')
-        // console.log(response)
+
         if (response.data) {
           // SimpleToast.show(`on data`)
           setAccessToken(response.token);
@@ -175,7 +150,9 @@ const SignIn = () => {
       })
       .catch((e) => {
         // SimpleToast.show(`on verify catch` + e)
-        console.log(e);
+        if (__DEV__) {
+          console.log('verify user error: ', e);
+        }
         setLoading(false);
       });
   };

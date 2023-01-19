@@ -60,7 +60,6 @@ import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
 import { useClientGetstream } from '../utils/getstream/ClientGetStram';
-// import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
 import { Analytics } from '../libraries/analytics/firebaseAnalytics';
@@ -105,7 +104,14 @@ export const RootNavigator = () => {
   React.useEffect(() => {
     if (initialStartup.id !== null) {
       if (initialStartup.id !== '') {
-        create();
+        setTimeout(() => {
+          SplashScreen.hide();
+
+          if (perf.current) {
+            perf.current.stop();
+          }
+          create();
+        }, 500);
       }
     } else {
       SplashScreen.hide();
@@ -117,17 +123,17 @@ export const RootNavigator = () => {
 
   }, [initialStartup]);
 
-  React.useEffect(() => {
-    if (clientState?.client) {
-      setTimeout(() => {
-        SplashScreen.hide();
-
-        if (perf.current) {
-          perf.current.stop();
-        }
-      }, 1500)
-    }
-  }, [clientState]);
+  // React.useEffect(() => {
+  //   if (clientState?.client) {
+  //     setTimeout(() => {
+  //       SplashScreen.hide();
+  //
+  //       if (perf.current) {
+  //         perf.current.stop();
+  //       }
+  //     }, 1500)
+  //   }
+  // }, [clientState]);
 
   // const hideNetworkStatusIfInOnboarding = initialStartup?.id === null || initialStartup?.id === ''
 

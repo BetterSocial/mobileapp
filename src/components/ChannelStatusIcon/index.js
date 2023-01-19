@@ -10,14 +10,12 @@ import { calculateTime } from '../../utils/time';
 import { getUserId } from '../../utils/users';
 
 const ChannelStatusIcon = (props) => {
-    let [userId, setUserId] = React.useState("")
-    let newLatestMessagePreview = { ...props.latestMessagePreview };
-    // console.log(newLatestMessagePreview)
+    const [userId, setUserId] = React.useState("");
 
     React.useEffect(() => {
         __getUserId()
     }, [])
-    
+
     let __getUserId = async() => {
         let id = await getUserId()
         setUserId(id)
@@ -29,7 +27,7 @@ const ChannelStatusIcon = (props) => {
         let sendMessageStatus = props?.latestMessagePreview?.messageObject?.status
 
         if(!showCheckMark) return <></>
-        
+
         if(checkMarkStatus === 0 || sendMessageStatus === 'failed') {
             // Not sent yet
             return <IconChatClock height={14} width={14} />
@@ -43,13 +41,13 @@ const ChannelStatusIcon = (props) => {
     }
 
     let __renderDate = () => {
-        let updatedAt = props?.latestMessagePreview?.messageObject?.updated_at 
+        let updatedAt = props?.latestMessagePreview?.messageObject?.updated_at
         if(!updatedAt) return <></>
 
         let diffTime = calculateTime(moment(updatedAt))
         return <Text style={styles.time}>{diffTime}</Text>
     }
-    
+
     return (
         <View style={styles.dateContainer}>
             {/* <ChannelPreviewStatus latestMessagePreview={newLatestMessagePreview} /> */}
@@ -64,9 +62,9 @@ const styles = StyleSheet.create({
         fontSize: 12, marginLeft: 4
     },
 
-    dateContainer: { 
-        paddingRight: 12, 
-        display:'flex', 
+    dateContainer: {
+        paddingRight: 12,
+        display:'flex',
         flexDirection:'row',
         justifyContent: 'center',
         // backgroundColor: 'red'

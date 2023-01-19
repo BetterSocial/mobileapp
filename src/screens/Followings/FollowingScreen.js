@@ -96,7 +96,6 @@ function FollowingScreen(props) {
   }
 
   const backPress = () => {
-    console.log('a')
     return false;
   }
 
@@ -120,7 +119,7 @@ function FollowingScreen(props) {
       <Tabs.Navigator
         initialRouteName={TAB_FOLLOWING}
         tabBar={tabComponent}
-        
+
         >
         <Tabs.Screen
           name={TAB_FOLLOWING}

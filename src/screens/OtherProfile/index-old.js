@@ -12,7 +12,6 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
-import { STREAM_API_KEY } from '@env';
 import { StreamApp } from 'react-native-activity-feed';
 import { generateRandomId } from 'stream-chat-react-native';
 import { useNavigation } from '@react-navigation/core';
@@ -239,7 +238,9 @@ const OtherProfile = () => {
       setTimeout(() => setIsLoading(false), 400)
       // setIsLoading(false)
     } catch (e) {
-      console.log(e)
+      if (__DEV__) {
+        console.log('create channel error: ', e);
+      }
     }
   };
 
@@ -279,7 +280,9 @@ const OtherProfile = () => {
         reportUserRef.current.close();
       }
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log('unblock user error: ', e);
+      }
     }
   };
 
@@ -365,7 +368,9 @@ const OtherProfile = () => {
         );
       }
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log('update feed error: ', e);
+      }
     }
   };
 

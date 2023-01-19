@@ -28,16 +28,22 @@ jest.mock('@react-native-firebase/analytics', () => () => ({
 
 describe('TermsAndCondition page should run correctly', () => {
     it('should match snapshot',() => {
-        const {toJSON} = render(<TermsAndCondition />)
+               const navigation = {
+          goBack: jest.fn()
+        }
+        const {toJSON} = render(<TermsAndCondition navigation={navigation} />)
         expect(toJSON).toMatchSnapshot()
 
     })
 
     it('backButton should navigate back', async () => {
-         const {getByTestId} = render(<TermsAndCondition />)
+             const navigation = {
+          goBack: jest.fn()
+        }
+         const {getByTestId} = render(<TermsAndCondition navigation={navigation} />)
          act(() => {
             fireEvent.press(getByTestId('backButton'))
          })
-         expect(mockGoBack).toHaveBeenCalled()
+         expect(navigation.goBack).toHaveBeenCalled()
     })
 })

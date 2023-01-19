@@ -27,7 +27,7 @@ const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
-const getHeightHeader = () => 
+const getHeightHeader = () =>
   // let h = Math.floor((FULL_HEIGHT * 10) / 100);
   // return h;
    dimen.size.FEED_HEADER_HEIGHT
@@ -70,7 +70,7 @@ const RenderListFeed = (props) => {
     return h;
   };
 
-  const getHeightReaction = () => 
+  const getHeightReaction = () =>
     // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
     // return h;
      dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
@@ -159,9 +159,6 @@ const RenderListFeed = (props) => {
 
   const initial = () => {
     const reactionCount = item.reaction_counts;
-    if(item?.id === '06f2a0e0-850b-11ec-bbb5-123430d3b8d3') {
-      console.log(item)
-    }
     if (JSON.stringify(reactionCount) !== '{}') {
       const comment = reactionCount?.comment;
       handleVote(reactionCount);

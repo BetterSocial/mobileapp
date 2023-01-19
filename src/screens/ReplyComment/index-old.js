@@ -41,15 +41,15 @@ const ReplyComment = (props) => {
   const {indexFeed} = props.route.params;
 
   const {level} = props.route.params;
-  console.log(`level : ${level}`)
+
   const [item, setItem] = React.useState(itemProp);
   const [idComment, setIdComment] = React.useState(0)
   const [newCommentList, setNewCommentList] = React.useState([])
   const [defaultData, setDefaultData] = React.useState({
-    data: {count_downvote: 0, count_upvote: 0, text: textComment}, 
-    id: newCommentList.length + 1, kind: "comment", updated_at: moment(), 
-    children_counts: {comment: 0}, 
-    latest_children: {}, 
+    data: {count_downvote: 0, count_upvote: 0, text: textComment},
+    id: newCommentList.length + 1, kind: "comment", updated_at: moment(),
+    children_counts: {comment: 0},
+    latest_children: {},
     user: {data: {...itemProp.user.data, profile_pic_url: users.photoUrl}, id: itemProp.user.id}
   })
 
@@ -117,7 +117,9 @@ const ReplyComment = (props) => {
         );
       }
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 
@@ -128,7 +130,6 @@ const ReplyComment = (props) => {
     try {
       if (textComment.trim() !== '') {
         const data = await createChildComment(textComment, item.id);
-        console.log(data, 'kakak')
         if (data.code === 200) {
           setNewCommentList([...newCommentList, {...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data}])
           setLoadingCMD(false);
@@ -254,7 +255,7 @@ const ReplyComment = (props) => {
                              <View style={styles.childCommentWrapperLoading}>
                               <LoadingComment commentText={textComment} user={itemProp.user}  />
                               </View>
-                             </ConnectorWrapper>    
+                             </ConnectorWrapper>
                            </ContainerReply>
             )}
           {newCommentList.length > 0 ? <View style={styles.childLevelMainConnector} /> : null}
@@ -266,9 +267,7 @@ const ReplyComment = (props) => {
         username={item.user.data.username}
         onChangeText={(v) => setComment(v)}
         onPress={() => createComment()}
-        // onPress={() => console.log('level ', level)}
         value={temporaryText}
-        // loadingComment={loadingCMD}
       />
     </View>
   );

@@ -25,14 +25,13 @@ export const fetchRemoteConfig = () => {
       //   console.log(data);
       Object.entries(res).forEach(($) => {
         const [key, entry] = $;
-        // console.log('Key: ', key);
-        // console.log('Source: ', entry.getSource());
-        // console.log('Value: ', entry.asBoolean());
       });
       return res;
     })
     .catch((err) => {
-      console.log(err);
+      if (__DEV__) {
+        console.log('remote config error: ', err);
+      }
       firebaseRemoteConfig;
     });
 };

@@ -15,7 +15,7 @@ const BlockedUserList = (props) => {
             other_id: value.user_id_followed,
             username: value.user.username,
           };
-      
+
           navigation.navigate('OtherProfile', {data});
     }
 
@@ -27,7 +27,7 @@ const BlockedUserList = (props) => {
         handleTabbarName()
     }, [listBlockedUser])
     return (
-        <FlatList 
+        <FlatList
         data={listBlockedUser}
         renderItem={({item}) => <BlockedList handleSetBlock={() => handleBlockUser(item)} handleSetUnblock={() => handleUnblockUser(item)} onPressBody={() => goToDetailUser(item)} item={item} />}
         keyExtractor={(item, index) => index.toString()}

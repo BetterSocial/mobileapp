@@ -24,7 +24,6 @@ const Content = ({message, images_url, style, onPress}) => {
   const cekImage = () => images_url && images_url !== '';
 
   const onImageClickedByIndex = (index) => {
-    console.log(index);
     navigation.push('ImageViewer', {
       title: 'Photo',
       index,

@@ -68,7 +68,7 @@ const PostPageDetail = (props) => {
   const [loadingPost, setLoadingPost] = React.useState(false)
   const [commentList, setCommentList] = React.useState([]);
   const navigation = useNavigation();
-  
+
   const [feeds, dispatch] = React.useContext(Context).feeds;
 
   React.useEffect(() => {
@@ -163,7 +163,6 @@ const PostPageDetail = (props) => {
     } else {
       Toast.show('Your report was filed & will be investigated', Toast.LONG);
     }
-    console.log('result block user ', result);
   };
   const onSkipOnlyBlock = () => {
     refReportUser.current.close();
@@ -211,7 +210,7 @@ const PostPageDetail = (props) => {
       if(isSort) {
         oldData = {...oldData, latest_reactions: {...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix())} }
       }
-      console.log(oldData, 'sunat')
+
       setLoadingPost(false)
       if (data) {
         setItem(oldData);
@@ -224,7 +223,9 @@ const PostPageDetail = (props) => {
         );
       }
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 
@@ -244,7 +245,7 @@ const PostPageDetail = (props) => {
           setTextComment('');
           updateFeed(true);
           // Toast.show('Comment successful', Toast.LONG);
-          
+
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
           setLoadingPost(false)
@@ -281,7 +282,7 @@ const PostPageDetail = (props) => {
     };
     const processData = await upVote(data);
     if (processData.code == 200) {
-      updateFeed()    
+      updateFeed()
       return setLoadingVote(false);
     }
     setLoadingVote(false);
@@ -334,7 +335,7 @@ const PostPageDetail = (props) => {
     if(voteStatus === 'none') {
       setTotalVote((prevState) => prevState - 1)
       setVoteStatus('downvote')
-    } 
+    }
     await setDownVote(!statusDownvote);
   };
 
@@ -352,7 +353,7 @@ const PostPageDetail = (props) => {
     if(voteStatus === 'none') {
       setTotalVote((prevState) => prevState + 1)
       setVoteStatus('upvote')
-    } 
+    }
     await setUpVote(!statusUpvote);
   };
 
@@ -447,7 +448,6 @@ const PostPageDetail = (props) => {
               onPressComment={onCommentButtonClicked}
               loadingVote={loadingVote}
               onPressBlock={() => {
-                // console.log(item);
                 if (item.actor.id === yourselfId) {
                   Toast.show("Can't Block yourself", Toast.LONG);
                 } else {
@@ -548,9 +548,9 @@ const styles = StyleSheet.create({
       return {
         height: h * 0.5,
       };
-    } 
+    }
       return {};
-    
+
   },
   contentScrollView: (totalComment) => ({
     height,

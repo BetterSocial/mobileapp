@@ -30,7 +30,6 @@ const MentionSuggestions = ({
     }
 
     const onMentionSuggestionClicked = (item) => {
-        console.log('clicked')
         const newMessage = reformatStringByPosition(item.username, message);
         setPositionKeyboard('never')
         handleStateMention(newMessage);

@@ -1,13 +1,10 @@
 import * as React from 'react';
-import analytics from '@react-native-firebase/analytics';
 import {
     Dimensions,
     FlatList,
-    Platform,
     SafeAreaView,
     StyleSheet,
     Text,
-    TouchableHighlight,
     TouchableNativeFeedback,
     View,
 } from 'react-native';
@@ -15,7 +12,6 @@ import { debounce } from 'lodash'
 import { showMessage } from 'react-native-flash-message';
 import { useNavigation } from '@react-navigation/core';
 
-import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import PinIcon from '../../../assets/icons/pin.svg';
 import PlusIcon from '../../../assets/icons/plus.svg';
 import StringConstant from '../../utils/string/StringConstant';
@@ -29,6 +25,7 @@ import { colors } from '../../utils/colors';
 import { locationValidation } from '../../utils/Utils';
 import { post } from '../../api/server';
 import { setLocalCommunity } from '../../context/actions/localCommunity';
+import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const {width} = Dimensions.get('screen');
 const LocalCommunity = () => {
@@ -45,19 +42,13 @@ const LocalCommunity = () => {
     const [locationLog, setLocationLog] = React.useState([]);
 
     const [, dispatch] = React.useContext(Context).localCommunity;
-    React.useEffect(() => {
-        analytics().logScreenView({
-            screen_class: 'LocalCommunity',
-            screen_name: 'onb_select_location',
-        });
-    }, []);
 
     const handleSearch = (value) => {
         // setIsLoading(true);
         const params = {
             name: value,
         };
-        
+
         post({ url: '/location/list_v2', params })
             .then((res) => {
                 setIsLoading(false);
@@ -112,29 +103,33 @@ const LocalCommunity = () => {
         a.toLocaleLowerCase()
     };
 
-    const renderItem = ({ index, item }) => (
-        <TouchableNativeFeedback
-            onPress={() => {
-                setSearch('');
-                if (index === 0) {
-                    return setIsVisibleFirstLocation(true);
-                } if (index === 1) {
-                    return setIsVisibleSecondLocation(true);
-                }
-            }}>
-            <View style={styles.containerLocation}>
-                <View style={styles.containerRow}>
-                    <PinIcon width={14} height={20} fill="#000000" />
-                    <Text style={styles.textLocation}>{locationValidation(item)}</Text>
-                </View>
-                <TouchableNativeFeedback
+    const renderItem = ({ index, item }) => {
+        const onPressTouchable = () => {
+            setSearch('');
+            if (index === 0) {
+                setIsVisibleFirstLocation(true);
+            } else if (index === 1) {
+                setIsVisibleSecondLocation(true);
+            }
+        };
+
+        return (
+          <TouchableNativeFeedback
+            onPress={onPressTouchable}>
+              <View style={styles.containerLocation}>
+                  <View style={styles.containerRow}>
+                      <PinIcon width={14} height={20} fill="#000000"/>
+                      <Text style={styles.textLocation}>{locationValidation(item)}</Text>
+                  </View>
+                  <TouchableNativeFeedback
                     onPress={() => handleDelete(item.location_id)}
                     background={TouchableNativeFeedback.Ripple(colors.gray1, true, 20)}>
-                    <TrashIcon width={18} height={20} fill="#000000" />
-                </TouchableNativeFeedback>
-            </View>
-        </TouchableNativeFeedback>
-    );
+                      <TrashIcon width={18} height={20} fill="#000000"/>
+                  </TouchableNativeFeedback>
+              </View>
+          </TouchableNativeFeedback>
+        );
+    };
 
     const handleDelete = async (val) => {
         const tempLocation = [...location];
@@ -157,7 +152,7 @@ const LocalCommunity = () => {
     const next = () => {
         if (location.length > 0) {
             setLocalCommunity(locationPost, dispatch);
-            analytics().logEvent('onb_select_location', {
+            Analytics.logEvent('onb_select_location', {
                 location: locationLog,
             });
             navigation.navigate('Topics');

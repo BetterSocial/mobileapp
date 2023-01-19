@@ -35,11 +35,9 @@ const useChatClientHook = () => {
         }
 
         const response = await putUserTopic(data);
-        console.log('response?.data')
-        console.log(response?.data)
         if (response?.data) {
             addTopicToChatTab(topic)
-        } else { 
+        } else {
             removeTopicFromChatTab(topic)
         }
 

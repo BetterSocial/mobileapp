@@ -1,6 +1,5 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 import config from 'react-native-config'
-import {CLIENT_ID, CLIENT_SECRET} from '@env';
 export const checkToken = (token) => {
   return fetch('https://core.human-id.org/v0.0.3/server/users/exchange', {
     method: 'POST', // or 'PUT'

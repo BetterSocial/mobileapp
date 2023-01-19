@@ -91,9 +91,7 @@ const styles = StyleSheet.create({
 })
 
 const BlockedList = (props) => {
-    const {onPressList, item, isHashtag, handleSetBlock, handleSetUnblock, onPressBody} = props
-
-  console.log('taiman', item)
+    const {item, isHashtag, handleSetBlock, handleSetUnblock, onPressBody} = props
 
     const hanldeImage = (uri) => {
       if(uri && typeof uri === 'string') {
@@ -115,13 +113,13 @@ const BlockedList = (props) => {
     }
 
     return (
- 
+
         <View style={styles.card}>
           <GlobalButton testID='pressbody' onPress={() => onPressBody(item)} style={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
               {hanldeImage(item.image)}
             </React.Fragment> : null}
-            
+
             <View style={styles.wrapTextProfile}>
               <Text testID='name' style={styles.textProfileUsername}>
                 {isHashtag && "#"}{item.name || 'Anonymous'}
