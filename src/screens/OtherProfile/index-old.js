@@ -12,7 +12,6 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
-import { STREAM_API_KEY } from '@env';
 import { StreamApp } from 'react-native-activity-feed';
 import { generateRandomId } from 'stream-chat-react-native';
 import { useNavigation } from '@react-navigation/core';

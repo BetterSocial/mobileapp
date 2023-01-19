@@ -40,6 +40,7 @@ const Comment = ({
   const { totalVote, setTotalVote, statusVote, setStatusVote, onUpVote, onDownVote, iVote } = useComment({ comment, findCommentAndUpdate, level, updateVote })
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
+      console.log('')
       return;
     }
     if (onPress && typeof onPress === 'function') {
