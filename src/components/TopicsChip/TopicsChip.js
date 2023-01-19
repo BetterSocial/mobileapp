@@ -11,12 +11,11 @@ const TopicsChip = ({ topics = [], fontSize = 24, text = '', isPdp }) => {
     const onTopicPress = (topic) => {
         navigation.navigate('TopicPageScreen', { id: topic.replace('#', '') })
     }
-
+    console.log(topics, 'baban')
     if (topics.length === 0) return <></>
 
     return <View style={!isPdp ? styles.topicContainer : styles.topicContainerPdp}>
-        {topics.map((item, index) => {
-            if(text.indexOf(`#${item}`) < 0) return <View key={`topicContainer-${index}`} style={styles.topicItemContainer}>
+        {topics.map((item, index) => <View key={`topicContainer-${index}`} style={styles.topicItemContainer}>
                 <TouchableOpacity
                     testID='topic-chip'
                     activeOpacity={1}
@@ -27,8 +26,7 @@ const TopicsChip = ({ topics = [], fontSize = 24, text = '', isPdp }) => {
                     onPress={() => onTopicPress(item)}>
                     <Text style={{ ...styles.topicText, fontSize }}>#{item}</Text>
                 </TouchableOpacity>
-            </View>
-        })}
+            </View>)}
     </View>
 }
 

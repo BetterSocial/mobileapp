@@ -36,7 +36,9 @@ const TopicSuggestions = ({
         const newMessage = reformatStringByPosition(item.name, message);
         topics.splice(topics.length - 1, 1, topicItem)
         setPositionKeyboard('never')
+        setTopics(topics);
         handleStateHashtag(newMessage);
+        setMessage(newMessage);
         setTopicSearch([]);
     }
 

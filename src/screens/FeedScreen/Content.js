@@ -41,7 +41,6 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   const handleSubstring = () => medianDimen1 * 200
 
   
-  
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
