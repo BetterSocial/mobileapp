@@ -110,8 +110,8 @@ export const RootNavigator = () => {
           if (perf.current) {
             perf.current.stop();
           }
-        }, 1500);
-        create();
+          create();
+        }, 500);
       }
     } else {
       SplashScreen.hide();
