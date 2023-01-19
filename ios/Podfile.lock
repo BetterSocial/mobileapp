@@ -220,6 +220,11 @@ PODS:
     - boost-for-react-native
     - DoubleConversion
     - glog
+  - RCT-Folly/Futures (2020.01.13.00):
+    - boost-for-react-native
+    - DoubleConversion
+    - glog
+    - libevent
   - RCTRequired (0.64.4)
   - RCTTypeSafety (0.64.4):
     - FBLazyVector (= 0.64.4)
@@ -275,6 +280,16 @@ PODS:
     - React-jsi (= 0.64.4)
     - React-jsiexecutor (= 0.64.4)
     - React-jsinspector (= 0.64.4)
+    - React-perflogger (= 0.64.4)
+    - Yoga
+  - React-Core/Hermes (0.64.4):
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2020.01.13.00)
+    - RCT-Folly/Futures
+    - React-cxxreact (= 0.64.4)
+    - React-jsi (= 0.64.4)
+    - React-jsiexecutor (= 0.64.4)
     - React-perflogger (= 0.64.4)
     - Yoga
   - React-Core/RCTActionSheetHeaders (0.64.4):
@@ -642,6 +657,7 @@ DEPENDENCIES:
   - React-callinvoker (from `../node_modules/react-native/ReactCommon/callinvoker`)
   - React-Core (from `../node_modules/react-native/`)
   - React-Core/DevSupport (from `../node_modules/react-native/`)
+  - React-Core/Hermes (from `../node_modules/react-native/`)
   - React-Core/RCTWebSocket (from `../node_modules/react-native/`)
   - React-CoreModules (from `../node_modules/react-native/React/CoreModules`)
   - React-cxxreact (from `../node_modules/react-native/ReactCommon/cxxreact`)
@@ -728,6 +744,7 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
+    - hermes-engine
     - libevent
     - libwebp
     - nanopb
