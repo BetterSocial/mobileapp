@@ -95,23 +95,24 @@ const DomainList = (props) => {
 
     return (
         <View style={styles.card}>
-          <GlobalButton onPress={() => onPressBody(item)} buttonStyle={styles.wrapProfile}>
+          <GlobalButton testID='pressbody' onPress={() => onPressBody(item)} buttonStyle={styles.wrapProfile}>
             {!isHashtag ? <React.Fragment>
-              {item.image  ? <Image
+              {item.image  ? <Image testID='images'
               source={{
                 uri: item.image,
               }}
               style={styles.profilepicture}
               width={48}
               height={48}
-            />  :  <View style={styles.profilepicture} />}
+            />  :  <View testID='noimage' style={styles.profilepicture} />}
             </React.Fragment> : null}
             
             <View style={styles.wrapTextProfile}>
-              <Text style={styles.textProfileUsername}>
+              <Text testID='name' style={styles.textProfileUsername}>
                 {isHashtag && "#"}{item.name}
               </Text>
               <Text
+                testID='desc'
                 style={styles.textProfileFullName}
                 numberOfLines={1}
                 ellipsizeMode={'tail'}>
@@ -120,13 +121,13 @@ const DomainList = (props) => {
             </View>
           </GlobalButton>
           {item.isunfollowed ? (
-            <GlobalButton onPress={handleSetFollow}>
+            <GlobalButton testID='isUnfollow' onPress={handleSetFollow}>
               <View style={styles.buttonFollow}>
                 <Text style={styles.textButtonFollow}>Follow</Text>
               </View>
             </GlobalButton>
           ) : (
-            <GlobalButton onPress={handleSetUnFollow}>
+            <GlobalButton testID='isFollow' onPress={handleSetUnFollow}>
               <View style={styles.buttonFollowing}>
                 <Text style={styles.textButtonFollowing}>Following</Text>
               </View>
@@ -145,10 +146,10 @@ DomainList.propTypes = {
 }
 
 DomainList.defaultProps = {
-  onPressList: () => null,
-  handleSetFollow: () => null,
-  handleSetUnFollow: () => null,
-  onPressBody: () => null
+  onPressList: () => {},
+  handleSetFollow: () => {},
+  handleSetUnFollow: () => {},
+  onPressBody: () => {}
 }
 
 export default React.memo (DomainList)
