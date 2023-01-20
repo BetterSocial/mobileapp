@@ -63,8 +63,9 @@ const useContentPoll = ({polls}) => {
           selectedPoll.polling_option_id,
         );
       }
-
-      onnewpollfetched(newItem, index);
+      if(onnewpollfetched && typeof onnewpollfetched === 'function') {
+        onnewpollfetched(newItem, index);
+      }
       setIsAlreadyPolling(true);
       setNewPoll(newItem)
     }

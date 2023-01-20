@@ -17,6 +17,7 @@ import {
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
+  POST_VERB_POLL,
 } from '../../utils/constants';
 import { Footer, Gap, PreviewComment } from '../../components';
 import { colors } from '../../utils/colors';
@@ -208,7 +209,7 @@ const RenderListFeed = (props) => {
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
         <Header props={item} height={getHeightHeader()} />
-        {item.post_type === POST_TYPE_POLL && (
+        {/* {item.post_type === POST_TYPE_POLL && (
           <ContentPoll
             index={index}
             message={item.message}
@@ -222,7 +223,7 @@ const RenderListFeed = (props) => {
             onnewpollfetched={onNewPollFetched}
             voteCount={item.voteCount}
           />
-        )}
+        )} */}
 
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
@@ -233,12 +234,15 @@ const RenderListFeed = (props) => {
             onCardContentPress={() => navigateToLinkContextPage(item)}
           />
         )}
-        {item.post_type === POST_TYPE_STANDARD && (
+        {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
           <Content
             index={index}
             message={item.message}
             images_url={item.images_url}
             onPress={onPress}
+            item={item}
+            onNewPollFetched={onNewPollFetched}
+              
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
