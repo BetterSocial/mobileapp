@@ -34,7 +34,6 @@ const {getDataFeeds, postOffset, loading, setShowNavbar, showNavbar, myProfile, 
   const getDataFeedsHandle = async (offsetFeed = 0, useLoading) => {
     getDataFeeds(offsetFeed, useLoading)
   };
-
   const onDeleteBlockedPostCompletedHandle = async (postId) => {
     onDeleteBlockedPostCompleted(postId)
   }
