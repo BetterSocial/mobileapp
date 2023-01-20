@@ -51,7 +51,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
       }, []),
     });
   };
-
+  console.log(item, 'sunat')
   const renderHandleTextContent = () => {
     if(images_url.length > 0) {
       return (
@@ -102,7 +102,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
               voteCount={item.voteCount}
               topics={item?.topics}
             /> 
-                    </View>
+            </View>
 
             : null}
        {images_url.length > 0 && <View style={styles.containerImage}>
