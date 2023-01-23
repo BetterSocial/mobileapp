@@ -21,7 +21,7 @@ import Gap from '../../components/Gap';
 import { colors } from '../../utils/colors';
 import { fonts, normalizeFontSize } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
-import ContentLink from './ContentLink';
+import useContentFeed from './hooks/useContentFeed';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -35,7 +35,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
   const substringPostImage = devHeight /2.25 - (40 * 4)
   const substringNoImageNoTopic = devHeight/1.25 - (40 * 4)
   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
-
+  const {hashtagAtComponent} = useContentFeed({navigation})
 
 
   const handleSubstring = () => medianDimen1 * 200
@@ -51,7 +51,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
       }, []),
     });
   };
-  console.log(item, 'sunat')
+
   const renderHandleTextContent = () => {
     if(images_url.length > 0) {
       return (
@@ -75,7 +75,6 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
       </View>
     )
   }
-
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       <View style={styles.container}>
@@ -87,8 +86,9 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
       </View>
       {item && item.post_type === POST_TYPE_POLL ?
            <View style={styles.containerMainText} >
-           {message && typeof message === 'string' && message.length > 0 ? <Text style={[styles.textMedia]} >{message.substring(0, handleSubstring())} {message.length > handleSubstring() && <Text style={{color: '#2F80ED'}} >More...</Text>} </Text> : null}
-
+          <Text style={styles.textMedia} >
+            {hashtagAtComponent(message)}
+          </Text>
             <ContentPoll
               message={item.message}
               images_url={item.images_url}
@@ -102,7 +102,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
               voteCount={item.voteCount}
               topics={item?.topics}
             /> 
-            </View>
+                    </View>
 
             : null}
        {images_url.length > 0 && <View style={styles.containerImage}>
