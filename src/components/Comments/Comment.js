@@ -164,7 +164,7 @@ const Comment = ({
 
       </View>
 
-      <BlockComponent ref={refBlockComponent} refresh={() => {}} screen={"feed_comment_item"}/>
+      <BlockComponent ref={refBlockComponent} screen={"feed_comment_item"}/>
 
       </View>
 
