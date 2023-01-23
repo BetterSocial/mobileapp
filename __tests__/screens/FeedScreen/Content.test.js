@@ -9,6 +9,7 @@ jest.mock('@react-navigation/native', () => ({
   useRoute: () => ({
     params: {}
   }),
+  createNavigatorFactory: jest.fn()
 }));
 
 jest.mock('react-native/Libraries/Pressability/usePressability')
