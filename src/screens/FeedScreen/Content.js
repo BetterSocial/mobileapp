@@ -21,8 +21,6 @@ import Gap from '../../components/Gap';
 import { colors } from '../../utils/colors';
 import { fonts, normalizeFontSize } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
-import ContentLink from './ContentLink';
-import useFeed from './hooks/useFeed';
 import useContentFeed from './hooks/useContentFeed';
 
 const { width: screenWidth } = Dimensions.get('window');
