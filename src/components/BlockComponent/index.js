@@ -159,7 +159,11 @@ class BlockComponent extends React.Component {
       this.props.screen || 'screen_feed',
       reason,
       messageReport,
-      () => this.props.refresh(this.state.postId)
+      () => {
+        if (this.props.refresh) {
+          this.props.refresh(this.state.postId);
+        }
+      }
     );
   }
 
@@ -170,7 +174,11 @@ class BlockComponent extends React.Component {
       this.props.screen || 'screen_feed',
       reason,
       messageReport,
-      () => this.props.refreshAnonymous(this.state.postId)
+      () => {
+        if (this.props.refreshAnonymous) {
+          this.props.refreshAnonymous(this.state.postId);
+        }
+      }
     );
   }
 

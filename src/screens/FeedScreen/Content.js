@@ -13,6 +13,7 @@ import {POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
+import useContentFeed from './hooks/useContentFeed';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -27,13 +28,10 @@ const Content = ({
 }) => {
   const navigation = useNavigation();
   const devHeight = Dimensions.get('screen').height;
-  const devWidth = Dimensions.get('screen').width;
-  const medianDimen1 = devWidth / devHeight;
   const substringPostImage = devHeight / 2.25 - 40 * 4;
   const substringNoImageNoTopic = devHeight / 1.25 - 40 * 4;
   const substringNoImageTopic = devHeight / 1.25 - 40 * 7;
-
-  const handleSubstring = () => medianDimen1 * 200;
+  const {hashtagAtComponent} = useContentFeed({navigation});
 
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
@@ -88,15 +86,7 @@ const Content = ({
       </View>
       {item && item.post_type === POST_TYPE_POLL ? (
         <View style={styles.containerMainText}>
-          {message && typeof message === 'string' && message.length > 0 ? (
-            <Text style={[styles.textMedia]}>
-              {message.substring(0, handleSubstring())}{' '}
-              {message.length > handleSubstring() && (
-                <Text style={{color: '#2F80ED'}}>More...</Text>
-              )}{' '}
-            </Text>
-          ) : null}
-
+          <Text style={styles.textMedia}>{hashtagAtComponent(message)}</Text>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
@@ -258,8 +248,5 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     height: '100%'
-    // backgroundColor: 'red'
-
-    // marginBottom: 7
   }
 });
