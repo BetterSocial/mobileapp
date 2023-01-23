@@ -22,16 +22,18 @@ const useContentFeed = ({navigation}) => {
     }
   }
 
+    const onPressComponent = React.useCallback((match) => {
+        matchPress(match)
+    }, [])
+
   const hashtagAtComponent = (message) => {
     const regex = /\B([#@][a-zA-Z0-9_+-]+\b)(?!;)/
     if(message && typeof message === 'string') {
       return (
         reactStringReplace(message, regex, (match) => {
-            const onPressComponent = () => {
-                matchPress(match)
-            }
+       
          return (
-          <Text onPress={onPressComponent} testID='regex' style={{color:colors.blue}} >
+          <Text onPress={() => onPressComponent(match)} testID='regex' style={{color:colors.blue}} >
             {match}
           </Text>
          )
