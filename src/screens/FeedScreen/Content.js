@@ -86,7 +86,7 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
       </View>
       {item && item.post_type === POST_TYPE_POLL ?
            <View style={styles.containerMainText} >
-          <Text style={styles.textMedia} >
+          <Text style={[styles.textMedia]} >
             {hashtagAtComponent(message)}
           </Text>
             <ContentPoll
