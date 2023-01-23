@@ -27,8 +27,11 @@ const useContentFeed = ({navigation}) => {
     if(message && typeof message === 'string') {
       return (
         reactStringReplace(message, regex, (match) => {
+            const onPressComponent = () => {
+                matchPress(match)
+            }
          return (
-          <Text onPress={() => matchPress(match)} testID='regex' style={{color:colors.blue}} >
+          <Text onPress={onPressComponent} testID='regex' style={{color:colors.blue}} >
             {match}
           </Text>
          )
