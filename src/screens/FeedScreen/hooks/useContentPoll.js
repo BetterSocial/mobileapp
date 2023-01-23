@@ -75,7 +75,6 @@ const useContentPoll = ({polls}) => {
   const onSeeResultsClicked = (item, multiplechoice, onnewpollfetched, index) => {
     if (multiplechoice) {
       handleMultipleChoice(item, onnewpollfetched, index)
-      // setIsAlreadyPolling(true);
     } else {
      handleNoMultipleChoice(item, onnewpollfetched, index)
     }
