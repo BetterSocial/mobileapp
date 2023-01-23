@@ -15,7 +15,7 @@ import {
   ANALYTICS_SHARE_POST_TOPIC_SCREEN,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
+  POST_TYPE_STANDARD
 } from '../../utils/constants';
 import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
@@ -41,7 +41,7 @@ const RenderListFeed = (props) => {
     onPressBlock,
     onPressUpvote,
     userId,
-    onPressDownVote,
+    onPressDownVote
   } = props;
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
@@ -116,14 +116,11 @@ const RenderListFeed = (props) => {
 
   const postApiUpvote = async (status) => {
     try {
-      const processData = await onPressUpvote({
+      await onPressUpvote({
         activity_id: item.id,
         status,
-        feed_group: 'main_feed',
+        feed_group: 'main_feed'
       });
-      if (processData.code === 200) {
-        setLoadingVote(false);
-      }
       setLoadingVote(false);
     } catch (e) {
       setLoadingVote(false);
@@ -133,16 +130,12 @@ const RenderListFeed = (props) => {
 
   const postApiDownvote = async (status) => {
     try {
-      const processData = await onPressDownVote({
+      await onPressDownVote({
         activity_id: item.id,
         status,
-        feed_group: 'main_feed',
+        feed_group: 'main_feed'
       });
-      if (processData.code === 200) {
-        setLoadingVote(false);
-      } else {
-        setLoadingVote(false);
-      }
+      setLoadingVote(false);
     } catch (e) {
       setLoadingVote(false);
       SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
@@ -263,17 +256,17 @@ const styles = StyleSheet.create({
     width: FULL_WIDTH,
     backgroundColor: colors.white,
     borderBottomWidth: 7,
-    borderBottomColor: colors.lightgrey,
+    borderBottomColor: colors.lightgrey
   }),
   cardMain: {
     height: '100%',
-    width: '100%',
+    width: '100%'
   },
   footerWrapper: (h) => ({height: h, bottom: 0}),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
-  }),
+    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
+  })
 });
 
 RenderListFeed.propTypes = {
@@ -288,7 +281,7 @@ RenderListFeed.propTypes = {
   userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onPressUpvote: PropTypes.func,
   onPressDownVote: PropTypes.func,
-  loading: PropTypes.bool,
+  loading: PropTypes.bool
 };
 
 function compare(prevProps, nextProps) {

@@ -43,6 +43,7 @@ export const useInitialStartup = () => {
   const perf = React.useRef(null);
   const timeoutSplashScreen = React.useRef(null);
   const [loadingUser, setLoadingUser] = React.useState(true);
+  const getLocalChannelData = useLocalChannelsFirst(setLocalChannelData);
 
   const LIMIT_FIRST_FEEDS = 1;
   const LIMIT_FIRST_NEWS = 3;
@@ -186,9 +187,8 @@ export const useInitialStartup = () => {
     StatusBar.setBarStyle('dark-content', true);
 
     doGetAccessToken();
-    useLocalChannelsFirst(setLocalChannelData);
     getFeedChat();
-
+    getLocalChannelData();
     getDomain();
     getDataFeeds();
     getDiscoveryData();

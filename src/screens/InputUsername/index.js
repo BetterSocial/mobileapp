@@ -151,7 +151,7 @@ const ChooseUsername = () => {
   };
 
   const onTextBlur = () => {
-    const value = formatUsernameString(username);
+    const value = formatUsernameString();
     setUsernameState(value);
   };
 
