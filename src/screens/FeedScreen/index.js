@@ -1,22 +1,22 @@
 import * as React from 'react';
-import { Animated, InteractionManager, StatusBar, StyleSheet } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import {Animated, InteractionManager, StatusBar, StyleSheet} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
 import RenderListFeed from './RenderList';
 import Search from './elements/Search';
 import TiktokScroll from '../../components/TiktokScroll';
 import dimen from '../../utils/dimen';
-import { ButtonNewPost } from '../../components/Button';
-import { COLORS } from '../../utils/theme';
-import { Context } from '../../context';
-import { DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB } from '../../utils/constants';
-import { viewTimePost } from '../../service/post';
-import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { setFeedByIndex, setTimer } from '../../context/actions/feeds';
-import { useAfterInteractions } from '../../hooks/useAfterInteractions';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import {ButtonNewPost} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB} from '../../utils/constants';
+import {viewTimePost} from '../../service/post';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import useCoreFeed from './hooks/useCoreFeed';
 
 let lastDragY = 0;
@@ -24,76 +24,87 @@ let lastDragY = 0;
 const FeedScreen = (props) => {
   const navigation = useNavigation();
   // const [postOffset, setPostOffset] = React.useState(0)
-  const offset = React.useRef(new Animated.Value(0)).current
+  const offset = React.useRef(new Animated.Value(0)).current;
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-  const { interactionsComplete } = useAfterInteractions()
-  const { feeds, timer, viewPostTimeIndex } = feedsContext;
-  const [isScroll, setIsScroll] = React.useState(false)
-const {getDataFeeds, postOffset, loading, setShowNavbar, showNavbar, myProfile, bottom, onDeleteBlockedPostCompleted, onBlockCompleted, checkCacheFeed, setUpVote, setDownVote, saveSearchHeight, searchHeight} = useCoreFeed()
+  const {interactionsComplete} = useAfterInteractions();
+  const {feeds, timer, viewPostTimeIndex} = feedsContext;
+  const [isScroll, setIsScroll] = React.useState(false);
+  const {
+    getDataFeeds,
+    postOffset,
+    loading,
+    setShowNavbar,
+    showNavbar,
+    myProfile,
+    bottom,
+    onDeleteBlockedPostCompleted,
+    onBlockCompleted,
+    checkCacheFeed,
+    setUpVote,
+    setDownVote,
+    saveSearchHeight,
+    searchHeight
+  } = useCoreFeed();
   const getDataFeedsHandle = async (offsetFeed = 0, useLoading) => {
-    getDataFeeds(offsetFeed, useLoading)
+    getDataFeeds(offsetFeed, useLoading);
   };
 
   const onDeleteBlockedPostCompletedHandle = async (postId) => {
-    onDeleteBlockedPostCompleted(postId)
-  }
+    onDeleteBlockedPostCompleted(postId);
+  };
 
   const onBlockCompletedHandle = async (postId) => {
-    onBlockCompleted(postId)
-  }
+    onBlockCompleted(postId);
+  };
 
   React.useEffect(() => {
     if (interactionsComplete) {
-        checkCacheFeed()
+      checkCacheFeed();
     }
-
   }, [interactionsComplete]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      showSearchBarAnimation()
+      showSearchBarAnimation();
     });
 
     return unsubscribe;
   }, [navigation]);
 
-
   const setUpVoteHandle = async (post, index) => {
-   setUpVote(post, index)
+    setUpVote(post, index);
   };
 
   const setDownVoteHandle = async (post, index) => {
-    setDownVote(post, index)
+    setDownVote(post, index);
   };
 
   const sendViewPost = () => {
-    const currentTime = new Date()
-    const diffTime = currentTime.getTime() - timer.getTime()
-    const id = feeds && feeds[viewPostTimeIndex]?.id
+    const currentTime = new Date();
+    const diffTime = currentTime.getTime() - timer.getTime();
+    const id = feeds && feeds[viewPostTimeIndex]?.id;
     if (id) viewTimePost(id, diffTime, SOURCE_FEED_TAB);
-
   };
 
   const onNewPollFetched = (newPolls, index) => {
     setFeedByIndex(
       {
         index,
-        singleFeed: newPolls,
+        singleFeed: newPolls
       },
-      dispatch,
+      dispatch
     );
   };
-
 
   const onPressDomain = (item) => {
     const param = linkContextScreenParamBuilder(
       item,
       item.og.domain,
       item.og.domainImage,
-      item.og.domain_page_id,
+      item.og.domain_page_id
     );
-    sendViewPost()
+    sendViewPost();
     props.navigation.navigate('DomainScreen', param);
   };
 
@@ -111,7 +122,6 @@ const {getDataFeeds, postOffset, loading, setShowNavbar, showNavbar, myProfile, 
       // refreshParent:  getDataFeedsHandle,
       data: item,
       isCaching: true
-
     });
   };
 
@@ -135,64 +145,88 @@ const {getDataFeeds, postOffset, loading, setShowNavbar, showNavbar, myProfile, 
     getDataFeedsHandle(0, true);
   };
 
-
   const handleOnScrollBeginDrag = (event) => {
     lastDragY = event.nativeEvent.contentOffset.y;
   };
-
 
   const showSearchBarAnimation = () => {
     InteractionManager.runAfterInteractions(() => {
       Animated.timing(offset, {
         toValue: 0,
         duration: 100,
-        useNativeDriver: false,
+        useNativeDriver: false
       }).start();
-
-    })
-    setShowNavbar(true)
-
-  }
-  const handleScrollEvent = React.useCallback((event) => {
-    setIsScroll(true)
-    const { y } = event.nativeEvent.contentOffset;
-    const dy = y - lastDragY;
-    if (dy + 20 <= 0) {
-      showSearchBarAnimation()
-
-    } else if (dy - 20 > 0) {
-      InteractionManager.runAfterInteractions(() => {
-        Animated.timing(offset, {
-          toValue: -50,
-          duration: 100,
-          useNativeDriver: false,
-        }).start();
-      })
-      setShowNavbar(false)
-    }
-  }, [offset])
-
-
+    });
+    setShowNavbar(true);
+  };
+  const handleScrollEvent = React.useCallback(
+    (event) => {
+      setIsScroll(true);
+      const {y} = event.nativeEvent.contentOffset;
+      const dy = y - lastDragY;
+      if (dy + 20 <= 0) {
+        showSearchBarAnimation();
+      } else if (dy - 20 > 0) {
+        InteractionManager.runAfterInteractions(() => {
+          Animated.timing(offset, {
+            toValue: -50,
+            duration: 100,
+            useNativeDriver: false
+          }).start();
+        });
+        setShowNavbar(false);
+      }
+    },
+    [offset]
+  );
 
   const handleSearchBarClicked = () => {
-    sendViewPost()
+    sendViewPost();
 
     navigation.navigate('DiscoveryScreen', {
       tab: DISCOVERY_TAB_TOPICS
-    })
+    });
 
-    setTimer(new Date(), dispatch)
-  }
+    setTimer(new Date(), dispatch);
+  };
 
   const saveSearchHeightHandle = (height) => {
-    saveSearchHeight(height)
-  }
+    saveSearchHeight(height);
+  };
+
+  const renderItem = ({item, index}) => {
+    if (item.dummy) return null;
+    return (
+      <RenderListFeed
+        key={item.id}
+        item={item}
+        onNewPollFetched={onNewPollFetched}
+        index={index}
+        onPressDomain={onPressDomain}
+        onPress={() => onPress(item, index)}
+        onPressComment={() => onPressComment(index, item)}
+        onPressBlock={() => onPressBlock(item)}
+        onPressUpvote={(post) => setUpVoteHandle(post, index)}
+        selfUserId={myProfile.user_id}
+        onPressDownVote={(post) => setDownVoteHandle(post, index)}
+        loading={loading}
+        showNavbar={showNavbar}
+        searchHeight={searchHeight}
+        bottomArea={bottom}
+        isScroll={isScroll}
+      />
+    );
+  };
 
   return (
-    <SafeAreaProvider style={styles.container} forceInset={{ top: 'always' }}>
+    <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
 
-      <Search getSearchLayout={saveSearchHeightHandle} animatedValue={offset} onContainerClicked={handleSearchBarClicked} />
+      <Search
+        getSearchLayout={saveSearchHeightHandle}
+        animatedValue={offset}
+        onContainerClicked={handleSearchBarClicked}
+      />
       <TiktokScroll
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
@@ -202,57 +236,40 @@ const {getDataFeeds, postOffset, loading, setShowNavbar, showNavbar, myProfile, 
         onScrollBeginDrag={handleOnScrollBeginDrag}
         searchHeight={searchHeight}
         showSearchBar={showNavbar}
-        refreshing={loading}>
-        {({ item, index }) => {
-          if (item.dummy) return null
-          return <RenderListFeed
-            item={item}
-            onNewPollFetched={onNewPollFetched}
-            index={index}
-            onPressDomain={onPressDomain}
-            onPress={() => onPress(item, index)}
-            onPressComment={() => onPressComment(index, item)}
-            onPressBlock={() => onPressBlock(item)}
-            onPressUpvote={(post) => setUpVoteHandle(post, index)}
-            selfUserId={myProfile.user_id}
-            onPressDownVote={(post) => setDownVoteHandle(post, index)}
-            loading={loading}
-            showNavbar={showNavbar}
-            searchHeight={searchHeight}
-            bottomArea={bottom}
-            isScroll={isScroll}
-          />
-        }}
-      </TiktokScroll>
+        refreshing={loading}
+        renderItem={renderItem}
+      />
       <ButtonNewPost />
-      <BlockComponent ref={refBlockComponent}
+      <BlockComponent
+        ref={refBlockComponent}
         refresh={onBlockCompletedHandle}
         refreshAnonymous={onDeleteBlockedPostCompletedHandle}
-        screen="screen_feed" />
+        screen="screen_feed"
+      />
     </SafeAreaProvider>
-
   );
 };
 
-export default React.memo(withInteractionsManaged(FeedScreen));
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: {flex: 1},
   content: {
     flex: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: -1,
+    zIndex: -1
   },
   dummyItem: (height) => ({
     height,
-    backgroundColor: COLORS.gray1,
+    backgroundColor: COLORS.gray1
   }),
   containerLoading: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   flatlistContainer: {
-    paddingBottom: 0,
-  },
+    paddingBottom: 0
+  }
 });
+
+export default React.memo(withInteractionsManaged(FeedScreen));
