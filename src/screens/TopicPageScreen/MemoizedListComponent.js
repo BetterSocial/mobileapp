@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/core';
 
 import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
-import ContentPoll from '../FeedScreen/ContentPoll';
 import Header from '../FeedScreen/Header';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
@@ -17,7 +16,6 @@ import {
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
-  POST_VERB_POLL,
 } from '../../utils/constants';
 import { Footer, Gap, PreviewComment } from '../../components';
 import { colors } from '../../utils/colors';
@@ -209,22 +207,6 @@ const RenderListFeed = (props) => {
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
         <Header props={item} height={getHeightHeader()} />
-        {/* {item.post_type === POST_TYPE_POLL && (
-          <ContentPoll
-            index={index}
-            message={item.message}
-            images_url={item.images_url}
-            polls={item.pollOptions}
-            onPress={() => onPress(item, index)}
-            item={item}
-            pollexpiredat={item.polls_expired_at}
-            multiplechoice={item.multiplechoice}
-            isalreadypolling={item.isalreadypolling}
-            onnewpollfetched={onNewPollFetched}
-            voteCount={item.voteCount}
-          />
-        )} */}
-
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
             index={index}
