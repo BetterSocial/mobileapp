@@ -33,13 +33,12 @@ import {getFeedDetail} from '../../service/post';
 import {setFeedByIndex} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {withInteractionsManaged} from '../WithInteractionManaged';
+import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 
 const {width, height} = Dimensions.get('window');
 
 const PostPageDetailIdComponent = (props) => {
   const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
-  let feedsContext;
-  let dispatch;
 
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
@@ -57,26 +56,9 @@ const PostPageDetailIdComponent = (props) => {
   const route = useRoute();
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
-  [feedsContext, dispatch] = React.useContext(Context).feeds;
+  const [feedsContext, dispatch] = useFeedDataContext(contextSource);
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
-
-  switch (contextSource) {
-    case CONTEXT_SOURCE.FEEDS:
-      [feedsContext, dispatch] = React.useContext(Context).feeds;
-      break;
-
-    case CONTEXT_SOURCE.OTHER_PROFILE_FEEDS:
-      [feedsContext, dispatch] = React.useContext(Context).otherProfileFeed;
-      break;
-
-    case CONTEXT_SOURCE.PROFILE_FEEDS:
-      [feedsContext, dispatch] = React.useContext(Context).myProfileFeed;
-      break;
-
-    default:
-      break;
-  }
 
   React.useEffect(() => {
     if (item && item?.latest_reactions) {
