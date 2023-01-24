@@ -23,7 +23,6 @@ let lastDragY = 0;
 
 const FeedScreen = (props) => {
   const navigation = useNavigation();
-  // const [postOffset, setPostOffset] = React.useState(0)
   const offset = React.useRef(new Animated.Value(0)).current;
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;

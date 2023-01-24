@@ -86,7 +86,7 @@ const Content = ({
       </View>
       {item && item.post_type === POST_TYPE_POLL ? (
         <View style={styles.containerMainText}>
-          <Text style={styles.textMedia}>{hashtagAtComponent(message)}</Text>
+          <Text style={[styles.textMedia]}>{hashtagAtComponent(message)}</Text>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
