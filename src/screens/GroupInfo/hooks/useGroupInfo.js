@@ -9,6 +9,7 @@ import { getChatName } from '../../../utils/string/StringUtils';
 const useGroupInfo = ({navigation}) => {
      const [groupChatState, groupPatchDispatch] =
     React.useContext(Context).groupChat;
+
   const {participants, asset} = groupChatState;
   const [channelState, ] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
@@ -16,13 +17,12 @@ const useGroupInfo = ({navigation}) => {
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
-
   const username = channelState.channel?.data?.name;
   const createChat = channelState.channel?.data?.created_at;
   const countUser = Object.entries(participants).length;
 
     const serializeMembersList = (result = []) => {
-    if (typeof result !== 'object') {
+    if (!result) {
       return {};
     }
 
@@ -40,6 +40,7 @@ const useGroupInfo = ({navigation}) => {
       const getMembersList = async () => {
     try {
       const result = await channel.queryMembers({});
+      console.log(result.members, 'lalak')
       const serializedMember = serializeMembersList(result.members);
       setParticipants(serializedMember, groupPatchDispatch);
       setIsLoadingMembers(false);

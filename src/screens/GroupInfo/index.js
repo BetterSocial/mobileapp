@@ -129,7 +129,7 @@ const GroupInfo = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.lineTop} />
-          <View style={styles.containerMedia(asset.length === 0)}>
+          <View style={styles.containerMedia(asset && asset.length === 0)}>
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate('GroupMedia')}>
               <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
@@ -137,7 +137,7 @@ const GroupInfo = () => {
             <FlatList
               data={asset}
               keyExtractor={(item, index) => index.toString()}
-              style={styles.listImage(asset.length === 0)}
+              style={styles.listImage(asset && asset.length === 0)}
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={renderItem}
@@ -147,7 +147,7 @@ const GroupInfo = () => {
           <View style={styles.users}>
             <Text style={styles.countUser}>Participants ({countUser})</Text>
             <FlatList
-              data={Object.keys(participants)}
+              data={participants ? Object.keys(participants) : []}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
                 <View style={{height: normalize(72)}}>
@@ -181,7 +181,7 @@ const GroupInfo = () => {
 
 export default GroupInfo;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
   users: {
     paddingTop: 12,
