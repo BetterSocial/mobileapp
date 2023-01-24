@@ -1,55 +1,46 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Dimensions,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 
 import ImageLayouter from './ImageLayouter';
 import TopicsChip from '../../TopicsChip/TopicsChip';
-import { COLORS } from '../../../utils/theme';
-import { Gap } from "../..";
-import { colors } from '../../../utils/colors';
-import { fonts, normalizeFontSize } from '../../../utils/fonts';
-import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
+import {COLORS} from '../../../utils/theme';
+import {colors} from '../../../utils/colors';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
-import { POST_TYPE_POLL } from '../../../utils/constants';
-import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed'
-const { width: screenWidth } = Dimensions.get('window');
+import {POST_TYPE_POLL} from '../../../utils/constants';
+import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
 
-const Content = ({ message, images_url, topics = [], item, onnewpollfetched }) => {
+const {width: screenWidth} = Dimensions.get('window');
+
+const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => {
   const navigation = useNavigation();
-  const cekImage = () => images_url  && images_url !== '' ;
-  const {hashtagAtComponent} = useContentFeed({navigation})
+  const cekImage = () => images_url && images_url !== '';
+  const {hashtagAtComponent} = useContentFeed({navigation});
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
       index,
       images: images_url.reduce((acc, current) => {
-        acc.push({ url: current });
+        acc.push({url: current});
         return acc;
-      }, []),
+      }, [])
     });
   };
 
-  const devHeight = Dimensions.get('screen').height
-  const substringNoImageTopic = devHeight / 1.25 - (40 * 7)
-  if (!cekImage) return null
+  if (!cekImage) return null;
 
   return (
     <>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1, paddingBottom: 40}}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={true}>
         <View style={[styles.contentFeed]}>
-          <Text style={[styles.textContentFeed]} >
-            {hashtagAtComponent(message)}
-          </Text>
-          {item && item.post_type === POST_TYPE_POLL ?
+          <Text style={[styles.textContentFeed]}>{hashtagAtComponent(message)}</Text>
+          {item && item.post_type === POST_TYPE_POLL ? (
             <ContentPoll
               message={item.message}
               images_url={item.images_url}
@@ -61,23 +52,17 @@ const Content = ({ message, images_url, topics = [], item, onnewpollfetched }) =
               onnewpollfetched={onnewpollfetched}
               voteCount={item.voteCount}
               topics={item?.topics}
-            /> : null}
-
+            />
+          ) : null}
         </View>
-        {images_url.length > 0 && <ImageLayouter
-          images={images_url || []}
-          onimageclick={onImageClickedByIndex}
-        />}
-
+        {images_url.length > 0 && (
+          <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
+        )}
       </ScrollView>
-      <View style={styles.topicContainer} >
+      <View style={styles.topicContainer}>
         <TopicsChip isPdp={true} topics={topics} fontSize={normalizeFontSize(14)} text={message} />
-
       </View>
     </>
-
-
-
   );
 };
 
@@ -85,7 +70,7 @@ Content.propTypes = {
   message: PropTypes.string,
   images_url: PropTypes.array,
   style: PropTypes.object,
-  onPress: PropTypes.func,
+  onPress: PropTypes.func
 };
 
 export default Content;
@@ -93,52 +78,52 @@ export default Content;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 16,
+    paddingBottom: 16
   },
-  fletlist: { flex: 1 },
+  fletlist: {flex: 1},
   imageList: {
     flex: 1,
     width: screenWidth - 32,
-    borderRadius: 16,
+    borderRadius: 16
   },
   containerShowMessage: (currentRouteName) => ({
-      justifyContent: 'center',
-      alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
-      flex: 1,
-      paddingBottom: 10,
-      minHeight: 100,
-    }),
+    justifyContent: 'center',
+    alignItems: currentRouteName === 'Feed' ? 'center' : 'center',
+    flex: 1,
+    paddingBottom: 10,
+    minHeight: 100
+  }),
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   rowCenter: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   containerFeedProfile: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginLeft: 13,
+    marginLeft: 13
   },
 
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: colors.black
   },
   containerFeedText: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5,
+    marginTop: 5
   },
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.black,
-    lineHeight: 18,
+    lineHeight: 18
   },
   point: {
     width: 4,
@@ -146,7 +131,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: colors.gray,
     marginLeft: 8,
-    marginRight: 8,
+    marginRight: 8
   },
   contentFeed: {
     flex: 1,
@@ -154,7 +139,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 80,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.white
   },
   topicContainer: {
     height: 110,
@@ -164,58 +149,57 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingBottom: 10,
     justifyContent: 'flex-end'
-
   },
   textContentFeed: {
-       fontFamily: fonts.inter[400],
+    fontFamily: fonts.inter[400],
     fontWeight: 'normal',
     fontSize: normalizeFontSize(14),
     color: colors.black,
     lineHeight: 24,
     flex: 1,
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
   textComment: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: 18,
-    color: colors.gray,
+    color: colors.gray
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
     fontSize: normalizeFontSize(12),
     lineHeight: 24,
-    color: colors.black,
+    color: colors.black
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
     fontSize: normalizeFontSize(12),
     lineHeight: 24,
-    color: colors.gray,
+    color: colors.gray
   },
   item: {
     width: screenWidth - 20,
     height: screenWidth - 20,
     marginTop: 10,
     marginLeft: -20,
-    backgroundColor: 'pink',
+    backgroundColor: 'pink'
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 8
   },
   image: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
     aspectRatio: 1.5,
-    resizeMode: 'cover',
+    resizeMode: 'cover'
   },
   imageAnonimity: {
     marginRight: 8,
     width: 32,
-    height: 32,
-  },
+    height: 32
+  }
 });

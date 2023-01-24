@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  TouchableNativeFeedback,
-  View,
-  Text,
-  Image,
-} from 'react-native';
+import {StyleSheet, TouchableNativeFeedback, View, Text} from 'react-native';
 
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
@@ -13,7 +7,7 @@ import {COLORS} from '../../utils/theme';
 import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
 import IconPollMine from '../../assets/icon/IconPollMine';
 
-export const PollOptions = ({
+const PollOptions = ({
   mypoll,
   poll,
   index,
@@ -22,7 +16,7 @@ export const PollOptions = ({
   isexpired = false,
   isalreadypolling = false,
   maxpolls = [],
-  onselected = () => {},
+  onselected = () => {}
 }) => {
   const counter = poll?.counter || 10;
   const optionPercentage = total === 0 ? 0 : (counter / total) * 100;
@@ -35,43 +29,53 @@ export const PollOptions = ({
   };
 
   const isMyPoll = () => mypoll?.polling_option_id === poll?.polling_option_id;
-  const isPollNotEndedAndIsMax =
-    isalreadypolling && maxpolls.includes(poll.polling_option_id);
+  const isPollNotEndedAndIsMax = isalreadypolling && maxpolls.includes(poll.polling_option_id);
 
   const isPollNotEndedAndIsMine = isalreadypolling && isMyPoll();
   const isMax = maxpolls.includes(poll.polling_option_id);
 
+  // eslint-disable-next-line consistent-return
   const renderPercentageBar = () => {
     if (isexpired) {
       return (
-        <View testID='isExpiredPollOption' style={styles.expiredPercentageBar(optionPercentage, isMax)} />
+        <View
+          testID="isExpiredPollOption"
+          style={styles.expiredPercentageBar(optionPercentage, isMax)}
+        />
       );
-    } if (isPollNotEndedAndIsMax) {
+    }
+    if (isPollNotEndedAndIsMax) {
       return (
-        <View testID='isPollNotEndedAndIsMax' style={styles.expiredPercentageBar(optionPercentage, isMax)} />
+        <View
+          testID="isPollNotEndedAndIsMax"
+          style={styles.expiredPercentageBar(optionPercentage, isMax)}
+        />
       );
-    } if (isalreadypolling) {
+    }
+    if (isalreadypolling) {
       return (
-        <View testID='isAlreadyPollingOption' style={styles.percentageBar(optionPercentage, isMyPoll())} />
+        <View
+          testID="isAlreadyPollingOption"
+          style={styles.percentageBar(optionPercentage, isMyPoll())}
+        />
       );
     }
   };
 
   const renderPollBadge = () => {
     if (isMax) {
-      return (
-        <IconPollWinnerBadge style={{marginRight: 9, alignSelf: 'center'}} />
-      );
-    } if (isPollNotEndedAndIsMine) {
+      return <IconPollWinnerBadge style={{marginRight: 9, alignSelf: 'center'}} />;
+    }
+    if (isPollNotEndedAndIsMine) {
       return <IconPollMine style={{marginRight: 9, alignSelf: 'center'}} />;
-    } 
-      return <></>;
-    
+    }
+    return <></>;
   };
 
   return (
     <TouchableNativeFeedback
-      testID='option'
+      key={index}
+      testID="option"
       disabled={isPollDisabled()}
       onPress={onPollPressed}>
       <View
@@ -88,20 +92,13 @@ export const PollOptions = ({
           ) : (
             <View
               style={
-                selectedindex === index
-                  ? styles.pollRadioButtonActive
-                  : styles.pollRadioButton
+                selectedindex === index ? styles.pollRadioButtonActive : styles.pollRadioButton
               }
             />
           )}
-          <Text style={styles.pollOptionItemText(isexpired, isMax)}>
-            {poll?.option}
-          </Text>
+          <Text style={styles.pollOptionItemText(isexpired, isMax)}>{poll?.option}</Text>
           {isPollDisabled() ? (
-            <Text
-              style={
-                styles.pollOptionItemPercentage
-              }>{`${optionPercentage}%`}</Text>
+            <Text style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text>
           ) : (
             <></>
           )}
@@ -111,12 +108,12 @@ export const PollOptions = ({
   );
 };
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   pollOptionsContainer: {
     width: '100%',
     padding: 0,
     marginTop: 16,
-    marginBottom: 8,
+    marginBottom: 8
   },
   pollOptionItemContainer: {
     backgroundColor: colors.lightgrey,
@@ -124,7 +121,7 @@ export const styles = StyleSheet.create({
     // height: 56,
     borderRadius: 8,
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   pollOptionItemContainerActive: {
     backgroundColor: colors.holytosca30percent,
@@ -132,68 +129,53 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 8,
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   pollOptionTextContainer: {
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 16
   },
-  pollOptionItemText: (isexpired, ismax) => ({
-      flex: 1,
-      color: colors.black,
-      fontFamily: fonts.inter[400],
-      marginStart: 0,
-      alignSelf: 'center',
-      fontSize: normalizeFontSize(14)
-
-    }),
+  pollOptionItemText: () => ({
+    flex: 1,
+    color: colors.black,
+    fontFamily: fonts.inter[400],
+    marginStart: 0,
+    alignSelf: 'center',
+    fontSize: normalizeFontSize(14)
+  }),
   pollOptionItemPercentage: {
     fontSize: normalizeFontSize(14)
   },
   percentageBar: (percent, isMyPoll = false) => {
-    if (!percent) {
-      percent = 0;
-    }
-    if (percent > 100) {
-      percent = 100;
-    }
-
     return {
-      width: `${percent}%`,
+      width: `${!percent ? 0 : percent > 100 ? 100 : percent}%`,
       height: '100%',
       position: 'absolute',
       top: 0,
       left: 0,
       borderRadius: 6,
-      backgroundColor: isMyPoll ? colors.bondi_blue : colors.gray1,
+      backgroundColor: isMyPoll ? colors.bondi_blue : colors.gray1
     };
   },
   expiredPercentageBar: (percent, isMax = false) => {
-    if (!percent) {
-      percent = 0;
-    }
-    if (percent > 100) {
-      percent = 100;
-    }
-
     return {
-      width: `${percent}%`,
+      width: `${!percent ? 0 : percent > 100 ? 100 : percent}%`,
       height: '100%',
       position: 'absolute',
       top: 0,
       left: 0,
       borderRadius: 6,
-      backgroundColor: isMax ? COLORS.blueSea : colors.gray1,
+      backgroundColor: isMax ? COLORS.blueSea : colors.gray1
     };
   },
   totalpolltext: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: 16,
-    color: colors.blackgrey,
+    color: colors.blackgrey
   },
   pollRadioButton: {
     width: 12,
@@ -202,7 +184,7 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     borderColor: colors.black,
     borderWidth: 1,
-    marginEnd: 8,
+    marginEnd: 8
   },
 
   pollRadioButtonActive: {
@@ -211,12 +193,12 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 6,
     backgroundColor: colors.holytosca,
-    marginEnd: 8,
+    marginEnd: 8
   },
   totalVotesContainer: {
     display: 'flex',
-    flexDirection: 'row',
-  },
+    flexDirection: 'row'
+  }
 });
 
 export default PollOptions;

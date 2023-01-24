@@ -3,7 +3,7 @@
  */
 import 'react-native-gesture-handler';
 import './src/libraries/reactotron/reactotronInstance';
-// import { enableScreens } from 'react-native-screens';
+import { enableScreens } from 'react-native-screens';
 import config from 'react-native-config'
 import { AppRegistry } from 'react-native';
 import { configureHumanID } from '@human-internet/react-native-humanid';
@@ -12,7 +12,7 @@ import App from './App';
 import AppIcon from './src/components/AppIcon';
 import { name as appName } from './app.json';
 
-// enableScreens();
+enableScreens();
 const { HUMAN_ID_CLIENT_ID, HUMAN_ID_CLIENT_SECRET} = config
 const clientSecret = HUMAN_ID_CLIENT_SECRET;
 const clientId = HUMAN_ID_CLIENT_ID;

@@ -1,27 +1,20 @@
-import * as React from 'react';
+import React from 'react';
 import {Image, StyleSheet} from 'react-native';
 
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {colors} from '../../utils/colors';
+import {Context} from '../../context';
+import {LoadingStartupContext} from '../../service/initialStartup';
 
-let ProfileIcon = ({uri, loadingUser}) => {
-  if(!loadingUser) {
-    if (uri) {
+const ProfileIcon = () => {
+  const [myProfile] = React.useContext(Context).profile;
+  const loadingStartup = React.useContext(LoadingStartupContext);
+  if (!loadingStartup.loadingUser) {
+    if (myProfile.myProfile.profile_pic_path) {
       return (
         <Image
           source={{
-            uri: `${uri}`,
-          }}
-          width={19}
-          height={19}
-          style={styles.borderCircleImage}
-        />
-      );
-    } else {
-      return (
-        <Image
-          source={{
-            uri: `${DEFAULT_PROFILE_PIC_PATH}`,
+            uri: `${myProfile.myProfile.profile_pic_path}`
           }}
           width={19}
           height={19}
@@ -29,19 +22,28 @@ let ProfileIcon = ({uri, loadingUser}) => {
         />
       );
     }
+    return (
+      <Image
+        source={{
+          uri: `${DEFAULT_PROFILE_PIC_PATH}`
+        }}
+        width={19}
+        height={19}
+        style={styles.borderCircleImage}
+      />
+    );
   }
-  return null
- 
+  return null;
 };
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   borderCircleImage: {
     borderRadius: 19,
     width: 19,
     height: 19,
     borderWidth: 0.25,
-    borderColor: colors.gray1,
-  },
+    borderColor: colors.gray1
+  }
 });
 
 export default ProfileIcon;
