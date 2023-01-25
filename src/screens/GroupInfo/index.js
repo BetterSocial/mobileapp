@@ -96,6 +96,7 @@ const GroupInfo = () => {
         width={80}
         height={80}
         style={styles.image(index === 0)}
+        testID='renderItem'
       />
       )
     }
@@ -110,7 +111,7 @@ const GroupInfo = () => {
       <View style={styles.lineTop} />
       <ScrollView>
         <SafeAreaView>
-          <TouchableOpacity onPress={handleOnImageClicked}>
+          <TouchableOpacity testID='imageClick' onPress={handleOnImageClicked}>
             <View style={styles.containerPhoto}>{showImageProfile()}</View>
           </TouchableOpacity>
           <View style={styles.row}>
@@ -131,10 +132,12 @@ const GroupInfo = () => {
           <View style={styles.lineTop} />
           <View style={styles.containerMedia(asset && asset.length === 0)}>
             <TouchableWithoutFeedback
+              testID='groupMedia'
               onPress={() => navigation.navigate('GroupMedia')}>
               <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
             </TouchableWithoutFeedback>
             <FlatList
+              testID='asset'
               data={asset}
               keyExtractor={(item, index) => index.toString()}
               style={styles.listImage(asset && asset.length === 0)}
@@ -147,6 +150,7 @@ const GroupInfo = () => {
           <View style={styles.users}>
             <Text style={styles.countUser}>Participants ({countUser})</Text>
             <FlatList
+              testID='participants'
               data={participants ? Object.keys(participants) : []}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
@@ -165,10 +169,11 @@ const GroupInfo = () => {
       </ScrollView>
       {!channel?.cid.includes('!members') && (
         <View style={styles.btnAdd}>
-          <TouchableWithoutFeedback
+          <TouchableOpacity
+            testID='addParticipant'
             onPress={() => navigation.push('AddParticipant')}>
             <Text style={styles.btnAddText}>+ Add Participants</Text>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </View>
       )}
       <View style={styles.containerLoading}>
