@@ -1,17 +1,22 @@
 import React from 'react'
 import { act, renderHook } from '@testing-library/react-hooks'
-import Store, { Context } from '../../src/context/Store'
+import { Context } from '../../src/context/Store'
 import useGroupInfo from '../../src/screens/GroupInfo/hooks/useGroupInfo'
 import * as groupChatService from '../../src/context/actions/groupChat';
 import * as servicePermission from '../../src/utils/permission';
-
-
+import * as launchGallery from 'react-native-image-picker'
+import * as serviceFile from '../../src/service/file';
 jest.mock('react-native-permissions', () =>
   require('react-native-permissions/mock'),
 );
 
 
 describe('useGroupInfo should run correctly', () => {
+
+    beforeEach(() => {
+        jest.spyOn(servicePermission, 'requestExternalStoragePermission').mockImplementation(() => ({success: true}))
+        jest.spyOn(serviceFile, 'uploadFile').mockImplementation(() => ({data: {url: 'https://detik.jpg'}}))
+    })
 
     const mockMyProfile = {
         bio: "Fe mobile engineer",
@@ -81,7 +86,6 @@ updated_at: "2023-01-24T01:41:46.237211Z"
     ]
 
 
-    const mockGroupChat = {}
 
     const mockParticipans = {
         'a3c59170-c110-4fac-929e-7834f6c6827f': {
@@ -242,6 +246,7 @@ updated_at: "2023-01-24T01:41:46.237211Z"
             navigate: jest.fn()
         }
         const spySetParticipant = jest.spyOn(groupChatService, 'setParticipants')
+
         const wrapper = ({children}) => (
             <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
                 {children}
@@ -252,6 +257,7 @@ updated_at: "2023-01-24T01:41:46.237211Z"
         expect(mockQueryMember).toHaveBeenCalled()
         expect(spySetParticipant).toHaveBeenCalled()
         expect(result.current.isLoadingMembers).toBeFalsy()
+
     })
 
     it('handleOnNameChange should run correctly', () => {
@@ -270,98 +276,41 @@ updated_at: "2023-01-24T01:41:46.237211Z"
         })
         expect(navigation.push).toHaveBeenCalled()
     })
+    
 
-    it('handleOnImageClicked should run correctly', () => {
+    it('handleOnImageClicked should run correctly', async () => {
           const navigation = {
             push: jest.fn(),
             navigate: jest.fn()
         }
         const spyPermission = jest.spyOn(servicePermission, 'requestExternalStoragePermission')
+        const spyGallery = jest.spyOn(launchGallery, 'launchImageLibrary')
         const wrapper = ({children}) => (
             <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
                 {children}
             </Context.Provider>
         )
         const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper})
-        act(() => {
-            result.current.handleOnImageClicked()
-        })
+        await result.current.handleOnImageClicked()
         expect(spyPermission).toHaveBeenCalled()
+        expect(spyGallery).toHaveBeenCalled()
+    })
+
+    it('uploadImageBase64 should run correctly', async () => {
+          const navigation = {
+            push: jest.fn(),
+            navigate: jest.fn()
+        }
+        const spyService = jest.spyOn(serviceFile, 'uploadFile')
+        const wrapper = ({children}) => (
+            <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
+                {children}
+            </Context.Provider>
+        )
+        const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper})
+        await result.current.uploadImageBase64({base64: '1234'})
+        expect(result.current.isUploadingImage).toBeTruthy()
+        expect(spyService).toHaveBeenCalled()
+        expect(result.current.uploadedImage).toEqual('https://detik.jpg')
     })
 })
-
-//   const handleOnNameChange = () => {
-//     navigation.push('GroupSetting', {
-//       username: chatName,
-//       focusChatName: true,
-//     });
-//   };
-  
-//     const handleOnImageClicked = () => {
-//     launchGallery();
-//   };
-
-//   const getMembersList = async () => {
-//     try {
-//       const result = await channel.queryMembers({});
-//       console.log(result.members, 'lalak')
-//       const serializedMember = serializeMembersList(result.members);
-//       setParticipants(serializedMember, groupPatchDispatch);
-//       setIsLoadingMembers(false);
-//     } catch(e) {
-//       if (__DEV__) {
-//         console.log(e);
-//       }
-//       setIsLoadingMembers(false)
-//     }
-//   };
-
-//   const onProfilePressed = (data) => {
-//     if (profile.myProfile.user_id === participants[data].user_id) {
-//       navigation.navigate('ProfileScreen', {
-//         isNotFromHomeTab : true
-//       });
-//       return;
-//     }
-
-//     navigation.navigate('OtherProfile', {
-//       data: {
-//         user_id: profile.myProfile.user_id,
-//         other_id: participants[data].user_id,
-//         username: participants[data].user.name,
-//       },
-//     });
-//   };
-
-
-
-//     const serializeMembersList = (result = []) => {
-//     if (typeof result !== 'object') {
-//       return {};
-//     }
-
-//     if (result.length === 0) {
-//       return {};
-//     }
-
-//     const membersObject = {};
-//     result.forEach((item, ) => {
-//       membersObject[item.user_id] = item;
-//     });
-//     return membersObject;
-//   };
-
-//       const getMembersList = async () => {
-//     try {
-//       const result = await channel.queryMembers({});
-//       console.log(result.members, 'lalak')
-//       const serializedMember = serializeMembersList(result.members);
-//       setParticipants(serializedMember, groupPatchDispatch);
-//       setIsLoadingMembers(false);
-//     } catch(e) {
-//       if (__DEV__) {
-//         console.log(e);
-//       }
-//       setIsLoadingMembers(false)
-//     }
-//   };

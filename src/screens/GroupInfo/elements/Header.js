@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {TouchableWithoutFeedback, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {Gap} from '../../../components';
@@ -11,10 +11,10 @@ const Header = ({title}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+      <TouchableOpacity testID='onBack' onPress={() => navigation.goBack()}>
         <MemoIc_arrow_back width={20} height={12} />
-      </TouchableWithoutFeedback>
-      <Text style={styles.title}>{trimString(title, 21)}</Text>
+      </TouchableOpacity>
+      <Text testID='title' style={styles.title}>{trimString(title, 21)}</Text>
       <Gap width={20} />
     </View>
   );
