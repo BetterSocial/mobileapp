@@ -46,6 +46,7 @@ const Comment = ({
 
   const onTextPress = React.useCallback(() => {
     if (level >= 2 || disableOnTextPress) {
+      console.log('');
       return;
     }
     if (onPress && typeof onPress === 'function') {
