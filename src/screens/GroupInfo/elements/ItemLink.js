@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, Linking, TouchableWithoutFeedback} from 'react-native';
+import {Image, Linking, TouchableOpacity} from 'react-native';
 import {StyleSheet, Text, View} from 'react-native';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
@@ -7,18 +7,18 @@ import {trimString} from '../../../utils/string/TrimString';
 
 const ItemLink = ({domain, link, title, image}) => {
   return (
-    <TouchableWithoutFeedback onPress={() => Linking.openURL(link)}>
+    <TouchableOpacity testID='onPress' onPress={() => Linking.openURL(link)}>
       <View style={styles.container}>
         <View style={styles.detail}>
           <View style={styles.itemDetail}>
-            <Text style={styles.title}>{trimString(title, 50)}</Text>
-            <Text style={styles.domain}>{domain}</Text>
+            <Text testID='title' style={styles.title}>{trimString(title, 50)}</Text>
+            <Text testID='domain' style={styles.domain}>{domain}</Text>
           </View>
           <Image style={styles.image} source={{uri: image}} />
         </View>
         <Text style={styles.link}>{link}</Text>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 

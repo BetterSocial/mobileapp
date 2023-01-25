@@ -40,7 +40,6 @@ const useGroupInfo = ({navigation}) => {
       const getMembersList = async () => {
     try {
       const result = await channel.queryMembers({});
-      console.log(result.members, 'lalak')
       const serializedMember = serializeMembersList(result.members);
       setParticipants(serializedMember, groupPatchDispatch);
       setIsLoadingMembers(false);
