@@ -1,8 +1,6 @@
 import React from 'react'
-import { Linking } from 'react-native'
-import {render, cleanup, act, fireEvent} from '@testing-library/react-native'
-import Link from '../../../src/screens/GroupInfo/elements/Link'
-import { trimString } from '../../../src/utils/string/TrimString';
+import {render} from '@testing-library/react-native'
+import Media from '../../../src/screens/GroupInfo/elements/Media'
 import { Context } from '../../../src/context';
 
 const mockGoback = jest.fn()
@@ -102,9 +100,8 @@ updated_at: "2023-01-24T01:41:46.237211Z"
                 {children}
             </Context.Provider>
         )
-        const {toJSON, getAllByTestId} = render(<Link  />, {wrapper})
+        const {toJSON} = render(<Media  />, {wrapper})
         expect(toJSON).toMatchSnapshot()
-        expect(getAllByTestId('onPress')).toHaveLength(mockAsset.length)
     })
 
 })
