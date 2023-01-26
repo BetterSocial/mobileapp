@@ -20,11 +20,10 @@ const useContentPoll = ({polls}) => {
   }
   const showSetResultsButton = (pollexpiredat) => !isPollExpired(pollexpiredat) && !isAlreadyPolling;
 
-  const onSeeResultsClicked = (item, multiplechoice, onnewpollfetched, index) => {
+  const handleMultipleChoice = (item, onnewpollfetched, index) => {
     const newPolls = [...polls];
     const newItem = { ...item };
-    if (multiplechoice) {
-      newItem.isalreadypolling = true;
+    newItem.isalreadypolling = true;
       newItem.refreshtoken = new Date().valueOf();
       if (multipleChoiceSelected.length === 0) {
         setIsAlreadyPolling(false)
@@ -44,9 +43,12 @@ const useContentPoll = ({polls}) => {
       }
       if(onnewpollfetched && typeof onnewpollfetched === 'function')       onnewpollfetched(newItem, index);
       setNewPoll(newItem)
-      // setIsAlreadyPolling(true);
-    } else {
-      newItem.isalreadypolling = true;
+  }
+
+  const handleNoMultipleChoice = (item, onnewpollfetched, index) => {
+    const newPolls = [...polls];
+    const newItem = { ...item };
+          newItem.isalreadypolling = true;
       newItem.refreshtoken = new Date().valueOf();
 
       if (singleChoiceSelectedIndex === -1) {
@@ -63,10 +65,18 @@ const useContentPoll = ({polls}) => {
           selectedPoll.polling_option_id,
         );
       }
-
-      onnewpollfetched(newItem, index);
+      if(onnewpollfetched && typeof onnewpollfetched === 'function') {
+        onnewpollfetched(newItem, index);
+      }
       setIsAlreadyPolling(true);
       setNewPoll(newItem)
+  }
+
+  const onSeeResultsClicked = (item, multiplechoice, onnewpollfetched, index) => {
+    if (multiplechoice) {
+      handleMultipleChoice(item, onnewpollfetched, index)
+    } else {
+     handleNoMultipleChoice(item, onnewpollfetched, index)
     }
   };
 

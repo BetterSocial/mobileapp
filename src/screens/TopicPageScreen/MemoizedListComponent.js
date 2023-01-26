@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/core';
 
 import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
-import ContentPoll from '../FeedScreen/ContentPoll';
 import Header from '../FeedScreen/Header';
 import ShareUtils from '../../utils/share'
 import StringConstant from '../../utils/string/StringConstant';
@@ -208,22 +207,6 @@ const RenderListFeed = (props) => {
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
         <Header props={item} height={getHeightHeader()} />
-        {item.post_type === POST_TYPE_POLL && (
-          <ContentPoll
-            index={index}
-            message={item.message}
-            images_url={item.images_url}
-            polls={item.pollOptions}
-            onPress={() => onPress(item, index)}
-            item={item}
-            pollexpiredat={item.polls_expired_at}
-            multiplechoice={item.multiplechoice}
-            isalreadypolling={item.isalreadypolling}
-            onnewpollfetched={onNewPollFetched}
-            voteCount={item.voteCount}
-          />
-        )}
-
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
             index={index}
@@ -233,12 +216,15 @@ const RenderListFeed = (props) => {
             onCardContentPress={() => navigateToLinkContextPage(item)}
           />
         )}
-        {item.post_type === POST_TYPE_STANDARD && (
+        {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
           <Content
             index={index}
             message={item.message}
             images_url={item.images_url}
             onPress={onPress}
+            item={item}
+            onNewPollFetched={onNewPollFetched}
+              
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
