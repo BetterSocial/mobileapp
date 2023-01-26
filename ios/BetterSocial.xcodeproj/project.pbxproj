@@ -47,7 +47,6 @@
 		845C6E9A2758B16500C9F384 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCE2758A00C00C9F384 /* Poppins-Thin.ttf */; };
 		845C6E9B2758B16800C9F384 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DBF2758A00B00C9F384 /* Poppins-ThinItalic.ttf */; };
 		845C6E9C2758B16B00C9F384 /* Poppins.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD52758A00C00C9F384 /* Poppins.ttf */; };
-		88203A2D2811FB6400199BF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88203A2C2811FB6400199BF0 /* GoogleService-Info.plist */; };
 		88954CF92832853500A4B355 /* FontsFree-Net-SFProText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88954CF82832852B00A4B355 /* FontsFree-Net-SFProText-Regular.ttf */; };
 		889CAB6227D46CD6007F5892 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		889CAB6327D46CD6007F5892 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -96,6 +95,7 @@
 		E1C561345A5FD457F1545D81 /* libPods-BetterSocial-BetterSocialTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B21DEAB1FB90E7DCB4A3131 /* libPods-BetterSocial-BetterSocialTests.a */; };
 		E97154A42976870A0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E97154A52976870B0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		E971B4FE298060060050AAC5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E971B4FD298060060050AAC5 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,7 +173,6 @@
 		845C6DD82758A00C00C9F384 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		845C6DD92758A00C00C9F384 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		872AA14391C366F352E74819 /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.release.xcconfig"; sourceTree = "<group>"; };
-		88203A2C2811FB6400199BF0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "Development/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		88954CF82832852B00A4B355 /* FontsFree-Net-SFProText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FontsFree-Net-SFProText-Regular.ttf"; path = "../assets/fonts/FontsFree-Net-SFProText-Regular.ttf"; sourceTree = "<group>"; };
 		889CAB1B27D437C3007F5892 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		889CAB8E27D46CD6007F5892 /* BetterSocialDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterSocialDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -198,6 +197,7 @@
 		E1DE8642037C401E91B99F83 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		E2BBBD9BBC740EB6102642D5 /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.debug.xcconfig"; sourceTree = "<group>"; };
 		E8A1A88B295646DCA23AABFD /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
+		E971B4FD298060060050AAC5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../kevinnathaniel/Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F5913E96BDBE423996F307FB /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -426,7 +426,7 @@
 		889CAB9427D46F9B007F5892 /* Development */ = {
 			isa = PBXGroup;
 			children = (
-				88203A2C2811FB6400199BF0 /* GoogleService-Info.plist */,
+				E971B4FD298060060050AAC5 /* GoogleService-Info.plist */,
 			);
 			path = Development;
 			sourceTree = "<group>";
@@ -528,7 +528,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BetterSocial-tvOSTests" */;
 			buildPhases = (
-				E88FE2F15469F353C1502868 /* [CP] Check Pods Manifest.lock */,
+				E88FE2F15469F353C1502868 /* [CP] Embed Pods Frameworks */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -716,13 +716,13 @@
 				889CAB7827D46CD6007F5892 /* Poppins-Regular.ttf in Resources */,
 				889CAB7927D46CD6007F5892 /* Poppins-SemiBoldItalic.ttf in Resources */,
 				E97154A52976870B0021A505 /* LaunchScreen.storyboard in Resources */,
+				E971B4FE298060060050AAC5 /* GoogleService-Info.plist in Resources */,
 				889CAB7A27D46CD6007F5892 /* Inter-Medium.ttf in Resources */,
 				889CAB7B27D46CD6007F5892 /* Poppins-ExtraLightItalic.ttf in Resources */,
 				889CAB7C27D46CD6007F5892 /* Poppins-ExtraBoldItalic.ttf in Resources */,
 				889CAB7D27D46CD6007F5892 /* Inter-Black.ttf in Resources */,
 				889CAB7E27D46CD6007F5892 /* Poppins-ExtraLight.ttf in Resources */,
 				889CAB7F27D46CD6007F5892 /* Inter-Light.ttf in Resources */,
-				88203A2D2811FB6400199BF0 /* GoogleService-Info.plist in Resources */,
 				889CAB8027D46CD6007F5892 /* Poppins-Thin.ttf in Resources */,
 				889CAB8127D46CD6007F5892 /* Poppins-ExtraBold.ttf in Resources */,
 				889CAB8227D46CD6007F5892 /* Poppins-Medium.ttf in Resources */,
@@ -1078,7 +1078,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial/Pods-BetterSocial-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E88FE2F15469F353C1502868 /* [CP] Check Pods Manifest.lock */ = {
+		E88FE2F15469F353C1502868 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1608,7 +1608,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.BetterSocial;
+				PRODUCT_BUNDLE_IDENTIFIER = org.bettersocial.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1639,7 +1639,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.BetterSocial;
+				PRODUCT_BUNDLE_IDENTIFIER = org.bettersocial.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
