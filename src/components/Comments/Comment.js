@@ -43,7 +43,8 @@ const Comment = ({
     level,
     updateVote
   });
-  const onTextPress = () => {
+
+  const onTextPress = React.useCallback(() => {
     if (level >= 2 || disableOnTextPress) {
       console.log('');
       return;
@@ -51,9 +52,9 @@ const Comment = ({
     if (onPress && typeof onPress === 'function') {
       onPress();
     }
-  };
+  }, []);
 
-  const openProfile = async () => {
+  const openProfile = React.useCallback(async () => {
     const selfUserId = await getUserId();
     if (selfUserId === user.id) {
       return navigation.navigate('ProfileScreen', {
@@ -67,7 +68,7 @@ const Comment = ({
         username: user.data.username
       }
     });
-  };
+  }, [user.id]);
 
   const onBlockComponent = () => {
     refBlockComponent.current.openBlockComponent({
@@ -178,16 +179,26 @@ const Comment = ({
 };
 
 export const isEqual = (prevProps, nextProps) => prevProps.comment === nextProps.comment;
-export default React.memo(Comment);
 
 const styles = StyleSheet.create({
-  vote: (count) => ({
-    ...FONTS.body3,
-    textAlign: 'center',
-    width: 26,
-    alignSelf: 'center',
-    color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4'
-  }),
+  vote: (count) => {
+    function colorBasedCount() {
+      if (count > 0) {
+        return '#00ADB5';
+      }
+      if (count < 0) {
+        return '#FF2E63';
+      }
+      return '#C4C4C4';
+    }
+    return {
+      ...FONTS.body3,
+      textAlign: 'center',
+      width: 26,
+      alignSelf: 'center',
+      color: colorBasedCount()
+    };
+  },
   btn: {
     // width: 30,
     height: 30,
@@ -199,12 +210,24 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12
   },
-  container: ({isLast, style, level, showLeftConnector}) => ({
-    width: '100%',
-    borderLeftWidth: showLeftConnector ? 1 : 0,
-    borderLeftColor: isLast ? (level === 0 ? colors.gray1 : 'transparent') : colors.gray1,
-    ...style
-  }),
+  container: ({isLast, style, level, showLeftConnector}) => {
+    function borderLeftColorBasedLevel() {
+      if (isLast) {
+        if (level === 0) {
+          return colors.gray1;
+        }
+        return 'transparent';
+      }
+      return colors.gray1;
+    }
+
+    return {
+      width: '100%',
+      borderLeftWidth: showLeftConnector ? 1 : 0,
+      borderLeftColor: borderLeftColorBasedLevel(),
+      ...style
+    };
+  },
   flexStartContainer: {
     alignSelf: 'flex-start'
   },
@@ -268,3 +291,5 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
+
+export default React.memo(Comment);

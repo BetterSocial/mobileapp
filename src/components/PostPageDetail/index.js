@@ -482,6 +482,18 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
+  const navigateToReply = React.useCallback(
+    (data) =>
+      navigateToReplyView(
+        data,
+        updateParentPost,
+        findCommentAndUpdate,
+        item,
+        updateVoteLatestChildren
+      ),
+    []
+  );
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'height' : null}
@@ -535,15 +547,7 @@ const PostPageDetailIdComponent = (props) => {
                 isLoading={loadingPost}
                 refreshComment={handleRefreshComment}
                 refreshChildComment={handleRefreshChildComment}
-                navigateToReplyView={(data) =>
-                  navigateToReplyView(
-                    data,
-                    updateParentPost,
-                    findCommentAndUpdate,
-                    item,
-                    updateVoteLatestChildren
-                  )
-                }
+                navigateToReplyView={navigateToReply}
                 findCommentAndUpdate={findCommentAndUpdate}
                 updateParentPost={updateParentPost}
                 contextSource={contextSource}

@@ -24,7 +24,7 @@ target 'BetterSocial' do
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
 
-  use_react_native!(:path => config["reactNativePath"], :hermes_enabled => true)
+  # use_react_native!(:path => config["reactNativePath"], :hermes_enabled => true)
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 

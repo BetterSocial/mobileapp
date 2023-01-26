@@ -65,7 +65,6 @@ export const useInitialStartup = () => {
   const callStreamFeed = async () => {
     const token = await getAccessToken();
     if (token) {
-      console.tron.log('msk');
       const clientFeed = streamFeed(token);
       const notif = clientFeed.feed('notification', profileState.user_id, token.id);
       notif.subscribe(() => {
@@ -221,7 +220,6 @@ export const useInitialStartup = () => {
         getDiscoveryData();
         getProfile();
 
-        console.tron.log('check');
         timeoutSplashScreen.current = setTimeout(() => {
           SplashScreen.hide();
 
