@@ -23,6 +23,7 @@ jest.mock('@react-navigation/native', () => ({
 }));
 
 
+
 describe('GroupInfo should run correctly', () => {
     const mockMyProfile = {
         bio: "Fe mobile engineer",
@@ -75,6 +76,32 @@ describe('GroupInfo should run correctly', () => {
                         type: "image",
                     }
                 ],
+                channel: {
+                    cid: "messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a",
+                    created_at: "2022-09-30T22:49:45.59342Z",
+                    disabled: false,
+                    frozen: false,
+                    id: "c47d45f2-0dd9-4eaa-1600-4ff6e518199a",
+                    last_message_at: "2023-01-24T01:00:59.432027Z",
+                    member_count: 4,
+                    name: "Test group baru",
+                    type: "messaging",
+updated_at: "2023-01-24T01:41:46.237211Z"
+                }
+            }
+        }
+    ]
+
+       const mockAsset1 = [
+        {
+            message: {
+                cid: "messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a",
+                created_at: "2023-01-24T00:59:12.801526Z",
+                html: "",
+                id: "c6c91b04-795c-404e-b012-ea28813a2006-531b41e6-263b-4d6c-1c0e-e62f13357aef",
+                latest_reactions: [],
+                mentioned_users: [],
+                attachments: null,
                 channel: {
                     cid: "messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a",
                     created_at: "2022-09-30T22:49:45.59342Z",
@@ -181,7 +208,8 @@ updated_at: "2023-01-24T01:41:46.237211Z"
             member_count: 4,
             name: "Test group baru",
             type: "messaging",
-            updated_at: "2023-01-24T01:41:46.237211Z"
+            updated_at: "2023-01-24T01:41:46.237211Z",
+            image: 'https://image.jpg'
         },
         disconnected: false,
         id: "c47d45f2-0dd9-4eaa-1600-4ff6e518199a",
@@ -270,6 +298,7 @@ updated_at: "2023-01-24T01:41:46.237211Z"
         )
         const {getByTestId} = render(<GroupInfo />, {wrapper})
         expect(getByTestId('asset').props.keyExtractor(mockAsset[0], 1 )).toEqual('1')
+         expect(getByTestId('asset').props.renderItem({item: mockAsset1[0]})).toEqual(null)
         expect(getByTestId('asset').props.renderItem({item: mockAsset[0]})).toEqual(<Image height={80} source={{uri: "https://us-east.stream-io-cdn.com/114344/images/4d589ea4-8717-4c2a-bd9a-68a343a1a688.image-534fc5f4-33de-46f3-8f59-ec43e1853ad5790.jpg?Key-Pair-Id=APKAIHG36VEWPDULE23Q&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy1lYXN0LnN0cmVhbS1pby1jZG4uY29tLzExNDM0NC9pbWFnZXMvNGQ1ODllYTQtODcxNy00YzJhLWJkOWEtNjhhMzQzYTFhNjg4LmltYWdlLTUzNGZjNWY0LTMzZGUtNDZmMy04ZjU5LWVjNDNlMTg1M2FkNTc5MC5qcGc~Km9oPTEyODAqb3c9OTYwKiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTY3NTczMTU1Mn19fV19&Signature=Q6pitq~Opzb-~~lPSshSSFvkol2hni~Zm70Hpfw3xFMjSOoCnqu7CLLlDk8H7NI9Qq1CK8HqDKTDxfRbPTiSkHYBGTPwwC-BFMGxafxUbNngjsAvaEB9822NhthJrlnp-1RSwU~Lc7WPJ-uiuOstBt8gE1g5NVQULSSBenICq75bCX5WE363aOHUCnrrFHMX6kewJ4-suGwbKv~J7Uo2YSCG7sUEY4foMKBOP3TuajYkqlY6UNhmunCvlNQHXJMdccTUbH7v7HuOjYbmTKFzxCYWPX9BM3-eYSH07oV7T5oCU7k9ZNBjc8wf0f5lEd2Qdp58TL0OOyC6eBVvz7oO8g__&oh=1280&ow=960"}} style={{"height": 80, "marginLeft": 5,"width": 80,}} width={80} testID="renderItem" />)
     })
 
@@ -298,8 +327,62 @@ updated_at: "2023-01-24T01:41:46.237211Z"
 
     })
 
+    it('showImageProfile should run correctly', () => {
+        const wrapper = ({children}) => (
+           <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
+                {children}
+            </Context.Provider>
+        )
+        const {getByTestId} = render(<GroupInfo />, {wrapper})
+    })
+
 
 })
+
+// const showImageProfile = () => {
+//     if (profileChannel || channel?.data?.image) {
+//       if (uploadedImage !== '') {
+//         return (
+//           <Image testID='image1' style={styles.btnUpdatePhoto} source={{uri: uploadedImage !== '' ? uploadedImage: undefined}} />
+//         );
+//       }
+
+//       if (channel?.data?.image?.indexOf('res.cloudinary.com') > -1) {
+//         return (
+//           <Image
+//             testID='image2'
+//             style={styles.btnUpdatePhoto}
+//             source={{uri: channel?.data?.image !== '' ? channel?.data?.image : undefined}}
+//           />
+//         );
+//       }
+
+//       if (channel?.data?.image) {
+//         return (
+//           <Image
+//             testID='image3'
+//             style={styles.btnUpdatePhoto}
+//             source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
+//           />
+//         );
+//       }
+//         return (
+//           <View style={styles.containerAvatar}>
+//             <Image
+//               testID='image4'
+//               source={DefaultChatGroupProfilePicture}
+//               style={styles.groupProfilePicture}
+//             />
+//           </View>
+//         );
+
+//     }
+//     return (
+//       <View testID='image5' style={styles.btnUpdatePhoto}>
+//         <MemoIc_pencil width={50} height={50} color={colors.gray1} />
+//       </View>
+//     );
+//   };
 
 //  {!channel?.cid.includes('!members') && (
 //         <View style={styles.btnAdd}>

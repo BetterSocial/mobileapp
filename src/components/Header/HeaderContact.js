@@ -23,7 +23,7 @@ const HeaderContact = ({
   const renderHeader = () => {
     if (Platform.OS === 'android') {
       return (
-        <GlobalButton buttonStyle={styles.noPaddingLeft} onPress={onPress}>
+        <GlobalButton testID='onPressAndroid' buttonStyle={styles.noPaddingLeft} onPress={onPress}>
           <View testID='android' style={styles.content(-4)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
@@ -31,7 +31,7 @@ const HeaderContact = ({
       );
     } 
       return (
-        <GlobalButton buttonStyle={styles.noPaddingLeft} onPress={onPress}>
+        <GlobalButton testID='onPressIos' buttonStyle={styles.noPaddingLeft} onPress={onPress}>
           <View testID='ios' style={styles.content(-8)}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </View>
