@@ -20,13 +20,13 @@ import { fonts, normalizeFontSize } from '../../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../../utils/string/StringUtils';
 import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
 import { POST_TYPE_POLL } from '../../../utils/constants';
-
+import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed'
 const { width: screenWidth } = Dimensions.get('window');
 
 const Content = ({ message, images_url, topics = [], item, onnewpollfetched }) => {
   const navigation = useNavigation();
   const cekImage = () => images_url  && images_url !== '' ;
-
+  const {hashtagAtComponent} = useContentFeed({navigation})
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -46,7 +46,9 @@ const Content = ({ message, images_url, topics = [], item, onnewpollfetched }) =
     <>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
         <View style={[styles.contentFeed]}>
-          <Text style={styles.textContentFeed}>{getCaptionWithTopicStyle(message, navigation,  substringNoImageTopic, item?.topics)}</Text>
+          <Text style={[styles.textContentFeed]} >
+            {hashtagAtComponent(message)}
+          </Text>
           {item && item.post_type === POST_TYPE_POLL ?
             <ContentPoll
               message={item.message}
@@ -165,10 +167,13 @@ const styles = StyleSheet.create({
 
   },
   textContentFeed: {
-    fontFamily: fonts.inter[400],
+       fontFamily: fonts.inter[400],
+    fontWeight: 'normal',
     fontSize: normalizeFontSize(14),
-    lineHeight: 24,
     color: colors.black,
+    lineHeight: 24,
+    flex: 1,
+    flexWrap: 'wrap',
   },
   textComment: {
     fontFamily: fonts.inter[400],
