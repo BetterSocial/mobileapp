@@ -46,13 +46,14 @@ const GroupInfo = () => {
     if (profileChannel || channel?.data?.image) {
       if (uploadedImage !== '') {
         return (
-          <Image style={styles.btnUpdatePhoto} source={{uri: uploadedImage !== '' ? uploadedImage: undefined}} />
+          <Image testID='image1' style={styles.btnUpdatePhoto} source={{uri: uploadedImage !== '' ? uploadedImage: undefined}} />
         );
       }
 
       if (channel?.data?.image?.indexOf('res.cloudinary.com') > -1) {
         return (
           <Image
+            testID='image2'
             style={styles.btnUpdatePhoto}
             source={{uri: channel?.data?.image !== '' ? channel?.data?.image : undefined}}
           />
@@ -62,6 +63,7 @@ const GroupInfo = () => {
       if (channel?.data?.image) {
         return (
           <Image
+            testID='image3'
             style={styles.btnUpdatePhoto}
             source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
           />
@@ -70,6 +72,7 @@ const GroupInfo = () => {
         return (
           <View style={styles.containerAvatar}>
             <Image
+              testID='image4'
               source={DefaultChatGroupProfilePicture}
               style={styles.groupProfilePicture}
             />
@@ -78,7 +81,7 @@ const GroupInfo = () => {
 
     }
     return (
-      <View style={styles.btnUpdatePhoto}>
+      <View testID='image5' style={styles.btnUpdatePhoto}>
         <MemoIc_pencil width={50} height={50} color={colors.gray1} />
       </View>
     );
