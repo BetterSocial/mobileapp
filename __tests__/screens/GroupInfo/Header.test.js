@@ -1,5 +1,5 @@
 import React from 'react'
-import {render, cleanup, act, fireEvent} from '@testing-library/react-native'
+import {render, act, fireEvent} from '@testing-library/react-native'
 import Header from '../../../src/screens/GroupInfo/elements/Header'
 import { trimString } from '../../../src/utils/string/TrimString';
 

@@ -1,8 +1,8 @@
 import React from 'react'
-import {render, cleanup, act, fireEvent} from '@testing-library/react-native'
+import {render, act, fireEvent} from '@testing-library/react-native'
 import { Image } from 'react-native'
 import GroupInfo, {styles} from '../../../src/screens/GroupInfo'
-import Store, { Context } from '../../../src/context/Store';
+import { Context } from '../../../src/context/Store';
 import * as useGroupInfo from '../../../src/screens/GroupInfo/hooks/useGroupInfo'
 jest.mock('react-native-permissions', () =>
   require('react-native-permissions/mock'),
@@ -338,75 +338,3 @@ updated_at: "2023-01-24T01:41:46.237211Z"
 
 
 })
-
-// const showImageProfile = () => {
-//     if (profileChannel || channel?.data?.image) {
-//       if (uploadedImage !== '') {
-//         return (
-//           <Image testID='image1' style={styles.btnUpdatePhoto} source={{uri: uploadedImage !== '' ? uploadedImage: undefined}} />
-//         );
-//       }
-
-//       if (channel?.data?.image?.indexOf('res.cloudinary.com') > -1) {
-//         return (
-//           <Image
-//             testID='image2'
-//             style={styles.btnUpdatePhoto}
-//             source={{uri: channel?.data?.image !== '' ? channel?.data?.image : undefined}}
-//           />
-//         );
-//       }
-
-//       if (channel?.data?.image) {
-//         return (
-//           <Image
-//             testID='image3'
-//             style={styles.btnUpdatePhoto}
-//             source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
-//           />
-//         );
-//       }
-//         return (
-//           <View style={styles.containerAvatar}>
-//             <Image
-//               testID='image4'
-//               source={DefaultChatGroupProfilePicture}
-//               style={styles.groupProfilePicture}
-//             />
-//           </View>
-//         );
-
-//     }
-//     return (
-//       <View testID='image5' style={styles.btnUpdatePhoto}>
-//         <MemoIc_pencil width={50} height={50} color={colors.gray1} />
-//       </View>
-//     );
-//   };
-
-//  {!channel?.cid.includes('!members') && (
-//         <View style={styles.btnAdd}>
-//           <TouchableOpacity
-//             testID='addParticipant'
-//             onPress={() => navigation.push('AddParticipant')}>
-//             <Text style={styles.btnAddText}>+ Add Participants</Text>
-//           </TouchableOpacity>
-//         </View>
-//       )}
-
-  // const renderItem = ({item, index}) => {
-  //   if(item.message.attachments && Array.isArray(item.message.attachments)) {
-  //     return (
-  //        <Image
-  //       source={{
-  //         uri: item.message.attachments[0] && item.message.attachments[0].image_url,
-  //       }}
-  //       width={80}
-  //       height={80}
-  //       style={styles.image(index === 0)}
-  //       testID='renderItem'
-  //     />
-  //     )
-  //   }
-  //   return null
-  // }

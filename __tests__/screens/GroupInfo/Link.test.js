@@ -1,8 +1,6 @@
 import React from 'react'
-import { Linking } from 'react-native'
-import {render, cleanup, act, fireEvent} from '@testing-library/react-native'
+import {render} from '@testing-library/react-native'
 import Link from '../../../src/screens/GroupInfo/elements/Link'
-import { trimString } from '../../../src/utils/string/TrimString';
 import { Context } from '../../../src/context';
 
 const mockGoback = jest.fn()

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Linking } from 'react-native'
-import {render, cleanup, act, fireEvent} from '@testing-library/react-native'
+import {render, act, fireEvent} from '@testing-library/react-native'
 import ItemLink from '../../../src/screens/GroupInfo/elements/ItemLink'
 import { trimString } from '../../../src/utils/string/TrimString';
 
