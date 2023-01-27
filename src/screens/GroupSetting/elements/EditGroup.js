@@ -34,12 +34,11 @@ const EditGroup = ({
   }, [inputChatNameRef, isFocusChatName]);
 
   const renderImage = (source) => {
-    try {
-      if (source && source.indexOf('file:///') > -1) {
-        return <Image source={{uri: source}} style={styles.image} />;
+   if (source && source.indexOf('file:///') > -1) {
+        return <Image testID='fileImage' source={{uri: source}} style={styles.image} />;
       } else if (source && source.length > 0) {
         if (source.indexOf('res.cloudinary.com') > -1) {
-          return <Image source={{uri: source}} style={styles.image} />;
+          return <Image testID='rescloud' source={{uri: source}} style={styles.image} />;
         }
 
         return (
@@ -50,14 +49,11 @@ const EditGroup = ({
         );
       } else if (countUser > 2) {
         return (
-          <Image source={DefaultChatGroupProfilePicture} style={styles.image} />
+          <Image testID='imageCountUser' source={DefaultChatGroupProfilePicture} style={styles.image} />
         );
       } else {
-        return <MemoIc_pencil width={25} height={25} color={COLORS.gray1} />;
+        return <View testID='imagePencil' ><MemoIc_pencil width={25} height={25} color={COLORS.gray1} /></View>;
       }
-    } catch (e) {
-      return <MemoIc_pencil width={25} height={25} color={COLORS.gray1} />;
-    }
   };
 
   return (
@@ -65,6 +61,7 @@ const EditGroup = ({
       <View style={styles.itemEdit}>
         {true ? (
           <TouchableOpacity
+            testID='updateImage'
             style={styles.btnUpdatePhoto}
             onPress={onUpdateImage}>
             {renderImage(imageUri)}
@@ -86,6 +83,7 @@ const EditGroup = ({
             onChangeText={setEditName}
             selectTextOnFocus
             onBlur={saveGroupName}
+            testID='onInputChange'
           />
         ) : (
           <Text style={styles.editName}>{editName}</Text>

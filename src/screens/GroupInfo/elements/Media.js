@@ -3,19 +3,13 @@ import {Image} from 'react-native';
 import {FlatList} from 'react-native';
 import {StyleSheet, View} from 'react-native';
 import {Context} from '../../../context';
+import useMedia from './useMedia';
 
 const Media = () => {
   const [groupChatState] = React.useContext(Context).groupChat;
   let {asset} = groupChatState;
-  const [count, setCount] = React.useState(5);
-  const getSpace = (index) => {
-    if (index === 0 && index + 1 === count) {
-      setCount(index + 1 === count);
-      return true;
-    } else {
-      return false;
-    }
-  };
+  const {getSpace} = useMedia()
+
 
   return (
     <View style={styles.container}>

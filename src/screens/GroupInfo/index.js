@@ -12,70 +12,24 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
 import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
-import {Context} from '../../context';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {getChatName} from '../../utils/string/StringUtils';
-import {requestExternalStoragePermission} from '../../utils/permission';
-import {setParticipants} from '../../context/actions/groupChat';
 import {trimString} from '../../utils/string/TrimString';
-import {uploadFile} from '../../service/file';
+import useGroupInfo from './hooks/useGroupInfo'
 
 const GroupInfo = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [groupChatState, groupPatchDispatch] =
-    React.useContext(Context).groupChat;
-  const {participants, asset} = groupChatState;
-  const [channelState, ] = React.useContext(Context).channel;
-  const [profile] = React.useContext(Context).profile;
-  const {channel, profileChannel} = channelState;
-  const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
-  const [uploadedImage, setUploadedImage] = React.useState('');
-  const [isUploadingImage, setIsUploadingImage] = React.useState(false);
+  const {participants, asset, channel, profileChannel, isLoadingMembers, setIsLoadingMembers, uploadedImage, isUploadingImage, createChat, countUser, getMembersList, chatName, onProfilePressed, handleOnNameChange, handleOnImageClicked} = useGroupInfo({navigation})
 
-  const username = channelState.channel?.data?.name;
-  const createChat = channelState.channel?.data?.created_at;
-  const countUser = Object.entries(participants).length;
-
-  const serializeMembersList = (result = []) => {
-    if (typeof result !== 'object') {
-      return {};
-    }
-
-    if (result.length === 0) {
-      return {};
-    }
-
-    const membersObject = {};
-    result.forEach((item, ) => {
-      membersObject[item.user_id] = item;
-    });
-    return membersObject;
-  };
-
-  const getMembersList = async () => {
-    try {
-      const result = await channel.queryMembers({});
-      const serializedMember = serializeMembersList(result.members);
-      setParticipants(serializedMember, groupPatchDispatch);
-      setIsLoadingMembers(false);
-    } catch(e) {
-      if (__DEV__) {
-        console.log(e);
-      }
-      setIsLoadingMembers(false)
-    }
-  };
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -92,13 +46,14 @@ const GroupInfo = () => {
     if (profileChannel || channel?.data?.image) {
       if (uploadedImage !== '') {
         return (
-          <Image style={styles.btnUpdatePhoto} source={{uri: uploadedImage !== '' ? uploadedImage: undefined}} />
+          <Image testID='image1' style={styles.btnUpdatePhoto} source={{uri: uploadedImage !== '' ? uploadedImage: undefined}} />
         );
       }
 
       if (channel?.data?.image?.indexOf('res.cloudinary.com') > -1) {
         return (
           <Image
+            testID='image2'
             style={styles.btnUpdatePhoto}
             source={{uri: channel?.data?.image !== '' ? channel?.data?.image : undefined}}
           />
@@ -108,6 +63,7 @@ const GroupInfo = () => {
       if (channel?.data?.image) {
         return (
           <Image
+            testID='image3'
             style={styles.btnUpdatePhoto}
             source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
           />
@@ -116,6 +72,7 @@ const GroupInfo = () => {
         return (
           <View style={styles.containerAvatar}>
             <Image
+              testID='image4'
               source={DefaultChatGroupProfilePicture}
               style={styles.groupProfilePicture}
             />
@@ -124,90 +81,30 @@ const GroupInfo = () => {
 
     }
     return (
-      <View style={styles.btnUpdatePhoto}>
+      <View testID='image5' style={styles.btnUpdatePhoto}>
         <MemoIc_pencil width={50} height={50} color={colors.gray1} />
       </View>
     );
   };
 
-  const chatName = getChatName(username, profile.myProfile.username);
 
-  const onProfilePressed = (data) => {
-    if (profile.myProfile.user_id === participants[data].user_id) {
-      navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab : true
-      });
-      return;
+
+  const renderItem = ({item, index}) => {
+    if(item.message.attachments && Array.isArray(item.message.attachments)) {
+      return (
+         <Image
+        source={{
+          uri: item.message.attachments[0] && item.message.attachments[0].image_url,
+        }}
+        width={80}
+        height={80}
+        style={styles.image(index === 0)}
+        testID='renderItem'
+      />
+      )
     }
-
-    navigation.navigate('OtherProfile', {
-      data: {
-        user_id: profile.myProfile.user_id,
-        other_id: participants[data].user_id,
-        username: participants[data].user.name,
-      },
-    });
-  };
-
-  const handleOnNameChange = () => {
-    navigation.push('GroupSetting', {
-      username: chatName,
-      focusChatName: true,
-    });
-  };
-
-  const handleOnImageClicked = () => {
-    launchGallery();
-  };
-
-  const uploadImageBase64 = async (res) => {
-    try {
-      setIsUploadingImage(true);
-      const result = await uploadFile(`data:image/jpeg;base64,${res.base64}`);
-      setUploadedImage(result.data.url);
-      const dataEdit = {
-        name: chatName,
-        image: result.data.url,
-      };
-
-      await channel.update(dataEdit);
-      setIsUploadingImage(false);
-    } catch (e) {
-      if (__DEV__) {
-        console.log(e);
-      }
-    }
-  };
-
-  const launchGallery = async () => {
-    const {success, } = await requestExternalStoragePermission();
-    if (success) {
-      launchImageLibrary(
-        {
-          mediaType: 'photo',
-          maxHeight: 500,
-          maxWidth: 500,
-          includeBase64: true,
-        },
-        (res) => {
-          if (!res.didCancel) {
-            uploadImageBase64(res);
-          }
-        },
-      );
-    }
-  };
-
-  const renderItem = ({item, index}) => (
-    <Image
-      source={{
-        uri: item.message.attachments[0].image_url !== '' ? item.message.attachments[0] : undefined,
-      }}
-      width={80}
-      height={80}
-      style={styles.image(index === 0)}
-    />
-  )
+    return null
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -217,7 +114,7 @@ const GroupInfo = () => {
       <View style={styles.lineTop} />
       <ScrollView>
         <SafeAreaView>
-          <TouchableOpacity onPress={handleOnImageClicked}>
+          <TouchableOpacity testID='imageClick' onPress={handleOnImageClicked}>
             <View style={styles.containerPhoto}>{showImageProfile()}</View>
           </TouchableOpacity>
           <View style={styles.row}>
@@ -236,15 +133,17 @@ const GroupInfo = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.lineTop} />
-          <View style={styles.containerMedia(asset.length === 0)}>
+          <View style={styles.containerMedia(asset && asset.length === 0)}>
             <TouchableWithoutFeedback
+              testID='groupMedia'
               onPress={() => navigation.navigate('GroupMedia')}>
               <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
             </TouchableWithoutFeedback>
             <FlatList
+              testID='asset'
               data={asset}
               keyExtractor={(item, index) => index.toString()}
-              style={styles.listImage(asset.length === 0)}
+              style={styles.listImage(asset && asset.length === 0)}
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={renderItem}
@@ -254,7 +153,8 @@ const GroupInfo = () => {
           <View style={styles.users}>
             <Text style={styles.countUser}>Participants ({countUser})</Text>
             <FlatList
-              data={Object.keys(participants)}
+              testID='participants'
+              data={participants ? Object.keys(participants) : []}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
                 <View style={{height: normalize(72)}}>
@@ -272,10 +172,11 @@ const GroupInfo = () => {
       </ScrollView>
       {!channel?.cid.includes('!members') && (
         <View style={styles.btnAdd}>
-          <TouchableWithoutFeedback
+          <TouchableOpacity
+            testID='addParticipant'
             onPress={() => navigation.push('AddParticipant')}>
             <Text style={styles.btnAddText}>+ Add Participants</Text>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </View>
       )}
       <View style={styles.containerLoading}>
@@ -288,7 +189,7 @@ const GroupInfo = () => {
 
 export default GroupInfo;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
   users: {
     paddingTop: 12,
