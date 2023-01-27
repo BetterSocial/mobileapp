@@ -76,17 +76,21 @@ const useGroupSetting = ({navigation, route}) => {
           includeBase64: true,
         },
         (res) => {
-          if (!res.didCancel) {
-            setChangeImage(true);
-            setBase64Profile(res.base64);
-            setUrlImage(res.uri);
-          }
+          handleResLaunchGallery(res)
         },
       );
     } else {
       SimpleToast.show(message, SimpleToast.SHORT);
     }
   };
+
+  const handleResLaunchGallery = (res) => {
+    if (!res.didCancel) {
+            setChangeImage(true);
+            setBase64Profile(res.base64);
+            setUrlImage(res.uri);
+          }
+  }
 
     const renderHeaderSubtitleText = () => {
     if (changeImage || changeName) {
@@ -117,7 +121,8 @@ const useGroupSetting = ({navigation, route}) => {
     urlImage,
     setUrlImage,
     isLoading,
-    setIsLoading  
+    setIsLoading,
+    handleResLaunchGallery  
   }
 
 }
