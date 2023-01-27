@@ -186,15 +186,16 @@ updated_at: "2023-01-24T01:41:46.237211Z"
         queryMembers: mockQueryMember
     }
 
-    it('handleOnNameChange should run correctly', () => {
-        const navigation = {
-            push: jest.fn()
-        }
-        const wrapper = ({children}) => (
+     const wrapper = ({children}) => (
             <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
                 {children}
             </Context.Provider>
         )
+
+    it('handleOnNameChange should run correctly', () => {
+        const navigation = {
+            push: jest.fn()
+        }
         const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper})
         act(() => {
             result.current.handleOnNameChange()
@@ -208,11 +209,6 @@ updated_at: "2023-01-24T01:41:46.237211Z"
             push: jest.fn(),
             navigate: jest.fn()
         }
-        const wrapper = ({children}) => (
-            <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper})
         act(() => {
             result.current.onProfilePressed('a3c59170-c110-4fac-929e-7834f6c6827f')
@@ -229,11 +225,6 @@ updated_at: "2023-01-24T01:41:46.237211Z"
             push: jest.fn(),
             navigate: jest.fn()
         }
-        const wrapper = ({children}) => (
-            <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper})
         expect(result.current.serializeMembersList([{user_id: '123', name: 'agita', address: 'anoa'}])).toEqual({'123': {user_id: '123', name: 'agita', address: 'anoa'}})
         expect(result.current.serializeMembersList([])).toEqual({})
@@ -247,11 +238,6 @@ updated_at: "2023-01-24T01:41:46.237211Z"
         }
         const spySetParticipant = jest.spyOn(groupChatService, 'setParticipants')
 
-        const wrapper = ({children}) => (
-            <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper})
         await result.current.getMembersList()
         expect(mockQueryMember).toHaveBeenCalled()
@@ -265,11 +251,6 @@ updated_at: "2023-01-24T01:41:46.237211Z"
             push: jest.fn(),
             navigate: jest.fn()
         }
-        const wrapper = ({children}) => (
-            <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper})
         act(() => {
             result.current.handleOnNameChange()
@@ -285,11 +266,6 @@ updated_at: "2023-01-24T01:41:46.237211Z"
         }
         const spyPermission = jest.spyOn(servicePermission, 'requestExternalStoragePermission')
         const spyGallery = jest.spyOn(launchGallery, 'launchImageLibrary')
-        const wrapper = ({children}) => (
-            <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper})
         await result.current.handleOnImageClicked()
         expect(spyPermission).toHaveBeenCalled()
@@ -302,11 +278,6 @@ updated_at: "2023-01-24T01:41:46.237211Z"
             navigate: jest.fn()
         }
         const spyService = jest.spyOn(serviceFile, 'uploadFile')
-        const wrapper = ({children}) => (
-            <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {result} = renderHook(() => useGroupInfo({navigation}), {wrapper})
         await result.current.uploadImageBase64({base64: '1234'})
         expect(result.current.isUploadingImage).toBeTruthy()

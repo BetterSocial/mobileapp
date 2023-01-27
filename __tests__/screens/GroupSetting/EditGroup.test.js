@@ -176,12 +176,13 @@ describe('EditGroup should run correctly', () => {
             jest.spyOn(React, 'useRef').mockImplementation(() => ({current: {focus: mockFocus}}))
         })
 
-        it('editGroup should match snapshot', () => {
             const wrapper = ({children}) => (
             <Context.Provider value={mockContext} >
                 {children}
             </Context.Provider>
             )
+
+        it('editGroup should match snapshot', () => {
             const onUpdateImage = jest.fn()
             const saveGroupName = jest.fn()
             const updateName = jest.fn()
@@ -190,11 +191,6 @@ describe('EditGroup should run correctly', () => {
         })
 
         it('updateImage should run correctly', () => {
-             const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-            )
             const onUpdateImage = jest.fn()
             const saveGroupName = jest.fn()
             const updateName = jest.fn()
@@ -206,11 +202,6 @@ describe('EditGroup should run correctly', () => {
         })
 
         it('image type file:/// should show correctly', () => {
-               const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-            )
             const onUpdateImage = jest.fn()
             const saveGroupName = jest.fn()
             const updateName = jest.fn()
@@ -220,11 +211,6 @@ describe('EditGroup should run correctly', () => {
          
 
             it('image type res.cloudinary.com should show correctly', () => {
-               const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-            )
             const onUpdateImage = jest.fn()
             const saveGroupName = jest.fn()
             const updateName = jest.fn()
@@ -233,11 +219,6 @@ describe('EditGroup should run correctly', () => {
         })
 
         it('image count user > 2 should be correct', () => {
-            const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-            )
             const onUpdateImage = jest.fn()
             const saveGroupName = jest.fn()
             const updateName = jest.fn()

@@ -141,6 +141,11 @@ describe('GroupSetting should be run correctly', () => {
                 }}
             ]
         }
+            const wrapper = ({children}) => (
+            <Context.Provider value={mockContext} >
+                {children}
+            </Context.Provider>
+        )
 
     it('Should match snapshot', () => {
         const navigation = {
@@ -152,13 +157,6 @@ describe('GroupSetting should be run correctly', () => {
             }
         }
 
-        
-
-        const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-        )
 
         const {toJSON} = render(<GroupSetting navigation={navigation} route={route} />, {wrapper})
         expect(toJSON).toMatchSnapshot()
@@ -175,13 +173,6 @@ describe('GroupSetting should be run correctly', () => {
             }
         }
 
-        
-
-        const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-        )
 
         const {getByTestId} = render(<GroupSetting navigation={navigation} route={route} />, {wrapper})
         act(() => {
