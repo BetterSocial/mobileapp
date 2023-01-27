@@ -72,7 +72,8 @@ describe('use groupSetting should run correctly', () => {
             }
             ],
             channel: [
-                {channel: {
+                {
+                    channel: {
                                 cid: "messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a",
                     data: {
                         cid: "messaging:c47d45f2-0dd9-4eaa-1600-4ff6e518199a",
@@ -105,9 +106,10 @@ describe('use groupSetting should run correctly', () => {
                     isTyping: false,
                     lastKeyStroke: undefined,
                     lastTypingEvent: null,
+                     update: mockDataEdit
                     },
                     profileChannel: null,
-                    update: mockDataEdit
+                   
                     },
             ],
             profile: [
@@ -291,4 +293,28 @@ describe('use groupSetting should run correctly', () => {
         expect(result.current.base64Profile).toEqual('123')
         expect(result.current.urlImage).toEqual('https://image.jpg')
     })
+
+    it('updateDataEdit should run correctly', async () => {
+        const wrapper = ({children}) => (
+            <Context.Provider value={mockContext} >
+                {children}
+            </Context.Provider>
+        )
+        const navigation = {
+            navigate: jest.fn(),
+            push: jest.fn(),
+            goBack: jest.fn()
+        }
+        const route = {
+            params: {
+                username: 'agita'
+            }
+        }
+        const {result} = renderHook(() => useGroupSetting({navigation, route}), {wrapper})
+        await result.current.updateDataEdit('123', true)
+        expect(mockDataEdit).toHaveBeenCalled()
+       expect(navigation.navigate).toHaveBeenCalled()
+
+    })
 })
+

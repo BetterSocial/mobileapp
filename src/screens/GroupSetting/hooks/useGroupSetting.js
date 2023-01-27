@@ -51,7 +51,12 @@ const useGroupSetting = ({navigation, route}) => {
       } else if (channel?.data?.image) {
           dataEdit.image = channel?.data?.image;
         }
+        updateDataEdit(dataEdit, withNavigation)
+    
+    } else if(withNavigation) navigation.goBack();
+  };
 
+  const updateDataEdit = async (dataEdit, withNavigation) => {
       try {
         await channel.update(dataEdit);
         if(withNavigation) navigation.navigate('ChannelList');
@@ -62,8 +67,7 @@ const useGroupSetting = ({navigation, route}) => {
         SimpleToast.show(StringConstant.groupSettingUpdateFailed)
       }
       setIsLoading(false);
-    } else if(withNavigation) navigation.goBack();
-  };
+  }
 
    const lounchGalery = async () => {
     const {success, message} = await requestExternalStoragePermission();
@@ -122,7 +126,8 @@ const useGroupSetting = ({navigation, route}) => {
     setUrlImage,
     isLoading,
     setIsLoading,
-    handleResLaunchGallery  
+    handleResLaunchGallery,
+    updateDataEdit  
   }
 
 }
