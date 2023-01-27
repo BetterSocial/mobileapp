@@ -141,10 +141,7 @@ describe('GroupSetting should be run correctly', () => {
                 }}
             ]
         }
-    const mockSubmit = jest.fn()
-    beforeEach(() => {
-        // jest.spyOn(useGroupSetting, 'default').mockImplementation(() => ({submitData: mockSubmit,}))
-    })
+
     it('Should match snapshot', () => {
         const navigation = {
             push: jest.fn()
