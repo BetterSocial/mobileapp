@@ -46,13 +46,14 @@ const GroupInfo = () => {
     if (profileChannel || channel?.data?.image) {
       if (uploadedImage !== '') {
         return (
-          <Image style={styles.btnUpdatePhoto} source={{uri: uploadedImage !== '' ? uploadedImage: undefined}} />
+          <Image testID='image1' style={styles.btnUpdatePhoto} source={{uri: uploadedImage !== '' ? uploadedImage: undefined}} />
         );
       }
 
       if (channel?.data?.image?.indexOf('res.cloudinary.com') > -1) {
         return (
           <Image
+            testID='image2'
             style={styles.btnUpdatePhoto}
             source={{uri: channel?.data?.image !== '' ? channel?.data?.image : undefined}}
           />
@@ -62,6 +63,7 @@ const GroupInfo = () => {
       if (channel?.data?.image) {
         return (
           <Image
+            testID='image3'
             style={styles.btnUpdatePhoto}
             source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
           />
@@ -70,6 +72,7 @@ const GroupInfo = () => {
         return (
           <View style={styles.containerAvatar}>
             <Image
+              testID='image4'
               source={DefaultChatGroupProfilePicture}
               style={styles.groupProfilePicture}
             />
@@ -78,7 +81,7 @@ const GroupInfo = () => {
 
     }
     return (
-      <View style={styles.btnUpdatePhoto}>
+      <View testID='image5' style={styles.btnUpdatePhoto}>
         <MemoIc_pencil width={50} height={50} color={colors.gray1} />
       </View>
     );
@@ -96,6 +99,7 @@ const GroupInfo = () => {
         width={80}
         height={80}
         style={styles.image(index === 0)}
+        testID='renderItem'
       />
       )
     }
@@ -110,7 +114,7 @@ const GroupInfo = () => {
       <View style={styles.lineTop} />
       <ScrollView>
         <SafeAreaView>
-          <TouchableOpacity onPress={handleOnImageClicked}>
+          <TouchableOpacity testID='imageClick' onPress={handleOnImageClicked}>
             <View style={styles.containerPhoto}>{showImageProfile()}</View>
           </TouchableOpacity>
           <View style={styles.row}>
@@ -129,15 +133,17 @@ const GroupInfo = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.lineTop} />
-          <View style={styles.containerMedia(asset.length === 0)}>
+          <View style={styles.containerMedia(asset && asset.length === 0)}>
             <TouchableWithoutFeedback
+              testID='groupMedia'
               onPress={() => navigation.navigate('GroupMedia')}>
               <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
             </TouchableWithoutFeedback>
             <FlatList
+              testID='asset'
               data={asset}
               keyExtractor={(item, index) => index.toString()}
-              style={styles.listImage(asset.length === 0)}
+              style={styles.listImage(asset && asset.length === 0)}
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={renderItem}
@@ -147,7 +153,8 @@ const GroupInfo = () => {
           <View style={styles.users}>
             <Text style={styles.countUser}>Participants ({countUser})</Text>
             <FlatList
-              data={Object.keys(participants)}
+              testID='participants'
+              data={participants ? Object.keys(participants) : []}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
                 <View style={{height: normalize(72)}}>
@@ -165,10 +172,11 @@ const GroupInfo = () => {
       </ScrollView>
       {!channel?.cid.includes('!members') && (
         <View style={styles.btnAdd}>
-          <TouchableWithoutFeedback
+          <TouchableOpacity
+            testID='addParticipant'
             onPress={() => navigation.push('AddParticipant')}>
             <Text style={styles.btnAddText}>+ Add Participants</Text>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </View>
       )}
       <View style={styles.containerLoading}>
@@ -181,7 +189,7 @@ const GroupInfo = () => {
 
 export default GroupInfo;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
   users: {
     paddingTop: 12,
