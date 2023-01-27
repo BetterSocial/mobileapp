@@ -148,12 +148,13 @@ describe('use groupSetting should run correctly', () => {
                 }}
             ]
         }
-    it('updateName should change the name', () => {
-        const wrapper = ({children}) => (
+             const wrapper = ({children}) => (
             <Context.Provider value={mockContext} >
                 {children}
             </Context.Provider>
         )
+        
+    it('updateName should change the name', () => {
         const navigation = {
             navigate: jest.fn(),
             push: jest.fn()
@@ -174,11 +175,6 @@ describe('use groupSetting should run correctly', () => {
         jest.spyOn(servicePermission, 'requestExternalStoragePermission').mockImplementation(() => ({success: true}))
     })
     it('launchGallery success true should run correctly', async () => {
-        const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-        )
         const navigation = {
             navigate: jest.fn(),
             push: jest.fn()
@@ -198,11 +194,6 @@ describe('use groupSetting should run correctly', () => {
     })
     it('launchGallery success false should run correctly', async () => {
         jest.spyOn(servicePermission, 'requestExternalStoragePermission').mockImplementation(() => ({success: false}))
-        const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-        )
         const navigation = {
             navigate: jest.fn(),
             push: jest.fn()
@@ -220,11 +211,6 @@ describe('use groupSetting should run correctly', () => {
     })
 
     it('renderHeaderSubtitleText should return correctly', async () => {
-         const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-        )
         const navigation = {
             navigate: jest.fn(),
             push: jest.fn()
@@ -243,11 +229,6 @@ describe('use groupSetting should run correctly', () => {
     })
 
     it('submitData should run correctly', async () => {
-        const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-        )
         const navigation = {
             navigate: jest.fn(),
             push: jest.fn(),
@@ -270,11 +251,6 @@ describe('use groupSetting should run correctly', () => {
     })
 
     it('handleResLaunchGallery should run correctly', () => {
-         const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-        )
         const navigation = {
             navigate: jest.fn(),
             push: jest.fn(),
@@ -295,11 +271,6 @@ describe('use groupSetting should run correctly', () => {
     })
 
     it('updateDataEdit should run correctly', async () => {
-        const wrapper = ({children}) => (
-            <Context.Provider value={mockContext} >
-                {children}
-            </Context.Provider>
-        )
         const navigation = {
             navigate: jest.fn(),
             push: jest.fn(),

@@ -225,13 +225,13 @@ updated_at: "2023-01-24T01:41:46.237211Z"
     beforeEach(() => {
         jest.spyOn(useGroupInfo, 'default').mockImplementation(() => ({setIsLoadingMembers, handleOnImageClicked: mockImageClick}))
     })
-
-    it('GroupInfo should match snapshot', () => {
-        const wrapper = ({children}) => (
+       const wrapper = ({children}) => (
            <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
                 {children}
             </Context.Provider>
         )
+
+    it('GroupInfo should match snapshot', () => {
         const {toJSON} = render(<GroupInfo />, {wrapper})
         expect(toJSON).toMatchSnapshot()
         expect(mockAddListener).toHaveBeenCalled()
@@ -252,11 +252,6 @@ updated_at: "2023-01-24T01:41:46.237211Z"
     })
 
     it('imageClick should run correctly', () => {
-       const wrapper = ({children}) => (
-           <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {getByTestId} = render(<GroupInfo />, {wrapper})
         act(() => {
           fireEvent.press(getByTestId('imageClick'))
@@ -265,11 +260,6 @@ updated_at: "2023-01-24T01:41:46.237211Z"
     })
 
     it('backButton should run correctly', () => {
-      const wrapper = ({children}) => (
-           <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {getByTestId} = render(<GroupInfo />, {wrapper})
         act(() => {
           fireEvent.press(getByTestId('backButton'))
@@ -291,11 +281,6 @@ updated_at: "2023-01-24T01:41:46.237211Z"
     })
 
     it('flatlist asset should run correctly', () => {
-       const wrapper = ({children}) => (
-           <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {getByTestId} = render(<GroupInfo />, {wrapper})
         expect(getByTestId('asset').props.keyExtractor(mockAsset[0], 1 )).toEqual('1')
          expect(getByTestId('asset').props.renderItem({item: mockAsset1[0]})).toEqual(null)
@@ -303,22 +288,12 @@ updated_at: "2023-01-24T01:41:46.237211Z"
     })
 
     it('flatlist participants should run correctly', () => {
-      const wrapper = ({children}) => (
-           <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {getByTestId} = render(<GroupInfo />, {wrapper})
         expect(getByTestId('participants').props.keyExtractor(mockParticipans, 1 )).toEqual('1')
 
     })
 
         it('addParticipant should run correctly', () => {
-      const wrapper = ({children}) => (
-           <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
         const {getByTestId} = render(<GroupInfo />, {wrapper})
         act(() => {
           fireEvent.press(getByTestId('addParticipant'))
