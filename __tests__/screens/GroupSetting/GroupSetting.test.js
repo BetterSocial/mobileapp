@@ -1,8 +1,7 @@
 import React from 'react'
 import GroupSetting from "../../../src/screens/GroupSetting"
-import {render, cleanup, act, fireEvent} from '@testing-library/react-native'
+import {render, act, fireEvent} from '@testing-library/react-native'
 import { Context } from '../../../src/context';
-import * as useGroupSetting from '../../../src/screens/GroupSetting/hooks/useGroupSetting';
 
 jest.mock('react-native-permissions', () =>
   require('react-native-permissions/mock'),
@@ -15,18 +14,6 @@ jest.mock('../../../src/hooks/useAfterInteractions', () => ({
     })
 }))
 
-// jest.mock('react-native', () => ({
-//     Platform: {
-//         OS: 'android'
-//     },
-//     StyleSheet: {
-//         create: jest.fn()
-//     },
-//     Dimensions: {
-//         get: jest.fn().mockImplementation(() => ({width: 400}))
-//     },
-//     ScrollView: jest.fn()
-// }))
 
 describe('GroupSetting should be run correctly', () => {
 

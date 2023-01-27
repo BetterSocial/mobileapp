@@ -1,6 +1,6 @@
 import React from 'react'
 import GroupSetting from "../../../src/screens/GroupSetting/elements/EditGroup"
-import {render, cleanup, act, fireEvent} from '@testing-library/react-native'
+import {render, act, fireEvent} from '@testing-library/react-native'
 import { Context } from '../../../src/context'
 
 describe('EditGroup should run correctly', () => {
