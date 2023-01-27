@@ -182,6 +182,7 @@ describe('EditGroup should run correctly', () => {
             </Context.Provider>
             )
 
+
         it('editGroup should match snapshot', () => {
             const onUpdateImage = jest.fn()
             const saveGroupName = jest.fn()
