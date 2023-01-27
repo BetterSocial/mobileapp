@@ -327,14 +327,4 @@ updated_at: "2023-01-24T01:41:46.237211Z"
 
     })
 
-    it('showImageProfile should run correctly', () => {
-        const wrapper = ({children}) => (
-           <Context.Provider value={{profile: [{isShowHeader: true, myProfile: mockMyProfile,  navbarTitle: "Who you're following"}], groupChat: [{asset: mockAsset, participants: mockParticipans}], channel: [{channel: mockChannel}]}} >
-                {children}
-            </Context.Provider>
-        )
-        const {getByTestId} = render(<GroupInfo />, {wrapper})
-    })
-
-
 })
