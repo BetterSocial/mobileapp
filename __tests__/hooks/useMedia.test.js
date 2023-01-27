@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react-hooks'
+import { renderHook } from '@testing-library/react-hooks'
 import useMedia from '../../src/screens/GroupInfo/elements/useMedia'
 
 describe('useMedia should run correctly', () => {
