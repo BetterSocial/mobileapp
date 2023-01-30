@@ -319,7 +319,7 @@ export default DetailDomainScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     flex: 1,
     paddingBottom: 75,
     // paddingTop: 8,
@@ -348,13 +348,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
-    marginBottom: 16,
   },
   gap: { height: 16 },
   footerWrapper: {
     height: 52,
-    borderBottomColor: COLORS.gray1,
-    borderBottomWidth: 0.5,
-    marginBottom: -16,
   },
 });

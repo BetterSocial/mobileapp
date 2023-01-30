@@ -51,7 +51,11 @@ export const useInitialStartup = () => {
 
   const doGetAccessToken = async () => {
     const accessToken = await getAccessToken();
-    setInitialValue({id: accessToken.id});
+    if (accessToken) {
+      setInitialValue({id: accessToken.id});
+      return;
+    }
+    SplashScreen.hide();
   };
 
   const getFeedChat = async () => {
