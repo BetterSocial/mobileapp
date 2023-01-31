@@ -68,11 +68,13 @@ export const useInitialStartup = () => {
 
   const callStreamFeed = async () => {
     const token = await getAccessToken();
-    const clientFeed = streamFeed(token);
-    const notif = clientFeed.feed('notification', profileState.user_id, token.id);
-    notif.subscribe(() => {
-      getFeedChat();
-    });
+    if (token) {
+      const clientFeed = streamFeed(token);
+      const notif = clientFeed.feed('notification', profileState.user_id, token.id);
+      notif.subscribe(() => {
+        getFeedChat();
+      });
+    }
   };
 
   const getProfile = async () => {
@@ -131,7 +133,6 @@ export const useInitialStartup = () => {
 
   const getDiscoveryData = async () => {
     const selfUserId = await getUserId();
-    // Not using await so splash screen can navigate to next screen faster
 
     try {
       getFollowing(selfUserId).then((response) => {
@@ -191,22 +192,19 @@ export const useInitialStartup = () => {
     StatusBar.setBarStyle('dark-content', true);
 
     doGetAccessToken();
-    getFeedChat();
     getLocalChannelData();
-    getDomain();
-    getDataFeeds();
-    getDiscoveryData();
 
     getSpecificCache(PROFILE_CACHE, (res) => {
-      if (!res) {
-        getProfile();
-      } else {
+      if (res) {
         setMyProfileAction(res, dispatchProfile);
         setLoadingUser(false);
       }
     });
 
     return async () => {
+      if (timeoutSplashScreen.current) {
+        clearTimeout(timeoutSplashScreen.current);
+      }
       await client?.disconnectUser();
     };
   }, []);
@@ -220,6 +218,12 @@ export const useInitialStartup = () => {
   React.useEffect(() => {
     if (initialStartup.id !== null) {
       if (initialStartup.id !== '') {
+        getFeedChat();
+        getDomain();
+        getDataFeeds();
+        getDiscoveryData();
+        getProfile();
+
         timeoutSplashScreen.current = setTimeout(() => {
           SplashScreen.hide();
 
@@ -236,15 +240,8 @@ export const useInitialStartup = () => {
         if (perf.current) {
           perf.current.stop();
         }
-        create();
       }, 700);
     }
-
-    return () => {
-      if (timeoutSplashScreen.current) {
-        clearTimeout(timeoutSplashScreen.current);
-      }
-    };
   }, [initialStartup]);
 
   return {

@@ -58,7 +58,7 @@ export const RootNavigator = () => {
   const loadingStartup = useInitialStartup();
 
   return (
-    <LoadingStartupContext.Provider value={loadingStartup}>
+    <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
       <View
         style={{
           height: '100%'
