@@ -35,7 +35,7 @@ const FirebaseConfig = (props) => {
         navigation.navigate('OtherProfile', {
           data
         });
-        return null;
+        return USER;
       default:
         return null;
     }
