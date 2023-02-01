@@ -7,8 +7,10 @@ import {
   MessageList,
   Streami18n
 } from 'stream-chat-react-native';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { MessageSystem } from 'stream-chat-react-native-core'
+import { useHeaderHeight } from '@react-navigation/stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
@@ -30,7 +32,7 @@ const ChatDetailPage = () => {
   const [clients] = React.useContext(Context).client;
   const [channelClient] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
-
+  const insets = useSafeAreaInsets()
   const messageSystemCustom = (props) => {
 
     const { message, channel } = props;
@@ -131,7 +133,7 @@ const ChatDetailPage = () => {
           ReactionList={() => null}>
             <>
             <Header />
-            <View style={{ flex: 1 }}>
+            <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior={Platform.OS === 'ios' ? 'height' : 'padding'} keyboardVerticalOffset={insets.top} style={{ flex: 1 }}>
 
               <MessageList
                 tDateTimeParser={testDate}
@@ -140,7 +142,7 @@ const ChatDetailPage = () => {
               />
 
             <MessageInput Input={InputMessage} />
-            </View>
+            </KeyboardAvoidingView>
             </>
 
         </Channel>
