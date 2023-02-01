@@ -99,7 +99,7 @@ const ProfileScreen = ({ route }) => {
   const [loadingContainer, setLoadingContainer] = React.useState(true)
   const [yourselfId,] = React.useState('');
   const [isLastPage, setIsLastPage] = React.useState(false)
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false)
   const [selectedPostForOption, setSelectedPostForOption] = React.useState(null)
   const [isFetchingList, setIsFetchingList] = React.useState(false)
