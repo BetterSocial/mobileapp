@@ -270,10 +270,10 @@ const Item = ({
           />
         </View>
       )}
-      <LinearGradient
+      {/* <LinearGradient
         colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']}
         style={styles.linearGradient}
-      />
+      /> */}
     </View>
   );
 };
@@ -290,15 +290,17 @@ const styles = StyleSheet.create({
     width: '100%',
     height: dimen.size.PROFILE_ITEM_HEIGHT,
     maxHeight: dimen.size.PROFILE_ITEM_HEIGHT,
-    shadowColor: '#c4c4c4',
-    shadowOffset: {
-      width: 1,
-      height: 8,
-    },
-    shadowOpacity: 0.5,
+    // shadowColor: '#c4c4c4',
+    // shadowOffset: {
+    //   width: 1,
+    //   height: 8,
+    // },
+    // shadowOpacity: 0.5,
     backgroundColor: 'white',
     paddingBottom: 0,
-    borderBottomColor: 'transparent',
+    borderBottomColor: '#f2f2f2',
+    borderBottomWidth: 6
+
     // paddingHorizontal: 9
   }),
   paddingHorizontal: { paddingHorizontal: 20 },
