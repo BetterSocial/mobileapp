@@ -9,7 +9,6 @@ import {
 } from 'stream-chat-react-native';
 import { KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { MessageSystem } from 'stream-chat-react-native-core'
-import { useHeaderHeight } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
