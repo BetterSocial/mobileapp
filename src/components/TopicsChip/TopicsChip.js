@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useNavigation } from '@react-navigation/native';
 
 import { colors } from "../../utils/colors"
@@ -11,7 +11,7 @@ const TopicsChip = ({ topics = [], fontSize = 24, text = '', isPdp }) => {
     const onTopicPress = (topic) => {
         navigation.navigate('TopicPageScreen', { id: topic.replace('#', '') })
     }
-    console.log(topics, 'baban')
+    
     if (topics.length === 0) return <></>
 
     return <View style={!isPdp ? styles.topicContainer : styles.topicContainerPdp}>

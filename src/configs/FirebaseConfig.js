@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react'
+import SimpleToast from 'react-native-simple-toast'
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import { getUserId } from '../utils/users';
@@ -55,9 +56,19 @@ const FirebaseConfig = (props) => {
         })
     }
 
+    const handlePostExpired = () => {
+        dynamicLinks().onLink((link) => {
+            if (link.url.includes('postexpired')) {
+                SimpleToast.show('This post has expired and has been deleted automatically', SimpleToast.SHORT)
+                navigation.navigate('Feed')
+            }
+        })
+    }
+
     React.useEffect(() => {
         handleBgDynamicLink()
         handleFgDynamicLink()
+        handlePostExpired()
     })
 
     return (

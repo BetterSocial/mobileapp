@@ -1,10 +1,11 @@
-
-import { renderHook } from '@testing-library/react-hooks'
 import { act } from "@testing-library/react-native"
-import useBlockedUser from "../../src/screens/Blocked/elements/UserScreen/hooks/useBlockedUser"
-import * as serviceBlock from '../../src/service/blocking';
+import { renderHook } from '@testing-library/react-hooks'
 
+import * as serviceBlock from '../../src/service/blocking';
 import * as serviceUser from '../../src/service/users'
+import useBlockedUser from "../../src/screens/Blocked/elements/UserScreen/hooks/useBlockedUser"
+
+jest.useFakeTimers()
 
 describe('useBlockUser should run correctly', async () => {
      const mockUserBlock = [
