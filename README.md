@@ -5,8 +5,7 @@ Better Social Mobile App
 
 ```
    git clone https://github.com/BetterSocial/mobileapp.git
-   npm install --no-optional
-   npx jetify
+   yarn
 ```
 
 # Development Requirements
