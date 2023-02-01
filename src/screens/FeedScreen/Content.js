@@ -13,7 +13,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 import ContentPoll from './ContentPoll';
-import Gap from '../../components/Gap';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import useContentFeed from './hooks/useContentFeed';
