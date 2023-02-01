@@ -60,7 +60,6 @@ import { trimString } from '../../utils/string/TrimString';
 import { useAfterInteractions } from '../../hooks/useAfterInteractions';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
-import SimpleToast from 'react-native-simple-toast';
 
 const { height, width } = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -186,7 +185,7 @@ const ProfileScreen = ({ route }) => {
        const result = await getSelfFeedsInProfile(offset, limit);
        if(Array.isArray(result.data) && result.data.length === 0) {
         setIsLastPage(true)
-        SimpleToast.show('No posts yet.', SimpleToast.LONG)
+        Toast.show('No posts yet.', Toast.LONG)
        }
     if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch)
     else {
