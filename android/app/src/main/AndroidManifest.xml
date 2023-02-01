@@ -35,6 +35,14 @@
             android:pathPrefix="/"/>
         </intent-filter>
       </activity>
+      <intent-filter>
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <data android:scheme="http"
+            android:host="13.114.138.142"
+            android:pathPrefix="/"/>
+        </intent-filter>
 <!--      <activity-->
 <!--      android:exported="true"-->
 <!--      android:name="com.facebook.react.devsupport.DevSettingsActivity" />-->
