@@ -1,12 +1,10 @@
 import * as React from 'react';
-import LinearGradient from 'react-native-linear-gradient';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
 
 import Content from '../../FeedScreen/Content';
 import ContentLink from '../../FeedScreen/ContentLink';
-import ContentPoll from '../../FeedScreen/ContentPoll';
 import Header from '../../FeedScreen/Header';
 import ShareUtils from '../../../utils/share';
 import dimen from '../../../utils/dimen';
@@ -23,7 +21,7 @@ import { getCountCommentWithChild } from '../../../utils/getstream';
 import { linkContextScreenParamBuilder } from '../../../utils/navigation/paramBuilder';
 import { showScoreAlertDialog } from '../../../utils/Utils';
 
-const { width, height } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 const getHeightReaction = () => {
   const h = Math.floor((height * 12) / 100);
@@ -56,17 +54,6 @@ const getCountVote = (item) => {
   return count;
 };
 
-const getCountComment = (item) => {
-  const reactionCount = item.reaction_counts;
-  let count = 0;
-  if (JSON.stringify(reactionCount) !== '{}') {
-    const { comment } = reactionCount;
-    if (comment !== undefined) {
-      count = comment;
-    }
-  }
-  return count;
-};
 
 const Item = ({
   item,
@@ -78,7 +65,6 @@ const Item = ({
   selfUserId,
   onPressDomain,
   onNewPollFetched,
-  onCardContentPress,
   index = -1,
   bottomBar = true,
   onHeaderOptionClicked = () => { }
@@ -90,9 +76,7 @@ const Item = ({
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
-  const [feeds, dispatch] = React.useContext(Context).feeds;
   const navigation = useNavigation();
-  const [contentHeight, setContentHeight] = React.useState(0);
   const bottomHeight = bottomBar ? useBottomTabBarHeight() : 0;
   // const bottomHeight = 0;
 
@@ -270,10 +254,6 @@ const Item = ({
           />
         </View>
       )}
-      <LinearGradient
-        colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']}
-        style={styles.linearGradient}
-      />
     </View>
   );
 };
@@ -286,20 +266,15 @@ export default RenderItem;
 // export default Item
 
 const styles = StyleSheet.create({
-  cardContainer: (bottomHeight) => ({
+  cardContainer: () => ({
     width: '100%',
     height: dimen.size.PROFILE_ITEM_HEIGHT,
     maxHeight: dimen.size.PROFILE_ITEM_HEIGHT,
-    shadowColor: '#c4c4c4',
-    shadowOffset: {
-      width: 1,
-      height: 8,
-    },
-    shadowOpacity: 0.5,
     backgroundColor: 'white',
     paddingBottom: 0,
-    borderBottomColor: 'transparent',
-    // paddingHorizontal: 9
+    borderBottomColor: '#f2f2f2',
+    borderBottomWidth: 6
+
   }),
   paddingHorizontal: { paddingHorizontal: 20 },
   lineAffterFooter: { backgroundColor: '#C4C4C4', height: 1 },
