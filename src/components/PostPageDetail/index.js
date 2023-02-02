@@ -17,6 +17,7 @@ import { useRoute } from '@react-navigation/native';
 import BlockComponent from "../BlockComponent";
 import ContainerComment from "../Comments/ContainerComment";
 import Content from './elements/Content';
+import ContentLink from '../../screens/FeedScreen/ContentLink';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from "../LoadingWithoutModal";
 import StringConstant from '../../utils/string/StringConstant';
@@ -26,6 +27,7 @@ import usePostContextHook, { CONTEXT_SOURCE } from '../../hooks/usePostContextHo
 import { Context } from '../../context';
 import { Footer, Gap } from "..";
 import {
+  POST_TYPE_LINK,
   SOURCE_PDP
 } from '../../utils/constants';
 import { createCommentParent } from '../../service/comment';
@@ -132,7 +134,7 @@ const PostPageDetailIdComponent = (props) => {
     if (!route.params.isCaching) {
       setLoading(true)
       const data = await getFeedDetail(feedId);
-      setItem(data.data)
+      setItem(data?.data)
       setLoading(false)
     } else {
       setItem(route.params.data)
@@ -156,7 +158,7 @@ const PostPageDetailIdComponent = (props) => {
   const updateFeed = async (isSort) => {
     try {
       const data = await getFeedDetail(feedId);
-      let oldData = { ...data.data }
+      let oldData = { ...data?.data }
       if (isSort) {
         oldData = { ...oldData, latest_reactions: { ...oldData?.latest_reactions, comment: oldData?.latest_reactions?.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()) } }
       }
@@ -193,7 +195,7 @@ const PostPageDetailIdComponent = (props) => {
       if (textComment.trim() !== '') {
 
         const data = await createCommentParent(textComment, item.id, item.actor.id, true);
-        updateCachingComment(data.data)
+        updateCachingComment(data?.data)
         if (data.code === 200) {
           setTextComment('');
           updateFeed(true);
@@ -286,8 +288,8 @@ const PostPageDetailIdComponent = (props) => {
     const mappingData = feedsContext.feeds.map((feed) => {
       if (feed.id === item.id) {
         let joinComment = []
-        if (Array.isArray(feed.latest_reactions.comment)) {
-          joinComment = [...feed.latest_reactions.comment, comment].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        if (Array.isArray(feed?.latest_reactions?.comment)) {
+          joinComment = [...feed?.latest_reactions?.comment, comment].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
         } else {
           joinComment.push(comment)
         }
@@ -303,7 +305,7 @@ const PostPageDetailIdComponent = (props) => {
     if (level > 0) {
       const updatedComment = commentList.map((comment) => {
         if (comment.id === newData.parent) {
-          const findComment = comment.latest_children.comment.map((comment1) => {
+          const findComment = comment?.latest_children?.comment.map((comment1) => {
             if (comment1.id === newData.id) {
               return { ...comment1, ...newData }
             }
@@ -491,18 +493,30 @@ const PostPageDetailIdComponent = (props) => {
           style={styles.contentScrollView(totalComment)}
           nestedScrollEnabled={true}>
           <View style={styles.content(height)}>
-            <Content
-              message={item.message}
-              images_url={item.images_url}
-              style={styles.additionalContentStyle(
-                item?.images_url?.length,
-                height,
-              )}
-              topics={item?.topics}
-              item={item}
-              onnewpollfetched={onNewPollFetched}
+            {item.post_type === POST_TYPE_LINK ? (
+              <ContentLink
+                og={item.og}
+                onHeaderPress={onPressDomain}
+                onCardContentPress={() => navigateToLinkContextPage(item)}
+                score={item.credderScore}
+                message={item?.message}
+                topics={item?.topics}
+                item={item}
+              />
+            ) :
+              <Content
+                message={item.message}
+                images_url={item.images_url}
+                style={styles.additionalContentStyle(
+                  item?.images_url?.length,
+                  height,
+                )}
+                topics={item?.topics}
+                item={item}
+                onnewpollfetched={onNewPollFetched}
+              />
+            }
 
-            />
 
             <Gap height={16} />
             <View style={{ height: 52, paddingHorizontal: 0, width: '100%' }}>
