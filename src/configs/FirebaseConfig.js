@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react'
 import SimpleToast from 'react-native-simple-toast'
-import dynamicLinks from '@react-native-firebase/dynamic-links';
+import dynamicLinks, { FirebaseDynamicLinksTypes } from '@react-native-firebase/dynamic-links';
 
 import { getUserId } from '../utils/users';
 
 const FirebaseConfig = (props) => {
     const { navigation } = props
+
     const USER = 'users'
     const getUserProfile = async (url) => {
         if (url && typeof url === 'string') {
@@ -56,20 +57,51 @@ const FirebaseConfig = (props) => {
         })
     }
 
-    const handlePostExpired = () => {
-        dynamicLinks().onLink((link) => {
-            if (link.url.includes('postexpired')) {
-                SimpleToast.show('This post has expired and has been deleted automatically', SimpleToast.SHORT)
-                navigation.navigate('Feed')
+    /**
+     * 
+     * @param {FirebaseDynamicLinksTypes.DynamicLink} dynamicLink 
+     */
+    const parseDynamicLink = (dynamicLink) => {
+        if (dynamicLink?.url?.includes('postexpired')) {
+            SimpleToast.show('This post has expired and has been deleted automatically', SimpleToast.SHORT)
+            return navigation.navigate('Feed')
+        }
+
+        if (dynamicLink?.url?.includes('postprivate')) {
+            let isAuthorFollowing = false
+            /**
+             * TODO: CHECK IF USER IS FOLLOWING THE POST OWNER
+             */
+
+            if (!isAuthorFollowing) {
+                SimpleToast.show('You cannot access this private post', SimpleToast.SHORT)
+                return navigation.navigate('Feed')
             }
-        })
+
+            return
+        }
+
+        if (dynamicLink?.url?.includes('postId=')) {
+            let postId = dynamicLink.url.split('postId=')[1]
+            postId = postId?.length > 36 ? postId.substring(0, 36) : postId
+            navigation?.navigate('PostDetailPage', {
+                feedId: postId,
+                refreshCache: null,
+                isCaching: false
+            })
+            // return navigation.navigate('PostDetail', { postId })
+        }
     }
 
     React.useEffect(() => {
         handleBgDynamicLink()
         handleFgDynamicLink()
-        handlePostExpired()
     })
+
+    React.useEffect(() => {
+        const unsubscribe = dynamicLinks().onLink(parseDynamicLink)
+        return () => unsubscribe()
+    }, [])
 
     return (
         <>
