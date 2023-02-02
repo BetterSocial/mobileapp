@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react'
 import SimpleToast from 'react-native-simple-toast'
-import dynamicLinks, { FirebaseDynamicLinksTypes } from '@react-native-firebase/dynamic-links';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import { getUserId } from '../utils/users';
+import { isAuthorFollowingMe } from '../service/post';
 
 const FirebaseConfig = (props) => {
     const { navigation } = props
@@ -61,24 +62,39 @@ const FirebaseConfig = (props) => {
      * 
      * @param {FirebaseDynamicLinksTypes.DynamicLink} dynamicLink 
      */
-    const parseDynamicLink = (dynamicLink) => {
-        if (dynamicLink?.url?.includes('postexpired')) {
+    const parseDynamicLink = async (dynamicLink) => {
+        console.log('dynamicLink', dynamicLink?.url)
+        if (dynamicLink?.url?.includes('postExpired=true')) {
             SimpleToast.show('This post has expired and has been deleted automatically', SimpleToast.SHORT)
             return navigation.navigate('Feed')
         }
 
-        if (dynamicLink?.url?.includes('postprivate')) {
-            let isAuthorFollowing = false
-            /**
-             * TODO: CHECK IF USER IS FOLLOWING THE POST OWNER
-             */
-
+        if (dynamicLink?.url?.includes('postPrivateId=')) {
+            let postId = dynamicLink.url.split('postPrivateId=')[1]
+            let response = await isAuthorFollowingMe(postId)
+            let isAuthorFollowing = response?.success
             if (!isAuthorFollowing) {
-                SimpleToast.show('You cannot access this private post', SimpleToast.SHORT)
-                return navigation.navigate('Feed')
+                if (response?.code === 1) {
+                    SimpleToast.show('Post is not found', SimpleToast.SHORT)
+                    return
+                }
+
+                if (response?.code === 2) {
+                    SimpleToast.show('You cannot access this private post', SimpleToast.SHORT)
+                    return navigation.navigate('Feed')
+                }
+                
+                if (response?.code === 3) {
+                    SimpleToast.show('This post has expired and has been deleted automatically', SimpleToast.SHORT)
+                    return
+                }
             }
 
-            return
+            return navigation?.navigate('PostDetailPage', {
+                feedId: postId,
+                refreshCache: null,
+                isCaching: false
+            })
         }
 
         if (dynamicLink?.url?.includes('postId=')) {
