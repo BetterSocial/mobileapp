@@ -108,3 +108,13 @@ export const deletePost = async (postId) => {
     return error;
   }
 }
+
+export const isAuthorFollowingMe = async (postId) => {
+  try {
+    const resApi = await api.get(`/activity/post/is-author-follow-me/${postId}`);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(error?.response?.data);
+    return error;
+  }
+}
