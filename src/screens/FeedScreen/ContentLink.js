@@ -8,6 +8,7 @@ import { COLORS, SIZES } from '../../utils/theme';
 import { fonts } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 import { smartRender } from '../../utils/Utils';
+import useContentFeed from './hooks/useContentFeed';
 
 const FONT_SIZE_TEXT = 16
 
@@ -18,13 +19,12 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
 
   const devHeight = Dimensions.get('screen').height
    const substringNoImageTopic = devHeight/1.25 - (40 * 7)
-
+      const sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
+      const {hashtagAtComponent} = useContentFeed({navigation})
   const renderMessageContentLink = () => {
-    const sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
     if (sanitizeUrl?.length === 0) return <></>
     return <View style={{ ...styles.messageContainer, ...messageContainerStyle }}>
-      <Text style={styles.message} numberOfLines={3}>{getCaptionWithTopicStyle(sanitizeUrl, navigation, substringNoImageTopic, item?.topics)}</Text>
-      <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl} />
+      <Text style={styles.message} numberOfLines={3}>{hashtagAtComponent(sanitizeUrl)}</Text>
     </View>
   }
 
@@ -48,6 +48,8 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
           })}
         </>
       </TouchableNativeFeedback>
+            <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl} />
+
     </View>
   );
 };
