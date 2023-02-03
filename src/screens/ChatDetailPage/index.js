@@ -7,8 +7,8 @@ import {
   MessageList,
   Streami18n
 } from 'stream-chat-react-native';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { MessageSystem } from 'stream-chat-react-native-core'
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
@@ -121,7 +121,7 @@ const ChatDetailPage = () => {
           ImageUploadPreview={<ImageSendPreview />}
           keyboardVerticalOffset={0}
           mutesEnabled={false}
-          reactionsEnabled={false}
+          reactionsEnabled={true}
           readEventsEnabled={true}
           threadRepliesEnabled={false}
           MessageStatus={ChatStatusIcon}
