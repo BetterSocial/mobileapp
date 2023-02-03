@@ -253,7 +253,7 @@ function HomeBottomTabs(props) {
   }, []);
 
   React.useEffect(() => {
-    // requestPermission();
+    requestPermission();
     getDomain();
     getDataFeeds();
     getDiscoveryData();

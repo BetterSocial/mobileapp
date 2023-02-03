@@ -30,6 +30,14 @@
           }
         },
         {
+          "client_id": "999239767957-m6u0v76tvii3h3k2e5eb1tb48jbfjat9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.bettersocial",
+            "certificate_hash": "54f0c89ac294bbdcac18b687f59d29bb4e9e1d72"
+          }
+        },
+        {
           "client_id": "999239767957-b83i74ia5rfsud9ikj069d3cq5fb26cb.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -37,6 +45,49 @@
       "api_key": [
         {
           "current_key": "AIzaSyCudxGam44Fib-oTPdXIwMFzkcfXz4rJkY"
+        },
+        {
+          "current_key": "AIzaSyA7-Rr4om4KwlWZNS1_V8KxrGC6IfwqDzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999239767957-b83i74ia5rfsud9ikj069d3cq5fb26cb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "999239767957-3jv3sce57ks240h185eigbejh5g0fsem.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.bettersocial",
+                "app_store_id": "1602603711"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999239767957:android:0f98f80341f6966fc4489c",
+        "android_client_info": {
+          "package_name": "org.bettersocial.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999239767957-b83i74ia5rfsud9ikj069d3cq5fb26cb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCudxGam44Fib-oTPdXIwMFzkcfXz4rJkY"
+        },
+        {
+          "current_key": "AIzaSyA7-Rr4om4KwlWZNS1_V8KxrGC6IfwqDzs"
         }
       ],
       "services": {
