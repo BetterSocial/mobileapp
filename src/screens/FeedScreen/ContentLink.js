@@ -17,8 +17,6 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
   const isTouchableDisabled = route?.name === 'PostDetailPage';
   const navigation = useNavigation()
 
-  const devHeight = Dimensions.get('screen').height
-   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
       const sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
       const {hashtagAtComponent} = useContentFeed({navigation})
   const renderMessageContentLink = () => {
@@ -32,7 +30,9 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
     <View style={styles.contentFeed}>
       <TouchableNativeFeedback disabled={isTouchableDisabled} onPress={onPress} testID='contentLinkContentPressable'>
         <>
-          {renderMessageContentLink()}
+         <TouchableNativeFeedback onPress={onPress} >
+           {renderMessageContentLink()}
+         </TouchableNativeFeedback>
           {smartRender(Card, {
             domain: og.domain,
             date: new Date(og.date).toLocaleDateString(),
