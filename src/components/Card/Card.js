@@ -46,6 +46,12 @@ const Card = (props) => {
     />
   }
 
+  const onPressUrl = () => {
+    if(Linking.canOpenURL(url)) {
+      Linking.openURL(url)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View>
@@ -64,21 +70,22 @@ const Card = (props) => {
             <View style={{ flex: 1 }}>
               {renderImageComponent()}
             </View>
-            <View>
+            
+          </View>
+        </TouchableNativeFeedback>
+       <TouchableNativeFeedback onPress={onPressUrl} >
               <Text style={styles.description}>
                 {_.truncate(`${description}`, { length: 120 })}
-                {/* {description} */}
                 <Gap style={styles.width(2)} />
                 <Text testID={TestIdConstant.contentLinkOpenLinkPress}
-                  onPress={() => Linking.openURL(sanitizeUrlForLinking(url))}
+                  
                   style={styles.link}>
                   Open Link
                 </Text>
               </Text>
-            </View>
-          </View>
-        </TouchableNativeFeedback>
+            </TouchableNativeFeedback>
       </View>
+       
     </View>
   );
 };
