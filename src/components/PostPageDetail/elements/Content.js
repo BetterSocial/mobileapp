@@ -40,13 +40,6 @@ const Content = ({ message, images_url, topics = [], item, onnewpollfetched }) =
     });
   };
 
-  const renderMessageContentLink = () => {
-    if (sanitizeUrl(message)?.length === 0) return <></>
-    return <View >
-      <Text style={styles.message} numberOfLines={3}>{hashtagAtComponent(sanitizeUrl(message))}</Text>
-    </View>
-  }
-
 
   const handleStyleFeed = () => {
     if(item.post_type !== POST_TYPE_LINK) {

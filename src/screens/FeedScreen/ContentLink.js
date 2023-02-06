@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { Dimensions, StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
+import { StyleSheet, Text, TouchableNativeFeedback, View, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import { COLORS, SIZES } from '../../utils/theme';
 import { fonts } from '../../utils/fonts';
-import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 import { smartRender } from '../../utils/Utils';
 import useContentFeed from './hooks/useContentFeed';
 
@@ -30,9 +29,9 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
     <View style={styles.contentFeed}>
       <TouchableNativeFeedback disabled={isTouchableDisabled} onPress={onPress} testID='contentLinkContentPressable'>
         <>
-         <TouchableNativeFeedback onPress={onPress} >
+         <TouchableWithoutFeedback onPress={onPress} >
            {renderMessageContentLink()}
-         </TouchableNativeFeedback>
+         </TouchableWithoutFeedback>
           {smartRender(Card, {
             domain: og.domain,
             date: new Date(og.date).toLocaleDateString(),
