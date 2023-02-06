@@ -88,7 +88,8 @@ describe('Testing Feed Screen Content Link', () => {
 
     it('Will open linking by its url when open link is clicked', async () => {
         jest.mock('react-native/Libraries/Linking/Linking', () => ({
-            openURL : jest.fn((url) => Promise.resolve(url))
+            openURL : jest.fn((url) => Promise.resolve(url)),
+            canOpenURL: jest.fn().mockImplementation(() => true)
         }))
         
         const {getByTestId} = render(<Card domain={og.domain} date={og.date} description={og.description} domainImage={og.domainImage} image={og.image} title={og.title} url={og.url}/>)

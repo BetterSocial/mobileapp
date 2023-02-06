@@ -482,7 +482,6 @@ const PostPageDetailIdComponent = (props) => {
     }
   }
 
-
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} enabled style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
