@@ -26,9 +26,9 @@ import WriteComment from "../Comments/WriteComment";
 import usePostDetail from './hooks/usePostDetail';
 import usePostContextHook, { CONTEXT_SOURCE } from '../../hooks/usePostContextHooks';
 import {
-  POST_TYPE_LINK,
   ANALYTICS_SHARE_POST_FEED_ID,
   ANALYTICS_SHARE_POST_PDP_SCREEN,
+  POST_TYPE_LINK,
   SOURCE_PDP
 } from '../../utils/constants';
 import { Context } from '../../context';
