@@ -20,16 +20,19 @@ import Content from './elements/Content';
 import ContentLink from '../../screens/FeedScreen/ContentLink';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from "../LoadingWithoutModal";
+import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from "../Comments/WriteComment";
 import usePostDetail from './hooks/usePostDetail';
 import usePostContextHook, { CONTEXT_SOURCE } from '../../hooks/usePostContextHooks';
-import { Context } from '../../context';
-import { Footer, Gap } from "..";
 import {
+  ANALYTICS_SHARE_POST_FEED_ID,
+  ANALYTICS_SHARE_POST_PDP_SCREEN,
   POST_TYPE_LINK,
   SOURCE_PDP
 } from '../../utils/constants';
+import { Context } from '../../context';
+import { Footer, Gap } from "..";
 import { createCommentParent } from '../../service/comment';
 import { downVote, upVote } from '../../service/vote';
 import { fonts } from '../../utils/fonts';
@@ -479,7 +482,6 @@ const PostPageDetailIdComponent = (props) => {
     }
   }
 
-
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} enabled style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -528,7 +530,10 @@ const PostPageDetailIdComponent = (props) => {
                 onPressDownVote={onPressDownVoteHandle}
                 onPressUpvote={onPressUpvoteHandle}
                 statusVote={voteStatus}
-                onPressShare={() => { }}
+                onPressShare={() => ShareUtils.shareFeeds(item,
+                  ANALYTICS_SHARE_POST_PDP_SCREEN,
+                  ANALYTICS_SHARE_POST_FEED_ID
+                )}
                 onPressComment={onCommentButtonClicked}
                 // loadingVote={loadingVote}
                 showScoreButton={true}

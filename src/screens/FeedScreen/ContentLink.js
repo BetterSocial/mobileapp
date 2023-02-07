@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Dimensions, StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
+import { StyleSheet, Text, TouchableNativeFeedback, View, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import { COLORS, SIZES } from '../../utils/theme';
 import { fonts } from '../../utils/fonts';
-import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
 import { smartRender } from '../../utils/Utils';
+import useContentFeed from './hooks/useContentFeed';
 
 const FONT_SIZE_TEXT = 16
 
@@ -16,15 +16,12 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
   const isTouchableDisabled = route?.name === 'PostDetailPage';
   const navigation = useNavigation()
 
-  const devHeight = Dimensions.get('screen').height
-   const substringNoImageTopic = devHeight/1.25 - (40 * 7)
-
+      const sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
+      const {hashtagAtComponent} = useContentFeed({navigation})
   const renderMessageContentLink = () => {
-    const sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
     if (sanitizeUrl?.length === 0) return <></>
     return <View style={{ ...styles.messageContainer, ...messageContainerStyle }}>
-      <Text style={styles.message} numberOfLines={3}>{getCaptionWithTopicStyle(sanitizeUrl, navigation, substringNoImageTopic, item?.topics)}</Text>
-      <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl} />
+      <Text style={styles.message} numberOfLines={3}>{hashtagAtComponent(sanitizeUrl)}</Text>
     </View>
   }
 
@@ -32,7 +29,9 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
     <View style={styles.contentFeed}>
       <TouchableNativeFeedback disabled={isTouchableDisabled} onPress={onPress} testID='contentLinkContentPressable'>
         <>
-          {renderMessageContentLink()}
+         <TouchableWithoutFeedback onPress={onPress} >
+           {renderMessageContentLink()}
+         </TouchableWithoutFeedback>
           {smartRender(Card, {
             domain: og.domain,
             date: new Date(og.date).toLocaleDateString(),
@@ -48,6 +47,8 @@ const ContentLink = ({ item, og, onPress, onHeaderPress, onCardContentPress, sco
           })}
         </>
       </TouchableNativeFeedback>
+            <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl} />
+
     </View>
   );
 };
