@@ -28,7 +28,6 @@ import usePostContextHook, { CONTEXT_SOURCE } from '../../hooks/usePostContextHo
 import {
   POST_TYPE_LINK,
   ANALYTICS_SHARE_POST_FEED_ID,
-  ANALYTICS_SHARE_POST_FEED_SCREEN,
   ANALYTICS_SHARE_POST_PDP_SCREEN,
   SOURCE_PDP
 } from '../../utils/constants';
