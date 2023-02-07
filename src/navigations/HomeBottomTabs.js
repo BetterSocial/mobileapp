@@ -17,6 +17,8 @@ import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 
+import {fcmTokenService} from '../service/users';
+
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs({navigation}) {
@@ -60,8 +62,12 @@ function HomeBottomTabs({navigation}) {
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    if (enabled && __DEV__) {
-      console.log('Authorization status:', authStatus);
+    if (enabled) {
+      const fcmToken = await messaging().getToken();
+      const payload = {
+        fcm_token: fcmToken
+      };
+      fcmTokenService(payload);
     }
   };
 
