@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { render, cleanup } from '@testing-library/react-native';
+import { cleanup, render } from '@testing-library/react-native';
 import { useState } from 'react';
 
 import NetworkStatusIndicator from '../../../src/components/NetworkStatusIndicator';
+
+jest.useFakeTimers()
 
 const mockNetInfo = jest.fn().mockImplementation({isInternetReachable: false})
 

@@ -11,34 +11,44 @@ import {
   StyleSheet,
   View
 } from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
 import BlockComponent from '../BlockComponent';
 import ContainerComment from '../Comments/ContainerComment';
 import Content from './elements/Content';
+import ContentLink from '../../screens/FeedScreen/ContentLink';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from '../LoadingWithoutModal';
+import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../Comments/WriteComment';
 import usePostDetail from './hooks/usePostDetail';
 import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHooks';
+import {
+  ANALYTICS_SHARE_POST_FEED_ID,
+  ANALYTICS_SHARE_POST_PDP_SCREEN,
+  POST_TYPE_LINK,
+  SOURCE_PDP
+} from '../../utils/constants';
 import {Context} from '../../context';
 import {Footer, Gap} from '..';
-import {SOURCE_PDP} from '../../utils/constants';
 import {createCommentParent} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
-import {getFeedDetail} from '../../service/post';
-import {setFeedByIndex} from '../../context/actions/feeds';
+import {getFeedDetail, viewTimePost} from '../../service/post';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {withInteractionsManaged} from '../WithInteractionManaged';
-import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 
 const {width, height} = Dimensions.get('window');
 
 const PostPageDetailIdComponent = (props) => {
   const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
+  let feedsContext;
+  let dispatch;
 
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
@@ -52,13 +62,33 @@ const PostPageDetailIdComponent = (props) => {
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false);
   const [commentList, setCommentList] = React.useState([]);
+  const [time, setTime] = React.useState(new Date().getTime());
   const [item, setItem] = React.useState(null);
+  const navigation = useNavigation();
   const route = useRoute();
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
-  const [feedsContext, dispatch] = useFeedDataContext(contextSource);
+  [feedsContext, dispatch] = React.useContext(Context).feeds;
+  const {timer} = feedsContext;
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
+
+  switch (contextSource) {
+    case CONTEXT_SOURCE.FEEDS:
+      [feedsContext, dispatch] = React.useContext(Context).feeds;
+      break;
+
+    case CONTEXT_SOURCE.OTHER_PROFILE_FEEDS:
+      [feedsContext, dispatch] = React.useContext(Context).otherProfileFeed;
+      break;
+
+    case CONTEXT_SOURCE.PROFILE_FEEDS:
+      [feedsContext, dispatch] = React.useContext(Context).myProfileFeed;
+      break;
+
+    default:
+      break;
+  }
 
   React.useEffect(() => {
     if (item && item?.latest_reactions) {
@@ -107,7 +137,7 @@ const PostPageDetailIdComponent = (props) => {
     if (!route.params.isCaching) {
       setLoading(true);
       const data = await getFeedDetail(feedId);
-      setItem(data.data);
+      setItem(data?.data);
       setLoading(false);
     } else {
       setItem(route.params.data);
@@ -130,7 +160,7 @@ const PostPageDetailIdComponent = (props) => {
   const updateFeed = async (isSort) => {
     try {
       const data = await getFeedDetail(feedId);
-      let oldData = {...data.data};
+      let oldData = {...data?.data};
       if (isSort) {
         oldData = {
           ...oldData,
@@ -171,7 +201,7 @@ const PostPageDetailIdComponent = (props) => {
     try {
       if (textComment.trim() !== '') {
         const data = await createCommentParent(textComment, item.id, item.actor.id, true);
-        updateCachingComment(data.data);
+        updateCachingComment(data?.data);
         if (data.code === 200) {
           setTextComment('');
           updateFeed(true);
@@ -188,6 +218,28 @@ const PostPageDetailIdComponent = (props) => {
       setLoadingPost(false);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
+  };
+
+  const onPressDomain = () => {
+    const param = linkContextScreenParamBuilder(
+      item,
+      item.og.domain,
+      item.og.domainImage,
+      item.og.domain_page_id
+    );
+
+    const currentTime = new Date();
+    const feedDiffTime = currentTime.getTime() - timer.getTime();
+    const pdpDiffTime = currentTime.getTime() - time;
+
+    if (feedId) {
+      // viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
+      viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
+    }
+
+    setTime(new Date().getTime());
+    setTimer(new Date(), dispatch);
+    navigation.navigate('DomainScreen', param);
   };
 
   const onCommentButtonClicked = () => {
@@ -301,8 +353,8 @@ const PostPageDetailIdComponent = (props) => {
     const mappingData = feedsContext.feeds.map((feed) => {
       if (feed.id === item.id) {
         let joinComment = [];
-        if (Array.isArray(feed.latest_reactions.comment)) {
-          joinComment = [...feed.latest_reactions.comment, comment].sort(
+        if (Array.isArray(feed?.latest_reactions?.comment)) {
+          joinComment = [...feed?.latest_reactions?.comment, comment].sort(
             (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
           );
         } else {
@@ -320,7 +372,7 @@ const PostPageDetailIdComponent = (props) => {
     if (level > 0) {
       const updatedComment = commentList.map((comment) => {
         if (comment.id === newData.parent) {
-          const findComment = comment.latest_children.comment.map((comment1) => {
+          const findComment = comment?.latest_children?.comment.map((comment1) => {
             if (comment1.id === newData.id) {
               return {...comment1, ...newData};
             }
@@ -382,6 +434,28 @@ const PostPageDetailIdComponent = (props) => {
       },
       dispatch
     );
+  };
+
+  const navigateToLinkContextPage = (itemParams) => {
+    const param = linkContextScreenParamBuilder(
+      itemParams,
+      itemParams.og.domain,
+      itemParams.og.domainImage,
+      itemParams.og.domain_page_id
+    );
+
+    const currentTime = new Date();
+    const feedDiffTime = currentTime.getTime() - timer.getTime();
+    const pdpDiffTime = currentTime.getTime() - time;
+
+    if (feedId) {
+      viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
+    }
+
+    setTime(new Date().getTime());
+    setTimer(new Date(), dispatch);
+
+    navigation.push('LinkContextScreen', param);
   };
 
   const onPressDownVoteHandle = async () => {
@@ -482,18 +556,6 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
-  const navigateToReply = React.useCallback(
-    (data) =>
-      navigateToReplyView(
-        data,
-        updateParentPost,
-        findCommentAndUpdate,
-        item,
-        updateVoteLatestChildren
-      ),
-    []
-  );
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'height' : null}
@@ -511,14 +573,26 @@ const PostPageDetailIdComponent = (props) => {
             style={styles.contentScrollView(totalComment)}
             nestedScrollEnabled={true}>
             <View style={styles.content(height)}>
-              <Content
-                message={item.message}
-                images_url={item.images_url}
-                style={styles.additionalContentStyle(item?.images_url?.length, height)}
-                topics={item?.topics}
-                item={item}
-                onnewpollfetched={onNewPollFetched}
-              />
+              {item.post_type === POST_TYPE_LINK ? (
+                <ContentLink
+                  og={item.og}
+                  onHeaderPress={onPressDomain}
+                  onCardContentPress={() => navigateToLinkContextPage(item)}
+                  score={item.credderScore}
+                  message={item?.message}
+                  topics={item?.topics}
+                  item={item}
+                />
+              ) : (
+                <Content
+                  message={item.message}
+                  images_url={item.images_url}
+                  style={styles.additionalContentStyle(item?.images_url?.length, height)}
+                  topics={item?.topics}
+                  item={item}
+                  onnewpollfetched={onNewPollFetched}
+                />
+              )}
 
               <Gap height={16} />
               <View style={{height: 52, paddingHorizontal: 0, width: '100%'}}>
@@ -530,7 +604,13 @@ const PostPageDetailIdComponent = (props) => {
                   onPressDownVote={onPressDownVoteHandle}
                   onPressUpvote={onPressUpvoteHandle}
                   statusVote={voteStatus}
-                  onPressShare={() => {}}
+                  onPressShare={() =>
+                    ShareUtils.shareFeeds(
+                      item,
+                      ANALYTICS_SHARE_POST_PDP_SCREEN,
+                      ANALYTICS_SHARE_POST_FEED_ID
+                    )
+                  }
                   onPressComment={onCommentButtonClicked}
                   // loadingVote={loadingVote}
                   showScoreButton={true}
@@ -547,7 +627,15 @@ const PostPageDetailIdComponent = (props) => {
                 isLoading={loadingPost}
                 refreshComment={handleRefreshComment}
                 refreshChildComment={handleRefreshChildComment}
-                navigateToReplyView={navigateToReply}
+                navigateToReplyView={(data) =>
+                  navigateToReplyView(
+                    data,
+                    updateParentPost,
+                    findCommentAndUpdate,
+                    item,
+                    updateVoteLatestChildren
+                  )
+                }
                 findCommentAndUpdate={findCommentAndUpdate}
                 updateParentPost={updateParentPost}
                 contextSource={contextSource}

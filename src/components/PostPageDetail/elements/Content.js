@@ -9,12 +9,16 @@ import TopicsChip from '../../TopicsChip/TopicsChip';
 import {COLORS} from '../../../utils/theme';
 import {colors} from '../../../utils/colors';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
+import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import ContentPoll from '../../../screens/FeedScreen/ContentPoll';
-import {POST_TYPE_POLL} from '../../../utils/constants';
+import {POST_TYPE_POLL, POST_TYPE_LINK} from '../../../utils/constants';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
+import {smartRender} from '../../../utils/Utils';
+import Card from '../../Card/Card';
+import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 
 const {width: screenWidth} = Dimensions.get('window');
-
+const FONT_SIZE_TEXT = 16;
 const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => {
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
@@ -30,16 +34,49 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
     });
   };
 
-  if (!cekImage) return null;
+  const handleStyleFeed = () => {
+    if (item.post_type !== POST_TYPE_LINK) {
+      return styles.contentFeed;
+    }
+    return styles.contentFeedLink;
+  };
 
+  const navigateToLinkContextPage = () => {
+    const param = linkContextScreenParamBuilder(
+      item,
+      item.og.domain,
+      item.og.domainImage,
+      item.og.domain_page_id
+    );
+    navigation.push('LinkContextScreen', param);
+  };
+
+  const onPressDomain = () => {
+    const param = linkContextScreenParamBuilder(
+      item,
+      item.og.domain,
+      item.og.domainImage,
+      item.og.domain_page_id
+    );
+
+    navigation.navigate('DomainScreen', param);
+  };
+  if (!cekImage) return null;
   return (
     <>
       <ScrollView
         contentContainerStyle={{flexGrow: 1, paddingBottom: 40}}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        <View style={[styles.contentFeed]}>
-          <Text style={[styles.textContentFeed]}>{hashtagAtComponent(message)}</Text>
+        <View style={handleStyleFeed()}>
+          {item.post_type !== POST_TYPE_LINK ? (
+            <Text style={[styles.textContentFeed]}>{hashtagAtComponent(message)}</Text>
+          ) : (
+            <Text style={[styles.textContentFeed]}>
+              {hashtagAtComponent(sanitizeUrl(message))}{' '}
+            </Text>
+          )}
+
           {item && item.post_type === POST_TYPE_POLL ? (
             <ContentPoll
               message={item.message}
@@ -55,6 +92,23 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
             />
           ) : null}
         </View>
+        {item && item.post_type === POST_TYPE_LINK && (
+          <View style={styles.newsCard}>
+            {smartRender(Card, {
+              domain: item.og.domain,
+              date: new Date(item.og.date).toLocaleDateString(),
+              domainImage: item.og.domainImage,
+              title: item.og.title,
+              description: item.og.description,
+              image: item.og.image,
+              url: item.og.url,
+              onHeaderPress: onPressDomain,
+              onCardContentPress: navigateToLinkContextPage,
+              score: item.score,
+              item
+            })}
+          </View>
+        )}
         {images_url.length > 0 && (
           <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
         )}
@@ -201,5 +255,23 @@ const styles = StyleSheet.create({
     marginRight: 8,
     width: 32,
     height: 32
+  },
+  contentFeedLink: {
+    // flex: 1,
+    marginTop: 12,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+    backgroundColor: COLORS.white
+  },
+  newsCard: {
+    paddingHorizontal: 20
+    // height: '80%',
+  },
+  message: {
+    fontFamily: fonts.inter[400],
+    lineHeight: 24,
+    fontSize: FONT_SIZE_TEXT,
+    letterSpacing: 0.1
   }
 });

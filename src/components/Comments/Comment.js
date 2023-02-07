@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
@@ -43,18 +44,16 @@ const Comment = ({
     level,
     updateVote
   });
-
-  const onTextPress = React.useCallback(() => {
+  const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
-      console.log('');
       return;
     }
     if (onPress && typeof onPress === 'function') {
       onPress();
     }
-  }, []);
+  };
 
-  const openProfile = React.useCallback(async () => {
+  const openProfile = async () => {
     const selfUserId = await getUserId();
     if (selfUserId === user.id) {
       return navigation.navigate('ProfileScreen', {
@@ -68,13 +67,13 @@ const Comment = ({
         username: user.data.username
       }
     });
-  }, [user.id]);
+  };
 
-  const onBlockComponent = () => {
+  const onBlockComponent = (commentParams) => {
     refBlockComponent.current.openBlockComponent({
       anonimity: false,
-      actor: comment.user,
-      id: comment.id
+      actor: commentParams.user,
+      id: commentParams.id
     });
   };
 
@@ -113,8 +112,7 @@ const Comment = ({
               source={
                 photo
                   ? {uri: removeWhiteSpace(photo)}
-                  : // eslint-disable-next-line global-require
-                    require('../../assets/images/ProfileDefault.png')
+                  : require('../../assets/images/ProfileDefault.png')
               }
               style={styles.image}
             />
@@ -147,7 +145,7 @@ const Comment = ({
         )}
         <ButtonHightlight
           style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
-          onPress={() => onBlockComponent()}>
+          onPress={() => onBlockComponent(comment)}>
           <IconEn name="block" size={15.02} color={colors.gray1} />
         </ButtonHightlight>
 
@@ -179,26 +177,16 @@ const Comment = ({
 };
 
 export const isEqual = (prevProps, nextProps) => prevProps.comment === nextProps.comment;
+export default React.memo(Comment);
 
 const styles = StyleSheet.create({
-  vote: (count) => {
-    function colorBasedCount() {
-      if (count > 0) {
-        return '#00ADB5';
-      }
-      if (count < 0) {
-        return '#FF2E63';
-      }
-      return '#C4C4C4';
-    }
-    return {
-      ...FONTS.body3,
-      textAlign: 'center',
-      width: 26,
-      alignSelf: 'center',
-      color: colorBasedCount()
-    };
-  },
+  vote: (count) => ({
+    ...FONTS.body3,
+    textAlign: 'center',
+    width: 26,
+    alignSelf: 'center',
+    color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4'
+  }),
   btn: {
     // width: 30,
     height: 30,
@@ -210,24 +198,12 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12
   },
-  container: ({isLast, style, level, showLeftConnector}) => {
-    function borderLeftColorBasedLevel() {
-      if (isLast) {
-        if (level === 0) {
-          return colors.gray1;
-        }
-        return 'transparent';
-      }
-      return colors.gray1;
-    }
-
-    return {
-      width: '100%',
-      borderLeftWidth: showLeftConnector ? 1 : 0,
-      borderLeftColor: borderLeftColorBasedLevel(),
-      ...style
-    };
-  },
+  container: ({isLast, style, level, showLeftConnector}) => ({
+    width: '100%',
+    borderLeftWidth: showLeftConnector ? 1 : 0,
+    borderLeftColor: isLast ? (level === 0 ? colors.gray1 : 'transparent') : colors.gray1,
+    ...style
+  }),
   flexStartContainer: {
     alignSelf: 'flex-start'
   },
@@ -291,5 +267,3 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
-
-export default React.memo(Comment);

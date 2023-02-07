@@ -8,12 +8,12 @@ import {useNavigation} from '@react-navigation/native';
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import useContentFeed from './hooks/useContentFeed';
 import {COLORS} from '../../utils/theme';
 import {POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
-import useContentFeed from './hooks/useContentFeed';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -43,7 +43,6 @@ const Content = ({
       }, [])
     });
   };
-
   const renderHandleTextContent = () => {
     if (images_url.length > 0) {
       return (
@@ -78,7 +77,6 @@ const Content = ({
       </View>
     );
   };
-
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       <View style={styles.container}>
@@ -86,7 +84,7 @@ const Content = ({
       </View>
       {item && item.post_type === POST_TYPE_POLL ? (
         <View style={styles.containerMainText}>
-          <Text style={[styles.textMedia]}>{hashtagAtComponent(message)}</Text>
+          <Text style={styles.textMedia}>{hashtagAtComponent(message)}</Text>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
@@ -248,5 +246,8 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     height: '100%'
+    // backgroundColor: 'red'
+
+    // marginBottom: 7
   }
 });
