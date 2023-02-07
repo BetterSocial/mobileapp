@@ -247,7 +247,7 @@ const Item = ({
           <PreviewComment
             user={previewComment?.user}
             comment={previewComment?.data?.text}
-            image={previewComment?.user.data?.profile_pic_url}
+            image={previewComment?.user?.data?.profile_pic_url}
             time={previewComment?.created_at}
             totalComment={getCountCommentWithChild(item) - 1}
             onPress={onPressComment}
