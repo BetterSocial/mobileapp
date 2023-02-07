@@ -3,5 +3,6 @@
     "search.exclude": {
         "**/node_modules": false,
         "**/node-modules": true
-    }
+    },
+    "dotenv.enableAutocloaking": false
 }

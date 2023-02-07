@@ -307,55 +307,6 @@ const DomainScreen = () => {
           }}
       </ProfileTiktokScroll>
 
-      {/* <FlatList
-        data={data}
-        renderItem={({ item, index }) => {
-          if (index === 0) {
-            return (
-              <View key={index} style={{ backgroundColor: 'transparent' }}>
-                <Header
-                  image={domainImage}
-                  description={profile.short_description}
-                  domain={dataDomain.og.domain}
-                  followers={domainFollowers}
-                  onPressBlock={onReaction}
-                  onPressUnblock={onUnblockDomain}
-                  follow={follow}
-                  handleFollow={handleFollow}
-                  handleUnfollow={handleUnfollow}
-                  isBlocked={isBlocked}
-                />
-                <LinearGradient
-                  colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']}
-                  style={styles.linearGradient}
-                />
-              </View>
-            );
-          }
-
-          if (item.content) {
-            return (
-              <RenderItem
-                key={index}
-                item={item}
-                image={profile.logo}
-                onPressComment={(itemNews) => handleOnPressComment(itemNews)}
-                onPressUpvote={(news) => upvoteNews(news)}
-                onPressDownVote={(news) => downvoteNews(news)}
-                selfUserId={idFromToken}
-                onPressBlock={() => onReaction(0)}
-                follow={follow}
-                handleFollow={handleFollow}
-                handleUnfollow={handleUnfollow}
-                onPressShare={ShareUtils.shareDomain}
-              />
-            );
-          }
-        }}
-        style={styles.list}
-        keyExtractor={(i) => i.id}
-      /> */}
-
       <BlockDomainComponent
         ref={refBlockDomainComponent}
         domain={domain}

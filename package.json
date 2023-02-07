@@ -26,8 +26,8 @@
     "prepare": "husky install",
     "reset-all": "rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules && npm cache clean --force && npm install && npm start -- --reset-cache",
     "update-stream": "npm i stream-chat-react-native stream-chat-react-native-core --legacy-peer-deps",
-    "update-env-dev": "doppler secrets download --no-file --format env-no-quotes --config dev > .env.development",
-    "update-env-prod": "doppler secrets download --no-file --format env-no-quotes --config prd > .env.production"
+    "update-env-dev": "doppler secrets download -p bettersocial --no-file --format env-no-quotes --config dev > .env.development",
+    "update-env-prod": "doppler secrets download -p bettersocial --no-file --format env-no-quotes --config prd > .env.production"
   },
   "dependencies": {
     "@human-internet/react-native-humanid": "^2.4.4",
@@ -66,7 +66,7 @@
     "react-native-autolink": "^4.0.0",
     "react-native-bundle-splitter": "^2.2.1",
     "react-native-card-stack-swiper": "^1.2.5",
-    "react-native-config": "^1.4.2",
+    "react-native-config": "1.4.2",
     "react-native-device-info": "^8.0.5",
     "react-native-document-picker": "5.0.2",
     "react-native-emoji-selector": "^0.2.0",

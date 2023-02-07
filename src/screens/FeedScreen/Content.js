@@ -15,13 +15,12 @@ import { useNavigation } from '@react-navigation/native';
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import useContentFeed from './hooks/useContentFeed';
 import { COLORS } from '../../utils/theme';
 import { POST_TYPE_POLL } from '../../utils/constants';
-import Gap from '../../components/Gap';
 import { colors } from '../../utils/colors';
 import { fonts, normalizeFontSize } from '../../utils/fonts';
 import { getCaptionWithTopicStyle } from '../../utils/string/StringUtils';
-import useContentFeed from './hooks/useContentFeed';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -51,7 +50,6 @@ const Content = ({ message, images_url = [], style, onPress, topics = [], item, 
       }, []),
     });
   };
-  console.log(item, 'sunat')
   const renderHandleTextContent = () => {
     if(images_url.length > 0) {
       return (

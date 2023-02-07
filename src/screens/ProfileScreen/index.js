@@ -97,10 +97,11 @@ const ProfileScreen = ({ route }) => {
   const [postOffset, setPostOffset] = React.useState(0)
   const [loadingContainer, setLoadingContainer] = React.useState(true)
   const [yourselfId,] = React.useState('');
+  const [isLastPage, setIsLastPage] = React.useState(false)
   const [loading, setLoading] = React.useState(false);
   const [isPostOptionModalOpen, setIsOptionModalOpen] = React.useState(false)
   const [selectedPostForOption, setSelectedPostForOption] = React.useState(null)
-
+  const [isFetchingList, setIsFetchingList] = React.useState(false)
   const { interactionsComplete } = useAfterInteractions()
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab
   const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
@@ -177,9 +178,15 @@ const ProfileScreen = ({ route }) => {
     }
 
   }
-
   const getMyFeeds = async (offset = 0, limit = 10) => {
-    const result = await getSelfFeedsInProfile(offset, limit);
+    try {
+          setIsFetchingList(true)
+
+       const result = await getSelfFeedsInProfile(offset, limit);
+       if(Array.isArray(result.data) && result.data.length === 0) {
+        setIsLastPage(true)
+        Toast.show('No posts yet.', Toast.LONG)
+       }
     if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch)
     else {
       const clonedFeeds = [...feeds]
@@ -187,7 +194,13 @@ const ProfileScreen = ({ route }) => {
       setMyProfileFeed(clonedFeeds, myProfileDispatch)
     }
     setLoading(false)
+    setIsFetchingList(false)
     setPostOffset(offset + 10)
+    } catch(e) {
+      setIsChangeRealName(false)
+      setLoading(false)
+    }
+   
   };
 
 
@@ -477,7 +490,11 @@ const ProfileScreen = ({ route }) => {
   };
 
   const handleOnEndReached = () => {
-    getMyFeeds(postOffset)
+    console.log('masuk pak')
+    if(!isLastPage) {
+      getMyFeeds(postOffset)
+
+    }
   }
 
   const handleRefresh = () => {
@@ -549,7 +566,7 @@ const ProfileScreen = ({ route }) => {
           onRefresh={handleRefresh}
           refreshing={loading}
           onScroll={handleScroll}
-          ListFooterComponent={<ActivityIndicator />}
+          ListFooterComponent={isFetchingList ?<ActivityIndicator /> : null}
           onEndReach={handleOnEndReached}
           initialNumToRender={2}
           maxToRenderPerBatch={2}

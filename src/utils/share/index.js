@@ -1,6 +1,7 @@
 // import dynamicLinks from '@react-native-firebase/dynamic-links';
-import config, { Config } from 'react-native-config';
+import config from 'react-native-config';
 import { Alert, Share } from 'react-native';
+
 import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
 
 const buildShare = async (message) => {
@@ -38,21 +39,22 @@ const sharePostInTopic = async (item, analyticsLogEvent, analyticsId) => {
     Analytics.logEvent(analyticsLogEvent, {
         id: analyticsId,
     });
-    await buildShare(`${Config.SHARE_URL}/p/${item?.id}`)
+    await buildShare(`${config.POST_SHARE_URL}/post/${item?.id}`)
 }
 
 const sharePostInProfile = async (item, analyticsLogEvent, analyticsId) => {
     Analytics.logEvent(analyticsLogEvent, {
         id: analyticsId,
     });
-    await buildShare(`${Config.SHARE_URL}/p/${item?.id}`)
+    await buildShare(`${config.POST_SHARE_URL}/post/${item?.id}`)
 }
 
 const shareFeeds = async (item, analyticsLogEvent, analyticsId) => {
     Analytics.logEvent(analyticsLogEvent, {
         id: analyticsId,
     });
-    await buildShare(`${Config.SHARE_URL}/p/${item?.id}`)
+    console.log(config.POST_SHARE_URL)
+    await buildShare(`${config.POST_SHARE_URL}/post/${item?.id}`)
 }
 
 const shareUserLink = (username) => buildShare(`${config.SHARE_URL}/u/${username}`)
