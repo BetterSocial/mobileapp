@@ -26,12 +26,10 @@ import { fonts } from '../../utils/fonts';
 const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed, updateReply, itemParent, updateVote, updateVoteLatestChildren }) => {
   const navigation = useNavigation();
   const { getThisCommentHook, setCommentHook, temporaryText,
-    setTemporaryText, isLastInParentHook, findCommentAndUpdateHook,
-    updateVoteParentPostHook, updateVoteLatestChildrenParentHook, textComment,
-    setTextComment, newCommentList, setNewCommentList,
-    defaultData, setItem, item,
-    showChildrenCommentView, updateFeed, scrollViewRef,
-    createComment
+    isLastInParentHook, findCommentAndUpdateHook, setTextComment, 
+    newCommentList, setNewCommentList, setItem, 
+    item, showChildrenCommentView, updateFeed, 
+    scrollViewRef, createComment
   } = useReplyComment({ itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page })
 
 
