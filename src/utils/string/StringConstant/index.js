@@ -113,6 +113,12 @@ const groupSettingUpdateFailed = 'Update failed, please try again'
 // Feed
 const feedDeleteCommentConfirmation = 'Do you want to delete your comment?'
 
+// Firebase Config
+const dynamicLinkPostCannotBeFound = 'This post cannot be found';
+const dynamicLinkAuthorNotFollowing = 'You cannot access this private post';
+const dynamicLinkAuthorBlocks = 'You cannot access this private post';
+const dynamicLinkPostExpired = 'This post has expired and has been deleted automatically';
+
 export default {
     signInPrivacy,
     signInScreenHumanIdBrand,
@@ -199,5 +205,10 @@ export default {
     generalCannotOpenLink,
 
     groupSettingUpdateFailed,
-    feedDeleteCommentConfirmation
+    feedDeleteCommentConfirmation,
+    
+    dynamicLinkAuthorBlocks,
+    dynamicLinkPostCannotBeFound,
+    dynamicLinkAuthorNotFollowing,
+    dynamicLinkPostExpired,
 };
