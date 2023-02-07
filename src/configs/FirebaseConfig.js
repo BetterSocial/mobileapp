@@ -3,6 +3,8 @@ import React from 'react'
 import SimpleToast from 'react-native-simple-toast'
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 
+import StringConstant from '../utils/string/StringConstant';
+import { POST_CHECK_AUTHOR_BLOCKED, POST_CHECK_AUTHOR_NOT_FOLLOWING, POST_CHECK_FEED_EXPIRED, POST_CHECK_FEED_NOT_FOUND } from '../utils/constants';
 import { getUserId } from '../utils/users';
 import { isAuthorFollowingMe } from '../service/post';
 
@@ -83,47 +85,51 @@ const FirebaseConfig = (props) => {
     }
 
     const handleExpiredPost = async (dynamicLink) => {
-        SimpleToast.show('This post has expired and has been deleted automatically', SimpleToast.SHORT)
+        SimpleToast.show(StringConstant.dynamicLinkPostExpired, SimpleToast.SHORT)
         return navigation.navigate('Feed')
+    }
+
+    const checkIsAuthorFollowingMe = async (postId) => {
+        let response = await isAuthorFollowingMe(postId)
+        let isAuthorFollowing = response?.success
+        let errorCode = response?.code
+
+        if (!isAuthorFollowing && errorCode === POST_CHECK_FEED_NOT_FOUND) {
+            SimpleToast.show(StringConstant.dynamicLinkPostCannotBeFound, SimpleToast.SHORT)
+            return navigation.navigate('Feed')
+        }
+
+        if (!isAuthorFollowing && errorCode === POST_CHECK_AUTHOR_NOT_FOLLOWING) {
+            SimpleToast.show(StringConstant.dynamicLinkAuthorNotFollowing, SimpleToast.SHORT)
+            return navigation.navigate('Feed')
+        }
+
+        if (!isAuthorFollowing && errorCode === POST_CHECK_AUTHOR_BLOCKED) {
+            SimpleToast.show(StringConstant.dynamicLinkAuthorBlocks, SimpleToast.SHORT)
+            return navigation.navigate('Feed')
+        }
+
+        if (!isAuthorFollowing && errorCode === POST_CHECK_FEED_EXPIRED) {
+            SimpleToast.show(StringConstant.dynamicLinkPostExpired, SimpleToast.SHORT)
+            return navigation.navigate('Feed')
+        }
+
+        return navigation?.navigate('PostDetailPage', {
+            feedId: postId,
+            refreshCache: null,
+            isCaching: false
+        })
     }
 
     const handlePost = async (dynamicLink) => {
         let postId = dynamicLink.url.split('postId=')[1]
         postId = postId?.length > 36 ? postId.substring(0, 36) : postId
-        return navigation?.navigate('PostDetailPage', {
-            feedId: postId,
-            refreshCache: null,
-            isCaching: false
-        })
+        checkIsAuthorFollowingMe(postId)
     }
 
     const handlePrivatePost = async (dynamicLink) => {
         let postId = dynamicLink.url.split('postPrivateId=')[1]
-
-        let response = await isAuthorFollowingMe(postId)
-        let isAuthorFollowing = response?.success
-        let errorCode = response?.code
-
-        if (!isAuthorFollowing && errorCode === 1) {
-            SimpleToast.show('Post is not found', SimpleToast.SHORT)
-            return navigation.navigate('Feed')
-        }
-
-        if (!isAuthorFollowing && errorCode === 2) {
-            SimpleToast.show('You cannot access this private post', SimpleToast.SHORT)
-            return navigation.navigate('Feed')
-        }
-
-        if (!isAuthorFollowing && errorCode === 3) {
-            SimpleToast.show('This post has expired and has been deleted automatically', SimpleToast.SHORT)
-            return navigation.navigate('Feed')
-        }
-
-        return navigation?.navigate('PostDetailPage', {
-            feedId: postId,
-            refreshCache: null,
-            isCaching: false
-        })
+        checkIsAuthorFollowingMe(postId)
     }
 
     return (
