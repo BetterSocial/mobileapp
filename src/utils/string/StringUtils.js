@@ -351,6 +351,14 @@ const getCaptionWithTopicStyle = (text, navigation, substringEnd, topics = []) =
 
 const removeStringAfterSpace = str => str.split(' ')[0]
 
+const sanitizeUrl = (message) => {
+        if(message && typeof message === 'string') {
+            return message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim()
+        }
+        return ''
+}
+
+
 export {
     capitalizeFirstText,
     convertString,
@@ -366,5 +374,6 @@ export {
     NO_POLL_UUID,
     randomString,
     removeStringAfterSpace,
-    displayCityName
+    displayCityName,
+    sanitizeUrl
 };

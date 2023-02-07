@@ -1,11 +1,38 @@
 import PropTypes from 'prop-types';
 import React from 'react'
+import SimpleToast from 'react-native-simple-toast'
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import { getUserId } from '../utils/users';
+import { isAuthorFollowingMe } from '../service/post';
 
 const FirebaseConfig = (props) => {
     const { navigation } = props
+
+    React.useEffect(() => {
+        handleBgDynamicLink()
+        handleFgDynamicLink()
+    })
+
+    React.useEffect(() => {
+        const unsubscribe = dynamicLinks().onLink(parseDynamicLink)
+        return () => unsubscribe()
+    }, [])
+
+    React.useEffect(() => {
+        dynamicLinks().getInitialLink().then(parseDynamicLink)
+    }, [])
+
+    /**
+     * 
+     * @param {FirebaseDynamicLinksTypes.DynamicLink} dynamicLink 
+     */
+    const parseDynamicLink = async (dynamicLink) => {
+        if (dynamicLink?.url?.includes('postExpired=true')) return handleExpiredPost(dynamicLink)
+        if (dynamicLink?.url?.includes('postPrivateId=')) return handlePrivatePost(dynamicLink)
+        if (dynamicLink?.url?.includes('postId=')) return handlePost(dynamicLink)
+    }
+
     const USER = 'users'
     const getUserProfile = async (url) => {
         if (url && typeof url === 'string') {
@@ -55,10 +82,49 @@ const FirebaseConfig = (props) => {
         })
     }
 
-    React.useEffect(() => {
-        handleBgDynamicLink()
-        handleFgDynamicLink()
-    })
+    const handleExpiredPost = async (dynamicLink) => {
+        SimpleToast.show('This post has expired and has been deleted automatically', SimpleToast.SHORT)
+        return navigation.navigate('Feed')
+    }
+
+    const handlePost = async (dynamicLink) => {
+        let postId = dynamicLink.url.split('postId=')[1]
+        postId = postId?.length > 36 ? postId.substring(0, 36) : postId
+        return navigation?.navigate('PostDetailPage', {
+            feedId: postId,
+            refreshCache: null,
+            isCaching: false
+        })
+    }
+
+    const handlePrivatePost = async (dynamicLink) => {
+        let postId = dynamicLink.url.split('postPrivateId=')[1]
+
+        let response = await isAuthorFollowingMe(postId)
+        let isAuthorFollowing = response?.success
+        let errorCode = response?.code
+
+        if (!isAuthorFollowing && errorCode === 1) {
+            SimpleToast.show('Post is not found', SimpleToast.SHORT)
+            return navigation.navigate('Feed')
+        }
+
+        if (!isAuthorFollowing && errorCode === 2) {
+            SimpleToast.show('You cannot access this private post', SimpleToast.SHORT)
+            return navigation.navigate('Feed')
+        }
+
+        if (!isAuthorFollowing && errorCode === 3) {
+            SimpleToast.show('This post has expired and has been deleted automatically', SimpleToast.SHORT)
+            return navigation.navigate('Feed')
+        }
+
+        return navigation?.navigate('PostDetailPage', {
+            feedId: postId,
+            refreshCache: null,
+            isCaching: false
+        })
+    }
 
     return (
         <>
