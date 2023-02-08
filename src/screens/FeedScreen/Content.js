@@ -3,7 +3,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
@@ -27,6 +27,7 @@ const Content = ({
   onNewPollFetched
 }) => {
   const navigation = useNavigation();
+  const route = useRoute();
   const devHeight = Dimensions.get('screen').height;
   const substringPostImage = devHeight / 2.25 - 40 * 4;
   const substringNoImageNoTopic = devHeight / 1.25 - 40 * 4;
@@ -48,7 +49,13 @@ const Content = ({
       return (
         <View testID="postTypePoll" style={{height: '100%', flexDirection: 'row'}}>
           <Text style={styles.textMedia}>
-            {getCaptionWithTopicStyle(message, navigation, substringPostImage, item?.topics)}{' '}
+            {getCaptionWithTopicStyle(
+              route?.params?.id,
+              message,
+              navigation,
+              substringPostImage,
+              item?.topics
+            )}{' '}
             {message.length > substringPostImage ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
             ) : null}
@@ -61,14 +68,26 @@ const Content = ({
       <View testID="postTypeStatus" style={{flex: 1}}>
         {topics.length > 0 ? (
           <Text style={styles.textMedia}>
-            {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic, item?.topics)}{' '}
+            {getCaptionWithTopicStyle(
+              route?.params?.id,
+              message,
+              navigation,
+              substringNoImageTopic,
+              item?.topics
+            )}{' '}
             {message.length > substringNoImageTopic ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
             ) : null}
           </Text>
         ) : (
           <Text style={styles.textMedia}>
-            {getCaptionWithTopicStyle(message, navigation, substringNoImageNoTopic, item?.topics)}{' '}
+            {getCaptionWithTopicStyle(
+              route?.params?.id,
+              message,
+              navigation,
+              substringNoImageNoTopic,
+              item?.topics
+            )}{' '}
             {message.length > substringNoImageNoTopic ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
             ) : null}

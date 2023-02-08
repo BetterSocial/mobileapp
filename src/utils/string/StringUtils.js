@@ -3,7 +3,6 @@ import * as React from 'react';
 import moment from 'moment';
 import reactStringReplace from 'react-string-replace';
 import {StyleSheet, Text} from 'react-native';
-import {useRoute} from '@react-navigation/native';
 
 import TaggingUserText from '../../components/TaggingUserText';
 import TextBold from '../../components/Text/TextBold';
@@ -337,9 +336,8 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @param {Any} navigation
  * @returns
  */
-const getCaptionWithTopicStyle = (text, navigation, substringEnd, topics = []) => {
-  const route = useRoute();
-  const topicWithPrefix = route?.params?.id;
+const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topics = []) => {
+  const topicWithPrefix = idParams;
   const id = removePrefixTopic(topicWithPrefix);
   const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/;
   const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
