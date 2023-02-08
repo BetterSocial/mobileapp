@@ -1,8 +1,4 @@
 import * as React from 'react';
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-unused-vars */
-import { useNavigation } from '@react-navigation/core';
-import { debounce } from 'lodash';
 import PSL from 'psl'
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
@@ -14,20 +10,23 @@ import Toast from 'react-native-simple-toast';
 /* eslint-disable no-unused-vars */
 import {
     Alert,
+    Animated,
     BackHandler,
-    Dimensions,
     Pressable,
     SafeAreaView,
     ScrollView,
     StatusBar,
     StyleSheet,
     Text,
-    View,
-    Animated
+    View
 } from 'react-native';
-import { showMessage } from 'react-native-flash-message';
+import { debounce } from 'lodash';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { openSettings } from 'react-native-permissions';
+import { showMessage } from 'react-native-flash-message';
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
+import { useNavigation } from '@react-navigation/core';
 
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
@@ -38,37 +37,9 @@ import ListItem from '../../components/MenuPostItem';
 import Loading from '../Loading';
 import Location from '../../assets/icons/Ic_location';
 import MemoIc_hastag from '../../assets/icons/Ic_hastag';
-import Timer from '../../assets/icons/Ic_timer';
 import MemoIc_user_group from '../../assets/icons/Ic_user_group';
 import MemoIc_world from '../../assets/icons/Ic_world';
 import ProfileDefault from '../../assets/images/ProfileDefault.png';
-import { Button, ButtonAddMedia } from '../../components/Button';
-import TopicItem from '../../components/TopicItem';
-import { Context } from '../../context';
-import { getLinkPreviewInfo } from '../../service/feeds';
-import { ShowingAudience, createPollPost, createPost } from '../../service/post';
-import { getMyProfile } from '../../service/profile';
-import { getSpecificCache } from '../../utils/cache';
-import { PROFILE_CACHE } from '../../utils/cache/constant';
-import { colors } from '../../utils/colors';
-import { convertString } from '../../utils/string/StringUtils';
-import { fonts, normalizeFontSize } from '../../utils/fonts';
-import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
-import {
-    requestCameraPermission,
-    requestExternalStoragePermission,
-} from '../../utils/permission';
-import {
-    getDurationId,
-    getLocationId,
-    getPrivacyId,
-    setDurationId,
-    setPrivacyId
-} from '../../utils/setting';
-import { getUrl, isContainUrl } from '../../utils/Utils';
-import { getUserId } from '../../utils/users';
-import WarningAnimatedMessage from '../../components/WarningAnimateMessage';
-import StringConstant from '../../utils/string/StringConstant';
 import SheetAddTopic from './elements/SheetAddTopic';
 import SheetCloseBtn from './elements/SheetCloseBtn';
 import SheetExpiredPost from './elements/SheetExpiredPost';
@@ -76,10 +47,38 @@ import SheetGeographic from './elements/SheetGeographic';
 import SheetMedia from './elements/SheetMedia';
 import SheetPrivacy from './elements/SheetPrivacy';
 import ShowMedia from './elements/ShowMedia';
-import useHastagMention from './elements/useHastagMention';
+import StringConstant from '../../utils/string/StringConstant';
+import Timer from '../../assets/icons/Ic_timer';
+import TopicItem from '../../components/TopicItem';
 import UserProfile from './elements/UserProfile';
+import WarningAnimatedMessage from '../../components/WarningAnimateMessage';
+import useCreatePostHook from '../../hooks/screen/useCreatePostHook';
+import useHastagMention from './elements/useHastagMention';
 import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
-
+import { Button, ButtonAddMedia } from '../../components/Button';
+import { Context } from '../../context';
+import { MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED } from '../../utils/constants';
+import { PROFILE_CACHE } from '../../utils/cache/constant';
+import { ShowingAudience, createPollPost, createPost } from '../../service/post';
+import { colors } from '../../utils/colors';
+import { convertString } from '../../utils/string/StringUtils';
+import { fonts, normalizeFontSize } from '../../utils/fonts';
+import {
+    getDurationId,
+    getLocationId,
+    getPrivacyId,
+    setDurationId,
+    setPrivacyId
+} from '../../utils/setting';
+import { getLinkPreviewInfo } from '../../service/feeds';
+import { getMyProfile } from '../../service/profile';
+import { getSpecificCache } from '../../utils/cache';
+import { getUrl, isContainUrl } from '../../utils/Utils';
+import { getUserId } from '../../utils/users';
+import {
+    requestCameraPermission,
+    requestExternalStoragePermission,
+} from '../../utils/permission';
 
 const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
@@ -88,6 +87,8 @@ function compire(prevProps, nextProps) {
 const CreatePost = () => {
     const defaultPollItem = [{ text: '' }, { text: '' }];
     const navigation = useNavigation();
+    const { headerTitle, initialTopic } = useCreatePostHook()
+
     const sheetMediaRef = React.useRef();
     const sheetTopicRef = React.useRef();
     const sheetExpiredRef = React.useRef();
@@ -97,7 +98,7 @@ const CreatePost = () => {
 
     const [message, setMessage] = React.useState('');
     const [mediaStorage, setMediaStorage] = React.useState([]);
-    const [listTopic, setListTopic] = React.useState([]);
+    const [listTopic, setListTopic] = React.useState(initialTopic);
     const [listTopicChat, setListTopicChat] = React.useState([])
     const [isPollShown, setIsPollShown] = React.useState(false);
     const [polls, setPolls] = React.useState([...defaultPollItem]);
@@ -712,7 +713,7 @@ const CreatePost = () => {
     }, [message])
 
     React.useEffect(() => {
-        if(typeUser) {
+        if (typeUser) {
             Animated.sequence([
                 Animated.timing(animatedReminder, {
                     toValue: 1,
@@ -731,7 +732,7 @@ const CreatePost = () => {
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps={positionKeyboard}
             >
-                <Header title="Create a post" onPress={() => onBack()} />
+                <Header title={headerTitle} onPress={() => onBack()} />
                 <View style={{ paddingHorizontal: 15 }} >
                     <UserProfile
                         typeUser={typeUser}
@@ -764,9 +765,9 @@ const CreatePost = () => {
                         setAllTaggedUser={setAllTaggingUser}
                     />
                     {typeUser && (
-                    <Animated.View style={[{opacity: animatedReminder}, styles.reminderContainer]} >
-                        <Text style={styles.whiteText} >Even when anonymous, you can be blocked by others.</Text>
-                    </Animated.View>
+                        <Animated.View style={[{ opacity: animatedReminder }, styles.reminderContainer]} >
+                            <Text style={styles.whiteText} >Even when anonymous, you can be blocked by others.</Text>
+                        </Animated.View>
                     )}
 
                     {isLinkPreviewShown && (
