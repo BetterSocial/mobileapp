@@ -8,7 +8,7 @@ const useCreatePostHook = () => {
 
     return {
         headerTitle,
-        initialTopic: [topic],
+        initialTopic: topic ? [topic] : [],
     }
 }
 

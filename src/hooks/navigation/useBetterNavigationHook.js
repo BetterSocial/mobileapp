@@ -10,7 +10,9 @@ const useBetterNavigationHook = () => {
     }
 
     const toCreatePostWithTopic = (topic) => {
-        if (topic === undefined || topic?.length === 0 || topic === null) throw new Error('topic is undefined')
+        if (topic === undefined || topic === null) throw new Error('topic is undefined')
+        if (typeof topic !== 'string') throw new Error('topic is not a string')
+        if (topic?.trim().length === 0) throw new Error('topic is empty')
 
         navigation.navigate(NavigationConstants.CREATE_POST_SCREEN, { topic })
     }
