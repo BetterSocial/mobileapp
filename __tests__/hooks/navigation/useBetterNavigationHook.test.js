@@ -12,16 +12,15 @@ jest.mock('@react-navigation/core', () => ({
     })
 }))
 
+const navigation = useNavigation()
+const navigateSpy = jest.spyOn(navigation, 'navigate')
+
 describe('Testing useBetterNavigationHooks', () => {
     it('Testing toCreatePost', () => {
         const { result } = renderHook(() => useBetterNavigationHook())
         const { toCreatePost } = result.current
 
-        const navigation = useNavigation()
-        const navigateSpy = jest.spyOn(navigation, 'navigate')
-
         toCreatePost()
-
         expect(navigateSpy).toHaveBeenCalledWith(NavigationConstants.CREATE_POST_SCREEN)
     })
 
@@ -29,9 +28,6 @@ describe('Testing useBetterNavigationHooks', () => {
         it('Should be called normally with topic', () => {
             const { result } = renderHook(() => useBetterNavigationHook())
             const { toCreatePostWithTopic } = result.current
-
-            const navigation = useNavigation()
-            const navigateSpy = jest.spyOn(navigation, 'navigate')
 
             toCreatePostWithTopic('TopicName')
 
@@ -41,9 +37,6 @@ describe('Testing useBetterNavigationHooks', () => {
         it('Should be called normally with topic with additional spaces', () => {
             const { result } = renderHook(() => useBetterNavigationHook())
             const { toCreatePostWithTopic } = result.current
-
-            const navigation = useNavigation()
-            const navigateSpy = jest.spyOn(navigation, 'navigate')
 
             toCreatePostWithTopic(' TopicName ')
 
