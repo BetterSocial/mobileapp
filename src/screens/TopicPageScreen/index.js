@@ -1,33 +1,33 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
 import * as  React from 'react';
+import config from 'react-native-config';
 import { StatusBar, View } from 'react-native';
+import { StreamChat } from 'stream-chat';
 import { useChannelContext } from 'stream-chat-react-native-core';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
+import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
+import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
+import RenderItem from '../ProfileScreen/elements/RenderItem';
 import TiktokScroll from '../../components/TiktokScroll';
 import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
 import useChatClientHook from '../../utils/getstream/useChatClientHook';
 import { Context } from '../../context';
 import { TOPIC_LIST } from '../../utils/cache/constant';
+import { convertString } from '../../utils/string/StringUtils';
 import { downVote, upVote } from '../../service/vote';
-import config from 'react-native-config';
-import { StreamChat } from 'stream-chat';
-
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
+import { getAccessToken } from '../../utils/token';
 import { getFeedDetail } from '../../service/post';
 import { getSpecificCache, saveToCache } from '../../utils/cache';
 import { getTopicPages } from '../../service/topicPages';
 import { getUserId } from '../../utils/users';
 import { getUserTopic } from '../../service/topics';
 import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { convertString } from '../../utils/string/StringUtils';
-import { getAccessToken } from '../../utils/token';
-import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
-import RenderItem from '../ProfileScreen/elements/RenderItem';
+import { setTopicFeedByIndex, setTopicFeeds } from '../../context/actions/feeds';
+import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 
 const TopicPageScreen = (props) => {
     const route = useRoute();
@@ -311,8 +311,8 @@ const TopicPageScreen = (props) => {
                     )}
                 </TiktokScroll>
 
-
             </View>
+            <ButtonAddPostTopic />
             <BlockComponent ref={refBlockComponent}
                 refresh={onBlockCompleted}
                 refreshAnonymous={onDeleteBlockedPostCompleted}

@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Button Add Topic Post should match snapshot 1`] = `
+<View
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "backgroundColor": "#23C5B6",
+      "borderRadius": NaN,
+      "bottom": NaN,
+      "elevation": 3,
+      "height": NaN,
+      "justifyContent": "center",
+      "opacity": 1,
+      "position": "absolute",
+      "right": NaN,
+      "shadowColor": "#000",
+      "shadowOffset": Object {
+        "height": 1,
+        "width": 0,
+      },
+      "shadowOpacity": 0.8,
+      "shadowRadius": 1,
+      "width": NaN,
+      "zIndex": 1,
+    }
+  }
+  testID="onaddtopicbutton"
+>
+  <View />
+</View>
+`;
