@@ -4,7 +4,7 @@ const KEY_LOCATION_ID = 'KEY_LOCATION_ID';
 const KEY_PRIVACY_ID = 'KEY_PRIVACY_ID';
 const KEY_DURATION = 'KEY_DURATION';
 
-const converStringToInt = (str) => parseInt(str, 2);
+const converStringToInt = (str) => parseInt(str, 10);
 
 const setLocationId = async (locatioId) => {
   await AsyncStorage.setItem(KEY_LOCATION_ID, locatioId);
