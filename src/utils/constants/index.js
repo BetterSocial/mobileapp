@@ -42,6 +42,10 @@ const ENABLE_DEV_ONLY_FEATURE = true;
 
 const PREFIX_TOPIC = 'topic_';
 
+const NavigationConstants = {
+    CREATE_POST_SCREEN: 'CreatePost',
+}
+
 export {
     ANALYTICS_SHARE_POST_FEED_ID,
     ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -76,5 +80,7 @@ export {
     POST_VERB_STANDARD,
     PRIVACY_PEOPLE_I_FOLLOW,
     PRIVACY_PUBLIC,
-    PREFIX_TOPIC
+    PREFIX_TOPIC,
+    
+    NavigationConstants,
 };

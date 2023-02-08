@@ -19,8 +19,10 @@ describe('Testing Button Add Topic Post', () => {
     })
 
     it('Should navigate to create post screen when clicked', () => {
-        const { getByTestId } = render(<ButtonAddPostTopic />)
+        const { getByTestId } = render(<ButtonAddPostTopic topicName={'TestTopic'}/>)
         fireEvent.press(getByTestId('onaddtopicbutton'))
-        expect(mockNavigate).toHaveBeenCalledWith('CreatePost')
+        expect(mockNavigate).toHaveBeenCalledWith('CreatePost', {
+            topic: 'TestTopic'
+        })
     })
 })

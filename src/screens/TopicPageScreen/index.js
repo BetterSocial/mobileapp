@@ -312,7 +312,7 @@ const TopicPageScreen = (props) => {
                 </TiktokScroll>
 
             </View>
-            <ButtonAddPostTopic />
+            <ButtonAddPostTopic topicName={topicName} />
             <BlockComponent ref={refBlockComponent}
                 refresh={onBlockCompleted}
                 refreshAnonymous={onDeleteBlockedPostCompleted}

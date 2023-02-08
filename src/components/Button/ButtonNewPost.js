@@ -2,9 +2,8 @@ import * as React from 'react';
 import { useNavigation } from '@react-navigation/core';
 
 import BaseButtonAddPost from './BaseButtonAddPost';
-import { COLORS } from '../../utils/theme';
 import { Context } from '../../context'
-import { SOURCE_FEED_TAB } from '../../utils/constants';
+import { NavigationConstants, SOURCE_FEED_TAB } from '../../utils/constants';
 import { setTimer } from '../../context/actions/feeds';
 import { viewTimePost } from '../../service/post';
 
@@ -19,7 +18,7 @@ const ButtonAddPost = () => {
     const currentTime = new Date().getTime()
     const id = feeds && feeds[viewPostTimeIndex]?.id
     if (id) viewTimePost(id, currentTime - timer.getTime(), SOURCE_FEED_TAB)
-    navigator.navigate('CreatePost');
+    navigator.navigate(NavigationConstants.CREATE_POST_SCREEN);
     setTimer(new Date(), dispatch)
   }
 

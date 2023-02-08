@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { useNavigation } from '@react-navigation/core';
 
 import BaseButtonAddPost from './BaseButtonAddPost';
+import useBetterNavigationHook from '../../hooks/navigation/useBetterNavigationHook';
 
-const ButtonAddPostTopic = () => {
-    const navigation = useNavigation()
+const ButtonAddPostTopic = ({ topicName }) => {
+    const { toCreatePostWithTopic } = useBetterNavigationHook()
 
     const onAddPostPressed = () => {
-        navigation.navigate('CreatePost')
+        toCreatePostWithTopic(topicName)
     }
 
-    return <BaseButtonAddPost onAddPostPressed={onAddPostPressed} testID="onaddtopicbutton"/>
+    return <BaseButtonAddPost onAddPostPressed={onAddPostPressed} testID="onaddtopicbutton" />
 }
 
 export default ButtonAddPostTopic
