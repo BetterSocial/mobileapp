@@ -47,6 +47,10 @@ const POST_CHECK_AUTHOR_NOT_FOLLOWING = 2;
 const POST_CHECK_FEED_EXPIRED = 3;
 const POST_CHECK_AUTHOR_BLOCKED = 4;
 
+const NavigationConstants = {
+    CREATE_POST_SCREEN: 'CreatePost',
+}
+
 export {
     ANALYTICS_SHARE_POST_FEED_ID,
     ANALYTICS_SHARE_POST_FEED_SCREEN,
@@ -86,4 +90,6 @@ export {
     POST_CHECK_AUTHOR_NOT_FOLLOWING,
     POST_CHECK_FEED_EXPIRED,
     POST_CHECK_AUTHOR_BLOCKED,
+    
+    NavigationConstants,
 };

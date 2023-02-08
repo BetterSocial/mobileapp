@@ -1,25 +1,25 @@
 import * as React from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View } from 'react-native';
 import KeyEvent from 'react-native-keyevent';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View } from 'react-native';
 
-import { Button } from '../../../components/Button';
-import TopicItem from '../../../components/TopicItem';
-import { getTopics } from '../../../service/topics';
-import { colors } from '../../../utils/colors';
-import { fonts } from '../../../utils/fonts';
-import { capitalizeFirstText, convertString } from '../../../utils/string/StringUtils';
-import { isEmptyOrSpaces } from '../../../utils/Utils';
 import Card from './Card';
+import TopicItem from '../../../components/TopicItem';
+import { Button } from '../../../components/Button';
+import { colors } from '../../../utils/colors';
+import { convertString } from '../../../utils/string/StringUtils';
+import { fonts } from '../../../utils/fonts';
+import { getTopics } from '../../../service/topics';
+import { isEmptyOrSpaces } from '../../../utils/Utils';
 
-const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose, chatTopics }) => {
+const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
   const [dataTopic, setTopic] = React.useState('');
   const [listTopics, setlistTopics] = React.useState([]);
   const [chatTopic, setChatTopic] = React.useState([])
   const [trigger, setTrigger] = React.useState(-1);
   const [topicSuggestion, setTopicSuggestion] = React.useState([]);
   const rbSheetHeight = 330
-  const [widthInput, setWidthInput] = React.useState(0);
+  const [, setWidthInput] = React.useState(0);
   const inputRef = React.useRef();
 
   React.useEffect(() => {
@@ -88,10 +88,10 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose, chatTopi
     if (data === '') {
       onAdd(listTopics, chatTopic);
     } else if (!listTopics.includes(data)) {
-        const newArr = [...listTopics, data];
-        const newChatTopic = [...chatTopic, `topic_${data}`]
-        onAdd(newArr, newChatTopic);
-      }
+      const newArr = [...listTopics, data];
+      const newChatTopic = [...chatTopic, `topic_${data}`]
+      onAdd(newArr, newChatTopic);
+    }
     add();
     onClose();
   };
@@ -171,27 +171,27 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, saveOnClose, chatTopi
             {topicSuggestion.length > 0 && (
               <Card >
                 {topicSuggestion.map((item, index) => (
-                    <TouchableNativeFeedback key={`topicSuggestions-${index}`} onPress={() => {
-                      let textTopic = convertString(item.name, " ", "")
-                      textTopic += ' ';
-                      setTopic(textTopic);
-                      setTopicSuggestion([]);
-                      onKeyUp(62);
-                    }}>
-                      <View style={{ marginBottom: 5 }} >
-                        <Text style={{
-                          color: '#000000',
-                          fontFamily: fonts.inter[500],
-                          fontWeight: '500',
-                          fontSize: 12,
-                          lineHeight: 18
-                        }}>#{convertString(item.name, " ", "")}</Text>
-                        {index !== topicSuggestion.length - 1 && (
-                          <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
-                        )}
-                      </View>
-                    </TouchableNativeFeedback>
-                  ))}
+                  <TouchableNativeFeedback key={`topicSuggestions-${index}`} onPress={() => {
+                    let textTopic = convertString(item.name, " ", "")
+                    textTopic += ' ';
+                    setTopic(textTopic);
+                    setTopicSuggestion([]);
+                    onKeyUp(62);
+                  }}>
+                    <View style={{ marginBottom: 5 }} >
+                      <Text style={{
+                        color: '#000000',
+                        fontFamily: fonts.inter[500],
+                        fontWeight: '500',
+                        fontSize: 12,
+                        lineHeight: 18
+                      }}>#{convertString(item.name, " ", "")}</Text>
+                      {index !== topicSuggestion.length - 1 && (
+                        <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
+                      )}
+                    </View>
+                  </TouchableNativeFeedback>
+                ))}
               </Card>
             )}
           </View>

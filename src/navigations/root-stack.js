@@ -1,4 +1,5 @@
 import * as React from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import {
   LogBox,
   Platform,
@@ -7,10 +8,9 @@ import {
   StyleSheet,
   View
 } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useLocalChannelsFirst } from 'stream-chat-react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useLocalChannelsFirst } from 'stream-chat-react-native';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -53,16 +53,16 @@ import {
   GroupSetting,
   ProfileScreen
 } from '../screens';
+import { Analytics } from '../libraries/analytics/firebaseAnalytics';
 import { Context } from '../context';
 import { InitialStartupAtom } from '../service/initialStartup';
+import { NavigationConstants } from '../utils/constants';
 import { channelListLocalAtom } from '../service/channelListLocal';
 import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 import { getAccessToken } from '../utils/token';
-import { useClientGetstream } from '../utils/getstream/ClientGetStram';
-
 import { traceMetricScreen } from '../libraries/performance/firebasePerformance';
-import { Analytics } from '../libraries/analytics/firebaseAnalytics';
+import { useClientGetstream } from '../utils/getstream/ClientGetStram';
 
 const RootStack = createStackNavigator();
 
@@ -237,7 +237,7 @@ const AuthenticatedNavigator = () => {
         options={{ headerShown: false }}
       />
       <AuthenticatedStack.Screen
-        name="CreatePost"
+        name={NavigationConstants.CREATE_POST_SCREEN}
         component={CreatePost}
         options={{ headerShown: false }}
       />
