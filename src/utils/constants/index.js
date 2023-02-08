@@ -10,7 +10,7 @@ const CHANNEL_TYPE_GROUP_LOCATION = 2;
 const CHANNEL_TYPE_PERSONAL = 0;
 const CHANNEL_TYPE_TOPIC = 3;
 const DEFAULT_PROFILE_PIC_PATH = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png';
-const DEFAULT_TOPIC_PIC_PATH='https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png';
+const DEFAULT_TOPIC_PIC_PATH = 'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png';
 const KEY_ACCESS_TOKEN = 'access_token';
 const KEY_REFRESH_TOKEN = 'refresh_token';
 const MAX_POLLING_ALLOWED = 4;
@@ -41,6 +41,11 @@ const PRIVACY_PEOPLE_I_FOLLOW = 'people_i_follow';
 const ENABLE_DEV_ONLY_FEATURE = true;
 
 const PREFIX_TOPIC = 'topic_';
+
+const POST_CHECK_FEED_NOT_FOUND = 1;
+const POST_CHECK_AUTHOR_NOT_FOLLOWING = 2;
+const POST_CHECK_FEED_EXPIRED = 3;
+const POST_CHECK_AUTHOR_BLOCKED = 4;
 
 export {
     ANALYTICS_SHARE_POST_FEED_ID,
@@ -76,5 +81,9 @@ export {
     POST_VERB_STANDARD,
     PRIVACY_PEOPLE_I_FOLLOW,
     PRIVACY_PUBLIC,
-    PREFIX_TOPIC
+    PREFIX_TOPIC,
+    POST_CHECK_FEED_NOT_FOUND,
+    POST_CHECK_AUTHOR_NOT_FOLLOWING,
+    POST_CHECK_FEED_EXPIRED,
+    POST_CHECK_AUTHOR_BLOCKED,
 };
