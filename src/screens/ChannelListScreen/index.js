@@ -150,6 +150,16 @@ const ChannelListScreen = ({navigation}) => {
     }
   };
 
+  const postNotifComponent = (item, index) => (
+    <PostNotificationPreview
+      countPostNotif={countPostNotifComponent}
+      item={item.item}
+      index={index}
+      onSelectAdditionalData={() => goToFeedDetail(item.item)}
+      showBadgePostNotif
+    />
+  );
+
   return (
     <SafeAreaProvider style={{height: '100%'}}>
       <StatusBar translucent={false} />
@@ -178,15 +188,7 @@ const ChannelListScreen = ({navigation}) => {
               context={myContext}
               PreviewUnreadCount={chatBadge}
               PreviewMessage={PreviewMessage}
-              PostNotifComponent={(item, index) => (
-                <PostNotificationPreview
-                  countPostNotif={countPostNotifComponent}
-                  item={item.item}
-                  index={index}
-                  onSelectAdditionalData={() => goToFeedDetail(item.item)}
-                  showBadgePostNotif
-                />
-              )}
+              PostNotifComponent={postNotifComponent}
             />
           </Chat>
         ) : (
