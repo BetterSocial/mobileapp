@@ -1,14 +1,16 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import CreatePollContainerIOS from './CreatePollContainer.ios';
-import CreatePollContainerAndroid from './CreatePollContainer.android';
+import React, { lazy, Suspense } from 'react';
+import { Platform, View } from 'react-native';
 
-function CreatePollContainer(props) {
-  if (Platform.OS === 'android') {
-    return <CreatePollContainerAndroid {...props} />
-  }
-    return <CreatePollContainerIOS {...props} />
+const CreatePollComponent = lazy(() =>
+  Platform.OS === 'ios'
+    ? import('./CreatePollContainer.ios')
+    : import('./CreatePollContainer.android'),
+);
 
-}
+const CreatePollContainer = (props) => (
+    <Suspense fallback={<View />}>
+      <CreatePollComponent {...props} />
+    </Suspense>
+  );
 
 export default CreatePollContainer;

@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, Switch, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 import Modal from 'react-native-modal';
 import {WheelPicker} from '@victorzimnikov/react-native-wheel-picker-android';
@@ -13,15 +19,15 @@ import {
 } from '../../../../utils/constants';
 import MemoIc_arrow_right from '../../../../assets/icons/Ic_arrow_right';
 
-export default function CreatePollContainer({
+function CreatePollContainer({
   onremoveallpoll = () => {},
   onaddpoll = () => {},
-  onremovesinglepoll = (index) => {},
-  onsinglepollchanged = (item, index) => {},
+  onremovesinglepoll = () => {},
+  onsinglepollchanged = () => {},
   ismultiplechoice = false,
-  onmultiplechoicechanged = (ismultiple) => {},
+  onmultiplechoicechanged = () => {},
   selectedtime = {day: 1, hour: 0, minute: 0},
-  ontimechanged = (timeobject) => {},
+  ontimechanged = () => {},
   polls,
   expiredobject = {day: 7, hour: 24},
 }) {
@@ -55,14 +61,6 @@ export default function CreatePollContainer({
         : '';
 
     return `${dayText}${hourText}${minuteText}`;
-  };
-  const setDuration = () => {
-    const selectedTime = {...selectedtime};
-    selectedTime.day = pickerDay;
-    selectedTime.hour = pickerHour;
-    selectedTime.minute = pickerMinute;
-    ontimechanged(selectedTime);
-    setIsDurationModalShown(false);
   };
 
   return (
@@ -322,3 +320,5 @@ const S = StyleSheet.create({
     fontFamily: 'Inter-SemiBold',
   },
 });
+
+export default CreatePollContainer;

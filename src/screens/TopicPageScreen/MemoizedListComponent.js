@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import { Dimensions, Share, StatusBar, StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
+import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 
 import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
 import Header from '../FeedScreen/Header';
-import ShareUtils from '../../utils/share'
+import ShareUtils from '../../utils/share';
 import StringConstant from '../../utils/string/StringConstant';
 import dimen from '../../utils/dimen';
 import {
@@ -15,12 +15,12 @@ import {
   ANALYTICS_SHARE_POST_TOPIC_SCREEN,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
-  POST_TYPE_STANDARD,
+  POST_TYPE_STANDARD
 } from '../../utils/constants';
-import { Footer, Gap, PreviewComment } from '../../components';
-import { colors } from '../../utils/colors';
-import { getCountCommentWithChild } from '../../utils/getstream';
-import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
+import {Footer, Gap, PreviewComment} from '../../components';
+import {colors} from '../../utils/colors';
+import {getCountCommentWithChild} from '../../utils/getstream';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
 const FULL_HEIGHT = Dimensions.get('screen').height;
@@ -29,9 +29,7 @@ const tabBarHeight = StatusBar.currentHeight;
 const getHeightHeader = () =>
   // let h = Math.floor((FULL_HEIGHT * 10) / 100);
   // return h;
-   dimen.size.FEED_HEADER_HEIGHT
-;
-
+  dimen.size.FEED_HEADER_HEIGHT;
 const RenderListFeed = (props) => {
   const {
     item,
@@ -43,7 +41,7 @@ const RenderListFeed = (props) => {
     onPressBlock,
     onPressUpvote,
     userId,
-    onPressDownVote,
+    onPressDownVote
   } = props;
   const navigation = useNavigation();
   const [totalVote, setTotalVote] = React.useState(0);
@@ -53,28 +51,22 @@ const RenderListFeed = (props) => {
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
   const [loadingVote, setLoadingVote] = React.useState(false);
-  const navigateToLinkContextPage = (item) => {
+
+  const navigateToLinkContextPage = (itemParam) => {
     const param = linkContextScreenParamBuilder(
-      item,
-      item.og.domain,
-      item.og.domainImage,
-      item.og.domain_page_id,
+      itemParam,
+      itemParam.og.domain,
+      itemParam.og.domainImage,
+      itemParam.og.domain_page_id
     );
     navigation.push('LinkContextScreen', param);
   };
 
-  const getHeightFooter = () => {
-    // let h = Math.floor(((FULL_HEIGHT) * 6.8) / 100);
-    const h = Math.floor(((FULL_HEIGHT - tabBarHeight) * 6.8) / 100);
-    return h;
-  };
+  const getHeightFooter = () => Math.floor(((FULL_HEIGHT - tabBarHeight) * 6.8) / 100);
 
-  const getHeightReaction = () =>
-    // let h = Math.floor(((FULL_HEIGHT) * 16) / 100);
-    // return h;
-     dimen.size.FEED_COMMENT_CONTAINER_HEIGHT
-  ;
+  const getHeightReaction = () => dimen.size.FEED_COMMENT_CONTAINER_HEIGHT;
 
+  // eslint-disable-next-line consistent-return
   const onPressDownVoteHandle = async () => {
     setStatusDowvote((prev) => !prev);
     setLoadingVote(true);
@@ -104,7 +96,7 @@ const RenderListFeed = (props) => {
     } else {
       setVoteStatus('upvote');
       setTotalVote(1);
-      return await postApiUpvote(true)
+      await postApiUpvote(true);
     }
     await postApiUpvote(!statusUpvote);
   };
@@ -113,7 +105,8 @@ const RenderListFeed = (props) => {
     if (data.downvotes > 0) {
       setVoteStatus('downvote');
       return setTotalVote(data.downvotes * -1);
-    } if (data.upvotes > 0) {
+    }
+    if (data.upvotes > 0) {
       setVoteStatus('upvote');
       return setTotalVote(data.upvotes);
     }
@@ -123,36 +116,29 @@ const RenderListFeed = (props) => {
 
   const postApiUpvote = async (status) => {
     try {
-      const processData = await onPressUpvote({
+      await onPressUpvote({
         activity_id: item.id,
         status,
-        feed_group: 'main_feed',
+        feed_group: 'main_feed'
       });
-      if (processData.code == 200) {
-        setLoadingVote(false);
-      }
       setLoadingVote(false);
     } catch (e) {
       setLoadingVote(false);
-      return SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
+      SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     }
   };
 
   const postApiDownvote = async (status) => {
     try {
-      const processData = await onPressDownVote({
+      await onPressDownVote({
         activity_id: item.id,
         status,
-        feed_group: 'main_feed',
+        feed_group: 'main_feed'
       });
-      if (processData.code == 200) {
-        setLoadingVote(false);
-      } else {
-        setLoadingVote(false);
-      }
+      setLoadingVote(false);
     } catch (e) {
       setLoadingVote(false);
-      return SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
+      SimpleToast.show(StringConstant.downvoteFailedText, SimpleToast.SHORT);
     }
   };
 
@@ -167,7 +153,7 @@ const RenderListFeed = (props) => {
           setPreviewComment(item?.latest_reactions?.comment[0]);
         }
       } else {
-        setReaction(false)
+        setReaction(false);
       }
     }
   };
@@ -176,9 +162,7 @@ const RenderListFeed = (props) => {
     const validationStatusVote = () => {
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
-          const upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === userId,
-          );
+          const upvote = item.latest_reactions.upvotes.filter((vote) => vote.user_id === userId);
           if (upvote !== undefined) {
             setVoteStatus('upvote');
             setStatusUpvote(true);
@@ -187,7 +171,7 @@ const RenderListFeed = (props) => {
 
         if (item.latest_reactions.downvotes !== undefined) {
           const downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === userId,
+            (vote) => vote.user_id === userId
           );
           if (downvotes !== undefined) {
             setVoteStatus('downvote');
@@ -224,7 +208,6 @@ const RenderListFeed = (props) => {
             onPress={onPress}
             item={item}
             onNewPollFetched={onNewPollFetched}
-              
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>
@@ -232,21 +215,20 @@ const RenderListFeed = (props) => {
             item={item}
             totalComment={getCountCommentWithChild(item)}
             totalVote={totalVote}
-            onPressShare={() => ShareUtils.sharePostInTopic(item,
-              ANALYTICS_SHARE_POST_TOPIC_SCREEN,
-              ANALYTICS_SHARE_POST_TOPIC_ID
-            )}
+            onPressShare={() =>
+              ShareUtils.sharePostInTopic(
+                item,
+                ANALYTICS_SHARE_POST_TOPIC_SCREEN,
+                ANALYTICS_SHARE_POST_TOPIC_ID
+              )
+            }
             onPressComment={() => onPressComment(item)}
             onPressBlock={() => onPressBlock(item)}
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}
             statusVote={voteStatus}
             loadingVote={loadingVote}
-            isSelf={
-              item.anonimity
-                ? false
-                : userId === item?.actor?.id
-            }
+            isSelf={item.anonimity ? false : userId === item?.actor?.id}
           />
         </View>
         {isReaction && (
@@ -267,8 +249,6 @@ const RenderListFeed = (props) => {
   );
 };
 
-
-
 const styles = StyleSheet.create({
   cardContainer: () => ({
     // height: FULL_HEIGHT - tabBarHeight,
@@ -276,17 +256,17 @@ const styles = StyleSheet.create({
     width: FULL_WIDTH,
     backgroundColor: colors.white,
     borderBottomWidth: 7,
-    borderBottomColor: colors.lightgrey,
+    borderBottomColor: colors.lightgrey
   }),
   cardMain: {
     height: '100%',
-    width: '100%',
+    width: '100%'
   },
-  footerWrapper: (h) => ({ height: h, bottom: 0, }),
+  footerWrapper: (h) => ({height: h, bottom: 0}),
   contentReaction: (heightReaction) => ({
     maxHeight: heightReaction,
-    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0,
-  }),
+    marginBottom: heightReaction <= 0 ? tabBarHeight + 10 : 0
+  })
 });
 
 RenderListFeed.propTypes = {
@@ -301,13 +281,12 @@ RenderListFeed.propTypes = {
   userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onPressUpvote: PropTypes.func,
   onPressDownVote: PropTypes.func,
-  loading: PropTypes.bool,
+  loading: PropTypes.bool
 };
 
 function compare(prevProps, nextProps) {
-
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
 
 const MemoizedListComponent = React.memo(RenderListFeed, compare);
-export default MemoizedListComponent
+export default MemoizedListComponent;

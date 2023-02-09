@@ -14,19 +14,20 @@ function useInterval(callback, delay) {
     LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
   }, []);
 
+  // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     function tick() {
       savedCallback.current();
     }
     if (delay !== null) {
-      let id = setInterval(tick, delay);
+      const id = setInterval(tick, delay);
       return () => clearInterval(id);
     }
   }, [delay]);
 }
 
 const ProgressBar = (props) => {
-  let animation = React.useRef(new Animated.Value(0));
+  const animation = React.useRef(new Animated.Value(0));
   const [progress, setProgress] = React.useState(50);
   useInterval(() => {
     if (progress < 100 && !props.isStatic) {
@@ -37,7 +38,7 @@ const ProgressBar = (props) => {
   React.useEffect(() => {
     Animated.timing(animation.current, {
       toValue: progress,
-      duration: 100,
+      duration: 100
     }).start();
   }, [progress]);
 
@@ -48,15 +49,13 @@ const ProgressBar = (props) => {
   const width = animation.current.interpolate({
     inputRange: [0, 100],
     outputRange: ['0%', '100%'],
-    extrapolate: 'clamp',
+    extrapolate: 'clamp'
   });
 
   return (
     <View style={styles.container}>
       <View style={styles.progressBar}>
-        <Animated.View
-          style={([StyleSheet.absoluteFill], styles.animated(width))}
-        />
+        <Animated.View style={([StyleSheet.absoluteFill], styles.animated(width))} />
       </View>
     </View>
   );
@@ -70,18 +69,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.porcelain,
-    borderRadius: 5,
+    borderRadius: 5
   },
   progressBar: {
     flexDirection: 'row',
     height: 8,
     width: '100%',
     backgroundColor: colors.alto,
-    borderRadius: 5,
+    borderRadius: 5
   },
   animated: (width) => ({
     backgroundColor: colors.bondi_blue,
     borderRadius: 5,
-    width,
-  }),
+    width
+  })
 });
