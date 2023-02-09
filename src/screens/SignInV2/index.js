@@ -39,6 +39,7 @@ import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
 import { verifyUser } from '../../service/users';
 import { withInteractionsManaged } from '../../components/WithInteractionManaged';
 import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
+import { removeAllCache } from '../../utils/cache';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;
@@ -119,6 +120,11 @@ const SignIn = () => {
     logIn();
     Analytics.logLogin('humanid');
   };
+
+  React.useEffect(() => {
+    console.log('jalan')
+    removeAllCache()
+  },  [])
 
   React.useEffect(() => {
     getTopicsData()

@@ -9,7 +9,6 @@ import { removeAllCache } from '../../../utils/cache';
 import { resetProfileFeed } from '../../../context/actions/myProfileFeed';
 import { setMainFeeds } from '../../../context/actions/feeds';
 import { createClient } from '../../../context/actions/createClient';
-import { clearLocalStorege } from '../../../utils/token';
 import { deleteAccount } from '../../../service/users';
 import StringConstant from '../../../utils/string/StringConstant';
 
@@ -29,7 +28,6 @@ const useSettings = () => {
     setMainFeeds([], feedDispatch)
     client?.disconnectUser();
     createClient(null, dispatch)
-    clearLocalStorege();
 
     // setStartupValue({
     //   id: null,
