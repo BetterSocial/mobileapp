@@ -36,19 +36,19 @@ const PollOptions = ({
 
   // eslint-disable-next-line consistent-return
   const renderPercentageBar = () => {
+    const percentage = `${
+      !optionPercentage ? 0 : optionPercentage > 100 ? 100 : optionPercentage
+    }%`;
     if (isexpired) {
       return (
-        <View
-          testID="isExpiredPollOption"
-          style={styles.expiredPercentageBar(optionPercentage, isMax)}
-        />
+        <View testID="isExpiredPollOption" style={styles.expiredPercentageBar(percentage, isMax)} />
       );
     }
     if (isPollNotEndedAndIsMax) {
       return (
         <View
           testID="isPollNotEndedAndIsMax"
-          style={styles.expiredPercentageBar(optionPercentage, isMax)}
+          style={styles.expiredPercentageBar(percentage, isMax)}
         />
       );
     }
@@ -56,7 +56,7 @@ const PollOptions = ({
       return (
         <View
           testID="isAlreadyPollingOption"
-          style={styles.percentageBar(optionPercentage, isMyPoll())}
+          style={styles.percentageBar(percentage, isMyPoll())}
         />
       );
     }
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   },
   percentageBar: (percent, isMyPoll = false) => {
     return {
-      width: `${!percent ? 0 : percent > 100 ? 100 : percent}%`,
+      width: percent,
       height: '100%',
       position: 'absolute',
       top: 0,
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   expiredPercentageBar: (percent, isMax = false) => {
     return {
-      width: `${!percent ? 0 : percent > 100 ? 100 : percent}%`,
+      width: percent,
       height: '100%',
       position: 'absolute',
       top: 0,

@@ -141,6 +141,40 @@ function HomeBottomTabs({navigation}) {
     }
   }, [initialStartup, otherProfileData]);
 
+  const renderTabLabelIcon =
+    (componentType) =>
+    // eslint-disable-next-line react/display-name
+    ({color}) => {
+      if (componentType === 'Feed') {
+        return (
+          <View style={styles.center}>
+            <MemoFeed fill={color} />
+          </View>
+        );
+      }
+      if (componentType === 'ChannelList') {
+        return (
+          <View style={styles.center}>
+            <MemoHome fill={color} />
+          </View>
+        );
+      }
+      if (componentType === 'News') {
+        return (
+          <View>
+            <MemoNews fill={color} />
+          </View>
+        );
+      }
+
+      return (
+        <View style={styles.center}>
+          <MemoProfileIcon />
+        </View>
+      );
+    };
+  // eslint-disable-next-line react/display-name
+
   return (
     <View style={styles.container}>
       <Tab.Navigator
@@ -179,11 +213,7 @@ function HomeBottomTabs({navigation}) {
           component={FeedScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({color}) => (
-              <View style={styles.center}>
-                <MemoFeed fill={color} />
-              </View>
-            )
+            tabBarIcon: renderTabLabelIcon('Feed')
             // unmountOnBlur: true
           }}
         />
@@ -192,11 +222,7 @@ function HomeBottomTabs({navigation}) {
           component={ChannelListScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({color}) => (
-              <View style={styles.center}>
-                <MemoHome fill={color} />
-              </View>
-            ),
+            tabBarIcon: renderTabLabelIcon('ChannelList'),
             tabBarBadge:
               unReadMessage.total_unread_count + unReadMessage.unread_post > 0
                 ? unReadMessage.total_unread_count + unReadMessage.unread_post
@@ -208,11 +234,7 @@ function HomeBottomTabs({navigation}) {
           component={NewsScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({color}) => (
-              <View>
-                <MemoNews fill={color} />
-              </View>
-            )
+            tabBarIcon: renderTabLabelIcon('News')
             // unmountOnBlur: true
           }}
         />
@@ -221,11 +243,7 @@ function HomeBottomTabs({navigation}) {
           component={ProfileScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: () => (
-              <View style={styles.center}>
-                <MemoProfileIcon />
-              </View>
-            )
+            tabBarIcon: renderTabLabelIcon('Profile')
             // unmountOnBlur:true
           }}
         />

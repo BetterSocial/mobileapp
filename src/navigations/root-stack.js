@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 
 import {useRecoilValue} from 'recoil';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
@@ -10,7 +10,6 @@ import CreatePost from '../screens/CreatePost';
 import DiscoveryScreenV2 from '../screens/DiscoveryScreenV2';
 import DomainScreen from '../screens/DomainScreen';
 import FollowingScreen from '../screens/Followings/FollowingScreen';
-import Header from '../components/Header';
 import HelpCenter from '../screens/WebView/HelpCenter';
 import HomeBottomTabs from './HomeBottomTabs';
 import ImageViewerScreen from '../screens/ImageViewer';
@@ -45,10 +44,7 @@ import {
   GroupSetting,
   ProfileScreen
 } from '../screens';
-import {Context} from '../context';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
-import {colors} from '../utils/colors';
-import {fonts} from '../utils/fonts';
 import {useInitialStartup} from '../hooks/useInitialStartup';
 
 const RootStack = createNativeStackNavigator();
@@ -90,9 +86,6 @@ export const RootNavigator = () => {
 const AuthenticatedStack = createNativeStackNavigator();
 
 const AuthenticatedNavigator = () => {
-  const [profileState] = React.useContext(Context).profile;
-  const isIos = Platform.OS === 'ios';
-
   return (
     <AuthenticatedStack.Navigator initialRouteName="HomeTabs">
       <AuthenticatedStack.Screen
@@ -155,18 +148,7 @@ const AuthenticatedNavigator = () => {
         name="Followings"
         component={FollowingScreen}
         options={{
-          headerShown: isIos ? profileState.isShowHeader : true,
-          header: ({navigation}) => (
-            <SafeAreaView>
-              <Header
-                title={profileState.navbarTitle}
-                // containerStyle={styles.header}
-                titleStyle={styles.title}
-                onPress={() => navigation.goBack()}
-                isCenter
-              />
-            </SafeAreaView>
-          )
+          headerShown: false
         }}
       />
       <AuthenticatedStack.Screen
@@ -195,18 +177,7 @@ const AuthenticatedNavigator = () => {
         name="BlockScreen"
         component={Blocked}
         options={{
-          headerShown: isIos ? profileState.isShowHeader : true,
-          header: ({navigation}) => (
-            <SafeAreaView>
-              <Header
-                title={'Blocked'}
-                // containerStyle={styles.header}
-                titleStyle={styles.title}
-                onPress={() => navigation.goBack()}
-                isCenter
-              />
-            </SafeAreaView>
-          )
+          headerShown: false
         }}
       />
       <AuthenticatedStack.Screen
@@ -311,13 +282,3 @@ const UnauthenticatedNavigator = () => (
 );
 
 // endregion
-
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: colors.white,
-    padding: 20,
-    paddingTop: 10,
-    paddingBottom: 10
-  },
-  title: {fontSize: 16, fontFamily: fonts.inter[600], textAlign: 'center'}
-});

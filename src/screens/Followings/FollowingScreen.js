@@ -11,15 +11,32 @@ import {fonts} from '../../utils/fonts';
 import DomainFragmentScreen from './elements/DomainFragmentScreen';
 import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
 import Followings from '.';
+import Header from '../../components/Header';
 
 function FollowingScreen(props) {
   const {navigation} = props;
-  const [, dispatchNavbar] = React.useContext(Context).profile;
+  const [profileState, dispatchNavbar] = React.useContext(Context).profile;
   const TAB_TOPIC = 'TabTopic';
   const TAB_FOLLOWING = 'TabFollowing';
   const TAB_DOMAIN = 'TabDomain';
   const isAndroid = Platform.OS === 'android';
   const Tabs = createMaterialTopTabNavigator();
+
+  const followingHeader = () => {
+    if ((Platform.OS === 'ios' && profileState.isShowHeader) || Platform.OS === 'android') {
+      return (
+        <Header
+          title={profileState.navbarTitle}
+          // containerStyle={styles.header}
+          titleStyle={S.headerTitle}
+          onPress={() => navigation.goBack()}
+          isCenter
+        />
+      );
+    }
+
+    return null;
+  };
 
   function MyTabBar({state, descriptors, position}) {
     return (
@@ -116,6 +133,7 @@ function FollowingScreen(props) {
   return (
     <View style={{flex: 1}}>
       {isAndroid ? <StatusBar translucent={false} /> : null}
+      {followingHeader()}
       {/* <StatusBar translucent={false} /> */}
       <Tabs.Navigator initialRouteName={TAB_FOLLOWING} tabBar={tabComponent}>
         <Tabs.Screen
@@ -156,7 +174,7 @@ const S = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column'
   },
-
+  headerTitle: {fontSize: 16, fontFamily: fonts.inter[600], textAlign: 'center'},
   containertitle: {
     fontSize: 16
   },

@@ -93,6 +93,16 @@ const Comment = ({
     iVote();
   }, [JSON.stringify(comment.data)]);
 
+  const voteStyle = () => {
+    if (totalVote > 0) {
+      return '#00ADB5';
+    }
+    if (totalVote < 0) {
+      return '#FF2E63';
+    }
+    return '#C4C4C4';
+  };
+
   return (
     <View
       style={styles.container({
@@ -159,7 +169,7 @@ const Comment = ({
           </ButtonHightlight>
         </TouchableOpacity>
 
-        <Text style={styles.vote(totalVote)}>{totalVote}</Text>
+        <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
         <TouchableOpacity activeOpacity={1} testID="upvoteBtn">
           <ButtonHightlight style={[styles.arrowdown, styles.btn]} onPress={onUpVote}>
             {statusVote === 'upvote' ? (
@@ -180,12 +190,12 @@ export const isEqual = (prevProps, nextProps) => prevProps.comment === nextProps
 export default React.memo(Comment);
 
 const styles = StyleSheet.create({
-  vote: (count) => ({
+  vote: (colorBasedVote) => ({
     ...FONTS.body3,
     textAlign: 'center',
     width: 26,
     alignSelf: 'center',
-    color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4'
+    color: colorBasedVote
   }),
   btn: {
     // width: 30,

@@ -1,9 +1,10 @@
+/* eslint-disable global-require */
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
 import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import BlockComponent from "../BlockComponent";
+import BlockComponent from '../BlockComponent';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
@@ -15,7 +16,7 @@ import {colors} from '../../utils/colors';
 import {iVoteComment, voteComment} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
-import { removeWhiteSpace } from '../../utils/Utils';
+import {removeWhiteSpace} from '../../utils/Utils';
 import ButtonHightlight from '../ButtonHighlight';
 
 const ReplyCommentItem = ({
@@ -31,24 +32,24 @@ const ReplyCommentItem = ({
   showLeftConnector = true,
   disableOnTextPress = false,
   refreshComment,
-   updateVoteParent
+  updateVoteParent
 }) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
 
   const [totalVote, setTotalVote] = React.useState(
-    comment.data.count_upvote - comment.data.count_downvote,
+    comment.data.count_upvote - comment.data.count_downvote
   );
   const [statusVote, setStatusVote] = React.useState('');
 
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
-      console.log('')
-      return
+      console.log('');
+      return;
     }
-    if(onPress) {
-      onPress()
+    if (onPress) {
+      onPress();
     }
   };
   const openProfile = async () => {
@@ -62,8 +63,8 @@ const ReplyCommentItem = ({
       data: {
         user_id: selfUserId,
         other_id: user.id,
-        username: user.data.username,
-      },
+        username: user.data.username
+      }
     });
   };
 
@@ -71,7 +72,7 @@ const ReplyCommentItem = ({
     const dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
-      status: 'upvote',
+      status: 'upvote'
     };
     onVote(dataVote);
   };
@@ -80,18 +81,18 @@ const ReplyCommentItem = ({
     const dataVote = {
       activity_id: comment.id,
       text: comment.data.text,
-      status: 'downvote',
+      status: 'downvote'
     };
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
     const result = await voteComment(dataVote);
-    if(updateVoteParent && typeof updateVoteParent === 'function') {
-      updateVoteParent(result, dataVote, comment)
+    if (updateVoteParent && typeof updateVoteParent === 'function') {
+      updateVoteParent(result, dataVote, comment);
     }
-    setTotalVote(result.data.data.count_upvote - result.data.data.count_downvote)
-    iVote()
-    if(refreshComment) refreshComment(result)
+    setTotalVote(result.data.data.count_upvote - result.data.data.count_downvote);
+    iVote();
+    if (refreshComment) refreshComment(result);
   };
 
   const iVote = async () => {
@@ -103,11 +104,11 @@ const ReplyCommentItem = ({
 
   const onBlock = (commentBlock) => {
     refBlockComponent.current.openBlockComponent({
-      anonimity : false,
-      actor : commentBlock.user,
-      id : commentBlock.id,
-    })
-  }
+      anonimity: false,
+      actor: commentBlock.user,
+      id: commentBlock.id
+    });
+  };
   React.useEffect(() => {
     const parseToken = async () => {
       const id = await getUserId();
@@ -116,12 +117,23 @@ const ReplyCommentItem = ({
       }
     };
     parseToken();
-    iVote()
+    iVote();
   }, []);
 
   React.useEffect(() => {
-    setTotalVote(comment.data.count_upvote  - comment.data.count_downvote)
-  }, [JSON.stringify(comment.data)])
+    setTotalVote(comment.data.count_upvote - comment.data.count_downvote);
+  }, [JSON.stringify(comment.data)]);
+
+  const voteStyle = () => {
+    if (totalVote > 0) {
+      return '#00ADB5';
+    }
+    if (totalVote < 0) {
+      return '#FF2E63';
+    }
+    return '#C4C4C4';
+  };
+
   return (
     <View
       style={styles.container({
@@ -129,166 +141,163 @@ const ReplyCommentItem = ({
         style,
         level,
         isLastInParent,
-        showLeftConnector,
+        showLeftConnector
       })}>
-        <TouchableOpacity activeOpacity={1}  onPress={openProfile} testID='profileOpen' >
-          <ButtonHightlight onPress={openProfile}>
-        <View style={styles.profile}>
-          <Image
-            source={
-              photo
-                ? {uri: removeWhiteSpace(photo)}
-                : require('../../assets/images/ProfileDefault.png')
-            }
-            style={styles.image}
-          />
-          <View style={styles.containerUsername}>
-            <Text style={styles.username}>{user.data.username} •</Text>
-            <Text style={styles.time}> {calculateTime(time)}</Text>
+      <TouchableOpacity activeOpacity={1} onPress={openProfile} testID="profileOpen">
+        <ButtonHightlight onPress={openProfile}>
+          <View style={styles.profile}>
+            <Image
+              source={
+                photo
+                  ? {uri: removeWhiteSpace(photo)}
+                  : require('../../assets/images/ProfileDefault.png')
+              }
+              style={styles.image}
+            />
+            <View style={styles.containerUsername}>
+              <Text style={styles.username}>{user.data.username} •</Text>
+              <Text style={styles.time}> {calculateTime(time)}</Text>
+            </View>
           </View>
-        </View>
-      </ButtonHightlight>
-        </TouchableOpacity>
+        </ButtonHightlight>
+      </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={1} testID='ontextpress'  onPress={onTextPress} >
-          <ButtonHightlight  onPress={onTextPress} >
-            <Text testID='commentText' style={styles.post}>{comment.data.text}</Text>
-          </ButtonHightlight>
+      <TouchableOpacity activeOpacity={1} testID="ontextpress" onPress={onTextPress}>
+        <ButtonHightlight onPress={onTextPress}>
+          <Text testID="commentText" style={styles.post}>
+            {comment.data.text}
+          </Text>
+        </ButtonHightlight>
       </TouchableOpacity>
 
       <View style={styles.constainerFooter}>
         {isLast && level >= 2 ? (
           <View style={styles.gap} />
         ) : (
-          <TouchableOpacity testID='replyBtn' activeOpacity={1} onPress={onPress} >
+          <TouchableOpacity testID="replyBtn" activeOpacity={1} onPress={onPress}>
             <ButtonHightlight style={styles.btnReply} onPress={onPress}>
-            <MemoCommentReply />
-            <Text style={styles.btnReplyText}>Reply</Text>
-          </ButtonHightlight>
+              <MemoCommentReply />
+              <Text style={styles.btnReplyText}>Reply</Text>
+            </ButtonHightlight>
           </TouchableOpacity>
         )}
-       <TouchableOpacity  onPress={() => onBlock(comment)} testID='btnBlock' activeOpacity={1}  >
-         <ButtonHightlight
-         onPress={() => onBlock(comment)}
-          style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}
-          >
-          <IconEn name="block" size={15.02} color={colors.gray1} />
-        </ButtonHightlight>
-       </TouchableOpacity>
+        <TouchableOpacity onPress={() => onBlock(comment)} testID="btnBlock" activeOpacity={1}>
+          <ButtonHightlight
+            onPress={() => onBlock(comment)}
+            style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
+            <IconEn name="block" size={15.02} color={colors.gray1} />
+          </ButtonHightlight>
+        </TouchableOpacity>
 
-       <TouchableOpacity   onPress={onDownVote} testID='downvoteBtn' >
-         <ButtonHightlight
-          style={[styles.arrowup, styles.btn]}
-          onPress={onDownVote}>
-          {statusVote === 'downvote' ? (
-            <MemoIc_downvote_on width={20} height={18} />
-          ) : (
-            <MemoIc_arrow_down_vote_off width={20} height={18} />
-          )}
-        </ButtonHightlight>
-       </TouchableOpacity>
-        <Text style={styles.vote(totalVote)}>{totalVote}</Text>
-            <TouchableOpacity   onPress={onUpVote} testID='upvotebtn' activeOpacity={1} >
-                <ButtonHightlight
-                  style={[styles.arrowdown, styles.btn]}
-                  onPress={onUpVote}>
-                  {statusVote === 'upvote' ? (
-                    <MemoIc_upvote_on width={20} height={18} />
-                  ) : (
-                    <MemoIc_arrow_upvote_off width={20} height={18} />
-                  )}
-                </ButtonHightlight>
-            </TouchableOpacity>
+        <TouchableOpacity onPress={onDownVote} testID="downvoteBtn">
+          <ButtonHightlight style={[styles.arrowup, styles.btn]} onPress={onDownVote}>
+            {statusVote === 'downvote' ? (
+              <MemoIc_downvote_on width={20} height={18} />
+            ) : (
+              <MemoIc_arrow_down_vote_off width={20} height={18} />
+            )}
+          </ButtonHightlight>
+        </TouchableOpacity>
+        <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
+        <TouchableOpacity onPress={onUpVote} testID="upvotebtn" activeOpacity={1}>
+          <ButtonHightlight style={[styles.arrowdown, styles.btn]} onPress={onUpVote}>
+            {statusVote === 'upvote' ? (
+              <MemoIc_upvote_on width={20} height={18} />
+            ) : (
+              <MemoIc_arrow_upvote_off width={20} height={18} />
+            )}
+          </ButtonHightlight>
+        </TouchableOpacity>
       </View>
 
-      <BlockComponent ref={refBlockComponent} refresh={() => {} } screen="reply_screen"/>
+      <BlockComponent ref={refBlockComponent} refresh={() => {}} screen="reply_screen" />
     </View>
   );
 };
 
-export default React.memo (ReplyCommentItem, (prevProps, nextProps) => prevProps === nextProps);
+export default React.memo(ReplyCommentItem, (prevProps, nextProps) => prevProps === nextProps);
 
 const styles = StyleSheet.create({
-  vote: (count) => ({
+  vote: (colorBasedCount) => ({
     ...FONTS.body3,
     textAlign: 'center',
     width: 26,
-    color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4',
-    alignSelf : 'center',
+    color: colorBasedCount,
+    alignSelf: 'center'
   }),
   btn: {
     // width: 30,
     height: 30,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   image: {
     width: 24,
     height: 24,
-    borderRadius: 12,
+    borderRadius: 12
   },
-  container: ({isLast, style, level, isLastInParent, showLeftConnector}) => ({
+  container: ({isLast, style, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
     borderLeftColor: isLast ? 'transparent' : colors.gray1,
-    ...style,
+    ...style
   }),
   username: {
     fontFamily: fonts.inter[700],
     fontSize: 12,
     color: '#828282',
     lineHeight: 14,
-    marginLeft: 16,
+    marginLeft: 16
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
     color: '#333333',
-    marginLeft: 28,
+    marginLeft: 28
   },
   profile: {
     flexDirection: 'row',
-    marginLeft: -13,
+    marginLeft: -13
   },
   constainerFooter: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: 11.13,
     marginBottom: 12,
-    marginLeft: 30,
+    marginLeft: 30
   },
   btnReply: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    flex: 1,
+    flex: 1
   },
   btnReplyText: {
     fontFamily: fonts.inter[400],
     fontSize: 13,
     color: '#C4C4C4',
     marginLeft: 8.98,
-    marginRight: 14,
+    marginRight: 14
   },
   btnBlock: (isMySelf) => ({
     paddingHorizontal: 14,
-    display: isMySelf ? 'none' : 'flex',
+    display: isMySelf ? 'none' : 'flex'
   }),
   arrowup: {
-    paddingHorizontal: 14,
+    paddingHorizontal: 14
   },
   arrowdown: {
-    paddingHorizontal: 14,
+    paddingHorizontal: 14
   },
   gap: {marginBottom: 8},
   time: {
     fontFamily: fonts.inter[400],
     fontSize: 10,
     color: '#828282',
-    lineHeight: 12,
+    lineHeight: 12
   },
   containerUsername: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }
 });

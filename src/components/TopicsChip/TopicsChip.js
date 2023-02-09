@@ -16,10 +16,9 @@ const TopicsChip = ({topics = [], fontSize = 24, isPdp}) => {
 
   return (
     <View style={!isPdp ? styles.topicContainer : styles.topicContainerPdp}>
-      {topics.map((item, index) => (
-        <View key={`topicContainer-${index}`} style={styles.topicItemContainer}>
+      {topics.map((item) => (
+        <View key={`topicContainer-${item}`} style={styles.topicItemContainer}>
           <TouchableOpacity
-            key={`topicContainer-${index}`}
             testID="topic-chip"
             activeOpacity={1}
             onPress={() => onTopicPress(item)}>
