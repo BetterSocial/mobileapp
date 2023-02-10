@@ -1,15 +1,18 @@
-import { useRoute } from "@react-navigation/core"
+import {useRoute} from '@react-navigation/core';
 
 const useCreatePostHook = () => {
-    const { params = {} } = useRoute()
-    const { topic } = params
+  const {params = {}} = useRoute();
+  const {topic} = params;
 
-    const headerTitle = topic ? `Create Post in #${topic}` : 'Create Post'
+  const headerTitle = topic ? `Create Post in #${topic}` : 'Create Post';
 
-    return {
-        headerTitle,
-        initialTopic: topic ? [topic] : [],
-    }
-}
+  const isInCreatePostTopicScreen = !!topic;
 
-export default useCreatePostHook
+  return {
+    headerTitle,
+    initialTopic: topic ? [topic] : [],
+    isInCreatePostTopicScreen
+  };
+};
+
+export default useCreatePostHook;
