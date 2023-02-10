@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   },
   flex: {
-    flex: 1,
-    marginLeft: -24
+    flex: 1
   }
 });
