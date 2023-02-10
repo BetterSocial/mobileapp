@@ -54,7 +54,7 @@ const TopicPageScreen = (props) => {
       // eslint-disable-next-line no-underscore-dangle
       // const _resultGetTopicPages = await getTopicPages(id);
 
-      await getSpecificCache(`${TOPIC_LIST}_${id}`, async (cacheTopic) => {
+      getSpecificCache(`${TOPIC_LIST}_${id}`, async (cacheTopic) => {
         if (!cacheTopic) {
           const resultGetTopicPages = await getTopicPages(id);
           saveToCache(`${TOPIC_LIST}_${id}`, resultGetTopicPages);

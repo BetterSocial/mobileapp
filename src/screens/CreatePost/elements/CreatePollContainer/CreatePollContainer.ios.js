@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {StyleSheet, Switch, Text, TouchableOpacity, View} from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-
 import Modal from 'react-native-modal';
-import PollItem from '../PollItem';
+import {Picker} from '@react-native-picker/picker';
+import {StyleSheet, Switch, Text, TouchableOpacity, View} from 'react-native';
+
 import MemoIcPlus from '../../../../assets/icons/ic_plus';
-import {colors} from '../../../../utils/colors';
-import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
 import MemoIc_arrow_right from '../../../../assets/icons/Ic_arrow_right';
+import PollItem from '../PollItem';
+import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
+import {colors} from '../../../../utils/colors';
 
 function CreatePollContainer({
   onremoveallpoll = () => {},
@@ -39,10 +39,22 @@ function CreatePollContainer({
   const [pickerHour, setPickerHour] = React.useState(selectedtime.hour);
   const [pickerMinute, setPickerMinute] = React.useState(selectedtime.minute);
 
+  const getHourText = (day, hourParam) => {
+    if (day > 0 && hourParam > 0) return `, ${hourParam}h`;
+    if (day === 0 && hourParam > 0) return ` ${hourParam}h`;
+    return '';
+  };
+
+  const getMinuteText = (minuteParam, hourParam) => {
+    if (hourParam > 0 && minuteParam > 0) return `, ${minuteParam}m`;
+    if (hourParam === 0 && minuteParam > 0) return ` ${minuteParam}m`;
+    return '';
+  };
+
   const getDurationTimeText = () => {
-    const dayText = pickerDay > 0 ? `${pickerDay} Day(s)` : '';
-    const hourText = pickerHour > 0 ? `${pickerDay > 0 ? ', ' : ' '}${pickerHour}h` : '';
-    const minuteText = pickerMinute > 0 ? `${pickerHour > 0 ? ', ' : ' '}${pickerMinute}m` : '';
+    const dayText = selectedtime.day > 0 ? `${selectedtime.day} Day(s)` : '';
+    const hourText = getHourText(selectedtime?.day, selectedtime?.hour);
+    const minuteText = getMinuteText(selectedtime?.hour, selectedtime?.minute);
 
     return `${dayText}${hourText}${minuteText}`;
   };
