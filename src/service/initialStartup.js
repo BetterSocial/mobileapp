@@ -1,31 +1,33 @@
-import { atom } from 'recoil';
-import { Linking } from 'react-native';
-import { getUserId } from '../utils/users';
-import { verifyTokenGetstream } from './users';
-import { setAccessToken, setRefreshToken, removeAccessToken } from '../utils/token';
-import { getProfileByUsername } from './profile';
+/* eslint-disable no-useless-escape */
+import React from 'react';
+import {atom} from 'recoil';
+import {Linking} from 'react-native';
+import {getUserId} from '../utils/users';
+import {verifyTokenGetstream} from './users';
+import {setAccessToken, setRefreshToken, removeAccessToken} from '../utils/token';
+import {getProfileByUsername} from './profile';
 
 const BASE_DEEPLINK_URL_REGEX = 'link.bettersocial.org/u';
 
 export const InitialStartupAtom = atom({
   key: 'InitialStartupAtom',
   default: {
-    id: null,
+    id: null
   },
   effects_UNSTABLE: [
-    ({ setSelf, onSet }) => {
+    ({setSelf, onSet}) => {
       // If there's a persisted value - set it on load
       const loadPersisted = async () => {
         const savedValue = await getUserId();
         if (savedValue !== null && savedValue !== '') {
           const verify = await verifyTokenGetstream();
           if (verify !== null && verify !== '') {
-            setSelf({ id: savedValue });
+            setSelf({id: savedValue});
           } else {
-            setSelf({ id: '' });
+            setSelf({id: ''});
           }
         } else {
-          setSelf({ id: '' });
+          setSelf({id: ''});
         }
       };
 
@@ -40,13 +42,13 @@ export const InitialStartupAtom = atom({
           removeAccessToken();
         }
       });
-    },
-  ],
+    }
+  ]
 });
 
 export const otherProfileAtom = atom({
   key: 'otherProfileAtom',
-  default: null,
+  default: null
 });
 
 const doGetProfileByUsername = async (username) => {
@@ -61,26 +63,32 @@ const doGetProfileByUsername = async (username) => {
   }
 };
 
-export const initialStartupTask = ({ set }) => async () => {
-  try {
-    const deepLinkUrl = await Linking.getInitialURL();
+export const initialStartupTask =
+  ({set}) =>
+  async () => {
+    try {
+      const deepLinkUrl = await Linking.getInitialURL();
 
-    if (deepLinkUrl !== null) {
-      const match = deepLinkUrl.match(`(?<=${BASE_DEEPLINK_URL_REGEX}\/).+`);
+      if (deepLinkUrl !== null) {
+        const match = deepLinkUrl.match(`(?<=${BASE_DEEPLINK_URL_REGEX}\/).+`);
 
-      if (match.length > 0) {
-        const username = match[0];
-        const otherProfile = await doGetProfileByUsername(username);
+        if (match.length > 0) {
+          const username = match[0];
+          const otherProfile = await doGetProfileByUsername(username);
 
-        // Check if myself
-        set(otherProfileAtom, otherProfile);
+          // Check if myself
+          set(otherProfileAtom, otherProfile);
+        }
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-undef
+      if (__DEV__) {
+        console.error('getDeeplinkUrl error :', e);
       }
     }
-  } catch (e) {
-    // eslint-disable-next-line no-undef
-    if (__DEV__) {
-      console.error('getDeeplinkUrl error :', e);
-    }
-  }
-  // }
-};
+    // }
+  };
+
+export const LoadingStartupContext = React.createContext({
+  loadingUser: true
+});

@@ -14,28 +14,25 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { showMessage } from 'react-native-flash-message';
-import { useNavigation } from '@react-navigation/core';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {showMessage} from 'react-native-flash-message';
+import {useNavigation} from '@react-navigation/core';
 
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 import StringConstant from '../../utils/string/StringConstant';
-import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
-import { Button } from '../../components/Button';
-import { Context } from '../../context';
-import { DEFAULT_PROFILE_PIC_PATH } from '../../utils/constants';
-import { Input } from '../../components/Input';
-import { ProgressBar } from '../../components/ProgressBar';
-import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
-import {
-  requestCameraPermission,
-  requestExternalStoragePermission,
-} from '../../utils/permission';
-import { setCapitalFirstLetter } from '../../utils/Utils';
-import { setImage, setUsername } from '../../context/actions/users';
-import { verifyUsername } from '../../service/users';
+import {Button} from '../../components/Button';
+import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import {Input} from '../../components/Input';
+import {ProgressBar} from '../../components/ProgressBar';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
+import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import {setCapitalFirstLetter} from '../../utils/Utils';
+import {setImage, setUsername} from '../../context/actions/users';
+import {verifyUsername} from '../../service/users';
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 
 const ChooseUsername = () => {
   const navigation = useNavigation();
@@ -43,58 +40,66 @@ const ChooseUsername = () => {
   const [users, dispatch] = React.useContext(Context).users;
   const [username, setUsernameState] = React.useState('');
   const [typeFetch, setTypeFetch] = React.useState('');
-  const [fadeInfo] = React.useState(new Animated.Value(0))
+  const [fadeInfo] = React.useState(new Animated.Value(0));
 
-  const verifyUsernameDebounce = React.useCallback(_.debounce(async (text) => {
-    const user = await verifyUsername(text);
-    setTypeFetch('max');
-    if (user.data && text.length > 2) {
-      setTypeFetch('notavailable');
-    } else {
-      setTypeFetch('available');
-    }
-  }, 500), [])
+  const verifyUsernameDebounce = React.useCallback(
+    _.debounce(async (text) => {
+      const user = await verifyUsername(text);
+      setTypeFetch('max');
+      if (user.data && text.length > 2) {
+        setTypeFetch('notavailable');
+      } else {
+        setTypeFetch('available');
+      }
+    }, 500),
+    []
+  );
 
   React.useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', hideInfo)
-    Keyboard.addListener('keyboardDidHide', showInfoHandle)
-  }, [])
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', hideInfo);
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', showInfoHandle);
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   const hideInfo = () => {
     Animated.timing(fadeInfo, {
       toValue: 0,
       duration: 500
-    }).start()
-  }
+    }).start();
+  };
   const showInfoHandle = () => {
     Animated.timing(fadeInfo, {
       toValue: 1,
       duration: 500
-    }).start()
-  }
+    }).start();
+  };
 
   const onPhoto = () => {
     Analytics.logEvent('btn_take_photo_profile', {
-      id: 2,
+      id: 2
     });
     bottomSheetChooseImageRef.current.open();
   };
 
   const handleOpenCamera = async () => {
-    const { success, message } = await requestCameraPermission();
+    const {success, message} = await requestCameraPermission();
     if (success) {
       launchCamera(
         {
           mediaType: 'photo',
           includeBase64: true,
-          selectionLimit: 1,
+          selectionLimit: 1
         },
         (res) => {
           if (res.base64) {
             setImage(`${res.base64}`, dispatch);
             bottomSheetChooseImageRef.current.close();
           }
-        },
+        }
       );
     } else {
       Toast.show(message, Toast.SHORT);
@@ -102,9 +107,9 @@ const ChooseUsername = () => {
   };
 
   const handleOpenGallery = async () => {
-    const { success, message } = await requestExternalStoragePermission();
+    const {success, message} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (res) => {
+      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
         if (res.base64) {
           setImage(`${res.base64}`, dispatch);
           bottomSheetChooseImageRef.current.close();
@@ -122,9 +127,9 @@ const ChooseUsername = () => {
     setUsernameState(value);
     if (value.length <= 15) {
       if (value.length > 2) {
-        if (!Number.isNaN(v)) {
+        if (Number.isNaN(v)) {
           setTypeFetch('fetch');
-          verifyUsernameDebounce(value)
+          verifyUsernameDebounce(value);
         } else {
           setTypeFetch('nan');
         }
@@ -137,20 +142,18 @@ const ChooseUsername = () => {
   };
 
   const formatUsernameString = () => {
-    if(username && typeof username === 'string') {
+    if (username && typeof username === 'string') {
       let value = username.toLowerCase().replace(/[^a-z0-9-_]/g, '');
       value = setCapitalFirstLetter(value);
-      return value
+      return value;
     }
-    return ''
-
-  }
+    return '';
+  };
 
   const onTextBlur = () => {
-    const value = formatUsernameString(username)
+    const value = formatUsernameString();
     setUsernameState(value);
-  }
-
+  };
 
   // eslint-disable-next-line consistent-return
   const next = () => {
@@ -162,7 +165,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameErrorCannotBeEmpty,
           type: 'danger',
-          backgroundColor: colors.red,
+          backgroundColor: colors.red
         });
       }
 
@@ -170,7 +173,7 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelMinimumChar,
           type: 'danger',
-          backgroundColor: colors.red,
+          backgroundColor: colors.red
         });
       }
 
@@ -178,16 +181,15 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelMaximumChar,
           type: 'danger',
-          backgroundColor: colors.red,
+          backgroundColor: colors.red
         });
       }
 
       if (typeFetch === 'notavailable') {
         return showMessage({
-          message:
-            StringConstant.onboardingChooseUsernameLabelUserTaken(username),
+          message: StringConstant.onboardingChooseUsernameLabelUserTaken(username),
           type: 'danger',
-          backgroundColor: colors.red,
+          backgroundColor: colors.red
         });
       }
 
@@ -195,14 +197,12 @@ const ChooseUsername = () => {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelJustANumber,
           type: 'danger',
-          backgroundColor: colors.red,
+          backgroundColor: colors.red
         });
       }
     }
   };
   const messageTypeFetch = (type, user) => {
-    console.log('type')
-    console.log(type)
     switch (type) {
       case 'fetch':
         return (
@@ -213,9 +213,7 @@ const ChooseUsername = () => {
       case 'available':
         return (
           <Text style={styles.textMessage(colors.holytosca, true)}>
-            {` ${StringConstant.onboardingChooseUsernameLabelUserAvailable(
-              user,
-            )}`}
+            {` ${StringConstant.onboardingChooseUsernameLabelUserAvailable(user)}`}
           </Text>
         );
       case 'notavailable':
@@ -253,28 +251,21 @@ const ChooseUsername = () => {
       <KeyboardAvoidingView
         style={styles.keyboardavoidingview}
         behavior={'height'}
-        keyboardVerticalOffset={18}
-      >
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
+        keyboardVerticalOffset={18}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.content}>
             <ProgressBar isStatic={true} value={25} />
-            <Text style={styles.title}>
-              {StringConstant.onboardingChooseUsernameHeadline}
-            </Text>
-            <Text style={styles.desc}>
-              {StringConstant.onboardingChooseUsernameSubHeadline}
-            </Text>
+            <Text style={styles.title}>{StringConstant.onboardingChooseUsernameHeadline}</Text>
+            <Text style={styles.desc}>{StringConstant.onboardingChooseUsernameSubHeadline}</Text>
             <View style={styles.containerInput}>
-              <TouchableOpacity
-                style={styles.containerAddIcon}
-                onPress={() => onPhoto()}>
+              <TouchableOpacity style={styles.containerAddIcon} onPress={() => onPhoto()}>
                 <View style={{}}>
                   <Image
                     source={{
                       uri: users.photo
                         ? `data:image/png;base64,${users.photo}`
                         : DEFAULT_PROFILE_PIC_PATH,
-                      cache: 'reload',
+                      cache: 'reload'
                     }}
                     width={52}
                     height={52}
@@ -313,21 +304,18 @@ const ChooseUsername = () => {
               </View>
 
           </Animated.View> */}
-
           </View>
         </TouchableWithoutFeedback>
 
         <View style={styles.gap} />
-        <View style={styles.footer} >
-          <Text
-            style={
-              styles.textSmall
-            }>No matter your username, you can always post anonymously</Text>
+        <View style={styles.footer}>
+          <Text style={styles.textSmall}>
+            No matter your username, you can always post anonymously
+          </Text>
           <Button onPress={() => next()}>
             {StringConstant.onboardingChooseUsernameButtonStateNext}
           </Button>
         </View>
-
       </KeyboardAvoidingView>
       <BottomSheetChooseImage
         ref={bottomSheetChooseImageRef}
@@ -344,24 +332,24 @@ const styles = StyleSheet.create({
   containerInput: {
     flexDirection: 'row',
     marginTop: 28,
-    marginBottom: 20,
+    marginBottom: 20
   },
   container: {
-    flex: 1,
+    flex: 1
   },
-  btnNext: { marginTop: 16 },
-  gap: { flex: 1 },
+  btnNext: {marginTop: 16},
+  gap: {flex: 1},
   icon: {
     width: 14,
     height: 14,
     position: 'absolute',
     bottom: -5,
-    left: 19,
+    left: 19
   },
   image: {
     height: 52,
     width: 52,
-    borderRadius: 26,
+    borderRadius: 26
   },
   title: {
     fontFamily: 'Inter-Bold',
@@ -370,20 +358,20 @@ const styles = StyleSheet.create({
     fontSize: 36,
     lineHeight: 43.57,
     color: '#11243D',
-    marginTop: 24,
+    marginTop: 24
   },
   desc: {
     fontSize: 14,
     color: 'rgba(130,130,130,0.84)',
     fontWeight: '400',
     fontFamily: fonts.inter[400],
-    lineHeight: 24,
+    lineHeight: 24
   },
   btnImage: {
     width: 23,
     height: 23,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   constainerInfo: {
     backgroundColor: 'rgba(85, 194, 255, 0.3)',
@@ -418,7 +406,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red'
   },
   containerAddIcon: {
-    marginRight: 13,
+    marginRight: 13
   },
   content: {
     paddingHorizontal: 20
@@ -428,13 +416,13 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 20,
     paddingTop: 75,
     // paddingBottom: 32,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   textMessage: (color, marginTop) => ({
     fontSize: 12,
     color,
     fontFamily: fonts.inter[400],
-    marginTop: marginTop ? 6 : 0,
+    marginTop: marginTop ? 6 : 0
   }),
   parentIcon: {
     width: '10%',
@@ -451,13 +439,12 @@ const styles = StyleSheet.create({
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 5
     },
     shadowOpacity: 0.36,
     shadowRadius: 6.68,
     elevation: 11,
-    height: 112,
-
+    height: 112
   },
   textSmall: {
     fontFamily: 'Inter',
@@ -467,6 +454,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.emperor,
     marginBottom: 20,
-    marginTop: 10,
+    marginTop: 10
   }
 });

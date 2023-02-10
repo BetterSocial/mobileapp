@@ -1,131 +1,93 @@
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import * as React from 'react';
-import {BackHandler, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import Animated from 'react-native-reanimated';
+import {BackHandler, Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-import { withInteractionsManaged, withInteractionsManagedNoStatusBar } from '../../components/WithInteractionManaged';
+import DomainFragmentScreen from './elements/DomainFragmentScreen';
+import Followings from '.';
+import Header from '../../components/Header';
+import MyTabBar from './elements/TabBar/FollowingTabBar';
+import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
 import {Context} from '../../context';
-import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction'
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import DomainFragmentScreen from './elements/DomainFragmentScreen';
-import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
-import Followings from '.';
+import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction';
+import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 
 function FollowingScreen(props) {
-  const {navigation} = props
-  const [, dispatchNavbar] = React.useContext(Context).profile
-  const TAB_TOPIC = 'TabTopic'
-  const TAB_FOLLOWING = 'TabFollowing'
-  const TAB_DOMAIN = 'TabDomain'
-  const isAndroid = Platform.OS === 'android'
+  const {navigation} = props;
+  const [profileState, dispatchNavbar] = React.useContext(Context).profile;
+  const TAB_TOPIC = 'TabTopic';
+  const TAB_FOLLOWING = 'TabFollowing';
+  const TAB_DOMAIN = 'TabDomain';
+  const isAndroid = Platform.OS === 'android';
   const Tabs = createMaterialTopTabNavigator();
-  function MyTabBar({state, descriptors, navigation, position}) {
-    return (
-      <View style={S.toptabcontainer}>
-        {state.routes.map((route, index) => {
-          const {options} = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-              ? options.title
-              : route.name;
 
-          const isFocused = state.index === index;
+  const followingHeader = () => {
+    if ((Platform.OS === 'ios' && profileState.isShowHeader) || Platform.OS === 'android') {
+      return (
+        <Header
+          title={profileState.navbarTitle}
+          titleStyle={S.headerTitle}
+          onPress={() => navigation.goBack()}
+          isCenter
+        />
+      );
+    }
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
-
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
-            }
-          };
-
-          const inputRange = state.routes.map((_, i) => i);
-          const opacity = Animated.interpolateNode(position, {
-            inputRange,
-            outputRange: inputRange.map((i) => (i === index ? 1 : 0.3)),
-          });
-
-          return (
-            <TouchableOpacity
-              accessibilityRole="button"
-              accessibilityState={isFocused ? {selected: true} : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
-              testID={options.tabBarTestID}
-              onPress={onPress}
-              style={S.singletab}>
-              <Animated.Text style={{opacity, ...S.singletabtext}}>
-                {label}
-              </Animated.Text>
-              <View style={isFocused ? S.viewborderbottom : {}} />
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
-  }
-
-
-  const tabComponent = (tabProps) => <MyTabBar {...tabProps} />
+    return null;
+  };
 
   const listenTab = (tabProps) => {
-    const {route} = tabProps
-    if(route.name === TAB_FOLLOWING) {
-      setNavbarTitle("Who you're following", dispatchNavbar)
+    const {route} = tabProps;
+    if (route.name === TAB_FOLLOWING) {
+      setNavbarTitle("Who you're following", dispatchNavbar);
     }
-    if(route.name === TAB_DOMAIN) {
-      setNavbarTitle("Your Domains", dispatchNavbar)
+    if (route.name === TAB_DOMAIN) {
+      setNavbarTitle('Your Domains', dispatchNavbar);
     }
-    if(route.name === TAB_TOPIC) {
-      setNavbarTitle("Your Topics", dispatchNavbar)
+    if (route.name === TAB_TOPIC) {
+      setNavbarTitle('Your Topics', dispatchNavbar);
     }
-  }
+  };
 
   const settingBackhandleAndroid = () => {
-    BackHandler.addEventListener('hardwareBackPress', backPress)
-  }
+    BackHandler.addEventListener('hardwareBackPress', backPress);
+  };
 
   const removeBackHandleAndroid = () => {
-    BackHandler.removeEventListener('hardwareBackPress', backPress)
-  }
+    BackHandler.removeEventListener('hardwareBackPress', backPress);
+  };
 
-  const backPress = () => {
-    return false;
-  }
+  const backPress = () => false;
 
   React.useEffect(() => {
-    navigation.addListener('focus', () => {
-      showHeaderProfile(true, dispatchNavbar)
-    })
-    navigation.addListener('blur', () => {
-      showHeaderProfile(false, dispatchNavbar)
-    })
-    settingBackhandleAndroid()
+    const unsubFocusListener = navigation.addListener('focus', () => {
+      showHeaderProfile(true, dispatchNavbar);
+    });
+    const unsubBlurListener = navigation.addListener('blur', () => {
+      showHeaderProfile(false, dispatchNavbar);
+    });
+    settingBackhandleAndroid();
     return () => {
-      removeBackHandleAndroid()
-    }
-  }, [])
+      removeBackHandleAndroid();
+      unsubBlurListener();
+      unsubFocusListener();
+    };
+  }, []);
 
   return (
-    <View style={{flex: 1}} >
+    <View style={{flex: 1}}>
       {isAndroid ? <StatusBar translucent={false} /> : null}
+      {followingHeader()}
       {/* <StatusBar translucent={false} /> */}
       <Tabs.Navigator
         initialRouteName={TAB_FOLLOWING}
-        tabBar={tabComponent}
-
-        >
+        tabBar={(tabProps) => <MyTabBar navigation={navigation} {...tabProps} />}>
         <Tabs.Screen
           name={TAB_FOLLOWING}
           component={Followings}
           options={{
-            title: 'User',
+            title: 'User'
           }}
           listeners={listenTab}
         />
@@ -133,7 +95,7 @@ function FollowingScreen(props) {
           name={TAB_DOMAIN}
           component={DomainFragmentScreen}
           options={{
-            title: 'Domains',
+            title: 'Domains'
           }}
           listeners={listenTab}
         />
@@ -141,7 +103,7 @@ function FollowingScreen(props) {
           name={TAB_TOPIC}
           component={TopicFragmentScreen}
           options={{
-            title: 'Topics',
+            title: 'Topics'
           }}
           listeners={listenTab}
         />
@@ -150,18 +112,12 @@ function FollowingScreen(props) {
   );
 }
 
-export default withInteractionsManagedNoStatusBar(FollowingScreen)
+export default withInteractionsManagedNoStatusBar(FollowingScreen);
 
 const S = StyleSheet.create({
-  container: {
-    paddingHorizontal: 22,
-    paddingVertical: 20,
-    display: 'flex',
-    flexDirection: 'column',
-  },
-
+  headerTitle: {fontSize: 16, fontFamily: fonts.inter[600], textAlign: 'center'},
   containertitle: {
-    fontSize: 16,
+    fontSize: 16
   },
 
   toptabcontainer: {
@@ -169,23 +125,6 @@ const S = StyleSheet.create({
     backgroundColor: colors.white,
     borderBottomColor: '#00000050',
     borderBottomWidth: 1,
-    paddingHorizontal: 4,
-  },
-
-  singletab: {
-    flex: 1,
-    paddingLeft: 16,
-  },
-
-  singletabtext: {
-    fontFamily: fonts.inter[500],
-    textAlign: 'left',
-    fontSize: 14,
-    paddingVertical: 10,
-  },
-
-  viewborderbottom: {
-    borderBottomColor: colors.holytosca,
-    borderBottomWidth: 1,
-  },
+    paddingHorizontal: 4
+  }
 });

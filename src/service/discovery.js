@@ -2,11 +2,6 @@ import crashlytics from '@react-native-firebase/crashlytics';
 
 import api from './config';
 
-const API_URL = {
-  fetchInitialDiscoveryTopics: '/discovery/init/topic',
-  fetchInitialDiscoveryUsers: '/discovery/init/user',
-};
-
 /**
  *
  * @typedef {Object} FetchDiscoveryDataResponse
@@ -34,7 +29,7 @@ const fetchDiscoveryDataUser = async (query, axiosOptions = {}) => {
     }
     return {
       success: false,
-      message: response?.data?.message,
+      message: response?.data?.message
     };
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -49,13 +44,16 @@ const fetchDiscoveryDataUser = async (query, axiosOptions = {}) => {
  */
 const fetchDiscoveryDataDomain = async (query, axiosOptions = {}) => {
   try {
-    const response = await api.get(`/discovery/domain/?q=${encodeURIComponent(query)}`, axiosOptions);
+    const response = await api.get(
+      `/discovery/domain/?q=${encodeURIComponent(query)}`,
+      axiosOptions
+    );
     if (response?.data?.success) {
       return response?.data;
     }
     return {
       success: false,
-      message: response.data.message,
+      message: response.data.message
     };
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -70,13 +68,16 @@ const fetchDiscoveryDataDomain = async (query, axiosOptions = {}) => {
  */
 const fetchDiscoveryDataTopic = async (query, axiosOptions = {}) => {
   try {
-    const response = await api.get(`/discovery/topic/?q=${encodeURIComponent(query)}`, axiosOptions);
+    const response = await api.get(
+      `/discovery/topic/?q=${encodeURIComponent(query)}`,
+      axiosOptions
+    );
     if (response.data.success) {
       return response.data;
     }
     return {
       success: false,
-      message: response.data.message,
+      message: response.data.message
     };
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -97,7 +98,7 @@ const fetchDiscoveryDataNews = async (query, axiosOptions = {}) => {
     }
     return {
       success: false,
-      message: response.data.message,
+      message: response.data.message
     };
   } catch (error) {
     crashlytics().recordError(new Error(error));
@@ -127,22 +128,24 @@ const fetchDiscoveryDataNews = async (query, axiosOptions = {}) => {
 /**
  * @param {Number} limit
  * @param {Number} page
- * @returns {FetchInitialDiscoveryTopicsResponse}
+ * @returns {Promise<FetchInitialDiscoveryTopicsResponse>}
  */
 const fetchInitialDiscoveryTopics = async (limit = 25, page = 0) => {
   try {
     const response = await api.post(`/discovery/init/topic?limit=${limit}`, {
       limit,
-      page,
+      page
     });
 
-    if (response.data.success) {
-      return response.data;
-    }
-    return {
-      success: false,
-      message: response.data.message,
-    };
+    return new Promise((resolve) => {
+      if (response.data.success) {
+        return resolve(response.data);
+      }
+      return resolve({
+        success: false,
+        message: response.data.message
+      });
+    });
   } catch (error) {
     crashlytics().recordError(new Error(error));
     throw new Error(error);
@@ -176,22 +179,24 @@ const fetchInitialDiscoveryTopics = async (limit = 25, page = 0) => {
 /**
  * @param {Number} limit
  * @param {Number} page
- * @returns {FetchInitialDiscoveryUsersResponse}
+ * @returns {Promise<FetchInitialDiscoveryUsersResponse>}
  */
 const fetchInitialDiscoveryUsers = async (limit = 25, page = 0) => {
   try {
     const response = await api.post('discovery/init/user', {
       limit,
-      page,
+      page
     });
 
-    if (response.data.success) {
-      return response.data;
-    }
-    return {
-      success: false,
-      message: response.data.message,
-    };
+    return new Promise((resolve) => {
+      if (response.data.success) {
+        return resolve(response.data);
+      }
+      return resolve({
+        success: false,
+        message: response.data.message
+      });
+    });
   } catch (error) {
     crashlytics().recordError(new Error(error));
     throw new Error(error);
@@ -219,22 +224,24 @@ const fetchInitialDiscoveryUsers = async (limit = 25, page = 0) => {
 /**
  * @param {Number} limit
  * @param {Number} page
- * @returns {FetchInitialDiscoveryDomainsResponse}
+ * @returns {Promise<FetchInitialDiscoveryDomainsResponse>}
  */
 const fetchInitialDiscoveryDomains = async (limit = 25, page = 0) => {
   try {
     const response = await api.post(`discovery/init/domain?limit=${limit}`, {
       limit,
-      page,
+      page
     });
 
-    if (response.data.success) {
-      return response.data;
-    }
-    return {
-      success: false,
-      message: response.data.message,
-    };
+    return new Promise((resolve) => {
+      if (response.data.success) {
+        return resolve(response.data);
+      }
+      return resolve({
+        success: false,
+        message: response.data.message
+      });
+    });
   } catch (error) {
     crashlytics().recordError(new Error(error));
     throw new Error(error);
@@ -248,7 +255,7 @@ const DiscoveryRepo = {
   fetchDiscoveryDataNews,
   fetchInitialDiscoveryTopics,
   fetchInitialDiscoveryUsers,
-  fetchInitialDiscoveryDomains,
+  fetchInitialDiscoveryDomains
 };
 
 export default DiscoveryRepo;
