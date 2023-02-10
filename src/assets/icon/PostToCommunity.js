@@ -2,7 +2,13 @@ import * as React from 'react';
 import Svg, {Path, Rect} from 'react-native-svg';
 
 const PostToCommunity = (props) => (
-  <Svg width={32} height={28} fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+  <Svg
+    width={32}
+    height={28}
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="-2 2 32 28"
+    {...props}>
     <Rect x={1} y={7} width={25} height={20} rx={4} stroke="#fff" strokeWidth={2} />
     <Path
       fillRule="evenodd"
