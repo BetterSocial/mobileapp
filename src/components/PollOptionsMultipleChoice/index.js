@@ -9,7 +9,7 @@ import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import usePollOptionMultiple from './hooks/usePollOptionMultiple';
 
-export const PollOptionsMultipleChoice = ({
+const PollOptionsMultipleChoice = ({
   item,
   mypoll,
   index,
@@ -21,7 +21,16 @@ export const PollOptionsMultipleChoice = ({
   onselected = () => {},
   totalVotingUser = 0
 }) => {
-  const {  onOptionsClicked, optionPercentage, isPollDisabled, selected, isMyPoll, isPollNotEndedAndIsMine, isMax, handleStyleBar} = usePollOptionMultiple({
+  const {
+    onOptionsClicked,
+    optionPercentage,
+    isPollDisabled,
+    selected,
+    isMyPoll,
+    isPollNotEndedAndIsMine,
+    isMax,
+    handleStyleBar
+  } = usePollOptionMultiple({
     item,
     mypoll,
     index,
@@ -30,70 +39,84 @@ export const PollOptionsMultipleChoice = ({
     isalreadypolling,
     maxpolls,
     onselected,
-    totalVotingUser 
-  })
+    totalVotingUser
+  });
 
   const renderPercentageBar = () => {
     if (isexpired) {
       return (
-        <View testID='isExpired' style={[styles.barStyle, {width: `${handleStyleBar(optionPercentage)}%`, backgroundColor:isMax ? colors.bondi_blue : colors.gray1}]}  />
-      );
-    } if (isalreadypolling) {
-      return (
-        <View testID='isAlreadyPolling' style={[styles.barStyle, {width: `${handleStyleBar(optionPercentage)}%`, backgroundColor: isMyPoll() ? colors.bondi_blue : colors.gray1}]} />
+        <View
+          testID="isExpired"
+          style={[
+            styles.barStyle,
+            {
+              width: `${handleStyleBar(optionPercentage)}%`,
+              backgroundColor: isMax ? colors.bondi_blue : colors.gray1
+            }
+          ]}
+        />
       );
     }
-    return null
+    if (isalreadypolling) {
+      return (
+        <View
+          testID="isAlreadyPolling"
+          style={[
+            styles.barStyle,
+            {
+              width: `${handleStyleBar(optionPercentage)}%`,
+              backgroundColor: isMyPoll() ? colors.bondi_blue : colors.gray1
+            }
+          ]}
+        />
+      );
+    }
+    return null;
   };
 
   const renderPollBadge = () => {
     if (isMax && isexpired) {
       return (
-       <View testID='pollWinner' >
-         <IconPollWinnerBadge style={{marginRight: 9, alignSelf: 'center'}} />
-       </View>
+        <View testID="pollWinner">
+          <IconPollWinnerBadge style={{marginRight: 9, alignSelf: 'center'}} />
+        </View>
       );
-    } if (isPollNotEndedAndIsMine) {
-      return <View testID='isPollNotEndedAndIsMine' ><IconPollMine style={{marginRight: 9, alignSelf: 'center'}} /></View>
-    } 
-      return <View testID='nonePoll' />;
-    
+    }
+    if (isPollNotEndedAndIsMine) {
+      return (
+        <View testID="isPollNotEndedAndIsMine">
+          <IconPollMine style={{marginRight: 9, alignSelf: 'center'}} />
+        </View>
+      );
+    }
+    return <View testID="nonePoll" />;
   };
 
   return (
     <TouchableNativeFeedback
-      testID='multiple'
+      key={index}
+      testID="multiple"
       disabled={isPollDisabled()}
       onPress={onOptionsClicked}>
       <View
-        key={`poll-options-${index}`}
-        style={
-          selected
-            ? styles.pollOptionItemContainerActive
-            : styles.pollOptionItemContainer
-        }>
-
+        style={selected ? styles.pollOptionItemContainerActive : styles.pollOptionItemContainer}>
         {renderPercentageBar()}
         <View style={styles.pollOptionTextContainer}>
           {isPollDisabled() ? (
             renderPollBadge()
           ) : (
             <CheckBox
-              testID='checkbox'
+              testID="checkbox"
               value={selected}
               tintColors={{true: colors.holytosca, false: colors.black}}
               onChange={onOptionsClicked}
             />
           )}
-          <Text style={styles.pollOptionItemText(isPollDisabled(), isMax)}>
-            {item.option}
-          </Text>
+          <Text style={styles.pollOptionItemText(isPollDisabled(), isMax)}>{item.option}</Text>
           {isPollDisabled() && (
             <Text
-            testID='optionPercentage'
-              style={
-                styles.pollOptionItemPercentage
-              }>{`${optionPercentage}%`}</Text>
+              testID="optionPercentage"
+              style={styles.pollOptionItemPercentage}>{`${optionPercentage}%`}</Text>
           )}
         </View>
       </View>
@@ -101,12 +124,12 @@ export const PollOptionsMultipleChoice = ({
   );
 };
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   pollOptionsContainer: {
     width: '100%',
     padding: 0,
     marginTop: 16,
-    marginBottom: 8,
+    marginBottom: 8
   },
   pollOptionItemContainer: {
     backgroundColor: colors.lightgrey,
@@ -114,7 +137,7 @@ let styles = StyleSheet.create({
     borderRadius: 8,
     // height: 56,
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   pollOptionItemContainerActive: {
     backgroundColor: colors.holytosca30percent,
@@ -122,7 +145,7 @@ let styles = StyleSheet.create({
     borderRadius: 8,
     // height: 56,
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   pollOptionTextContainer: {
     display: 'flex',
@@ -130,28 +153,27 @@ let styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 4,
     paddingHorizontal: 16,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   pollOptionItemText: (isexpired, isMax) => ({
-      flex: 1,
-      color: colors.black,
-      fontFamily: fonts.inter[400],
-      alignSelf: 'center',
-      marginTop: isMax ? 0 : isexpired ? 6 : 0,
-      marginBottom: isMax ? 0 : isexpired ? 6 : 0,
-      marginLeft: 0,
-      fontSize: normalizeFontSize(14)
-    }),
+    flex: 1,
+    color: colors.black,
+    fontFamily: fonts.inter[400],
+    alignSelf: 'center',
+    marginTop: isMax ? 0 : isexpired ? 6 : 0,
+    marginBottom: isMax ? 0 : isexpired ? 6 : 0,
+    marginLeft: 0,
+    fontSize: normalizeFontSize(14)
+  }),
   pollOptionItemPercentage: {
     alignSelf: 'center',
     fontSize: normalizeFontSize(14)
-
   },
   totalpolltext: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
     lineHeight: 16,
-    color: colors.blackgrey,
+    color: colors.blackgrey
   },
   pollRadioButton: {
     width: 12,
@@ -160,7 +182,7 @@ let styles = StyleSheet.create({
     borderRadius: 0,
     borderColor: colors.black,
     borderWidth: 1,
-    marginEnd: 12,
+    marginEnd: 12
   },
 
   pollRadioButtonActive: {
@@ -169,18 +191,18 @@ let styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 6,
     backgroundColor: colors.holytosca,
-    marginEnd: 12,
+    marginEnd: 12
   },
   totalVotesContainer: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   barStyle: {
-     height: '100%',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      borderRadius: 6,
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    borderRadius: 6
   }
 });
 

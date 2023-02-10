@@ -1,62 +1,45 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {
-  BackHandler,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  View
-} from 'react-native';
-import { StackActions } from '@react-navigation/native';
+import {BackHandler, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import {StackActions} from '@react-navigation/native';
 // eslint-disable-next-line import/no-unresolved
-import { colors } from 'react-native-swiper-flatlist/src/themes';
-import {
-  logIn,
-  onCancel,
-  onError,
-  onSuccess
-} from '@human-internet/react-native-humanid';
-import { useNavigation } from '@react-navigation/core';
-import { useSetRecoilState } from 'recoil';
+import {colors} from 'react-native-swiper-flatlist/src/themes';
+import {logIn, onCancel, onError, onSuccess} from '@human-internet/react-native-humanid';
+import {useNavigation} from '@react-navigation/core';
+import {useSetRecoilState} from 'recoil';
 
 import DevDummyLogin from '../../components/DevDummyLogin';
 import SlideShow from './elements/SlideShow';
 import getRemoteConfig from '../../service/getRemoteConfig';
 import useSignin from './hooks/useSignin';
-import { Context } from '../../context';
-import { InitialStartupAtom } from '../../service/initialStartup';
-import { checkToken } from '../../service/outh';
-import { fonts } from '../../utils/fonts';
-import {
-  removeLocalStorege,
-  setAccessToken,
-  setRefreshToken,
-  setUserId
-} from '../../utils/token';
-import { setDataHumenId } from '../../context/actions/users';
-import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { verifyUser } from '../../service/users';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
-import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
+import {Context} from '../../context';
+import {InitialStartupAtom} from '../../service/initialStartup';
+import {checkToken} from '../../service/outh';
+import {fonts} from '../../utils/fonts';
+import {removeLocalStorege, setAccessToken, setRefreshToken, setUserId} from '../../utils/token';
+import {setDataHumenId} from '../../context/actions/users';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {verifyUser} from '../../service/users';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;
-  const [clickTime, setClickTime] = React.useState(0)
-  const [isDemoLoginEnabled, setIsDemoLoginEnabled] = React.useState(false)
+  const [clickTime, setClickTime] = React.useState(0);
+  const [isDemoLoginEnabled, setIsDemoLoginEnabled] = React.useState(false);
   const setValueStartup = useSetRecoilState(InitialStartupAtom);
-  const {getTopicsData} = useSignin()
+  const {getTopicsData} = useSignin();
   const navigation = useNavigation();
   const create = useClientGetstream();
 
-
   const onClickContainer = () => {
-    setClickTime((prevState) => prevState + 1)
-  }
+    setClickTime((prevState) => prevState + 1);
+  };
 
   const resetClickTime = () => {
-    setClickTime(0)
-  }
+    setClickTime(0);
+  };
 
   React.useEffect(() => {
     setDataHumenId(null, dispatch);
@@ -67,10 +50,10 @@ const SignIn = () => {
       checkToken(exchangeToken)
         .then((res) => {
           if (__DEV__) {
-            console.log(res, 'response token')
+            console.log(res, 'response token');
           }
           if (res.success) {
-            const { appUserId } = res.data;
+            const {appUserId} = res.data;
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
               .then((response) => {
@@ -82,7 +65,6 @@ const SignIn = () => {
                     deeplinkProfile: false
                   });
                   create(response.token);
-
                 } else {
                   removeLocalStorege('userId');
                   navigation.dispatch(StackActions.replace('ChooseUsername'));
@@ -91,11 +73,11 @@ const SignIn = () => {
               })
               .catch((e) => {
                 if (__DEV__) {
-                  console.log(e)
+                  console.log(e);
                 }
               });
           } else {
-            SimpleToast.show(res.message, SimpleToast.SHORT)
+            SimpleToast.show(res.message, SimpleToast.SHORT);
           }
         })
         .catch((e) => {
@@ -110,46 +92,52 @@ const SignIn = () => {
     });
     onCancel(() => {
       Analytics.logEvent('cencel_auth_humanid', {
-        id: '1',
+        id: '1'
       });
     });
   }, []);
 
   const handleLogin = () => {
-    logIn();
+    try {
+      logIn();
+    } catch (e) {
+      console.log('test', e);
+    }
     Analytics.logLogin('humanid');
   };
 
   React.useEffect(() => {
-    getTopicsData()
-  }, [])
+    getTopicsData();
+  }, []);
 
   const checkIsDemoLoginEnabled = async () => {
     const isEnabled = await getRemoteConfig.isDemoLoginViewEnabled();
     if (isEnabled) {
       setIsDemoLoginEnabled(true);
     }
-  }
+  };
 
   React.useEffect(() => {
-    checkIsDemoLoginEnabled()
-  }, [])
+    checkIsDemoLoginEnabled();
+  }, []);
 
-  const preventBackButton = () => true
+  const preventBackButton = () => true;
 
   React.useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', preventBackButton)
+    BackHandler.addEventListener('hardwareBackPress', preventBackButton);
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', preventBackButton)
-    }
-  }, [])
+      BackHandler.removeEventListener('hardwareBackPress', preventBackButton);
+    };
+  }, []);
 
   return (
     <SafeAreaView style={S.container}>
       <StatusBar translucent={false} />
       <View style={S.containerSlideShow}>
-        {clickTime >= 7 && isDemoLoginEnabled ? <DevDummyLogin resetClickTime={resetClickTime} /> : null}
-        <SlideShow onContainerPress={onClickContainer}  handleLogin={handleLogin} />
+        {clickTime >= 7 && isDemoLoginEnabled ? (
+          <DevDummyLogin resetClickTime={resetClickTime} />
+        ) : null}
+        <SlideShow onContainerPress={onClickContainer} handleLogin={handleLogin} />
       </View>
     </SafeAreaView>
   );
@@ -159,20 +147,20 @@ export default withInteractionsManaged(SignIn);
 
 const S = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   image: {
     width: 321,
     height: 48,
-    borderRadius: 10,
+    borderRadius: 10
   },
   containerSlideShow: {
-    height: '100%',
+    height: '100%'
   },
   containerBtnLogin: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 26,
+    paddingTop: 26
   },
   btn: {
     backgroundColor: '#023B60',
@@ -181,7 +169,7 @@ const S = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 23,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   desc: {
     fontWeight: '400',
@@ -191,16 +179,16 @@ const S = StyleSheet.create({
     width: 250,
     textAlign: 'center',
     color: colors.gray,
-    marginTop: 16,
+    marginTop: 16
   },
   humanID: {
     color: '#11243D',
     // fontWeight: 'bold',
-    textDecorationLine: 'underline',
+    textDecorationLine: 'underline'
   },
-  btnText: { fontSize: 17, color: '#fff', fontWeight: 'bold' },
-  humen: { fontSize: 17, color: '#fff', fontWeight: '100' },
+  btnText: {fontSize: 17, color: '#fff', fontWeight: 'bold'},
+  humen: {fontSize: 17, color: '#fff', fontWeight: '100'},
   btnSign: {
-    borderRadius: 10,
-  },
+    borderRadius: 10
+  }
 });

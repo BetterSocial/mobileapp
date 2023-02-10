@@ -10,63 +10,82 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import ButtonHightlight from '../ButtonHighlight';
-import Comment from "../Comments/Comment";
-import ConnectorWrapper from "../Comments/ConnectorWrapper";
-import ReplyCommentItem from "../Comments/ReplyCommentItem";
+import Comment from '../Comments/Comment';
+import ConnectorWrapper from '../Comments/ConnectorWrapper';
+import ReplyCommentItem from '../Comments/ReplyCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
-import WriteComment from "../Comments/WriteComment";
+import WriteComment from '../Comments/WriteComment';
 import useReplyComment from './hooks/useReplyComment';
-import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
-const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFeed, updateReply, itemParent, updateVote, updateVoteLatestChildren }) => {
+const ReplyCommentId = ({
+  itemProp,
+  indexFeed,
+  level,
+  updateParent,
+  page,
+  dataFeed,
+  updateReply,
+  itemParent,
+  updateVote,
+  updateVoteLatestChildren
+}) => {
   const navigation = useNavigation();
-  const { getThisCommentHook, setCommentHook, temporaryText, setTemporaryText, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook, updateVoteLatestChildrenParentHook, textComment, setTextComment, newCommentList, setNewCommentList, defaultData, setItem, item, showChildrenCommentView, updateFeed, scrollViewRef, createComment } = useReplyComment({ itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page })
-
+  const {
+    getThisCommentHook,
+    setCommentHook,
+    temporaryText,
+    isLastInParentHook,
+    findCommentAndUpdateHook,
+    setTextComment,
+    newCommentList,
+    setNewCommentList,
+    setItem,
+    item,
+    showChildrenCommentView,
+    updateFeed,
+    scrollViewRef,
+    createComment
+  } = useReplyComment({itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page});
 
   React.useEffect(() => {
     if (setTextComment && typeof setTextComment === 'function') {
-      setTextComment(temporaryText)
+      setTextComment(temporaryText);
     }
-  }, [temporaryText])
-
+  }, [temporaryText]);
 
   const getThisComment = async () => {
-    const comments = await getThisCommentHook(itemProp)
-    setItem({ ...itemProp, latest_children: { comment: comments } });
-    setNewCommentList(comments)
+    const comments = await getThisCommentHook(itemProp);
+    setItem({...itemProp, latest_children: {comment: comments}});
+    setNewCommentList(comments);
   };
 
   React.useEffect(() => {
     if (itemProp) {
       getThisComment();
-
     }
   }, [itemProp]);
 
-
   const navigationGoBack = () => navigation.goBack();
 
-
-
-  if (!item) return null
+  if (!item) return null;
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'height' : null} style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'height' : null}
+      style={styles.container}>
       <StatusBar translucent={false} />
       {/* Header */}
       <SafeAreaView>
         <View style={styles.header}>
-          <TouchableOpacity
-            testID='backButton'
-            onPress={navigationGoBack}
-            style={styles.backArrow}>
+          <TouchableOpacity testID="backButton" onPress={navigationGoBack} style={styles.backArrow}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableOpacity>
-          <Text testID='usernameText' style={styles.headerText}>
+          <Text testID="usernameText" style={styles.headerText}>
             Reply to {item.user.data.username}
           </Text>
           <View style={styles.btn} />
@@ -90,49 +109,44 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
           {newCommentList.length > 0 &&
             newCommentList.map((itemReply, index) => (
               <React.Fragment key={index}>
-                {itemReply.user ? <ContainerReply >
-                  <ConnectorWrapper index={index}>
-                    <View style={styles.childCommentWrapper}>
-                      <Comment
-                        indexFeed={indexFeed}
-                        showLeftConnector={false}
-                        time={itemReply.updated_at}
-                        photo={itemReply.user.data.profile_pic_url}
-                        isLast={
-                          level >= 2
-                        }
-                        key={`r${index}`}
-                        user={itemReply.user}
-                        comment={itemReply}
-                        onPress={() => showChildrenCommentView(itemReply)}
-                        level={parseInt(level, 10) + 1}
-                        refreshComment={updateFeed}
-                        findCommentAndUpdate={findCommentAndUpdateHook}
-                        updateVote={updateVoteLatestChildren}
-                      />
-                      {itemReply.children_counts.comment > 0 && (
-                        <>
-                          <View
-                            style={styles.seeRepliesContainer(
-                              isLastInParentHook(index),
-                            )}>
-                            <View style={styles.connector} />
-                            <ButtonHightlight onPress={() => showChildrenCommentView(itemReply)}>
-                              <Text style={styles.seeRepliesText}>
-                                {StringConstant.postDetailPageSeeReplies(
-                                  itemReply.children_counts.comment || 0,
-                                )}
-                              </Text>
-                            </ButtonHightlight>
-                          </View>
-                        </>
-                      )}
-                    </View>
-                  </ConnectorWrapper>
-                </ContainerReply> : null}
-
+                {itemReply.user ? (
+                  <ContainerReply>
+                    <ConnectorWrapper index={index}>
+                      <View style={styles.childCommentWrapper}>
+                        <Comment
+                          indexFeed={indexFeed}
+                          showLeftConnector={false}
+                          time={itemReply.updated_at}
+                          photo={itemReply.user.data.profile_pic_url}
+                          isLast={level >= 2}
+                          key={`r${index}`}
+                          user={itemReply.user}
+                          comment={itemReply}
+                          onPress={() => showChildrenCommentView(itemReply)}
+                          level={parseInt(level, 10) + 1}
+                          refreshComment={updateFeed}
+                          findCommentAndUpdate={findCommentAndUpdateHook}
+                          updateVote={updateVoteLatestChildren}
+                        />
+                        {itemReply.children_counts.comment > 0 && (
+                          <>
+                            <View style={styles.seeRepliesContainer(isLastInParentHook(index))}>
+                              <View style={styles.connector} />
+                              <ButtonHightlight onPress={() => showChildrenCommentView(itemReply)}>
+                                <Text style={styles.seeRepliesText}>
+                                  {StringConstant.postDetailPageSeeReplies(
+                                    itemReply.children_counts.comment || 0
+                                  )}
+                                </Text>
+                              </ButtonHightlight>
+                            </View>
+                          </>
+                        )}
+                      </View>
+                    </ConnectorWrapper>
+                  </ContainerReply>
+                ) : null}
               </React.Fragment>
-
             ))}
           {newCommentList.length > 0 ? <View style={styles.childLevelMainConnector} /> : null}
         </View>
@@ -148,13 +162,10 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, updateParent, page, dataFe
     </KeyboardAvoidingView>
   );
 };
-export const ContainerReply = ({ children, isGrandchild = true, key }) => (
+export const ContainerReply = ({children, isGrandchild = true, key}) => (
   <View
     key={key}
-    style={[
-      styles.containerReply,
-      { borderColor: isGrandchild ? 'transparent' : colors.gray1 },
-    ]}>
+    style={[styles.containerReply, {borderColor: isGrandchild ? 'transparent' : colors.gray1}]}>
     {children}
   </View>
 );
@@ -165,7 +176,7 @@ export const styles = StyleSheet.create({
   container: {
     height: 'auto',
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
     // backgroundColor: 'blue',
   },
   containerComment: {
@@ -174,47 +185,47 @@ export const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     paddingLeft: 36,
-    paddingRight: 23,
+    paddingRight: 23
   },
   header: {
     marginRight: -20,
     marginBottom: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   containerReply: {
     borderLeftWidth: 1,
-    width: '100%',
+    width: '100%'
     // flex: 1,
   },
   seeRepliesContainer: (isLast) => ({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : colors.gray1,
+    borderLeftColor: isLast ? 'transparent' : colors.gray1
   }),
   seeRepliesText: {
-    color: colors.blue,
+    color: colors.blue
   },
   btn: {
     paddingVertical: 8,
     paddingHorizontal: 20,
-    borderRadius: 20,
+    borderRadius: 20
   },
   btnText: {
-    color: '#fff',
+    color: '#fff'
   },
   headerText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
     marginLeft: -24,
     color: '#000',
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   image: {
     width: 48,
-    height: 48,
+    height: 48
   },
   input: {
     backgroundColor: '#F2F2F2',
@@ -222,19 +233,19 @@ export const styles = StyleSheet.create({
     color: '#000',
     padding: 10,
     marginLeft: 20,
-    borderRadius: 8,
+    borderRadius: 8
   },
   comment: {
     flexDirection: 'row',
     paddingRight: 20,
     position: 'absolute',
-    bottom: 0,
+    bottom: 0
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
     color: '#333333',
-    marginLeft: 28,
+    marginLeft: 28
   },
   mainLeftConnector: {
     height: '100%',
@@ -242,7 +253,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: colors.gray1,
     left: 46,
-    zIndex: -100,
+    zIndex: -100
   },
   connector: {
     width: 15,
@@ -253,30 +264,30 @@ export const styles = StyleSheet.create({
     borderLeftColor: colors.gray1,
     borderBottomColor: colors.gray1,
     marginRight: 4,
-    marginLeft: -1,
+    marginLeft: -1
   },
   childCommentWrapper: {
     borderLeftColor: colors.gray1,
     borderLeftWidth: 1,
-    flex: 1,
+    flex: 1
   },
   childLevelMainConnector: {
     flex: 1,
     borderLeftWidth: 1,
     borderLeftColor: colors.gray1,
-    marginLeft: 24,
+    marginLeft: 24
   },
   backArrow: {
     padding: 10,
     paddingLeft: 24,
     paddingVertical: 18,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   commentScrollView: {
     minHeight: '100%',
-    paddingBottom: 83,
+    paddingBottom: 83
   },
   childCommentWrapperLoading: {
-    flex: 1,
-  },
+    flex: 1
+  }
 });

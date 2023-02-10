@@ -25,24 +25,22 @@ const Footer = ({
   totalVote,
   disableComment = false,
   blockStatus,
-  loadingVote,
+  loadingVote
 }) => {
   const handleBlockUi = () => {
     if (isSelf) {
-      return <View testID='isself' />;
-    } 
-      if (blockStatus && blockStatus.blocker) {
-        return <View testID='blocker' />;
-      } 
-        return (
-          <TouchableOpacity testID='onPressBlock' style={styles.btn} onPress={onPressBlock}>
-            <View style={styles.btnBlock}>
-              <MemoIc_block_inactive height={22} width={22} />
-            </View>
-          </TouchableOpacity>
-        );
-      
-    
+      return <View testID="isself" />;
+    }
+    if (blockStatus && blockStatus.blocker) {
+      return <View testID="blocker" />;
+    }
+    return (
+      <TouchableOpacity testID="onPressBlock" style={styles.btn} onPress={onPressBlock}>
+        <View style={styles.btnBlock}>
+          <MemoIc_block_inactive height={22} width={22} />
+        </View>
+      </TouchableOpacity>
+    );
   };
 
   // const __renderShowScoreUI = () => {
@@ -55,22 +53,31 @@ const Footer = ({
   //   } return <></>
   // }
 
+  const voteStyle = () => {
+    if (totalVote > 0) {
+      return '#00ADB5';
+    }
+    if (totalVote < 0) {
+      return '#FF2E63';
+    }
+    return '#C4C4C4';
+  };
   return (
     <View style={[styles.rowSpaceBeetwen, styles.container]}>
       <View style={styles.leftGroupContainer}>
-        <TouchableOpacity testID='shareBtn' style={styles.btn} onPress={onPressShare}>
+        <TouchableOpacity testID="shareBtn" style={styles.btn} onPress={onPressShare}>
           <View style={styles.btnShare}>
             <MemoIc_share height={20} width={22} />
           </View>
         </TouchableOpacity>
         {disableComment ? (
-          <View testID='disableComment' style={styles.btn}>
+          <View testID="disableComment" style={styles.btn}>
             <View style={styles.btnComment}>
               <MemoIc_comment height={24} width={25} />
             </View>
           </View>
         ) : (
-          <TouchableOpacity testID='availableComment' style={styles.btn} onPress={onPressComment}>
+          <TouchableOpacity testID="availableComment" style={styles.btn} onPress={onPressComment}>
             <View style={styles.btnComment}>
               <MemoIc_comment height={24} width={25} />
             </View>
@@ -82,7 +89,7 @@ const Footer = ({
           <Text style={styles.text}>{totalComment}</Text>
         </View>
       ) : (
-        <TouchableOpacity style={{ flex: 1 }} onPress={onPressComment}>
+        <TouchableOpacity style={{flex: 1}} onPress={onPressComment}>
           <View style={styles.totalCommentContainer}>
             <Text style={styles.text}>{totalComment}</Text>
           </View>
@@ -92,38 +99,37 @@ const Footer = ({
       <View style={styles.rightGroupContainer}>
         {handleBlockUi()}
         <TouchableOpacity
-          testID='downVoteBtn'
+          testID="downVoteBtn"
           disabled={loadingVote}
           style={styles.btn}
           onPress={onPressDownVote}>
           <View style={styles.btnDownvote}>
             {statusVote === 'downvote' ? (
-              <View testID='downvoteOn' >
+              <View testID="downvoteOn">
                 <MemoIc_arrow_down_vote_on width={20} height={18} />
               </View>
             ) : (
-              <View testID='downvoteOff' >
-                  <MemoIc_arrow_down_vote_off width={20} height={18} />
-
+              <View testID="downvoteOff">
+                <MemoIc_arrow_down_vote_off width={20} height={18} />
               </View>
             )}
           </View>
         </TouchableOpacity>
 
-        <Text style={styles.vote(totalVote)}>{totalVote}</Text>
+        <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
 
         <TouchableOpacity
-          testID='pressUpvote'
+          testID="pressUpvote"
           disabled={loadingVote}
           style={styles.btn}
           onPress={onPressUpvote}>
           <View style={styles.btnUpvote}>
             {statusVote === 'upvote' ? (
-              <View testID='votingUpOn' >
+              <View testID="votingUpOn">
                 <MemoIc_arrow_upvote_on width={20} height={18} />
               </View>
             ) : (
-              <View testID='votingUpOff' >
+              <View testID="votingUpOff">
                 <MemoIc_arrow_upvote_off width={20} height={18} />
               </View>
             )}
@@ -136,79 +142,79 @@ const Footer = ({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    alignItems: 'center'
     // height: '100%',
   },
   leftGroupContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
     // marginLeft: 8,
   },
   rightGroupContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
     // marginRight: 8,
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
     // justifyContent: 'space-between',
     // marginHorizontal: 10,
   },
   text: {
     ...FONTS.body3,
-    color: '#C4C4C4',
+    color: '#C4C4C4'
   },
-  vote: (count) => ({
+  vote: (colorBasedCount) => ({
     ...FONTS.body3,
     textAlign: 'center',
     width: 26,
-    color: count > 0 ? '#00ADB5' : count < 0 ? '#FF2E63' : '#C4C4C4',
+    color: colorBasedCount
   }),
   btn: {
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    display: 'flex',
+    display: 'flex'
   },
   btnShare: {
     height: '100%',
     justifyContent: 'center',
     paddingRight: 13.5,
-    paddingLeft: 18,
+    paddingLeft: 18
     // backgroundColor: 'red',
   },
   btnComment: {
     height: '100%',
     justifyContent: 'center',
     paddingLeft: 13.5,
-    paddingRight: 10,
+    paddingRight: 10
     // backgroundColor: 'blue',
   },
   btnBlock: {
     height: '100%',
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
     // backgroundColor: 'gray',
   },
   btnDownvote: {
     height: '100%',
     justifyContent: 'center',
-    paddingHorizontal: 11,
+    paddingHorizontal: 11
     // backgroundColor: 'green',
   },
   btnUpvote: {
     height: '100%',
     justifyContent: 'center',
     paddingLeft: 11,
-    paddingRight: 22,
+    paddingRight: 22
     // backgroundColor: 'brown',
   },
   totalCommentContainer: {
     flex: 1,
     // backgroundColor: 'blue',
     height: '100%',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   buttonFollowing: {
     width: 88,
@@ -218,14 +224,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.bondi_blue,
-    borderRadius: 8,
+    borderRadius: 8
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue,
-  },
+    color: colors.bondi_blue
+  }
 });
 
 Footer.propTypes = {
@@ -238,7 +244,7 @@ Footer.propTypes = {
   totalVote: PropTypes.number,
   totalComment: PropTypes.number,
   statusVote: PropTypes.oneOf(['none', 'upvote', 'downvote']),
-  isSelf: PropTypes.bool,
+  isSelf: PropTypes.bool
 };
 
 export default Footer;

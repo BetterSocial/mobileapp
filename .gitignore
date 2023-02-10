@@ -66,10 +66,12 @@ buck-out/
 android/keystore.properties
 android/app/debug.keystore
 android/app/google-services.json
+android/app/src/dev/google-services.json
+android/app/src/prod/google-services.json
+android/app/src/release/google-services.json
 android/app/keystore.properties
+
 yarn.lock
-yarn.lock
-./yarn.lock
 android/debug.keystore
 
 # Jest testing

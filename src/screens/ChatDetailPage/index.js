@@ -1,66 +1,61 @@
 import * as React from 'react';
 import moment from 'moment';
+import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
 import {
-  Channel,
-  Chat,
-  MessageInput,
-  MessageList,
-  Streami18n
-} from 'stream-chat-react-native';
-import { KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { MessageSystem } from 'stream-chat-react-native-core'
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
+import {MessageSystem} from 'stream-chat-react-native-core';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
-import { COLORS } from '../../utils/theme';
-import { Context } from '../../context';
-import { CustomMessageSystem } from '../../components';
-import { fonts } from '../../utils/fonts';
-import { setAsset, setParticipants } from '../../context/actions/groupChat';
-import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {CustomMessageSystem} from '../../components';
+import {fonts} from '../../utils/fonts';
+import {setAsset, setParticipants} from '../../context/actions/groupChat';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const streami18n = new Streami18n({
-  language: 'en',
+  language: 'en'
 });
 
 const ChatDetailPage = () => {
   const [clients] = React.useContext(Context).client;
   const [channelClient] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
-  const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
   const messageSystemCustom = (props) => {
-
-    const { message, channel } = props;
-    if(channel?.data.channel_type === 2 || channel?.data.channel_type === 3) return <CustomMessageSystem text={`${message.user.name} has joined the group`} />
+    const {message, channel} = props;
+    if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
+      return <CustomMessageSystem text={`${message.user.name} has joined the group`} />;
 
     if (message.is_add) {
       if (message.only_to_user_show) {
         if (message.only_to_user_show === clients.client.user.id) {
-          return <CustomMessageSystem text={message.text} />
+          return <CustomMessageSystem text={message.text} />;
         }
-          return <View />;
-
+        return <View />;
       }
       if (message.disable_to_user === clients.client.user.id) {
-          return <View />
+        return <View />;
       }
-      return <CustomMessageSystem text={message.text} />
-
-
+      return <CustomMessageSystem text={message.text} />;
     }
-    if(message.system_user === clients.client.user.id) {
-      return null
-
+    if (message.system_user === clients.client.user.id) {
+      return null;
     }
-    return <MessageSystem {...props} />
-
-
-  }
-
+    return <MessageSystem {...props} />;
+  };
 
   const defaultActionsAllowed = (messageActionsProp) => {
     const {
@@ -72,7 +67,7 @@ const ChatDetailPage = () => {
       error,
       isMyMessage,
       quotedReply,
-      retry,
+      retry
     } = messageActionsProp;
 
     const options = [];
@@ -103,63 +98,65 @@ const ChatDetailPage = () => {
   const searchUserMessages = async (channelID) => {
     const messages = await clients.client.search(
       {
-        cid: channelID,
+        cid: channelID
       },
-      { 'attachments.type': { $in: ['image'] } },
+      {'attachments.type': {$in: ['image']}}
     );
     setAsset(messages.results, dispatch);
   };
   const testDate = (v) => v;
 
   if (clients.client && channelClient.channel) {
-    return (<SafeAreaView>
-      <StatusBar backgroundColor="white" translucent={false} />
-      <Chat client={clients.client} i18nInstance={streami18n}>
-        <Channel
-          channel={channelClient.channel}
-          DateHeader={CustomDateHeader}
-          hasFilePicker={false}
-          ImageUploadPreview={<ImageSendPreview />}
-          keyboardVerticalOffset={0}
-          mutesEnabled={false}
-          reactionsEnabled={false}
-          readEventsEnabled={true}
-          threadRepliesEnabled={false}
-          MessageStatus={ChatStatusIcon}
-          MessageSystem={props => messageSystemCustom(props)}
-          // MessageContent={(props) => <CustomMessageContent {...props} />}
-          messageActions={(props) => defaultActionsAllowed(props)}
-          ReactionList={() => null}>
+    return (
+      <SafeAreaView>
+        <StatusBar backgroundColor="white" translucent={false} />
+        <Chat client={clients.client} i18nInstance={streami18n}>
+          <Channel
+            channel={channelClient.channel}
+            DateHeader={CustomDateHeader}
+            hasFilePicker={false}
+            ImageUploadPreview={<ImageSendPreview />}
+            keyboardVerticalOffset={0}
+            mutesEnabled={false}
+            reactionsEnabled={false}
+            readEventsEnabled={true}
+            threadRepliesEnabled={false}
+            MessageStatus={ChatStatusIcon}
+            MessageSystem={(props) => messageSystemCustom(props)}
+            // MessageContent={(props) => <CustomMessageContent {...props} />}
+            messageActions={(props) => defaultActionsAllowed(props)}
+            ReactionList={() => null}>
             <>
-            <Header />
-            <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior={Platform.OS === 'ios' ? 'height' : 'padding'} keyboardVerticalOffset={insets.top} style={{ flex: 1 }}>
+              <Header />
+              <KeyboardAvoidingView
+                enabled={Platform.OS === 'ios'}
+                behavior={Platform.OS === 'ios' ? 'height' : 'padding'}
+                keyboardVerticalOffset={insets.top}
+                style={{flex: 1}}>
+                <MessageList
+                  tDateTimeParser={testDate}
+                  InlineDateSeparator={CustomInlineDateSeparator}
+                />
 
-              <MessageList
-                tDateTimeParser={testDate}
-                InlineDateSeparator={CustomInlineDateSeparator}
-
-              />
-
-            <MessageInput Input={InputMessage} />
-            </KeyboardAvoidingView>
+                <MessageInput Input={InputMessage} />
+              </KeyboardAvoidingView>
             </>
-
-        </Channel>
-      </Chat>
-    </SafeAreaView>
+          </Channel>
+        </Chat>
+      </SafeAreaView>
     );
   }
   return <View />;
 };
 
-const CustomInlineDateSeparator = ({ date }) => {
+const CustomInlineDateSeparator = ({date}) => {
   const newDate = moment(date).locale('en').format('MMMM D, YYYY');
   return <Text style={[styles.date, styles.inlineDate]}>{newDate}</Text>;
 };
 
 const CustomDateHeader = () => null;
 
-export default withInteractionsManaged (ChatDetailPage);
+export default withInteractionsManaged(ChatDetailPage);
 const styles = StyleSheet.create({
   date: {
     backgroundColor: COLORS.blackgrey,
@@ -169,13 +166,13 @@ const styles = StyleSheet.create({
     borderRadius: 19,
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    lineHeight: 16.94,
+    lineHeight: 16.94
   },
   dateHeader: {
-    marginTop: 14,
+    marginTop: 14
   },
   inlineDate: {
     alignSelf: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12
+  }
 });

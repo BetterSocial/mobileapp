@@ -1,66 +1,68 @@
 import * as React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Toast from 'react-native-simple-toast';
-import { Dimensions, FlatList, StatusBar, StyleSheet, View } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
 import Header from './elements/Header';
-import Loading from '../Loading';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
 import Navigation from './elements/Navigation';
 import ProfileTiktokScroll from '../ProfileScreen/elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
-import { COLORS } from '../../utils/theme';
-import { Context } from '../../context';
-import { addIFollowByID, setIFollow } from '../../context/actions/news';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {addIFollowByID, setIFollow} from '../../context/actions/news';
 import {
   checkBlockDomainPage,
   followDomain,
   getDetailDomains,
   getDomainIdIFollow,
   getProfileDomain,
-  unfollowDomain,
+  unfollowDomain
 } from '../../service/domain';
-import { colors } from '../../utils/colors';
-import { downVoteDomain, upVoteDomain } from '../../service/vote';
-import { getUserId } from '../../utils/users';
-import { setDomainData, setProfileDomain, setSelectedLastDomain } from '../../context/actions/domainAction';
-import { unblokDomain } from '../../service/blocking';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import {colors} from '../../utils/colors';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
+import {getUserId} from '../../utils/users';
+import {
+  setDomainData,
+  setProfileDomain,
+  setSelectedLastDomain
+} from '../../context/actions/domainAction';
+import {unblokDomain} from '../../service/blocking';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
-const { height, width } = Dimensions.get('screen');
-const headerHeight = 0;
+const {height} = Dimensions.get('screen');
 
 const DomainScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const refBlockDomainComponent = React.useRef(null);
-  const [dataDomain, setDataDomain] = React.useState(route.params.item);
-  const [data, setData] = React.useState([]);
+  const [dataDomain] = React.useState(route.params.item);
+  const [data] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [profile, setProfile] = React.useState({});
-  const [domain, setDomain] = React.useState(route.params.item.og.domain);
+  const [domain] = React.useState(route.params.item.og.domain);
   const [idFromToken, setIdFromToken] = React.useState('');
   const [domainFollowers, setDomainFollowers] = React.useState(0);
-  const [isBlocked, setIsBlocked] = React.useState(false)
+  const [isBlocked, setIsBlocked] = React.useState(false);
   const [follow, setFollow] = React.useState(false);
   const [domainStore, dispatchDomain] = React.useContext(Context).domains;
-  const [postOffset, setPostOffset] = React.useState(0)
+  const [postOffset, setPostOffset] = React.useState(0);
 
   const tiktokScrollRef = React.useRef(null);
-  const [headerHeightRef, setHeaderHeightRef] = React.useState(0)
+  const [headerHeightRef, setHeaderHeightRef] = React.useState(0);
 
   const iddomain = dataDomain.content.domain_page_id;
   const [dataFollow] = React.useState({
     domainId: iddomain,
-    source: 'domain_page',
+    source: 'domain_page'
   });
 
   const [news, dispatch] = React.useContext(Context).news;
-  const { ifollow } = news;
+  const {ifollow} = news;
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -77,17 +79,17 @@ const DomainScreen = () => {
   }, []);
 
   React.useEffect(() => {
-    checkBlockDomain()
-  }, [])
+    checkBlockDomain();
+  }, []);
 
   const checkBlockDomain = async () => {
-    const processCheckBlock = await checkBlockDomainPage(iddomain)
+    const processCheckBlock = await checkBlockDomainPage(iddomain);
     if (processCheckBlock.data) {
-      setIsBlocked(true)
+      setIsBlocked(true);
     } else {
-      setIsBlocked(false)
+      setIsBlocked(false);
     }
-  }
+  };
 
   const getIFollow = async () => {
     if (ifollow.length === 0) {
@@ -99,9 +101,8 @@ const DomainScreen = () => {
   };
 
   const init = async (withLoading = false) => {
-
     const domainName = dataDomain.og.domain;
-    if (domainName != domainStore.selectedLastDomain) {
+    if (domainName !== domainStore.selectedLastDomain) {
       if (withLoading) {
         setLoading(true);
       }
@@ -114,13 +115,12 @@ const DomainScreen = () => {
         navigation.goBack();
       }
 
-      await getDomainFeed(postOffset)
+      await getDomainFeed(postOffset);
 
       if (withLoading) {
         setLoading(false);
       }
     }
-
   };
 
   const getDomainFeed = async (offset) => {
@@ -128,18 +128,18 @@ const DomainScreen = () => {
 
     if (res.code === 200) {
       setDomainFollowers(res.followers);
-      if (offset === 0) setDomainData([...res.data, { dummy: true }], dispatchDomain)
-      else {
-        const clonedFeeds = [...feeds]
-        clonedFeeds.splice(feeds.length - 1, 0, ...data)
+      if (offset === 0) setDomainData([...res.data, {dummy: true}], dispatchDomain);
+      else if (offset > 0) {
+        const clonedFeeds = [...domainStore?.domains];
+        clonedFeeds.splice(domainStore?.domains?.length - 1, 0, ...data);
         setDomainData(clonedFeeds, dispatchDomain);
       }
       setSelectedLastDomain(dataDomain.og.domain, dispatchDomain);
       setLoading(false);
     }
 
-    setPostOffset(parseInt(postOffset) + 10)
-  }
+    setPostOffset(parseInt(postOffset, 10) + 10);
+  };
 
   React.useEffect(() => {
     init(true);
@@ -164,26 +164,24 @@ const DomainScreen = () => {
     navigation.navigate('DetailDomainScreen', {
       item: {
         ...itemNews,
-        score: dataDomain?.domain?.credderScore ,
+        score: dataDomain?.domain?.credderScore,
         follower: domainFollowers
       }
     });
   };
 
-  const upvoteNews = async (news) => {
-    upVoteDomain(news);
+  const upvoteNews = async (newsParam) => {
+    upVoteDomain(newsParam);
   };
 
-  const downvoteNews = async (news) => {
-    downVoteDomain(news);
+  const downvoteNews = async (newsParam) => {
+    downVoteDomain(newsParam);
   };
-  const onReaction = async (v) => {
-    refBlockDomainComponent.current.openBlockDomain()
+  const onReaction = async () => {
+    refBlockDomainComponent.current.openBlockDomain();
   };
 
-  const domainImage = dataDomain.domain
-    ? dataDomain.domain.image
-    : dataDomain.og.domainImage;
+  const domainImage = dataDomain.domain ? dataDomain.domain.image : dataDomain.og.domainImage;
 
   const handleFollow = async () => {
     setFollow(true);
@@ -194,9 +192,9 @@ const DomainScreen = () => {
     if (res.code === 200) {
       addIFollowByID(
         {
-          domain_id_followed: iddomain,
+          domain_id_followed: iddomain
         },
-        dispatch,
+        dispatch
       );
       init();
     } else {
@@ -220,23 +218,23 @@ const DomainScreen = () => {
     }
   };
 
-  const checkBlock = (data) => {
-    if (!data) {
-      setIsBlocked(false)
+  const checkBlock = (dataParam) => {
+    if (!dataParam) {
+      setIsBlocked(false);
     } else {
-      setIsBlocked(true)
+      setIsBlocked(true);
     }
-  }
+  };
 
   const onUnblockDomain = async () => {
-    await unblokDomain({ domain_page_id: iddomain }).then(() => {
-      checkBlockDomain()
-    })
-  }
+    await unblokDomain({domain_page_id: iddomain}).then(() => {
+      checkBlockDomain();
+    });
+  };
 
-  const __handleOnEndReached = () => {
-    getDomainFeed(postOffset)
-  }
+  const handleOnEndReached = () => {
+    getDomainFeed(postOffset);
+  };
 
   if (loading) {
     return (
@@ -252,16 +250,20 @@ const DomainScreen = () => {
       <ProfileTiktokScroll
         ref={tiktokScrollRef}
         data={domainStore.domains}
-        onEndReach={__handleOnEndReached}
+        onEndReach={handleOnEndReached}
         snapToOffsets={(() => {
-          const posts = domainStore.domains.map((item, index) => headerHeightRef + (index * dimen.size.DOMAIN_CURRENT_HEIGHT))
-          return [headerHeightRef, ...posts]
+          const posts = domainStore.domains.map(
+            (item, index) => headerHeightRef + index * dimen.size.DOMAIN_CURRENT_HEIGHT
+          );
+          return [headerHeightRef, ...posts];
         })()}
         ListHeaderComponent={
-          <View style={{ backgroundColor: 'transparent' }} onLayout={(event) => {
-            const headerHeightLayout = event.nativeEvent.layout.height
-            setHeaderHeightRef(headerHeightLayout)
-          }}>
+          <View
+            style={{backgroundColor: 'transparent'}}
+            onLayout={(event) => {
+              const headerHeightLayout = event.nativeEvent.layout.height;
+              setHeaderHeightRef(headerHeightLayout);
+            }}>
             <Header
               image={domainImage}
               description={domainStore.profileDomain.short_description}
@@ -281,30 +283,29 @@ const DomainScreen = () => {
             />
           </View>
         }>
-
-        {
-          ({ item, index }) => {
-            const dummyItemHeight = height - dimen.size.DOMAIN_CURRENT_HEIGHT - 44 - 18 - StatusBar.currentHeight;
-            if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
-            return (
-              <RenderItem
-                key={index}
-                item={item}
-                score={dataDomain.domain.credderScore}
-                image={profile.logo}
-                onPressComment={(itemNews) => handleOnPressComment(itemNews)}
-                onPressUpvote={(news) => upvoteNews(news)}
-                onPressDownVote={(news) => downvoteNews(news)}
-                selfUserId={idFromToken}
-                onPressBlock={() => onReaction(0)}
-                follow={follow}
-                follower={domainFollowers}
-                handleFollow={handleFollow}
-                handleUnfollow={handleUnfollow}
-                onPressShare={ShareUtils.shareDomain}
-              />
-            );
-          }}
+        {({item, index}) => {
+          const dummyItemHeight =
+            height - dimen.size.DOMAIN_CURRENT_HEIGHT - 44 - 18 - StatusBar.currentHeight;
+          if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>;
+          return (
+            <RenderItem
+              key={index}
+              item={item}
+              score={dataDomain.domain.credderScore}
+              image={profile.logo}
+              onPressComment={(itemNews) => handleOnPressComment(itemNews)}
+              onPressUpvote={(newsParam) => upvoteNews(newsParam)}
+              onPressDownVote={(newsParam) => downvoteNews(newsParam)}
+              selfUserId={idFromToken}
+              onPressBlock={onReaction}
+              follow={follow}
+              follower={domainFollowers}
+              handleFollow={handleFollow}
+              handleUnfollow={handleUnfollow}
+              onPressShare={ShareUtils.shareDomain}
+            />
+          );
+        }}
       </ProfileTiktokScroll>
 
       <BlockDomainComponent
@@ -312,30 +313,30 @@ const DomainScreen = () => {
         domain={domain}
         domainId={dataDomain.content.domain_page_id}
         screen="domain_screen"
-        getValueBlock={(data) => checkBlock(data)}
+        getValueBlock={(dataParam) => checkBlock(dataParam)}
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  list: { flex: 1 },
-  dummyItem: (height) => ({
-      height,
-      backgroundColor: colors.gray1
-    }),
+  list: {flex: 1},
+  dummyItem: (heightParam) => ({
+    height: heightParam,
+    backgroundColor: colors.gray1
+  }),
   container: {
     flex: 1,
     // backgroundColor: COLORS.gray1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.white
   },
   height: (h) => ({
-    height: h,
+    height: h
   }),
   linearGradient: {
-    height: 8,
+    height: 8
   },
-  containerLoading: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  containerLoading: {flex: 1, justifyContent: 'center', alignItems: 'center'}
 });
 
 export default withInteractionsManaged(DomainScreen);
