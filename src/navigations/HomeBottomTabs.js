@@ -138,40 +138,6 @@ function HomeBottomTabs({navigation}) {
     }
   }, [initialStartup, otherProfileData]);
 
-  // const renderTabLabelIcon =
-  //   (componentType) =>
-  //   // eslint-disable-next-line react/display-name
-  //   ({color}) => {
-  //     if (componentType === 'Feed') {
-  //       return (
-  //         <View style={styles.center}>
-  //           <MemoFeed fill={color} />
-  //         </View>
-  //       );
-  //     }
-  //     if (componentType === 'ChannelList') {
-  //       return (
-  //         <View style={styles.center}>
-  //           <MemoHome fill={color} />
-  //         </View>
-  //       );
-  //     }
-  //     if (componentType === 'News') {
-  //       return (
-  //         <View>
-  //           <MemoNews fill={color} />
-  //         </View>
-  //       );
-  //     }
-
-  //     return (
-  //       <View style={styles.center}>
-  //         <MemoProfileIcon />
-  //       </View>
-  //     );
-  //   };
-  // // eslint-disable-next-line react/display-name
-
   return (
     <View style={styles.container}>
       <Tab.Navigator

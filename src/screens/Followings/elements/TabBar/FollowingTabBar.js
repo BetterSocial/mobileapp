@@ -1,14 +1,11 @@
 import * as React from 'react';
 import Animated from 'react-native-reanimated';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {useNavigation} from '@react-navigation/core';
 
 import {colors} from '../../../../utils/colors';
 import {fonts} from '../../../../utils/fonts';
 
-const MyTabBar = ({state, descriptors, position}) => {
-  const navigation = useNavigation();
-
+const MyTabBar = ({state, descriptors, position, navigation}) => {
   const getLabel = (options, route) => {
     if (options?.tabBarLabel) return options.topBarLabel;
     if (options?.title) return options.title;
