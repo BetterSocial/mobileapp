@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, TouchableNativeFeedback, View, Text} from 'react-native';
+import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 
+import IconPollMine from '../../assets/icon/IconPollMine';
+import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
+import {COLORS} from '../../utils/theme';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
-import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
-import IconPollMine from '../../assets/icon/IconPollMine';
 
 const PollOptions = ({
   mypoll,
@@ -36,9 +36,13 @@ const PollOptions = ({
 
   // eslint-disable-next-line consistent-return
   const renderPercentageBar = () => {
-    const percentage = `${
-      !optionPercentage ? 0 : optionPercentage > 100 ? 100 : optionPercentage
-    }%`;
+    const renderPercentage = () => {
+      if (!optionPercentage) return 0;
+      if (optionPercentage > 100) return 100;
+      return optionPercentage;
+    };
+
+    const percentage = `${renderPercentage()}%`;
     if (isexpired) {
       return (
         <View testID="isExpiredPollOption" style={styles.expiredPercentageBar(percentage, isMax)} />

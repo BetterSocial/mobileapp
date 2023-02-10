@@ -4,6 +4,7 @@ import IconEn from 'react-native-vector-icons/Entypo';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import BlockComponent from '../BlockComponent';
 import ButtonHightlight from '../ButtonHighlight';
 import Image from '../Image';
 import MemoCommentReply from '../../assets/icon/CommentReply';
@@ -18,7 +19,6 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {removeWhiteSpace} from '../../utils/Utils';
-import BlockComponent from '../BlockComponent';
 
 const Comment = ({
   user,
@@ -189,6 +189,11 @@ const Comment = ({
 export const isEqual = (prevProps, nextProps) => prevProps.comment === nextProps.comment;
 export default React.memo(Comment);
 
+const isLastBorderColor = (isLast, level) => {
+  if (isLast && level > 0) return colors.transparent;
+  return colors.gray1;
+};
+
 const styles = StyleSheet.create({
   vote: (colorBasedVote) => ({
     ...FONTS.body3,
@@ -211,7 +216,7 @@ const styles = StyleSheet.create({
   container: ({isLast, style, level, showLeftConnector}) => ({
     width: '100%',
     borderLeftWidth: showLeftConnector ? 1 : 0,
-    borderLeftColor: isLast ? (level === 0 ? colors.gray1 : 'transparent') : colors.gray1,
+    borderLeftColor: isLastBorderColor(isLast, level),
     ...style
   }),
   flexStartContainer: {

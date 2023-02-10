@@ -283,7 +283,7 @@ const DomainScreen = () => {
               onPressUpvote={(newsParam) => upvoteNews(newsParam)}
               onPressDownVote={(newsParam) => downvoteNews(newsParam)}
               selfUserId={idFromToken}
-              onPressBlock={() => onReaction(0)}
+              onPressBlock={onReaction}
               follow={follow}
               follower={domainFollowers}
               handleFollow={handleFollow}
