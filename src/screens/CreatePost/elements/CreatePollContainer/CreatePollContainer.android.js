@@ -8,6 +8,7 @@ import MemoIc_arrow_right from '../../../../assets/icons/Ic_arrow_right';
 import PollItem from '../PollItem';
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
 import {colors} from '../../../../utils/colors';
+import {getDurationTimeText} from '../../../../utils/string/StringUtils';
 
 function CreatePollContainer({
   onremoveallpoll = () => {},
@@ -39,26 +40,6 @@ function CreatePollContainer({
   const [pickerHour, setPickerHour] = React.useState(selectedtime.hour);
   const [pickerMinute, setPickerMinute] = React.useState(selectedtime.minute);
 
-  const getHourText = (day, hourParam) => {
-    if (day > 0 && hourParam > 0) return `, ${hourParam}h`;
-    if (day === 0 && hourParam > 0) return ` ${hourParam}h`;
-    return '';
-  };
-
-  const getMinuteText = (minuteParam, hourParam) => {
-    if (hourParam > 0 && minuteParam > 0) return `, ${minuteParam}m`;
-    if (hourParam === 0 && minuteParam > 0) return ` ${minuteParam}m`;
-    return '';
-  };
-
-  const getDurationTimeText = () => {
-    const dayText = selectedtime.day > 0 ? `${selectedtime.day} Day(s)` : '';
-    const hourText = getHourText(selectedtime?.day, selectedtime?.hour);
-    const minuteText = getMinuteText(selectedtime?.hour, selectedtime?.minute);
-
-    return `${dayText}${hourText}${minuteText}`;
-  };
-
   return (
     <View style={S.createpollcontainer}>
       {polls.map((item, index) => (
@@ -85,7 +66,7 @@ function CreatePollContainer({
       <TouchableOpacity style={S.polldurationbutton} onPress={() => setIsDurationModalShown(true)}>
         <View style={S.row}>
           <Text style={S.fillparenttext}>Duration</Text>
-          <Text style={S.polldurationbuttontext}>{getDurationTimeText()}</Text>
+          <Text style={S.polldurationbuttontext}>{getDurationTimeText(selectedtime)}</Text>
           <MemoIc_arrow_right width={8} height={12} style={S.rightarrow} />
         </View>
       </TouchableOpacity>

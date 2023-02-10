@@ -27,7 +27,6 @@ function FollowingScreen(props) {
       return (
         <Header
           title={profileState.navbarTitle}
-          // containerStyle={styles.header}
           titleStyle={S.headerTitle}
           onPress={() => navigation.goBack()}
           isCenter
@@ -116,12 +115,6 @@ function FollowingScreen(props) {
 export default withInteractionsManagedNoStatusBar(FollowingScreen);
 
 const S = StyleSheet.create({
-  container: {
-    paddingHorizontal: 22,
-    paddingVertical: 20,
-    display: 'flex',
-    flexDirection: 'column'
-  },
   headerTitle: {fontSize: 16, fontFamily: fonts.inter[600], textAlign: 'center'},
   containertitle: {
     fontSize: 16
@@ -133,22 +126,5 @@ const S = StyleSheet.create({
     borderBottomColor: '#00000050',
     borderBottomWidth: 1,
     paddingHorizontal: 4
-  },
-
-  singletab: {
-    flex: 1,
-    paddingLeft: 16
-  },
-
-  singletabtext: {
-    fontFamily: fonts.inter[500],
-    textAlign: 'left',
-    fontSize: 14,
-    paddingVertical: 10
-  },
-
-  viewborderbottom: {
-    borderBottomColor: colors.holytosca,
-    borderBottomWidth: 1
   }
 });

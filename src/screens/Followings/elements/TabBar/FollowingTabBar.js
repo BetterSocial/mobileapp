@@ -54,17 +54,6 @@ const MyTabBar = ({state, descriptors, position, navigation}) => {
 };
 
 const S = StyleSheet.create({
-  container: {
-    paddingHorizontal: 22,
-    paddingVertical: 20,
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  headerTitle: {fontSize: 16, fontFamily: fonts.inter[600], textAlign: 'center'},
-  containertitle: {
-    fontSize: 16
-  },
-
   toptabcontainer: {
     flexDirection: 'row',
     backgroundColor: colors.white,

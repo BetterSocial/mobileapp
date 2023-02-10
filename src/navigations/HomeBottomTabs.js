@@ -7,6 +7,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilValue} from 'recoil';
 
 import FirebaseConfig from '../configs/FirebaseConfig';
+import HomeTabBarLabel from './HomeTabBarLabel';
 import UniversalLink from '../configs/UniversalLink';
 import renderTabLabelIcon from '../components/BottomTab/TabLabelIcon';
 import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
@@ -158,18 +159,7 @@ function HomeBottomTabs({navigation}) {
         }}
         screenOptions={({navigation: screenOptionsNavigation}) => ({
           activeTintColor: colors.holytosca,
-          tabBarLabel: () => (
-            <View
-              style={[
-                styles.badge,
-                {
-                  backgroundColor: screenOptionsNavigation.isFocused()
-                    ? colors.holytosca
-                    : 'transparent'
-                }
-              ]}
-            />
-          )
+          tabBarLabel: () => HomeTabBarLabel(screenOptionsNavigation)
         })}>
         <Tab.Screen
           name="Feed"
@@ -222,13 +212,6 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     width: '100%'
-  },
-  badge: {
-    height: 7,
-    width: 7,
-    position: 'absolute',
-    bottom: 3,
-    borderRadius: 3.5
   },
   center: {
     alignItems: 'center',
