@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
 
-import ItemListLarge from '../../components/Blocking/ItemListLarge';
+import ItemListLarge from './ItemListLarge';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
@@ -15,7 +15,7 @@ const BlockProfile = ({refBlockUser, onSelect, username, isBlocker}) => {
       label: `Block ${username} indefinitely`,
       desc: 'You will not be able to see each other’s posts, or message each other. The user’s reach will be reduced across BetterSocial, in particular for this post.',
       iconReght: false,
-      blocker: false,
+      blocker: false
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ const BlockProfile = ({refBlockUser, onSelect, username, isBlocker}) => {
       label: `Block & report ${username}`,
       desc: 'This account is fake, hacked, or involved in criminal activity. You will need to provide additional information to help us take consequences.',
       iconReght: true,
-      blocker: false,
+      blocker: false
     },
     {
       id: 3,
@@ -31,8 +31,8 @@ const BlockProfile = ({refBlockUser, onSelect, username, isBlocker}) => {
       label: `Unblock ${username}`,
       desc: '',
       iconReght: false,
-      blocker: true,
-    },
+      blocker: true
+    }
   ];
 
   if (isBlocker) {
@@ -49,14 +49,14 @@ const BlockProfile = ({refBlockUser, onSelect, username, isBlocker}) => {
         closeOnPressMask={true}
         customStyles={{
           container: styles.container,
-          draggableIcon: styles.draggableIcon,
+          draggableIcon: styles.draggableIcon
         }}>
         <Text style={styles.title}>What do you want to do?</Text>
         <Text style={styles.desc}>
-          Blocking a user will not just remove their post from your feed, but
-          also reduce their visibility for all other users.
+          Blocking a user will not just remove their post from your feed, but also reduce their
+          visibility for all other users.
         </Text>
-        {data.map((item, index) => (
+        {data.map((item) => (
           <ItemListLarge
             key={item.id}
             id={item.id}
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[600],
     fontSize: 18,
     color: '#000',
-    marginLeft: 21,
+    marginLeft: 21
   },
   desc: {
     color: colors.gray,
@@ -87,15 +87,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginHorizontal: 21,
     marginTop: 17,
-    marginBottom: 29,
+    marginBottom: 29
   },
   container: {
     height: 'auto',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopLeftRadius: 20
   },
   draggableIcon: {
     backgroundColor: colors.alto,
-    width: 60,
-  },
+    width: 60
+  }
 });

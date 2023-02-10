@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { useNavigation } from '@react-navigation/core';
+import LinearGradient from 'react-native-linear-gradient';
+import {Dimensions, StyleSheet, View} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 
 import Content from '../../FeedScreen/Content';
 import ContentLink from '../../FeedScreen/ContentLink';
@@ -15,13 +15,12 @@ import {
   POST_TYPE_POLL,
   POST_TYPE_STANDARD
 } from '../../../utils/constants';
-import { Context } from '../../../context';
-import { Footer, PreviewComment } from '../../../components';
-import { getCountCommentWithChild } from '../../../utils/getstream';
-import { linkContextScreenParamBuilder } from '../../../utils/navigation/paramBuilder';
-import { showScoreAlertDialog } from '../../../utils/Utils';
+import {Footer, PreviewComment} from '../../../components';
+import {getCountCommentWithChild} from '../../../utils/getstream';
+import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
+import {showScoreAlertDialog} from '../../../utils/Utils';
 
-const { height } = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 const getHeightReaction = () => {
   const h = Math.floor((height * 12) / 100);
@@ -54,7 +53,6 @@ const getCountVote = (item) => {
   return count;
 };
 
-
 const Item = ({
   item,
   onPress,
@@ -66,9 +64,7 @@ const Item = ({
   onPressDomain,
   onNewPollFetched,
   index = -1,
-  bottomBar = true,
-  onHeaderOptionClicked = () => { }
-
+  onHeaderOptionClicked = () => {}
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -77,8 +73,6 @@ const Item = ({
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const navigation = useNavigation();
-  const bottomHeight = bottomBar ? useBottomTabBarHeight() : 0;
-  // const bottomHeight = 0;
 
   React.useEffect(() => {
     const initial = () => {
@@ -89,22 +83,22 @@ const Item = ({
           if (comment > 0) {
             setReaction(true);
             setPreviewComment(item.latest_reactions.comment[0]);
-            return
+            return;
           }
         }
       }
 
-      setReaction(false)
+      setReaction(false);
     };
     initial();
   }, [item]);
 
-  const navigateToLinkContextPage = (item) => {
+  const navigateToLinkContextPage = (itemParam) => {
     const param = linkContextScreenParamBuilder(
-      item,
-      item.og.domain,
-      item.og.domainImage,
-      item.og.domain_page_id,
+      itemParam,
+      itemParam.og.domain,
+      itemParam.og.domainImage,
+      itemParam.og.domain_page_id
     );
     navigation.push('LinkContextScreen', param);
   };
@@ -114,7 +108,7 @@ const Item = ({
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
           const upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === selfUserId,
+            (vote) => vote.user_id === selfUserId
           );
           if (upvote !== undefined) {
             setVoteStatus('upvote');
@@ -124,7 +118,7 @@ const Item = ({
 
         if (item.latest_reactions.downvotes !== undefined) {
           const downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === selfUserId,
+            (vote) => vote.user_id === selfUserId
           );
           if (downvotes !== undefined) {
             setVoteStatus('downvote');
@@ -145,15 +139,17 @@ const Item = ({
   }, [item]);
 
   return (
-    <View style={styles.cardContainer(bottomHeight)}>
+    <View key={item.id} style={styles.cardContainer}>
       <Header
         onHeaderOptionClicked={onHeaderOptionClicked}
-        headerStyle={{ paddingHorizontal: 9 }}
-        props={item} height={getHeightHeader()}
-        showAnonymousOption={true} />
+        headerStyle={{paddingHorizontal: 9}}
+        props={item}
+        height={getHeightHeader()}
+        showAnonymousOption={true}
+      />
 
       {item.post_type === POST_TYPE_LINK && (
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <ContentLink
             index={index}
             og={item.og}
@@ -184,21 +180,25 @@ const Item = ({
           totalComment={getCountCommentWithChild(item)}
           totalVote={totalVote}
           isSelf={true}
-          onPressShare={() => ShareUtils.sharePostInProfile(item,
-            ANALYTICS_SHARE_POST_PROFILE_SCREEN,
-            ANALYTICS_SHARE_POST_PROFILE_ID
-          )}
+          onPressShare={() =>
+            ShareUtils.sharePostInProfile(
+              item,
+              ANALYTICS_SHARE_POST_PROFILE_SCREEN,
+              ANALYTICS_SHARE_POST_PROFILE_ID
+            )
+          }
           onPressComment={() => onPressComment(item)}
           onPressBlock={() => onPressBlock(item)}
           showScoreButton={true}
           onPressScore={() => showScoreAlertDialog(item)}
           onPressDownVote={() => {
             setStatusDowvote((prev) => {
+              // eslint-disable-next-line no-param-reassign
               prev = !prev;
               onPressDownVote({
                 activity_id: item.id,
                 status: prev,
-                feed_group: 'main_feed',
+                feed_group: 'main_feed'
               });
               if (prev) {
                 setVoteStatus('downvote');
@@ -217,11 +217,12 @@ const Item = ({
           }}
           onPressUpvote={() => {
             setStatusUpvote((prev) => {
+              // eslint-disable-next-line no-param-reassign
               prev = !prev;
               onPressUpvote({
                 activity_id: item.id,
                 status: prev,
-                feed_group: 'main_feed',
+                feed_group: 'main_feed'
               });
               if (prev) {
                 setVoteStatus('upvote');
@@ -247,13 +248,14 @@ const Item = ({
           <PreviewComment
             user={previewComment?.user}
             comment={previewComment?.data?.text}
-            image={previewComment?.user?.data?.profile_pic_url}
+            image={previewComment?.user.data?.profile_pic_url}
             time={previewComment?.created_at}
             totalComment={getCountCommentWithChild(item) - 1}
             onPress={onPressComment}
           />
         </View>
       )}
+      <LinearGradient colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']} style={styles.linearGradient} />
     </View>
   );
 };
@@ -266,23 +268,28 @@ export default RenderItem;
 // export default Item
 
 const styles = StyleSheet.create({
-  cardContainer: () => ({
+  cardContainer: {
     width: '100%',
     height: dimen.size.PROFILE_ITEM_HEIGHT,
     maxHeight: dimen.size.PROFILE_ITEM_HEIGHT,
+    shadowColor: '#c4c4c4',
+    shadowOffset: {
+      width: 1,
+      height: 8
+    },
+    shadowOpacity: 0.5,
     backgroundColor: 'white',
     paddingBottom: 0,
-    borderBottomColor: '#f2f2f2',
-    borderBottomWidth: 6
-
-  }),
-  paddingHorizontal: { paddingHorizontal: 20 },
-  lineAffterFooter: { backgroundColor: '#C4C4C4', height: 1 },
-  footerWrapper: (h) => ({ height: h, paddingHorizontal: 0 }),
+    borderBottomColor: 'transparent'
+    // paddingHorizontal: 9
+  },
+  paddingHorizontal: {paddingHorizontal: 20},
+  lineAffterFooter: {backgroundColor: '#C4C4C4', height: 1},
+  footerWrapper: (h) => ({height: h, paddingHorizontal: 0}),
   contentReaction: (heightReaction) => ({
     height: heightReaction
   }),
   linearGradient: {
-    height: 8,
-  },
+    height: 8
+  }
 });

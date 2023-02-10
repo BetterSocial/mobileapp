@@ -7,23 +7,20 @@ import {WheelPicker} from '@victorzimnikov/react-native-wheel-picker-android';
 import PollItem from '../PollItem';
 import MemoIcPlus from '../../../../assets/icons/ic_plus';
 import {colors} from '../../../../utils/colors';
-import {
-  MAX_POLLING_ALLOWED,
-  MIN_POLLING_ALLOWED,
-} from '../../../../utils/constants';
+import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
 import MemoIc_arrow_right from '../../../../assets/icons/Ic_arrow_right';
 
-export default function CreatePollContainer({
+function CreatePollContainer({
   onremoveallpoll = () => {},
   onaddpoll = () => {},
-  onremovesinglepoll = (index) => {},
-  onsinglepollchanged = (item, index) => {},
+  onremovesinglepoll = () => {},
+  onsinglepollchanged = () => {},
   ismultiplechoice = false,
-  onmultiplechoicechanged = (ismultiple) => {},
+  onmultiplechoicechanged = () => {},
   selectedtime = {day: 1, hour: 0, minute: 0},
-  ontimechanged = (timeobject) => {},
+  ontimechanged = () => {},
   polls,
-  expiredobject = {day: 7, hour: 24},
+  expiredobject = {day: 7, hour: 24}
 }) {
   const arrayContentToString = (arr) => {
     const newArray = arr.reduce((acc, current) => {
@@ -46,53 +43,37 @@ export default function CreatePollContainer({
   const getDurationTimeText = () => {
     const dayText = selectedtime.day > 0 ? `${selectedtime.day} Day(s)` : '';
     const hourText =
-      selectedtime.hour > 0
-        ? `${selectedtime.day > 0 ? ', ' : ' '}${selectedtime.hour}h`
-        : '';
+      selectedtime.hour > 0 ? `${selectedtime.day > 0 ? ', ' : ' '}${selectedtime.hour}h` : '';
     const minuteText =
-      selectedtime.minute > 0
-        ? `${selectedtime.hour > 0 ? ', ' : ' '}${selectedtime.minute}m`
-        : '';
+      selectedtime.minute > 0 ? `${selectedtime.hour > 0 ? ', ' : ' '}${selectedtime.minute}m` : '';
 
     return `${dayText}${hourText}${minuteText}`;
-  };
-  const setDuration = () => {
-    const selectedTime = {...selectedtime};
-    selectedTime.day = pickerDay;
-    selectedTime.hour = pickerHour;
-    selectedTime.minute = pickerMinute;
-    ontimechanged(selectedTime);
-    setIsDurationModalShown(false);
   };
 
   return (
     <View style={S.createpollcontainer}>
       {polls.map((item, index) => (
-          <PollItem
-            index={index}
-            poll={item}
-            key={`poll-item-${index}`}
-            showdeleteicon={polls.length > MIN_POLLING_ALLOWED}
-            onremovepoll={(ind) => onremovesinglepoll(ind)}
-            onpollchanged={(v) => {
-              onsinglepollchanged(v, index);
-            }}
-          />
-        ))}
+        <PollItem
+          index={index}
+          poll={item}
+          key={`poll-item-${index}`}
+          showdeleteicon={polls.length > MIN_POLLING_ALLOWED}
+          onremovepoll={(ind) => onremovesinglepoll(ind)}
+          onpollchanged={(v) => {
+            onsinglepollchanged(v, index);
+          }}
+        />
+      ))}
 
       {polls.length < MAX_POLLING_ALLOWED && (
-        <TouchableOpacity
-          onPress={() => onaddpoll()}
-          style={S.addpollitemcontainer}>
+        <TouchableOpacity onPress={() => onaddpoll()} style={S.addpollitemcontainer}>
           <MemoIcPlus width={16} height={16} style={S.addpollitemplusicon} />
         </TouchableOpacity>
       )}
 
       <View style={S.divider} />
 
-      <TouchableOpacity
-        style={S.polldurationbutton}
-        onPress={() => setIsDurationModalShown(true)}>
+      <TouchableOpacity style={S.polldurationbutton} onPress={() => setIsDurationModalShown(true)}>
         <View style={S.row}>
           <Text style={S.fillparenttext}>Duration</Text>
           <Text style={S.polldurationbuttontext}>{getDurationTimeText()}</Text>
@@ -111,9 +92,7 @@ export default function CreatePollContainer({
         />
       </View>
 
-      <TouchableOpacity
-        onPress={() => onremoveallpoll()}
-        style={S.removepollcontainer}>
+      <TouchableOpacity onPress={() => onremoveallpoll()} style={S.removepollcontainer}>
         <Text style={S.removepolltext}>Remove Poll</Text>
       </TouchableOpacity>
 
@@ -195,13 +174,13 @@ const S = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     marginTop: 16,
-    padding: 16,
+    padding: 16
   },
 
   removepollcontainer: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: 16
   },
 
   addpollitemcontainer: {
@@ -209,18 +188,18 @@ const S = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 2,
-    paddingVertical: 12,
+    paddingVertical: 12
   },
 
   addpollitemplusicon: {
     color: colors.black,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
 
   removepolltext: {
     color: colors.redalert,
     fontWeight: '600',
-    fontFamily: 'Inter-SemiBold',
+    fontFamily: 'Inter-SemiBold'
   },
 
   divider: {
@@ -228,29 +207,29 @@ const S = StyleSheet.create({
     width: '100%',
     height: 1,
     marginVertical: 8,
-    backgroundColor: colors.gray1,
+    backgroundColor: colors.gray1
   },
 
   row: {
     flexDirection: 'row',
     display: 'flex',
-    paddingVertical: 8,
+    paddingVertical: 8
   },
 
   fillparenttext: {
     flex: 1,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
 
   rightarrow: {
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
 
   polldurationbutton: {
     backgroundColor: colors.white,
     color: colors.white,
     paddingVertical: 4,
-    borderRadius: 4,
+    borderRadius: 4
   },
 
   polldurationbuttontext: {
@@ -259,18 +238,18 @@ const S = StyleSheet.create({
     paddingHorizontal: 22,
     paddingVertical: 8,
     borderRadius: 6,
-    marginEnd: 24,
+    marginEnd: 24
   },
 
   switchtext: {
     alignSelf: 'center',
-    marginRight: 16,
+    marginRight: 16
   },
 
   modalcontainer: {
     flexDirection: 'column',
     display: 'flex',
-    flex: 1,
+    flex: 1
   },
 
   parentcolumncontainer: {
@@ -279,14 +258,14 @@ const S = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 24,
     paddingHorizontal: 38,
-    borderRadius: 4,
+    borderRadius: 4
   },
 
   modalrowcontainer: {
     backgroundColor: 'white',
     flexDirection: 'row',
     display: 'flex',
-    width: '100%',
+    width: '100%'
   },
 
   pickercontainer: {
@@ -294,31 +273,33 @@ const S = StyleSheet.create({
     flexDirection: 'column',
     alignSelf: 'flex-start',
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
 
   setdurationtext: {
     fontFamily: 'Inter-SemiBold',
-    marginBottom: 22,
+    marginBottom: 22
   },
 
   pickerlabeltext: {
-    marginBottom: 32,
+    marginBottom: 32
   },
 
   bottombuttonrowcontainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
 
   buttoncontainer: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 8
   },
 
   bottombuttontext: {
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold'
+  }
 });
+
+export default CreatePollContainer;
