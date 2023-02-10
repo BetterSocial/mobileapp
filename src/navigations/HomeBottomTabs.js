@@ -108,9 +108,8 @@ function HomeBottomTabs({navigation}) {
   };
 
   const handlePushNotif = (remoteMessage) => {
-    let {channel} = remoteMessage.data;
-    channel = JSON.parse(channel);
-    if (channel.channel_type !== 3) {
+    const {data} = remoteMessage;
+    if (data.channel_type !== 3) {
       if (isIos) {
         pushNotifIos(remoteMessage);
       } else {
