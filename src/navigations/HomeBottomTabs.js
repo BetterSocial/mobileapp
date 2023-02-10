@@ -82,7 +82,7 @@ function HomeBottomTabs(props) {
     // (optional) Called when the user fails to register for remote notifications.
     // Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
     onRegistrationError(err) {
-      console.error(err.message, err);
+      console.error(err.message, err, 'bahay');
     },
     // IOS ONLY (optional): default: all - Permissions to register.
     permissions: {
@@ -191,7 +191,7 @@ function HomeBottomTabs(props) {
       {
         channelId: 'bettersosialid', // (required)
         channelName: 'bettersosial-chat', // (required)
-        playSound: false, // (optional) default: true
+        playSound: true, // (optional) default: true
         soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
@@ -266,6 +266,7 @@ function HomeBottomTabs(props) {
       if (isIos) {
         pushNotifIos(remoteMessage)
       } else {
+        console.log('masuk mas')
         pushNotifAndroid(remoteMessage)
       }
     }
