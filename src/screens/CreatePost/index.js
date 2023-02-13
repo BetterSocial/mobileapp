@@ -231,7 +231,11 @@ const CreatePost = () => {
 
   const init = async () => {
     const privacyId = await getPrivacyId();
-    if (privacyId) {
+    console.log('privacyId', privacyId);
+    if (privacyId && isInCreatePostTopicScreen) {
+      setPrivacySelect(0);
+    }
+    if (privacyId && !isInCreatePostTopicScreen) {
       setPrivacySelect(privacyId);
     }
     const durationId = await getDurationId();
