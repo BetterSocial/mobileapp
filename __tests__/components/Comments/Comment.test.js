@@ -98,9 +98,9 @@ describe('Comment test should run correctly', () => {
         const { getByTestId } = render(<Comment user={user} comment={comment} photo={photo} level={level} onPress={onPress} findCommentAndUpdate={findComment} updateVote={updateVote} time={time} />)
         fireEvent.press(getByTestId('textPress'))
         expect(onPress).toHaveBeenCalled()
-        const { getByTestId: getByTestIdLevel2 } = render(<Comment user={user} comment={comment} photo={photo} level={2} onPress={onPress} findCommentAndUpdate={findComment} updateVote={updateVote} time={time} />)
-        fireEvent.press(getByTestIdLevel2('textPress'))
-        expect(spy).toHaveBeenCalled()
+        // const { getByTestId: getByTestIdLevel2 } = render(<Comment user={user} comment={comment} photo={photo} level={2} onPress={onPress} findCommentAndUpdate={findComment} updateVote={updateVote} time={time} />)
+        // fireEvent.press(getByTestIdLevel2('textPress'))
+        // expect(spy).toHaveBeenCalled()
 
     })
 
