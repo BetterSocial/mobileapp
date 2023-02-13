@@ -13,19 +13,25 @@ jest.mock('@react-navigation/core', () => ({
   })
 }));
 
-describe('Testing Button Add Topic Post', () => {
-  //   it('should match snapshot', () => {
-  //     const {toJSON} = render(<ButtonAddPostTopic />);
-  //     expect(toJSON()).toMatchSnapshot();
-  //   });
+// eslint-disable-next-line react/display-name
+jest.mock('react-native-shadow-2', () => ({
+  ...jest.requireActual('react-native-shadow-2'),
+  Shadow: (props) => <>{props.children}</>
+}));
 
-  //   it('Should navigate to create post screen when clicked', () => {
-  //     const {getByTestId} = render(<ButtonAddPostTopic topicName={'TestTopic'} />);
-  //     fireEvent.press(getByTestId('onaddtopicbutton'));
-  //     expect(mockNavigate).toHaveBeenCalledWith('CreatePost', {
-  //       topic: 'TestTopic'
-  //     });
-  //   });
+describe('Testing Button Add Topic Post', () => {
+  it('should match snapshot', () => {
+    const {toJSON} = render(<ButtonAddPostTopic />);
+    expect(toJSON()).toMatchSnapshot();
+  });
+
+  it('Should navigate to create post screen when clicked', () => {
+    const {getByTestId} = render(<ButtonAddPostTopic topicName={'TestTopic'} />);
+    fireEvent.press(getByTestId('onaddtopicbutton'));
+    expect(mockNavigate).toHaveBeenCalledWith('CreatePost', {
+      topic: 'TestTopic'
+    });
+  });
 
   it('dummy', () => {
     expect(1).toEqual(1);
