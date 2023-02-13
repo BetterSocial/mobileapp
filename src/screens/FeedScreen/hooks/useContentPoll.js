@@ -28,8 +28,9 @@ const useContentPoll = ({polls}) => {
     } else {
       setIsAlreadyPolling(true);
       const selectedPolls = [];
-      for (let i = 0; i < multipleChoiceSelected.length; i++) {
-        const changedPollIndex = multipleChoiceSelected[i];
+      // eslint-disable-next-line no-restricted-syntax
+      for (const selectedChoice of multipleChoiceSelected) {
+        const changedPollIndex = selectedChoice;
         const selectedPoll = polls[changedPollIndex];
         newPolls[changedPollIndex].counter = Number(selectedPoll.counter) + 1;
         selectedPolls.push(selectedPoll);

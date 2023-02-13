@@ -3,17 +3,17 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
+import useContentFeed from './hooks/useContentFeed';
 import {COLORS} from '../../utils/theme';
 import {POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
-import useContentFeed from './hooks/useContentFeed';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -27,6 +27,7 @@ const Content = ({
   onNewPollFetched
 }) => {
   const navigation = useNavigation();
+  const route = useRoute();
   const devHeight = Dimensions.get('screen').height;
   const substringPostImage = devHeight / 2.25 - 40 * 4;
   const substringNoImageNoTopic = devHeight / 1.25 - 40 * 4;
@@ -43,13 +44,18 @@ const Content = ({
       }, [])
     });
   };
-
   const renderHandleTextContent = () => {
     if (images_url.length > 0) {
       return (
         <View testID="postTypePoll" style={{height: '100%', flexDirection: 'row'}}>
           <Text style={styles.textMedia}>
-            {getCaptionWithTopicStyle(message, navigation, substringPostImage, item?.topics)}{' '}
+            {getCaptionWithTopicStyle(
+              route?.params?.id,
+              message,
+              navigation,
+              substringPostImage,
+              item?.topics
+            )}{' '}
             {message.length > substringPostImage ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
             ) : null}
@@ -62,14 +68,26 @@ const Content = ({
       <View testID="postTypeStatus" style={{flex: 1}}>
         {topics.length > 0 ? (
           <Text style={styles.textMedia}>
-            {getCaptionWithTopicStyle(message, navigation, substringNoImageTopic, item?.topics)}{' '}
+            {getCaptionWithTopicStyle(
+              route?.params?.id,
+              message,
+              navigation,
+              substringNoImageTopic,
+              item?.topics
+            )}{' '}
             {message.length > substringNoImageTopic ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
             ) : null}
           </Text>
         ) : (
           <Text style={styles.textMedia}>
-            {getCaptionWithTopicStyle(message, navigation, substringNoImageNoTopic, item?.topics)}{' '}
+            {getCaptionWithTopicStyle(
+              route?.params?.id,
+              message,
+              navigation,
+              substringNoImageNoTopic,
+              item?.topics
+            )}{' '}
             {message.length > substringNoImageNoTopic ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
             ) : null}
@@ -78,7 +96,6 @@ const Content = ({
       </View>
     );
   };
-
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       <View style={styles.container}>
@@ -86,7 +103,7 @@ const Content = ({
       </View>
       {item && item.post_type === POST_TYPE_POLL ? (
         <View style={styles.containerMainText}>
-          <Text style={[styles.textMedia]}>{hashtagAtComponent(message)}</Text>
+          <Text style={styles.textMedia}>{hashtagAtComponent(message)}</Text>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
@@ -248,5 +265,8 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     height: '100%'
+    // backgroundColor: 'red'
+
+    // marginBottom: 7
   }
 });

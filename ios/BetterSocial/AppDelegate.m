@@ -20,7 +20,6 @@
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 #import "RNCConfig.h"
 
-
 static void InitializeFlipper(UIApplication *application) {
   NSDictionary *config = [RNCConfig env];
   FlipperClient *client = [FlipperClient sharedClient];

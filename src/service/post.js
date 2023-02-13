@@ -8,44 +8,46 @@ export const createPost = async (data) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(error.response.data);
+    throw new Error(error);
   }
 };
 
-export const createPollPost = async (data) => new Promise(async (resolve, reject) => {
+export const createPollPost = async (data) => {
   try {
     const resApi = await api.post(
       '/activity/post/poll',
-      data,
+      data
       // headers : {
       //   "Authorization" : getstreamToken
       // }
     );
 
-    resolve(resApi.data);
+    return resApi.data;
   } catch (error) {
     crashlytics().recordError(error.response.data);
-    reject(error);
+    throw new Error(error);
   }
-});
+};
 
-export const createFeedToken = async (data) => new Promise(async (resolve, reject) => {
+export const createFeedToken = async (data) => {
   try {
     const resApi = await api.post('/activity/create-token', data);
-    resolve(resApi.data);
+    return resApi.data;
   } catch (error) {
     crashlytics().recordError(error.response.data);
-    reject(error);
+    throw new Error(error);
   }
-});
+};
 
 export const ShowingAudience = async (privacy, location) => {
   try {
     const resApi = await api.get(
-      `/users/showing-audience-estimates?privacy=${privacy}&location=${location}`,
+      `/users/showing-audience-estimates?privacy=${privacy}&location=${location}`
     );
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
+    throw new Error(error);
   }
 };
 
@@ -72,7 +74,7 @@ export const inputSingleChoicePoll = async (polling_id, polling_option_id) => {
   try {
     const resApi = await api.post('/activity/post/poll/input', {
       polling_id,
-      polling_option_id,
+      polling_option_id
     });
     return resApi.data;
   } catch (error) {
@@ -87,7 +89,7 @@ export const viewTimePost = async (id, time, source) => {
     const resApi = api.post('/activity/viewpost', {
       post_id: id,
       view_time: time,
-      source,
+      source
     });
     return resApi.data;
   } catch (error) {
@@ -107,4 +109,14 @@ export const deletePost = async (postId) => {
     }
     return error;
   }
-}
+};
+
+export const isAuthorFollowingMe = async (postId) => {
+  try {
+    const resApi = await api.get(`/activity/post/is-author-follow-me/${postId}`);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(error?.response?.data);
+    return error;
+  }
+};

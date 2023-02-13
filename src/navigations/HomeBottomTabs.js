@@ -17,6 +17,8 @@ import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 
+import {fcmTokenService} from '../service/users';
+
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs({navigation}) {
@@ -29,8 +31,10 @@ function HomeBottomTabs({navigation}) {
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
-      if (__DEV__) {
-        console.log('NOTIFICATION:', notification);
+      if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
+        navigation.navigate('PostDetailPage', {
+          feedId: notification.data.feed_id
+        });
       }
       // process the notification
       // (required) Called when a remote is received or opened, or local notification is opened
@@ -60,8 +64,12 @@ function HomeBottomTabs({navigation}) {
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    if (enabled && __DEV__) {
-      console.log('Authorization status:', authStatus);
+    if (enabled) {
+      const fcmToken = await messaging().getToken();
+      const payload = {
+        fcm_token: fcmToken
+      };
+      fcmTokenService(payload);
     }
   };
 
@@ -70,8 +78,6 @@ function HomeBottomTabs({navigation}) {
       console.log(message.messageId, 'message');
     }
     PushNotificationIOS.addNotificationRequest({
-      // alertBody: message.notification.body,
-      // alertTitle: message.notification.title
       title: message.notification.title,
       body: message.notification.body,
       id: message.messageId
@@ -83,7 +89,8 @@ function HomeBottomTabs({navigation}) {
       id: '123',
       title: remoteMessage.notification.title,
       channelId: 'bettersosialid',
-      message: remoteMessage.notification.body
+      message: remoteMessage.notification.body,
+      data: remoteMessage.data
     });
   };
 
@@ -106,9 +113,8 @@ function HomeBottomTabs({navigation}) {
   };
 
   const handlePushNotif = (remoteMessage) => {
-    let {channel} = remoteMessage.data;
-    channel = JSON.parse(channel);
-    if (channel.channel_type !== 3) {
+    const {data} = remoteMessage;
+    if (data.channel_type !== 3) {
       if (isIos) {
         pushNotifIos(remoteMessage);
       } else {
@@ -142,6 +148,40 @@ function HomeBottomTabs({navigation}) {
       });
     }
   }, [initialStartup, otherProfileData]);
+
+  const renderTabLabelIcon =
+    (componentType) =>
+    // eslint-disable-next-line react/display-name
+    ({color}) => {
+      if (componentType === 'Feed') {
+        return (
+          <View style={styles.center}>
+            <MemoFeed fill={color} />
+          </View>
+        );
+      }
+      if (componentType === 'ChannelList') {
+        return (
+          <View style={styles.center}>
+            <MemoHome fill={color} />
+          </View>
+        );
+      }
+      if (componentType === 'News') {
+        return (
+          <View>
+            <MemoNews fill={color} />
+          </View>
+        );
+      }
+
+      return (
+        <View style={styles.center}>
+          <MemoProfileIcon />
+        </View>
+      );
+    };
+  // eslint-disable-next-line react/display-name
 
   return (
     <View style={styles.container}>
@@ -181,11 +221,7 @@ function HomeBottomTabs({navigation}) {
           component={FeedScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({color}) => (
-              <View style={styles.center}>
-                <MemoFeed fill={color} />
-              </View>
-            )
+            tabBarIcon: renderTabLabelIcon('Feed')
             // unmountOnBlur: true
           }}
         />
@@ -194,11 +230,7 @@ function HomeBottomTabs({navigation}) {
           component={ChannelListScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({color}) => (
-              <View style={styles.center}>
-                <MemoHome fill={color} />
-              </View>
-            ),
+            tabBarIcon: renderTabLabelIcon('ChannelList'),
             tabBarBadge:
               unReadMessage.total_unread_count + unReadMessage.unread_post > 0
                 ? unReadMessage.total_unread_count + unReadMessage.unread_post
@@ -210,11 +242,7 @@ function HomeBottomTabs({navigation}) {
           component={NewsScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: ({color}) => (
-              <View>
-                <MemoNews fill={color} />
-              </View>
-            )
+            tabBarIcon: renderTabLabelIcon('News')
             // unmountOnBlur: true
           }}
         />
@@ -223,11 +251,7 @@ function HomeBottomTabs({navigation}) {
           component={ProfileScreen}
           options={{
             activeTintColor: colors.holytosca,
-            tabBarIcon: () => (
-              <View style={styles.center}>
-                <MemoProfileIcon />
-              </View>
-            )
+            tabBarIcon: renderTabLabelIcon('Profile')
             // unmountOnBlur:true
           }}
         />

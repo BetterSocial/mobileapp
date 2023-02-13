@@ -143,3 +143,13 @@ export const deleteAccount = async () => {
     return null
   }
 }
+
+export const fcmTokenService = async (body) => {
+  try {
+    const result = await api.post('/users/fcmtoken', body);
+    return result.data
+  } catch(e) {
+     crashlytics().recordError(new Error(e));
+    return null
+  }
+}

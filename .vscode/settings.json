@@ -1,7 +1,8 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic",
-    "search.exclude": {
-        "**/node_modules": false,
-        "**/node-modules": true
-    }
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "search.exclude": {
+    "**/node_modules": false,
+    "**/node-modules": true
+  },
+  "dotenv.enableAutocloaking": false
 }

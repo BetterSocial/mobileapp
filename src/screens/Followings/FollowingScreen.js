@@ -11,64 +11,78 @@ import {fonts} from '../../utils/fonts';
 import DomainFragmentScreen from './elements/DomainFragmentScreen';
 import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
 import Followings from '.';
+import Header from '../../components/Header';
 
 function FollowingScreen(props) {
   const {navigation} = props;
-  const [, dispatchNavbar] = React.useContext(Context).profile;
+  const [profileState, dispatchNavbar] = React.useContext(Context).profile;
   const TAB_TOPIC = 'TabTopic';
   const TAB_FOLLOWING = 'TabFollowing';
   const TAB_DOMAIN = 'TabDomain';
   const isAndroid = Platform.OS === 'android';
   const Tabs = createMaterialTopTabNavigator();
 
+  const followingHeader = () => {
+    if ((Platform.OS === 'ios' && profileState.isShowHeader) || Platform.OS === 'android') {
+      return (
+        <Header
+          title={profileState.navbarTitle}
+          // containerStyle={styles.header}
+          titleStyle={S.headerTitle}
+          onPress={() => navigation.goBack()}
+          isCenter
+        />
+      );
+    }
+
+    return null;
+  };
+
   function MyTabBar({state, descriptors, position}) {
-    return (
-      <View style={S.toptabcontainer}>
-        {state.routes.map((route, index) => {
-          const {options} = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-              ? options.title
-              : route.name;
+    const buttonTabBar = () =>
+      state.routes.map((route, index) => {
+        const {options} = descriptors[route.key];
+        const label = options.tabBarLabel
+          ? options.tabBarLabel
+          : options.title
+          ? options.title
+          : route.name;
 
-          const isFocused = state.index === index;
+        const isFocused = state.index === index;
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true
-            });
-
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
-            }
-          };
-
-          const inputRange = state.routes.map((_, i) => i);
-          const opacity = Animated.interpolateNode(position, {
-            inputRange,
-            outputRange: inputRange.map((i) => (i === index ? 1 : 0.3))
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true
           });
 
-          return (
-            <TouchableOpacity
-              key={route.key}
-              accessibilityRole="button"
-              accessibilityState={isFocused ? {selected: true} : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
-              testID={options.tabBarTestID}
-              onPress={onPress}
-              style={S.singletab}>
-              <Animated.Text style={{opacity, ...S.singletabtext}}>{label}</Animated.Text>
-              <View style={isFocused ? S.viewborderbottom : {}} />
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name);
+          }
+        };
+
+        const inputRange = state.routes.map((_, i) => i);
+        const opacity = Animated.interpolateNode(position, {
+          inputRange,
+          outputRange: inputRange.map((i) => (i === index ? 1 : 0.3))
+        });
+
+        return (
+          <TouchableOpacity
+            key={route.key}
+            accessibilityRole="button"
+            accessibilityState={isFocused ? {selected: true} : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarTestID}
+            onPress={onPress}
+            style={S.singletab}>
+            <Animated.Text style={{opacity, ...S.singletabtext}}>{label}</Animated.Text>
+            <View style={isFocused ? S.viewborderbottom : {}} />
+          </TouchableOpacity>
+        );
+      });
+    return <View style={S.toptabcontainer}>{buttonTabBar()}</View>;
   }
 
   const tabComponent = (tabProps) => <MyTabBar {...tabProps} />;
@@ -116,6 +130,7 @@ function FollowingScreen(props) {
   return (
     <View style={{flex: 1}}>
       {isAndroid ? <StatusBar translucent={false} /> : null}
+      {followingHeader()}
       {/* <StatusBar translucent={false} /> */}
       <Tabs.Navigator initialRouteName={TAB_FOLLOWING} tabBar={tabComponent}>
         <Tabs.Screen
@@ -156,7 +171,7 @@ const S = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column'
   },
-
+  headerTitle: {fontSize: 16, fontFamily: fonts.inter[600], textAlign: 'center'},
   containertitle: {
     fontSize: 16
   },
