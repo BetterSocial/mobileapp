@@ -227,6 +227,9 @@ const CreatePost = () => {
 
   React.useEffect(() => {
     init();
+    if (isInCreatePostTopicScreen) {
+      setTimeout(() => setMessage((prev) => `${prev} `), 500);
+    }
   }, []);
 
   const init = async () => {
