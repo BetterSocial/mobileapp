@@ -198,9 +198,7 @@ const useReplyComment = ({
       if (updateParent) {
         updateParent(oldData);
       }
-    }
-  };
-
+  }
   const createComment = async () => {
     let sendPostNotif = false;
     if (page !== 'DetailDomainScreen') {
@@ -213,13 +211,7 @@ const useReplyComment = ({
     ]);
     try {
       if (textComment.trim() !== '') {
-        const data = await createChildComment(
-          textComment,
-          item.id,
-          item.user.id,
-          sendPostNotif,
-          dataFeed?.actor?.id
-        );
+        const data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif, dataFeed?.actor?.id, dataFeed.id);
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
           const newComment = [

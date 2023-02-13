@@ -31,7 +31,7 @@ function HomeBottomTabs({navigation}) {
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
-      if (notification.data.type === 'feed') {
+      if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
         navigation.navigate('PostDetailPage', {
           feedId: notification.data.feed_id
         });
