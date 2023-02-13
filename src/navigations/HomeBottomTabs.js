@@ -31,8 +31,10 @@ function HomeBottomTabs({navigation}) {
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
-      if (__DEV__) {
-        console.log('NOTIFICATION:', notification);
+      if (notification.data.type === 'feed') {
+        navigation.navigate('PostDetailPage', {
+          feedId: notification.data.feed_id
+        });
       }
       // process the notification
       // (required) Called when a remote is received or opened, or local notification is opened
@@ -87,7 +89,8 @@ function HomeBottomTabs({navigation}) {
       id: '123',
       title: remoteMessage.notification.title,
       channelId: 'bettersosialid',
-      message: remoteMessage.notification.body
+      message: remoteMessage.notification.body,
+      data: remoteMessage.data
     });
   };
 
