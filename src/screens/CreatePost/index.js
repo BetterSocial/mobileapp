@@ -227,11 +227,18 @@ const CreatePost = () => {
 
   React.useEffect(() => {
     init();
+    if (isInCreatePostTopicScreen) {
+      setTimeout(() => setMessage((prev) => `${prev} `), 500);
+    }
   }, []);
 
   const init = async () => {
     const privacyId = await getPrivacyId();
-    if (privacyId) {
+    console.log('privacyId', privacyId);
+    if (privacyId && isInCreatePostTopicScreen) {
+      setPrivacySelect(0);
+    }
+    if (privacyId && !isInCreatePostTopicScreen) {
       setPrivacySelect(privacyId);
     }
     const durationId = await getDurationId();
