@@ -7,7 +7,7 @@ const PostToCommunity = (props) => (
     height={28}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="-2 2 32 28"
+    viewBox="-1 2 32 28"
     {...props}>
     <Rect x={1} y={7} width={25} height={20} rx={4} stroke="#fff" strokeWidth={2} />
     <Path
