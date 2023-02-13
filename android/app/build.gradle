@@ -152,7 +152,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 216
-        versionName "1.9.16"
+        versionName "1.10"
     }
     splits {
         abi {

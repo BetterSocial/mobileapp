@@ -67,7 +67,7 @@
     "react-native-autolink": "^4.0.0",
     "react-native-bundle-splitter": "^2.2.1",
     "react-native-card-stack-swiper": "^1.2.5",
-    "react-native-config": "^1.5.0",
+    "react-native-config": "1.5.0",
     "react-native-device-info": "^8.0.5",
     "react-native-document-picker": "5.0.2",
     "react-native-emoji-selector": "^0.2.0",

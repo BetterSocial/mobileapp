@@ -2,11 +2,13 @@
  * @format
  */
 import 'react-native-gesture-handler';
+
 import './src/libraries/reactotron/reactotronInstance';
-import {enableScreens} from 'react-native-screens';
+
 import config from 'react-native-config';
 import {AppRegistry} from 'react-native';
 import {configureHumanID} from '@human-internet/react-native-humanid';
+import {enableScreens} from 'react-native-screens';
 
 import App from './App';
 import AppIcon from './src/components/AppIcon';
