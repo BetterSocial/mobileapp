@@ -30,6 +30,10 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         <intent-filter>
+            <action android:name="OPEN_ACTIVITY_1" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+        <intent-filter>
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.BROWSABLE" />
           <category android:name="android.intent.category.DEFAULT" />
@@ -44,9 +48,8 @@
           <data android:scheme="http"
             android:host="13.114.138.142"
             android:pathPrefix="/"/>
-        <action android:name="OPEN_ACTIVITY_1" />
-        <category android:name="android.intent.category.DEFAULT" />
         </intent-filter>
+
       </activity>
 <!--      <activity-->
 <!--      android:exported="true"-->
