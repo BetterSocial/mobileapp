@@ -234,7 +234,6 @@ const CreatePost = () => {
 
   const init = async () => {
     const privacyId = await getPrivacyId();
-    console.log('privacyId', privacyId);
     if (privacyId && isInCreatePostTopicScreen) {
       setPrivacySelect(0);
     }
@@ -245,8 +244,13 @@ const CreatePost = () => {
     if (durationId) {
       setExpiredSelect(durationId);
     }
+
+    if (isInCreatePostTopicScreen) {
+      setGeoSelect(0);
+    }
+
     const locationId = await getLocationId();
-    if (locationId) {
+    if (locationId && !isInCreatePostTopicScreen) {
       setGeoSelect(locationId);
     }
   };
@@ -493,9 +497,12 @@ const CreatePost = () => {
         tagUsers: checkTaggingUser()
       };
 
-      setLocationId(JSON.stringify(geoSelect));
       setDurationId(JSON.stringify(expiredSelect));
-      setPrivacyId(JSON.stringify(privacySelect));
+      if (!isInCreatePostTopicScreen) {
+        setLocationId(JSON.stringify(geoSelect));
+        setPrivacyId(JSON.stringify(privacySelect));
+      }
+
       Analytics.logEvent('create_post', {
         id: 6,
         newpost_reach: geoList[geoSelect].neighborhood,
@@ -651,9 +658,11 @@ const CreatePost = () => {
       tagUsers: checkTaggingUser()
     };
 
-    setLocationId(JSON.stringify(geoSelect));
     setDurationId(JSON.stringify(expiredSelect));
-    setPrivacyId(JSON.stringify(privacySelect));
+    if (!isInCreatePostTopicScreen) {
+      setLocationId(JSON.stringify(geoSelect));
+      setPrivacyId(JSON.stringify(privacySelect));
+    }
 
     if (isInCreatePostTopicScreen) {
       navigateToTopicPage();
