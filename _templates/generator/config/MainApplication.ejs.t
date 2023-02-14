@@ -1,4 +1,8 @@
-package org.bettersocial.dev;
+---
+to: android/app/src/main/java/org/bettersocial/MainApplication.java
+force: true
+---
+package org.bettersocial<%= name %>;
 
 import android.app.Application;
 import android.content.Context;
@@ -14,7 +18,7 @@ import java.util.List;
 import com.facebook.react.bridge.JSIModulePackage; // <- add
 import com.swmansion.reanimated.ReanimatedJSIModulePackage; // <- add
 import io.invertase.firebase.analytics.ReactNativeFirebaseAnalyticsPackage;
-import org.bettersocial.dev.RNENVConfigPackage;
+import org.bettersocial.<%= name %>.RNENVConfigPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

@@ -1,4 +1,8 @@
-package org.bettersocial.dev;
+---
+to: android/app/src/main/java/org/bettersocial/RNENVConfigPackage.java
+force: true
+---
+package org.bettersocial<%= name %>;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;

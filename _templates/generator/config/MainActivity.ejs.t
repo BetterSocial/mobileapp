@@ -1,4 +1,9 @@
-package org.bettersocial.dev;
+---
+to: android/app/src/main/java/org/bettersocial/MainActivity.java
+force: true
+---
+
+package org.bettersocial<%= name %>;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

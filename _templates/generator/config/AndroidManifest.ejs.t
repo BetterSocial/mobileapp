@@ -1,5 +1,9 @@
+---
+to: android/app/src/main/AndroidManifest.xml
+force: true
+---
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="org.bettersocial.dev">
+  package="org.bettersocial<%= name %>">
 
     <uses-permission android:name="android.permission.INTERNET" />
      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
