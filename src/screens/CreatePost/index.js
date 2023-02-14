@@ -68,6 +68,7 @@ import {
   getLocationId,
   getPrivacyId,
   setDurationId,
+  setLocationId,
   setPrivacyId
 } from '../../utils/setting';
 import {getLinkPreviewInfo} from '../../service/feeds';
@@ -113,7 +114,7 @@ const CreatePost = () => {
   const [topicSearch, setTopicSearch] = React.useState([]);
   const [listUsersForTagging, setListUsersForTagging] = React.useState([]);
   const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
-  const [locationId, setLocationId] = React.useState('');
+  const [locationId, setLocationIdState] = React.useState('');
   const [hastagPosition, setHastagPosition] = React.useState(0);
   const [positionKeyboard, setPositionKeyboard] = React.useState('never');
   const [taggingUsers, setTaggingUsers] = React.useState([]);
@@ -283,7 +284,8 @@ const CreatePost = () => {
   const location = [
     {
       location_id: 'everywhere',
-      neighborhood: 'Everywhere'
+      neighborhood: 'Everywhere',
+      location_level: 'neighborhood'
     }
   ];
 
@@ -314,13 +316,7 @@ const CreatePost = () => {
   }, []);
 
   const handleLocation = async (res) => {
-    await res.locations.map((res) => {
-      location.push({
-        location_id: res.location_id,
-        neighborhood: res.neighborhood
-      });
-    });
-    setGeoList(location);
+    setGeoList([...location, ...res?.locations]);
     setLoading(false);
   };
 
@@ -420,7 +416,7 @@ const CreatePost = () => {
   const onSetGeoSelect = (v) => {
     getEstimationsAudience(listPrivacy[privacySelect].key, geoList[v].location_id);
     setGeoSelect(v);
-    setLocationId(geoList[v].location_id);
+    setLocationIdState(geoList[v].location_id);
     sheetGeoRef.current.close();
   };
   const onSetPrivacySelect = (v) => {
@@ -486,7 +482,7 @@ const CreatePost = () => {
         // privacy: listPrivacy[privacySelect].label,
         privacy: listPrivacy[privacySelect].key,
         anonimity: typeUser,
-        location: geoList[geoSelect].neighborhood,
+        location: renderLocationString(geoList[geoSelect]),
         location_id: locationId,
         duration_feed: postExpired[expiredSelect].value,
         images_url: dataImage,
@@ -743,6 +739,14 @@ const CreatePost = () => {
     }
   }, 500);
 
+  const renderLocationString = (geoInfo) => {
+    if (geoInfo?.location_level?.toLowerCase() === 'neighborhood') return geoInfo?.neighborhood;
+    if (geoInfo?.location_level?.toLowerCase() === 'city') return geoInfo?.city;
+    if (geoInfo?.location_level?.toLowerCase() === 'state') return geoInfo?.state;
+    if (geoInfo?.location_level?.toLowerCase() === 'country') return geoInfo?.country;
+    return geoInfo?.location_level;
+  };
+
   React.useEffect(() => {
     handleTagUser();
   }, [message]);
@@ -854,7 +858,7 @@ const CreatePost = () => {
           <Gap style={styles.height(16)} />
           <ListItem
             icon={<Location width={16.67} height={16.67} />}
-            label={geoList.length === 0 ? 'Loading...' : geoList[geoSelect].neighborhood}
+            label={geoList.length === 0 ? 'Loading...' : renderLocationString(geoList[geoSelect])}
             labelStyle={styles.listText}
             onPress={() => sheetGeoRef.current.open()}
           />
