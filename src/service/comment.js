@@ -25,7 +25,8 @@ const createChildComment = async (
   useridFeed,
   sendPostNotif,
   postMaker,
-  activityId
+  activityId,
+  postTitle
 ) => {
   try {
     const data = {
@@ -34,7 +35,8 @@ const createChildComment = async (
       useridFeed,
       sendPostNotif,
       postMaker,
-      activityId
+      activityId,
+      postTitle
     };
     const resApi = await api.post('/activity/child-comment', data);
     return resApi.data;

@@ -204,14 +204,12 @@ const useReplyComment = ({
     if (page !== 'DetailDomainScreen') {
       sendPostNotif = true;
     }
-    setTemporaryText('');
-    setNewCommentList([
-      ...newCommentList,
-      {...defaultData, data: {...defaultData.data, text: textComment}}
-    ]);
+    setTemporaryText('')
+    setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
+    console.log(dataFeed, 'nana')
     try {
       if (textComment.trim() !== '') {
-        const data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif, dataFeed?.actor?.id, dataFeed.id);
+        const data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif, dataFeed?.actor?.id, dataFeed.id, dataFeed.message);
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
           const newComment = [
