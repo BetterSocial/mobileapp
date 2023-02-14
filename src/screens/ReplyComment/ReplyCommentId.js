@@ -120,7 +120,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
       }
     }
   };
-
+  
   const createComment = async () => {
     // setLoadingCMD(true);
     setTemporaryText('')
