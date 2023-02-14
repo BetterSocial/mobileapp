@@ -1,58 +1,79 @@
-import React from 'react'
+import React from 'react';
 import Toast from 'react-native-simple-toast';
-import moment from "moment";
-import { useNavigation } from "@react-navigation/core";
+import moment from 'moment';
+import {useNavigation} from '@react-navigation/core';
 
-import StringConstant from "../../../utils/string/StringConstant";
-import { Context } from "../../../context";
-import { createChildComment } from "../../../service/comment";
-import { getFeedDetail } from "../../../service/post";
+import StringConstant from '../../../utils/string/StringConstant';
+import {Context} from '../../../context';
+import {createChildComment} from '../../../service/comment';
+import {getFeedDetail} from '../../../service/post';
 
-const useReplyComment = ({ itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page }) => {
-  const [temporaryText, setTemporaryText] = React.useState('')
+const useReplyComment = ({
+  itemProp,
+  indexFeed,
+  dataFeed,
+  updateParent,
+  updateReply,
+  itemParent,
+  page
+}) => {
+  const [temporaryText, setTemporaryText] = React.useState('');
   const [textComment, setTextComment] = React.useState('');
-  const [newCommentList, setNewCommentList] = React.useState([])
+  const [newCommentList, setNewCommentList] = React.useState([]);
   const [item, setItem] = React.useState(itemProp);
   const navigation = useNavigation();
-  const scrollViewRef = React.useRef(null)
+  const scrollViewRef = React.useRef(null);
 
   const [profile] = React.useContext(Context).profile;
-  const [defaultData,] = React.useState({
-    data: { count_downvote: 0, count_upvote: 0, text: textComment },
-    id: newCommentList.length + 1, kind: "comment", updated_at: moment(),
-    children_counts: { comment: 0 },
+  const [defaultData] = React.useState({
+    data: {count_downvote: 0, count_upvote: 0, text: textComment},
+    id: newCommentList.length + 1,
+    kind: 'comment',
+    updated_at: moment(),
+    children_counts: {comment: 0},
     latest_children: {},
-    user: { data: { ...itemProp.user.data, profile_pic_url: profile?.myProfile?.profile_pic_path, username: profile.myProfile.username }, id: itemProp.user.id }
-  })
+    user: {
+      data: {
+        ...itemProp.user.data,
+        profile_pic_url: profile?.myProfile?.profile_pic_path,
+        username: profile.myProfile.username
+      },
+      id: itemProp.user.id
+    }
+  });
 
   const initTextComment = (text) => {
-    setTextComment(text)
-  }
+    setTextComment(text);
+  };
 
   const setCommentHook = (text) => {
-    setTemporaryText(text)
+    setTemporaryText(text);
   };
 
   const handleFirstTextCommentHook = () => {
-    setTextComment(temporaryText)
-
-  }
+    setTextComment(temporaryText);
+  };
 
   const updateReplyPost = (comment, itemParentProps, commentId) => {
     if (itemParentProps) {
       const updateComment = itemParentProps.latest_children.comment.map((dComment) => {
         if (dComment.id === commentId) {
-          return { ...dComment, latest_children: { ...dComment.latest_children, comment }, children_counts: { comment: comment.length } }
+          return {
+            ...dComment,
+            latest_children: {...dComment.latest_children, comment},
+            children_counts: {comment: comment.length}
+          };
         }
-        return { ...dComment }
-
-      })
-      const replaceComment = { ...itemParentProps, latest_children: { ...itemParentProps.latest_children, comment: updateComment } }
-      setItem(replaceComment)
-      setNewCommentList(updateComment)
-
+        return {...dComment};
+      });
+      const replaceComment = {
+        ...itemParentProps,
+        latest_children: {...itemParentProps.latest_children, comment: updateComment}
+      };
+      setItem(replaceComment);
+      setNewCommentList(updateComment);
     }
-  }
+  };
 
   const getThisCommentHook = () => {
     let comments = [];
@@ -62,54 +83,56 @@ const useReplyComment = ({ itemProp, indexFeed, dataFeed, updateParent, updateRe
       Array.isArray(itemProp.latest_children.comment)
     ) {
       comments = itemProp.latest_children.comment.sort(
-        (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix(),
+        (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()
       );
     }
-    return comments
-  }
+    return comments;
+  };
 
   const updateReplyPostHook = (comment, itemParentProps, commentId) => {
     if (itemParentProps) {
       const updateComment = itemParentProps.latest_children.comment.map((dComment) => {
         if (dComment.id === commentId) {
-          return { ...dComment, latest_children: { ...dComment.latest_children, comment }, children_counts: { comment: comment.length } }
+          return {
+            ...dComment,
+            latest_children: {...dComment.latest_children, comment},
+            children_counts: {comment: comment.length}
+          };
         }
-        return { ...dComment }
-
-      })
-      const replaceComment = { ...itemParentProps, latest_children: { ...itemParentProps.latest_children, comment: updateComment } }
-      return { replaceComment, updateComment }
-
-
+        return {...dComment};
+      });
+      const replaceComment = {
+        ...itemParentProps,
+        latest_children: {...itemParentProps.latest_children, comment: updateComment}
+      };
+      return {replaceComment, updateComment};
     }
-    return { replaceComment: itemParentProps, updateComment: itemParentProps }
-
-  }
+    return {replaceComment: itemParentProps, updateComment: itemParentProps};
+  };
 
   const isLastInParentHook = (index) => index === (item.children_counts.comment || 0) - 1;
 
   const findCommentAndUpdateHook = (id, data) => {
     const newComment = newCommentList.map((comment) => {
       if (comment.id === id) {
-        return { ...comment, data: data.data }
+        return {...comment, data: data.data};
       }
-      return { ...comment }
-    })
-    setNewCommentList(newComment)
-    return newComment
-  }
+      return {...comment};
+    });
+    setNewCommentList(newComment);
+    return newComment;
+  };
 
   const updateVoteParentPostHook = (data, dataVote, comment) => {
     const updateComment = comment.latest_children.comment.map((dComment) => {
       if (dComment.id === dataVote.activity_id) {
-        return { ...dComment, data: data.data.data }
+        return {...dComment, data: data.data.data};
       }
-      return { ...dComment }
-
-    })
-    setNewCommentList(updateComment)
-    return updateComment
-  }
+      return {...dComment};
+    });
+    setNewCommentList(updateComment);
+    return updateComment;
+  };
 
   const updateVoteLatestChildrenParentHook = (response, dataVote, comment) => {
     if (comment) {
@@ -117,24 +140,28 @@ const useReplyComment = ({ itemProp, indexFeed, dataFeed, updateParent, updateRe
         if (dComment.id === dataVote.parent) {
           const mapChildren = dComment.latest_children.comment.map((child) => {
             if (child.id === dataVote.id) {
-              return { ...child, data: response.data }
+              return {...child, data: response.data};
             }
-            return { ...child }
-
-          })
-          return { ...dComment, latest_children: { ...dComment.latest_children, comment: mapChildren } }
+            return {...child};
+          });
+          return {
+            ...dComment,
+            latest_children: {...dComment.latest_children, comment: mapChildren}
+          };
         }
-        return { ...dComment }
-      })
-      setNewCommentList(updateData)
-      return updateData
+        return {...dComment};
+      });
+      setNewCommentList(updateData);
+      return updateData;
     }
-    return []
-
-  }
+    return [];
+  };
 
   const showChildrenCommentView = async (itemReply) => {
-    const itemParentProps = await { ...itemProp, latest_children: { ...itemProp.latest_children, comment: newCommentList } }
+    const itemParentProps = await {
+      ...itemProp,
+      latest_children: {...itemProp.latest_children, comment: newCommentList}
+    };
     navigation.push('ReplyComment', {
       item: itemReply,
       level: 2,
@@ -144,14 +171,15 @@ const useReplyComment = ({ itemProp, indexFeed, dataFeed, updateParent, updateRe
       itemParent: itemParentProps,
       updateReply: (comment, parentProps, id) => updateReplyPost(comment, parentProps, id),
       updateVote: (data, dataVote) => updateVoteParentPostHook(data, dataVote, itemParentProps),
-      updateVoteLatestChildren: (data, dataVote) => updateVoteLatestChildrenParentHook(data, dataVote, itemParentProps)
+      updateVoteLatestChildren: (data, dataVote) =>
+        updateVoteLatestChildrenParentHook(data, dataVote, itemParentProps)
     });
   };
 
   const updateFeed = async (isSort) => {
     try {
       const data = await getFeedDetail(item.activity_id);
-      handleUpdateFeed(data, isSort)
+      handleUpdateFeed(data, isSort);
     } catch (e) {
       console.log(e);
     }
@@ -159,36 +187,56 @@ const useReplyComment = ({ itemProp, indexFeed, dataFeed, updateParent, updateRe
 
   const handleUpdateFeed = (data, isSort) => {
     if (data) {
-      let oldData = data.data
+      let oldData = data.data;
       if (isSort) {
-        oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment } }
+        oldData = {
+          ...oldData,
+          latest_reactions: {...oldData.latest_reactions, comment: oldData.latest_reactions.comment}
+        };
       }
 
       if (updateParent) {
-        updateParent(oldData)
+        updateParent(oldData);
       }
-
     }
-  }
+  };
 
   const createComment = async () => {
-    let sendPostNotif = false
+    let sendPostNotif = false;
     if (page !== 'DetailDomainScreen') {
-      sendPostNotif = true
+      sendPostNotif = true;
     }
-    setTemporaryText('')
-    setNewCommentList([...newCommentList, { ...defaultData, data: { ...defaultData.data, text: textComment } }])
+    setTemporaryText('');
+    setNewCommentList([
+      ...newCommentList,
+      {...defaultData, data: {...defaultData.data, text: textComment}}
+    ]);
     try {
       if (textComment.trim() !== '') {
-        const data = await createChildComment(textComment, item.id, item.user.id, sendPostNotif, dataFeed?.actor?.id);
+        const data = await createChildComment(
+          textComment,
+          item.id,
+          item.user.id,
+          sendPostNotif,
+          dataFeed?.actor?.id
+        );
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
-          const newComment = [...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }]
-          setNewCommentList(newComment)
+          const newComment = [
+            ...newCommentList,
+            {
+              ...defaultData,
+              id: data.data.id,
+              activity_id: data.data.activity_id,
+              user: data.data.user,
+              data: data.data.data
+            }
+          ];
+          setNewCommentList(newComment);
           if (typeof updateReply === 'function') {
-            updateReply(newComment, itemParent, item.id)
+            updateReply(newComment, itemParent, item.id);
           }
-          updateFeed(true)
+          updateFeed(true);
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
@@ -201,11 +249,32 @@ const useReplyComment = ({ itemProp, indexFeed, dataFeed, updateParent, updateRe
     }
   };
 
+  return {
+    getThisCommentHook,
+    updateReplyPostHook,
+    setTemporaryText,
+    setCommentHook,
+    temporaryText,
+    handleFirstTextCommentHook,
+    textComment,
+    isLastInParentHook,
+    findCommentAndUpdateHook,
+    updateVoteParentPostHook,
+    updateVoteLatestChildrenParentHook,
+    setTextComment,
+    newCommentList,
+    setNewCommentList,
+    defaultData,
+    setItem,
+    item,
+    initTextComment,
+    updateReplyPost,
+    showChildrenCommentView,
+    updateFeed,
+    handleUpdateFeed,
+    scrollViewRef,
+    createComment
+  };
+};
 
-
-  return { getThisCommentHook, updateReplyPostHook, setTemporaryText, setCommentHook, temporaryText, handleFirstTextCommentHook, textComment, isLastInParentHook, findCommentAndUpdateHook, updateVoteParentPostHook, updateVoteLatestChildrenParentHook, setTextComment, newCommentList, setNewCommentList, defaultData, setItem, item, initTextComment, updateReplyPost, showChildrenCommentView, updateFeed, handleUpdateFeed, scrollViewRef, createComment }
-}
-
-
-
-export default useReplyComment
+export default useReplyComment;
