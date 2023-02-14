@@ -269,4 +269,4 @@ const useReplyComment = ({
   };
 };
 
-export default useReplyComment;
+export default useReplyComment
