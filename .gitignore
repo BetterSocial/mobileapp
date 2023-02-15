@@ -78,4 +78,4 @@ android/debug.keystore
 coverage
 
 # ESLint
-.eslincache
+.eslintcache
