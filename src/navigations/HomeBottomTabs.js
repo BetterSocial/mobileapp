@@ -15,6 +15,8 @@ import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 
+import {fcmTokenService} from '../service/users';
+
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs({navigation}) {
@@ -27,8 +29,10 @@ function HomeBottomTabs({navigation}) {
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
-      if (__DEV__) {
-        console.log('NOTIFICATION:', notification);
+      if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
+        navigation.navigate('PostDetailPage', {
+          feedId: notification.data.feed_id
+        });
       }
       // process the notification
       // (required) Called when a remote is received or opened, or local notification is opened
@@ -58,8 +62,12 @@ function HomeBottomTabs({navigation}) {
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    if (enabled && __DEV__) {
-      console.log('Authorization status:', authStatus);
+    if (enabled) {
+      const fcmToken = await messaging().getToken();
+      const payload = {
+        fcm_token: fcmToken
+      };
+      fcmTokenService(payload);
     }
   };
 
@@ -79,7 +87,8 @@ function HomeBottomTabs({navigation}) {
       id: '123',
       title: remoteMessage.notification.title,
       channelId: 'bettersosialid',
-      message: remoteMessage.notification.body
+      message: remoteMessage.notification.body,
+      data: remoteMessage.data
     });
   };
 
@@ -102,9 +111,8 @@ function HomeBottomTabs({navigation}) {
   };
 
   const handlePushNotif = (remoteMessage) => {
-    let {channel} = remoteMessage.data;
-    channel = JSON.parse(channel);
-    if (channel.channel_type !== 3) {
+    const {data} = remoteMessage;
+    if (data.channel_type !== 3) {
       if (isIos) {
         pushNotifIos(remoteMessage);
       } else {

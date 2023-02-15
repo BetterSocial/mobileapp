@@ -218,7 +218,9 @@ const useReplyComment = ({
           item.id,
           item.user.id,
           sendPostNotif,
-          dataFeed?.actor?.id
+          dataFeed?.actor?.id,
+          dataFeed.id,
+          dataFeed.message
         );
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
