@@ -33,11 +33,4 @@ const getDurationId = async () => {
   return converStringToInt(res);
 };
 
-export {
-  setLocationId,
-  getLocationId,
-  setPrivacyId,
-  getPrivacyId,
-  setDurationId,
-  getDurationId,
-};
+export {setLocationId, getLocationId, setPrivacyId, getPrivacyId, setDurationId, getDurationId};
