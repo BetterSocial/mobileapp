@@ -1,57 +1,39 @@
 import * as React from 'react';
 import JWTDecode from 'jwt-decode';
-import {
-  Animated,
-  FlatList,
-  Image,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {Animated, FlatList, Image, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {useRoute} from '@react-navigation/native';
 
 import LinkContextItem from './elements/Item';
 import Loading from '../Loading';
 import PostArrowUp from '../../assets/images/post-arrow-up.png';
 import TopicPageLabel from '../../components/Label/TopicPageLabel';
-import { COLORS } from '../../utils/theme';
-import { Context } from '../../context';
-import { downVoteDomain, upVoteDomain } from '../../service/vote';
-import { fonts } from '../../utils/fonts';
-import { getAccessToken } from '../../utils/token';
-import {
-  getDomainIdIFollow,
-  getLinkContextScreenRelated
-} from '../../service/domain';
-import { setIFollow } from '../../context/actions/news';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {fonts} from '../../utils/fonts';
+import {getAccessToken} from '../../utils/token';
+import {getDomainIdIFollow, getLinkContextScreenRelated} from '../../service/domain';
+import {setIFollow} from '../../context/actions/news';
 
-const VIEW_MAIN_NEWS_INDEX = 0
-const VIEW_RELATED_LINKS_LABEL = 1
+const VIEW_MAIN_NEWS_INDEX = 0;
+const VIEW_RELATED_LINKS_LABEL = 1;
 
 const LinkContextScreen = () => {
   const route = useRoute();
 
-  const { item } = route.params;
-  const domainName = item.domain.name;
+  const {item} = route.params;
   const iddomain = item.content.domain_page_id;
 
-  const navigation = useNavigation();
-  const [dataDomain, setDataDomain] = React.useState(route.params.item);
+  const [dataDomain] = React.useState(route.params.item);
   const [data, setData] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [profile, setProfile] = React.useState({});
-  const [domain, setDomain] = React.useState(item.domainId);
-  const [idFromToken, setIdFromToken] = React.useState('');
+  const [, setLoading] = React.useState(false);
+  const [, setIdFromToken] = React.useState('');
   const [follow, setFollow] = React.useState(false);
   const [news, dispatch] = React.useContext(Context).news;
-  const [featuredNewsFromFeed, setFeaturedNewsFromFeed] = React.useState(item);
+  const [featuredNewsFromFeed] = React.useState(item);
 
-  const { ifollow } = news;
+  const {ifollow} = news;
 
-  const animatedBottomAnchorContainerValue = React.useRef(
-    new Animated.Value(0),
-  ).current;
+  const animatedBottomAnchorContainerValue = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
     const parseToken = async () => {
@@ -70,12 +52,12 @@ const LinkContextScreen = () => {
       const res = await getLinkContextScreenRelated(item?.content?.news_link_id);
       if (res.data) {
         const reducedData = res?.data?.results?.reduce((acc, currentItem) => {
-          const newItem = { ...currentItem }
-          newItem.domain.credderScore = dataDomain?.domain?.credderScore
-          acc.push(newItem)
+          const newItem = {...currentItem};
+          newItem.domain.credderScore = dataDomain?.domain?.credderScore;
+          acc.push(newItem);
           return acc;
         }, []);
-        setData([{ dummy: true }, { label: true }, ...reducedData]);
+        setData([{dummy: true}, {label: true}, ...reducedData]);
         setLoading(false);
       }
       setLoading(false);
@@ -96,37 +78,19 @@ const LinkContextScreen = () => {
     }
   };
 
-  const handleOnPressComment = (itemNews) => {
-    navigation.navigate('DetailDomainScreen', {
-      item: {
-        ...itemNews,
-        score: itemNews?.domain?.credderScore,
-        follower: 0,
-      }
-    });
-  };
-
-  const upvoteNews = async (news) => {
-    upVoteDomain(news);
-  };
-
-  const downvoteNews = async (news) => {
-    downVoteDomain(news);
-  };
-
   const handleOnScroll = (event) => {
-    const { y } = event.nativeEvent.contentOffset;
+    const {y} = event.nativeEvent.contentOffset;
     if (y > 50) {
       Animated.timing(animatedBottomAnchorContainerValue, {
         toValue: -(y - 50),
         duration: 50,
-        useNativeDriver: false,
+        useNativeDriver: false
       }).start();
     } else {
       Animated.timing(animatedBottomAnchorContainerValue, {
         toValue: 0,
         duration: 50,
-        useNativeDriver: false,
+        useNativeDriver: false
       }).start();
     }
   };
@@ -140,7 +104,7 @@ const LinkContextScreen = () => {
         initialNumToRender={5}
         renderItem={(props) => {
           const singleItem = props.item;
-          const { index } = props;
+          const {index} = props;
 
           if (index === VIEW_MAIN_NEWS_INDEX) {
             return (
@@ -148,15 +112,13 @@ const LinkContextScreen = () => {
                 item={featuredNewsFromFeed}
                 follow={follow}
                 isFirstItem={true}
-                setFollow={(follow) => setFollow(follow)}
+                setFollow={(followParam) => setFollow(followParam)}
               />
             );
           }
 
           if (index === VIEW_RELATED_LINKS_LABEL) {
-            return (
-              <TopicPageLabel label="Related Links" />
-            );
+            return <TopicPageLabel label="Related Links" />;
           }
 
           if (singleItem.content) {
@@ -166,24 +128,21 @@ const LinkContextScreen = () => {
                 showBackButton={false}
                 follow={follow}
                 isFirstItem={false}
-                setFollow={(follow) => setFollow(follow)}
+                setFollow={(followParam) => setFollow(followParam)}
               />
             );
           }
+
+          return <></>;
         }}
         style={styles.list}
         keyExtractor={(i) => i.id}
       />
       {data.length > 1 && (
-        <Animated.View
-          style={styles.bottomAnchorContainer(
-            animatedBottomAnchorContainerValue,
-          )}>
+        <Animated.View style={styles.bottomAnchorContainer(animatedBottomAnchorContainerValue)}>
           <Image source={PostArrowUp} style={styles.postArrowUpImage} />
           <View style={styles.bottomAnchorTextContainer}>
-            <Text style={styles.bottomAnchorSwipeText}>
-              Swipe for related articles
-            </Text>
+            <Text style={styles.bottomAnchorSwipeText}>Swipe for related articles</Text>
           </View>
         </Animated.View>
       )}
@@ -199,33 +158,33 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
   height: (h) => ({
-    height: h,
+    height: h
   }),
   bottomAnchorContainer: (animatedValue) => ({
     position: 'absolute',
     bottom: animatedValue,
-    alignSelf: 'center',
+    alignSelf: 'center'
   }),
   postArrowUpImage: {
     width: 48,
     height: 48,
     marginBottom: 6,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   bottomAnchorTextContainer: {
     backgroundColor: COLORS.bondi_blue,
     padding: 11,
     borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopRightRadius: 8
   },
   bottomAnchorSwipeText: {
     fontFamily: fonts.inter[500],
     color: COLORS.white,
-    fontSize: 14,
-  },
+    fontSize: 14
+  }
 });
 
 export default LinkContextScreen;
