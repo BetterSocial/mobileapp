@@ -85,14 +85,14 @@ function compire(prevProps, nextProps) {
 const CreatePost = () => {
   const defaultPollItem = [{text: ''}, {text: ''}];
   const navigation = useNavigation();
-  const {headerTitle, initialTopic, isInCreatePostTopicScreen} = useCreatePostHook();
-
   const sheetMediaRef = React.useRef();
   const sheetTopicRef = React.useRef();
   const sheetExpiredRef = React.useRef();
   const sheetGeoRef = React.useRef();
   const sheetPrivacyRef = React.useRef();
   const sheetBackRef = React.useRef();
+
+  const {headerTitle, initialTopic, isInCreatePostTopicScreen} = useCreatePostHook();
 
   const [message, setMessage] = React.useState('');
   const [mediaStorage, setMediaStorage] = React.useState([]);
@@ -123,6 +123,17 @@ const CreatePost = () => {
   const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
+
+  const debounced = React.useCallback(
+    debounce((changedText) => {
+      if (isContainUrl(changedText)) {
+        getPreviewUrl(getUrl(changedText));
+      } else {
+        setIsLinkPreviewShown(false);
+      }
+    }, 1000),
+    []
+  );
 
   const [selectedTime, setSelectedTime] = React.useState({
     day: 1,
@@ -164,52 +175,6 @@ const CreatePost = () => {
       }
     }
   ]);
-
-  const debounced = React.useCallback(
-    debounce((changedText) => {
-      if (isContainUrl(changedText)) {
-        getPreviewUrl(getUrl(changedText));
-      } else {
-        setIsLinkPreviewShown(false);
-      }
-    }, 1000),
-    []
-  );
-
-  const listPostExpired = [
-    {
-      label: '24 hours',
-      value: '1',
-      expiredobject: {
-        hour: 24,
-        day: 1
-      }
-    },
-    {
-      label: '7 days',
-      value: '7',
-      expiredobject: {
-        hour: 24,
-        day: 7
-      }
-    },
-    {
-      label: '30 days',
-      value: '30',
-      expiredobject: {
-        hour: 24,
-        day: 30
-      }
-    },
-    {
-      label: 'Never',
-      value: 'never',
-      expiredobject: {
-        hour: 24,
-        day: 30
-      }
-    }
-  ];
 
   const listPrivacy = [
     {
@@ -255,7 +220,6 @@ const CreatePost = () => {
       setGeoSelect(locationId);
     }
   };
-
   const getPreviewUrl = async (link) => {
     const newLink = link;
 
@@ -456,16 +420,16 @@ const CreatePost = () => {
     sheetTopicRef.current.close();
   };
 
+  const navigateToTopicPage = () => {
+    return navigation.navigate('TopicPageScreen', {id: initialTopic[0]});
+  };
+
   const checkTaggingUser = () => {
     const mapTagUser = taggingUsers.map((data) => {
       const findData = allTaggingUser.find((dataUser) => dataUser.username === data);
       return findData.user_id;
     });
     return mapTagUser;
-  };
-
-  const navigateToTopicPage = () => {
-    return navigation.navigate('TopicPageScreen', {id: initialTopic[0]});
   };
 
   const postTopic = async () => {
@@ -860,7 +824,7 @@ const CreatePost = () => {
           <Gap style={styles.height(16)} />
           <ListItem
             icon={<Timer width={16.67} height={16.67} />}
-            label={postExpired.length === 0 ? 'Loading...' : listPostExpired[expiredSelect].label}
+            label={postExpired.length === 0 ? 'Loading...' : postExpired[expiredSelect].label}
             labelStyle={styles.listText}
             onPress={() => sheetExpiredRef.current.open()}
           />
