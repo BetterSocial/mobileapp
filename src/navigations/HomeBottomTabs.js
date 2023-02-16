@@ -34,6 +34,15 @@ function HomeBottomTabs({navigation}) {
           feedId: notification.data.feed_id
         });
       }
+      if (notification.data.type === 'follow_user') {
+        navigation.navigate('OtherProfile', {
+          data: {
+            user_id: notification.data.user_id,
+            other_id: notification.data.user_id_follower,
+            username: notification.data.username_follower
+          }
+        });
+      }
       // process the notification
       // (required) Called when a remote is received or opened, or local notification is opened
       notification.finish(PushNotificationIOS.FetchResult.NoData);
