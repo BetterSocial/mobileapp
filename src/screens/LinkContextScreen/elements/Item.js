@@ -98,7 +98,7 @@ const LinkContextItem = ({
       <LinkContextScreenFooter
         item={item}
         itemId={item.id}
-        onPressBlock={() => onReaction(0)}
+        onPressBlock={onReaction}
         onPressComment={() => handleOnPressComment(item)}
         onPressUpvote={(news) => upvoteNews(news)}
         onPressDownVote={(news) => downvoteNews(news)}
