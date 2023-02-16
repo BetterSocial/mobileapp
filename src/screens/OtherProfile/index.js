@@ -91,7 +91,6 @@ const OtherProfile = () => {
   const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
-
   const create = useClientGetstream();
   const { interactionsComplete } = useAfterInteractions()
 
@@ -124,7 +123,6 @@ const OtherProfile = () => {
     const getJwtToken = async () => {
       setTokenJwt(await getAccessToken());
     };
-
     getJwtToken();
     setUserId(params.data.user_id);
     setUsername(params.data.username);
@@ -173,7 +171,7 @@ const OtherProfile = () => {
 
   const handleSetUnFollow = async () => {
     const data = {
-      user_id_follower: user_id,
+      user_id_follower: profile.myProfile.user_id,
       user_id_followed: other_id,
       follow_source: 'other-profile',
     };
@@ -185,13 +183,12 @@ const OtherProfile = () => {
 
   const handleSetFollow = async () => {
     const data = {
-      user_id_follower: user_id,
+      user_id_follower: profile.myProfile.user_id,
       user_id_followed: other_id,
       username_follower: profile.myProfile.username,
       username_followed: username,
       follow_source: 'other-profile',
     };
-
     const result = await setFollow(data);
     // prepopulated follow
     // const textOwnUser = `${username} started following you. Send them a message now`;
