@@ -16,7 +16,7 @@ const ButtonAddPostTopic = ({topicName}) => {
 
   return (
     <View style={styles.container}>
-      <Shadow distance={4} startColor="#00000033" endColor="#00000000" offset={[0, 4]}>
+      <Shadow distance={4} startColor="#00000033" endColor="#00000000" offset={[0, 2]}>
         <TouchableOpacity
           onPress={onAddPostPressed}
           style={styles.buttonContainer}
