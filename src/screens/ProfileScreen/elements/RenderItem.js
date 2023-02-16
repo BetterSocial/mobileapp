@@ -245,14 +245,16 @@ const Item = ({
       {isReaction && (
         <View style={styles.contentReaction(getHeightReaction())}>
           <View style={styles.lineAffterFooter} />
-          <PreviewComment
-            user={previewComment?.user}
-            comment={previewComment?.data?.text}
-            image={previewComment?.user.data?.profile_pic_url}
-            time={previewComment?.created_at}
-            totalComment={getCountCommentWithChild(item) - 1}
-            onPress={onPressComment}
-          />
+          {previewComment && (
+            <PreviewComment
+              user={previewComment?.user}
+              comment={previewComment?.data?.text}
+              image={previewComment.user && previewComment?.user.data?.profile_pic_url}
+              time={previewComment?.created_at}
+              totalComment={getCountCommentWithChild(item) - 1}
+              onPress={onPressComment}
+            />
+          )}
         </View>
       )}
       <LinearGradient colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)']} style={styles.linearGradient} />
