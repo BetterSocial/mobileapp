@@ -19,6 +19,7 @@
     "test": "jest --verbose --collectCoverage",
     "testCoverage": "jest --verbose --coverage --collectCoverageFrom=\"./src/**\" __tests__ src",
     "test:update-snapshot": "jest __tests__ src -u",
+    "test:content": "jest __tests__/screens/FeedScreen/ContentPoll.test.js -u && jest __tests__/screens/FeedScreen/ContentLink.test.js -u",
     "lint": "eslint .",
     "format": "npx prettier --check ./src",
     "android:clean": "cd android && ./gradlew clean && ./gradlew cleanBuildCache",
