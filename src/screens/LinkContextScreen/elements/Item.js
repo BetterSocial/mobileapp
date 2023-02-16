@@ -99,7 +99,7 @@ const LinkContextItem = ({
         item={item}
         itemId={item.id}
         onPressBlock={onReaction}
-        onPressComment={() => handleOnPressComment(item)}
+        onPressComment={handleOnPressComment}
         onPressUpvote={(news) => upvoteNews(news)}
         onPressDownVote={(news) => downvoteNews(news)}
         onPressShare={ShareUtils.shareNews}
