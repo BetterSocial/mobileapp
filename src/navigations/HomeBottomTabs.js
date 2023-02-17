@@ -26,25 +26,27 @@ function HomeBottomTabs({navigation}) {
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [unReadMessage] = React.useContext(Context).unReadMessage;
 
+  const handleNotification = (notification) => {
+    if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
+      navigation.navigate('PostDetailPage', {
+        feedId: notification.data.feed_id
+      });
+    }
+    if (notification.data.type === 'follow_user') {
+      navigation.navigate('OtherProfile', {
+        data: {
+          user_id: notification.data.user_id,
+          other_id: notification.data.user_id_follower,
+          username: notification.data.username_follower
+        }
+      });
+    }
+  };
+
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
-      if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
-        navigation.navigate('PostDetailPage', {
-          feedId: notification.data.feed_id
-        });
-      }
-      if (notification.data.type === 'follow_user') {
-        navigation.navigate('OtherProfile', {
-          data: {
-            user_id: notification.data.user_id,
-            other_id: notification.data.user_id_follower,
-            username: notification.data.username_follower
-          }
-        });
-      }
-      // process the notification
-      // (required) Called when a remote is received or opened, or local notification is opened
+      handleNotification(notification);
       notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
 
@@ -155,6 +157,18 @@ function HomeBottomTabs({navigation}) {
       });
     }
   }, [initialStartup, otherProfileData]);
+
+  React.useEffect(() => {
+    PushNotificationIOS.addEventListener('localNotification', (notification) => {
+      const isClicked = notification.getData().userInteraction === 1;
+      if (isClicked) {
+        const {aps} = notification.getData();
+        handleNotification(aps.alert);
+      }
+    });
+  }, []);
+
+  // eslint-disable-next-line react/display-name
 
   return (
     <View style={styles.container}>
