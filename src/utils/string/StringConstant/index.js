@@ -28,7 +28,7 @@ const onboardingChooseUsernameLabelUserTaken = (username) =>
 // Onboarding - Local Community
 const onboardingLocalCommunityHeadline = 'Find your local community';
 const onboardingLocalCommunitySubHeadline =
-  'Join up to two cities you call home. Locations can only be adjusted or added infrequently.';
+  'Your location will be used to show relevant posts, and not be visible to others or on your profile.';
 const onboardingLocalCommunityPrimaryLocationTitle = 'Add New Location';
 const onboardingLocalCommunityPrimaryLocationSubTitle = 'Search your favorite location';
 const onboardingLocalCommunitySecondaryLocationTitle = 'Add a second location';
