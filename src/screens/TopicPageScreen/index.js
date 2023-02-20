@@ -1,6 +1,7 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
 import * as React from 'react';
 import {StatusBar, View} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+
 import BlockComponent from '../../components/BlockComponent';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
@@ -11,15 +12,14 @@ import useChatClientHook from '../../utils/getstream/useChatClientHook';
 import {Context} from '../../context';
 import {TOPIC_LIST} from '../../utils/cache/constant';
 import {downVote, upVote} from '../../service/vote';
-
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {getFeedDetail} from '../../service/post';
 import {getSpecificCache, saveToCache} from '../../utils/cache';
 import {getTopicPages} from '../../service/topicPages';
 import {getUserId} from '../../utils/users';
 import {getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -54,7 +54,7 @@ const TopicPageScreen = (props) => {
       // const _resultGetTopicPages = await getTopicPages(id);
 
       await getSpecificCache(`${TOPIC_LIST}_${id}`, async (cacheTopic) => {
-        if (!cacheTopic) {
+        if (!cacheTopic || cacheTopic?.length === 0) {
           const resultGetTopicPages = await getTopicPages(id);
           saveToCache(`${TOPIC_LIST}_${id}`, resultGetTopicPages);
           setTopicFeeds(resultGetTopicPages.data, dispatch);
@@ -124,7 +124,7 @@ const TopicPageScreen = (props) => {
   };
 
   const refreshingData = async (offsetParam = offset) => {
-    if (offset) {
+    if (offsetParam >= 0) {
       try {
         setLoading(true);
         const result = await getTopicPages(topicId, offsetParam);
