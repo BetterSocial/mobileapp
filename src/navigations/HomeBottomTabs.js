@@ -89,16 +89,16 @@ function HomeBottomTabs({navigation}) {
     if (__DEV__) {
       console.log(message.messageId, 'message');
     }
-    const title = handleChatMessage(message);
+    const {title, body} = handleChatMessage(message);
     PushNotificationIOS.addNotificationRequest({
       title,
-      body: message.notification.body,
+      body,
       id: message.messageId
     });
   };
 
   const handleChatMessage = (remoteMessage) => {
-    let {title} = remoteMessage.notification;
+    let {title, body} = remoteMessage.notification;
     if (
       remoteMessage.data.channel_type === 'messaging' &&
       remoteMessage.data.channel_id.includes('!members')
@@ -107,18 +107,23 @@ function HomeBottomTabs({navigation}) {
       title = newTitle[0].replace(' ', '');
     } else {
       const newTitle = remoteMessage.notification.title.split('@');
+      const newBody = `${newTitle[0].replace(' ', '')}: ${body}`;
+      body = newBody;
       title = newTitle[1].replace(' ', '');
     }
-    return title;
+    return {
+      title,
+      body
+    };
   };
 
   const pushNotifAndroid = (remoteMessage) => {
-    const title = handleChatMessage(remoteMessage);
+    const {title, body} = handleChatMessage(remoteMessage);
     PushNotification.localNotification({
       id: '123',
       title,
       channelId: 'bettersosialid',
-      message: remoteMessage.notification.body,
+      message: body,
       data: remoteMessage.data
     });
   };
