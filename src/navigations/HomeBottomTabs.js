@@ -7,9 +7,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilValue} from 'recoil';
 
 import FirebaseConfig from '../configs/FirebaseConfig';
-import HomeTabBarLabel from './HomeTabBarLabel';
+import MemoFeed from '../assets/icon/Feed';
+import MemoHome from '../assets/icon/Home';
+import MemoNews from '../assets/icon/News';
+import MemoProfileIcon from '../assets/icon/Profile';
 import UniversalLink from '../configs/UniversalLink';
-import renderTabLabelIcon from '../components/BottomTab/TabLabelIcon';
 import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
@@ -26,25 +28,28 @@ function HomeBottomTabs({navigation}) {
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [unReadMessage] = React.useContext(Context).unReadMessage;
 
+  const handleNotification = (notification) => {
+    if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
+      navigation.navigate('PostDetailPage', {
+        feedId: notification.data.feed_id
+      });
+    }
+    if (notification.data.type === 'follow_user') {
+      navigation.navigate('OtherProfile', {
+        data: {
+          user_id: notification.data.user_id,
+          other_id: notification.data.user_id_follower,
+          username: notification.data.username_follower
+        }
+      });
+    }
+  };
+
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
-      if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
-        navigation.navigate('PostDetailPage', {
-          feedId: notification.data.feed_id
-        });
-      }
-      if (notification.data.type === 'follow_user') {
-        navigation.navigate('OtherProfile', {
-          data: {
-            user_id: notification.data.user_id,
-            other_id: notification.data.user_id_follower,
-            username: notification.data.username_follower
-          }
-        });
-      }
-      // process the notification
-      // (required) Called when a remote is received or opened, or local notification is opened
+      console.log(notification, 'bisa');
+      handleNotification(notification);
       notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
 
@@ -84,19 +89,41 @@ function HomeBottomTabs({navigation}) {
     if (__DEV__) {
       console.log(message.messageId, 'message');
     }
+    const {title, body} = handleChatMessage(message);
     PushNotificationIOS.addNotificationRequest({
-      title: message.notification.title,
-      body: message.notification.body,
+      title,
+      body,
       id: message.messageId
     });
   };
 
+  const handleChatMessage = (remoteMessage) => {
+    let {title, body} = remoteMessage.notification;
+    if (
+      remoteMessage.data.channel_type === 'messaging' &&
+      remoteMessage.data.channel_id.includes('!members')
+    ) {
+      const newTitle = remoteMessage.notification.title.split('@');
+      title = newTitle[0].replace(' ', '');
+    } else if (remoteMessage.data.channel_type === 'messaging') {
+      const newTitle = remoteMessage.notification.title.split('@');
+      const newBody = `${newTitle[0].replace(' ', '')}: ${body}`;
+      body = newBody;
+      title = newTitle[1].replace(' ', '');
+    }
+    return {
+      title,
+      body
+    };
+  };
+
   const pushNotifAndroid = (remoteMessage) => {
+    const {title, body} = handleChatMessage(remoteMessage);
     PushNotification.localNotification({
       id: '123',
-      title: remoteMessage.notification.title,
+      title,
       channelId: 'bettersosialid',
-      message: remoteMessage.notification.body,
+      message: body,
       data: remoteMessage.data
     });
   };
@@ -156,6 +183,50 @@ function HomeBottomTabs({navigation}) {
     }
   }, [initialStartup, otherProfileData]);
 
+  React.useEffect(() => {
+    PushNotificationIOS.addEventListener('localNotification', (notification) => {
+      const isClicked = notification.getData().userInteraction === 1;
+      if (isClicked) {
+        const {aps} = notification.getData();
+        handleNotification(aps.alert);
+      }
+    });
+  }, []);
+
+  const renderTabLabelIcon =
+    (componentType) =>
+    // eslint-disable-next-line react/display-name
+    ({color}) => {
+      if (componentType === 'Feed') {
+        return (
+          <View style={styles.center}>
+            <MemoFeed fill={color} />
+          </View>
+        );
+      }
+      if (componentType === 'ChannelList') {
+        return (
+          <View style={styles.center}>
+            <MemoHome fill={color} />
+          </View>
+        );
+      }
+      if (componentType === 'News') {
+        return (
+          <View>
+            <MemoNews fill={color} />
+          </View>
+        );
+      }
+
+      return (
+        <View style={styles.center}>
+          <MemoProfileIcon />
+        </View>
+      );
+    };
+  // eslint-disable-next-line react/display-name
+
   return (
     <View style={styles.container}>
       <Tab.Navigator
@@ -176,7 +247,18 @@ function HomeBottomTabs({navigation}) {
         }}
         screenOptions={({navigation: screenOptionsNavigation}) => ({
           activeTintColor: colors.holytosca,
-          tabBarLabel: () => HomeTabBarLabel(screenOptionsNavigation)
+          tabBarLabel: () => (
+            <View
+              style={[
+                styles.badge,
+                {
+                  backgroundColor: screenOptionsNavigation.isFocused()
+                    ? colors.holytosca
+                    : 'transparent'
+                }
+              ]}
+            />
+          )
         })}>
         <Tab.Screen
           name="Feed"
@@ -229,6 +311,13 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     width: '100%'
+  },
+  badge: {
+    height: 7,
+    width: 7,
+    position: 'absolute',
+    bottom: 3,
+    borderRadius: 3.5
   },
   center: {
     alignItems: 'center',

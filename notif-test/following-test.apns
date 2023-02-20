@@ -1,0 +1,19 @@
+{
+   "Simulator Target Bundle": "org.reactjs.native.example.BetterSocial",
+
+   "aps": {
+       "badge": 0,
+       "alert": {
+           "title": "Push Notification Test",
+           "subtitle": "Hey! 👋",
+           "body": "Is this working?",
+           "data": {
+                "user_id": "f19ce509-e8ae-405f-91cf-ed19ce1ed96e",
+                "other_id": "c6c91b04-795c-404e-b012-ea28813a2006",
+                "username": "Fajarism",
+                "type": "follow_user",
+           }
+       },
+      "sound":"default"
+   }
+}
