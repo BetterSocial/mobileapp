@@ -7,9 +7,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilValue} from 'recoil';
 
 import FirebaseConfig from '../configs/FirebaseConfig';
-import HomeTabBarLabel from './HomeTabBarLabel';
+import MemoFeed from '../assets/icon/Feed';
+import MemoHome from '../assets/icon/Home';
+import MemoNews from '../assets/icon/News';
+import MemoProfileIcon from '../assets/icon/Profile';
 import UniversalLink from '../configs/UniversalLink';
-import renderTabLabelIcon from '../components/BottomTab/TabLabelIcon';
 import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
@@ -191,6 +193,38 @@ function HomeBottomTabs({navigation}) {
     });
   }, []);
 
+  const renderTabLabelIcon =
+    (componentType) =>
+    // eslint-disable-next-line react/display-name
+    ({color}) => {
+      if (componentType === 'Feed') {
+        return (
+          <View style={styles.center}>
+            <MemoFeed fill={color} />
+          </View>
+        );
+      }
+      if (componentType === 'ChannelList') {
+        return (
+          <View style={styles.center}>
+            <MemoHome fill={color} />
+          </View>
+        );
+      }
+      if (componentType === 'News') {
+        return (
+          <View>
+            <MemoNews fill={color} />
+          </View>
+        );
+      }
+
+      return (
+        <View style={styles.center}>
+          <MemoProfileIcon />
+        </View>
+      );
+    };
   // eslint-disable-next-line react/display-name
 
   return (
@@ -213,7 +247,18 @@ function HomeBottomTabs({navigation}) {
         }}
         screenOptions={({navigation: screenOptionsNavigation}) => ({
           activeTintColor: colors.holytosca,
-          tabBarLabel: () => HomeTabBarLabel(screenOptionsNavigation)
+          tabBarLabel: () => (
+            <View
+              style={[
+                styles.badge,
+                {
+                  backgroundColor: screenOptionsNavigation.isFocused()
+                    ? colors.holytosca
+                    : 'transparent'
+                }
+              ]}
+            />
+          )
         })}>
         <Tab.Screen
           name="Feed"
@@ -266,6 +311,13 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     width: '100%'
+  },
+  badge: {
+    height: 7,
+    width: 7,
+    position: 'absolute',
+    bottom: 3,
+    borderRadius: 3.5
   },
   center: {
     alignItems: 'center',
