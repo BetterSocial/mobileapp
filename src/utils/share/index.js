@@ -29,10 +29,8 @@ const shareDomain = (item) => {
   }
 };
 
-const shareNews = (item) => {
-  if (__DEV__) {
-    console.log('Share in news', item);
-  }
+const shareNews = async (item) => {
+  await buildShare(`${item?.content?.url}`);
 };
 
 const sharePostInTopic = async (item, analyticsLogEvent, analyticsId) => {

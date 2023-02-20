@@ -1,16 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import Content from './Content';
 import Gap from '../../components/Gap';
 import Header from './Header';
-import { COLORS, SIZES } from '../../utils/theme';
-import { Footer } from '../../components';
-import {
-  getCountCommentWithChild,
-  getCountVote
-} from '../../utils/getstream';
 import useItemNews from './hooks/useItemNews';
+import {COLORS, SIZES} from '../../utils/theme';
+import {Footer} from '../../components';
+import {getCountCommentWithChild, getCountVote} from '../../utils/getstream';
 
 const RenderItem = ({
   item,
@@ -19,10 +16,16 @@ const RenderItem = ({
   onPressBlock = () => {},
   onPressDownVote = () => {},
   onPressUpvote = () => {},
-  selfUserId,
+  selfUserId
 }) => {
-
-  const {onPressDownVoteHandle, onPressUpvoteNew, voteStatus, totalVote, setTotalVote, validationStatusVote} = useItemNews()
+  const {
+    onPressDownVoteHandle,
+    onPressUpvoteNew,
+    voteStatus,
+    totalVote,
+    setTotalVote,
+    validationStatusVote
+  } = useItemNews();
 
   React.useEffect(() => {
     const initialVote = () => {
@@ -32,26 +35,26 @@ const RenderItem = ({
     initialVote();
   }, [item]);
 
-
   React.useEffect(() => {
-    validationStatusVote(item, selfUserId)
+    validationStatusVote(item, selfUserId);
   }, [item, selfUserId]);
 
   return (
     <View style={styles.container}>
-      <View style={{paddingHorizontal: 18}} >
+      <View style={{paddingHorizontal: 18}}>
         <Header
-        image={item.domain.image}
-        domain={item.domain.name}
-        time={item.content.created_at}
-        item={item}/>
-      <Content
-        item={item}
-        title={item.content.title}
-        image={item.content.image}
-        description={item.content.description}
-        url={item.content.url}
-      />
+          image={item.domain.image}
+          domain={item.domain.name}
+          time={item.content.created_at}
+          item={item}
+        />
+        <Content
+          item={item}
+          title={item.content.title}
+          image={item.content.image}
+          description={item.content.description}
+          url={item.content.url}
+        />
       </View>
       <Gap height={8} />
       <View style={styles.wrapperFooter}>
@@ -77,12 +80,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     elevation: 0.0,
     borderColor: COLORS.gray,
-    marginHorizontal: SIZES.base,
+    marginHorizontal: SIZES.base
   },
   wrapperFooter: {
     // marginHorizontal: SIZES.base,
-    height: 52,
-  },
+    height: 52
+  }
 });
 
-export default React.memo(RenderItem, (prevProps, nextProps) => prevProps.item === nextProps.item) 
+export default React.memo(RenderItem, (prevProps, nextProps) => prevProps.item === nextProps.item);
