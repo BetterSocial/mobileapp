@@ -48,7 +48,6 @@ function HomeBottomTabs({navigation}) {
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
-      console.log(notification, 'bisa');
       handleNotification(notification);
       notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
@@ -93,7 +92,8 @@ function HomeBottomTabs({navigation}) {
     PushNotificationIOS.addNotificationRequest({
       title,
       body,
-      id: message.messageId
+      id: message.messageId,
+      userInfo: message.data
     });
   };
 
@@ -182,16 +182,6 @@ function HomeBottomTabs({navigation}) {
       });
     }
   }, [initialStartup, otherProfileData]);
-
-  React.useEffect(() => {
-    PushNotificationIOS.addEventListener('localNotification', (notification) => {
-      const isClicked = notification.getData().userInteraction === 1;
-      if (isClicked) {
-        const {aps} = notification.getData();
-        handleNotification(aps.alert);
-      }
-    });
-  }, []);
 
   const renderTabLabelIcon =
     (componentType) =>
