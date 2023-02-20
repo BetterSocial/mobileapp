@@ -103,7 +103,7 @@ function HomeBottomTabs({navigation}) {
     ) {
       const newTitle = remoteMessage.notification.title.split('@');
       title = newTitle[0].replace(' ', '');
-    } else {
+    } else if (remoteMessage.data.channel_type === 'messaging') {
       const newTitle = remoteMessage.notification.title.split('@');
       const newBody = `${newTitle[0].replace(' ', '')}: ${body}`;
       body = newBody;
