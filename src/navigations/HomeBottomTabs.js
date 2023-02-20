@@ -48,6 +48,7 @@ function HomeBottomTabs({navigation}) {
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
+      console.log(notification, 'bisa');
       handleNotification(notification);
       notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
@@ -88,17 +89,34 @@ function HomeBottomTabs({navigation}) {
     if (__DEV__) {
       console.log(message.messageId, 'message');
     }
+    const title = handleChatMessage(message);
     PushNotificationIOS.addNotificationRequest({
-      title: message.notification.title,
+      title,
       body: message.notification.body,
       id: message.messageId
     });
   };
 
+  const handleChatMessage = (remoteMessage) => {
+    let {title} = remoteMessage.notification;
+    if (
+      remoteMessage.data.channel_type === 'messaging' &&
+      remoteMessage.data.channel_id.includes('!members')
+    ) {
+      const newTitle = remoteMessage.notification.title.split('@');
+      title = newTitle[0].replace(' ', '');
+    } else {
+      const newTitle = remoteMessage.notification.title.split('@');
+      title = newTitle[1].replace(' ', '');
+    }
+    return title;
+  };
+
   const pushNotifAndroid = (remoteMessage) => {
+    const title = handleChatMessage(remoteMessage);
     PushNotification.localNotification({
       id: '123',
-      title: remoteMessage.notification.title,
+      title,
       channelId: 'bettersosialid',
       message: remoteMessage.notification.body,
       data: remoteMessage.data
