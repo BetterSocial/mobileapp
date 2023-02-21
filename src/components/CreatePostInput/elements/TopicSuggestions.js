@@ -32,12 +32,11 @@ const TopicSuggestions = ({
   };
 
   const onTopicSuggestionClicked = (item) => {
-    const topicItem = convertString(item.name, ' ', '');
+    const topicItem = convertString(item.name.toLowerCase(), ' ', '');
     const newMessage = reformatStringByPosition(item.name.toLowerCase(), message);
     topics.splice(topics.length - 1, 1, topicItem);
-    const mapTopic = topics.map((topic) => topic.toLowerCase())
     setPositionKeyboard('never');
-    setTopics(mapTopic);
+    setTopics(topics);
     handleStateHashtag(newMessage);
     setMessage(newMessage);
     setTopicSearch([]);
