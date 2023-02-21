@@ -46,10 +46,12 @@ const TopicPageScreen = (props) => {
       // setLoading(true)
       const topicWithPrefix = route.params.id;
       const id = removePrefixTopic(topicWithPrefix);
-      setTopicName(id);
-      setUserTopicName(id);
-      const query = `?name=${id}`;
-      setTopicId(id);
+      const idLower = id.toLowerCase();
+      setTopicName(idLower);
+      setUserTopicName(idLower);
+      const query = `?name=${idLower}`;
+      setTopicId(idLower);
+      console.log(query, 'liman')
       // eslint-disable-next-line no-underscore-dangle
       // const _resultGetTopicPages = await getTopicPages(id);
 
