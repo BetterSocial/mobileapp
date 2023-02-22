@@ -19,16 +19,13 @@ import {colors} from '../utils/colors';
 import {setChannel} from '../context/actions/setChannel';
 
 import {fcmTokenService} from '../service/users';
-import {saveToCache} from '../utils/cache';
-import {getAccessToken} from '../utils/token';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs({navigation}) {
   const isIos = Platform.OS === 'ios';
-  const [channelClient, dispatch] = React.useContext(Context).channel;
+  const [, dispatch] = React.useContext(Context).channel;
   const [client] = React.useContext(Context).client;
-  const [profile] = React.useContext(Context).profile;
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [unReadMessage] = React.useContext(Context).unReadMessage;
