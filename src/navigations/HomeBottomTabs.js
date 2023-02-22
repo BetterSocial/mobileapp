@@ -16,19 +16,24 @@ import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../scree
 import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
+import {setChannel} from '../context/actions/setChannel';
 
 import {fcmTokenService} from '../service/users';
+import {saveToCache} from '../utils/cache';
+import {getAccessToken} from '../utils/token';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs({navigation}) {
   const isIos = Platform.OS === 'ios';
-
+  const [channelClient, dispatch] = React.useContext(Context).channel;
+  const [client] = React.useContext(Context).client;
+  const [profile] = React.useContext(Context).profile;
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [unReadMessage] = React.useContext(Context).unReadMessage;
 
-  const handleNotification = (notification) => {
+  const handleNotification = async (notification) => {
     if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
       navigation.navigate('PostDetailPage', {
         feedId: notification.data.feed_id
@@ -43,6 +48,17 @@ function HomeBottomTabs({navigation}) {
         }
       });
     }
+    if (notification.data.type === 'message.new') {
+      try {
+        const channel = client.client.getChannelById('messaging', notification.data.channel_id, {});
+        setChannel(channel, dispatch);
+        navigation.navigate('ChatDetailPage');
+      } catch (e) {
+        navigation.navigate('ChatDetailPage', {
+          data: notification.data
+        });
+      }
+    }
   };
 
   PushNotification.configure({
@@ -51,7 +67,6 @@ function HomeBottomTabs({navigation}) {
       handleNotification(notification);
       notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
-
     // (optional) Called when the user fails to register for remote notifications.
     // Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
     onRegistrationError(err) {
@@ -165,7 +180,6 @@ function HomeBottomTabs({navigation}) {
       // eslint-disable-next-line no-unused-expressions
       handlePushNotif(remoteMessage);
     });
-
     return () => {
       unsubscribe();
     };
