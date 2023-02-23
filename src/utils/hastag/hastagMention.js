@@ -21,7 +21,7 @@ const handleHastagMention = (text = '', hashtags = [], setHashtagState = () => {
             if (isHashtagInTopic || isHashtagUnique) {
                 topicOccurence?.push(match?.substring(1))
                 return <Text key={generateRandomId()} style={styles.mention}>
-                    {`${match}`}
+                    {`${match.toLowerCase()}`}
                 </Text>
             }
 
