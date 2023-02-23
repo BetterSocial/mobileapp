@@ -35,6 +35,22 @@ const CreatePostInput = ({
     useHastagMention('');
 
   React.useEffect(() => {
+    const newPostText = detectIfTopicsAlreadyInPost();
+    // updateHashtag(newPostText, topics)
+  }, [topics]);
+
+  const detectIfTopicsAlreadyInPost = () => {
+    let newPostText = message;
+    topics.forEach((topic) => {
+      if (!newPostText.includes(`#${topic}`)) newPostText += ` #${topic}`;
+    });
+
+    if (newPostText === message) return newPostText;
+    setMessage((prev) => newPostText);
+    setShouldUpdateHashtag(new Date().valueOf());
+  };
+
+  React.useEffect(() => {
     // updateHashtag(message, topics, setTopics, positionEndCursor)
     setShouldUpdateHashtag(new Date().valueOf());
   }, [message]);
