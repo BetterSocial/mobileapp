@@ -8,7 +8,7 @@ const TopicText = ({text, navigation = null, currentTopic = null}) => {
   const onClick = () => {
     // Do navigation here
     if (!navigation || currentTopic === text.replace('#', '')) return;
-    navigation.push('TopicPageScreen', {id: text.replace('#', '').toLowerCase()});
+    navigation.push('TopicPageScreen', {id: `topic_${text.replace('#', '').toLowerCase()}`});
   };
 
   return (
