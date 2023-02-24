@@ -45,7 +45,7 @@ const ChannelListScreen = ({navigation}) => {
 
   const filters = {
     members: {$in: [myProfile.user_id]},
-    type: {$in: ['messaging', 'topics']}
+    type: {$in: ['messaging', 'topics', 'group']}
   };
   // React.useEffect(() => { }, [unReadMessage]);
   const perf = React.useRef(null);

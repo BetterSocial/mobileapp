@@ -111,13 +111,10 @@ function HomeBottomTabs({navigation}) {
 
   const handleChatMessage = (remoteMessage) => {
     let {title, body} = remoteMessage.notification;
-    if (
-      remoteMessage.data.channel_type === 'messaging' &&
-      remoteMessage.data.channel_id.includes('!members')
-    ) {
+    if (remoteMessage.data.channel_type === 'messaging') {
       const newTitle = remoteMessage.notification.title.split('@');
       title = newTitle[0].replace(' ', '');
-    } else if (remoteMessage.data.channel_type === 'messaging') {
+    } else if (remoteMessage.data.channel_type === 'group') {
       const newTitle = remoteMessage.notification.title.split('@');
       const newBody = `${newTitle[0].replace(' ', '')}: ${body}`;
       body = newBody;
@@ -130,6 +127,7 @@ function HomeBottomTabs({navigation}) {
   };
 
   const pushNotifAndroid = (remoteMessage) => {
+    console.log(remoteMessage, 'suka');
     const {title, body} = handleChatMessage(remoteMessage);
     PushNotification.localNotification({
       id: '123',
@@ -159,6 +157,7 @@ function HomeBottomTabs({navigation}) {
   };
 
   const handlePushNotif = (remoteMessage) => {
+    console.log(remoteMessage, 'jahat');
     const {data} = remoteMessage;
     if (data.channel_type !== 3) {
       if (isIos) {
