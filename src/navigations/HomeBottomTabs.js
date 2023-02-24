@@ -47,7 +47,11 @@ function HomeBottomTabs({navigation}) {
     }
     if (notification.data.type === 'message.new') {
       try {
-        const channel = client.client.getChannelById('messaging', notification.data.channel_id, {});
+        const channel = client.client.getChannelById(
+          notification.data.channel_type,
+          notification.data.channel_id,
+          {}
+        );
         setChannel(channel, dispatch);
         navigation.navigate('ChatDetailPage');
       } catch (e) {
@@ -100,7 +104,7 @@ function HomeBottomTabs({navigation}) {
     if (__DEV__) {
       console.log(message.messageId, 'message');
     }
-    const {title, body} = handleChatMessage(message);
+    const {title, body} = message.notification;
     PushNotificationIOS.addNotificationRequest({
       title,
       body,
@@ -109,26 +113,8 @@ function HomeBottomTabs({navigation}) {
     });
   };
 
-  const handleChatMessage = (remoteMessage) => {
-    let {title, body} = remoteMessage.notification;
-    if (remoteMessage.data.channel_type === 'messaging') {
-      const newTitle = remoteMessage.notification.title.split('@');
-      title = newTitle[0].replace(' ', '');
-    } else if (remoteMessage.data.channel_type === 'group') {
-      const newTitle = remoteMessage.notification.title.split('@');
-      const newBody = `${newTitle[0].replace(' ', '')}: ${body}`;
-      body = newBody;
-      title = newTitle[1].replace(' ', '');
-    }
-    return {
-      title,
-      body
-    };
-  };
-
   const pushNotifAndroid = (remoteMessage) => {
-    console.log(remoteMessage, 'suka');
-    const {title, body} = handleChatMessage(remoteMessage);
+    const {title, body} = remoteMessage.notification;
     PushNotification.localNotification({
       id: '123',
       title,
@@ -143,7 +129,7 @@ function HomeBottomTabs({navigation}) {
       {
         channelId: 'bettersosialid', // (required)
         channelName: 'bettersosial-chat', // (required)
-        playSound: false, // (optional) default: true
+        playSound: true, // (optional) default: true
         soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
         vibrate: true // (optional) default: true. Creates the default vibration patten if true.
