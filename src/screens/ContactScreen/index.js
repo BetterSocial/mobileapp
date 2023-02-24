@@ -159,7 +159,7 @@ const ContactScreen = ({ navigation }) => {
             type_channel: typeChannel,
           },
         );
-        const createChannel = await channelChat.create();
+        await channelChat.create();
         await channelChat.addMembers(memberWithRoles)
         setChannel(channelChat, dispatchChannel);
       }
