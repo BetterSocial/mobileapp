@@ -59,7 +59,11 @@ const ChatDetailPage = ({route}) => {
   };
   const handleChannelClient = async () => {
     try {
-      const channel = clients.client.getChannelById('messaging', route.params.data.channel_id, {});
+      const channel = clients.client.getChannelById(
+        route.params.data.channel_type,
+        route.params.data.channel_id,
+        {}
+      );
       setChannel(channel, dispatchChannel);
     } catch (e) {
       console.log(e, 'eman');
