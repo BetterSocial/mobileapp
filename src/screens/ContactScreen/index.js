@@ -129,7 +129,12 @@ const ContactScreen = ({ navigation }) => {
         typeChannel = 1;
       }
       const clientChat = await client.client;
-      const filter = { type: 'messaging', members: { $eq: members } };
+      console.log(members, 'lala')
+      let type = 'messaging'
+      if(members.length > 2) {
+        type = 'group'
+      }
+      const filter = { type, members: { $eq: members } };
       const sort = [{ last_message_at: -1 }];
       const findChannels = await clientChat.queryChannels(filter, sort, {
         watch: true,
@@ -147,14 +152,14 @@ const ContactScreen = ({ navigation }) => {
         setChannel(findChannels[0], dispatchChannel);
       } else {
         const channelChat = await clientChat.channel(
-          'messaging',
+          type,
           generatedChannelId,
           {
             name: channelName.join(', '),
             type_channel: typeChannel,
           },
         );
-        const err = await channelChat.create();
+        const createChannel = await channelChat.create();
         await channelChat.addMembers(memberWithRoles)
         setChannel(channelChat, dispatchChannel);
       }
