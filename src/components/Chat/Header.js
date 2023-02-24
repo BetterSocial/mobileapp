@@ -22,7 +22,6 @@ const Header = () => {
   const [channelClient] = React.useContext(Context).channel;
   const [profileContext] = React.useContext(Context).profile;
   const { channel } = channelClient;
-
   const username = channelClient.channel?.data?.name;
 
   const chatName = getChatName(username, profileContext.myProfile.username);
