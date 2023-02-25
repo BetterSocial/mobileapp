@@ -1,6 +1,6 @@
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LogBox, StatusBar} from 'react-native';
+import {LogBox, StatusBar, AppState} from 'react-native';
 import {useLocalChannelsFirst} from 'stream-chat-react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
@@ -40,6 +40,7 @@ export const useInitialStartup = () => {
   const setFeedChatData = useSetRecoilState(feedChatAtom);
   const [clientState] = React.useContext(Context).client;
   const {client} = clientState;
+  const appState = React.useRef(AppState.currentState);
   const perf = React.useRef(null);
   const timeoutSplashScreen = React.useRef(null);
   const [loadingUser, setLoadingUser] = React.useState(true);
@@ -174,6 +175,13 @@ export const useInitialStartup = () => {
     }
   };
 
+  const handleAppStateChange = async (nextAppState) => {
+    if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+      getFeedChat();
+    }
+
+    appState.current = nextAppState;
+  };
   React.useEffect(() => {
     // logging section
     traceMetricScreen('loading_splashscreen').then((fnCallback) => {
@@ -181,6 +189,10 @@ export const useInitialStartup = () => {
     });
     Analytics.logEvent('splashscreen_startup');
     Analytics.trackingScreen('splashscreen');
+
+    if (initialStartup.id !== null && initialStartup.id !== '') {
+      AppState.addEventListener('change', handleAppStateChange);
+    }
     LogBox.ignoreAllLogs();
 
     // statusbar
@@ -198,6 +210,9 @@ export const useInitialStartup = () => {
     });
 
     return async () => {
+      if (initialStartup.id !== null && initialStartup.id !== '') {
+        AppState.removeEventListener('change', handleAppStateChange);
+      }
       if (timeoutSplashScreen.current) {
         clearTimeout(timeoutSplashScreen.current);
       }
