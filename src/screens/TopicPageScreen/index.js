@@ -3,6 +3,7 @@ import {StatusBar, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import BlockComponent from '../../components/BlockComponent';
+import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
 import TiktokScroll from '../../components/TiktokScroll';
@@ -124,33 +125,31 @@ const TopicPageScreen = (props) => {
   };
 
   const refreshingData = async (offsetParam = offset) => {
-    if (offsetParam >= 0) {
-      try {
-        setLoading(true);
-        const result = await getTopicPages(topicId, offsetParam);
-        const {data} = result;
-        const topicWithPrefix = route.params.id;
-        const id = removePrefixTopic(topicWithPrefix);
-        setOffset(result.offset);
-        if (result.code === 200) {
-          if (offsetParam === 0) {
-            saveToCache(`${TOPIC_LIST}_${id}`, result);
-            setTopicFeeds(data, dispatch);
-          } else {
-            const joinData = [...feeds, ...data];
-            const newResult = {...result, data: joinData};
-            saveToCache(`${TOPIC_LIST}_${id}`, newResult);
-            setTopicFeeds(joinData, dispatch);
-          }
+    try {
+      setLoading(true);
+      const result = await getTopicPages(topicId, offsetParam);
+      const {data} = result;
+      const topicWithPrefix = route.params.id;
+      const id = removePrefixTopic(topicWithPrefix);
+      setOffset(result.offset);
+      if (result.code === 200) {
+        if (offsetParam === 0) {
+          saveToCache(`${TOPIC_LIST}_${id}`, result);
+          setTopicFeeds(data, dispatch);
+        } else {
+          const joinData = [...feeds, ...data];
+          const newResult = {...result, data: joinData};
+          saveToCache(`${TOPIC_LIST}_${id}`, newResult);
+          setTopicFeeds(joinData, dispatch);
         }
-
-        setLoading(false);
-      } catch (error) {
-        if (__DEV__) {
-          console.log(error);
-        }
-        setLoading(false);
       }
+
+      setLoading(false);
+    } catch (error) {
+      if (__DEV__) {
+        console.log(error);
+      }
+      setLoading(false);
     }
   };
   const onDeleteBlockedPostCompleted = async (postId) => {
@@ -289,6 +288,7 @@ const TopicPageScreen = (props) => {
           renderItem={renderItem}
         />
       </View>
+      <ButtonAddPostTopic topicName={topicName} />
       <BlockComponent
         ref={refBlockComponent}
         refresh={onBlockCompleted}

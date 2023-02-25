@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {View} from 'react-native';
-
-import {useRecoilValue} from 'recoil';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
+import {useRecoilValue} from 'recoil';
 
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
@@ -45,6 +44,7 @@ import {
   ProfileScreen
 } from '../screens';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
+import {NavigationConstants} from '../utils/constants';
 import {useInitialStartup} from '../hooks/useInitialStartup';
 
 const RootStack = createNativeStackNavigator();
@@ -140,7 +140,7 @@ const AuthenticatedNavigator = () => {
         options={{headerShown: false}}
       />
       <AuthenticatedStack.Screen
-        name="CreatePost"
+        name={NavigationConstants.CREATE_POST_SCREEN}
         component={CreatePost}
         options={{headerShown: false}}
       />

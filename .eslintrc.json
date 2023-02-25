@@ -41,7 +41,7 @@
         "bracketSameLine": true,
         "arrowParens": "always",
         "printWidth": 100,
-        "trailingComma" : "none",
+        "trailingComma": "none",
         "proseWrap": "preserve"
       }
     ]
