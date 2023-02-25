@@ -55,7 +55,7 @@ const TopicPageScreen = (props) => {
       // const _resultGetTopicPages = await getTopicPages(id);
 
       await getSpecificCache(`${TOPIC_LIST}_${id}`, async (cacheTopic) => {
-        if (!cacheTopic) {
+        if (!cacheTopic || cacheTopic?.length === 0) {
           const resultGetTopicPages = await getTopicPages(id);
           saveToCache(`${TOPIC_LIST}_${id}`, resultGetTopicPages);
           setTopicFeeds(resultGetTopicPages.data, dispatch);
