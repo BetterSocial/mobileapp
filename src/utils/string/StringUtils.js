@@ -366,6 +366,26 @@ const sanitizeUrl = (message) => {
   return '';
 };
 
+const getHourText = (day, hourParam) => {
+  if (day > 0 && hourParam > 0) return `, ${hourParam}h`;
+  if (day === 0 && hourParam > 0) return ` ${hourParam}h`;
+  return '';
+};
+
+const getMinuteText = (minuteParam, hourParam) => {
+  if (hourParam > 0 && minuteParam > 0) return `, ${minuteParam}m`;
+  if (hourParam === 0 && minuteParam > 0) return ` ${minuteParam}m`;
+  return '';
+};
+
+const getDurationTimeText = (selectedtime) => {
+  const dayText = selectedtime.day > 0 ? `${selectedtime.day} Day(s)` : '';
+  const hourText = getHourText(selectedtime?.day, selectedtime?.hour);
+  const minuteText = getMinuteText(selectedtime?.hour, selectedtime?.minute);
+
+  return `${dayText}${hourText}${minuteText}`;
+};
+
 export {
   capitalizeFirstText,
   convertString,
@@ -382,5 +402,6 @@ export {
   randomString,
   removeStringAfterSpace,
   displayCityName,
-  sanitizeUrl
+  sanitizeUrl,
+  getDurationTimeText
 };

@@ -1,13 +1,14 @@
 import * as React from 'react';
-import {StyleSheet, Switch, Text, TouchableOpacity, View} from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-
 import Modal from 'react-native-modal';
-import PollItem from '../PollItem';
+import {Picker} from '@react-native-picker/picker';
+import {StyleSheet, Switch, Text, TouchableOpacity, View} from 'react-native';
+
 import MemoIcPlus from '../../../../assets/icons/ic_plus';
-import {colors} from '../../../../utils/colors';
-import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
 import MemoIc_arrow_right from '../../../../assets/icons/Ic_arrow_right';
+import PollItem from '../PollItem';
+import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../../../utils/constants';
+import {colors} from '../../../../utils/colors';
+import {getDurationTimeText} from '../../../../utils/string/StringUtils';
 
 function CreatePollContainer({
   onremoveallpoll = () => {},
@@ -38,14 +39,6 @@ function CreatePollContainer({
   const [pickerDay, setPickerDay] = React.useState(selectedtime.day);
   const [pickerHour, setPickerHour] = React.useState(selectedtime.hour);
   const [pickerMinute, setPickerMinute] = React.useState(selectedtime.minute);
-
-  const getDurationTimeText = () => {
-    const dayText = pickerDay > 0 ? `${pickerDay} Day(s)` : '';
-    const hourText = pickerHour > 0 ? `${pickerDay > 0 ? ', ' : ' '}${pickerHour}h` : '';
-    const minuteText = pickerMinute > 0 ? `${pickerHour > 0 ? ', ' : ' '}${pickerMinute}m` : '';
-
-    return `${dayText}${hourText}${minuteText}`;
-  };
 
   const onSetTime = () => {
     const selectedTime = {...selectedtime};
