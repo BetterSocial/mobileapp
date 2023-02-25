@@ -381,7 +381,7 @@ const getMinuteText = (minuteParam, hourParam) => {
 const getDurationTimeText = (selectedtime) => {
   const dayText = selectedtime.day > 0 ? `${selectedtime.day} Day(s)` : '';
   const hourText = getHourText(selectedtime?.day, selectedtime?.hour);
-  const minuteText = getMinuteText(selectedtime?.hour, selectedtime?.minute);
+  const minuteText = getMinuteText(selectedtime?.minute, selectedtime?.hour);
 
   return `${dayText}${hourText}${minuteText}`;
 };
