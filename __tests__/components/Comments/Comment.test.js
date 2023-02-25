@@ -214,7 +214,6 @@ describe('Comment test should run correctly', () => {
       />
     );
     fireEvent.press(getByTestId('upvoteBtn'));
-    // expect(serviceVoteMock).toHaveBeenCalled();
     expect(setState).toHaveBeenCalled();
     expect(serviceIvoteMock).toHaveBeenCalled();
   });
