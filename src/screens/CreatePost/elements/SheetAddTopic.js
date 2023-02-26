@@ -1,24 +1,23 @@
 import * as React from 'react';
+import {ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View} from 'react-native';
 import KeyEvent from 'react-native-keyevent';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View } from 'react-native';
-
-import Card from './Card';
+import {Button} from '../../../components/Button';
 import TopicItem from '../../../components/TopicItem';
-import { Button } from '../../../components/Button';
-import { colors } from '../../../utils/colors';
-import { convertString } from '../../../utils/string/StringUtils';
-import { fonts } from '../../../utils/fonts';
-import { getTopics } from '../../../service/topics';
-import { isEmptyOrSpaces } from '../../../utils/Utils';
+import {getTopics} from '../../../service/topics';
+import {colors} from '../../../utils/colors';
+import {fonts} from '../../../utils/fonts';
+import {convertString} from '../../../utils/string/StringUtils';
+import {isEmptyOrSpaces} from '../../../utils/Utils';
+import Card from './Card';
 
-const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
+const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
   const [dataTopic, setTopic] = React.useState('');
   const [listTopics, setlistTopics] = React.useState([]);
-  const [chatTopic, setChatTopic] = React.useState([])
+  const [chatTopic, setChatTopic] = React.useState([]);
   const [trigger, setTrigger] = React.useState(-1);
   const [topicSuggestion, setTopicSuggestion] = React.useState([]);
-  const rbSheetHeight = 330
+  const rbSheetHeight = 330;
   const [, setWidthInput] = React.useState(0);
   const inputRef = React.useRef();
 
@@ -36,7 +35,6 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
     add();
   }, [trigger]);
 
-
   const onKeyUp = (keycode) => {
     if (keycode === 62) {
       setTrigger(new Date().valueOf());
@@ -46,7 +44,7 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
   const searchTopic = async (name) => {
     if (!isEmptyOrSpaces(name)) {
       getTopics(name)
-        .then(v => {
+        .then((v) => {
           if (v.data.length > 0) {
             if (v.data.length > 5) {
               const newData = v.data.slice(0, 5);
@@ -56,18 +54,18 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
             }
           }
         })
-        .catch(err => {
+        .catch((err) => {
           if (__DEV__) {
             console.log(err);
           }
         });
     }
-  }
+  };
   const add = () => {
-    const data = dataTopic.replace(/\s/g, '')
+    const data = dataTopic.replace(/\s/g, '');
     if (data !== '' && !listTopics.includes(data)) {
       setlistTopics((val) => [...val, data]);
-      setChatTopic((val) => [...val, `topic_${data}`])
+      setChatTopic((val) => [...val, `topic_${data}`]);
       setTopic('');
     }
     setTopic('');
@@ -75,13 +73,13 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
   };
   const removeTopic = (v) => {
     const newArr = listTopics.filter((e) => e !== v);
-    const newChatTopic = chatTopic.filter((chat) => chat !== `topic_${v}`)
+    const newChatTopic = chatTopic.filter((chat) => chat !== `topic_${v}`);
     setlistTopics(newArr);
-    setChatTopic(newChatTopic)
+    setChatTopic(newChatTopic);
   };
   const merge = () => {
     setlistTopics(topics);
-    setChatTopic(chatTopics)
+    setChatTopic(chatTopics);
   };
   const save = () => {
     const data = dataTopic.replace(/\s/g, '').toLowerCase();
@@ -89,7 +87,7 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
       onAdd(listTopics, chatTopic);
     } else if (!listTopics.includes(data)) {
       const newArr = [...listTopics, data];
-      const newChatTopic = [...chatTopic, `topic_${data}`]
+      const newChatTopic = [...chatTopic, `topic_${data}`];
       onAdd(newArr, newChatTopic);
     }
     add();
@@ -106,7 +104,6 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
   //   add();
   // };
 
-
   return (
     <RBSheet
       height={rbSheetHeight}
@@ -117,15 +114,13 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
       closeOnPressMask={true}
       customStyles={{
         container: styles.containerSheet,
-        draggableIcon: styles.draggableIcon,
+        draggableIcon: styles.draggableIcon
       }}>
-      <View style={styles.container}
-      >
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="always">
+      <View style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
           <Text style={styles.title}>Add topics</Text>
-          <View style={styles.content}
+          <View
+            style={styles.content}
             onLayout={(event) => {
               // const headerHeightLayout = event.nativeEvent.layout.height;
               const headerWidthLayout = event.nativeEvent.layout.width;
@@ -142,8 +137,7 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
               ))}
             </View>
             {listTopics.length < 5 && (
-              <View style={styles.containerInput}
-              >
+              <View style={styles.containerInput}>
                 <Text style={styles.hashtag}>#</Text>
                 <TextInput
                   ref={inputRef}
@@ -159,35 +153,39 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
                       searchTopic(v);
                     }
 
-                    return null
+                    return null;
                   }}
                   autoCapitalize="none"
                   blurOnSubmit={false}
                   autoFocus
                 />
-
               </View>
             )}
             {topicSuggestion.length > 0 && (
-              <Card >
+              <Card>
                 {topicSuggestion.map((item, index) => (
-                  <TouchableNativeFeedback key={`topicSuggestions-${index}`} onPress={() => {
-                    let textTopic = convertString(item.name, " ", "")
-                    textTopic += ' ';
-                    setTopic(textTopic);
-                    setTopicSuggestion([]);
-                    onKeyUp(62);
-                  }}>
-                    <View style={{ marginBottom: 5 }} >
-                      <Text style={{
-                        color: '#000000',
-                        fontFamily: fonts.inter[500],
-                        fontWeight: '500',
-                        fontSize: 12,
-                        lineHeight: 18
-                      }}>#{convertString(item.name, " ", "")}</Text>
+                  <TouchableNativeFeedback
+                    key={`topicSuggestions-${index}`}
+                    onPress={() => {
+                      let textTopic = convertString(item.name, ' ', '');
+                      textTopic += ' ';
+                      setTopic(textTopic.toLowerCase());
+                      setTopicSuggestion([]);
+                      onKeyUp(62);
+                    }}>
+                    <View style={{marginBottom: 5}}>
+                      <Text
+                        style={{
+                          color: '#000000',
+                          fontFamily: fonts.inter[500],
+                          fontWeight: '500',
+                          fontSize: 12,
+                          lineHeight: 18
+                        }}>
+                        #{convertString(item.name, ' ', '')}
+                      </Text>
                       {index !== topicSuggestion.length - 1 && (
-                        <View style={{ height: 1, marginTop: 5, backgroundColor: '#C4C4C4' }} />
+                        <View style={{height: 1, marginTop: 5, backgroundColor: '#C4C4C4'}} />
                       )}
                     </View>
                   </TouchableNativeFeedback>
@@ -196,10 +194,7 @@ const SheetAddTopic = ({ refTopic, onAdd, topics, onClose, chatTopics }) => {
             )}
           </View>
 
-
-          <Text style={styles.textDesc}>
-            Hit space to start a new topic. Add up to 5 topics.
-          </Text>
+          <Text style={styles.textDesc}>Hit space to start a new topic. Add up to 5 topics.</Text>
           <Button onPress={() => save()}>Save</Button>
         </ScrollView>
       </View>
@@ -212,7 +207,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom: 38,
+    paddingBottom: 38
   },
   content: {
     backgroundColor: colors.lightgrey,
@@ -227,7 +222,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   containerTag: {
     backgroundColor: colors.white,
@@ -239,24 +234,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginRight: 12,
-    marginBottom: 12,
+    marginBottom: 12
   },
   tag: {
     fontFamily: fonts.inter[400],
-    fontSize: 12,
+    fontSize: 12
   },
   containerInput: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   listItem: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
   hashtag: {
     fontSize: 14,
     fontWeight: '400',
-    fontFamily: fonts.inter[400],
+    fontFamily: fonts.inter[400]
     // marginTop: Platform.OS === 'android' ? -8 : 0,
   },
   textDesc: {
@@ -264,17 +259,17 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     color: colors.gray,
     marginTop: 5,
-    marginBottom: 21,
+    marginBottom: 21
   },
   containerSheet: {
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopLeftRadius: 20
   },
   draggableIcon: {
-    backgroundColor: colors.alto,
+    backgroundColor: colors.alto
   },
   topicItem: {
-    marginBottom: 12,
+    marginBottom: 12
   },
-  input: { width: '100%', paddingStart: 0 },
+  input: {width: '100%', paddingStart: 0}
 });

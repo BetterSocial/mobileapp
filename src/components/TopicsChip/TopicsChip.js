@@ -22,7 +22,7 @@ const TopicsChip = ({topics = [], fontSize = 24, isPdp}) => {
             testID="topic-chip"
             activeOpacity={1}
             onPress={() => onTopicPress(item)}>
-            <Text style={{...styles.topicText, fontSize}}>#{item}</Text>
+            <Text style={{...styles.topicText, fontSize}}>#{item && item.toLowerCase()}</Text>
           </TouchableOpacity>
         </View>
       ))}
