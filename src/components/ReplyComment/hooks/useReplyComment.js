@@ -211,6 +211,7 @@ const useReplyComment = ({
       ...newCommentList,
       {...defaultData, data: {...defaultData.data, text: textComment}}
     ]);
+    console.log(dataFeed, 'nana');
     try {
       if (textComment.trim() !== '') {
         const data = await createChildComment(
@@ -218,7 +219,9 @@ const useReplyComment = ({
           item.id,
           item.user.id,
           sendPostNotif,
-          dataFeed?.actor?.id
+          dataFeed?.actor?.id,
+          dataFeed.id,
+          dataFeed.message
         );
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
@@ -276,5 +279,4 @@ const useReplyComment = ({
     createComment
   };
 };
-
 export default useReplyComment;

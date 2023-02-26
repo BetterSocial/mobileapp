@@ -8,7 +8,7 @@ const createCommentParent = async (text, activityId, useridFeed, sendPostNotif) 
       activity_id: activityId,
       message: text,
       useridFeed,
-      sendPostNotif,
+      sendPostNotif
     };
 
     const resApi = await api.post('/activity/comment', data);
@@ -19,16 +19,25 @@ const createCommentParent = async (text, activityId, useridFeed, sendPostNotif) 
   }
 };
 
-const createChildComment = async (text, reactionId, useridFeed, sendPostNotif, postMaker) => {
+const createChildComment = async (
+  text,
+  reactionId,
+  useridFeed,
+  sendPostNotif,
+  postMaker,
+  activityId,
+  postTitle
+) => {
   try {
     const data = {
       reaction_id: reactionId,
       message: text,
       useridFeed,
       sendPostNotif,
-      postMaker
+      postMaker,
+      activityId,
+      postTitle
     };
-
     const resApi = await api.post('/activity/child-comment', data);
     return resApi.data;
   } catch (error) {
@@ -41,14 +50,14 @@ const deleteComment = async (reactionId) => {
   try {
     const payload = {
       reaction_id: reactionId
-    }
+    };
 
-    const resApi = await api.post('/activity/delete-reaction', payload)
-    return resApi?.data
+    const resApi = await api.post('/activity/delete-reaction', payload);
+    return resApi?.data;
   } catch (error) {
     crashlytics().recordError(error.response.data);
     throw new Error(error);
   }
-}
+};
 
-export { createCommentParent, createChildComment, deleteComment };
+export {createCommentParent, createChildComment, deleteComment};
