@@ -33,7 +33,8 @@ function HomeBottomTabs({navigation}) {
   const handleNotification = async (notification) => {
     if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
       navigation.navigate('PostDetailPage', {
-        feedId: notification.data.feed_id
+        feedId: notification.data.feed_id,
+        is_from_pn: true
       });
     }
     if (notification.data.type === 'follow_user') {
