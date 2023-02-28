@@ -13,7 +13,6 @@ const PollOptionsMultipleChoice = ({
   item,
   mypoll,
   index,
-  // total,
   selectedindex,
   isexpired,
   isalreadypolling = false,
@@ -94,7 +93,6 @@ const PollOptionsMultipleChoice = ({
 
   return (
     <TouchableNativeFeedback
-      key={index}
       testID="multiple"
       disabled={isPollDisabled()}
       onPress={onOptionsClicked}>

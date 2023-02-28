@@ -12,10 +12,10 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { generateRandomId } from 'stream-chat-react-native';
+import {generateRandomId} from 'stream-chat-react-native';
 /* eslint-disable no-underscore-dangle */
-import { useNavigation } from '@react-navigation/core';
-import { useRoute } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/core';
+import {useRoute} from '@react-navigation/native';
 
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
@@ -30,8 +30,8 @@ import ReportUser from '../../components/Blocking/ReportUser';
 import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import dimen from '../../utils/dimen';
-import { Context } from '../../context';
-import { blockUser, unblockUserApi } from '../../service/blocking';
+import {Context} from '../../context';
+import {blockUser, unblockUserApi} from '../../service/blocking';
 import {
   checkUserBlock,
   getOtherFeedsInProfile,
@@ -39,21 +39,21 @@ import {
   setFollow,
   setUnFollow
 } from '../../service/profile';
-import { colors } from '../../utils/colors';
-import { downVote, upVote } from '../../service/vote';
-import { fonts } from '../../utils/fonts';
-import { getAccessToken } from '../../utils/token';
-import { getFeedDetail } from '../../service/post';
-import { getSingularOrPluralText } from '../../utils/string/StringUtils';
-import { linkContextScreenParamBuilder } from '../../utils/navigation/paramBuilder';
-import { setChannel } from '../../context/actions/setChannel';
-import { setFeedByIndex, setOtherProfileFeed } from '../../context/actions/otherProfileFeed';
-import { trimString } from '../../utils/string/TrimString';
-import { useAfterInteractions } from '../../hooks/useAfterInteractions';
-import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import {colors} from '../../utils/colors';
+import {downVote, upVote} from '../../service/vote';
+import {fonts} from '../../utils/fonts';
+import {getAccessToken} from '../../utils/token';
+import {getFeedDetail} from '../../service/post';
+import {getSingularOrPluralText} from '../../utils/string/StringUtils';
+import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {setChannel} from '../../context/actions/setChannel';
+import {setFeedByIndex, setOtherProfileFeed} from '../../context/actions/otherProfileFeed';
+import {trimString} from '../../utils/string/TrimString';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
-const { width, height } = Dimensions.get('screen');
+const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
 
 const OtherProfile = () => {
@@ -67,55 +67,61 @@ const OtherProfile = () => {
   const flatListRef = React.useRef();
 
   const [dataMain, setDataMain] = React.useState({});
-  const [dataMainBio, setDataMainBio] = React.useState("");
+  const [, setDataMainBio] = React.useState('');
   const [user_id, setUserId] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [other_id, setOtherId] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
   const [isShowButton, setIsShowButton] = React.useState(false);
   const [opacity, setOpacity] = React.useState(0);
-  const [tokenJwt, setTokenJwt] = React.useState('');
+  const [, setTokenJwt] = React.useState('');
   const [reason, setReason] = React.useState([]);
-  const [yourselfId, setYourselfId] = React.useState('');
+  const [yourselfId] = React.useState('');
   const [blockStatus, setBlockStatus] = React.useState({
     blocked: false,
-    blocker: false,
+    blocker: false
   });
   const [loadingBlocking, setLoadingBlocking] = React.useState(false);
-  const [postOffset, setPostOffset] = React.useState(0)
+  const [postOffset, setPostOffset] = React.useState(0);
 
   const headerHeightRef = React.useRef(0);
+  const interactionManagerRef = React.useRef(null);
 
   const [client] = React.useContext(Context).client;
-  const [channel, dispatchChannel] = React.useContext(Context).channel;
+  const [, dispatchChannel] = React.useContext(Context).channel;
   const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
-  const [feedsContext, dispatch] = React.useContext(Context).feeds;
+  const [, dispatch] = React.useContext(Context).feeds;
 
   const create = useClientGetstream();
-  const { interactionsComplete } = useAfterInteractions()
+  const {interactionsComplete} = useAfterInteractions();
 
-  const { params } = route;
-  const { feeds } = otherProfileFeeds
+  const {params} = route;
+  const {feeds} = otherProfileFeeds;
 
   const getOtherFeeds = async (userId, offset = 0) => {
-    const result = await getOtherFeedsInProfile(userId)
+    const result = await getOtherFeedsInProfile(userId);
 
-    if (offset === 0) setOtherProfileFeed([...result.data, { dummy: true }], dispatchOtherProfile)
+    if (offset === 0) setOtherProfileFeed([...result.data, {dummy: true}], dispatchOtherProfile);
     else {
-      const clonedFeeds = [...feeds]
-      clonedFeeds.splice(feeds.length - 1, 0, ...data)
-      setOtherProfileFeed(clonedFeeds, dispatchOtherProfile)
+      const clonedFeeds = [...feeds];
+      clonedFeeds.splice(feeds.length - 1, 0, ...data);
+      setOtherProfileFeed(clonedFeeds, dispatchOtherProfile);
     }
 
-    setPostOffset(result.offset)
-  }
+    setPostOffset(result.offset);
+  };
 
+  React.useEffect(() => {
+    return () => {
+      if (interactionManagerRef.current) interactionManagerRef.current.cancel();
+    };
+  }, []);
 
   React.useEffect(() => {
     if (interactionsComplete) {
-      fetchOtherProfile(params?.data?.username)
-    };
+      fetchOtherProfile(params?.data?.username);
+    }
   }, [interactionsComplete]);
 
   React.useEffect(() => {
@@ -134,10 +140,10 @@ const OtherProfile = () => {
   const checkUserBlockHandle = async (user_id, callback) => {
     try {
       const sendData = {
-        user_id,
+        user_id
       };
       const processGetBlock = await checkUserBlock(sendData);
-      if (callback) callback()
+      if (callback) callback();
       if (processGetBlock.status === 200) {
         setBlockStatus(processGetBlock.data.data);
         setIsLoading(false);
@@ -152,30 +158,30 @@ const OtherProfile = () => {
       const result = await getOtherProfile(username);
       if (result.code === 200) {
         setDataMain(result.data);
-        setDataMainBio(result.data.bio)
+        setDataMainBio(result.data.bio);
         checkUserBlockHandle(result.data.user_id);
         setOtherId(result.data.user_id);
-        getOtherFeeds(result.data.user_id)
+        getOtherFeeds(result.data.user_id);
       }
     } catch (e) {
       if (e.response && e.response.data && e.response.data.message) {
-        SimpleToast.show(e.response.data.message, SimpleToast.SHORT)
+        SimpleToast.show(e.response.data.message, SimpleToast.SHORT);
       }
       setBlockStatus({
         ...blockStatus,
-        blocked: true,
+        blocked: true
       });
       setIsLoading(false);
     }
   };
 
-  const onShare = async () => ShareUtils.shareUserLink(username)
+  const onShare = async () => ShareUtils.shareUserLink(username);
 
   const handleSetUnFollow = async () => {
     const data = {
       user_id_follower: user_id,
       user_id_followed: other_id,
-      follow_source: 'other-profile',
+      follow_source: 'other-profile'
     };
     const result = await setUnFollow(data);
     if (result.code === 200) {
@@ -189,7 +195,7 @@ const OtherProfile = () => {
       user_id_followed: other_id,
       username_follower: profile.myProfile.username,
       username_followed: username,
-      follow_source: 'other-profile',
+      follow_source: 'other-profile'
     };
 
     const result = await setFollow(data);
@@ -197,7 +203,6 @@ const OtherProfile = () => {
     // const textOwnUser = `${username} started following you. Send them a message now`;
     // const textTargetUser = `You started following ${profile.myProfile.username}. Send them a message now.`;
     if (result.code === 200) {
-
       fetchOtherProfile(username);
     }
   };
@@ -209,9 +214,7 @@ const OtherProfile = () => {
       ) : (
         <Text linkStyle={styles.seeMore}>
           {trimString(string, 121)}{' '}
-          {string.length > 121 ? (
-            <Text style={{ color: colors.blue }}>see more</Text>
-          ) : null}
+          {string.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
         </Text>
       )}
     </View>
@@ -219,108 +222,93 @@ const OtherProfile = () => {
 
   const __renderListHeader = () => {
     const __renderBlockIcon = () => {
-      if (blockStatus.blocker) return (
-        <View style={styles.buttonFollowing}>
-          <Text style={styles.textButtonFollowing}>
-            Blocked
-          </Text>
-        </View>)
+      if (blockStatus.blocker)
+        return (
+          <View style={styles.buttonFollowing}>
+            <Text style={styles.textButtonFollowing}>Blocked</Text>
+          </View>
+        );
 
-      return (
-        <BlockBlueIcon
-          width={20}
-          height={20}
-          fill={colors.bondi_blue} />
-      )
-    }
+      return <BlockBlueIcon width={20} height={20} fill={colors.bondi_blue} />;
+    };
 
     const handleOpenFollowerUser = () => {
-      SimpleToast.show(`For privacy reasons, you cannot see who follows ${dataMain.username}`, SimpleToast.LONG)
-    }
+      SimpleToast.show(
+        `For privacy reasons, you cannot see who follows ${dataMain.username}`,
+        SimpleToast.LONG
+      );
+    };
 
     const __renderFollowerDetail = () => {
-      if (blockStatus.blocker) return <></>
+      if (blockStatus.blocker) return <></>;
       return (
         <React.Fragment>
           <View style={styles.wrapFollower}>
             <TouchableOpacity onPress={handleOpenFollowerUser} style={styles.wrapRow}>
               <React.Fragment>
-                <Text style={styles.textTotal}>
-                  {dataMain.follower_symbol}
+                <Text style={styles.textTotal}>{dataMain.follower_symbol}</Text>
+                <Text style={styles.textFollow}>
+                  {getSingularOrPluralText(dataMain.follower_symbol, 'Follower', 'Followers')}
                 </Text>
-                <Text style={styles.textFollow}>{getSingularOrPluralText(dataMain.follower_symbol, "Follower", "Followers")}</Text>
               </React.Fragment>
-
             </TouchableOpacity>
-            {user_id === dataMain.user_id ? <View style={styles.following}>
-              <TouchableNativeFeedback
-                onPress={() =>
-                  goToFollowings(dataMain.user_id, dataMain.username)
-                }>
-                <View style={styles.wrapRow}>
-                  <Text style={styles.textTotal}>
-                    {dataMain.following_symbol}
-                  </Text>
-                  <Text style={styles.textFollow}>Following</Text>
-                </View>
-              </TouchableNativeFeedback>
-            </View> : null}
+            {user_id === dataMain.user_id ? (
+              <View style={styles.following}>
+                <TouchableNativeFeedback
+                  onPress={() => goToFollowings(dataMain.user_id, dataMain.username)}>
+                  <View style={styles.wrapRow}>
+                    <Text style={styles.textTotal}>{dataMain.following_symbol}</Text>
+                    <Text style={styles.textFollow}>Following</Text>
+                  </View>
+                </TouchableNativeFeedback>
+              </View>
+            ) : null}
           </View>
           {__renderBio(dataMain.bio)}
         </React.Fragment>
-      )
-    }
+      );
+    };
 
     const __renderFollowingButton = () => {
-      if (user_id === dataMain.user_id) return <></>
-      if (dataMain.is_following) return (
-        <React.Fragment>
-          <GlobalButton
-            onPress={() => handleSetUnFollow()}>
-            <View style={styles.buttonFollowing}>
-              <Text style={styles.textButtonFollowing}>
-                Following
-              </Text>
-            </View>
-          </GlobalButton>
-        </React.Fragment>)
+      if (user_id === dataMain.user_id) return <></>;
+      if (dataMain.is_following)
+        return (
+          <React.Fragment>
+            <GlobalButton onPress={() => handleSetUnFollow()}>
+              <View style={styles.buttonFollowing}>
+                <Text style={styles.textButtonFollowing}>Following</Text>
+              </View>
+            </GlobalButton>
+          </React.Fragment>
+        );
 
       return (
         <React.Fragment>
-          <GlobalButton
-            onPress={() => handleSetFollow()}>
+          <GlobalButton onPress={() => handleSetFollow()}>
             <View style={styles.buttonFollow}>
-              <Text style={styles.textButtonFollow}>
-                Follow
-              </Text>
+              <Text style={styles.textButtonFollow}>Follow</Text>
             </View>
           </GlobalButton>
         </React.Fragment>
-      )
-    }
+      );
+    };
 
     const __renderMessageAndFollowButtonGroup = () => {
-      if (blockStatus.blocker) return <></>
+      if (blockStatus.blocker) return <></>;
       return (
         <React.Fragment>
-          <GlobalButton
-            onPress={onCreateChannel}>
+          <GlobalButton onPress={onCreateChannel}>
             <View style={styles.btnMsg}>
-              <EnveloveBlueIcon
-                width={20}
-                height={20}
-                fill={colors.bondi_blue}
-              />
+              <EnveloveBlueIcon width={20} height={20} fill={colors.bondi_blue} />
             </View>
           </GlobalButton>
 
           {__renderFollowingButton()}
-
         </React.Fragment>
-      )
-    }
+      );
+    };
 
-    if (blockStatus.blocked) return <></>
+    if (blockStatus.blocked) return <></>;
     return (
       <React.Fragment>
         <View style={styles.containerProfile}>
@@ -330,28 +318,22 @@ const OtherProfile = () => {
               source={{
                 uri: dataMain.profile_pic_path
                   ? dataMain.profile_pic_path
-                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png',
+                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
               }}
             />
 
             <View style={styles.wrapButton}>
-              <GlobalButton onPress={onBlockReaction}>
-                {__renderBlockIcon()}
-              </GlobalButton>
+              <GlobalButton onPress={onBlockReaction}>{__renderBlockIcon()}</GlobalButton>
 
               {__renderMessageAndFollowButtonGroup()}
             </View>
           </View>
-          {dataMain.real_name && (
-            <Text style={styles.nameProfile}>
-              {dataMain.real_name}
-            </Text>
-          )}
+          {dataMain.real_name && <Text style={styles.nameProfile}>{dataMain.real_name}</Text>}
         </View>
         {__renderFollowerDetail()}
       </React.Fragment>
-    )
-  }
+    );
+  };
 
   const handleScroll = (event) => {
     const currentOffset = event.nativeEvent.contentOffset.y;
@@ -376,28 +358,24 @@ const OtherProfile = () => {
       const members = [other_id, user_id];
       setIsLoading(true);
       const clientChat = await client.client;
-      const filter = { type: 'messaging', members: { $eq: members } };
-      const sort = [{ last_message_at: -1 }];
+      const filter = {type: 'messaging', members: {$eq: members}};
+      const sort = [{last_message_at: -1}];
       const channels = await clientChat.queryChannels(filter, sort, {
         watch: true,
-        state: true,
+        state: true
       });
       if (channels.length > 0) {
         setChannel(channels[0], dispatchChannel);
       } else {
-        const channelChat = await clientChat.channel(
-          'messaging',
-          generateRandomId(),
-          {
-            name: [profile.myProfile.username, username].join(', '),
-            members,
-          },
-        );
+        const channelChat = await clientChat.channel('messaging', generateRandomId(), {
+          name: [profile.myProfile.username, username].join(', '),
+          members
+        });
         await channelChat.watch();
         setChannel(channelChat, dispatchChannel);
       }
       await navigation.navigate('ChatDetailPage');
-      setTimeout(() => setIsLoading(false), 400)
+      setTimeout(() => setIsLoading(false), 400);
       // setIsLoading(false)
     } catch (e) {
       if (__DEV__) {
@@ -415,10 +393,10 @@ const OtherProfile = () => {
     let data = {
       userId: dataMain.user_id,
       source: 'screen_profile',
-      reason,
+      reason
     };
     if (message) {
-      data = { ...data, message };
+      data = {...data, message};
     }
     const blockingUser = await blockUser(data);
     if (blockingUser.code === 200) {
@@ -434,14 +412,13 @@ const OtherProfile = () => {
 
   const unblockUser = async () => {
     try {
-      const processPostApi = await unblockUserApi({ userId: dataMain.user_id });
+      const processPostApi = await unblockUserApi({userId: dataMain.user_id});
       if (processPostApi.code == 200) {
         checkUserBlockHandle(dataMain.user_id);
         blockUserRef.current.close();
         specificIssueRef.current.close();
         reportUserRef.current.close();
       }
-
     } catch (e) {
       checkUserBlockHandle(dataMain.user_id);
       blockUserRef.current.close();
@@ -455,9 +432,9 @@ const OtherProfile = () => {
       handleBlocking();
     } else if (reason === 2) {
       blockUserRef.current.close();
-      InteractionManager.runAfterInteractions(() => {
+      interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
         reportUserRef.current.open();
-      })
+      });
     } else {
       unblockUser();
     }
@@ -466,10 +443,9 @@ const OtherProfile = () => {
   const onNextQuestion = (question) => {
     setReason(question);
     reportUserRef.current.close();
-    InteractionManager.runAfterInteractions(() => {
+    interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
       specificIssueRef.current.open();
-
-    })
+    });
   };
 
   const skipQuestion = () => {
@@ -486,12 +462,12 @@ const OtherProfile = () => {
     setFeedByIndex(
       {
         index,
-        singleFeed: newPolls,
+        singleFeed: newPolls
       },
-      dispatch,
+      dispatch
     );
 
-    getOtherFeeds(other_id)
+    getOtherFeeds(other_id);
   };
 
   const onPressDomain = (item) => {
@@ -499,7 +475,7 @@ const OtherProfile = () => {
       item,
       item.og.domain,
       item.og.domainImage,
-      item.og.domain_page_id,
+      item.og.domain_page_id
     );
     navigation.navigate('DomainScreen', param);
   };
@@ -508,7 +484,7 @@ const OtherProfile = () => {
     navigation.navigate('OtherProfilePostDetailPage', {
       index,
       isalreadypolling: item.isalreadypolling,
-      feedId: item.id,
+      feedId: item.id
     });
   };
 
@@ -516,7 +492,7 @@ const OtherProfile = () => {
     navigation.navigate('OtherProfilePostDetailPage', {
       index,
       isalreadypolling: item.isalreadypolling,
-      feedId: item.id,
+      feedId: item.id
     });
   };
 
@@ -536,9 +512,9 @@ const OtherProfile = () => {
         setFeedByIndex(
           {
             singleFeed: data.data,
-            index,
+            index
           },
-          dispatch,
+          dispatch
         );
       }
     } catch (e) {
@@ -551,18 +527,23 @@ const OtherProfile = () => {
   const goToFollowings = (user_id, username) => {
     navigation.navigate('Followings', {
       screen: 'TabFollowing',
-      params: { user_id, username },
+      params: {user_id, username}
     });
   };
 
-  const isFeedsShown = !(blockStatus.blocked) && !(blockStatus.blocker)
-  const __handleOnEndReached = () => getOtherFeeds(other_id, postOffset)
+  const isFeedsShown = !blockStatus.blocked && !blockStatus.blocker;
+  const __handleOnEndReached = () => getOtherFeeds(other_id, postOffset);
 
   return (
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
       <SafeAreaView style={styles.container}>
-        <ProfileHeader hideSetting showArrow onShareClicked={onShare} username={dataMain.username} />
+        <ProfileHeader
+          hideSetting
+          showArrow
+          onShareClicked={onShare}
+          username={dataMain.username}
+        />
         {isLoading ? (
           <View style={styles.containerLoading}>
             <LoadingWithoutModal />
@@ -577,45 +558,46 @@ const OtherProfile = () => {
           onScroll={handleScroll}
           onEndReach={__handleOnEndReached}
           snapToOffsets={(() => {
-            const posts = feeds.map((item, index) => headerHeightRef.current + (index * dimen.size.PROFILE_ITEM_HEIGHT))
-            return [headerHeightRef.current, ...posts]
+            const posts = feeds.map(
+              (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
+            );
+            return [headerHeightRef.current, ...posts];
           })()}
           ListHeaderComponent={
-            <View onLayout={(event) => {
-              const headerHeightLayout = event.nativeEvent.layout.height
-              headerHeightRef.current = headerHeightLayout
-            }}>
-              <View style={styles.content}>
-                {__renderListHeader()}
-              </View>
+            <View
+              onLayout={(event) => {
+                const headerHeightLayout = event.nativeEvent.layout.height;
+                headerHeightRef.current = headerHeightLayout;
+              }}>
+              <View style={styles.content}>{__renderListHeader()}</View>
               <View>
                 <View style={styles.tabs} ref={postRef}>
-                  <Text style={styles.postText}>
-                    Posts
-                  </Text>
+                  <Text style={styles.postText}>Posts</Text>
                 </View>
               </View>
             </View>
           }>
-          {({ item, index }) => {
-            const dummyItemHeight = height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight;
-            if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>
-            return <View style={{ width: '100%' }}>
-              <RenderItem
-                bottomBar={false}
-                item={item}
-                index={index}
-                onNewPollFetched={onNewPollFetched}
-                onPressDomain={onPressDomain}
-                onPress={() => onPress(item, index)}
-                onPressComment={() => onPressComment(item, item.id)}
-                onPressBlock={() => onPressBlock(item)}
-                onPressUpvote={(post) => setUpVote(post, index)}
-                selfUserId={yourselfId}
-                onPressDownVote={(post) =>
-                  setDownVote(post, index)
-                } />
-            </View>
+          {({item, index}) => {
+            const dummyItemHeight =
+              height - dimen.size.PROFILE_ITEM_HEIGHT - 44 - 16 - StatusBar.currentHeight;
+            if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>;
+            return (
+              <View style={{width: '100%'}}>
+                <RenderItem
+                  bottomBar={false}
+                  item={item}
+                  index={index}
+                  onNewPollFetched={onNewPollFetched}
+                  onPressDomain={onPressDomain}
+                  onPress={() => onPress(item, index)}
+                  onPressComment={() => onPressComment(item, item.id)}
+                  onPressBlock={() => onPressBlock(item)}
+                  onPressUpvote={(post) => setUpVote(post, index)}
+                  selfUserId={yourselfId}
+                  onPressDownVote={(post) => setDownVote(post, index)}
+                />
+              </View>
+            );
           }}
         </ProfileTiktokScroll>
 
@@ -625,11 +607,7 @@ const OtherProfile = () => {
           username={username}
           isBlocker={blockStatus.blocker}
         />
-        <ReportUser
-          ref={reportUserRef}
-          onSelect={onNextQuestion}
-          onSkip={skipQuestion}
-        />
+        <ReportUser ref={reportUserRef} onSelect={onNextQuestion} onSkip={skipQuestion} />
         <SpecificIssue
           refSpecificIssue={specificIssueRef}
           onSkip={skipQuestion}
@@ -638,7 +616,7 @@ const OtherProfile = () => {
         />
         {isShowButton ? (
           <TouchableNativeFeedback onPress={toTop}>
-            <View style={{ ...styles.btnBottom, opacity }}>
+            <View style={{...styles.btnBottom, opacity}}>
               <ArrowUpWhiteIcon width={12} height={20} fill={colors.white} />
             </View>
           </TouchableNativeFeedback>
@@ -651,80 +629,79 @@ const OtherProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.white
   },
   content: {
     flexDirection: 'column',
-    padding: 20,
+    padding: 20
   },
   dummyItem: (height) => ({
-    height,
-
+    height
   }),
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-  following: { marginLeft: 18 },
+  following: {marginLeft: 18},
   textUsername: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 18,
     lineHeight: 22,
     color: colors.black,
-    marginLeft: 18,
+    marginLeft: 18
   },
   profileImage: {
     width: 100,
     height: 100,
     borderRadius: 100,
-    marginBottom: 12,
+    marginBottom: 12
   },
   containerProfile: {
-    marginTop: 24,
+    marginTop: 24
   },
   wrapImageProfile: {
     marginTop: 24,
     flexDirection: 'column',
-    backgroundColor: 'red',
+    backgroundColor: 'red'
   },
   nameProfile: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 17,
-    color: colors.black,
+    color: colors.black
   },
   wrapFollower: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 12,
+    marginTop: 12
   },
   wrapRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   textTotal: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
     color: colors.bondi_blue,
-    paddingRight: 4,
+    paddingRight: 4
   },
   textFollow: {
     fontFamily: fonts.inter[800],
     fontSize: 14,
     color: colors.black,
-    paddingRight: 4,
+    paddingRight: 4
   },
   containerBio: {
-    marginTop: 8,
+    marginTop: 8
   },
   seeMore: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
-    color: colors.black,
+    color: colors.black
   },
   tabs: {
     width,
@@ -732,7 +709,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   postText: {
     fontFamily: fonts.inter[800],
@@ -741,23 +718,23 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingBottom: 12,
     borderBottomWidth: 2,
-    borderBottomColor: colors.bondi_blue,
+    borderBottomColor: colors.bondi_blue
   },
   wrapNameAndbackButton: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   wrapImageAndStatus: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
   wrapButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   buttonFollowing: {
     width: 88,
@@ -767,7 +744,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.bondi_blue,
-    borderRadius: 8,
+    borderRadius: 8
   },
   buttonFollow: {
     width: 88,
@@ -777,19 +754,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     backgroundColor: colors.bondi_blue,
-    color: colors.white,
+    color: colors.white
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue,
+    color: colors.bondi_blue
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white,
+    color: colors.white
   },
   btnBottom: {
     position: 'absolute',
@@ -801,7 +778,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   tabsFixed: {
     width,
@@ -813,19 +790,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     zIndex: 2000,
-    backgroundColor: colors.white,
+    backgroundColor: colors.white
   },
   containerFlatFeed: {
     // padding: 20,
-    flex: 1,
+    flex: 1
   },
   btnMsg: {
-    paddingVertical: 0,
+    paddingVertical: 0
   },
   containerLoading: {
     height: '100%',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }
 });
 export default withInteractionsManaged(OtherProfile);
