@@ -9,8 +9,8 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { debounce } from 'lodash'
-import { useNavigation } from '@react-navigation/core'
+import {debounce} from 'lodash';
+import {useNavigation} from '@react-navigation/core';
 
 import DiscoveryAction from '../../../context/actions/discoveryAction';
 import IconClear from '../../../assets/icon/IconClear';
@@ -19,44 +19,46 @@ import MemoIcSearch from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import TestIdConstant from '../../../utils/testId';
 import dimen from '../../../utils/dimen';
-import { COLORS, FONTS, SIZES } from '../../../utils/theme';
-import { Context } from '../../../context/Store';
-import { RECENT_SEARCH_TERMS } from '../../../utils/cache/constant';
-import { colors } from '../../../utils/colors';
-import { fonts } from '../../../utils/fonts';
+import {COLORS, FONTS, SIZES} from '../../../utils/theme';
+import {Context} from '../../../context/Store';
+import {RECENT_SEARCH_TERMS} from '../../../utils/cache/constant';
+import {colors} from '../../../utils/colors';
+import {fonts} from '../../../utils/fonts';
 
 const DiscoverySearch = ({
-  setDiscoveryLoadingData = () => { },
-  searchText = "",
-  setSearchText = () => { },
+  setDiscoveryLoadingData = () => {},
+  searchText = '',
+  setSearchText = () => {},
   isFocus = true,
-  setIsFocus = () => { },
-  setIsFirstTimeOpen = () => { },
-  fetchDiscoveryData = () => { },
-  onCancelToken = () => { }
+  setIsFocus = () => {},
+  setIsFirstTimeOpen = () => {},
+  fetchDiscoveryData = () => {},
+  onCancelToken = () => {}
 }) => {
-  const navigation = useNavigation()
-  const [, discoveryDispatch] = React.useContext(Context).discovery
-  const discoverySearchBarRef = React.useRef(null)
+  const navigation = useNavigation();
+  const [, discoveryDispatch] = React.useContext(Context).discovery;
+  const discoverySearchBarRef = React.useRef(null);
 
-  const [isSearchIconShown, setIsSearchIconShown] = React.useState(false)
-  const [isTextAvailable, setIsTextAvailable] = React.useState(false)
-  const [lastSearch, setLastSearch] = React.useState('')
+  const [isSearchIconShown, setIsSearchIconShown] = React.useState(false);
+  const [isTextAvailable, setIsTextAvailable] = React.useState(false);
+  const [lastSearch, setLastSearch] = React.useState('');
 
-  const debounced = React.useCallback(debounce((text) => {
-    handleSubmitSearchData(text)
-  }, 1000)
+  const debounced = React.useCallback(
+    debounce((text) => {
+      handleSubmitSearchData(text);
+    }, 1000),
 
-    , [])
+    []
+  );
 
   const handleBackPress = () => {
-    Keyboard.dismiss()
-    if (navigation.canGoBack()) navigation.goBack()
-  }
+    Keyboard.dismiss();
+    if (navigation.canGoBack()) navigation.goBack();
+  };
 
   const handleFocus = (isFocusParam) => {
-    setIsFocus(isFocusParam)
-  }
+    setIsFocus(isFocusParam);
+  };
 
   const setAllLoading = (isLoading) => {
     setDiscoveryLoadingData({
@@ -64,110 +66,120 @@ const DiscoverySearch = ({
       topic: isLoading,
       domain: isLoading,
       news: isLoading
-    })
-  }
+    });
+  };
 
   const debounceChangeText = (text) => {
-    onCancelToken()
+    onCancelToken();
     if (text.length > 2) {
-      setAllLoading(true)
-      setIsFirstTimeOpen(false)
-      debounced(text)
+      setAllLoading(true);
+      setIsFirstTimeOpen(false);
+      debounced(text);
     } else {
-      setIsFirstTimeOpen(true)
-      setAllLoading(false)
-      debounced.cancel()
+      setIsFirstTimeOpen(true);
+      setAllLoading(false);
+      debounced.cancel();
     }
-  }
+  };
 
   const handleChangeText = (text) => {
-    setSearchText(text)
-    setIsTextAvailable(text.length > 0)
-    debounceChangeText(text)
-  }
+    setSearchText(text);
+    setIsTextAvailable(text.length > 0);
+    debounceChangeText(text);
+  };
 
   const handleOnClearText = () => {
-    setSearchText("")
-    setLastSearch("")
+    setSearchText('');
+    setLastSearch('');
     // setIsTextAvailable(false)
     // debounced.cancel()
     // discoverySearchBarRef.current.focus()
-  }
+  };
 
   const handleOnSubmitEditing = (event) => {
-    const { text } = event?.nativeEvent
-    handleSubmitSearchData(text)
-  }
+    const {text} = event?.nativeEvent;
+    handleSubmitSearchData(text);
+  };
 
   const handleSubmitSearchData = async (text) => {
-    if (text === lastSearch) return
+    if (text === lastSearch) return;
+    setLastSearch(text);
+    setAllLoading(true);
+    setIsFirstTimeOpen(false);
+    fetchDiscoveryData(text);
 
-    setLastSearch(text)
-    setAllLoading(true)
-    setIsFirstTimeOpen(false)
-    fetchDiscoveryData(text)
-
-    const result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS)
+    const result = await AsyncStorage.getItem(RECENT_SEARCH_TERMS);
 
     if (!result) {
-      const itemToSave = JSON.stringify([text])
-      DiscoveryAction.setDiscoveryRecentSearch([text], discoveryDispatch)
-      AsyncStorage.setItem(RECENT_SEARCH_TERMS, itemToSave)
-      return
+      const itemToSave = JSON.stringify([text]);
+      DiscoveryAction.setDiscoveryRecentSearch([text], discoveryDispatch);
+      AsyncStorage.setItem(RECENT_SEARCH_TERMS, itemToSave);
+      return;
     }
 
-    let resultArray = JSON.parse(result)
-    if (resultArray.indexOf(text) > -1) return
+    let resultArray = JSON.parse(result);
+    if (resultArray.indexOf(text) > -1) return;
 
-    resultArray = [text].concat(resultArray)
-    if (resultArray.length > 3) resultArray.pop()
+    resultArray = [text].concat(resultArray);
+    if (resultArray.length > 3) resultArray.pop();
 
-    DiscoveryAction.setDiscoveryRecentSearch(resultArray, discoveryDispatch)
-    AsyncStorage.setItem(RECENT_SEARCH_TERMS, JSON.stringify(resultArray))
-  }
-
-  React.useEffect(() => {
-    setIsSearchIconShown(!isFocus && !isTextAvailable)
-  }, [isTextAvailable, isFocus])
+    DiscoveryAction.setDiscoveryRecentSearch(resultArray, discoveryDispatch);
+    AsyncStorage.setItem(RECENT_SEARCH_TERMS, JSON.stringify(resultArray));
+  };
 
   React.useEffect(() => {
-    debounceChangeText(searchText)
-    setIsTextAvailable(searchText.length > 0)
-  }, [searchText])
+    setIsSearchIconShown(!isFocus && !isTextAvailable);
+  }, [isTextAvailable, isFocus]);
+
+  React.useEffect(() => {
+    debounceChangeText(searchText);
+    setIsTextAvailable(searchText.length > 0);
+  }, [searchText]);
 
   React.useEffect(() => {
     const unsubscribe = () => {
-      setIsTextAvailable(false)
-      setSearchText('')
-      DiscoveryAction.setDiscoveryData({
-        followedUsers: [],
-        unfollowedUsers: [],
-        followedDomains: [],
-        unfollowedDomains: [],
-        followedTopic: [],
-        unfollowedTopic: [],
-        news: [],
-      }, discoveryDispatch)
-    }
+      setIsTextAvailable(false);
+      setSearchText('');
+      DiscoveryAction.setDiscoveryData(
+        {
+          followedUsers: [],
+          unfollowedUsers: [],
+          followedDomains: [],
+          unfollowedDomains: [],
+          followedTopic: [],
+          unfollowedTopic: [],
+          news: []
+        },
+        discoveryDispatch
+      );
+    };
 
-    return unsubscribe
-  }, [])
+    return unsubscribe;
+  }, []);
 
   return (
     <View style={styles.animatedViewContainer}>
       <View style={styles.arrowContainer}>
-        <TouchableNativeFeedback testID={TestIdConstant.discoveryScreenBackArrow} onPress={handleBackPress}>
+        <TouchableNativeFeedback
+          testID={TestIdConstant.discoveryScreenBackArrow}
+          onPress={handleBackPress}>
           <View style={styles.backArrow}>
-            <MemoIcArrowBackWhite width={20} height={12} fill={colors.black} style={{ alignSelf: 'center' }} />
+            <MemoIcArrowBackWhite
+              width={20}
+              height={12}
+              fill={colors.black}
+              style={{alignSelf: 'center'}}
+            />
           </View>
         </TouchableNativeFeedback>
       </View>
       <View style={styles.searchContainer}>
         <View style={styles.wrapperSearch}>
-          {isSearchIconShown && <View style={styles.wrapperIcon}>
-            <MemoIcSearch width={16.67} height={16.67} />
-          </View>
-          }
+          {isSearchIconShown && (
+            <View style={styles.wrapperIcon}>
+              <MemoIcSearch width={16.67} height={16.67} />
+            </View>
+          )}
           <TextInput
             ref={discoverySearchBarRef}
             testID={TestIdConstant.discoveryScreenSearchBar}
@@ -183,15 +195,19 @@ const DiscoverySearch = ({
             onSubmitEditing={handleOnSubmitEditing}
             placeholder={StringConstant.discoverySearchBarPlaceholder}
             placeholderTextColor={COLORS.gray1}
-            style={styles.input} />
+            style={styles.input}
+          />
 
-          <TouchableOpacity testID={TestIdConstant.discoveryScreenClearButton} delayPressIn={0} onPress={handleOnClearText} style={styles.clearIconContainer}
+          <TouchableOpacity
+            testID={TestIdConstant.discoveryScreenClearButton}
+            delayPressIn={0}
+            onPress={handleOnClearText}
+            style={styles.clearIconContainer}
             android_ripple={{
               color: COLORS.gray1,
               borderless: true,
-              radius: 35,
-            }}
-          >
+              radius: 35
+            }}>
             <View style={styles.wrapperDeleteIcon}>
               <IconClear width={9} height={10} iconColor={colors.black} />
             </View>
@@ -203,13 +219,13 @@ const DiscoverySearch = ({
 };
 
 const styles = StyleSheet.create({
-  arrowContainer: { paddingLeft: 20 },
-  backArrow: { flex: 1, justifyContent: 'center', marginRight: 9, },
+  arrowContainer: {paddingLeft: 20},
+  backArrow: {flex: 1, justifyContent: 'center', marginRight: 9},
   container: {
     flexDirection: 'row',
     backgroundColor: 'white',
     marginBottom: SIZES.base,
-    marginHorizontal: SIZES.base,
+    marginHorizontal: SIZES.base
   },
   clearIconContainer: {
     justifyContent: 'center',
@@ -217,11 +233,11 @@ const styles = StyleSheet.create({
     marginRight: -20.5,
     paddingRight: 30,
     paddingLeft: 30,
-    zIndex: 1000,
+    zIndex: 1000
   },
   searchContainer: {
     flex: 1,
-    marginRight: 20,
+    marginRight: 20
   },
   wrapperSearch: {
     flex: 1,
@@ -230,7 +246,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     flexDirection: 'row',
     height: 36,
-    paddingRight: 8,
+    paddingRight: 8
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -240,7 +256,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 9,
-    paddingBottom: 9,
+    paddingBottom: 9
   },
   input: {
     marginRight: 16,
@@ -251,22 +267,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 33,
     paddingTop: 0,
-    paddingBottom: 0,
+    paddingBottom: 0
   },
   wrapperIcon: {
     marginLeft: 9.67,
     marginRight: 1.67,
     alignSelf: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   wrapperDeleteIcon: {
     alignSelf: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   newPostText: {
     color: COLORS.holyTosca,
     marginRight: 11,
-    ...FONTS.h3,
+    ...FONTS.h3
   },
   animatedViewContainer: {
     flexDirection: 'row',
@@ -277,8 +293,8 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.alto,
-  },
+    borderBottomColor: COLORS.alto
+  }
 });
 
 export default DiscoverySearch;
