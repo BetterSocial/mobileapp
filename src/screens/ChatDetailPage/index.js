@@ -1,15 +1,7 @@
 import * as React from 'react';
 import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -124,7 +116,7 @@ const ChatDetailPage = ({route}) => {
     setAsset(messages.results, dispatch);
   };
   const testDate = (v) => v;
-
+  console.log(insets, 'sisi');
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
@@ -147,18 +139,13 @@ const ChatDetailPage = ({route}) => {
             ReactionList={() => null}>
             <>
               <Header />
-              <KeyboardAvoidingView
-                enabled={Platform.OS === 'ios'}
-                behavior={Platform.OS === 'ios' ? 'height' : 'padding'}
-                keyboardVerticalOffset={insets.top}
-                style={{flex: 1}}>
-                <MessageList
-                  tDateTimeParser={testDate}
-                  InlineDateSeparator={CustomInlineDateSeparator}
-                />
 
-                <MessageInput Input={InputMessage} />
-              </KeyboardAvoidingView>
+              <MessageList
+                tDateTimeParser={testDate}
+                InlineDateSeparator={CustomInlineDateSeparator}
+              />
+
+              <MessageInput Input={InputMessage} />
             </>
           </Channel>
         </Chat>
