@@ -1,7 +1,5 @@
 import * as React from 'react';
 import {
-  KeyboardAvoidingView,
-  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -75,24 +73,17 @@ const ReplyCommentId = ({
 
   if (!item) return null;
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'height' : null}
-      style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
-      {/* Header */}
-      <SafeAreaView>
-        <View style={styles.header}>
-          <TouchableOpacity testID="backButton" onPress={navigationGoBack} style={styles.backArrow}>
-            <ArrowLeftIcon width={20} height={12} fill="#000" />
-          </TouchableOpacity>
-          <Text testID="usernameText" style={styles.headerText}>
-            Reply to {item.user.data.username}
-          </Text>
-          <View style={styles.btn} />
-        </View>
-      </SafeAreaView>
-
-      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity testID="backButton" onPress={navigationGoBack} style={styles.backArrow}>
+          <ArrowLeftIcon width={20} height={12} fill="#000" />
+        </TouchableOpacity>
+        <Text testID="usernameText" style={styles.headerText}>
+          Reply to {item.user.data.username}
+        </Text>
+        <View style={styles.btn} />
+      </View>
       <ScrollView ref={scrollViewRef} contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
           <ReplyCommentItem
@@ -159,7 +150,7 @@ const ReplyCommentId = ({
         onPress={() => createComment()}
         value={temporaryText}
       />
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 export const ContainerReply = ({children, isGrandchild = true, key}) => (

@@ -1,16 +1,7 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
-import {
-  Dimensions,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  View
-} from 'react-native';
+import {Dimensions, Keyboard, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
@@ -538,10 +529,7 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'height' : null}
-      enabled
-      style={styles.container}>
+    <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
       <StatusBar translucent={false} />
       {item ? (
@@ -638,7 +626,7 @@ const PostPageDetailIdComponent = (props) => {
           <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />
         </React.Fragment>
       ) : null}
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
