@@ -57,6 +57,9 @@ const SignIn = () => {
             setDataHumenId(res.data, dispatch);
             verifyUser(appUserId)
               .then((response) => {
+                if (response.is_banned) {
+                  return;
+                }
                 if (response.data) {
                   setAccessToken(response.token);
                   setRefreshToken(response.refresh_token);
