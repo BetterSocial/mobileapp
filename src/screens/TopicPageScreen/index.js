@@ -52,7 +52,7 @@ const TopicPageScreen = (props) => {
       setUserTopicName(idLower);
       const query = `?name=${idLower}`;
       setTopicId(idLower);
-      console.log(query, 'liman')
+      console.log(query, 'liman');
       // eslint-disable-next-line no-underscore-dangle
       // const _resultGetTopicPages = await getTopicPages(id);
 
@@ -216,9 +216,10 @@ const TopicPageScreen = (props) => {
     });
   };
 
-  const onPressComment = (index) => {
+  const onPressComment = (item) => {
     props.navigation.navigate('PostDetailPage', {
-      index
+      feedId: item.id,
+      isalreadypolling: item.isalreadypolling
     });
   };
 
@@ -267,7 +268,7 @@ const TopicPageScreen = (props) => {
       index={index}
       onPressDomain={onPressDomain}
       onPress={() => onPress(item, index)}
-      onPressComment={() => onPressComment(index)}
+      onPressComment={() => onPressComment(item)}
       onPressBlock={() => onPressBlock(item)}
       onPressUpvote={(post) => setUpVote(post, index)}
       userId={userId}
