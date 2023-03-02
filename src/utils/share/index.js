@@ -40,6 +40,10 @@ const sharePostInTopic = async (item, analyticsLogEvent, analyticsId) => {
   await buildShare(`${config.POST_SHARE_URL}/post/${item?.id}`);
 };
 
+const shareCommunity = (topicname) => {
+  buildShare(`${config.POST_SHARE_URL}/community/${topicname}`);
+};
+
 const sharePostInProfile = async (item, analyticsLogEvent, analyticsId) => {
   Analytics.logEvent(analyticsLogEvent, {
     id: analyticsId
@@ -86,7 +90,8 @@ const ShareUtils = {
   shareNews,
   sharePostInProfile,
   sharePostInTopic,
-  shareUserLink
+  shareUserLink,
+  shareCommunity
 };
 
 export default ShareUtils;
