@@ -21,6 +21,7 @@ import {getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import ShareUtils from '../../utils/share';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -52,7 +53,6 @@ const TopicPageScreen = (props) => {
       setUserTopicName(idLower);
       const query = `?name=${idLower}`;
       setTopicId(idLower);
-      console.log(query, 'liman');
       // eslint-disable-next-line no-underscore-dangle
       // const _resultGetTopicPages = await getTopicPages(id);
 
@@ -240,6 +240,10 @@ const TopicPageScreen = (props) => {
     return processVote;
   };
 
+  const onShareCommunity = () => {
+    ShareUtils.shareCommunity(topicName);
+  };
+
   const updateFeed = async (post, index) => {
     try {
       const data = await getFeedDetail(post.activity_id);
@@ -280,7 +284,12 @@ const TopicPageScreen = (props) => {
     <View
       style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
       <StatusBar barStyle="dark-content" translucent={false} />
-      <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
+      <Navigation
+        domain={topicName}
+        onShareCommunity={onShareCommunity}
+        onPress={() => handleFollowTopic()}
+        isFollow={isFollow}
+      />
       <View style={{flex: 1}}>
         <TiktokScroll
           contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
