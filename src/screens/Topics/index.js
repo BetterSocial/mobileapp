@@ -19,10 +19,11 @@ import {colors} from '../../utils/colors';
 import {ProgressBar} from '../../components/ProgressBar';
 import StringConstant from '../../utils/string/StringConstant';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
-import { Header } from '../../components';
-import { getSpecificCache } from '../../utils/cache';
-import { TOPICS_PICK } from '../../utils/cache/constant';
-import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
+import {Header} from '../../components';
+import {getSpecificCache} from '../../utils/cache';
+import {TOPICS_PICK} from '../../utils/cache/constant';
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import useSignin from '../SignInV2/hooks/useSignin';
 
 const {width} = Dimensions.get('screen');
 
@@ -34,134 +35,141 @@ const Topics = () => {
   const [, dispatch] = React.useContext(Context).topics;
   const [myTopic, setMyTopic] = React.useState({});
   const [isPreload, setIspreload] = React.useState(true);
-
+  const {getTopicsData, topicCollection} = useSignin();
   const getCacheTopic = async () => {
-
     getSpecificCache(TOPICS_PICK, (cache) => {
-      setTopics(cache)
-      setIspreload(false)
-    })
-  }
+      if (cache) {
+        setTopics(cache);
+        setIspreload(false);
+      } else {
+        getTopicsData();
+        setIspreload(false);
+      }
+    });
+  };
+  React.useEffect(() => {
+    if (topicCollection.length > 0) {
+      setTopics(topicCollection);
+    }
+  }, [topicCollection]);
 
   React.useEffect(() => {
-    getCacheTopic()
-  }, [])
+    getCacheTopic();
+  }, []);
 
-
-  const handleSelectedLanguage = React.useCallback((val) => {
-    if(!myTopic[val]) {
-      setMyTopic({...myTopic, [val]: val})
-    } else {
-      setMyTopic({...myTopic, [val]: null})
-    }
-    let copytopicSelected = [...topicSelected];
-    const index = copytopicSelected.findIndex((data) => data === val);
-    if (index > -1) {
-      copytopicSelected = copytopicSelected.filter((data) => data !== val)
-    } else {
-      copytopicSelected.push(val);
-    }
-    setTopicSelected(copytopicSelected);
-  }, [topicSelected])
+  const handleSelectedLanguage = React.useCallback(
+    (val) => {
+      if (!myTopic[val]) {
+        setMyTopic({...myTopic, [val]: val});
+      } else {
+        setMyTopic({...myTopic, [val]: null});
+      }
+      let copytopicSelected = [...topicSelected];
+      const index = copytopicSelected.findIndex((data) => data === val);
+      if (index > -1) {
+        copytopicSelected = copytopicSelected.filter((data) => data !== val);
+      } else {
+        copytopicSelected.push(val);
+      }
+      setTopicSelected(copytopicSelected);
+    },
+    [topicSelected]
+  );
 
   const next = () => {
     if (topicSelected.length >= minTopic) {
       Analytics.logEvent('onb_select_topics_add_btn', {
-        onb_topics_selected: topicSelected,
+        onb_topics_selected: topicSelected
       });
       setTopicsContext(topicSelected, dispatch);
       navigation.navigate('WhotoFollow');
     }
   };
 
-
-
   const renderListTopics = ({item, i}) => (
     <Pressable
-    onPress={() =>
-      handleSelectedLanguage(item.topic_id)
-    }
-    key={i}
-    style={
-      [styles.bgTopicSelectNotActive, {backgroundColor: myTopic[item.topic_id] ? colors.bondi_blue : colors.concrete}]
-    }
-    >
-    <Text>{item.icon}</Text>
-    <Text
-      style={
-        [styles.textTopicNotActive, {color: myTopic[item.topic_id] ?  colors.white : colors.mine_shaft}]
-      }>#{item.name}</Text>
-  </Pressable>
-  )
+      onPress={() => handleSelectedLanguage(item.topic_id)}
+      key={i}
+      style={[
+        styles.bgTopicSelectNotActive,
+        {backgroundColor: myTopic[item.topic_id] ? colors.bondi_blue : colors.concrete}
+      ]}>
+      <Text>{item.icon}</Text>
+      <Text
+        style={[
+          styles.textTopicNotActive,
+          {color: myTopic[item.topic_id] ? colors.white : colors.mine_shaft}
+        ]}>
+        #{item.name}
+      </Text>
+    </Pressable>
+  );
   const onBack = () => {
-    navigation.goBack()
-  }
+    navigation.goBack();
+  };
 
-  const keyExtractor = React.useCallback((item ,index) => index.toString(), [])
+  const keyExtractor = React.useCallback((item, index) => index.toString(), []);
 
   return (
     <SafeAreaView style={styles.container}>
-      {isPreload ? null : <React.Fragment>
-        <Header onPress={onBack} />
-      <View style={styles.containerProgress}>
-        <ProgressBar isStatic={true} value={75} />
-      </View>
-      <View>
-        <Text style={styles.textPickYourTopic}>
-          {StringConstant.onboardingTopicsHeadline}
-        </Text>
-        <Text style={styles.textGetPersonalContent}>
-          {StringConstant.onboardingTopicsSubHeadline}
-        </Text>
-      </View>
+      {isPreload ? null : (
+        <React.Fragment>
+          <Header onPress={onBack} />
+          <View style={styles.containerProgress}>
+            <ProgressBar isStatic={true} value={75} />
+          </View>
+          <View>
+            <Text style={styles.textPickYourTopic}>{StringConstant.onboardingTopicsHeadline}</Text>
+            <Text style={styles.textGetPersonalContent}>
+              {StringConstant.onboardingTopicsSubHeadline}
+            </Text>
+          </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
-        {topics ? topics.map((topic, index) => (
-          <View key={index} style={styles.containerTopic}>
-          <Text style={styles.title}>{topic.name}</Text>
-          <ScrollView
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          style={styles.scrollButtonParent}
-          contentContainerStyle={styles.containerContent}
-          nestedScrollEnabled
-          >
-            <FlatList
-            data={topic.data}
-            renderItem={renderListTopics}
-            numColumns={Math.floor(topic.data.length / 3) + 1}
-            nestedScrollEnabled
-            scrollEnabled={false}
-            extraData={topicSelected}
-            maxToRenderPerBatch={2}
-            updateCellsBatchingPeriod={10}
-            removeClippedSubviews
-            windowSize={10}
-            keyExtractor={keyExtractor}
-            />
-
+          <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
+            {topics
+              ? topics.map((topic, index) => (
+                  <View key={index} style={styles.containerTopic}>
+                    <Text style={styles.title}>{topic.name}</Text>
+                    <ScrollView
+                      showsHorizontalScrollIndicator={false}
+                      horizontal={true}
+                      style={styles.scrollButtonParent}
+                      contentContainerStyle={styles.containerContent}
+                      nestedScrollEnabled>
+                      <FlatList
+                        data={topic.data}
+                        renderItem={renderListTopics}
+                        numColumns={Math.floor(topic.data.length / 3) + 1}
+                        nestedScrollEnabled
+                        scrollEnabled={false}
+                        extraData={topicSelected}
+                        maxToRenderPerBatch={2}
+                        updateCellsBatchingPeriod={10}
+                        removeClippedSubviews
+                        windowSize={10}
+                        keyExtractor={keyExtractor}
+                      />
+                    </ScrollView>
+                  </View>
+                ))
+              : null}
           </ScrollView>
-        </View>
-        )) : null}
-      </ScrollView>
-      <View style={styles.footer}>
-        <Text
-          style={
-            styles.textSmall
-          }>{`${StringConstant.onboardingTopicsOthersCannotSee}`}</Text>
-        <Button
-          onPress={() => next()}
-          disabled={!(topicSelected.length >= minTopic)}
-          style={topicSelected.length >= minTopic ? null : styles.button}>
-          {topicSelected.length >= minTopic
-            ? StringConstant.onboardingTopicsButtonStateNext
-            : StringConstant.onboardingTopicsButtonStateChooseMore(
-                minTopic - topicSelected.length,
-              )}
-        </Button>
-      </View>
-        </React.Fragment>}
-
+          <View style={styles.footer}>
+            <Text
+              style={styles.textSmall}>{`${StringConstant.onboardingTopicsOthersCannotSee}`}</Text>
+            <Button
+              onPress={() => next()}
+              disabled={!(topicSelected.length >= minTopic)}
+              style={topicSelected.length >= minTopic ? null : styles.button}>
+              {topicSelected.length >= minTopic
+                ? StringConstant.onboardingTopicsButtonStateNext
+                : StringConstant.onboardingTopicsButtonStateChooseMore(
+                    minTopic - topicSelected.length
+                  )}
+            </Button>
+          </View>
+        </React.Fragment>
+      )}
     </SafeAreaView>
   );
 };
@@ -170,12 +178,12 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   container: {
     flex: 1,
     padding: Platform.OS === 'ios' ? 22 : 0,
-    backgroundColor: colors.white,
+    backgroundColor: colors.white
   },
   containerProgress: {
     marginTop: 36,
@@ -203,14 +211,14 @@ const styles = StyleSheet.create({
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 5
     },
     shadowOpacity: 0.36,
     shadowRadius: 6.68,
 
     elevation: 11,
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   textGetPersonalContent: {
     fontFamily: 'Inter',
@@ -225,7 +233,7 @@ const styles = StyleSheet.create({
   },
   containerTopic: {
     flexDirection: 'column',
-    marginBottom: 32,
+    marginBottom: 32
   },
   title: {
     fontFamily: 'Inter',
@@ -241,8 +249,7 @@ const styles = StyleSheet.create({
   listTopic: {
     flexDirection: 'column',
     marginBottom: 8,
-    paddingRight: 8,
-
+    paddingRight: 8
   },
 
   bgTopicSelectActive: {
@@ -276,7 +283,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: colors.white,
+    color: colors.white
     // paddingLeft: 5,
   },
   textTopicNotActive: {
@@ -284,7 +291,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: colors.mine_shaft,
+    color: colors.mine_shaft
     // paddingLeft: 5,
   },
   textSmall: {
@@ -295,16 +302,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.emperor,
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 10
   },
   button: {
-    backgroundColor: colors.gray,
+    backgroundColor: colors.gray
   },
   scrollButtonParent: {
-    paddingHorizontal: 22,
+    paddingHorizontal: 22
   },
   containerContent: {
     paddingRight: 20
   }
 });
-export default React.memo (Topics);
+export default React.memo(Topics);
