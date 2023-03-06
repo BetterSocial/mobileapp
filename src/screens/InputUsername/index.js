@@ -5,7 +5,6 @@ import {
   Animated,
   Image,
   Keyboard,
-  KeyboardAvoidingView,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -248,10 +247,7 @@ const ChooseUsername = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
 
-      <KeyboardAvoidingView
-        style={styles.keyboardavoidingview}
-        behavior={'height'}
-        keyboardVerticalOffset={18}>
+      <View style={styles.keyboardavoidingview}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.content}>
             <ProgressBar isStatic={true} value={25} />
@@ -316,7 +312,7 @@ const ChooseUsername = () => {
             {StringConstant.onboardingChooseUsernameButtonStateNext}
           </Button>
         </View>
-      </KeyboardAvoidingView>
+      </View>
       <BottomSheetChooseImage
         ref={bottomSheetChooseImageRef}
         onOpenCamera={handleOpenCamera}

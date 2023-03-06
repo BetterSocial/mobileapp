@@ -1,43 +1,42 @@
+/* eslint-disable no-param-reassign */
 import * as React from 'react';
 import {
   Alert,
   Dimensions,
-  KeyboardAvoidingView,
-  Platform,
   RefreshControl,
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  View,
+  View
 } from 'react-native';
-import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
-import { debounce } from 'lodash';
-import { generateRandomId } from 'stream-chat-react-native-core';
-import { showMessage } from 'react-native-flash-message';
+import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
+import {debounce} from 'lodash';
+import {generateRandomId} from 'stream-chat-react-native-core';
+import {showMessage} from 'react-native-flash-message';
 
 import ContactPreview from './elements/ContactPreview';
 import Header from './elements/Header';
 import ItemUser from './elements/ItemUser';
 import SearchRecyclerView from './elements/SearchRecyclerView';
 import StringConstant from '../../utils/string/StringConstant';
-import { COLORS } from '../../utils/theme';
-import { Context } from '../../context';
-import { Loading } from '../../components';
-import { Search } from './elements';
-import { setChannel } from '../../context/actions/setChannel';
-import { userPopulate } from '../../service/users';
-import { withInteractionsManaged } from '../../components/WithInteractionManaged';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {Loading} from '../../components';
+import {Search} from './elements';
+import {setChannel} from '../../context/actions/setChannel';
+import {userPopulate} from '../../service/users';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
-const { width } = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 
-const ContactScreen = ({ navigation }) => {
+const ContactScreen = ({navigation}) => {
   const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState([]);
   const [profile] = React.useContext(Context).profile;
-  const [channel, dispatchChannel] = React.useContext(Context).channel;
-  const [client, setClient] = React.useContext(Context).client;
+  const [, dispatchChannel] = React.useContext(Context).channel;
+  const [client] = React.useContext(Context).client;
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
-  const [layoutProvider, setLayoutProvider] = React.useState(() => { });
+  const [layoutProvider, setLayoutProvider] = React.useState(() => {});
   const [refreshing, setRefreshing] = React.useState(false);
   const [dataProvider, setDataProvider] = React.useState(null);
   const [cacheUsers, setCacheUser] = React.useState([]);
@@ -46,13 +45,16 @@ const ContactScreen = ({ navigation }) => {
   const [followed, setFollowed] = React.useState([profile.myProfile.user_id]);
   const [usernames, setUsernames] = React.useState([profile.myProfile.username]);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
-  const [isSearchMode, setIsSearchMode] = React.useState(false)
-  const [isLoadingSearchResult, setIsLoadingSearchResult] = React.useState(false)
+  const [isSearchMode, setIsSearchMode] = React.useState(false);
+  const [isLoadingSearchResult, setIsLoadingSearchResult] = React.useState(false);
 
-  const debounced = React.useCallback(debounce((changedText) => {
-    // handleSearch(changedText)
-    setDebouncedText(changedText)
-  }, 1000), [])
+  const debounced = React.useCallback(
+    debounce((changedText) => {
+      // handleSearch(changedText)
+      setDebouncedText(changedText);
+    }, 1000),
+    []
+  );
 
   const VIEW_TYPE_LABEL = 1;
   const VIEW_TYPE_DATA = 2;
@@ -102,8 +104,8 @@ const ContactScreen = ({ navigation }) => {
                 dim.width = width;
                 dim.height = 40;
             }
-          },
-        ),
+          }
+        )
       );
       setDataProvider(dProvider.cloneWithRows(users));
     }
@@ -129,38 +131,33 @@ const ContactScreen = ({ navigation }) => {
         typeChannel = 1;
       }
       const clientChat = await client.client;
-      console.log(members, 'lala')
-      let type = 'messaging'
-      if(members.length > 2) {
-        type = 'group'
+      console.log(members, 'lala');
+      let type = 'messaging';
+      if (members.length > 2) {
+        type = 'group';
       }
-      const filter = { type, members: { $eq: members } };
-      const sort = [{ last_message_at: -1 }];
+      const filter = {type, members: {$eq: members}};
+      const sort = [{last_message_at: -1}];
       const findChannels = await clientChat.queryChannels(filter, sort, {
         watch: true,
-        state: true,
+        state: true
       });
-
 
       const generatedChannelId = generateRandomId();
       const memberWithRoles = members.map((item) => ({
         user_id: item,
-        channel_role: "channel_moderator",
+        channel_role: 'channel_moderator'
       }));
 
       if (findChannels.length > 0) {
         setChannel(findChannels[0], dispatchChannel);
       } else {
-        const channelChat = await clientChat.channel(
-          type,
-          generatedChannelId,
-          {
-            name: channelName.join(', '),
-            type_channel: typeChannel,
-          },
-        );
+        const channelChat = await clientChat.channel(type, generatedChannelId, {
+          name: channelName.join(', '),
+          type_channel: typeChannel
+        });
         await channelChat.create();
-        await channelChat.addMembers(memberWithRoles)
+        await channelChat.addMembers(memberWithRoles);
         setChannel(channelChat, dispatchChannel);
       }
       setFollowed([profile.user_id]);
@@ -170,18 +167,17 @@ const ContactScreen = ({ navigation }) => {
     } catch (error) {
       showMessage({
         message: 'Failed creating new chat',
-        type: 'danger',
+        type: 'danger'
       });
       setLoading(false);
     }
   };
 
-  const rowRenderer = (type, item, index, extendedState) =>
-  // switch (type) {
-  // case VIEW_TYPE_LABEL:
-  //   return <Label label={item.name} />;
-  // case VIEW_TYPE_DATA:
-  (
+  const rowRenderer = (type, item, index, extendedState) => (
+    // switch (type) {
+    // case VIEW_TYPE_LABEL:
+    //   return <Label label={item.name} />;
+    // case VIEW_TYPE_DATA:
     <ItemUser
       photo={item.profile_pic_path}
       bio={item.bio}
@@ -190,11 +186,9 @@ const ContactScreen = ({ navigation }) => {
       userid={item.user_id}
       onPress={() => handleSelected(item)}
     />
-  )
-    // }
-    ;
-
-  const handleSelected = (value, fromSearchMode = false) => {
+  );
+  // }
+  const handleSelected = (value) => {
     const copyFollowed = [...followed];
     const copyUsername = [...usernames];
     const copyUsers = [...selectedUsers];
@@ -237,34 +231,25 @@ const ContactScreen = ({ navigation }) => {
     }
   }, []);
 
-  const handleSearch = (searchQuery) => {
-    const newUsers = cacheUsers.filter(
-      (item) => item.username.toLowerCase().indexOf(searchQuery) > -1,
-    );
-    setUsers(newUsers);
-    // setText(null);
+  const setDefaultPopulateUsers = () => {
+    setUsers(cacheUsers);
   };
 
-  const setDefaultPopulateUsers = () => {
-    setUsers(cacheUsers)
-  }
-
   const onSearchTextChange = (changedText) => {
-    setText(changedText)
+    setText(changedText);
     if (changedText.length > 0) {
-      debounced(changedText)
+      debounced(changedText);
     } else {
-      debounced.cancel()
-      setDefaultPopulateUsers()
+      debounced.cancel();
+      setDefaultPopulateUsers();
     }
 
-    setIsSearchMode(changedText.length > 0)
-  }
+    setIsSearchMode(changedText.length > 0);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
         <StatusBar translucent={false} />
         <Header
           title={StringConstant.chatTabHeaderCreateChatButtonText}
@@ -281,15 +266,12 @@ const ContactScreen = ({ navigation }) => {
           onChangeText={onSearchTextChange}
           onClearText={() => onSearchTextChange('')}
           isLoading={isLoadingSearchResult}
-        // onPress={handleSearch}
+          // onPress={handleSearch}
         />
 
         <View>
           {selectedUsers && (
-            <ContactPreview
-              users={selectedUsers}
-              onPress={(user) => handleSelected(user)}
-            />
+            <ContactPreview users={selectedUsers} onPress={(user) => handleSelected(user)} />
           )}
         </View>
 
@@ -299,27 +281,27 @@ const ContactScreen = ({ navigation }) => {
             layoutProvider={layoutProvider}
             dataProvider={dataProvider}
             extendedState={{
-              followed,
+              followed
             }}
             rowRenderer={rowRenderer}
             scrollViewProps={{
-              refreshControl: (
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              ),
+              refreshControl: <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }}
           />
         )}
 
-        {isSearchMode && <SearchRecyclerView
-          text={debouncedText}
-          followed={followed}
-          selectedUsers={selectedUsers}
-          usernames={usernames}
-          setLoading={setIsLoadingSearchResult}
-          onHandleSelected={(value, fromSearchMode) => handleSelected(value, fromSearchMode)} />
-        }
+        {isSearchMode && (
+          <SearchRecyclerView
+            text={debouncedText}
+            followed={followed}
+            selectedUsers={selectedUsers}
+            usernames={usernames}
+            setLoading={setIsLoadingSearchResult}
+            onHandleSelected={(value, fromSearchMode) => handleSelected(value, fromSearchMode)}
+          />
+        )}
         <Loading visible={loading} />
-      </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -328,20 +310,20 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     backgroundColor: '#FFFFFF',
-    flex: 1,
+    flex: 1
   },
   recyclerview: {
     // paddingBottom: 100,
     // height: height - 180,
-    flex: 1,
+    flex: 1
   },
   containerStyle: {
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   subtitleStyle: (selectedUsers) => ({
     color: selectedUsers.length > 0 ? COLORS.holyTosca : COLORS.gray4,
-    marginEnd: 8,
-  }),
+    marginEnd: 8
+  })
 });
 
 export default withInteractionsManaged(ContactScreen);
