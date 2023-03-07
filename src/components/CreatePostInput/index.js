@@ -194,7 +194,7 @@ const CreatePostInput = ({
         placeholder={
           'What’s on your mind?\nRemember to be respectful.\nDownvotes & Blocks harm all your posts’ visibility.'
         }
-        autoCapitalize={'none'}>
+        autoCapitalize={'sentences'}>
         <Text>{formattedText}</Text>
       </TextInput>
       <TopicSuggestions
