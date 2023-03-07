@@ -56,7 +56,15 @@ const CustomPreviewAvatar = ({channel}) => {
             source={{uri: channel?.data?.image, priority: FastImage.priority.normal}}
             style={styles.defaultGroupImage}
           />
-          <View style={styles.typeContainer()}>{/* <Text>Min</Text> */}</View>
+          <View style={styles.typeContainer()}>
+            {channel.data.type === 'group' && (
+              <FastImage
+                resizeMode={FastImage.resizeMode.contain}
+                source={GroupIcon}
+                style={styles.iconChatStyle}
+              />
+            )}
+          </View>
         </View>
       );
     }
