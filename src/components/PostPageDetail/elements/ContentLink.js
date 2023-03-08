@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
     // maxHeight: dimen.size.FEED_CONTENT_LINK_MAX_HEIGHT,
   },
   messageContainer: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
     // paddingBottom: 15,
-    // paddingTop: 7
+    paddingTop: 7
     // backgroundColor: 'red'
   },
   message: {
