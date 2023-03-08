@@ -1,15 +1,7 @@
 import * as React from 'react';
 import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -24,14 +16,15 @@ import {fonts} from '../../utils/fonts';
 import {setAsset, setParticipants} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {setChannel} from '../../context/actions/setChannel';
 
 const streami18n = new Streami18n({
   language: 'en'
 });
 
-const ChatDetailPage = () => {
+const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
-  const [channelClient] = React.useContext(Context).channel;
+  const [channelClient, dispatchChannel] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
   const insets = useSafeAreaInsets();
   const messageSystemCustom = (props) => {
@@ -56,6 +49,24 @@ const ChatDetailPage = () => {
     }
     return <MessageSystem {...props} />;
   };
+  const handleChannelClient = async () => {
+    try {
+      const channel = clients.client.getChannelById(
+        route.params.data.channel_type,
+        route.params.data.channel_id,
+        {}
+      );
+      setChannel(channel, dispatchChannel);
+    } catch (e) {
+      console.log(e, 'eman');
+    }
+  };
+
+  React.useEffect(() => {
+    if (clients && route.params && !channelClient.client) {
+      handleChannelClient();
+    }
+  }, [route.params, clients]);
 
   const defaultActionsAllowed = (messageActionsProp) => {
     const {
@@ -105,7 +116,7 @@ const ChatDetailPage = () => {
     setAsset(messages.results, dispatch);
   };
   const testDate = (v) => v;
-
+  console.log(insets, 'sisi');
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
@@ -128,18 +139,13 @@ const ChatDetailPage = () => {
             ReactionList={() => null}>
             <>
               <Header />
-              <KeyboardAvoidingView
-                enabled={Platform.OS === 'ios'}
-                behavior={Platform.OS === 'ios' ? 'height' : 'padding'}
-                keyboardVerticalOffset={insets.top}
-                style={{flex: 1}}>
-                <MessageList
-                  tDateTimeParser={testDate}
-                  InlineDateSeparator={CustomInlineDateSeparator}
-                />
 
-                <MessageInput Input={InputMessage} />
-              </KeyboardAvoidingView>
+              <MessageList
+                tDateTimeParser={testDate}
+                InlineDateSeparator={CustomInlineDateSeparator}
+              />
+
+              <MessageInput Input={InputMessage} />
             </>
           </Channel>
         </Chat>

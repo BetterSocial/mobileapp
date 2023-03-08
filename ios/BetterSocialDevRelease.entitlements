@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>aps-environment</key>
+	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:linkdev.bettersocial.org/users</string>
+		<string>applinks:bettersocialapp.page.link/users</string>
+		<string>applinks:linkdev.bettersocial.org/posts</string>
+		<string>applinks:linkdev.bettersocial.org/postprivate</string>
+		<string>applinks:linkdev.bettersocial.org/postexpired</string>
+	</array>
+</dict>
+</plist>

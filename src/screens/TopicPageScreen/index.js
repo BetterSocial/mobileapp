@@ -1,7 +1,9 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
 import * as React from 'react';
 import {StatusBar, View} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+
 import BlockComponent from '../../components/BlockComponent';
+import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
 import TiktokScroll from '../../components/TiktokScroll';
@@ -11,15 +13,15 @@ import useChatClientHook from '../../utils/getstream/useChatClientHook';
 import {Context} from '../../context';
 import {TOPIC_LIST} from '../../utils/cache/constant';
 import {downVote, upVote} from '../../service/vote';
-
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {getFeedDetail} from '../../service/post';
 import {getSpecificCache, saveToCache} from '../../utils/cache';
 import {getTopicPages} from '../../service/topicPages';
 import {getUserId} from '../../utils/users';
 import {getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import ShareUtils from '../../utils/share';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -46,15 +48,16 @@ const TopicPageScreen = (props) => {
       // setLoading(true)
       const topicWithPrefix = route.params.id;
       const id = removePrefixTopic(topicWithPrefix);
-      setTopicName(id);
-      setUserTopicName(id);
-      const query = `?name=${id}`;
-      setTopicId(id);
+      const idLower = id.toLowerCase();
+      setTopicName(idLower);
+      setUserTopicName(idLower);
+      const query = `?name=${idLower}`;
+      setTopicId(idLower);
       // eslint-disable-next-line no-underscore-dangle
       // const _resultGetTopicPages = await getTopicPages(id);
 
       await getSpecificCache(`${TOPIC_LIST}_${id}`, async (cacheTopic) => {
-        if (!cacheTopic) {
+        if (!cacheTopic || cacheTopic?.length === 0) {
           const resultGetTopicPages = await getTopicPages(id);
           saveToCache(`${TOPIC_LIST}_${id}`, resultGetTopicPages);
           setTopicFeeds(resultGetTopicPages.data, dispatch);
@@ -124,33 +127,31 @@ const TopicPageScreen = (props) => {
   };
 
   const refreshingData = async (offsetParam = offset) => {
-    if (offset) {
-      try {
-        setLoading(true);
-        const result = await getTopicPages(topicId, offsetParam);
-        const {data} = result;
-        const topicWithPrefix = route.params.id;
-        const id = removePrefixTopic(topicWithPrefix);
-        setOffset(result.offset);
-        if (result.code === 200) {
-          if (offsetParam === 0) {
-            saveToCache(`${TOPIC_LIST}_${id}`, result);
-            setTopicFeeds(data, dispatch);
-          } else {
-            const joinData = [...feeds, ...data];
-            const newResult = {...result, data: joinData};
-            saveToCache(`${TOPIC_LIST}_${id}`, newResult);
-            setTopicFeeds(joinData, dispatch);
-          }
+    try {
+      setLoading(true);
+      const result = await getTopicPages(topicId, offsetParam);
+      const {data} = result;
+      const topicWithPrefix = route.params.id;
+      const id = removePrefixTopic(topicWithPrefix);
+      setOffset(result.offset);
+      if (result.code === 200) {
+        if (offsetParam === 0) {
+          saveToCache(`${TOPIC_LIST}_${id}`, result);
+          setTopicFeeds(data, dispatch);
+        } else {
+          const joinData = [...feeds, ...data];
+          const newResult = {...result, data: joinData};
+          saveToCache(`${TOPIC_LIST}_${id}`, newResult);
+          setTopicFeeds(joinData, dispatch);
         }
-
-        setLoading(false);
-      } catch (error) {
-        if (__DEV__) {
-          console.log(error);
-        }
-        setLoading(false);
       }
+
+      setLoading(false);
+    } catch (error) {
+      if (__DEV__) {
+        console.log(error);
+      }
+      setLoading(false);
     }
   };
   const onDeleteBlockedPostCompleted = async (postId) => {
@@ -213,9 +214,10 @@ const TopicPageScreen = (props) => {
     });
   };
 
-  const onPressComment = (index) => {
+  const onPressComment = (item) => {
     props.navigation.navigate('PostDetailPage', {
-      index
+      feedId: item.id,
+      isalreadypolling: item.isalreadypolling
     });
   };
 
@@ -236,6 +238,10 @@ const TopicPageScreen = (props) => {
     const processVote = await downVote(post);
     updateFeed(post, index);
     return processVote;
+  };
+
+  const onShareCommunity = () => {
+    ShareUtils.shareCommunity(topicName);
   };
 
   const updateFeed = async (post, index) => {
@@ -264,7 +270,7 @@ const TopicPageScreen = (props) => {
       index={index}
       onPressDomain={onPressDomain}
       onPress={() => onPress(item, index)}
-      onPressComment={() => onPressComment(index)}
+      onPressComment={() => onPressComment(item)}
       onPressBlock={() => onPressBlock(item)}
       onPressUpvote={(post) => setUpVote(post, index)}
       userId={userId}
@@ -278,7 +284,12 @@ const TopicPageScreen = (props) => {
     <View
       style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
       <StatusBar barStyle="dark-content" translucent={false} />
-      <Navigation domain={topicName} onPress={() => handleFollowTopic()} isFollow={isFollow} />
+      <Navigation
+        domain={topicName}
+        onShareCommunity={onShareCommunity}
+        onPress={() => handleFollowTopic()}
+        isFollow={isFollow}
+      />
       <View style={{flex: 1}}>
         <TiktokScroll
           contentHeight={dimen.size.TOPIC_CURRENT_ITEM_HEIGHT}
@@ -289,6 +300,7 @@ const TopicPageScreen = (props) => {
           renderItem={renderItem}
         />
       </View>
+      <ButtonAddPostTopic topicName={topicName} />
       <BlockComponent
         ref={refBlockComponent}
         refresh={onBlockCompleted}

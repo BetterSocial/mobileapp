@@ -1,16 +1,7 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
-import {
-  Dimensions,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  View
-} from 'react-native';
+import {Dimensions, Keyboard, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
@@ -70,7 +61,6 @@ const PostPageDetailIdComponent = (props) => {
   const {timer} = feedsContext;
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
-
   React.useEffect(() => {
     if (item && item?.latest_reactions) {
       if (!item?.latest_reactions?.comment) setCommentList([]);
@@ -114,12 +104,23 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
+  const onBottomPage = () => {
+    if (scrollViewRef && scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({y: Dimensions.get('screen').height + 30, x: 0});
+    }
+  };
+
   const getDetailFeed = async () => {
     if (!route.params.isCaching) {
       setLoading(true);
       const data = await getFeedDetail(feedId);
       setItem(data?.data);
       setLoading(false);
+      if (route.params.is_from_pn) {
+        setTimeout(() => {
+          onBottomPage();
+        }, 500);
+      }
     } else {
       setItem(route.params.data);
     }
@@ -160,9 +161,7 @@ const PostPageDetailIdComponent = (props) => {
       updateAllContent(oldData);
       Keyboard.dismiss();
       setTimeout(() => {
-        if (scrollViewRef && scrollViewRef.current) {
-          scrollViewRef.current.scrollTo({y: Dimensions.get('screen').height + 30, x: 0});
-        }
+        onBottomPage();
       }, 300);
     } catch (e) {
       if (__DEV__) {
@@ -538,10 +537,7 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'height' : null}
-      enabled
-      style={styles.container}>
+    <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
       <StatusBar translucent={false} />
       {item ? (
@@ -638,7 +634,7 @@ const PostPageDetailIdComponent = (props) => {
           <BlockComponent ref={refBlockComponent} refresh={updateFeed} screen="post_detail_page" />
         </React.Fragment>
       ) : null}
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 

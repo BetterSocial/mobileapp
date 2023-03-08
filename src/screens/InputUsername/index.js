@@ -5,7 +5,6 @@ import {
   Animated,
   Image,
   Keyboard,
-  KeyboardAvoidingView,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -21,6 +20,7 @@ import {useNavigation} from '@react-navigation/core';
 import BottomSheetChooseImage from './elements/BottomSheetChooseImage';
 import MemoOnboardingChangeProfilePlusIcon from '../../assets/icon/OnboardingChangeProfilePlusIcon';
 import StringConstant from '../../utils/string/StringConstant';
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
@@ -32,7 +32,6 @@ import {requestCameraPermission, requestExternalStoragePermission} from '../../u
 import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
-import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 
 const ChooseUsername = () => {
   const navigation = useNavigation();
@@ -127,7 +126,7 @@ const ChooseUsername = () => {
     setUsernameState(value);
     if (value.length <= 15) {
       if (value.length > 2) {
-        if (Number.isNaN(v)) {
+        if (!Number.isNaN(v)) {
           setTypeFetch('fetch');
           verifyUsernameDebounce(value);
         } else {
@@ -248,10 +247,7 @@ const ChooseUsername = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
 
-      <KeyboardAvoidingView
-        style={styles.keyboardavoidingview}
-        behavior={'height'}
-        keyboardVerticalOffset={18}>
+      <View style={styles.keyboardavoidingview}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.content}>
             <ProgressBar isStatic={true} value={25} />
@@ -316,7 +312,7 @@ const ChooseUsername = () => {
             {StringConstant.onboardingChooseUsernameButtonStateNext}
           </Button>
         </View>
-      </KeyboardAvoidingView>
+      </View>
       <BottomSheetChooseImage
         ref={bottomSheetChooseImageRef}
         onOpenCamera={handleOpenCamera}

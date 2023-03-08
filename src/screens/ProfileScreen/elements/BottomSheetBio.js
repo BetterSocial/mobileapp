@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
@@ -14,10 +7,10 @@ import {Button} from '../../../components/Button';
 import {BottomSheet} from '../../../components/BottomSheet';
 import AutoFocusTextArea from '../../../components/TextArea/AutoFocusTextArea';
 
+// eslint-disable-next-line react/display-name
 const BottomSheetBio = React.forwardRef((props, ref) => {
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <View>
       <BottomSheet
         ref={ref}
         closeOnPressMask={true}
@@ -32,62 +25,54 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
             placeholder="Add Bio"
             keyboardAppearDelay={500}
           />
-          <Text style={styles.description}>
-            {props.value ? props.value.length : 0}/350
-          </Text>
-          {props.error ? (
-            <Text style={styles.errorText}>{props.error}</Text>
-          ) : null}
+          <Text style={styles.description}>{props.value ? props.value.length : 0}/350</Text>
+          {props.error ? <Text style={styles.errorText}>{props.error}</Text> : null}
         </View>
         <Button
           style={styles.button}
           textStyling={styles.textStyling}
           onPress={() => (props.error ? null : props.handleSave())}>
-          {props.isLoadingUpdateBio ? (
-            <ActivityIndicator size="small" color="#0000ff" />
-          ) : (
-            'Save'
-          )}
+          {props.isLoadingUpdateBio ? <ActivityIndicator size="small" color="#0000ff" /> : 'Save'}
         </Button>
       </BottomSheet>
-    </KeyboardAvoidingView>
+    </View>
   );
 });
 
 const styles = StyleSheet.create({
   bottomsheet: {
-    paddingBottom: 20,
+    paddingBottom: 20
   },
   containerBottomSheet: {
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   title: {
     fontFamily: fonts.inter[400],
     fontWeight: 'bold',
     fontSize: 24,
     color: colors.black,
-    marginBottom: 16,
+    marginBottom: 16
   },
   description: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.gray,
-    marginTop: 7,
+    marginTop: 7
   },
   errorText: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.red,
-    marginTop: 7,
+    marginTop: 7
   },
   button: {
     marginTop: 33,
-    backgroundColor: colors.bondi_blue,
+    backgroundColor: colors.bondi_blue
   },
   textStyling: {
     fontFamily: fonts.inter[600],
     fontSize: 18,
-    color: colors.white,
+    color: colors.white
   },
   input: {
     backgroundColor: colors.lightgrey,
@@ -100,7 +85,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 14,
     color: colors.black,
-    lineHeight: 24,
-  },
+    lineHeight: 24
+  }
 });
-export default React.memo (BottomSheetBio);
+export default React.memo(BottomSheetBio);

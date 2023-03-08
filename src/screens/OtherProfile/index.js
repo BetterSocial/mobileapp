@@ -179,7 +179,7 @@ const OtherProfile = () => {
 
   const handleSetUnFollow = async () => {
     const data = {
-      user_id_follower: user_id,
+      user_id_follower: profile.myProfile.user_id,
       user_id_followed: other_id,
       follow_source: 'other-profile'
     };
@@ -191,13 +191,12 @@ const OtherProfile = () => {
 
   const handleSetFollow = async () => {
     const data = {
-      user_id_follower: user_id,
+      user_id_follower: profile.myProfile.user_id,
       user_id_followed: other_id,
       username_follower: profile.myProfile.username,
       username_followed: username,
       follow_source: 'other-profile'
     };
-
     const result = await setFollow(data);
     // prepopulated follow
     // const textOwnUser = `${username} started following you. Send them a message now`;

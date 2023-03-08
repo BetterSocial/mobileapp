@@ -3,11 +3,7 @@ import {StyleSheet, View} from 'react-native';
 
 import {COLORS} from '../../../utils/theme';
 import {Footer, Gap, PreviewComment} from '../../../components';
-import {
-  getCountComment,
-  getCountCommentWithChild,
-  getCountVote,
-} from '../../../utils/getstream';
+import {getCountCommentWithChild, getCountVote} from '../../../utils/getstream';
 
 const LinkContextScreenFooter = ({
   item,
@@ -17,7 +13,7 @@ const LinkContextScreenFooter = ({
   onPressComment,
   onPressDownVote,
   onPressUpvote,
-  selfUserId,
+  selfUserId
 }) => {
   const [previewComment, setPreviewComment] = React.useState({});
   const [isReaction, setReaction] = React.useState(false);
@@ -32,7 +28,7 @@ const LinkContextScreenFooter = ({
       if (item.reaction_counts !== undefined || null) {
         if (item.latest_reactions.upvotes !== undefined) {
           const upvote = item.latest_reactions.upvotes.filter(
-            (vote) => vote.user_id === selfUserId,
+            (vote) => vote.user_id === selfUserId
           );
           if (upvote !== undefined) {
             setVoteStatus('upvote');
@@ -42,7 +38,7 @@ const LinkContextScreenFooter = ({
 
         if (item.latest_reactions.downvotes !== undefined) {
           const downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === selfUserId,
+            (vote) => vote.user_id === selfUserId
           );
           if (downvotes !== undefined) {
             setVoteStatus('downvote');
@@ -90,13 +86,13 @@ const LinkContextScreenFooter = ({
           onPressShare={() => onPressShare(item)}
           onPressComment={() => onPressComment(item)}
           onPressDownVote={() => {
-            setStatusDowvote((prev) => {
-              prev = !prev;
+            setStatusDowvote((prevParam) => {
+              const prev = !prevParam;
               onPressDownVote({
                 activity_id: item.id,
                 status: prev,
                 feed_group: 'domain',
-                domain: item.domain.name,
+                domain: item.domain.name
               });
               if (prev) {
                 setVoteStatus('downvote');
@@ -114,13 +110,13 @@ const LinkContextScreenFooter = ({
             });
           }}
           onPressUpvote={() => {
-            setStatusUpvote((prev) => {
-              prev = !prev;
+            setStatusUpvote((prevParam) => {
+              const prev = !prevParam;
               onPressUpvote({
                 activity_id: item.id,
                 status: prev,
                 feed_group: 'domain',
-                domain: item.domain.name,
+                domain: item.domain.name
               });
               if (prev) {
                 setVoteStatus('upvote');
@@ -161,11 +157,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     height: 52,
     borderBottomColor: COLORS.gray1,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   reactionContainer: {
-    zIndex: 1000,
-  },
+    zIndex: 1000
+  }
 });
 
 export default LinkContextScreenFooter;
