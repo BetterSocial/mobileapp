@@ -26,7 +26,8 @@ const ContentLink = ({
   score,
   message = '',
   messageContainerStyle = {},
-  topics = []
+  topics = [],
+  isPostDetail
 }) => {
   const route = useRoute();
   const isTouchableDisabled = route?.name === 'PostDetailPage';
@@ -38,8 +39,10 @@ const ContentLink = ({
     if (sanitizeUrl?.length === 0) return <></>;
     return (
       <View style={{...styles.messageContainer, ...messageContainerStyle}}>
-        <Text style={styles.message} numberOfLines={3}>
-          {hashtagAtComponent(sanitizeUrl)}
+        <Text style={styles.message}>
+          {!isPostDetail ? hashtagAtComponent(sanitizeUrl, 50) : hashtagAtComponent(sanitizeUrl)}
+          {!isPostDetail && message.length > 50 && <Text style={{color: '#2F80ED'}}> More...</Text>}
+          {/* {hashtagAtComponent(sanitizeUrl)} */}
         </Text>
       </View>
     );
@@ -55,19 +58,21 @@ const ContentLink = ({
           <TouchableWithoutFeedback onPress={onPress}>
             {renderMessageContentLink()}
           </TouchableWithoutFeedback>
-          {smartRender(Card, {
-            domain: og.domain,
-            date: new Date(og.date).toLocaleDateString(),
-            domainImage: og.domainImage,
-            title: og.title,
-            description: og.description,
-            image: og.image,
-            url: og.url,
-            onHeaderPress,
-            onCardContentPress,
-            score,
-            item
-          })}
+          <View style={{flex: 1}}>
+            {smartRender(Card, {
+              domain: og.domain,
+              date: new Date(og.date).toLocaleDateString(),
+              domainImage: og.domainImage,
+              title: og.title,
+              description: og.description,
+              image: og.image,
+              url: og.url,
+              onHeaderPress,
+              onCardContentPress,
+              score,
+              item
+            })}
+          </View>
         </>
       </TouchableNativeFeedback>
       <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl} />

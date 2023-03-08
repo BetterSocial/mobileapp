@@ -8,7 +8,7 @@ import {useRoute} from '@react-navigation/native';
 import BlockComponent from '../BlockComponent';
 import ContainerComment from '../Comments/ContainerComment';
 import Content from './elements/Content';
-import ContentLink from '../../screens/FeedScreen/ContentLink';
+import ContentLink from './elements/ContentLink';
 import Header from '../../screens/FeedScreen/Header';
 import LoadingWithoutModal from '../LoadingWithoutModal';
 import ShareUtils from '../../utils/share';
@@ -548,6 +548,7 @@ const PostPageDetailIdComponent = (props) => {
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
             style={styles.contentScrollView(totalComment)}
+            contentContainerStyle={{paddingBottom: 80}}
             nestedScrollEnabled={true}>
             <View style={styles.content(height)}>
               {item.post_type === POST_TYPE_LINK ? (
@@ -559,6 +560,7 @@ const PostPageDetailIdComponent = (props) => {
                   message={item?.message}
                   topics={item?.topics}
                   item={item}
+                  isPostDetail={true}
                 />
               ) : (
                 <Content

@@ -198,6 +198,7 @@ const RenderListFeed = (props) => {
             onPress={() => onPress(item)}
             onHeaderPress={() => onPressDomain(item)}
             onCardContentPress={() => navigateToLinkContextPage(item)}
+            message={item.message}
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
