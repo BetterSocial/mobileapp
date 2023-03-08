@@ -30,8 +30,8 @@ const Content = ({
   const route = useRoute();
   const devHeight = Dimensions.get('screen').height;
   const substringPostImage = devHeight / 2.25 - 40 * 4;
-  const substringNoImageNoTopic = devHeight / 1.25 - 40 * 4;
-  const substringNoImageTopic = devHeight / 1.25 - 40 * 7;
+  const substringNoImageNoTopic = devHeight / 1.6 - 40 * 4;
+  const substringNoImageTopic = devHeight / 1.6 - 40 * 7;
   const {hashtagAtComponent} = useContentFeed({navigation});
 
   const onImageClickedByIndex = (index) => {
@@ -63,9 +63,8 @@ const Content = ({
         </View>
       );
     }
-
     return (
-      <View testID="postTypeStatus" style={{flex: 1}}>
+      <View testID="postTypeStatus" style={{height: '50%'}}>
         {topics.length > 0 ? (
           <Text style={styles.textMedia}>
             {getCaptionWithTopicStyle(
