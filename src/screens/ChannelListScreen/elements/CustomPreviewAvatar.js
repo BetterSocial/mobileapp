@@ -64,6 +64,13 @@ const CustomPreviewAvatar = ({channel}) => {
                 style={styles.iconChatStyle}
               />
             )}
+            {channel.data.type === 'messaging' && (
+              <FastImage
+                resizeMode={FastImage.resizeMode.contain}
+                source={ChatIcon}
+                style={styles.iconChatStyle}
+              />
+            )}
           </View>
         </View>
       );
