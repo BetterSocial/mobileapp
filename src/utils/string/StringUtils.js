@@ -341,6 +341,9 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   const id = removePrefixTopic(topicWithPrefix);
   const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/;
   const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
+  if (substringEnd && typeof substringEnd === 'number') {
+    text = text.substring(0, substringEnd);
+  }
   substringEnd = Math.round(substringEnd);
   text = reactStringReplace(text, topicRegex, (match) => {
     if (topics?.indexOf(match?.replace('#', '')) > -1)
@@ -351,9 +354,6 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   text = reactStringReplace(text, validationTextHasAt, (match) => (
     <TaggingUserText navigation={navigation} text={match} currentTopic={id} />
   ));
-  if (substringEnd && typeof substringEnd === 'number') {
-    text[text.length - 1] = text[text.length - 1].substring(0, substringEnd);
-  }
   return text;
 };
 
