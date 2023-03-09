@@ -9,7 +9,7 @@ const TopicsChip = ({topics = [], fontSize = 24, isPdp}) => {
   const navigation = useNavigation();
 
   const onTopicPress = (topic) => {
-    navigation.navigate('TopicPageScreen', {id: topic.replace('#', '')});
+    navigation.push('TopicPageScreen', {id: topic.replace('#', '')});
   };
 
   if (topics.length === 0) return <></>;
