@@ -199,6 +199,7 @@ const RenderListFeed = (props) => {
             onHeaderPress={() => onPressDomain(item)}
             onCardContentPress={() => navigateToLinkContextPage(item)}
             message={item.message}
+            topics={item?.topics}
           />
         )}
         {(item.post_type === POST_TYPE_STANDARD || item.post_type === POST_TYPE_POLL) && (
@@ -209,6 +210,7 @@ const RenderListFeed = (props) => {
             onPress={onPress}
             item={item}
             onNewPollFetched={onNewPollFetched}
+            topics={item?.topics}
           />
         )}
         <View style={styles.footerWrapper(getHeightFooter())}>

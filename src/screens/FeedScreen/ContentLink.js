@@ -11,7 +11,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import {COLORS, SIZES} from '../../utils/theme';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {smartRender} from '../../utils/Utils';
 import useContentFeed from './hooks/useContentFeed';
 
@@ -58,7 +58,7 @@ const ContentLink = ({
           <TouchableWithoutFeedback onPress={onPress}>
             {renderMessageContentLink()}
           </TouchableWithoutFeedback>
-          <View style={{flex: 1}}>
+          <View style={{height: '50%'}}>
             {smartRender(Card, {
               domain: og.domain,
               date: new Date(og.date).toLocaleDateString(),
@@ -75,7 +75,7 @@ const ContentLink = ({
           </View>
         </>
       </TouchableNativeFeedback>
-      <TopicsChip topics={topics} fontSize={FONT_SIZE_TEXT} text={sanitizeUrl} />
+      <TopicsChip topics={topics} fontSize={normalizeFontSize(14)} text={sanitizeUrl} />
     </View>
   );
 };
