@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React from 'react';
 import {Text} from 'react-native';
 import reactStringReplace from 'react-string-replace';
@@ -26,8 +27,11 @@ const useContentFeed = ({navigation}) => {
     matchPress(match);
   }, []);
 
-  const hashtagAtComponent = (message) => {
+  const hashtagAtComponent = (message, substring) => {
     const regex = /\B([#@][a-zA-Z0-9_+-]+\b)(?!;)/;
+    if (substring) {
+      message = message.substring(0, substring);
+    }
     if (message && typeof message === 'string') {
       return reactStringReplace(message, regex, (match) => (
         <Text onPress={() => onPressComponent(match)} testID="regex" style={{color: colors.blue}}>
