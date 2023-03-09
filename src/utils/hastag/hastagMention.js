@@ -8,10 +8,12 @@ import {fonts} from '../fonts';
 const handleHastagMention = (
   text = '',
   hashtags = [],
-  setHashtagState = () => {},
-  cursorPosition = -1
+  setHashtagState = () => {}
+  // cursorPosition = -1
 ) => {
+  // eslint-disable-next-line
   const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/g;
+  // eslint-disable-next-line
   const mentionRegex = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
   const topicOccurence = [];
   const reactStringHashtags = reactStringReplace(text, topicRegex, (match) => {
@@ -24,14 +26,14 @@ const handleHastagMention = (
       return (
         <Text key={generateRandomId()} style={styles.mention}>
           {`${match.toLowerCase()}`}
-        </Text>;
+        </Text>
       );
     }
 
     return (
       <Text key={generateRandomId()} style={styles.mention}>
         {match}
-      </Text>;
+      </Text>
     );
   });
 
