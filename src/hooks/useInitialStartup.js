@@ -1,6 +1,6 @@
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LogBox, StatusBar, AppState} from 'react-native';
+import {LogBox, StatusBar} from 'react-native';
 import {useLocalChannelsFirst} from 'stream-chat-react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
@@ -199,7 +199,6 @@ export const useInitialStartup = () => {
     });
 
     return async () => {
-
       if (timeoutSplashScreen.current) {
         clearTimeout(timeoutSplashScreen.current);
       }
