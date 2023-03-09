@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, TouchableNativeFeedback, View, Text} from 'react-native';
+import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 
+import IconPollMine from '../../assets/icon/IconPollMine';
+import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
+import {COLORS} from '../../utils/theme';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
-import {COLORS} from '../../utils/theme';
-import IconPollWinnerBadge from '../../assets/icon/IconPollWinnerBadge';
-import IconPollMine from '../../assets/icon/IconPollMine';
 
 const PollOptions = ({
   mypoll,
@@ -36,9 +36,13 @@ const PollOptions = ({
 
   // eslint-disable-next-line consistent-return
   const renderPercentageBar = () => {
-    const percentage = `${
-      !optionPercentage ? 0 : optionPercentage > 100 ? 100 : optionPercentage
-    }%`;
+    const renderPercentage = () => {
+      if (!optionPercentage) return 0;
+      if (optionPercentage > 100) return 100;
+      return optionPercentage;
+    };
+
+    const percentage = `${renderPercentage()}%`;
     if (isexpired) {
       return (
         <View testID="isExpiredPollOption" style={styles.expiredPercentageBar(percentage, isMax)} />
@@ -149,28 +153,24 @@ const styles = StyleSheet.create({
   pollOptionItemPercentage: {
     fontSize: normalizeFontSize(14)
   },
-  percentageBar: (percent, isMyPoll = false) => {
-    return {
-      width: percent,
-      height: '100%',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      borderRadius: 6,
-      backgroundColor: isMyPoll ? colors.bondi_blue : colors.gray1
-    };
-  },
-  expiredPercentageBar: (percent, isMax = false) => {
-    return {
-      width: percent,
-      height: '100%',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      borderRadius: 6,
-      backgroundColor: isMax ? COLORS.blueSea : colors.gray1
-    };
-  },
+  percentageBar: (percent, isMyPoll = false) => ({
+    width: percent,
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    borderRadius: 6,
+    backgroundColor: isMyPoll ? colors.bondi_blue : colors.gray1
+  }),
+  expiredPercentageBar: (percent, isMax = false) => ({
+    width: percent,
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    borderRadius: 6,
+    backgroundColor: isMax ? COLORS.blueSea : colors.gray1
+  }),
   totalpolltext: {
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),

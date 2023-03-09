@@ -2,6 +2,7 @@ import * as React from 'react';
 import {ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View} from 'react-native';
 import KeyEvent from 'react-native-keyevent';
 import RBSheet from 'react-native-raw-bottom-sheet';
+
 import {Button} from '../../../components/Button';
 import TopicItem from '../../../components/TopicItem';
 import {getTopics} from '../../../service/topics';

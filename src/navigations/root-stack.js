@@ -85,174 +85,172 @@ export const RootNavigator = () => {
 // region authenticatedStack
 const AuthenticatedStack = createNativeStackNavigator();
 
-const AuthenticatedNavigator = () => {
-  return (
-    <AuthenticatedStack.Navigator initialRouteName="HomeTabs">
-      <AuthenticatedStack.Screen
-        name="HomeTabs"
-        component={HomeBottomTabs}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="TermsAndCondition"
-        component={TermsAndCondition}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="PrivacyPolicies"
-        component={PrivacyPolicies}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="Settings"
-        component={Settings}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="HelpCenter"
-        component={HelpCenter}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="ProfileScreen"
-        component={ProfileScreen}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
-      <AuthenticatedStack.Screen
-        name="DomainScreen"
-        component={DomainScreen}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="CreateGroupScreen"
-        component={CreateGroupScreen}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="ContactScreen"
-        component={ContactScreen}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="OtherProfile"
-        component={OtherProfile}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name={NavigationConstants.CREATE_POST_SCREEN}
-        component={CreatePost}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="Followings"
-        component={FollowingScreen}
-        options={{
-          headerShown: false
-        }}
-      />
-      <AuthenticatedStack.Screen
-        name="DetailDomainScreen"
-        component={DetailDomainScreen}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="LinkContextScreen"
-        component={LinkContextScreen}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="TopicPageScreen"
-        component={TopicPageScreen}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="DiscoveryScreen"
-        component={DiscoveryScreenV2}
-        options={{
-          headerShown: false
-        }}
-      />
-      <AuthenticatedStack.Screen
-        name="BlockScreen"
-        component={Blocked}
-        options={{
-          headerShown: false
-        }}
-      />
-      <AuthenticatedStack.Screen
-        name="GroupSetting"
-        component={GroupSetting}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="AddParticipant"
-        component={AddParticipant}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="GroupMedia"
-        component={GroupMedia}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="GroupInfo"
-        component={GroupInfo}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="DetailGroupImage"
-        component={DetailGroupImage}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="ChatDetailPage"
-        component={ChatDetailPage}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="ReplyComment"
-        component={ReplyComment}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="ReplyCommentLev3"
-        component={ReplyCommentLev3}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="ProfileReplyComment"
-        component={ProfileReplyComment}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="OtherProfileReplyComment"
-        component={OtherProfileReplyComment}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="PostDetailPage"
-        component={PostDetailPage}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="ProfilePostDetailPage"
-        component={ProfilePostDetail}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="OtherProfilePostDetailPage"
-        component={OtherProfilePostDetail}
-        options={{headerShown: false}}
-      />
-      <AuthenticatedStack.Screen
-        name="ChannelScreen"
-        component={ChannelScreen}
-        options={{headerShown: false}}
-      />
-    </AuthenticatedStack.Navigator>
-  );
-};
+const AuthenticatedNavigator = () => (
+  <AuthenticatedStack.Navigator initialRouteName="HomeTabs">
+    <AuthenticatedStack.Screen
+      name="HomeTabs"
+      component={HomeBottomTabs}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="TermsAndCondition"
+      component={TermsAndCondition}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="PrivacyPolicies"
+      component={PrivacyPolicies}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="Settings"
+      component={Settings}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="HelpCenter"
+      component={HelpCenter}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="ProfileScreen"
+      component={ProfileScreen}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen name="ImageViewer" component={ImageViewerScreen} />
+    <AuthenticatedStack.Screen
+      name="DomainScreen"
+      component={DomainScreen}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="CreateGroupScreen"
+      component={CreateGroupScreen}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="ContactScreen"
+      component={ContactScreen}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="OtherProfile"
+      component={OtherProfile}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name={NavigationConstants.CREATE_POST_SCREEN}
+      component={CreatePost}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="Followings"
+      component={FollowingScreen}
+      options={{
+        headerShown: false
+      }}
+    />
+    <AuthenticatedStack.Screen
+      name="DetailDomainScreen"
+      component={DetailDomainScreen}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="LinkContextScreen"
+      component={LinkContextScreen}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="TopicPageScreen"
+      component={TopicPageScreen}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="DiscoveryScreen"
+      component={DiscoveryScreenV2}
+      options={{
+        headerShown: false
+      }}
+    />
+    <AuthenticatedStack.Screen
+      name="BlockScreen"
+      component={Blocked}
+      options={{
+        headerShown: false
+      }}
+    />
+    <AuthenticatedStack.Screen
+      name="GroupSetting"
+      component={GroupSetting}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="AddParticipant"
+      component={AddParticipant}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="GroupMedia"
+      component={GroupMedia}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="GroupInfo"
+      component={GroupInfo}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="DetailGroupImage"
+      component={DetailGroupImage}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="ChatDetailPage"
+      component={ChatDetailPage}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="ReplyComment"
+      component={ReplyComment}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="ReplyCommentLev3"
+      component={ReplyCommentLev3}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="ProfileReplyComment"
+      component={ProfileReplyComment}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="OtherProfileReplyComment"
+      component={OtherProfileReplyComment}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="PostDetailPage"
+      component={PostDetailPage}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="ProfilePostDetailPage"
+      component={ProfilePostDetail}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="OtherProfilePostDetailPage"
+      component={OtherProfilePostDetail}
+      options={{headerShown: false}}
+    />
+    <AuthenticatedStack.Screen
+      name="ChannelScreen"
+      component={ChannelScreen}
+      options={{headerShown: false}}
+    />
+  </AuthenticatedStack.Navigator>
+);
 
 // endregion
 

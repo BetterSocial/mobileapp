@@ -127,33 +127,35 @@ const TopicPageScreen = (props) => {
   };
 
   const refreshingData = async (offsetParam = offset) => {
-    try {
-      setLoading(true);
-      const result = await getTopicPages(topicId, offsetParam);
-      const {data} = result;
-      const topicWithPrefix = route.params.id;
-      const id = removePrefixTopic(topicWithPrefix);
-      setOffset(result.offset);
-      if (result.code === 200) {
-        if (offsetParam === 0) {
-          saveToCache(`${TOPIC_LIST}_${id}`, result);
-          setTopicFeeds(data, dispatch);
-        } else {
-          const joinData = [...feeds, ...data];
-          const newResult = {...result, data: joinData};
-          saveToCache(`${TOPIC_LIST}_${id}`, newResult);
-          setTopicFeeds(joinData, dispatch);
+    if (offsetParam >= 0) {
+      try {
+        setLoading(true);
+        const result = await getTopicPages(topicId, offsetParam);
+        const {data} = result;
+        const topicWithPrefix = route.params.id;
+        const id = removePrefixTopic(topicWithPrefix);
+        setOffset(result.offset);
+        if (result.code === 200) {
+          if (offsetParam === 0) {
+            saveToCache(`${TOPIC_LIST}_${id}`, result);
+            setTopicFeeds(data, dispatch);
+          } else {
+            const joinData = [...feeds, ...data];
+            const newResult = {...result, data: joinData};
+            saveToCache(`${TOPIC_LIST}_${id}`, newResult);
+            setTopicFeeds(joinData, dispatch);
+          }
         }
+      } catch (error) {
+        if (__DEV__) {
+          console.log(error);
+        }
+        setLoading(false);
       }
-
-      setLoading(false);
-    } catch (error) {
-      if (__DEV__) {
-        console.log(error);
-      }
-      setLoading(false);
     }
+    setLoading(false);
   };
+
   const onDeleteBlockedPostCompleted = async (postId) => {
     const postIndex = feeds.findIndex((item) => item.id === postId);
     const clonedFeeds = [...feeds];
@@ -307,6 +309,7 @@ const TopicPageScreen = (props) => {
         refreshAnonymous={onDeleteBlockedPostCompleted}
         screen="topic_screen"
       />
+      <ButtonAddPostTopic topicName={topicName} />
     </View>
   );
 };

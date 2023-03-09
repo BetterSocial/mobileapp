@@ -1,29 +1,30 @@
 import * as React from 'react';
-import {
-  ChannelAvatar,
-} from 'stream-chat-react-native';
+import {ChannelAvatar} from 'stream-chat-react-native';
 import FastImage from 'react-native-fast-image';
 
-import { StyleSheet, View } from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
-import { getGroupMemberCount } from '../../../utils/string/StringUtils';
-import ChatIcon from '../../../assets/chat-icon.png'
-import GroupIcon from '../../../assets/group-icon.png'
-import Hashtag from '../../../assets/hashtag.png'
-import { colors } from '../../../utils/colors';
+import {getGroupMemberCount} from '../../../utils/string/StringUtils';
+import ChatIcon from '../../../assets/chat-icon.png';
+import GroupIcon from '../../../assets/group-icon.png';
+import Hashtag from '../../../assets/hashtag.png';
+import {colors} from '../../../utils/colors';
 
-const CustomPreviewAvatar = ({ channel }) => {
-
-
+const CustomPreviewAvatar = ({channel}) => {
+  console.log(channel, 'sisin');
   if (channel.data.channel_type === 3) {
     return (
-      <View style={styles.containerAvatar} >
-      <FastImage
-        source={{ uri: channel.data.image, priority: FastImage.priority.normal }}
-        style={styles.image}
-      />
-      <View style={styles.typeContainer('#55C2FF')} >
-          <FastImage resizeMode={FastImage.resizeMode.contain} style={styles.iconChatStyle} source={Hashtag} />
+      <View style={styles.containerAvatar}>
+        <FastImage
+          source={{uri: channel.data.image, priority: FastImage.priority.normal}}
+          style={styles.image}
+        />
+        <View style={styles.typeContainer('#55C2FF')}>
+          <FastImage
+            resizeMode={FastImage.resizeMode.contain}
+            style={styles.iconChatStyle}
+            source={Hashtag}
+          />
         </View>
       </View>
     );
@@ -31,13 +32,17 @@ const CustomPreviewAvatar = ({ channel }) => {
 
   if (channel.data.channel_type === 2) {
     return (
-      <View style={styles.containerAvatar} >
-      <FastImage
-        source={{ uri: channel.data.image, priority: FastImage.priority.normal }}
-        style={styles.image}
-      />
-      <View style={styles.typeContainer()} >
-          <FastImage resizeMode={FastImage.resizeMode.contain} source={GroupIcon} style={styles.iconChatStyle} />
+      <View style={styles.containerAvatar}>
+        <FastImage
+          source={{uri: channel.data.image, priority: FastImage.priority.normal}}
+          style={styles.image}
+        />
+        <View style={styles.typeContainer()}>
+          <FastImage
+            resizeMode={FastImage.resizeMode.contain}
+            source={GroupIcon}
+            style={styles.iconChatStyle}
+          />
         </View>
       </View>
     );
@@ -46,56 +51,81 @@ const CustomPreviewAvatar = ({ channel }) => {
   if (channel?.data?.image) {
     if (channel?.data?.image.indexOf('res.cloudinary.com') > -1) {
       return (
-        <View style={styles.containerAvatar} >
-        <FastImage source={{uri: channel?.data?.image, priority: FastImage.priority.normal}} style={styles.image} />
-        <View style={styles.typeContainer()} >
-          {/* <Text>Min</Text> */}
-        </View>
+        <View style={styles.containerAvatar}>
+          <FastImage
+            source={{uri: channel?.data?.image, priority: FastImage.priority.normal}}
+            style={styles.defaultGroupImage}
+          />
+          <View style={styles.typeContainer()}>
+            {channel.data.type === 'group' && (
+              <FastImage
+                resizeMode={FastImage.resizeMode.contain}
+                source={GroupIcon}
+                style={styles.iconChatStyle}
+              />
+            )}
+            {channel.data.type === 'messaging' && (
+              <FastImage
+                resizeMode={FastImage.resizeMode.contain}
+                source={ChatIcon}
+                style={styles.iconChatStyle}
+              />
+            )}
+          </View>
         </View>
       );
     }
 
     return (
-      <View style={styles.containerAvatar} >
-      <FastImage
-        source={{ uri: `data:image/jpg;base64,${channel?.data?.image}`, priority: FastImage.priority.normal }}
-        style={styles.image}
-      />
-      <View style={styles.typeContainer()} >
-          {/* <Text>Man</Text> */}
-        </View>
-      </View>
-    );
-  } if (getGroupMemberCount(channel) > 2) {
-    return (
       <View style={styles.containerAvatar}>
         <FastImage
-          source={DefaultChatGroupProfilePicture}
-          style={styles.defaultGroupImage}
+          source={{
+            uri: `data:image/jpg;base64,${channel?.data?.image}`,
+            priority: FastImage.priority.normal
+          }}
+          style={styles.image}
         />
-        <View style={styles.typeContainer()} >
-          <FastImage resizeMode={FastImage.resizeMode.contain} source={GroupIcon} style={styles.iconChatStyle} />
-        </View>
+        <View style={styles.typeContainer()}>{/* <Text>Man</Text> */}</View>
       </View>
     );
-  } 
+  }
+  if (getGroupMemberCount(channel) > 2) {
     return (
       <View style={styles.containerAvatar}>
-        <ChannelAvatar channel={channel} />
-        <View style={styles.typeContainer()} >
-          <FastImage resizeMode={FastImage.resizeMode.contain} source={ChatIcon} style={styles.iconChatStyle} />
+        <FastImage source={DefaultChatGroupProfilePicture} style={styles.defaultGroupImage} />
+        <View style={styles.typeContainer()}>
+          <FastImage
+            resizeMode={FastImage.resizeMode.contain}
+            source={GroupIcon}
+            style={styles.iconChatStyle}
+          />
         </View>
       </View>
     );
-  
+  }
+  return (
+    <View style={styles.containerAvatar}>
+      <ChannelAvatar channel={channel} />
+      <View style={styles.typeContainer()}>
+        <FastImage
+          resizeMode={FastImage.resizeMode.contain}
+          source={ChatIcon}
+          style={styles.iconChatStyle}
+        />
+      </View>
+    </View>
+  );
 };
 
-export default React.memo (CustomPreviewAvatar, (prevProps, nexProps) => prevProps.channel === nexProps.channel);
+export default React.memo(
+  CustomPreviewAvatar,
+  (prevProps, nexProps) => prevProps.channel === nexProps.channel
+);
 
 const styles = StyleSheet.create({
   image: {
     width: 48,
-    height: 48,
+    height: 48
     // borderRadius: 24,
     // marginLeft: 8,
   },
@@ -103,12 +133,12 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    marginLeft: 0,
+    marginLeft: 0
   },
   containerAvatar: {
-    paddingLeft: 8,
+    paddingLeft: 8
   },
-    typeContainer: (background) => ({
+  typeContainer: (background) => ({
     height: 24,
     width: 24,
     backgroundColor: background || colors.bondi_blue,
@@ -120,7 +150,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: 'white'
   }),
   iconChatStyle: {
     height: 12,
@@ -131,6 +161,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     padding: 0,
-    margin: 0,
+    margin: 0
   }
 });

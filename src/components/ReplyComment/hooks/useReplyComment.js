@@ -1,12 +1,11 @@
-import React from 'react';
-import Toast from 'react-native-simple-toast';
-import moment from 'moment';
 import {useNavigation} from '@react-navigation/core';
-
-import StringConstant from '../../../utils/string/StringConstant';
+import moment from 'moment';
+import Toast from 'react-native-simple-toast';
+import React from 'react';
 import {Context} from '../../../context';
-import {createChildComment} from '../../../service/comment';
 import {getFeedDetail} from '../../../service/post';
+import StringConstant from '../../../utils/string/StringConstant';
+import {createChildComment} from '../../../service/comment';
 
 const useReplyComment = ({
   itemProp,
@@ -20,6 +19,7 @@ const useReplyComment = ({
   const [temporaryText, setTemporaryText] = React.useState('');
   const [textComment, setTextComment] = React.useState('');
   const [newCommentList, setNewCommentList] = React.useState([]);
+  const [users] = React.useContext(Context).users;
   const [item, setItem] = React.useState(itemProp);
   const navigation = useNavigation();
   const scrollViewRef = React.useRef(null);
@@ -35,13 +35,12 @@ const useReplyComment = ({
     user: {
       data: {
         ...itemProp.user.data,
-        profile_pic_url: profile?.myProfile?.profile_pic_path,
+        profile_pic_url: users.photoUrl,
         username: profile.myProfile.username
       },
       id: itemProp.user.id
     }
   });
-
   const initTextComment = (text) => {
     setTextComment(text);
   };
@@ -200,7 +199,6 @@ const useReplyComment = ({
       }
     }
   };
-
   const createComment = async () => {
     let sendPostNotif = false;
     if (page !== 'DetailDomainScreen') {
@@ -279,4 +277,5 @@ const useReplyComment = ({
     createComment
   };
 };
+
 export default useReplyComment;

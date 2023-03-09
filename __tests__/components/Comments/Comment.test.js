@@ -101,7 +101,7 @@ describe('Comment test should run correctly', () => {
     expect(toJSON).toMatchSnapshot();
   });
 
-  it('textPress fuction should run correctly', () => {
+  it('textPress function should run correctly', () => {
     const onPress = jest.fn();
     const findComment = jest.fn();
     const updateVote = jest.fn();

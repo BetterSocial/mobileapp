@@ -128,7 +128,7 @@ const fetchDiscoveryDataNews = async (query, axiosOptions = {}) => {
 /**
  * @param {Number} limit
  * @param {Number} page
- * @returns {FetchInitialDiscoveryTopicsResponse}
+ * @returns {Promise<FetchInitialDiscoveryTopicsResponse>}
  */
 const fetchInitialDiscoveryTopics = async (limit = 25, page = 0) => {
   try {
@@ -137,13 +137,15 @@ const fetchInitialDiscoveryTopics = async (limit = 25, page = 0) => {
       page
     });
 
-    if (response.data.success) {
-      return response.data;
-    }
-    return {
-      success: false,
-      message: response.data.message
-    };
+    return new Promise((resolve) => {
+      if (response.data.success) {
+        return resolve(response.data);
+      }
+      return resolve({
+        success: false,
+        message: response.data.message
+      });
+    });
   } catch (error) {
     crashlytics().recordError(new Error(error));
     throw new Error(error);
@@ -177,7 +179,7 @@ const fetchInitialDiscoveryTopics = async (limit = 25, page = 0) => {
 /**
  * @param {Number} limit
  * @param {Number} page
- * @returns {FetchInitialDiscoveryUsersResponse}
+ * @returns {Promise<FetchInitialDiscoveryUsersResponse>}
  */
 const fetchInitialDiscoveryUsers = async (limit = 25, page = 0) => {
   try {
@@ -186,14 +188,15 @@ const fetchInitialDiscoveryUsers = async (limit = 25, page = 0) => {
       page
     });
 
-    if (response.data.success) {
-      return response.data;
-    }
-
-    return {
-      success: false,
-      message: response.data.message
-    };
+    return new Promise((resolve) => {
+      if (response.data.success) {
+        return resolve(response.data);
+      }
+      return resolve({
+        success: false,
+        message: response.data.message
+      });
+    });
   } catch (error) {
     crashlytics().recordError(new Error(error));
     throw new Error(error);
@@ -221,7 +224,7 @@ const fetchInitialDiscoveryUsers = async (limit = 25, page = 0) => {
 /**
  * @param {Number} limit
  * @param {Number} page
- * @returns {FetchInitialDiscoveryDomainsResponse}
+ * @returns {Promise<FetchInitialDiscoveryDomainsResponse>}
  */
 const fetchInitialDiscoveryDomains = async (limit = 25, page = 0) => {
   try {
@@ -230,13 +233,15 @@ const fetchInitialDiscoveryDomains = async (limit = 25, page = 0) => {
       page
     });
 
-    if (response.data.success) {
-      return response.data;
-    }
-    return {
-      success: false,
-      message: response.data.message
-    };
+    return new Promise((resolve) => {
+      if (response.data.success) {
+        return resolve(response.data);
+      }
+      return resolve({
+        success: false,
+        message: response.data.message
+      });
+    });
   } catch (error) {
     crashlytics().recordError(new Error(error));
     throw new Error(error);

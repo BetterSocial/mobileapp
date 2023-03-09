@@ -3,6 +3,7 @@ import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
@@ -25,6 +26,7 @@ const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
+  const insets = useSafeAreaInsets();
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -114,7 +116,7 @@ const ChatDetailPage = ({route}) => {
     setAsset(messages.results, dispatch);
   };
   const testDate = (v) => v;
-  console.tron.log(channelClient.channel, 'testing');
+  console.log(insets, 'sisi');
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>

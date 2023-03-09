@@ -1,3 +1,5 @@
+import 'react-native-get-random-values';
+
 /* eslint-disable no-param-reassign,no-useless-escape */
 import * as React from 'react';
 import moment from 'moment';
@@ -313,7 +315,9 @@ const randomString = (length) => {
   const charactersLength = characters.length;
   // eslint-disable-next-line no-plusplus
   for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    result += characters.charAt(
+      global.crypto.getRandomValues(new Uint32Array(1))[0] % charactersLength
+    );
   }
   return result;
 };
@@ -341,7 +345,9 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   const id = removePrefixTopic(topicWithPrefix);
   const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/;
   const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
-  substringEnd = Math.round(substringEnd);
+  if (substringEnd && typeof substringEnd === 'number') {
+    text = text.substring(0, substringEnd);
+  }
   text = reactStringReplace(text, topicRegex, (match) => {
     if (topics?.indexOf(match?.replace('#', '')) > -1)
       return <TopicText navigation={navigation} text={match} currentTopic={id} />;
@@ -351,9 +357,6 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   text = reactStringReplace(text, validationTextHasAt, (match) => (
     <TaggingUserText navigation={navigation} text={match} currentTopic={id} />
   ));
-  if (substringEnd && typeof substringEnd === 'number') {
-    text[text.length - 1] = text[text.length - 1].substring(0, substringEnd);
-  }
   return text;
 };
 
@@ -381,7 +384,7 @@ const getMinuteText = (minuteParam, hourParam) => {
 const getDurationTimeText = (selectedtime) => {
   const dayText = selectedtime.day > 0 ? `${selectedtime.day} Day(s)` : '';
   const hourText = getHourText(selectedtime?.day, selectedtime?.hour);
-  const minuteText = getMinuteText(selectedtime?.minute, selectedtime?.hour);
+  const minuteText = getMinuteText(selectedtime?.hour, selectedtime?.minute);
 
   return `${dayText}${hourText}${minuteText}`;
 };

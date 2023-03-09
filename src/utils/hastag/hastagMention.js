@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from 'react';
 import reactStringReplace from 'react-string-replace';
 import {StyleSheet, Text} from 'react-native';
@@ -8,12 +9,9 @@ import {fonts} from '../fonts';
 const handleHastagMention = (
   text = '',
   hashtags = [],
-  setHashtagState = () => {}
-  // cursorPosition = -1
+  setHashtagState = () => {},
 ) => {
-  // eslint-disable-next-line
   const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/g;
-  // eslint-disable-next-line
   const mentionRegex = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
   const topicOccurence = [];
   const reactStringHashtags = reactStringReplace(text, topicRegex, (match) => {

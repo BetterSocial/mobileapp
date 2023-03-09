@@ -297,7 +297,7 @@ const ContactScreen = ({navigation}) => {
             selectedUsers={selectedUsers}
             usernames={usernames}
             setLoading={setIsLoadingSearchResult}
-            onHandleSelected={(value, fromSearchMode) => handleSelected(value, fromSearchMode)}
+            onHandleSelected={(value) => handleSelected(value)}
           />
         )}
         <Loading visible={loading} />

@@ -128,8 +128,9 @@ const DomainScreen = () => {
 
     if (res.code === 200) {
       setDomainFollowers(res.followers);
-      if (offset === 0) setDomainData([...res.data, {dummy: true}], dispatchDomain);
-      else if (offset > 0) {
+      if (offset === 0) {
+        setDomainData([...res.data, {dummy: true}], dispatchDomain);
+      } else {
         const clonedFeeds = [...domainStore?.domains];
         clonedFeeds.splice(domainStore?.domains?.length - 1, 0, ...data);
         setDomainData(clonedFeeds, dispatchDomain);
@@ -144,21 +145,6 @@ const DomainScreen = () => {
   React.useEffect(() => {
     init(true);
   }, [dataDomain]);
-
-  // React.useEffect(() => {
-  //   const getProfile = async () => {
-  //     setProfileDomain({}, dispatchDomain);
-  //     let res = await getProfileDomain(domain);
-  //     if (res.code === 200) {
-  //       setProfile(res.data);
-  //       setProfileDomain(res.data, dispatchDomain);
-  //     } else {
-  //       Toast.show('Domain Not Found', Toast.LONG);
-  //       navigation.goBack();
-  //     }
-  //   };
-  //   getProfile();
-  // }, [dataDomain]);
 
   const handleOnPressComment = (itemNews) => {
     navigation.navigate('DetailDomainScreen', {
