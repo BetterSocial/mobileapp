@@ -1,28 +1,18 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Animated,
-  Pressable
-} from 'react-native';
+import {View, Text, StyleSheet, Animated, Pressable} from 'react-native';
 
-import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
 import MemoIc_search from '../../../assets/icons/Ic_search';
 import StringConstant from '../../../utils/string/StringConstant';
 import {fonts} from '../../../utils/fonts';
 import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
-const Search = ({onPress, animatedValue, onContainerClicked = () => {}, getSearchLayout}) => {
-
+const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout}) => {
   const onSearchLayout = (event) => {
-    var {x, y, width, height} = event.nativeEvent.layout;
-    if(getSearchLayout) {
-      getSearchLayout(height)
+    const {height} = event.nativeEvent.layout;
+    if (getSearchLayout) {
+      getSearchLayout(height);
     }
-  }
+  };
 
   return (
     <Animated.View onLayout={onSearchLayout} style={styles.animatedViewContainer(animatedValue)}>
@@ -32,12 +22,6 @@ const Search = ({onPress, animatedValue, onContainerClicked = () => {}, getSearc
             <MemoIc_search width={16.67} height={16.67} />
           </View>
           <Text style={styles.inputText}>{StringConstant.newsTabHeaderPlaceholder}</Text>
-          {/* <TextInput
-            multiline={false}
-            placeholder={StringConstant.newsTabHeaderPlaceholder}
-            placeholderTextColor={COLORS.gray1}
-            style={styles.input}
-          /> */}
         </View>
       </Pressable>
     </Animated.View>
@@ -49,10 +33,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     marginBottom: SIZES.base,
-    marginHorizontal: SIZES.base,
+    marginHorizontal: SIZES.base
   },
   searchContainer: {
-    flex: 1,
+    flex: 1
   },
   wrapperSearch: {
     flex: 1,
@@ -62,7 +46,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignSelf: 'center',
     flexDirection: 'row',
-    height: 36,
+    height: 36
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -72,7 +56,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 9,
-    paddingBottom: 9,
+    paddingBottom: 9
   },
   input: {
     marginRight: 16,
@@ -82,7 +66,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     height: 36,
     paddingTop: 0,
-    paddingBottom: 0,
+    paddingBottom: 0
   },
   inputText: {
     marginRight: 16,
@@ -99,12 +83,12 @@ const styles = StyleSheet.create({
   wrapperIcon: {
     marginLeft: 8,
     alignSelf: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   newPostText: {
     color: COLORS.holyTosca,
     marginRight: 11,
-    ...FONTS.h3,
+    ...FONTS.h3
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
@@ -119,8 +103,8 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.alto,
-  }),
+    borderBottomColor: COLORS.alto
+  })
 });
 
-export default React.memo (Search);
+export default React.memo(Search);

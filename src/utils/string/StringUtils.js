@@ -348,7 +348,6 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   if (substringEnd && typeof substringEnd === 'number') {
     text = text.substring(0, substringEnd);
   }
-  substringEnd = Math.round(substringEnd);
   text = reactStringReplace(text, topicRegex, (match) => {
     if (topics?.indexOf(match?.replace('#', '')) > -1)
       return <TopicText navigation={navigation} text={match} currentTopic={id} />;

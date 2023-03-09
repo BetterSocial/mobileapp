@@ -182,6 +182,7 @@ export const useInitialStartup = () => {
     });
     Analytics.logEvent('splashscreen_startup');
     Analytics.trackingScreen('splashscreen');
+
     LogBox.ignoreAllLogs();
 
     // statusbar

@@ -1,16 +1,13 @@
 /* eslint-disable react/display-name */
-import React from 'react'
-import { StatusBar } from 'react-native'
-import { Transition, Transitioning } from 'react-native-reanimated'
+import React from 'react';
+import {StatusBar} from 'react-native';
+import {Transition, Transitioning} from 'react-native-reanimated';
 
-import { useAfterInteractions } from '../../hooks/useAfterInteractions'
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 
-export function withInteractionsManaged(
-  Component,
-  Placeholder
-) {
+export function withInteractionsManaged(Component, Placeholder) {
   return (props) => {
-    const { transitionRef, interactionsComplete } = useAfterInteractions()
+    const {transitionRef, interactionsComplete} = useAfterInteractions();
     return (
       <Transitioning.View
         transition={
@@ -19,25 +16,17 @@ export function withInteractionsManaged(
             <Transition.In type="fade" />
           </Transition.Together>
         }
-        style={{ flex: 1 }}
-        ref={transitionRef}
-      >
-        {interactionsComplete ? (
-          <Component {...props} />
-        ) : (
-          Placeholder && <Placeholder />
-        )}
+        style={{flex: 1}}
+        ref={transitionRef}>
+        {interactionsComplete ? <Component {...props} /> : Placeholder && <Placeholder />}
       </Transitioning.View>
-    )
-  }
+    );
+  };
 }
 
-export function withInteractionsManagedNoStatusBar(
-  Component,
-  Placeholder
-) {
+export function withInteractionsManagedNoStatusBar(Component, Placeholder) {
   return (props) => {
-    const { transitionRef, interactionsComplete } = useAfterInteractions()
+    const {transitionRef, interactionsComplete} = useAfterInteractions();
     return (
       <Transitioning.View
         transition={
@@ -46,16 +35,11 @@ export function withInteractionsManagedNoStatusBar(
             <Transition.In type="fade" />
           </Transition.Together>
         }
-        style={{ flex: 1 }}
-        ref={transitionRef}
-      >
+        style={{flex: 1}}
+        ref={transitionRef}>
         <StatusBar translucent={false} />
-        {interactionsComplete ? (
-          <Component {...props} />
-        ) : (
-          Placeholder && <Placeholder />
-        )}
+        {interactionsComplete ? <Component {...props} /> : Placeholder && <Placeholder />}
       </Transitioning.View>
-    )
-  }
+    );
+  };
 }

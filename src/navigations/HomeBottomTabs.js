@@ -54,10 +54,49 @@ function HomeBottomTabs({navigation}) {
           {}
         );
         setChannel(channel, dispatch);
-        navigation.navigate('ChatDetailPage');
+        navigation.reset({
+          index: 1,
+          routes: [
+            {
+              name: 'AuthenticatedStack',
+              params: {
+                screen: 'HomeTabs',
+                params: {
+                  screen: 'ChannelList'
+                }
+              }
+            },
+            {
+              name: 'AuthenticatedStack',
+              params: {
+                screen: 'ChatDetailPage'
+              }
+            }
+          ]
+        });
       } catch (e) {
-        navigation.navigate('ChatDetailPage', {
-          data: notification.data
+        navigation.reset({
+          index: 1,
+          routes: [
+            {
+              name: 'AuthenticatedStack',
+              params: {
+                screen: 'HomeTabs',
+                params: {
+                  screen: 'ChannelList'
+                }
+              }
+            },
+            {
+              name: 'AuthenticatedStack',
+              params: {
+                screen: 'ChatDetailPage',
+                params: {
+                  data: notification.data
+                }
+              }
+            }
+          ]
         });
       }
     }
@@ -144,7 +183,6 @@ function HomeBottomTabs({navigation}) {
   };
 
   const handlePushNotif = (remoteMessage) => {
-    console.log(remoteMessage, 'jahat');
     const {data} = remoteMessage;
     if (data.channel_type !== 3) {
       if (isIos) {

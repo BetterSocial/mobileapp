@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableNativeFeedback,
-  View
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View} from 'react-native';
 import KeyEvent from 'react-native-keyevent';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
@@ -16,18 +8,18 @@ import TopicItem from '../../../components/TopicItem';
 import {getTopics} from '../../../service/topics';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
-import {capitalizeFirstText, convertString} from '../../../utils/string/StringUtils';
+import {convertString} from '../../../utils/string/StringUtils';
 import {isEmptyOrSpaces} from '../../../utils/Utils';
 import Card from './Card';
 
-const SheetAddTopic = ({refTopic, onAdd, topics, onClose, saveOnClose, chatTopics}) => {
+const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
   const [dataTopic, setTopic] = React.useState('');
   const [listTopics, setlistTopics] = React.useState([]);
   const [chatTopic, setChatTopic] = React.useState([]);
   const [trigger, setTrigger] = React.useState(-1);
   const [topicSuggestion, setTopicSuggestion] = React.useState([]);
   const rbSheetHeight = 330;
-  const [widthInput, setWidthInput] = React.useState(0);
+  const [, setWidthInput] = React.useState(0);
   const inputRef = React.useRef();
 
   React.useEffect(() => {

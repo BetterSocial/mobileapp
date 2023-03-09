@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/arrow-left.svg';
 import ButtonHightlight from '../../components/ButtonHighlight';
@@ -20,44 +20,52 @@ import LoadingComment from '../../components/LoadingComment';
 import ReplyCommentItem from '../../components/Comments/ReplyCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
-import { Context } from '../../context';
-import { colors } from '../../utils/colors';
-import { createChildComment } from '../../service/comment';
-import { fonts } from '../../utils/fonts';
-import { getComment } from '../../utils/getstream/getComment';
-import { getFeedDetail } from '../../service/post';
+import {Context} from '../../context';
+import {colors} from '../../utils/colors';
+import {createChildComment} from '../../service/comment';
+import {fonts} from '../../utils/fonts';
+import {getComment} from '../../utils/getstream/getComment';
+import {getFeedDetail} from '../../service/post';
 
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
-const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => {
+const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
-  const [temporaryText, setTemporaryText] = React.useState('')
+  const [temporaryText, setTemporaryText] = React.useState('');
   const [, setReaction] = React.useState(false);
-  const [loadingCMD, setLoadingCMD] = React.useState(false);
+  const [loadingCMD] = React.useState(false);
   const [users] = React.useContext(Context).users;
   const [profile] = React.useContext(Context).profile;
 
   const [item, setItem] = React.useState(itemProp);
-  const [idComment, setIdComment] = React.useState(0)
-  const [newCommentList, setNewCommentList] = React.useState([])
-  const [defaultData, setDefaultData] = React.useState({
-    data: { count_downvote: 0, count_upvote: 0, text: textComment },
-    id: newCommentList.length + 1, kind: "comment", updated_at: moment(),
-    children_counts: { comment: 0 },
+  const [, setIdComment] = React.useState(0);
+  const [newCommentList, setNewCommentList] = React.useState([]);
+  const [defaultData] = React.useState({
+    data: {count_downvote: 0, count_upvote: 0, text: textComment},
+    id: newCommentList.length + 1,
+    kind: 'comment',
+    updated_at: moment(),
+    children_counts: {comment: 0},
     latest_children: {},
-    user: { data: { ...itemProp.user.data, profile_pic_url: users.photoUrl, username: profile.myProfile.username }, id: itemProp.user.id }
-  })
+    user: {
+      data: {
+        ...itemProp.user.data,
+        profile_pic_url: users.photoUrl,
+        username: profile.myProfile.username
+      },
+      id: itemProp.user.id
+    }
+  });
   const setComment = (text) => {
-    setTemporaryText(text)
+    setTemporaryText(text);
   };
-
 
   React.useEffect(() => {
     if (!loadingCMD) {
-      setTextComment(temporaryText)
+      setTextComment(temporaryText);
     }
-  }, [temporaryText, loadingCMD])
+  }, [temporaryText, loadingCMD]);
 
   React.useEffect(() => {
     const init = () => {
@@ -67,7 +75,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
     };
     init();
     if (item.latest_children && item.latest_children.comment) {
-      setIdComment(item.latest_children.comment.length)
+      setIdComment(item.latest_children.comment.length);
     }
   }, [item]);
   const getThisComment = async (newFeed) => {
@@ -75,7 +83,7 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
       feed: newFeed,
       level,
       idlevel1: itemProp.id,
-      idlevel2: itemProp.parent,
+      idlevel2: itemProp.parent
     });
     let comments = [];
     if (
@@ -84,11 +92,11 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
       Array.isArray(newItem.latest_children.comment)
     ) {
       comments = newItem.latest_children.comment.sort(
-        (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix(),
+        (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()
       );
     }
-    setItem({ ...newItem, latest_children: { comment: comments } });
-    setNewCommentList(comments)
+    setItem({...newItem, latest_children: {comment: comments}});
+    setNewCommentList(comments);
   };
   React.useEffect(() => {
     getThisComment(itemProp);
@@ -98,13 +106,21 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
     try {
       const data = await getFeedDetail(itemProp.activity_id);
       if (data) {
-        let oldData = data.data
+        let oldData = data.data;
         if (isSort) {
-          oldData = { ...oldData, latest_reactions: { ...oldData.latest_reactions, comment: oldData.latest_reactions.comment.sort((a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()) } }
+          oldData = {
+            ...oldData,
+            latest_reactions: {
+              ...oldData.latest_reactions,
+              comment: oldData.latest_reactions.comment.sort(
+                (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()
+              )
+            }
+          };
         }
         getThisComment(oldData);
-        if(updateParent) {
-          updateParent(oldData)
+        if (updateParent) {
+          updateParent(oldData);
         }
         // setFeedByIndexProps(
         //   {
@@ -120,19 +136,22 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
       }
     }
   };
-  
+
   const createComment = async () => {
     // setLoadingCMD(true);
-    setTemporaryText('')
-    setIdComment((prev) => prev + 1)
-    setNewCommentList([...newCommentList, { ...defaultData, data: {...defaultData.data, text: textComment} }])
+    setTemporaryText('');
+    setIdComment((prev) => prev + 1);
+    setNewCommentList([
+      ...newCommentList,
+      {...defaultData, data: {...defaultData.data, text: textComment}}
+    ]);
     try {
       if (textComment.trim() !== '') {
         const data = await createChildComment(textComment, item.id, item.user.id);
         if (data.code === 200) {
           // setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
           // setLoadingCMD(false);
-          await updateFeed(true)
+          await updateFeed(true);
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
           // setLoadingCMD(false);
@@ -149,35 +168,31 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
 
   const navigationGoBack = () => navigation.goBack();
 
-  const saveNewComment = ({ data }) => {
-    updateFeed()
-  }
+  const saveNewComment = () => {
+    updateFeed();
+  };
 
-  const saveParentComment = ({ data }) => {
-    updateFeed()
-  }
+  const saveParentComment = () => {
+    updateFeed();
+  };
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      updateFeed(true)
-    })
+      updateFeed(true);
+    });
 
-    return unsubscribe
-  }, [])
+    return unsubscribe;
+  }, []);
   return (
     <View style={styles.container}>
       <StatusBar translucent={false} />
       {/* Header */}
       <SafeAreaView>
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={navigationGoBack}
-            style={styles.backArrow}>
+          <TouchableOpacity onPress={navigationGoBack} style={styles.backArrow}>
             <ArrowLeftIcon width={20} height={12} fill="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>
-            Reply to {itemProp.user.data.username}
-          </Text>
+          <Text style={styles.headerText}>Reply to {itemProp.user.data.username}</Text>
           <View style={styles.btn} />
         </View>
       </SafeAreaView>
@@ -200,11 +215,12 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
               const showChildrenCommentView = () => {
                 navigation.push('ReplyComment', {
                   item: itemReply,
-                  level: parseInt(level) + 2,
-                  indexFeed,
+                  level: parseInt(level, 10) + 2,
+                  indexFeed
                 });
               };
-              const isLastInParent = (index) => index === (item.children_counts.comment || 0) - 1;
+              const isLastInParent = (indexLasInParent) =>
+                indexLasInParent === (item.children_counts.comment || 0) - 1;
 
               return (
                 <ContainerReply key={index}>
@@ -220,27 +236,24 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
                           // (itemReply.children_counts.comment || 0) === 0
                           level >= 2
                         }
-                        key={`r${  index}`}
+                        key={`r${index}`}
                         user={itemReply.user}
                         comment={itemReply}
                         onPress={showChildrenCommentView}
-                        level={parseInt(level) + 1}
+                        level={parseInt(level, 10) + 1}
                         loading={loadingCMD}
                         refreshComment={saveNewComment}
 
-                      // showLeftConnector
+                        // showLeftConnector
                       />
                       {itemReply.children_counts.comment > 0 && (
                         <>
-                          <View
-                            style={styles.seeRepliesContainer(
-                              isLastInParent(index),
-                            )}>
+                          <View style={styles.seeRepliesContainer(isLastInParent(index))}>
                             <View style={styles.connector} />
                             <ButtonHightlight onPress={showChildrenCommentView}>
                               <Text style={styles.seeRepliesText}>
                                 {StringConstant.postDetailPageSeeReplies(
-                                  itemReply.children_counts.comment || 0,
+                                  itemReply.children_counts.comment || 0
                                 )}
                               </Text>
                             </ButtonHightlight>
@@ -275,23 +288,20 @@ const ReplyCommentId = ({ itemProp, indexFeed, level, feeds, updateParent }) => 
     </View>
   );
 };
-const ContainerReply = ({ children, isGrandchild = true, hideLeftConnector, key }) => (
-    <View
-      key={key}
-      style={[
-        styles.containerReply(hideLeftConnector),
-        { borderColor: isGrandchild ? 'transparent' : colors.gray1 },
-      ]}>
-      {children}
-    </View>
-  );
+const ContainerReply = ({children, isGrandchild = true, key}) => (
+  <View
+    key={key}
+    style={[styles.containerReply, {borderColor: isGrandchild ? 'transparent' : colors.gray1}]}>
+    {children}
+  </View>
+);
 export default ReplyCommentId;
 
 const styles = StyleSheet.create({
   container: {
     height: 'auto',
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
     // backgroundColor: 'blue',
   },
   containerComment: {
@@ -300,48 +310,48 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     paddingLeft: 36,
-    paddingRight: 23,
+    paddingRight: 23
   },
   header: {
     marginRight: -20,
     marginBottom: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-  containerReply: (hideLeftConnector) => ({
+  containerReply: {
     borderLeftWidth: 1,
-    width: '100%',
+    width: '100%'
     // backgroundColor: 'red',
     // flex: 1,
-  }),
+  },
   seeRepliesContainer: (isLast) => ({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 14,
-    borderLeftColor: isLast ? 'transparent' : colors.gray1,
+    borderLeftColor: isLast ? 'transparent' : colors.gray1
   }),
   seeRepliesText: {
-    color: colors.blue,
+    color: colors.blue
   },
   btn: {
     paddingVertical: 8,
     paddingHorizontal: 20,
-    borderRadius: 20,
+    borderRadius: 20
   },
   btnText: {
-    color: '#fff',
+    color: '#fff'
   },
   headerText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
     marginLeft: -24,
     color: '#000',
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   image: {
     width: 48,
-    height: 48,
+    height: 48
   },
   input: {
     backgroundColor: '#F2F2F2',
@@ -349,19 +359,19 @@ const styles = StyleSheet.create({
     color: '#000',
     padding: 10,
     marginLeft: 20,
-    borderRadius: 8,
+    borderRadius: 8
   },
   comment: {
     flexDirection: 'row',
     paddingRight: 20,
     position: 'absolute',
-    bottom: 0,
+    bottom: 0
   },
   post: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
     color: '#333333',
-    marginLeft: 28,
+    marginLeft: 28
   },
   mainLeftConnector: {
     height: '100%',
@@ -369,7 +379,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: colors.gray1,
     left: 46,
-    zIndex: -100,
+    zIndex: -100
   },
   connector: {
     width: 15,
@@ -380,30 +390,30 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.gray1,
     borderBottomColor: colors.gray1,
     marginRight: 4,
-    marginLeft: -1,
+    marginLeft: -1
   },
   childCommentWrapper: {
     borderLeftColor: colors.gray1,
     borderLeftWidth: 1,
-    flex: 1,
+    flex: 1
   },
   childLevelMainConnector: {
     flex: 1,
     borderLeftWidth: 1,
     borderLeftColor: colors.gray1,
-    marginLeft: 24,
+    marginLeft: 24
   },
   backArrow: {
     padding: 10,
     paddingLeft: 24,
     paddingVertical: 18,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   commentScrollView: {
     minHeight: '100%',
-    paddingBottom: 83,
+    paddingBottom: 83
   },
   childCommentWrapperLoading: {
-    flex: 1,
-  },
+    flex: 1
+  }
 });
