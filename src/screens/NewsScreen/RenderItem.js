@@ -4,10 +4,10 @@ import {StyleSheet, View} from 'react-native';
 import Content from './Content';
 import Gap from '../../components/Gap';
 import Header from './Header';
-import useItemNews from './hooks/useItemNews';
 import {COLORS, SIZES} from '../../utils/theme';
 import {Footer} from '../../components';
 import {getCountCommentWithChild, getCountVote} from '../../utils/getstream';
+import useItemNews from './hooks/useItemNews';
 
 const RenderItem = ({
   item,

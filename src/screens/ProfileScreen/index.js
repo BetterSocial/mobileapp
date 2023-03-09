@@ -588,22 +588,20 @@ const ProfileScreen = ({route}) => {
                 bottomBarHeight;
               if (item.dummy) return <View style={styles.dummyItem(dummyItemHeight)}></View>;
               return (
-                <View style={{width: '100%'}}>
-                  <RenderItem
-                    bottomBar={!isNotFromHomeTab}
-                    item={item}
-                    index={index}
-                    onNewPollFetched={onNewPollFetched}
-                    onPressDomain={onPressDomain}
-                    onPress={() => onPress(item, index)}
-                    onPressComment={() => onPressComment(item, item.id)}
-                    onPressUpvote={(post) => setUpVote(post, index)}
-                    selfUserId={yourselfId}
-                    onHeaderOptionClicked={onHeaderOptionClicked}
-                    showAnonymousOption={true}
-                    onPressDownVote={(post) => setDownVote(post, index)}
-                  />
-                </View>
+                <RenderItem
+                  bottomBar={!isNotFromHomeTab}
+                  item={item}
+                  index={index}
+                  onNewPollFetched={onNewPollFetched}
+                  onPressDomain={onPressDomain}
+                  onPress={() => onPress(item, index)}
+                  onPressComment={() => onPressComment(item, item.id)}
+                  onPressUpvote={(post) => setUpVote(post, index)}
+                  selfUserId={yourselfId}
+                  onHeaderOptionClicked={onHeaderOptionClicked}
+                  showAnonymousOption={true}
+                  onPressDownVote={(post) => setDownVote(post, index)}
+                />
               );
             }}
           </ProfileTiktokScroll>

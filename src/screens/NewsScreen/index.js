@@ -37,7 +37,8 @@ const NewsScreen = () => {
   const {interactionsComplete} = useAfterInteractions();
   const [profileContext] = React.useContext(Context).profile;
   const {myProfile} = profileContext;
-  // const [isCompleteAnimation, setIsCompleteAnimation] = React.useState(false)
+
+  const interactionAnimatedRef = React.useRef(null);
 
   const scrollRef = React.createRef();
   const {news} = newslist;
@@ -48,7 +49,10 @@ const NewsScreen = () => {
       // checkCache()
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      if (interactionAnimatedRef.current) interactionAnimatedRef.current.cancel();
+    };
   }, []);
 
   React.useEffect(() => {
@@ -110,7 +114,7 @@ const NewsScreen = () => {
     const {y} = event.nativeEvent.contentOffset;
     const dy = y - lastDragY;
     if (dy + 20 <= 0) {
-      InteractionManager.runAfterInteractions(() => {
+      interactionAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
           toValue: 0,
           duration: 100,
@@ -123,7 +127,7 @@ const NewsScreen = () => {
         }).start();
       });
     } else if (dy - 20 > 0) {
-      InteractionManager.runAfterInteractions(() => {
+      interactionAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
         Animated.timing(offset, {
           toValue: -50,
           duration: 100,
