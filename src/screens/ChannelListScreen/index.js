@@ -65,7 +65,7 @@ const ChannelListScreen = ({navigation}) => {
 
   React.useEffect(
     () => () => {
-      handleUnsubscribeNotif();
+      // handleUnsubscribeNotif();
     },
     []
   );

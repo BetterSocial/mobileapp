@@ -15,6 +15,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BetterSocialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BetterSocialTests.m */; };
+		35AE310072645B8BA189DAC9 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68E57216479827BAC9F395A9 /* libPods-BetterSocial-BetterSocialDev.a */; };
 		4744DB994E163E19901072FB /* libPods-BetterSocial-BetterSocialTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A97978B80D03C076437BC22 /* libPods-BetterSocial-BetterSocialTests.a */; };
 		845147C0275632A000F1BF16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		845147C1275632B300F1BF16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -49,7 +50,6 @@
 		845C6E9C2758B16B00C9F384 /* Poppins.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD52758A00C00C9F384 /* Poppins.ttf */; };
 		888DAA1829B48C8900311304 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		888DAA1929B48C8900311304 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		888DAA1B29B48C8900311304 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68E57216479827BAC9F395A9 /* libPods-BetterSocial-BetterSocialDev.a */; };
 		888DAA1D29B48C8900311304 /* FontsFree-Net-SFProText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88954CF82832852B00A4B355 /* FontsFree-Net-SFProText-Regular.ttf */; };
 		888DAA1E29B48C8900311304 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88A969582829ED7100A87C3C /* Roboto-Bold.ttf */; };
 		888DAA1F29B48C8900311304 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88BB34922829E9DC0057417B /* Montserrat-Bold.ttf */; };
@@ -170,16 +170,15 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BetterSocial/main.m; sourceTree = "<group>"; };
 		190BDF63607778DB0B51054B /* libPods-BetterSocial.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AC891F9490348DCA26D996F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		1C391AEC15B45D688092CE1D /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.debug.xcconfig"; sourceTree = "<group>"; };
 		24D259700A804021837D0178 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		2BAB2ECDE2FB4F9CBC368E44 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
-		2C72745743B519882BA1DEBE /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.release.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* BetterSocial-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BetterSocial-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* BetterSocial-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BetterSocial-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		31B376BF28E745F3BF9C69FF /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		5CCDBF3D1E39A5EADBD60F99 /* libPods-BetterSocial-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		604B9ED866475442B0C96967 /* Pods-BetterSocial-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-tvOS/Pods-BetterSocial-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		68E57216479827BAC9F395A9 /* libPods-BetterSocial-BetterSocialDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BetterSocial-BetterSocialDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		72C1B8BCEA42A6D52CC5C1B0 /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.release.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.release.xcconfig"; sourceTree = "<group>"; };
 		793547E3C2448EB51FC04616 /* Pods-BetterSocial-BetterSocialTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialTests.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialTests/Pods-BetterSocial-BetterSocialTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = BetterSocial/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83C90F8EE35E4BC885132002 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
@@ -260,6 +259,7 @@
 		F87F33DF270D789D003F1E09 /* BetterSocial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BetterSocial.entitlements; path = BetterSocial/BetterSocial.entitlements; sourceTree = "<group>"; };
 		F87F35802717E4C8003F1E09 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		F87F35812717E4C8003F1E09 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		FF1C13E76F9FF52031C9FF8E /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BetterSocial-BetterSocialDev.debug.xcconfig"; path = "Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -299,7 +299,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				888DAA1B29B48C8900311304 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92D8142362E828E0BFD1A9D0 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
+				35AE310072645B8BA189DAC9 /* libPods-BetterSocial-BetterSocialDev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,14 +511,14 @@
 			children = (
 				ACFF33D6994ED4EDE6827000 /* Pods-BetterSocial.debug.xcconfig */,
 				CFF95CFBB6715E6AC876DEAF /* Pods-BetterSocial.release.xcconfig */,
-				1C391AEC15B45D688092CE1D /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */,
-				2C72745743B519882BA1DEBE /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */,
 				793547E3C2448EB51FC04616 /* Pods-BetterSocial-BetterSocialTests.debug.xcconfig */,
 				CE734B675C12751669B0FFFE /* Pods-BetterSocial-BetterSocialTests.release.xcconfig */,
 				604B9ED866475442B0C96967 /* Pods-BetterSocial-tvOS.debug.xcconfig */,
 				B6A8BEDD05EFD434CE64D853 /* Pods-BetterSocial-tvOS.release.xcconfig */,
 				8DFABB038E64C0AB07CEB070 /* Pods-BetterSocial-tvOSTests.debug.xcconfig */,
 				B99FF28AF6CEB9A4AC1FCE8D /* Pods-BetterSocial-tvOSTests.release.xcconfig */,
+				FF1C13E76F9FF52031C9FF8E /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */,
+				72C1B8BCEA42A6D52CC5C1B0 /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -614,14 +614,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 888DAA4629B48C8900311304 /* Build configuration list for PBXNativeTarget "BetterSocialStaging" */;
 			buildPhases = (
-				888DAA1529B48C8900311304 /* [CP] Check Pods Manifest.lock */,
 				888DAA1629B48C8900311304 /* Start Packager */,
 				888DAA1729B48C8900311304 /* Sources */,
 				888DAA1A29B48C8900311304 /* Frameworks */,
 				888DAA1C29B48C8900311304 /* Resources */,
 				888DAA4329B48C8900311304 /* Bundle React Native code and images */,
-				888DAA4429B48C8900311304 /* [CP] Embed Pods Frameworks */,
-				888DAA4529B48C8900311304 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1075,28 +1072,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		888DAA1529B48C8900311304 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BetterSocial-BetterSocialDev-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		888DAA1629B48C8900311304 /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1129,78 +1104,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
-		};
-		888DAA4429B48C8900311304 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		888DAA4529B48C8900311304 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BetterSocial-BetterSocialDev/Pods-BetterSocial-BetterSocialDev-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		889CAB6027D46CD6007F5892 /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1858,7 +1761,6 @@
 		};
 		888DAA4729B48C8900311304 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1C391AEC15B45D688092CE1D /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1889,7 +1791,6 @@
 		};
 		888DAA4829B48C8900311304 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2C72745743B519882BA1DEBE /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1919,7 +1820,7 @@
 		};
 		889CAB8C27D46CD6007F5892 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1C391AEC15B45D688092CE1D /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */;
+			baseConfigurationReference = FF1C13E76F9FF52031C9FF8E /* Pods-BetterSocial-BetterSocialDev.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1950,7 +1851,7 @@
 		};
 		889CAB8D27D46CD6007F5892 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2C72745743B519882BA1DEBE /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */;
+			baseConfigurationReference = 72C1B8BCEA42A6D52CC5C1B0 /* Pods-BetterSocial-BetterSocialDev.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

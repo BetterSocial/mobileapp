@@ -2,7 +2,7 @@ import * as React from 'react';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
-import {Platform, StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View, AppState} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilValue} from 'recoil';
 
@@ -17,8 +17,14 @@ import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 import {setChannel} from '../context/actions/setChannel';
-
 import {fcmTokenService} from '../service/users';
+import {feedChatAtom} from '../models/feeds/feedsNotification';
+import useChannelList from '../screens/ChannelListScreen/hooks/useChannelList';
+import { setTotalUnReadMessage } from '../context/actions/unReadMessageAction';
+import { getAccessToken } from '../utils/token';
+import { StreamFeed } from 'getstream';
+import { getSpecificCache } from '../utils/cache';
+import { FEED_COMMENT_COUNT } from '../utils/cache/constant';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,17 +34,81 @@ function HomeBottomTabs({navigation}) {
   const [client] = React.useContext(Context).client;
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
-  const [unReadMessage] = React.useContext(Context).unReadMessage;
+  const [unReadMessage, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
+  const listPostNotif = useRecoilValue(feedChatAtom);
+  const [countReadComment, setCountReadComment] = React.useState({});
+  const [totalComment, setTotalComment] = React.useState(0)
+  const {handleNotHaveCacheHook, mappingUnreadCountPostNotifHook} = useChannelList();
+    const [profileContext] = React.useContext(Context).profile;
+      const {myProfile} = profileContext;
+
+  console.log(countReadComment, 'sisan');
+
+  //   const mappingUnreadCountPostNotif = () => {
+  //   const totalMessage = mappingUnreadCountPostNotif(listPostNotif, countReadComment);
+  //   dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage));
+  // };
+
+  //   React.useEffect(
+  //   () => () => {
+  //     handleUnsubscribeNotif();
+  //   },
+  //   []
+  // );
+
+  // const handleUnsubscribeNotif = async () => {
+  //   const token = await getAccessToken();
+  //   const clientFeed = StreamFeed(token);
+  //   const notif = clientFeed.feed('notification', myProfile.user_id, token.id);
+  //   return () => {
+  //     notif.unsubscribe();
+  //   };
+  // };
+
+    const mappingUnreadCountPostNotif = () => {
+    const totalMessage = mappingUnreadCountPostNotifHook(listPostNotif, countReadComment);
+    console.log(totalMessage, unReadMessage, 'sukira')
+    console.log(totalMessage, 'saka')
+    // setTotalComment(totalMessage)
+    // dispatchUnreadMessage(setTotalUnReadMessage(totalMessage));
+  };
+  console.log(totalComment, 'total bos')
+  console.log(listPostNotif, 'sulaika')
+  const handleNotHaveCache = () => {
+    const comment = handleNotHaveCacheHook(listPostNotif);
+    console.log(comment, 'sukira1')
+    setCountReadComment(comment);
+  };
+
+  React.useEffect(() => {
+    mappingUnreadCountPostNotif()
+  }, [countReadComment, listPostNotif])
+
+    const handleCacheComment = () => {
+    getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
+      console.log(cache, 'sutil')
+      if (cache) {
+        setCountReadComment(cache);
+      } else {
+        handleNotHaveCache();
+      }
+    });
+  };
+
+  React.useEffect(() => {
+    handleCacheComment();
+  }, []);
+      console.log(listPostNotif, 'listsaya');
 
   const handleNotification = async (notification) => {
     if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
-      navigation.navigate('PostDetailPage', {
+      navigation.push('PostDetailPage', {
         feedId: notification.data.feed_id,
         is_from_pn: true
       });
     }
     if (notification.data.type === 'follow_user') {
-      navigation.navigate('OtherProfile', {
+      navigation.push('OtherProfile', {
         data: {
           user_id: notification.data.user_id,
           other_id: notification.data.user_id_follower,
@@ -53,8 +123,8 @@ function HomeBottomTabs({navigation}) {
           notification.data.channel_id,
           {}
         );
-        setChannel(channel, dispatch);
-        navigation.navigate('ChatDetailPage');
+        await setChannel(channel, dispatch);
+        navigation.push('ChatDetailPage');
       } catch (e) {
         navigation.navigate('ChatDetailPage', {
           data: notification.data
@@ -67,7 +137,12 @@ function HomeBottomTabs({navigation}) {
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
       handleNotification(notification);
-      notification.finish(PushNotificationIOS.FetchResult.NoData);
+      if (Platform.OS === 'ios') {
+        // PushNotificationIOS.getApplicationIconBadgeNumber((number) => {
+        //   PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
+        // });
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      }
     },
     // (optional) Called when the user fails to register for remote notifications.
     // Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
@@ -144,7 +219,6 @@ function HomeBottomTabs({navigation}) {
   };
 
   const handlePushNotif = (remoteMessage) => {
-    console.log(remoteMessage, 'jahat');
     const {data} = remoteMessage;
     if (data.channel_type !== 3) {
       if (isIos) {
@@ -167,7 +241,7 @@ function HomeBottomTabs({navigation}) {
       unsubscribe();
     };
   }, []);
-
+  console.log(unReadMessage, 'sukira2')
   React.useEffect(() => {
     if (otherProfileData !== null && initialStartup.id !== null) {
       navigation.navigate('OtherProfile', {
@@ -179,6 +253,24 @@ function HomeBottomTabs({navigation}) {
       });
     }
   }, [initialStartup, otherProfileData]);
+
+  const handleAppState = (nextAppState) => {
+    if (
+      Platform.OS === 'ios' &&
+      nextAppState === 'background' &&
+      typeof unReadMessage === 'object'
+    ) {
+      PushNotificationIOS.setApplicationIconBadgeNumber(
+        unReadMessage.total_unread_count + unReadMessage.unread_post
+      );
+    }
+  };
+
+  React.useEffect(() => {
+    if (unReadMessage && typeof unReadMessage === 'object') {
+      AppState.addEventListener('change', handleAppState);
+    }
+  }, [unReadMessage]);
 
   const renderTabLabelIcon =
     (componentType) =>

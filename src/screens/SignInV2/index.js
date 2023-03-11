@@ -1,7 +1,7 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {BackHandler, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import {BackHandler, Platform, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 // eslint-disable-next-line import/no-unresolved
 import {colors} from 'react-native-swiper-flatlist/src/themes';
@@ -23,6 +23,7 @@ import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {verifyUser} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;
@@ -128,6 +129,12 @@ const SignIn = () => {
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', preventBackButton);
     };
+  }, []);
+
+  React.useEffect(() => {
+    if (Platform.OS === 'ios') {
+      PushNotificationIOS.setApplicationIconBadgeNumber(0);
+    }
   }, []);
 
   return (
