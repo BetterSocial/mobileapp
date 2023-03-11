@@ -42,6 +42,16 @@ target 'BetterSocial' do
 
     pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
     end
+  target 'BetterSocialStaging' do
+    config = use_native_modules!
+    permissions_path = '../node_modules/react-native-permissions/ios'
+    pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
+    pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+
+    use_react_native!(:path => config["reactNativePath"])
+
+    pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+    end
 
   # Enables Flipper.
   #
