@@ -10,16 +10,12 @@ import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
 import PreviewMessage from './elements/CustomPreviewMessage';
 import Search from './elements/Search';
-import streamFeed from '../../utils/getstream/streamer';
 import useChannelList from './hooks/useChannelList';
 import {CHANNEL_TYPE_TOPIC} from '../../utils/constants';
-import {FEED_COMMENT_COUNT} from '../../utils/cache/constant';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {channelListLocalAtom} from '../../service/channelListLocal';
-import {getAccessToken} from '../../utils/token';
 import {getChatName} from '../../utils/string/StringUtils';
-import {getSpecificCache} from '../../utils/cache';
 import {setChannel} from '../../context/actions/setChannel';
 import {setTotalUnreadPostNotif} from '../../context/actions/unReadMessageAction';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
@@ -38,8 +34,7 @@ const ChannelListScreen = ({navigation}) => {
   const [profileContext] = React.useContext(Context).profile;
   const [countReadComment, setCountReadComment] = React.useState({});
   const {myProfile} = profileContext;
-  const {mappingUnreadCountPostNotifHook, handleNotHaveCacheHook, handleUpdateCacheHook} =
-    useChannelList();
+  const {mappingUnreadCountPostNotifHook, handleUpdateCacheHook} = useChannelList();
   const [, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
 
@@ -70,32 +65,32 @@ const ChannelListScreen = ({navigation}) => {
     []
   );
 
-  const handleUnsubscribeNotif = async () => {
-    const token = await getAccessToken();
-    const clientFeed = streamFeed(token);
-    const notif = clientFeed.feed('notification', myProfile.user_id, token.id);
-    return () => {
-      notif.unsubscribe();
-    };
-  };
+  // const handleUnsubscribeNotif = async () => {
+  //   const token = await getAccessToken();
+  //   const clientFeed = streamFeed(token);
+  //   const notif = clientFeed.feed('notification', myProfile.user_id, token.id);
+  //   return () => {
+  //     notif.unsubscribe();
+  //   };
+  // };
 
   React.useEffect(() => {
-    handleCacheComment();
+    // handleCacheComment();
   }, []);
 
-  const handleCacheComment = () => {
-    getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
-      if (cache) {
-        setCountReadComment(cache);
-      } else {
-        handleNotHaveCache();
-      }
-    });
-  };
-  const handleNotHaveCache = () => {
-    const comment = handleNotHaveCacheHook(listPostNotif);
-    setCountReadComment(comment);
-  };
+  // const handleCacheComment = () => {
+  //   getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
+  //     if (cache) {
+  //       setCountReadComment(cache);
+  //     } else {
+  //       handleNotHaveCache();
+  //     }
+  //   });
+  // };
+  // const handleNotHaveCache = () => {
+  //   const comment = handleNotHaveCacheHook(listPostNotif);
+  //   setCountReadComment(comment);
+  // };
 
   const handleUpdateCache = (id, totalComment) => {
     const updateReadCache = handleUpdateCacheHook(countReadComment, id, totalComment);

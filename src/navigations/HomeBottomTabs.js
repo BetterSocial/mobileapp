@@ -20,11 +20,9 @@ import {setChannel} from '../context/actions/setChannel';
 import {fcmTokenService} from '../service/users';
 import {feedChatAtom} from '../models/feeds/feedsNotification';
 import useChannelList from '../screens/ChannelListScreen/hooks/useChannelList';
-import { setTotalUnReadMessage } from '../context/actions/unReadMessageAction';
-import { getAccessToken } from '../utils/token';
-import { StreamFeed } from 'getstream';
-import { getSpecificCache } from '../utils/cache';
-import { FEED_COMMENT_COUNT } from '../utils/cache/constant';
+import {setTotalUnreadPostNotif} from '../context/actions/unReadMessageAction';
+import {getSpecificCache} from '../utils/cache';
+import {FEED_COMMENT_COUNT} from '../utils/cache/constant';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,10 +35,10 @@ function HomeBottomTabs({navigation}) {
   const [unReadMessage, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const listPostNotif = useRecoilValue(feedChatAtom);
   const [countReadComment, setCountReadComment] = React.useState({});
-  const [totalComment, setTotalComment] = React.useState(0)
+  const [totalComment, setTotalComment] = React.useState(0);
   const {handleNotHaveCacheHook, mappingUnreadCountPostNotifHook} = useChannelList();
-    const [profileContext] = React.useContext(Context).profile;
-      const {myProfile} = profileContext;
+  const [profileContext] = React.useContext(Context).profile;
+  const {myProfile} = profileContext;
 
   console.log(countReadComment, 'sisan');
 
@@ -65,28 +63,25 @@ function HomeBottomTabs({navigation}) {
   //   };
   // };
 
-    const mappingUnreadCountPostNotif = () => {
+  const mappingUnreadCountPostNotif = () => {
     const totalMessage = mappingUnreadCountPostNotifHook(listPostNotif, countReadComment);
-    console.log(totalMessage, unReadMessage, 'sukira')
-    console.log(totalMessage, 'saka')
-    // setTotalComment(totalMessage)
-    // dispatchUnreadMessage(setTotalUnReadMessage(totalMessage));
+    dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage));
   };
-  console.log(totalComment, 'total bos')
-  console.log(listPostNotif, 'sulaika')
+  console.log(totalComment, 'total bos');
+  console.log(listPostNotif, 'sulaika');
   const handleNotHaveCache = () => {
     const comment = handleNotHaveCacheHook(listPostNotif);
-    console.log(comment, 'sukira1')
+    console.log(comment, 'sukira1');
     setCountReadComment(comment);
   };
 
   React.useEffect(() => {
-    mappingUnreadCountPostNotif()
-  }, [countReadComment, listPostNotif])
+    mappingUnreadCountPostNotif();
+  }, [countReadComment, listPostNotif]);
 
-    const handleCacheComment = () => {
+  const handleCacheComment = () => {
     getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
-      console.log(cache, 'sutil')
+      console.log(cache, 'sutil');
       if (cache) {
         setCountReadComment(cache);
       } else {
@@ -98,7 +93,6 @@ function HomeBottomTabs({navigation}) {
   React.useEffect(() => {
     handleCacheComment();
   }, []);
-      console.log(listPostNotif, 'listsaya');
 
   const handleNotification = async (notification) => {
     if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
@@ -138,9 +132,9 @@ function HomeBottomTabs({navigation}) {
     onNotification(notification) {
       handleNotification(notification);
       if (Platform.OS === 'ios') {
-        // PushNotificationIOS.getApplicationIconBadgeNumber((number) => {
-        //   PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
-        // });
+        PushNotificationIOS.getApplicationIconBadgeNumber((number) => {
+          PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
+        });
         notification.finish(PushNotificationIOS.FetchResult.NoData);
       }
     },
@@ -177,9 +171,6 @@ function HomeBottomTabs({navigation}) {
   };
 
   const pushNotifIos = (message) => {
-    if (__DEV__) {
-      console.log(message.messageId, 'message');
-    }
     const {title, body} = message.notification;
     PushNotificationIOS.addNotificationRequest({
       title,
@@ -241,7 +232,6 @@ function HomeBottomTabs({navigation}) {
       unsubscribe();
     };
   }, []);
-  console.log(unReadMessage, 'sukira2')
   React.useEffect(() => {
     if (otherProfileData !== null && initialStartup.id !== null) {
       navigation.navigate('OtherProfile', {
@@ -260,9 +250,7 @@ function HomeBottomTabs({navigation}) {
       nextAppState === 'background' &&
       typeof unReadMessage === 'object'
     ) {
-      PushNotificationIOS.setApplicationIconBadgeNumber(
-        unReadMessage.total_unread_count + unReadMessage.unread_post
-      );
+      PushNotificationIOS.setApplicationIconBadgeNumber(unReadMessage.total_unread_count);
     }
   };
 
@@ -305,7 +293,6 @@ function HomeBottomTabs({navigation}) {
       );
     };
   // eslint-disable-next-line react/display-name
-
   return (
     <View style={styles.container}>
       <Tab.Navigator
