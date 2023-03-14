@@ -3,7 +3,6 @@ import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
@@ -14,7 +13,6 @@ import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
 import {fonts} from '../../utils/fonts';
 import {setAsset, setParticipants} from '../../context/actions/groupChat';
-import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {setChannel} from '../../context/actions/setChannel';
 
@@ -26,7 +24,6 @@ const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
-  const insets = useSafeAreaInsets();
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -49,6 +46,7 @@ const ChatDetailPage = ({route}) => {
     }
     return <MessageSystem {...props} />;
   };
+
   const handleChannelClient = async () => {
     try {
       const channel = clients.client.getChannelById(
@@ -61,12 +59,17 @@ const ChatDetailPage = ({route}) => {
       console.log(e, 'eman');
     }
   };
-
   React.useEffect(() => {
     if (clients && route.params && !channelClient.client) {
       handleChannelClient();
     }
   }, [route.params, clients]);
+
+  React.useEffect(() => () => {
+    if (channelClient.channel) {
+      channelClient.channel.markRead();
+    }
+  });
 
   const defaultActionsAllowed = (messageActionsProp) => {
     const {
@@ -98,10 +101,7 @@ const ChatDetailPage = ({route}) => {
 
     return options;
   };
-  const connect = useClientGetstream();
-  React.useEffect(() => {
-    connect();
-  }, []);
+
   React.useEffect(() => {
     searchUserMessages(channelClient.channel?.cid);
     setParticipants(channelClient.channel?.state?.members, dispatch);
@@ -116,7 +116,7 @@ const ChatDetailPage = ({route}) => {
     setAsset(messages.results, dispatch);
   };
   const testDate = (v) => v;
-  console.log(insets, 'sisi');
+
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
-import {Platform, StyleSheet, View, AppState} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilValue} from 'recoil';
 
@@ -35,12 +35,7 @@ function HomeBottomTabs({navigation}) {
   const [unReadMessage, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const listPostNotif = useRecoilValue(feedChatAtom);
   const [countReadComment, setCountReadComment] = React.useState({});
-  const [totalComment, setTotalComment] = React.useState(0);
   const {handleNotHaveCacheHook, mappingUnreadCountPostNotifHook} = useChannelList();
-  const [profileContext] = React.useContext(Context).profile;
-  const {myProfile} = profileContext;
-
-  console.log(countReadComment, 'sisan');
 
   //   const mappingUnreadCountPostNotif = () => {
   //   const totalMessage = mappingUnreadCountPostNotif(listPostNotif, countReadComment);
@@ -67,11 +62,9 @@ function HomeBottomTabs({navigation}) {
     const totalMessage = mappingUnreadCountPostNotifHook(listPostNotif, countReadComment);
     dispatchUnreadMessage(setTotalUnreadPostNotif(totalMessage));
   };
-  console.log(totalComment, 'total bos');
-  console.log(listPostNotif, 'sulaika');
+
   const handleNotHaveCache = () => {
     const comment = handleNotHaveCacheHook(listPostNotif);
-    console.log(comment, 'sukira1');
     setCountReadComment(comment);
   };
 
@@ -243,22 +236,6 @@ function HomeBottomTabs({navigation}) {
       });
     }
   }, [initialStartup, otherProfileData]);
-
-  const handleAppState = (nextAppState) => {
-    if (
-      Platform.OS === 'ios' &&
-      nextAppState === 'background' &&
-      typeof unReadMessage === 'object'
-    ) {
-      PushNotificationIOS.setApplicationIconBadgeNumber(unReadMessage.total_unread_count);
-    }
-  };
-
-  React.useEffect(() => {
-    if (unReadMessage && typeof unReadMessage === 'object') {
-      AppState.addEventListener('change', handleAppState);
-    }
-  }, [unReadMessage]);
 
   const renderTabLabelIcon =
     (componentType) =>

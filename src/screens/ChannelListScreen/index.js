@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ActivityIndicator, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StatusBar, StyleSheet, View} from 'react-native';
 import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useRecoilValue} from 'recoil';
@@ -64,33 +64,6 @@ const ChannelListScreen = ({navigation}) => {
     },
     []
   );
-
-  // const handleUnsubscribeNotif = async () => {
-  //   const token = await getAccessToken();
-  //   const clientFeed = streamFeed(token);
-  //   const notif = clientFeed.feed('notification', myProfile.user_id, token.id);
-  //   return () => {
-  //     notif.unsubscribe();
-  //   };
-  // };
-
-  React.useEffect(() => {
-    // handleCacheComment();
-  }, []);
-
-  // const handleCacheComment = () => {
-  //   getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
-  //     if (cache) {
-  //       setCountReadComment(cache);
-  //     } else {
-  //       handleNotHaveCache();
-  //     }
-  //   });
-  // };
-  // const handleNotHaveCache = () => {
-  //   const comment = handleNotHaveCacheHook(listPostNotif);
-  //   setCountReadComment(comment);
-  // };
 
   const handleUpdateCache = (id, totalComment) => {
     const updateReadCache = handleUpdateCacheHook(countReadComment, id, totalComment);
@@ -158,40 +131,43 @@ const ChannelListScreen = ({navigation}) => {
   return (
     <SafeAreaProvider style={{height: '100%'}}>
       <StatusBar translucent={false} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View style={{height: 52}}>
-          <Search animatedValue={0} onPress={() => navigation.navigate('ContactScreen')} />
+      {/* <ScrollView contentInsetAdjustmentBehavior="automatic"> */}
+      <View style={{height: 52}}>
+        <Search animatedValue={0} onPress={() => navigation.navigate('ContactScreen')} />
+      </View>
+      {myProfile && myProfile.user_id && client.client ? (
+        <Chat client={client.client} i18nInstance={streami18n}>
+          <ChannelList
+            PreviewAvatar={CustomPreviewAvatar}
+            filters={memoizedFilters}
+            PreviewStatus={ChannelStatusIcon}
+            PreviewTitle={customPreviewTitle}
+            onSelect={onSelectChat}
+            sort={sort}
+            options={options}
+            onChannelVisible={onChannelVisible}
+            maxUnreadCount={99}
+            localData={channelListLocalValue}
+            additionalFlatListProps={{
+              onEndReached: () => null,
+              refreshControl: null,
+              initialNumToRender: 10,
+              maxToRenderPerBatch: 30,
+              contentInsetAdjustmentBehavior: 'automatic'
+            }}
+            additionalData={listPostNotif}
+            context={myContext}
+            PreviewUnreadCount={chatBadge}
+            PreviewMessage={PreviewMessage}
+            PostNotifComponent={postNotifComponent}
+          />
+        </Chat>
+      ) : (
+        <View style={styles.content}>
+          <ActivityIndicator size="small" color={COLORS.red} />
         </View>
-        {myProfile && myProfile.user_id && client.client ? (
-          <Chat client={client.client} i18nInstance={streami18n}>
-            <ChannelList
-              PreviewAvatar={CustomPreviewAvatar}
-              filters={memoizedFilters}
-              PreviewStatus={ChannelStatusIcon}
-              PreviewTitle={customPreviewTitle}
-              onSelect={onSelectChat}
-              sort={sort}
-              options={options}
-              onChannelVisible={onChannelVisible}
-              maxUnreadCount={99}
-              localData={channelListLocalValue}
-              additionalFlatListProps={{
-                onEndReached: () => null,
-                refreshControl: null
-              }}
-              additionalData={listPostNotif}
-              context={myContext}
-              PreviewUnreadCount={chatBadge}
-              PreviewMessage={PreviewMessage}
-              PostNotifComponent={postNotifComponent}
-            />
-          </Chat>
-        ) : (
-          <View style={styles.content}>
-            <ActivityIndicator size="small" color={COLORS.red} />
-          </View>
-        )}
-      </ScrollView>
+      )}
+      {/* </ScrollView> */}
     </SafeAreaProvider>
   );
 };
