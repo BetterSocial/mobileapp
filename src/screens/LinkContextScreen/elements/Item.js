@@ -1,25 +1,26 @@
 import * as React from 'react';
 import JWTDecode from 'jwt-decode';
-import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {Linking, StyleSheet, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import BlockDomainComponent from '../../../components/BlockDomain';
 import ContentRelated from './ContentRelated';
+import ShareUtils from '../../../utils/share';
 import dimen from '../../../utils/dimen';
-import { COLORS } from '../../../utils/theme';
-import { Content, Header, LinkContextScreenFooter } from ".";
-import { downVoteDomain, upVoteDomain } from '../../../service/vote';
-import { fonts } from '../../../utils/fonts';
-import { getAccessToken } from '../../../utils/token';
-import { linkContextScreenParamBuilder, linkContextScreenSwitchScreenParam } from '../../../utils/navigation/paramBuilder';
-import { openUrl } from '../../../utils/Utils';
+import {COLORS} from '../../../utils/theme';
+import {Content, Header, LinkContextScreenFooter} from '.';
+import {downVoteDomain, upVoteDomain} from '../../../service/vote';
+import {fonts} from '../../../utils/fonts';
+import {getAccessToken} from '../../../utils/token';
+import {linkContextScreenSwitchScreenParam} from '../../../utils/navigation/paramBuilder';
+import {openUrl} from '../../../utils/Utils';
 
 const LinkContextItem = ({
   item,
   showBackButton = true,
   setFollow,
   follow = false,
-  isFirstItem = false,
+  isFirstItem = false
 }) => {
   const navigation = useNavigation();
   const domainImage = item.domain.image;
@@ -29,16 +30,16 @@ const LinkContextItem = ({
   const refBlockDomainComponent = React.useRef(null);
   const [idFromToken, setIdFromToken] = React.useState('');
 
-  const onReaction = async (v) => {
+  const onReaction = async () => {
     refBlockDomainComponent.current.openBlockDomain();
   };
 
-  const handleOnPressComment = (itemNews) => {
+  const handleOnPressComment = () => {
     navigation.navigate('DetailDomainScreen', {
       item: {
         ...item,
         score: item?.domain?.credderScore,
-        follower: 0,
+        follower: 0
       }
     });
   };
@@ -52,13 +53,18 @@ const LinkContextItem = ({
   };
 
   const onContentPressed = () => {
-    const url = item?.content?.news_url || item?.content?.url
+    const url = item?.content?.news_url || item?.content?.url;
     if (isFirstItem && Linking.canOpenURL(url)) {
-      return openUrl(url, true)
+      return openUrl(url, true);
     }
 
-    const param = linkContextScreenSwitchScreenParam(item, item?.domain?.name, item?.domain?.image, item?.domain?.domain_page_id)
-    navigation.push('LinkContextScreen', param)
+    const param = linkContextScreenSwitchScreenParam(
+      item,
+      item?.domain?.name,
+      item?.domain?.image,
+      item?.domain?.domain_page_id
+    );
+    return navigation.push('LinkContextScreen', param);
   };
 
   React.useEffect(() => {
@@ -79,26 +85,31 @@ const LinkContextItem = ({
         name={domainName}
         image={domainImage}
         time={postTime}
-        onFollowDomainPressed={() => { }}
+        onFollowDomainPressed={() => {}}
         setFollow={setFollow}
         follow={follow}
         showBackButton={showBackButton}
       />
-      {isFirstItem ? <Content item={item} onContentPressed={onContentPressed} /> : <ContentRelated item={item} onContentPressed={onContentPressed} />}
+      {isFirstItem ? (
+        <Content item={item} onContentPressed={onContentPressed} />
+      ) : (
+        <ContentRelated item={item} onContentPressed={onContentPressed} />
+      )}
       <LinkContextScreenFooter
         item={item}
         itemId={item.id}
-        onPressBlock={() => onReaction(0)}
-        onPressComment={() => handleOnPressComment(item)}
+        onPressBlock={onReaction}
+        onPressComment={handleOnPressComment}
         onPressUpvote={(news) => upvoteNews(news)}
         onPressDownVote={(news) => downvoteNews(news)}
+        onPressShare={ShareUtils.shareNews}
         selfUserId={idFromToken}
       />
       <View
         style={{
           height: 6,
           width: '100%',
-          backgroundColor: COLORS.lightgrey,
+          backgroundColor: COLORS.lightgrey
         }}
       />
 
@@ -106,7 +117,8 @@ const LinkContextItem = ({
         ref={refBlockDomainComponent}
         domain={item.domain.name}
         domainId={item.domain.domain_page_id}
-        screen="link_context_screen" />
+        screen="link_context_screen"
+      />
     </View>
   );
 };
@@ -120,30 +132,30 @@ const styles = StyleSheet.create({
   },
   containerRelated: {
     backgroundColor: COLORS.white,
-    flex: 1,
+    flex: 1
   },
   bottomAnchorContainer: {
     position: 'absolute',
     bottom: 0,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   postArrowUpImage: {
     width: 48,
     height: 48,
     marginBottom: 6,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   bottomAnchorTextContainer: {
     backgroundColor: COLORS.bondi_blue,
     padding: 11,
     borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopRightRadius: 8
   },
   bottomAnchorSwipeText: {
     fontFamily: fonts.inter[500],
     color: COLORS.white,
-    fontSize: 14,
-  },
+    fontSize: 14
+  }
 });
 
 export default LinkContextItem;

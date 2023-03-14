@@ -5,23 +5,10 @@ import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {colors} from '../../utils/colors';
 import dimen from '../../utils/dimen';
 
-const FULL_WIDTH = Dimensions.get('screen').width;
-
 const styles = StyleSheet.create({
   flatlistContainer: {
     paddingBottom: 0
   },
-  cardContainer: () => ({
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
-    width: FULL_WIDTH,
-    borderBottomWidth: 7,
-    borderBottomColor: colors.lightgrey,
-    backgroundColor: 'white'
-  }),
-  cardMain: () => ({
-    height: dimen.size.FEED_CURRENT_ITEM_HEIGHT,
-    width: '100%'
-  })
 });
 
 const TiktokScroll = (props) => {
@@ -65,13 +52,7 @@ const TiktokScroll = (props) => {
       initialNumToRender={2}
       ref={flatListRef}
       refreshing={refreshing}
-      renderItem={({item, index}) => (
-        <View key={index} testID="dataScroll" style={[styles.cardContainer()]}>
-          <View key={index} style={styles.cardMain()}>
-            {renderItem({item, index})}
-          </View>
-        </View>
-      )}
+      renderItem={renderItem}
       scrollEventThrottle={1}
       showsVerticalScrollIndicator={false}
       snapToAlignment="start"

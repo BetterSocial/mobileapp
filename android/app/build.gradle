@@ -151,8 +151,8 @@ android {
         applicationId "org.bettersocial"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 216
-        versionName "1.10"
+        versionCode 223
+        versionName "1.10.8"
     }
     splits {
         abi {
@@ -182,6 +182,12 @@ android {
         debug {
             signingConfig signingConfigs.debug
             matchingFallbacks = ['debug', 'release']
+        }
+        profileable {
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://reactnative.dev/docs/signed-apk-android.
+            initWith release
+            matchingFallbacks = ['release']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.

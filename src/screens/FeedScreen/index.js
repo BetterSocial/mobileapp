@@ -45,6 +45,8 @@ const FeedScreen = (props) => {
     saveSearchHeight,
     searchHeight
   } = useCoreFeed();
+  const interactionManagerRef = React.useRef(null);
+  const interactionManagerAnimatedRef = React.useRef(null);
   const getDataFeedsHandle = async (offsetFeed = 0, useLoading) => {
     getDataFeeds(offsetFeed, useLoading);
   };
@@ -67,7 +69,12 @@ const FeedScreen = (props) => {
       showSearchBarAnimation();
     });
 
-    return unsubscribe;
+    return () => {
+      if (interactionManagerRef.current) interactionManagerRef.current.cancel();
+      if (interactionManagerAnimatedRef.current) interactionManagerAnimatedRef.current.cancel();
+
+      unsubscribe();
+    };
   }, [navigation]);
 
   const setUpVoteHandle = async (post, index) => {
@@ -148,7 +155,7 @@ const FeedScreen = (props) => {
   };
 
   const showSearchBarAnimation = () => {
-    InteractionManager.runAfterInteractions(() => {
+    interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
       Animated.timing(offset, {
         toValue: 0,
         duration: 100,
@@ -165,7 +172,7 @@ const FeedScreen = (props) => {
       if (dy + 20 <= 0) {
         showSearchBarAnimation();
       } else if (dy - 20 > 0) {
-        InteractionManager.runAfterInteractions(() => {
+        interactionManagerAnimatedRef.current = InteractionManager.runAfterInteractions(() => {
           Animated.timing(offset, {
             toValue: -50,
             duration: 100,
@@ -193,7 +200,7 @@ const FeedScreen = (props) => {
   };
 
   const renderItem = ({item, index}) => {
-    if (item.dummy) return null;
+    if (item.dummy) return <React.Fragment key={index} />;
     return (
       <RenderListFeed
         key={item.id}
@@ -219,7 +226,6 @@ const FeedScreen = (props) => {
   return (
     <SafeAreaProvider style={styles.container} forceInset={{top: 'always'}}>
       <StatusBar translucent={false} />
-
       <Search
         getSearchLayout={saveSearchHeightHandle}
         animatedValue={offset}

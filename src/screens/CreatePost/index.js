@@ -6,13 +6,13 @@ import PSL from 'psl';
 /* eslint-disable camelcase */
 /* eslint-disable no-use-before-define */
 import Toast from 'react-native-simple-toast';
+import _, {debounce} from 'lodash';
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
 import {
   Alert,
   Animated,
   BackHandler,
-  Dimensions,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -21,7 +21,6 @@ import {
   Text,
   View
 } from 'react-native';
-import {debounce} from 'lodash';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
@@ -53,6 +52,7 @@ import Timer from '../../assets/icons/Ic_timer';
 import TopicItem from '../../components/TopicItem';
 import UserProfile from './elements/UserProfile';
 import WarningAnimatedMessage from '../../components/WarningAnimateMessage';
+import useCreatePostHook from '../../hooks/screen/useCreatePostHook';
 import useHastagMention from './elements/useHastagMention';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button, ButtonAddMedia} from '../../components/Button';
@@ -92,9 +92,11 @@ const CreatePost = () => {
   const sheetPrivacyRef = React.useRef();
   const sheetBackRef = React.useRef();
 
+  const {headerTitle, initialTopic, isInCreatePostTopicScreen} = useCreatePostHook();
+
   const [message, setMessage] = React.useState('');
   const [mediaStorage, setMediaStorage] = React.useState([]);
-  const [listTopic, setListTopic] = React.useState([]);
+  const [listTopic, setListTopic] = React.useState(initialTopic);
   const [listTopicChat, setListTopicChat] = React.useState([]);
   const [isPollShown, setIsPollShown] = React.useState(false);
   const [polls, setPolls] = React.useState([...defaultPollItem]);
@@ -121,6 +123,17 @@ const CreatePost = () => {
   const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
+
+  const debounced = React.useCallback(
+    debounce((changedText) => {
+      if (isContainUrl(changedText)) {
+        getPreviewUrl(getUrl(changedText));
+      } else {
+        setIsLinkPreviewShown(false);
+      }
+    }, 1000),
+    []
+  );
 
   const [selectedTime, setSelectedTime] = React.useState({
     day: 1,
@@ -163,52 +176,6 @@ const CreatePost = () => {
     }
   ]);
 
-  const debounced = React.useCallback(
-    debounce((changedText) => {
-      if (isContainUrl(changedText)) {
-        getPreviewUrl(getUrl(changedText));
-      } else {
-        setIsLinkPreviewShown(false);
-      }
-    }, 1000),
-    []
-  );
-
-  const listPostExpired = [
-    {
-      label: '24 hours',
-      value: '1',
-      expiredobject: {
-        hour: 24,
-        day: 1
-      }
-    },
-    {
-      label: '7 days',
-      value: '7',
-      expiredobject: {
-        hour: 24,
-        day: 7
-      }
-    },
-    {
-      label: '30 days',
-      value: '30',
-      expiredobject: {
-        hour: 24,
-        day: 30
-      }
-    },
-    {
-      label: 'Never',
-      value: 'never',
-      expiredobject: {
-        hour: 24,
-        day: 30
-      }
-    }
-  ];
-
   const listPrivacy = [
     {
       icon: <MemoIc_world height={16.67} width={16.67} />,
@@ -226,25 +193,33 @@ const CreatePost = () => {
 
   React.useEffect(() => {
     init();
+    if (isInCreatePostTopicScreen) {
+      setTimeout(() => setMessage((prev) => `${prev} `), 500);
+    }
   }, []);
 
   const init = async () => {
     const privacyId = await getPrivacyId();
-    if (privacyId) {
+    if (privacyId && isInCreatePostTopicScreen) {
+      setPrivacySelect(0);
+    }
+    if (privacyId && !isInCreatePostTopicScreen) {
       setPrivacySelect(privacyId);
     }
     const durationId = await getDurationId();
     if (durationId) {
       setExpiredSelect(durationId);
     }
+
+    if (isInCreatePostTopicScreen) {
+      setGeoSelect(0);
+    }
+
     const locationId = await getLocationId();
-    console.log('locationId');
-    console.log(locationId);
-    if (locationId) {
+    if (locationId && !isInCreatePostTopicScreen) {
       setGeoSelect(locationId);
     }
   };
-
   const getPreviewUrl = async (link) => {
     const newLink = link;
 
@@ -439,10 +414,15 @@ const CreatePost = () => {
   };
 
   const onSaveTopic = (v, topicChat) => {
+    console.log(v, topicChat, 'hellop');
     setListTopic(v);
     setHashtags(v);
     setListTopicChat(topicChat);
     sheetTopicRef.current.close();
+  };
+
+  const navigateToTopicPage = () => {
+    return navigation.navigate('TopicPageScreen', {id: initialTopic[0]});
   };
 
   const checkTaggingUser = () => {
@@ -462,8 +442,9 @@ const CreatePost = () => {
         });
         return true;
       }
+      const topicsToPost = _.union(initialTopic, listTopic);
       const data = {
-        topics: listTopic,
+        topics: topicsToPost,
         message,
         verb: 'tweet',
         feedGroup: 'main_feed',
@@ -477,9 +458,12 @@ const CreatePost = () => {
         tagUsers: checkTaggingUser()
       };
 
-      setLocationId(JSON.stringify(geoSelect));
       setDurationId(JSON.stringify(expiredSelect));
-      setPrivacyId(JSON.stringify(privacySelect));
+      if (!isInCreatePostTopicScreen) {
+        setLocationId(JSON.stringify(geoSelect));
+        setPrivacyId(JSON.stringify(privacySelect));
+      }
+
       Analytics.logEvent('create_post', {
         id: 6,
         newpost_reach: geoList[geoSelect].neighborhood,
@@ -490,12 +474,17 @@ const CreatePost = () => {
         anon: typeUser,
         predicted_audience: audienceEstimations
       });
-      navigation.navigate('HomeTabs', {
-        screen: 'Feed',
-        params: {
-          refresh: true
-        }
-      });
+
+      if (isInCreatePostTopicScreen) {
+        navigateToTopicPage();
+      } else {
+        navigation.navigate('HomeTabs', {
+          screen: 'Feed',
+          params: {
+            refresh: true
+          }
+        });
+      }
       await createPost(data);
       handleTopicChat();
       showMessage({
@@ -612,9 +601,10 @@ const CreatePost = () => {
 
   const sendPollPost = async () => {
     // setLoading(true);
+    const topicsToPost = _.union(initialTopic, listTopic, ['poll']);
     const data = {
       message,
-      topics: ['poll'],
+      topics: topicsToPost,
       verb: 'poll',
       object: {},
       feedGroup: 'main_feed',
@@ -629,15 +619,23 @@ const CreatePost = () => {
       tagUsers: checkTaggingUser()
     };
 
-    setLocationId(JSON.stringify(geoSelect));
     setDurationId(JSON.stringify(expiredSelect));
-    setPrivacyId(JSON.stringify(privacySelect));
-    navigation.navigate('HomeTabs', {
-      screen: 'Feed',
-      params: {
-        refresh: true
-      }
-    });
+    if (!isInCreatePostTopicScreen) {
+      setLocationId(JSON.stringify(geoSelect));
+      setPrivacyId(JSON.stringify(privacySelect));
+    }
+
+    if (isInCreatePostTopicScreen) {
+      navigateToTopicPage();
+    } else {
+      navigation.navigate('HomeTabs', {
+        screen: 'Feed',
+        params: {
+          refresh: true
+        }
+      });
+    }
+
     try {
       await createPollPost(data);
       showMessage({
@@ -744,7 +742,7 @@ const CreatePost = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={positionKeyboard}>
-        <Header title="Create a post" onPress={() => onBack()} />
+        <Header title={headerTitle} onPress={() => onBack()} />
         <View style={{paddingHorizontal: 15}}>
           <UserProfile
             typeUser={typeUser}
@@ -827,7 +825,7 @@ const CreatePost = () => {
           <Gap style={styles.height(16)} />
           <ListItem
             icon={<Timer width={16.67} height={16.67} />}
-            label={postExpired.length === 0 ? 'Loading...' : listPostExpired[expiredSelect].label}
+            label={postExpired.length === 0 ? 'Loading...' : postExpired[expiredSelect].label}
             labelStyle={styles.listText}
             onPress={() => sheetExpiredRef.current.open()}
           />

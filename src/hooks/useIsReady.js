@@ -1,21 +1,26 @@
-import { useEffect, useState } from 'react';
-import { InteractionManager } from 'react-native';
-import { debounce } from 'lodash';
+import React from 'react';
+import {InteractionManager} from 'react-native';
+import {debounce} from 'lodash';
 
 const useIsReady = () => {
-  const [isReady, setIsReady] = useState(false);
+  const [isReady, setIsReady] = React.useState(false);
+  const interactionManagerRef = React.useRef(null);
   const debounceTime = debounce(() => {
     setIsReady(true);
   }, 100);
 
   const waitAnimation = () => {
-    InteractionManager.runAfterInteractions(() => {
+    interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
       setIsReady(true);
     });
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     waitAnimation();
+
+    return () => {
+      if (interactionManagerRef.current) interactionManagerRef.current.cancel();
+    };
   }, []);
 
   return isReady;

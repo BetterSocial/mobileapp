@@ -37,6 +37,7 @@ const FirebaseConfig = (props) => {
   const parseDynamicLink = async (dynamicLink) => {
     if (dynamicLink?.url?.includes('postExpired=true')) return handleExpiredPost();
     if (dynamicLink?.url?.includes('postPrivateId=')) return handlePrivatePost(dynamicLink);
+    if (dynamicLink?.url?.includes('communityName')) return handleCommunityPage(dynamicLink);
     return handlePost(dynamicLink);
   };
 
@@ -59,6 +60,15 @@ const FirebaseConfig = (props) => {
       data = {...data, user_id: userId};
       handleMovePage(type, data);
     }
+  };
+
+  const handleCommunityPage = (data) => {
+    const splitParam = data?.url?.split('=');
+    let useParam = splitParam[1];
+    useParam = useParam.split('');
+    useParam = useParam.slice(0, useParam.length - 1).join('');
+
+    navigation.navigate('TopicPageScreen', {id: useParam});
   };
 
   const handleMovePage = async (type, data) => {

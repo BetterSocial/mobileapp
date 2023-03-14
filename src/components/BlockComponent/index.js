@@ -30,6 +30,7 @@ class BlockComponent extends React.Component {
     this.refReportPostAnonymous = React.createRef();
     this.refReportUser = React.createRef();
     this.refSpecificIssue = React.createRef();
+    this.refInteractionManaged = React.createRef();
     this.onIssueTimeout = null;
 
     this.__blockPostAnonymous = this.__blockPostAnonymous.bind(this);
@@ -47,6 +48,7 @@ class BlockComponent extends React.Component {
 
   componentWillUnmount() {
     clearTimeout(this.onIssueTimeout);
+    if (this.refInteractionManaged.current) this.refInteractionManaged.current.cancel();
   }
 
   setDataToState(value) {
@@ -95,7 +97,7 @@ class BlockComponent extends React.Component {
 
   __onSelectBlocking(v) {
     if (v !== 1) {
-      InteractionManager.runAfterInteractions(() => {
+      this.refInteractionManaged.current = InteractionManager.runAfterInteractions(() => {
         this.refReportUser.current.open();
       });
     } else {
@@ -106,7 +108,7 @@ class BlockComponent extends React.Component {
 
   __onSelectBlockingPostAnonymous(v) {
     if (v !== 1) {
-      InteractionManager.runAfterInteractions(() => {
+      this.refInteractionManaged.current = InteractionManager.runAfterInteractions(() => {
         this.refReportPostAnonymous.current.open();
       });
     } else {
@@ -121,7 +123,7 @@ class BlockComponent extends React.Component {
     });
     this.refReportUser.current.close();
     this.refReportPostAnonymous.current.close();
-    InteractionManager.runAfterInteractions(() => {
+    this.refInteractionManaged.current = InteractionManager.runAfterInteractions(() => {
       this.refSpecificIssue.current.open();
     });
   }

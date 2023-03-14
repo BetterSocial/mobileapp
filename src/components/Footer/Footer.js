@@ -240,7 +240,6 @@ Footer.propTypes = {
   onPressBlock: PropTypes.func,
   onPressUpvote: PropTypes.func,
   onPressDownVote: PropTypes.func,
-  item: PropTypes.object.isRequired,
   totalVote: PropTypes.number,
   totalComment: PropTypes.number,
   statusVote: PropTypes.oneOf(['none', 'upvote', 'downvote']),

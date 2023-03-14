@@ -1,17 +1,18 @@
-import { useNavigation } from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/core';
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import MemoIc_arrow_back from '../../../assets/arrow/Ic_arrow_back';
 import dimen from '../../../utils/dimen';
-import { fonts, normalize, normalizeFontSize } from '../../../utils/fonts';
-import { convertString } from '../../../utils/string/StringUtils';
+import {fonts, normalize, normalizeFontSize} from '../../../utils/fonts';
+import {convertString} from '../../../utils/string/StringUtils';
 import ButtonFollow from './ButtonFollow';
 import ButtonFollowing from './ButtonFollowing';
+import ShareIcon from '../../../assets/icons/images/share.svg';
 
-const Navigation = ({ domain, onPress, isFollow = false }) => {
+const Navigation = ({domain, onPress, isFollow = false, onShareCommunity}) => {
   const navigation = useNavigation();
-  
+
   const backScreen = () => {
     navigation.goBack();
   };
@@ -26,13 +27,15 @@ const Navigation = ({ domain, onPress, isFollow = false }) => {
           {`#${convertString(domain, ' ', '')}`}
         </Text>
       </View>
-      <View style={{ marginRight: 10 }} >
+      <View style={styles.containerAction}>
+        <TouchableOpacity onPress={onShareCommunity} style={styles.shareIconStyle}>
+          <ShareIcon width={20} height={20} />
+        </TouchableOpacity>
         {isFollow ? (
           <ButtonFollowing handleSetUnFollow={onPress} />
         ) : (
           <ButtonFollow handleSetFollow={onPress} />
         )}
-
       </View>
     </SafeAreaView>
   );
@@ -46,7 +49,7 @@ const styles = StyleSheet.create({
     paddingVertical: normalize(8),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
   backbutton: {
     paddingLeft: 16,
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginRight: 14,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   domainText: {
     fontSize: normalizeFontSize(18),
@@ -71,6 +74,15 @@ const styles = StyleSheet.create({
   buttonFollow: {
     paddingHorizontal: 5,
     paddingVertical: 10
+  },
+  containerAction: {
+    marginRight: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  shareIconStyle: {
+    padding: 10
   }
 });
 

@@ -29,10 +29,8 @@ const shareDomain = (item) => {
   }
 };
 
-const shareNews = (item) => {
-  if (__DEV__) {
-    console.log('Share in news', item);
-  }
+const shareNews = async (item) => {
+  await buildShare(`${item?.content?.url}`);
 };
 
 const sharePostInTopic = async (item, analyticsLogEvent, analyticsId) => {
@@ -40,6 +38,10 @@ const sharePostInTopic = async (item, analyticsLogEvent, analyticsId) => {
     id: analyticsId
   });
   await buildShare(`${config.POST_SHARE_URL}/post/${item?.id}`);
+};
+
+const shareCommunity = (topicname) => {
+  buildShare(`${config.POST_SHARE_URL}/community/${topicname}`);
 };
 
 const sharePostInProfile = async (item, analyticsLogEvent, analyticsId) => {
@@ -88,7 +90,8 @@ const ShareUtils = {
   shareNews,
   sharePostInProfile,
   sharePostInTopic,
-  shareUserLink
+  shareUserLink,
+  shareCommunity
 };
 
 export default ShareUtils;

@@ -1,13 +1,6 @@
 import * as React from 'react';
 import Toast from 'react-native-simple-toast';
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  View
-} from 'react-native';
+import {Dimensions, SafeAreaView, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 
 import BlockDomainComponent from '../../components/BlockDomain';
 import ContainerComment from '../../components/Comments/ContainerComment';
@@ -16,54 +9,48 @@ import DetailDomainScreenHeader from './elements/DetailDomainScreenHeader';
 import Loading from '../Loading';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
-import { COLORS } from '../../utils/theme';
-import { Context } from '../../context';
-import { Footer } from '../../components';
-import { createCommentParent } from '../../service/comment';
-import { downVoteDomain, upVoteDomain } from '../../service/vote';
-import { fonts } from '../../utils/fonts';
-import {
-  getCountCommentWithChildInDetailPage
-} from '../../utils/getstream';
-import { getDomainDetailById } from '../../service/domain';
-import { getMyProfile } from '../../service/profile';
-import { getUserId } from '../../utils/users';
-import { updateComment } from '../../context/actions/news';
+import {Context} from '../../context';
+import {Footer} from '../../components';
+import {createCommentParent} from '../../service/comment';
+import {downVoteDomain, upVoteDomain} from '../../service/vote';
+import {fonts} from '../../utils/fonts';
+import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
+import {getDomainDetailById} from '../../service/domain';
+import {getMyProfile} from '../../service/profile';
+import {getUserId} from '../../utils/users';
+import {updateComment} from '../../context/actions/news';
 
-const { width, height } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const DetailDomainScreen = (props) => {
-  const { navigation } = props
-  const dataDomain = props.route.params && props.route.params.item
-  const refreshNews = props.route.params && props.route.params.refreshNews
-  const [dataProfile, setDataProfile] = React.useState({});
+  const {navigation} = props;
+  const dataDomain = props.route.params && props.route.params.item;
+  const refreshNews = props.route.params && props.route.params.refreshNews;
+  const [, setDataProfile] = React.useState({});
   const [item, setItem] = React.useState(null);
   const [isReaction, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
-  const [typeComment, setTypeComment] = React.useState('parent');
   const [totalComment, setTotalComment] = React.useState(0);
   const [totalVote, setTotalVote] = React.useState(0);
   const [yourselfId, setYourselfId] = React.useState('');
   const [voteStatus, setVoteStatus] = React.useState('none');
-  const [statusUpvote, setStatusUpvote] = React.useState(false);
-  const [comments, setComments] = React.useState([])
-  const [isLoading, setIsLoading] = React.useState(true)
-  const blockRef = React.useRef(null)
+  const [statusUpvote] = React.useState(false);
+  const [comments, setComments] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const blockRef = React.useRef(null);
 
-  const [, dispatch] = React.useContext(Context).news
+  const [, dispatch] = React.useContext(Context).news;
 
   const initial = () => {
     const reactionCount = item.reaction_counts;
     if (JSON.stringify(reactionCount) !== '{}') {
       let count = 0;
-      const { comment } = reactionCount;
+      const {comment} = reactionCount;
       if (comment !== undefined) {
         if (comment > 0) {
           setReaction(true);
           setTotalComment(
-            getCountCommentWithChildInDetailPage(
-              props.route.params.item.latest_reactions,
-            ),
+            getCountCommentWithChildInDetailPage(props.route.params.item.latest_reactions)
           );
         }
       }
@@ -79,26 +66,24 @@ const DetailDomainScreen = (props) => {
     }
   };
 
-
   React.useEffect(() => {
-
     if (item) {
       initial();
     }
   }, [item]);
 
   const getDomain = (withLoading = true) => {
-    if (withLoading) setIsLoading(true)
-    const id = dataDomain?.og?.news_feed_id || dataDomain?.id
+    if (withLoading) setIsLoading(true);
+    const id = dataDomain?.og?.news_feed_id || dataDomain?.id;
     getDomainDetailById(id).then((res) => {
-      setItem(res)
-      setIsLoading(false)
-    })
-  }
+      setItem(res);
+      setIsLoading(false);
+    });
+  };
 
   React.useEffect(() => {
     fetchMyProfile();
-    getDomain()
+    getDomain();
   }, []);
 
   React.useEffect(() => {
@@ -113,17 +98,14 @@ const DetailDomainScreen = (props) => {
 
   const onRefreshNews = () => {
     if (refreshNews && typeof refreshNews === 'function') {
-      refreshNews()
+      refreshNews();
     }
-  }
-
+  };
 
   const validationStatusVote = () => {
     if (item.reaction_counts !== undefined || null) {
       if (item.latest_reactions.upvotes !== undefined) {
-        const upvote = item.latest_reactions.upvotes.filter(
-          (vote) => vote.user_id === yourselfId,
-        );
+        const upvote = item.latest_reactions.upvotes.filter((vote) => vote.user_id === yourselfId);
         if (upvote !== undefined) {
           setVoteStatus('upvote');
         }
@@ -131,7 +113,7 @@ const DetailDomainScreen = (props) => {
 
       if (item.latest_reactions.downvotes !== undefined) {
         const downvotes = item.latest_reactions.downvotes.filter(
-          (vote) => vote.user_id === yourselfId,
+          (vote) => vote.user_id === yourselfId
         );
         if (downvotes !== undefined) {
           setVoteStatus('downvote');
@@ -141,10 +123,9 @@ const DetailDomainScreen = (props) => {
   };
 
   React.useEffect(() => {
-
     if (item) {
       validationStatusVote();
-      setComments(item?.latest_reactions?.comment || [])
+      setComments(item?.latest_reactions?.comment || []);
     }
   }, [item, yourselfId]);
 
@@ -168,12 +149,12 @@ const DetailDomainScreen = (props) => {
     try {
       if (textComment.trim() !== '') {
         const data = await createCommentParent(textComment, item.id, '', false);
-        setComments([data?.data, ...comments])
+        setComments([data?.data, ...comments]);
         if (data?.code === 200) {
           setTextComment('');
           // Toast.show('Comment successful', Toast.LONG);
-          updateComment(data?.data, item?.id, dispatch)
-          setTotalComment((prev) => (parseInt(prev, 10) + 1))
+          updateComment(data?.data, item?.id, dispatch);
+          setTotalComment((prev) => parseInt(prev, 10) + 1);
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
@@ -190,60 +171,62 @@ const DetailDomainScreen = (props) => {
       activity_id: item.id,
       status: !statusUpvote,
       feed_group: 'domain',
-      domain: item.domain.name,
+      domain: item.domain.name
     });
     if (voteStatus === 'none') {
       setVoteStatus('upvote');
-      setTotalVote((vote) => vote + 1)
+      setTotalVote((vote) => vote + 1);
     }
     if (voteStatus === 'upvote') {
-      setVoteStatus('none')
-      setTotalVote((vote) => vote - 1)
+      setVoteStatus('none');
+      setTotalVote((vote) => vote - 1);
     }
     if (voteStatus === 'downvote') {
-      setVoteStatus('upvote')
-      setTotalVote((vote) => vote + 2)
+      setVoteStatus('upvote');
+      setTotalVote((vote) => vote + 2);
     }
-    onRefreshNews()
-
-  }
+    onRefreshNews();
+  };
 
   const onPressDownVoteHandle = async () => {
     await downVoteDomain({
       activity_id: item.id,
       status: !statusUpvote,
       feed_group: 'domain',
-      domain: item.domain.name,
+      domain: item.domain.name
     });
     if (voteStatus === 'none') {
       setVoteStatus('downvote');
-      setTotalVote((vote) => vote - 1)
+      setTotalVote((vote) => vote - 1);
     }
     if (voteStatus === 'downvote') {
-      setVoteStatus('none')
-      setTotalVote((vote) => vote + 1)
+      setVoteStatus('none');
+      setTotalVote((vote) => vote + 1);
     }
     if (voteStatus === 'upvote') {
-      setVoteStatus('downvote')
-      setTotalVote((vote) => vote - 2)
+      setVoteStatus('downvote');
+      setTotalVote((vote) => vote - 2);
     }
-    onRefreshNews()
-
-  }
+    onRefreshNews();
+  };
 
   const updateParentPost = (data) => {
-    setItem(data)
-  }
+    setItem(data);
+  };
 
   const navigateToReplyView = (data) => {
-    navigation.navigate('ReplyComment', { ...data, page: props.route.name, updateParent: updateParentPost });
-  }
+    navigation.navigate('ReplyComment', {
+      ...data,
+      page: props.route.name,
+      updateParent: updateParentPost
+    });
+  };
 
   const blockNews = () => {
-    blockRef.current.refBlockDomain.current.open()
+    blockRef.current.refBlockDomain.current.open();
   };
-  if (isLoading) return <Loading />
-  if (!item?.domain) return <View />
+  if (isLoading) return <Loading />;
+  if (!item?.domain) return <View />;
 
   return (
     <View style={styles.container}>
@@ -253,47 +236,49 @@ const DetailDomainScreen = (props) => {
           domain={item.domain.name}
           time={item?.content?.created_at}
           image={item.domain.image}
-          onFollowDomainPressed={() => { }}
+          onFollowDomainPressed={() => {}}
           score={dataDomain?.score}
           follower={dataDomain?.follower}
         />
       </SafeAreaView>
 
-      {item ? <ScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}>
-        <View style={styles.content}>
-          <View>
-            <DetailDomainScreenContent
-              date={item?.content?.created_at}
-              description={item?.content?.description}
-              domain={item.domain}
-              domainImage={item.domain.image}
-              image={item?.content?.image}
-              title={item?.content?.title}
-              url={item?.content?.url}
-            />
-            <View style={styles.footerWrapper}>
-              <Footer
-                disableComment={true}
-                statusVote={voteStatus}
-                totalComment={totalComment}
-                totalVote={totalVote}
-                onPressDownVote={onPressDownVoteHandle}
-                onPressUpvote={onPressUpvoteNew}
-                onPressBlock={blockNews}
+      {item ? (
+        <ScrollView showsVerticalScrollIndicator={false} style={{height: '100%'}}>
+          <View style={styles.content}>
+            <View>
+              <DetailDomainScreenContent
+                date={item?.content?.created_at}
+                description={item?.content?.description}
+                domain={item.domain}
+                domainImage={item.domain.image}
+                image={item?.content?.image}
+                title={item?.content?.title}
+                url={item?.content?.url}
               />
+              <View style={styles.footerWrapper}>
+                <Footer
+                  disableComment={true}
+                  statusVote={voteStatus}
+                  totalComment={totalComment}
+                  totalVote={totalVote}
+                  onPressDownVote={onPressDownVoteHandle}
+                  onPressUpvote={onPressUpvoteNew}
+                  onPressBlock={blockNews}
+                />
+              </View>
             </View>
           </View>
-        </View>
-        {isReaction && (
-          <ContainerComment
-            comments={comments}
-            refreshComment={getDomain}
-            refreshChildComment={getDomain}
-            navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
-          // refreshComment={refreshNews}
-          />
-        )}
-      </ScrollView> : null}
+          {isReaction && (
+            <ContainerComment
+              comments={comments}
+              refreshComment={getDomain}
+              refreshChildComment={getDomain}
+              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
+              // refreshComment={refreshNews}
+            />
+          )}
+        </ScrollView>
+      ) : null}
 
       {item && (
         <WriteComment
@@ -309,7 +294,6 @@ const DetailDomainScreen = (props) => {
         ref={blockRef}
         domain={item.domain.name}
         domainId={item.domain.domain_page_id}
-
       />
     </View>
   );
@@ -321,22 +305,22 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flex: 1,
-    paddingBottom: 75,
+    paddingBottom: 75
     // paddingTop: 8,
   },
   containerText: {
     marginTop: 20,
-    marginHorizontal: 22,
+    marginHorizontal: 22
   },
   textDesc: {
     fontFamily: fonts.inter[400],
     fontSize: 16,
-    color: '#000',
+    color: '#000'
   },
   more: {
     color: '#0e24b3',
     fontFamily: fonts.inter[400],
-    fontSize: 14,
+    fontSize: 14
   },
   content: {
     width,
@@ -344,13 +328,13 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 1
     },
     shadowOpacity: 0.5,
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
-  gap: { height: 16 },
+  gap: {height: 16},
   footerWrapper: {
-    height: 52,
-  },
+    height: 52
+  }
 });

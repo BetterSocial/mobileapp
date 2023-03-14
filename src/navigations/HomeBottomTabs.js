@@ -16,27 +16,98 @@ import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../scree
 import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
+import {setChannel} from '../context/actions/setChannel';
+
+import {fcmTokenService} from '../service/users';
 
 const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs({navigation}) {
   const isIos = Platform.OS === 'ios';
-
+  const [, dispatch] = React.useContext(Context).channel;
+  const [client] = React.useContext(Context).client;
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [unReadMessage] = React.useContext(Context).unReadMessage;
 
+  const handleNotification = async (notification) => {
+    if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
+      navigation.navigate('PostDetailPage', {
+        feedId: notification.data.feed_id,
+        is_from_pn: true
+      });
+    }
+    if (notification.data.type === 'follow_user') {
+      navigation.navigate('OtherProfile', {
+        data: {
+          user_id: notification.data.user_id,
+          other_id: notification.data.user_id_follower,
+          username: notification.data.username_follower
+        }
+      });
+    }
+    if (notification.data.type === 'message.new') {
+      try {
+        const channel = client.client.getChannelById(
+          notification.data.channel_type,
+          notification.data.channel_id,
+          {}
+        );
+        setChannel(channel, dispatch);
+        navigation.reset({
+          index: 1,
+          routes: [
+            {
+              name: 'AuthenticatedStack',
+              params: {
+                screen: 'HomeTabs',
+                params: {
+                  screen: 'ChannelList'
+                }
+              }
+            },
+            {
+              name: 'AuthenticatedStack',
+              params: {
+                screen: 'ChatDetailPage'
+              }
+            }
+          ]
+        });
+      } catch (e) {
+        navigation.reset({
+          index: 1,
+          routes: [
+            {
+              name: 'AuthenticatedStack',
+              params: {
+                screen: 'HomeTabs',
+                params: {
+                  screen: 'ChannelList'
+                }
+              }
+            },
+            {
+              name: 'AuthenticatedStack',
+              params: {
+                screen: 'ChatDetailPage',
+                params: {
+                  data: notification.data
+                }
+              }
+            }
+          ]
+        });
+      }
+    }
+  };
+
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification(notification) {
-      if (__DEV__) {
-        console.log('NOTIFICATION:', notification);
-      }
-      // process the notification
-      // (required) Called when a remote is received or opened, or local notification is opened
+      handleNotification(notification);
       notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
-
     // (optional) Called when the user fails to register for remote notifications.
     // Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
     onRegistrationError(err) {
@@ -60,8 +131,12 @@ function HomeBottomTabs({navigation}) {
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    if (enabled && __DEV__) {
-      console.log('Authorization status:', authStatus);
+    if (enabled) {
+      const fcmToken = await messaging().getToken();
+      const payload = {
+        fcm_token: fcmToken
+      };
+      fcmTokenService(payload);
     }
   };
 
@@ -69,19 +144,23 @@ function HomeBottomTabs({navigation}) {
     if (__DEV__) {
       console.log(message.messageId, 'message');
     }
+    const {title, body} = message.notification;
     PushNotificationIOS.addNotificationRequest({
-      title: message.notification.title,
-      body: message.notification.body,
-      id: message.messageId
+      title,
+      body,
+      id: message.messageId,
+      userInfo: message.data
     });
   };
 
   const pushNotifAndroid = (remoteMessage) => {
+    const {title, body} = remoteMessage.notification;
     PushNotification.localNotification({
       id: '123',
-      title: remoteMessage.notification.title,
+      title,
       channelId: 'bettersosialid',
-      message: remoteMessage.notification.body
+      message: body,
+      data: remoteMessage.data
     });
   };
 
@@ -90,7 +169,7 @@ function HomeBottomTabs({navigation}) {
       {
         channelId: 'bettersosialid', // (required)
         channelName: 'bettersosial-chat', // (required)
-        playSound: false, // (optional) default: true
+        playSound: true, // (optional) default: true
         soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
         vibrate: true // (optional) default: true. Creates the default vibration patten if true.
@@ -104,9 +183,9 @@ function HomeBottomTabs({navigation}) {
   };
 
   const handlePushNotif = (remoteMessage) => {
-    let {channel} = remoteMessage.data;
-    channel = JSON.parse(channel);
-    if (channel.channel_type !== 3) {
+    console.log(remoteMessage, 'jahat');
+    const {data} = remoteMessage;
+    if (data.channel_type !== 3) {
       if (isIos) {
         pushNotifIos(remoteMessage);
       } else {
@@ -123,7 +202,6 @@ function HomeBottomTabs({navigation}) {
       // eslint-disable-next-line no-unused-expressions
       handlePushNotif(remoteMessage);
     });
-
     return () => {
       unsubscribe();
     };

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Better Social</string>
+	<string>BetterSocial</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -29,7 +29,7 @@
 			<string>org.bettersocial</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>devme.bettersocial.org</string>
+				<string>me.bettersocial.org</string>
 			</array>
 		</dict>
 	</array>
@@ -113,8 +113,7 @@
 	<false/>
 	<key>FirebaseDynamicLinksCustomDomains</key>
 	<array>
-		<string>https://linkdev.bettersocial.org</string>
-    	<string>https://link.bettersocial.org</string>
+		<string>https://link.bettersocial.org</string>
 	</array>
 </dict>
 </plist>

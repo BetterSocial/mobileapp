@@ -1,11 +1,11 @@
 import crashlytics from '@react-native-firebase/crashlytics';
 import api from './config';
-import { getRefreshToken } from '../utils/token';
+import {getRefreshToken} from '../utils/token';
 
 export const verifyUser = async (userId) => {
   try {
     const resApi = await api.post('/users/verify-user', {
-      user_id: userId,
+      user_id: userId
     });
     return resApi.data;
   } catch (error) {
@@ -17,7 +17,7 @@ export const verifyUser = async (userId) => {
 export const demoVerifyUser = async (userId) => {
   try {
     const resApi = await api.post('/users/demo-verify-user', {
-      user_id: userId,
+      user_id: userId
     });
 
     return resApi.data;
@@ -38,14 +38,14 @@ export const searchChatUsers = async (query) => {
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(new Error(error));
-    return false
+    return false;
   }
 };
 
 export const verifyToken = async (token) => {
   try {
     const resApi = await api.post('/users/veryfy-token', {
-      token,
+      token
     });
     return resApi.data;
   } catch (error) {
@@ -56,7 +56,7 @@ export const verifyToken = async (token) => {
 export const verifyUsername = async (username) => {
   try {
     const resApi = await api.post('/users/check-username', {
-      username,
+      username
     });
     return resApi.data;
   } catch (error) {
@@ -67,7 +67,7 @@ export const verifyUsername = async (username) => {
 export const registerUser = async (data) => {
   try {
     const resApi = await api.post('/users/register', {
-      data,
+      data
     });
     return resApi.data;
   } catch (error) {
@@ -76,20 +76,21 @@ export const registerUser = async (data) => {
   }
 };
 
-const verifyAccessToken = async () => api
-  .get('/users/veryfy-token-getstream', {})
-  .then((res) => res.data)
-  .catch((err) => {
-    const code = err.response.status;
-    return code;
-  });
+const verifyAccessToken = async () =>
+  api
+    .get('/users/veryfy-token-getstream', {})
+    .then((res) => res.data)
+    .catch((err) => {
+      const code = err.response.status;
+      return code;
+    });
 
 export const refreshToken = async () => {
   const token = await getRefreshToken();
   const options = {
     headers: {
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   };
 
   // const resp = await fetchWithTimeout(this.url, options, 10000);
@@ -140,6 +141,18 @@ export const deleteAccount = async () => {
     return result.data;
   } catch (e) {
     crashlytics().recordError(new Error(e));
-    return null
+    return null;
   }
-}
+};
+
+export const fcmTokenService = async (body) => {
+  try {
+    const result = await api.post('/users/fcmtoken', body);
+    console.log(result, 'hana');
+    return result.data;
+  } catch (e) {
+    console.log(e, 'siman');
+    crashlytics().recordError(new Error(e));
+    return null;
+  }
+};
