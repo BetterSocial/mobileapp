@@ -2,10 +2,12 @@ import * as React from 'react';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
-import {Platform, StyleSheet, View} from 'react-native';
+import config from 'react-native-config';
+
+import {AppState, Platform, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilValue} from 'recoil';
-
+import firestore from '@react-native-firebase/firestore';
 import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
@@ -30,12 +32,14 @@ function HomeBottomTabs({navigation}) {
   const isIos = Platform.OS === 'ios';
   const [, dispatch] = React.useContext(Context).channel;
   const [client] = React.useContext(Context).client;
+  const [profile] = React.useContext(Context).profile;
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [unReadMessage, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const listPostNotif = useRecoilValue(feedChatAtom);
   const [countReadComment, setCountReadComment] = React.useState({});
   const {handleNotHaveCacheHook, mappingUnreadCountPostNotifHook} = useChannelList();
+  const [myFcmToken, setMyFcmToke] = React.useState(null);
 
   //   const mappingUnreadCountPostNotif = () => {
   //   const totalMessage = mappingUnreadCountPostNotif(listPostNotif, countReadComment);
@@ -74,7 +78,6 @@ function HomeBottomTabs({navigation}) {
 
   const handleCacheComment = () => {
     getSpecificCache(FEED_COMMENT_COUNT, (cache) => {
-      console.log(cache, 'sutil');
       if (cache) {
         setCountReadComment(cache);
       } else {
@@ -156,6 +159,7 @@ function HomeBottomTabs({navigation}) {
 
     if (enabled) {
       const fcmToken = await messaging().getToken();
+      setMyFcmToke(fcmToken);
       const payload = {
         fcm_token: fcmToken
       };
@@ -236,6 +240,36 @@ function HomeBottomTabs({navigation}) {
       });
     }
   }, [initialStartup, otherProfileData]);
+
+  const handleAppState = (nextAppState) => {
+    if (
+      Platform.OS === 'ios' &&
+      nextAppState === 'background' &&
+      typeof unReadMessage === 'object'
+    ) {
+      PushNotificationIOS.setApplicationIconBadgeNumber(
+        unReadMessage.total_unread_count + unReadMessage.unread_post
+      );
+    }
+  };
+
+  React.useEffect(() => {
+    if (unReadMessage && typeof unReadMessage === 'object') {
+      AppState.addEventListener('change', handleAppState);
+      // firestore().collection(`${config.DOPPLER_ENVIRONMENT}UserBadge`).doc()
+    }
+    console.log(myFcmToken, profile, 'nana');
+    if (myFcmToken) {
+      firestore()
+        .collection(`${config.DOPPLER_ENVIRONMENT}UserBadge`)
+        .doc(profile.myProfile.user_id)
+        .set({
+          badgeCount: unReadMessage.total_unread_count + unReadMessage.unread_post,
+          user_id: profile.myProfile.user_id,
+          fcmToken: myFcmToken
+        });
+    }
+  }, [JSON.stringify(unReadMessage)]);
 
   const renderTabLabelIcon =
     (componentType) =>
