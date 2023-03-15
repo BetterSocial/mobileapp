@@ -406,5 +406,6 @@ export {
   removeStringAfterSpace,
   displayCityName,
   sanitizeUrl,
-  getDurationTimeText
+  getDurationTimeText,
+  isLocationMatch
 };
