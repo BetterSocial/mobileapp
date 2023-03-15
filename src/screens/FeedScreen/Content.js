@@ -95,6 +95,7 @@ const Content = ({
       </View>
     );
   };
+
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
       <View style={styles.container}>

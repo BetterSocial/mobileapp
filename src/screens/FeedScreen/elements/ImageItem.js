@@ -1,37 +1,38 @@
 import React from 'react';
-import {Pressable, Text, View, StyleSheet, Dimensions} from 'react-native';
+import {Pressable, Text, View, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import Image from '../../../components/Image';
 import useImageLayout from '../hooks/useImageLayout';
 
-const {width} = Dimensions.get('window');
-
-const ImageItem = ({image, index, length, onImageClick}) => {
+const ImageItem = ({image, index, onImageClick, images}) => {
   const {handleImageWidth} = useImageLayout();
-
   const onPress = () => onImageClick(index);
-
   if (index > 3) return null;
   return (
-    <Pressable testID="press" style={handleImageWidth(image, index)} onPress={onPress}>
-      {index === 3 && length - 4 > 0 ? (
-        <View style={styles.backdropBg}>
-          <Text style={styles.allImageFont}>{length - 4}+ </Text>
-        </View>
-      ) : null}
-      <Image
-        source={{uri: image}}
-        style={styles.imageStyle}
-        resizeMode={FastImage.resizeMode.contain}
-      />
-    </Pressable>
+    <>
+      {index > 3 ? null : (
+        <Pressable testID="press" style={handleImageWidth(images, index)} onPress={onPress}>
+          {index === 3 && image.length - 4 > 0 ? (
+            <View style={styles.backdropBg}>
+              <Text style={styles.allImageFont}>{image.length - 4}+ </Text>
+            </View>
+          ) : null}
+          <React.Fragment>
+            <FastImage
+              source={{uri: image}}
+              style={styles.imageStyle}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+          </React.Fragment>
+        </Pressable>
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   imageStyle: {
     height: '100%',
-    width
+    width: '100%'
   },
   backdropBg: {
     position: 'absolute',
