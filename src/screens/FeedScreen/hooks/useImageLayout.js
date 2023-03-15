@@ -1,13 +1,13 @@
 const useImageLayout = () => {
-  const handleImageWidth = (length, index) => {
-    if (length > 2 && length % 2 === 0) {
+  const handleImageWidth = (images, index) => {
+    if (images.length > 2 && images.length % 2 === 0) {
       return {
         height: '50%',
         width: '50%'
       };
     }
-    if (length > 2 && length % 2 === 1) {
-      if (index === length - 1) {
+    if (images.length > 2 && images.length % 2 === 1) {
+      if (index === images.length - 1) {
         return {
           height: '50%',
           width: '100%'
@@ -18,7 +18,7 @@ const useImageLayout = () => {
         width: '50%'
       };
     }
-    if (length === 2) {
+    if (images.length === 2) {
       return {
         height: '100%',
         width: '50%'

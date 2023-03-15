@@ -1,31 +1,25 @@
 import * as React from 'react';
 
-import {FlatList, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import ImageItem from './ImageItem';
 
 const ImageLayouter = ({images = [], onimageclick}) => {
-  const imageSize = () => {
-    if (images?.length) {
-      return images.length;
-    }
-
-    return 0;
-  };
-
-  const imageLength = React.useMemo(imageSize, [images]);
-
   const imageOnClick = React.useCallback(onimageclick, []);
-
-  const renderItem = ({item, index}) => (
-    <ImageItem image={item} index={index} onImageClick={imageOnClick} length={imageLength} />
-  );
-
-  const keyExtractor = (item, index) => `${item}-${index}`;
-
   return (
     <>
       <View style={styles.imageContainer}>
-        <FlatList data={images} renderItem={renderItem} keyExtractor={keyExtractor} />
+        {images.length > 0 &&
+          images.map((image, index) => (
+            <React.Fragment key={index}>
+              <ImageItem
+                image={image}
+                length={images.length}
+                index={index}
+                onImageClick={imageOnClick}
+                images={images}
+              />
+            </React.Fragment>
+          ))}
       </View>
     </>
   );
