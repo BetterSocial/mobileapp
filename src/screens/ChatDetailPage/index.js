@@ -26,7 +26,6 @@ const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
   const [, dispatch] = React.useContext(Context).groupChat;
-  const insets = useSafeAreaInsets();
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -103,9 +102,12 @@ const ChatDetailPage = ({route}) => {
     connect();
   }, []);
   React.useEffect(() => {
-    searchUserMessages(channelClient.channel?.cid);
-    setParticipants(channelClient.channel?.state?.members, dispatch);
-  }, [clients.client]);
+    if (channelClient.channel) {
+      searchUserMessages(channelClient.channel?.cid);
+      setParticipants(channelClient.channel?.state?.members, dispatch);
+    }
+  }, [channelClient]);
+
   const searchUserMessages = async (channelID) => {
     const messages = await clients.client.search(
       {
