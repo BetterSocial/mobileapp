@@ -114,7 +114,6 @@ const ChatDetailPage = ({route}) => {
     setAsset(messages.results, dispatch);
   };
   const testDate = (v) => v;
-  console.tron.log(channelClient.channel, 'testing');
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
