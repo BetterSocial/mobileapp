@@ -63,6 +63,7 @@ const Header = () => {
       <View style={styles.row}>
         <GlobalButton
           style={styles.btnOptions}
+          disabled={!username}
           onPress={() =>
             navigation.navigate('GroupSetting', {
               username,
