@@ -16,7 +16,6 @@ import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../scree
 import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
-import {setChannel} from '../context/actions/setChannel';
 
 import {fcmTokenService} from '../service/users';
 
@@ -24,11 +23,10 @@ const Tab = createBottomTabNavigator();
 
 function HomeBottomTabs({navigation}) {
   const isIos = Platform.OS === 'ios';
-  const [, dispatch] = React.useContext(Context).channel;
-  const [client] = React.useContext(Context).client;
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [unReadMessage] = React.useContext(Context).unReadMessage;
+  let isOpenNotification = false;
 
   const handleNotification = async (notification) => {
     if (notification.data.type === 'feed' || notification.data.type === 'reaction') {
@@ -47,58 +45,34 @@ function HomeBottomTabs({navigation}) {
       });
     }
     if (notification.data.type === 'message.new') {
-      try {
-        const channel = client.client.getChannelById(
-          notification.data.channel_type,
-          notification.data.channel_id,
-          {}
-        );
-        setChannel(channel, dispatch);
-        navigation.reset({
-          index: 1,
-          routes: [
-            {
-              name: 'AuthenticatedStack',
-              params: {
-                screen: 'HomeTabs',
+      setTimeout(() => {
+        if (!isOpenNotification) {
+          isOpenNotification = true;
+          navigation.reset({
+            index: 1,
+            routes: [
+              {
+                name: 'AuthenticatedStack',
                 params: {
-                  screen: 'ChannelList'
+                  screen: 'HomeTabs',
+                  params: {
+                    screen: 'ChannelList'
+                  }
+                }
+              },
+              {
+                name: 'AuthenticatedStack',
+                params: {
+                  screen: 'ChatDetailPage',
+                  params: {
+                    data: notification.data
+                  }
                 }
               }
-            },
-            {
-              name: 'AuthenticatedStack',
-              params: {
-                screen: 'ChatDetailPage'
-              }
-            }
-          ]
-        });
-      } catch (e) {
-        navigation.reset({
-          index: 1,
-          routes: [
-            {
-              name: 'AuthenticatedStack',
-              params: {
-                screen: 'HomeTabs',
-                params: {
-                  screen: 'ChannelList'
-                }
-              }
-            },
-            {
-              name: 'AuthenticatedStack',
-              params: {
-                screen: 'ChatDetailPage',
-                params: {
-                  data: notification.data
-                }
-              }
-            }
-          ]
-        });
-      }
+            ]
+          });
+        }
+      }, 500);
     }
   };
 

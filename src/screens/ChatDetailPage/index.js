@@ -116,7 +116,6 @@ const ChatDetailPage = ({route}) => {
     setAsset(messages.results, dispatch);
   };
   const testDate = (v) => v;
-  console.log(insets, 'sisi');
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
