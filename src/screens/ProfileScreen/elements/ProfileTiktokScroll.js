@@ -1,29 +1,26 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Dimensions, FlatList, StatusBar, StyleSheet, Text } from 'react-native';
-
-const FULL_HEIGHT = Dimensions.get('screen').height;
-const tabBarHeight = StatusBar.currentHeight;
+import {FlatList, StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   flatlistContainer: {
-    paddingBottom: 0,
-  },
+    paddingBottom: 0
+  }
 });
 
 class ProfileTiktokScroll extends React.Component {
   constructor(props) {
-    super(props)
-    this.flatListScrollRef = React.createRef()
+    super(props);
+    this.flatListScrollRef = React.createRef();
 
-    this.scrollToTop = this.scrollToTop.bind(this)
+    this.scrollToTop = this.scrollToTop.bind(this);
   }
 
   scrollToTop() {
     this.flatListScrollRef.current.scrollToOffset({
       offset: 0,
       animated: true
-    })
+    });
   }
 
   // __onViewableItemsChanged({ viewableItems, changed }) {
@@ -32,11 +29,11 @@ class ProfileTiktokScroll extends React.Component {
   // }
 
   render() {
-    const { data, children, onRefresh, refreshing,
-      onEndReach, onScroll, ListHeaderComponent } = this.props;
+    const {data, children, onRefresh, refreshing, onEndReach, onScroll, ListHeaderComponent} =
+      this.props;
     return (
       <FlatList
-        contentInsetAdjustmentBehavior='automatic'
+        contentInsetAdjustmentBehavior="automatic"
         initialNumToRender={2}
         contentContainerStyle={styles.flatlistContainer}
         data={data}
@@ -54,6 +51,7 @@ class ProfileTiktokScroll extends React.Component {
         showsVerticalScrollIndicator={false}
         snapToAlignment="end"
         maxToRenderPerBatch={2}
+        onEndReachedThreshold={0.9}
         updateCellsBatchingPeriod={10}
         removeClippedSubviews
         windowSize={10}
@@ -63,7 +61,7 @@ class ProfileTiktokScroll extends React.Component {
           itemVisiblePercentThreshold: 80
         }}
         // onViewableItemsChanged={this.__onViewableItemsChanged}
-        { ...this.props}
+        {...this.props}
       />
     );
   }
@@ -80,7 +78,7 @@ ProfileTiktokScroll.propTypes = {
   refreshing: PropTypes.bool,
   snapToOffsets: PropTypes.arrayOf(PropTypes.number),
   stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
-  StickyHeaderComponent: PropTypes.element,
+  StickyHeaderComponent: PropTypes.element
 };
 
 ProfileTiktokScroll.defaultProps = {
@@ -89,7 +87,7 @@ ProfileTiktokScroll.defaultProps = {
   onEndReach: () => null,
   onScroll: () => {},
   StickyHeaderComponent: null,
-  stickyHeaderIndices: undefined,
+  stickyHeaderIndices: undefined
 };
 
-export default React.memo (ProfileTiktokScroll);
+export default React.memo(ProfileTiktokScroll);
