@@ -101,6 +101,7 @@ const ProfileScreen = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
   const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
+  const [isScrollEnd, setIsScrollEnd] = React.useState(false);
   const LIMIT_PROFILE_FEED = 1;
 
   const {feeds} = myProfileFeed;
@@ -178,7 +179,6 @@ const ProfileScreen = ({route}) => {
       const result = await getSelfFeedsInProfile(offset, limit);
       if (Array.isArray(result.data) && result.data.length === 0) {
         setIsLastPage(true);
-        Toast.show('No posts yet.', Toast.LONG);
       }
       if (offset === 0) setMyProfileFeed(result.data, myProfileDispatch);
       else {
@@ -194,6 +194,12 @@ const ProfileScreen = ({route}) => {
       setLoading(false);
     }
   };
+
+  React.useEffect(() => {
+    if (isScrollEnd && isLastPage) {
+      Toast.show('No posts yet.', Toast.LONG);
+    }
+  }, [isLastPage, isScrollEnd]);
 
   const onShare = async () => {
     Analytics.logEvent('profile_screen_btn_share', {
@@ -251,6 +257,9 @@ const ProfileScreen = ({route}) => {
     } else if (currentOffset > headerHeightRef.current) {
       setOpacity(1);
       setIsShowButton(true);
+    }
+    if (event.nativeEvent.contentSize.height >= event.nativeEvent.layoutMeasurement.height) {
+      setIsScrollEnd(true);
     }
   };
 
@@ -478,7 +487,6 @@ const ProfileScreen = ({route}) => {
   };
 
   const handleOnEndReached = () => {
-    console.log('masuk pak');
     if (!isLastPage) {
       getMyFeeds(postOffset);
     }
