@@ -3,7 +3,6 @@ import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
@@ -158,7 +157,11 @@ const ChatDetailPage = ({route}) => {
 
 const CustomInlineDateSeparator = ({date}) => {
   const newDate = moment(date).locale('en').format('MMMM D, YYYY');
-  return <Text style={[styles.date, styles.inlineDate]}>{newDate}</Text>;
+  return (
+    <View style={[styles.containerDate, styles.inlineDate]} >
+      <Text style={[styles.date]}>{newDate}</Text>
+    </View>
+  );
 };
 
 const CustomDateHeader = () => null;
@@ -166,11 +169,7 @@ const CustomDateHeader = () => null;
 export default withInteractionsManaged(ChatDetailPage);
 const styles = StyleSheet.create({
   date: {
-    backgroundColor: COLORS.blackgrey,
     color: '#fff',
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 19,
     fontFamily: fonts.inter[500],
     fontSize: 14,
     lineHeight: 16.94
@@ -181,5 +180,12 @@ const styles = StyleSheet.create({
   inlineDate: {
     alignSelf: 'center',
     marginBottom: 12
+  },
+  containerDate: {
+    backgroundColor: COLORS.blackgrey,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 19,
+    flex: 1
   }
 });
