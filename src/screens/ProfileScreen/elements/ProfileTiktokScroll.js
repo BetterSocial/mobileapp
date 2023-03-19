@@ -51,7 +51,7 @@ class ProfileTiktokScroll extends React.Component {
         showsVerticalScrollIndicator={false}
         snapToAlignment="end"
         maxToRenderPerBatch={2}
-        onEndReachedThreshold={0.9}
+        onEndReachedThreshold={0.5}
         updateCellsBatchingPeriod={10}
         removeClippedSubviews
         windowSize={10}
