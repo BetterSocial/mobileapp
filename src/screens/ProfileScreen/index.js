@@ -484,7 +484,6 @@ const ProfileScreen = ({route}) => {
   };
 
   const handleOnEndReached = () => {
-    console.log(postOffset, 'papa');
     if (!isLastPage) {
       getMyFeeds(postOffset);
     }

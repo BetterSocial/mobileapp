@@ -92,6 +92,9 @@ const OtherProfile = () => {
   const [otherProfileFeeds, dispatchOtherProfile] = React.useContext(Context).otherProfileFeed;
   const [profile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).feeds;
+  const [isLastPage, setIsLastPage] = React.useState(false);
+  const [isHitApiFirstTime, setIsHitApiFirstTime] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const create = useClientGetstream();
   const {interactionsComplete} = useAfterInteractions();
@@ -100,17 +103,32 @@ const OtherProfile = () => {
   const {feeds} = otherProfileFeeds;
 
   const getOtherFeeds = async (userId, offset = 0) => {
-    const result = await getOtherFeedsInProfile(userId);
+    try {
+      setIsHitApiFirstTime(true);
 
-    if (offset === 0) setOtherProfileFeed([...result.data, {dummy: true}], dispatchOtherProfile);
-    else {
-      const clonedFeeds = [...feeds];
-      clonedFeeds.splice(feeds.length - 1, 0, ...data);
-      setOtherProfileFeed(clonedFeeds, dispatchOtherProfile);
+      const result = await getOtherFeedsInProfile(userId, offset);
+      console.log(result, 'surya');
+      if (Array.isArray(result.data) && result.data.length === 0) {
+        setIsLastPage(true);
+      }
+      if (offset === 0) setOtherProfileFeed(result.data, dispatchOtherProfile);
+      else {
+        const clonedFeeds = [...feeds, ...result.data];
+        setOtherProfileFeed(clonedFeeds, dispatchOtherProfile);
+      }
+      setLoading(false);
+      setPostOffset(Number(result.offset));
+    } catch (e) {
+      setLoading(false);
+      console.log(e, 'error');
     }
-
-    setPostOffset(result.offset);
   };
+  console.log(isLastPage, 'susu');
+  React.useEffect(() => {
+    if (isLastPage && isHitApiFirstTime) {
+      SimpleToast.show('No posts yet.', SimpleToast.LONG);
+    }
+  }, [isHitApiFirstTime, isLastPage]);
 
   React.useEffect(() => {
     return () => {
@@ -137,10 +155,10 @@ const OtherProfile = () => {
     fetchOtherProfile(params.data.username);
   }, [params.data]);
 
-  const checkUserBlockHandle = async (user_id, callback) => {
+  const checkUserBlockHandle = async (userId, callback) => {
     try {
       const sendData = {
-        user_id
+        userId
       };
       const processGetBlock = await checkUserBlock(sendData);
       if (callback) callback();
@@ -153,9 +171,9 @@ const OtherProfile = () => {
     }
   };
 
-  const fetchOtherProfile = async (username) => {
+  const fetchOtherProfile = async (usernames) => {
     try {
-      const result = await getOtherProfile(username);
+      const result = await getOtherProfile(usernames);
       if (result.code === 200) {
         setDataMain(result.data);
         setDataMainBio(result.data.bio);
@@ -412,7 +430,7 @@ const OtherProfile = () => {
   const unblockUser = async () => {
     try {
       const processPostApi = await unblockUserApi({userId: dataMain.user_id});
-      if (processPostApi.code == 200) {
+      if (processPostApi.code === 200) {
         checkUserBlockHandle(dataMain.user_id);
         blockUserRef.current.close();
         specificIssueRef.current.close();
@@ -426,10 +444,10 @@ const OtherProfile = () => {
     }
   };
 
-  const onBlocking = (reason) => {
-    if (reason === 1) {
+  const onBlocking = (reasonBlock) => {
+    if (reasonBlock === 1) {
       handleBlocking();
-    } else if (reason === 2) {
+    } else if (reasonBlock === 2) {
       blockUserRef.current.close();
       interactionManagerRef.current = InteractionManager.runAfterInteractions(() => {
         reportUserRef.current.open();
@@ -499,6 +517,7 @@ const OtherProfile = () => {
     await upVote(post);
     updateFeed(post, index);
   };
+  console.log(postOffset, 'posoffset');
   const setDownVote = async (post, index) => {
     await downVote(post);
     updateFeed(post, index);
@@ -523,15 +542,25 @@ const OtherProfile = () => {
     }
   };
 
-  const goToFollowings = (user_id, username) => {
+  const goToFollowings = (idUser, myUsername) => {
     navigation.navigate('Followings', {
       screen: 'TabFollowing',
-      params: {user_id, username}
+      params: {idUser, myUsername}
     });
   };
 
   const isFeedsShown = !blockStatus.blocked && !blockStatus.blocker;
-  const __handleOnEndReached = () => getOtherFeeds(other_id, postOffset);
+  const __handleOnEndReached = () => {
+    if (!isLastPage) {
+      getOtherFeeds(other_id, postOffset);
+    }
+  };
+
+  const handleRefresh = () => {
+    setLoading(true);
+    setIsLastPage(false);
+    getOtherFeeds(other_id, 0);
+  };
 
   return (
     <>
@@ -556,11 +585,13 @@ const OtherProfile = () => {
           data={isFeedsShown ? feeds : []}
           onScroll={handleScroll}
           onEndReach={__handleOnEndReached}
+          onRefresh={handleRefresh}
+          refreshing={loading}
           snapToOffsets={(() => {
             const posts = feeds.map(
               (item, index) => headerHeightRef.current + index * dimen.size.PROFILE_ITEM_HEIGHT
             );
-            return [headerHeightRef.current, ...posts];
+            return [0, ...posts];
           })()}
           ListHeaderComponent={
             <View
@@ -590,7 +621,7 @@ const OtherProfile = () => {
                   onPressDomain={onPressDomain}
                   onPress={() => onPress(item, index)}
                   onPressComment={() => onPressComment(item, item.id)}
-                  onPressBlock={() => onPressBlock(item)}
+                  // onPressBlock={() => onPressBlock(item)}
                   onPressUpvote={(post) => setUpVote(post, index)}
                   selfUserId={yourselfId}
                   onPressDownVote={(post) => setDownVote(post, index)}
@@ -634,8 +665,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 20
   },
-  dummyItem: (height) => ({
-    height
+  dummyItem: (heightItem) => ({
+    height: heightItem
   }),
   header: {
     flexDirection: 'row',
