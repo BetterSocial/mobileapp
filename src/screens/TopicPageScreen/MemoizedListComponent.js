@@ -113,7 +113,7 @@ const RenderListFeed = (props) => {
   return (
     <View style={[styles.cardContainer()]}>
       <View style={styles.cardMain}>
-        <Header props={item} height={getHeightHeader()} />
+        <Header hideThreeDot={true} props={item} height={getHeightHeader()} />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
             index={index}

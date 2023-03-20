@@ -2,18 +2,10 @@ import * as React from 'react';
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 import PropsTypes from 'prop-types';
-import { Avatar } from 'react-native-activity-feed';
-import {
-  Dimensions,
-  Image,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import {Avatar} from 'react-native-activity-feed';
+import {Dimensions, Image, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import ElipsisIcon from '../../assets/icon/ElipsisIcon';
@@ -31,12 +23,12 @@ import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import dimen from '../../utils/dimen';
 import useFeedHeader from './hooks/useFeedHeader';
-import { PRIVACY_PUBLIC } from '../../utils/constants';
-import { calculateTime } from '../../utils/time';
-import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
+import {PRIVACY_PUBLIC} from '../../utils/constants';
+import {calculateTime} from '../../utils/time';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 
-const { width: screenWidth } = Dimensions.get('window');
+const {width: screenWidth} = Dimensions.get('window');
 
 export const validationTimer = (timer, duration_feed) => {
   const date1 = new Date(timer);
@@ -47,50 +39,48 @@ export const validationTimer = (timer, duration_feed) => {
   switch (true) {
     case total < 25:
       return (
-        <View testID='25' >
+        <View testID="25">
           <MemoEightyEight_hundred height={17} width={17} />
         </View>
-      )
+      );
     case total < 38:
       return (
-        <View testID='36' >
+        <View testID="36">
           <MemoSeventyFive_eightySeven height={17} width={17} />
         </View>
       );
     case total < 50:
       return (
-        <View testID='50' >
+        <View testID="50">
           <MemoSixtyThree_seventyFour height={17} width={17} />
         </View>
       );
     case total < 63:
       return (
-        <View testID='63' >
+        <View testID="63">
           <MemoFivety_sixtyTwo height={17} width={17} />
         </View>
       );
     case total < 75:
       return (
-        <View testID='75' >
+        <View testID="75">
           <MemoThirtySeven_fourtyNine height={17} width={17} />
         </View>
-      )
+      );
     case total < 88:
       return (
-        <View testID='80' >
+        <View testID="80">
           <MemoTwentyFive_thirtySix height={17} width={17} />
         </View>
       );
     default:
       return (
-        <View testID='full' >
+        <View testID="full">
           <MemoOne height={17} width={17} />
         </View>
       );
   }
 };
-
-
 
 const _renderAnonimity = ({
   time,
@@ -102,19 +92,21 @@ const _renderAnonimity = ({
   height,
   headerStyle,
   showAnonymousOption = false,
-  onHeaderOptionClicked = () => { }
+  onHeaderOptionClicked = () => {},
+  hideThreeDot
 }) => {
   const navigation = useNavigation();
 
-
   return (
     <SafeAreaView>
-      <View testID='anonymHeader' style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
+      <View
+        testID="anonymHeader"
+        style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
-            <View testID='haveBackButton' style={[styles.btn]}>
+            <View testID="haveBackButton" style={[styles.btn]}>
               <GlobalButton
-                testID='onBack'
+                testID="onBack"
                 onPress={() => {
                   navigation.goBack();
                 }}>
@@ -122,7 +114,7 @@ const _renderAnonimity = ({
               </GlobalButton>
             </View>
           ) : null}
-          <View style={[styles.imageAnonymContainer]} >
+          <View style={[styles.imageAnonymContainer]}>
             <Image
               source={AnonymousProfile}
               width={dimen.size.FEED_HEADER_IMAGE_RADIUS}
@@ -132,16 +124,18 @@ const _renderAnonimity = ({
           </View>
 
           <View style={[styles.containerFeedProfile]}>
-            <View style={[styles.containerFeedName, { alignItems: 'center' }]}>
+            <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
               <Text style={[styles.feedUsername]}>Anonymous</Text>
             </View>
-            {showAnonymousOption && <GlobalButton
-              buttonStyle={{ position: 'absolute', right: 0, top: -8 }}
-              onPress={onHeaderOptionClicked}>
-              <View style={{ zIndex: 1000 }}>
-                <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
-              </View>
-            </GlobalButton>}
+            {showAnonymousOption && !hideThreeDot && (
+              <GlobalButton
+                buttonStyle={{position: 'absolute', right: 0, top: -8}}
+                onPress={onHeaderOptionClicked}>
+                <View style={{zIndex: 1000}}>
+                  <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+                </View>
+              </GlobalButton>
+            )}
             <View style={styles.containerFeedText}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
@@ -152,20 +146,14 @@ const _renderAnonimity = ({
               )}
 
               {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-              {duration_feed !== 'never'
-                ? validationTimer(expired_at, duration_feed)
-                : null}
+              {duration_feed !== 'never' ? validationTimer(expired_at, duration_feed) : null}
               <View style={styles.point} />
               <Text style={styles.feedDate}>{location}</Text>
             </View>
           </View>
         </View>
-        <GlobalButton>
-          <ElipsisIcon width={18} height={3.94} fill={colors.black} />
-        </GlobalButton>
       </View>
     </SafeAreaView>
-
   );
 };
 
@@ -180,51 +168,56 @@ const _renderProfileNormal = ({
   height,
   source,
   headerStyle,
-  onHeaderOptionClicked = () => { }
+  onHeaderOptionClicked = () => {},
+  hideThreeDot
 }) => {
-  const { navigateToProfile, username, profile_pic_url, onBackNormalUser } = useFeedHeader({ actor, source })
-
+  const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
+    actor,
+    source
+  });
 
   return (
     <SafeAreaView>
-      <View testID='defaultHeader' style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
+      <View
+        testID="defaultHeader"
+        style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
-            <View testID='haveBackButton' style={styles.btn}>
-              <GlobalButton
-                testID='onBack'
-                onPress={onBackNormalUser}>
+            <View testID="haveBackButton" style={styles.btn}>
+              <GlobalButton testID="onBack" onPress={onBackNormalUser}>
                 <MemoIc_arrow_back height={20} width={20} />
               </GlobalButton>
             </View>
           ) : null}
-          <GlobalButton
-            onPress={navigateToProfile}>
+          <GlobalButton onPress={navigateToProfile}>
             <View style={{}}>
               <Avatar
                 source={
-                  profile_pic_url || 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+                  profile_pic_url ||
+                  'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
                 }
                 size={dimen.size.FEED_HEADER_IMAGE_RADIUS}
                 noShadow
               />
             </View>
           </GlobalButton>
-          <GlobalButton onPress={navigateToProfile} style={[styles.containerFeedProfile, { paddingBottom: 5 }]}>
-            <View style={[styles.containerFeedName, { alignItems: 'flex-end' }]}>
-              <Text style={styles.feedUsername}>
-                {username || 'no name specifics'}
-              </Text>
+          <GlobalButton
+            onPress={navigateToProfile}
+            style={[styles.containerFeedProfile, {paddingBottom: 5}]}>
+            <View style={[styles.containerFeedName, {alignItems: 'flex-end'}]}>
+              <Text style={styles.feedUsername}>{username || 'no name specifics'}</Text>
 
               <GlobalButton
-                buttonStyle={{ marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center' }}
+                buttonStyle={{marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center'}}
                 onPress={onHeaderOptionClicked}>
-                <View style={{ zIndex: 1000 }}>
-                  <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
-                </View>
+                {hideThreeDot ? null : (
+                  <View style={{zIndex: 1000}}>
+                    <ElipsisIcon width={4} height={14} fill={colors.blackgrey} />
+                  </View>
+                )}
               </GlobalButton>
             </View>
-            <View style={[styles.containerFeedText, { paddingBottom: 0 }]}>
+            <View style={[styles.containerFeedText, {paddingBottom: 0}]}>
               <Text style={styles.feedDate}>{calculateTime(time)}</Text>
               <View style={styles.point} />
               {privacy?.toLowerCase() === PRIVACY_PUBLIC ? (
@@ -234,9 +227,7 @@ const _renderProfileNormal = ({
               )}
 
               {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-              {duration_feed !== 'never'
-                ? validationTimer(expired_at, duration_feed)
-                : null}
+              {duration_feed !== 'never' ? validationTimer(expired_at, duration_feed) : null}
               <View style={styles.point} />
               <Text style={styles.feedDateLocation} numberOfLines={1}>
                 {location}
@@ -246,13 +237,20 @@ const _renderProfileNormal = ({
         </View>
       </View>
     </SafeAreaView>
-
   );
 };
 
-const Header = ({ props, isBackButton = false, height, source = null, headerStyle, onHeaderOptionClicked = () => { }, showAnonymousOption = false }) => {
-  const { anonimity, time, privacy, duration_feed, expired_at, location, actor } =
-    props;
+const Header = ({
+  props,
+  isBackButton = false,
+  height,
+  source = null,
+  headerStyle,
+  onHeaderOptionClicked = () => {},
+  showAnonymousOption = false,
+  hideThreeDot
+}) => {
+  const {anonimity, time, privacy, duration_feed, expired_at, location, actor} = props;
 
   if (anonimity) {
     return _renderAnonimity({
@@ -265,7 +263,8 @@ const Header = ({ props, isBackButton = false, height, source = null, headerStyl
       height,
       headerStyle,
       showAnonymousOption,
-      onHeaderOptionClicked: () => onHeaderOptionClicked(props)
+      onHeaderOptionClicked: () => onHeaderOptionClicked(props),
+      hideThreeDot
     });
   }
   return _renderProfileNormal({
@@ -279,14 +278,14 @@ const Header = ({ props, isBackButton = false, height, source = null, headerStyl
     height,
     source,
     headerStyle,
-    onHeaderOptionClicked: () => onHeaderOptionClicked(props)
+    onHeaderOptionClicked: () => onHeaderOptionClicked(props),
+    hideThreeDot
   });
-
 };
 
 const styles = StyleSheet.create({
   heightHeader: (height) => ({
-    height,
+    height
   }),
   rowSpaceBeetwen: {
     flexDirection: 'row',
@@ -295,28 +294,28 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.gray1,
     borderBottomWidth: 0.4,
     paddingTop: 8,
-    paddingBottom: 8,
+    paddingBottom: 8
   },
   rowCenter: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   containerFeedProfile: {
     justifyContent: 'space-between',
     // marginLeft: 13,
-    flex: 1,
+    flex: 1
   },
   containerFeedName: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
-  btn: { marginEnd: 0 },
+  btn: {marginEnd: 0},
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 16.94,
     color: colors.black,
-    flex: 1,
+    flex: 1
   },
   containerFeedText: {
     flexDirection: 'row',
@@ -329,14 +328,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.blackgrey,
-    lineHeight: 18,
+    lineHeight: 18
   },
   feedDateLocation: {
     flex: 1,
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.blackgrey,
-    lineHeight: 18,
+    lineHeight: 18
   },
   point: {
     width: 2,
@@ -346,73 +345,73 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
     alignSelf: 'center',
-    marginTop: 0,
+    marginTop: 0
   },
   contentFeed: {
     marginTop: 12,
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
     fontSize: 14,
     lineHeight: 24,
-    color: colors.black,
+    color: colors.black
   },
   textComment: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: colors.gray,
+    color: colors.gray
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
     fontSize: 12,
     lineHeight: 24,
-    color: colors.black,
+    color: colors.black
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: colors.gray,
+    color: colors.gray
   },
   item: {
     width: screenWidth - 20,
     height: screenWidth - 20,
     marginTop: 10,
-    marginLeft: -20,
+    marginLeft: -20
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 8
   },
   image: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
     aspectRatio: 1.5,
-    resizeMode: 'contain',
+    resizeMode: 'contain'
   },
   imageAnonimity: {
     marginRight: 0,
     width: dimen.size.FEED_HEADER_IMAGE_RADIUS,
-    height: dimen.size.FEED_HEADER_IMAGE_RADIUS,
+    height: dimen.size.FEED_HEADER_IMAGE_RADIUS
   },
   noPaddingLeft: {
-    paddingLeft: 0,
+    paddingLeft: 0
   },
   imageAnonymContainer: {
     // paddingRight: 10,
-    padding: 10,
+    padding: 10
     // paddingLeft: 24
   }
 });
 
 Header.propsTypes = {
   props: PropsTypes.object,
-  isBackButton: PropsTypes.bool,
+  isBackButton: PropsTypes.bool
 };
 
 export default React.memo(Header);
