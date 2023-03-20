@@ -101,7 +101,12 @@ const RenderListFeed = (props) => {
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={styles.cardMain}>
-        <Header props={item} height={getHeightHeader()} source={SOURCE_FEED_TAB} />
+        <Header
+          hideThreeDot={true}
+          props={item}
+          height={getHeightHeader()}
+          source={SOURCE_FEED_TAB}
+        />
         {item.post_type === POST_TYPE_LINK && (
           <ContentLink
             key={item.id}

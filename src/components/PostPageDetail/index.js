@@ -552,7 +552,7 @@ const PostPageDetailIdComponent = (props) => {
       <StatusBar translucent={false} />
       {item ? (
         <React.Fragment>
-          <Header props={item} isBackButton={true} source={SOURCE_PDP} />
+          <Header hideThreeDot={true} props={item} isBackButton={true} source={SOURCE_PDP} />
 
           <ScrollView
             ref={scrollViewRef}
