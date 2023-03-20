@@ -64,7 +64,8 @@ const Item = ({
   onPressDomain,
   onNewPollFetched,
   index = -1,
-  onHeaderOptionClicked = () => {}
+  onHeaderOptionClicked = () => {},
+  hideThreeDot
 }) => {
   const [isReaction, setReaction] = React.useState(false);
   const [previewComment, setPreviewComment] = React.useState({});
@@ -146,6 +147,7 @@ const Item = ({
         props={item}
         height={getHeightHeader()}
         showAnonymousOption={true}
+        hideThreeDot={hideThreeDot}
       />
 
       {item.post_type === POST_TYPE_LINK && (

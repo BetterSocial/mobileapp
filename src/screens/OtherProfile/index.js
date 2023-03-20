@@ -625,6 +625,7 @@ const OtherProfile = () => {
                   onPressUpvote={(post) => setUpVote(post, index)}
                   selfUserId={yourselfId}
                   onPressDownVote={(post) => setDownVote(post, index)}
+                  hideThreeDot={true}
                 />
               </View>
             );
