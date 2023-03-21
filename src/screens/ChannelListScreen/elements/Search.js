@@ -1,31 +1,23 @@
+/* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Animated,
-  Pressable
-} from 'react-native';
-import { useNavigation } from '@react-navigation/core'
+import {View, Text, TouchableOpacity, StyleSheet, Animated, Pressable} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 
 import MemoIcNewChat from '../../../assets/icons/ic_new_chat';
 import MemoIc_search from '../../../assets/icons/Ic_search';
-import { colors } from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import StringConstant from '../../../utils/string/StringConstant';
-import {COLORS, FONTS, SIZES} from '../../../utils/theme';
-import { DISCOVERY_TAB_USERS } from '../../../utils/constants';
+import {COLORS, SIZES} from '../../../utils/theme';
+import {DISCOVERY_TAB_USERS} from '../../../utils/constants';
 
 const Search = ({onPress, animatedValue}) => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const __handleOnSearchClicked = () => {
     navigation.push('DiscoveryScreen', {
       tab: DISCOVERY_TAB_USERS
-    })
-  }
+    });
+  };
 
   return (
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
@@ -37,14 +29,13 @@ const Search = ({onPress, animatedValue}) => {
           <Text
             // placeholder={StringConstant.chatTabHeaderPlaceholder}
             // placeholderTextColor={COLORS.gray1}
-            style={styles.input}
-          >{StringConstant.chatTabHeaderPlaceholder}</Text>
+            style={styles.input}>
+            {StringConstant.chatTabHeaderPlaceholder}
+          </Text>
         </View>
       </Pressable>
       <TouchableOpacity style={styles.wrapperButton} onPress={onPress}>
-        <Text style={styles.newPostText}>
-          {StringConstant.chatTabHeaderCreateChatButtonText}
-        </Text>
+        <Text style={styles.newPostText}>{StringConstant.chatTabHeaderCreateChatButtonText}</Text>
         <View>
           <MemoIcNewChat height={17} width={15} style={styles.newChatIcon} />
         </View>
@@ -57,10 +48,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    marginBottom: SIZES.base,
+    marginBottom: SIZES.base
   },
   searchPressableContainer: {
-    flex: 1,
+    flex: 1
   },
   wrapperSearch: {
     flex: 1,
@@ -70,7 +61,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
     borderRadius: 8,
     alignSelf: 'center',
-    height: 36,
+    height: 36
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -80,7 +71,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 12,
     paddingTop: 9,
-    paddingBottom: 9,
+    paddingBottom: 9
   },
   input: {
     paddingStart: 10,
@@ -91,22 +82,22 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14,
     alignSelf: 'center',
-    color: COLORS.gray1,
+    color: COLORS.gray1
   },
   wrapperIcon: {
     marginLeft: 8,
     alignSelf: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   newPostText: {
     color: COLORS.holyTosca,
     marginRight: 11,
     fontFamily: 'Inter-SemiBold',
     fontSize: 12,
-    lineHeight: 14.52,
+    lineHeight: 14.52
   },
   newChatIcon: {
-    marginTop: 0,
+    marginTop: 0
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
@@ -121,8 +112,8 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray1,
-  }),
+    borderBottomColor: COLORS.gray1
+  })
 });
 
 export default Search;

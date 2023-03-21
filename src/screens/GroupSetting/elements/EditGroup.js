@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import DefaultChatGroupProfilePicture from '../../../assets/images/default-group-picture.png';
 import MemoIc_pencil from '../../../assets/icons/Ic_pencil';
@@ -20,10 +13,10 @@ const EditGroup = ({
   onUpdateImage,
   imageUri,
   isFocusChatName = false,
-  saveGroupName,
+  saveGroupName
 }) => {
   const [groupChat] = React.useContext(Context).groupChat;
-  let countUser = Object.entries(groupChat.participants).length;
+  const countUser = Object.entries(groupChat.participants).length;
 
   const inputChatNameRef = React.useRef();
 
@@ -34,48 +27,42 @@ const EditGroup = ({
   }, [inputChatNameRef, isFocusChatName]);
 
   const renderImage = (source) => {
-   if (source && source.indexOf('file:///') > -1) {
-        return <Image testID='fileImage' source={{uri: source}} style={styles.image} />;
-      } else if (source && source.length > 0) {
-        if (source.indexOf('res.cloudinary.com') > -1) {
-          return <Image testID='rescloud' source={{uri: source}} style={styles.image} />;
-        }
-
-        return (
-          <Image
-            source={{uri: `data:image/jpg;base64,${source}`}}
-            style={styles.image}
-          />
-        );
-      } else if (countUser > 2) {
-        return (
-          <Image testID='imageCountUser' source={DefaultChatGroupProfilePicture} style={styles.image} />
-        );
-      } else {
-        return <View testID='imagePencil' ><MemoIc_pencil width={25} height={25} color={COLORS.gray1} /></View>;
+    if (source && source.indexOf('file:///') > -1) {
+      return <Image testID="fileImage" source={{uri: source}} style={styles.image} />;
+    }
+    if (source && source.length > 0) {
+      if (source.indexOf('res.cloudinary.com') > -1) {
+        return <Image testID="rescloud" source={{uri: source}} style={styles.image} />;
       }
+
+      return <Image source={{uri: `data:image/jpg;base64,${source}`}} style={styles.image} />;
+    }
+    if (countUser > 2) {
+      return (
+        <Image
+          testID="imageCountUser"
+          source={DefaultChatGroupProfilePicture}
+          style={styles.image}
+        />
+      );
+    }
+    return (
+      <View testID="imagePencil">
+        <MemoIc_pencil width={25} height={25} color={COLORS.gray1} />
+      </View>
+    );
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.itemEdit}>
-        {true ? (
-          <TouchableOpacity
-            testID='updateImage'
-            style={styles.btnUpdatePhoto}
-            onPress={onUpdateImage}>
-            {renderImage(imageUri)}
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.btnUpdatePhoto}>
-            {imageUri ? (
-              <Image source={{uri: imageUri}} style={styles.image} />
-            ) : (
-              <MemoIc_pencil width={25} height={25} color={COLORS.gray1} />
-            )}
-          </View>
-        )}
-        {true ? (
+        <TouchableOpacity
+          testID="updateImage"
+          style={styles.btnUpdatePhoto}
+          onPress={onUpdateImage}>
+          {renderImage(imageUri)}
+        </TouchableOpacity>
+        <View style={styles.inputContainer}>
           <TextInput
             ref={inputChatNameRef}
             style={styles.editName}
@@ -83,11 +70,11 @@ const EditGroup = ({
             onChangeText={setEditName}
             selectTextOnFocus
             onBlur={saveGroupName}
-            testID='onInputChange'
+            testID="onInputChange"
+            multiline
+            textAlignVertical="top"
           />
-        ) : (
-          <Text style={styles.editName}>{editName}</Text>
-        )}
+        </View>
       </View>
       <Text style={styles.textDesc}>Provide a group name and group icon</Text>
     </View>
@@ -100,32 +87,36 @@ const styles = StyleSheet.create({
   image: {
     width: normalize(48),
     height: normalize(48),
-    borderRadius: normalize(48 / 2),
+    borderRadius: normalize(48 / 2)
   },
   editName: {
     color: COLORS.white,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(24),
-    flex: 1,
+    flex: 1
+  },
+  inputContainer: {
+    paddingTop: 5,
+    paddingBottom: 5
   },
   itemEdit: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 5
   },
   textDesc: {
     color: COLORS.white,
     fontFamily: fonts.inter[400],
     fontSize: normalizeFontSize(12),
-    lineHeight: normalizeFontSize(18),
+    lineHeight: normalizeFontSize(18)
   },
   container: {
     backgroundColor: COLORS.holyTosca,
     borderTopWidth: 1,
     borderTopColor: COLORS.alto,
     paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 15
   },
   btnUpdatePhoto: {
     width: normalize(48),
@@ -134,6 +125,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.alto,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 17,
-  },
+    marginRight: 17
+  }
 });

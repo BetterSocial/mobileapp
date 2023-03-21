@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
 
 import {useMessageInputContext} from 'stream-chat-react-native';
 
@@ -17,15 +11,8 @@ import SheetEmoji from './SheetEmoji';
 
 const InputMessage = () => {
   const refEmoji = React.useRef(null);
-  const {
-    setText,
-    text,
-    appendText,
-    sendMessage,
-    toggleAttachmentPicker,
-    ImageUploadPreview,
-    imageUploads,
-  } = useMessageInputContext();
+  const {setText, text, appendText, sendMessage, toggleAttachmentPicker, imageUploads} =
+    useMessageInputContext();
 
   const onChangeInput = (v) => {
     setText(v);
@@ -42,20 +29,11 @@ const InputMessage = () => {
     <>
       <View style={styles.container}>
         <View style={styles.containerInput}>
-          <TextInput
-            multiline
-            style={styles.input}
-            onChangeText={onChangeInput}
-            value={text}
-          />
-          <TouchableOpacity
-            style={styles.btnEmoji}
-            onPress={() => onShowPickerEmoji()}>
+          <TextInput multiline style={styles.input} onChangeText={onChangeInput} value={text} />
+          <TouchableOpacity style={styles.btnEmoji} onPress={() => onShowPickerEmoji()}>
             <MemoIc_emoji width={20} height={20} />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btnPicture}
-            onPress={toggleAttachmentPicker}>
+          <TouchableOpacity style={styles.btnPicture} onPress={toggleAttachmentPicker}>
             <MemoIc_Picture width={20} height={20} />
           </TouchableOpacity>
         </View>
@@ -65,10 +43,7 @@ const InputMessage = () => {
           <IconSend style={styles.icSendButton} />
         </TouchableOpacity>
       </View>
-      <SheetEmoji
-        ref={refEmoji}
-        selectEmoji={(emoji) => onSelectImoji(emoji)}
-      />
+      <SheetEmoji ref={refEmoji} selectEmoji={(emoji) => onSelectImoji(emoji)} />
     </>
   );
 };
@@ -80,19 +55,19 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    zIndex: 4,
+    zIndex: 4
   },
   btnEmoji: {
     paddingVertical: 7,
-    paddingHorizontal: 6,
+    paddingHorizontal: 6
   },
   icSendButton: {
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   btnPicture: {
     paddingVertical: 7,
     paddingRight: 7,
-    paddingLeft: 6,
+    paddingLeft: 6
   },
   containerInput: {
     flex: 1,
@@ -100,11 +75,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 9,
-    borderRadius: 8,
+    borderRadius: 8
   },
   input: {
     flex: 1,
-    backgroundColor: colors.lightgrey,
+    backgroundColor: colors.lightgrey
   },
   btn: (enabled) => ({
     backgroundColor: enabled ? colors.bondi_blue : colors.gray1,
@@ -113,6 +88,6 @@ const styles = StyleSheet.create({
     height: 35,
     display: 'flex',
     justifyContent: 'center',
-    marginLeft: 8,
-  }),
+    marginLeft: 8
+  })
 });
