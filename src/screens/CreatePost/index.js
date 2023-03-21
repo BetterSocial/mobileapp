@@ -414,7 +414,6 @@ const CreatePost = () => {
   };
 
   const onSaveTopic = (v, topicChat) => {
-    console.log(v, topicChat, 'hellop');
     setListTopic(v);
     setHashtags(v);
     setListTopicChat(topicChat);

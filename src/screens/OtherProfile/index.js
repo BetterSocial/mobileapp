@@ -107,7 +107,6 @@ const OtherProfile = () => {
       setIsHitApiFirstTime(true);
 
       const result = await getOtherFeedsInProfile(userId, offset);
-      console.log(result, 'surya');
       if (Array.isArray(result.data) && result.data.length === 0) {
         setIsLastPage(true);
       }
@@ -120,10 +119,9 @@ const OtherProfile = () => {
       setPostOffset(Number(result.offset));
     } catch (e) {
       setLoading(false);
-      console.log(e, 'error');
     }
   };
-  console.log(isLastPage, 'susu');
+
   React.useEffect(() => {
     if (isLastPage && isHitApiFirstTime) {
       SimpleToast.show('No posts yet.', SimpleToast.LONG);
@@ -372,7 +370,8 @@ const OtherProfile = () => {
 
   const onCreateChannel = async () => {
     try {
-      const members = [other_id, user_id];
+      const userId = profile?.myProfile?.user_id || '';
+      const members = [other_id, userId];
       setIsLoading(true);
       const clientChat = await client.client;
       const filter = {type: 'messaging', members: {$eq: members}};
@@ -517,7 +516,6 @@ const OtherProfile = () => {
     await upVote(post);
     updateFeed(post, index);
   };
-  console.log(postOffset, 'posoffset');
   const setDownVote = async (post, index) => {
     await downVote(post);
     updateFeed(post, index);

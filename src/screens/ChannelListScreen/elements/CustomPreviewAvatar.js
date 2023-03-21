@@ -11,7 +11,6 @@ import Hashtag from '../../../assets/hashtag.png';
 import {colors} from '../../../utils/colors';
 
 const CustomPreviewAvatar = ({channel}) => {
-  console.log(channel, 'sisin');
   if (channel.data.channel_type === 3) {
     return (
       <View style={styles.containerAvatar}>

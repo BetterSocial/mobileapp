@@ -56,7 +56,9 @@ const ChatDetailPage = ({route}) => {
       );
       setChannel(channel, dispatchChannel);
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log(e, 'eman');
+      }
     }
   };
 
@@ -158,7 +160,7 @@ const ChatDetailPage = ({route}) => {
 const CustomInlineDateSeparator = ({date}) => {
   const newDate = moment(date).locale('en').format('MMMM D, YYYY');
   return (
-    <View style={[styles.containerDate, styles.inlineDate]} >
+    <View style={[styles.containerDate, styles.inlineDate]}>
       <Text style={[styles.date]}>{newDate}</Text>
     </View>
   );

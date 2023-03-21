@@ -209,7 +209,6 @@ const useReplyComment = ({
       ...newCommentList,
       {...defaultData, data: {...defaultData.data, text: textComment}}
     ]);
-    console.log(dataFeed, 'nana');
     try {
       if (textComment.trim() !== '') {
         const data = await createChildComment(

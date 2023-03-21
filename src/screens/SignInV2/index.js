@@ -104,7 +104,9 @@ const SignIn = () => {
     try {
       logIn();
     } catch (e) {
-      console.log('test', e);
+      if (__DEV__) {
+        console.log('failed login : ', e);
+      }
     }
     Analytics.logLogin('humanid');
   };
