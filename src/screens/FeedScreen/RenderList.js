@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 import Content from './Content';
 import ContentLink from './ContentLink';
@@ -26,6 +27,8 @@ const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
 
 const RenderListFeed = (props) => {
+  const bottomHeight = useBottomTabBarHeight();
+
   const {
     item,
     index,
@@ -128,7 +131,7 @@ const RenderListFeed = (props) => {
             onNewPollFetched={onNewPollFetched}
           />
         )}
-        <View style={styles.footerWrapper(getHeightFooter())}>
+        <View style={styles.footerWrapper(getHeightFooter(bottomHeight))}>
           <Footer
             item={item}
             totalComment={getCommentLength(item.latest_reactions.comment)}
