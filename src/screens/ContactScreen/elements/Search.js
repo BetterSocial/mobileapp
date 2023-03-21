@@ -2,37 +2,41 @@ import * as React from 'react';
 import {
   ActivityIndicator,
   Animated,
+  Platform,
   Pressable,
   StyleSheet,
   TextInput,
-  View,
+  View
 } from 'react-native';
 
 import IcClearCircle from '../../../assets/icons/ic_clear_circle';
 import MemoIc_search from '../../../assets/icons/Ic_search';
-import { COLORS, FONTS, SIZES } from '../../../utils/theme';
+import {COLORS, FONTS, SIZES} from '../../../utils/theme';
 
-const Search = ({ onPress, animatedValue, onChangeText, text, onClearText, isLoading = false }) => (
+const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoading = false}) => (
   <Animated.View style={styles.animatedViewContainer(animatedValue)}>
     <View style={styles.wrapperSearch}>
       <TextInput
         value={text}
-        multiline={false}
+        multiline={true}
         placeholder={'Search Users'}
         style={styles.input}
         onChangeText={(t) => {
           onChangeText(t);
         }}
         onSubmitEditing={onPress}
+        textAlignVertical="center"
       />
       <View style={styles.wrapperIcon}>
         <MemoIc_search width={20} height={20} />
       </View>
       <View style={styles.wrapperSecondaryIcon}>
-        { isLoading && <ActivityIndicator style={styles.loader} color={COLORS.gray} />}
-        { !isLoading && <Pressable onPress={onClearText}>
-          <IcClearCircle width={20} height={20} />
-        </Pressable> }
+        {isLoading && <ActivityIndicator style={styles.loader} color={COLORS.gray} />}
+        {!isLoading && (
+          <Pressable onPress={onClearText}>
+            <IcClearCircle width={20} height={20} />
+          </Pressable>
+        )}
       </View>
     </View>
   </Animated.View>
@@ -41,7 +45,7 @@ const Search = ({ onPress, animatedValue, onChangeText, text, onClearText, isLoa
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
   wrapperSearch: {
     flex: 1,
@@ -49,11 +53,13 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     borderRadius: SIZES.radius,
-    alignSelf: 'center',
+    paddingTop: Platform.OS === 'ios' ? 10 : 0,
+    paddingBottom: Platform.OS === 'ios' ? 10 : 0,
+    justifyContent: 'center'
   },
   loader: {
     width: 20,
-    height: 20,
+    height: 20
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -63,7 +69,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 9,
-    paddingBottom: 9,
+    paddingBottom: 9
     // backgroundColor: 'red',
   },
   input: {
@@ -71,12 +77,12 @@ const styles = StyleSheet.create({
     marginRight: 28,
     paddingEnd: 16,
     paddingStart: 16,
-    lineHeight: 24,
+    // lineHeight: 24,
     fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 14,
-    color: '#000000',
+    color: '#000000'
     // backgroundColor: 'red'
   },
   wrapperIcon: {
@@ -84,19 +90,19 @@ const styles = StyleSheet.create({
     left: 8,
     top: 0,
     bottom: 0,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   wrapperSecondaryIcon: {
     position: 'absolute',
     right: 8,
     top: 0,
     bottom: 0,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   newPostText: {
     color: COLORS.holyTosca,
     marginRight: 11,
-    ...FONTS.h4,
+    ...FONTS.h4
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
@@ -110,8 +116,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: COLORS.gray1,
     borderTopWidth: 0.5,
-    borderTopColor: COLORS.gray1,
-  }),
+    borderTopColor: COLORS.gray1
+  })
 });
 
 export default Search;
