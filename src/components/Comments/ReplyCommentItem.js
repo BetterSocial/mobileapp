@@ -45,7 +45,6 @@ const ReplyCommentItem = ({
 
   const onTextPress = () => {
     if (level >= 2 || disableOnTextPress) {
-      console.log('');
       return;
     }
     if (onPress) {
