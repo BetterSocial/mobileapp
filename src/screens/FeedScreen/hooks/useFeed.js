@@ -1,5 +1,4 @@
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import {useNavigation, useRoute} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {Dimensions, StatusBar} from 'react-native';
 import dimen from '../../../utils/dimen';
@@ -7,7 +6,6 @@ import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuil
 
 const useFeed = () => {
   const navigation = useNavigation();
-  const {params} = useRoute();
   const [totalVote, setTotalVote] = React.useState(0);
   const FULL_HEIGHT = Dimensions.get('screen').height;
   const tabBarHeight = StatusBar.currentHeight;
@@ -20,12 +18,7 @@ const useFeed = () => {
     const downvotes = data.downvotes ? data.downvotes : 0;
     setTotalVote(upvote - downvotes);
   };
-  const handleBottomTab = () => {
-    if (params.isBottomTab) {
-      return useBottomTabBarHeight();
-    }
-    return 0;
-  };
+
   const getHeightReaction = () => dimen.size.FEED_COMMENT_CONTAINER_HEIGHT;
   const navigateToLinkContextPage = (item) => {
     const param = linkContextScreenParamBuilder(
@@ -37,8 +30,8 @@ const useFeed = () => {
     navigation.push('LinkContextScreen', param);
   };
 
-  const getHeightFooter = () => {
-    const h = Math.floor(((FULL_HEIGHT - tabBarHeight - handleBottomTab()) * 7) / 100);
+  const getHeightFooter = (bottomHeight = 0) => {
+    const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 7) / 100);
     return h;
   };
 
