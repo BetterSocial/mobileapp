@@ -33,14 +33,19 @@ const ContentLink = ({
   const isTouchableDisabled = route?.name === 'PostDetailPage';
   const navigation = useNavigation();
 
-  const sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim();
+  const sanitizeUrl = message
+    .replace(
+      /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi,
+      ''
+    )
+    .trim();
   const {hashtagAtComponent} = useContentFeed({navigation});
   const renderMessageContentLink = () => {
     if (sanitizeUrl?.length === 0) return <></>;
     return (
       <View style={{...styles.messageContainer, ...messageContainerStyle}}>
         <Text style={styles.message}>
-          {!isPostDetail ? hashtagAtComponent(sanitizeUrl, 50) : hashtagAtComponent(sanitizeUrl)}
+          {!isPostDetail ? hashtagAtComponent(sanitizeUrl, 100) : hashtagAtComponent(sanitizeUrl)}
           {!isPostDetail && message.length > 50 && <Text style={{color: '#2F80ED'}}> More...</Text>}
           {/* {hashtagAtComponent(sanitizeUrl)} */}
         </Text>
