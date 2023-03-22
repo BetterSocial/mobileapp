@@ -263,6 +263,7 @@ function HomeBottomTabs({navigation}) {
         <Tab.Screen
           name="Feed"
           component={FeedScreen}
+          initialParams={{isBottomTab: true}}
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: renderTabLabelIcon('Feed')
@@ -272,6 +273,7 @@ function HomeBottomTabs({navigation}) {
         <Tab.Screen
           name="ChannelList"
           component={ChannelListScreen}
+          initialParams={{isBottomTab: true}}
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: renderTabLabelIcon('ChannelList'),
@@ -284,6 +286,7 @@ function HomeBottomTabs({navigation}) {
         <Tab.Screen
           name="News"
           component={NewsScreen}
+          initialParams={{isBottomTab: true}}
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: renderTabLabelIcon('News')
@@ -292,6 +295,7 @@ function HomeBottomTabs({navigation}) {
         />
         <Tab.Screen
           name="Profile"
+          initialParams={{isBottomTab: true}}
           component={ProfileScreen}
           options={{
             activeTintColor: colors.holytosca,

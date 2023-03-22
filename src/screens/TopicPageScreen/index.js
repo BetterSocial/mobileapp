@@ -19,7 +19,7 @@ import {getTopicPages} from '../../service/topicPages';
 import {getUserId} from '../../utils/users';
 import {getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
+import {setTopicFeedByIndex, setTopicFeeds, setFeedByIndex} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import ShareUtils from '../../utils/share';
 
@@ -33,21 +33,23 @@ const TopicPageScreen = (props) => {
   const [topicId, setTopicId] = React.useState('');
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const feeds = feedsContext.topicFeeds;
+  const mainFeeds = feedsContext.feeds;
   const [isFollow, setIsFollow] = React.useState(false);
   const [userTopicName, setUserTopicName] = React.useState('');
+  const [tempResponse, setTempResponse] = React.useState({});
   const [offset, setOffset] = React.useState(0);
   const [client] = React.useContext(Context).client;
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
-
+  const topicWithPrefix = route.params.id;
+  const id = removePrefixTopic(topicWithPrefix);
   const {followTopic} = useChatClientHook();
 
   const initData = async () => {
     try {
       setIsInitialLoading(true);
       // setLoading(true)
-      const topicWithPrefix = route.params.id;
-      const id = removePrefixTopic(topicWithPrefix);
+
       const idLower = id.toLowerCase();
       setTopicName(idLower);
       setUserTopicName(idLower);
@@ -60,10 +62,12 @@ const TopicPageScreen = (props) => {
         if (!cacheTopic || cacheTopic?.length === 0) {
           const resultGetTopicPages = await getTopicPages(id);
           saveToCache(`${TOPIC_LIST}_${id}`, resultGetTopicPages);
+          setTempResponse(resultGetTopicPages);
           setTopicFeeds(resultGetTopicPages.data, dispatch);
           setOffset(resultGetTopicPages.offset);
           setIsInitialLoading(false);
         } else {
+          setTempResponse(cacheTopic);
           setTopicFeeds(cacheTopic.data, dispatch);
           setOffset(cacheTopic.offset);
           setIsInitialLoading(false);
@@ -86,6 +90,17 @@ const TopicPageScreen = (props) => {
   };
 
   React.useEffect(() => {
+    if (feeds && Object.keys(tempResponse).length > 0) {
+      getSpecificCache(`${TOPIC_LIST}_${id}`, (cache) => {
+        const newData = {...cache, data: feeds};
+        if (Array.isArray(feeds) && feeds.length > 0) {
+          saveToCache(`${TOPIC_LIST}_${id}`, newData);
+        }
+      });
+    }
+  }, [JSON.stringify(feeds)]);
+
+  React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       initData();
     });
@@ -95,9 +110,9 @@ const TopicPageScreen = (props) => {
 
   React.useEffect(() => {
     const parseToken = async () => {
-      const id = await getUserId();
-      if (id) {
-        setUserId(id);
+      const idUser = await getUserId();
+      if (idUser) {
+        setUserId(idUser);
       }
     };
 
@@ -127,30 +142,29 @@ const TopicPageScreen = (props) => {
   };
 
   const refreshingData = async (offsetParam = offset) => {
-    try {
-      setLoading(true);
-      const result = await getTopicPages(topicId, offsetParam);
-      const {data} = result;
-      const topicWithPrefix = route.params.id;
-      const id = removePrefixTopic(topicWithPrefix);
-      setOffset(result.offset);
-      if (result.code === 200) {
-        if (offsetParam === 0) {
-          saveToCache(`${TOPIC_LIST}_${id}`, result);
-          setTopicFeeds(data, dispatch);
-        } else {
-          const joinData = [...feeds, ...data];
-          const newResult = {...result, data: joinData};
-          saveToCache(`${TOPIC_LIST}_${id}`, newResult);
-          setTopicFeeds(joinData, dispatch);
+    if (offsetParam >= 0) {
+      try {
+        setLoading(true);
+        const result = await getTopicPages(topicId, offsetParam);
+        const {data} = result;
+        setOffset(result.offset);
+        if (result.code === 200) {
+          if (offsetParam === 0) {
+            saveToCache(`${TOPIC_LIST}_${id}`, result);
+            setTopicFeeds(data, dispatch);
+          } else {
+            const joinData = [...feeds, ...data];
+            const newResult = {...result, data: joinData};
+            saveToCache(`${TOPIC_LIST}_${id}`, newResult);
+            setTopicFeeds(joinData, dispatch);
+          }
+        }
+      } catch (error) {
+        if (__DEV__) {
+          console.log(error);
         }
       }
 
-      setLoading(false);
-    } catch (error) {
-      if (__DEV__) {
-        console.log(error);
-      }
       setLoading(false);
     }
   };
@@ -202,7 +216,6 @@ const TopicPageScreen = (props) => {
   };
 
   const onEndReach = () => {
-    // refreshingData(feeds[feeds.length - 1]?.id);
     refreshingData(offset);
   };
 
@@ -248,10 +261,18 @@ const TopicPageScreen = (props) => {
     try {
       const data = await getFeedDetail(post.activity_id);
       if (data) {
+        const feedIndex = mainFeeds.findIndex((feed) => feed.id === post.activity_id);
         setTopicFeedByIndex(
           {
             singleFeed: data.data,
             index
+          },
+          dispatch
+        );
+        setFeedByIndex(
+          {
+            singleFeed: data.data,
+            index: feedIndex
           },
           dispatch
         );
@@ -276,6 +297,7 @@ const TopicPageScreen = (props) => {
       userId={userId}
       onPressDownVote={(post) => setDownVote(post, index)}
       loading={loading}
+      selfUserId={userId}
     />
   );
 

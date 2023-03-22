@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/core';
 
 import Content from '../FeedScreen/Content';
 import ContentLink from '../FeedScreen/ContentLink';
@@ -19,17 +18,12 @@ import {
 } from '../../utils/constants';
 import {Footer, Gap, PreviewComment} from '../../components';
 import {colors} from '../../utils/colors';
-import {getCountCommentWithChild} from '../../utils/getstream';
-import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {getCommentLength, getCountCommentWithChild} from '../../utils/getstream';
+import useFeed from '../FeedScreen/hooks/useFeed';
 
 const FULL_WIDTH = Dimensions.get('screen').width;
-const FULL_HEIGHT = Dimensions.get('screen').height;
 const tabBarHeight = StatusBar.currentHeight;
 
-const getHeightHeader = () =>
-  // let h = Math.floor((FULL_HEIGHT * 10) / 100);
-  // return h;
-  dimen.size.FEED_HEADER_HEIGHT;
 const RenderListFeed = (props) => {
   const {
     item,
@@ -39,93 +33,45 @@ const RenderListFeed = (props) => {
     onPressDomain,
     onPressComment,
     onPressBlock,
-    onPressUpvote,
     userId,
-    onPressDownVote
+    onPressDownVote,
+    selfUserId,
+    onPressUpvote
   } = props;
-  const navigation = useNavigation();
-  const [totalVote, setTotalVote] = React.useState(0);
-  const [statusDownvote, setStatusDowvote] = React.useState(false);
-  const [voteStatus, setVoteStatus] = React.useState('none');
-  const [statusUpvote, setStatusUpvote] = React.useState(false);
-  const [previewComment, setPreviewComment] = React.useState({});
-  const [isReaction, setReaction] = React.useState(false);
+
   const [loadingVote, setLoadingVote] = React.useState(false);
+  const {
+    totalVote,
+    getHeightReaction,
+    navigateToLinkContextPage,
+    getHeightFooter,
+    getHeightHeader,
+    statusDownvote,
+    voteStatus,
+    checkVotes,
+    initialSetup,
+    onPressUpvoteHook,
+    onPressDownVoteHook,
+    statusUpvote
+  } = useFeed();
 
-  const navigateToLinkContextPage = (itemParam) => {
-    const param = linkContextScreenParamBuilder(
-      itemParam,
-      itemParam.og.domain,
-      itemParam.og.domainImage,
-      itemParam.og.domain_page_id
-    );
-    navigation.push('LinkContextScreen', param);
-  };
-
-  const getHeightFooter = () => Math.floor(((FULL_HEIGHT - tabBarHeight) * 6.8) / 100);
-
-  const getHeightReaction = () => dimen.size.FEED_COMMENT_CONTAINER_HEIGHT;
-
-  // eslint-disable-next-line consistent-return
   const onPressDownVoteHandle = async () => {
-    setStatusDowvote((prev) => !prev);
-    setLoadingVote(true);
-    if (totalVote === -1) {
-      setVoteStatus('none');
-      setTotalVote((prevState) => prevState + 1);
-    } else if (totalVote === 0) {
-      setVoteStatus('downvote');
-      setTotalVote((prevState) => prevState - 1);
-    } else {
-      setVoteStatus('downvote');
-      setTotalVote(-1);
-      return postApiDownvote(true);
+    onPressDownVoteHook();
+    let newStatus = !statusDownvote;
+    if (voteStatus === 'upvote') {
+      newStatus = true;
     }
-    await postApiDownvote(!statusDownvote);
+
+    await postApiDownvote(newStatus);
   };
 
   const onPressUpvoteHandle = async () => {
-    setLoadingVote(true);
-    setStatusUpvote((prev) => !prev);
-    if (totalVote === 1) {
-      setVoteStatus('none');
-      setTotalVote((prevState) => prevState - 1);
-    } else if (totalVote === 0) {
-      setVoteStatus('upvote');
-      setTotalVote((prevState) => prevState + 1);
-    } else {
-      setVoteStatus('upvote');
-      setTotalVote(1);
-      await postApiUpvote(true);
+    onPressUpvoteHook();
+    let newStatus = !statusUpvote;
+    if (voteStatus === 'downvote') {
+      newStatus = true;
     }
-    await postApiUpvote(!statusUpvote);
-  };
-
-  const handleVote = (data = {}) => {
-    if (data.downvotes > 0) {
-      setVoteStatus('downvote');
-      return setTotalVote(data.downvotes * -1);
-    }
-    if (data.upvotes > 0) {
-      setVoteStatus('upvote');
-      return setTotalVote(data.upvotes);
-    }
-    setVoteStatus('none');
-    return setTotalVote(0);
-  };
-
-  const postApiUpvote = async (status) => {
-    try {
-      await onPressUpvote({
-        activity_id: item.id,
-        status,
-        feed_group: 'main_feed'
-      });
-      setLoadingVote(false);
-    } catch (e) {
-      setLoadingVote(false);
-      SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
-    }
+    await postApiUpvote(newStatus);
   };
 
   const postApiDownvote = async (status) => {
@@ -142,49 +88,26 @@ const RenderListFeed = (props) => {
     }
   };
 
-  const initial = () => {
-    const reactionCount = item.reaction_counts;
-    if (JSON.stringify(reactionCount) !== '{}') {
-      const comment = reactionCount?.comment;
-      handleVote(reactionCount);
-      if (comment !== undefined) {
-        if (comment > 0) {
-          setReaction(true);
-          setPreviewComment(item?.latest_reactions?.comment[0]);
-        }
-      } else {
-        setReaction(false);
-      }
+  const postApiUpvote = async (status) => {
+    try {
+      await onPressUpvote({
+        activity_id: item.id,
+        status,
+        feed_group: 'main_feed',
+        voteStatus
+      });
+    } catch (e) {
+      SimpleToast.show(StringConstant.upvoteFailedText, SimpleToast.SHORT);
     }
   };
 
-  React.useEffect(() => {
-    const validationStatusVote = () => {
-      if (item.reaction_counts !== undefined || null) {
-        if (item.latest_reactions.upvotes !== undefined) {
-          const upvote = item.latest_reactions.upvotes.filter((vote) => vote.user_id === userId);
-          if (upvote !== undefined) {
-            setVoteStatus('upvote');
-            setStatusUpvote(true);
-          }
-        }
-
-        if (item.latest_reactions.downvotes !== undefined) {
-          const downvotes = item.latest_reactions.downvotes.filter(
-            (vote) => vote.user_id === userId
-          );
-          if (downvotes !== undefined) {
-            setVoteStatus('downvote');
-            setStatusDowvote(true);
-          }
-        }
-      }
-    };
-    validationStatusVote();
-  }, [item, userId]);
+  const checkVotesHandle = () => {
+    checkVotes(item, selfUserId);
+  };
 
   React.useEffect(() => {
-    initial();
+    initialSetup(item);
+    checkVotesHandle();
   }, [item]);
 
   return (
@@ -231,14 +154,14 @@ const RenderListFeed = (props) => {
             isSelf={item.anonimity ? false : userId === item?.actor?.id}
           />
         </View>
-        {isReaction && (
+        {getCommentLength(item.latest_reactions.comment) > 0 && (
           <View style={styles.contentReaction(getHeightReaction())}>
             <PreviewComment
-              user={previewComment.user}
-              comment={previewComment.data.text}
-              image={previewComment.user.data.profile_pic_url}
-              time={previewComment.created_at}
-              totalComment={getCountCommentWithChild(item) - 1}
+              user={item.latest_reactions.comment[0].user}
+              comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
+              image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
+              time={item.latest_reactions.comment[0].created_at}
+              totalComment={getCommentLength(item.latest_reactions.comment) - 1}
               onPress={onPressComment}
             />
             <Gap height={8} />
