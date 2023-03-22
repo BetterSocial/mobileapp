@@ -1,4 +1,5 @@
-import {useNavigation} from '@react-navigation/core';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {useNavigation, useRoute} from '@react-navigation/core';
 import React from 'react';
 import {Dimensions, StatusBar} from 'react-native';
 import dimen from '../../../utils/dimen';
@@ -6,9 +7,14 @@ import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuil
 
 const useFeed = () => {
   const navigation = useNavigation();
+  const {params} = useRoute();
   const [totalVote, setTotalVote] = React.useState(0);
   const FULL_HEIGHT = Dimensions.get('screen').height;
   const tabBarHeight = StatusBar.currentHeight;
+  let bottomHeight = 0;
+  if (params.isBottomTab) {
+    bottomHeight = useBottomTabBarHeight();
+  }
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
@@ -30,7 +36,7 @@ const useFeed = () => {
     navigation.push('LinkContextScreen', param);
   };
 
-  const getHeightFooter = (bottomHeight = 0) => {
+  const getHeightFooter = () => {
     const h = Math.floor(((FULL_HEIGHT - tabBarHeight - bottomHeight) * 7) / 100);
     return h;
   };
@@ -38,9 +44,13 @@ const useFeed = () => {
   const getHeightHeader = () => dimen.size.FEED_HEADER_HEIGHT;
   const checkVotes = (item, selfUserId) => {
     const findUpvote =
+      item &&
+      item.own_reactions &&
       item.own_reactions.upvotes &&
       item.own_reactions.upvotes.find((vote) => vote.user_id === selfUserId);
     const findDownvote =
+      item &&
+      item.own_reactions &&
       item.own_reactions.downvotes &&
       item.own_reactions.downvotes.find((vote) => vote.user_id === selfUserId);
     if (findUpvote) {
