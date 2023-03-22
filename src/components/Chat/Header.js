@@ -18,8 +18,17 @@ const Header = () => {
   const [profileContext] = React.useContext(Context).profile;
   const {channel} = channelClient;
   const username = channelClient.channel?.data?.name;
+  const [chatName, setChatName] = React.useState(null);
 
-  const chatName = getChatName(username, profileContext.myProfile.username);
+  React.useEffect(() => {
+    if (
+      profileContext.myProfile &&
+      typeof profileContext.myProfile === 'object' &&
+      typeof username === 'string'
+    ) {
+      setChatName(getChatName(username, profileContext.myProfile.username));
+    }
+  }, [JSON.stringify(profileContext.myProfile), username]);
 
   const renderHeaderImage = () => {
     if (channel?.data?.image) {
