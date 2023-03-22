@@ -85,8 +85,6 @@ function FollowingScreen(props) {
     return <View style={S.toptabcontainer}>{buttonTabBar()}</View>;
   }
 
-  const tabComponent = (tabProps) => <MyTabBar {...tabProps} />;
-
   const listenTab = (tabProps) => {
     const {route} = tabProps;
     if (route.name === TAB_FOLLOWING) {
@@ -127,12 +125,14 @@ function FollowingScreen(props) {
     };
   }, []);
 
+  const renderTabbar = (tabProps) => <MyTabBar navigation={navigation} {...tabProps} />;
+
   return (
     <View style={{flex: 1}}>
       {isAndroid ? <StatusBar translucent={false} /> : null}
       {followingHeader()}
       {/* <StatusBar translucent={false} /> */}
-      <Tabs.Navigator initialRouteName={TAB_FOLLOWING} tabBar={tabComponent}>
+      <Tabs.Navigator initialRouteName={TAB_FOLLOWING} tabBar={renderTabbar}>
         <Tabs.Screen
           name={TAB_FOLLOWING}
           component={Followings}
