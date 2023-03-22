@@ -40,8 +40,10 @@ const ContentLink = ({
     return (
       <View style={{...styles.messageContainer, ...messageContainerStyle}}>
         <Text style={styles.message}>
-          {!isPostDetail ? hashtagAtComponent(sanitizeUrl, 50) : hashtagAtComponent(sanitizeUrl)}
-          {!isPostDetail && message.length > 50 && <Text style={{color: '#2F80ED'}}> More...</Text>}
+          {!isPostDetail ? hashtagAtComponent(sanitizeUrl, 100) : hashtagAtComponent(sanitizeUrl)}
+          {!isPostDetail && message.length > 100 && (
+            <Text style={{color: '#2F80ED'}}> More...</Text>
+          )}
           {/* {hashtagAtComponent(sanitizeUrl)} */}
         </Text>
       </View>
