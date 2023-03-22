@@ -166,11 +166,6 @@ const TopicPageScreen = (props) => {
       }
 
       setLoading(false);
-    } catch (error) {
-      if (__DEV__) {
-        console.log(error);
-      }
-      setLoading(false);
     }
   };
   const onDeleteBlockedPostCompleted = async (postId) => {
