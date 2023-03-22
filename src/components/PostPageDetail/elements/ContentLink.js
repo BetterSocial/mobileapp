@@ -34,12 +34,7 @@ const ContentLink = ({
   const isTouchableDisabled = route?.name === 'PostDetailPage';
   const navigation = useNavigation();
 
-  const sanitizeUrl = message
-    .replace(
-      /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi,
-      ''
-    )
-    .trim();
+  const sanitizeUrl = message.replace(/(https?:\/\/)?([^.\s]+)?[^.\s]+\.[^\s]+/gi, '').trim();
   const {hashtagAtComponent} = useContentFeed({navigation});
   const renderMessageContentLink = () => {
     if (sanitizeUrl?.length === 0) return <></>;
