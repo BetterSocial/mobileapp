@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
     color: colors.alto,
     fontFamily: fonts.inter[500],
     fontSize: normalizeFontSize(12.5),
-    lineHeight: 16.94,
-    paddingVertical: 15,
+    // lineHeight: 16.94,
+    paddingVertical: 10,
     textAlign: 'left'
   },
   tabItemTextFocus: {
@@ -71,8 +71,7 @@ const styles = StyleSheet.create({
     fontSize: normalizeFontSize(12.5),
     lineHeight: 16.94,
     textAlign: 'left',
-    paddingTop: 15,
-    paddingBottom: 15
+    paddingVertical: 10
   },
   underlineFocus: {
     borderBottomColor: colors.bondi_blue,
