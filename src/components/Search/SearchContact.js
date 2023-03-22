@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Animated, StyleSheet, TextInput, View} from 'react-native';
+import {Animated, Platform, StyleSheet, TextInput, View} from 'react-native';
 
 import MemoIc_search from '../../assets/icons/Ic_search';
 import {COLORS, FONTS, SIZES} from '../../utils/theme';
@@ -9,11 +9,12 @@ const Search = ({animatedValue, text, setText}) => {
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
       <View style={styles.wrapperSearch}>
         <TextInput
-          multiline={false}
+          multiline={true}
           placeholder={'Search Users'}
           style={styles.input}
           text={text}
           onChangeText={setText}
+          // textAlignVertical={P}
         />
         <View style={styles.wrapperIcon}>
           <MemoIc_search width={20} height={20} />
@@ -30,6 +31,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     borderRadius: SIZES.radius,
     alignSelf: 'center',
+    justifyContent: 'center',
+    paddingVertical: Platform.OS === 'ios' ? 7 : 0
+    // alignItems: 'center'
   },
   wrapperButton: {
     flexDirection: 'row',
@@ -39,24 +43,24 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 9,
-    paddingBottom: 9,
+    paddingBottom: 9
   },
   input: {
     marginLeft: 20,
-    paddingStart: 16,
-    lineHeight: 24,
+    paddingStart: 16
+    // lineHeight: 24,
   },
   wrapperIcon: {
     position: 'absolute',
     left: 8,
     top: 0,
     bottom: 0,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   newPostText: {
     color: COLORS.holyTosca,
     marginRight: 11,
-    ...FONTS.h4,
+    ...FONTS.h4
   },
   animatedViewContainer: (animatedValue) => ({
     flexDirection: 'row',
@@ -69,8 +73,8 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 7,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray1,
-  }),
+    borderBottomColor: COLORS.gray1
+  })
 });
 
 export default Search;

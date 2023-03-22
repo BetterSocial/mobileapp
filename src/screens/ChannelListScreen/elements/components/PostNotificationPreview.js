@@ -168,7 +168,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
         return `You: ${findComment.reaction.data.text} `;
       }
       if (findComment.reaction.parent !== '' && !item.isAnonym) {
-        if (findComment && findComment.actor && findComment.actor.data) {
+        if (findComment.actor && findComment.actor.data) {
           return `${findComment.actor.data.username} replied to your comment: ${findComment.reaction.data.text} `;
         }
         return null;
