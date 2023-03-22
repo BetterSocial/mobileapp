@@ -34,7 +34,7 @@ const ContentLink = ({
   const isTouchableDisabled = route?.name === 'PostDetailPage';
   const navigation = useNavigation();
 
-  const sanitizeUrl = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').trim();
+  const sanitizeUrl = message.replace(/(https?:\/\/)?([^.\s]+)?[^.\s]+\.[^\s]+/gi, '').trim();
   const {hashtagAtComponent} = useContentFeed({navigation});
   const renderMessageContentLink = () => {
     if (sanitizeUrl?.length === 0) return <></>;
