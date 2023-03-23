@@ -90,10 +90,10 @@ const PollOptionsMultipleChoice = ({
     }
     return <View testID="nonePoll" />;
   };
-
   return (
     <TouchableNativeFeedback
       testID="multiple"
+      key={index}
       disabled={isPollDisabled()}
       onPress={onOptionsClicked}>
       <View
@@ -108,6 +108,8 @@ const PollOptionsMultipleChoice = ({
               value={selected}
               tintColors={{true: colors.holytosca, false: colors.black}}
               onChange={onOptionsClicked}
+              style={{marginRight: 10}}
+              onStartShouldSetResponder={() => true}
             />
           )}
           <Text style={styles.pollOptionItemText(isPollDisabled(), isMax)}>{item.option}</Text>
@@ -133,17 +135,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightgrey,
     marginBottom: 8,
     borderRadius: 8,
-    // height: 56,
+    height: 48,
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   pollOptionItemContainerActive: {
     backgroundColor: colors.holytosca30percent,
     marginBottom: 8,
     borderRadius: 8,
-    // height: 56,
+    height: 48,
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    // paddingVertical: 7
   },
   pollOptionTextContainer: {
     display: 'flex',

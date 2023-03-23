@@ -127,7 +127,7 @@ export const removeImageProfile = async (userID) => new Promise((resolve, reject
 
 export const updateBioProfile = async (userID, data) => new Promise((resolve, reject) => {
   api
-    .post(`/profiles/update-bio/${userID}`, data)
+    .post(`/profiles/update-bio`, data)
     .then((res) => {
       resolve(res.data);
     })
