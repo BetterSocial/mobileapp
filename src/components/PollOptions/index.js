@@ -122,14 +122,14 @@ const styles = StyleSheet.create({
   pollOptionItemContainer: {
     backgroundColor: colors.lightgrey,
     marginBottom: 8,
-    // height: 56,
+    height: 48,
     borderRadius: 8,
     display: 'flex',
     flexDirection: 'row'
   },
   pollOptionItemContainerActive: {
     backgroundColor: colors.holytosca30percent,
-    // height: 56,
+    height: 48,
     marginBottom: 8,
     borderRadius: 8,
     display: 'flex',

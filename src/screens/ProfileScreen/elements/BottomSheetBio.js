@@ -28,10 +28,7 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
           <Text style={styles.description}>{props.value ? props.value.length : 0}/350</Text>
           {props.error ? <Text style={styles.errorText}>{props.error}</Text> : null}
         </View>
-        <Button
-          style={styles.button}
-          textStyling={styles.textStyling}
-          onPress={() => (props.error ? null : props.handleSave())}>
+        <Button style={styles.button} textStyling={styles.textStyling} onPress={props.handleSave}>
           {props.isLoadingUpdateBio ? <ActivityIndicator size="small" color="#0000ff" /> : 'Save'}
         </Button>
       </BottomSheet>
