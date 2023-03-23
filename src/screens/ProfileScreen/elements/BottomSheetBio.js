@@ -15,22 +15,25 @@ const BottomSheetBio = React.forwardRef((props, ref) => {
         ref={ref}
         closeOnPressMask={true}
         height={380}
-        pullBottom
+        // pullBottom
         viewstyle={styles.bottomsheet}>
         <View style={styles.containerBottomSheet}>
-          <Text style={styles.title}>Update your bio</Text>
+          <Text style={styles.title}>{props.username || 'Update your'} bio</Text>
           <AutoFocusTextArea
             value={props.value}
             onChangeText={props.onChangeText}
             placeholder="Add Bio"
             keyboardAppearDelay={500}
+            editable={!props.isOtherProfile}
           />
           <Text style={styles.description}>{props.value ? props.value.length : 0}/350</Text>
           {props.error ? <Text style={styles.errorText}>{props.error}</Text> : null}
         </View>
-        <Button style={styles.button} textStyling={styles.textStyling} onPress={props.handleSave}>
-          {props.isLoadingUpdateBio ? <ActivityIndicator size="small" color="#0000ff" /> : 'Save'}
-        </Button>
+        {!props.isOtherProfile && (
+          <Button style={styles.button} textStyling={styles.textStyling} onPress={props.handleSave}>
+            {props.isLoadingUpdateBio ? <ActivityIndicator size="small" color="#0000ff" /> : 'Save'}
+          </Button>
+        )}
       </BottomSheet>
     </View>
   );

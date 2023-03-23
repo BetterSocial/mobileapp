@@ -52,6 +52,7 @@ import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -59,7 +60,7 @@ const {width, height} = Dimensions.get('screen');
 const OtherProfile = () => {
   const navigation = useNavigation();
   const route = useRoute();
-
+  const bottomSheetBio = React.useRef(null);
   const postRef = React.useRef(null);
   const blockUserRef = React.useRef();
   const reportUserRef = React.useRef();
@@ -222,15 +223,21 @@ const OtherProfile = () => {
     }
   };
 
+  const openBio = () => {
+    bottomSheetBio.current.open();
+  };
+
   const __renderBio = (string) => (
     <View style={styles.containerBio}>
       {string === null || string === undefined ? (
         <Text>No Bio</Text>
       ) : (
-        <Text linkStyle={styles.seeMore}>
-          {trimString(string, 121)}{' '}
-          {string.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
-        </Text>
+        <TouchableOpacity onPress={openBio}>
+          <Text linkStyle={styles.seeMore}>
+            {trimString(string, 121)}{' '}
+            {string.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
+          </Text>
+        </TouchableOpacity>
       )}
     </View>
   );
@@ -629,7 +636,12 @@ const OtherProfile = () => {
             );
           }}
         </ProfileTiktokScroll>
-
+        <BottomSheetBio
+          username={dataMain.username}
+          isOtherProfile={true}
+          ref={bottomSheetBio}
+          value={dataMain.bio}
+        />
         <BlockProfile
           onSelect={onBlocking}
           refBlockUser={blockUserRef}
