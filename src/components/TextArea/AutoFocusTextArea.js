@@ -27,7 +27,7 @@ export default class AutoFocusTextArea extends React.Component {
         value={this.props.value}
         onChangeText={this.props.onChangeText}
         multiline={true}
-        style={{...styles.input, ...this.props.style}}
+        style={[styles.input, {height: !this.props.editable ? 190 : 150}]}
         textAlignVertical={'top'}
         placeholder={this.props.placeholder}
         {...this.props}
@@ -41,7 +41,7 @@ AutoFocusTextArea.propTypes = {
   value: PropTypes.string,
   placeholder: PropTypes.string,
   onChangeText: PropTypes.func,
-  style: PropTypes.object,
+  style: PropTypes.object
 };
 
 const styles = StyleSheet.create({
@@ -56,6 +56,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[500],
     fontSize: 14,
     color: colors.black,
-    lineHeight: 24,
-  },
+    lineHeight: 24
+  }
 });
