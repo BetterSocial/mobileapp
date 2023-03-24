@@ -154,3 +154,13 @@ export const fcmTokenService = async (body) => {
     return null;
   }
 };
+
+export const removeFcmToken = async () => {
+  try {
+    const result = await api.delete('/users/fcmtoken');
+    return result.data;
+  } catch (e) {
+    crashlytics().recordError(new Error(e));
+    return null;
+  }
+};

@@ -10,7 +10,7 @@ import {resetProfileFeed} from '../../../context/actions/myProfileFeed';
 import {setMainFeeds} from '../../../context/actions/feeds';
 import {createClient} from '../../../context/actions/createClient';
 import {clearLocalStorege} from '../../../utils/token';
-import {deleteAccount} from '../../../service/users';
+import {deleteAccount, removeFcmToken} from '../../../service/users';
 import StringConstant from '../../../utils/string/StringConstant';
 
 const useSettings = () => {
@@ -23,7 +23,8 @@ const useSettings = () => {
   const [, myProfileDispatch] = React.useContext(Context).myProfileFeed;
   const [, feedDispatch] = React.useContext(Context).feeds;
 
-  const logout = () => {
+  const logout = async () => {
+    await removeFcmToken();
     removeAllCache();
     resetProfileFeed(myProfileDispatch);
     setMainFeeds([], feedDispatch);
@@ -44,7 +45,7 @@ const useSettings = () => {
     handleResponseDelete(response);
   };
 
-  const handleResponseDelete = (response) => {
+  const handleResponseDelete = async (response) => {
     if (response.status === 'success') {
       logout();
       Toast.show(StringConstant.profileDeleteAccountSuccess, Toast.SHORT);
