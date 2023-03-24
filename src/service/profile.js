@@ -114,9 +114,9 @@ export const updateImageProfile = async (userID, data) => new Promise((resolve, 
     });
 });
 
-export const removeImageProfile = async (userID) => new Promise((resolve, reject) => {
+export const removeImageProfile = async () => new Promise((resolve, reject) => {
   api
-    .delete(`/profiles/remove-image/${userID}`)
+    .delete(`/profiles/remove-image`)
     .then((res) => {
       resolve(res.data);
     })
