@@ -326,6 +326,7 @@ const ProfileScreen = ({route}) => {
         if (res.code === 200) {
           closeImageBs();
           fetchMyProfile();
+          getMyFeeds();
         }
       })
       .catch(() => {
@@ -345,6 +346,7 @@ const ProfileScreen = ({route}) => {
         if (res.code === 200) {
           closeImageBs();
           fetchMyProfile();
+          getMyFeeds();
         }
       })
       .catch(() => {

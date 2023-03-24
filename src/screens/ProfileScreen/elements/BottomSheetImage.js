@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableNativeFeedback,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableNativeFeedback, ActivityIndicator} from 'react-native';
 
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
@@ -55,18 +49,16 @@ const BottomSheetImage = React.forwardRef((props, ref) => (
             <TrashIcon width={16.67} height={16.67} fill={colors.black} />
             <Text style={styles.textCard}>Remove current picture</Text>
           </View>
-          {props.isLoadingRemoveImage ? (
-            <ActivityIndicator size="small" color="#0000ff" />
-          ) : null}
+          {props.isLoadingRemoveImage ? <ActivityIndicator size="small" color="#0000ff" /> : null}
         </View>
       </TouchableNativeFeedback>
     </View>
   </BottomSheet>
 ));
-
+BottomSheetImage.displayName = 'BottomSheetImage';
 const styles = StyleSheet.create({
   containerBottomSheet: {
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   card: {
     height: 52,
@@ -77,18 +69,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 12
   },
   wrapCardImage: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   textCard: {
     fontFamily: fonts.inter[500],
     fontSize: 14,
     color: colors.black,
-    paddingLeft: 9,
-  },
+    paddingLeft: 9
+  }
 });
 
 export default BottomSheetImage;
