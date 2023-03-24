@@ -558,7 +558,6 @@ const PostPageDetailIdComponent = (props) => {
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
             style={styles.contentScrollView(totalComment)}
-            contentContainerStyle={{paddingBottom: 80}}
             nestedScrollEnabled={true}>
             <View style={styles.content(height)}>
               {item.post_type === POST_TYPE_LINK ? (
