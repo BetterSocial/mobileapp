@@ -60,7 +60,7 @@ const ContentLink = ({
           <TouchableWithoutFeedback onPress={onPress}>
             {renderMessageContentLink()}
           </TouchableWithoutFeedback>
-          <View style={{height: '50%'}}>
+          <View style={{flex: 1}}>
             {smartRender(Card, {
               domain: og.domain,
               date: new Date(og.date).toLocaleDateString(),
