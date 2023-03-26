@@ -424,9 +424,6 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.4.1):
     - React-Core
-  - react-native-simple-toast (1.1.4):
-    - React-Core
-    - Toast (~> 4.0.0)
   - react-native-splash-screen (3.3.0):
     - React-Core
   - react-native-version-number (0.3.6):
@@ -660,7 +657,6 @@ DEPENDENCIES:
   - react-native-keyevent (from `../node_modules/react-native-keyevent`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - react-native-simple-toast (from `../node_modules/react-native-simple-toast`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-version-number (from `../node_modules/react-native-version-number`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -801,8 +797,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-simple-toast:
-    :path: "../node_modules/react-native-simple-toast"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
   react-native-version-number:
@@ -948,7 +942,6 @@ SPEC CHECKSUMS:
   react-native-keyevent: f8728b8c73dbfbcb4d2c56d9e78be082c673c456
   react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
-  react-native-simple-toast: 8ee5d23f0b92b935ab7434cdb65159ce12dfb4b7
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
   react-native-webview: 9f111dfbcfc826084d6c507f569e5e03342ee1c1
