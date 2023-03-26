@@ -157,7 +157,7 @@ const OtherProfile = () => {
   const checkUserBlockHandle = async (userId, callback) => {
     try {
       const sendData = {
-        userId
+        user_id: userId
       };
       const processGetBlock = await checkUserBlock(sendData);
       if (callback) callback();
@@ -422,6 +422,7 @@ const OtherProfile = () => {
       data = {...data, message};
     }
     const blockingUser = await blockUser(data);
+    console.log(blockingUser, 'kaka');
     if (blockingUser.code === 200) {
       blockUserRef.current.close();
       specificIssueRef.current.close();
