@@ -140,6 +140,7 @@ const ChatDetailPage = ({route}) => {
               <MessageList
                 tDateTimeParser={testDate}
                 InlineDateSeparator={CustomInlineDateSeparator}
+                loading={false}
               />
 
               <MessageInput Input={InputMessage} />
