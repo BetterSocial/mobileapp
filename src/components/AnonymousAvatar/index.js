@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
  * @property {number} [radius=dimen.size.FEED_HEADER_IMAGE_RADIUS]
  * @property {number} [emojiRadius=dimen.size.FEED_HEADER_ANONYMOUS_IMAGE_RADIUS]
  * @property {string} version
+ * @property {import('react-native').StyleProp} containerStyle
  * @property {AnonUserInfoTypes} anonUserInfo
  */
 
@@ -40,20 +41,27 @@ const AnonymousAvatar = (props) => {
   const {
     version,
     anonUserInfo,
+    containerStyle = {},
     radius = dimen.size.FEED_HEADER_IMAGE_RADIUS,
     emojiRadius = dimen.size.FEED_HEADER_ANONYMOUS_IMAGE_RADIUS
   } = props;
 
   if (version >= POST_VERSION) {
     return (
-      <View style={styles.avatarV2Background(anonUserInfo.colorCode, radius)}>
+      <View
+        style={{...styles.avatarV2Background(anonUserInfo.colorCode, radius), ...containerStyle}}>
         <Text style={styles.avatarV2Emoji(emojiRadius)}>{anonUserInfo.emojiCode}</Text>
       </View>
     );
   }
 
   return (
-    <Image source={AnonymousProfile} width={radius} height={radius} style={styles.imageAnonimity} />
+    <Image
+      source={AnonymousProfile}
+      width={radius}
+      height={radius}
+      style={{...styles.imageAnonimity, ...containerStyle}}
+    />
   );
 };
 

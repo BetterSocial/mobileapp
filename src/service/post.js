@@ -4,9 +4,11 @@ import api from './config';
 
 export const createPost = async (data) => {
   try {
-    const resApi = await api.post('/activity/post', data);
+    const resApi = await api.post('/activity/post-v2', data);
     return resApi.data;
   } catch (error) {
+    console.log('error');
+    console.log(error.response);
     crashlytics().recordError(error.response.data);
     throw new Error(error);
   }
@@ -14,13 +16,7 @@ export const createPost = async (data) => {
 
 export const createPollPost = async (data) => {
   try {
-    const resApi = await api.post(
-      '/activity/post/poll',
-      data
-      // headers : {
-      //   "Authorization" : getstreamToken
-      // }
-    );
+    const resApi = await api.post('/activity/post-v2', data);
 
     return resApi.data;
   } catch (error) {

@@ -54,7 +54,7 @@ import {Button, ButtonAddMedia} from '../../components/Button';
 import {Context} from '../../context';
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
-import {ShowingAudience, createPollPost, createPost} from '../../service/post';
+import {ShowingAudience, createPost} from '../../service/post';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
@@ -86,7 +86,7 @@ const CreatePost = () => {
   const sheetPrivacyRef = React.useRef();
   const sheetBackRef = React.useRef();
 
-  const {headerTitle, initialTopic, isInCreatePostTopicScreen} = useCreatePostHook();
+  const {headerTitle, initialTopic, isInCreatePostTopicScreen, anonUserInfo} = useCreatePostHook();
 
   const [message, setMessage] = React.useState('');
   const [mediaStorage, setMediaStorage] = React.useState([]);
@@ -423,69 +423,86 @@ const CreatePost = () => {
     return mapTagUser;
   };
 
-  const postTopic = async () => {
-    try {
-      if (message === '') {
-        showMessage({
-          message: StringConstant.createPostFailedNoMessage,
-          type: 'danger'
-        });
-        return true;
-      }
-      const topicsToPost = _.union(initialTopic, listTopic);
-      const data = {
-        topics: topicsToPost,
-        message,
-        verb: 'tweet',
-        feedGroup: 'main_feed',
-        // privacy: listPrivacy[privacySelect].label,
-        privacy: listPrivacy[privacySelect].key,
-        anonimity: typeUser,
-        location: renderLocationString(geoList[geoSelect]),
-        location_id: locationId,
-        duration_feed: postExpired[expiredSelect].value,
-        images_url: dataImage,
-        tagUsers: checkTaggingUser()
-      };
-
-      setDurationId(JSON.stringify(expiredSelect));
-      if (!isInCreatePostTopicScreen) {
-        setLocationId(JSON.stringify(geoSelect));
-        setPrivacyId(JSON.stringify(privacySelect));
-      }
-
-      Analytics.logEvent('create_post', {
-        id: 6,
-        newpost_reach: geoList[geoSelect].neighborhood,
-        newpost_privacy: listPrivacy[privacySelect].label,
-        num_images: dataImage.length,
-        added_poll: false,
-        topics_added: listTopic,
-        anon: typeUser,
-        predicted_audience: audienceEstimations
+  const postV2 = async () => {
+    if (message === '') {
+      showMessage({
+        message: StringConstant.createPostFailedNoMessage,
+        type: 'danger'
       });
+      return true;
+    }
 
-      if (isInCreatePostTopicScreen) {
-        navigateToTopicPage();
-      } else {
-        navigation.navigate('HomeTabs', {
-          screen: 'Feed',
-          params: {
-            refresh: true
-          }
-        });
-      }
+    const topicsToPost = _.union(initialTopic, listTopic);
+    const data = {
+      message,
+      topics: topicsToPost,
+      verb: isPollShown ? 'poll' : 'tweet',
+      feedGroup: 'main_feed',
+      privacy: listPrivacy[privacySelect].key,
+      anonimity: typeUser,
+      location: renderLocationString(geoList[geoSelect]),
+      location_id: locationId,
+      duration_feed: postExpired[expiredSelect].value,
+      images_url: dataImage,
+      tagUsers: checkTaggingUser()
+    };
+
+    if (isPollShown) {
+      data.polls = getReducedPoll();
+      data.pollsduration = selectedTime;
+      data.multiplechoice = isPollMultipleChoice;
+    }
+
+    if (typeUser) {
+      data.anon_user_info = {
+        color_name: anonUserInfo?.colorName,
+        color_code: anonUserInfo?.colorCode,
+        emoji_name: anonUserInfo?.emojiName,
+        emoji_code: anonUserInfo?.emojiCode
+      };
+    }
+
+    setDurationId(JSON.stringify(expiredSelect));
+    if (!isInCreatePostTopicScreen) {
+      setLocationId(JSON.stringify(geoSelect));
+      setPrivacyId(JSON.stringify(privacySelect));
+    }
+
+    if (isInCreatePostTopicScreen) {
+      navigateToTopicPage();
+    } else {
+      navigation.navigate('HomeTabs', {
+        screen: 'Feed',
+        params: {
+          refresh: true
+        }
+      });
+    }
+
+    try {
+      console.log('data');
+      console.log(data);
       await createPost(data);
       handleTopicChat();
       showMessage({
         message: StringConstant.createPostDone,
         type: 'success'
       });
-    } catch (error) {
+    } catch (e) {
       if (__DEV__) {
-        console.log(error);
+        console.log(e);
       }
     }
+    Analytics.logEvent('create_post', {
+      id: 6,
+      newpost_reach: renderLocationString(geoList[geoSelect]),
+      newpost_privacy: listPrivacy[privacySelect].label,
+      num_images: 0,
+      added_poll: isPollShown,
+      topics_added: listTopic,
+      anon: typeUser,
+      predicted_audience: audienceEstimations
+    });
   };
 
   const randerComponentMedia = () => {
@@ -588,64 +605,9 @@ const CreatePost = () => {
   };
 
   const isPollButtonDisabled = () => getReducedPoll().length < 2;
-
-  const sendPollPost = async () => {
-    const topicsToPost = _.union(initialTopic, listTopic, ['poll']);
-    const data = {
-      message,
-      topics: topicsToPost,
-      verb: 'poll',
-      object: {},
-      feedGroup: 'main_feed',
-      privacy: listPrivacy[privacySelect].label,
-      anonimity: typeUser,
-      location: geoList[geoSelect].neighborhood,
-      location_id: locationId,
-      duration_feed: postExpired[expiredSelect].value,
-      polls: getReducedPoll(),
-      pollsduration: selectedTime,
-      multiplechoice: isPollMultipleChoice,
-      tagUsers: checkTaggingUser()
-    };
-
-    setDurationId(JSON.stringify(expiredSelect));
-    if (!isInCreatePostTopicScreen) {
-      setLocationId(JSON.stringify(geoSelect));
-      setPrivacyId(JSON.stringify(privacySelect));
-    }
-
-    if (isInCreatePostTopicScreen) {
-      navigateToTopicPage();
-    } else {
-      navigation.navigate('HomeTabs', {
-        screen: 'Feed',
-        params: {
-          refresh: true
-        }
-      });
-    }
-
-    try {
-      await createPollPost(data);
-      showMessage({
-        message: StringConstant.createPostDone,
-        type: 'success'
-      });
-    } catch (e) {
-      if (__DEV__) {
-        console.log(e);
-      }
-    }
-    Analytics.logEvent('create_post', {
-      id: 6,
-      newpost_reach: geoList[geoSelect].neighborhood,
-      newpost_privacy: listPrivacy[privacySelect].label,
-      num_images: 0,
-      added_poll: true,
-      topics_added: listTopic,
-      anon: typeUser,
-      predicted_audience: audienceEstimations
-    });
+  const isButtonDisabled = () => {
+    if (isPollShown) return isPollButtonDisabled();
+    return false;
   };
 
   const renderListTopic = () => {
@@ -723,8 +685,9 @@ const CreatePost = () => {
         <Header title={headerTitle} onPress={() => onBack()} />
         <View style={{paddingHorizontal: 15}}>
           <UserProfile
-            typeUser={typeUser}
             setTypeUser={setTypeUser}
+            isAnonymous={typeUser}
+            anonUserInfo={anonUserInfo}
             username={dataProfile.username ? dataProfile.username : 'Loading . . .'}
             photo={
               dataProfile.profile_pic_path ? {uri: dataProfile.profile_pic_path} : ProfileDefault
@@ -827,13 +790,9 @@ const CreatePost = () => {
           <Text style={styles.userTarget}>~ {audienceEstimations}</Text> users.
         </Text> */}
           <Gap style={styles.height(25)} />
-          {isPollShown ? (
-            <Button disabled={isPollButtonDisabled()} onPress={() => sendPollPost()}>
-              Post
-            </Button>
-          ) : (
-            <Button onPress={() => postTopic()}>Post</Button>
-          )}
+          <Button disabled={isButtonDisabled()} onPress={postV2}>
+            Post
+          </Button>
           <Gap style={styles.height(18)} />
           <SheetMedia
             refMedia={sheetMediaRef}
