@@ -24,6 +24,7 @@ import {getSpecificCache} from '../../utils/cache';
 import {TOPICS_PICK} from '../../utils/cache/constant';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import useSignin from '../SignInV2/hooks/useSignin';
+import {Monitoring} from '../../libraries/monitoring/sentry';
 
 const {width} = Dimensions.get('screen');
 
@@ -36,9 +37,11 @@ const Topics = () => {
   const [myTopic, setMyTopic] = React.useState({});
   const [isPreload, setIspreload] = React.useState(true);
   const {getTopicsData, topicCollection} = useSignin();
+
   const getCacheTopic = async () => {
     getSpecificCache(TOPICS_PICK, (cache) => {
       if (cache) {
+        Monitoring.logActions('set topics data from cache', cache);
         setTopics(cache);
         setIspreload(false);
       } else {
@@ -104,6 +107,7 @@ const Topics = () => {
       </Text>
     </Pressable>
   );
+
   const onBack = () => {
     navigation.goBack();
   };
@@ -138,7 +142,7 @@ const Topics = () => {
                       nestedScrollEnabled>
                       <FlatList
                         data={topic.data}
-                        renderItem={renderListTopics}
+                        renderItem={React.memo(renderListTopics)}
                         numColumns={Math.floor(topic.data.length / 3) + 1}
                         nestedScrollEnabled
                         scrollEnabled={false}
@@ -314,4 +318,4 @@ const styles = StyleSheet.create({
     paddingRight: 20
   }
 });
-export default React.memo(Topics);
+export default Topics;

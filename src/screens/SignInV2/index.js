@@ -23,6 +23,7 @@ import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {verifyUser} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import {Monitoring} from '../../libraries/monitoring/sentry';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;
@@ -72,6 +73,9 @@ const SignIn = () => {
                   removeLocalStorege('userId');
                   navigation.dispatch(StackActions.replace('ChooseUsername'));
                 }
+                Monitoring.setUser({
+                  id: appUserId
+                });
                 setUserId(appUserId);
               })
               .catch((e) => {
@@ -104,6 +108,7 @@ const SignIn = () => {
     try {
       logIn();
     } catch (e) {
+      Monitoring.logError('failed login : ', e);
       if (__DEV__) {
         console.log('failed login : ', e);
       }
