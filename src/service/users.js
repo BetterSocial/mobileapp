@@ -149,7 +149,6 @@ export const deleteAccount = async () => {
 export const fcmTokenService = async (body) => {
   try {
     const result = await api.post('/users/fcmtoken', body);
-    console.log(result, 'hana');
     return result.data;
   } catch (e) {
     console.log(e, 'siman');

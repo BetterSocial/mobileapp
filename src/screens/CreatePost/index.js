@@ -1,14 +1,11 @@
-import * as React from 'react';
-import PSL from 'psl';
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
-/* eslint-disable no-use-before-define */
+import * as React from 'react';
+import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
 import _, {debounce} from 'lodash';
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-unused-vars */
 import {
   Alert,
   Animated,
@@ -24,8 +21,6 @@ import {
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-unused-vars */
 import {useNavigation} from '@react-navigation/core';
 
 import ContentLink from './elements/ContentLink';
@@ -61,7 +56,6 @@ import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPollPost, createPost} from '../../service/post';
 import {colors} from '../../utils/colors';
-import {convertString} from '../../utils/string/StringUtils';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
   getDurationId,
@@ -78,10 +72,10 @@ import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 
-const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
+const MemoShowMedia = React.memo(ShowMedia, compire);
 const CreatePost = () => {
   const defaultPollItem = [{text: ''}, {text: ''}];
   const navigation = useNavigation();
@@ -111,11 +105,7 @@ const CreatePost = () => {
   const [dataProfile, setDataProfile] = React.useState({});
   const [geoList, setGeoList] = React.useState([]);
   const [geoSelect, setGeoSelect] = React.useState(0);
-  const [topicSearch, setTopicSearch] = React.useState([]);
-  const [listUsersForTagging, setListUsersForTagging] = React.useState([]);
-  const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
   const [locationId, setLocationIdState] = React.useState('');
-  const [hastagPosition, setHastagPosition] = React.useState(0);
   const [positionKeyboard, setPositionKeyboard] = React.useState('never');
   const [taggingUsers, setTaggingUsers] = React.useState([]);
   const {setHashtags} = useHastagMention('');
@@ -305,7 +295,7 @@ const CreatePost = () => {
   };
 
   const uploadMediaFromLibrary = async () => {
-    const {success, message} = await requestExternalStoragePermission();
+    const {success} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
         if (res.didCancel && __DEV__) {
@@ -319,7 +309,7 @@ const CreatePost = () => {
           setDataImage((val) => [...val, res.base64]);
           sheetMediaRef.current.close();
         } else {
-          // console.log(res);
+          console.log(res);
         }
       });
     } else {
@@ -406,10 +396,10 @@ const CreatePost = () => {
   const onBack = () => {
     if (message || getReducedPoll().length > 0 || mediaStorage.length > 0) {
       sheetBackRef.current.open();
-      return true;
+    } else {
+      navigation.goBack();
     }
 
-    navigation.goBack();
     return true;
   };
 
@@ -600,7 +590,6 @@ const CreatePost = () => {
   const isPollButtonDisabled = () => getReducedPoll().length < 2;
 
   const sendPollPost = async () => {
-    // setLoading(true);
     const topicsToPost = _.union(initialTopic, listTopic, ['poll']);
     const data = {
       message,
@@ -686,17 +675,6 @@ const CreatePost = () => {
   const openTopic = () => {
     setPositionKeyboard('always');
     sheetTopicRef.current.open();
-  };
-
-  const reformatStringByPosition = (str = '', strFromState = '') => {
-    const topicItem = convertString(str, ' ', '');
-    const topicItemWithSpace = topicItem.concat(' ');
-    const oldMessage = strFromState;
-    const start = hastagPosition + 1;
-    const end = positionTopicSearch + 1;
-    const s = oldMessage.substring(0, end);
-    const newMessage = s.insert(start, topicItemWithSpace);
-    return newMessage;
   };
 
   const handleTagUser = debounce(() => {

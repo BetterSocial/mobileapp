@@ -24,6 +24,7 @@
     "react/prop-types": "off",
     "camelcase": "off",
     "import/no-extraneous-dependencies": "off",
+    "no-useless-escape": "warn",
     "no-nested-ternary": "off",
     "quotes": [
       2,
