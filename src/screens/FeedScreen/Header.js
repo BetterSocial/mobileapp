@@ -248,7 +248,6 @@ const Header = ({
   showAnonymousOption = false,
   hideThreeDot
 }) => {
-  console.log('props', props);
   const {
     anonimity,
     time,
