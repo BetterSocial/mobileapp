@@ -1,14 +1,11 @@
-import * as React from 'react';
-import PSL from 'psl';
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
-/* eslint-disable no-use-before-define */
+import * as React from 'react';
+import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
 import _, {debounce} from 'lodash';
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-unused-vars */
 import {
   Alert,
   Animated,
@@ -24,8 +21,6 @@ import {
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-unused-vars */
 import {useNavigation} from '@react-navigation/core';
 
 import ContentLink from './elements/ContentLink';
@@ -59,9 +54,8 @@ import {Button, ButtonAddMedia} from '../../components/Button';
 import {Context} from '../../context';
 import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
-import {ShowingAudience, createPollPost, createPost} from '../../service/post';
+import {ShowingAudience, createPost} from '../../service/post';
 import {colors} from '../../utils/colors';
-import {convertString} from '../../utils/string/StringUtils';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
   getDurationId,
@@ -78,10 +72,10 @@ import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 
-const MemoShowMedia = React.memo(ShowMedia, compire);
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
+const MemoShowMedia = React.memo(ShowMedia, compire);
 const CreatePost = () => {
   const defaultPollItem = [{text: ''}, {text: ''}];
   const navigation = useNavigation();
@@ -92,7 +86,7 @@ const CreatePost = () => {
   const sheetPrivacyRef = React.useRef();
   const sheetBackRef = React.useRef();
 
-  const {headerTitle, initialTopic, isInCreatePostTopicScreen} = useCreatePostHook();
+  const {headerTitle, initialTopic, isInCreatePostTopicScreen, anonUserInfo} = useCreatePostHook();
 
   const [message, setMessage] = React.useState('');
   const [mediaStorage, setMediaStorage] = React.useState([]);
@@ -111,11 +105,7 @@ const CreatePost = () => {
   const [dataProfile, setDataProfile] = React.useState({});
   const [geoList, setGeoList] = React.useState([]);
   const [geoSelect, setGeoSelect] = React.useState(0);
-  const [topicSearch, setTopicSearch] = React.useState([]);
-  const [listUsersForTagging, setListUsersForTagging] = React.useState([]);
-  const [positionTopicSearch, setPositionTopicSearch] = React.useState(0);
   const [locationId, setLocationIdState] = React.useState('');
-  const [hastagPosition, setHastagPosition] = React.useState(0);
   const [positionKeyboard, setPositionKeyboard] = React.useState('never');
   const [taggingUsers, setTaggingUsers] = React.useState([]);
   const {setHashtags} = useHastagMention('');
@@ -305,7 +295,7 @@ const CreatePost = () => {
   };
 
   const uploadMediaFromLibrary = async () => {
-    const {success, message} = await requestExternalStoragePermission();
+    const {success} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
         if (res.didCancel && __DEV__) {
@@ -319,7 +309,7 @@ const CreatePost = () => {
           setDataImage((val) => [...val, res.base64]);
           sheetMediaRef.current.close();
         } else {
-          // console.log(res);
+          console.log(res);
         }
       });
     } else {
@@ -406,10 +396,10 @@ const CreatePost = () => {
   const onBack = () => {
     if (message || getReducedPoll().length > 0 || mediaStorage.length > 0) {
       sheetBackRef.current.open();
-      return true;
+    } else {
+      navigation.goBack();
     }
 
-    navigation.goBack();
     return true;
   };
 
@@ -432,69 +422,86 @@ const CreatePost = () => {
     return mapTagUser;
   };
 
-  const postTopic = async () => {
-    try {
-      if (message === '') {
-        showMessage({
-          message: StringConstant.createPostFailedNoMessage,
-          type: 'danger'
-        });
-        return true;
-      }
-      const topicsToPost = _.union(initialTopic, listTopic);
-      const data = {
-        topics: topicsToPost,
-        message,
-        verb: 'tweet',
-        feedGroup: 'main_feed',
-        // privacy: listPrivacy[privacySelect].label,
-        privacy: listPrivacy[privacySelect].key,
-        anonimity: typeUser,
-        location: renderLocationString(geoList[geoSelect]),
-        location_id: locationId,
-        duration_feed: postExpired[expiredSelect].value,
-        images_url: dataImage,
-        tagUsers: checkTaggingUser()
-      };
-
-      setDurationId(JSON.stringify(expiredSelect));
-      if (!isInCreatePostTopicScreen) {
-        setLocationId(JSON.stringify(geoSelect));
-        setPrivacyId(JSON.stringify(privacySelect));
-      }
-
-      Analytics.logEvent('create_post', {
-        id: 6,
-        newpost_reach: geoList[geoSelect].neighborhood,
-        newpost_privacy: listPrivacy[privacySelect].label,
-        num_images: dataImage.length,
-        added_poll: false,
-        topics_added: listTopic,
-        anon: typeUser,
-        predicted_audience: audienceEstimations
+  const postV2 = async () => {
+    if (message === '') {
+      showMessage({
+        message: StringConstant.createPostFailedNoMessage,
+        type: 'danger'
       });
+      return true;
+    }
 
-      if (isInCreatePostTopicScreen) {
-        navigateToTopicPage();
-      } else {
-        navigation.navigate('HomeTabs', {
-          screen: 'Feed',
-          params: {
-            refresh: true
-          }
-        });
-      }
+    const topicsToPost = _.union(initialTopic, listTopic);
+    const data = {
+      message,
+      topics: topicsToPost,
+      verb: isPollShown ? 'poll' : 'tweet',
+      feedGroup: 'main_feed',
+      privacy: listPrivacy[privacySelect].key,
+      anonimity: typeUser,
+      location: renderLocationString(geoList[geoSelect]),
+      location_id: locationId,
+      duration_feed: postExpired[expiredSelect].value,
+      images_url: dataImage,
+      tagUsers: checkTaggingUser()
+    };
+
+    if (isPollShown) {
+      data.polls = getReducedPoll();
+      data.pollsduration = selectedTime;
+      data.multiplechoice = isPollMultipleChoice;
+    }
+
+    if (typeUser) {
+      data.anon_user_info = {
+        color_name: anonUserInfo?.colorName,
+        color_code: anonUserInfo?.colorCode,
+        emoji_name: anonUserInfo?.emojiName,
+        emoji_code: anonUserInfo?.emojiCode
+      };
+    }
+
+    setDurationId(JSON.stringify(expiredSelect));
+    if (!isInCreatePostTopicScreen) {
+      setLocationId(JSON.stringify(geoSelect));
+      setPrivacyId(JSON.stringify(privacySelect));
+    }
+
+    if (isInCreatePostTopicScreen) {
+      navigateToTopicPage();
+    } else {
+      navigation.navigate('HomeTabs', {
+        screen: 'Feed',
+        params: {
+          refresh: true
+        }
+      });
+    }
+
+    try {
+      console.log('data');
+      console.log(data);
       await createPost(data);
       handleTopicChat();
       showMessage({
         message: StringConstant.createPostDone,
         type: 'success'
       });
-    } catch (error) {
+    } catch (e) {
       if (__DEV__) {
-        console.log(error);
+        console.log(e);
       }
     }
+    Analytics.logEvent('create_post', {
+      id: 6,
+      newpost_reach: renderLocationString(geoList[geoSelect]),
+      newpost_privacy: listPrivacy[privacySelect].label,
+      num_images: 0,
+      added_poll: isPollShown,
+      topics_added: listTopic,
+      anon: typeUser,
+      predicted_audience: audienceEstimations
+    });
   };
 
   const randerComponentMedia = () => {
@@ -597,65 +604,9 @@ const CreatePost = () => {
   };
 
   const isPollButtonDisabled = () => getReducedPoll().length < 2;
-
-  const sendPollPost = async () => {
-    // setLoading(true);
-    const topicsToPost = _.union(initialTopic, listTopic, ['poll']);
-    const data = {
-      message,
-      topics: topicsToPost,
-      verb: 'poll',
-      object: {},
-      feedGroup: 'main_feed',
-      privacy: listPrivacy[privacySelect].label,
-      anonimity: typeUser,
-      location: geoList[geoSelect].neighborhood,
-      location_id: locationId,
-      duration_feed: postExpired[expiredSelect].value,
-      polls: getReducedPoll(),
-      pollsduration: selectedTime,
-      multiplechoice: isPollMultipleChoice,
-      tagUsers: checkTaggingUser()
-    };
-
-    setDurationId(JSON.stringify(expiredSelect));
-    if (!isInCreatePostTopicScreen) {
-      setLocationId(JSON.stringify(geoSelect));
-      setPrivacyId(JSON.stringify(privacySelect));
-    }
-
-    if (isInCreatePostTopicScreen) {
-      navigateToTopicPage();
-    } else {
-      navigation.navigate('HomeTabs', {
-        screen: 'Feed',
-        params: {
-          refresh: true
-        }
-      });
-    }
-
-    try {
-      await createPollPost(data);
-      showMessage({
-        message: StringConstant.createPostDone,
-        type: 'success'
-      });
-    } catch (e) {
-      if (__DEV__) {
-        console.log(e);
-      }
-    }
-    Analytics.logEvent('create_post', {
-      id: 6,
-      newpost_reach: geoList[geoSelect].neighborhood,
-      newpost_privacy: listPrivacy[privacySelect].label,
-      num_images: 0,
-      added_poll: true,
-      topics_added: listTopic,
-      anon: typeUser,
-      predicted_audience: audienceEstimations
-    });
+  const isButtonDisabled = () => {
+    if (isPollShown) return isPollButtonDisabled();
+    return false;
   };
 
   const renderListTopic = () => {
@@ -685,17 +636,6 @@ const CreatePost = () => {
   const openTopic = () => {
     setPositionKeyboard('always');
     sheetTopicRef.current.open();
-  };
-
-  const reformatStringByPosition = (str = '', strFromState = '') => {
-    const topicItem = convertString(str, ' ', '');
-    const topicItemWithSpace = topicItem.concat(' ');
-    const oldMessage = strFromState;
-    const start = hastagPosition + 1;
-    const end = positionTopicSearch + 1;
-    const s = oldMessage.substring(0, end);
-    const newMessage = s.insert(start, topicItemWithSpace);
-    return newMessage;
   };
 
   const handleTagUser = debounce(() => {
@@ -744,8 +684,9 @@ const CreatePost = () => {
         <Header title={headerTitle} onPress={() => onBack()} />
         <View style={{paddingHorizontal: 15}}>
           <UserProfile
-            typeUser={typeUser}
             setTypeUser={setTypeUser}
+            isAnonymous={typeUser}
+            anonUserInfo={anonUserInfo}
             username={dataProfile.username ? dataProfile.username : 'Loading . . .'}
             photo={
               dataProfile.profile_pic_path ? {uri: dataProfile.profile_pic_path} : ProfileDefault
@@ -848,13 +789,9 @@ const CreatePost = () => {
           <Text style={styles.userTarget}>~ {audienceEstimations}</Text> users.
         </Text> */}
           <Gap style={styles.height(25)} />
-          {isPollShown ? (
-            <Button disabled={isPollButtonDisabled()} onPress={() => sendPollPost()}>
-              Post
-            </Button>
-          ) : (
-            <Button onPress={() => postTopic()}>Post</Button>
-          )}
+          <Button disabled={isButtonDisabled()} onPress={postV2}>
+            Post
+          </Button>
           <Gap style={styles.height(18)} />
           <SheetMedia
             refMedia={sheetMediaRef}

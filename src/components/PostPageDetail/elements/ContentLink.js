@@ -1,20 +1,20 @@
 import * as React from 'react';
 import {
+  ScrollView,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  View,
   TouchableWithoutFeedback,
-  ScrollView
+  View
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import Card from '../../Card/Card';
 import TopicsChip from '../../TopicsChip/TopicsChip';
+import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
 import {COLORS} from '../../../utils/theme';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {smartRender} from '../../../utils/Utils';
-import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
 
 const FONT_SIZE_TEXT = 14;
 

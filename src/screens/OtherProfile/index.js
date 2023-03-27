@@ -20,6 +20,7 @@ import {useRoute} from '@react-navigation/native';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
+import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
@@ -52,7 +53,6 @@ import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -122,6 +122,12 @@ const OtherProfile = () => {
       setLoading(false);
     }
   };
+  console.log(isLastPage, 'susu');
+  React.useEffect(() => {
+    if (isLastPage && isHitApiFirstTime) {
+      SimpleToast.show('No posts yet.', SimpleToast.LONG);
+    }
+  }, [isHitApiFirstTime, isLastPage]);
 
   React.useEffect(() => {
     if (isLastPage && isHitApiFirstTime) {
@@ -157,7 +163,7 @@ const OtherProfile = () => {
   const checkUserBlockHandle = async (userId, callback) => {
     try {
       const sendData = {
-        user_id: userId
+        userId
       };
       const processGetBlock = await checkUserBlock(sendData);
       if (callback) callback();
@@ -524,6 +530,7 @@ const OtherProfile = () => {
     await upVote(post);
     updateFeed(post, index);
   };
+  console.log(postOffset, 'posoffset');
   const setDownVote = async (post, index) => {
     await downVote(post);
     updateFeed(post, index);

@@ -7,30 +7,31 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
-import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
-import { showMessage } from 'react-native-flash-message';
-import { useNavigation } from '@react-navigation/core';
-import { useSetRecoilState } from 'recoil';
+import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
+import {showMessage} from 'react-native-flash-message';
+import {useNavigation} from '@react-navigation/core';
+import {useSetRecoilState} from 'recoil';
 
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
-import { Button } from '../../components/Button';
-import { Context } from '../../context';
-import { Header } from '../../components';
-import { InitialStartupAtom } from '../../service/initialStartup';
-import { ProgressBar } from '../../components/ProgressBar';
-import { colors } from '../../utils/colors';
-import { get } from '../../api/server';
-import { registerUser } from '../../service/users';
-import { setAccessToken, setRefreshToken, setToken } from '../../utils/token';
-import { setImage } from '../../context/actions/users';
-import { useClientGetstream } from '../../utils/getstream/ClientGetStram';
-import { Analytics } from '../../libraries/analytics/firebaseAnalytics';
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
+import {Button} from '../../components/Button';
+import {Context} from '../../context';
+import {Header} from '../../components';
+import {InitialStartupAtom} from '../../service/initialStartup';
+import {ProgressBar} from '../../components/ProgressBar';
+import {colors} from '../../utils/colors';
+import {get} from '../../api/server';
+import {randomString} from '../../utils/string/StringUtils';
+import {registerUser} from '../../service/users';
+import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
+import {setImage} from '../../context/actions/users';
+import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
-const { width } = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 
 const VIEW_TYPE_LABEL_TOPIC = 1;
 const VIEW_TYPE_LABEL_LOCATION = 2;
@@ -47,9 +48,9 @@ const WhotoFollow = () => {
   const [usersState, usersDispatch] = React.useContext(Context).users;
   const [dataProvider, setDataProvider] = React.useState(null);
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
-  const [layoutProvider, setLayoutProvider] = React.useState(() => { });
+  const [layoutProvider, setLayoutProvider] = React.useState(() => {});
 
-  const setInitialValue = useSetRecoilState(InitialStartupAtom)
+  const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const create = useClientGetstream();
 
   const navigation = useNavigation();
@@ -58,10 +59,10 @@ const WhotoFollow = () => {
     setIsLoading(true);
 
     const getWhoToFollowListUrl = `/who-to-follow/list?topics=${encodeURI(
-      JSON.stringify(topics.topics),
+      JSON.stringify(topics.topics)
     )}&locations=${encodeURI(JSON.stringify(localCommunity.local_community))}`;
 
-    get({ url: getWhoToFollowListUrl })
+    get({url: getWhoToFollowListUrl})
       .then((res) => {
         setIsLoading(false);
         if (res.status === 200) {
@@ -93,23 +94,20 @@ const WhotoFollow = () => {
           },
           (type, dim) => {
             switch (type) {
-              case VIEW_TYPE_LABEL_TOPIC:
-              case VIEW_TYPE_LABEL_LOCATION:
-                dim.width = width;
-                dim.height = 40;
-                break;
-
               case VIEW_TYPE_DATA:
                 dim.width = width;
                 dim.height = 76;
                 break;
 
+              case VIEW_TYPE_LABEL_TOPIC:
+              case VIEW_TYPE_LABEL_LOCATION:
               default:
                 dim.width = width;
                 dim.height = 40;
+                break;
             }
-          },
-        ),
+          }
+        )
       );
       setDataProvider(dProvider.cloneWithRows(users));
     }
@@ -134,7 +132,7 @@ const WhotoFollow = () => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    get({ url: '/who-to-follow/list' })
+    get({url: '/who-to-follow/list'})
       .then((res) => {
         setRefreshing(false);
         if (res.status === 200) {
@@ -150,22 +148,22 @@ const WhotoFollow = () => {
   const register = () => {
     setFetchRegister(true);
     Analytics.logEvent('onb_select_follows_btn_add', {
-      onb_whofollow_users_selected: followed,
+      onb_whofollow_users_selected: followed
     });
     const data = {
       users: {
         username: usersState.username,
-        human_id: usersState.userId,
-        country_code: usersState.countryCode,
-        // human_id: randomString(16),
-        // country_code: 'US',
+        // human_id: usersState.userId,
+        // country_code: usersState.countryCode,
+        human_id: randomString(16),
+        country_code: 'US',
         profile_pic_path: usersState.photo,
-        status: 'A',
+        status: 'A'
       },
       local_community: localCommunity.local_community,
       topics: topics.topics,
       follows: followed,
-      follow_source: 'onboarding',
+      follow_source: 'onboarding'
     };
 
     registerUser(data)
@@ -178,31 +176,30 @@ const WhotoFollow = () => {
           showMessage({
             message: 'Welcome to Better Social',
             type: 'success',
-            backgroundColor: colors.holytosca,
+            backgroundColor: colors.holytosca
           });
           setTimeout(() => {
             create();
-            setImage(null, usersDispatch)
-            // navigation.dispatch(StackActions.replace('HomeTabs'));
-            setInitialValue({ id: res.token })
+            setImage(null, usersDispatch);
+            setInitialValue({id: res.token});
           }, 2000);
         } else {
           crashlytics().recordError(new Error(res));
           if (typeof res.message === 'object') {
             showMessage({
               message: res.message[0].message,
-              type: 'danger',
+              type: 'danger'
             });
           } else if (typeof res.message === 'string') {
             showMessage({
               message: res.message,
-              type: 'danger',
+              type: 'danger'
             });
           } else {
             showMessage({
               message: 'please complete the data',
               type: 'danger',
-              backgroundColor: colors.red,
+              backgroundColor: colors.red
             });
           }
         }
@@ -213,18 +210,18 @@ const WhotoFollow = () => {
         showMessage({
           message: 'please complete the data',
           type: 'danger',
-          backgroundColor: colors.red,
+          backgroundColor: colors.red
         });
       });
   };
 
   const rowRenderer = (type, item, index, extendedState) => {
-    const labelTopicName = item.neighborhood ? item.neighborhood : item.name || ""
+    const labelTopicName = item.neighborhood ? item.neighborhood : item.name || '';
     switch (type) {
       case VIEW_TYPE_LABEL_TOPIC:
         return <Label label={`#${labelTopicName}`} />;
       case VIEW_TYPE_LABEL_LOCATION:
-        return <Label label={`${item?.city || ""}`} />;
+        return <Label label={`${item?.city || ''}`} />;
       case VIEW_TYPE_DATA:
       default:
         return (
@@ -241,8 +238,8 @@ const WhotoFollow = () => {
   };
 
   const onBack = () => {
-    navigation.goBack()
-  }
+    navigation.goBack();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -254,8 +251,8 @@ const WhotoFollow = () => {
       <View style={styles.content}>
         <Text style={styles.textWhoToFollow}>Who to follow</Text>
         <Text style={styles.textDescription}>
-          Interesting people to follow. You can edit this anytime, and others
-          cannot see who you follow.
+          Interesting people to follow. You can edit this anytime, and others cannot see who you
+          follow.
         </Text>
       </View>
       {isLoading ? <ActivityIndicator size="small" color="#0000ff" /> : null}
@@ -265,13 +262,11 @@ const WhotoFollow = () => {
           layoutProvider={layoutProvider}
           dataProvider={dataProvider}
           extendedState={{
-            followed,
+            followed
           }}
           rowRenderer={rowRenderer}
           scrollViewProps={{
-            refreshControl: (
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            ),
+            refreshControl: <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }}
         />
       ) : (
@@ -288,25 +283,25 @@ const WhotoFollow = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
   },
   recyclerview: {
-    marginBottom: 90,
+    marginBottom: 90
   },
   content: {
-    padding: 22,
+    padding: 22
   },
   wrapperHeader: {
     paddingLeft: 22,
     paddingRight: 22,
-    paddingTop: 22,
+    paddingTop: 22
   },
 
   containerProgress: {
     marginTop: 36,
     paddingLeft: 22,
     paddingRight: 22,
-    paddingTop: 22,
+    paddingTop: 22
   },
   textWhoToFollow: {
     fontFamily: 'Poppins',
@@ -314,7 +309,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 36,
     lineHeight: 44,
-    color: '#11243D',
+    color: '#11243D'
   },
   textDescription: {
     fontFamily: 'Poppins',
@@ -324,7 +319,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: '#828282',
     marginTop: 20,
-    opacity: 0.84,
+    opacity: 0.84
   },
   footer: {
     position: 'absolute',
@@ -338,7 +333,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 5
     },
     shadowOpacity: 0.36,
     shadowRadius: 6.68,
@@ -355,23 +350,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 4,
     paddingBottom: 4,
-    marginBottom: 8,
+    marginBottom: 8
   },
   cardLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   textRounded: {
     fontFamily: 'Inter-Black',
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 24,
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   containerTextCard: {
     flexDirection: 'column',
     alignItems: 'center',
-    marginLeft: 8,
+    marginLeft: 8
   },
 
   button: {
@@ -381,7 +376,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     borderRadius: 8,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   textStyling: {
     fontFamily: 'Inter',
@@ -389,7 +384,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 12,
     textAlign: 'center',
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   textFullName: {
     fontFamily: 'Poppins',
@@ -398,7 +393,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000000',
     lineHeight: 21,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start'
   },
   textUsername: {
     fontFamily: 'Inter',
@@ -407,7 +402,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#000000',
     lineHeight: 15,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start'
   },
   headerList: {
     height: 40,
@@ -417,7 +412,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     marginBottom: 12,
-    marginTop: 12,
+    marginTop: 12
   },
   titleHeader: {
     fontFamily: 'Poppins',
@@ -425,16 +420,16 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 12,
     lineHeight: 18,
-    color: '#4F4F4F',
+    color: '#4F4F4F'
   },
   flatList: {
     paddingLeft: 22,
-    paddingRight: 22,
+    paddingRight: 22
   },
   tinyLogo: {
     width: 48,
     height: 48,
-    borderRadius: 48,
+    borderRadius: 48
   },
   containerButton: {
     width: 32,
@@ -442,7 +437,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   textBold: {
     fontFamily: 'Poppins',
@@ -451,17 +446,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: '#4F4F4F',
-    textTransform: 'capitalize',
+    textTransform: 'capitalize'
   },
   followAction: (awidth, height) => ({
     height,
     width: awidth,
     backgroundColor: 'red',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   }),
   listUser: {
-    marginBottom: 90,
-  },
+    marginBottom: 90
+  }
 });
 export default WhotoFollow;
