@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
  */
 const AnonymousAvatar = (props) => {
   const {version, anonUserInfo} = props;
-  console.log(anonUserInfo);
 
   if (version >= POST_VERSION) {
     return (
