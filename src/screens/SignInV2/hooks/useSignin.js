@@ -2,6 +2,7 @@ import React from 'react';
 import {get} from '../../../api/server';
 import {saveToCache} from '../../../utils/cache';
 import {TOPICS_PICK} from '../../../utils/cache/constant';
+import {Monitoring} from '../../../libraries/monitoring/sentry';
 
 const useSignin = () => {
   const [topicCollection, setTopics] = React.useState([]);
@@ -18,6 +19,8 @@ const useSignin = () => {
         })
       );
     }
+
+    Monitoring.logActions('set topics data from cache', topicMapping);
     setTopics(allTopics);
     saveToCache(TOPICS_PICK, allTopics);
   };

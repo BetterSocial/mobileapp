@@ -28,6 +28,7 @@ import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 import {setNews} from '../context/actions/news';
 import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
+import {Monitoring} from '../libraries/monitoring/sentry';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -67,6 +68,9 @@ export const useInitialStartup = () => {
     const token = await getAccessToken();
     if (token) {
       const clientFeed = streamFeed(token);
+      Monitoring.setUser({
+        id: profileState.user_id
+      });
       const notif = clientFeed.feed('notification', profileState.user_id, token.id);
       notif.subscribe(() => {
         getFeedChat();
