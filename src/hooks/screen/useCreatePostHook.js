@@ -1,17 +1,52 @@
+import * as React from 'react';
+import {showMessage} from 'react-native-flash-message';
 import {useRoute} from '@react-navigation/core';
+
+import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 
 const useCreatePostHook = () => {
   const {params = {}} = useRoute();
   const {topic} = params;
+  const [anonUserInfo, setAnonUserInfo] = React.useState(null);
 
   const headerTitle = topic ? `Create Post in #${topic}` : 'Create Post';
 
   const isInCreatePostTopicScreen = !!topic;
 
+  const getAnonUserInfo = React.useCallback(async () => {
+    try {
+      const response = await AnonUserInfoRepo.getPostAnonUserInfo();
+      if (response.isSuccess) {
+        setAnonUserInfo(response.data);
+      } else {
+        showMessage({
+          message: response.error,
+          type: 'danger'
+        });
+      }
+    } catch (e) {
+      console.log('Error in getAnonUserInfo', e);
+      showMessage({
+        message: e,
+        type: 'danger'
+      });
+    }
+  }, []);
+
+  const refreshAnonUserInfo = React.useCallback(() => {
+    getAnonUserInfo();
+  }, []);
+
+  React.useEffect(() => {
+    getAnonUserInfo();
+  }, []);
+
   return {
     headerTitle,
     initialTopic: topic ? [topic] : [],
-    isInCreatePostTopicScreen
+    isInCreatePostTopicScreen,
+    refreshAnonUserInfo,
+    anonUserInfo
   };
 };
 

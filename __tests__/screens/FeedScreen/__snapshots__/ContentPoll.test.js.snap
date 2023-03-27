@@ -252,7 +252,11 @@ exports[`Content poll should same as snapshot should same as snapshot 1`] = `
         }
       }
     >
+<<<<<<< HEAD
        Poll closed 100d ago
+=======
+       Poll closed 118d ago
+>>>>>>> 01fb678cfae14ae1217f6b21be95d6407a997f10
     </Text>
   </View>
 </View>

@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {ChannelAvatar} from 'stream-chat-react-native';
 import FastImage from 'react-native-fast-image';
-
+import {ChannelAvatar} from 'stream-chat-react-native';
 import {StyleSheet, View} from 'react-native';
-import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
-import {getGroupMemberCount} from '../../../utils/string/StringUtils';
+
 import ChatIcon from '../../../assets/chat-icon.png';
+import DefaultChatGroupProfilePicture from '../../../assets/images/default-chat-group-picture.png';
 import GroupIcon from '../../../assets/group-icon.png';
 import Hashtag from '../../../assets/hashtag.png';
 import {colors} from '../../../utils/colors';
+import {getGroupMemberCount} from '../../../utils/string/StringUtils';
 
 const CustomPreviewAvatar = ({channel}) => {
   if (channel.data.channel_type === 3) {

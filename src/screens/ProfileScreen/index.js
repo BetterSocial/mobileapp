@@ -31,6 +31,7 @@ import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Context} from '../../context';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {
@@ -56,7 +57,6 @@ import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 
 const {height, width} = Dimensions.get('screen');
 // let headerHeight = 0;
