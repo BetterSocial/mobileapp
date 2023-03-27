@@ -1,18 +1,19 @@
-import * as React from 'react';
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
+// eslint-disable-next-line import/no-extraneous-dependencies
+
+import * as React from 'react';
 import PropsTypes from 'prop-types';
 import {Avatar} from 'react-native-activity-feed';
-import {Dimensions, Image, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-// eslint-disable-next-line import/no-extraneous-dependencies
+import {Dimensions, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
+import AnonymousAvatar from '../../components/AnonymousAvatar';
+import AnonymousUsername from '../../components/AnonymousUsername';
 import ElipsisIcon from '../../assets/icon/ElipsisIcon';
 import GlobalButton from '../../components/Button/GlobalButton';
 import MemoEightyEight_hundred from '../../assets/timer/EightyEight_hundred';
 import MemoFivety_sixtyTwo from '../../assets/timer/Fivety_sixtyTwo';
-// import ElipsisIcon from '../../assets/icons/images/ellipsis-vertical.svg';
 import MemoIc_arrow_back from '../../assets/arrow/Ic_arrow_back';
 import MemoOne from '../../assets/timer/One';
 import MemoPeopleFollow from '../../assets/icons/Ic_people_follow';
@@ -93,7 +94,9 @@ const _renderAnonimity = ({
   headerStyle,
   showAnonymousOption = false,
   onHeaderOptionClicked = () => {},
-  hideThreeDot
+  hideThreeDot,
+  version = 1,
+  anonUserInfo = {}
 }) => {
   const navigation = useNavigation();
 
@@ -115,17 +118,12 @@ const _renderAnonimity = ({
             </View>
           ) : null}
           <View style={[styles.imageAnonymContainer]}>
-            <Image
-              source={AnonymousProfile}
-              width={dimen.size.FEED_HEADER_IMAGE_RADIUS}
-              height={dimen.size.FEED_HEADER_IMAGE_RADIUS}
-              style={styles.imageAnonimity}
-            />
+            <AnonymousAvatar anonUserInfo={anonUserInfo} version={version} />
           </View>
 
           <View style={[styles.containerFeedProfile]}>
             <View style={[styles.containerFeedName, {alignItems: 'center'}]}>
-              <Text style={[styles.feedUsername]}>Anonymous</Text>
+              <AnonymousUsername version={version} anonUserInfo={anonUserInfo} />
             </View>
             {showAnonymousOption && !hideThreeDot && (
               <GlobalButton
@@ -250,7 +248,21 @@ const Header = ({
   showAnonymousOption = false,
   hideThreeDot
 }) => {
-  const {anonimity, time, privacy, duration_feed, expired_at, location, actor} = props;
+  console.log('props', props);
+  const {
+    anonimity,
+    time,
+    privacy,
+    duration_feed,
+    expired_at,
+    location,
+    actor,
+    anon_user_info_color_code,
+    anon_user_info_color_name,
+    anon_user_info_emoji_code,
+    anon_user_info_emoji_name,
+    version = 1
+  } = props;
 
   if (anonimity) {
     return _renderAnonimity({
@@ -264,7 +276,14 @@ const Header = ({
       headerStyle,
       showAnonymousOption,
       onHeaderOptionClicked: () => onHeaderOptionClicked(props),
-      hideThreeDot
+      hideThreeDot,
+      version,
+      anonUserInfo: {
+        colorCode: anon_user_info_color_code,
+        colorName: anon_user_info_color_name,
+        emojiCode: anon_user_info_emoji_code,
+        emojiName: anon_user_info_emoji_name
+      }
     });
   }
   return _renderProfileNormal({
@@ -393,11 +412,6 @@ const styles = StyleSheet.create({
     flex: 1,
     aspectRatio: 1.5,
     resizeMode: 'contain'
-  },
-  imageAnonimity: {
-    marginRight: 0,
-    width: dimen.size.FEED_HEADER_IMAGE_RADIUS,
-    height: dimen.size.FEED_HEADER_IMAGE_RADIUS
   },
   noPaddingLeft: {
     paddingLeft: 0

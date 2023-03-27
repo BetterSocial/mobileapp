@@ -1,4 +1,5 @@
 import crashlytics from '@react-native-firebase/crashlytics';
+
 import api from './config';
 import {getRefreshToken} from '../utils/token';
 
@@ -66,7 +67,7 @@ export const verifyUsername = async (username) => {
 };
 export const registerUser = async (data) => {
   try {
-    const resApi = await api.post('/users/register', {
+    const resApi = await api.post('/users/register-v2', {
       data
     });
     return resApi.data;
