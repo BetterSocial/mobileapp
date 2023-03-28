@@ -16,7 +16,7 @@ const baseUrl = {
  *
  * @param {number} [offset = 0]
  * @param {number} [limit = 10]
- * @returns {GetSelfAnonymousFeedResponse}
+ * @returns {Promise<GetSelfAnonymousFeedResponse>}
  */
 const getSelfAnonymousFeed = async (offset = 0, limit = 10) => {
   try {
@@ -24,23 +24,24 @@ const getSelfAnonymousFeed = async (offset = 0, limit = 10) => {
     if (response.status === 200) {
       const feeds = response?.data?.data?.feeds;
       const offsetData = response?.data?.data?.offset;
-      return {
+      return Promise.resolve({
         isSuccess: true,
         data: feeds,
         offset: offsetData
-      };
+      });
     }
-    return {
+
+    return Promise.resolve({
       isSuccess: false,
       error: response?.data?.data?.error,
       data: []
-    };
+    });
   } catch (e) {
-    return {
+    return Promise.resolve({
       isSuccess: false,
       error: e?.message,
       data: []
-    };
+    });
   }
 };
 
