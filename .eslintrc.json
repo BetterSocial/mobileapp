@@ -26,6 +26,7 @@
     "import/no-extraneous-dependencies": "off",
     "no-useless-escape": "warn",
     "no-nested-ternary": "off",
+    "no-case-declarations": "warn",
     "quotes": [
       2,
       "single",
