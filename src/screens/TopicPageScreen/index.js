@@ -79,13 +79,10 @@ const TopicPageScreen = (props) => {
       if (_resultGetUserTopic.data) {
         setIsFollow(true);
       }
-
-      // setLoading(false)
     } catch (error) {
       if (__DEV__) {
         console.log(error);
       }
-      // setLoading(false);
     }
   };
 
@@ -292,7 +289,7 @@ const TopicPageScreen = (props) => {
       onNewPollFetched={onNewPollFetched}
       index={index}
       onPressDomain={onPressDomain}
-      onPress={() => onPress(item, index)}
+      onPress={() => onPress(item)}
       onPressComment={() => onPressComment(item)}
       onPressBlock={() => onPressBlock(item)}
       onPressUpvote={(post) => setUpVote(post, index)}

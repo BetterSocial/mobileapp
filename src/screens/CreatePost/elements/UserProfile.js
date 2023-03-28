@@ -70,7 +70,7 @@ const UserProfile = ({
           />
           <View>
             <AnonymousUsername anonUserInfo={anonUserInfo} version={POST_VERSION} />
-            <Text style={styles.desc}>This is your anonymous username</Text>
+            <Text style={styles.desc}>Your alias for this post</Text>
           </View>
         </View>
       );

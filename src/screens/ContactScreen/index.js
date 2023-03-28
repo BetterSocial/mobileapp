@@ -90,19 +90,16 @@ const ContactScreen = ({navigation}) => {
           },
           (type, dim) => {
             switch (type) {
-              case VIEW_TYPE_LABEL:
-                dim.width = width;
-                dim.height = 40;
-                break;
-
               case VIEW_TYPE_DATA:
                 dim.width = width;
                 dim.height = 72;
                 break;
 
+              case VIEW_TYPE_LABEL:
               default:
                 dim.width = width;
                 dim.height = 40;
+                break;
             }
           }
         )
@@ -173,10 +170,6 @@ const ContactScreen = ({navigation}) => {
   };
 
   const rowRenderer = (type, item, index, extendedState) => (
-    // switch (type) {
-    // case VIEW_TYPE_LABEL:
-    //   return <Label label={item.name} />;
-    // case VIEW_TYPE_DATA:
     <ItemUser
       photo={item.profile_pic_path}
       bio={item.bio}
@@ -205,7 +198,6 @@ const ContactScreen = ({navigation}) => {
       copyUsername.push(value.username);
     }
 
-    // const indexSelectedUser = copyUsers.indexOf(value);
     const indexSelectedUser = copyUsers.findIndex((item) => item.user_id === value.user_id);
     if (indexSelectedUser > -1) {
       copyUsers.splice(indexSelectedUser, 1);
@@ -254,7 +246,7 @@ const ContactScreen = ({navigation}) => {
           title={StringConstant.chatTabHeaderCreateChatButtonText}
           containerStyle={styles.containerStyle}
           subTitle={'Next'}
-          onPressSub={() => handleCreateChannel(selectedUsers)}
+          onPressSub={() => handleCreateChannel()}
           onPress={() => navigation.goBack()}
           disabledNextBtn={selectedUsers.length <= 0}
         />

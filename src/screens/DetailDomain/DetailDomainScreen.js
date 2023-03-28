@@ -135,9 +135,7 @@ const DetailDomainScreen = (props) => {
       const result = await getMyProfile(id);
       if (result.code === 200) {
         setDataProfile(result.data);
-        // setLoading(false);
       }
-      // setLoading(false);
     }
   };
 
@@ -152,14 +150,11 @@ const DetailDomainScreen = (props) => {
         setComments([data?.data, ...comments]);
         if (data?.code === 200) {
           setTextComment('');
-          // Toast.show('Comment successful', Toast.LONG);
           updateComment(data?.data, item?.id, dispatch);
           setTotalComment((prev) => parseInt(prev, 10) + 1);
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
-      } else {
-        // Toast.show('Comments are not empty', Toast.LONG);
       }
     } catch (e) {
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
@@ -273,7 +268,7 @@ const DetailDomainScreen = (props) => {
               comments={comments}
               refreshComment={getDomain}
               refreshChildComment={getDomain}
-              navigateToReplyView={(data) => navigateToReplyView(data, updateParentPost)}
+              navigateToReplyView={(data) => navigateToReplyView(data)}
               // refreshComment={refreshNews}
             />
           )}
