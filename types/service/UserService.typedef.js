@@ -27,4 +27,4 @@
  * @property {DBUsers[]} moreUsers
  */
 
-exports.unused = {}
+exports.unused = {};

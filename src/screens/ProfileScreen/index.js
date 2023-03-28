@@ -17,11 +17,13 @@ import {showMessage} from 'react-native-flash-message';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/core';
 
+import AnonymousTab from './elements/AnonymousTab';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockComponent from '../../components/BlockComponent';
 import BottomSheetBio from './elements/BottomSheetBio';
 import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
+import CustomPressable from '../../components/CustomPressable';
 import FollowInfoRow from './elements/FollowInfoRow';
 import GlobalButton from '../../components/Button/GlobalButton';
 import PostOptionModal from '../../components/Modal/PostOptionModal';
@@ -31,6 +33,10 @@ import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
+import useProfileScreenHook, {
+  TAB_INDEX_ANONYMOUS,
+  TAB_INDEX_SIGNED
+} from '../../hooks/screen/useProfileScreenHook';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Context} from '../../context';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
@@ -59,7 +65,6 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {height, width} = Dimensions.get('screen');
-// let headerHeight = 0;
 
 const ProfileScreen = ({route}) => {
   const navigation = useNavigation();
@@ -102,9 +107,18 @@ const ProfileScreen = ({route}) => {
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
   const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
   const [isHitApiFirstTime, setIsHitApiFirstTime] = React.useState(false);
+
   const LIMIT_PROFILE_FEED = 10;
 
   const {feeds} = myProfileFeed;
+  const {
+    feeds: mainFeeds,
+    profileTabIndex,
+    isLoadingFetchingAnonymousPosts,
+    setTabIndexToAnonymous,
+    setTabIndexToSigned,
+    reloadFetchAnonymousPost
+  } = useProfileScreenHook();
 
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
@@ -495,6 +509,7 @@ const ProfileScreen = ({route}) => {
     setLoading(true);
     setIsLastPage(false);
     getMyFeeds(0, LIMIT_PROFILE_FEED);
+    reloadFetchAnonymousPost();
   };
 
   const onHeaderOptionClicked = (item) => {
@@ -525,34 +540,36 @@ const ProfileScreen = ({route}) => {
     getMyFeeds();
   };
 
-  const renderHeader = React.useMemo(
-    () => (
-      <View
-        onLayout={(event) => {
-          const headerHeightLayout = event.nativeEvent.layout.height;
-          headerHeightRef.current = headerHeightLayout;
-        }}>
-        <View style={styles.content}>
-          <ProfilePicture
-            onImageContainerClick={changeImage}
-            profilePicPath={dataMain.profile_pic_path}
-          />
-          <FollowInfoRow
-            follower={dataMain.follower_symbol}
-            following={dataMain.following_symbol}
-            onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)}
-          />
+  const renderHeader = () => (
+    <View
+      onLayout={(event) => {
+        const headerHeightLayout = event.nativeEvent.layout.height;
+        headerHeightRef.current = headerHeightLayout;
+      }}>
+      <View style={styles.content}>
+        <ProfilePicture
+          onImageContainerClick={changeImage}
+          profilePicPath={dataMain.profile_pic_path}
+        />
+        <FollowInfoRow
+          follower={dataMain.follower_symbol}
+          following={dataMain.following_symbol}
+          onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)}
+        />
 
-          {renderBio(dataMainBio)}
-        </View>
-        <View>
-          <View style={styles.tabs} ref={postRef}>
-            <Text style={styles.postText}>Posts</Text>
-          </View>
+        {renderBio(dataMainBio)}
+      </View>
+      <View>
+        <View style={styles.tabs} ref={postRef}>
+          <CustomPressable style={styles.tabItem} onPress={setTabIndexToSigned}>
+            <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
+          </CustomPressable>
+          <CustomPressable style={styles.tabItem} onPress={setTabIndexToAnonymous}>
+            <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
+          </CustomPressable>
         </View>
       </View>
-    ),
-    [dataMain, dataMainBio]
+    </View>
   );
 
   return (
@@ -568,9 +585,9 @@ const ProfileScreen = ({route}) => {
           />
           <ProfileTiktokScroll
             ref={flatListScrollRef}
-            data={feeds}
+            data={mainFeeds}
             onRefresh={handleRefresh}
-            refreshing={loading}
+            refreshing={loading || isLoadingFetchingAnonymousPosts}
             onScroll={handleScroll}
             ListFooterComponent={isFetchingList ? <ActivityIndicator /> : null}
             onEndReach={handleOnEndReached}
@@ -674,15 +691,16 @@ const styles = StyleSheet.create({
     height: heightItem,
     backgroundColor: colors.white
   }),
-  postText: {
-    fontFamily: fonts.inter[600],
+  postText: (isActive) => ({
+    fontFamily: fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
-    color: colors.bondi_blue,
-    paddingBottom: 12
+    color: isActive ? colors.bondi_blue : colors.blackgrey,
+    paddingHorizontal: 16,
+    textAlign: 'center'
     // borderBottomWidth: 2,
-    // borderBottomColor: colors.bondi_blue,
-  },
+    // borderBottomColor: colors.bondi_blue
+  }),
   containerFlatFeed: {
     padding: 0,
     flex: 1
@@ -712,9 +730,15 @@ const styles = StyleSheet.create({
     width,
     borderBottomColor: colors.alto,
     borderBottomWidth: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 48
   },
   tabsFixed: {
     width,
@@ -747,4 +771,3 @@ const styles = StyleSheet.create({
   }
 });
 export default React.memo(withInteractionsManaged(ProfileScreen));
-// export default withInteractionsManaged(ProfileScreen);
