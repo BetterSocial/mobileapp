@@ -4,7 +4,12 @@ import {useRoute} from '@react-navigation/core';
 
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 
-const useCreatePostHook = () => {
+/**
+ *
+ * @param {boolean} isAnonymous
+ * @returns
+ */
+const useCreatePostHook = (isAnonymous) => {
   const {params = {}} = useRoute();
   const {topic} = params;
   const [anonUserInfo, setAnonUserInfo] = React.useState(null);
@@ -40,6 +45,10 @@ const useCreatePostHook = () => {
   React.useEffect(() => {
     getAnonUserInfo();
   }, []);
+
+  React.useEffect(() => {
+    if (!isAnonymous) getAnonUserInfo();
+  }, [isAnonymous]);
 
   return {
     headerTitle,

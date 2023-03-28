@@ -86,7 +86,9 @@ const CreatePost = () => {
   const sheetPrivacyRef = React.useRef();
   const sheetBackRef = React.useRef();
 
-  const {headerTitle, initialTopic, isInCreatePostTopicScreen, anonUserInfo} = useCreatePostHook();
+  const [typeUser, setTypeUser] = React.useState(false);
+  const {headerTitle, initialTopic, isInCreatePostTopicScreen, anonUserInfo} =
+    useCreatePostHook(typeUser);
 
   const [message, setMessage] = React.useState('');
   const [mediaStorage, setMediaStorage] = React.useState([]);
@@ -101,7 +103,6 @@ const CreatePost = () => {
   const [privacySelect, setPrivacySelect] = React.useState(0);
   const [dataImage, setDataImage] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [typeUser, setTypeUser] = React.useState(false);
   const [dataProfile, setDataProfile] = React.useState({});
   const [geoList, setGeoList] = React.useState([]);
   const [geoSelect, setGeoSelect] = React.useState(0);

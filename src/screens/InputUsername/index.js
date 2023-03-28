@@ -121,7 +121,6 @@ const ChooseUsername = () => {
 
   const checkUsername = async (v) => {
     const value = v.replace(/[^a-zA-Z0-9-_]/g, '');
-    // const value = setCapitalFirstLetter(v);
     setTypeFetch('typing');
     setUsernameState(value);
     if (value.length <= 15) {
@@ -284,7 +283,7 @@ const ChooseUsername = () => {
                   autoCorrect={false}
                   autoFocus
                 />
-                {messageTypeFetch(typeFetch, formatUsernameString(username))}
+                {messageTypeFetch(typeFetch, formatUsernameString())}
               </View>
             </View>
             {/* <Animated.View style={[styles.constainerInfo, {opacity: fadeInfo}]}>
