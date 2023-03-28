@@ -43,7 +43,9 @@ const FeedScreen = (props) => {
     setUpVote,
     setDownVote,
     saveSearchHeight,
-    searchHeight
+    searchHeight,
+    handleScroll,
+    setIsLastPage
   } = useCoreFeed();
   const interactionManagerRef = React.useRef(null);
   const interactionManagerAnimatedRef = React.useRef(null);
@@ -148,6 +150,8 @@ const FeedScreen = (props) => {
 
   const onRefresh = () => {
     getDataFeedsHandle(0, true);
+    setIsLastPage(false);
+    handleScroll(false);
   };
 
   const handleOnScrollBeginDrag = (event) => {
@@ -167,6 +171,7 @@ const FeedScreen = (props) => {
   const handleScrollEvent = React.useCallback(
     (event) => {
       setIsScroll(true);
+      handleScroll(true);
       const {y} = event.nativeEvent.contentOffset;
       const dy = y - lastDragY;
       if (dy + 20 <= 0) {
@@ -242,6 +247,7 @@ const FeedScreen = (props) => {
         showSearchBar={showNavbar}
         refreshing={loading}
         renderItem={renderItem}
+        onEndReachedThreshold={0.9}
       />
       <ButtonNewPost />
       <BlockComponent
