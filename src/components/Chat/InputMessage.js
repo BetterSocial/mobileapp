@@ -64,6 +64,7 @@ const InputMessage = () => {
         <View style={styles.previewPhotoContainer}>
           <FlatList
             horizontal
+            showsHorizontalScrollIndicator={false}
             data={imageUploads}
             renderItem={({item, index}) => (
               <View key={index}>
@@ -127,7 +128,8 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     height: 64,
-    width: 64
+    width: 64,
+    marginRight: 10
   },
   containerDelete: {
     position: 'absolute',
