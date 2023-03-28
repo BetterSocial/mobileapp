@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import ProfileRepo from '../../service/repo/profileRepo';
 import useMyProfileFeedContextHook from '../context/useMyProfileFeedContext';
-import {useAfterInteractions} from '../useAfterInteractions';
 
 export const TAB_INDEX_SIGNED = 0;
 export const TAB_INDEX_ANONYMOUS = 1;
@@ -14,7 +13,6 @@ const useProfileScreenHook = () => {
   const [isLoadingFetchingSignedPosts] = React.useState(false);
 
   const {feeds, anonymousFeeds, setMyProfileAnonymousFeed} = useMyProfileFeedContextHook();
-  const {interactionsComplete} = useAfterInteractions();
 
   const isProfileTabSigned = profileTabIndex === TAB_INDEX_SIGNED;
 
@@ -34,9 +32,7 @@ const useProfileScreenHook = () => {
   };
 
   React.useEffect(() => {
-    if (interactionsComplete) {
-      fetchAnonymousPost();
-    }
+    fetchAnonymousPost();
   }, []);
 
   return {
