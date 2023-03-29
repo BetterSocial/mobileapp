@@ -80,3 +80,8 @@ coverage
 
 # ESLint
 .eslintcache
+.sentryclirc
+index.android.bundle
+index.android.bundle.hbc.map
+index.android.bundle.packager.map
+index.android.bundle.map
