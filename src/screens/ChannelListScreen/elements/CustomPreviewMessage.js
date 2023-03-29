@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
 const PreviewMessage = (props) => {
   const [profileContext] = React.useContext(Context).profile;
   const {channel} = props;
-  if (channel?.data?.channel_type === 2 || channel?.data?.channel_type === 3)
+  if (channel?.data?.channel_type === 3) return null;
+  if (channel?.data?.channel_type === 2)
     return (
       <Text numberOfLines={1} style={[styles.message, {color: '#7A7A7A'}]}>
         <Text style={[{color: '#7A7A7A'}]}>
