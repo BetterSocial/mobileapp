@@ -25,7 +25,6 @@ import {InitialStartupAtom} from '../../service/initialStartup';
 import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
 import {get} from '../../api/server';
-import {randomString} from '../../utils/string/StringUtils';
 import {registerUser} from '../../service/users';
 import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
 import {setImage} from '../../context/actions/users';
@@ -153,10 +152,10 @@ const WhotoFollow = () => {
     const data = {
       users: {
         username: usersState.username,
-        // human_id: usersState.userId,
-        // country_code: usersState.countryCode,
-        human_id: randomString(16),
-        country_code: 'US',
+        human_id: usersState.userId,
+        country_code: usersState.countryCode,
+        // human_id: randomString(16),
+        // country_code: 'US',
         profile_pic_path: usersState.photo,
         status: 'A'
       },
@@ -190,16 +189,10 @@ const WhotoFollow = () => {
               message: res.message[0].message,
               type: 'danger'
             });
-          } else if (typeof res.message === 'string') {
-            showMessage({
-              message: res.message,
-              type: 'danger'
-            });
           } else {
             showMessage({
-              message: 'please complete the data',
-              type: 'danger',
-              backgroundColor: colors.red
+              message: res.message || '',
+              type: 'danger'
             });
           }
         }
@@ -208,7 +201,7 @@ const WhotoFollow = () => {
         crashlytics().recordError(new Error(error.response));
         setFetchRegister(false);
         showMessage({
-          message: 'please complete the data',
+          message: 'Cannot connect to server, please try again later',
           type: 'danger',
           backgroundColor: colors.red
         });
