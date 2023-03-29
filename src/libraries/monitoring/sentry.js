@@ -9,16 +9,16 @@ const SentryMonitoring = () => {
     },
     logActions(message, data) {
       Sentry.addBreadcrumb({
-        type: 'info',
-        level: Sentry.Severity.Info,
+        type: 'Info',
+        level: 'info',
         message,
         data: data ?? {}
       });
     },
     logError(message, data) {
       Sentry.addBreadcrumb({
-        type: 'error',
-        level: Sentry.Severity.Error,
+        type: 'Error',
+        level: 'error',
         message,
         data
       });
