@@ -86,7 +86,7 @@ const useGroupInfo = () => {
       focusChatName: true
     });
   };
-  console.log(channel, profileChannel, 'suria');
+
   const checkUserIsBlockHandle = async () => {
     try {
       const sendData = {
@@ -99,7 +99,7 @@ const useGroupInfo = () => {
       }
       return onProfilePressed();
     } catch (e) {
-      console.log(e, 'eman');
+      throw new Error(e);
     }
   };
 
@@ -252,7 +252,7 @@ const useGroupInfo = () => {
   };
   console.log(channel, 'suti');
   const onLeaveGroup = () => {
-    Alert.alert('Leave group', `Are you sure you want to leave group ?`, [
+    Alert.alert('Leave group', 'Are you sure you want to leave group ?', [
       {text: 'Yes', onPress: leaveGroup},
       {text: 'No'}
     ]);
