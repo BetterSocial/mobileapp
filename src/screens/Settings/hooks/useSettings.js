@@ -1,17 +1,17 @@
 import React from 'react';
-import {useSetRecoilState} from 'recoil';
-import {Alert} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {InitialStartupAtom} from '../../../service/initialStartup';
+import {Alert} from 'react-native';
+import {useSetRecoilState} from 'recoil';
 
+import StringConstant from '../../../utils/string/StringConstant';
 import {Context} from '../../../context';
+import {InitialStartupAtom} from '../../../service/initialStartup';
+import {clearLocalStorege} from '../../../utils/token';
+import {createClient} from '../../../context/actions/createClient';
+import {deleteAccount, removeFcmToken} from '../../../service/users';
 import {removeAllCache} from '../../../utils/cache';
 import {resetProfileFeed} from '../../../context/actions/myProfileFeed';
 import {setMainFeeds} from '../../../context/actions/feeds';
-import {createClient} from '../../../context/actions/createClient';
-import {clearLocalStorege} from '../../../utils/token';
-import {deleteAccount, removeFcmToken} from '../../../service/users';
-import StringConstant from '../../../utils/string/StringConstant';
 
 const useSettings = () => {
   const [isLoadingDeletingAccount, setIsLoadingDeletingAccount] = React.useState(false);
