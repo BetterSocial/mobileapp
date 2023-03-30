@@ -2,10 +2,9 @@ import * as React from 'react';
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 import PropsTypes from 'prop-types';
-import {Avatar} from 'react-native-activity-feed';
-import {Dimensions, Image, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-// eslint-disable-next-line import/no-extraneous-dependencies
+import {Dimensions, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import ElipsisIcon from '../../assets/icon/ElipsisIcon';
@@ -21,7 +20,6 @@ import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFou
 import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
-import dimen from '../../utils/dimen';
 import useFeedHeader from './hooks/useFeedHeader';
 import {PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
@@ -191,13 +189,13 @@ const _renderProfileNormal = ({
           ) : null}
           <GlobalButton onPress={navigateToProfile}>
             <View style={{}}>
-              <Avatar
-                source={
-                  profile_pic_url ||
-                  'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
-                }
-                size={dimen.size.FEED_HEADER_IMAGE_RADIUS}
-                noShadow
+              <FastImage
+                source={{
+                  uri:
+                    profile_pic_url ||
+                    'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+                }}
+                style={styles.avatarImage}
               />
             </View>
           </GlobalButton>
@@ -406,7 +404,8 @@ const styles = StyleSheet.create({
     // paddingRight: 10,
     padding: 10
     // paddingLeft: 24
-  }
+  },
+  avatarImage: {height: 48, width: 48, borderRadius: 24}
 });
 
 Header.propsTypes = {

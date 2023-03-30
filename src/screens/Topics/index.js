@@ -39,6 +39,7 @@ const Topics = () => {
   const getCacheTopic = async () => {
     getSpecificCache(TOPICS_PICK, (cache) => {
       if (cache) {
+        // Monitoring.logActions('set topics data from cache', cache);
         setTopics(cache);
         setIspreload(false);
       } else {
@@ -48,11 +49,11 @@ const Topics = () => {
     });
   };
   React.useEffect(() => {
+    // console.log(topicCollection, 'lusi')
     if (topicCollection.length > 0) {
       setTopics(topicCollection);
     }
-  }, [topicCollection]);
-
+  }, [JSON.stringify(topicCollection)]);
   React.useEffect(() => {
     getCacheTopic();
   }, []);
@@ -138,7 +139,7 @@ const Topics = () => {
                       nestedScrollEnabled>
                       <FlatList
                         data={topic.data}
-                        renderItem={renderListTopics}
+                        renderItem={React.memo(renderListTopics)}
                         numColumns={Math.floor(topic.data.length / 3) + 1}
                         nestedScrollEnabled
                         scrollEnabled={false}
