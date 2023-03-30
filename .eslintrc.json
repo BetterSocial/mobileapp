@@ -24,6 +24,7 @@
     "camelcase": "off",
     "import/no-extraneous-dependencies": "off",
     "no-nested-ternary": "off",
+    "no-param-reassign": "warn",
     "quotes": [
       2,
       "single",
