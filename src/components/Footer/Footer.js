@@ -43,16 +43,6 @@ const Footer = ({
     );
   };
 
-  // const __renderShowScoreUI = () => {
-  //   if(false && showScoreButton) {
-  //     return <TouchableOpacity style={styles.btn} onPress={onPressScore}>
-  //       <View style={styles.btnComment}>
-  //         <MemoIcCreatePoll height={24} width={25}/>
-  //       </View>
-  //     </TouchableOpacity>
-  //   } return <></>
-  // }
-
   const voteStyle = () => {
     if (totalVote > 0) {
       return '#00ADB5';
@@ -95,7 +85,6 @@ const Footer = ({
           </View>
         </TouchableOpacity>
       )}
-      {/* {__renderShowScoreUI()} */}
       <View style={styles.rightGroupContainer}>
         {handleBlockUi()}
         <TouchableOpacity
@@ -143,23 +132,18 @@ const Footer = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center'
-    // height: '100%',
   },
   leftGroupContainer: {
     flexDirection: 'row',
     alignItems: 'center'
-    // marginLeft: 8,
   },
   rightGroupContainer: {
     flexDirection: 'row',
     alignItems: 'center'
-    // marginRight: 8,
   },
   rowSpaceBeetwen: {
     flexDirection: 'row',
     alignItems: 'center'
-    // justifyContent: 'space-between',
-    // marginHorizontal: 10,
   },
   text: {
     ...FONTS.body3,
@@ -182,37 +166,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingRight: 13.5,
     paddingLeft: 18
-    // backgroundColor: 'red',
   },
   btnComment: {
     height: '100%',
     justifyContent: 'center',
     paddingLeft: 13.5,
     paddingRight: 10
-    // backgroundColor: 'blue',
   },
   btnBlock: {
     height: '100%',
     justifyContent: 'center',
     paddingHorizontal: 10
-    // backgroundColor: 'gray',
   },
   btnDownvote: {
     height: '100%',
     justifyContent: 'center',
     paddingHorizontal: 11
-    // backgroundColor: 'green',
   },
   btnUpvote: {
     height: '100%',
     justifyContent: 'center',
     paddingLeft: 11,
     paddingRight: 22
-    // backgroundColor: 'brown',
   },
   totalCommentContainer: {
     flex: 1,
-    // backgroundColor: 'blue',
     height: '100%',
     justifyContent: 'center'
   },
