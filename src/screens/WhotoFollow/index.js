@@ -184,17 +184,11 @@ const WhotoFollow = () => {
           }, 2000);
         } else {
           crashlytics().recordError(new Error(res));
-          if (typeof res.message === 'object') {
-            showMessage({
-              message: res.message[0].message,
-              type: 'danger'
-            });
-          } else {
-            showMessage({
-              message: res.message || '',
-              type: 'danger'
-            });
-          }
+          showMessage({
+            message: 'Cannot connect to server, please try again later',
+            type: 'danger',
+            backgroundColor: colors.red
+          });
         }
       })
       .catch((error) => {

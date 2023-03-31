@@ -1,7 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import SimpleToast from 'react-native-simple-toast';
-
+import axios from 'axios';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Context} from '../../../context';
@@ -38,7 +37,7 @@ const useCoreFeed = () => {
         setLoading(false);
         return setIsLastPage(true);
       }
-      handleDataFeeds(dataFeeds, offsetFeed);
+      return handleDataFeeds(dataFeeds, offsetFeed);
     } catch (e) {
       setLoading(false);
       return e;

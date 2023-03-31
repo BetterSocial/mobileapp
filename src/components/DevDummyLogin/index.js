@@ -22,7 +22,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const [dummyUsers] = React.useState([
     {name: 'fajarism', humanId: 'HQEGNQCHA8J1OIX4G2CP'},
     {name: 'fajarismv2', humanId: 'e15GzZfsXJ00rbmV'},
-    {name: 'fajarismrandom01', humanId: 'RNDM-RNDM-0001'},
+    {name: 'halofajarism', humanId: 'JOAinsqkHSsdki5s'},
     {name: 'bas_v1-4', humanId: 'KVL1JKD8VG6KMHUZ0RY5'},
     {name: 'usupsuparma', humanId: '1G1H-1TUHI-7U9H7-572G21'},
     {name: 'busanid', humanId: 'TVGBYD1BI9YMXMAA6CQS'},
