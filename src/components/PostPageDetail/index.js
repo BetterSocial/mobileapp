@@ -192,7 +192,8 @@ const PostPageDetailIdComponent = (props) => {
           emoji_name: anonimityData.emojiName,
           color_name: anonimityData.colorName,
           emoji_code: anonimityData.emojiCode,
-          color_code: anonimityData.colorCode
+          color_code: anonimityData.colorCode,
+          is_anonymous: isAnonimity
         };
         if (isAnonimity) {
           sendData = {...sendData, anon_user_info: anonUser};
@@ -551,7 +552,6 @@ const PostPageDetailIdComponent = (props) => {
   const handleOnPressScore = () => {
     showScoreAlertDialog(item);
   };
-
   const updateVoteLatestChildren = async (dataUpdated, data, level) => {
     if (level === 3) {
       const newComment = await updateVoteLatestChildrenLevel3(commentList, dataUpdated);
