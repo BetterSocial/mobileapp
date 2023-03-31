@@ -133,7 +133,7 @@ const ReplyCommentItem = ({
     }
     return '#C4C4C4';
   };
-
+  console.log(comment, 'lili');
   return (
     <View
       style={styles.container({
@@ -146,16 +146,29 @@ const ReplyCommentItem = ({
       <TouchableOpacity activeOpacity={1} onPress={openProfile} testID="profileOpen">
         <ButtonHightlight onPress={openProfile}>
           <View style={styles.profile}>
-            <Image
-              source={
-                photo
-                  ? {uri: removeWhiteSpace(photo)}
-                  : require('../../assets/images/ProfileDefault.png')
-              }
-              style={styles.image}
-            />
+            {comment.data.anon_user_info_emoji_name || comment.data.is_anonymous ? (
+              <View
+                style={[styles.image, {backgroundColor: comment.data.anon_user_info_color_code}]}>
+                <Text> {comment.data.anon_user_info_emoji_code}</Text>
+              </View>
+            ) : (
+              <Image
+                source={
+                  photo
+                    ? {uri: removeWhiteSpace(photo)}
+                    : require('../../assets/images/ProfileDefault.png')
+                }
+                style={styles.image}
+              />
+            )}
+
             <View style={styles.containerUsername}>
-              <Text style={styles.username}>{user.data.username} •</Text>
+              <Text style={styles.username}>
+                {user.data.username
+                  ? user.data.username
+                  : `${comment.data.anon_user_info_color_name} ${comment.data.anon_user_info_emoji_name}`}{' '}
+                •
+              </Text>
               <Text style={styles.time}> {calculateTime(time)}</Text>
             </View>
           </View>
