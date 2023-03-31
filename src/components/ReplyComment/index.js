@@ -147,7 +147,9 @@ const ReplyCommentId = ({
         showProfileConnector={newCommentList.length > 0}
         username={item.user.data.username}
         onChangeText={setCommentHook}
-        onPress={() => createComment()}
+        onPress={(isAnonimity, anonimityData) => {
+          createComment(isAnonimity, anonimityData);
+        }}
         value={temporaryText}
       />
     </SafeAreaView>
