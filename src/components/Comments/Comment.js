@@ -102,6 +102,7 @@ const Comment = ({
     }
     return '#C4C4C4';
   };
+  console.log(comment, 'nunu');
   return (
     <View
       style={styles.container({
@@ -120,7 +121,7 @@ const Comment = ({
             {comment.data.anon_user_info_emoji_name || comment.data.is_anonymous ? (
               <View
                 style={[styles.image, {backgroundColor: comment.data.anon_user_info_color_code}]}>
-                <Text>{comment.data.anon_user_info_emoji_code}</Text>
+                <Text> {comment.data.anon_user_info_emoji_code}</Text>
               </View>
             ) : (
               <Image
@@ -135,7 +136,10 @@ const Comment = ({
 
             <View style={styles.containerUsername}>
               <Text style={styles.username}>
-                {user.data.username ? user.data.username : comment.data.anon_user_info_color_name} •
+                {user.data.username
+                  ? user.data.username
+                  : `${comment.data.anon_user_info_color_name} ${comment.data.anon_user_info_emoji_name}`}{' '}
+                •
               </Text>
               <Text style={styles.time}> {calculateTime(time)}</Text>
             </View>

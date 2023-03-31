@@ -211,6 +211,7 @@ const useReplyComment = ({
       ...newCommentList,
       {...defaultData, data: {...defaultData.data, text: textComment}}
     ]);
+
     try {
       if (textComment.trim() !== '') {
         const data = await createChildComment(

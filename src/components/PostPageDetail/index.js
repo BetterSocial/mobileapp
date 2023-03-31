@@ -175,6 +175,7 @@ const PostPageDetailIdComponent = (props) => {
       commentParent(isAnonimity, anonimityData);
     }
   };
+  console.log(item, 'nana');
   const commentParent = async (isAnonimity, anonimityData) => {
     setLoadingPost(true);
     try {
@@ -184,7 +185,8 @@ const PostPageDetailIdComponent = (props) => {
           message: textComment,
           // useridFeed: item.actor.id,
           sendPostNotif: true,
-          anonimity: isAnonimity
+          anonimity: isAnonimity,
+          useridFeed: 'asdasd'
         };
 
         const anonUser = {
