@@ -199,7 +199,8 @@ const useReplyComment = ({
       }
     }
   };
-  const createComment = async () => {
+  const createComment = async (isAnonimity, anonimityData) => {
+    console.log(isAnonimity, anonimityData, 'sulit');
     let sendPostNotif = false;
     if (page !== 'DetailDomainScreen') {
       sendPostNotif = true;
@@ -209,6 +210,7 @@ const useReplyComment = ({
       ...newCommentList,
       {...defaultData, data: {...defaultData.data, text: textComment}}
     ]);
+
     try {
       if (textComment.trim() !== '') {
         const data = await createChildComment(
@@ -218,7 +220,9 @@ const useReplyComment = ({
           sendPostNotif,
           dataFeed?.actor?.id,
           dataFeed.id,
-          dataFeed.message
+          dataFeed.message,
+          isAnonimity,
+          anonimityData
         );
         scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {

@@ -66,7 +66,9 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
 
             <View style={styles.containerUsername}>
               <Text style={styles.username}>
-                {user.data.username ? user.data.username : item.data.anon_user_info_emoji_name}
+                {user.data.username
+                  ? user.data.username
+                  : `${item.data.anon_user_info_color_name} ${item.data.anon_user_info_emoji_name}`}
               </Text>
               <Gap width={4} />
               <Dot size={4} color={'#828282'} />

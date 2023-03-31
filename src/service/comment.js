@@ -38,21 +38,36 @@ const createChildComment = async (
   sendPostNotif,
   postMaker,
   activityId,
-  postTitle
+  postTitle,
+  isAnonymous,
+  anonUser
 ) => {
   try {
-    const data = {
+    let data = {
       reaction_id: reactionId,
       message: text,
       useridFeed,
       sendPostNotif,
       postMaker,
       activityId,
-      postTitle
+      postTitle,
+      anonimity: isAnonymous
     };
-    const resApi = await api.post('/activity/child-comment', data);
+    const anonimity = {
+      emoji_name: anonUser.emojiName,
+      color_name: anonUser.colorName,
+      emoji_code: anonUser.emojiCode,
+      color_code: anonUser.colorCode,
+      is_anonymous: isAnonymous
+    };
+    if (isAnonymous) {
+      data = {...data, anon_user_info: anonimity};
+    }
+    console.log(anonimity, 'cheetah');
+    const resApi = await api.post('/activity/comment-child-v2', data);
     return resApi.data;
   } catch (error) {
+    console.log(error, 'eman');
     crashlytics().recordError(error.response.data);
     throw new Error(error);
   }
