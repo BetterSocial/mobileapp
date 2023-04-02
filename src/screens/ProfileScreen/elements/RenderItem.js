@@ -138,7 +138,6 @@ const Item = ({
     };
     initialVote();
   }, [item]);
-
   return (
     <View key={item.id} style={styles.cardContainer}>
       <Header
@@ -255,6 +254,7 @@ const Item = ({
               time={previewComment?.created_at}
               totalComment={getCountCommentWithChild(item) - 1}
               onPress={onPressComment}
+              item={previewComment}
             />
           )}
         </View>

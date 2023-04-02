@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import dimen from '../../utils/dimen';
@@ -56,7 +57,7 @@ const AnonymousAvatar = (props) => {
   }
 
   return (
-    <Image
+    <FastImage
       source={AnonymousProfile}
       width={radius}
       height={radius}

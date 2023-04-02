@@ -24,7 +24,7 @@ import {
 } from '../../utils/constants';
 import {Context} from '../../context';
 import {Footer, Gap} from '..';
-import {createCommentParent} from '../../service/comment';
+import {createCommentParentV2} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
@@ -170,17 +170,36 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
-  const onComment = () => {
+  const onComment = (isAnonimity, anonimityData) => {
     if (typeComment === 'parent') {
-      commentParent();
+      commentParent(isAnonimity, anonimityData);
     }
   };
-
-  const commentParent = async () => {
+  console.log(item, 'nana');
+  const commentParent = async (isAnonimity, anonimityData) => {
     setLoadingPost(true);
     try {
       if (textComment.trim() !== '') {
-        const data = await createCommentParent(textComment, item.id, item.actor.id, true);
+        let sendData = {
+          activity_id: item.id,
+          message: textComment,
+          // useridFeed: item.actor.id,
+          sendPostNotif: true,
+          anonimity: isAnonimity,
+          useridFeed: 'asdasd'
+        };
+
+        const anonUser = {
+          emoji_name: anonimityData.emojiName,
+          color_name: anonimityData.colorName,
+          emoji_code: anonimityData.emojiCode,
+          color_code: anonimityData.colorCode,
+          is_anonymous: isAnonimity
+        };
+        if (isAnonimity) {
+          sendData = {...sendData, anon_user_info: anonUser};
+        }
+        const data = await createCommentParentV2(sendData);
         updateCachingComment(data?.data);
         if (data.code === 200) {
           setTextComment('');
@@ -534,7 +553,6 @@ const PostPageDetailIdComponent = (props) => {
   const handleOnPressScore = () => {
     showScoreAlertDialog(item);
   };
-
   const updateVoteLatestChildren = async (dataUpdated, data, level) => {
     if (level === 3) {
       const newComment = await updateVoteLatestChildrenLevel3(commentList, dataUpdated);
@@ -545,7 +563,6 @@ const PostPageDetailIdComponent = (props) => {
       setCommentList(newComment);
     }
   };
-
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -637,9 +654,7 @@ const PostPageDetailIdComponent = (props) => {
             }
             value={textComment}
             onChangeText={(value) => setTextComment(value)}
-            onPress={() => {
-              onComment();
-            }}
+            onPress={onComment}
             loadingPost={loadingPost}
           />
 
