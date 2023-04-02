@@ -25,7 +25,6 @@ const WriteComment = ({
   const isCommentEnabled = value.length > 0;
   const [loadingUser, setLoadingUser] = React.useState(false);
   const isDisableSubmit = !isCommentEnabled || loadingPost;
-  // const isSendButtonPressed = () => onPress();
   const [anonimityData, setAnoimityData] = React.useState({});
   const getAnonUser = React.useCallback(async () => {
     setLoadingUser(true);
@@ -106,8 +105,8 @@ const WriteComment = ({
         <TouchableOpacity
           testID="iscommentenable"
           onPress={() => onPress(isAnonimity, anonimityData)}
-          style={styles.btn(isDisableSubmit)}
-          disabled={isDisableSubmit}>
+          style={styles.btn(isDisableSubmit || loadingUser)}
+          disabled={isDisableSubmit || loadingUser}>
           <MemoSendComment style={styles.icSendButton} />
         </TouchableOpacity>
       </View>

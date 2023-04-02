@@ -63,7 +63,6 @@ const createChildComment = async (
     if (isAnonymous) {
       data = {...data, anon_user_info: anonimity};
     }
-    console.log(anonimity, 'cheetah');
     const resApi = await api.post('/activity/comment-child-v2', data);
     return resApi.data;
   } catch (error) {
