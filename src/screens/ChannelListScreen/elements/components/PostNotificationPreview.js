@@ -162,24 +162,15 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
   };
   const handleReplyComment = () => {
     const findComment = item.comments.find((data) => data.reaction.kind === 'comment');
+    console.log(findComment, 'sunat');
     if (findComment) {
-      const actorId = findComment.actor && findComment.actor.data && findComment.actor.data.id;
-      if (actorId === myProfile.user_id && !item.isAnonym) {
-        return `You: ${findComment.reaction.data.text} `;
+      if (findComment.reaction.isOwningReaction) {
+        return `You: ${findComment.reaction.data.text}`;
       }
-      if (findComment.reaction.parent !== '' && !item.isAnonym) {
-        if (findComment.actor && findComment.actor.data) {
-          return `${findComment.actor.data.username} replied to your comment: ${findComment.reaction.data.text} `;
-        }
-        return null;
+      if (findComment.reaction.data.anon_user_info_color_name) {
+        return `${findComment.reaction.data.anon_user_info_color_name} ${findComment.reaction.data.anon_user_info_emoji_name} replied to your comment: ${findComment.reaction.data.text}`;
       }
-      if (!item.isAnonym) {
-        return (
-          findComment.actor.data &&
-          `${findComment.actor.data.username}: ${findComment.reaction.data.text} `
-        );
-      }
-      return `Anonymous: ${findComment.reaction.data.text}`;
+      return `${findComment.actor.data.username} replied to your comment: ${findComment.reaction.data.text} `;
     }
     return 'No comments yet';
   };
@@ -199,10 +190,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
             <View style={styles.row}>
               {item.postMaker && item.postMaker.data ? (
                 <Text numberOfLines={1} style={[styles.titleTextBig, {maxWidth: '85%'}]}>
-                  {item.postMaker.id === myProfile.user_id
-                    ? 'Your post'
-                    : item.postMaker.data.username}
-                  : {item.titlePost}
+                  {item.isOwnPost ? 'Your post' : item.postMaker.data.username}: {item.titlePost}
                 </Text>
               ) : null}
               <Text style={[styles.dateFont]}>{handleDate()} </Text>

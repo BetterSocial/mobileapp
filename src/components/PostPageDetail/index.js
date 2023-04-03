@@ -185,8 +185,7 @@ const PostPageDetailIdComponent = (props) => {
           message: textComment,
           // useridFeed: item.actor.id,
           sendPostNotif: true,
-          anonimity: isAnonimity,
-          useridFeed: 'asdasd'
+          anonimity: isAnonimity
         };
 
         const anonUser = {
