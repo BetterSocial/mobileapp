@@ -23,6 +23,7 @@ const createCommentParentV2 = async (data) => {
   console.log(data, 'nani');
   try {
     const resApi = await api.post('/activity/comment-v2', data);
+    console.log(resApi, 'nana');
     return resApi.data;
   } catch (error) {
     console.log(error, 'error pak');
@@ -46,11 +47,8 @@ const createChildComment = async (
     let data = {
       reaction_id: reactionId,
       message: text,
-      useridFeed,
       sendPostNotif,
-      postMaker,
       activityId,
-      postTitle,
       anonimity: isAnonymous
     };
     const anonimity = {
@@ -66,7 +64,6 @@ const createChildComment = async (
     const resApi = await api.post('/activity/comment-child-v2', data);
     return resApi.data;
   } catch (error) {
-    console.log(error, 'eman');
     crashlytics().recordError(error.response.data);
     throw new Error(error);
   }

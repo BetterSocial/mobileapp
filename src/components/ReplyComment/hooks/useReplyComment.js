@@ -236,6 +236,7 @@ const useReplyComment = ({
               data: data.data.data
             }
           ];
+          console.log(newComment, users, 'lali');
           setNewCommentList(newComment);
           if (typeof updateReply === 'function') {
             updateReply(newComment, itemParent, item.id);
