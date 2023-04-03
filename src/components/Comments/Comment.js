@@ -136,7 +136,7 @@ const Comment = ({
 
             <View style={styles.containerUsername}>
               <Text style={styles.username}>
-                {user.data.username
+                {user.data && user.data.username
                   ? user.data.username
                   : `${comment.data.anon_user_info_color_name} ${comment.data.anon_user_info_emoji_name}`}{' '}
                 •
