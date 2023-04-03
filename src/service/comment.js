@@ -23,6 +23,7 @@ const createCommentParentV2 = async (data) => {
   console.log(data, 'nani');
   try {
     const resApi = await api.post('/activity/comment-v2', data);
+    console.log(resApi, 'nana');
     return resApi.data;
   } catch (error) {
     console.log(error, 'error pak');
