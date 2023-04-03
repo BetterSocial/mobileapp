@@ -23,6 +23,7 @@ import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
 import {getSpecificCache} from '../../utils/cache';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
+import ListTopic from './ListTopics';
 
 const {width} = Dimensions.get('screen');
 
@@ -89,22 +90,12 @@ const Topics = () => {
   };
 
   const renderListTopics = ({item, i}) => (
-    <Pressable
-      onPress={() => handleSelectedLanguage(item.topic_id)}
-      key={i}
-      style={[
-        styles.bgTopicSelectNotActive,
-        {backgroundColor: myTopic[item.topic_id] ? colors.bondi_blue : colors.concrete}
-      ]}>
-      <Text>{item.icon}</Text>
-      <Text
-        style={[
-          styles.textTopicNotActive,
-          {color: myTopic[item.topic_id] ? colors.white : colors.mine_shaft}
-        ]}>
-        #{item.name}
-      </Text>
-    </Pressable>
+    <ListTopic
+      item={item}
+      i={i}
+      myTopic={myTopic}
+      handleSelectedLanguage={handleSelectedLanguage}
+    />
   );
 
   const onBack = () => {
