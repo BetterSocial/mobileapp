@@ -32,8 +32,8 @@ import {getFeedDetail, viewTimePost} from '../../service/post';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
-import {withInteractionsManaged} from '../WithInteractionManaged';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
+import {withInteractionsManaged} from '../WithInteractionManaged';
 
 const {width, height} = Dimensions.get('window');
 
@@ -175,7 +175,6 @@ const PostPageDetailIdComponent = (props) => {
       commentParent(isAnonimity, anonimityData);
     }
   };
-  console.log(item, 'nana');
   const commentParent = async (isAnonimity, anonimityData) => {
     setLoadingPost(true);
     try {
@@ -648,6 +647,7 @@ const PostPageDetailIdComponent = (props) => {
           </ScrollView>
 
           <WriteComment
+            postId={feedId}
             username={
               item.anonimity ? StringConstant.generalAnonymousText : item.actor.data.username
             }
