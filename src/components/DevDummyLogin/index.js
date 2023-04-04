@@ -23,7 +23,9 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
     {name: 'fajarismv2', humanId: 'fajarismv2'},
     {name: 'halofajarism', humanId: 'halofajarism'},
     {name: 'agita', humanId: 'agita'},
-    {name: 'bastian', humanId: 'bastian'}
+    {name: 'bastian', humanId: 'bastian'},
+    {name: 'agita2', humanId: 'I4K3M10FGR78EWQQDNQ2'},
+    {name: 'agita3', humanId: 'dlNWskypPXEPyNPM'}
   ]);
 
   const dummyLoginRbSheetRef = React.useRef(null);
