@@ -19,14 +19,14 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   anonymousPostTextTitle: (isActive) => ({
-    fontFamily: fonts.inter[400],
+    fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
     textAlign: 'center',
     color: isActive ? colors.bondi_blue : colors.blackgrey
   }),
   anonymousPostTextSubtitle: (isActive) => ({
-    fontFamily: fonts.inter[400],
+    fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 10,
     textAlign: 'center',
     color: isActive ? colors.bondi_blue : colors.blackgrey
@@ -41,7 +41,6 @@ const AnonymousTab = ({isActive = false}) => {
         width={17}
         height={17}
       />
-      {/* <Image source={AnonymousImage} style={styles.anonymousIcon} /> */}
       <View style={styles.anonymousTextContainer}>
         <Text style={styles.anonymousPostTextTitle(isActive)}>Anonymous Posts</Text>
         <Text style={styles.anonymousPostTextSubtitle(isActive)}>Only visible to you</Text>

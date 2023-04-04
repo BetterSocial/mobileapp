@@ -561,10 +561,14 @@ const ProfileScreen = ({route}) => {
       </View>
       <View>
         <View style={styles.tabs} ref={postRef}>
-          <CustomPressable style={styles.tabItem} onPress={setTabIndexToSigned}>
+          <CustomPressable
+            style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED)}
+            onPress={setTabIndexToSigned}>
             <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
           </CustomPressable>
-          <CustomPressable style={styles.tabItem} onPress={setTabIndexToAnonymous}>
+          <CustomPressable
+            style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
+            onPress={setTabIndexToAnonymous}>
             <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
           </CustomPressable>
         </View>
@@ -692,14 +696,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white
   }),
   postText: (isActive) => ({
-    fontFamily: fonts.inter[400],
+    fontFamily: isActive ? fonts.inter[600] : fonts.inter[400],
     fontSize: 14,
     lineHeight: 17,
     color: isActive ? colors.bondi_blue : colors.blackgrey,
     paddingHorizontal: 16,
     textAlign: 'center'
-    // borderBottomWidth: 2,
-    // borderBottomColor: colors.bondi_blue
   }),
   containerFlatFeed: {
     padding: 0,
@@ -734,12 +736,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  tabItem: {
+  tabItem: (isActive) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 48
-  },
+    height: 48,
+    borderBottomColor: colors.bondi_blue,
+    borderBottomWidth: isActive ? 2 : 0
+  }),
   tabsFixed: {
     width,
     borderBottomColor: colors.alto,
