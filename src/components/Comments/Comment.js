@@ -102,7 +102,6 @@ const Comment = ({
     }
     return '#C4C4C4';
   };
-  console.log(comment, 'nunu');
   return (
     <View
       style={styles.container({

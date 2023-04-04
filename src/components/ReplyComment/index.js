@@ -143,6 +143,7 @@ const ReplyCommentId = ({
         </View>
       </ScrollView>
       <WriteComment
+        postId={item?.activity_id}
         inReplyCommentView={true}
         showProfileConnector={newCommentList.length > 0}
         username={item.user.data.username}
