@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {StyleSheet, Text, TextInput, View, TouchableOpacity, ActivityIndicator} from 'react-native';
-import ToggleSwitch from 'toggle-switch-react-native';
-
 import FastImage from 'react-native-fast-image';
+import ToggleSwitch from 'toggle-switch-react-native';
+import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
+import MemoSendComment from '../../assets/icon/IconSendComment';
+import StringConstant from '../../utils/string/StringConstant';
+import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import StringConstant from '../../utils/string/StringConstant';
-import MemoSendComment from '../../assets/icon/IconSendComment';
-import {Context} from '../../context';
 
 const WriteComment = ({
   value = null,
@@ -17,7 +17,8 @@ const WriteComment = ({
   username,
   inReplyCommentView = false,
   showProfileConnector = true,
-  loadingPost = false
+  loadingPost = false,
+  postId = ''
 }) => {
   const [profile] = React.useContext(Context).profile;
   const commentInputRef = React.useRef(null);
@@ -30,17 +31,22 @@ const WriteComment = ({
     setLoadingUser(true);
     try {
       if (!isAnonimity) {
-        const response = await AnonUserInfoRepo.getPostAnonUserInfo();
-        setAnoimityData(response.data);
+        const response = await AnonUserInfoRepo.getCommentAnonUserInfo(postId);
         setLoadingUser(false);
-      } else {
-        setAnoimityData({});
-        setLoadingUser(false);
+        if (response?.isSuccess) {
+          return setAnoimityData(response.data);
+        }
+
+        setIsAnonimity(false);
+        return setAnoimityData({});
       }
+      setLoadingUser(false);
+      return setAnoimityData({});
     } catch (e) {
       console.log(e, 'error');
+      return setAnoimityData({});
     }
-  }, [isAnonimity]);
+  }, [isAnonimity, postId]);
 
   const toggleSwitch = () => {
     setIsAnonimity((prevState) => !prevState);

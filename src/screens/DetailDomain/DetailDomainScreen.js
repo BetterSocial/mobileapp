@@ -39,6 +39,9 @@ const DetailDomainScreen = (props) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const blockRef = React.useRef(null);
 
+  console.log('dataDomain');
+  console.log(dataDomain);
+
   const [, dispatch] = React.useContext(Context).news;
 
   const initial = () => {
@@ -277,6 +280,7 @@ const DetailDomainScreen = (props) => {
 
       {item && (
         <WriteComment
+          postId={dataDomain?.id}
           value={textComment}
           username={item.domain.name}
           onChangeText={(value) => setTextComment(value)}
