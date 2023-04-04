@@ -16,8 +16,11 @@ const useChatClientHook = () => {
     let text = '';
     if (queryChannel.length > 0) {
       const filterMessage = queryChannel[0].state.messages.filter((message) => message.text !== '');
-      text = filterMessage[filterMessage.length - 1].text;
+      if (filterMessage.length > 0) {
+        text = filterMessage[filterMessage.length - 1].text;
+      }
     }
+
     const channel = await client.client.channel('topics', `topic_${topic}`, {
       name: `#${topic}`,
       members: [user.myProfile.user_id],
