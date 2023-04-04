@@ -145,7 +145,6 @@ const FeedScreen = (props) => {
 
   const onPressBlock = (value) => {
     refBlockComponent.current.openBlockComponent(value);
-    // setSelectedFeed(value)
   };
 
   const onRefresh = () => {

@@ -19,18 +19,17 @@ const heightBs = Dimensions.get('window').height * 0.6
 const DevDummyLogin = ({ resetClickTime = () => { } }) => {
     const { ENABLE_DEV_ONLY_FEATURE } = configEnv
 
-    const [loading, setLoading] = React.useState(false);
-    const [isShown, setIsShown] = React.useState(true)
-    const [dummyUsers] = React.useState([
-        { name: "fajarism", humanId: "HQEGNQCHA8J1OIX4G2CP" },
-        { name: "fajarismrandom01", humanId: "RNDM-RNDM-0001" },
-        { name: "bas_v1-4", humanId: "KVL1JKD8VG6KMHUZ0RY5" },
-        { name: "usupsuparma", humanId: "1G1H-1TUHI-7U9H7-572G21" },
-        { name: "busanid", humanId: "TVGBYD1BI9YMXMAA6CQS" },
-        { name: "agita", humanId: "I4K3M10FGR78EWQQDNQ2" },
-        { name: "alesha6", humanId: "P19FGPQGMSZ5VSHA0YSQR6" },
-        { name: "Demo Account", humanId: "g53BCUA3uisOfAP9" },
-    ])
+  const [dummyUsers] = React.useState([
+    {name: 'fajarism', humanId: 'HQEGNQCHA8J1OIX4G2CP'},
+    {name: 'fajarismv2', humanId: 'e15GzZfsXJ00rbmV'},
+    {name: 'halofajarism', humanId: 'JOAinsqkHSsdki5s'},
+    {name: 'bas_v1-4', humanId: 'KVL1JKD8VG6KMHUZ0RY5'},
+    {name: 'usupsuparma', humanId: '1G1H-1TUHI-7U9H7-572G21'},
+    {name: 'busanid', humanId: 'TVGBYD1BI9YMXMAA6CQS'},
+    {name: 'agita', humanId: 'I4K3M10FGR78EWQQDNQ2'},
+    {name: 'alesha6', humanId: 'P19FGPQGMSZ5VSHA0YSQR6'},
+    {name: 'Demo Account', humanId: 'g53BCUA3uisOfAP9'}
+  ]);
 
     const dummyLoginRbSheetRef = React.useRef(null)
     const navigation = useNavigation()
