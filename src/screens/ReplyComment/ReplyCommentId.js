@@ -30,6 +30,9 @@ import {getFeedDetail} from '../../service/post';
 // import {temporaryComment} from '../../utils/string/LoadingComment';
 
 const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
+  console.log('indexFeed');
+  console.log(indexFeed);
+
   const navigation = useNavigation();
   const [textComment, setTextComment] = React.useState('');
   const [temporaryText, setTemporaryText] = React.useState('');
@@ -278,6 +281,7 @@ const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
         </View>
       </ScrollView>
       <WriteComment
+        postId={item?.activity_id}
         inReplyCommentView={true}
         showProfileConnector={newCommentList.length > 0}
         username={item.user.data.username}

@@ -1,10 +1,11 @@
 /* eslint-disable global-require */
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
-import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import BlockComponent from '../BlockComponent';
+import ButtonHightlight from '../ButtonHighlight';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
@@ -13,11 +14,10 @@ import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import {FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
-import {iVoteComment, voteComment} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
+import {iVoteComment, voteComment} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
-import ButtonHightlight from '../ButtonHighlight';
 
 const ReplyCommentItem = ({
   user,
@@ -132,7 +132,6 @@ const ReplyCommentItem = ({
     }
     return '#C4C4C4';
   };
-  console.log(comment, 'lili');
   return (
     <View
       style={styles.container({
