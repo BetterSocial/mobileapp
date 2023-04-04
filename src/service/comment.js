@@ -19,6 +19,18 @@ const createCommentParent = async (text, activityId, useridFeed, sendPostNotif) 
   }
 };
 
+const createCommentParentV2 = async (data) => {
+  console.log(data, 'nani');
+  try {
+    const resApi = await api.post('/activity/comment-v2', data);
+    return resApi.data;
+  } catch (error) {
+    console.log(error, 'error pak');
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+
 const createChildComment = async (
   text,
   reactionId,
@@ -60,4 +72,4 @@ const deleteComment = async (reactionId) => {
   }
 };
 
-export {createCommentParent, createChildComment, deleteComment};
+export {createCommentParent, createChildComment, deleteComment, createCommentParentV2};

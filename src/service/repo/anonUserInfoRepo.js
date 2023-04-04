@@ -39,8 +39,13 @@ const getPostAnonUserInfo = async () => {
   return baseGetAnonUserInfo('post');
 };
 
+const getCommentAnonUserInfo = async (postId) => {
+  return baseGetAnonUserInfo('comment', postId);
+};
+
 const AnonUserInfoRepo = {
-  getPostAnonUserInfo
+  getPostAnonUserInfo,
+  getCommentAnonUserInfo
 };
 
 export default AnonUserInfoRepo;
