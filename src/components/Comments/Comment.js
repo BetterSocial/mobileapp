@@ -120,7 +120,7 @@ const Comment = ({
             {comment.data.anon_user_info_emoji_name || comment.data.is_anonymous ? (
               <View
                 style={[styles.image, {backgroundColor: comment.data.anon_user_info_color_code}]}>
-                <Text> {comment.data.anon_user_info_emoji_code}</Text>
+                <Text>{comment.data.anon_user_info_emoji_code}</Text>
               </View>
             ) : (
               <Image
