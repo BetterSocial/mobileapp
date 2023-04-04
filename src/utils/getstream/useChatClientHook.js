@@ -29,9 +29,13 @@ const useChatClientHook = () => {
       channelImage: defaultImage,
       image: defaultImage
     });
+    const sendMessage = {
+      text,
+      silent: true
+    };
     await channel.create();
     await channel.addMembers([user.myProfile.user_id]);
-    await channel.sendMessage({text}, {skip_push: true});
+    await channel.sendMessage(sendMessage, {skip_push: true});
   };
 
   const removeTopicFromChatTab = async (topic) => {
