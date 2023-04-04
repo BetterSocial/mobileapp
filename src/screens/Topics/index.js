@@ -129,7 +129,7 @@ const Topics = () => {
                       nestedScrollEnabled>
                       <FlatList
                         data={topic.data}
-                        renderItem={React.memo(renderListTopics)}
+                        renderItem={renderListTopics}
                         numColumns={Math.floor(topic.data.length / 3) + 1}
                         nestedScrollEnabled
                         scrollEnabled={false}
