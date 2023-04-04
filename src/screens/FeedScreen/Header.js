@@ -25,6 +25,7 @@ import {PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import dimen from '../../utils/dimen';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -113,7 +114,7 @@ const _renderAnonimity = ({
             </View>
           ) : null}
           <View style={[styles.imageAnonymContainer]}>
-            <Image
+            <FastImage
               source={AnonymousProfile}
               width={dimen.size.FEED_HEADER_IMAGE_RADIUS}
               height={dimen.size.FEED_HEADER_IMAGE_RADIUS}
