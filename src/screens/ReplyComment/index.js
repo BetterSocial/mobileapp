@@ -18,6 +18,7 @@ const ReplyComment = (props) => {
     updateVote,
     updateVoteLatestChildren
   } = props.route.params;
+
   const {level} = props.route.params;
   const {dataFeed} = props.route.params;
   const [feeds, dispatch] = React.useContext(Context).feeds;

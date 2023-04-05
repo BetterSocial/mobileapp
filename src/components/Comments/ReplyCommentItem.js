@@ -1,10 +1,11 @@
 /* eslint-disable global-require */
 import * as React from 'react';
 import IconEn from 'react-native-vector-icons/Entypo';
-import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import BlockComponent from '../BlockComponent';
+import ButtonHightlight from '../ButtonHighlight';
 import MemoCommentReply from '../../assets/icon/CommentReply';
 import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
@@ -13,11 +14,10 @@ import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
 import {FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
-import {iVoteComment, voteComment} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
+import {iVoteComment, voteComment} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
-import ButtonHightlight from '../ButtonHighlight';
 
 const ReplyCommentItem = ({
   user,
@@ -133,7 +133,6 @@ const ReplyCommentItem = ({
     }
     return '#C4C4C4';
   };
-
   return (
     <View
       style={styles.container({
@@ -146,16 +145,29 @@ const ReplyCommentItem = ({
       <TouchableOpacity activeOpacity={1} onPress={openProfile} testID="profileOpen">
         <ButtonHightlight onPress={openProfile}>
           <View style={styles.profile}>
-            <Image
-              source={
-                photo
-                  ? {uri: removeWhiteSpace(photo)}
-                  : require('../../assets/images/ProfileDefault.png')
-              }
-              style={styles.image}
-            />
+            {comment.data.anon_user_info_emoji_name || comment.data.is_anonymous ? (
+              <View
+                style={[styles.image, {backgroundColor: comment.data.anon_user_info_color_code}]}>
+                <Text>{comment.data.anon_user_info_emoji_code}</Text>
+              </View>
+            ) : (
+              <Image
+                source={
+                  photo
+                    ? {uri: removeWhiteSpace(photo)}
+                    : require('../../assets/images/ProfileDefault.png')
+                }
+                style={styles.image}
+              />
+            )}
+
             <View style={styles.containerUsername}>
-              <Text style={styles.username}>{user.data.username} •</Text>
+              <Text style={styles.username}>
+                {user.data.username
+                  ? user.data.username
+                  : `${comment.data.anon_user_info_color_name} ${comment.data.anon_user_info_emoji_name}`}{' '}
+                •
+              </Text>
               <Text style={styles.time}> {calculateTime(time)}</Text>
             </View>
           </View>
@@ -234,7 +246,9 @@ const styles = StyleSheet.create({
   image: {
     width: 24,
     height: 24,
-    borderRadius: 12
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   container: ({isLast, style, showLeftConnector}) => ({
     width: '100%',

@@ -167,6 +167,7 @@ const RenderListFeed = (props) => {
                 image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
                 time={item.latest_reactions.comment[0].created_at}
                 totalComment={getCommentLength(item.latest_reactions.comment) - 1}
+                item={item.latest_reactions.comment[0]}
                 onPress={onPressComment}
               />
               <Gap height={8} />

@@ -91,7 +91,7 @@ const ReplyCommentId = ({
             user={item.user}
             comment={item}
             time={item.created_at}
-            photo={item.user.data.profile_pic_url}
+            photo={item.user.data && item.user.data.profile_pic_url}
             isLast={newCommentList.length <= 0}
             level={level}
             refreshComment={updateFeed}
@@ -108,7 +108,7 @@ const ReplyCommentId = ({
                           indexFeed={indexFeed}
                           showLeftConnector={false}
                           time={itemReply.updated_at}
-                          photo={itemReply.user.data.profile_pic_url}
+                          photo={itemReply.user.data && itemReply.user.data.profile_pic_url}
                           isLast={level >= 2}
                           key={`r${index}`}
                           user={itemReply.user}
@@ -143,11 +143,14 @@ const ReplyCommentId = ({
         </View>
       </ScrollView>
       <WriteComment
+        postId={item?.activity_id}
         inReplyCommentView={true}
         showProfileConnector={newCommentList.length > 0}
         username={item.user.data.username}
         onChangeText={setCommentHook}
-        onPress={() => createComment()}
+        onPress={(isAnonimity, anonimityData) => {
+          createComment(isAnonimity, anonimityData);
+        }}
         value={temporaryText}
       />
     </SafeAreaView>
