@@ -5,7 +5,8 @@ import React from 'react';
 import {Context} from '../../../context';
 import {getFeedDetail} from '../../../service/post';
 import StringConstant from '../../../utils/string/StringConstant';
-import {createChildComment} from '../../../service/comment';
+import {createChildComment, getCommentList} from '../../../service/comment';
+import {saveComment} from '../../../context/actions/comment';
 
 const useReplyComment = ({
   itemProp,
@@ -23,7 +24,10 @@ const useReplyComment = ({
   const [item, setItem] = React.useState(itemProp);
   const navigation = useNavigation();
   const scrollViewRef = React.useRef(null);
-
+  const [, dispatchComments] = React.useContext(Context).comments;
+  const [commenListParam] = React.useState({
+    limit: 20
+  });
   const [profile] = React.useContext(Context).profile;
   const [defaultData] = React.useState({
     data: {count_downvote: 0, count_upvote: 0, text: textComment},
@@ -44,7 +48,6 @@ const useReplyComment = ({
   const initTextComment = (text) => {
     setTextComment(text);
   };
-
   const setCommentHook = (text) => {
     setTemporaryText(text);
   };
@@ -200,7 +203,6 @@ const useReplyComment = ({
     }
   };
   const createComment = async (isAnonimity, anonimityData) => {
-    console.log(isAnonimity, anonimityData, 'sulit');
     let sendPostNotif = false;
     if (page !== 'DetailDomainScreen') {
       sendPostNotif = true;
@@ -236,12 +238,12 @@ const useReplyComment = ({
               data: data.data.data
             }
           ];
-          console.log(newComment, users, 'lali');
           setNewCommentList(newComment);
           if (typeof updateReply === 'function') {
             updateReply(newComment, itemParent, item.id);
           }
           updateFeed(true);
+          updateComment();
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
@@ -252,6 +254,12 @@ const useReplyComment = ({
     } catch (error) {
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
+  };
+
+  const updateComment = async () => {
+    const queryParam = new URLSearchParams(commenListParam).toString();
+    const response = await getCommentList(item.activity_id, queryParam);
+    saveComment(response.data.data, dispatchComments);
   };
 
   return {
