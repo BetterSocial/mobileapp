@@ -1,11 +1,14 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, TextInput, View, TouchableOpacity} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import ToggleSwitch from 'toggle-switch-react-native';
+import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
+import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
+import MemoSendComment from '../../assets/icon/IconSendComment';
+import StringConstant from '../../utils/string/StringConstant';
+import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import StringConstant from '../../utils/string/StringConstant';
-import MemoSendComment from '../../assets/icon/IconSendComment';
-import {Context} from '../../context';
 
 const WriteComment = ({
   value = null,
@@ -14,28 +17,85 @@ const WriteComment = ({
   username,
   inReplyCommentView = false,
   showProfileConnector = true,
-  loadingPost = false
+  loadingPost = false,
+  postId = ''
 }) => {
   const [profile] = React.useContext(Context).profile;
   const commentInputRef = React.useRef(null);
+  const [isAnonimity, setIsAnonimity] = React.useState(false);
   const isCommentEnabled = value.length > 0;
+  const [loadingUser, setLoadingUser] = React.useState(false);
   const isDisableSubmit = !isCommentEnabled || loadingPost;
-  const isSendButtonPressed = () => onPress();
+  const [anonimityData, setAnoimityData] = React.useState({});
+  const getAnonUser = React.useCallback(async () => {
+    setLoadingUser(true);
+    try {
+      if (!isAnonimity) {
+        const response = await AnonUserInfoRepo.getCommentAnonUserInfo(postId);
+        setLoadingUser(false);
+        if (response?.isSuccess) {
+          return setAnoimityData(response.data);
+        }
+
+        setIsAnonimity(false);
+        return setAnoimityData({});
+      }
+      setLoadingUser(false);
+      return setAnoimityData({});
+    } catch (e) {
+      console.log(e, 'error');
+      return setAnoimityData({});
+    }
+  }, [isAnonimity, postId]);
+
+  const toggleSwitch = () => {
+    setIsAnonimity((prevState) => !prevState);
+    getAnonUser();
+  };
+
   return (
     <View style={styles.columnContainer}>
       <View style={styles.connectorTop(inReplyCommentView, showProfileConnector)} />
-      <Text style={styles.replyToContainer(inReplyCommentView)}>
-        <Text style={styles.replyToTitle}>Reply to </Text>
-        {username}
-      </Text>
+      <View style={{flexDirection: 'row', paddingRight: 10}}>
+        <Text style={styles.replyToContainer(inReplyCommentView)}>
+          <Text style={styles.replyToTitle}>Reply to </Text>
+          {username}
+        </Text>
+        <View style={styles.anonimityContainer}>
+          <ToggleSwitch
+            isOn={isAnonimity}
+            onColor={colors.bondi_blue}
+            label="Anonymity"
+            offColor="#F5F5F5"
+            size="small"
+            labelStyle={styles.switch}
+            onToggle={toggleSwitch}
+          />
+        </View>
+      </View>
       <View style={styles.container(inReplyCommentView)}>
         <View style={styles.connectorBottom(inReplyCommentView, showProfileConnector)} />
-        <Image
-          style={styles.image}
-          source={{
-            uri: profile.myProfile.profile_pic_path
-          }}
-        />
+        {isAnonimity ? (
+          <>
+            {loadingUser ? (
+              <ActivityIndicator size={'small'} color={colors.bondi_blue} />
+            ) : (
+              <View style={[styles.image, {backgroundColor: anonimityData.colorCode}]}>
+                <Text style={styles.emojyStyle}>{anonimityData.emojiCode}</Text>
+              </View>
+            )}
+          </>
+        ) : (
+          <>
+            <FastImage
+              style={styles.image}
+              source={{
+                uri: profile.myProfile.profile_pic_path
+              }}
+            />
+          </>
+        )}
+
         <View style={styles.content}>
           <TextInput
             testID="changeinput"
@@ -50,9 +110,9 @@ const WriteComment = ({
         </View>
         <TouchableOpacity
           testID="iscommentenable"
-          onPress={isSendButtonPressed}
-          style={styles.btn(isDisableSubmit)}
-          disabled={isDisableSubmit}>
+          onPress={() => onPress(isAnonimity, anonimityData)}
+          style={styles.btn(isDisableSubmit || loadingUser)}
+          disabled={isDisableSubmit || loadingUser}>
           <MemoSendComment style={styles.icSendButton} />
         </TouchableOpacity>
       </View>
@@ -128,7 +188,9 @@ export const styles = StyleSheet.create({
     height: 36,
     marginLeft: -7,
     zIndex: -10,
-    borderRadius: 18
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   text: {
     flex: 1,
@@ -160,5 +222,19 @@ export const styles = StyleSheet.create({
     top: 0,
     left: inReplyCommentView ? 60 : 30,
     zIndex: -100
-  })
+  }),
+  anonimityContainer: {
+    marginLeft: 'auto',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  emojyStyle: {
+    fontSize: 18
+  },
+  switch: {
+    fontFamily: fonts.inter[400],
+    fontSize: 12,
+    color: colors.gray
+  }
 });

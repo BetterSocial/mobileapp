@@ -19,6 +19,18 @@ const createCommentParent = async (text, activityId, useridFeed, sendPostNotif) 
   }
 };
 
+const createCommentParentV2 = async (data) => {
+  console.log(data, 'nani');
+  try {
+    const resApi = await api.post('/activity/comment-v2', data);
+    return resApi.data;
+  } catch (error) {
+    console.log(error, 'error pak');
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+
 const createChildComment = async (
   text,
   reactionId,
@@ -26,19 +38,29 @@ const createChildComment = async (
   sendPostNotif,
   postMaker,
   activityId,
-  postTitle
+  postTitle,
+  isAnonymous,
+  anonUser
 ) => {
   try {
-    const data = {
+    let data = {
       reaction_id: reactionId,
       message: text,
-      useridFeed,
       sendPostNotif,
-      postMaker,
       activityId,
-      postTitle
+      anonimity: isAnonymous
     };
-    const resApi = await api.post('/activity/child-comment', data);
+    const anonimity = {
+      emoji_name: anonUser.emojiName,
+      color_name: anonUser.colorName,
+      emoji_code: anonUser.emojiCode,
+      color_code: anonUser.colorCode,
+      is_anonymous: isAnonymous
+    };
+    if (isAnonymous) {
+      data = {...data, anon_user_info: anonimity};
+    }
+    const resApi = await api.post('/activity/comment-child-v2', data);
     return resApi.data;
   } catch (error) {
     crashlytics().recordError(error.response.data);
@@ -60,4 +82,4 @@ const deleteComment = async (reactionId) => {
   }
 };
 
-export {createCommentParent, createChildComment, deleteComment};
+export {createCommentParent, createChildComment, deleteComment, createCommentParentV2};

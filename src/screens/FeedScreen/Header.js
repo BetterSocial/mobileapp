@@ -4,9 +4,10 @@
 
 import * as React from 'react';
 import PropsTypes from 'prop-types';
-import {Avatar} from 'react-native-activity-feed';
 import {Dimensions, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import Image from 'react-native-fast-image';
+import dimen from '../../utils/dimen';
 
 import AnonymousAvatar from '../../components/AnonymousAvatar';
 import AnonymousUsername from '../../components/AnonymousUsername';
@@ -22,7 +23,6 @@ import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFou
 import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
-import dimen from '../../utils/dimen';
 import useFeedHeader from './hooks/useFeedHeader';
 import {PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
@@ -189,13 +189,13 @@ const _renderProfileNormal = ({
           ) : null}
           <GlobalButton onPress={navigateToProfile}>
             <View style={{}}>
-              <Avatar
-                source={
-                  profile_pic_url ||
-                  'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
-                }
-                size={dimen.size.FEED_HEADER_IMAGE_RADIUS}
-                noShadow
+              <Image
+                source={{
+                  uri:
+                    profile_pic_url ||
+                    'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+                }}
+                style={styles.avatarImage}
               />
             </View>
           </GlobalButton>
@@ -419,7 +419,8 @@ const styles = StyleSheet.create({
     // paddingRight: 10,
     padding: 10
     // paddingLeft: 24
-  }
+  },
+  avatarImage: {height: 48, width: 48, borderRadius: 24}
 });
 
 Header.propsTypes = {

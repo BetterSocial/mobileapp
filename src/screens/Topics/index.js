@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/core';
-
+import ListTopic from './ListTopics';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
@@ -48,11 +48,11 @@ const Topics = () => {
     });
   };
   React.useEffect(() => {
+    // console.log(topicCollection, 'lusi')
     if (topicCollection.length > 0) {
       setTopics(topicCollection);
     }
-  }, [topicCollection]);
-
+  }, [JSON.stringify(topicCollection)]);
   React.useEffect(() => {
     getCacheTopic();
   }, []);
@@ -87,22 +87,12 @@ const Topics = () => {
   };
 
   const renderListTopics = ({item, i}) => (
-    <Pressable
-      onPress={() => handleSelectedLanguage(item.topic_id)}
-      key={i}
-      style={[
-        styles.bgTopicSelectNotActive,
-        {backgroundColor: myTopic[item.topic_id] ? colors.bondi_blue : colors.concrete}
-      ]}>
-      <Text>{item.icon}</Text>
-      <Text
-        style={[
-          styles.textTopicNotActive,
-          {color: myTopic[item.topic_id] ? colors.white : colors.mine_shaft}
-        ]}>
-        #{item.name}
-      </Text>
-    </Pressable>
+    <ListTopic
+      item={item}
+      i={i}
+      myTopic={myTopic}
+      handleSelectedLanguage={handleSelectedLanguage}
+    />
   );
   const onBack = () => {
     navigation.goBack();
@@ -138,7 +128,7 @@ const Topics = () => {
                       nestedScrollEnabled>
                       <FlatList
                         data={topic.data}
-                        renderItem={renderListTopics}
+                        renderItem={React.memo(renderListTopics)}
                         numColumns={Math.floor(topic.data.length / 3) + 1}
                         nestedScrollEnabled
                         scrollEnabled={false}

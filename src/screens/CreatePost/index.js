@@ -533,9 +533,9 @@ const CreatePost = () => {
 
   const handleTextMessage = () => {
     if (!typeUser) {
-      return `New posts by ${user.myProfile.username} & others`;
+      return `There are new posts from ${user.myProfile.username} & others`;
     }
-    return 'New posts by Anonymous & others';
+    return 'There are new posts from Anonymous & others';
   };
 
   const handleTopicChat = async () => {

@@ -166,6 +166,7 @@ const RenderListFeed = (props) => {
               time={item.latest_reactions.comment[0].created_at}
               totalComment={getCommentLength(item.latest_reactions.comment) - 1}
               onPress={onPressComment}
+              item={item.latest_reactions.comment[0]}
             />
             <Gap height={8} />
           </View>
