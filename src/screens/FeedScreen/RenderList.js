@@ -8,6 +8,7 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import ShareUtils from '../../utils/share';
+import dimen from '../../utils/dimen';
 import useFeed from './hooks/useFeed';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
@@ -18,10 +19,9 @@ import {
   SOURCE_FEED_TAB
 } from '../../utils/constants';
 import {Footer, Gap, PreviewComment} from '../../components';
+import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
 import {showScoreAlertDialog} from '../../utils/Utils';
-import dimen from '../../utils/dimen';
-import {colors} from '../../utils/colors';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
