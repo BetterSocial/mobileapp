@@ -6,6 +6,7 @@ import BlockComponent from '../../components/BlockComponent';
 import ButtonAddPostTopic from '../../components/Button/ButtonAddPostTopic';
 import MemoizedListComponent from './MemoizedListComponent';
 import Navigation from './elements/Navigation';
+import ShareUtils from '../../utils/share';
 import TiktokScroll from '../../components/TiktokScroll';
 import dimen from '../../utils/dimen';
 import removePrefixTopic from '../../utils/topics/removePrefixTopic';
@@ -19,9 +20,8 @@ import {getTopicPages} from '../../service/topicPages';
 import {getUserId} from '../../utils/users';
 import {getUserTopic} from '../../service/topics';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
-import {setTopicFeedByIndex, setTopicFeeds, setFeedByIndex} from '../../context/actions/feeds';
+import {setFeedByIndex, setTopicFeedByIndex, setTopicFeeds} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import ShareUtils from '../../utils/share';
 
 const TopicPageScreen = (props) => {
   const route = useRoute();
@@ -79,13 +79,10 @@ const TopicPageScreen = (props) => {
       if (_resultGetUserTopic.data) {
         setIsFollow(true);
       }
-
-      // setLoading(false)
     } catch (error) {
       if (__DEV__) {
         console.log(error);
       }
-      // setLoading(false);
     }
   };
 
@@ -290,7 +287,7 @@ const TopicPageScreen = (props) => {
       onNewPollFetched={onNewPollFetched}
       index={index}
       onPressDomain={onPressDomain}
-      onPress={() => onPress(item, index)}
+      onPress={() => onPress(item)}
       onPressComment={() => onPressComment(item)}
       onPressBlock={() => onPressBlock(item)}
       onPressUpvote={(post) => setUpVote(post, index)}

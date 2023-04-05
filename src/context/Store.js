@@ -1,39 +1,29 @@
 import * as React from 'react';
-import { RecoilRoot } from 'recoil';
 
-import { channelReducer, channelState } from './reducers/channelReducer';
-import { clientReducer, clientState } from './reducers/clientReducer';
-import { discoveryReducer, discoveryState } from './reducers/discoveryReducer';
-import { domainReducer, domainState } from './reducers/domainReducer';
-import { feedsReducer, feedsState } from './reducers/FeedReducer';
-import { followingReducer, followingState } from './reducers/followingReducer';
-import { generalComponentReducer, generalComponentState } from './reducers/generalComponentReducer';
-import { groupChatReducer, groupChatState } from './reducers/groupChat';
-import { initialStartupReducer, initialStartupState } from './reducers/intialStartupReducer';
-import {
-  localCommunityReducer,
-  localCommunityState,
-} from './reducers/localComunityReducer';
-import {
-  myProfileFeedReducer,
-  myProfileFeedState,
-} from './reducers/myProfileFeedReducer';
-import { myProfileReducer, myProfileState } from './reducers/myProfileReducer';
-import { newsReducer, newsState } from './reducers/newsReducer';
-import { otherProfileFeedReducer, otherProfileFeedState } from './reducers/OtherProfileFeedReducer';
-import { topicsReducer, topicsState } from './reducers/topicsReducer';
-import {
-  unReadMessageReducer,
-  unReadMessageState,
-} from './reducers/unReadMessageReducer';
-import { usersReducer, usersState } from './reducers/userReducer';
+import {channelReducer, channelState} from './reducers/channelReducer';
+import {clientReducer, clientState} from './reducers/clientReducer';
+import {discoveryReducer, discoveryState} from './reducers/discoveryReducer';
+import {domainReducer, domainState} from './reducers/domainReducer';
+import {feedsReducer, feedsState} from './reducers/FeedReducer';
+import {followingReducer, followingState} from './reducers/followingReducer';
+import {generalComponentReducer, generalComponentState} from './reducers/generalComponentReducer';
+import {groupChatReducer, groupChatState} from './reducers/groupChat';
+import {initialStartupReducer, initialStartupState} from './reducers/intialStartupReducer';
+import {localCommunityReducer, localCommunityState} from './reducers/localComunityReducer';
+import {myProfileFeedReducer, myProfileFeedState} from './reducers/myProfileFeedReducer';
+import {myProfileReducer, myProfileState} from './reducers/myProfileReducer';
+import {newsReducer, newsState} from './reducers/newsReducer';
+import {otherProfileFeedReducer, otherProfileFeedState} from './reducers/OtherProfileFeedReducer';
+import {topicsReducer, topicsState} from './reducers/topicsReducer';
+import {unReadMessageReducer, unReadMessageState} from './reducers/unReadMessageReducer';
+import {usersReducer, usersState} from './reducers/userReducer';
 
 /**
  *
  * @typedef {Object} MainContext
  * @property {import('./reducers/discoveryReducer').DiscoveryState} discovery
  */
-const Store = ({ children }) => {
+const Store = ({children}) => {
   const rootReducer = {
     channel: React.useReducer(channelReducer, channelState),
     client: React.useReducer(clientReducer, clientState),
@@ -42,10 +32,7 @@ const Store = ({ children }) => {
     following: React.useReducer(followingReducer, followingState),
     generalComponent: React.useReducer(generalComponentReducer, generalComponentState),
     groupChat: React.useReducer(groupChatReducer, groupChatState),
-    localCommunity: React.useReducer(
-      localCommunityReducer,
-      localCommunityState,
-    ),
+    localCommunity: React.useReducer(localCommunityReducer, localCommunityState),
     myProfileFeed: React.useReducer(myProfileFeedReducer, myProfileFeedState),
     otherProfileFeed: React.useReducer(otherProfileFeedReducer, otherProfileFeedState),
     news: React.useReducer(newsReducer, newsState),
@@ -59,6 +46,6 @@ const Store = ({ children }) => {
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };
 export const Context = React.createContext(null);
-export const useAppContext =() => React.useContext(Context)
+export const useAppContext = () => React.useContext(Context);
 
 export default Store;

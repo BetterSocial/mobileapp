@@ -8,16 +8,16 @@ import RenderListFeed from './RenderList';
 import Search from './elements/Search';
 import TiktokScroll from '../../components/TiktokScroll';
 import dimen from '../../utils/dimen';
+import useCoreFeed from './hooks/useCoreFeed';
 import {ButtonNewPost} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {DISCOVERY_TAB_TOPICS, SOURCE_FEED_TAB} from '../../utils/constants';
-import {viewTimePost} from '../../service/post';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
 import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import {viewTimePost} from '../../service/post';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import useCoreFeed from './hooks/useCoreFeed';
 
 let lastDragY = 0;
 
@@ -145,7 +145,6 @@ const FeedScreen = (props) => {
 
   const onPressBlock = (value) => {
     refBlockComponent.current.openBlockComponent(value);
-    // setSelectedFeed(value)
   };
 
   const onRefresh = () => {
@@ -213,7 +212,7 @@ const FeedScreen = (props) => {
         onNewPollFetched={onNewPollFetched}
         index={index}
         onPressDomain={onPressDomain}
-        onPress={() => onPress(item, index)}
+        onPress={() => onPress(item)}
         onPressComment={() => onPressComment(index, item)}
         onPressBlock={() => onPressBlock(item)}
         onPressUpvote={(post) => setUpVoteHandle(post, index)}
