@@ -80,7 +80,7 @@ const ReplyCommentId = ({
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableOpacity>
         <Text testID="usernameText" style={styles.headerText}>
-          Reply to {item.user.data.username}
+          Reply to {item.user?.data?.username}
         </Text>
         <View style={styles.btn} />
       </View>
@@ -91,7 +91,7 @@ const ReplyCommentId = ({
             user={item.user}
             comment={item}
             time={item.created_at}
-            photo={item.user.data && item.user.data.profile_pic_url}
+            photo={item.user?.data?.profile_pic_url}
             isLast={newCommentList.length <= 0}
             level={level}
             refreshComment={updateFeed}
@@ -146,7 +146,7 @@ const ReplyCommentId = ({
         postId={item?.activity_id}
         inReplyCommentView={true}
         showProfileConnector={newCommentList.length > 0}
-        username={item.user.data.username}
+        username={item.user?.data?.username}
         onChangeText={setCommentHook}
         onPress={(isAnonimity, anonimityData) => {
           createComment(isAnonimity, anonimityData);

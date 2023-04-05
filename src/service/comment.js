@@ -82,4 +82,22 @@ const deleteComment = async (reactionId) => {
   }
 };
 
-export {createCommentParent, createChildComment, deleteComment, createCommentParentV2};
+const getCommentList = async (activity_id, params) => {
+  try {
+    const url = `feeds/reaction-list/${activity_id}?${params}`;
+    const response = await api.get(url);
+    console.log(response, 'buset');
+    return response;
+  } catch (e) {
+    crashlytics().recordError(e.response.data);
+    throw new Error(e);
+  }
+};
+
+export {
+  createCommentParent,
+  createChildComment,
+  deleteComment,
+  createCommentParentV2,
+  getCommentList
+};
