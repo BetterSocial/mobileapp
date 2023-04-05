@@ -1,29 +1,28 @@
 import * as React from 'react';
 import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Platform,
   Dimensions,
-  ScrollView,
   FlatList,
-  Pressable
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
 } from 'react-native';
-
 import {useNavigation} from '@react-navigation/core';
+
 import ListTopic from './ListTopics';
+import StringConstant from '../../utils/string/StringConstant';
+import useSignin from '../SignInV2/hooks/useSignin';
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
 import {Context} from '../../context';
-import {colors} from '../../utils/colors';
-import {ProgressBar} from '../../components/ProgressBar';
-import StringConstant from '../../utils/string/StringConstant';
-import {setTopics as setTopicsContext} from '../../context/actions/topics';
 import {Header} from '../../components';
-import {getSpecificCache} from '../../utils/cache';
+import {ProgressBar} from '../../components/ProgressBar';
 import {TOPICS_PICK} from '../../utils/cache/constant';
-import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
-import useSignin from '../SignInV2/hooks/useSignin';
+import {colors} from '../../utils/colors';
+import {getSpecificCache} from '../../utils/cache';
+import {setTopics as setTopicsContext} from '../../context/actions/topics';
 
 const {width} = Dimensions.get('screen');
 
@@ -128,7 +127,7 @@ const Topics = () => {
                       nestedScrollEnabled>
                       <FlatList
                         data={topic.data}
-                        renderItem={React.memo(renderListTopics)}
+                        renderItem={renderListTopics}
                         numColumns={Math.floor(topic.data.length / 3) + 1}
                         nestedScrollEnabled
                         scrollEnabled={false}
