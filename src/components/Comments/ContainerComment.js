@@ -76,7 +76,7 @@ const ContainerComment = ({
                   user={item.user}
                   level={0}
                   time={item.created_at}
-                  photo={item.user.data.profile_pic_url}
+                  photo={item.user.data && item.user.data.profile_pic_url}
                   isLast={isLast(index, item, comments)}
                   isLastInParent={isLastInParent(index, comments)}
                   onPress={() =>

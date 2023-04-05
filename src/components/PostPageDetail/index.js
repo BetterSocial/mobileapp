@@ -24,7 +24,7 @@ import {
 } from '../../utils/constants';
 import {Context} from '../../context';
 import {Footer, Gap} from '..';
-import {createCommentParentV2} from '../../service/comment';
+import {createCommentParentV2, getCommentList} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
@@ -34,6 +34,7 @@ import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
+import {saveComment} from '../../context/actions/comment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -58,23 +59,44 @@ const PostPageDetailIdComponent = (props) => {
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
+  const [isInitial, setIsInitial] = React.useState(true);
   const {timer} = feedsContext;
+  const [commenListParam] = React.useState({
+    limit: 20
+  });
+  const [commentContext, dispatchComment] = React.useContext(Context).comments;
+  const {comments} = commentContext;
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
+  // React.useEffect(() => {
+  //   if (!isInitial) {
+  //     if (item && item?.latest_reactions) {
+  //       if (!item?.latest_reactions?.comment) setCommentList([]);
+  //       else
+  //         setCommentList(
+  //           item.latest_reactions.comment.sort(
+  //             (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()
+  //           )
+  //         );
+
+  //       setTotalComment(getCountCommentWithChildInDetailPage(item.latest_reactions));
+  //     }
+  //   }
+  // }, [item]);
+  // console.log(commentContext.comments, 'buset 1');
+
+  const getComment = async () => {
+    const queryParam = new URLSearchParams(commenListParam).toString();
+    const response = await getCommentList(feedId, queryParam);
+    saveComment(response.data.data, dispatchComment);
+    // setCommentList(response.data.data);
+    setIsInitial(false);
+  };
+
   React.useEffect(() => {
-    if (item && item?.latest_reactions) {
-      if (!item?.latest_reactions?.comment) setCommentList([]);
-      else
-        setCommentList(
-          item.latest_reactions.comment.sort(
-            (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()
-          )
-        );
-
-      setTotalComment(getCountCommentWithChildInDetailPage(item.latest_reactions));
-    }
-  }, [item]);
-
+    getComment();
+  }, []);
+  console.log(comments, 'sunan')
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
     const downvotes = data.downvotes ? data.downvotes : 0;
@@ -142,6 +164,7 @@ const PostPageDetailIdComponent = (props) => {
   const updateFeed = async (isSort) => {
     try {
       const data = await getFeedDetail(feedId);
+      console.log(data, 'nanamoa');
       let oldData = {...data?.data};
       if (isSort) {
         oldData = {
@@ -156,7 +179,7 @@ const PostPageDetailIdComponent = (props) => {
       }
       setLoadingPost(false);
       if (data) {
-        setItem(oldData);
+        getComment();
       }
       updateAllContent(oldData);
       Keyboard.dismiss();
@@ -377,7 +400,7 @@ const PostPageDetailIdComponent = (props) => {
   const findCommentAndUpdate = (id, newData, level) => {
     let newCommenList = [];
     if (level > 0) {
-      const updatedComment = commentList.map((comment) => {
+      const updatedComment = comments.map((comment) => {
         if (comment.id === newData.parent) {
           const findComment = comment?.latest_children?.comment.map((comment1) => {
             if (comment1.id === newData.id) {
@@ -391,7 +414,7 @@ const PostPageDetailIdComponent = (props) => {
       });
       newCommenList = updatedComment;
     } else {
-      const updatedComment = commentList.map((comment) => {
+      const updatedComment = comments.map((comment) => {
         if (comment.id === id) {
           return {...comment, ...newData};
         }
@@ -399,7 +422,8 @@ const PostPageDetailIdComponent = (props) => {
       });
       newCommenList = updatedComment;
     }
-    setCommentList(newCommenList);
+    // setCommentList(newCommenList)
+    saveComment(newCommenList, dispatchComment);
     findReduxCommentAndUpdate(newCommenList);
   };
 
@@ -553,12 +577,14 @@ const PostPageDetailIdComponent = (props) => {
   };
   const updateVoteLatestChildren = async (dataUpdated, data, level) => {
     if (level === 3) {
-      const newComment = await updateVoteLatestChildrenLevel3(commentList, dataUpdated);
-      setCommentList(newComment);
+      const newComment = await updateVoteLatestChildrenLevel3(comments, dataUpdated);
+      // setCommentList(newComment);
+      saveComment(newComment, dispatchComment)
     }
     if (level === 1) {
-      const newComment = await updateVoteChildrenLevel1(commentList, dataUpdated);
-      setCommentList(newComment);
+      const newComment = await updateVoteChildrenLevel1(comments, dataUpdated);
+      // setCommentList(newComment);
+      saveComment(newComment, dispatchComment)
     }
   };
   return (
@@ -572,7 +598,7 @@ const PostPageDetailIdComponent = (props) => {
           <ScrollView
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
-            style={styles.contentScrollView(totalComment)}
+            style={styles.contentScrollView(comments.length)}
             nestedScrollEnabled={true}>
             <View style={styles.content(height)}>
               {item.post_type === POST_TYPE_LINK ? (
@@ -623,10 +649,10 @@ const PostPageDetailIdComponent = (props) => {
                 />
               </View>
             </View>
-            {isReaction && commentList && (
+            {comments.length > 0 && (
               <ContainerComment
                 feedId={feedId}
-                comments={commentList}
+                comments={comments}
                 isLoading={loadingPost}
                 refreshComment={handleRefreshComment}
                 refreshChildComment={handleRefreshChildComment}
