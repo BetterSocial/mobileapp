@@ -1,10 +1,10 @@
 import api from './config';
 import {createChannel} from './chat';
 
-export const getMyProfile = async (userId) =>
+export const getMyProfile = async () =>
   new Promise((resolve, reject) => {
     api
-      .get(`/profiles/get-my-profile/${userId}`)
+      .get('/profiles/get-my-profile')
       .then((res) => {
         resolve(res.data);
       })
@@ -52,10 +52,10 @@ export const checkUserBlock = (data) =>
       });
   });
 
-export const changeRealName = async (userId, real_name) =>
+export const changeRealName = async (real_name) =>
   new Promise((resolve, reject) => {
     api
-      .post(`/profiles/changes-real-name/${userId}`, {
+      .post('/profiles/changes-real-name', {
         real_name
       })
       .then((res) => {
@@ -66,10 +66,10 @@ export const changeRealName = async (userId, real_name) =>
       });
   });
 
-export const getFollowing = async (userId) =>
+export const getFollowing = async () =>
   new Promise((resolve, reject) => {
     api
-      .get(`/profiles/following/${userId}`)
+      .get('/profiles/following/')
       .then((res) => {
         resolve(res.data);
       })
@@ -120,10 +120,10 @@ export const setFollow = async (data) => {
     });
 };
 
-export const updateImageProfile = async (userID, data) =>
+export const updateImageProfile = async (data) =>
   new Promise((resolve, reject) => {
     api
-      .post(`/profiles/changes-image/${userID}`, data)
+      .post('/profiles/changes-image', data)
       .then((res) => {
         resolve(res.data);
       })
