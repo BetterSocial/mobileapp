@@ -144,10 +144,10 @@ export const removeImageProfile = async () =>
       });
   });
 
-export const updateBioProfile = async (userID, data) =>
+export const updateBioProfile = async (data) =>
   new Promise((resolve, reject) => {
     api
-      .post(`/profiles/update-bio/${userID}`, data)
+      .post('/profiles/update-bio', data)
       .then((res) => {
         resolve(res.data);
       })

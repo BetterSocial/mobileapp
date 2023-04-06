@@ -392,7 +392,7 @@ const ProfileScreen = ({route}) => {
       bio: tempBio
     };
     setDataMainBio(tempBio);
-    updateBioProfile(dataMain.user_id, data)
+    updateBioProfile(data)
       .then((res) => {
         setIsLoadingUpdateBio(false);
         if (res.code === 200) {
