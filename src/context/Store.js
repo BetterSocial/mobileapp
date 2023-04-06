@@ -17,6 +17,7 @@ import {otherProfileFeedReducer, otherProfileFeedState} from './reducers/OtherPr
 import {topicsReducer, topicsState} from './reducers/topicsReducer';
 import {unReadMessageReducer, unReadMessageState} from './reducers/unReadMessageReducer';
 import {usersReducer, usersState} from './reducers/userReducer';
+import {commentReducer, commentState} from './reducers/commentReducer';
 
 /**
  *
@@ -41,7 +42,8 @@ const Store = ({children}) => {
     unReadMessage: React.useReducer(unReadMessageReducer, unReadMessageState),
     users: React.useReducer(usersReducer, usersState),
     domains: React.useReducer(domainReducer, domainState),
-    initialStartup: React.useReducer(initialStartupReducer, initialStartupState)
+    initialStartup: React.useReducer(initialStartupReducer, initialStartupState),
+    comments: React.useReducer(commentReducer, commentState)
   };
   return <Context.Provider value={rootReducer}>{children}</Context.Provider>;
 };

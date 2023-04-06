@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {cleanup, fireEvent, render} from '@testing-library/react-native';
+import Store from '../../../src/context/Store';
 
 import * as serviceUser from '../../../src/utils/users';
 import * as serviceVote from '../../../src/service/vote';
@@ -72,7 +73,8 @@ describe('ReplyCommentItem should run correctly', () => {
         refreshComment={refreshComment}
         showLeftConnector={false}
         disableOnTextPress={false}
-      />
+      />,
+      {wrapper: Store}
     );
     expect(toJSON).toMatchSnapshot();
     expect(getAllByText('-2')).toHaveLength(1);
@@ -94,7 +96,7 @@ describe('ReplyCommentItem should run correctly', () => {
         refreshComment={refreshComment}
         showLeftConnector={false}
         disableOnTextPress={false}
-      />
+      /> , {wrapper: Store}
     );
     fireEvent.press(getByTestId('ontextpress'));
     expect(onPress).toHaveBeenCalled();
@@ -111,7 +113,7 @@ describe('ReplyCommentItem should run correctly', () => {
         refreshComment={refreshComment}
         showLeftConnector={false}
         disableOnTextPress={false}
-      />
+      />, {wrapper: Store}
     );
     fireEvent.press(getLevelMore2('ontextpress'));
   });
@@ -131,7 +133,7 @@ describe('ReplyCommentItem should run correctly', () => {
         refreshComment={refreshComment}
         showLeftConnector={false}
         disableOnTextPress={false}
-      />
+      />, {wrapper: Store}
     );
     fireEvent.press(getByTestId('replyBtn'));
     expect(onPress).toHaveBeenCalled();
@@ -154,7 +156,7 @@ describe('ReplyCommentItem should run correctly', () => {
         refreshComment={refreshComment}
         showLeftConnector={false}
         disableOnTextPress={false}
-      />
+      />, {wrapper: Store}
     );
     fireEvent.press(getByTestId('downvoteBtn'));
     expect(spyDownvote).toHaveBeenCalled();
@@ -176,7 +178,7 @@ describe('ReplyCommentItem should run correctly', () => {
         refreshComment={refreshComment}
         showLeftConnector={false}
         disableOnTextPress={false}
-      />
+      />, {wrapper: Store}
     );
     fireEvent.press(getByTestId('upvotebtn'));
     expect(spyDownvote).toHaveBeenCalled();
@@ -199,7 +201,7 @@ describe('ReplyCommentItem should run correctly', () => {
         refreshComment={refreshComment}
         showLeftConnector={false}
         disableOnTextPress={false}
-      />
+      />, {wrapper: Store}
     );
     fireEvent.press(getByTestId('profileOpen'));
     expect(spyUser).toHaveBeenCalled();
