@@ -137,7 +137,7 @@ export const ReplyComment = ({
                     // username={item.user.data.username}
                     user={item.user}
                     level={1}
-                    photo={item.user.data.profile_pic_url}
+                    photo={item.user?.data?.profile_pic_url}
                     time={item.created_at}
                     onPress={() => navigateToReplyView({item, level: 2, indexFeed})}
                     isLast={isLast(item, index, countComment)}

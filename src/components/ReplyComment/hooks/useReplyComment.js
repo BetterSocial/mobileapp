@@ -5,8 +5,8 @@ import React from 'react';
 import {Context} from '../../../context';
 import {getFeedDetail} from '../../../service/post';
 import StringConstant from '../../../utils/string/StringConstant';
-import {createChildComment, getCommentList} from '../../../service/comment';
-import {saveComment} from '../../../context/actions/comment';
+import {createChildComment} from '../../../service/comment';
+import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 
 const useReplyComment = ({
   itemProp,
@@ -24,14 +24,11 @@ const useReplyComment = ({
   const [item, setItem] = React.useState(itemProp);
   const navigation = useNavigation();
   const scrollViewRef = React.useRef(null);
-  const [, dispatchComments] = React.useContext(Context).comments;
-  const [commenListParam] = React.useState({
-    limit: 20
-  });
+  const {updateComment} = useUpdateComment();
   const [profile] = React.useContext(Context).profile;
   const [defaultData] = React.useState({
     data: {count_downvote: 0, count_upvote: 0, text: textComment},
-    id: newCommentList.length + 1,
+    id: newCommentList?.length + 1,
     kind: 'comment',
     updated_at: moment(),
     children_counts: {comment: 0},
@@ -58,7 +55,7 @@ const useReplyComment = ({
 
   const updateReplyPost = (comment, itemParentProps, commentId) => {
     if (itemParentProps) {
-      const updateComment = itemParentProps.latest_children.comment.map((dComment) => {
+      const updateMyComment = itemParentProps.latest_children.comment.map((dComment) => {
         if (dComment.id === commentId) {
           return {
             ...dComment,
@@ -70,10 +67,10 @@ const useReplyComment = ({
       });
       const replaceComment = {
         ...itemParentProps,
-        latest_children: {...itemParentProps.latest_children, comment: updateComment}
+        latest_children: {...itemParentProps.latest_children, comment: updateMyComment}
       };
       setItem(replaceComment);
-      setNewCommentList(updateComment);
+      setNewCommentList(updateMyComment);
     }
   };
 
@@ -93,7 +90,7 @@ const useReplyComment = ({
 
   const updateReplyPostHook = (comment, itemParentProps, commentId) => {
     if (itemParentProps) {
-      const updateComment = itemParentProps.latest_children.comment.map((dComment) => {
+      const updateMyComment = itemParentProps.latest_children.comment.map((dComment) => {
         if (dComment.id === commentId) {
           return {
             ...dComment,
@@ -105,11 +102,11 @@ const useReplyComment = ({
       });
       const replaceComment = {
         ...itemParentProps,
-        latest_children: {...itemParentProps.latest_children, comment: updateComment}
+        latest_children: {...itemParentProps.latest_children, comment: updateMyComment}
       };
-      return {replaceComment, updateComment};
+      return {replaceComment, updateMyComment};
     }
-    return {replaceComment: itemParentProps, updateComment: itemParentProps};
+    return {replaceComment: itemParentProps, updateMyComment: itemParentProps};
   };
 
   const isLastInParentHook = (index) => index === (item.children_counts.comment || 0) - 1;
@@ -126,14 +123,14 @@ const useReplyComment = ({
   };
 
   const updateVoteParentPostHook = (data, dataVote, comment) => {
-    const updateComment = comment.latest_children.comment.map((dComment) => {
+    const updateMyComment = comment.latest_children.comment.map((dComment) => {
       if (dComment.id === dataVote.activity_id) {
         return {...dComment, data: data.data.data};
       }
       return {...dComment};
     });
-    setNewCommentList(updateComment);
-    return updateComment;
+    setNewCommentList(updateMyComment);
+    return updateMyComment;
   };
 
   const updateVoteLatestChildrenParentHook = (response, dataVote, comment) => {
@@ -208,10 +205,23 @@ const useReplyComment = ({
       sendPostNotif = true;
     }
     setTemporaryText('');
-    setNewCommentList([
-      ...newCommentList,
-      {...defaultData, data: {...defaultData.data, text: textComment}}
-    ]);
+    let dummyData = {...defaultData, data: {...defaultData.data, text: textComment}};
+    if (anonimityData.emojiName) {
+      dummyData = {
+        ...defaultData,
+        user: {},
+        data: {
+          ...defaultData.data,
+          anon_user_info_emoji_name: anonimityData.emojiName,
+          is_anonymous: true,
+          anon_user_info_color_code: anonimityData.colorCode,
+          anon_user_info_emoji_code: anonimityData.emojiCode,
+          anon_user_info_color_name: anonimityData.colorName,
+          text: textComment
+        }
+      };
+    }
+    setNewCommentList([...newCommentList, {...dummyData}]);
 
     try {
       if (textComment.trim() !== '') {
@@ -243,7 +253,7 @@ const useReplyComment = ({
             updateReply(newComment, itemParent, item.id);
           }
           updateFeed(true);
-          updateComment();
+          updateComment(item.activity_id);
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
@@ -254,12 +264,6 @@ const useReplyComment = ({
     } catch (error) {
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
-  };
-
-  const updateComment = async () => {
-    const queryParam = new URLSearchParams(commenListParam).toString();
-    const response = await getCommentList(item.activity_id, queryParam);
-    saveComment(response.data.data, dispatchComments);
   };
 
   return {

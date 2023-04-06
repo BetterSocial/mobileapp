@@ -138,7 +138,7 @@ const Comment = ({
                 {user.data && user.data.username
                   ? user.data.username
                   : `${comment.data.anon_user_info_color_name} ${comment.data.anon_user_info_emoji_name}`}{' '}
-                •
+                • {comment.is_you ? '(You)' : ''} {comment.is_author ? '(Author)' : ''}
               </Text>
               <Text style={styles.time}> {calculateTime(time)}</Text>
             </View>

@@ -35,7 +35,6 @@ const ReplyCommentId = ({
 }) => {
   const navigation = useNavigation();
   const {
-    getThisCommentHook,
     setCommentHook,
     temporaryText,
     isLastInParentHook,
@@ -43,14 +42,12 @@ const ReplyCommentId = ({
     setTextComment,
     newCommentList,
     setNewCommentList,
-    setItem,
     item,
     showChildrenCommentView,
     updateFeed,
     scrollViewRef,
     createComment
   } = useReplyComment({itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page});
-
   React.useEffect(() => {
     if (setTextComment && typeof setTextComment === 'function') {
       setTextComment(temporaryText);
@@ -58,9 +55,9 @@ const ReplyCommentId = ({
   }, [temporaryText]);
 
   const getThisComment = async () => {
-    const comments = await getThisCommentHook(itemProp);
-    setItem({...itemProp, latest_children: {comment: comments}});
-    setNewCommentList(comments);
+    if (itemProp.latest_children.comment && Array.isArray(itemProp.latest_children.comment)) {
+      setNewCommentList(itemProp.latest_children?.comment);
+    }
   };
 
   React.useEffect(() => {
