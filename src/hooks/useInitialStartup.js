@@ -1,32 +1,32 @@
-import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import {LogBox, StatusBar} from 'react-native';
 import {useLocalChannelsFirst} from 'stream-chat-react-native';
-import SplashScreen from 'react-native-splash-screen';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
-import {getDomains, getFollowedDomain} from '../service/domain';
-import {getSpecificCache, saveToCache} from '../utils/cache';
-import {FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS} from '../utils/cache/constant';
-import {setNews} from '../context/actions/news';
-import {getMainFeed} from '../service/post';
-import {setMainFeeds, setTimer} from '../context/actions/feeds';
-import {getUserId} from '../utils/users';
-import {getFollowing, getMyProfile} from '../service/profile';
-import following from '../context/actions/following';
-import {getFollowingTopic} from '../service/topics';
-import DiscoveryRepo from '../service/discovery';
+
 import DiscoveryAction from '../context/actions/discoveryAction';
-import {Context} from '../context';
-import {setMyProfileAction} from '../context/actions/setMyProfileAction';
-import {useClientGetstream} from '../utils/getstream/ClientGetStram';
-import {getAccessToken} from '../utils/token';
-import {getFeedNotification, setFeedChatsFromLocal} from '../service/feeds';
+import DiscoveryRepo from '../service/discovery';
+import following from '../context/actions/following';
 import streamFeed from '../utils/getstream/streamer';
-import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {Analytics} from '../libraries/analytics/firebaseAnalytics';
+import {Context} from '../context';
+import {FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS} from '../utils/cache/constant';
 import {InitialStartupAtom} from '../service/initialStartup';
 import {channelListLocalAtom} from '../service/channelListLocal';
 import {feedChatAtom} from '../models/feeds/feedsNotification';
+import {getAccessToken} from '../utils/token';
+import {getDomains, getFollowedDomain} from '../service/domain';
+import {getFeedNotification, setFeedChatsFromLocal} from '../service/feeds';
+import {getFollowing, getMyProfile} from '../service/profile';
+import {getFollowingTopic} from '../service/topics';
+import {getMainFeed} from '../service/post';
+import {getSpecificCache, saveToCache} from '../utils/cache';
+import {setMainFeeds, setTimer} from '../context/actions/feeds';
+import {setMyProfileAction} from '../context/actions/setMyProfileAction';
+import {setNews} from '../context/actions/news';
+import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
+import {useClientGetstream} from '../utils/getstream/ClientGetStram';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -75,8 +75,7 @@ export const useInitialStartup = () => {
 
   const getProfile = async () => {
     try {
-      const selfUserId = await getUserId();
-      const profile = await getMyProfile(selfUserId);
+      const profile = await getMyProfile();
       saveToCache(PROFILE_CACHE, profile.data);
       setMyProfileAction(profile.data, dispatchProfile);
       setLoadingUser(false);
@@ -128,10 +127,8 @@ export const useInitialStartup = () => {
   };
 
   const getDiscoveryData = async () => {
-    const selfUserId = await getUserId();
-
     try {
-      getFollowing(selfUserId).then((response) => {
+      getFollowing().then((response) => {
         following.setFollowingUsers(response.data, followingDispatch);
       });
 
