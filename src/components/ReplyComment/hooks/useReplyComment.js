@@ -206,7 +206,7 @@ const useReplyComment = ({
     }
     setTemporaryText('');
     let dummyData = {...defaultData, data: {...defaultData.data, text: textComment}};
-    if (anonimityData.emojiName) {
+    if (anonimityData?.emojiName) {
       dummyData = {
         ...defaultData,
         user: {},
