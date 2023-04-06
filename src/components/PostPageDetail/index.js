@@ -67,30 +67,12 @@ const PostPageDetailIdComponent = (props) => {
 
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
-  // React.useEffect(() => {
-  //   if (!isInitial) {
-  //     if (item && item?.latest_reactions) {
-  //       if (!item?.latest_reactions?.comment) setCommentList([]);
-  //       else
-  //         setCommentList(
-  //           item.latest_reactions.comment.sort(
-  //             (a, b) => moment(a.updated_at).unix() - moment(b.updated_at).unix()
-  //           )
-  //         );
-
-  //       setTotalComment(getCountCommentWithChildInDetailPage(item.latest_reactions));
-  //     }
-  //   }
-  // }, [item]);
-  // console.log(commentContext.comments, 'buset 1');
 
   const getComment = async () => {
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
     saveComment(response.data.data, dispatchComment);
-    // setCommentList(response.data.data);
   };
-  console.log(comments, 'benar');
   React.useEffect(() => {
     getComment();
   }, []);
@@ -202,7 +184,6 @@ const PostPageDetailIdComponent = (props) => {
         let sendData = {
           activity_id: item.id,
           message: textComment,
-          // useridFeed: item.actor.id,
           sendPostNotif: true,
           anonimity: isAnonimity
         };
@@ -222,7 +203,6 @@ const PostPageDetailIdComponent = (props) => {
         if (data.code === 200) {
           setTextComment('');
           updateFeed(true);
-          // Toast.show('Comment successful', Toast.LONG);
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
           setLoadingPost(false);
@@ -250,7 +230,6 @@ const PostPageDetailIdComponent = (props) => {
     const pdpDiffTime = currentTime.getTime() - time;
 
     if (feedId) {
-      // viewTimePost(feedId, feedDiffTime, SOURCE_FEED_TAB);
       viewTimePost(feedId, pdpDiffTime + feedDiffTime, SOURCE_PDP);
     }
 
@@ -271,7 +250,6 @@ const PostPageDetailIdComponent = (props) => {
         }
         return {...feed};
       });
-      // setMainFeeds(mappingData, dispatch)
       updateFeedContext(mappingData);
     }
   };
@@ -372,7 +350,6 @@ const PostPageDetailIdComponent = (props) => {
       }
       return {...feed};
     });
-    // setMainFeeds(mappingData, dispatch)
     updateFeedContext(mappingData);
   };
 
@@ -391,7 +368,6 @@ const PostPageDetailIdComponent = (props) => {
       }
       return {...feed};
     });
-    // setMainFeeds(mappingData, dispatch)
     updateFeedContext(mappingData);
   };
   const findCommentAndUpdate = (id, newData, level) => {
@@ -419,7 +395,6 @@ const PostPageDetailIdComponent = (props) => {
       });
       newCommenList = updatedComment;
     }
-    // setCommentList(newCommenList)
     saveComment(newCommenList, dispatchComment);
     findReduxCommentAndUpdate(newCommenList);
   };
@@ -431,7 +406,6 @@ const PostPageDetailIdComponent = (props) => {
       }
       return {...feed};
     });
-    // setMainFeeds(mappingData, dispatch)
     updateFeedContext(mappingData);
   };
 
@@ -487,7 +461,6 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const onPressDownVoteHandle = async () => {
-    // setLoadingVote(true);
     setStatusDowvote((prev) => !prev);
     if (voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 2);
@@ -505,7 +478,6 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const onPressUpvoteHandle = async () => {
-    // setLoadingVote(true);
     setStatusUpvote((prev) => !prev);
     if (voteStatus === 'upvote') {
       setTotalVote((prevState) => prevState - 1);
@@ -575,13 +547,11 @@ const PostPageDetailIdComponent = (props) => {
   const updateVoteLatestChildren = async (dataUpdated, data, level) => {
     if (level === 3) {
       const newComment = await updateVoteLatestChildrenLevel3(comments, dataUpdated);
-      // setCommentList(newComment);
-      saveComment(newComment, dispatchComment);
+      saveComment(newComment, dispatchComment)
     }
     if (level === 1) {
       const newComment = await updateVoteChildrenLevel1(comments, dataUpdated);
-      // setCommentList(newComment);
-      saveComment(newComment, dispatchComment);
+      saveComment(newComment, dispatchComment)
     }
   };
   return (
@@ -638,7 +608,6 @@ const PostPageDetailIdComponent = (props) => {
                     )
                   }
                   onPressComment={onCommentButtonClicked}
-                  // loadingVote={loadingVote}
                   showScoreButton={true}
                   onPressScore={handleOnPressScore}
                   onPressBlock={() => refBlockComponent.current.openBlockComponent(item)}
