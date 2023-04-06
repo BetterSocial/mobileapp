@@ -42,6 +42,17 @@ const InputMessage = () => {
     const notDeleteImage = imageUploads.filter((image) => image.id !== item.id);
     setImageUploads(notDeleteImage);
   };
+
+  const isDisableButton = () => {
+    if (isOnline) {
+      if (text.length > 0 || imageUploads.length > 0) {
+        return false;
+      }
+      return true;
+    }
+    return true;
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -54,8 +65,8 @@ const InputMessage = () => {
             <MemoIc_Picture width={20} height={20} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.btn(text || imageUploads.length !== 0)}
-            disabled={imageUploads.length <= 0 || !isOnline}
+            style={styles.btn(!isDisableButton())}
+            disabled={isDisableButton()}
             onPress={handleSendMessage}>
             <IconSend style={styles.icSendButton} />
           </TouchableOpacity>
