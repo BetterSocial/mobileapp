@@ -16,6 +16,12 @@ import {setAsset, setParticipants} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {setChannel} from '../../context/actions/setChannel';
+import EasyFollowSystem
+  from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
+import api from '../../service/config';
+import crashlytics from '@react-native-firebase/crashlytics';
+import { useRecoilState } from 'recoil';
+import { followersOrFollowingAtom } from '../ChannelListScreen/model/followersOrFollowingAtom';
 
 const streami18n = new Streami18n({
   language: 'en'
@@ -24,6 +30,7 @@ const streami18n = new Streami18n({
 const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
+  const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
@@ -119,39 +126,74 @@ const ChatDetailPage = ({route}) => {
     setAsset(messages.results, dispatch);
   };
   const testDate = (v) => v;
+
+  const checkFollowBack = async (data) => {
+    try {
+      const response = await api.get(`/users/check-follow?targetUserId=${data}`);
+      if (response?.data) {
+        return response.data.data;
+      }
+    } catch (error) {
+      crashlytics().recordError(new Error(error));
+      throw new Error(error);
+    }
+  };
+
+  const followButtonAction = async (userId, targetUserId, username, targetUsername) => {
+    const requestData = {
+      user_id_follower: userId,
+      user_id_followed: targetUserId,
+      username_follower: username,
+      username_followed: targetUsername,
+      follow_source: 'chat'
+    };
+
+    api
+      .post('/profiles/follow-user', requestData)
+      .then((res) => {
+        Promise.resolve(res.data);
+      })
+      .catch((err) => {
+        setFollowUserList([...followUserList, requestData]);
+        Promise.reject(err);
+      });
+
+    return true;
+  };
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
         <StatusBar backgroundColor="white" translucent={false} />
-        <Chat client={clients.client} i18nInstance={streami18n}>
-          <Channel
-            channel={channelClient.channel}
-            DateHeader={CustomDateHeader}
-            hasFilePicker={false}
-            ImageUploadPreview={<ImageSendPreview />}
-            keyboardVerticalOffset={0}
-            mutesEnabled={false}
-            reactionsEnabled={false}
-            readEventsEnabled={true}
-            threadRepliesEnabled={false}
-            MessageStatus={ChatStatusIcon}
-            MessageSystem={(props) => messageSystemCustom(props)}
-            // MessageContent={(props) => <CustomMessageContent {...props} />}
-            messageActions={(props) => defaultActionsAllowed(props)}
-            ReactionList={() => null}>
-            <>
-              <Header />
+        <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
+          <Chat client={clients.client} i18nInstance={streami18n}>
+            <Channel
+              channel={channelClient.channel}
+              DateHeader={CustomDateHeader}
+              hasFilePicker={false}
+              ImageUploadPreview={<ImageSendPreview />}
+              keyboardVerticalOffset={0}
+              mutesEnabled={false}
+              reactionsEnabled={false}
+              readEventsEnabled={true}
+              threadRepliesEnabled={false}
+              MessageStatus={ChatStatusIcon}
+              MessageSystem={(props) => messageSystemCustom(props)}
+              // MessageContent={(props) => <CustomMessageContent {...props} />}
+              messageActions={(props) => defaultActionsAllowed(props)}
+              ReactionList={() => null}>
+              <>
+                <Header />
+                <MessageList
+                  tDateTimeParser={testDate}
+                  InlineDateSeparator={CustomInlineDateSeparator}
+                  loading={false}
+                />
 
-              <MessageList
-                tDateTimeParser={testDate}
-                InlineDateSeparator={CustomInlineDateSeparator}
-                loading={false}
-              />
-
-              <MessageInput Input={InputMessage} />
-            </>
-          </Channel>
-        </Chat>
+                <MessageInput Input={InputMessage} />
+              </>
+            </Channel>
+          </Chat>
+        </EasyFollowSystem>
       </SafeAreaView>
     );
   }
