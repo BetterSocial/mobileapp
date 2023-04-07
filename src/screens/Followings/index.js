@@ -1,23 +1,16 @@
 import * as React from 'react';
-import {
-  Dimensions,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/core';
-import { useRoute } from '@react-navigation/native';
+import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
+import {useRoute} from '@react-navigation/native';
 
 import DomainList from './elements/RenderList';
-import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
-import { getFollowing, setFollow, setUnFollow } from '../../service/profile';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
+import {getFollowing, setFollow, setUnFollow} from '../../service/profile';
 
-const { width, height } = Dimensions.get('screen');
+const {width, height} = Dimensions.get('screen');
 
 const Followings = () => {
-
   const navigation = useNavigation();
   const route = useRoute();
   const [user_id, setUserId] = React.useState(null);
@@ -25,32 +18,35 @@ const Followings = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [dataFollowing, setDataFollowing] = React.useState([]);
 
-  const { params } = route;
+  const {params} = route;
 
   React.useEffect(() => {
     if (params.user_id) {
       setUserId(params.user_id);
       setUsername(params.username);
     }
-
   }, [params.user_id]);
 
   React.useEffect(() => {
     if (user_id) {
       fetchFollowing(true);
     }
-  }, [user_id])
+  }, [user_id]);
 
   const fetchFollowing = async (withLoading) => {
-    withLoading ? setIsLoading(true) : null;
-    // const userId = await getUserId();
-    const result = await getFollowing(user_id);
+    if (withLoading) setIsLoading(true);
+    const result = await getFollowing();
     if (result.code === 200) {
-      const newData = result.data.map((data) => ({ ...data, name: data.user.username, image: data.user.profile_pic_path, description: null }))
+      const newData = result.data.map((data) => ({
+        ...data,
+        name: data.user.username,
+        image: data.user.profile_pic_path,
+        description: null
+      }));
       setDataFollowing(newData);
-      withLoading ? setIsLoading(false) : null;
+      if (withLoading) setIsLoading(false);
       navigation.setOptions({
-        title: `Users (${newData.length})`,
+        title: `Users (${newData.length})`
       });
     }
   };
@@ -59,10 +55,10 @@ const Followings = () => {
     const data = {
       user_id,
       other_id: value.user_id_followed,
-      username: value.user.username,
+      username: value.user.username
     };
 
-    navigation.navigate('OtherProfile', { data });
+    navigation.navigate('OtherProfile', {data});
   };
 
   const handleSetUnFollow = async (index) => {
@@ -74,10 +70,10 @@ const Followings = () => {
     const data = {
       user_id_follower: user_id,
       user_id_followed: singleDataFollowing.user.user_id,
-      follow_source: 'other-profile',
+      follow_source: 'other-profile'
     };
 
-   await setUnFollow(data);
+    await setUnFollow(data);
   };
 
   const handleSetFollow = async (index) => {
@@ -91,15 +87,19 @@ const Followings = () => {
       user_id_followed: singleDataFollowing.user.user_id,
       username_follower: username,
       username_followed: singleDataFollowing.user.username,
-      follow_source: 'other-profile',
+      follow_source: 'other-profile'
     };
     await setFollow(data);
   };
 
-  const renderItem = ({ item, index }) => (
-      <DomainList item={item} onPressBody={() => goToOtherProfile(item)} handleSetFollow={() => handleSetFollow(index)} handleSetUnFollow={() => handleSetUnFollow(index)} />
-    );
-
+  const renderItem = ({item, index}) => (
+    <DomainList
+      item={item}
+      onPressBody={() => goToOtherProfile(item)}
+      handleSetFollow={() => handleSetFollow(index)}
+      handleSetUnFollow={() => handleSetUnFollow(index)}
+    />
+  );
 
   return (
     <View style={styles.container}>
@@ -111,14 +111,18 @@ const Followings = () => {
           refreshing={isLoading}
           // contentContainerStyle={{ flex: 1 }}
           onRefresh={fetchFollowing}
-          ListEmptyComponent={isLoading ? null : <View style={styles.nousercontent}>
-            <Text style={styles.nousertext}>
-              {`You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.`}
-            </Text>
-          </View>}
-
+          ListEmptyComponent={
+            isLoading ? null : (
+              <View style={styles.nousercontent}>
+                <Text style={styles.nousertext}>
+                  {
+                    'You are not following anyone.\n Find interesting people to follow.\n Others cannot see whom you are following.'
+                  }
+                </Text>
+              </View>
+            )
+          }
         />
-
       </View>
       {/* <Loading visible={isLoading} /> */}
     </View>
@@ -127,7 +131,7 @@ const Followings = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.white
   },
   header: {
     flexDirection: 'row',
@@ -135,18 +139,18 @@ const styles = StyleSheet.create({
     marginTop: 6,
     paddingBottom: 16,
     paddingTop: 16,
-    position: 'relative',
+    position: 'relative'
   },
   textUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 16,
-    color: colors.black,
+    color: colors.black
   },
   floatLeft: {
     position: 'absolute',
     left: 20,
-    top: 10,
+    top: 10
   },
   tabs: {
     width,
@@ -157,20 +161,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
-    marginTop: 14,
+    marginTop: 14
   },
   wrapTextTabs: {
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
     borderBottomWidth: 2,
-    borderBottomColor: colors.bondi_blue,
+    borderBottomColor: colors.bondi_blue
   },
   textTabs: {
     fontFamily: fonts.inter[800],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: colors.black
   },
   content: {
     flexDirection: 'column',
@@ -181,12 +185,12 @@ const styles = StyleSheet.create({
     // flexDirection: 'column',
     height: height - 140,
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   nousertext: {
     alignSelf: 'center',
     textAlign: 'center',
-    marginHorizontal: 36,
+    marginHorizontal: 36
   },
   card: {
     height: 68,
@@ -195,37 +199,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     paddingHorizontal: 20,
-    marginVertical: 10,
+    marginVertical: 10
   },
   wrapProfile: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     flex: 1,
-    marginEnd: 16,
+    marginEnd: 16
   },
   imageProfile: {
     width: 48,
     height: 48,
-    borderRadius: 48,
+    borderRadius: 48
   },
   wrapTextProfile: {
     marginLeft: 12,
     flexDirection: 'column',
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   textProfileUsername: {
     fontFamily: fonts.inter[500],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: colors.black
   },
   textProfileFullName: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.gray,
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
   buttonFollowing: {
     width: 88,
@@ -235,7 +239,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.bondi_blue,
-    borderRadius: 8,
+    borderRadius: 8
   },
   buttonFollow: {
     width: 88,
@@ -244,19 +248,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: colors.bondi_blue,
+    backgroundColor: colors.bondi_blue
   },
   textButtonFollowing: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.bondi_blue,
+    color: colors.bondi_blue
   },
   textButtonFollow: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 12,
-    color: colors.white,
+    color: colors.white
   },
   profilepicture: {
     width: 48,
@@ -266,6 +270,6 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderColor: colors.lightgrey,
     borderWidth: 1
-  },
+  }
 });
-export default (Followings);
+export default Followings;

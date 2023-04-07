@@ -3,7 +3,6 @@ import {
   Dimensions,
   FlatList,
   Platform,
-  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -12,6 +11,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
+import ListTopic from './ListTopics';
 import StringConstant from '../../utils/string/StringConstant';
 import useSignin from '../SignInV2/hooks/useSignin';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
@@ -23,7 +23,6 @@ import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
 import {getSpecificCache} from '../../utils/cache';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
-import ListTopic from './ListTopics';
 
 const {width} = Dimensions.get('screen');
 

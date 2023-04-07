@@ -13,6 +13,7 @@ import {Analytics} from '../libraries/analytics/firebaseAnalytics';
 import {Context} from '../context';
 import {FEEDS_CACHE, NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS} from '../utils/cache/constant';
 import {InitialStartupAtom} from '../service/initialStartup';
+import {Monitoring} from '../libraries/monitoring/sentry';
 import {channelListLocalAtom} from '../service/channelListLocal';
 import {feedChatAtom} from '../models/feeds/feedsNotification';
 import {getAccessToken} from '../utils/token';
@@ -22,13 +23,11 @@ import {getFollowing, getMyProfile} from '../service/profile';
 import {getFollowingTopic} from '../service/topics';
 import {getMainFeed} from '../service/post';
 import {getSpecificCache, saveToCache} from '../utils/cache';
-import {getUserId} from '../utils/users';
 import {setMainFeeds, setTimer} from '../context/actions/feeds';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
 import {setNews} from '../context/actions/news';
 import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
-import {Monitoring} from '../libraries/monitoring/sentry';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -80,8 +79,7 @@ export const useInitialStartup = () => {
 
   const getProfile = async () => {
     try {
-      const selfUserId = await getUserId();
-      const profile = await getMyProfile(selfUserId);
+      const profile = await getMyProfile();
       saveToCache(PROFILE_CACHE, profile.data);
       setMyProfileAction(profile.data, dispatchProfile);
       setLoadingUser(false);
@@ -133,10 +131,8 @@ export const useInitialStartup = () => {
   };
 
   const getDiscoveryData = async () => {
-    const selfUserId = await getUserId();
-
     try {
-      getFollowing(selfUserId).then((response) => {
+      getFollowing().then((response) => {
         following.setFollowingUsers(response.data, followingDispatch);
       });
 
