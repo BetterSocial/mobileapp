@@ -42,10 +42,10 @@ const PostPageDetailIdComponent = (props) => {
   const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
-  const [isReaction, setReaction] = React.useState(false);
+  const [, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
   const [typeComment] = React.useState('parent');
-  const [totalComment, setTotalComment] = React.useState(0);
+  const [, setTotalComment] = React.useState(0);
   const [totalVote, setTotalVote] = React.useState(0);
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
@@ -64,14 +64,16 @@ const PostPageDetailIdComponent = (props) => {
   });
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
-
+  const [loadingGetComment, setLoadingGetComment] = React.useState(true);
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
 
   const getComment = async () => {
+    setLoadingGetComment(true);
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
     saveComment(response.data.data, dispatchComment);
+    setLoadingGetComment(false);
   };
   React.useEffect(() => {
     getComment();
@@ -547,11 +549,11 @@ const PostPageDetailIdComponent = (props) => {
   const updateVoteLatestChildren = async (dataUpdated, data, level) => {
     if (level === 3) {
       const newComment = await updateVoteLatestChildrenLevel3(comments, dataUpdated);
-      saveComment(newComment, dispatchComment)
+      saveComment(newComment, dispatchComment);
     }
     if (level === 1) {
       const newComment = await updateVoteChildrenLevel1(comments, dataUpdated);
-      saveComment(newComment, dispatchComment)
+      saveComment(newComment, dispatchComment);
     }
   };
   return (
@@ -595,7 +597,7 @@ const PostPageDetailIdComponent = (props) => {
                 <Footer
                   item={item}
                   disableComment={false}
-                  totalComment={totalComment}
+                  totalComment={item.reaction_counts.comment}
                   totalVote={totalVote}
                   onPressDownVote={onPressDownVoteHandle}
                   onPressUpvote={onPressUpvoteHandle}
@@ -615,7 +617,7 @@ const PostPageDetailIdComponent = (props) => {
                 />
               </View>
             </View>
-            {comments.length > 0 && (
+            {comments.length > 0 && !loadingGetComment && (
               <ContainerComment
                 feedId={feedId}
                 comments={comments}
