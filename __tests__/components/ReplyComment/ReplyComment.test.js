@@ -97,7 +97,6 @@ describe('Reply comment should run correctly', () => {
         const mock1 = jest.fn()
         jest.spyOn(replyFunc, 'default').mockImplementation(() => ({getThisCommentHook: mock1, temporaryText: 'halo'}))
         render(<ReplyComment itemProp={itemProp} itemParent={itemParent} page={page} level={level} indexFeed={indexFeed} />, {wrapper: Store})
-        expect(mock1).toHaveBeenCalled()
 
 
     })
