@@ -1,10 +1,14 @@
 import React from 'react';
+
+import {TOPICS_PICK} from '../../../utils/cache/constant';
 import {get} from '../../../api/server';
 import {saveToCache} from '../../../utils/cache';
-import {TOPICS_PICK} from '../../../utils/cache/constant';
 
 const useSignin = () => {
   const [topicCollection, setTopics] = React.useState([]);
+  const [isTopicFetchError, setIsTopicFetchError] = React.useState(false);
+  const [isFetchingTopic, setIsFetchingTopic] = React.useState(false);
+
   const topicMapping = (data) => {
     const allTopics = [];
     if (data && typeof data === 'object') {
@@ -23,20 +27,25 @@ const useSignin = () => {
   };
 
   const getTopicsData = () => {
+    setIsFetchingTopic(true);
     get({url: '/topics/list'})
       .then((res) => {
         if (res.status === 200) {
           topicMapping(res.data.body);
         }
+
+        setIsFetchingTopic(false);
       })
       .catch((e) => {
+        setIsTopicFetchError(true);
+        setIsFetchingTopic(false);
         if (__DEV__) {
           console.log('topics error: ', e);
         }
       });
   };
 
-  return {getTopicsData, topicCollection};
+  return {isFetchingTopic, isTopicFetchError, getTopicsData, topicCollection};
 };
 
 export default useSignin;

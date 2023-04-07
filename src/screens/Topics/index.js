@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   Platform,
@@ -11,16 +12,19 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
+import CustomPressable from '../../components/CustomPressable';
 import ListTopic from './ListTopics';
 import StringConstant from '../../utils/string/StringConstant';
 import useSignin from '../SignInV2/hooks/useSignin';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Header} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 
@@ -34,7 +38,8 @@ const Topics = () => {
   const [, dispatch] = React.useContext(Context).topics;
   const [myTopic, setMyTopic] = React.useState({});
   const [isPreload, setIspreload] = React.useState(true);
-  const {getTopicsData, topicCollection} = useSignin();
+
+  const {isFetchingTopic, isTopicFetchError, getTopicsData, topicCollection} = useSignin();
   const getCacheTopic = async () => {
     getSpecificCache(TOPICS_PICK, (cache) => {
       if (cache) {
@@ -114,35 +119,48 @@ const Topics = () => {
             </Text>
           </View>
 
-          <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
-            {topics
-              ? topics.map((topic, index) => (
-                  <View key={index} style={styles.containerTopic}>
-                    <Text style={styles.title}>{topic.name}</Text>
-                    <ScrollView
-                      showsHorizontalScrollIndicator={false}
-                      horizontal={true}
-                      style={styles.scrollButtonParent}
-                      contentContainerStyle={styles.containerContent}
-                      nestedScrollEnabled>
-                      <FlatList
-                        data={topic.data}
-                        renderItem={renderListTopics}
-                        numColumns={Math.floor(topic.data.length / 3) + 1}
-                        nestedScrollEnabled
-                        scrollEnabled={false}
-                        extraData={topicSelected}
-                        maxToRenderPerBatch={2}
-                        updateCellsBatchingPeriod={10}
-                        removeClippedSubviews
-                        windowSize={10}
-                        keyExtractor={keyExtractor}
-                      />
-                    </ScrollView>
-                  </View>
-                ))
-              : null}
-          </ScrollView>
+          {topics?.length > 0 && (
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
+              {topics
+                ? topics.map((topic, index) => (
+                    <View key={index} style={styles.containerTopic}>
+                      <Text style={styles.title}>{topic.name}</Text>
+                      <ScrollView
+                        showsHorizontalScrollIndicator={false}
+                        horizontal={true}
+                        style={styles.scrollButtonParent}
+                        contentContainerStyle={styles.containerContent}
+                        nestedScrollEnabled>
+                        <FlatList
+                          data={topic.data}
+                          renderItem={renderListTopics}
+                          numColumns={Math.floor(topic.data.length / 3) + 1}
+                          nestedScrollEnabled
+                          scrollEnabled={false}
+                          extraData={topicSelected}
+                          maxToRenderPerBatch={2}
+                          updateCellsBatchingPeriod={10}
+                          removeClippedSubviews
+                          windowSize={10}
+                          keyExtractor={keyExtractor}
+                        />
+                      </ScrollView>
+                    </View>
+                  ))
+                : null}
+            </ScrollView>
+          )}
+
+          {topics?.length === 0 && !isTopicFetchError && !isFetchingTopic && (
+            <View style={styles.reloadTopicButtonContainer}>
+              <CustomPressable onPress={getTopicsData}>
+                <Text style={styles.reloadTopicButton}>
+                  {'Something went wrong. \n\n Tap to reload'}
+                </Text>
+              </CustomPressable>
+            </View>
+          )}
+
           <View style={styles.footer}>
             <Text
               style={styles.textSmall}>{`${StringConstant.onboardingTopicsOthersCannotSee}`}</Text>
@@ -159,6 +177,8 @@ const Topics = () => {
           </View>
         </React.Fragment>
       )}
+
+      {isFetchingTopic && <ActivityIndicator size={'large'} color={colors.gray} />}
     </SafeAreaView>
   );
 };
@@ -301,6 +321,15 @@ const styles = StyleSheet.create({
   },
   containerContent: {
     paddingRight: 20
+  },
+  reloadTopicButtonContainer: {
+    marginTop: 60
+  },
+  reloadTopicButton: {
+    textAlign: 'center',
+    fontFamily: fonts.inter[600],
+    color: COLORS.blue,
+    textDecorationLine: 'underline'
   }
 });
 export default React.memo(Topics);
