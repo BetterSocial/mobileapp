@@ -2,8 +2,10 @@ import * as React from 'react';
 import {ActivityIndicator, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 
+import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
+import crashlytics from '@react-native-firebase/crashlytics';
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
@@ -25,6 +27,8 @@ import {setTotalUnreadPostNotif} from '../../context/actions/unReadMessageAction
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {traceMetricScreen} from '../../libraries/performance/firebasePerformance';
 import {feedChatAtom} from '../../models/feeds/feedsNotification';
+import api from '../../service/config';
+import {followersOrFollowingAtom} from './model/followersOrFollowingAtom';
 
 const ChannelListScreen = ({navigation}) => {
   const streami18n = new Streami18n({
@@ -42,6 +46,7 @@ const ChannelListScreen = ({navigation}) => {
     useChannelList();
   const [, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
+  const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
 
   const filters = {
     members: {$in: [myProfile.user_id]},
@@ -160,6 +165,40 @@ const ChannelListScreen = ({navigation}) => {
     />
   );
 
+  const checkFollowBack = async (data) => {
+    try {
+      const response = await api.get(`/users/check-follow?targetUserId=${data}`);
+      if (response?.data) {
+        return response.data.data;
+      }
+    } catch (error) {
+      crashlytics().recordError(new Error(error));
+      throw new Error(error);
+    }
+  };
+
+  const followButtonAction = async (userId, targetUserId, username, targetUsername) => {
+    const requestData = {
+      user_id_follower: userId,
+      user_id_followed: targetUserId,
+      username_follower: username,
+      username_followed: targetUsername,
+      follow_source: 'chat'
+    };
+
+    api
+      .post('/profiles/follow-user', requestData)
+      .then((res) => {
+        Promise.resolve(res.data);
+      })
+      .catch((err) => {
+        setFollowUserList([...followUserList, requestData]);
+        Promise.reject(err);
+      });
+
+    return true;
+  };
+
   return (
     <SafeAreaProvider style={{height: '100%'}}>
       <StatusBar translucent={false} />
@@ -167,35 +206,37 @@ const ChannelListScreen = ({navigation}) => {
         <View style={{height: 52}}>
           <Search animatedValue={0} onPress={() => navigation.navigate('ContactScreen')} />
         </View>
-        {myProfile && myProfile.user_id && client.client ? (
-          <Chat client={client.client} i18nInstance={streami18n}>
-            <ChannelList
-              PreviewAvatar={CustomPreviewAvatar}
-              filters={memoizedFilters}
-              PreviewStatus={ChannelStatusIcon}
-              PreviewTitle={customPreviewTitle}
-              onSelect={onSelectChat}
-              sort={sort}
-              options={options}
-              onChannelVisible={onChannelVisible}
-              maxUnreadCount={99}
-              localData={channelListLocalValue}
-              additionalFlatListProps={{
-                onEndReached: () => null,
-                refreshControl: null
-              }}
-              additionalData={listPostNotif}
-              context={myContext}
-              PreviewUnreadCount={chatBadge}
-              PreviewMessage={PreviewMessage}
-              PostNotifComponent={postNotifComponent}
-            />
-          </Chat>
-        ) : (
-          <View style={styles.content}>
-            <ActivityIndicator size="small" color={COLORS.red} />
-          </View>
-        )}
+        <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
+          {myProfile && myProfile.user_id && client.client ? (
+            <Chat client={client.client} i18nInstance={streami18n}>
+              <ChannelList
+                PreviewAvatar={CustomPreviewAvatar}
+                filters={memoizedFilters}
+                PreviewStatus={ChannelStatusIcon}
+                PreviewTitle={customPreviewTitle}
+                onSelect={onSelectChat}
+                sort={sort}
+                options={options}
+                onChannelVisible={onChannelVisible}
+                maxUnreadCount={99}
+                localData={channelListLocalValue}
+                additionalFlatListProps={{
+                  onEndReached: () => null,
+                  refreshControl: null
+                }}
+                additionalData={listPostNotif}
+                context={myContext}
+                PreviewUnreadCount={chatBadge}
+                PreviewMessage={PreviewMessage}
+                PostNotifComponent={postNotifComponent}
+              />
+            </Chat>
+          ) : (
+            <View style={styles.content}>
+              <ActivityIndicator size="small" color={COLORS.red} />
+            </View>
+          )}
+        </EasyFollowSystem>
       </ScrollView>
     </SafeAreaProvider>
   );
