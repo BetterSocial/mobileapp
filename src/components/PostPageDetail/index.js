@@ -42,7 +42,7 @@ const PostPageDetailIdComponent = (props) => {
   const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
-  const [isReaction, setReaction] = React.useState(false);
+  const [, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
   const [typeComment] = React.useState('parent');
   const [totalComment, setTotalComment] = React.useState(0);
@@ -51,7 +51,6 @@ const PostPageDetailIdComponent = (props) => {
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
   const [loadingPost, setLoadingPost] = React.useState(false);
-  const [commentList, setCommentList] = React.useState([]);
   const [time, setTime] = React.useState(new Date().getTime());
   const [item, setItem] = React.useState(null);
   const navigation = useNavigation();
@@ -59,13 +58,13 @@ const PostPageDetailIdComponent = (props) => {
   const scrollViewRef = React.useRef(null);
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
-  const [isInitial, setIsInitial] = React.useState(true);
   const {timer} = feedsContext;
   const [commenListParam] = React.useState({
     limit: 20
   });
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
+
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   // React.useEffect(() => {
@@ -90,13 +89,11 @@ const PostPageDetailIdComponent = (props) => {
     const response = await getCommentList(feedId, queryParam);
     saveComment(response.data.data, dispatchComment);
     // setCommentList(response.data.data);
-    setIsInitial(false);
   };
-
+  console.log(comments, 'benar');
   React.useEffect(() => {
     getComment();
   }, []);
-  console.log(comments, 'sunan')
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
     const downvotes = data.downvotes ? data.downvotes : 0;
@@ -579,12 +576,12 @@ const PostPageDetailIdComponent = (props) => {
     if (level === 3) {
       const newComment = await updateVoteLatestChildrenLevel3(comments, dataUpdated);
       // setCommentList(newComment);
-      saveComment(newComment, dispatchComment)
+      saveComment(newComment, dispatchComment);
     }
     if (level === 1) {
       const newComment = await updateVoteChildrenLevel1(comments, dataUpdated);
       // setCommentList(newComment);
-      saveComment(newComment, dispatchComment)
+      saveComment(newComment, dispatchComment);
     }
   };
   return (
@@ -690,7 +687,7 @@ const PostPageDetailIdComponent = (props) => {
   );
 };
 
-export default withInteractionsManaged(PostPageDetailIdComponent);
+export default withInteractionsManaged(React.memo(PostPageDetailIdComponent));
 
 const styles = StyleSheet.create({
   container: {
