@@ -13,8 +13,10 @@ import DevDummyLogin from '../../components/DevDummyLogin';
 import SlideShow from './elements/SlideShow';
 import getRemoteConfig from '../../service/getRemoteConfig';
 import useSignin from './hooks/useSignin';
+import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
+import {Monitoring} from '../../libraries/monitoring/sentry';
 import {checkToken} from '../../service/outh';
 import {fonts} from '../../utils/fonts';
 import {removeLocalStorege, setAccessToken, setRefreshToken, setUserId} from '../../utils/token';
@@ -22,8 +24,6 @@ import {setDataHumenId} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {verifyUser} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
-import {Monitoring} from '../../libraries/monitoring/sentry';
 
 const SignIn = () => {
   const [, dispatch] = React.useContext(Context).users;
