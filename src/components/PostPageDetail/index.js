@@ -30,11 +30,11 @@ import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
 import {getFeedDetail, viewTimePost} from '../../service/post';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {saveComment} from '../../context/actions/comment';
 import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
-import {saveComment} from '../../context/actions/comment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -42,7 +42,7 @@ const PostPageDetailIdComponent = (props) => {
   const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
   const [profile] = React.useContext(Context).profile;
   const [loading, setLoading] = React.useState(true);
-  const [isReaction, setReaction] = React.useState(false);
+  const [, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
   const [typeComment] = React.useState('parent');
   const [totalComment, setTotalComment] = React.useState(0);
@@ -547,11 +547,11 @@ const PostPageDetailIdComponent = (props) => {
   const updateVoteLatestChildren = async (dataUpdated, data, level) => {
     if (level === 3) {
       const newComment = await updateVoteLatestChildrenLevel3(comments, dataUpdated);
-      saveComment(newComment, dispatchComment)
+      saveComment(newComment, dispatchComment);
     }
     if (level === 1) {
       const newComment = await updateVoteChildrenLevel1(comments, dataUpdated);
-      saveComment(newComment, dispatchComment)
+      saveComment(newComment, dispatchComment);
     }
   };
   return (

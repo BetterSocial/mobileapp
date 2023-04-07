@@ -1,5 +1,6 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text} from 'react-native';
+
 import {colors} from '../../utils/colors';
 
 const ListTopics = ({item, i, myTopic, handleSelectedLanguage}) => (

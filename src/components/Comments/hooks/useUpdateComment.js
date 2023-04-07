@@ -22,4 +22,4 @@ const useUpdateComment = () => {
   };
 };
 
-export default useUpdateComment
+export default useUpdateComment;

@@ -250,7 +250,7 @@ const ProfileScreen = ({route}) => {
 
   const handleSave = async () => {
     setIsChangeRealName(true);
-    const result = await changeRealName(dataMain.user_id, tempFullName);
+    const result = await changeRealName(tempFullName);
     if (result.code === 200) {
       fetchMyProfile();
       setIsChangeRealName(false);
@@ -330,7 +330,7 @@ const ProfileScreen = ({route}) => {
       profile_pic_path: value
     };
 
-    updateImageProfile(dataMain.user_id, data)
+    updateImageProfile(data)
       .then((res) => {
         if (type === 'gallery') {
           setIsLoadingUpdateImageGalery(false);
@@ -392,7 +392,7 @@ const ProfileScreen = ({route}) => {
       bio: tempBio
     };
     setDataMainBio(tempBio);
-    updateBioProfile(dataMain.user_id, data)
+    updateBioProfile(data)
       .then((res) => {
         setIsLoadingUpdateBio(false);
         if (res.code === 200) {

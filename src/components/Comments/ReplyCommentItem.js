@@ -38,7 +38,7 @@ const ReplyCommentItem = ({
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
   const [yourselfId, setYourselfId] = React.useState('');
-  const {updateComment} = useUpdateComment()
+  const {updateComment} = useUpdateComment();
   const [totalVote, setTotalVote] = React.useState(
     comment.data.count_upvote - comment.data.count_downvote
   );
@@ -86,16 +86,16 @@ const ReplyCommentItem = ({
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    console.log(dataVote, 'nana')
+    console.log(dataVote, 'nana');
     const result = await voteComment(dataVote);
-    console.log(result, 'sipo')
+    console.log(result, 'sipo');
     if (updateVoteParent && typeof updateVoteParent === 'function') {
       updateVoteParent(result, dataVote, comment);
     }
     setTotalVote(result.data.data.count_upvote - result.data.data.count_downvote);
     iVote();
     if (refreshComment) refreshComment(result);
-    updateComment(result.data.activity_id)
+    updateComment(result.data.activity_id);
   };
 
   const iVote = async () => {
@@ -124,7 +124,7 @@ const ReplyCommentItem = ({
   }, []);
 
   React.useEffect(() => {
-    console.log(comment.data, 'lupa')
+    console.log(comment.data, 'lupa');
     setTotalVote(comment.data.count_upvote - comment.data.count_downvote);
   }, [JSON.stringify(comment.data)]);
 
