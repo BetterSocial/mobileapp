@@ -1,8 +1,9 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 
+import NetInfo from '@react-native-community/netinfo';
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
@@ -46,12 +47,43 @@ import {
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
 import {useInitialStartup} from '../hooks/useInitialStartup';
+import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
+import api from '../service/config';
 
 const RootStack = createNativeStackNavigator();
 
 export const RootNavigator = () => {
   const initialStartup = useRecoilValue(InitialStartupAtom);
+  const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
+
+  React.useEffect(() => {
+    // console.tron.log(NetInfo)
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (state.isConnected && following?.length !== 0) {
+        const successValue = [];
+        following.forEach((value) => {
+          api.post('/profiles/follow-user', value).then(() => {
+            successValue.push(value.user_id_followed);
+          });
+        });
+
+        if (successValue.length === following.length) {
+          setFollowing([]);
+        } else {
+          const filteredList = following.filter(
+            (value) => !successValue.includes(value.user_id_followed)
+          );
+
+          setFollowing([...filteredList]);
+        }
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <LoadingStartupContext.Provider value={loadingStartup.loadingUser}>
