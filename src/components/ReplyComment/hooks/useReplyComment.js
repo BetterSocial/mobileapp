@@ -201,16 +201,27 @@ const useReplyComment = ({
     }
   };
   const createComment = async (isAnonimity, anonimityData) => {
-    console.log(isAnonimity, anonimityData, 'sulit');
     let sendPostNotif = false;
     if (page !== 'DetailDomainScreen') {
       sendPostNotif = true;
     }
+
+    const commentWillBeAddedData = {
+      ...defaultData,
+      data: {...defaultData.data, text: textComment}
+    };
+
+    if (isAnonimity) {
+      commentWillBeAddedData.data.is_anonymous = true;
+      commentWillBeAddedData.data.anon_user_info_emoji_name = anonimityData.emojiName;
+      commentWillBeAddedData.data.anon_user_info_emoji_code = anonimityData.emojiCode;
+      commentWillBeAddedData.data.anon_user_info_color_name = anonimityData.colorName;
+      commentWillBeAddedData.data.anon_user_info_color_code = anonimityData.colorCode;
+      commentWillBeAddedData.user.data.username = `${anonimityData.colorName} ${anonimityData.emojiName}`;
+    }
+
     setTemporaryText('');
-    setNewCommentList([
-      ...newCommentList,
-      {...defaultData, data: {...defaultData.data, text: textComment}}
-    ]);
+    setNewCommentList([...newCommentList, commentWillBeAddedData]);
     try {
       if (textComment.trim() !== '') {
         const data = await createChildComment(

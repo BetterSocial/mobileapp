@@ -202,7 +202,6 @@ const PostPageDetailIdComponent = (props) => {
         if (data.code === 200) {
           setTextComment('');
           updateFeed(true);
-          // Toast.show('Comment successful', Toast.LONG);
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
           setLoadingPost(false);
