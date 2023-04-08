@@ -37,14 +37,14 @@ const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
   const [textComment, setTextComment] = React.useState('');
   const [temporaryText, setTemporaryText] = React.useState('');
   const [, setReaction] = React.useState(false);
-  const [loadingCMD, setLoadingCMD] = React.useState(false);
+  const [loadingCMD] = React.useState(false);
   const [users] = React.useContext(Context).users;
   const [profile] = React.useContext(Context).profile;
 
   const [item, setItem] = React.useState(itemProp);
-  const [idComment, setIdComment] = React.useState(0);
+  const [, setIdComment] = React.useState(0);
   const [newCommentList, setNewCommentList] = React.useState([]);
-  const [defaultData, setDefaultData] = React.useState({
+  const [defaultData] = React.useState({
     data: {count_downvote: 0, count_upvote: 0, text: textComment},
     id: newCommentList.length + 1,
     kind: 'comment',
@@ -171,11 +171,11 @@ const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
 
   const navigationGoBack = () => navigation.goBack();
 
-  const saveNewComment = ({data}) => {
+  const saveNewComment = () => {
     updateFeed();
   };
 
-  const saveParentComment = ({data}) => {
+  const saveParentComment = () => {
     updateFeed();
   };
 
@@ -218,11 +218,12 @@ const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
               const showChildrenCommentView = () => {
                 navigation.push('ReplyComment', {
                   item: itemReply,
-                  level: parseInt(level) + 2,
+                  level: parseInt(level, 10) + 2,
                   indexFeed
                 });
               };
-              const isLastInParent = (index) => index === (item.children_counts.comment || 0) - 1;
+              const isLastInParent = (indexParam) =>
+                indexParam === (item.children_counts.comment || 0) - 1;
 
               return (
                 <ContainerReply key={index}>
@@ -242,7 +243,7 @@ const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
                         user={itemReply.user}
                         comment={itemReply}
                         onPress={showChildrenCommentView}
-                        level={parseInt(level) + 1}
+                        level={parseInt(level, 10) + 1}
                         loading={loadingCMD}
                         refreshComment={saveNewComment}
 
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center'
   },
-  containerReply: (hideLeftConnector) => ({
+  containerReply: () => ({
     borderLeftWidth: 1,
     width: '100%'
     // backgroundColor: 'red',
