@@ -212,32 +212,16 @@ const useReplyComment = ({
     };
 
     if (isAnonimity) {
+      commentWillBeAddedData.user = {};
       commentWillBeAddedData.data.is_anonymous = true;
       commentWillBeAddedData.data.anon_user_info_emoji_name = anonimityData.emojiName;
       commentWillBeAddedData.data.anon_user_info_emoji_code = anonimityData.emojiCode;
       commentWillBeAddedData.data.anon_user_info_color_name = anonimityData.colorName;
       commentWillBeAddedData.data.anon_user_info_color_code = anonimityData.colorCode;
-      commentWillBeAddedData.user.data.username = `${anonimityData.colorName} ${anonimityData.emojiName}`;
     }
 
     setTemporaryText('');
-    let dummyData = {...defaultData, data: {...defaultData.data, text: textComment}};
-    if (anonimityData?.emojiName) {
-      dummyData = {
-        ...defaultData,
-        user: {},
-        data: {
-          ...defaultData.data,
-          anon_user_info_emoji_name: anonimityData.emojiName,
-          is_anonymous: true,
-          anon_user_info_color_code: anonimityData.colorCode,
-          anon_user_info_emoji_code: anonimityData.emojiCode,
-          anon_user_info_color_name: anonimityData.colorName,
-          text: textComment
-        }
-      };
-    }
-    setNewCommentList([...newCommentList, {...dummyData}]);
+    setNewCommentList([...newCommentList, commentWillBeAddedData]);
 
     try {
       if (textComment.trim() !== '') {
