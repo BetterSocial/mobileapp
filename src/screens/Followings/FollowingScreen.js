@@ -1,11 +1,12 @@
 import * as React from 'react';
-import {BackHandler, Platform, StatusBar, StyleSheet, View} from 'react-native';
+import Animated from 'react-native-reanimated';
+import {BackHandler, Platform, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {useNavigation} from '@react-navigation/core';
 
 import DomainFragmentScreen from './elements/DomainFragmentScreen';
 import Followings from '.';
 import Header from '../../components/Header';
-import MyTabBar from './elements/TabBar/FollowingTabBar';
 import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
@@ -13,8 +14,8 @@ import {fonts} from '../../utils/fonts';
 import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction';
 import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 
-function FollowingScreen(props) {
-  const {navigation} = props;
+function FollowingScreen() {
+  const navigation = useNavigation();
   const [profileState, dispatchNavbar] = React.useContext(Context).profile;
   const TAB_TOPIC = 'TabTopic';
   const TAB_FOLLOWING = 'TabFollowing';
@@ -37,6 +38,45 @@ function FollowingScreen(props) {
     return null;
   };
 
+  function MyTabBar({state, descriptors, position}) {
+    const buttonTabBar = () =>
+      state.routes.map((route, index) => {
+        const {options} = descriptors[route.key];
+        const label = options.tabBarLabel
+          ? options.tabBarLabel
+          : options.title
+          ? options.title
+          : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          navigation.navigate(route.name);
+        };
+
+        const inputRange = state.routes.map((_, i) => i);
+        const opacity = Animated.interpolateNode(position, {
+          inputRange,
+          outputRange: inputRange.map((i) => (i === index ? 1 : 0.3))
+        });
+
+        return (
+          <TouchableOpacity
+            key={route.key}
+            accessibilityRole="button"
+            accessibilityState={isFocused ? {selected: true} : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarTestID}
+            onPress={onPress}
+            style={S.singletab}>
+            <Animated.Text style={{opacity, ...S.singletabtext}}>{label}</Animated.Text>
+            <View style={isFocused ? S.viewborderbottom : {}} />
+          </TouchableOpacity>
+        );
+      });
+    return <View style={S.toptabcontainer}>{buttonTabBar()}</View>;
+  }
+
   const listenTab = (tabProps) => {
     const {route} = tabProps;
     if (route.name === TAB_FOLLOWING) {
@@ -46,7 +86,7 @@ function FollowingScreen(props) {
       setNavbarTitle('Your Domains', dispatchNavbar);
     }
     if (route.name === TAB_TOPIC) {
-      setNavbarTitle('Your Topics', dispatchNavbar);
+      setNavbarTitle('Your Communities', dispatchNavbar);
     }
   };
 
@@ -103,7 +143,7 @@ function FollowingScreen(props) {
           name={TAB_TOPIC}
           component={TopicFragmentScreen}
           options={{
-            title: 'Topics'
+            title: 'Communities'
           }}
           listeners={listenTab}
         />
