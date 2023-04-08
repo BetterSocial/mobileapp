@@ -162,7 +162,6 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
   };
   const handleReplyComment = () => {
     const findComment = item.comments.find((data) => data.reaction.kind === 'comment');
-    console.log(findComment, 'sunat');
     if (findComment) {
       if (findComment.reaction.isOwningReaction) {
         return `You: ${findComment.reaction.data.text}`;
@@ -170,7 +169,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
       if (findComment.reaction.data.anon_user_info_color_name) {
         return `${findComment.reaction.data.anon_user_info_color_name} ${findComment.reaction.data.anon_user_info_emoji_name} replied to your comment: ${findComment.reaction.data.text}`;
       }
-      return `${findComment.actor.data.username} replied to your comment: ${findComment.reaction.data.text} `;
+      return `${findComment.reaction?.user?.data?.username} replied to your comment: ${findComment.reaction.data.text} `;
     }
     return 'No comments yet';
   };
@@ -181,6 +180,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
     }
     return null;
   };
+  console.log(item, 'heiman');
   return (
     <ButtonHighlight key={index} onPress={() => onSelectAdditionalData(item)}>
       <View style={[styles.containerCard, {borderBottomColor: border}]}>
@@ -214,7 +214,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
             </View>
           </View>
         </View>
-        {item.postMaker.id === myProfile.user_id ? (
+        {item.isOwnPost ? (
           <View style={[styles.descriptionContainer]}>
             <View style={[styles.avatarContainer, styles.avatarNoHeight]} />
             <React.Fragment>

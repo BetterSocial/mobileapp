@@ -8,6 +8,7 @@ import Content from './Content';
 import ContentLink from './ContentLink';
 import Header from './Header';
 import ShareUtils from '../../utils/share';
+import dimen from '../../utils/dimen';
 import useFeed from './hooks/useFeed';
 import {
   ANALYTICS_SHARE_POST_FEED_ID,
@@ -18,10 +19,9 @@ import {
   SOURCE_FEED_TAB
 } from '../../utils/constants';
 import {Footer, Gap, PreviewComment} from '../../components';
+import {colors} from '../../utils/colors';
 import {getCommentLength} from '../../utils/getstream';
 import {showScoreAlertDialog} from '../../utils/Utils';
-import dimen from '../../utils/dimen';
-import {colors} from '../../utils/colors';
 
 const tabBarHeight = StatusBar.currentHeight;
 const FULL_WIDTH = Dimensions.get('screen').width;
@@ -100,7 +100,7 @@ const RenderListFeed = (props) => {
     checkVotesHandle();
     initialSetup(item);
   }, [item]);
-
+  console.log(item, 'salah');
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={styles.cardMain}>
@@ -139,7 +139,7 @@ const RenderListFeed = (props) => {
         <View style={styles.footerWrapper(getHeightFooter(bottomHeight))}>
           <Footer
             item={item}
-            totalComment={getCommentLength(item.latest_reactions.comment)}
+            totalComment={item.reaction_counts.comment}
             totalVote={totalVote}
             onPressShare={() =>
               ShareUtils.shareFeeds(
@@ -166,7 +166,7 @@ const RenderListFeed = (props) => {
                 comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
                 image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
                 time={item.latest_reactions.comment[0].created_at}
-                totalComment={getCommentLength(item.latest_reactions.comment) - 1}
+                totalComment={item.reaction_counts.comment - 1}
                 item={item.latest_reactions.comment[0]}
                 onPress={onPressComment}
               />

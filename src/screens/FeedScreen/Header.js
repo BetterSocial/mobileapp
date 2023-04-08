@@ -3,11 +3,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 
 import * as React from 'react';
+import Image from 'react-native-fast-image';
 import PropsTypes from 'prop-types';
+import moment from 'moment';
 import {Dimensions, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Image from 'react-native-fast-image';
-import dimen from '../../utils/dimen';
 
 import AnonymousAvatar from '../../components/AnonymousAvatar';
 import AnonymousUsername from '../../components/AnonymousUsername';
@@ -31,63 +31,69 @@ import {fonts} from '../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-export const validationTimer = (timer, duration_feed) => {
-  const date1 = new Date(timer);
-  const date2 = new Date();
-  const totalFeed = 24 * duration_feed;
-  const hours = Math.abs(date1 - date2) / 36e5;
-  const total = (hours / totalFeed) * 100;
-  switch (true) {
-    case total < 25:
-      return (
-        <View testID="25">
-          <MemoEightyEight_hundred height={17} width={17} />
-        </View>
-      );
-    case total < 38:
-      return (
-        <View testID="36">
-          <MemoSeventyFive_eightySeven height={17} width={17} />
-        </View>
-      );
-    case total < 50:
-      return (
-        <View testID="50">
-          <MemoSixtyThree_seventyFour height={17} width={17} />
-        </View>
-      );
-    case total < 63:
-      return (
-        <View testID="63">
-          <MemoFivety_sixtyTwo height={17} width={17} />
-        </View>
-      );
-    case total < 75:
-      return (
-        <View testID="75">
-          <MemoThirtySeven_fourtyNine height={17} width={17} />
-        </View>
-      );
-    case total < 88:
-      return (
-        <View testID="80">
-          <MemoTwentyFive_thirtySix height={17} width={17} />
-        </View>
-      );
-    default:
-      return (
-        <View testID="full">
-          <MemoOne height={17} width={17} />
-        </View>
-      );
-  }
+export const validationTimer = (createdAt, duration_feed) => {
+  const postCreatedAt = moment(`${createdAt}Z`);
+  const postExpiredAt = moment(`${createdAt}Z`).add(duration_feed, 'days');
+  const now = moment();
+
+  const timeFromExpiredToNow = postExpiredAt.diff(now, 'hours');
+  const timeFromCreatedToExpired = postExpiredAt.diff(postCreatedAt, 'hours');
+
+  const timePercentage = (timeFromExpiredToNow * 100) / timeFromCreatedToExpired;
+
+  if (timePercentage < 25)
+    return (
+      <View testID="25">
+        <MemoEightyEight_hundred height={17} width={17} />
+      </View>
+    );
+
+  if (timePercentage < 38)
+    return (
+      <View testID="36">
+        <MemoSeventyFive_eightySeven height={17} width={17} />
+      </View>
+    );
+
+  if (timePercentage < 50)
+    return (
+      <View testID="50">
+        <MemoSixtyThree_seventyFour height={17} width={17} />
+      </View>
+    );
+
+  if (timePercentage < 63)
+    return (
+      <View testID="63">
+        <MemoFivety_sixtyTwo height={17} width={17} />
+      </View>
+    );
+
+  if (timePercentage < 75)
+    return (
+      <View testID="75">
+        <MemoThirtySeven_fourtyNine height={17} width={17} />
+      </View>
+    );
+
+  if (timePercentage < 88)
+    return (
+      <View testID="80">
+        <MemoTwentyFive_thirtySix height={17} width={17} />
+      </View>
+    );
+
+  return (
+    <View testID="full">
+      <MemoOne height={17} width={17} />
+    </View>
+  );
 };
 
 const _renderAnonimity = ({
   time,
   privacy,
   duration_feed,
-  expired_at,
   location,
   isBackButton,
   height,
@@ -144,7 +150,7 @@ const _renderAnonimity = ({
               )}
 
               {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-              {duration_feed !== 'never' ? validationTimer(expired_at, duration_feed) : null}
+              {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
               <View style={styles.point} />
               <Text style={styles.feedDate}>{location}</Text>
             </View>
@@ -160,7 +166,6 @@ const _renderProfileNormal = ({
   time,
   privacy,
   duration_feed,
-  expired_at,
   location,
   isBackButton,
   height,
@@ -225,7 +230,7 @@ const _renderProfileNormal = ({
               )}
 
               {duration_feed !== 'never' ? <View style={styles.point} /> : null}
-              {duration_feed !== 'never' ? validationTimer(expired_at, duration_feed) : null}
+              {duration_feed !== 'never' ? validationTimer(time, duration_feed) : null}
               <View style={styles.point} />
               <Text style={styles.feedDateLocation} numberOfLines={1}>
                 {location}
