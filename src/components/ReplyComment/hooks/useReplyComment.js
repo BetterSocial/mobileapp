@@ -206,26 +206,10 @@ const useReplyComment = ({
       sendPostNotif = true;
     }
     setTemporaryText('');
-    let dummyData = {...defaultData, data: {...defaultData.data, text: textComment}};
-    if (anonimityData?.emojiName) {
-      dummyData = {
-        ...defaultData,
-        user: {},
-        data: {
-          ...defaultData.data,
-          anon_user_info_emoji_name: anonimityData.emojiName,
-          is_anonymous: true,
-          anon_user_info_color_code: anonimityData.colorCode,
-          anon_user_info_emoji_code: anonimityData.emojiCode,
-          anon_user_info_color_name: anonimityData.colorName,
-          text: textComment
-        }
-      };
-    }
-    setNewCommentList([...newCommentList, {...dummyData}]);
 
     const commentWillBeAddedData = {
       ...defaultData,
+      user: {},
       data: {...defaultData.data, text: textComment}
     };
 
@@ -238,8 +222,8 @@ const useReplyComment = ({
       commentWillBeAddedData.user.data.username = `${anonimityData.colorName} ${anonimityData.emojiName}`;
     }
 
-    setTemporaryText('');
     setNewCommentList([...newCommentList, commentWillBeAddedData]);
+
     try {
       if (textComment.trim() !== '') {
         const data = await createChildComment(

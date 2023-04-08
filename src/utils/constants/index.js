@@ -10,7 +10,7 @@ const CHANNEL_TYPE_GROUP_LOCATION = 2;
 const CHANNEL_TYPE_PERSONAL = 0;
 const CHANNEL_TYPE_TOPIC = 3;
 const DEFAULT_PROFILE_PIC_PATH =
-  'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png';
+  'https://res.cloudinary.com/hpjivutj2/image/upload/v1680929851/default-profile-picture_vrmmdn.png';
 const DEFAULT_TOPIC_PIC_PATH =
   'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png';
 const KEY_ACCESS_TOKEN = 'access_token';
