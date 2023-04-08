@@ -43,7 +43,8 @@ const useProfileScreenHook = () => {
     setTabIndexToSigned,
     reloadFetchAnonymousPost,
     fetchAnonymousPost,
-    profileTabIndex
+    profileTabIndex,
+    isProfileTabSigned
   };
 };
 
