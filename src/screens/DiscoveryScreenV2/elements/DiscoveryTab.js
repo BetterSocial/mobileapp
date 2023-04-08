@@ -12,7 +12,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0}) => {
     onChangeScreen(index);
   }, []);
 
-  const tabs = ['Users', 'Topics', 'Domains', 'News'];
+  const tabs = ['Users', 'Communities', 'Domains', 'News'];
   return (
     <>
       <ScrollView
@@ -27,7 +27,7 @@ const DiscoveryTab = ({onChangeScreen, selectedScreen = 0}) => {
             android_ripple={{
               color: colors.gray1
             }}
-            style={styles.tabItem}
+            style={styles.tabItem(index)}
             onPress={() => handleTabOnClicked(index)}>
             <View style={styles.tabItemContainer}>
               <Text style={index === selectedScreen ? styles.tabItemTextFocus : styles.tabItemText}>
@@ -47,13 +47,13 @@ const styles = StyleSheet.create({
     height: 48,
     backgroundColor: colors.white
   },
-  tabItem: {
+  tabItem: (index) => ({
     flex: 1,
     width: width / 4,
     justifyContent: 'center',
     height: '100%',
-    paddingLeft: 20
-  },
+    paddingLeft: index !== 1 ? 20 : 0
+  }),
   tabItemContainer: {
     alignSelf: 'flex-start'
   },

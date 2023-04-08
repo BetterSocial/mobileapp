@@ -1,20 +1,21 @@
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import * as React from 'react';
-import {BackHandler, Platform, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Animated from 'react-native-reanimated';
+import {BackHandler, Platform, StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {useNavigation} from '@react-navigation/core';
 
-import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
-import {Context} from '../../context';
-import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction';
-import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
 import DomainFragmentScreen from './elements/DomainFragmentScreen';
-import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
 import Followings from '.';
 import Header from '../../components/Header';
+import TopicFragmentScreen from './elements/TopicScreen/TopicFragmentScreen';
+import {Context} from '../../context';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
+import {setNavbarTitle, showHeaderProfile} from '../../context/actions/setMyProfileAction';
+import {withInteractionsManagedNoStatusBar} from '../../components/WithInteractionManaged';
 
-function FollowingScreen(props) {
-  const {navigation} = props;
+function FollowingScreen() {
+  const navigation = useNavigation();
   const [profileState, dispatchNavbar] = React.useContext(Context).profile;
   const TAB_TOPIC = 'TabTopic';
   const TAB_FOLLOWING = 'TabFollowing';
@@ -51,15 +52,7 @@ function FollowingScreen(props) {
         const isFocused = state.index === index;
 
         const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true
-          });
-
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
-          }
+          navigation.navigate(route.name);
         };
 
         const inputRange = state.routes.map((_, i) => i);
@@ -94,7 +87,7 @@ function FollowingScreen(props) {
       setNavbarTitle('Your Domains', dispatchNavbar);
     }
     if (route.name === TAB_TOPIC) {
-      setNavbarTitle('Your Topics', dispatchNavbar);
+      setNavbarTitle('Your Communities', dispatchNavbar);
     }
   };
 
@@ -153,7 +146,7 @@ function FollowingScreen(props) {
           name={TAB_TOPIC}
           component={TopicFragmentScreen}
           options={{
-            title: 'Topics'
+            title: 'Communities'
           }}
           listeners={listenTab}
         />

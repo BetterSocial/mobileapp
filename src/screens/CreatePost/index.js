@@ -760,7 +760,7 @@ const CreatePost = () => {
             icon={<MemoIc_hastag width={16.67} height={16.67} />}
             topic={listTopic.length > 0}
             listTopic={renderListTopic()}
-            label="Add Topics"
+            label="Add Communities"
             labelStyle={styles.hastagText}
             onPress={openTopic}
           />

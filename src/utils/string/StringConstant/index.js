@@ -36,9 +36,9 @@ const onboardingLocalCommunitySecondaryLocationSubTitle =
   '🏡 Home away from home? Add a second location';
 
 // Onboarding - Topics
-const onboardingTopicsHeadline = 'Pick your topics of interest';
+const onboardingTopicsHeadline = 'Join communities of interest';
 const onboardingTopicsSubHeadline = 'Find like-minded people';
-const onboardingTopicsOthersCannotSee = "Others cannot see which topics you're following";
+const onboardingTopicsOthersCannotSee = "Others cannot see which communities you're following";
 const onboardingTopicsButtonStateNext = 'NEXT';
 const onboardingTopicsButtonStateChooseMore = (count) => `CHOOSE ${count} MORE`;
 
@@ -97,7 +97,7 @@ const upvoteFailedText = 'Upvote failed - please try again';
 
 // Discovery Screen
 const discoveryMoreUsers = 'More Users';
-const discoveryMoreTopics = 'More Topics';
+const discoveryMoreTopics = 'More Communities';
 const discoveryMoreDomains = 'More Domains';
 const discoveryMoreNews = 'More News';
 const discoverySearchBarPlaceholder = 'Search Better';

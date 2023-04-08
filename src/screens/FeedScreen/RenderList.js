@@ -100,7 +100,6 @@ const RenderListFeed = (props) => {
     checkVotesHandle();
     initialSetup(item);
   }, [item]);
-  console.log(item, 'salah');
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={styles.cardMain}>
