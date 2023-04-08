@@ -4,10 +4,10 @@ import moment from 'moment';
 import {useNavigation} from '@react-navigation/core';
 
 import StringConstant from '../../../utils/string/StringConstant';
+import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 import {Context} from '../../../context';
 import {createChildComment} from '../../../service/comment';
 import {getFeedDetail} from '../../../service/post';
-import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 
 const useReplyComment = ({
   itemProp,
@@ -205,6 +205,21 @@ const useReplyComment = ({
     if (page !== 'DetailDomainScreen') {
       sendPostNotif = true;
     }
+
+    const commentWillBeAddedData = {
+      ...defaultData,
+      data: {...defaultData.data, text: textComment}
+    };
+
+    if (isAnonimity) {
+      commentWillBeAddedData.data.is_anonymous = true;
+      commentWillBeAddedData.data.anon_user_info_emoji_name = anonimityData.emojiName;
+      commentWillBeAddedData.data.anon_user_info_emoji_code = anonimityData.emojiCode;
+      commentWillBeAddedData.data.anon_user_info_color_name = anonimityData.colorName;
+      commentWillBeAddedData.data.anon_user_info_color_code = anonimityData.colorCode;
+      commentWillBeAddedData.user.data.username = `${anonimityData.colorName} ${anonimityData.emojiName}`;
+    }
+
     setTemporaryText('');
     let dummyData = {...defaultData, data: {...defaultData.data, text: textComment}};
     if (anonimityData?.emojiName) {
