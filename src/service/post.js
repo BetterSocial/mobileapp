@@ -107,6 +107,19 @@ export const deletePost = async (postId) => {
   }
 };
 
+export const deleteAnonymousPost = async (postId) => {
+  try {
+    const resApi = await api.delete(`/activity/anonymous/${postId}`);
+    return resApi.data;
+  } catch (error) {
+    crashlytics().recordError(error?.response?.data);
+    if (__DEV__) {
+      console.log('delete post error: ', error);
+    }
+    return error;
+  }
+};
+
 export const isAuthorFollowingMe = async (postId) => {
   try {
     const resApi = await api.get(`/activity/post/is-author-follow-me/${postId}`);
