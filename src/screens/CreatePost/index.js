@@ -185,7 +185,7 @@ const CreatePost = () => {
   React.useEffect(() => {
     init();
     if (isInCreatePostTopicScreen) {
-      setTimeout(() => setMessage((prev) => `${prev} `), 500);
+      setTimeout(() => setMessage((prev) => `${prev}#${listTopic[0]}`), 500);
     }
   }, []);
 
