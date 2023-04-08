@@ -20,12 +20,10 @@ const createCommentParent = async (text, activityId, useridFeed, sendPostNotif) 
 };
 
 const createCommentParentV2 = async (data) => {
-  console.log(data, 'nani');
   try {
     const resApi = await api.post('/activity/comment-v2', data);
     return resApi.data;
   } catch (error) {
-    console.log(error, 'error pak');
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }
@@ -42,6 +40,7 @@ const createChildComment = async (
   isAnonymous,
   anonUser
 ) => {
+  console.log('masuk');
   try {
     let data = {
       reaction_id: reactionId,
@@ -82,4 +81,21 @@ const deleteComment = async (reactionId) => {
   }
 };
 
-export {createCommentParent, createChildComment, deleteComment, createCommentParentV2};
+const getCommentList = async (activity_id, params) => {
+  try {
+    const url = `feeds/reaction-list/${activity_id}?${params}`;
+    const response = await api.get(url);
+    return response;
+  } catch (e) {
+    crashlytics().recordError(e.response.data);
+    throw new Error(e);
+  }
+};
+
+export {
+  createCommentParent,
+  createChildComment,
+  deleteComment,
+  createCommentParentV2,
+  getCommentList
+};
