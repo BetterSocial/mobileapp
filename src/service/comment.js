@@ -24,6 +24,18 @@ const createCommentParentV2 = async (data) => {
     const resApi = await api.post('/activity/comment-v2', data);
     return resApi.data;
   } catch (error) {
+    console.log(error?.message);
+    crashlytics().recordError(new Error(error));
+    throw new Error(error);
+  }
+};
+
+const createCommentDomainParentV2 = async (data) => {
+  try {
+    const resApi = await api.post('/activity/comment-domain-v2', data);
+    return resApi.data;
+  } catch (error) {
+    console.log(error?.message);
     crashlytics().recordError(new Error(error));
     throw new Error(error);
   }
@@ -94,6 +106,7 @@ const getCommentList = async (activity_id, params) => {
 
 export {
   createCommentParent,
+  createCommentDomainParentV2,
   createChildComment,
   deleteComment,
   createCommentParentV2,

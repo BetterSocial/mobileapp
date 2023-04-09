@@ -144,6 +144,7 @@ const LinkContextScreenFooter = ({
             time={previewComment.created_at}
             totalComment={item.latest_reactions.comment.length - 1}
             onPress={() => onPressComment(item)}
+            item={previewComment}
           />
           <Gap height={16} />
         </View>
