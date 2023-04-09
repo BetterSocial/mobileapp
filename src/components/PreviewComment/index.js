@@ -15,8 +15,6 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
 
   const openProfile = async () => {
     const selfUserId = await getUserId();
-    console.log('item');
-    console.log(item);
 
     if (item?.data?.is_anonymous) return null;
 
@@ -42,10 +40,10 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
         <TouchableOpacity style={styles.profileTouchable} onPress={openProfile}>
           <View style={{left: -16}} />
           <View style={styles.profile}>
-            {item.data.anon_user_info_emoji_name || item.data.is_anonymous ? (
+            {item?.data?.anon_user_info_emoji_name || item?.data?.is_anonymous ? (
               <View style={[styles.image, {backgroundColor: item.data.anon_user_info_color_code}]}>
                 <Text style={{color: 'white', fontSize: 14}}>
-                  {item.data.anon_user_info_emoji_code}
+                  {item?.data?.anon_user_info_emoji_code}
                 </Text>
               </View>
             ) : (
@@ -73,7 +71,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
               <Text style={styles.username}>
                 {user?.data?.username
                   ? user.data.username
-                  : `${item.data?.anon_user_info_color_name} ${item.data?.anon_user_info_emoji_name}`}
+                  : `${item?.data?.anon_user_info_color_name} ${item?.data?.anon_user_info_emoji_name}`}
               </Text>
               <Gap width={4} />
               <Dot size={4} color={'#828282'} />

@@ -18,7 +18,7 @@ const getCountComment = (item) => {
   const reactionCount = item.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
-    const { comment } = reactionCount;
+    const {comment} = reactionCount;
     if (comment !== undefined) {
       count = comment;
     }
@@ -32,7 +32,7 @@ const getCountCommentWithChild = (item) => {
   const reactionLevelOne = item?.latest_reactions?.comment || [];
 
   if (JSON.stringify(reactionCountLevelOne) !== '{}') {
-    const { comment } = reactionCountLevelOne || {};
+    const {comment} = reactionCountLevelOne || {};
     if (comment !== undefined) {
       count += comment;
     }
@@ -41,7 +41,7 @@ const getCountCommentWithChild = (item) => {
       reactionLevelOne.forEach((itemLevelOne) => {
         if (JSON.stringify(itemLevelOne.latest_children) !== '{}') {
           const reactionLevelTwo = itemLevelOne.latest_children.comment;
-          reactionLevelTwo.forEach((itemLevelTwo, index) => {
+          reactionLevelTwo.forEach((itemLevelTwo) => {
             count += reactionLevelTwo.length;
 
             const reactionLevelThree = itemLevelTwo.latest_children;
@@ -52,7 +52,7 @@ const getCountCommentWithChild = (item) => {
         }
       });
     } catch (e) {
-
+      console.log(e);
     }
   }
 
@@ -71,14 +71,14 @@ const getCountCommentWithChildInDetailPage = (item) => {
   let count = 0;
   const reactionCountLevelOne = item?.comment || [];
   count += item?.comment?.length || 0;
-  reactionCountLevelOne.forEach((itemLevelOne, index) => {
-    if (itemLevelOne.latest_children.comment !== undefined) {
-      const reactionLevelTwo = itemLevelOne.latest_children.comment;
+  reactionCountLevelOne.forEach((itemLevelOne) => {
+    if (itemLevelOne?.latest_children?.comment !== undefined) {
+      const reactionLevelTwo = itemLevelOne?.latest_children?.comment || [];
       count += reactionLevelTwo.length;
-      reactionLevelTwo.forEach((itemLevelTwo, index) => {
-        const reactionLevelThree = itemLevelTwo.latest_children;
+      reactionLevelTwo.forEach((itemLevelTwo) => {
+        const reactionLevelThree = itemLevelTwo?.latest_children;
         if (JSON.stringify(reactionLevelThree) !== '{}') {
-          count += reactionLevelThree.comment.length;
+          count += reactionLevelThree?.comment?.length || 0;
         }
       });
     }
@@ -91,5 +91,5 @@ export {
   getCountVote,
   getCountCommentWithChild,
   getCountCommentWithChildInDetailPage,
-  getCommentLength,
+  getCommentLength
 };
