@@ -11,7 +11,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import {Context} from '../../context';
 import {Footer} from '../../components';
-import {createCommentParent} from '../../service/comment';
+import {createCommentDomainParentV2} from '../../service/comment';
 import {downVoteDomain, upVoteDomain} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
@@ -38,9 +38,6 @@ const DetailDomainScreen = (props) => {
   const [comments, setComments] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const blockRef = React.useRef(null);
-
-  console.log('dataDomain');
-  console.log(dataDomain);
 
   const [, dispatch] = React.useContext(Context).news;
 
@@ -142,24 +139,40 @@ const DetailDomainScreen = (props) => {
     }
   };
 
-  const onComment = () => {
-    commentParent();
-  };
-
-  const commentParent = async () => {
+  const commentParent = async (isAnonimity, anonimityData) => {
     try {
       if (textComment.trim() !== '') {
-        const data = await createCommentParent(textComment, item.id, '', false);
+        let sendData = {
+          activity_id: item.id,
+          message: textComment,
+          sendPostNotif: true,
+          anonimity: isAnonimity
+        };
+
+        const anonUser = {
+          emoji_name: anonimityData.emojiName,
+          color_name: anonimityData.colorName,
+          emoji_code: anonimityData.emojiCode,
+          color_code: anonimityData.colorCode,
+          is_anonymous: isAnonimity
+        };
+        if (isAnonimity) {
+          sendData = {...sendData, anon_user_info: anonUser};
+        }
+
+        const data = await createCommentDomainParentV2(sendData);
         setComments([data?.data, ...comments]);
         if (data?.code === 200) {
           setTextComment('');
           updateComment(data?.data, item?.id, dispatch);
           setTotalComment((prev) => parseInt(prev, 10) + 1);
+          getDomain(false);
         } else {
           Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
         }
       }
     } catch (e) {
+      console.log(e?.message);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
   };
@@ -284,9 +297,7 @@ const DetailDomainScreen = (props) => {
           value={textComment}
           username={item.domain.name}
           onChangeText={(value) => setTextComment(value)}
-          onPress={() => {
-            onComment();
-          }}
+          onPress={commentParent}
         />
       )}
       <BlockDomainComponent
