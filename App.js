@@ -88,6 +88,7 @@ const App = () => {
   return (
     <>
       <HumanIDProvider />
+      {/* <RealmProvider> */}
       <RecoilRoot>
         {__DEV__ ? <RecoilDebugObserver instance={reactotronInstance} /> : null}
         <Store>
@@ -106,6 +107,7 @@ const App = () => {
           </NavigationContainer>
         </Store>
       </RecoilRoot>
+      {/* </RealmProvider> */}
       <Toast config={toastConfig} />
       <FlashMessage position="top" />
     </>
