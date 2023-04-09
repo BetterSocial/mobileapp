@@ -185,7 +185,7 @@ const CreatePost = () => {
   React.useEffect(() => {
     init();
     if (isInCreatePostTopicScreen) {
-      setTimeout(() => setMessage((prev) => `${prev} `), 500);
+      setTimeout(() => setMessage((prev) => `${prev}#${listTopic[0]}`), 500);
     }
   }, []);
 
@@ -760,7 +760,7 @@ const CreatePost = () => {
             icon={<MemoIc_hastag width={16.67} height={16.67} />}
             topic={listTopic.length > 0}
             listTopic={renderListTopic()}
-            label="Add Topics"
+            label="Add Communities"
             labelStyle={styles.hastagText}
             onPress={openTopic}
           />

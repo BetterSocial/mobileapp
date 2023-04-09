@@ -1,15 +1,16 @@
 import * as React from 'react';
-import {ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View} from 'react-native';
 import KeyEvent from 'react-native-keyevent';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {Button} from '../../../components/Button';
-import TopicItem from '../../../components/TopicItem';
-import {getTopics} from '../../../service/topics';
-import {colors} from '../../../utils/colors';
-import {fonts} from '../../../utils/fonts';
-import {convertString} from '../../../utils/string/StringUtils';
-import {isEmptyOrSpaces} from '../../../utils/Utils';
+import {ScrollView, StyleSheet, Text, TextInput, TouchableNativeFeedback, View} from 'react-native';
+
 import Card from './Card';
+import TopicItem from '../../../components/TopicItem';
+import {Button} from '../../../components/Button';
+import {colors} from '../../../utils/colors';
+import {convertString} from '../../../utils/string/StringUtils';
+import {fonts} from '../../../utils/fonts';
+import {getTopics} from '../../../service/topics';
+import {isEmptyOrSpaces} from '../../../utils/Utils';
 
 const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
   const [dataTopic, setTopic] = React.useState('');
@@ -93,16 +94,6 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
     add();
     onClose();
   };
-  // const onSwepDown = () => {
-  //   const data = dataTopic.replace(/\s/g, '').toLowerCase();
-  //   if (data === '') {
-  //     saveOnClose(listTopics);
-  //   } else if (!listTopics.includes(data)) {
-  //       const newArr = [...listTopics, data];
-  //       saveOnClose(newArr);
-  //     }
-  //   add();
-  // };
 
   return (
     <RBSheet
@@ -118,7 +109,7 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
       }}>
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
-          <Text style={styles.title}>Add topics</Text>
+          <Text style={styles.title}>Add communities</Text>
           <View
             style={styles.content}
             onLayout={(event) => {
@@ -194,7 +185,9 @@ const SheetAddTopic = ({refTopic, onAdd, topics, onClose, chatTopics}) => {
             )}
           </View>
 
-          <Text style={styles.textDesc}>Hit space to start a new topic. Add up to 5 topics.</Text>
+          <Text style={styles.textDesc}>
+            Hit space to finish adding a community. Add up to 5 communities.
+          </Text>
           <Button onPress={() => save()}>Save</Button>
         </ScrollView>
       </View>

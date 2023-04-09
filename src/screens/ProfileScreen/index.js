@@ -49,7 +49,7 @@ import {
   updateImageProfile
 } from '../../service/profile';
 import {colors} from '../../utils/colors';
-import {deletePost, getFeedDetail} from '../../service/post';
+import {deleteAnonymousPost, deletePost, getFeedDetail} from '../../service/post';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
 import {getAccessToken} from '../../utils/token';
@@ -115,6 +115,7 @@ const ProfileScreen = ({route}) => {
     feeds: mainFeeds,
     profileTabIndex,
     isLoadingFetchingAnonymousPosts,
+    isProfileTabSigned,
     setTabIndexToAnonymous,
     setTabIndexToSigned,
     reloadFetchAnonymousPost
@@ -533,11 +534,15 @@ const ProfileScreen = ({route}) => {
     setIsOptionModalOpen(false);
     removePostByIdFromContext();
 
-    const response = await deletePost(selectedPostForOption?.id);
+    let response;
+    if (isProfileTabSigned) response = await deletePost(selectedPostForOption?.id);
+    else response = await deleteAnonymousPost(selectedPostForOption?.id);
     if (response?.success) {
       Toast.show('Post was permanently deleted', Toast.LONG);
     }
-    getMyFeeds();
+
+    if (isProfileTabSigned) return getMyFeeds();
+    return reloadFetchAnonymousPost();
   };
 
   const renderHeader = () => (
