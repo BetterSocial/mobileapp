@@ -15,6 +15,11 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
 
   const openProfile = async () => {
     const selfUserId = await getUserId();
+    console.log('item');
+    console.log(item);
+
+    if (item?.data?.is_anonymous) return null;
+
     if (selfUserId === user?.id) {
       return navigation.navigate('ProfileScreen', {
         isNotFromHomeTab: true
