@@ -35,7 +35,6 @@ const CreatePostInput = ({
     useHastagMention('');
 
   React.useEffect(() => {
-    // updateHashtag(message, topics, setTopics, positionEndCursor)
     setShouldUpdateHashtag(new Date().valueOf());
   }, [message]);
 
