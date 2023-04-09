@@ -261,6 +261,7 @@ const useReplyComment = ({
         }
       }
     } catch (error) {
+      console.log(error);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
   };
