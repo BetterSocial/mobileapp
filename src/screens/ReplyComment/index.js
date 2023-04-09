@@ -7,7 +7,6 @@ import {setFeedByIndex} from '../../context/actions/feeds';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const ReplyComment = (props) => {
-  // const [newComment, setNewComment] = React.useState([])
   const itemProp = props.route.params.item;
   const {
     updateParent,
