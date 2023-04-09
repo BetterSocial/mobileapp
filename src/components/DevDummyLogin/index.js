@@ -84,7 +84,13 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
           testID="dummyonboarding"
           title="Dev Dummy Onboarding"
           onPress={() => {
-            setDataHumenId(randomString(16), dispatch);
+            setDataHumenId(
+              {
+                appUserId: randomString(16),
+                countryCode: 'US'
+              },
+              dispatch
+            );
             navigation.navigate('ChooseUsername');
           }}
         />
