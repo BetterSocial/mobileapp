@@ -229,6 +229,7 @@ const DetailDomainScreen = (props) => {
     navigation.navigate('ReplyComment', {
       ...data,
       page: props.route.name,
+      dataFeed: data?.item,
       updateParent: updateParentPost
     });
   };
