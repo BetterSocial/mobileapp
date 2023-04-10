@@ -55,7 +55,6 @@ const FeedScreen = (props) => {
   const onDeleteBlockedPostCompletedHandle = async (postId) => {
     onDeleteBlockedPostCompleted(postId);
   };
-
   const onBlockCompletedHandle = async (postId) => {
     onBlockCompleted(postId);
   };

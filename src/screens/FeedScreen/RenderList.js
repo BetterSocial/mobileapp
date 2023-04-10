@@ -53,7 +53,8 @@ const RenderListFeed = (props) => {
     checkVotes,
     initialSetup,
     onPressUpvoteHook,
-    onPressDownVoteHook
+    onPressDownVoteHook,
+    getTotalReaction
   } = useFeed();
 
   const onPressDownVoteHandle = async () => {
@@ -101,6 +102,8 @@ const RenderListFeed = (props) => {
     initialSetup(item);
   }, [item]);
 
+  getTotalReaction(item);
+
   return (
     <View key={item.id} testID="dataScroll" style={styles.cardContainer}>
       <View style={styles.cardMain}>
@@ -139,7 +142,7 @@ const RenderListFeed = (props) => {
         <View style={styles.footerWrapper(getHeightFooter(bottomHeight))}>
           <Footer
             item={item}
-            totalComment={item.reaction_counts.comment}
+            totalComment={getTotalReaction(item)}
             totalVote={totalVote}
             onPressShare={() =>
               ShareUtils.shareFeeds(
