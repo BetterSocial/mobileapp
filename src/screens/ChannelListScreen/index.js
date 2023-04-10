@@ -1,34 +1,35 @@
 import * as React from 'react';
+// eslint-disable-next-line import/no-unresolved
+import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
+import crashlytics from '@react-native-firebase/crashlytics';
 import {ActivityIndicator, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
-import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
-import crashlytics from '@react-native-firebase/crashlytics';
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
 import PostNotificationPreview from './elements/components/PostNotificationPreview';
 import PreviewMessage from './elements/CustomPreviewMessage';
 import Search from './elements/Search';
+import api from '../../service/config';
 import streamFeed from '../../utils/getstream/streamer';
 import useChannelList from './hooks/useChannelList';
 import {CHANNEL_TYPE_TOPIC} from '../../utils/constants';
-import {FEED_COMMENT_COUNT} from '../../utils/cache/constant';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
+import {FEED_COMMENT_COUNT} from '../../utils/cache/constant';
 import {channelListLocalAtom} from '../../service/channelListLocal';
+import {feedChatAtom} from '../../models/feeds/feedsNotification';
+import {followersOrFollowingAtom} from './model/followersOrFollowingAtom';
 import {getAccessToken} from '../../utils/token';
 import {getChatName} from '../../utils/string/StringUtils';
 import {getSpecificCache} from '../../utils/cache';
 import {setChannel} from '../../context/actions/setChannel';
 import {setTotalUnreadPostNotif} from '../../context/actions/unReadMessageAction';
-import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {traceMetricScreen} from '../../libraries/performance/firebasePerformance';
-import {feedChatAtom} from '../../models/feeds/feedsNotification';
-import api from '../../service/config';
-import {followersOrFollowingAtom} from './model/followersOrFollowingAtom';
+import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const ChannelListScreen = ({navigation}) => {
   const streami18n = new Streami18n({
@@ -124,7 +125,8 @@ const ChannelListScreen = ({navigation}) => {
   const goToFeedDetail = async (item) => {
     navigation.navigate('PostDetailPage', {
       feedId: item.activity_id,
-      refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge)
+      refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
+      isCaching: false
     });
   };
 
@@ -171,6 +173,8 @@ const ChannelListScreen = ({navigation}) => {
       if (response?.data) {
         return response.data.data;
       }
+
+      return null;
     } catch (error) {
       crashlytics().recordError(new Error(error));
       throw new Error(error);
