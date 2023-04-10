@@ -104,6 +104,33 @@ const useFeed = () => {
     return '#C4C4C4';
   };
 
+  const getTotalReaction = (feedDetail) => {
+    if (feedDetail) {
+      const parentComment = feedDetail?.reaction_counts?.comment || 0;
+      const totalLevel2Comment = feedDetail?.latest_reactions?.comment?.map(
+        (child) => child?.children_counts?.comment || 0
+      ) || [0];
+      const total2 = totalLevel2Comment?.reduce((a, b) => a + b);
+      const level3Comment = [];
+      feedDetail?.latest_reactions?.comment?.forEach((feed) => {
+        const mapCount = feed?.latest_children?.comment?.map(
+          (comment) => comment?.children_counts?.comment || 0
+        );
+        if (Array.isArray(mapCount)) {
+          level3Comment.push(...mapCount);
+        }
+      });
+      let total3 = 0;
+      if (level3Comment.length > 0) {
+        total3 = level3Comment.reduce((a, b) => a + b);
+      }
+      console.log(parentComment, total2, total3, 'naniopo');
+
+      return parentComment + total2 + total3;
+    }
+    return 0;
+  };
+
   return {
     handleVote,
     totalVote,
@@ -122,7 +149,8 @@ const useFeed = () => {
     initialSetup,
     onPressUpvoteHook,
     onPressDownVoteHook,
-    handleTextCountStyle
+    handleTextCountStyle,
+    getTotalReaction
   };
 };
 
