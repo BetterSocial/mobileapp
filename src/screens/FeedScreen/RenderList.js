@@ -169,7 +169,7 @@ const RenderListFeed = (props) => {
                 comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
                 image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
                 time={item.latest_reactions.comment[0].created_at}
-                totalComment={item.reaction_counts.comment - 1}
+                totalComment={getTotalReaction(item) - 1}
                 item={item.latest_reactions.comment[0]}
                 onPress={onPressComment}
               />
