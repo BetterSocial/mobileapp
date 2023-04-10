@@ -1,19 +1,21 @@
+// eslint-disable-next-line import/no-unresolved
+import ButtonHighlight from 'stream-chat-react-native-core/src/components/ChannelPreview/ButtonHighlight';
+import FastImage from 'react-native-fast-image';
 /* eslint-disable import/no-unresolved */
 /* eslint-disable camelcase */
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
-import {useTheme} from 'stream-chat-react-native-core/src/contexts/themeContext/ThemeContext';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {calculateTime} from 'stream-chat-react-native-core/src/components/ChannelList/customUtils';
-import ButtonHighlight from 'stream-chat-react-native-core/src/components/ChannelPreview/ButtonHighlight';
-import FastImage from 'react-native-fast-image';
+import {useTheme} from 'stream-chat-react-native-core/src/contexts/themeContext/ThemeContext';
+
+import AvatarPostNotif from './AvatarPostNotif';
+import BlockIcon from '../../../../assets/block.png';
+import Imageblock from '../../../../assets/images/block.png';
 import MemoIc_arrow_down_vote_on from '../../../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_on from '../../../../assets/arrow/Ic_upvote_on';
-import MemoIc_comment from '../../../../assets/icons/Ic_comment';
 import MemoIc_block_inactive from '../../../../assets/block/Ic_block_inactive';
-import Imageblock from '../../../../assets/images/block.png';
+import MemoIc_comment from '../../../../assets/icons/Ic_comment';
 import {Context} from '../../../../context';
-import BlockIcon from '../../../../assets/block.png';
-import AvatarPostNotif from './AvatarPostNotif';
 import {normalizeFontSize} from '../../../../utils/fonts';
 
 const styles = StyleSheet.create({
@@ -180,7 +182,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
     }
     return null;
   };
-  console.log(item, 'heiman');
+
   return (
     <ButtonHighlight key={index} onPress={() => onSelectAdditionalData(item)}>
       <View style={[styles.containerCard, {borderBottomColor: border}]}>
