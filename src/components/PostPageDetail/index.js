@@ -35,6 +35,7 @@ import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
+import useFeed from '../../screens/FeedScreen/hooks/useFeed';
 
 const {width, height} = Dimensions.get('window');
 
@@ -62,6 +63,7 @@ const PostPageDetailIdComponent = (props) => {
   const [commenListParam] = React.useState({
     limit: 20
   });
+  const {getTotalReaction} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
   const [loadingGetComment, setLoadingGetComment] = React.useState(true);
@@ -603,7 +605,7 @@ const PostPageDetailIdComponent = (props) => {
                 <Footer
                   item={item}
                   disableComment={false}
-                  totalComment={item.reaction_counts.comment}
+                  totalComment={getTotalReaction(item)}
                   totalVote={totalVote}
                   onPressDownVote={onPressDownVoteHandle}
                   onPressUpvote={onPressUpvoteHandle}
