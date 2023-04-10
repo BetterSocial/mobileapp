@@ -30,11 +30,11 @@ import {fonts} from '../../utils/fonts';
 import {getCountCommentWithChildInDetailPage} from '../../utils/getstream';
 import {getFeedDetail, viewTimePost} from '../../service/post';
 import {linkContextScreenParamBuilder} from '../../utils/navigation/paramBuilder';
+import {saveComment} from '../../context/actions/comment';
 import {setFeedByIndex, setTimer} from '../../context/actions/feeds';
 import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
-import {saveComment} from '../../context/actions/comment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -116,13 +116,19 @@ const PostPageDetailIdComponent = (props) => {
   const getDetailFeed = async () => {
     if (!route.params.isCaching) {
       setLoading(true);
-      const data = await getFeedDetail(feedId);
-      setItem(data?.data);
-      setLoading(false);
-      if (route.params.is_from_pn) {
-        setTimeout(() => {
-          onBottomPage();
-        }, 500);
+      try {
+        const data = await getFeedDetail(feedId);
+        setItem(data?.data);
+        setLoading(false);
+        if (route.params.is_from_pn) {
+          setTimeout(() => {
+            onBottomPage();
+          }, 500);
+        }
+      } catch (e) {
+        Toast.show(e?.response?.data?.message || "Can't get detail feed", Toast.LONG);
+        navigation.goBack();
+        console.log(e);
       }
     } else {
       setItem(route.params.data);

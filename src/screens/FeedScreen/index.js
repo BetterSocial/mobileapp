@@ -128,7 +128,7 @@ const FeedScreen = (props) => {
       feedId: item.id,
       // refreshParent:  getDataFeedsHandle,
       data: item,
-      isCaching: true
+      isCaching: false
     });
   };
 
