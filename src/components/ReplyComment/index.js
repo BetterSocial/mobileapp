@@ -55,7 +55,6 @@ const ReplyCommentId = ({
       setTextComment(temporaryText);
     }
   }, [temporaryText]);
-  console.log(itemProp, 'lali');
   const getThisComment = async () => {
     if (itemProp.latest_children.comment && Array.isArray(itemProp.latest_children.comment)) {
       setNewCommentList(itemProp.latest_children?.comment);
