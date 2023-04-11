@@ -184,7 +184,7 @@ const useReplyComment = ({
       console.log(e);
     }
   };
-
+  console.log(profile, 'sipo');
   const handleUpdateFeed = (data, isSort) => {
     if (data) {
       let oldData = data.data;
@@ -210,7 +210,6 @@ const useReplyComment = ({
       ...defaultData,
       data: {...defaultData.data, text: textComment}
     };
-
     if (isAnonimity) {
       commentWillBeAddedData.user = {};
       commentWillBeAddedData.data.is_anonymous = true;
@@ -218,6 +217,12 @@ const useReplyComment = ({
       commentWillBeAddedData.data.anon_user_info_emoji_code = anonimityData.emojiCode;
       commentWillBeAddedData.data.anon_user_info_color_name = anonimityData.colorName;
       commentWillBeAddedData.data.anon_user_info_color_code = anonimityData.colorCode;
+    }
+    if (!isAnonimity) {
+      commentWillBeAddedData.user.data = {
+        profile_pic_url: profile?.myProfile?.profile_pic_path,
+        username: profile?.myProfile?.username
+      };
     }
 
     setTemporaryText('');
