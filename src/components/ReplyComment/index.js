@@ -20,6 +20,7 @@ import WriteComment from '../Comments/WriteComment';
 import useReplyComment from './hooks/useReplyComment';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import useWriteComment from '../Comments/hooks/useWriteComment';
 
 const ReplyCommentId = ({
   itemProp,
@@ -48,12 +49,13 @@ const ReplyCommentId = ({
     scrollViewRef,
     createComment
   } = useReplyComment({itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page});
+  const {handleUsernameReplyComment} = useWriteComment();
   React.useEffect(() => {
     if (setTextComment && typeof setTextComment === 'function') {
       setTextComment(temporaryText);
     }
   }, [temporaryText]);
-
+  console.log(itemProp, 'lali');
   const getThisComment = async () => {
     if (itemProp.latest_children.comment && Array.isArray(itemProp.latest_children.comment)) {
       setNewCommentList(itemProp.latest_children?.comment);
@@ -77,7 +79,7 @@ const ReplyCommentId = ({
           <ArrowLeftIcon width={20} height={12} fill="#000" />
         </TouchableOpacity>
         <Text testID="usernameText" style={styles.headerText}>
-          Reply to {item.user?.data?.username}
+          Reply to {handleUsernameReplyComment(itemProp)}
         </Text>
         <View style={styles.btn} />
       </View>
@@ -143,7 +145,7 @@ const ReplyCommentId = ({
         postId={item?.activity_id}
         inReplyCommentView={true}
         showProfileConnector={newCommentList.length > 0}
-        username={item.user?.data?.username}
+        username={handleUsernameReplyComment(itemProp)}
         onChangeText={setCommentHook}
         onPress={(isAnonimity, anonimityData) => {
           createComment(isAnonimity, anonimityData);

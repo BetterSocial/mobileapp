@@ -36,6 +36,7 @@ import {showScoreAlertDialog} from '../../utils/Utils';
 import {useFeedDataContext} from '../../hooks/useFeedDataContext';
 import {withInteractionsManaged} from '../WithInteractionManaged';
 import useFeed from '../../screens/FeedScreen/hooks/useFeed';
+import useWriteComment from '../Comments/hooks/useWriteComment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -69,7 +70,7 @@ const PostPageDetailIdComponent = (props) => {
   const [loadingGetComment, setLoadingGetComment] = React.useState(true);
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
-
+  const {handleUserName} = useWriteComment();
   const getComment = async () => {
     setLoadingGetComment(true);
     const queryParam = new URLSearchParams(commenListParam).toString();
@@ -564,6 +565,7 @@ const PostPageDetailIdComponent = (props) => {
       saveComment(newComment, dispatchComment);
     }
   };
+
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -650,9 +652,7 @@ const PostPageDetailIdComponent = (props) => {
 
           <WriteComment
             postId={feedId}
-            username={
-              item.anonimity ? StringConstant.generalAnonymousText : item.actor.data.username
-            }
+            username={handleUserName(item)}
             value={textComment}
             onChangeText={(value) => setTextComment(value)}
             onPress={onComment}
