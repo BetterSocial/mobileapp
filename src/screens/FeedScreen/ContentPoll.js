@@ -1,14 +1,15 @@
 /* eslint-disable no-nested-ternary,import/no-named-as-default */
 import * as React from 'react';
+import moment from 'moment';
 import {Dimensions, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import PollOptions from '../../components/PollOptions';
 import PollOptionsMultipleChoice from '../../components/PollOptionsMultipleChoice';
+import useContentPoll from './hooks/useContentPoll';
 import {COLORS} from '../../utils/theme';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getPollTime, isPollExpired} from '../../utils/string/StringUtils';
-import useContentPoll from './hooks/useContentPoll';
 
 const {width: screenWidth} = Dimensions.get('window');
 const FONT_SIZE_MEDIA = 16;
@@ -21,7 +22,8 @@ const ContentPoll = ({
   isalreadypolling,
   pollexpiredat,
   index = -1,
-  voteCount = 0
+  voteCount = 0,
+  currentMoment = moment()
 }) => {
   const {
     renderSeeResultButton,
@@ -95,7 +97,7 @@ const ContentPoll = ({
             backgroundColor: colors.blackgrey
           }}
         />
-        <Text style={styles.polltime}>{` ${getPollTime(pollexpiredat)}`}</Text>
+        <Text style={styles.polltime}>{` ${getPollTime(pollexpiredat, currentMoment)}`}</Text>
         {showSetResultsButton(pollexpiredat) && (
           <View testID="resultButton" style={styles.seeresultscontainer}>
             <TouchableOpacity
