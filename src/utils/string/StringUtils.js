@@ -12,8 +12,7 @@ import removePrefixTopic from '../topics/removePrefixTopic';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 
-const getPollTime = (pollExpiredAtString) => {
-  const currentMoment = moment();
+const getPollTime = (pollExpiredAtString, currentMoment = moment()) => {
   const pollExpiredMoment = moment(pollExpiredAtString);
   const diff = pollExpiredMoment.diff(currentMoment);
 
