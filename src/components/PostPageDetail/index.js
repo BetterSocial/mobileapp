@@ -4,6 +4,7 @@ import moment from 'moment';
 import {Dimensions, Keyboard, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import BlockComponent from '../BlockComponent';
 import ContainerComment from '../Comments/ContainerComment';
@@ -43,6 +44,8 @@ const {width, height} = Dimensions.get('window');
 const PostPageDetailIdComponent = (props) => {
   const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
   const [profile] = React.useContext(Context).profile;
+  const {bottom, top} = useSafeAreaInsets();
+
   const [loading, setLoading] = React.useState(true);
   const [, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
@@ -566,6 +569,17 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
+  const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
+
+  const calculatePaddingBtm = () => {
+    let defaultValue = 108;
+    if (top > 20) {
+      defaultValue = 180;
+    }
+    console.log(top, 'las');
+    return calculatedSizeScreen - defaultValue;
+  };
+
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -577,9 +591,11 @@ const PostPageDetailIdComponent = (props) => {
           <ScrollView
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
-            style={styles.contentScrollView(comments.length)}
-            nestedScrollEnabled={true}>
-            <View style={styles.content(height)}>
+            nestedScrollEnabled={true}
+            contentContainerStyle={{
+              paddingBottom: calculatePaddingBtm()
+            }}>
+            <View style={styles.content(height - calculatedSizeScreen)}>
               {item.post_type === POST_TYPE_LINK ? (
                 <ContentLink
                   og={item.og}
@@ -687,7 +703,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14
   },
-  content: (h) => ({
+  content: (h, commentLength) => ({
     width,
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {
@@ -696,10 +712,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
-    borderBottomWidth: 1,
+    borderBottomWidth: commentLength > 0 ? 1 : 0,
     borderBottomColor: '#C4C4C4',
     marginBottom: -1,
-    height: h - 170
+    height: h
   }),
   gap: {height: 16},
   additionalContentStyle: (imageLength, h) => {
@@ -709,9 +725,5 @@ const styles = StyleSheet.create({
       };
     }
     return {};
-  },
-  contentScrollView: (totalComment) => ({
-    height,
-    marginBottom: totalComment > 0 ? 82 : 0
-  })
+  }
 });
