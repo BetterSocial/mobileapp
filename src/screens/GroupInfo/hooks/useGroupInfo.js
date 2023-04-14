@@ -3,13 +3,13 @@ import {useNavigation} from '@react-navigation/core';
 
 import {launchImageLibrary} from 'react-native-image-picker';
 import {Alert} from 'react-native';
+import {generateRandomId} from 'stream-chat-react-native-core';
 import {Context} from '../../../context';
 import {setParticipants} from '../../../context/actions/groupChat';
 import {uploadFile} from '../../../service/file';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {setChannel} from '../../../context/actions/setChannel';
-import {generateRandomId} from 'stream-chat-react-native-core';
 import {checkUserBlock} from '../../../service/profile';
 
 const useGroupInfo = () => {
