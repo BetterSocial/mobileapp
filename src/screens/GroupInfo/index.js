@@ -10,7 +10,7 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
+  View
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -18,18 +18,33 @@ import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-gro
 import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import useGroupInfo from './hooks/useGroupInfo';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
-import useGroupInfo from './hooks/useGroupInfo'
 
 const GroupInfo = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const {participants, asset, channel, profileChannel, isLoadingMembers, setIsLoadingMembers, uploadedImage, isUploadingImage, createChat, countUser, getMembersList, chatName, onProfilePressed, handleOnNameChange, handleOnImageClicked} = useGroupInfo({navigation})
-
+  const {
+    participants,
+    asset,
+    channel,
+    profileChannel,
+    isLoadingMembers,
+    setIsLoadingMembers,
+    uploadedImage,
+    isUploadingImage,
+    createChat,
+    countUser,
+    getMembersList,
+    chatName,
+    onProfilePressed,
+    handleOnNameChange,
+    handleOnImageClicked
+  } = useGroupInfo({navigation});
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -37,23 +52,27 @@ const GroupInfo = () => {
         setIsLoadingMembers(true);
         getMembersList();
       }
-    })
+    });
 
     return unsubscribe;
-  },[navigation]);
+  }, [navigation]);
 
   const showImageProfile = () => {
     if (profileChannel || channel?.data?.image) {
       if (uploadedImage !== '') {
         return (
-          <Image testID='image1' style={styles.btnUpdatePhoto} source={{uri: uploadedImage !== '' ? uploadedImage: undefined}} />
+          <Image
+            testID="image1"
+            style={styles.btnUpdatePhoto}
+            source={{uri: uploadedImage !== '' ? uploadedImage : undefined}}
+          />
         );
       }
 
       if (channel?.data?.image?.indexOf('res.cloudinary.com') > -1) {
         return (
           <Image
-            testID='image2'
+            testID="image2"
             style={styles.btnUpdatePhoto}
             source={{uri: channel?.data?.image !== '' ? channel?.data?.image : undefined}}
           />
@@ -63,48 +82,45 @@ const GroupInfo = () => {
       if (channel?.data?.image) {
         return (
           <Image
-            testID='image3'
+            testID="image3"
             style={styles.btnUpdatePhoto}
             source={{uri: `data:image/jpg;base64,${channel?.data?.image}`}}
           />
         );
       }
-        return (
-          <View style={styles.containerAvatar}>
-            <Image
-              testID='image4'
-              source={DefaultChatGroupProfilePicture}
-              style={styles.groupProfilePicture}
-            />
-          </View>
-        );
-
+      return (
+        <View style={styles.containerAvatar}>
+          <Image
+            testID="image4"
+            source={DefaultChatGroupProfilePicture}
+            style={styles.groupProfilePicture}
+          />
+        </View>
+      );
     }
     return (
-      <View testID='image5' style={styles.btnUpdatePhoto}>
+      <View testID="image5" style={styles.btnUpdatePhoto}>
         <MemoIc_pencil width={50} height={50} color={colors.gray1} />
       </View>
     );
   };
 
-
-
   const renderItem = ({item, index}) => {
-    if(item.message.attachments && Array.isArray(item.message.attachments)) {
+    if (item.message.attachments && Array.isArray(item.message.attachments)) {
       return (
-         <Image
-        source={{
-          uri: item.message.attachments[0] && item.message.attachments[0].image_url,
-        }}
-        width={80}
-        height={80}
-        style={styles.image(index === 0)}
-        testID='renderItem'
-      />
-      )
+        <Image
+          source={{
+            uri: item.message.attachments[0] && item.message.attachments[0].image_url
+          }}
+          width={80}
+          height={80}
+          style={styles.image(index === 0)}
+          testID="renderItem"
+        />
+      );
     }
-    return null
-  }
+    return null;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -114,7 +130,7 @@ const GroupInfo = () => {
       <View style={styles.lineTop} />
       <ScrollView>
         <SafeAreaView>
-          <TouchableOpacity testID='imageClick' onPress={handleOnImageClicked}>
+          <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
             <View style={styles.containerPhoto}>{showImageProfile()}</View>
           </TouchableOpacity>
           <View style={styles.row}>
@@ -122,25 +138,21 @@ const GroupInfo = () => {
               <View style={styles.containerGroupName}>
                 <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
               </View>
-              <Text style={styles.dateCreate}>
-                Created {moment(createChat).format('DD/MM/YY')}
-              </Text>
+              <Text style={styles.dateCreate}>Created {moment(createChat).format('DD/MM/YY')}</Text>
             </View>
-            <TouchableOpacity
-              onPress={handleOnNameChange}
-              style={styles.pencilIconTouchable}>
+            <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
               <MemoIc_pencil width={20} height={20} color={colors.gray1} />
             </TouchableOpacity>
           </View>
           <View style={styles.lineTop} />
           <View style={styles.containerMedia(asset && asset.length === 0)}>
             <TouchableWithoutFeedback
-              testID='groupMedia'
+              testID="groupMedia"
               onPress={() => navigation.navigate('GroupMedia')}>
               <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
             </TouchableWithoutFeedback>
             <FlatList
-              testID='asset'
+              testID="asset"
               data={asset}
               keyExtractor={(item, index) => index.toString()}
               style={styles.listImage(asset && asset.length === 0)}
@@ -153,7 +165,7 @@ const GroupInfo = () => {
           <View style={styles.users}>
             <Text style={styles.countUser}>Participants ({countUser})</Text>
             <FlatList
-              testID='participants'
+              testID="participants"
               data={participants ? Object.keys(participants) : []}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
@@ -173,7 +185,7 @@ const GroupInfo = () => {
       {!channel?.cid.includes('!members') && (
         <View style={styles.btnAdd}>
           <TouchableOpacity
-            testID='addParticipant'
+            testID="addParticipant"
             onPress={() => navigation.push('AddParticipant')}>
             <Text style={styles.btnAddText}>+ Add Participants</Text>
           </TouchableOpacity>
@@ -192,20 +204,20 @@ export default GroupInfo;
 export const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff', paddingBottom: 40},
   users: {
-    paddingTop: 12,
+    paddingTop: 12
   },
   photoProfile: {
     height: normalize(50),
-    width: normalize(50),
+    width: normalize(50)
   },
   listImage: (isIsset) => ({
-    marginTop: isIsset ? 0 : 12,
+    marginTop: isIsset ? 0 : 12
   }),
   btnAddText: {
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(20),
-    color: colors.holytosca,
+    color: colors.holytosca
   },
   btnAdd: {
     padding: normalize(8),
@@ -216,7 +228,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: 8,
     alignSelf: 'center',
-    bottom: 5,
+    bottom: 5
   },
   countUser: {
     fontFamily: fonts.inter[600],
@@ -224,23 +236,23 @@ export const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(16.94),
     color: colors.holytosca,
     marginLeft: 20,
-    marginBottom: 4,
+    marginBottom: 4
   },
   image: (isFirst) => ({
     width: 80,
     height: 80,
-    marginLeft: isFirst ? 0 : 5,
+    marginLeft: isFirst ? 0 : 5
   }),
   btnToMediaGroup: {
     fontFamily: fonts.inter[600],
     fontSize: normalizeFontSize(14),
     lineHeight: normalizeFontSize(16.94),
-    color: colors.holytosca,
+    color: colors.holytosca
   },
   containerMedia: (isIsset) => ({
     paddingHorizontal: 20,
     paddingTop: 12,
-    paddingBottom: isIsset ? 12 : 8,
+    paddingBottom: isIsset ? 12 : 8
   }),
   dateCreate: {
     marginLeft: 20,
@@ -249,29 +261,29 @@ export const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(16.94),
     color: '#000',
     marginTop: 4,
-    marginBottom: 9,
+    marginBottom: 9
   },
   groupName: {
     fontSize: normalizeFontSize(24),
     fontFamily: fonts.inter[500],
     lineHeight: normalizeFontSize(29.05),
-    color: '#000',
+    color: '#000'
   },
   lineTop: {
     backgroundColor: colors.alto,
-    height: 1,
+    height: 1
   },
   containerGroupName: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingLeft: 20,
+    paddingLeft: 20
   },
   containerPhoto: {
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 8,
-    paddingBottom: 13,
+    paddingBottom: 13
   },
   btnUpdatePhoto: {
     width: normalize(100),
@@ -279,32 +291,32 @@ export const styles = StyleSheet.create({
     borderRadius: normalize(50),
     backgroundColor: colors.alto,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   groupProfilePicture: {
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(50),
-    paddingLeft: 8,
+    paddingLeft: 8
   },
   containerLoading: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   row: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   column: {
     display: 'flex',
     flexDirection: 'column',
-    flex: 1,
+    flex: 1
   },
   pencilIconTouchable: {
     padding: 4,
     marginRight: 28,
     alignContent: 'center',
     alignItems: 'center',
-    height: 28,
-  },
+    height: 28
+  }
 });
