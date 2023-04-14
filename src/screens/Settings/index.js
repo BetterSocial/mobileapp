@@ -1,15 +1,16 @@
 import * as React from 'react';
 import VersionNumber from 'react-native-version-number';
+import analytics from '@react-native-firebase/analytics';
 import {Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
-import analytics from '@react-native-firebase/analytics';
+
 import Header from '../../components/Header';
 import Loading from '../Loading';
 import ProfileSettingItem from './element/ProfileSettingItem';
+import useSettings from './hooks/useSettings';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import useSettings from './hooks/useSettings';
 
 const {width} = Dimensions.get('screen');
 

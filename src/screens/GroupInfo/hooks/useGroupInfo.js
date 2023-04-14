@@ -1,17 +1,17 @@
-import React from 'react'
-import { launchImageLibrary } from 'react-native-image-picker';
-import { Context } from '../../../context';
-import { setParticipants } from '../../../context/actions/groupChat';
-import { uploadFile } from '../../../service/file';
-import { requestExternalStoragePermission } from '../../../utils/permission';
-import { getChatName } from '../../../utils/string/StringUtils';
+import React from 'react';
+import {launchImageLibrary} from 'react-native-image-picker';
+
+import {Context} from '../../../context';
+import {getChatName} from '../../../utils/string/StringUtils';
+import {requestExternalStoragePermission} from '../../../utils/permission';
+import {setParticipants} from '../../../context/actions/groupChat';
+import {uploadFile} from '../../../service/file';
 
 const useGroupInfo = ({navigation}) => {
-     const [groupChatState, groupPatchDispatch] =
-    React.useContext(Context).groupChat;
+  const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
 
   const {participants, asset} = groupChatState;
-  const [channelState, ] = React.useContext(Context).channel;
+  const [channelState] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
   const {channel, profileChannel} = channelState;
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
@@ -21,7 +21,7 @@ const useGroupInfo = ({navigation}) => {
   const createChat = channelState.channel?.data?.created_at;
   const countUser = Object.entries(participants).length;
 
-    const serializeMembersList = (result = []) => {
+  const serializeMembersList = (result = []) => {
     if (!result) {
       return {};
     }
@@ -31,23 +31,23 @@ const useGroupInfo = ({navigation}) => {
     }
 
     const membersObject = {};
-    result.forEach((item, ) => {
+    result.forEach((item) => {
       membersObject[item.user_id] = item;
     });
     return membersObject;
   };
 
-      const getMembersList = async () => {
+  const getMembersList = async () => {
     try {
       const result = await channel.queryMembers({});
       const serializedMember = serializeMembersList(result.members);
       setParticipants(serializedMember, groupPatchDispatch);
       setIsLoadingMembers(false);
-    } catch(e) {
+    } catch (e) {
       if (__DEV__) {
         console.log(e);
       }
-      setIsLoadingMembers(false)
+      setIsLoadingMembers(false);
     }
   };
 
@@ -56,7 +56,7 @@ const useGroupInfo = ({navigation}) => {
   const onProfilePressed = (data) => {
     if (profile.myProfile.user_id === participants[data].user_id) {
       navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab : true
+        isNotFromHomeTab: true
       });
       return;
     }
@@ -65,30 +65,30 @@ const useGroupInfo = ({navigation}) => {
       data: {
         user_id: profile.myProfile.user_id,
         other_id: participants[data].user_id,
-        username: participants[data].user.name,
-      },
+        username: participants[data].user.name
+      }
     });
   };
 
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
-      focusChatName: true,
+      focusChatName: true
     });
   };
-  
-    const handleOnImageClicked = () => {
+
+  const handleOnImageClicked = () => {
     launchGallery();
   };
 
-    const uploadImageBase64 = async (res) => {
+  const uploadImageBase64 = async (res) => {
     try {
       setIsUploadingImage(true);
       const result = await uploadFile(`data:image/jpeg;base64,${res.base64}`);
       setUploadedImage(result.data.url);
       const dataEdit = {
         name: chatName,
-        image: result.data.url,
+        image: result.data.url
       };
 
       await channel.update(dataEdit);
@@ -100,21 +100,21 @@ const useGroupInfo = ({navigation}) => {
     }
   };
 
-    const launchGallery = async () => {
-    const {success, } = await requestExternalStoragePermission();
+  const launchGallery = async () => {
+    const {success} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary(
         {
           mediaType: 'photo',
           maxHeight: 500,
           maxWidth: 500,
-          includeBase64: true,
+          includeBase64: true
         },
         (res) => {
           if (!res.didCancel) {
             uploadImageBase64(res);
           }
-        },
+        }
       );
     }
   };
@@ -145,8 +145,7 @@ const useGroupInfo = ({navigation}) => {
     uploadImageBase64,
     chatName,
     launchGallery
-  }
+  };
+};
 
-}
-
-export default useGroupInfo
+export default useGroupInfo;
