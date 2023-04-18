@@ -98,7 +98,7 @@ const useGroupInfo = () => {
       }
       return onProfilePressed();
     } catch (e) {
-      throw new Error(e);
+      console.log(e, 'eman');
     }
   };
 
