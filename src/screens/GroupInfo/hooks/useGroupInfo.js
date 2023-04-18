@@ -76,6 +76,7 @@ const useGroupInfo = () => {
         username: selectedUser.user.name
       }
     });
+    setSelectedUser(null);
   };
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
