@@ -13,7 +13,7 @@ import {SearchContact} from '../../components/Search';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {userPopulate} from '../../service/users';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 const VIEW_TYPE_DATA = 2;
 
 const AddParticipant = ({navigation, route}) => {
@@ -85,7 +85,6 @@ const AddParticipant = ({navigation, route}) => {
       setDataProvider(dProvider.cloneWithRows(users));
     }
   }, [users]);
-
 
   const handleSelected = (value) => {
     const copyFollowed = [...followed];

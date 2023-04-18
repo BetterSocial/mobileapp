@@ -30,7 +30,6 @@ const useGroupInfo = () => {
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
-
   const serializeMembersList = (result = []) => {
     if (!result) {
       return {};
@@ -59,8 +58,7 @@ const useGroupInfo = () => {
     }
   };
   const memberName = () => {
-    const members = newParticipant.map((member) => member.user.name);
-    return channel.data.name ? channel.data.name : members.join(', ');
+    return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
 
   const chatName = getChatName(username, profile.myProfile.username);
@@ -83,10 +81,11 @@ const useGroupInfo = () => {
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
-      focusChatName: true
+      focusChatName: true,
+      refresh: getMembersList
     });
   };
-
+  // eslint-disable-next-line consistent-return
   const checkUserIsBlockHandle = async () => {
     try {
       const sendData = {
@@ -99,7 +98,7 @@ const useGroupInfo = () => {
       }
       return onProfilePressed();
     } catch (e) {
-      throw new Error(e);
+      console.log(e, 'eman');
     }
   };
 
@@ -163,7 +162,7 @@ const useGroupInfo = () => {
   };
 
   const handleCloseSelectUser = async () => {
-    await setSelectedUser(null);
+    // await setSelectedUser(null);
     setOpenModal(false);
   };
 
@@ -174,12 +173,13 @@ const useGroupInfo = () => {
       const result = await channel.removeMembers([selectedUser.user_id]);
       const generatedChannelId = generateRandomId();
       const channelChat = await client.client.channel('system', generatedChannelId, {
-        name: 'System',
-        type_channel: 'system'
+        name: channelState?.channel?.data.name,
+        type_channel: 'system',
+        channel_type: 2
       });
       await channel.sendMessage(
         {
-          text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this chat`,
+          text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this group`,
           isRemoveMember: true,
           user_id: profile.myProfile.user_id,
           silent: true
@@ -190,7 +190,7 @@ const useGroupInfo = () => {
       await channelChat.addMembers([selectedUser.user_id]);
       await channelChat.sendMessage(
         {
-          text: `${profile.myProfile.username} remove you from ${channel.data.name}`,
+          text: `${profile.myProfile.username} removed you from ${channel.data.name}`,
           isRemoveMember: true,
           silent: true
         },
@@ -240,9 +240,9 @@ const useGroupInfo = () => {
     }
     if (status === 'remove') {
       Alert.alert(
-        'Remove user',
-        `Are you sure you want to remove ${selectedUser.user.name} from this group? We will let the group know that you removed ${selectedUser.user.name}`,
-        [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'No'}]
+        null,
+        `Are you sure you want to remove ${selectedUser.user.name} from this group? We will let the group know that you removed ${selectedUser.user.name}.`,
+        [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'Cancel'}]
       );
     }
 
@@ -250,7 +250,7 @@ const useGroupInfo = () => {
       checkUserIsBlockHandle();
     }
   };
-  console.log(channel, 'suti');
+
   const onLeaveGroup = () => {
     Alert.alert('Leave group', 'Are you sure you want to leave group ?', [
       {text: 'Yes', onPress: leaveGroup},
@@ -259,7 +259,6 @@ const useGroupInfo = () => {
   };
 
   const leaveGroup = async () => {
-    console.log(profile, 'sulit');
     try {
       await channel.sendMessage(
         {
@@ -288,6 +287,14 @@ const useGroupInfo = () => {
     } catch (e) {
       console.log(e, 'sayu');
     }
+  };
+
+  const handlePressContact = (item) => {
+    if (newParticipant.length > 2) {
+      handleSelectUser(item);
+      return true;
+    }
+    return null;
   };
 
   return {
@@ -327,7 +334,8 @@ const useGroupInfo = () => {
     alertRemoveUser,
     memberName,
     onLeaveGroup,
-    checkUserIsBlockHandle
+    checkUserIsBlockHandle,
+    handlePressContact
   };
 };
 
