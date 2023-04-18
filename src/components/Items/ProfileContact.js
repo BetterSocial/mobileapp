@@ -5,6 +5,7 @@ import Mi from 'react-native-vector-icons/MaterialIcons';
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import {homeTabs} from '../../assets';
 
 const ProfileContact = ({photo, fullname, onPress, select, showArrow, userId, item}) => (
   <Pressable
