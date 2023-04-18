@@ -18,7 +18,7 @@ const {width} = Dimensions.get('screen');
 const VIEW_TYPE_LABEL = 1;
 const VIEW_TYPE_DATA = 2;
 
-const AddParticipant = ({navigation}) => {
+const AddParticipant = ({navigation, route}) => {
   const [channel] = React.useContext(Context).channel;
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
   const [followed, setFollowed] = React.useState([]);
@@ -31,12 +31,13 @@ const AddParticipant = ({navigation}) => {
   const {participants} = groupChatState;
   const [filterParams, setFilterParams] = React.useState('');
   const [cacheUser, setCacheUser] = React.useState([]);
+  const [profile] = React.useContext(Context).profile;
+
   React.useEffect(() => {
     if (dataProvider) {
       setIsRecyclerViewShown(true);
     }
   }, [dataProvider]);
-
   React.useEffect(() => {
     getUserPopulate();
   }, []);
@@ -92,8 +93,6 @@ const AddParticipant = ({navigation}) => {
     }
   }, [users]);
 
-  React.useEffect(() => {}, [followed]);
-
   const handleSelected = (value) => {
     const copyFollowed = [...followed];
     const index = followed.indexOf(value);
@@ -128,6 +127,19 @@ const AddParticipant = ({navigation}) => {
         });
 
         await channel.channel.addMembers(followedWithRoles);
+        followedName.forEach(async (name) => {
+          await channel.channel.sendMessage(
+            {
+              text: `${name} was added to this chat by ${profile.myProfile.username}`,
+              isRemoveMember: true,
+              silent: true
+            },
+            {skip_push: true}
+          );
+        });
+        if (route.params?.refresh && typeof route.params.refresh === 'function') {
+          route.params.refresh();
+        }
         const previousChannelMembers = channel?.channel?.data?.name?.split(',');
         if (previousChannelMembers.length > 1) {
           await channel?.channel?.update({

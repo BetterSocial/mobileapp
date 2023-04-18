@@ -4,12 +4,12 @@ import {StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {COLORS} from '../../utils/theme';
 import {fonts} from '../../utils/fonts';
 
-const ButtonAddParticipants = () => {
+const ButtonAddParticipants = (props) => {
   const navigation = useNavigation();
   return (
     <View style={styles.btnAdd}>
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('AddParticipant')}>
+        onPress={() => navigation.navigate('AddParticipant', {refresh: props.refresh})}>
         <Text style={styles.btnAddText}>+ Add Participants</Text>
       </TouchableWithoutFeedback>
     </View>
@@ -27,12 +27,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   btnAddText: {
     fontFamily: fonts.inter[600],
     fontSize: 14,
     lineHeight: 20,
-    color: COLORS.holytosca,
-  },
+    color: COLORS.holytosca
+  }
 });
