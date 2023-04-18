@@ -6,6 +6,7 @@ import newsSelected from './icon/NewsSelected';
 import newsUnselected from './icon/NewsUnselected';
 import profileSelected from './icon/ProfileSelected';
 import profileUnselected from './icon/ProfileUnselected';
+import AllowLeft from './arrow-left.png';
 
 const homeTabs = {
   homeSelected,
@@ -16,6 +17,7 @@ const homeTabs = {
   newsUnselected,
   profileSelected,
   profileUnselected,
+  AllowLeft
 };
 
 export {homeTabs};

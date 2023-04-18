@@ -125,7 +125,6 @@ const useFeed = () => {
       if (level3Comment.length > 0) {
         total3 = level3Comment.reduce((a, b) => a + b);
       }
-
       return parentComment + total2 + total3;
     }
     return 0;

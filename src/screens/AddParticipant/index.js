@@ -13,10 +13,10 @@ import {SearchContact} from '../../components/Search';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {userPopulate} from '../../service/users';
 
-const {width} = Dimensions.get('screen');
+const width = Dimensions.get('screen').width;
 const VIEW_TYPE_DATA = 2;
 
-const AddParticipant = ({navigation}) => {
+const AddParticipant = ({navigation, route}) => {
   const [channel] = React.useContext(Context).channel;
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
   const [followed, setFollowed] = React.useState([]);
@@ -34,7 +34,7 @@ const AddParticipant = ({navigation}) => {
       setIsRecyclerViewShown(true);
     }
   }, [dataProvider]);
-
+  console.log(route, 'lusioa');
   React.useEffect(() => {
     getUserPopulate();
   }, []);
@@ -86,7 +86,6 @@ const AddParticipant = ({navigation}) => {
     }
   }, [users]);
 
-  React.useEffect(() => {}, [followed]);
 
   const handleSelected = (value) => {
     const copyFollowed = [...followed];
