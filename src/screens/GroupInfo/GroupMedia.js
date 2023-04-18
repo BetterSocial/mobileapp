@@ -1,16 +1,13 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import * as React from 'react';
-import {SafeAreaView, StatusBar} from 'react-native';
-import {ScrollView} from 'react-native';
-import {Dimensions} from 'react-native';
-import {TouchableOpacity} from 'react-native';
-import {StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StatusBar, StyleSheet, View, TouchableOpacity} from 'react-native';
 import Animated from 'react-native-reanimated';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import Header from './elements/Header';
 import Link from './elements/Link';
 import Media from './elements/Media';
+
 const GroupMedia = () => {
   const Tab = createMaterialTopTabNavigator();
   const MyTabBar = ({state, descriptors, navigation, position}) => {
@@ -31,7 +28,7 @@ const GroupMedia = () => {
             const event = navigation.emit({
               type: 'tabPress',
               target: route.key,
-              canPreventDefault: true,
+              canPreventDefault: true
             });
 
             if (!isFocused && !event.defaultPrevented) {
@@ -42,20 +39,19 @@ const GroupMedia = () => {
           const inputRange = state.routes.map((_, i) => i);
           const opacity = Animated.interpolateNode(position, {
             inputRange,
-            outputRange: inputRange.map((i) => (i === index ? 1 : 0.3)),
+            outputRange: inputRange.map((i) => (i === index ? 1 : 0.3))
           });
 
           return (
             <TouchableOpacity
+              key={index}
               accessibilityRole="button"
               accessibilityState={isFocused ? {selected: true} : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}
               testID={options.tabBarTestID}
               onPress={onPress}
               style={styles.singletab}>
-              <Animated.Text style={{opacity, ...styles.singletabtext}}>
-                {label}
-              </Animated.Text>
+              <Animated.Text style={{opacity, ...styles.singletabtext}}>{label}</Animated.Text>
               <View style={isFocused ? styles.viewborderbottom : {}} />
             </TouchableOpacity>
           );
@@ -90,12 +86,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderBottomColor: '#00000050',
     borderBottomWidth: 1,
-    paddingHorizontal: 4,
+    paddingHorizontal: 4
   },
 
   singletab: {
     flex: 1,
-    paddingHorizontal: 19,
+    paddingHorizontal: 19
   },
 
   singletabtext: {
@@ -104,11 +100,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 16.94,
     paddingTop: 15,
-    paddingBottom: 16,
+    paddingBottom: 16
   },
 
   viewborderbottom: {
     borderBottomColor: colors.holytosca,
-    borderBottomWidth: 2,
-  },
+    borderBottomWidth: 2
+  }
 });

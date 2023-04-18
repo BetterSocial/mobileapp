@@ -124,8 +124,6 @@ const useFeed = () => {
       if (level3Comment.length > 0) {
         total3 = level3Comment.reduce((a, b) => a + b);
       }
-      console.log(parentComment, total2, total3, 'naniopo');
-
       return parentComment + total2 + total3;
     }
     return 0;

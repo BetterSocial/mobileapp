@@ -1,17 +1,23 @@
-import React from 'react'
-import { launchImageLibrary } from 'react-native-image-picker';
-import { Context } from '../../../context';
-import { setParticipants } from '../../../context/actions/groupChat';
-import { uploadFile } from '../../../service/file';
-import { requestExternalStoragePermission } from '../../../utils/permission';
-import { getChatName } from '../../../utils/string/StringUtils';
+import React from 'react';
+import {useNavigation} from '@react-navigation/core';
 
-const useGroupInfo = ({navigation}) => {
-     const [groupChatState, groupPatchDispatch] =
-    React.useContext(Context).groupChat;
+import {launchImageLibrary} from 'react-native-image-picker';
+import {Alert} from 'react-native';
+import {Context} from '../../../context';
+import {setParticipants} from '../../../context/actions/groupChat';
+import {uploadFile} from '../../../service/file';
+import {requestExternalStoragePermission} from '../../../utils/permission';
+import {getChatName} from '../../../utils/string/StringUtils';
+import {setChannel} from '../../../context/actions/setChannel';
+import {generateRandomId} from 'stream-chat-react-native-core';
 
+const useGroupInfo = () => {
+  const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
+  //  const [client] = React.useContext(Context).client
+  const navigation = useNavigation();
   const {participants, asset} = groupChatState;
-  const [channelState, ] = React.useContext(Context).channel;
+  const [client] = React.useContext(Context).client;
+  const [channelState] = React.useContext(Context).channel;
   const [profile] = React.useContext(Context).profile;
   const {channel, profileChannel} = channelState;
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
@@ -20,8 +26,13 @@ const useGroupInfo = ({navigation}) => {
   const username = channelState.channel?.data?.name;
   const createChat = channelState.channel?.data?.created_at;
   const countUser = Object.entries(participants).length;
+  const [selectedUser, setSelectedUser] = React.useState(null);
+  const [newParticipant, setNewParticipan] = React.useState([]);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [, dispatchChannel] = React.useContext(Context).channel;
 
-    const serializeMembersList = (result = []) => {
+  console.log(newParticipant, 'sunit');
+  const serializeMembersList = (result = []) => {
     if (!result) {
       return {};
     }
@@ -31,64 +42,66 @@ const useGroupInfo = ({navigation}) => {
     }
 
     const membersObject = {};
-    result.forEach((item, ) => {
+    result.forEach((item) => {
       membersObject[item.user_id] = item;
     });
     return membersObject;
   };
-
-      const getMembersList = async () => {
+  const getMembersList = async () => {
     try {
       const result = await channel.queryMembers({});
-      const serializedMember = serializeMembersList(result.members);
-      setParticipants(serializedMember, groupPatchDispatch);
+      console.log(result, 'polo');
+      setNewParticipan(result.members);
       setIsLoadingMembers(false);
-    } catch(e) {
+    } catch (e) {
       if (__DEV__) {
         console.log(e);
       }
-      setIsLoadingMembers(false)
+      setIsLoadingMembers(false);
     }
+  };
+  console.log(client, 'client');
+  const memberName = () => {
+    const members = newParticipant.map((member) => member.user.name);
+    return members.join();
   };
 
   const chatName = getChatName(username, profile.myProfile.username);
-
-  const onProfilePressed = (data) => {
-    if (profile.myProfile.user_id === participants[data].user_id) {
+  const onProfilePressed = () => {
+    if (profile.myProfile.user_id === selectedUser.user_id) {
       navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab : true
+        isNotFromHomeTab: true
       });
-      return;
     }
 
     navigation.navigate('OtherProfile', {
       data: {
         user_id: profile.myProfile.user_id,
-        other_id: participants[data].user_id,
-        username: participants[data].user.name,
-      },
+        other_id: selectedUser.user_id,
+        username: selectedUser.user.name
+      }
     });
+    setSelectedUser(null);
   };
-
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
-      focusChatName: true,
+      focusChatName: true
     });
   };
-  
-    const handleOnImageClicked = () => {
+
+  const handleOnImageClicked = () => {
     launchGallery();
   };
 
-    const uploadImageBase64 = async (res) => {
+  const uploadImageBase64 = async (res) => {
     try {
       setIsUploadingImage(true);
       const result = await uploadFile(`data:image/jpeg;base64,${res.base64}`);
       setUploadedImage(result.data.url);
       const dataEdit = {
         name: chatName,
-        image: result.data.url,
+        image: result.data.url
       };
 
       await channel.update(dataEdit);
@@ -100,23 +113,126 @@ const useGroupInfo = ({navigation}) => {
     }
   };
 
-    const launchGallery = async () => {
-    const {success, } = await requestExternalStoragePermission();
+  const launchGallery = async () => {
+    const {success} = await requestExternalStoragePermission();
     if (success) {
       launchImageLibrary(
         {
           mediaType: 'photo',
           maxHeight: 500,
           maxWidth: 500,
-          includeBase64: true,
+          includeBase64: true
         },
         (res) => {
           if (!res.didCancel) {
             uploadImageBase64(res);
           }
-        },
+        }
       );
     }
+  };
+
+  const initParticipant = (obj) => {
+    const newData = [];
+    if (typeof obj === 'object') {
+      Object.keys(obj).forEach((key) => {
+        const newObj = {...obj[key]};
+        newData.push(newObj);
+      });
+    }
+    setNewParticipan(newData);
+  };
+
+  const handleSelectUser = async (user) => {
+    if (user.user_id === profile.myProfile.user_id) return;
+    await setSelectedUser(user);
+    setOpenModal(true);
+  };
+
+  const handleCloseSelectUser = async () => {
+    await setSelectedUser(null);
+    setOpenModal(false);
+  };
+
+  const onRemoveUser = async () => {
+    setOpenModal(false);
+
+    try {
+      const result = await channel.removeMembers([selectedUser.user_id]);
+      const responseMessage = await channel.sendMessage(
+        {
+          text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this chat`,
+          isRemoveMember: true,
+          user_id: profile.myProfile.user_id,
+          silent: true
+        },
+        {skip_push: true}
+      );
+      setNewParticipan(result.members);
+    } catch (e) {
+      console.log(e, 'eman');
+    }
+  };
+
+  const alertRemoveUser = async (status, user) => {
+    console.log(user, 'user');
+    if (status === 'view') {
+      setOpenModal(false);
+      // onProfilePressed();
+      onProfilePressed();
+    }
+    if (status === 'remove') {
+      Alert.alert(
+        'Remove user',
+        `Are you sure you want to remove ${selectedUser.user.name} from this group? We will let the group know that you removed ${selectedUser.user.name}`,
+        [{text: 'Yes - remove', onPress: () => onRemoveUser('remove')}, {text: 'No'}]
+      );
+    }
+
+    if (status === 'message') {
+      const members = [profile.myProfile.user_id];
+      members.push(selectedUser.user_id);
+      const filter = {type: 'messaging', members: {$eq: members}};
+      const sort = [{last_message_at: -1}];
+      const memberWithRoles = members.map((item) => ({
+        user_id: item,
+        channel_role: 'channel_moderator'
+      }));
+      const filterMessage = await client.client.queryChannels(filter, sort, {
+        watch: true, // this is the default
+        state: true
+      });
+      const generatedChannelId = generateRandomId();
+
+      if (filterMessage.length > 0) {
+        setChannel(filterMessage[0], dispatchChannel);
+      } else {
+        const channelChat = await client.client.channel('messaging', generatedChannelId, {
+          name: selectedUser.user.name,
+          type_channel: 1
+        });
+        await channelChat.create();
+        await channelChat.addMembers(memberWithRoles);
+        setChannel(channelChat, dispatchChannel);
+      }
+      setOpenModal(false);
+
+      navigation.push('ChatDetailPage', {channel});
+    }
+  };
+  console.log(channel, 'suti')
+  const onLeaveGroup = () => {
+    Alert.alert('Leave group', `Are you sure you want to leave group ?`, [
+      {text: 'Yes', onPress: leaveGroup},
+      {text: 'No'}
+    ]);
+  };
+
+  const leaveGroup = async () => {
+    console.log(profile, 'sulit');
+    try {
+      await channel.removeMembers([profile.myProfile.user_id]);
+    } catch (e) {}
   };
 
   return {
@@ -144,9 +260,19 @@ const useGroupInfo = ({navigation}) => {
     handleOnImageClicked,
     uploadImageBase64,
     chatName,
-    launchGallery
-  }
+    launchGallery,
+    selectedUser,
+    handleSelectUser,
+    initParticipant,
+    newParticipant,
+    handleCloseSelectUser,
+    onRemoveUser,
+    openModal,
+    leaveGroup,
+    alertRemoveUser,
+    memberName,
+    onLeaveGroup
+  };
+};
 
-}
-
-export default useGroupInfo
+export default useGroupInfo;

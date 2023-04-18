@@ -11,10 +11,12 @@ const Header = ({title}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TouchableOpacity testID='onBack' onPress={() => navigation.goBack()}>
+      <TouchableOpacity testID="onBack" onPress={() => navigation.goBack()}>
         <MemoIc_arrow_back width={20} height={12} />
       </TouchableOpacity>
-      <Text testID='title' style={styles.title}>{trimString(title, 21)}</Text>
+      <Text testID="title" style={styles.title}>
+        {trimString(title, 21)}
+      </Text>
       <Gap width={20} />
     </View>
   );
@@ -29,12 +31,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingVertical: 12
   },
   title: {
     fontSize: normalizeFontSize(16),
     fontFamily: fonts.inter[600],
     lineHeight: normalizeFontSize(19.36),
-    color: '#000',
-  },
+    color: '#000'
+  }
 });
