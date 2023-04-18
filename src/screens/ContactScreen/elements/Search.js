@@ -18,14 +18,16 @@ const Search = ({onPress, animatedValue, onChangeText, text, onClearText, isLoad
     <View style={styles.wrapperSearch}>
       <TextInput
         value={text}
-        multiline={true}
         placeholder={'Search Users'}
         style={styles.input}
         onChangeText={(t) => {
           onChangeText(t);
         }}
+        returnKeyType="search"
         onSubmitEditing={onPress}
         textAlignVertical="center"
+        clearButtonMode="while-editing"
+        blurOnSubmit={true}
       />
       <View style={styles.wrapperIcon}>
         <MemoIc_search width={20} height={20} />
