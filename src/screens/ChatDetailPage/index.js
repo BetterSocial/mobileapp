@@ -16,12 +16,11 @@ import {setAsset, setParticipants} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {setChannel} from '../../context/actions/setChannel';
-import EasyFollowSystem
-  from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
+import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import api from '../../service/config';
 import crashlytics from '@react-native-firebase/crashlytics';
-import { useRecoilState } from 'recoil';
-import { followersOrFollowingAtom } from '../ChannelListScreen/model/followersOrFollowingAtom';
+import {useRecoilState} from 'recoil';
+import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 
 const streami18n = new Streami18n({
   language: 'en'
@@ -66,12 +65,20 @@ const ChatDetailPage = ({route}) => {
       console.log(e, 'eman');
     }
   };
-
   React.useEffect(() => {
     if (clients && route.params && !channelClient.client) {
       handleChannelClient();
     }
   }, [route.params, clients]);
+
+  React.useEffect(() => {
+    return () => {
+      console.log(route, 'sinar');
+      if (route.params.channel) {
+        setChannel(route.params.channel, dispatchChannel);
+      }
+    };
+  }, []);
 
   const defaultActionsAllowed = (messageActionsProp) => {
     const {

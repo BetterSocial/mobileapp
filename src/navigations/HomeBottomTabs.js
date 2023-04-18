@@ -174,6 +174,7 @@ function HomeBottomTabs({navigation}) {
 
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       // eslint-disable-next-line no-unused-expressions
+      console.log(remoteMessage, 'sulip')
       handlePushNotif(remoteMessage);
     });
     return () => {
