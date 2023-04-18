@@ -139,6 +139,10 @@ const GroupInfo = () => {
     handleMember();
   }, []);
 
+  React.useEffect(() => {
+    getMembersList();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
