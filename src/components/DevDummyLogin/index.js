@@ -14,7 +14,7 @@ import {removeLocalStorege, setAccessToken, setRefreshToken, setUserId} from '..
 import {setDataHumenId} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
-const heightBs = Dimensions.get('window').height * 0.6;
+const heightBs = Dimensions.get('window').height * 0.85;
 
 const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const {ENABLE_DEV_ONLY_FEATURE} = configEnv;
@@ -26,7 +26,18 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
     {name: 'bastian', humanId: 'bastian'},
     {name: 'agita2', humanId: 'I4K3M10FGR78EWQQDNQ2'},
     {name: 'agita3', humanId: 'dlNWskypPXEPyNPM'},
-    {name: 'BetterSocial_Team', humanId: 'KVL1JKD8VG6KMHUZ0RY5'}
+    {name: 'BetterSocial_Team', humanId: 'KVL1JKD8VG6KMHUZ0RY5'},
+    {name: 'JSmithWrites', humanId: 'AXZ61CSQ5CGC1WD94QSE'},
+    {name: 'SophiaZ', humanId: 'ZZ750A44B7RWBNOP40U2'},
+    {name: 'LuckyNumber8', humanId: '2QT5N04V8TU03IWFX61W'},
+    {name: 'BornIn1999', humanId: 'G7WWEXKD5N264GLU3FZB'},
+    {name: 'CollegeConfessions', humanId: '12ULE1ZRJSMOU24YREHU'},
+    {name: 'Harvard_gossip', humanId: 'RRSJWZJCU9DC3Y01XRIC'},
+    {name: 'GraceFul', humanId: 'L0ASAI3OQYDD36M49NIY'},
+    {name: 'CatLadyForever', humanId: 'YZ55TDV3W49CCFW722CX'},
+    {name: 'Liz2', humanId: 'HXDX51MNA1DFV09608SX'},
+    {name: 'Simplythebest2', humanId: 'WUCHMWWT9ZNHYFCMPMXZ'},
+    {name: 'AlwaysinCrimson', humanId: 'GEPIX69EXGSRF17MMX0S'}
   ]);
 
   const dummyLoginRbSheetRef = React.useRef(null);
