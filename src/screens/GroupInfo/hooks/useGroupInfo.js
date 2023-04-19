@@ -189,11 +189,14 @@ const useGroupInfo = () => {
       );
       await channelChat.create();
       await channelChat.addMembers([selectedUser.user_id]);
-      await channelChat.sendMessage({
-        text: `${profile.myProfile.username} remove you from ${channel.data.name}`,
-        isRemoveMember: true,
-        silent: true
-      });
+      await channelChat.sendMessage(
+        {
+          text: `${profile.myProfile.username} remove you from ${channel.data.name}`,
+          isRemoveMember: true,
+          silent: true
+        },
+        {skip_push: true}
+      );
       // await channel.sendMessage(
       //   {
       //     text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this chat`,

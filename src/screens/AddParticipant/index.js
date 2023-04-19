@@ -121,6 +121,9 @@ const AddParticipant = ({navigation, route}) => {
         });
 
         await channel.channel.addMembers(followedWithRoles);
+        if (route.params?.refresh && typeof route.params.refresh === 'function') {
+          route.params.refresh();
+        }
         const previousChannelMembers = channel?.channel?.data?.name?.split(',');
         if (previousChannelMembers.length > 1) {
           await channel?.channel?.update({

@@ -27,7 +27,6 @@ import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
-import useGroupInfo from './hooks/useGroupInfo';
 import ModalAction from './elements/ModalAction';
 
 const GroupInfo = () => {
