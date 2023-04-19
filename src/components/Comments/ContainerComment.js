@@ -206,7 +206,7 @@ export const styles = StyleSheet.create({
     height: 10,
     borderLeftWidth: 1,
     borderBottomWidth: 1,
-    borderBottomLeftRadius: 21,
+    borderBottomLeftRadius: 0,
     borderLeftColor: colors.gray1,
     borderBottomColor: colors.gray1,
     marginRight: 4,
