@@ -10,6 +10,7 @@ import {requestExternalStoragePermission} from '../../../utils/permission';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {setChannel} from '../../../context/actions/setChannel';
 import {generateRandomId} from 'stream-chat-react-native-core';
+import {checkUserBlock} from '../../../service/profile';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -31,7 +32,6 @@ const useGroupInfo = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
 
-  console.log(newParticipant, 'sunit');
   const serializeMembersList = (result = []) => {
     if (!result) {
       return {};
@@ -50,7 +50,6 @@ const useGroupInfo = () => {
   const getMembersList = async () => {
     try {
       const result = await channel.queryMembers({});
-      console.log(result, 'polo');
       setNewParticipan(result.members);
       setIsLoadingMembers(false);
     } catch (e) {
@@ -60,10 +59,9 @@ const useGroupInfo = () => {
       setIsLoadingMembers(false);
     }
   };
-  console.log(client, 'client');
   const memberName = () => {
     const members = newParticipant.map((member) => member.user.name);
-    return members.join();
+    return `${channel.data.name}`;
   };
 
   const chatName = getChatName(username, profile.myProfile.username);
@@ -88,6 +86,22 @@ const useGroupInfo = () => {
       username: chatName,
       focusChatName: true
     });
+  };
+  console.log(channel, profileChannel, 'suria');
+  const checkUserIsBlockHandle = async () => {
+    try {
+      const sendData = {
+        user_id: selectedUser.user_id
+      };
+      const processGetBlock = await checkUserBlock(sendData);
+
+      if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
+        return openChatMessage();
+      }
+      return onProfilePressed();
+    } catch (e) {
+      console.log(e, 'eman');
+    }
   };
 
   const handleOnImageClicked = () => {
@@ -159,7 +173,12 @@ const useGroupInfo = () => {
 
     try {
       const result = await channel.removeMembers([selectedUser.user_id]);
-      const responseMessage = await channel.sendMessage(
+      const generatedChannelId = generateRandomId();
+      const channelChat = await client.client.channel('system', generatedChannelId, {
+        name: 'System',
+        type_channel: 'system'
+      });
+      await channel.sendMessage(
         {
           text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this chat`,
           isRemoveMember: true,
@@ -168,14 +187,82 @@ const useGroupInfo = () => {
         },
         {skip_push: true}
       );
+      await channelChat.create();
+      await channelChat.addMembers([selectedUser.user_id]);
+      await channelChat.sendMessage({
+        text: `${profile.myProfile.username} remove you from ${channel.data.name}`,
+        isRemoveMember: true,
+        silent: true
+      });
+      // await channel.sendMessage(
+      //   {
+      //     text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this chat`,
+      //     isRemoveMember: true,
+      //     // user_id: profile.myProfile.user_id,
+      //     silent: true
+      //   },
+      //   {skip_push: true}
+      // );
+      // const generatedChannelId = generateRandomId();
+      // const filter = {type: 'system', members: {$eq: [selectedUser.user_id]}};
+      // const sort = [{last_message_at: -1}];
+      // const filterMessage = await client.client.queryChannels(filter, sort, {
+      //   watch: true, // this is the default
+      //   state: true
+      // });
+      // if(filterMessage.length > 0) {
+      //   const channelChat = await client.client.channel('system', filterMessage[0].)
+      // }
+      // console.log(filterMessage, 'filter')
+      // const channelChat = await client.client.channel('messaging', generatedChannelId, {
+      //   name: memberName(),
+      //   type_channel: 'system'
+      // });
+      // await channelChat.create();
+      // await channelChat.addMembers([selectedUser.user_id]);
+      // await channelChat.sendMessage({
+      //   text: `${profile.myProfile.username} remove you from this chat`,
+      //   isRemoveMember: true,
+      //   silent: true
+      // });
       setNewParticipan(result.members);
     } catch (e) {
       console.log(e, 'eman');
     }
   };
 
-  const alertRemoveUser = async (status, user) => {
-    console.log(user, 'user');
+  const openChatMessage = async () => {
+    const members = [profile.myProfile.user_id];
+    members.push(selectedUser.user_id);
+    const filter = {type: 'messaging', members: {$eq: members}};
+    const sort = [{last_message_at: -1}];
+    const memberWithRoles = members.map((item) => ({
+      user_id: item,
+      channel_role: 'channel_moderator'
+    }));
+    const filterMessage = await client.client.queryChannels(filter, sort, {
+      watch: true, // this is the default
+      state: true
+    });
+    const generatedChannelId = generateRandomId();
+
+    if (filterMessage.length > 0) {
+      setChannel(filterMessage[0], dispatchChannel);
+    } else {
+      const channelChat = await client.client.channel('messaging', generatedChannelId, {
+        name: selectedUser.user.name,
+        type_channel: 1
+      });
+      await channelChat.create();
+      await channelChat.addMembers(memberWithRoles);
+      setChannel(channelChat, dispatchChannel);
+    }
+    setOpenModal(false);
+
+    navigation.push('ChatDetailPage', {channel});
+  };
+
+  const alertRemoveUser = async (status) => {
     if (status === 'view') {
       setOpenModal(false);
       // onProfilePressed();
@@ -190,37 +277,10 @@ const useGroupInfo = () => {
     }
 
     if (status === 'message') {
-      const members = [profile.myProfile.user_id];
-      members.push(selectedUser.user_id);
-      const filter = {type: 'messaging', members: {$eq: members}};
-      const sort = [{last_message_at: -1}];
-      const memberWithRoles = members.map((item) => ({
-        user_id: item,
-        channel_role: 'channel_moderator'
-      }));
-      const filterMessage = await client.client.queryChannels(filter, sort, {
-        watch: true, // this is the default
-        state: true
-      });
-      const generatedChannelId = generateRandomId();
-
-      if (filterMessage.length > 0) {
-        setChannel(filterMessage[0], dispatchChannel);
-      } else {
-        const channelChat = await client.client.channel('messaging', generatedChannelId, {
-          name: selectedUser.user.name,
-          type_channel: 1
-        });
-        await channelChat.create();
-        await channelChat.addMembers(memberWithRoles);
-        setChannel(channelChat, dispatchChannel);
-      }
-      setOpenModal(false);
-
-      navigation.push('ChatDetailPage', {channel});
+      checkUserIsBlockHandle();
     }
   };
-  console.log(channel, 'suti')
+  console.log(channel, 'suti');
   const onLeaveGroup = () => {
     Alert.alert('Leave group', `Are you sure you want to leave group ?`, [
       {text: 'Yes', onPress: leaveGroup},
@@ -231,8 +291,33 @@ const useGroupInfo = () => {
   const leaveGroup = async () => {
     console.log(profile, 'sulit');
     try {
-      await channel.removeMembers([profile.myProfile.user_id]);
-    } catch (e) {}
+      await channel.sendMessage(
+        {
+          text: `${profile.myProfile.username} left`,
+          isRemoveMember: true,
+          silent: true
+        },
+        {skip_push: true}
+      );
+      const response = await channel.removeMembers([profile.myProfile.user_id]);
+      navigation.reset({
+        index: 1,
+        routes: [
+          {
+            name: 'AuthenticatedStack',
+            params: {
+              screen: 'HomeTabs',
+              params: {
+                screen: 'ChannelList'
+              }
+            }
+          }
+        ]
+      });
+      setNewParticipan(response.members);
+    } catch (e) {
+      console.log(e, 'sayu');
+    }
   };
 
   return {
@@ -271,7 +356,8 @@ const useGroupInfo = () => {
     leaveGroup,
     alertRemoveUser,
     memberName,
-    onLeaveGroup
+    onLeaveGroup,
+    checkUserIsBlockHandle
   };
 };
 
