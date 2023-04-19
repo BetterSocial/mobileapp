@@ -57,7 +57,8 @@ const GroupInfo = () => {
     alertRemoveUser,
     memberName,
     onLeaveGroup,
-    profile
+    profile,
+    checkUserIsBlockHandle
   } = useGroupInfo();
 
   React.useEffect(() => {
