@@ -323,67 +323,6 @@ const useGroupInfo = () => {
     }
   };
 
-  const alertRemoveUser = async (status, user) => {
-    console.log(user, 'user');
-    if (status === 'view') {
-      setOpenModal(false);
-      // onProfilePressed();
-      onProfilePressed();
-    }
-    if (status === 'remove') {
-      Alert.alert(
-        'Remove user',
-        `Are you sure you want to remove ${selectedUser.user.name} from this group? We will let the group know that you removed ${selectedUser.user.name}`,
-        [{text: 'Yes - remove', onPress: () => onRemoveUser('remove')}, {text: 'No'}]
-      );
-    }
-
-    if (status === 'message') {
-      const members = [profile.myProfile.user_id];
-      members.push(selectedUser.user_id);
-      const filter = {type: 'messaging', members: {$eq: members}};
-      const sort = [{last_message_at: -1}];
-      const memberWithRoles = members.map((item) => ({
-        user_id: item,
-        channel_role: 'channel_moderator'
-      }));
-      const filterMessage = await client.client.queryChannels(filter, sort, {
-        watch: true, // this is the default
-        state: true
-      });
-      const generatedChannelId = generateRandomId();
-
-      if (filterMessage.length > 0) {
-        setChannel(filterMessage[0], dispatchChannel);
-      } else {
-        const channelChat = await client.client.channel('messaging', generatedChannelId, {
-          name: selectedUser.user.name,
-          type_channel: 1
-        });
-        await channelChat.create();
-        await channelChat.addMembers(memberWithRoles);
-        setChannel(channelChat, dispatchChannel);
-      }
-      setOpenModal(false);
-
-      navigation.push('ChatDetailPage', {channel});
-    }
-  };
-  console.log(channel, 'suti')
-  const onLeaveGroup = () => {
-    Alert.alert('Leave group', `Are you sure you want to leave group ?`, [
-      {text: 'Yes', onPress: leaveGroup},
-      {text: 'No'}
-    ]);
-  };
-
-  const leaveGroup = async () => {
-    console.log(profile, 'sulit');
-    try {
-      await channel.removeMembers([profile.myProfile.user_id]);
-    } catch (e) {}
-  };
-
   return {
     serializeMembersList,
     groupChatState,
