@@ -250,7 +250,6 @@ const useGroupInfo = () => {
       checkUserIsBlockHandle();
     }
   };
-
   const onLeaveGroup = () => {
     Alert.alert('Leave group', 'Are you sure you want to leave group ?', [
       {text: 'Yes', onPress: leaveGroup},
