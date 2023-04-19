@@ -51,7 +51,7 @@ const ChannelListScreen = ({navigation}) => {
 
   const filters = {
     members: {$in: [myProfile.user_id]},
-    type: {$in: ['messaging', 'topics', 'group']}
+    type: {$in: ['messaging', 'topics', 'group', 'system']}
   };
   // React.useEffect(() => { }, [unReadMessage]);
   const perf = React.useRef(null);
@@ -140,13 +140,16 @@ const ChannelListScreen = ({navigation}) => {
   const chatBadge = (props) => <CustomPreviewUnreadCount {...props} />;
 
   const onSelectChat = (channel, refreshList) => {
+    console.log(channel, 'yoko')
     if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
-      navigation.navigate('TopicPageScreen', {id: channel.data.id, refreshList});
-    } else {
-      setChannel(channel, dispatch);
-      // ChannelScreen | ChatDetailPage
-      navigation.navigate('ChatDetailPage');
+      return navigation.navigate('TopicPageScreen', {id: channel.data.id, refreshList});
     }
+    if (channel.data.type_channel === 'system') {
+      return null;
+    }
+    setChannel(channel, dispatch);
+    // ChannelScreen | ChatDetailPage
+    navigation.navigate('ChatDetailPage');
   };
 
   React.useEffect(() => {
