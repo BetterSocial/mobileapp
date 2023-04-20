@@ -24,7 +24,7 @@ import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNin
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
 import useFeedHeader from './hooks/useFeedHeader';
-import {PRIVACY_PUBLIC} from '../../utils/constants';
+import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
@@ -196,9 +196,7 @@ const _renderProfileNormal = ({
             <View style={{}}>
               <Image
                 source={{
-                  uri:
-                    profile_pic_url ||
-                    'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+                  uri: profile_pic_url ?? DEFAULT_PROFILE_PIC_PATH
                 }}
                 style={styles.avatarImage}
               />

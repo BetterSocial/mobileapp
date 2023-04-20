@@ -4,14 +4,15 @@ import jwtDecode from 'jwt-decode';
 import {StreamChat} from 'stream-chat';
 
 import {Context} from '../../context';
+
+import {DEFAULT_PROFILE_PIC_PATH} from '../constants';
 import {createClient} from '../../context/actions/createClient';
 import {getAccessToken} from '../token';
 import {getMyProfile} from '../../service/profile';
 import {setMessage} from '../firebase/setMessaging';
 import {setTotalUnReadMessage, setUnReadMessage} from '../../context/actions/unReadMessageAction';
 
-const defaultImage =
-  'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png';
+const defaultImage = DEFAULT_PROFILE_PIC_PATH;
 export const useClientGetstream = () => {
   const [client, dispatch] = React.useContext(Context).client;
   const [, dispatchUnReadMessage] = React.useContext(Context).unReadMessage;

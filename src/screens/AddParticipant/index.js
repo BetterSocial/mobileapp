@@ -1,39 +1,32 @@
 import * as React from 'react';
 import moment from 'moment';
-import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
-import {
-  Dimensions,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
+import {Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 
 import HeaderContact from '../../components/Header/HeaderContact';
 import Memo_ic_info from '../../assets/icons/ic_info';
-import { COLORS, FONTS } from '../../utils/theme';
-import { Context } from '../../context';
-import { Loading } from '../../components';
-import { ProfileContact } from '../../components/Items';
-import { SearchContact } from '../../components/Search';
-import { fonts, normalizeFontSize } from '../../utils/fonts';
-import { userPopulate } from '../../service/users';
+import {COLORS} from '../../utils/theme';
+import {Context} from '../../context';
+import {Loading} from '../../components';
+import {ProfileContact} from '../../components/Items';
+import {SearchContact} from '../../components/Search';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {userPopulate} from '../../service/users';
 
 const width = Dimensions.get('screen').width;
 const VIEW_TYPE_DATA = 2;
 
-const AddParticipant = ({ navigation }) => {
+const AddParticipant = ({navigation, route}) => {
   const [channel] = React.useContext(Context).channel;
   const [isRecyclerViewShown, setIsRecyclerViewShown] = React.useState(false);
   const [followed, setFollowed] = React.useState([]);
   const [followedName, setFollowedName] = React.useState([]);
-  const [layoutProvider, setLayoutProvider] = React.useState(() => { });
+  const [layoutProvider, setLayoutProvider] = React.useState(() => {});
   const [dataProvider, setDataProvider] = React.useState(null);
   const [users, setUsers] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [groupChatState] = React.useContext(Context).groupChat;
-  const { participants } = groupChatState;
+  const {participants} = groupChatState;
   const [filterParams, setFilterParams] = React.useState('');
   const [cacheUser, setCacheUser] = React.useState([]);
   React.useEffect(() => {
@@ -41,7 +34,7 @@ const AddParticipant = ({ navigation }) => {
       setIsRecyclerViewShown(true);
     }
   }, [dataProvider]);
-
+  console.log(route, 'lusioa');
   React.useEffect(() => {
     getUserPopulate();
   }, []);
@@ -67,10 +60,10 @@ const AddParticipant = ({ navigation }) => {
 
   React.useEffect(() => {
     if (users.length > 0) {
-      let dProvider = new DataProvider((row1, row2) => row1 !== row2);
+      const dProvider = new DataProvider((row1, row2) => row1 !== row2);
       setLayoutProvider(
         new LayoutProvider(
-          (index) => {
+          () => {
             if (users.length < 1) {
               return 0;
             }
@@ -86,19 +79,17 @@ const AddParticipant = ({ navigation }) => {
                 dim.width = width;
                 dim.height = 0;
             }
-          },
-        ),
+          }
+        )
       );
       setDataProvider(dProvider.cloneWithRows(users));
     }
   }, [users]);
 
-  React.useEffect(() => {
-  }, [followed])
 
   const handleSelected = (value) => {
-    let copyFollowed = [...followed];
-    let index = followed.indexOf(value);
+    const copyFollowed = [...followed];
+    const index = followed.indexOf(value);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
@@ -108,8 +99,8 @@ const AddParticipant = ({ navigation }) => {
   };
 
   const handleSelectedName = (value) => {
-    let copyFollowed = [...followedName];
-    let index = followedName.indexOf(value);
+    const copyFollowed = [...followedName];
+    const index = followedName.indexOf(value);
     if (index > -1) {
       copyFollowed.splice(index, 1);
     } else {
@@ -122,24 +113,27 @@ const AddParticipant = ({ navigation }) => {
     if (followed.length !== 0 && channel.channel) {
       try {
         setLoading(true);
-        let followedWithRoles = followed.map((item, index) => {
+        const followedWithRoles = followed.map((item) => {
           return {
             user_id: item,
             channel_role: 'channel_moderator'
-          }
-        })
+          };
+        });
 
         await channel.channel.addMembers(followedWithRoles);
-        let previousChannelMembers = channel?.channel?.data?.name?.split(',')
-        if(previousChannelMembers.length > 1) {
+        if (route.params?.refresh && typeof route.params.refresh === 'function') {
+          route.params.refresh();
+        }
+        const previousChannelMembers = channel?.channel?.data?.name?.split(',');
+        if (previousChannelMembers.length > 1) {
           await channel?.channel?.update({
             name: [...previousChannelMembers, ...followedName].join(', ')
-          })
+          });
         }
         setLoading(false);
         navigation.navigate('GroupInfo', {
           from: 'AddParticipant',
-          timestamp: moment().unix(),
+          timestamp: moment().unix()
         });
       } catch (error) {
         setLoading(false);
@@ -150,8 +144,8 @@ const AddParticipant = ({ navigation }) => {
   const filterText = (text) => {
     setFilterParams(text);
     if (text) {
-      let dataFilter = users.filter((item) => {
-        return item.username.includes(text);
+      const dataFilter = users.filter((item) => {
+        return item?.username?.toLowerCase()?.includes(text?.toLowerCase());
       });
       setUsers(dataFilter);
     } else {
@@ -160,9 +154,9 @@ const AddParticipant = ({ navigation }) => {
   };
 
   const onUserSelected = (item) => {
-    handleSelected(item.user_id)
-    handleSelectedName(item.username)
-  }
+    handleSelected(item.user_id);
+    handleSelectedName(item.username);
+  };
 
   const rowRenderer = (type, item, index, extendedState) => {
     return (
@@ -174,6 +168,7 @@ const AddParticipant = ({ navigation }) => {
       />
     );
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -198,7 +193,7 @@ const AddParticipant = ({ navigation }) => {
             layoutProvider={layoutProvider}
             dataProvider={dataProvider}
             extendedState={{
-              followed,
+              followed
             }}
             rowRenderer={rowRenderer}
           />
@@ -214,9 +209,9 @@ export default AddParticipant;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
   },
-  containerHeader: { marginHorizontal: 22 },
+  containerHeader: {marginHorizontal: 22},
   newParticipantWarningContainer: {
     backgroundColor: 'rgba(47,128,237,0.2)',
     borderRadius: 4,
@@ -227,7 +222,7 @@ const styles = StyleSheet.create({
     paddingRight: 11,
     paddingBottom: 11,
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   newParticipantWarningText: {
     color: COLORS.blue,
@@ -236,12 +231,12 @@ const styles = StyleSheet.create({
     lineHeight: normalizeFontSize(24),
     marginLeft: 12,
     flex: 1,
-    paddingTop: 13,
+    paddingTop: 13
   },
   newParticipantIcon: {
-    marginTop: 16,
+    marginTop: 16
   },
   subtitleStyle: (isIsset) => ({
-    color: isIsset ? COLORS.holyTosca : '#C4C4C4',
-  }),
+    color: isIsset ? COLORS.holyTosca : '#C4C4C4'
+  })
 });
