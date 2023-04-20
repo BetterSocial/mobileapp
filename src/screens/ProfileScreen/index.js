@@ -62,6 +62,7 @@ import {setMyProfileAction} from '../../context/actions/setMyProfileAction';
 import {setMyProfileFeed} from '../../context/actions/myProfileFeed';
 import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const {height, width} = Dimensions.get('screen');
@@ -107,6 +108,8 @@ const ProfileScreen = ({route}) => {
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
   const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
   const [isHitApiFirstTime, setIsHitApiFirstTime] = React.useState(false);
+
+  const updateUserClient = useUpdateClientGetstreamHook();
 
   const LIMIT_PROFILE_FEED = 10;
 
@@ -174,9 +177,12 @@ const ProfileScreen = ({route}) => {
       if (result.code === 200) {
         saveToCache(PROFILE_CACHE, result.data);
         saveProfileState(result?.data);
+        return result?.data?.profile_pic_path;
       }
       setLoadingContainer(false);
     }
+
+    return null;
   };
 
   const saveProfileState = (result) => {
@@ -332,7 +338,7 @@ const ProfileScreen = ({route}) => {
     };
 
     updateImageProfile(data)
-      .then((res) => {
+      .then(async (res) => {
         if (type === 'gallery') {
           setIsLoadingUpdateImageGalery(false);
         } else {
@@ -340,8 +346,9 @@ const ProfileScreen = ({route}) => {
         }
         if (res.code === 200) {
           closeImageBs();
-          fetchMyProfile();
           getMyFeeds();
+          const profilePicture = await fetchMyProfile();
+          updateUserClient(profilePicture);
         }
       })
       .catch(() => {
