@@ -4,6 +4,7 @@ import jwtDecode from 'jwt-decode';
 import {StreamChat} from 'stream-chat';
 
 import {Context} from '../../context';
+
 import {DEFAULT_PROFILE_PIC_PATH} from '../constants';
 import {createClient} from '../../context/actions/createClient';
 import {getAccessToken} from '../token';
@@ -61,4 +62,25 @@ export const useClientGetstream = () => {
   };
 
   return create;
+};
+
+export const useUpdateClientGetstreamHook = () => {
+  const [, dispatch] = React.useContext(Context).client;
+
+  const updateUserClient = async (image) => {
+    const chatClient = StreamChat.getInstance(config.STREAM_API_KEY);
+    const token = await getAccessToken();
+    const userId = await jwtDecode(token.id).user_id;
+
+    chatClient.partialUpdateUser({
+      id: userId,
+      set: {
+        image
+      }
+    });
+
+    createClient(chatClient, dispatch);
+  };
+
+  return updateUserClient;
 };
