@@ -5,7 +5,6 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {Alert} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
 import {Context} from '../../../context';
-import {setParticipants} from '../../../context/actions/groupChat';
 import {uploadFile} from '../../../service/file';
 import {requestExternalStoragePermission} from '../../../utils/permission';
 import {getChatName} from '../../../utils/string/StringUtils';
@@ -61,7 +60,7 @@ const useGroupInfo = () => {
   };
   const memberName = () => {
     const members = newParticipant.map((member) => member.user.name);
-    return `${channel.data.name}`;
+    return channel.data.name ? channel.data.name : members.join(', ');
   };
 
   const chatName = getChatName(username, profile.myProfile.username);
@@ -197,37 +196,6 @@ const useGroupInfo = () => {
         },
         {skip_push: true}
       );
-      // await channel.sendMessage(
-      //   {
-      //     text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this chat`,
-      //     isRemoveMember: true,
-      //     // user_id: profile.myProfile.user_id,
-      //     silent: true
-      //   },
-      //   {skip_push: true}
-      // );
-      // const generatedChannelId = generateRandomId();
-      // const filter = {type: 'system', members: {$eq: [selectedUser.user_id]}};
-      // const sort = [{last_message_at: -1}];
-      // const filterMessage = await client.client.queryChannels(filter, sort, {
-      //   watch: true, // this is the default
-      //   state: true
-      // });
-      // if(filterMessage.length > 0) {
-      //   const channelChat = await client.client.channel('system', filterMessage[0].)
-      // }
-      // console.log(filterMessage, 'filter')
-      // const channelChat = await client.client.channel('messaging', generatedChannelId, {
-      //   name: memberName(),
-      //   type_channel: 'system'
-      // });
-      // await channelChat.create();
-      // await channelChat.addMembers([selectedUser.user_id]);
-      // await channelChat.sendMessage({
-      //   text: `${profile.myProfile.username} remove you from this chat`,
-      //   isRemoveMember: true,
-      //   silent: true
-      // });
       setNewParticipan(result.members);
     } catch (e) {
       console.log(e, 'eman');
@@ -268,14 +236,13 @@ const useGroupInfo = () => {
   const alertRemoveUser = async (status) => {
     if (status === 'view') {
       setOpenModal(false);
-      // onProfilePressed();
       onProfilePressed();
     }
     if (status === 'remove') {
       Alert.alert(
         'Remove user',
         `Are you sure you want to remove ${selectedUser.user.name} from this group? We will let the group know that you removed ${selectedUser.user.name}`,
-        [{text: 'Yes - remove', onPress: () => onRemoveUser('remove')}, {text: 'No'}]
+        [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'No'}]
       );
     }
 

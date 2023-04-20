@@ -33,7 +33,6 @@ const GroupInfo = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const {
-    participants,
     asset,
     channel,
     profileChannel,
@@ -42,13 +41,11 @@ const GroupInfo = () => {
     uploadedImage,
     isUploadingImage,
     createChat,
-    countUser,
     getMembersList,
     chatName,
     handleOnNameChange,
     handleOnImageClicked,
     handleSelectUser,
-    initParticipant,
     newParticipant,
     selectedUser,
     handleCloseSelectUser,
@@ -56,8 +53,7 @@ const GroupInfo = () => {
     alertRemoveUser,
     memberName,
     onLeaveGroup,
-    profile,
-    checkUserIsBlockHandle
+    profile
   } = useGroupInfo();
 
   React.useEffect(() => {
