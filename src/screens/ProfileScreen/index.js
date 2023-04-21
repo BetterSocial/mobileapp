@@ -188,12 +188,6 @@ const ProfileScreen = ({route}) => {
     }
   };
 
-  React.useEffect(() => {
-    if (isLastPage && isHitApiFirstTime) {
-
-    }
-  }, [isHitApiFirstTime, isLastPage]);
-
   const getMyFeeds = async (offset = 0, limit = 10) => {
     try {
       setIsFetchingList(true);
