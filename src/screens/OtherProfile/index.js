@@ -124,12 +124,6 @@ const OtherProfile = () => {
       console.log(e, 'error');
     }
   };
-  console.log(isLastPage, 'susu');
-  React.useEffect(() => {
-    if (isLastPage && isHitApiFirstTime) {
-
-    }
-  }, [isHitApiFirstTime, isLastPage]);
 
   React.useEffect(() => {
     return () => {
