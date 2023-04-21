@@ -194,12 +194,6 @@ const ProfileScreen = ({route}) => {
     }
   };
 
-  React.useEffect(() => {
-    if (isLastPage && isHitApiFirstTime) {
-      Toast.show('No posts yet.', Toast.LONG);
-    }
-  }, [isHitApiFirstTime, isLastPage]);
-
   const getMyFeeds = async (offset = 0, limit = 10) => {
     try {
       setIsFetchingList(true);
