@@ -127,7 +127,7 @@ const OtherProfile = () => {
   console.log(isLastPage, 'susu');
   React.useEffect(() => {
     if (isLastPage && isHitApiFirstTime) {
-      // SimpleToast.show('No posts yet.', SimpleToast.LONG);
+
     }
   }, [isHitApiFirstTime, isLastPage]);
 
