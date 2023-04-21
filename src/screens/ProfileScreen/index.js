@@ -190,7 +190,7 @@ const ProfileScreen = ({route}) => {
 
   React.useEffect(() => {
     if (isLastPage && isHitApiFirstTime) {
-      // Toast.show('No posts yet.', Toast.LONG);
+
     }
   }, [isHitApiFirstTime, isLastPage]);
 
