@@ -4,27 +4,27 @@ import {View, StyleSheet} from 'react-native';
 import {colors} from '../../utils/colors';
 
 const ConnectorWrapper = ({children, index}) => (
-    <View style={styles.wrapper}>
-      <View style={styles.connector(index)} />
-      {children}
-    </View>
-  );
+  <View style={styles.wrapper}>
+    <View style={styles.connector(index)} />
+    {children}
+  </View>
+);
 
 export const styles = StyleSheet.create({
   wrapper: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   connector: (index) => ({
-      marginLeft: -1,
-      width: 24,
-      height: 14,
-      borderLeftWidth: 1,
-      borderBottomWidth: 1,
-      borderBottomLeftRadius: 21,
-      borderLeftColor: index === 0 ? colors.gray1 : 'transparent',
-      borderBottomColor: index === 0 ? colors.gray1 : 'transparent',
-    }),
+    marginLeft: -1,
+    width: 24,
+    height: 14,
+    borderLeftWidth: 1,
+    borderBottomWidth: 2,
+    borderBottomLeftRadius: 21,
+    borderLeftColor: index === 0 ? colors.gray1 : 'transparent',
+    borderBottomColor: index === 0 ? colors.gray1 : 'transparent'
+  })
 });
 
 export default ConnectorWrapper;
