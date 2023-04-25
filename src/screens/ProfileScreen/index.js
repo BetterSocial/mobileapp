@@ -106,7 +106,7 @@ const ProfileScreen = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
   const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
-  const [isHitApiFirstTime, setIsHitApiFirstTime] = React.useState(false);
+  const [, setIsHitApiFirstTime] = React.useState(false);
 
   const LIMIT_PROFILE_FEED = 10;
 
