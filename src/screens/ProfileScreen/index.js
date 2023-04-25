@@ -106,7 +106,7 @@ const ProfileScreen = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const isNotFromHomeTab = route?.params?.isNotFromHomeTab;
   const bottomBarHeight = isNotFromHomeTab ? 0 : useBottomTabBarHeight();
-  const [isHitApiFirstTime, setIsHitApiFirstTime] = React.useState(false);
+  const [, setIsHitApiFirstTime] = React.useState(false);
 
   const LIMIT_PROFILE_FEED = 10;
 
@@ -187,12 +187,6 @@ const ProfileScreen = ({route}) => {
       setLoadingContainer(false);
     }
   };
-
-  React.useEffect(() => {
-    if (isLastPage && isHitApiFirstTime) {
-      Toast.show('No posts yet.', Toast.LONG);
-    }
-  }, [isHitApiFirstTime, isLastPage]);
 
   const getMyFeeds = async (offset = 0, limit = 10) => {
     try {
