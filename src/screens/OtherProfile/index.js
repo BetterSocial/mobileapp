@@ -20,6 +20,7 @@ import {useRoute} from '@react-navigation/native';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
 import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
+import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
 import GlobalButton from '../../components/Button/GlobalButton';
 import LoadingWithoutModal from '../../components/LoadingWithoutModal';
@@ -31,6 +32,7 @@ import ShareUtils from '../../utils/share';
 import SpecificIssue from '../../components/Blocking/SpecificIssue';
 import dimen from '../../utils/dimen';
 import {Context} from '../../context';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
 import {blockUser, unblockUserApi} from '../../service/blocking';
 import {
   checkUserBlock,
@@ -52,7 +54,6 @@ import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -334,9 +335,7 @@ const OtherProfile = () => {
             <Image
               style={styles.profileImage}
               source={{
-                uri: dataMain.profile_pic_path
-                  ? dataMain.profile_pic_path
-                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+                uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
               }}
             />
 

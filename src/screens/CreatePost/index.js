@@ -52,7 +52,11 @@ import useHastagMention from './elements/useHastagMention';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button, ButtonAddMedia} from '../../components/Button';
 import {Context} from '../../context';
-import {MAX_POLLING_ALLOWED, MIN_POLLING_ALLOWED} from '../../utils/constants';
+import {
+  DEFAULT_TOPIC_PIC_PATH,
+  MAX_POLLING_ALLOWED,
+  MIN_POLLING_ALLOWED
+} from '../../utils/constants';
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
 import {colors} from '../../utils/colors';
@@ -539,8 +543,7 @@ const CreatePost = () => {
   };
 
   const handleTopicChat = async () => {
-    const defaultImage =
-      'https://res.cloudinary.com/hpjivutj2/image/upload/v1636632905/vdg8solozeepgvzxyfbv.png';
+    const defaultImage = DEFAULT_TOPIC_PIC_PATH;
     const allTopics = listTopic;
 
     allTopics.forEach(async (topic) => {

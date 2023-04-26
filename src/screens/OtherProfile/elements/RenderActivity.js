@@ -1,30 +1,23 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableNativeFeedback,
-  Dimensions,
-  Platform,
-} from 'react-native';
-
-import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import SeeMore from 'react-native-see-more-inline';
-import {Activity, Avatar} from 'react-native-activity-feed';
 import moment from 'moment';
+import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
+import {Activity, Avatar} from 'react-native-activity-feed';
+import {Dimensions, Platform, StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 
-import ShareIcon from '../../../assets/icons/images/share.svg';
-import ElipsisIcon from '../../../assets/icons/images/elipsis.svg';
-import ArrowUpIcon from '../../../assets/icons/images/arrow-up.svg';
 import ArrowDownRedIcon from '../../../assets/icons/images/arrow-down-red.svg';
+import ArrowUpIcon from '../../../assets/icons/images/arrow-up.svg';
 import CommentIcon from '../../../assets/icons/images/comment.svg';
+import ElipsisIcon from '../../../assets/icons/images/elipsis.svg';
+import ShareIcon from '../../../assets/icons/images/share.svg';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
 const {width: screenWidth} = Dimensions.get('window');
 
 const renderActivity = (props, data) => {
-  const _renderItem = ({item, index}, parallaxProps) => {
+  const renderItem = ({item}, parallaxProps) => {
     return (
       <View style={styles.item}>
         <ParallaxImage
@@ -44,15 +37,7 @@ const renderActivity = (props, data) => {
       Header={
         <View style={styles.rowSpaceBeetwen}>
           <View style={styles.rowCenter}>
-            <Avatar
-              source={
-                data.profile_pic_path
-                  ? data.profile_pic_path
-                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
-              }
-              size={48}
-              noShadow
-            />
+            <Avatar source={data.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH} size={48} noShadow />
             <View style={styles.containerFeedProfile}>
               <Text style={styles.feedUsername}>
                 {data.real_name ? data.real_name : 'no name specifics'}
@@ -82,7 +67,7 @@ const renderActivity = (props, data) => {
               sliderHeight={screenWidth}
               itemWidth={screenWidth - 20}
               data={props.activity.images_url}
-              renderItem={_renderItem}
+              renderItem={renderItem}
               hasParallaxImages={true}
             />
           ) : null}
@@ -107,35 +92,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: width,
-    marginTop: marginTop,
+    width,
+    marginTop
   }),
   rowCenter: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   containerFeedProfile: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginLeft: 13,
+    marginLeft: 13
   },
 
   feedUsername: {
     fontFamily: fonts.inter[600],
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.black,
+    color: colors.black
   },
   containerFeedText: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5,
+    marginTop: 5
   },
   feedDate: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     color: colors.black,
-    lineHeight: 18,
+    lineHeight: 18
   },
   point: {
     width: 4,
@@ -143,54 +128,54 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: colors.gray,
     marginLeft: 8,
-    marginRight: 8,
+    marginRight: 8
   },
   contentFeed: {
     marginTop: 12,
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
     fontSize: 14,
     lineHeight: 24,
-    color: colors.black,
+    color: colors.black
   },
   textComment: {
     fontFamily: fonts.inter[400],
     fontSize: 12,
     lineHeight: 18,
-    color: colors.gray,
+    color: colors.gray
   },
   usernameComment: {
     fontFamily: fonts.inter[500],
     fontWeight: '900',
     fontSize: 12,
     lineHeight: 24,
-    color: colors.black,
+    color: colors.black
   },
   usernameTextComment: {
     fontFamily: fonts.inter[500],
     fontSize: 12,
     lineHeight: 24,
-    color: colors.gray,
+    color: colors.gray
   },
   item: {
     width: screenWidth - 20,
     height: screenWidth - 20,
     marginTop: 10,
-    marginLeft: -20,
+    marginLeft: -20
   },
   imageContainer: {
     flex: 1,
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 8
   },
   image: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
     aspectRatio: 1.5,
-    resizeMode: 'contain',
-  },
+    resizeMode: 'contain'
+  }
 });
 export default renderActivity;
