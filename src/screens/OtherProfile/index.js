@@ -53,6 +53,7 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
+import { DEFAULT_PROFILE_PIC_PATH } from '../../utils/constants';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -336,7 +337,7 @@ const OtherProfile = () => {
               source={{
                 uri: dataMain.profile_pic_path
                   ? dataMain.profile_pic_path
-                  : 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+                  : DEFAULT_PROFILE_PIC_PATH
               }}
             />
 
