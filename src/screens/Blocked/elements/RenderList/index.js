@@ -1,15 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import GlobalButton from '../../../../components/Button/GlobalButton';
-import Anonymous from '../../../../assets/images/AnonymousProfile.png';
 import {colors} from '../../../../utils/colors';
 import {fonts} from '../../../../utils/fonts';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../../utils/constants';
