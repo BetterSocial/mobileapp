@@ -9,12 +9,12 @@ const Search = ({animatedValue, text, setText}) => {
     <Animated.View style={styles.animatedViewContainer(animatedValue)}>
       <View style={styles.wrapperSearch}>
         <TextInput
-          multiline={true}
           placeholder={'Search Users'}
           style={styles.input}
           text={text}
           onChangeText={setText}
-          // textAlignVertical={P}
+          returnKeyType="search"
+          blurOnSubmit={true}
         />
         <View style={styles.wrapperIcon}>
           <MemoIc_search width={20} height={20} />

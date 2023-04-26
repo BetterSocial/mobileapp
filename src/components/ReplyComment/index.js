@@ -248,15 +248,18 @@ export const styles = StyleSheet.create({
     zIndex: -100
   },
   connector: {
-    width: 15,
-    height: 10,
-    borderLeftWidth: 1,
-    borderBottomWidth: 1,
-    borderBottomLeftRadius: 21,
+    width: 10,
+    height: 5,
+    borderLeftWidth: 1.5,
+    borderBottomWidth: 1.5,
+    // borderBottomLeftRadius: 1,
     borderLeftColor: colors.gray1,
     borderBottomColor: colors.gray1,
     marginRight: 4,
-    marginLeft: -1
+    marginLeft: -1,
+    borderBottomLeftRadius: 15 / 2,
+    marginTop: 0
+    // marginTop: 1
   },
   childCommentWrapper: {
     borderLeftColor: colors.gray1,
