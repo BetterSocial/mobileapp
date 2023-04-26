@@ -62,3 +62,24 @@ export const useClientGetstream = () => {
 
   return create;
 };
+
+export const useUpdateClientGetstreamHook = () => {
+  const [, dispatch] = React.useContext(Context).client;
+
+  const updateUserClient = async (image) => {
+    const chatClient = StreamChat.getInstance(config.STREAM_API_KEY);
+    const token = await getAccessToken();
+    const userId = await jwtDecode(token.id).user_id;
+
+    chatClient.partialUpdateUser({
+      id: userId,
+      set: {
+        image
+      }
+    });
+
+    createClient(chatClient, dispatch);
+  };
+
+  return updateUserClient;
+};

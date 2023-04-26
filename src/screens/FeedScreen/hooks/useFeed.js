@@ -1,6 +1,7 @@
-import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {Dimensions, StatusBar} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
+
 import dimen from '../../../utils/dimen';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 
@@ -124,8 +125,6 @@ const useFeed = () => {
       if (level3Comment.length > 0) {
         total3 = level3Comment.reduce((a, b) => a + b);
       }
-      console.log(parentComment, total2, total3, 'naniopo');
-
       return parentComment + total2 + total3;
     }
     return 0;

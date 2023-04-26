@@ -12,7 +12,10 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import ExitGroup from '../../assets/images/exit-group.png';
+import ReportGroup from '../../assets/images/report.png';
 
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
 import Header from '../../components/Header';
@@ -24,12 +27,12 @@ import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
+import ModalAction from './elements/ModalAction';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const {
-    participants,
     asset,
     channel,
     profileChannel,
@@ -38,13 +41,20 @@ const GroupInfo = () => {
     uploadedImage,
     isUploadingImage,
     createChat,
-    countUser,
     getMembersList,
     chatName,
-    onProfilePressed,
     handleOnNameChange,
-    handleOnImageClicked
-  } = useGroupInfo({navigation});
+    handleOnImageClicked,
+    handleSelectUser,
+    newParticipant,
+    selectedUser,
+    handleCloseSelectUser,
+    openModal,
+    alertRemoveUser,
+    memberName,
+    onLeaveGroup,
+    profile
+  } = useGroupInfo();
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -122,13 +132,17 @@ const GroupInfo = () => {
     return null;
   };
 
+  React.useEffect(() => {
+    getMembersList();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       {/* <Header title={chatName} /> */}
-      <Header isCenter onPress={() => navigation.goBack()} title={chatName} />
+      <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
       <View style={styles.lineTop} />
-      <ScrollView>
+      <ScrollView nestedScrollEnabled={true} >
         <SafeAreaView>
           <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
             <View style={styles.containerPhoto}>{showImageProfile()}</View>
@@ -163,22 +177,46 @@ const GroupInfo = () => {
           </View>
           <View style={styles.lineTop} />
           <View style={styles.users}>
-            <Text style={styles.countUser}>Participants ({countUser})</Text>
+            <Text style={styles.countUser}>Participants ({newParticipant.length})</Text>
             <FlatList
               testID="participants"
-              data={participants ? Object.keys(participants) : []}
+              // nestedScrollEnabled={true}
+              data={newParticipant}
+              // contentContainerStyle={{paddingBottom: 10}}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => (
+              renderItem={({item, index}) => (
                 <View style={{height: normalize(72)}}>
                   <ProfileContact
-                    key={item}
-                    onPress={() => onProfilePressed(item)}
-                    fullname={participants[item].user.name}
-                    photo={participants[item].user.image}
+                    key={index}
+                    item={item}
+                    onPress={() => handleSelectUser(item)}
+                    fullname={item.user.name}
+                    photo={item.user.image}
+                    showArrow={true}
+                    userId={profile.myProfile.user_id}
                   />
                 </View>
               )}
             />
+          </View>
+          <View style={styles.gap} />
+          <View style={styles.actionGroup}>
+            <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
+              <View style={styles.imageActContainer}>
+                <FastImage style={styles.imageAction} source={ExitGroup} />
+              </View>
+              <View>
+                <Text style={styles.textAct}>Exit Group</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity  style={styles.buttonGroup}>
+              <View style={styles.imageActContainer}>
+                <FastImage style={styles.imageAction} source={ReportGroup} />
+              </View>
+              <View>
+                <Text style={styles.textAct}>Report Group</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </SafeAreaView>
       </ScrollView>
@@ -186,7 +224,7 @@ const GroupInfo = () => {
         <View style={styles.btnAdd}>
           <TouchableOpacity
             testID="addParticipant"
-            onPress={() => navigation.push('AddParticipant')}>
+            onPress={() => navigation.push('AddParticipant', {refresh: getMembersList})}>
             <Text style={styles.btnAddText}>+ Add Participants</Text>
           </TouchableOpacity>
         </View>
@@ -195,6 +233,13 @@ const GroupInfo = () => {
         <Loading visible={isLoadingMembers} />
       </View>
       <Loading visible={isUploadingImage} />
+      <ModalAction
+        name={selectedUser?.user?.name}
+        isOpen={openModal}
+        onCloseModal={handleCloseSelectUser}
+        selectedUser={selectedUser}
+        onPress={alertRemoveUser}
+      />
     </SafeAreaView>
   );
 };
@@ -318,5 +363,29 @@ export const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     height: 28
+  },
+  gap: {
+    height: 1,
+    backgroundColor: '#E0E0E0',
+    marginTop: 50
+  },
+  actionGroup: {
+    marginTop: 22
+  },
+  buttonGroup: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    paddingVertical: 13
+  },
+  imageAction: {
+    height: 20,
+    width: 20
+  },
+  imageActContainer: {
+    marginRight: 26
+  },
+  textAct: {
+    color: '#FF2E63',
+    fontSize: 14
   }
 });

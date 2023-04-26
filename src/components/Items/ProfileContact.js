@@ -1,34 +1,46 @@
 import * as React from 'react';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
+import {homeTabs} from '../../assets';
 
-const ProfileContact = ({photo, fullname, onPress, select}) => (
-    <Pressable
-      onPress={onPress}
-      android_ripple={{
-        color: COLORS.gray1,
-        borderless: false,
-        borderRadius: 10,
-      }}
-      style={styles.pressable}>
-      <View style={styles.container}>
-        <View style={styles.profile}>
-          <Image testID='image' style={styles.image} source={{uri: photo !== '' ? photo : undefined}} />
-          <Text style={styles.fullname}>{fullname}</Text>
-        </View>
-        {select && <View testID='selected' ><MemoIc_Checklist /></View>}
+const ProfileContact = ({photo, fullname, onPress, select, showArrow, userId, item}) => (
+  <Pressable
+    onPress={onPress}
+    android_ripple={{
+      color: COLORS.gray1,
+      borderless: false,
+      borderRadius: 10
+    }}
+    style={styles.pressable}>
+    <View style={styles.container}>
+      <View style={styles.profile}>
+        <Image
+          testID="image"
+          style={styles.image}
+          source={{uri: photo !== '' ? photo : undefined}}
+        />
+        <Text style={styles.fullname}>{fullname}</Text>
       </View>
-    </Pressable>
-  );
+      {showArrow && (
+        <>
+          {userId !== item.user_id && (
+            <View>
+              <Image style={styles.arroIcon} source={homeTabs.AllowLeft} />
+            </View>
+          )}
+        </>
+      )}
+      {select && (
+        <View testID="selected">
+          <MemoIc_Checklist />
+        </View>
+      )}
+    </View>
+  </Pressable>
+);
 
 export default ProfileContact;
 
@@ -36,28 +48,32 @@ const styles = StyleSheet.create({
   profile: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    flex: 1
   },
   image: {
     height: normalize(48),
     width: normalize(48),
     borderRadius: normalize(24),
-    marginRight: 17,
+    marginRight: 17
   },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
     paddingVertical: 12,
-    paddingHorizontal: 15,
+    paddingHorizontal: 15
   },
   fullname: {
     fontSize: normalizeFontSize(14),
     fontFamily: fonts.inter[500],
     color: '#000',
-    lineHeight: normalizeFontSize(16.94),
+    lineHeight: normalizeFontSize(16.94)
   },
   pressable: {
-    height: '100%',
+    height: '100%'
   },
+  arroIcon: {
+    height: 14,
+    width: 14
+  }
 });
