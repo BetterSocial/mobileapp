@@ -95,7 +95,7 @@ const OtherProfile = () => {
   const [profile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).feeds;
   const [isLastPage, setIsLastPage] = React.useState(false);
-  const [isHitApiFirstTime, setIsHitApiFirstTime] = React.useState(false);
+  const [, setIsHitApiFirstTime] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
   const create = useClientGetstream();
