@@ -1,5 +1,7 @@
 import React from 'react';
-import {render, cleanup} from '@testing-library/react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {cleanup, render} from '@testing-library/react-native';
+
 import PDP from '../../../src/screens/PostPageDetail';
 import Store from '../../../src/context/Store';
 
@@ -26,6 +28,15 @@ jest.mock('@react-navigation/native', () => ({
   })
 }));
 
+jest.mock('react-native-safe-area-context', () => {
+  const inset = {top: 0, right: 0, bottom: 0, left: 0};
+  return {
+    SafeAreaProvider: jest.fn().mockImplementation(({children}) => children),
+    SafeAreaConsumer: jest.fn().mockImplementation(({children}) => children(inset)),
+    useSafeAreaInsets: jest.fn().mockImplementation(() => inset)
+  };
+});
+
 describe('PDP page should run correctly', () => {
   const props = {
     route: {
@@ -44,6 +55,12 @@ describe('PDP page should run correctly', () => {
   });
 
   it('refresh cache should call if refreshCache params exist', () => {
+    render(
+      <SafeAreaProvider>
+        <PDP {...props} />
+      </SafeAreaProvider>,
+      {wrapper: Store}
+    );
     expect(props.route.params.refreshCache).toHaveBeenCalled();
   });
 });
