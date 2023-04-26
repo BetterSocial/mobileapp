@@ -244,7 +244,7 @@ const PostNotificationPreview = ({item, index, onSelectAdditionalData, countPost
           </View>
         ) : null}
       </View>
-      {item.postMaker.id === myProfile.user_id && showNotification() && (
+      {item?.postMaker?.id === myProfile.user_id && showNotification() && (
         <View style={styles.blockMention}>
           <View style={styles.containerIcon}>
             <View style={styles.iconBlockContainer}>

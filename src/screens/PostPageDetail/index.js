@@ -15,14 +15,12 @@ const FeedsPostDetail = (props) => {
   const {feeds} = feedsContext;
   const {navigateToReplyView} = useMainPdp(props);
 
-  React.useEffect(
-    () => () => {
-      if (refreshCache && typeof refreshCache === 'function') {
-        refreshCache();
-      }
-    },
-    []
-  );
+  React.useEffect(() => {
+    if (refreshCache && typeof refreshCache === 'function') {
+      refreshCache();
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <PostPageDetailComponent

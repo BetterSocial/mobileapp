@@ -4,7 +4,6 @@ import jwtDecode from 'jwt-decode';
 import {StreamChat} from 'stream-chat';
 
 import {Context} from '../../context';
-
 import {DEFAULT_PROFILE_PIC_PATH} from '../constants';
 import {createClient} from '../../context/actions/createClient';
 import {getAccessToken} from '../token';
