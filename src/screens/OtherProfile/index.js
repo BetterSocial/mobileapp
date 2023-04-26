@@ -95,7 +95,7 @@ const OtherProfile = () => {
   const [profile] = React.useContext(Context).profile;
   const [, dispatch] = React.useContext(Context).feeds;
   const [isLastPage, setIsLastPage] = React.useState(false);
-  const [isHitApiFirstTime, setIsHitApiFirstTime] = React.useState(false);
+  const [, setIsHitApiFirstTime] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
   const create = useClientGetstream();
@@ -125,12 +125,6 @@ const OtherProfile = () => {
       console.log(e, 'error');
     }
   };
-  console.log(isLastPage, 'susu');
-  React.useEffect(() => {
-    if (isLastPage && isHitApiFirstTime) {
-      SimpleToast.show('No posts yet.', SimpleToast.LONG);
-    }
-  }, [isHitApiFirstTime, isLastPage]);
 
   React.useEffect(() => {
     return () => {
