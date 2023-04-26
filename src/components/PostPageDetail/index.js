@@ -65,7 +65,7 @@ const PostPageDetailIdComponent = (props) => {
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
   const {timer} = feedsContext;
   const [commenListParam] = React.useState({
-    limit: 20
+    limit: 100
   });
   const {getTotalReaction} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
