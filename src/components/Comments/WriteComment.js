@@ -2,13 +2,14 @@ import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-
+// import NoImage from '../../assets/images'
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import StringConstant from '../../utils/string/StringConstant';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
+import { DEFAULT_PROFILE_PIC_PATH } from '../../utils/constants';
 
 const WriteComment = ({
   value = null,
@@ -52,7 +53,6 @@ const WriteComment = ({
     setIsAnonimity((prevState) => !prevState);
     getAnonUser();
   };
-
   return (
     <View style={styles.columnContainer}>
       <View style={styles.connectorTop(inReplyCommentView, showProfileConnector)} />
@@ -91,6 +91,8 @@ const WriteComment = ({
               style={styles.image}
               source={{
                 uri: profile.myProfile.profile_pic_path
+                  ? profile.myProfile.profile_pic_path
+                  : DEFAULT_PROFILE_PIC_PATH
               }}
             />
           </>
