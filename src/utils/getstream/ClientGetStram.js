@@ -1,13 +1,14 @@
 import * as React from 'react';
-import {StreamChat} from 'stream-chat';
-import jwtDecode from 'jwt-decode';
 import config from 'react-native-config';
+import jwtDecode from 'jwt-decode';
+import {StreamChat} from 'stream-chat';
+
 import {Context} from '../../context';
+import {createClient} from '../../context/actions/createClient';
 import {getAccessToken} from '../token';
 import {getMyProfile} from '../../service/profile';
-import {createClient} from '../../context/actions/createClient';
-import {setUnReadMessage, setTotalUnReadMessage} from '../../context/actions/unReadMessageAction';
 import {setMessage} from '../firebase/setMessaging';
+import {setTotalUnReadMessage, setUnReadMessage} from '../../context/actions/unReadMessageAction';
 
 const defaultImage =
   'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png';
@@ -60,4 +61,25 @@ export const useClientGetstream = () => {
   };
 
   return create;
+};
+
+export const useUpdateClientGetstreamHook = () => {
+  const [, dispatch] = React.useContext(Context).client;
+
+  const updateUserClient = async (image) => {
+    const chatClient = StreamChat.getInstance(config.STREAM_API_KEY);
+    const token = await getAccessToken();
+    const userId = await jwtDecode(token.id).user_id;
+
+    chatClient.partialUpdateUser({
+      id: userId,
+      set: {
+        image
+      }
+    });
+
+    createClient(chatClient, dispatch);
+  };
+
+  return updateUserClient;
 };
