@@ -70,6 +70,17 @@ const WriteComment = ({
   const saveToStorage = (valueData) => {
     AsyncStorage.setItem(storageKey, valueData);
   };
+
+  React.useEffect(() => {
+    AsyncStorage.getItem(storageKey).then((data) => {
+      if (data === 'true') {
+        setIsAnonimity(true);
+        getAnonUser();
+      }
+    });
+  }, []);
+
+
   return (
     <View style={styles.columnContainer}>
       <View style={styles.connectorTop(inReplyCommentView, showProfileConnector)} />
