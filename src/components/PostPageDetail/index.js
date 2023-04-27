@@ -74,12 +74,17 @@ const PostPageDetailIdComponent = (props) => {
   const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {handleUserName} = useWriteComment();
-  const getComment = async () => {
+  const getComment = async (scrollToBottom) => {
     setLoadingGetComment(true);
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
     saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
+    if (scrollToBottom) {
+      setTimeout(() => {
+        onBottomPage();
+      }, 300);
+    }
   };
   React.useEffect(() => {
     getComment();
@@ -172,13 +177,10 @@ const PostPageDetailIdComponent = (props) => {
       }
       setLoadingPost(false);
       if (data) {
-        getComment();
+        getComment(true);
       }
       updateAllContent(oldData);
       Keyboard.dismiss();
-      setTimeout(() => {
-        onBottomPage();
-      }, 300);
     } catch (e) {
       if (__DEV__) {
         console.log(e);

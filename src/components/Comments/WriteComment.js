@@ -3,6 +3,7 @@ import FastImage from 'react-native-fast-image';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 import MemoSendComment from '../../assets/icon/IconSendComment';
 import StringConstant from '../../utils/string/StringConstant';
@@ -27,6 +28,7 @@ const WriteComment = ({
   const [loadingUser, setLoadingUser] = React.useState(false);
   const isDisableSubmit = !isCommentEnabled || loadingPost;
   const [anonimityData, setAnoimityData] = React.useState({});
+  const storageKey = 'isAnonymByDefault';
   const getAnonUser = React.useCallback(async () => {
     setLoadingUser(true);
     try {
@@ -51,6 +53,21 @@ const WriteComment = ({
   const toggleSwitch = () => {
     setIsAnonimity((prevState) => !prevState);
     getAnonUser();
+    if (isAnonimity) saveToStorage('null');
+    if (!isAnonimity) saveToStorage('true');
+  };
+
+  React.useEffect(() => {
+    AsyncStorage.getItem(storageKey).then((data) => {
+      if (data === 'true') {
+        setIsAnonimity(true);
+        getAnonUser();
+      }
+    });
+  }, []);
+
+  const saveToStorage = (valueData) => {
+    AsyncStorage.setItem(storageKey, valueData);
   };
 
   return (
