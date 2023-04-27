@@ -51,8 +51,10 @@ const SearchModal = (props) => {
 
             {typeof props.options !== 'undefined' && props.options.length > 0 ? (
               <View style={styles.box}>
-                {props.options.map((value, index) => (
-                  <TouchableNativeFeedback key={index} onPress={() => props.onSelect(value)}>
+                {props.options.map((value) => (
+                  <TouchableNativeFeedback
+                    key={value?.location_id}
+                    onPress={() => props.onSelect(value)}>
                     <View style={styles.list}>
                       {displayFormattedSearchLocationsV2(props.value, value)}
                     </View>

@@ -96,8 +96,6 @@ const LocalCommunity = () => {
     await setLocation(tempLocation);
     await setLocationPost(returnTempLocation);
     await setLocationLog(locLog);
-    const a = '';
-    a.toLocaleLowerCase();
   };
 
   const renderItem = ({index, item}) => {
