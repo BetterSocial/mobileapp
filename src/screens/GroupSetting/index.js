@@ -7,22 +7,32 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
 
 import ButtonAddParticipants from '../../components/Button/ButtonAddParticipants';
 import EditGroup from './elements/EditGroup';
 import HeaderContact from '../../components/Header/HeaderContact';
 import Loading from '../Loading';
+import useGroupSetting from './hooks/useGroupSetting';
 import {COLORS} from '../../utils/theme';
 import {ProfileContact} from '../../components/Items';
 import {fonts} from '../../utils/fonts';
-import useGroupSetting from './hooks/useGroupSetting';
 
 const {width} = Dimensions.get('screen');
 
 const GroupSetting = ({navigation, route}) => {
-  const {participants, groupName, countUser, urlImage, isLoading, updateName, submitData, lounchGalery, renderHeaderSubtitleText} = useGroupSetting({navigation, route})
+  const {
+    participants,
+    groupName,
+    countUser,
+    urlImage,
+    isLoading,
+    updateName,
+    submitData,
+    lounchGalery,
+    renderHeaderSubtitleText
+  } = useGroupSetting({navigation, route});
 
   const isFocusChatName = route?.params?.focusChatName;
   return (
@@ -47,7 +57,7 @@ const GroupSetting = ({navigation, route}) => {
         />
         <Loading visible={isLoading} />
         <View style={styles.users}>
-          <Text style={styles.countUser}>Participants {countUser}</Text>
+          <Text style={styles.countUser}>{`Participants (${countUser})`}</Text>
           <FlatList
             data={Object.keys(participants)}
             keyExtractor={(item, index) => index.toString()}
@@ -73,12 +83,12 @@ export default GroupSetting;
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff'},
   subtitleStyle: {
-    color: COLORS.holyTosca,
+    color: COLORS.holyTosca
   },
   containerHeader: {marginLeft: 22, marginRight: 20},
   users: {
     paddingTop: 12,
-    width,
+    width
   },
   countUser: {
     fontFamily: fonts.inter[600],
@@ -86,6 +96,6 @@ const styles = StyleSheet.create({
     lineHeight: 16.94,
     color: COLORS.holytosca,
     marginLeft: 20,
-    marginBottom: 4,
-  },
+    marginBottom: 4
+  }
 });
