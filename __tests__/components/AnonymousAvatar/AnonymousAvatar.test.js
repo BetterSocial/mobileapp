@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {render, cleanup} from '@testing-library/react-native';
+import {render} from '@testing-library/react-native';
 import AnonymousAvatar, {styles} from '../../../src/components/AnonymousAvatar';
 
 describe('AnonymousAvatar should match run correctly', () => {
