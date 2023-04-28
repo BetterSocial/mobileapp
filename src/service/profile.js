@@ -110,14 +110,16 @@ export const setFollow = async (data) => {
     },
     {skip_push: true}
   );
-  api
-    .post('/profiles/follow-user', data)
-    .then((res) => {
-      Promise.resolve(res.data);
-    })
-    .catch((err) => {
-      Promise.reject(err);
-    });
+  return new Promise((resolve, reject) => {
+    api
+      .post('/profiles/follow-user', data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 };
 
 export const updateImageProfile = async (data) =>
