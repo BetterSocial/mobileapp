@@ -109,7 +109,6 @@ const OtherProfile = () => {
       setIsHitApiFirstTime(true);
 
       const result = await getOtherFeedsInProfile(userId, offset);
-      console.log(result, 'surya');
       if (Array.isArray(result.data) && result.data.length === 0) {
         setIsLastPage(true);
       }
@@ -192,6 +191,11 @@ const OtherProfile = () => {
   const onShare = async () => ShareUtils.shareUserLink(username);
 
   const handleSetUnFollow = async () => {
+    setDataMain((prevState) => ({
+      ...prevState,
+      is_following: false
+    }));
+
     const data = {
       user_id_follower: profile.myProfile.user_id,
       user_id_followed: other_id,
@@ -204,6 +208,11 @@ const OtherProfile = () => {
   };
 
   const handleSetFollow = async () => {
+    setDataMain((prevState) => ({
+      ...prevState,
+      is_following: true
+    }));
+
     const data = {
       user_id_follower: profile.myProfile.user_id,
       user_id_followed: other_id,
@@ -212,9 +221,6 @@ const OtherProfile = () => {
       follow_source: 'other-profile'
     };
     const result = await setFollow(data);
-    // prepopulated follow
-    // const textOwnUser = `${username} started following you. Send them a message now`;
-    // const textTargetUser = `You started following ${profile.myProfile.username}. Send them a message now.`;
     if (result.code === 200) {
       fetchOtherProfile(username);
     }
@@ -519,7 +525,7 @@ const OtherProfile = () => {
     await upVote(post);
     updateFeed(post, index);
   };
-  console.log(postOffset, 'posoffset');
+
   const setDownVote = async (post, index) => {
     await downVote(post);
     updateFeed(post, index);
