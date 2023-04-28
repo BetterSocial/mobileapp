@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import {LogBox, StatusBar} from 'react-native';
+import {LogBox, Platform, StatusBar} from 'react-native';
 import {useLocalChannelsFirst} from 'stream-chat-react-native';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 
@@ -182,7 +182,7 @@ export const useInitialStartup = () => {
     LogBox.ignoreAllLogs();
 
     // statusbar
-    StatusBar.setBackgroundColor('#ffffff');
+    if (Platform.OS === 'android') StatusBar.setBackgroundColor('#ffffff');
     StatusBar.setBarStyle('dark-content', true);
 
     doGetAccessToken();
