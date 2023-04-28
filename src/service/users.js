@@ -166,3 +166,16 @@ export const removeFcmToken = async () => {
     return null;
   }
 };
+
+export const verifyHumanIdExchangeToken = async (exchangeToken) => {
+  try {
+    const result = await api.post('/users/check-exchange-token', {
+      token: exchangeToken
+    });
+
+    return Promise.resolve(result?.data);
+  } catch (error) {
+    crashlytics().recordError(new Error(error));
+    return Promise.reject(error?.response?.data);
+  }
+};
