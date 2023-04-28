@@ -16,12 +16,11 @@ import useSignin from './hooks/useSignin';
 import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
-import {checkToken} from '../../service/outh';
 import {fonts} from '../../utils/fonts';
 import {removeLocalStorege, setAccessToken, setRefreshToken, setUserId} from '../../utils/token';
 import {setDataHumenId} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
-import {verifyUser} from '../../service/users';
+import {verifyHumanIdExchangeToken} from '../../service/users';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const SignIn = () => {
@@ -33,6 +32,8 @@ const SignIn = () => {
   const navigation = useNavigation();
   const create = useClientGetstream();
 
+  const [onFirstSuccess, setOnFirstSuccess] = React.useState(0);
+
   const onClickContainer = () => {
     setClickTime((prevState) => prevState + 1);
   };
@@ -43,49 +44,42 @@ const SignIn = () => {
 
   React.useEffect(() => {
     setDataHumenId(null, dispatch);
-  });
+  }, []);
 
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
-      checkToken(exchangeToken)
-        .then((res) => {
-          if (__DEV__) {
-            console.log(res, 'response token');
-          }
-          if (res.success) {
-            const {appUserId} = res.data;
-            setDataHumenId(res.data, dispatch);
-            verifyUser(appUserId)
-              .then((response) => {
-                if (response.data) {
-                  setAccessToken(response.token);
-                  setRefreshToken(response.refresh_token);
-                  setValueStartup({
-                    id: response.token,
-                    deeplinkProfile: false
-                  });
-                  create(response.token);
-                } else {
-                  removeLocalStorege('userId');
-                  navigation.dispatch(StackActions.replace('ChooseUsername'));
-                }
-                setUserId(appUserId);
-              })
-              .catch((e) => {
-                if (__DEV__) {
-                  console.log(e);
-                }
-              });
-          } else {
-            SimpleToast.show(res.message, SimpleToast.SHORT);
-          }
-        })
-        .catch((e) => {
-          if (__DEV__) {
-            console.log('error');
-            console.log(e);
-          }
-        });
+      if (onFirstSuccess > 0) {
+        return;
+      }
+
+      setOnFirstSuccess((prevState) => prevState + 1);
+
+      try {
+        const response = await verifyHumanIdExchangeToken(exchangeToken);
+        if (response?.data?.data) {
+          const {token, refresh_token} = response?.data?.data || {};
+          setAccessToken(token);
+          setRefreshToken(refresh_token);
+          setValueStartup({
+            id: token,
+            deeplinkProfile: false
+          });
+          create(token);
+          setUserId(response?.data?.data?.appUserId);
+        } else {
+          setDataHumenId(response?.data?.humanIdData, dispatch);
+          removeLocalStorege('userId');
+          navigation.dispatch(StackActions.replace('ChooseUsername'));
+          setUserId(response?.data?.humanIdData?.appUserId);
+        }
+      } catch (e) {
+        SimpleToast.show(e?.message, SimpleToast.SHORT);
+        crashlytics().recordError(new Error(e?.message));
+        if (__DEV__) {
+          console.log('error');
+          console.log(e);
+        }
+      }
     });
     onError((message) => {
       crashlytics().recordError(new Error(message));
@@ -95,6 +89,15 @@ const SignIn = () => {
         id: '1'
       });
     });
+
+    const cleanup = () => {
+      setOnFirstSuccess(0);
+      onSuccess(() => {});
+      onError(() => {});
+      onCancel(() => {});
+    };
+
+    return cleanup;
   }, []);
 
   const handleLogin = () => {
