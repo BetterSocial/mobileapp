@@ -53,7 +53,6 @@ const SignIn = () => {
       }
 
       setOnFirstSuccess((prevState) => prevState + 1);
-      console.log(exchangeToken);
 
       try {
         const response = await verifyHumanIdExchangeToken(exchangeToken);
