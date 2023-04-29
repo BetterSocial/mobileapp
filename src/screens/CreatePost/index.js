@@ -485,8 +485,6 @@ const CreatePost = () => {
     }
 
     try {
-      console.log('data');
-      console.log(data);
       await createPost(data);
       handleTopicChat();
       showMessage({
@@ -658,8 +656,9 @@ const CreatePost = () => {
   }, 500);
 
   const renderLocationString = (geoInfo) => {
+    console.log('kontol', geoInfo);
     if (geoInfo?.location_level?.toLowerCase() === 'neighborhood') return geoInfo?.neighborhood;
-    if (geoInfo?.location_level?.toLowerCase() === 'city') return geoInfo?.city;
+    if (geoInfo?.location_level?.toLowerCase() === 'city') return geoInfo?.city.split(',')[0];
     if (geoInfo?.location_level?.toLowerCase() === 'state') return geoInfo?.state;
     if (geoInfo?.location_level?.toLowerCase() === 'country') return geoInfo?.country;
     return geoInfo?.location_level;
