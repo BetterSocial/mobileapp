@@ -62,9 +62,8 @@ const detectStateInCity = (city) => {
  * @returns {String}
  */
 const displayCityName = (city, state) => {
-  if (city === null || city === undefined || city === '') throw new Error('City must be defined');
-  if (state === null || state === undefined || state === '')
-    throw new Error('State must be defined');
+  if (city === null || city === undefined || city === '') return null;
+  if (state === null || state === undefined || state === '') return null;
   if (detectStateInCity(city)) return city;
 
   return `${city}, ${state}`;
