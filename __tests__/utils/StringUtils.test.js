@@ -32,7 +32,7 @@ describe('SringUtils should be run correctly', () => {
     expect(getPollTime(minutes)).toEqual('1m left');
     expect(getPollTime(expiredDays)).toEqual('Poll closed 2d ago');
     expect(getPollTime(expiredHourse)).toEqual('Poll closed 0m ago');
-    expect(getPollTime(minute)).toEqual('39m left')
+    expect(getPollTime(minute)).toEqual('39m left');
   });
 
   it('isPollExpired should run correctly', () => {
@@ -46,6 +46,7 @@ describe('SringUtils should be run correctly', () => {
     const city1 = 'Jakarta';
     const starte = 'Jakarta Barat';
     expect(displayCityName(city1, starte)).toEqual('Jakarta, Jakarta Barat');
+    expect(displayCityName(null, starte)).toEqual(null);
   });
 
   it('isLocationMatch should run correctly', () => {
