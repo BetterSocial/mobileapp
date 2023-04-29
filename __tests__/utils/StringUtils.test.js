@@ -8,7 +8,12 @@ import {
   convertString,
   convertTopicNameToTopicPageScreenParam,
   capitalizeFirstText,
-  removeStringAfterSpace
+  removeStringAfterSpace,
+  sanitizeUrl,
+  getHourText,
+  getMinuteText,
+  getDurationTimeText,
+  getSingularOrPluralText
 } from '../../src/utils/string/StringUtils';
 import moment from 'moment';
 describe('SringUtils should be run corret', () => {
@@ -17,10 +22,12 @@ describe('SringUtils should be run corret', () => {
     const days = moment().add('day', 2);
     const expiredHourse = moment().subtract('hours', 2);
     const expiredDays = moment().subtract('day', 2);
+    const minute = moment().add(40, 'minute')
     expect(getPollTime(hours)).toEqual('1h 59m left');
     expect(getPollTime(days)).toEqual('1d left');
     expect(getPollTime(expiredDays)).toEqual('Poll closed 2d ago');
     expect(getPollTime(expiredHourse)).toEqual('Poll closed 0m ago');
+    expect(getPollTime(minute)).toEqual('39m left')
   });
 
   it('isPollExpired should run correctly', () => {
@@ -53,6 +60,7 @@ describe('SringUtils should be run corret', () => {
     expect(getChatName(username3)).toEqual('elon musk, steve jobs');
     expect(getChatName(username4, 'agita')).toEqual('elon');
     expect(getChatName(username5, 'agita')).toEqual('No Name');
+    expect(getChatName('', '')).toEqual('No Name');
   });
 
   it('getGroupMemberCount should run correctly', () => {
@@ -74,11 +82,39 @@ describe('SringUtils should be run corret', () => {
   });
 
   it('capitalizeFirstText should run correctly', () => {
-    expect(capitalizeFirstText('nama saya agita')).toEqual('Nama Saya Agita')
-  })
+    expect(capitalizeFirstText('nama saya agita')).toEqual('Nama Saya Agita');
+  });
 
   it('removeStringAfterSpace should run correctly', () => {
     expect(removeStringAfterSpace('halo nama saya')).toEqual('halo');
+  });
+
+  it('sanitizeUrl should run correctly', () => {
+    expect(sanitizeUrl('nama saya agita https://datik.com')).toEqual('nama saya agita');
+    expect(sanitizeUrl(null)).toEqual('');
+  });
+
+  it('getHourText should run correctly', () => {
+    expect(getHourText(1, 1)).toEqual(', 1h');
+    expect(getHourText(0, 1)).toEqual(' 1h');
+    expect(getHourText(-1, 0)).toEqual('');
+  });
+
+  it('getMinuteText should run correctly', () => {
+    expect(getMinuteText(1, 1)).toEqual(', 1m');
+    expect(getMinuteText(0, 1)).toEqual('');
+    expect(getMinuteText(-1, 0)).toEqual('');
+  });
+
+  it('getDurationTimeText should run correctly', () => {
+    expect(getDurationTimeText({day: 1})).toEqual('1 Day(s)');
+    expect(getDurationTimeText({day: 1})).toEqual('1 Day(s)');
+    expect(getDurationTimeText({day: 2})).toEqual('2 Day(s)');
+  });
+
+  it('getSingularOrPluralText should run correctly', () => {
+    expect(getSingularOrPluralText(1, 'message', 'messages')).toEqual('message');
+    expect(getSingularOrPluralText(2, 'message', 'messages')).toEqual('messages');
   });
 });
 
