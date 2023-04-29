@@ -79,7 +79,7 @@ const PostPageDetailIdComponent = (props) => {
     }
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
-    saveComment(response.data.data, dispatchComment);
+    await saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
     if (scrollToBottom) {
       setTimeout(() => {
@@ -576,6 +576,8 @@ const PostPageDetailIdComponent = (props) => {
     return comments.length <= 0 ? calculatePaddingBtm() : 0;
   };
 
+  const saveCurHeight = (w, h) => setCurHeight(h);
+  console.log(curHeight, 'lisa');
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
