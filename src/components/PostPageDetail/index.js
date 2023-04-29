@@ -65,7 +65,7 @@ const PostPageDetailIdComponent = (props) => {
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
   const {timer} = feedsContext;
   const [commenListParam] = React.useState({
-    limit: 100
+    limit: 20
   });
   const {getTotalReaction} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
@@ -78,7 +78,7 @@ const PostPageDetailIdComponent = (props) => {
     setLoadingGetComment(true);
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
-    saveComment(response.data.data, dispatchComment);
+    await saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
     if (scrollToBottom) {
       setTimeout(() => {
@@ -586,7 +586,6 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const saveCurHeight = (w, h) => setCurHeight(h);
-  console.log(curHeight, 'lisa');
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
