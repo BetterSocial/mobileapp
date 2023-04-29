@@ -1,3 +1,6 @@
+import moment from 'moment';
+import React from 'react';
+import {Text} from 'react-native';
 import {
   getPollTime,
   isPollExpired,
@@ -13,21 +16,24 @@ import {
   getHourText,
   getMinuteText,
   getDurationTimeText,
-  getSingularOrPluralText
+  getSingularOrPluralText,
+  displayFormattedSearchLocations,
+  displayFormattedSearchLocationsV2
 } from '../../src/utils/string/StringUtils';
-import moment from 'moment';
+import TextBold from '../../src/components/Text/TextBold';
+
 describe('SringUtils should be run corret', () => {
   it('getPollTime  should run correctly', () => {
     const hours = moment().add('hour', 2);
     const days = moment().add('day', 2);
     const expiredHourse = moment().subtract('hours', 2);
     const expiredDays = moment().subtract('day', 2);
-    const minute = moment().add(40, 'minute')
+    const minute = moment().add(40, 'minute');
     expect(getPollTime(hours)).toEqual('1h 59m left');
     expect(getPollTime(days)).toEqual('1d left');
     expect(getPollTime(expiredDays)).toEqual('Poll closed 2d ago');
     expect(getPollTime(expiredHourse)).toEqual('Poll closed 0m ago');
-    expect(getPollTime(minute)).toEqual('39m left')
+    expect(getPollTime(minute)).toEqual('39m left');
   });
 
   it('isPollExpired should run correctly', () => {
@@ -41,6 +47,7 @@ describe('SringUtils should be run corret', () => {
     const city1 = 'Jakarta';
     const starte = 'Jakarta Barat';
     expect(displayCityName(city1, starte)).toEqual('Jakarta, Jakarta Barat');
+    expect(displayCityName(null, starte)).toEqual(null);
   });
 
   it('isLocationMatch should run correctly', () => {
@@ -116,7 +123,128 @@ describe('SringUtils should be run corret', () => {
     expect(getSingularOrPluralText(1, 'message', 'messages')).toEqual('message');
     expect(getSingularOrPluralText(2, 'message', 'messages')).toEqual('messages');
   });
+  it('displayFormattedSearchLocation should run correctly', () => {
+    expect(
+      displayFormattedSearchLocations('yogyakarta', {
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        city: 'wakanda',
+        country: 'indonesia',
+        zip: '123'
+      })
+    ).toStrictEqual(<Text>sleman, <Text style={{"color": "#000000", "fontFamily": "Inter", "fontSize": 14, "fontStyle": "normal", "fontWeight": "bold", "lineHeight": 17}}>wakanda</Text>, yogyakarta, indonesia, 123</Text>);
+    expect(
+      displayFormattedSearchLocations('yogyakarta', {
+        city: 'yogyakarta',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123'
+      })
+    ).toStrictEqual(<Text>sleman, <Text style={{"color": "#000000", "fontFamily": "Inter", "fontSize": 14, "fontStyle": "normal", "fontWeight": "bold", "lineHeight": 17}}>yogyakarta</Text>, yogyakarta, indonesia, 123</Text>);
+     expect(
+      displayFormattedSearchLocations('sleman', {
+        city: 'yogyakarta',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123'
+      })
+    ).toStrictEqual(<Text><Text style={{"color": "#000000", "fontFamily": "Inter", "fontSize": 14, "fontStyle": "normal", "fontWeight": "bold", "lineHeight": 17}}>sleman</Text>, yogyakarta, yogyakarta, indonesia, 123</Text>);
+    expect(
+      displayFormattedSearchLocations('sleman', {
+        city: 'yogyakarta',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123'
+      })
+    ).toStrictEqual(<Text><Text style={{"color": "#000000", "fontFamily": "Inter", "fontSize": 14, "fontStyle": "normal", "fontWeight": "bold", "lineHeight": 17}}>sleman</Text>, yogyakarta, yogyakarta, indonesia, 123</Text>);
+     expect(
+      displayFormattedSearchLocations('123', {
+        city: 'yogyakarta',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123'
+      })
+    ).toStrictEqual(<Text>sleman, yogyakarta , yogyakarta, indonesia<Text style={{"color": "#000000", "fontFamily": "Inter", "fontSize": 14, "fontStyle": "normal", "fontWeight": "bold", "lineHeight": 17}}>, 123</Text></Text>);
+    expect(
+      displayFormattedSearchLocations('123', {
+        city: 'yogyakarta',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123',
+        location_level: 'Country'
+
+      })
+    ).toStrictEqual(<Text>sleman, yogyakarta , yogyakarta, indonesia<Text style={{"color": "#000000", "fontFamily": "Inter", "fontSize": 14, "fontStyle": "normal", "fontWeight": "bold", "lineHeight": 17}}>, 123</Text></Text>);
+     expect(
+      displayFormattedSearchLocationsV2('indonesia', {
+         city: 'yogyakarta',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123',
+        location_level: 'Country'
+      })
+    ).toStrictEqual(<Text><TextBold text="indonesia" /></Text>);
+         expect(
+      displayFormattedSearchLocationsV2('yogyakarta', {
+         city: 'yogyakarta',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123',
+        location_level: 'State'
+      })
+    ).toStrictEqual(<Text><TextBold text="yogyakarta" /></Text>);
+             expect(
+      displayFormattedSearchLocationsV2('yogyakarta', {
+         city: 'yogyakarta',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123',
+        location_level: 'City'
+      })
+    ).toStrictEqual(<Text><TextBold text="yogyakarta" />, yogyakarta</Text>);
+                 expect(
+      displayFormattedSearchLocationsV2('sleman', {
+         city: 'sleman',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123',
+        location_level: 'Neighborhood'
+      })
+    ).toStrictEqual(<Text><TextBold text="sleman, sleman" />, yogyakarta</Text>);
+    expect(
+      displayFormattedSearchLocationsV2('sleman', {
+         city: 'bantul',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123',
+        location_level: 'Neighborhood'
+      })
+    ).toStrictEqual(<Text><TextBold text="sleman, " />bantul, yogyakarta</Text>);
+        expect(
+      displayFormattedSearchLocationsV2('sleman', {
+         city: 'bantul',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123',
+        location_level: ''
+      })
+    ).toStrictEqual(null);
+    
+  });
+  
 });
+
 
 // const getPollTime = (pollExpiredAtString) => {
 //   const currentMoment = moment();
