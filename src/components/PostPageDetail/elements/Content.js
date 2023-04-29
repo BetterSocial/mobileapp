@@ -16,6 +16,7 @@ import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
 import {smartRender} from '../../../utils/Utils';
 import Card from '../../Card/Card';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
+import usePostDetail from '../hooks/usePostDetail';
 
 const {width: screenWidth} = Dimensions.get('window');
 const FONT_SIZE_TEXT = 16;
@@ -23,6 +24,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
   const {hashtagAtComponent} = useContentFeed({navigation});
+  const {calculationText} = usePostDetail();
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
       title: 'Photo',
@@ -70,9 +72,25 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
         nestedScrollEnabled={true}>
         <View style={handleStyleFeed()}>
           {item.post_type !== POST_TYPE_LINK ? (
-            <Text style={[styles.textContentFeed]}>{hashtagAtComponent(message)}</Text>
+            <Text
+              style={[
+                styles.textContentFeed,
+                {
+                  fontSize: calculationText(message).fontSize,
+                  lineHeight: calculationText(message).lineHeight
+                }
+              ]}>
+              {hashtagAtComponent(message)}
+            </Text>
           ) : (
-            <Text style={[styles.textContentFeed]}>
+            <Text
+              style={[
+                styles.textContentFeed,
+                {
+                  fontSize: calculationText(sanitizeUrl(message)).fontSize,
+                  lineHeight: calculationText(sanitizeUrl(message)).lineHeight
+                }
+              ]}>
               {hashtagAtComponent(sanitizeUrl(message))}{' '}
             </Text>
           )}

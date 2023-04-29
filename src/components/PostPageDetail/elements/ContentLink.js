@@ -15,6 +15,7 @@ import {COLORS} from '../../../utils/theme';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {smartRender} from '../../../utils/Utils';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
+import usePostDetail from '../hooks/usePostDetail';
 
 const FONT_SIZE_TEXT = 14;
 
@@ -36,15 +37,28 @@ const ContentLink = ({
 
   const sanitizeUrl = message.replace(/(https?:\/\/)?([^.\s]+)?[^.\s]+\.[^\s]+/gi, '').trim();
   const {hashtagAtComponent} = useContentFeed({navigation});
+  const {calculationText} = usePostDetail();
   const renderMessageContentLink = () => {
     if (sanitizeUrl?.length === 0) return <></>;
     return (
       <View style={{...styles.messageContainer, ...messageContainerStyle}}>
-        <Text style={styles.message}>
-          {!isPostDetail ? hashtagAtComponent(sanitizeUrl, 50) : hashtagAtComponent(sanitizeUrl)}
-          {!isPostDetail && message.length > 50 && <Text style={{color: '#2F80ED'}}> More...</Text>}
-          {/* {hashtagAtComponent(sanitizeUrl)} */}
-        </Text>
+        {!isPostDetail ? (
+          <Text tyle={[styles.message]}>
+            {hashtagAtComponent(sanitizeUrl, 50)}{' '}
+            {message.length > 50 && <Text style={{color: '#2F80ED'}}> More...</Text>}{' '}
+          </Text>
+        ) : (
+          <Text
+            style={[
+              styles.message,
+              {
+                fontSize: calculationText(sanitizeUrl).fontSize,
+                lineHeight: calculationText(sanitizeUrl).lineHeight
+              }
+            ]}>
+            {hashtagAtComponent(sanitizeUrl)}
+          </Text>
+        )}
       </View>
     );
   };
