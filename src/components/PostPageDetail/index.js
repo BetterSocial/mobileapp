@@ -45,7 +45,7 @@ const PostPageDetailIdComponent = (props) => {
   const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
   const [profile] = React.useContext(Context).profile;
   const {bottom, top} = useSafeAreaInsets();
-
+  const [curHeight, setCurHeight] = React.useState(Dimensions.get('window').height);
   const [loading, setLoading] = React.useState(true);
   const [, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
@@ -78,7 +78,7 @@ const PostPageDetailIdComponent = (props) => {
     setLoadingGetComment(true);
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
-    saveComment(response.data.data, dispatchComment);
+    await saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
     if (scrollToBottom) {
       setTimeout(() => {
@@ -120,7 +120,10 @@ const PostPageDetailIdComponent = (props) => {
 
   const onBottomPage = () => {
     if (scrollViewRef && scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({y: Dimensions.get('screen').height + 30, x: 0});
+      scrollViewRef.current.scrollTo({
+        y: curHeight,
+        x: 0
+      });
     }
   };
 
@@ -134,7 +137,7 @@ const PostPageDetailIdComponent = (props) => {
         if (route.params.is_from_pn) {
           setTimeout(() => {
             onBottomPage();
-          }, 500);
+          }, 300);
         }
       } catch (e) {
         Toast.show(e?.response?.data?.message || "Can't get detail feed", Toast.LONG);
@@ -582,6 +585,8 @@ const PostPageDetailIdComponent = (props) => {
     return calculatedSizeScreen - defaultValue;
   };
 
+  const saveCurHeight = (w, h) => setCurHeight(h);
+  console.log(curHeight, 'lisa');
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -594,6 +599,7 @@ const PostPageDetailIdComponent = (props) => {
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
+            onContentSizeChange={saveCurHeight}
             contentContainerStyle={{
               paddingBottom: calculatePaddingBtm()
             }}>
