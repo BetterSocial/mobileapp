@@ -234,6 +234,7 @@ const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
   return null;
 };
 
+// eslint-disable-next-line consistent-return
 const getChatName = (usernames, me) => {
   if (!usernames) {
     return 'No Name';
@@ -254,7 +255,7 @@ const getChatName = (usernames, me) => {
   if (userArraysWithoutMe.length === 1) {
     return userArraysWithoutMe[0].trim();
   }
-  return 'No name';
+  // return 'No name';
 };
 
 const getGroupMemberCount = (channel) => Object.keys(channel?.state?.members).length;
@@ -403,5 +404,7 @@ export {
   displayCityName,
   sanitizeUrl,
   getDurationTimeText,
-  isLocationMatch
+  isLocationMatch,
+  getHourText,
+  getMinuteText
 };
