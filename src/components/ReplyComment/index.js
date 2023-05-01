@@ -48,7 +48,9 @@ const ReplyCommentId = ({
     showChildrenCommentView,
     updateFeed,
     scrollViewRef,
-    createComment
+    createComment,
+    onSaveHeight,
+    curHeight
   } = useReplyComment({itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page});
   const {handleUsernameReplyComment} = useWriteComment();
   React.useEffect(() => {
@@ -84,7 +86,10 @@ const ReplyCommentId = ({
         </Text>
         <View style={styles.btn} />
       </View>
-      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.commentScrollView}>
+      <ScrollView
+        onContentSizeChange={onSaveHeight}
+        ref={scrollViewRef}
+        contentContainerStyle={styles.commentScrollView}>
         <View style={styles.containerComment}>
           <ReplyCommentItem
             indexFeed={indexFeed}

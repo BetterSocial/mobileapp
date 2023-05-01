@@ -3,6 +3,7 @@ import Toast from 'react-native-simple-toast';
 import moment from 'moment';
 import {useNavigation} from '@react-navigation/core';
 
+import {Dimensions} from 'react-native';
 import StringConstant from '../../../utils/string/StringConstant';
 import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 import {Context} from '../../../context';
@@ -22,6 +23,7 @@ const useReplyComment = ({
   const [textComment, setTextComment] = React.useState('');
   const [newCommentList, setNewCommentList] = React.useState([]);
   const [item, setItem] = React.useState(itemProp);
+  const [curHeight, saveCurHeight] = React.useState(Dimensions.get('window').height);
   const navigation = useNavigation();
   const scrollViewRef = React.useRef(null);
   const {updateComment} = useUpdateComment();
@@ -241,7 +243,7 @@ const useReplyComment = ({
           isAnonimity,
           anonimityData
         );
-        scrollViewRef.current.scrollToEnd();
+        scrollViewRef.current.scrollToEnd({animated: true});
         if (data.code === 200) {
           const newComment = [
             ...newCommentList,
@@ -272,6 +274,8 @@ const useReplyComment = ({
     }
   };
 
+  const onSaveHeight = (w, h) => saveCurHeight(h);
+
   return {
     getThisCommentHook,
     updateReplyPostHook,
@@ -296,7 +300,9 @@ const useReplyComment = ({
     updateFeed,
     handleUpdateFeed,
     scrollViewRef,
-    createComment
+    createComment,
+    onSaveHeight,
+    curHeight
   };
 };
 export default useReplyComment;
