@@ -9,7 +9,7 @@ import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import useContentFeed from './hooks/useContentFeed';
-import {COLORS} from '../../utils/theme';
+import {COLORS, SIZES} from '../../utils/theme';
 import {POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
@@ -103,7 +103,10 @@ const Content = ({
       </View>
       {item && item.post_type === POST_TYPE_POLL ? (
         <View style={styles.containerMainText}>
-          <Text style={styles.textMedia}>{hashtagAtComponent(message)}</Text>
+          <Text style={styles.textMedia}>
+            {hashtagAtComponent(message, 100)}{' '}
+            {message.length > 100 ? <Text style={{color: '#2F80ED'}}>More...</Text> : null}{' '}
+          </Text>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
@@ -209,7 +212,7 @@ export const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    marginTop: 0
+    marginTop: SIZES.base
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],
