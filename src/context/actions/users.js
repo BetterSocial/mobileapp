@@ -1,7 +1,7 @@
 import {SET_DATA_HUMAN_ID, SET_DATA_IMAGE, SET_DATA_IMAGE_URL, SET_DATA_USERNAME} from '../Types';
 
 export const setDataHumenId = async (data, dispatch) => {
-  const {appUserId, countryCode} = data;
+  const {appUserId, countryCode} = data || {};
   dispatch({
     type: SET_DATA_HUMAN_ID,
     payload: {
