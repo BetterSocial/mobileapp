@@ -30,7 +30,7 @@ const Content = ({
   const route = useRoute();
   const devHeight = Dimensions.get('screen').height;
   const substringPostImage = devHeight / 2.25 - 40 * 4;
-  const substringNoImageNoTopic = devHeight / 1.6 - 40 * 4;
+  const substringNoImageNoTopic = devHeight / 1.6 - 40 * 5;
   const substringNoImageTopic = devHeight / 1.6 - 40 * 7;
   const {hashtagAtComponent} = useContentFeed({navigation});
 
