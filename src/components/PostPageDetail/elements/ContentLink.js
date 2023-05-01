@@ -108,7 +108,8 @@ const styles = StyleSheet.create({
     flex: 1,
     // marginTop: SIZES.base,
     marginHorizontal: 6,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.white,
+    paddingTop: 5
     // maxHeight: dimen.size.FEED_CONTENT_LINK_MAX_HEIGHT,
   },
   messageContainer: {

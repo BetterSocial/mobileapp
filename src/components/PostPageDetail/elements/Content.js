@@ -68,6 +68,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
     <>
       <ScrollView
         contentContainerStyle={{flexGrow: 1, paddingBottom: 40}}
+        style={styles.contentFeed}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         <View style={handleStyleFeed()}>
@@ -207,11 +208,10 @@ const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    marginTop: 12,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 80,
-    backgroundColor: COLORS.white
+    // marginTop: 12,
+    marginHorizontal: 6,
+    backgroundColor: COLORS.white,
+    paddingTop: 5
   },
   topicContainer: {
     height: 110,

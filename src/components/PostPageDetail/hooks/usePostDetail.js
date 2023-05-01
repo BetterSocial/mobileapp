@@ -1,6 +1,11 @@
+import {Dimensions} from 'react-native';
 import {normalizeFontSize} from '../../../utils/fonts';
 
 const usePostDetail = () => {
+  const longTextFontSize = 16;
+  const longTextLineHeight = 24;
+  const shortTextFontSize = 24;
+  const shortTextLineHeight = 44;
   const updateVoteLatestChildrenLevel3 = (commentList, dataUpdated) => {
     const updateComment = commentList.map((comment) => {
       if (comment.activity_id === dataUpdated.activity_id) {
@@ -40,20 +45,26 @@ const usePostDetail = () => {
   };
 
   const calculationText = (message) => {
-    const smallText = 16;
-    const hugeText = smallText + smallText * 0.6;
-    const smallLineHeight = 26;
-    const hugeLineHeight = smallLineHeight + smallLineHeight * 0.8;
-    if (message?.length > 270) {
-      return {
-        fontSize: normalizeFontSize(smallText),
-        lineHeight: smallLineHeight
-      };
+    let fontSize = normalizeFontSize(shortTextFontSize);
+    let lineHeight = shortTextLineHeight;
+    let containerHeight = 0;
+    if (message.length > 270) {
+      fontSize = normalizeFontSize(longTextFontSize);
+      lineHeight = longTextLineHeight;
+    } else {
+      fontSize = normalizeFontSize(shortTextFontSize);
+      lineHeight = shortTextLineHeight;
     }
-    return {
-      fontSize: normalizeFontSize(hugeText),
-      lineHeight: hugeLineHeight
-    };
+
+    const numberOfLines = Math.ceil(
+      message.length / ((Dimensions.get('window').width / fontSize) * 0.5)
+    );
+
+    containerHeight = numberOfLines * lineHeight;
+
+    containerHeight = Math.max(containerHeight, shortTextLineHeight * 3);
+
+    return {fontSize, lineHeight, containerHeight};
   };
 
   return {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculationText};
