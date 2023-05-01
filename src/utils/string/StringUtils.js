@@ -180,7 +180,6 @@ const getChatName = (usernames, me) => {
   if (userArraysWithoutMe.length === 1) {
     return userArraysWithoutMe[0].trim();
   }
-  // return 'No name';
 };
 
 const getGroupMemberCount = (channel) => Object.keys(channel?.state?.members).length;
