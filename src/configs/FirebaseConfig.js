@@ -135,14 +135,15 @@ const FirebaseConfig = (props) => {
   };
 
   const handlePost = async (dynamicLink) => {
-    let postId = dynamicLink.url.split('postId=')[1];
+    let postId = dynamicLink?.url?.split('postId=')[1];
     postId = postId?.length > 36 ? postId.substring(0, 36) : postId;
-    checkIsAuthorFollowingMe(postId);
+
+    if (postId) checkIsAuthorFollowingMe(postId);
   };
 
   const handlePrivatePost = async (dynamicLink) => {
-    const postId = dynamicLink.url.split('postPrivateId=')[1];
-    checkIsAuthorFollowingMe(postId);
+    const postId = dynamicLink?.url?.split('postPrivateId=')[1];
+    if (postId) checkIsAuthorFollowingMe(postId);
   };
 
   return <></>;
