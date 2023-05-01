@@ -335,7 +335,10 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @param {Any} navigation
  * @returns
  */
-const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topics = [], item) => {
+const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topics, item) => {
+  if (!topics || !Array.isArray(topics)) {
+    topics = [];
+  }
   const topicWithPrefix = idParams;
   const id = removePrefixTopic(topicWithPrefix);
   const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/;
