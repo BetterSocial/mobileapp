@@ -54,7 +54,8 @@ const Content = ({
               message,
               navigation,
               substringPostImage,
-              item?.topics
+              item?.topics,
+              item
             )}{' '}
             {message.length > substringPostImage ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
@@ -72,7 +73,8 @@ const Content = ({
               message,
               navigation,
               substringNoImageTopic,
-              item?.topics
+              item?.topics,
+              item
             )}{' '}
             {message.length > substringNoImageTopic ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
@@ -85,7 +87,8 @@ const Content = ({
               message,
               navigation,
               substringNoImageNoTopic,
-              item?.topics
+              item?.topics,
+              item
             )}{' '}
             {message.length > substringNoImageNoTopic ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>

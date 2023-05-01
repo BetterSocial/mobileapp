@@ -334,7 +334,10 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @param {Any} navigation
  * @returns
  */
-const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topics = []) => {
+const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topics, item) => {
+  if (!topics || !Array.isArray(topics)) {
+    topics = [];
+  }
   const topicWithPrefix = idParams;
   const id = removePrefixTopic(topicWithPrefix);
   const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/;
@@ -345,12 +348,26 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   substringEnd = Math.round(substringEnd);
   text = reactStringReplace(text, topicRegex, (match) => {
     if (topics?.indexOf(match?.replace('#', '')) > -1)
-      return <TopicText navigation={navigation} text={match} currentTopic={id} />;
+      return (
+        <TopicText
+          item={item}
+          goToDetailPage={true}
+          navigation={navigation}
+          text={match}
+          currentTopic={id}
+        />
+      );
     return match;
   });
 
   text = reactStringReplace(text, validationTextHasAt, (match) => (
-    <TaggingUserText navigation={navigation} text={match} currentTopic={id} />
+    <TaggingUserText
+      item={item}
+      goToDetailPage={true}
+      navigation={navigation}
+      text={match}
+      currentTopic={id}
+    />
   ));
   return text;
 };
