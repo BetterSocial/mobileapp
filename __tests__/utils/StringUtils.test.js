@@ -240,6 +240,38 @@ describe('SringUtils should be run corret', () => {
         location_level: ''
       })
     ).toStrictEqual(null);
+            expect(
+      displayFormattedSearchLocationsV2('sleman', {
+         city: 'bantul',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123',
+        location_level: 'Country'
+      })
+    ).toStrictEqual(<Text>indonesia</Text>);
+                expect(
+      displayFormattedSearchLocationsV2('sleman', {
+         city: 'bantul',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123',
+        location_level: 'City'
+      })
+    ).toStrictEqual(<Text><TextBold text="bantul" />, yogyakarta</Text>);
+                    expect(
+      displayFormattedSearchLocationsV2('sleman', {
+         city: 'bantul',
+        state: 'yogyakarta',
+        neighborhood: 'sleman',
+        country: 'indonesia',
+        zip: '123',
+        location_level: 'State'
+      })
+    ).toStrictEqual(<Text><TextBold text="yogyakarta" /></Text>);
+
+    
     
   });
   
