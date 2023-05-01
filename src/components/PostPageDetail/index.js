@@ -78,7 +78,7 @@ const PostPageDetailIdComponent = (props) => {
     setLoadingGetComment(true);
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
-    await saveComment(response.data.data, dispatchComment);
+    saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
     if (scrollToBottom) {
       setTimeout(() => {
