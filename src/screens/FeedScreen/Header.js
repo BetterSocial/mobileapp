@@ -23,6 +23,7 @@ import MemoSixtyThree_seventyFour from '../../assets/timer/SixtyThree_seventyFou
 import MemoThirtySeven_fourtyNine from '../../assets/timer/ThirtySeven_fourtyNine';
 import MemoTwentyFive_thirtySix from '../../assets/timer/TwentyFive_thirtySix';
 import Memoic_globe from '../../assets/icons/ic_globe';
+import StringConstant from '../../utils/string/StringConstant';
 import useFeedHeader from './hooks/useFeedHeader';
 import {DEFAULT_PROFILE_PIC_PATH, PRIVACY_PUBLIC} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
@@ -206,7 +207,9 @@ const _renderProfileNormal = ({
             onPress={navigateToProfile}
             style={[styles.containerFeedProfile, {paddingBottom: 5}]}>
             <View style={[styles.containerFeedName, {alignItems: 'flex-end'}]}>
-              <Text style={styles.feedUsername}>{username || 'no name specifics'}</Text>
+              <Text style={styles.feedUsername}>
+                {username || StringConstant.feedDeletedUserName}
+              </Text>
 
               <GlobalButton
                 buttonStyle={{marginLeft: 'auto', paddingBottom: 0, alignSelf: 'center'}}
