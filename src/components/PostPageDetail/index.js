@@ -120,10 +120,7 @@ const PostPageDetailIdComponent = (props) => {
 
   const onBottomPage = () => {
     if (scrollViewRef && scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({
-        y: curHeight,
-        x: 0
-      });
+      scrollViewRef.current.scrollToEnd({animated: true});
     }
   };
 
