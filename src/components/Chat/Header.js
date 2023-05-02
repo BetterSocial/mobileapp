@@ -21,6 +21,18 @@ const Header = () => {
   const [chatName, setChatName] = React.useState(null);
 
   React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (channelClient.channel?.data?.name) {
+        setChatName(
+          getChatName(channelClient?.channel?.data?.name, profileContext?.myProfile?.username)
+        );
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  React.useEffect(() => {
     if (
       profileContext.myProfile &&
       typeof profileContext.myProfile === 'object' &&

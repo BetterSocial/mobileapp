@@ -154,6 +154,17 @@ const ContactScreen = ({navigation}) => {
           type_channel: typeChannel
         });
         await channelChat.create();
+        channelChat.update(
+          {
+            name: channelName.join(', ')
+          },
+          {
+            text: 'You created this group',
+            system_user: profile?.myProfile?.user_id,
+            is_from_prepopulated: true,
+            other_text: `${profile?.myProfile?.username} created this group`
+          }
+        );
         await channelChat.addMembers(memberWithRoles);
         setChannel(channelChat, dispatchChannel);
       }
