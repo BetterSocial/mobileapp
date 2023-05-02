@@ -10,6 +10,7 @@ import ArrowUpIcon from '../../../assets/icons/images/arrow-up.svg';
 import CommentIcon from '../../../assets/icons/images/comment.svg';
 import ElipsisIcon from '../../../assets/icons/images/elipsis.svg';
 import ShareIcon from '../../../assets/icons/images/share.svg';
+import StringConstant from '../../../utils/string/StringConstant';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
@@ -40,7 +41,7 @@ const renderActivity = (props, data) => {
             <Avatar source={data.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH} size={48} noShadow />
             <View style={styles.containerFeedProfile}>
               <Text style={styles.feedUsername}>
-                {data.username ? data.username : 'no name specifics'}
+                {data.username ? data.username : StringConstant.feedDeletedUserName}
               </Text>
               <View style={styles.containerFeedText}>
                 <Text style={styles.feedDate}>20 Feb 2021</Text>
