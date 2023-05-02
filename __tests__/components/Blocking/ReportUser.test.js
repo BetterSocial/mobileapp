@@ -1,7 +1,6 @@
 import React from 'react';
 import {render} from '@testing-library/react-native';
 import ReportUser from '../../../src/components/Blocking/ReportPostAnonymous';
-import {render} from '@testing-library/react-native';
 
 describe('ReportUSer should run correctly', () => {
   it('should match snapshot', () => {
