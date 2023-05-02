@@ -21,7 +21,7 @@ import {
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation, useRoute} from '@react-navigation/core';
 
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
@@ -93,7 +93,7 @@ const CreatePost = () => {
   const [typeUser, setTypeUser] = React.useState(false);
   const {headerTitle, initialTopic, isInCreatePostTopicScreen, anonUserInfo} =
     useCreatePostHook(typeUser);
-
+  const {params} = useRoute();
   const [message, setMessage] = React.useState('');
   const [mediaStorage, setMediaStorage] = React.useState([]);
   const [listTopic, setListTopic] = React.useState(initialTopic);
@@ -118,7 +118,6 @@ const CreatePost = () => {
   const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
-
   const debounced = React.useCallback(
     debounce((changedText) => {
       if (isContainUrl(changedText)) {
@@ -409,7 +408,6 @@ const CreatePost = () => {
   };
 
   const onSaveTopic = (v, topicChat) => {
-    console.log(v, topicChat, 'hellop');
     setListTopic(v);
     setHashtags(v);
     setListTopicChat(topicChat);
@@ -486,6 +484,9 @@ const CreatePost = () => {
 
     try {
       await createPost(data);
+      if (params.onRefresh && typeof params.onRefresh === 'function') {
+        params.onRefresh();
+      }
       handleTopicChat();
       showMessage({
         message: StringConstant.createPostDone,

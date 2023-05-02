@@ -67,11 +67,11 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
   return (
     <>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1, paddingBottom: 40}}
+        contentContainerStyle={{flexGrow: 1, paddingBottom: 5}}
         style={styles.contentFeed}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        <View style={handleStyleFeed()}>
+        <View style={[handleStyleFeed(), {marginHorizontal: 6}]}>
           {item.post_type !== POST_TYPE_LINK ? (
             <Text
               style={[
@@ -131,10 +131,15 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
         {images_url.length > 0 && (
           <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
         )}
+        <View style={styles.topicContainer}>
+          <TopicsChip
+            isPdp={true}
+            topics={topics}
+            fontSize={normalizeFontSize(14)}
+            text={message}
+          />
+        </View>
       </ScrollView>
-      <View style={styles.topicContainer}>
-        <TopicsChip isPdp={true} topics={topics} fontSize={normalizeFontSize(14)} text={message} />
-      </View>
     </>
   );
 };
@@ -208,18 +213,11 @@ const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    // marginTop: 12,
-    marginHorizontal: 6,
     backgroundColor: COLORS.white,
     paddingTop: 5
   },
   topicContainer: {
-    height: 110,
     backgroundColor: 'transparent',
-    marginTop: -110,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 10,
     justifyContent: 'flex-end'
   },
   textContentFeed: {
@@ -227,7 +225,6 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: normalizeFontSize(14),
     color: colors.black,
-    lineHeight: 24,
     flex: 1,
     flexWrap: 'wrap'
   },
