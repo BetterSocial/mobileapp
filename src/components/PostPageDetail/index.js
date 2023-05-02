@@ -599,7 +599,6 @@ const PostPageDetailIdComponent = (props) => {
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
-            onContentSizeChange={saveCurHeight}
             contentContainerStyle={{
               paddingBottom: calculatePaddingBtm()
             }}>
