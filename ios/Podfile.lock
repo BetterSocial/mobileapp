@@ -186,7 +186,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.11.1):
     - GoogleUtilities/Logger
-  - human-id-react-native-humanid (2.4.9):
+  - human-id-react-native-humanid (2.4.10):
     - React-Core
     - Toast (~> 4.0.0)
   - libevent (2.1.12)
@@ -501,7 +501,7 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
-  - RNCPicker (2.4.9):
+  - RNCPicker (2.4.10):
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
@@ -587,6 +587,9 @@ PODS:
     - Yoga
   - RNScreens (2.18.1):
     - React-Core
+  - RNSentry (5.4.0):
+    - React-Core
+    - Sentry/HybridSDK (= 8.5.0)
   - RNShare (5.3.0):
     - React-Core
   - RNSVG (12.5.1):
@@ -601,6 +604,9 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
+  - Sentry/HybridSDK (8.5.0):
+    - SentryPrivate (= 8.5.0)
+  - SentryPrivate (8.5.0)
   - Toast (4.0.0)
   - TOCropViewController (2.6.1)
   - Yoga (1.14.0)
@@ -693,6 +699,7 @@ DEPENDENCIES:
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNTextSize (from `../node_modules/react-native-text-size/ios`)
@@ -736,6 +743,8 @@ SPEC REPOS:
     - Protobuf
     - SDWebImage
     - SDWebImageWebPCoder
+    - Sentry
+    - SentryPrivate
     - Toast
     - TOCropViewController
     - YogaKit
@@ -869,6 +878,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSentry:
+    :path: "../node_modules/@sentry/react-native"
   RNShare:
     :path: "../node_modules/react-native-share"
   RNSVG:
@@ -913,7 +924,7 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 1c863b1161fc3c8cf614a7460d1be6a7c262aab3
   GoogleDataTransport: cd9db2180fcecd8da1b561aea31e3e56cf834aa7
   GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
-  human-id-react-native-humanid: e2aa063dc4db2bab91364ec0f4536f8120f69917
+  human-id-react-native-humanid: f1f8fbdca200a71b216794d683575c06c4ce8fed
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
@@ -960,7 +971,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
   RNCCheckbox: 43bcc6493611468af0e19f19f029dab3da8561c4
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
-  RNCPicker: 567de6dc0c6735cf249700d940c80b90b090e4db
+  RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDeviceInfo: aad3c663b25752a52bf8fce93f2354001dd185aa
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
@@ -978,12 +989,15 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 1e3efeca9628ff9876ee7cdd9edec1b336913f8c
   RNReanimated: 9c13c86454bfd54dab7505c1a054470bfecd2563
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
+  RNSentry: 3c8dff994d317f98fc073a9ba85d2d8da3868353
   RNShare: 4df87d1791f50a2c7b1d89432fb9bbb7c02a9c9a
   RNSVG: d7d7bc8229af3842c9cfc3a723c815a52cdd1105
   RNTextSize: 7efa06531c6bb7ab6ed070b4ce0d1248cf06fcdf
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
+  Sentry: 3be3f42e40e5a552935552e115744d5810a216d9
+  SentryPrivate: 8c9463280e282527f938d1a5d1d60f8e10ff279b
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: d1fc3575b8b68891ff5ef3c276daa855e841eb32
