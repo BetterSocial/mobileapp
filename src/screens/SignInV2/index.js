@@ -5,7 +5,13 @@ import {BackHandler, SafeAreaView, StatusBar, StyleSheet, View} from 'react-nati
 import {StackActions} from '@react-navigation/native';
 // eslint-disable-next-line import/no-unresolved
 import {colors} from 'react-native-swiper-flatlist/src/themes';
-import {logIn, onCancel, onError, onSuccess} from '@human-internet/react-native-humanid';
+import {
+  logIn,
+  onCancel,
+  onError,
+  onSuccess,
+  unsubscribeAllEventListener
+} from '@human-internet/react-native-humanid';
 import {useNavigation} from '@react-navigation/core';
 import {useSetRecoilState} from 'recoil';
 
@@ -32,8 +38,6 @@ const SignIn = () => {
   const navigation = useNavigation();
   const create = useClientGetstream();
 
-  const [onFirstSuccess, setOnFirstSuccess] = React.useState(0);
-
   const onClickContainer = () => {
     setClickTime((prevState) => prevState + 1);
   };
@@ -48,16 +52,10 @@ const SignIn = () => {
 
   React.useEffect(() => {
     onSuccess(async (exchangeToken) => {
-      if (onFirstSuccess > 0) {
-        return;
-      }
-
-      setOnFirstSuccess((prevState) => prevState + 1);
-
       try {
         const response = await verifyHumanIdExchangeToken(exchangeToken);
         if (response?.data?.data) {
-          const {token, refresh_token} = response?.data?.data || {};
+          const {token, refresh_token} = response?.data || {};
           setAccessToken(token);
           setRefreshToken(refresh_token);
           setValueStartup({
@@ -65,7 +63,7 @@ const SignIn = () => {
             deeplinkProfile: false
           });
           create(token);
-          setUserId(response?.data?.data?.appUserId);
+          setUserId(response?.data?.appUserId);
         } else {
           setDataHumenId(response?.data?.humanIdData, dispatch);
           removeLocalStorege('userId');
@@ -91,10 +89,7 @@ const SignIn = () => {
     });
 
     const cleanup = () => {
-      setOnFirstSuccess(0);
-      onSuccess(() => {});
-      onError(() => {});
-      onCancel(() => {});
+      if (unsubscribeAllEventListener) unsubscribeAllEventListener();
     };
 
     return cleanup;
