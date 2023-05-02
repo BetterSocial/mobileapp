@@ -1,11 +1,14 @@
-import {Dimensions} from 'react-native';
+import {Dimensions, StatusBar} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {normalizeFontSize} from '../../../utils/fonts';
+import {POST_TYPE_POLL} from '../../../utils/constants';
 
 const usePostDetail = () => {
   const longTextFontSize = 16;
   const longTextLineHeight = 24;
   const shortTextFontSize = 24;
   const shortTextLineHeight = 44;
+  const {top, bottom} = useSafeAreaInsets();
   const updateVoteLatestChildrenLevel3 = (commentList, dataUpdated) => {
     const updateComment = commentList.map((comment) => {
       if (comment.activity_id === dataUpdated.activity_id) {
@@ -44,30 +47,49 @@ const usePostDetail = () => {
     return newComment;
   };
 
-  const calculationText = (message) => {
+  const calculationText = (message, post_type, image) => {
     let fontSize = normalizeFontSize(shortTextFontSize);
     let lineHeight = shortTextLineHeight;
     let containerHeight = 0;
-    if (message.length > 270) {
+    if (message?.length > 270) {
       fontSize = normalizeFontSize(longTextFontSize);
       lineHeight = longTextLineHeight;
     } else {
       fontSize = normalizeFontSize(shortTextFontSize);
       lineHeight = shortTextLineHeight;
     }
-
+    let numLines = 0.4;
+    if (post_type === POST_TYPE_POLL || image?.length > 0) {
+      numLines = 0.09;
+    }
     const numberOfLines = Math.ceil(
-      message.length / ((Dimensions.get('window').width / fontSize) * 0.5)
+      message?.length / ((Dimensions.get('window').width / fontSize) * numLines)
     );
 
     containerHeight = numberOfLines * lineHeight;
 
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 3);
-
-    return {fontSize, lineHeight, containerHeight};
+    const containerComment = calculatedSizeScreen - containerHeight;
+    return {fontSize, lineHeight, containerHeight, containerComment};
   };
 
-  return {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculationText};
+  const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
+
+  const calculatePaddingBtm = () => {
+    let defaultValue = 108;
+    if (top > 20) {
+      defaultValue = 180;
+    }
+    return calculatedSizeScreen - defaultValue;
+  };
+
+  return {
+    updateVoteLatestChildrenLevel3,
+    updateVoteChildrenLevel1,
+    calculationText,
+    calculatedSizeScreen,
+    calculatePaddingBtm
+  };
 };
 
 export default usePostDetail;

@@ -4,7 +4,6 @@ import moment from 'moment';
 import {Dimensions, Keyboard, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import BlockComponent from '../BlockComponent';
 import ContainerComment from '../Comments/ContainerComment';
@@ -44,8 +43,6 @@ const {width, height} = Dimensions.get('window');
 const PostPageDetailIdComponent = (props) => {
   const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
   const [profile] = React.useContext(Context).profile;
-  const {bottom, top} = useSafeAreaInsets();
-  const [curHeight, setCurHeight] = React.useState(Dimensions.get('window').height);
   const [loading, setLoading] = React.useState(true);
   const [, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
@@ -70,8 +67,14 @@ const PostPageDetailIdComponent = (props) => {
   const {getTotalReaction} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
-  const [loadingGetComment, setLoadingGetComment] = React.useState(true);
-  const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1} = usePostDetail();
+  const [, setLoadingGetComment] = React.useState(true);
+  const {
+    updateVoteLatestChildrenLevel3,
+    updateVoteChildrenLevel1,
+    calculationText,
+    calculatedSizeScreen,
+    calculatePaddingBtm
+  } = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {handleUserName} = useWriteComment();
   const getComment = async (scrollToBottom) => {
@@ -139,7 +142,6 @@ const PostPageDetailIdComponent = (props) => {
       } catch (e) {
         Toast.show(e?.response?.data?.message || "Can't get detail feed", Toast.LONG);
         navigation.goBack();
-        console.log(e);
       }
     } else {
       setItem(route.params.data);
@@ -162,7 +164,6 @@ const PostPageDetailIdComponent = (props) => {
   const updateFeed = async (isSort) => {
     try {
       const data = await getFeedDetail(feedId);
-      console.log(data, 'nanamoa');
       let oldData = {...data?.data};
       if (isSort) {
         oldData = {
@@ -571,19 +572,6 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
-  const calculatedSizeScreen = top + bottom + StatusBar.currentHeight + 170;
-
-  const calculatePaddingBtm = () => {
-    let defaultValue = 108;
-    if (top > 20) {
-      defaultValue = 180;
-    }
-    console.log(top, 'las');
-    return calculatedSizeScreen - defaultValue;
-  };
-
-  const saveCurHeight = (w, h) => setCurHeight(h);
-  console.log(curHeight, 'lisa');
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -600,7 +588,13 @@ const PostPageDetailIdComponent = (props) => {
             contentContainerStyle={{
               paddingBottom: calculatePaddingBtm()
             }}>
-            <View style={styles.content(height - calculatedSizeScreen)}>
+            <View
+              style={styles.content(
+                height - calculatedSizeScreen,
+                calculationText(item?.message, item?.post_type, item?.images_url).containerHeight,
+                item?.images_url,
+                item
+              )}>
               {item.post_type === POST_TYPE_LINK ? (
                 <ContentLink
                   og={item.og}
@@ -622,7 +616,6 @@ const PostPageDetailIdComponent = (props) => {
                   onnewpollfetched={onNewPollFetched}
                 />
               )}
-
               <Gap height={16} />
               <View style={{height: 52, paddingHorizontal: 0, width: '100%'}}>
                 <Footer
@@ -648,9 +641,10 @@ const PostPageDetailIdComponent = (props) => {
                 />
               </View>
             </View>
-            {comments.length > 0 && !loadingGetComment && (
+            {comments.length > 0 && (
               <ContainerComment
                 feedId={feedId}
+                itemParent={item}
                 comments={comments}
                 isLoading={loadingPost}
                 refreshComment={handleRefreshComment}
@@ -708,7 +702,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14
   },
-  content: (h, commentLength) => ({
+  content: (h, minHeight) => ({
     width,
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {
@@ -717,10 +711,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
-    borderBottomWidth: commentLength > 0 ? 1 : 0,
     borderBottomColor: '#C4C4C4',
     marginBottom: -1,
-    height: h
+    height: minHeight > h ? h : minHeight
   }),
   gap: {height: 16},
   additionalContentStyle: (imageLength, h) => {
