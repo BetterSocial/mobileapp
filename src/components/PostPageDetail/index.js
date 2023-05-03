@@ -43,7 +43,6 @@ const {width, height} = Dimensions.get('window');
 const PostPageDetailIdComponent = (props) => {
   const {feedId, navigateToReplyView, contextSource = CONTEXT_SOURCE.FEEDS} = props;
   const [profile] = React.useContext(Context).profile;
-
   const [loading, setLoading] = React.useState(true);
   const [, setReaction] = React.useState(false);
   const [textComment, setTextComment] = React.useState('');
@@ -63,7 +62,7 @@ const PostPageDetailIdComponent = (props) => {
   const [feedsContext, dispatch] = useFeedDataContext(contextSource);
   const {timer} = feedsContext;
   const [commenListParam] = React.useState({
-    limit: 20
+    limit: 100
   });
   const {getTotalReaction} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
@@ -79,7 +78,7 @@ const PostPageDetailIdComponent = (props) => {
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {handleUserName} = useWriteComment();
 
-  const getComment = async (noNeedLoading) => {
+  const getComment = async (scrollToBottom, noNeedLoading) => {
     if (!noNeedLoading) {
       setLoadingGetComment(true);
     }
@@ -87,6 +86,11 @@ const PostPageDetailIdComponent = (props) => {
     const response = await getCommentList(feedId, queryParam);
     saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
+    if (scrollToBottom) {
+      setTimeout(() => {
+        onBottomPage();
+      }, 300);
+    }
   };
   React.useEffect(() => {
     getComment();
@@ -122,7 +126,7 @@ const PostPageDetailIdComponent = (props) => {
 
   const onBottomPage = () => {
     if (scrollViewRef && scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({y: Dimensions.get('screen').height + 30, x: 0});
+      scrollViewRef.current.scrollToEnd({animated: true});
     }
   };
 
@@ -136,7 +140,7 @@ const PostPageDetailIdComponent = (props) => {
         if (route.params.is_from_pn) {
           setTimeout(() => {
             onBottomPage();
-          }, 500);
+          }, 300);
         }
       } catch (e) {
         Toast.show(e?.response?.data?.message || "Can't get detail feed", Toast.LONG);
@@ -177,13 +181,10 @@ const PostPageDetailIdComponent = (props) => {
       }
       setLoadingPost(false);
       if (data) {
-        getComment(true);
+        await getComment(true, true);
       }
       updateAllContent(oldData);
       Keyboard.dismiss();
-      setTimeout(() => {
-        onBottomPage();
-      }, 300);
     } catch (e) {
       if (__DEV__) {
         console.log(e);
