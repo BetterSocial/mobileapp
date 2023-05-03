@@ -380,7 +380,7 @@ const OtherProfile = () => {
 
   const onCreateChannel = async () => {
     try {
-      const members = [other_id, user_id];
+      const members = [other_id, profile.myProfile.user_id];
       setIsLoading(true);
       const clientChat = await client.client;
       const filter = {type: 'messaging', members: {$eq: members}};
@@ -389,11 +389,13 @@ const OtherProfile = () => {
         watch: true,
         state: true
       });
+
       if (channels.length > 0) {
         setChannel(channels[0], dispatchChannel);
       } else {
+        const membersUsername = [profile.myProfile.username, username].join(', ');
         const channelChat = await clientChat.channel('messaging', generateRandomId(), {
-          name: [profile.myProfile.username, username].join(', '),
+          name: membersUsername,
           members
         });
         await channelChat.watch();
@@ -401,11 +403,11 @@ const OtherProfile = () => {
       }
       await navigation.navigate('ChatDetailPage');
       setTimeout(() => setIsLoading(false), 400);
-      // setIsLoading(false)
     } catch (e) {
       if (__DEV__) {
         console.log(e);
       }
+      setIsLoading(false);
     }
   };
 

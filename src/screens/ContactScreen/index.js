@@ -128,7 +128,7 @@ const ContactScreen = ({navigation}) => {
         typeChannel = 1;
       }
       const clientChat = await client.client;
-      console.log(members, 'lala');
+
       let type = 'messaging';
       if (members.length > 2) {
         type = 'group';
