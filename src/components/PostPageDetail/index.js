@@ -181,7 +181,7 @@ const PostPageDetailIdComponent = (props) => {
       }
       setLoadingPost(false);
       if (data) {
-        getComment(true);
+        await getComment(true, true);
       }
       updateAllContent(oldData);
       Keyboard.dismiss();
