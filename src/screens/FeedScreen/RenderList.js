@@ -101,7 +101,7 @@ const RenderListFeed = (props) => {
     checkVotesHandle();
     initialSetup(item);
   }, [item]);
-  console.log(item, 'nuki')
+
   getTotalReaction(item);
 
   return (
