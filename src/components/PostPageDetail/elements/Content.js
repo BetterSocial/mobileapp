@@ -129,7 +129,9 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
           </View>
         )}
         {images_url.length > 0 && (
-          <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
+          <View style={{marginTop: 10}}>
+            <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
+          </View>
         )}
         <View style={styles.topicContainer}>
           <TopicsChip
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingTop: 5
+    paddingTop: 0
   },
   topicContainer: {
     backgroundColor: 'transparent',

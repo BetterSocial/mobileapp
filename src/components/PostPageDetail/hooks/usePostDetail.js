@@ -1,7 +1,7 @@
 import {Dimensions, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {normalizeFontSize} from '../../../utils/fonts';
-import {POST_TYPE_POLL} from '../../../utils/constants';
+import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 
 const usePostDetail = () => {
   const longTextFontSize = 16;
@@ -59,15 +59,18 @@ const usePostDetail = () => {
       lineHeight = shortTextLineHeight;
     }
     let numLines = 0.4;
-    if (post_type === POST_TYPE_POLL || image?.length > 0) {
+    if (post_type === POST_TYPE_POLL || post_type === POST_TYPE_LINK) {
       numLines = 0.09;
     }
+
     const numberOfLines = Math.ceil(
       message?.length / ((Dimensions.get('window').width / fontSize) * numLines)
     );
 
     containerHeight = numberOfLines * lineHeight;
-
+    if (image?.length > 0) {
+      containerHeight = calculatedSizeScreen * 2 * numberOfLines;
+    }
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 3);
     const containerComment = calculatedSizeScreen - containerHeight;
     return {fontSize, lineHeight, containerHeight, containerComment};

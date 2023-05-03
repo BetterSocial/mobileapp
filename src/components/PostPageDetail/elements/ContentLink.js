@@ -106,17 +106,9 @@ export default ContentLink;
 const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
-    // marginTop: SIZES.base,
     marginHorizontal: 6,
     backgroundColor: COLORS.white,
     paddingTop: 5
-    // maxHeight: dimen.size.FEED_CONTENT_LINK_MAX_HEIGHT,
-  },
-  messageContainer: {
-    paddingHorizontal: 20
-    // paddingBottom: 15,
-    // paddingTop: 7
-    // backgroundColor: 'red'
   },
   message: {
     fontFamily: fonts.inter[400],

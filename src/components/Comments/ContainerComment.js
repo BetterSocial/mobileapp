@@ -72,8 +72,8 @@ const ContainerComment = ({
             calculationText(itemParent?.message, itemParent?.post_type, itemParent?.images_url)
               .containerHeight,
           borderLeftWidth: 1,
-          borderLeftColor: '#C4C4C4'
-          // backgroundColor: 'red'
+          borderLeftColor: '#C4C4C4',
+          marginTop: 2
         }}>
         <View style={styles.lineBeforeProfile} />
 

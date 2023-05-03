@@ -68,7 +68,7 @@ const PostPageDetailIdComponent = (props) => {
   const {getTotalReaction} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
-  const [, setLoadingGetComment] = React.useState(true);
+  const [loadingComment, setLoadingGetComment] = React.useState(true);
   const {
     updateVoteLatestChildrenLevel3,
     updateVoteChildrenLevel1,
@@ -79,8 +79,10 @@ const PostPageDetailIdComponent = (props) => {
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {handleUserName} = useWriteComment();
 
-  const getComment = async () => {
-    setLoadingGetComment(true);
+  const getComment = async (noNeedLoading) => {
+    if (!noNeedLoading) {
+      setLoadingGetComment(true);
+    }
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
     saveComment(response.data.data, dispatchComment);
@@ -175,7 +177,7 @@ const PostPageDetailIdComponent = (props) => {
       }
       setLoadingPost(false);
       if (data) {
-        getComment();
+        getComment(true);
       }
       updateAllContent(oldData);
       Keyboard.dismiss();
@@ -640,7 +642,7 @@ const PostPageDetailIdComponent = (props) => {
                 />
               </View>
             </View>
-            {comments.length > 0 && (
+            {comments.length > 0 && !loadingComment && (
               <ContainerComment
                 feedId={feedId}
                 itemParent={item}
@@ -712,7 +714,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomColor: '#C4C4C4',
     marginBottom: -1,
-    height: minHeight > h ? h : minHeight
+    minHeight: minHeight > h ? h : minHeight
+    // height: minHeight > h ? h : minHeight
   }),
   gap: {height: 16},
   additionalContentStyle: (imageLength, h) => {
