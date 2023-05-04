@@ -3,11 +3,9 @@ import {cleanup} from '@testing-library/react-hooks';
 import ShareUtils from '../../src/utils/share';
 
 const mockedShare = jest.fn(() => {
-  return new Promise((resolve) => {
-    resolve({
-      action: 'sharedAction',
-      activityType: 'activityType'
-    });
+  Promise.resolve({
+    action: 'sharedAction',
+    activityType: 'activityType'
   });
 });
 
@@ -108,7 +106,7 @@ describe('Share utils test should pass', () => {
   });
 
   it('should call share community', async () => {
-    await ShareUtils.shareCommunity('topicname');
+    ShareUtils.shareCommunity('topicname');
     expect(mockedShare).toHaveBeenCalledWith({
       message: 'https://www.google.com/community/topicname'
     });
