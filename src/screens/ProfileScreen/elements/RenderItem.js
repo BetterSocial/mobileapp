@@ -13,7 +13,8 @@ import {
   ANALYTICS_SHARE_POST_PROFILE_SCREEN,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
-  POST_TYPE_STANDARD
+  POST_TYPE_STANDARD,
+  SOURCE_MY_PROFILE
 } from '../../../utils/constants';
 import {Footer, PreviewComment} from '../../../components';
 import {getCountCommentWithChild} from '../../../utils/getstream';
@@ -145,6 +146,7 @@ const Item = ({
         props={item}
         height={getHeightHeader()}
         showAnonymousOption={true}
+        source={SOURCE_MY_PROFILE}
       />
 
       {item.post_type === POST_TYPE_LINK && (
