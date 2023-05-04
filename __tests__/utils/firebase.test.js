@@ -1,4 +1,3 @@
-import messaging from '@react-native-firebase/messaging';
 import {cleanup} from '@testing-library/react-native';
 
 import {setMessage} from '../../src/utils/firebase/setMessaging';
