@@ -102,7 +102,7 @@ export function showScoreAlertDialog(location) {
   if (location.score_details === undefined) return Alert.alert("This post doesn't have score yet");
 
   const ordered = Object.keys(location.score_details)
-    .sort()
+    .sort((a, b) => location.score_details[b] - location.score_details[a])
     .reduce((obj, key) => {
       obj[key] = location.score_details[key];
       return obj;
@@ -138,7 +138,7 @@ export const locationValidation = (location) => {
  * @returns {String[]}
  */
 export const filterAllTopics = (text, topics = []) => {
-  const topicsFromText = text.match(/#([a-zA-Z0-9-_]+)\b/gi) || [];
+  const topicsFromText = text.match(/#([A-Z0-9-_]+)\b/gi) || [];
   const topicsFromTextWithoutHashtag = topicsFromText.reduce((acc, next) => {
     acc.push(next.slice(1));
     return acc;
