@@ -25,7 +25,11 @@ const useFeedHeader = ({actor, source}) => {
   const sendViewTimePost = (id) => {
     const currentTime = new Date().getTime();
     const sourceParam = source === SOURCE_PDP ? SOURCE_FEED_TAB : source;
-    viewTimePost(id, currentTime - timer.getTime(), sourceParam).then(resetTimer);
+    viewTimePost(id, currentTime - timer.getTime(), sourceParam)
+      .then(resetTimer)
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const handleNavigate = (selfUserId) => {
