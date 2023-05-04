@@ -58,20 +58,20 @@ const usePostDetail = () => {
       fontSize = normalizeFontSize(shortTextFontSize);
       lineHeight = shortTextLineHeight;
     }
-    let numLines = 0.4;
-    if (post_type === POST_TYPE_POLL || post_type === POST_TYPE_LINK) {
-      numLines = 0.09;
-    }
+    const numLines = 0.5;
 
     const numberOfLines = Math.ceil(
       message?.length / ((Dimensions.get('window').width / fontSize) * numLines)
     );
 
     containerHeight = numberOfLines * lineHeight;
-    if (image?.length > 0) {
-      containerHeight = calculatedSizeScreen * 1.5 * numberOfLines;
-    }
     containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
+    if (image?.length > 0 || post_type === POST_TYPE_POLL) {
+      containerHeight *= 1.8;
+    }
+    if (post_type === POST_TYPE_LINK) {
+      containerHeight *= 2;
+    }
     const containerComment = calculatedSizeScreen - containerHeight;
     return {fontSize, lineHeight, containerHeight, containerComment};
   };

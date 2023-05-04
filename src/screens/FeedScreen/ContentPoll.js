@@ -23,7 +23,8 @@ const ContentPoll = ({
   pollexpiredat,
   index = -1,
   voteCount = 0,
-  currentMoment = moment()
+  currentMoment = moment(),
+  isPostDetail
 }) => {
   const {
     renderSeeResultButton,
@@ -47,7 +48,7 @@ const ContentPoll = ({
   const renderSeeResultButtonHandle = () =>
     renderSeeResultButton(multiplechoice, multipleChoiceSelected);
   return (
-    <View style={styles.containerShowMessage}>
+    <View style={[styles.containerShowMessage, {height: isPostDetail ? 'auto' : '80%'}]}>
       <View style={styles.pollOptionsContainer}>
         <Text style={styles.voteFont}>All votes are anonymous - even to the poll’s author!</Text>
         <View style={styles.pollContainer}>
@@ -128,8 +129,7 @@ const styles = StyleSheet.create({
   containerShowMessage: {
     justifyContent: 'flex-start',
     marginBottom: 0,
-    paddingVertical: 0,
-    height: '80%'
+    paddingVertical: 0
   },
   imageList: {flex: 1, width: screenWidth - 32, borderRadius: 16},
   rowSpaceBeetwen: {

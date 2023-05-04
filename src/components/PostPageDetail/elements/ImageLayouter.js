@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Dimensions, FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import Image from 'react-native-fast-image';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
@@ -24,148 +24,43 @@ const ImageLayouter = ({images = [], onimageclick}) => {
     });
   };
 
-  const handleThreeImage = ({item, index}) => {
-    let widthCalc = 0;
-    let heightCalc = 0;
-    if (ratio?.[`image_${index}`]) {
-      if (index === 2) {
-        widthCalc = Dimensions.get('window').width;
-        heightCalc = widthCalc * ratio?.[`image_${index}`];
-      } else {
-        widthCalc = Dimensions.get('window').width / 2;
-        heightCalc = widthCalc * ratio?.[`image_${index}`];
-      }
-    }
+  if (images.length === 1) {
     return (
-      <Pressable
-        style={{flex: 1, justifyContent: 'flex-end'}}
-        key={index}
-        onPress={() => onimageclick(index)}>
-        <Image
-          style={[styles.imagelayout3, {height: heightCalc, width: widthCalc}]}
-          source={{uri: item}}
-          resizeMode={Image.resizeMode.cover}
-          onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
-        />
-      </Pressable>
-    );
-  };
-
-  const handleImage4 = ({item, index}) => {
-    let widthCalc = 0;
-    let heightCalc = 0;
-    if (ratio?.[`image_${index}`]) {
-      widthCalc = Dimensions.get('window').width / 2;
-      heightCalc = widthCalc * ratio?.[`image_${index}`];
-    }
-    return (
-      <Pressable
-        style={{flex: 1, justifyContent: 'flex-end'}}
-        key={index}
-        onPress={() => onimageclick(index)}>
-        <Image
-          style={[styles.imagelayout3, {height: heightCalc, width: widthCalc}]}
-          source={{uri: item}}
-          resizeMode={Image.resizeMode.cover}
-          onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
-        />
-      </Pressable>
-    );
-  };
-
-  const handleImageMoreThan4 = ({item, index}) => {
-    let widthCalc = 0;
-    let heightCalc = 0;
-    if (ratio?.[`image_${index}`]) {
-      widthCalc = Dimensions.get('window').width / 2;
-      heightCalc = widthCalc * ratio?.[`image_${index}`];
-    }
-    if (index === 3) {
-      return (
-        <Pressable
-          onPress={() => onimageclick(index)}
-          style={[styles.threePhotoTopSecondLayout, {justifyContent: 'flex-end'}]}>
-          <View
-            style={{
-              backgroundColor: COLORS.blue,
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              opacity: 0.5,
-              zIndex: 1000
-            }}
-          />
-          <Text
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              top: '30%',
-              left: '40%',
-              fontSize: 36,
-              fontFamily: fonts.inter[700],
-              zIndex: 1000,
-              color: COLORS.white
-            }}>{`${images.length - (images.length - 1)}+`}</Text>
+      <View style={[styles.twoPhotoLayout, {flexWrap: 'wrap'}]}>
+        <Pressable style={{justifyContent: 'center'}} onPress={() => onimageclick(0)}>
           <Image
-            style={[styles.imagelayout3, {height: heightCalc, width: widthCalc}]}
-            source={{uri: item}}
-            resizeMode={Image.resizeMode.cover}
-            onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
+            resizeMode={Image.resizeMode.stretch}
+            source={{uri: images[0]}}
+            style={[
+              {
+                height: Dimensions.get('window').width * (ratio.image_0 || 0),
+                width: Dimensions.get('window').width
+              }
+            ]}
+            onLoad={({nativeEvent}) => onloadHandle(nativeEvent, 0)}
           />
         </Pressable>
-      );
-    }
-    if (index > 3) return null;
-    return (
-      <Pressable
-        style={{flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end'}}
-        key={index}
-        onPress={() => onimageclick(index)}>
-        <Image
-          style={[styles.imagelayout3, {height: heightCalc, width: widthCalc}]}
-          source={{uri: item}}
-          resizeMode={Image.resizeMode.contain}
-          onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
-        />
-      </Pressable>
-    );
-  };
-
-  if (images.length === 1) {
-    const heightCalc = Dimensions.get('window').width * ratio?.image_0 || 0;
-    const widthCalc = Dimensions.get('window').width;
-    return (
-      <Pressable style={{flex: 1, justifyContent: 'flex-end'}} onPress={() => onimageclick(0)}>
-        <Image
-          resizeMode={Image.resizeMode.cover}
-          source={{uri: images[0]}}
-          style={[{height: heightCalc, width: widthCalc}]}
-          onLoad={({nativeEvent}) => onloadHandle(nativeEvent, 0)}
-        />
-      </Pressable>
+      </View>
     );
   }
   if (images.length === 2) {
     return (
-      <View style={styles.twoPhotoLayout}>
+      <View style={[styles.twoPhotoLayout, {flexWrap: 'wrap'}]}>
         {images.map((item, index) => {
-          let widthCalc = 0;
-          let heightCalc = 0;
-          if (height?.[`image_${index}`] && ratio?.[`image_${index}`]) {
-            widthCalc = Dimensions.get('window').width / 2;
-            heightCalc = widthCalc * ratio?.[`image_${index}`];
-          }
-
           return (
             <Pressable
-              style={{flex: 1, justifyContent: 'flex-end'}}
+              style={{justifyContent: 'center'}}
               key={index}
               onPress={() => onimageclick(index)}>
               <Image
-                style={[{height: heightCalc, width: widthCalc}]}
+                style={[
+                  {
+                    height: (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0),
+                    width: Dimensions.get('window').width / 2
+                  }
+                ]}
                 source={{uri: item}}
-                resizeMode={Image.resizeMode.cover}
+                resizeMode={Image.resizeMode.stretch}
                 onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
               />
             </Pressable>
@@ -176,25 +71,129 @@ const ImageLayouter = ({images = [], onimageclick}) => {
   }
   if (images.length === 3) {
     return (
-      <FlatList
-        keyExtractor={(item, index) => index.toString()}
-        data={images}
-        renderItem={handleThreeImage}
-        numColumns={2}
-      />
+      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        {images.map((data, index) => {
+          if (index === 2) {
+            return (
+              <Pressable
+                style={{justifyContent: 'center'}}
+                onPress={() => onimageclick(index)}
+                key={index}>
+                <Image
+                  key={index}
+                  source={{uri: data}}
+                  onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
+                  style={{
+                    width: Dimensions.get('window').width,
+                    height: Dimensions.get('window').width * (ratio[`image_${index}`] || 0)
+                  }}
+                  resizeMode={Image.resizeMode.stretch}
+                />
+              </Pressable>
+            );
+          }
+          return (
+            <Pressable
+              style={{justifyContent: 'center'}}
+              onPress={() => onimageclick(index)}
+              key={index}>
+              <Image
+                key={index}
+                source={{uri: data}}
+                onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
+                style={{
+                  width: Dimensions.get('window').width / 2,
+                  height: (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0)
+                }}
+                resizeMode={Image.resizeMode.stretch}
+              />
+            </Pressable>
+          );
+        })}
+      </View>
     );
   }
   if (images.length === 4) {
-    return <FlatList numColumns={2} data={images} renderItem={handleImage4} />;
+    return (
+      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        {images.map((data, index) => {
+          return (
+            <Pressable
+              style={{justifyContent: 'center'}}
+              onPress={() => onimageclick(index)}
+              key={index}>
+              <Image
+                key={index}
+                source={{uri: data}}
+                onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
+                style={{
+                  width: Dimensions.get('window').width / 2,
+                  height: (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0)
+                }}
+                resizeMode={Image.resizeMode.stretch}
+              />
+            </Pressable>
+          );
+        })}
+      </View>
+    );
   }
   if (images.length > 4) {
     return (
-      <FlatList
-        keyExtractor={(item, index) => index.toString()}
-        data={images}
-        numColumns={2}
-        renderItem={handleImageMoreThan4}
-      />
+      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        {images.map((data, index) => {
+          return (
+            <Pressable
+              style={{justifyContent: 'center'}}
+              onPress={() => onimageclick(index)}
+              key={index}>
+              <>
+                {index > 3 ? null : (
+                  <>
+                    {index === 3 && (
+                      <>
+                        <View
+                          style={{
+                            backgroundColor: COLORS.blue,
+                            position: 'absolute',
+                            width: '100%',
+                            height: '100%',
+                            opacity: 0.5,
+                            zIndex: 1000
+                          }}
+                        />
+                        <Text
+                          style={{
+                            position: 'absolute',
+                            width: '100%',
+                            height: '100%',
+                            top: '30%',
+                            left: '40%',
+                            fontSize: 36,
+                            fontFamily: fonts.inter[700],
+                            zIndex: 1000,
+                            color: COLORS.white
+                          }}>{`${images.length - (images.length - 1)}+`}</Text>
+                      </>
+                    )}
+                    <Image
+                      key={index}
+                      source={{uri: data}}
+                      onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
+                      style={{
+                        width: Dimensions.get('window').width / 2,
+                        height:
+                          (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0)
+                      }}
+                      resizeMode={Image.resizeMode.stretch}
+                    />
+                  </>
+                )}
+              </>
+            </Pressable>
+          );
+        })}
+      </View>
     );
   }
 
@@ -220,7 +219,6 @@ const styles = StyleSheet.create({
 
   twoPhotoLayout: {
     width: '100%',
-    display: 'flex',
     flexDirection: 'row'
   },
 
