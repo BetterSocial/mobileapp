@@ -33,6 +33,7 @@ const DISCOVERY_TAB_NEWS = 3;
 
 const SOURCE_FEED_TAB = 'feed tab';
 const SOURCE_PDP = 'PDP';
+const SOURCE_MY_PROFILE = 'my profile';
 
 const PRIVACY_PUBLIC = 'public';
 const PRIVACY_PEOPLE_I_FOLLOW = 'people_i_follow';
@@ -78,6 +79,7 @@ export {
   MIN_POLLING_ALLOWED,
   SOURCE_FEED_TAB,
   SOURCE_PDP,
+  SOURCE_MY_PROFILE,
   POST_TYPE_LINK,
   POST_TYPE_POLL,
   POST_TYPE_STANDARD,
