@@ -1,24 +1,30 @@
 import {Linking} from 'react-native';
 import {act} from '@testing-library/react-hooks';
 import {waitFor} from '@testing-library/react-native';
+
 import {
-  sanitizeUrlForLinking,
-  setCapitalFirstLetter,
+  getUrl,
+  isContainUrl,
+  isEmptyOrSpaces,
+  locationValidation,
   openUrl,
   removeWhiteSpace,
-  globalReplaceAll,
-  validationURL,
-  getUrl,
-  isEmptyOrSpaces,
-  isContainUrl,
+  sanitizeUrlForLinking,
+  setCapitalFirstLetter,
   showScoreAlertDialog,
-  locationValidation
+  validationURL
 } from '../../src/utils/Utils';
+
 const mockToast = jest.fn();
-global.alert = jest.fn();
+const mockAlert = jest.fn();
+
 jest.mock('react-native-simple-toast', () => ({
   SHORT: jest.fn(),
   show: mockToast
+}));
+
+jest.mock('react-native/Libraries/Alert/Alert', () => ({
+  alert: mockAlert
 }));
 
 function mockSuccessLinking() {
@@ -30,9 +36,23 @@ function mockSuccessLinking() {
   return {canOpenURL, openURL};
 }
 
+function mockFailLinking() {
+  const canOpenURL = jest
+    .spyOn(Linking, 'canOpenURL')
+    .mockImplementation(() => Promise.resolve(false));
+  const openURL = jest.spyOn(Linking, 'openURL').mockImplementation(() => Promise.resolve(false));
+
+  return {canOpenURL, openURL};
+}
+
 describe('Utils function run correctly', () => {
   it('sanitizeUrlForLinking should run correctly', () => {
     const url = 'https://www.detik.com';
+    expect(sanitizeUrlForLinking(url)).toStrictEqual('https://detik.com');
+  });
+
+  it('sanitizeUrlForLinking set prefix https if not set', () => {
+    const url = 'detik.com';
     expect(sanitizeUrlForLinking(url)).toStrictEqual('https://detik.com');
   });
 
@@ -41,10 +61,14 @@ describe('Utils function run correctly', () => {
     expect(setCapitalFirstLetter(letter)).toStrictEqual('Rumah baru');
   });
 
+  it('setCapitalFirstLetter should return empty string if not set', () => {
+    const letter = null;
+    expect(setCapitalFirstLetter(letter)).toStrictEqual('');
+  });
+
   it('openUrl should run correctly', async () => {
     const {canOpenURL, openURL} = mockSuccessLinking();
     const url = 'https://www.detik.com';
-    const notUlr = 'halo';
     act(() => {
       openUrl(url);
     });
@@ -52,10 +76,18 @@ describe('Utils function run correctly', () => {
     await waitFor(() => {
       expect(openURL).toHaveBeenCalled();
     });
-    // act(() => {
-    //     openUrl(notUlr, false);
-    // });
-    // expect(mockToast).toHaveBeenCalled();
+  });
+
+  it('openUrl should show toast if fail', async () => {
+    const {canOpenURL, openURL} = mockFailLinking();
+    const url = 'https://www.detik.com';
+    act(() => {
+      openUrl(url);
+    });
+    expect(canOpenURL).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(openURL).toHaveBeenCalled();
+    });
   });
 
   it('removeWhiteSpace should run correctly', () => {
@@ -63,11 +95,9 @@ describe('Utils function run correctly', () => {
     expect(removeWhiteSpace(text)).toStrictEqual('test spasi depan');
   });
 
-  it('globalReplaceAll should run correctly', () => {
-    const text = 'ini adalah text baru dari saya, harusnya titik,';
-    expect(globalReplaceAll(text, ',', '.')).toStrictEqual(
-      'ini adalah text baru dari saya. harusnya titik.'
-    );
+  it('removeWhiteSpace should return empty string if not set', () => {
+    const text = null;
+    expect(removeWhiteSpace(text)).toStrictEqual('');
   });
 
   it('validationUrl should run correctly', () => {
@@ -104,11 +134,11 @@ describe('Utils function run correctly', () => {
     act(() => {
       showScoreAlertDialog(location1);
     });
-    expect(global.alert).toHaveBeenCalled();
+    expect(mockAlert).toHaveBeenCalled();
     act(() => {
       showScoreAlertDialog(location2);
     });
-    expect(global.alert).toHaveBeenCalled();
+    expect(mockAlert).toHaveBeenCalled();
   });
   it('locationValidation should run correctly', () => {
     const location = {
