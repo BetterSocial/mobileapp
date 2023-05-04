@@ -49,13 +49,6 @@ const ImageLayouter = ({images = [], onimageclick}) => {
     return (
       <View style={[styles.twoPhotoLayout, {flexWrap: 'wrap'}]}>
         {images.map((item, index) => {
-          let widthCalc = 0;
-          let heightCalc = 0;
-          if (height?.[`image_${index}`] && ratio?.[`image_${index}`]) {
-            widthCalc = Dimensions.get('window').width / 2;
-            heightCalc = widthCalc * ratio?.[`image_${index}`];
-          }
-
           return (
             <Pressable
               style={{justifyContent: 'center'}}
