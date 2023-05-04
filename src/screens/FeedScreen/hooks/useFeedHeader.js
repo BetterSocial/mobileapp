@@ -18,14 +18,15 @@ const useFeedHeader = ({actor, source}) => {
   const {username, profile_pic_url} = actor?.data || {};
 
   const resetTimer = () => {
-    console.log('reset timer called');
     setTimer(new Date(), dispatch);
   };
 
-  const sendViewTimePost = (id) => {
+  let id = null;
+
+  const sendViewTimePost = (idParam) => {
     const currentTime = new Date().getTime();
     const sourceParam = source === SOURCE_PDP ? SOURCE_FEED_TAB : source;
-    viewTimePost(id, currentTime - timer.getTime(), sourceParam)
+    viewTimePost(idParam, currentTime - timer.getTime(), sourceParam)
       .then(resetTimer)
       .catch((e) => {
         console.log(e);
@@ -57,10 +58,8 @@ const useFeedHeader = ({actor, source}) => {
   };
 
   const navigateToProfile = async () => {
-    const id = feeds && feeds[viewPostTimeIndex]?.id;
-    if (source && id) {
-      sendViewTimePost(id);
-    }
+    if (viewPostTimeIndex >= 0) id = feeds[viewPostTimeIndex]?.id;
+    if (source && id) sendViewTimePost(id);
 
     resetTimer();
     const selfUserId = await getUserId();
@@ -68,11 +67,10 @@ const useFeedHeader = ({actor, source}) => {
   };
 
   const onBackNormalUser = () => {
-    if (source) {
-      const id = feeds && feeds[viewPostTimeIndex]?.id;
-      sendViewTimePost(id);
-    }
+    if (viewPostTimeIndex >= 0) id = feeds[viewPostTimeIndex]?.id;
+    if (source && id) sendViewTimePost(id);
 
+    resetTimer();
     navigation.goBack();
   };
 
