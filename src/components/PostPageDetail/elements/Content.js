@@ -72,7 +72,10 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         <View
-          style={[handleStyleFeed(), {marginHorizontal: 6, paddingLeft: isPostDetail ? 12 : 0}]}>
+          style={[
+            handleStyleFeed(),
+            {marginHorizontal: 6, paddingHorizontal: isPostDetail ? 12 : 0}
+          ]}>
           {item.post_type !== POST_TYPE_LINK ? (
             <Text
               style={[
@@ -98,18 +101,26 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
           )}
 
           {item && item.post_type === POST_TYPE_POLL ? (
-            <ContentPoll
-              message={item.message}
-              images_url={item.images_url}
-              polls={item.pollOptions}
-              item={item}
-              pollexpiredat={item.polls_expired_at}
-              multiplechoice={item.multiplechoice}
-              isalreadypolling={item.isalreadypolling}
-              onnewpollfetched={onnewpollfetched}
-              voteCount={item.voteCount}
-              topics={item?.topics}
-            />
+            <View
+              style={{
+                flex: 1,
+                justifyContent: isPostDetail ? 'flex-end' : 'flex-start',
+                marginBottom: 0
+              }}>
+              <ContentPoll
+                message={item.message}
+                images_url={item.images_url}
+                polls={item.pollOptions}
+                item={item}
+                pollexpiredat={item.polls_expired_at}
+                multiplechoice={item.multiplechoice}
+                isalreadypolling={item.isalreadypolling}
+                onnewpollfetched={onnewpollfetched}
+                voteCount={item.voteCount}
+                topics={item?.topics}
+                isPostDetail={isPostDetail}
+              />
+            </View>
           ) : null}
         </View>
         {item && item.post_type === POST_TYPE_LINK && (
@@ -217,7 +228,7 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingTop: 0
+    paddingTop: 5
   },
   topicContainer: {
     backgroundColor: 'transparent',

@@ -71,8 +71,8 @@ const ContentLink = ({
   return (
     <>
       <ScrollView
-        style={styles.contentFeed}
-        contentContainerStyle={{flexGrow: 1, paddingBottom: 100}}
+        style={[styles.contentFeed]}
+        contentContainerStyle={{flexGrow: 1}}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         <TouchableNativeFeedback

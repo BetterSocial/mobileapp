@@ -11,7 +11,7 @@ const ImageItem = ({image, index, onImageClick, images}) => {
     <>
       {index > 3 ? null : (
         <Pressable testID="press" style={handleImageWidth(images, index)} onPress={onPress}>
-          {index === 3 && image.length - 4 > 0 ? (
+          {index === 3 && images.length > 4 ? (
             <View style={styles.backdropBg}>
               <Text style={styles.allImageFont}>{images.length - 4}+ </Text>
             </View>
