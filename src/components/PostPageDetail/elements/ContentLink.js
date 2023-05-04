@@ -41,7 +41,12 @@ const ContentLink = ({
   const renderMessageContentLink = () => {
     if (sanitizeUrl?.length === 0) return <></>;
     return (
-      <View style={{...styles.messageContainer, ...messageContainerStyle}}>
+      <View
+        style={{
+          ...styles.messageContainer,
+          ...messageContainerStyle,
+          paddingLeft: isPostDetail ? 12 : 0
+        }}>
         {!isPostDetail ? (
           <Text tyle={[styles.message]}>
             {hashtagAtComponent(sanitizeUrl, 50)}{' '}

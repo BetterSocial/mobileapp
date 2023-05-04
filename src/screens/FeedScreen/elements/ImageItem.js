@@ -13,7 +13,7 @@ const ImageItem = ({image, index, onImageClick, images}) => {
         <Pressable testID="press" style={handleImageWidth(images, index)} onPress={onPress}>
           {index === 3 && image.length - 4 > 0 ? (
             <View style={styles.backdropBg}>
-              <Text style={styles.allImageFont}>{image.length - 4}+ </Text>
+              <Text style={styles.allImageFont}>{images.length - 4}+ </Text>
             </View>
           ) : null}
           <React.Fragment>
