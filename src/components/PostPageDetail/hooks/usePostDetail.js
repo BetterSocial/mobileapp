@@ -69,9 +69,9 @@ const usePostDetail = () => {
 
     containerHeight = numberOfLines * lineHeight;
     if (image?.length > 0) {
-      containerHeight = calculatedSizeScreen * 2 * numberOfLines;
+      containerHeight = calculatedSizeScreen * 1.5 * numberOfLines;
     }
-    containerHeight = Math.max(containerHeight, shortTextLineHeight * 3);
+    containerHeight = Math.max(containerHeight, shortTextLineHeight * 5);
     const containerComment = calculatedSizeScreen - containerHeight;
     return {fontSize, lineHeight, containerHeight, containerComment};
   };
@@ -81,7 +81,7 @@ const usePostDetail = () => {
   const calculatePaddingBtm = () => {
     let defaultValue = 108;
     if (top > 20) {
-      defaultValue = 180;
+      defaultValue = 170;
     }
     return calculatedSizeScreen - defaultValue;
   };

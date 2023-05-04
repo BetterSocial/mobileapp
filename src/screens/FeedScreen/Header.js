@@ -102,7 +102,8 @@ const _renderAnonimity = ({
   onHeaderOptionClicked = () => {},
   hideThreeDot,
   version = 1,
-  anonUserInfo = {}
+  anonUserInfo = {},
+  isPostDetail
 }) => {
   const navigation = useNavigation();
 
@@ -110,7 +111,12 @@ const _renderAnonimity = ({
     <SafeAreaView>
       <View
         testID="anonymHeader"
-        style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
+        style={[
+          styles.rowSpaceBeetwen,
+          styles.heightHeader(height),
+          headerStyle,
+          {paddingLeft: isPostDetail ? 10 : 0}
+        ]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
             <View testID="haveBackButton" style={[styles.btn]}>
@@ -172,7 +178,8 @@ const _renderProfileNormal = ({
   source,
   headerStyle,
   onHeaderOptionClicked = () => {},
-  hideThreeDot
+  hideThreeDot,
+  isPostDetail
 }) => {
   const {navigateToProfile, username, profile_pic_url, onBackNormalUser} = useFeedHeader({
     actor,
@@ -183,7 +190,12 @@ const _renderProfileNormal = ({
     <SafeAreaView>
       <View
         testID="defaultHeader"
-        style={[styles.rowSpaceBeetwen, styles.heightHeader(height), headerStyle]}>
+        style={[
+          styles.rowSpaceBeetwen,
+          styles.heightHeader(height),
+          headerStyle,
+          {paddingLeft: isPostDetail ? 10 : 0}
+        ]}>
         <View style={styles.rowCenter}>
           {isBackButton ? (
             <View testID="haveBackButton" style={styles.btn}>
@@ -249,7 +261,8 @@ const Header = ({
   headerStyle,
   onHeaderOptionClicked = () => {},
   showAnonymousOption = false,
-  hideThreeDot
+  hideThreeDot,
+  isPostDetail
 }) => {
   const {
     anonimity,
@@ -285,7 +298,8 @@ const Header = ({
         colorName: anon_user_info_color_name,
         emojiCode: anon_user_info_emoji_code,
         emojiName: anon_user_info_emoji_name
-      }
+      },
+      isPostDetail
     });
   }
   return _renderProfileNormal({
@@ -300,7 +314,8 @@ const Header = ({
     source,
     headerStyle,
     onHeaderOptionClicked: () => onHeaderOptionClicked(props),
-    hideThreeDot
+    hideThreeDot,
+    isPostDetail
   });
 };
 

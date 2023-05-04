@@ -23,7 +23,7 @@ import {
   SOURCE_PDP
 } from '../../utils/constants';
 import {Context} from '../../context';
-import {Footer, Gap} from '..';
+import {Footer} from '..';
 import {createCommentParentV2, getCommentList} from '../../service/comment';
 import {downVote, upVote} from '../../service/vote';
 import {fonts} from '../../utils/fonts';
@@ -581,7 +581,13 @@ const PostPageDetailIdComponent = (props) => {
       <StatusBar translucent={false} />
       {item ? (
         <React.Fragment>
-          <Header hideThreeDot={true} props={item} isBackButton={true} source={SOURCE_PDP} />
+          <Header
+            isPostDetail={true}
+            hideThreeDot={true}
+            props={item}
+            isBackButton={true}
+            source={SOURCE_PDP}
+          />
 
           <ScrollView
             ref={scrollViewRef}
@@ -616,9 +622,9 @@ const PostPageDetailIdComponent = (props) => {
                   topics={item?.topics}
                   item={item}
                   onnewpollfetched={onNewPollFetched}
+                  isPostDetail={true}
                 />
               )}
-              <Gap height={16} />
               <View style={{height: 52, paddingHorizontal: 0, width: '100%'}}>
                 <Footer
                   item={item}
