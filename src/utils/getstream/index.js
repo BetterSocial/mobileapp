@@ -15,7 +15,7 @@ const getCountVote = (item) => {
 };
 
 const getCountComment = (item) => {
-  const reactionCount = item.reaction_counts;
+  const reactionCount = item?.reaction_counts;
   let count = 0;
   if (JSON.stringify(reactionCount) !== '{}') {
     const {comment} = reactionCount;
