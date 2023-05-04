@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Credder Rating testing should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#434343",
+      "borderRadius": 8,
+      "flexDirection": "row",
+      "paddingLeft": 4,
+      "paddingRight": 4,
+      "width": 69,
+    }
+  }
+>
+  <View
+    testID="credder-rating-green"
+  >
+    <View />
+    ;
+  </View>
+  <Text
+    style={
+      Object {
+        "alignSelf": "center",
+        "color": "#FFFFFF",
+        "flex": 1,
+        "fontFamily": "Inter-SemiBold",
+        "fontSize": 16,
+        "textAlign": "center",
+      }
+    }
+    testID="credder-score"
+  >
+    90%
+  </Text>
+</View>
+`;
