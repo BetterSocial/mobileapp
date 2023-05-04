@@ -60,30 +60,6 @@ const shareFeeds = async (item, analyticsLogEvent, analyticsId) => {
 
 const shareUserLink = (username) => buildShare(`${config.SHARE_URL}/u/${username}`);
 
-// const buildLink = async (item) => {
-//     const link = await dynamicLinks().buildLink({
-//         link: `https://dev.bettersocial.org/${item}`,
-//         domainUriPrefix: 'https://bettersocialapp.page.link',
-//         analytics: {
-//             campaign: 'banner',
-//         },
-//         navigation: {
-//             forcedRedirectEnabled: false,
-//         },
-//         // ios: {
-//         //   bundleId: '',
-//         //   // customScheme: 'giftit',
-//         //   appStoreId: '',
-//         // },
-//         android: {
-//             packageName: 'org.bettersocial.dev',
-//         },
-//     },
-//         'SHORT',
-//     );
-//     return link;
-// }
-
 const ShareUtils = {
   shareDomain,
   shareFeeds,
