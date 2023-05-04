@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingTop: 0
+    paddingTop: 5
   },
   topicContainer: {
     backgroundColor: 'transparent',
