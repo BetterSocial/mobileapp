@@ -1,6 +1,5 @@
 import {Dimensions, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {normalizeFontSize} from '../../../utils/fonts';
 import {POST_TYPE_LINK, POST_TYPE_POLL} from '../../../utils/constants';
 
 const usePostDetail = () => {
@@ -48,14 +47,14 @@ const usePostDetail = () => {
   };
 
   const calculationText = (message, post_type, image) => {
-    let fontSize = normalizeFontSize(shortTextFontSize);
+    let fontSize = shortTextFontSize;
     let lineHeight = shortTextLineHeight;
     let containerHeight = 0;
     if (message?.length > 270) {
-      fontSize = normalizeFontSize(longTextFontSize);
+      fontSize = longTextFontSize;
       lineHeight = longTextLineHeight;
     } else {
-      fontSize = normalizeFontSize(shortTextFontSize);
+      fontSize = shortTextFontSize;
       lineHeight = shortTextLineHeight;
     }
     const numLines = 0.5;
