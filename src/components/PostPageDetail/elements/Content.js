@@ -20,7 +20,7 @@ import usePostDetail from '../hooks/usePostDetail';
 
 const {width: screenWidth} = Dimensions.get('window');
 const FONT_SIZE_TEXT = 16;
-const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => {
+const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPostDetail}) => {
   const navigation = useNavigation();
   const cekImage = () => images_url && images_url !== '';
   const {hashtagAtComponent} = useContentFeed({navigation});
@@ -67,11 +67,15 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
   return (
     <>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1, paddingBottom: 5}}
+        contentContainerStyle={{flexGrow: 1}}
         style={styles.contentFeed}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        <View style={[handleStyleFeed(), {marginHorizontal: 6}]}>
+        <View
+          style={[
+            handleStyleFeed(),
+            {marginHorizontal: 6, paddingHorizontal: isPostDetail ? 12 : 0}
+          ]}>
           {item.post_type !== POST_TYPE_LINK ? (
             <Text
               style={[
@@ -97,18 +101,26 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
           )}
 
           {item && item.post_type === POST_TYPE_POLL ? (
-            <ContentPoll
-              message={item.message}
-              images_url={item.images_url}
-              polls={item.pollOptions}
-              item={item}
-              pollexpiredat={item.polls_expired_at}
-              multiplechoice={item.multiplechoice}
-              isalreadypolling={item.isalreadypolling}
-              onnewpollfetched={onnewpollfetched}
-              voteCount={item.voteCount}
-              topics={item?.topics}
-            />
+            <View
+              style={{
+                flex: 1,
+                justifyContent: isPostDetail ? 'flex-end' : 'flex-start',
+                marginBottom: 0
+              }}>
+              <ContentPoll
+                message={item.message}
+                images_url={item.images_url}
+                polls={item.pollOptions}
+                item={item}
+                pollexpiredat={item.polls_expired_at}
+                multiplechoice={item.multiplechoice}
+                isalreadypolling={item.isalreadypolling}
+                onnewpollfetched={onnewpollfetched}
+                voteCount={item.voteCount}
+                topics={item?.topics}
+                isPostDetail={isPostDetail}
+              />
+            </View>
           ) : null}
         </View>
         {item && item.post_type === POST_TYPE_LINK && (
@@ -129,7 +141,9 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched}) => 
           </View>
         )}
         {images_url.length > 0 && (
-          <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
+          <View>
+            <ImageLayouter images={images_url || []} onimageclick={onImageClickedByIndex} />
+          </View>
         )}
         <View style={styles.topicContainer}>
           <TopicsChip
