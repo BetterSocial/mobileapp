@@ -1,17 +1,9 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,
-  ActivityIndicator
-} from 'react-native';
-
-import RBSheet from 'react-native-raw-bottom-sheet';
 import IconFA5 from 'react-native-vector-icons/FontAwesome5';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
-import {Button} from '../../components/Button';
+import {Button} from '../Button';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
@@ -24,7 +16,7 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
       closeOnPressMask={true}
       customStyles={{
         container: styles.container,
-        draggableIcon: styles.draggableIcon,
+        draggableIcon: styles.draggableIcon
       }}>
       <View>
         <Text style={styles.title}>Please specify the issue</Text>
@@ -34,17 +26,19 @@ const SpecificIssue = ({refSpecificIssue, onPress, onSkip, loading}) => {
           onChangeText={(v) => setMessage(v)}
           textAlignVertical="top"
           multiline
-          placeholder={
-            'Please provide more details to inform our\n team (min. 50 characters)'
-          }
+          placeholder={'Please provide more details to inform our\n team (min. 50 characters)'}
         />
-        <TouchableOpacity style={styles.btnSkip} onPress={() => onSkip()}>
+        <TouchableOpacity testID="button-skip-test" style={styles.btnSkip} onPress={() => onSkip()}>
           <Text style={styles.btnSkipText}>Skip & just block this account</Text>
           <IconFA5 name="chevron-right" size={17} color={'#000'} />
         </TouchableOpacity>
         <View style={styles.containerBtn}>
-          <Button onPress={() => onPress(message)}>
-            {loading ? <ActivityIndicator /> : <Text>File Report</Text>}
+          <Button testID="button-report-test" onPress={() => onPress(message)}>
+            {loading ? (
+              <ActivityIndicator testID="loading-indicator-test" />
+            ) : (
+              <Text>File Report</Text>
+            )}
           </Button>
         </View>
       </View>
@@ -60,17 +54,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#000',
     marginLeft: 21,
-    marginTop: 18,
+    marginTop: 18
   },
   containerBtn: {
     marginRight: 22,
     marginLeft: 18,
-    marginBottom: 19,
+    marginBottom: 19
   },
   btn: {
     paddingLeft: 18,
     paddingRight: 22,
-    paddingTop: 8,
+    paddingTop: 8
   },
   btnSkip: {
     backgroundColor: '#E0E0E0',
@@ -78,12 +72,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 17,
     paddingVertical: 18,
-    marginVertical: 22,
+    marginVertical: 22
   },
   btnSkipText: {
     fontFamily: fonts.inter[700],
     fontSize: 14,
-    color: '#000',
+    color: '#000'
   },
   input: {
     backgroundColor: colors.lightgrey,
@@ -96,15 +90,15 @@ const styles = StyleSheet.create({
     paddingRight: 13,
     paddingLeft: 19,
     fontFamily: fonts.inter[400],
-    color: colors.gray,
+    color: colors.gray
   },
   container: {
     height: 'auto',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopLeftRadius: 20
   },
   draggableIcon: {
     backgroundColor: colors.alto,
-    width: 60,
-  },
+    width: 60
+  }
 });
