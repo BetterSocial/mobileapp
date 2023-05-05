@@ -50,7 +50,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
           return (
             <Pressable
               style={{justifyContent: 'center'}}
-              key={index}
+              key={`image_${index}`}
               onPress={() => onimageclick(index)}>
               <Image
                 style={[
@@ -78,9 +78,8 @@ const ImageLayouter = ({images = [], onimageclick}) => {
               <Pressable
                 style={{justifyContent: 'center'}}
                 onPress={() => onimageclick(index)}
-                key={index}>
+                key={`image_${index}`}>
                 <Image
-                  key={index}
                   source={{uri: data}}
                   onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
                   style={{
@@ -96,9 +95,8 @@ const ImageLayouter = ({images = [], onimageclick}) => {
             <Pressable
               style={{justifyContent: 'center'}}
               onPress={() => onimageclick(index)}
-              key={index}>
+              key={`image_${index}`}>
               <Image
-                key={index}
                 source={{uri: data}}
                 onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
                 style={{
@@ -121,9 +119,8 @@ const ImageLayouter = ({images = [], onimageclick}) => {
             <Pressable
               style={{justifyContent: 'center'}}
               onPress={() => onimageclick(index)}
-              key={index}>
+              key={`image_${index}`}>
               <Image
-                key={index}
                 source={{uri: data}}
                 onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
                 style={{
@@ -146,7 +143,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
             <Pressable
               style={{justifyContent: 'center'}}
               onPress={() => onimageclick(index)}
-              key={index}>
+              key={`image_${index}`}>
               <>
                 {index > 3 ? null : (
                   <>
@@ -177,7 +174,6 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                       </>
                     )}
                     <Image
-                      key={index}
                       source={{uri: data}}
                       onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
                       style={{
