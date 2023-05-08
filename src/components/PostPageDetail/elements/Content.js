@@ -74,7 +74,11 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
         <View
           style={[
             handleStyleFeed(),
-            {marginHorizontal: 6, paddingHorizontal: isPostDetail ? 12 : 0}
+            {
+              marginHorizontal: 6,
+              paddingHorizontal: isPostDetail ? 12 : 0,
+              minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
+            }
           ]}>
           {item.post_type !== POST_TYPE_LINK ? (
             <Text
@@ -99,7 +103,8 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
               {hashtagAtComponent(sanitizeUrl(message))}{' '}
             </Text>
           )}
-
+        </View>
+        <View style={{paddingHorizontal: 12}}>
           {item && item.post_type === POST_TYPE_POLL ? (
             <View
               style={{

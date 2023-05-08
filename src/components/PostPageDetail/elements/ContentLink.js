@@ -45,7 +45,8 @@ const ContentLink = ({
         style={{
           ...styles.messageContainer,
           ...messageContainerStyle,
-          paddingLeft: isPostDetail ? 12 : 0
+          paddingLeft: isPostDetail ? 12 : 0,
+          height: calculationText(hashtagAtComponent(sanitizeUrl)).containerHeight
         }}>
         {!isPostDetail ? (
           <Text tyle={[styles.message]}>
