@@ -152,11 +152,7 @@ const Comment = ({
           </View>
         </ButtonHightlight>
       </View>
-      <TouchableOpacity
-        testID="textPress"
-        activeOpacity={1}
-        onPress={onTextPress}
-        style={styles.flexStartContainer}>
+      <TouchableOpacity testID="textPress" onPress={onTextPress} style={styles.flexStartContainer}>
         <ButtonHightlight
           onLongPress={handleOnLongPress}
           style={styles.flexStartContainer}
