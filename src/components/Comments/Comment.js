@@ -153,14 +153,18 @@ const Comment = ({
           </View>
         </ButtonHightlight>
       </View>
-      <View testID="textPress" style={styles.flexStartContainer}>
+      <TouchableOpacity
+        testID="textPress"
+        activeOpacity={1}
+        onPress={onTextPress}
+        style={styles.flexStartContainer}>
         <ButtonHightlight
           onLongPress={handleOnLongPress}
           style={styles.flexStartContainer}
           onPress={onTextPress}>
           <Text style={styles.post}>{comment.data.text}</Text>
         </ButtonHightlight>
-      </View>
+      </TouchableOpacity>
       <View style={styles.constainerFooter}>
         {isLast && level >= 2 ? (
           <View testID="level2" style={styles.gap} />
