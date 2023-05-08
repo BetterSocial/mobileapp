@@ -35,6 +35,7 @@ const ContainerComment = ({
   const {calculationText, calculatedSizeScreen} = usePostDetail();
   const {deleteCommentFromContext} = usePostContextHook(contextSource);
   const onCommentLongPressed = async (item, level = 0) => {
+    console.log('jalan2', item)
     const selfId = await getUserId();
     if (selfId === item?.user_id) {
       setSelectedCommentForDelete(item);
@@ -114,6 +115,23 @@ const ContainerComment = ({
                   indexFeed={indexFeed}
                   navigateToReplyView={navigateToReplyView}
                   // refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
+                  key={`p${index}`}
+                  comment={item}
+                  user={item.user}
+                  level={0}
+                  time={item.created_at}
+                  photo={item.user.data && item.user.data.profile_pic_url}
+                  isLast={isLast(index, item, comments)}
+                  isLastInParent={isLastInParent(index, comments)}
+                  onPress={() =>
+                    navigateToReplyView({
+                      item,
+                      level: 0,
+                      indexFeed
+                    })
+                  }
+                  onLongPress={onCommentLongPressed}
+                  // refreshComment={refreshComment}
                   findCommentAndUpdate={findCommentAndUpdate}
                   onCommentLongPressed={onCommentLongPressed}
                 />
