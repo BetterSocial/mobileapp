@@ -34,6 +34,7 @@ const ContainerComment = ({
   const {deleteCommentFromContext} = usePostContextHook(contextSource);
 
   const onCommentLongPressed = async (item, level = 0) => {
+    console.log('jalan2', item)
     const selfId = await getUserId();
     if (selfId === item?.user_id) {
       setSelectedCommentForDelete(item);
@@ -86,6 +87,7 @@ const ContainerComment = ({
                       indexFeed
                     })
                   }
+                  onLongPress={onCommentLongPressed}
                   // refreshComment={refreshComment}
                   findCommentAndUpdate={findCommentAndUpdate}
                 />
