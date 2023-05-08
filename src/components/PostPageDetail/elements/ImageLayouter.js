@@ -3,38 +3,47 @@ import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import Image from 'react-native-fast-image';
 import {fonts} from '../../../utils/fonts';
 import {COLORS} from '../../../utils/theme';
+import usePostDetail from '../hooks/usePostDetail';
 
 const ImageLayouter = ({images = [], onimageclick}) => {
   const [height, setHeight] = React.useState({});
   const [width, setWidth] = React.useState({});
   const [ratio, setRatio] = React.useState({});
-
+  const {calculatedSizeScreen} = usePostDetail();
   const onloadHandle = (nativeEvent, index) => {
     setRatio({
       ...ratio,
-      [`image_${index}`]: nativeEvent.height / nativeEvent.width
+      [`image${index}`]: nativeEvent.height / nativeEvent.width
     });
     setHeight({
       ...height,
-      [`image_${index}`]: nativeEvent.height
+      [`image${index}`]: nativeEvent.height
     });
     setWidth({
       ...width,
-      [`image_${index}`]: nativeEvent.width
+      [`image${index}`]: nativeEvent.width
     });
   };
 
   if (images.length === 1) {
     return (
       <View style={[styles.twoPhotoLayout, {flexWrap: 'wrap'}]}>
-        <Pressable style={{justifyContent: 'center'}} onPress={() => onimageclick(0)}>
+        <Pressable
+          style={{justifyContent: 'center', alignItems: 'center', flex: 1}}
+          onPress={() => onimageclick(0)}>
           <Image
             resizeMode={Image.resizeMode.stretch}
             source={{uri: images[0]}}
             style={[
               {
-                height: Dimensions.get('window').width * (ratio.image_0 || 0),
-                width: Dimensions.get('window').width
+                height:
+                  (height?.image0 > Dimensions.get('window').height
+                    ? calculatedSizeScreen - 62
+                    : Dimensions.get('window').width) * (ratio.image0 || 0),
+                width:
+                  height?.image0 > Dimensions.get('window').height
+                    ? calculatedSizeScreen - 62
+                    : Dimensions.get('window').width
               }
             ]}
             onLoad={({nativeEvent}) => onloadHandle(nativeEvent, 0)}
@@ -50,13 +59,19 @@ const ImageLayouter = ({images = [], onimageclick}) => {
           return (
             <Pressable
               style={{justifyContent: 'center'}}
-              key={`image_${index}`}
+              key={`image${index}`}
               onPress={() => onimageclick(index)}>
               <Image
                 style={[
                   {
-                    height: (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0),
-                    width: Dimensions.get('window').width / 2
+                    height:
+                      (height[`image${index}`] > Dimensions.get('window').height
+                        ? calculatedSizeScreen - 62
+                        : Dimensions.get('window').width / 2) * (ratio[`image${index}`] || 0),
+                    width:
+                      height[`image${index}`] > Dimensions.get('window').height
+                        ? calculatedSizeScreen - 62
+                        : Dimensions.get('window').width / 2
                   }
                 ]}
                 source={{uri: item}}
@@ -78,13 +93,19 @@ const ImageLayouter = ({images = [], onimageclick}) => {
               <Pressable
                 style={{justifyContent: 'center'}}
                 onPress={() => onimageclick(index)}
-                key={`image_${index}`}>
+                key={`image${index}`}>
                 <Image
                   source={{uri: data}}
                   onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
                   style={{
-                    width: Dimensions.get('window').width,
-                    height: Dimensions.get('window').width * (ratio[`image_${index}`] || 0)
+                    width:
+                      height[`image${index}`] > Dimensions.get('window').height
+                        ? calculatedSizeScreen - 62
+                        : Dimensions.get('window').width,
+                    height:
+                      (height[`image${index}`] > Dimensions.get('window').height
+                        ? calculatedSizeScreen - 62
+                        : Dimensions.get('window').width) * (ratio[`image${index}`] || 0)
                   }}
                   resizeMode={Image.resizeMode.stretch}
                 />
@@ -95,13 +116,19 @@ const ImageLayouter = ({images = [], onimageclick}) => {
             <Pressable
               style={{justifyContent: 'center'}}
               onPress={() => onimageclick(index)}
-              key={`image_${index}`}>
+              key={`image${index}`}>
               <Image
                 source={{uri: data}}
                 onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
                 style={{
-                  width: Dimensions.get('window').width / 2,
-                  height: (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0)
+                  width:
+                    height[`image${index}`] > Dimensions.get('window').height
+                      ? calculatedSizeScreen - 62
+                      : Dimensions.get('window').width / 2,
+                  height:
+                    (height[`image${index}`] > Dimensions.get('window').height
+                      ? calculatedSizeScreen - 62
+                      : Dimensions.get('window').width / 2) * (ratio[`image${index}`] || 0)
                 }}
                 resizeMode={Image.resizeMode.stretch}
               />
@@ -119,13 +146,19 @@ const ImageLayouter = ({images = [], onimageclick}) => {
             <Pressable
               style={{justifyContent: 'center'}}
               onPress={() => onimageclick(index)}
-              key={`image_${index}`}>
+              key={`image${index}`}>
               <Image
                 source={{uri: data}}
                 onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
                 style={{
-                  width: Dimensions.get('window').width / 2,
-                  height: (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0)
+                  width:
+                    height[`image${index}`] > Dimensions.get('window').height
+                      ? calculatedSizeScreen - 62
+                      : Dimensions.get('window').width / 2,
+                  height:
+                    (height[`image${index}`] > Dimensions.get('window').height
+                      ? calculatedSizeScreen - 62
+                      : Dimensions.get('window').width / 2) * (ratio[`image${index}`] || 0)
                 }}
                 resizeMode={Image.resizeMode.stretch}
               />
@@ -143,7 +176,7 @@ const ImageLayouter = ({images = [], onimageclick}) => {
             <Pressable
               style={{justifyContent: 'center'}}
               onPress={() => onimageclick(index)}
-              key={`image_${index}`}>
+              key={`image${index}`}>
               <>
                 {index > 3 ? null : (
                   <>
@@ -177,9 +210,14 @@ const ImageLayouter = ({images = [], onimageclick}) => {
                       source={{uri: data}}
                       onLoad={({nativeEvent}) => onloadHandle(nativeEvent, index)}
                       style={{
-                        width: Dimensions.get('window').width / 2,
+                        width:
+                          height[`image${index}`] > Dimensions.get('window').height
+                            ? calculatedSizeScreen - 62
+                            : Dimensions.get('window').width / 2,
                         height:
-                          (Dimensions.get('window').width / 2) * (ratio[`image_${index}`] || 0)
+                          (height[`image${index}`] > Dimensions.get('window').height
+                            ? calculatedSizeScreen - 62
+                            : Dimensions.get('window').width / 2) * (ratio[`image${index}`] || 0)
                       }}
                       resizeMode={Image.resizeMode.stretch}
                     />
