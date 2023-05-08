@@ -35,6 +35,7 @@ const ContainerComment = ({
   const {calculationText, calculatedSizeScreen} = usePostDetail();
   const {deleteCommentFromContext} = usePostContextHook(contextSource);
   const onCommentLongPressed = async (item, level = 0) => {
+    console.log('jalan2', item)
     const selfId = await getUserId();
     if (selfId === item?.user_id) {
       setSelectedCommentForDelete(item);
