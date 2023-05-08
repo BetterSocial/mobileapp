@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {Alert, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import ButtonHightlight from '../ButtonHighlight';
@@ -26,8 +26,7 @@ const ContainerComment = ({
   navigateToReplyView,
   findCommentAndUpdate,
   updateParentPost = () => {},
-  contextSource = CONTEXT_SOURCE.FEEDS,
-  itemParent
+  contextSource = CONTEXT_SOURCE.FEEDS
 }) => {
   const navigation = useNavigation();
   const [, setSelectedCommentForDelete] = React.useState(null);
@@ -35,8 +34,9 @@ const ContainerComment = ({
   const {isLast, isLastInParent, hideLeftConnector} = useContainerComment();
   const {calculationText, calculatedSizeScreen, calculatePaddingBtm} = usePostDetail();
   const {deleteCommentFromContext} = usePostContextHook(contextSource);
+
   const onCommentLongPressed = async (item, level = 0) => {
-    console.log('jalan2', item)
+    console.log('jalan2', item);
     const selfId = await getUserId();
     if (selfId === item?.user_id || item?.is_you) {
       setSelectedCommentForDelete(item);
@@ -184,10 +184,12 @@ export const styles = StyleSheet.create({
     paddingRight: 8
   },
   lineBeforeProfile: {
-    height: 8.5
+    height: 8.5,
+    borderLeftWidth: 1,
+    borderLeftColor: '#C4C4C4'
   },
   containerReply: {
-    // borderLeftWidth: 1
+    borderLeftWidth: 1
   },
   seeRepliesContainer: (isLast) => ({
     display: 'flex',
