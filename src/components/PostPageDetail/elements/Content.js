@@ -67,7 +67,7 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
   return (
     <>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1}}
+        contentContainerStyle={{flexGrow: 1, paddingBottom: 5}}
         style={styles.contentFeed}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
