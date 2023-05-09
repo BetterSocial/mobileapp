@@ -10,14 +10,21 @@ const useChatClientHook = () => {
   const defaultImage = DEFAULT_TOPIC_PIC_PATH;
 
   const addTopicToChatTab = async (topic) => {
-    const filter = {id: {$eq: `topic_${topic}`}};
-
-    const queryChannel = await client.client.queryChannels(filter);
     let text = '';
-    if (queryChannel.length > 0) {
-      const filterMessage = queryChannel[0].state.messages.filter((message) => message.text !== '');
-      text = filterMessage[filterMessage.length - 1].text;
+    try {
+      const filter = {id: {$eq: `topic_${topic}`}};
+
+      const queryChannel = await client.client.queryChannels(filter);
+      if (queryChannel.length > 0) {
+        const filterMessage = queryChannel[0].state.messages.filter(
+          (message) => message.text !== ''
+        );
+        text = filterMessage[filterMessage.length - 1].text;
+      }
+    } catch (e) {
+      console.log('error follow channel', e);
     }
+
     const channel = await client.client.channel('topics', `topic_${topic}`, {
       name: `#${topic}`,
       members: [user.myProfile.user_id],
@@ -26,9 +33,12 @@ const useChatClientHook = () => {
       channelImage: defaultImage,
       image: defaultImage
     });
+
+    console.log('prepare follow channel', topic);
     await channel.create();
     await channel.addMembers([user.myProfile.user_id]);
     await channel.sendMessage({text}, {skip_push: true});
+    console.log('channel followed');
   };
 
   const removeTopicFromChatTab = async (topic) => {
