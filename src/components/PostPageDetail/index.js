@@ -575,6 +575,10 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
+  const calculateMinHeight = (heightC, minHeight) => {
+    return minHeight > heightC ? heightC : minHeight;
+  };
+
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
@@ -597,12 +601,16 @@ const PostPageDetailIdComponent = (props) => {
               paddingBottom: calculatePaddingBtm()
             }}>
             <View
-              style={styles.content(
-                height - calculatedSizeScreen,
-                calculationText(item?.message, item?.post_type, item?.images_url).containerHeight,
-                item?.images_url,
-                item
-              )}>
+              style={
+                ([styles.content],
+                {
+                  minHeight: calculateMinHeight(
+                    height - calculatedSizeScreen,
+                    calculationText(item?.message, item?.post_type, item?.images_url)
+                      .containerHeight
+                  )
+                })
+              }>
               {item.post_type === POST_TYPE_LINK ? (
                 <ContentLink
                   og={item.og}
@@ -710,7 +718,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.inter[400],
     fontSize: 14
   },
-  content: (h, minHeight) => ({
+  content: {
     width,
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {
@@ -720,10 +728,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderBottomColor: '#C4C4C4',
-    marginBottom: -1,
-    minHeight: minHeight > h ? h : minHeight
-    // height: minHeight > h ? h : minHeight
-  }),
+    marginBottom: -1
+  },
   gap: {height: 16},
   additionalContentStyle: (imageLength, h) => {
     if (imageLength > 0) {
