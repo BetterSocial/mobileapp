@@ -426,8 +426,13 @@ const CreatePost = () => {
     return mapTagUser;
   };
 
+  const isEmptyMessageAllowed = () => {
+    if (dataImage?.length > 0 || getReducedPoll()?.length > 0) return true;
+    return message !== '';
+  };
+
   const postV2 = async () => {
-    if (message === '') {
+    if (!isEmptyMessageAllowed()) {
       showMessage({
         message: StringConstant.createPostFailedNoMessage,
         type: 'danger'
