@@ -18,6 +18,7 @@ import useGroupSetting from './hooks/useGroupSetting';
 import {COLORS} from '../../utils/theme';
 import {ProfileContact} from '../../components/Items';
 import {fonts} from '../../utils/fonts';
+import { Context } from '../../context';
 
 const {width} = Dimensions.get('screen');
 
