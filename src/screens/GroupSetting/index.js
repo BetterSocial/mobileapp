@@ -34,6 +34,8 @@ const GroupSetting = ({navigation, route}) => {
     renderHeaderSubtitleText
   } = useGroupSetting({navigation, route});
   const isFocusChatName = route?.params?.focusChatName;
+  const [channelState] = React.useContext(Context).channel;
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -71,7 +73,9 @@ const GroupSetting = ({navigation, route}) => {
             )}
           />
         </View>
-        <ButtonAddParticipants refresh={route.params.refresh} />
+        {channelState?.channel?.data?.type === 'group' && (
+          <ButtonAddParticipants refresh={route.params.refresh} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
