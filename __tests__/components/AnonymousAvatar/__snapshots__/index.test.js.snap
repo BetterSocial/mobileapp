@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AnonymousAvatar test Should match version 1 snapshot 1`] = `
+<Image
+  height={15}
+  source={
+    Object {
+      "testUri": "../../../src/assets/images/AnonymousProfile.png",
+    }
+  }
+  style={
+    Object {
+      "height": NaN,
+      "marginRight": 0,
+      "width": NaN,
+    }
+  }
+  width={15}
+/>
+`;
+
+exports[`AnonymousAvatar test Should match version 2 snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#000000",
+      "borderRadius": 7.5,
+      "height": 15,
+      "justifyContent": "center",
+      "width": 15,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "alignSelf": "center",
+        "fontSize": 10,
+      }
+    }
+  >
+    😀
+  </Text>
+</View>
+`;
