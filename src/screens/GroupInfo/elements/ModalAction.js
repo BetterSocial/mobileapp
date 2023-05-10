@@ -24,7 +24,7 @@ const ModalAction = (props) => {
           <Text style={styles.textButton}>Remove {name} </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onPress('view')} style={styles.buttonStyle}>
-          <Text style={styles.textButton}>View {name} Profile </Text>
+          <Text style={styles.textButton}>View {name}&apos;s Profile </Text>
         </TouchableOpacity>
       </View>
     </Modal>
