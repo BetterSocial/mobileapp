@@ -78,80 +78,6 @@ const displayCityName = (city, state) => {
 const isLocationMatch = (searchQuery, location) =>
   location.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1;
 
-const displayFormattedSearchLocations = (searchQuery, locationObject) => {
-  const zipString =
-    locationObject.zip === '' || locationObject.zip === undefined ? '' : `, ${locationObject.zip}`;
-
-  // if (locationObject.state.toLowerCase() === searchQuery.toLowerCase()) {
-  //     const neighborhood = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : ``
-  //     return (
-  //         <Text>
-  //             {`${neighborhood}${locationObject.city}, `}
-  //             <Text style={styles.bold}>{locationObject.state}</Text>
-  //             {`, ${locationObject.country}${zipString}`}
-  //         </Text>
-  //     );
-  // }
-
-  if (
-    locationObject.city.toLowerCase() === searchQuery.toLowerCase() ||
-    locationObject.state.toLowerCase() === searchQuery.toLowerCase()
-  ) {
-    const {city, state} = locationObject;
-
-    const cityDisplay = detectStateInCity(city) ? displayCityName(city, state) : city;
-    const stateDisplay = detectStateInCity(city) ? ',' : `, ${state},`;
-
-    const neighborhood = locationObject?.neighborhood ? `${locationObject.neighborhood}, ` : '';
-    return (
-      <Text>
-        {`${neighborhood}`}
-        <Text style={styles.bold}>{cityDisplay}</Text>
-        {`${stateDisplay} ${locationObject.country}${zipString}`}
-      </Text>
-    );
-  }
-
-  if (locationObject.neighborhood.toLowerCase() === searchQuery.toLowerCase()) {
-    const cityState = displayCityName(locationObject?.city, locationObject?.state);
-    return (
-      <Text>
-        <Text style={styles.bold}>{locationObject.neighborhood}</Text>
-        {`, ${cityState}, ${locationObject.country}${zipString}`}
-      </Text>
-    );
-  }
-
-  if (locationObject.zip.toLowerCase() === searchQuery.toLowerCase()) {
-    return (
-      <Text>
-        {`${locationObject.neighborhood}, ${locationObject.city} , ${locationObject.state}, ${locationObject.country}`}
-        <Text style={styles.bold}>{zipString}</Text>
-      </Text>
-    );
-  }
-
-  if (locationObject.location_level === 'Country') {
-    return <Text>{`${locationObject.country}${zipString}`}</Text>;
-  }
-
-  if (locationObject.location_level === 'State') {
-    return <Text>{`${locationObject.state}, ${locationObject.country}${zipString}`}</Text>;
-  }
-
-  const cityState = displayCityName(locationObject?.city, locationObject?.state);
-  if (locationObject.location_level === 'City') {
-    // return <Text>{`${locationObject.city} , ${locationObject.state}, ${locationObject.country}${zipString}`}</Text>
-    return <Text>{`${cityState}, ${locationObject.country}${zipString}`}</Text>;
-  }
-
-  if (!locationObject.neighborhood) {
-    return <Text>{`${cityState}, ${locationObject.country}${zipString}`}</Text>;
-  }
-
-  return <Text>{`${locationObject.neighborhood}, ${cityState}, ${locationObject.country}`}</Text>;
-};
-
 const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
   const {neighborhood, city, state, country, location_level} = locationObject;
 
@@ -259,7 +185,7 @@ const getChatName = (usernames, me) => {
 
 const getGroupMemberCount = (channel) => Object.keys(channel?.state?.members).length;
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   bold: {
     fontFamily: 'Inter',
     fontStyle: 'normal',
@@ -389,7 +315,6 @@ export {
   capitalizeFirstText,
   convertString,
   convertTopicNameToTopicPageScreenParam,
-  displayFormattedSearchLocations,
   displayFormattedSearchLocationsV2,
   getCaptionWithTopicStyle,
   getChatName,
@@ -403,5 +328,6 @@ export {
   displayCityName,
   sanitizeUrl,
   getDurationTimeText,
-  isLocationMatch
+  isLocationMatch,
+  styles
 };

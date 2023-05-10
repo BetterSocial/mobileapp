@@ -114,8 +114,8 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
         <Button testID="closedemo" title="Close Demo Menu" onPress={closeDummyLogin} />
         <RBSheet height={heightBs} ref={dummyLoginRbSheetRef}>
           <Text>Choose an account you wish to login</Text>
-          {dummyUsers.map((item, index) => (
-            <View key={`dummyusers-${index}`}>
+          {dummyUsers.map((item) => (
+            <View testID={`dev-dummy-login-${item.name}`} key={`dummyusers-${item.name}`}>
               <TouchableOpacity onPress={() => dummyLogin(item.humanId)}>
                 <View style={S.divider} />
                 <Text style={S.dummyAccountItem}>{`${item.name}`}</Text>

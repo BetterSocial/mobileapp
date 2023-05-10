@@ -1,7 +1,6 @@
 /* eslint-disable no-case-declarations */
 import {
   DISCOVERY_RESET,
-  DISCOVERY_SET_DATA,
   DISCOVERY_SET_DATA_DOMAINS,
   DISCOVERY_SET_DATA_NEWS,
   DISCOVERY_SET_DATA_TOPICS,
@@ -22,7 +21,7 @@ import {
   DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN,
   DISCOVERY_SET_NEW_UNFOLLOWED_TOPIC,
   DISCOVERY_SET_NEW_UNFOLLOWED_USER,
-  DISCOVERY_SET_RECENT_SEARCH,
+  DISCOVERY_SET_RECENT_SEARCH
 } from '../Types';
 
 /**
@@ -56,7 +55,7 @@ const discoveryState = {
   isLoadingDiscoveryTopic: false,
   isLoadingDiscoveryNews: false,
   isFirstTimeOpen: true,
-  isFocus: true,
+  isFocus: true
 };
 
 /**
@@ -77,22 +76,6 @@ const discoveryState = {
  */
 const discoveryReducer = (state = discoveryState, action) => {
   switch (action.type) {
-    // case DISCOVERY_SET_DATA:
-    //   const {
-    //     followedUsers, unfollowedUsers, followedDomains,
-    //     unfollowedDomains, followedTopic, unfollowedTopic, news,
-    //   } = action.payload.discovery;
-    //   return {
-    //     ...state,
-    //     followedUsers,
-    //     unfollowedUsers,
-    //     followedDomains,
-    //     unfollowedDomains,
-    //     followedTopic,
-    //     unfollowedTopic,
-    //     news,
-    //   };
-
     case DISCOVERY_RESET:
       return {
         ...state,
@@ -100,82 +83,74 @@ const discoveryReducer = (state = discoveryState, action) => {
         isLoadingDiscoveryUser: false,
         isLoadingDiscoveryDomain: false,
         isLoadingDiscoveryTopic: false,
-        isLoadingDiscoveryNews: false,
+        isLoadingDiscoveryNews: false
       };
 
     case DISCOVERY_SET_INITIAL_DOMAINS:
       return {
         ...state,
-        initialDomains: action.payload,
+        initialDomains: action.payload
       };
 
     case DISCOVERY_SET_INITIAL_TOPICS:
       return {
         ...state,
-        initialTopics: action.payload,
+        initialTopics: action.payload
       };
 
     case DISCOVERY_SET_INITIAL_USERS:
       return {
         ...state,
-        initialUsers: action.payload,
+        initialUsers: action.payload
       };
 
     case DISCOVERY_SET_DATA_USERS:
-      const {
-        followedUsers, unfollowedUsers,
-      } = action.payload.discovery;
+      const {followedUsers, unfollowedUsers} = action.payload.discovery;
       return {
         ...state,
         followedUsers,
-        unfollowedUsers,
+        unfollowedUsers
       };
 
     case DISCOVERY_SET_DATA_DOMAINS:
-      const {
-        followedDomains, unfollowedDomains,
-      } = action.payload.discovery;
+      const {followedDomains, unfollowedDomains} = action.payload.discovery;
       return {
         ...state,
         followedDomains,
-        unfollowedDomains,
+        unfollowedDomains
       };
 
     case DISCOVERY_SET_DATA_TOPICS:
-      const {
-        followedTopic, unfollowedTopic,
-      } = action.payload.discovery;
+      const {followedTopic, unfollowedTopic} = action.payload.discovery;
       return {
         ...state,
         followedTopic,
-        unfollowedTopic,
+        unfollowedTopic
       };
 
     case DISCOVERY_SET_DATA_NEWS:
-      const {
-        news,
-      } = action.payload.discovery;
+      const {news} = action.payload.discovery;
       return {
         ...state,
-        news,
+        news
       };
 
     case DISCOVERY_SET_FOCUS:
       return {
         ...state,
-        isFocus: action.payload,
+        isFocus: action.payload
       };
 
     case DISCOVERY_SET_FIRST_TIME_OPEN:
       return {
         ...state,
-        isFirstTimeOpen: action.payload,
+        isFirstTimeOpen: action.payload
       };
 
     case DISCOVERY_SET_RECENT_SEARCH:
       return {
         ...state,
-        recentSearch: action.payload,
+        recentSearch: action.payload
       };
 
     case DISCOVERY_SET_LOADING_DATA:
@@ -184,70 +159,70 @@ const discoveryReducer = (state = discoveryState, action) => {
         isLoadingDiscoveryUser: action.payload,
         isLoadingDiscoveryDomain: action.payload,
         isLoadingDiscoveryTopic: action.payload,
-        isLoadingDiscoveryNews: action.payload,
+        isLoadingDiscoveryNews: action.payload
       };
 
     case DISCOVERY_SET_LOADING_DATA_USER:
       return {
         ...state,
-        isLoadingDiscoveryUser: action.payload,
+        isLoadingDiscoveryUser: action.payload
       };
 
     case DISCOVERY_SET_LOADING_DATA_TOPIC:
       return {
         ...state,
-        isLoadingDiscoveryTopic: action.payload,
+        isLoadingDiscoveryTopic: action.payload
       };
 
     case DISCOVERY_SET_LOADING_DATA_DOMAIN:
       return {
         ...state,
-        isLoadingDiscoveryDomain: action.payload,
+        isLoadingDiscoveryDomain: action.payload
       };
 
     case DISCOVERY_SET_LOADING_DATA_NEWS:
       return {
         ...state,
-        isLoadingDiscoveryNews: action.payload,
+        isLoadingDiscoveryNews: action.payload
       };
 
     case DISCOVERY_SET_NEW_FOLLOWED_USER:
       return {
         ...state,
-        followedUsers: action.payload.newFollowedUsers,
+        followedUsers: action.payload.newFollowedUsers
       };
 
     case DISCOVERY_SET_NEW_UNFOLLOWED_USER:
       return {
         ...state,
-        unfollowedUsers: action.payload.newUnfollowedUsers,
+        unfollowedUsers: action.payload.newUnfollowedUsers
       };
 
     case DISCOVERY_SET_NEW_FOLLOWED_DOMAIN:
       return {
         ...state,
-        followedDomains: action.payload.newFollowedDomains,
+        followedDomains: action.payload.newFollowedDomains
       };
 
     case DISCOVERY_SET_NEW_UNFOLLOWED_DOMAIN:
       return {
         ...state,
-        unfollowedDomains: action.payload.newUnfollowedDomains,
+        unfollowedDomains: action.payload.newUnfollowedDomains
       };
 
     case DISCOVERY_SET_NEW_FOLLOWED_TOPIC:
       return {
         ...state,
-        followedTopic: action.payload.newFollowedTopics,
+        followedTopic: action.payload.newFollowedTopics
       };
 
     case DISCOVERY_SET_NEW_UNFOLLOWED_TOPIC:
       return {
         ...state,
-        unfollowedTopic: action.payload.newUnfollowedTopics,
+        unfollowedTopic: action.payload.newUnfollowedTopics
       };
     default:
       return state;
   }
 };
-export { discoveryReducer, discoveryState };
+export {discoveryReducer, discoveryState};
