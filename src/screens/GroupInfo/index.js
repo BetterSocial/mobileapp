@@ -193,7 +193,7 @@ const GroupInfo = () => {
                     onPress={() => handlePressContact(item)}
                     fullname={item.user.name}
                     photo={item.user.image}
-                    showArrow={newParticipant.length > 2}
+                    showArrow={channelState?.channel.data.type === 'group'}
                     userId={profile.myProfile.user_id}
                   />
                 </View>
@@ -223,7 +223,7 @@ const GroupInfo = () => {
           ) : null}
         </SafeAreaView>
       </ScrollView>
-      {!channel?.cid.includes('!members') && (
+      {channelState?.channel.data.type === 'group' && (
         <View style={styles.btnAdd}>
           <TouchableOpacity
             testID="addParticipant"

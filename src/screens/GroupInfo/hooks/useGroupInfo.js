@@ -290,7 +290,7 @@ const useGroupInfo = () => {
   };
 
   const handlePressContact = (item) => {
-    if (newParticipant.length > 2) {
+    if (channelState?.channel.data.type === 'group') {
       handleSelectUser(item);
       return true;
     }
