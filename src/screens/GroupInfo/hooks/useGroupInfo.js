@@ -86,7 +86,7 @@ const useGroupInfo = () => {
       focusChatName: true
     });
   };
-  console.log(channel, profileChannel, 'suria');
+  // eslint-disable-next-line consistent-return
   const checkUserIsBlockHandle = async () => {
     try {
       const sendData = {
@@ -163,7 +163,7 @@ const useGroupInfo = () => {
   };
 
   const handleCloseSelectUser = async () => {
-    await setSelectedUser(null);
+    // await setSelectedUser(null);
     setOpenModal(false);
   };
 
@@ -190,7 +190,7 @@ const useGroupInfo = () => {
       await channelChat.addMembers([selectedUser.user_id]);
       await channelChat.sendMessage(
         {
-          text: `${profile.myProfile.username} remove you from ${channel.data.name}`,
+          text: `${profile.myProfile.username} removed you from ${channel.data.name}`,
           isRemoveMember: true,
           silent: true
         },
@@ -240,9 +240,9 @@ const useGroupInfo = () => {
     }
     if (status === 'remove') {
       Alert.alert(
-        'Remove user',
-        `Are you sure you want to remove ${selectedUser.user.name} from this group? We will let the group know that you removed ${selectedUser.user.name}`,
-        [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'No'}]
+        null,
+        `Are you sure you want to remove ${selectedUser.user.name} from this group? We will let the group know that you removed ${selectedUser.user.name}.`,
+        [{text: 'Yes - remove', onPress: () => onRemoveUser()}, {text: 'Cancel'}]
       );
     }
 
@@ -250,16 +250,15 @@ const useGroupInfo = () => {
       checkUserIsBlockHandle();
     }
   };
-  console.log(channel, 'suti');
+
   const onLeaveGroup = () => {
-    Alert.alert('Leave group', `Are you sure you want to leave group ?`, [
+    Alert.alert('Leave group', 'Are you sure you want to leave group ?', [
       {text: 'Yes', onPress: leaveGroup},
       {text: 'No'}
     ]);
   };
 
   const leaveGroup = async () => {
-    console.log(profile, 'sulit');
     try {
       await channel.sendMessage(
         {
