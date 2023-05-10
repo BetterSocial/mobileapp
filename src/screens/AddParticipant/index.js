@@ -5,7 +5,7 @@ import {Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react
 
 import HeaderContact from '../../components/Header/HeaderContact';
 import Memo_ic_info from '../../assets/icons/ic_info';
-import {COLORS, FONTS} from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
@@ -13,7 +13,7 @@ import {SearchContact} from '../../components/Search';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {userPopulate} from '../../service/users';
 
-const width = Dimensions.get('screen').width;
+const {width} = Dimensions.get('screen');
 const VIEW_TYPE_DATA = 2;
 
 const AddParticipant = ({navigation, route}) => {
@@ -29,12 +29,13 @@ const AddParticipant = ({navigation, route}) => {
   const {participants} = groupChatState;
   const [filterParams, setFilterParams] = React.useState('');
   const [cacheUser, setCacheUser] = React.useState([]);
+  const [profile] = React.useContext(Context).profile;
+
   React.useEffect(() => {
     if (dataProvider) {
       setIsRecyclerViewShown(true);
     }
   }, [dataProvider]);
-  console.log(route, 'lusioa');
   React.useEffect(() => {
     getUserPopulate();
   }, []);
@@ -63,7 +64,7 @@ const AddParticipant = ({navigation, route}) => {
       const dProvider = new DataProvider((row1, row2) => row1 !== row2);
       setLayoutProvider(
         new LayoutProvider(
-          (index) => {
+          () => {
             if (users.length < 1) {
               return 0;
             }
@@ -85,7 +86,6 @@ const AddParticipant = ({navigation, route}) => {
       setDataProvider(dProvider.cloneWithRows(users));
     }
   }, [users]);
-
 
   const handleSelected = (value) => {
     const copyFollowed = [...followed];
@@ -113,7 +113,7 @@ const AddParticipant = ({navigation, route}) => {
     if (followed.length !== 0 && channel.channel) {
       try {
         setLoading(true);
-        const followedWithRoles = followed.map((item, index) => {
+        const followedWithRoles = followed.map((item) => {
           return {
             user_id: item,
             channel_role: 'channel_moderator'
@@ -121,6 +121,16 @@ const AddParticipant = ({navigation, route}) => {
         });
 
         await channel.channel.addMembers(followedWithRoles);
+        followedName.forEach(async (name) => {
+          await channel.channel.sendMessage(
+            {
+              text: `${name} was added to this chat by ${profile.myProfile.username}`,
+              isRemoveMember: true,
+              silent: true
+            },
+            {skip_push: true}
+          );
+        });
         if (route.params?.refresh && typeof route.params.refresh === 'function') {
           route.params.refresh();
         }

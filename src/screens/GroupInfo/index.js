@@ -45,7 +45,6 @@ const GroupInfo = () => {
     chatName,
     handleOnNameChange,
     handleOnImageClicked,
-    handleSelectUser,
     newParticipant,
     selectedUser,
     handleCloseSelectUser,
@@ -53,7 +52,9 @@ const GroupInfo = () => {
     alertRemoveUser,
     memberName,
     onLeaveGroup,
-    profile
+    profile,
+    channelState,
+    handlePressContact
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -142,7 +143,7 @@ const GroupInfo = () => {
       {/* <Header title={chatName} /> */}
       <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
       <View style={styles.lineTop} />
-      <ScrollView nestedScrollEnabled={true} >
+      <ScrollView nestedScrollEnabled={true}>
         <SafeAreaView>
           <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
             <View style={styles.containerPhoto}>{showImageProfile()}</View>
@@ -189,10 +190,10 @@ const GroupInfo = () => {
                   <ProfileContact
                     key={index}
                     item={item}
-                    onPress={() => handleSelectUser(item)}
+                    onPress={() => handlePressContact(item)}
                     fullname={item.user.name}
                     photo={item.user.image}
-                    showArrow={true}
+                    showArrow={newParticipant.length > 2}
                     userId={profile.myProfile.user_id}
                   />
                 </View>
@@ -200,24 +201,26 @@ const GroupInfo = () => {
             />
           </View>
           <View style={styles.gap} />
-          <View style={styles.actionGroup}>
-            <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
-              <View style={styles.imageActContainer}>
-                <FastImage style={styles.imageAction} source={ExitGroup} />
-              </View>
-              <View>
-                <Text style={styles.textAct}>Exit Group</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity  style={styles.buttonGroup}>
-              <View style={styles.imageActContainer}>
-                <FastImage style={styles.imageAction} source={ReportGroup} />
-              </View>
-              <View>
-                <Text style={styles.textAct}>Report Group</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+          {channelState?.channel.data.type === 'group' ? (
+            <View style={styles.actionGroup}>
+              <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
+                <View style={styles.imageActContainer}>
+                  <FastImage style={styles.imageAction} source={ExitGroup} />
+                </View>
+                <View>
+                  <Text style={styles.textAct}>Exit Group</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonGroup}>
+                <View style={styles.imageActContainer}>
+                  <FastImage style={styles.imageAction} source={ReportGroup} />
+                </View>
+                <View>
+                  <Text style={styles.textAct}>Report Group</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </SafeAreaView>
       </ScrollView>
       {!channel?.cid.includes('!members') && (

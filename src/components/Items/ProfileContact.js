@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import Mi from 'react-native-vector-icons/MaterialIcons';
 
 import MemoIc_Checklist from '../../assets/icons/Ic_Checklist';
 import {COLORS} from '../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
-import {homeTabs} from '../../assets';
 
 const ProfileContact = ({photo, fullname, onPress, select, showArrow, userId, item}) => (
   <Pressable
@@ -28,7 +28,7 @@ const ProfileContact = ({photo, fullname, onPress, select, showArrow, userId, it
         <>
           {userId !== item.user_id && (
             <View>
-              <Image style={styles.arroIcon} source={homeTabs.AllowLeft} />
+              <Mi name="arrow-forward-ios" size={18} />
             </View>
           )}
         </>

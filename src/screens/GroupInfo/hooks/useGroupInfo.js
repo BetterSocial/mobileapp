@@ -30,7 +30,6 @@ const useGroupInfo = () => {
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
-
   const serializeMembersList = (result = []) => {
     if (!result) {
       return {};
@@ -59,8 +58,7 @@ const useGroupInfo = () => {
     }
   };
   const memberName = () => {
-    const members = newParticipant.map((member) => member.user.name);
-    return channel.data.name ? channel.data.name : members.join(', ');
+    return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
 
   const chatName = getChatName(username, profile.myProfile.username);
@@ -83,7 +81,8 @@ const useGroupInfo = () => {
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
-      focusChatName: true
+      focusChatName: true,
+      refresh: getMembersList
     });
   };
   // eslint-disable-next-line consistent-return
@@ -174,12 +173,13 @@ const useGroupInfo = () => {
       const result = await channel.removeMembers([selectedUser.user_id]);
       const generatedChannelId = generateRandomId();
       const channelChat = await client.client.channel('system', generatedChannelId, {
-        name: 'System',
-        type_channel: 'system'
+        name: channelState?.channel?.data.name,
+        type_channel: 'system',
+        channel_type: 2
       });
       await channel.sendMessage(
         {
-          text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this chat`,
+          text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this group`,
           isRemoveMember: true,
           user_id: profile.myProfile.user_id,
           silent: true
@@ -289,6 +289,14 @@ const useGroupInfo = () => {
     }
   };
 
+  const handlePressContact = (item) => {
+    if (newParticipant.length > 2) {
+      handleSelectUser(item);
+      return true;
+    }
+    return null;
+  };
+
   return {
     serializeMembersList,
     groupChatState,
@@ -326,7 +334,8 @@ const useGroupInfo = () => {
     alertRemoveUser,
     memberName,
     onLeaveGroup,
-    checkUserIsBlockHandle
+    checkUserIsBlockHandle,
+    handlePressContact
   };
 };
 

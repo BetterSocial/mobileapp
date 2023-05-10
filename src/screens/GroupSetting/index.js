@@ -7,7 +7,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
 
 import ButtonAddParticipants from '../../components/Button/ButtonAddParticipants';
@@ -22,8 +22,18 @@ import useGroupSetting from './hooks/useGroupSetting';
 const {width} = Dimensions.get('screen');
 
 const GroupSetting = ({navigation, route}) => {
-  const {participants, groupName, countUser, urlImage, isLoading, updateName, submitData, lounchGalery, renderHeaderSubtitleText} = useGroupSetting({navigation, route})
-
+  const {
+    participants,
+    groupName,
+    countUser,
+    urlImage,
+    isLoading,
+    updateName,
+    submitData,
+    lounchGalery,
+    renderHeaderSubtitleText
+  } = useGroupSetting({navigation, route});
+  console.log(route.params, 'laka');
   const isFocusChatName = route?.params?.focusChatName;
   return (
     <SafeAreaView style={styles.container}>
@@ -62,7 +72,7 @@ const GroupSetting = ({navigation, route}) => {
             )}
           />
         </View>
-        <ButtonAddParticipants />
+        <ButtonAddParticipants refresh={route.params.refresh} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -73,12 +83,12 @@ export default GroupSetting;
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff'},
   subtitleStyle: {
-    color: COLORS.holyTosca,
+    color: COLORS.holyTosca
   },
   containerHeader: {marginLeft: 22, marginRight: 20},
   users: {
     paddingTop: 12,
-    width,
+    width
   },
   countUser: {
     fontFamily: fonts.inter[600],
@@ -86,6 +96,6 @@ const styles = StyleSheet.create({
     lineHeight: 16.94,
     color: COLORS.holytosca,
     marginLeft: 20,
-    marginBottom: 4,
-  },
+    marginBottom: 4
+  }
 });
