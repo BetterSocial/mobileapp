@@ -190,7 +190,7 @@ const useGroupInfo = () => {
       await channelChat.addMembers([selectedUser.user_id]);
       await channelChat.sendMessage(
         {
-          text: `${profile.myProfile.username} removed you from ${channel.data.name}`,
+          text: `${profile.myProfile.username} removed you from this group`,
           isRemoveMember: true,
           silent: true
         },
