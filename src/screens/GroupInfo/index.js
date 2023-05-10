@@ -45,7 +45,6 @@ const GroupInfo = () => {
     chatName,
     handleOnNameChange,
     handleOnImageClicked,
-    handleSelectUser,
     newParticipant,
     selectedUser,
     handleCloseSelectUser,
@@ -54,7 +53,8 @@ const GroupInfo = () => {
     memberName,
     onLeaveGroup,
     profile,
-    checkUserIsBlockHandle
+    channelState,
+    handlePressContact
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -190,10 +190,10 @@ const GroupInfo = () => {
                   <ProfileContact
                     key={index}
                     item={item}
-                    onPress={() => handleSelectUser(item)}
+                    onPress={() => handlePressContact(item)}
                     fullname={item.user.name}
                     photo={item.user.image}
-                    showArrow={true}
+                    showArrow={newParticipant.length > 2}
                     userId={profile.myProfile.user_id}
                   />
                 </View>

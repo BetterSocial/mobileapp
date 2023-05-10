@@ -29,12 +29,13 @@ const AddParticipant = ({navigation, route}) => {
   const {participants} = groupChatState;
   const [filterParams, setFilterParams] = React.useState('');
   const [cacheUser, setCacheUser] = React.useState([]);
+  const [profile] = React.useContext(Context).profile;
+
   React.useEffect(() => {
     if (dataProvider) {
       setIsRecyclerViewShown(true);
     }
   }, [dataProvider]);
-  console.log(route, 'lusioa');
   React.useEffect(() => {
     getUserPopulate();
   }, []);
@@ -120,6 +121,16 @@ const AddParticipant = ({navigation, route}) => {
         });
 
         await channel.channel.addMembers(followedWithRoles);
+        followedName.forEach(async (name) => {
+          await channel.channel.sendMessage(
+            {
+              text: `${name} was added to this chat by ${profile.myProfile.username}`,
+              isRemoveMember: true,
+              silent: true
+            },
+            {skip_push: true}
+          );
+        });
         if (route.params?.refresh && typeof route.params.refresh === 'function') {
           route.params.refresh();
         }

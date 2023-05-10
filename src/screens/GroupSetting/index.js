@@ -33,7 +33,6 @@ const GroupSetting = ({navigation, route}) => {
     lounchGalery,
     renderHeaderSubtitleText
   } = useGroupSetting({navigation, route});
-
   const isFocusChatName = route?.params?.focusChatName;
   return (
     <SafeAreaView style={styles.container}>
@@ -72,7 +71,7 @@ const GroupSetting = ({navigation, route}) => {
             )}
           />
         </View>
-        <ButtonAddParticipants />
+        <ButtonAddParticipants refresh={route.params.refresh} />
       </ScrollView>
     </SafeAreaView>
   );
