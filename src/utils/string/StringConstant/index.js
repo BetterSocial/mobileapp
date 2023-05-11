@@ -18,7 +18,7 @@ const onboardingChooseUsernameButtonStateNext = 'NEXT';
 const onboardingChooseUsernameErrorCannotBeEmpty = 'Username cannot be empty';
 const onboardingChooseUsernameLabelCheckingAvailability = 'Checking availability';
 const onboardingChooseUsernameLabelMinimumChar = 'Username min. 3 characters';
-const onboardingChooseUsernameLabelMaximumChar = 'Username maximum 15 characters';
+const onboardingChooseUsernameLabelMaximumChar = 'Username maximum 19 characters';
 const onboardingChooseUsernameLabelJustANumber = 'Username cannot be just a number';
 const onboardingChooseUsernameLabelUserAvailable = (username) =>
   `Congrats - ${username} is still available`;
