@@ -52,3 +52,16 @@ export const getLinkPreviewInfo = async (domain, url) => {
     };
   }
 };
+
+// eslint-disable-next-line consistent-return
+export const getCommentChild = async (data) => {
+  try {
+    const response = await api.post('/feeds/reactions/', {
+      activity_id: data.activity_id,
+      limit: 100
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e, 'eman');
+  }
+};
