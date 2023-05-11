@@ -21,6 +21,7 @@ import useReplyComment from './hooks/useReplyComment';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import useWriteComment from '../Comments/hooks/useWriteComment';
+import {getCommentChild} from '../../service/feeds';
 
 const ReplyCommentId = ({
   itemProp,
@@ -58,6 +59,8 @@ const ReplyCommentId = ({
   const getThisComment = async () => {
     if (itemProp.latest_children.comment && Array.isArray(itemProp.latest_children.comment)) {
       setNewCommentList(itemProp.latest_children?.comment);
+      const response = await getCommentChild({activity_id: item?.id});
+      setNewCommentList(response.data);
     }
   };
 
@@ -68,7 +71,6 @@ const ReplyCommentId = ({
   }, [itemProp]);
 
   const navigationGoBack = () => navigation.goBack();
-
   if (!item) return null;
   return (
     <SafeAreaView style={styles.container}>
