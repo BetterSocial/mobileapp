@@ -22,6 +22,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const [dummyUsers] = React.useState([
     {name: 'fajarismv2', humanId: 'fajarismv2'},
     {name: 'halofajarism', humanId: 'halofajarism'},
+    {name: 'fajarus1', humanId: 'tYy3OFurquv0lkYF'},
     {name: 'agita', humanId: 'agita'},
     {name: 'bastian', humanId: 'bastian'},
     {name: 'agita2', humanId: 'I4K3M10FGR78EWQQDNQ2'},
