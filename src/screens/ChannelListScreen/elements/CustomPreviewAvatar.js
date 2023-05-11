@@ -28,14 +28,18 @@ const CustomPreviewAvatar = ({channel}) => {
       </View>
     );
   }
-
   if (channel.data.channel_type === 2) {
     return (
       <View style={styles.containerAvatar}>
-        <FastImage
-          source={{uri: channel.data.image, priority: FastImage.priority.normal}}
-          style={styles.image}
-        />
+        {channel?.data?.image ? (
+          <FastImage
+            source={{uri: channel.data.image, priority: FastImage.priority.normal}}
+            style={styles.image}
+          />
+        ) : (
+          <FastImage source={DefaultChatGroupProfilePicture} style={styles.image} />
+        )}
+
         <View style={styles.typeContainer()}>
           <FastImage
             resizeMode={FastImage.resizeMode.contain}

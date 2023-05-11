@@ -21,7 +21,7 @@ import {
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation, useRoute} from '@react-navigation/core';
 
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
@@ -93,7 +93,7 @@ const CreatePost = () => {
   const [typeUser, setTypeUser] = React.useState(false);
   const {headerTitle, initialTopic, isInCreatePostTopicScreen, anonUserInfo} =
     useCreatePostHook(typeUser);
-
+  const {params} = useRoute();
   const [message, setMessage] = React.useState('');
   const [mediaStorage, setMediaStorage] = React.useState([]);
   const [listTopic, setListTopic] = React.useState(initialTopic);
@@ -118,7 +118,6 @@ const CreatePost = () => {
   const [user] = React.useContext(Context).profile;
   const [allTaggingUser, setAllTaggingUser] = React.useState([]);
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
-
   const debounced = React.useCallback(
     debounce((changedText) => {
       if (isContainUrl(changedText)) {
@@ -202,7 +201,7 @@ const CreatePost = () => {
       setPrivacySelect(privacyId);
     }
     const durationId = await getDurationId();
-    if (durationId) {
+    if (durationId != null || durationId !== undefined) {
       setExpiredSelect(durationId);
     }
 
@@ -409,7 +408,6 @@ const CreatePost = () => {
   };
 
   const onSaveTopic = (v, topicChat) => {
-    console.log(v, topicChat, 'hellop');
     setListTopic(v);
     setHashtags(v);
     setListTopicChat(topicChat);
@@ -490,9 +488,10 @@ const CreatePost = () => {
     }
 
     try {
-      console.log('data');
-      console.log(data);
       await createPost(data);
+      if (params.onRefresh && typeof params.onRefresh === 'function') {
+        params.onRefresh();
+      }
       handleTopicChat();
       showMessage({
         message: StringConstant.createPostDone,
@@ -664,7 +663,7 @@ const CreatePost = () => {
 
   const renderLocationString = (geoInfo) => {
     if (geoInfo?.location_level?.toLowerCase() === 'neighborhood') return geoInfo?.neighborhood;
-    if (geoInfo?.location_level?.toLowerCase() === 'city') return geoInfo?.city;
+    if (geoInfo?.location_level?.toLowerCase() === 'city') return geoInfo?.city.split(',')[0];
     if (geoInfo?.location_level?.toLowerCase() === 'state') return geoInfo?.state;
     if (geoInfo?.location_level?.toLowerCase() === 'country') return geoInfo?.country;
     return geoInfo?.location_level;
@@ -775,7 +774,7 @@ const CreatePost = () => {
           <Gap style={styles.height(16)} />
           <ListItem
             icon={<Timer width={16.67} height={16.67} />}
-            label={postExpired.length === 0 ? 'Loading...' : postExpired[expiredSelect].label}
+            label={postExpired.length === 0 ? 'Loading...' : postExpired[expiredSelect]?.label}
             labelStyle={styles.listText}
             onPress={() => sheetExpiredRef.current.open()}
           />

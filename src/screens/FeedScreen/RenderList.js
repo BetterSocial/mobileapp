@@ -35,7 +35,6 @@ const RenderListFeed = (props) => {
     onPress,
     onNewPollFetched,
     onPressDomain,
-    onPressComment,
     onPressBlock,
     onPressUpvote,
     selfUserId,
@@ -151,7 +150,7 @@ const RenderListFeed = (props) => {
                 ANALYTICS_SHARE_POST_FEED_ID
               )
             }
-            onPressComment={() => onPressComment(item)}
+            onPressComment={() => onPress(item)}
             onPressBlock={() => onPressBlock(item)}
             onPressDownVote={onPressDownVoteHandle}
             onPressUpvote={onPressUpvoteHandle}
@@ -165,13 +164,13 @@ const RenderListFeed = (props) => {
           <View style={styles.contentReaction(getHeightReaction())}>
             <React.Fragment>
               <PreviewComment
-                user={item.latest_reactions.comment[0].user}
+                user={item?.latest_reactions?.comment[0]?.user}
                 comment={item?.latest_reactions?.comment[0]?.data?.text || ''}
                 image={item?.latest_reactions?.comment[0]?.user?.data?.profile_pic_url || ''}
                 time={item.latest_reactions.comment[0].created_at}
                 totalComment={getTotalReaction(item) - 1}
                 item={item.latest_reactions.comment[0]}
-                onPress={onPressComment}
+                onPress={onPress}
               />
               <Gap height={8} />
             </React.Fragment>

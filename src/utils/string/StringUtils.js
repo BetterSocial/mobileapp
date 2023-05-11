@@ -61,9 +61,8 @@ const detectStateInCity = (city) => {
  * @returns {String}
  */
 const displayCityName = (city, state) => {
-  if (city === null || city === undefined || city === '') throw new Error('City must be defined');
-  if (state === null || state === undefined || state === '')
-    throw new Error('State must be defined');
+  if (city === null || city === undefined || city === '') return null;
+  if (state === null || state === undefined || state === '') return null;
   if (detectStateInCity(city)) return city;
 
   return `${city}, ${state}`;
@@ -160,6 +159,7 @@ const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
   return null;
 };
 
+// eslint-disable-next-line consistent-return
 const getChatName = (usernames, me) => {
   if (!usernames) {
     return 'No Name';
@@ -180,7 +180,6 @@ const getChatName = (usernames, me) => {
   if (userArraysWithoutMe.length === 1) {
     return userArraysWithoutMe[0].trim();
   }
-  return 'No name';
 };
 
 const getGroupMemberCount = (channel) => Object.keys(channel?.state?.members).length;
@@ -261,7 +260,10 @@ const getSingularOrPluralText = (number, singularText, pluralText) => {
  * @param {Any} navigation
  * @returns
  */
-const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topics = []) => {
+const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topics, item) => {
+  if (!topics || !Array.isArray(topics)) {
+    topics = [];
+  }
   const topicWithPrefix = idParams;
   const id = removePrefixTopic(topicWithPrefix);
   const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/;
@@ -272,12 +274,26 @@ const getCaptionWithTopicStyle = (idParams, text, navigation, substringEnd, topi
   substringEnd = Math.round(substringEnd);
   text = reactStringReplace(text, topicRegex, (match) => {
     if (topics?.indexOf(match?.replace('#', '')) > -1)
-      return <TopicText navigation={navigation} text={match} currentTopic={id} />;
+      return (
+        <TopicText
+          item={item}
+          goToDetailPage={true}
+          navigation={navigation}
+          text={match}
+          currentTopic={id}
+        />
+      );
     return match;
   });
 
   text = reactStringReplace(text, validationTextHasAt, (match) => (
-    <TaggingUserText navigation={navigation} text={match} currentTopic={id} />
+    <TaggingUserText
+      item={item}
+      goToDetailPage={true}
+      navigation={navigation}
+      text={match}
+      currentTopic={id}
+    />
   ));
   return text;
 };
@@ -329,5 +345,7 @@ export {
   sanitizeUrl,
   getDurationTimeText,
   isLocationMatch,
+  getHourText,
+  getMinuteText,
   styles
 };

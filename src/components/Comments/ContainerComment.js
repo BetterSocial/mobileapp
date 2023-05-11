@@ -35,7 +35,7 @@ const ContainerComment = ({
 
   const onCommentLongPressed = async (item, level = 0) => {
     const selfId = await getUserId();
-    if (selfId === item?.user_id) {
+    if (selfId === item?.user_id || item.is_you) {
       setSelectedCommentForDelete(item);
       setSelectedCommentLevelForDelete(level);
       Alert.alert('', StringConstant.feedDeleteCommentConfirmation, [
@@ -86,6 +86,7 @@ const ContainerComment = ({
                       indexFeed
                     })
                   }
+                  onLongPress={onCommentLongPressed}
                   // refreshComment={refreshComment}
                   findCommentAndUpdate={findCommentAndUpdate}
                 />
