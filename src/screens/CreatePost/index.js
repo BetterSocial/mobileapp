@@ -202,7 +202,7 @@ const CreatePost = () => {
       setPrivacySelect(privacyId);
     }
     const durationId = await getDurationId();
-    if (durationId) {
+    if (durationId != null || durationId !== undefined) {
       setExpiredSelect(durationId);
     }
 
@@ -409,7 +409,6 @@ const CreatePost = () => {
   };
 
   const onSaveTopic = (v, topicChat) => {
-    console.log(v, topicChat, 'hellop');
     setListTopic(v);
     setHashtags(v);
     setListTopicChat(topicChat);
@@ -490,8 +489,6 @@ const CreatePost = () => {
     }
 
     try {
-      console.log('data');
-      console.log(data);
       await createPost(data);
       handleTopicChat();
       showMessage({
