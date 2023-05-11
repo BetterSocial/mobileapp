@@ -33,6 +33,9 @@ import {setCapitalFirstLetter} from '../../utils/Utils';
 import {setImage, setUsername} from '../../context/actions/users';
 import {verifyUsername} from '../../service/users';
 
+const MAXIMUM_USERNAME_LENGTH = 19;
+const MINIMUM_USERNAME_LENGTH = 3;
+
 const ChooseUsername = () => {
   const navigation = useNavigation();
   const bottomSheetChooseImageRef = React.useRef();
@@ -43,13 +46,16 @@ const ChooseUsername = () => {
 
   const verifyUsernameDebounce = React.useCallback(
     _.debounce(async (text) => {
+      if (text?.length < MINIMUM_USERNAME_LENGTH) return setTypeFetch('min');
+      if (text?.length > MAXIMUM_USERNAME_LENGTH) return setTypeFetch('max');
       const user = await verifyUsername(text);
-      setTypeFetch('max');
-      if (user.data && text.length > 2) {
-        setTypeFetch('notavailable');
-      } else {
-        setTypeFetch('available');
+      console.log('user');
+      console.log(user);
+      if (user.data) {
+        return setTypeFetch('notavailable');
       }
+
+      return setTypeFetch('available');
     }, 500),
     []
   );
@@ -120,11 +126,12 @@ const ChooseUsername = () => {
   };
 
   const checkUsername = async (v) => {
+    verifyUsernameDebounce.cancel();
     const value = v.replace(/[^a-zA-Z0-9-_]/g, '');
     setTypeFetch('typing');
     setUsernameState(value);
-    if (value.length <= 15) {
-      if (value.length > 2) {
+    if (value.length <= MAXIMUM_USERNAME_LENGTH) {
+      if (value.length >= MINIMUM_USERNAME_LENGTH) {
         if (!Number.isNaN(v)) {
           setTypeFetch('fetch');
           verifyUsernameDebounce(value);
@@ -155,7 +162,7 @@ const ChooseUsername = () => {
 
   // eslint-disable-next-line consistent-return
   const next = () => {
-    if (username && username.length > 2 && typeFetch === 'available') {
+    if (username && username.length >= MINIMUM_USERNAME_LENGTH && typeFetch === 'available') {
       setUsername(username, dispatch);
       navigation.navigate('LocalCommunity');
     } else {
@@ -167,7 +174,7 @@ const ChooseUsername = () => {
         });
       }
 
-      if (username.length <= 2) {
+      if (username.length < MINIMUM_USERNAME_LENGTH) {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelMinimumChar,
           type: 'danger',
@@ -175,7 +182,7 @@ const ChooseUsername = () => {
         });
       }
 
-      if (username.length > 15) {
+      if (username.length > MAXIMUM_USERNAME_LENGTH) {
         return showMessage({
           message: StringConstant.onboardingChooseUsernameLabelMaximumChar,
           type: 'danger',
@@ -200,6 +207,11 @@ const ChooseUsername = () => {
       }
     }
   };
+
+  const isNextButtonDisabled = () => {
+    return typeFetch !== 'available';
+  };
+
   const messageTypeFetch = (type, user) => {
     switch (type) {
       case 'fetch':
@@ -307,7 +319,7 @@ const ChooseUsername = () => {
           <Text style={styles.textSmall}>
             No matter your username, you can always post anonymously
           </Text>
-          <Button onPress={() => next()}>
+          <Button disabled={isNextButtonDisabled()} onPress={() => next()}>
             {StringConstant.onboardingChooseUsernameButtonStateNext}
           </Button>
         </View>
