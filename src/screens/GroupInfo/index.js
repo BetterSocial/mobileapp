@@ -201,24 +201,26 @@ const GroupInfo = () => {
             />
           </View>
           <View style={styles.gap} />
-          <View style={styles.actionGroup}>
-            <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
-              <View style={styles.imageActContainer}>
-                <FastImage style={styles.imageAction} source={ExitGroup} />
-              </View>
-              <View>
-                <Text style={styles.textAct}>Exit Group</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonGroup}>
-              <View style={styles.imageActContainer}>
-                <FastImage style={styles.imageAction} source={ReportGroup} />
-              </View>
-              <View>
-                <Text style={styles.textAct}>Report Group</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+          {channelState?.channel.data.type === 'group' ? (
+            <View style={styles.actionGroup}>
+              <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
+                <View style={styles.imageActContainer}>
+                  <FastImage style={styles.imageAction} source={ExitGroup} />
+                </View>
+                <View>
+                  <Text style={styles.textAct}>Exit Group</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonGroup}>
+                <View style={styles.imageActContainer}>
+                  <FastImage style={styles.imageAction} source={ReportGroup} />
+                </View>
+                <View>
+                  <Text style={styles.textAct}>Report Group</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </SafeAreaView>
       </ScrollView>
       {channelState?.channel.data.type === 'group' && (
