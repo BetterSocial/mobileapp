@@ -114,8 +114,8 @@ const ChannelListScreen = ({navigation}) => {
   };
 
   const customPreviewTitle = (props) => {
-    let {name} = props.channel?.data;
-    const {id} = props.channel?.data;
+    let {name} = props?.channel?.data || {};
+    const {id} = props?.channel?.data || {};
     if (name?.toLowerCase() === 'us' && id?.toLowerCase() === 'us') name = 'United States';
     return (
       <View style={{paddingRight: 12}}>
