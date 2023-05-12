@@ -136,7 +136,7 @@ const GroupInfo = () => {
   React.useEffect(() => {
     getMembersList();
   }, []);
-
+  console.log(openModal, 'laka');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />

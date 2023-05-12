@@ -203,6 +203,8 @@ const useGroupInfo = () => {
   };
 
   const openChatMessage = async () => {
+    navigation.push('ChatDetailPage', {channel});
+
     const members = [profile.myProfile.user_id];
     members.push(selectedUser.user_id);
     const filter = {type: 'messaging', members: {$eq: members}};
@@ -211,6 +213,7 @@ const useGroupInfo = () => {
       user_id: item,
       channel_role: 'channel_moderator'
     }));
+
     const filterMessage = await client.client.queryChannels(filter, sort, {
       watch: true, // this is the default
       state: true
@@ -229,8 +232,6 @@ const useGroupInfo = () => {
       setChannel(channelChat, dispatchChannel);
     }
     setOpenModal(false);
-
-    navigation.push('ChatDetailPage', {channel});
   };
 
   const alertRemoveUser = async (status) => {
@@ -288,12 +289,29 @@ const useGroupInfo = () => {
     }
   };
 
+  // eslint-disable-next-line consistent-return
   const handlePressContact = (item) => {
     if (channelState?.channel.data.type === 'group') {
       handleSelectUser(item);
       return true;
     }
-    return null;
+    handleOpenProfile(item);
+  };
+
+  const handleOpenProfile = (item) => {
+    if (profile.myProfile.user_id === item.user_id) {
+      navigation.navigate('ProfileScreen', {
+        isNotFromHomeTab: true
+      });
+    }
+
+    navigation.navigate('OtherProfile', {
+      data: {
+        user_id: profile.myProfile.user_id,
+        other_id: item.user_id,
+        username: item.user.name
+      }
+    });
   };
 
   return {
