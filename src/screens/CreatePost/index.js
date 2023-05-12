@@ -201,7 +201,7 @@ const CreatePost = () => {
       setPrivacySelect(privacyId);
     }
     const durationId = await getDurationId();
-    if (durationId != null || durationId !== undefined) {
+    if (durationId !== null && durationId !== undefined) {
       setExpiredSelect(durationId);
     }
 
