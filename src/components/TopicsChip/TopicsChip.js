@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
   topicContainerPdp: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: '100%'
-    // marginLeft: 16
+    width: '100%',
+    marginLeft: 5
   },
   topicItemContainer: {
     backgroundColor: colors.lightgrey,

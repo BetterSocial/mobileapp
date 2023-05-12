@@ -4,11 +4,21 @@ import {StyleSheet, Text} from 'react-native';
 import {fonts} from '../../utils/fonts';
 import {COLORS} from '../../utils/theme';
 
-const TopicText = ({text, navigation = null, currentTopic = null}) => {
+const TopicText = ({text, navigation = null, currentTopic = null, goToDetailPage, item}) => {
   const onClick = () => {
     // Do navigation here
-    if (!navigation || currentTopic === text.replace('#', '')) return;
-    navigation.push('TopicPageScreen', {id: `topic_${text.replace('#', '').toLowerCase()}`});
+    if (goToDetailPage && navigation) {
+      return navigation.push('PostDetailPage', {
+        // index: index,
+        isalreadypolling: item.isalreadypolling,
+        feedId: item.id,
+        // refreshParent:  getDataFeedsHandle,
+        data: item,
+        isCaching: false
+      });
+    }
+    if (!navigation || currentTopic === text.replace('#', '')) return null;
+    return navigation.push('TopicPageScreen', {id: `topic_${text.replace('#', '').toLowerCase()}`});
   };
 
   return (

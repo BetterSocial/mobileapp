@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SimpleToast from 'react-native-simple-toast';
-import {Alert, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {Alert, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import ButtonHightlight from '../ButtonHighlight';
@@ -14,6 +14,7 @@ import usePostContextHook, {CONTEXT_SOURCE} from '../../hooks/usePostContextHook
 import {colors} from '../../utils/colors';
 import {deleteComment} from '../../service/comment';
 import {getUserId} from '../../utils/users';
+import usePostDetail from '../PostPageDetail/hooks/usePostDetail';
 
 const ContainerComment = ({
   feedId,
@@ -24,15 +25,15 @@ const ContainerComment = ({
   navigateToReplyView,
   findCommentAndUpdate,
   updateParentPost = () => {},
-  contextSource = CONTEXT_SOURCE.FEEDS
+  contextSource = CONTEXT_SOURCE.FEEDS,
+  itemParent
 }) => {
   const navigation = useNavigation();
   const [, setSelectedCommentForDelete] = React.useState(null);
   const [selectedCommentLevelForDelete, setSelectedCommentLevelForDelete] = React.useState(0);
   const {isLast, isLastInParent, hideLeftConnector} = useContainerComment();
-
+  const {calculationText, calculatedSizeScreen} = usePostDetail();
   const {deleteCommentFromContext} = usePostContextHook(contextSource);
-
   const onCommentLongPressed = async (item, level = 0) => {
     const selfId = await getUserId();
     if (selfId === item?.user_id) {
@@ -62,51 +63,66 @@ const ContainerComment = ({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.lineBeforeProfile} />
-      {comments.map((item, index) => (
-        <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item, 0)}>
-          <View>
-            <View key={`p${index}`}>
-              {item.user ? (
-                <Comment
+    <View style={[styles.container]}>
+      <View
+        style={{
+          minHeight:
+            Dimensions.get('window').height -
+            calculatedSizeScreen -
+            calculationText(itemParent?.message, itemParent?.post_type, itemParent?.images_url)
+              .containerHeight,
+          borderLeftWidth: 1,
+          borderLeftColor: '#C4C4C4',
+          marginTop: 2
+        }}>
+        <View style={styles.lineBeforeProfile} />
+
+        {comments.map((item, index) => (
+          <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item, 0)}>
+            <View>
+              <View key={`p${index}`}>
+                {item.user ? (
+                  <Comment
+                    indexFeed={indexFeed}
+                    key={`p${index}`}
+                    comment={item}
+                    user={item.user}
+                    level={0}
+                    time={item.created_at}
+                    photo={item.user.data && item.user.data.profile_pic_url}
+                    isLast={isLast(index, item, comments)}
+                    isLastInParent={isLastInParent(index, comments)}
+                    showLeftConnector={false}
+                    onPress={() =>
+                      navigateToReplyView({
+                        item,
+                        level: 0,
+                        indexFeed
+                      })
+                    }
+                    // refreshComment={refreshComment}
+                    findCommentAndUpdate={findCommentAndUpdate}
+                  />
+                ) : null}
+              </View>
+              {item?.children_counts?.comment > 0 && (
+                <ReplyComment
+                  hideLeftConnector={hideLeftConnector(index, item, comments)}
+                  data={item.latest_children.comment}
+                  countComment={item.children_counts.comment}
+                  navigation={navigation}
                   indexFeed={indexFeed}
-                  key={`p${index}`}
-                  comment={item}
-                  user={item.user}
-                  level={0}
-                  time={item.created_at}
-                  photo={item.user.data && item.user.data.profile_pic_url}
-                  isLast={isLast(index, item, comments)}
-                  isLastInParent={isLastInParent(index, comments)}
-                  onPress={() =>
-                    navigateToReplyView({
-                      item,
-                      level: 0,
-                      indexFeed
-                    })
-                  }
-                  // refreshComment={refreshComment}
+                  navigateToReplyView={navigateToReplyView}
+                  // refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
                   findCommentAndUpdate={findCommentAndUpdate}
+                  onCommentLongPressed={onCommentLongPressed}
                 />
-              ) : null}
+              )}
             </View>
-            {item?.children_counts?.comment > 0 && (
-              <ReplyComment
-                hideLeftConnector={hideLeftConnector(index, item, comments)}
-                data={item.latest_children.comment}
-                countComment={item.children_counts.comment}
-                navigation={navigation}
-                indexFeed={indexFeed}
-                navigateToReplyView={navigateToReplyView}
-                // refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
-                findCommentAndUpdate={findCommentAndUpdate}
-                onCommentLongPressed={onCommentLongPressed}
-              />
-            )}
-          </View>
-        </TouchableWithoutFeedback>
-      ))}
+          </TouchableWithoutFeedback>
+        ))}
+      </View>
+
       {isLoading ? <LoadingComment /> : null}
     </View>
   );
@@ -184,12 +200,10 @@ export const styles = StyleSheet.create({
     paddingRight: 8
   },
   lineBeforeProfile: {
-    height: 8.5,
-    borderLeftWidth: 1,
-    borderLeftColor: '#C4C4C4'
+    height: 8.5
   },
   containerReply: {
-    borderLeftWidth: 1
+    // borderLeftWidth: 1
   },
   seeRepliesContainer: (isLast) => ({
     display: 'flex',
