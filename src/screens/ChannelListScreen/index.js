@@ -114,7 +114,9 @@ const ChannelListScreen = ({navigation}) => {
   };
 
   const customPreviewTitle = (props) => {
-    const {name} = props.channel?.data;
+    let {name} = props?.channel?.data || {};
+    const {id} = props?.channel?.data || {};
+    if (name?.toLowerCase() === 'us' && id?.toLowerCase() === 'us') name = 'United States';
     return (
       <View style={{paddingRight: 12}}>
         <ChannelPreviewTitle displayName={getChatName(name, profile.myProfile.username)} />
