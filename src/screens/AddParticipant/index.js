@@ -4,6 +4,7 @@ import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 
 import HeaderContact from '../../components/Header/HeaderContact';
+import Label from '../ContactScreen/elements/Label';
 import Memo_ic_info from '../../assets/icons/ic_info';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
@@ -14,6 +15,7 @@ import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {userPopulate} from '../../service/users';
 
 const {width} = Dimensions.get('screen');
+const VIEW_TYPE_LABEL = 1;
 const VIEW_TYPE_DATA = 2;
 
 const AddParticipant = ({navigation, route}) => {
@@ -64,14 +66,18 @@ const AddParticipant = ({navigation, route}) => {
       const dProvider = new DataProvider((row1, row2) => row1 !== row2);
       setLayoutProvider(
         new LayoutProvider(
-          () => {
-            if (users.length < 1) {
-              return 0;
-            }
+          (index) => {
+            if (users.length < 1) return 0;
+            if (users[index]?.viewtype === 'label') return VIEW_TYPE_LABEL;
+
             return VIEW_TYPE_DATA;
           },
           (type, dim) => {
             switch (type) {
+              case VIEW_TYPE_LABEL:
+                dim.width = width;
+                dim.height = 40;
+                break;
               case VIEW_TYPE_DATA:
                 dim.width = width;
                 dim.height = 72;
@@ -157,7 +163,11 @@ const AddParticipant = ({navigation, route}) => {
       const dataFilter = users.filter((item) => {
         return item?.username?.toLowerCase()?.includes(text?.toLowerCase());
       });
-      setUsers(dataFilter);
+      if (dataFilter.length < 1) {
+        setUsers([{viewtype: 'label', label: 'No users found'}]);
+      } else {
+        setUsers(dataFilter);
+      }
     } else {
       setUsers(cacheUser);
     }
@@ -169,14 +179,19 @@ const AddParticipant = ({navigation, route}) => {
   };
 
   const rowRenderer = (type, item, index, extendedState) => {
-    return (
-      <ProfileContact
-        select={extendedState.followed.includes(item.user_id)}
-        fullname={item.username}
-        onPress={() => onUserSelected(item)}
-        photo={item.profile_pic_path}
-      />
-    );
+    switch (type) {
+      case VIEW_TYPE_LABEL:
+        return <Label containerBgColor="#FFF" label={item?.label} />;
+      default:
+        return (
+          <ProfileContact
+            select={extendedState.followed.includes(item.user_id)}
+            fullname={item.username}
+            onPress={() => onUserSelected(item)}
+            photo={item.profile_pic_path}
+          />
+        );
+    }
   };
 
   return (
