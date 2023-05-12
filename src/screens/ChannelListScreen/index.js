@@ -141,7 +141,6 @@ const ChannelListScreen = ({navigation}) => {
 
   // eslint-disable-next-line consistent-return
   const onSelectChat = (channel, refreshList) => {
-    console.log(channel, 'yoko')
     if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
       return navigation.navigate('TopicPageScreen', {id: channel.data.id, refreshList});
     }
