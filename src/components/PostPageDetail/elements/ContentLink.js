@@ -15,6 +15,7 @@ import {COLORS} from '../../../utils/theme';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
 import {smartRender} from '../../../utils/Utils';
 import useContentFeed from '../../../screens/FeedScreen/hooks/useContentFeed';
+import usePostDetail from '../hooks/usePostDetail';
 
 const FONT_SIZE_TEXT = 14;
 
@@ -36,15 +37,34 @@ const ContentLink = ({
 
   const sanitizeUrl = message.replace(/(https?:\/\/)?([^.\s]+)?[^.\s]+\.[^\s]+/gi, '').trim();
   const {hashtagAtComponent} = useContentFeed({navigation});
+  const {calculationText} = usePostDetail();
   const renderMessageContentLink = () => {
     if (sanitizeUrl?.length === 0) return <></>;
     return (
-      <View style={{...styles.messageContainer, ...messageContainerStyle}}>
-        <Text style={styles.message}>
-          {!isPostDetail ? hashtagAtComponent(sanitizeUrl, 50) : hashtagAtComponent(sanitizeUrl)}
-          {!isPostDetail && message.length > 50 && <Text style={{color: '#2F80ED'}}> More...</Text>}
-          {/* {hashtagAtComponent(sanitizeUrl)} */}
-        </Text>
+      <View
+        style={{
+          ...styles.messageContainer,
+          ...messageContainerStyle,
+          paddingLeft: isPostDetail ? 12 : 0,
+          height: calculationText(hashtagAtComponent(sanitizeUrl)).containerHeight
+        }}>
+        {!isPostDetail ? (
+          <Text tyle={[styles.message]}>
+            {hashtagAtComponent(sanitizeUrl, 50)}{' '}
+            {message.length > 50 && <Text style={{color: '#2F80ED'}}> More...</Text>}{' '}
+          </Text>
+        ) : (
+          <Text
+            style={[
+              styles.message,
+              {
+                fontSize: calculationText(sanitizeUrl).fontSize,
+                lineHeight: calculationText(sanitizeUrl).lineHeight
+              }
+            ]}>
+            {hashtagAtComponent(sanitizeUrl)}
+          </Text>
+        )}
       </View>
     );
   };
@@ -52,8 +72,8 @@ const ContentLink = ({
   return (
     <>
       <ScrollView
-        style={styles.contentFeed}
-        contentContainerStyle={{flexGrow: 1, paddingBottom: 100}}
+        style={[styles.contentFeed]}
+        contentContainerStyle={{flexGrow: 1}}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         <TouchableNativeFeedback
@@ -92,16 +112,9 @@ export default ContentLink;
 const styles = StyleSheet.create({
   contentFeed: {
     flex: 1,
-    // marginTop: SIZES.base,
     marginHorizontal: 6,
-    backgroundColor: COLORS.white
-    // maxHeight: dimen.size.FEED_CONTENT_LINK_MAX_HEIGHT,
-  },
-  messageContainer: {
-    paddingHorizontal: 20
-    // paddingBottom: 15,
-    // paddingTop: 7
-    // backgroundColor: 'red'
+    backgroundColor: COLORS.white,
+    paddingTop: 5
   },
   message: {
     fontFamily: fonts.inter[400],

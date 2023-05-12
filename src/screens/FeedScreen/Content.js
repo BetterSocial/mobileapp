@@ -9,7 +9,7 @@ import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
 import useContentFeed from './hooks/useContentFeed';
-import {COLORS} from '../../utils/theme';
+import {COLORS, SIZES} from '../../utils/theme';
 import {POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
@@ -30,7 +30,7 @@ const Content = ({
   const route = useRoute();
   const devHeight = Dimensions.get('screen').height;
   const substringPostImage = devHeight / 2.25 - 40 * 4;
-  const substringNoImageNoTopic = devHeight / 1.6 - 40 * 4;
+  const substringNoImageNoTopic = devHeight / 1.6 - 40 * 5;
   const substringNoImageTopic = devHeight / 1.6 - 40 * 7;
   const {hashtagAtComponent} = useContentFeed({navigation});
 
@@ -54,7 +54,8 @@ const Content = ({
               message,
               navigation,
               substringPostImage,
-              item?.topics
+              item?.topics,
+              item
             )}{' '}
             {message.length > substringPostImage ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
@@ -72,7 +73,8 @@ const Content = ({
               message,
               navigation,
               substringNoImageTopic,
-              item?.topics
+              item?.topics,
+              item
             )}{' '}
             {message.length > substringNoImageTopic ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
@@ -85,7 +87,8 @@ const Content = ({
               message,
               navigation,
               substringNoImageNoTopic,
-              item?.topics
+              item?.topics,
+              item
             )}{' '}
             {message.length > substringNoImageNoTopic ? (
               <Text style={{color: '#2F80ED'}}>More...</Text>
@@ -103,7 +106,10 @@ const Content = ({
       </View>
       {item && item.post_type === POST_TYPE_POLL ? (
         <View style={styles.containerMainText}>
-          <Text style={styles.textMedia}>{hashtagAtComponent(message)}</Text>
+          <Text style={styles.textMedia}>
+            {hashtagAtComponent(message, 100)}{' '}
+            {message.length > 100 ? <Text style={{color: '#2F80ED'}}>More...</Text> : null}{' '}
+          </Text>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
@@ -209,7 +215,7 @@ export const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    marginTop: 0
+    marginTop: SIZES.base
   },
   textContentFeed: {
     fontFamily: fonts.inter[400],

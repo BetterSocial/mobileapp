@@ -247,7 +247,7 @@ const FeedScreen = (props) => {
         renderItem={renderItem}
         onEndReachedThreshold={0.9}
       />
-      <ButtonNewPost />
+      <ButtonNewPost onRefresh={onRefresh} />
       <BlockComponent
         ref={refBlockComponent}
         refresh={onBlockCompletedHandle}
