@@ -49,8 +49,6 @@ const ChooseUsername = () => {
       if (text?.length < MINIMUM_USERNAME_LENGTH) return setTypeFetch('min');
       if (text?.length > MAXIMUM_USERNAME_LENGTH) return setTypeFetch('max');
       const user = await verifyUsername(text);
-      console.log('user');
-      console.log(user);
       if (user.data) {
         return setTypeFetch('notavailable');
       }
