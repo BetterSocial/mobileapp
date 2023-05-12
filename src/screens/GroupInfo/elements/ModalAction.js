@@ -11,8 +11,8 @@ const ModalAction = (props) => {
       useNativeDriver={true}
       useNativeDriverForBackdrop={true}
       onBackdropPress={onCloseModal}
-      animationIn={'fadeIn'}
-      animationOut={'fadeOut'}
+      // animationIn={'slideInUp'}
+      // animationOut={'slideInDown'}
       {...props}>
       <View style={styles.modalContainer}>
         <TouchableOpacity
@@ -20,11 +20,11 @@ const ModalAction = (props) => {
           style={styles.buttonStyle}>
           <Text style={styles.textButton}>Message {name}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onPress('remove')} style={styles.buttonStyle}>
-          <Text style={styles.textButton}>Remove {name} </Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => onPress('view')} style={styles.buttonStyle}>
           <Text style={styles.textButton}>View {name}&apos;s Profile </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => onPress('remove')} style={styles.buttonStyle}>
+          <Text style={styles.textButton}>Remove {name} </Text>
         </TouchableOpacity>
       </View>
     </Modal>
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ModalAction;
+export default React.memo(ModalAction);

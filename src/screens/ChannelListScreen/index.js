@@ -6,7 +6,7 @@ import {ActivityIndicator, ScrollView, StatusBar, StyleSheet, View} from 'react-
 import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useRecoilState, useRecoilValue} from 'recoil';
-
+import Toast from 'react-native-simple-toast';
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
@@ -137,13 +137,13 @@ const ChannelListScreen = ({navigation}) => {
 
   const chatBadge = (props) => <CustomPreviewUnreadCount {...props} />;
 
+  // eslint-disable-next-line consistent-return
   const onSelectChat = (channel, refreshList) => {
-    console.log(channel, 'yoko')
     if (channel.data.channel_type === CHANNEL_TYPE_TOPIC) {
       return navigation.navigate('TopicPageScreen', {id: channel.data.id, refreshList});
     }
     if (channel.data.type_channel === 'system') {
-      return null;
+      return Toast.show(channel.state.messages[0]?.text, Toast.LONG);
     }
     setChannel(channel, dispatch);
     // ChannelScreen | ChatDetailPage
