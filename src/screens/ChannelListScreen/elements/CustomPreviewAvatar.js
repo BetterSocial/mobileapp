@@ -128,8 +128,8 @@ export default React.memo(
 const styles = StyleSheet.create({
   image: {
     width: 48,
-    height: 48
-    // borderRadius: 24,
+    height: 48,
+    borderRadius: 24
     // marginLeft: 8,
   },
   defaultGroupImage: {
