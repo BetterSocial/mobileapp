@@ -27,6 +27,7 @@ describe('SringUtils should be run correctly', () => {
 
     const expiredHourse = moment().subtract('hours', 2);
     const expiredDays = moment().subtract('day', 2);
+    const minute = moment().add(40, 'minute');
     expect(getPollTime(hours)).toEqual('1h 59m left');
     expect(getPollTime(days)).toEqual('1d left');
     expect(getPollTime(minutes)).toEqual('1m left');
