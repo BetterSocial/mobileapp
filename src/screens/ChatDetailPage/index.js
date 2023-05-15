@@ -12,7 +12,7 @@ import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
 import {fonts} from '../../utils/fonts';
-import {setAsset, setParticipants} from '../../context/actions/groupChat';
+import {setAsset} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {setChannel} from '../../context/actions/setChannel';
@@ -22,6 +22,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import {useRecoilState} from 'recoil';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
+import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 
 const streami18n = new Streami18n({
   language: 'en'
@@ -34,6 +35,7 @@ const ChatDetailPage = ({route}) => {
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
   const [checkFollowing, setCheckFollowing] = React.useState(false);
+  const {getMembersList} = useGroupInfo();
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -68,6 +70,13 @@ const ChatDetailPage = ({route}) => {
       console.log(e, 'eman');
     }
   };
+
+  React.useEffect(() => {
+    if(channelClient) {
+      getMembersList()
+    }
+  }, [channelClient])
+
   React.useEffect(() => {
     if (clients && route.params && !channelClient.client) {
       handleChannelClient();
@@ -76,7 +85,6 @@ const ChatDetailPage = ({route}) => {
 
   React.useEffect(() => {
     return () => {
-      console.log(route, 'sinar');
       if (route.params.channel) {
         setChannel(route.params.channel, dispatchChannel);
       }
@@ -119,7 +127,6 @@ const ChatDetailPage = ({route}) => {
   }, []);
   React.useEffect(() => {
     searchUserMessages(channelClient.channel?.cid);
-    setParticipants(channelClient.channel?.state?.members, dispatch);
   }, [clients.client]);
   const searchUserMessages = async (channelID) => {
     const messages = await clients.client.search(
