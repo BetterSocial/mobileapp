@@ -161,7 +161,6 @@ const useGroupInfo = () => {
   };
 
   const handleCloseSelectUser = async () => {
-    // await setSelectedUser(null);
     setOpenModal(false);
   };
   const onRemoveUser = async () => {
@@ -250,7 +249,7 @@ const useGroupInfo = () => {
     }
 
     if (status === 'message') {
-      checkUserIsBlockHandle();
+      await checkUserIsBlockHandle();
     }
   };
   const onLeaveGroup = () => {
@@ -292,15 +291,16 @@ const useGroupInfo = () => {
   };
 
   // eslint-disable-next-line consistent-return
-  const handlePressContact = (item) => {
+  const handlePressContact = async (item) => {
     if (channelState?.channel.data.type === 'group') {
-      handleSelectUser(item);
+      await handleSelectUser(item);
       return true;
     }
     handleOpenProfile(item);
   };
 
-  const handleOpenProfile = (item) => {
+  const handleOpenProfile = async (item) => {
+    await setOpenModal(false);
     if (profile.myProfile.user_id === item.user_id) {
       navigation.navigate('ProfileScreen', {
         isNotFromHomeTab: true

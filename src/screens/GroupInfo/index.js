@@ -132,11 +132,13 @@ const GroupInfo = () => {
     }
     return null;
   };
-
+  const handleMember = async () => {
+    await getMembersList();
+  };
   React.useEffect(() => {
-    getMembersList();
+    handleMember();
   }, []);
-  console.log(openModal, 'laka');
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
