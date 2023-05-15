@@ -176,7 +176,8 @@ const useGroupInfo = () => {
       const channelChat = await client.client.channel('system', generatedChannelId, {
         name: channelState?.channel?.data.name,
         type_channel: 'system',
-        channel_type: 2
+        channel_type: 2,
+        image: channelState.channel.data.image
       });
       await channel.sendMessage(
         {
@@ -204,11 +205,6 @@ const useGroupInfo = () => {
   };
 
   const openChatMessage = async () => {
-    await setOpenModal(false);
-    setTimeout(() => {
-      navigation.push('ChatDetailPage', {channel});
-    }, 150);
-
     const members = [profile.myProfile.user_id];
     members.push(selectedUser.user_id);
     const filter = {type: 'messaging', members: {$eq: members}};
@@ -217,11 +213,14 @@ const useGroupInfo = () => {
       user_id: item,
       channel_role: 'channel_moderator'
     }));
+    await setOpenModal(false);
 
     const filterMessage = await client.client.queryChannels(filter, sort, {
       watch: true, // this is the default
       state: true
     });
+    navigation.push('ChatDetailPage', {channel});
+
     const generatedChannelId = generateRandomId();
 
     if (filterMessage.length > 0) {
@@ -308,7 +307,7 @@ const useGroupInfo = () => {
         navigation.navigate('ProfileScreen', {
           isNotFromHomeTab: true
         });
-      }, 150);
+      }, 250);
     }
 
     navigation.navigate('OtherProfile', {
