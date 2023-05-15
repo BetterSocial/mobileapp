@@ -31,7 +31,6 @@ const useGroupInfo = () => {
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
-  const [isBlock, setIsBlock] = React.useState(null);
   const serializeMembersList = (result = []) => {
     if (!result) {
       return {};
@@ -50,7 +49,6 @@ const useGroupInfo = () => {
   const getMembersList = async () => {
     try {
       const result = await channel.queryMembers({});
-      console.log(result, 'honey')
       setNewParticipan(result.members);
       setParticipants(result.members, groupPatchDispatch);
 
@@ -67,21 +65,7 @@ const useGroupInfo = () => {
   };
 
   const chatName = getChatName(username, profile.myProfile.username);
-  const onProfilePressed = () => {
-    if (profile.myProfile.user_id === selectedUser.user_id) {
-      navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
-    }
 
-    navigation.navigate('OtherProfile', {
-      data: {
-        user_id: profile.myProfile.user_id,
-        other_id: selectedUser.user_id,
-        username: selectedUser.user.name
-      }
-    });
-  };
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
@@ -91,26 +75,18 @@ const useGroupInfo = () => {
   };
   // eslint-disable-next-line consistent-return
   const checkUserIsBlockHandle = async () => {
-    if (isBlock) {
-      onProfilePressed();
-    }
-    if (isBlock !== null) {
-      openChatMessage();
-    }
-  };
-  const checkStatusBlock = async (user) => {
     try {
       const sendData = {
-        user_id: user.user_id
+        user_id: selectedUser.user_id
       };
       const processGetBlock = await checkUserBlock(sendData);
 
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
-        return setIsBlock(false);
+        return openChatMessage();
       }
-      setIsBlock(true);
+      return handleOpenProfile(selectedUser);
     } catch (e) {
-      setIsBlock(null);
+      console.log(e, 'eman');
     }
   };
 
@@ -170,7 +146,6 @@ const useGroupInfo = () => {
   const handleSelectUser = async (user) => {
     if (user.user_id === profile.myProfile.user_id) return;
     await setSelectedUser(user);
-    await checkStatusBlock(user);
     setOpenModal(true);
   };
 
@@ -178,14 +153,14 @@ const useGroupInfo = () => {
     setOpenModal(false);
   };
   const onRemoveUser = async () => {
-    setOpenModal(false);
-
     try {
       const result = await channel.removeMembers([selectedUser.user_id]);
       const updateParticipant = newParticipant.filter(
         (participant) => participant.user_id !== selectedUser.user_id
       );
       setNewParticipan(updateParticipant);
+      setParticipants(updateParticipant, groupPatchDispatch);
+      setOpenModal(false);
       const generatedChannelId = generateRandomId();
       const channelChat = await client.client.channel('system', generatedChannelId, {
         name: channelState?.channel?.data.name,
@@ -228,9 +203,8 @@ const useGroupInfo = () => {
       user_id: item,
       channel_role: 'channel_moderator'
     }));
-    await setOpenModal(false);
     navigation.push('ChatDetailPage', {channel});
-
+    await setOpenModal(false);
     const filterMessage = await client.client.queryChannels(filter, sort, {
       watch: true, // this is the default
       state: true
@@ -254,7 +228,7 @@ const useGroupInfo = () => {
   const alertRemoveUser = async (status) => {
     if (status === 'view') {
       setOpenModal(false);
-      onProfilePressed();
+      handleOpenProfile(selectedUser);
     }
     if (status === 'remove') {
       Alert.alert(
@@ -354,7 +328,6 @@ const useGroupInfo = () => {
     createChat,
     countUser,
     getMembersList,
-    onProfilePressed,
     handleOnNameChange,
     handleOnImageClicked,
     uploadImageBase64,
