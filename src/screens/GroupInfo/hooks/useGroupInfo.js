@@ -164,12 +164,15 @@ const useGroupInfo = () => {
     // await setSelectedUser(null);
     setOpenModal(false);
   };
-
   const onRemoveUser = async () => {
     setOpenModal(false);
 
     try {
       const result = await channel.removeMembers([selectedUser.user_id]);
+      const updateParticipant = newParticipant.filter(
+        (participant) => participant.user_id !== selectedUser.user_id
+      );
+      setNewParticipan(updateParticipant);
       const generatedChannelId = generateRandomId();
       const channelChat = await client.client.channel('system', generatedChannelId, {
         name: channelState?.channel?.data.name,
@@ -202,6 +205,7 @@ const useGroupInfo = () => {
   };
 
   const openChatMessage = async () => {
+    await setOpenModal(false);
     navigation.push('ChatDetailPage', {channel});
 
     const members = [profile.myProfile.user_id];
@@ -230,7 +234,6 @@ const useGroupInfo = () => {
       await channelChat.addMembers(memberWithRoles);
       setChannel(channelChat, dispatchChannel);
     }
-    setOpenModal(false);
   };
 
   const alertRemoveUser = async (status) => {
