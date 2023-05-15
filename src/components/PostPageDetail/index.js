@@ -579,8 +579,6 @@ const PostPageDetailIdComponent = (props) => {
     return minHeight > heightC ? heightC : minHeight;
   };
 
-  const saveCurHeight = (w, h) => setCurHeight(h);
-  console.log(curHeight, 'lisa');
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
