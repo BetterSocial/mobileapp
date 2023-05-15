@@ -10,6 +10,7 @@ import {requestExternalStoragePermission} from '../../../utils/permission';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {setChannel} from '../../../context/actions/setChannel';
 import {checkUserBlock} from '../../../service/profile';
+import { setParticipants } from '../../../context/actions/groupChat';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -30,6 +31,7 @@ const useGroupInfo = () => {
   const [newParticipant, setNewParticipan] = React.useState([]);
   const [openModal, setOpenModal] = React.useState(false);
   const [, dispatchChannel] = React.useContext(Context).channel;
+  const [isBlock, setIsBlock] = React.useState(null);
   const serializeMembersList = (result = []) => {
     if (!result) {
       return {};
@@ -48,7 +50,10 @@ const useGroupInfo = () => {
   const getMembersList = async () => {
     try {
       const result = await channel.queryMembers({});
+      console.log(result, 'honey')
       setNewParticipan(result.members);
+      setParticipants(result.members, groupPatchDispatch);
+
       setIsLoadingMembers(false);
     } catch (e) {
       if (__DEV__) {
@@ -86,18 +91,26 @@ const useGroupInfo = () => {
   };
   // eslint-disable-next-line consistent-return
   const checkUserIsBlockHandle = async () => {
+    if (isBlock) {
+      onProfilePressed();
+    }
+    if (isBlock !== null) {
+      openChatMessage();
+    }
+  };
+  const checkStatusBlock = async (user) => {
     try {
       const sendData = {
-        user_id: selectedUser.user_id
+        user_id: user.user_id
       };
       const processGetBlock = await checkUserBlock(sendData);
 
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
-        return openChatMessage();
+        return setIsBlock(false);
       }
-      return onProfilePressed();
+      setIsBlock(true);
     } catch (e) {
-      console.log(e, 'eman');
+      setIsBlock(null);
     }
   };
 
@@ -157,6 +170,7 @@ const useGroupInfo = () => {
   const handleSelectUser = async (user) => {
     if (user.user_id === profile.myProfile.user_id) return;
     await setSelectedUser(user);
+    await checkStatusBlock(user);
     setOpenModal(true);
   };
 
@@ -199,6 +213,7 @@ const useGroupInfo = () => {
         {skip_push: true}
       );
       setNewParticipan(result.members);
+      setParticipants(result.members, groupPatchDispatch);
     } catch (e) {
       console.log(e, 'eman');
     }
@@ -214,12 +229,12 @@ const useGroupInfo = () => {
       channel_role: 'channel_moderator'
     }));
     await setOpenModal(false);
+    navigation.push('ChatDetailPage', {channel});
 
     const filterMessage = await client.client.queryChannels(filter, sort, {
       watch: true, // this is the default
       state: true
     });
-    navigation.push('ChatDetailPage', {channel});
 
     const generatedChannelId = generateRandomId();
 

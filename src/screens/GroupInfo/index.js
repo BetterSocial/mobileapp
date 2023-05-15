@@ -54,7 +54,8 @@ const GroupInfo = () => {
     onLeaveGroup,
     profile,
     channelState,
-    handlePressContact
+    handlePressContact,
+    participants
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -184,11 +185,11 @@ const GroupInfo = () => {
           </View>
           <View style={styles.lineTop} />
           <View style={styles.users}>
-            <Text style={styles.countUser}>Participants ({newParticipant.length})</Text>
+            <Text style={styles.countUser}>Participants ({participants.length})</Text>
             <FlatList
               testID="participants"
               // nestedScrollEnabled={true}
-              data={newParticipant}
+              data={participants}
               // contentContainerStyle={{paddingBottom: 10}}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item, index}) => (
