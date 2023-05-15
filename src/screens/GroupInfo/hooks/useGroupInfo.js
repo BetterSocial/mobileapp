@@ -205,7 +205,9 @@ const useGroupInfo = () => {
 
   const openChatMessage = async () => {
     await setOpenModal(false);
-    navigation.push('ChatDetailPage', {channel});
+    setTimeout(() => {
+      navigation.push('ChatDetailPage', {channel});
+    }, 150);
 
     const members = [profile.myProfile.user_id];
     members.push(selectedUser.user_id);
@@ -302,9 +304,11 @@ const useGroupInfo = () => {
   const handleOpenProfile = async (item) => {
     await setOpenModal(false);
     if (profile.myProfile.user_id === item.user_id) {
-      navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
+      setTimeout(() => {
+        navigation.navigate('ProfileScreen', {
+          isNotFromHomeTab: true
+        });
+      }, 150);
     }
 
     navigation.navigate('OtherProfile', {
