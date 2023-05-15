@@ -18,6 +18,7 @@ import useGroupSetting from './hooks/useGroupSetting';
 import {COLORS} from '../../utils/theme';
 import {ProfileContact} from '../../components/Items';
 import {fonts} from '../../utils/fonts';
+import { Context } from '../../context';
 
 const {width} = Dimensions.get('screen');
 
@@ -33,8 +34,9 @@ const GroupSetting = ({navigation, route}) => {
     lounchGalery,
     renderHeaderSubtitleText
   } = useGroupSetting({navigation, route});
-
   const isFocusChatName = route?.params?.focusChatName;
+  const [channelState] = React.useContext(Context).channel;
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -72,7 +74,9 @@ const GroupSetting = ({navigation, route}) => {
             )}
           />
         </View>
-        <ButtonAddParticipants />
+        {channelState?.channel?.data?.type === 'group' && (
+          <ButtonAddParticipants refresh={route.params.refresh} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );

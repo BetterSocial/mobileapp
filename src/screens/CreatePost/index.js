@@ -201,7 +201,7 @@ const CreatePost = () => {
       setPrivacySelect(privacyId);
     }
     const durationId = await getDurationId();
-    if (durationId) {
+    if (durationId !== null && durationId !== undefined) {
       setExpiredSelect(durationId);
     }
 
@@ -774,7 +774,7 @@ const CreatePost = () => {
           <Gap style={styles.height(16)} />
           <ListItem
             icon={<Timer width={16.67} height={16.67} />}
-            label={postExpired.length === 0 ? 'Loading...' : postExpired[expiredSelect].label}
+            label={postExpired.length === 0 ? 'Loading...' : postExpired[expiredSelect]?.label}
             labelStyle={styles.listText}
             onPress={() => sheetExpiredRef.current.open()}
           />
