@@ -22,6 +22,16 @@ const PreviewMessage = (props) => {
         </Text>
       </Text>
     );
+  if (
+    channel?.data?.type === 'group' &&
+    props.latestMessagePreview?.messageObject?.isRemoveMember
+  ) {
+    return (
+      <Text numberOfLines={1} style={[styles.message, {color: '#7A7A7A'}]}>
+        {props.latestMessagePreview?.messageObject?.text}
+      </Text>
+    );
+  }
   if (props.latestMessagePreview.messageObject) {
     if (props.latestMessagePreview.messageObject.is_from_prepopulated) {
       if (
