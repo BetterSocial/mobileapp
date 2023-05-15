@@ -21,6 +21,7 @@ import api from '../../service/config';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {useRecoilState} from 'recoil';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 
 const streami18n = new Streami18n({
   language: 'en'
@@ -29,8 +30,10 @@ const streami18n = new Streami18n({
 const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
+  const {interactionsComplete} = useAfterInteractions();
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
+  const [checkFollowing, setCheckFollowing] = React.useState(false);
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -136,6 +139,7 @@ const ChatDetailPage = ({route}) => {
         return response.data.data;
       }
     } catch (error) {
+      setCheckFollowing(false);
       crashlytics().recordError(new Error(error));
       throw new Error(error);
     }
@@ -166,36 +170,38 @@ const ChatDetailPage = ({route}) => {
     return (
       <SafeAreaView>
         <StatusBar backgroundColor="white" translucent={false} />
-        <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
-          <Chat client={clients.client} i18nInstance={streami18n}>
-            <Channel
-              channel={channelClient.channel}
-              DateHeader={CustomDateHeader}
-              hasFilePicker={false}
-              ImageUploadPreview={<ImageSendPreview />}
-              keyboardVerticalOffset={0}
-              mutesEnabled={false}
-              reactionsEnabled={false}
-              readEventsEnabled={true}
-              threadRepliesEnabled={false}
-              MessageStatus={ChatStatusIcon}
-              MessageSystem={(props) => messageSystemCustom(props)}
-              // MessageContent={(props) => <CustomMessageContent {...props} />}
-              messageActions={(props) => defaultActionsAllowed(props)}
-              ReactionList={() => null}>
-              <>
-                <Header />
-                <MessageList
-                  tDateTimeParser={testDate}
-                  InlineDateSeparator={CustomInlineDateSeparator}
-                  loading={false}
-                />
+        {interactionsComplete ? (
+          <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
+            <Chat client={clients.client} i18nInstance={streami18n}>
+              <Channel
+                channel={channelClient.channel}
+                DateHeader={CustomDateHeader}
+                hasFilePicker={false}
+                ImageUploadPreview={<ImageSendPreview />}
+                keyboardVerticalOffset={0}
+                mutesEnabled={false}
+                reactionsEnabled={false}
+                readEventsEnabled={true}
+                threadRepliesEnabled={false}
+                MessageStatus={ChatStatusIcon}
+                MessageSystem={(props) => messageSystemCustom(props)}
+                // MessageContent={(props) => <CustomMessageContent {...props} />}
+                messageActions={(props) => defaultActionsAllowed(props)}
+                ReactionList={() => null}>
+                <>
+                  <Header />
+                  <MessageList
+                    tDateTimeParser={testDate}
+                    InlineDateSeparator={CustomInlineDateSeparator}
+                    loading={false}
+                  />
 
-                <MessageInput Input={InputMessage} />
-              </>
-            </Channel>
-          </Chat>
-        </EasyFollowSystem>
+                  <MessageInput Input={InputMessage} />
+                </>
+              </Channel>
+            </Chat>
+          </EasyFollowSystem>
+        ) : null}
       </SafeAreaView>
     );
   }
