@@ -576,8 +576,6 @@ const PostPageDetailIdComponent = (props) => {
     return comments.length <= 0 ? calculatePaddingBtm() : 0;
   };
 
-  const saveCurHeight = (w, h) => setCurHeight(h);
-  console.log(curHeight, 'lisa');
   return (
     <View style={styles.container}>
       {loading && !route.params.isCaching ? <LoadingWithoutModal /> : null}
