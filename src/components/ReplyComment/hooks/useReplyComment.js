@@ -9,6 +9,7 @@ import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 import {Context} from '../../../context';
 import {createChildComment} from '../../../service/comment';
 import {getFeedDetail} from '../../../service/post';
+import {getCommentChild} from '../../../service/feeds';
 
 const useReplyComment = ({
   itemProp,
@@ -174,7 +175,8 @@ const useReplyComment = ({
       updateReply: (comment, parentProps, id) => updateReplyPost(comment, parentProps, id),
       updateVote: (data, dataVote) => updateVoteParentPostHook(data, dataVote, itemParentProps),
       updateVoteLatestChildren: (data, dataVote) =>
-        updateVoteLatestChildrenParentHook(data, dataVote, itemParentProps)
+        updateVoteLatestChildrenParentHook(data, dataVote, itemParentProps),
+      getComment: getThisComment
     });
   };
 
@@ -186,7 +188,6 @@ const useReplyComment = ({
       console.log(e);
     }
   };
-  console.log(profile, 'sipo');
   const handleUpdateFeed = (data, isSort) => {
     if (data) {
       let oldData = data.data;
@@ -275,6 +276,15 @@ const useReplyComment = ({
   };
 
   const onSaveHeight = (w, h) => saveCurHeight(h);
+  const getThisComment = async (isUpdate) => {
+    if (itemProp.latest_children.comment && Array.isArray(itemProp.latest_children.comment)) {
+      if (!isUpdate) {
+        setNewCommentList(itemProp.latest_children?.comment);
+      }
+    }
+    const response = await getCommentChild({activity_id: item?.id});
+    setNewCommentList(response.data);
+  };
 
   return {
     getThisCommentHook,
@@ -301,8 +311,7 @@ const useReplyComment = ({
     handleUpdateFeed,
     scrollViewRef,
     createComment,
-    onSaveHeight,
-    curHeight
+    getThisComment
   };
 };
 export default useReplyComment;
