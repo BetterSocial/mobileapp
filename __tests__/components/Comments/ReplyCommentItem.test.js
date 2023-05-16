@@ -73,7 +73,8 @@ describe('ReplyCommentItem should run correctly', () => {
         refreshComment={refreshComment}
         showLeftConnector={false}
         disableOnTextPress={false}
-      />, {wrapper: Store}
+      />,
+      {wrapper: Store}
     );
     expect(toJSON).toMatchSnapshot();
     expect(getAllByText('-2')).toHaveLength(1);
