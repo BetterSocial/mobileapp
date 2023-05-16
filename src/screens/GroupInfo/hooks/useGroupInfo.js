@@ -228,7 +228,7 @@ const useGroupInfo = () => {
   const alertRemoveUser = async (status) => {
     if (status === 'view') {
       setOpenModal(false);
-      handleOpenProfile(selectedUser);
+      handleOpenProfile(selectedUser).catch((e) => console.log(e));
     }
     if (status === 'remove') {
       Alert.alert(
