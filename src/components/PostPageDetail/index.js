@@ -67,7 +67,7 @@ const PostPageDetailIdComponent = (props) => {
   const {getTotalReaction} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
-  const [loadingComment, setLoadingGetComment] = React.useState(true);
+  const [, setLoadingGetComment] = React.useState(true);
   const {
     updateVoteLatestChildrenLevel3,
     updateVoteChildrenLevel1,
@@ -84,6 +84,7 @@ const PostPageDetailIdComponent = (props) => {
     }
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
+    console.log(response, 'response');
     saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
     if (scrollToBottom) {
@@ -657,7 +658,7 @@ const PostPageDetailIdComponent = (props) => {
                 />
               </View>
             </View>
-            {comments.length > 0 && !loadingComment && (
+            {comments.length > 0 && (
               <ContainerComment
                 feedId={feedId}
                 itemParent={item}
@@ -671,7 +672,8 @@ const PostPageDetailIdComponent = (props) => {
                     updateParentPost,
                     findCommentAndUpdate,
                     item,
-                    updateVoteLatestChildren
+                    updateVoteLatestChildren,
+                    getComment
                   )
                 }
                 findCommentAndUpdate={findCommentAndUpdate}

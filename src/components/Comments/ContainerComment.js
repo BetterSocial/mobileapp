@@ -85,6 +85,7 @@ const ContainerComment = ({
                   <Comment
                     indexFeed={indexFeed}
                     key={`p${index}`}
+                    onLongPress={() => onCommentLongPressed(item, 0)}
                     comment={item}
                     user={item.user}
                     level={0}
