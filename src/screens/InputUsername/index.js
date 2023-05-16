@@ -58,16 +58,6 @@ const ChooseUsername = () => {
     []
   );
 
-  React.useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', hideInfo);
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', showInfoHandle);
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, []);
-
   const hideInfo = () => {
     Animated.timing(fadeInfo, {
       toValue: 0,
@@ -80,6 +70,16 @@ const ChooseUsername = () => {
       duration: 500
     }).start();
   };
+
+  React.useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', hideInfo);
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', showInfoHandle);
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   const onPhoto = () => {
     Analytics.logEvent('btn_take_photo_profile', {
@@ -214,37 +214,37 @@ const ChooseUsername = () => {
     switch (type) {
       case 'fetch':
         return (
-          <Text style={styles.textMessage('#BDBDBD', true)}>
+          <Text style={styles.textMessage('#BDBDBD')}>
             {` ${StringConstant.onboardingChooseUsernameLabelCheckingAvailability}`}
           </Text>
         );
       case 'available':
         return (
-          <Text style={styles.textMessage(colors.holytosca, true)}>
+          <Text style={styles.textMessage(colors.holytosca)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserAvailable(user)}`}
           </Text>
         );
       case 'notavailable':
         return (
-          <Text style={styles.textMessage(colors.red, true)}>
+          <Text style={styles.textMessage(colors.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelUserTaken(user)}`}
           </Text>
         );
       case 'typing':
         return (
-          <Text style={styles.textMessage(colors.red, true)}>
+          <Text style={styles.textMessage(colors.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelMinimumChar}`}
           </Text>
         );
       case 'max':
         return (
-          <Text style={styles.textMessage(colors.red, false)}>
+          <Text style={styles.textMessage(colors.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelMaximumChar}`}
           </Text>
         );
       case 'nan':
         return (
-          <Text style={styles.textMessage(colors.red, false)}>
+          <Text style={styles.textMessage(colors.red)}>
             {` ${StringConstant.onboardingChooseUsernameLabelJustANumber}`}
           </Text>
         );
@@ -423,11 +423,11 @@ const styles = StyleSheet.create({
     // paddingBottom: 32,
     justifyContent: 'flex-end'
   },
-  textMessage: (color, marginTop) => ({
+  textMessage: (color) => ({
     fontSize: 12,
     color,
     fontFamily: fonts.inter[400],
-    marginTop: marginTop ? 6 : 0
+    marginTop: 6
   }),
   parentIcon: {
     width: '10%',
