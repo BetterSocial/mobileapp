@@ -84,6 +84,7 @@ const PostPageDetailIdComponent = (props) => {
     }
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
+    console.log(response, 'response');
     saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
     if (scrollToBottom) {
