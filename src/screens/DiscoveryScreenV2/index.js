@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import {Keyboard, ScrollView, StatusBar, StyleSheet} from 'react-native';
+import {Keyboard, Platform, ScrollView, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import DiscoveryAction from '../../context/actions/discoveryAction';
@@ -180,7 +180,7 @@ const DiscoveryScreenV2 = ({route}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <DiscoveryContainer>
       <StatusBar translucent={false} />
       <Search
         searchText={searchText}
@@ -203,7 +203,7 @@ const DiscoveryScreenV2 = ({route}) => {
         onMomentumScrollBegin={handleScroll}>
         {renderFragment()}
       </ScrollView>
-    </SafeAreaView>
+    </DiscoveryContainer>
   );
 };
 
@@ -230,3 +230,9 @@ const styles = StyleSheet.create({
 
 export default withInteractionsManagedNoStatusBar(DiscoveryScreenV2);
 // export default React.memo(DiscoveryScreenV2)
+
+const DiscoveryContainer = ({children}) => {
+  if (Platform.OS === 'ios') return <>{children}</>;
+
+  return <SafeAreaView style={{flex: 1}}>{children}</SafeAreaView>;
+};
