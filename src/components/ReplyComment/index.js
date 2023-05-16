@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -21,7 +22,7 @@ import useReplyComment from './hooks/useReplyComment';
 import useWriteComment from '../Comments/hooks/useWriteComment';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {getCommentChild} from '../../service/feeds';
+import useCommentAction from '../Comments/hooks/useCommentAction';
 
 const ReplyCommentId = ({
   itemProp,
@@ -43,26 +44,20 @@ const ReplyCommentId = ({
     findCommentAndUpdateHook,
     setTextComment,
     newCommentList,
-    setNewCommentList,
     item,
     showChildrenCommentView,
     updateFeed,
     scrollViewRef,
-    createComment
+    createComment,
+    getThisComment
   } = useReplyComment({itemProp, indexFeed, dataFeed, updateParent, updateReply, itemParent, page});
   const {handleUsernameReplyComment} = useWriteComment();
+  const {showAlertDelete} = useCommentAction();
   React.useEffect(() => {
     if (setTextComment && typeof setTextComment === 'function') {
       setTextComment(temporaryText);
     }
   }, [temporaryText]);
-  const getThisComment = async () => {
-    if (itemProp.latest_children.comment && Array.isArray(itemProp.latest_children.comment)) {
-      setNewCommentList(itemProp.latest_children?.comment);
-      const response = await getCommentChild({activity_id: item?.id});
-      setNewCommentList(response.data);
-    }
-  };
 
   React.useEffect(() => {
     if (itemProp) {
@@ -103,7 +98,11 @@ const ReplyCommentId = ({
                 {itemReply.user ? (
                   <ContainerReply>
                     <ConnectorWrapper index={index}>
-                      <View style={styles.childCommentWrapper}>
+                      <Pressable
+                        onLongPress={() => {
+                          showAlertDelete(itemReply, false, () => getThisComment(true));
+                        }}
+                        style={styles.childCommentWrapper}>
                         <Comment
                           indexFeed={indexFeed}
                           showLeftConnector={false}
@@ -118,6 +117,9 @@ const ReplyCommentId = ({
                           refreshComment={updateFeed}
                           findCommentAndUpdate={findCommentAndUpdateHook}
                           updateVote={updateVoteLatestChildren}
+                          onLongPress={() => {
+                            showAlertDelete(itemReply, false, () => getThisComment(true));
+                          }}
                         />
                         {itemReply.children_counts.comment > 0 && (
                           <>
@@ -133,7 +135,7 @@ const ReplyCommentId = ({
                             </View>
                           </>
                         )}
-                      </View>
+                      </Pressable>
                     </ConnectorWrapper>
                   </ContainerReply>
                 ) : null}
