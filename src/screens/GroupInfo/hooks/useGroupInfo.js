@@ -10,7 +10,7 @@ import {requestExternalStoragePermission} from '../../../utils/permission';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {setChannel} from '../../../context/actions/setChannel';
 import {checkUserBlock} from '../../../service/profile';
-import { setParticipants } from '../../../context/actions/groupChat';
+import {setParticipants} from '../../../context/actions/groupChat';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -290,13 +290,12 @@ const useGroupInfo = () => {
   };
 
   const handleOpenProfile = async (item) => {
-    await setOpenModal(false);
+    setOpenModal(false);
     if (profile.myProfile.user_id === item.user_id) {
-      setTimeout(() => {
-        navigation.navigate('ProfileScreen', {
-          isNotFromHomeTab: true
-        });
-      }, 250);
+      navigation.navigate('ProfileScreen', {
+        isNotFromHomeTab: true
+      });
+      return;
     }
 
     navigation.navigate('OtherProfile', {
@@ -345,7 +344,8 @@ const useGroupInfo = () => {
     memberName,
     onLeaveGroup,
     checkUserIsBlockHandle,
-    handlePressContact
+    handlePressContact,
+    handleOpenProfile
   };
 };
 
