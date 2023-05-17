@@ -16,7 +16,6 @@ import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../scree
 import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
-
 import {fcmTokenService} from '../service/users';
 
 const Tab = createBottomTabNavigator();
@@ -174,7 +173,7 @@ function HomeBottomTabs({navigation}) {
 
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       // eslint-disable-next-line no-unused-expressions
-      console.log(remoteMessage, 'sulip')
+      console.log(remoteMessage, 'sulip');
       handlePushNotif(remoteMessage);
     });
     return () => {

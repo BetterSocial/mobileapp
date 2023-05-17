@@ -146,10 +146,13 @@ const ProfileScreen = ({route}) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e) => {
+    const unsubscribe = navigation.addListener('tabPress', async (e) => {
       if (__DEV__) {
+        console.log('tabPress');
         console.log(e);
       }
+      handleRefresh();
+      toTop();
     });
 
     if (interactionsComplete) {
@@ -276,7 +279,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const toTop = () => {
-    flatListScrollRef.current.scrollToTop();
+    flatListScrollRef?.current?.scrollToTop();
   };
 
   const onOpenImageGalery = async () => {

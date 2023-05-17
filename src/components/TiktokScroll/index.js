@@ -1,14 +1,11 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
-
-import {colors} from '../../utils/colors';
-import dimen from '../../utils/dimen';
+import {FlatList, StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   flatlistContainer: {
     paddingBottom: 0
-  },
+  }
 });
 
 const TiktokScroll = (props) => {
@@ -24,9 +21,9 @@ const TiktokScroll = (props) => {
     onMomentumScrollEnd,
     searchHeight,
     showSearchBar,
+    ref,
     ...otherProps
   } = props;
-  const flatListRef = React.useRef();
 
   return (
     <FlatList
@@ -50,7 +47,7 @@ const TiktokScroll = (props) => {
       })}
       onMomentumScrollEnd={onMomentumScrollEnd}
       initialNumToRender={2}
-      ref={flatListRef}
+      ref={ref}
       refreshing={refreshing}
       renderItem={renderItem}
       scrollEventThrottle={1}

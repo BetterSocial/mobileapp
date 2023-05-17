@@ -1,12 +1,13 @@
 import * as React from 'react';
 // eslint-disable-next-line import/no-unresolved
 import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
+import Toast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {ActivityIndicator, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/core';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import Toast from 'react-native-simple-toast';
+
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
@@ -31,10 +32,13 @@ import {setTotalUnreadPostNotif} from '../../context/actions/unReadMessageAction
 import {traceMetricScreen} from '../../libraries/performance/firebasePerformance';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
-const ChannelListScreen = ({navigation}) => {
+const ChannelListScreen = () => {
   const streami18n = new Streami18n({
     language: 'en'
   });
+
+  const navigation = useNavigation();
+
   const listPostNotif = useRecoilValue(feedChatAtom);
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
@@ -48,6 +52,8 @@ const ChannelListScreen = ({navigation}) => {
   const [, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
+
+  const channelListRef = React.useRef(null);
 
   const filters = {
     members: {$in: [myProfile.user_id]},
@@ -75,6 +81,14 @@ const ChannelListScreen = ({navigation}) => {
     },
     []
   );
+
+  React.useEffect(() => {
+    const unsubscribe = navigation?.addListener('tabPress', () => {
+      if (channelListRef?.current?.scrollTo) channelListRef?.current?.scrollToTop();
+    });
+
+    return unsubscribe;
+  }, []);
 
   const handleUnsubscribeNotif = async () => {
     const token = await getAccessToken();
@@ -209,9 +223,9 @@ const ChannelListScreen = ({navigation}) => {
   };
 
   return (
-    <SafeAreaProvider style={{height: '100%'}}>
+    <>
       <StatusBar translucent={false} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
+      <ScrollView ref={channelListRef} contentInsetAdjustmentBehavior="automatic">
         <View style={{height: 52}}>
           <Search animatedValue={0} onPress={() => navigation.navigate('ContactScreen')} />
         </View>
@@ -247,7 +261,7 @@ const ChannelListScreen = ({navigation}) => {
           )}
         </EasyFollowSystem>
       </ScrollView>
-    </SafeAreaProvider>
+    </>
   );
 };
 

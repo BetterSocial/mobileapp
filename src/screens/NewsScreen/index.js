@@ -40,7 +40,7 @@ const NewsScreen = () => {
 
   const interactionAnimatedRef = React.useRef(null);
 
-  const scrollRef = React.createRef();
+  const scrollRef = React.useRef(null);
   const {news} = newslist;
   let lastDragY = 0;
   React.useEffect(() => {
@@ -56,10 +56,17 @@ const NewsScreen = () => {
   }, []);
 
   React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
+      if (scrollRef?.current?.scrollToOffset)
+        scrollRef?.current?.scrollToOffset({animated: true, offset: 0});
+    });
+
     if (interactionsComplete) {
       checkCache();
       getNewsIfollow();
     }
+
+    return unsubscribe;
   }, [interactionsComplete]);
 
   const checkCache = () => {

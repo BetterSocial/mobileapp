@@ -24,6 +24,8 @@ let lastDragY = 0;
 const FeedScreen = (props) => {
   const navigation = useNavigation();
   const offset = React.useRef(new Animated.Value(0)).current;
+  const feedListRef = React.useRef(null);
+
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const {interactionsComplete} = useAfterInteractions();
@@ -60,9 +62,16 @@ const FeedScreen = (props) => {
   };
 
   React.useEffect(() => {
+    const unsubscribe = navigation?.addListener('tabPress', () => {
+      if (feedListRef?.current?.scrollTo)
+        feedListRef?.current?.scrollToOffset({offset: 0, animated: true});
+    });
+
     if (interactionsComplete) {
       checkCacheFeed();
     }
+
+    return unsubscribe;
   }, [interactionsComplete]);
 
   React.useEffect(() => {
@@ -235,6 +244,7 @@ const FeedScreen = (props) => {
         onContainerClicked={handleSearchBarClicked}
       />
       <TiktokScroll
+        ref={feedListRef}
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
         onEndReach={onEndReach}
