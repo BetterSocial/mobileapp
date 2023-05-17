@@ -323,7 +323,7 @@ const TopicPageScreen = (props) => {
           renderItem={renderItem}
         />
       </View>
-      <ButtonAddPostTopic topicName={topicName} />
+      <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
         ref={refBlockComponent}
         refresh={onBlockCompleted}
