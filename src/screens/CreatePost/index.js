@@ -76,6 +76,8 @@ import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
 
+const IS_GEO_SELECT_ENABLED = false;
+
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
@@ -209,9 +211,11 @@ const CreatePost = () => {
       setGeoSelect(0);
     }
 
-    const locationId = await getLocationId();
-    if (locationId && !isInCreatePostTopicScreen) {
-      setGeoSelect(locationId);
+    if (IS_GEO_SELECT_ENABLED) {
+      const locationId = await getLocationId();
+      if (locationId && !isInCreatePostTopicScreen) {
+        setGeoSelect(locationId);
+      }
     }
   };
   const getPreviewUrl = async (link) => {
@@ -778,13 +782,19 @@ const CreatePost = () => {
             labelStyle={styles.listText}
             onPress={() => sheetExpiredRef.current.open()}
           />
-          <Gap style={styles.height(16)} />
-          <ListItem
-            icon={<Location width={16.67} height={16.67} />}
-            label={geoList.length === 0 ? 'Loading...' : renderLocationString(geoList[geoSelect])}
-            labelStyle={styles.listText}
-            onPress={() => sheetGeoRef.current.open()}
-          />
+          {IS_GEO_SELECT_ENABLED && (
+            <>
+              <Gap style={styles.height(16)} />
+              <ListItem
+                icon={<Location width={16.67} height={16.67} />}
+                label={
+                  geoList.length === 0 ? 'Loading...' : renderLocationString(geoList[geoSelect])
+                }
+                labelStyle={styles.listText}
+                onPress={() => sheetGeoRef.current.open()}
+              />
+            </>
+          )}
           <Gap style={styles.height(16)} />
           <ListItem
             icon={<MemoIc_world width={16.67} height={16.67} />}
