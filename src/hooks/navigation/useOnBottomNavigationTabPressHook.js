@@ -12,24 +12,25 @@ const useOnBottomNavigationTabPressHook = (listViewType, callback = null) => {
   const listRef = React.useRef(null);
 
   const onTabPressed = () => {
-    if (callback) callback();
     switch (listViewType) {
       case LIST_VIEW_TYPE.TIKTOK_SCROLL:
-        if (listRef.current.scrollToTop) listRef.current.scrollToTop();
+        if (listRef?.current?.scrollToTop) listRef.current.scrollToTop();
         break;
 
       case LIST_VIEW_TYPE.FLAT_LIST:
-        if (listRef.current.scrollToOffset)
+        if (listRef?.current?.scrollToOffset)
           listRef.current.scrollToOffset({offset: 0, animated: true});
         break;
 
       case LIST_VIEW_TYPE.SCROLL_VIEW:
-        if (listRef.current.scrollTo) listRef.current.scrollTo({x: 0, y: 0, animated: true});
+        if (listRef?.current?.scrollTo) listRef.current.scrollTo({x: 0, y: 0, animated: true});
         break;
 
       default:
         break;
     }
+
+    if (callback) callback();
   };
 
   React.useEffect(() => {

@@ -72,7 +72,7 @@ const {height, width} = Dimensions.get('screen');
 
 const ProfileScreen = ({route}) => {
   const navigation = useNavigation();
-  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, handleRefresh);
+  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL);
 
   const bottomSheetNameRef = React.useRef();
   const bottomSheetBioRef = React.useRef();
