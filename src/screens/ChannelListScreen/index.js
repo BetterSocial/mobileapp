@@ -17,6 +17,9 @@ import Search from './elements/Search';
 import api from '../../service/config';
 import streamFeed from '../../utils/getstream/streamer';
 import useChannelList from './hooks/useChannelList';
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {CHANNEL_TYPE_TOPIC} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
@@ -38,6 +41,7 @@ const ChannelListScreen = () => {
   });
 
   const navigation = useNavigation();
+  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.SCROLL_VIEW);
 
   const listPostNotif = useRecoilValue(feedChatAtom);
   const [client] = React.useContext(Context).client;
@@ -52,8 +56,6 @@ const ChannelListScreen = () => {
   const [, dispatchUnreadMessage] = React.useContext(Context).unReadMessage;
   const channelListLocalValue = useRecoilValue(channelListLocalAtom);
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
-
-  const channelListRef = React.useRef(null);
 
   const filters = {
     members: {$in: [myProfile.user_id]},
@@ -81,14 +83,6 @@ const ChannelListScreen = () => {
     },
     []
   );
-
-  React.useEffect(() => {
-    const unsubscribe = navigation?.addListener('tabPress', () => {
-      if (channelListRef?.current?.scrollTo) channelListRef?.current?.scrollToTop();
-    });
-
-    return unsubscribe;
-  }, []);
 
   const handleUnsubscribeNotif = async () => {
     const token = await getAccessToken();
@@ -225,7 +219,7 @@ const ChannelListScreen = () => {
   return (
     <>
       <StatusBar translucent={false} />
-      <ScrollView ref={channelListRef} contentInsetAdjustmentBehavior="automatic">
+      <ScrollView ref={listRef} contentInsetAdjustmentBehavior="automatic">
         <View style={{height: 52}}>
           <Search animatedValue={0} onPress={() => navigation.navigate('ContactScreen')} />
         </View>

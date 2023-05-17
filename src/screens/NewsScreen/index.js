@@ -14,6 +14,9 @@ import BlockDomainComponent from '../../components/BlockDomain';
 import RenderItem from './RenderItem';
 import Search from './Search';
 import ShareUtils from '../../utils/share';
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {NEWS_CACHE} from '../../utils/cache/constant';
@@ -26,6 +29,8 @@ import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
 const NewsScreen = () => {
   const navigation = useNavigation();
+  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.FLAT_LIST);
+
   const refBlockDomainComponent = React.useRef(null);
   const offset = React.useRef(new Animated.Value(0)).current;
   const paddingContainer = React.useRef(new Animated.Value(50)).current;
@@ -40,7 +45,6 @@ const NewsScreen = () => {
 
   const interactionAnimatedRef = React.useRef(null);
 
-  const scrollRef = React.useRef(null);
   const {news} = newslist;
   let lastDragY = 0;
   React.useEffect(() => {
@@ -56,17 +60,10 @@ const NewsScreen = () => {
   }, []);
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', () => {
-      if (scrollRef?.current?.scrollToOffset)
-        scrollRef?.current?.scrollToOffset({animated: true, offset: 0});
-    });
-
     if (interactionsComplete) {
       checkCache();
       getNewsIfollow();
     }
-
-    return unsubscribe;
   }, [interactionsComplete]);
 
   const checkCache = () => {
@@ -234,7 +231,7 @@ const NewsScreen = () => {
       <Search animatedValue={offset} />
       <Animated.View style={{paddingTop: Platform.OS === 'android' ? paddingContainer : 0}}>
         <FlatList
-          ref={scrollRef}
+          ref={listRef}
           contentInsetAdjustmentBehavior="automatic"
           keyExtractor={keyExtractor}
           onScrollBeginDrag={handleOnScrollBeginDrag}

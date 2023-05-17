@@ -33,6 +33,9 @@ import ProfileTiktokScroll from './elements/ProfileTiktokScroll';
 import RenderItem from './elements/RenderItem';
 import ShareUtils from '../../utils/share';
 import dimen from '../../utils/dimen';
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import useProfileScreenHook, {
   TAB_INDEX_ANONYMOUS,
   TAB_INDEX_SIGNED
@@ -69,11 +72,12 @@ const {height, width} = Dimensions.get('screen');
 
 const ProfileScreen = ({route}) => {
   const navigation = useNavigation();
+  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, handleRefresh);
+
   const bottomSheetNameRef = React.useRef();
   const bottomSheetBioRef = React.useRef();
   const bottomSheetProfilePictureRef = React.useRef();
   const postRef = React.useRef(null);
-  const flatListScrollRef = React.useRef(null);
   const refBlockComponent = React.useRef();
   const headerHeightRef = React.useRef(0);
 
@@ -146,15 +150,6 @@ const ProfileScreen = ({route}) => {
   }, [interactionsComplete]);
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', async (e) => {
-      if (__DEV__) {
-        console.log('tabPress');
-        console.log(e);
-      }
-      handleRefresh();
-      toTop();
-    });
-
     if (interactionsComplete) {
       getMyFeeds(0, LIMIT_PROFILE_FEED);
       getAccessToken().then((val) => {
@@ -168,8 +163,6 @@ const ProfileScreen = ({route}) => {
         }
       });
     }
-
-    return () => unsubscribe();
   }, [interactionsComplete]);
 
   const fetchMyProfile = async () => {
@@ -279,7 +272,7 @@ const ProfileScreen = ({route}) => {
   };
 
   const toTop = () => {
-    flatListScrollRef?.current?.scrollToTop();
+    listRef?.current?.scrollToTop();
   };
 
   const onOpenImageGalery = async () => {
@@ -510,12 +503,12 @@ const ProfileScreen = ({route}) => {
     }
   };
 
-  const handleRefresh = () => {
+  function handleRefresh() {
     setLoading(true);
     setIsLastPage(false);
     getMyFeeds(0, LIMIT_PROFILE_FEED);
     reloadFetchAnonymousPost();
-  };
+  }
 
   const onHeaderOptionClicked = (item) => {
     setSelectedPostForOption(item);
@@ -597,7 +590,7 @@ const ProfileScreen = ({route}) => {
             username={dataMain.username}
           />
           <ProfileTiktokScroll
-            ref={flatListScrollRef}
+            ref={listRef}
             data={mainFeeds}
             onRefresh={handleRefresh}
             refreshing={loading || isLoadingFetchingAnonymousPosts}
