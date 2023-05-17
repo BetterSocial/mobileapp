@@ -44,7 +44,7 @@ const useCommentAction = () => {
         }
       }
     } catch (e) {
-      if (__DEV__) console.log(e, 'eRROR');
+      if (__DEV__) console.log(e, 'error');
     }
   };
 
