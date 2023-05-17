@@ -214,8 +214,7 @@ const useReplyComment = ({
 
     const commentWillBeAddedData = {
       ...defaultData,
-      data: {...defaultData.data, text: textComment},
-      is_you: true
+      data: {...defaultData.data, text: textComment}
     };
     if (isAnonimity) {
       commentWillBeAddedData.user = {};
