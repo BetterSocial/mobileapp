@@ -214,7 +214,8 @@ const useReplyComment = ({
 
     const commentWillBeAddedData = {
       ...defaultData,
-      data: {...defaultData.data, text: textComment}
+      data: {...defaultData.data, text: textComment},
+      is_you: true
     };
     if (isAnonimity) {
       commentWillBeAddedData.user = {};
@@ -263,6 +264,7 @@ const useReplyComment = ({
           if (typeof updateReply === 'function') {
             updateReply(newComment, itemParent, item.id);
           }
+          getThisComment(true);
           updateFeed(true);
           updateComment(item.activity_id);
         } else {
