@@ -77,7 +77,8 @@ const Content = ({message, images_url, topics = [], item, onnewpollfetched, isPo
             {
               marginHorizontal: 6,
               paddingHorizontal: isPostDetail ? 12 : 0,
-              minHeight: calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight
+              minHeight:
+                calculationText(hashtagAtComponent(sanitizeUrl(message))).containerHeight || 0
             }
           ]}>
           {item.post_type !== POST_TYPE_LINK ? (
