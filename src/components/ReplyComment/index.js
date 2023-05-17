@@ -60,6 +60,8 @@ const ReplyCommentId = ({
     }
   }, [temporaryText]);
 
+  const updateComment = () => getThisComment(true);
+
   React.useEffect(() => {
     if (itemProp) {
       getThisComment();
@@ -104,7 +106,7 @@ const ReplyCommentId = ({
                     <ConnectorWrapper index={index}>
                       <Pressable
                         onLongPress={() => {
-                          showAlertDelete(itemReply, false, () => getThisComment(true));
+                          showAlertDelete(itemReply, false, updateComment);
                         }}
                         style={styles.childCommentWrapper}>
                         <Comment
@@ -122,7 +124,7 @@ const ReplyCommentId = ({
                           findCommentAndUpdate={findCommentAndUpdateHook}
                           updateVote={updateVoteLatestChildren}
                           onLongPress={() => {
-                            showAlertDelete(itemReply, false, () => getThisComment(true));
+                            showAlertDelete(itemReply, false, updateComment);
                           }}
                         />
                         {itemReply.children_counts.comment > 0 && (

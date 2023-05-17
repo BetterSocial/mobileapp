@@ -1,7 +1,7 @@
 import React from 'react';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation, useRoute} from '@react-navigation/core';
 
 import {Dimensions} from 'react-native';
 import StringConstant from '../../../utils/string/StringConstant';
@@ -24,6 +24,7 @@ const useReplyComment = ({
   const [textComment, setTextComment] = React.useState('');
   const [newCommentList, setNewCommentList] = React.useState([]);
   const [item, setItem] = React.useState(itemProp);
+  const {params} = useRoute();
   const [curHeight] = React.useState(Dimensions.get('window').height);
   const navigation = useNavigation();
   const scrollViewRef = React.useRef(null);
@@ -159,7 +160,6 @@ const useReplyComment = ({
     }
     return [];
   };
-
   const showChildrenCommentView = async (itemReply) => {
     const itemParentProps = await {
       ...itemProp,
@@ -176,7 +176,8 @@ const useReplyComment = ({
       updateVote: (data, dataVote) => updateVoteParentPostHook(data, dataVote, itemParentProps),
       updateVoteLatestChildren: (data, dataVote) =>
         updateVoteLatestChildrenParentHook(data, dataVote, itemParentProps),
-      getComment: getThisComment
+      getComment: getThisComment,
+      getCommentParent: params.getComment
     });
   };
 
@@ -185,7 +186,9 @@ const useReplyComment = ({
       const data = await getFeedDetail(item.activity_id);
       handleUpdateFeed(data, isSort);
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
   const handleUpdateFeed = (data, isSort) => {
@@ -270,7 +273,6 @@ const useReplyComment = ({
         // setLoadingCMD(false);
       }
     } catch (error) {
-      console.log(error);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
   };
