@@ -264,7 +264,9 @@ const useReplyComment = ({
           if (typeof updateReply === 'function') {
             updateReply(newComment, itemParent, item.id);
           }
-          getThisComment(true);
+          getThisComment(true).catch((e) => {
+            if (__DEV__) console.log(e);
+          });
           updateFeed(true);
           updateComment(item.activity_id);
         } else {
