@@ -58,7 +58,8 @@ export const getCommentChild = async (data) => {
   try {
     const response = await api.post('/feeds/reactions/', {
       activity_id: data.activity_id,
-      limit: 100
+      limit: 100,
+      feed_id: data.feed_id
     });
     return response.data;
   } catch (e) {
