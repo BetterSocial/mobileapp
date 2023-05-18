@@ -86,7 +86,7 @@ const ContainerComment = ({
                       indexFeed
                     })
                   }
-                  onLongPress={onCommentLongPressed}
+                  onLongPress={() => onCommentLongPressed(item, 0)}
                   // refreshComment={refreshComment}
                   findCommentAndUpdate={findCommentAndUpdate}
                 />
