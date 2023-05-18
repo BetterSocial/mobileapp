@@ -206,12 +206,8 @@ const useReplyComment = ({
       }
     }
   };
-  const createComment = async (isAnonimity, anonimityData) => {
-    let sendPostNotif = false;
-    if (page !== 'DetailDomainScreen') {
-      sendPostNotif = true;
-    }
 
+  const handleAddedComment = (isAnonimity, anonimityData) => {
     const commentWillBeAddedData = {
       ...defaultData,
       data: {...defaultData.data, text: textComment}
@@ -233,6 +229,15 @@ const useReplyComment = ({
 
     setTemporaryText('');
     setNewCommentList([...newCommentList, commentWillBeAddedData]);
+  };
+
+  const createComment = async (isAnonimity, anonimityData) => {
+    let sendPostNotif = false;
+    if (page !== 'DetailDomainScreen') {
+      sendPostNotif = true;
+    }
+
+    handleAddedComment(isAnonimity, anonimityData);
 
     try {
       if (textComment.trim() !== '') {
