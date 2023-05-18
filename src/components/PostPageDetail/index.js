@@ -206,7 +206,8 @@ const PostPageDetailIdComponent = (props) => {
           activity_id: item.id,
           message: textComment,
           sendPostNotif: true,
-          anonimity: isAnonimity
+          anonimity: isAnonimity,
+          is_you: true
         };
 
         const anonUser = {
@@ -214,7 +215,8 @@ const PostPageDetailIdComponent = (props) => {
           color_name: anonimityData.colorName,
           emoji_code: anonimityData.emojiCode,
           color_code: anonimityData.colorCode,
-          is_anonymous: isAnonimity
+          is_anonymous: isAnonimity,
+          is_you: true
         };
         if (isAnonimity) {
           sendData = {...sendData, anon_user_info: anonUser};
@@ -515,12 +517,12 @@ const PostPageDetailIdComponent = (props) => {
     await setUpVote(!statusUpvote);
   };
 
-  const handleRefreshComment = () => {
-    updateFeed();
+  const handleRefreshComment = async () => {
+    await getComment(false, true);
   };
 
-  const handleRefreshChildComment = () => {
-    updateFeed();
+  const handleRefreshChildComment = async () => {
+    await getComment(false, true);
   };
 
   const checkVotes = () => {

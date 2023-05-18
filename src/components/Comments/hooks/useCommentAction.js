@@ -36,12 +36,13 @@ const useCommentAction = () => {
           goBack();
         }
         if (callback && typeof callback === 'function') {
-          console.log('masuk callback');
           callback();
         }
       }
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log(e, 'eman');
+      }
     }
   };
 
