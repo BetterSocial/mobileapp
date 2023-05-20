@@ -77,14 +77,14 @@
 import axios from 'axios';
 import configEnv from 'react-native-config';
 
-import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from '../utils/token';
+import {getAccessToken, getRefreshToken, setAccessToken, setRefreshToken} from '../utils/token';
 
-const baseURL = configEnv.BASE_URL
+const baseURL = configEnv.BASE_URL;
 
 const api = axios.create({
   baseURL,
   timeout: 3000,
-  headers: { 'content-type': 'application/json' },
+  headers: {'content-type': 'application/json'}
 });
 api.interceptors.request.use(
   async (config) => {
@@ -94,36 +94,42 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(error)
 );
 
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error?.response?.status === 401 && error?.response?.config?.url !== '/users/refresh-token') {
+    if (
+      error?.response?.status === 401 &&
+      error?.response?.config?.url !== '/users/refresh-token'
+    ) {
       const token = await getRefreshToken();
       const refreshApi = axios.create({
         baseURL,
         timeout: 3000,
-        headers: { 'content-type': 'application/json', 'authorization': `Bearer ${token}` },
+        headers: {'content-type': 'application/json', authorization: `Bearer ${token}`}
       });
-      return refreshApi.get('/users/refresh-token').then((refreshResponse) => {
-        const data = refreshResponse?.data?.data
-        if (data?.token) {
-          setRefreshToken(data?.refresh_token)
-          setAccessToken(data?.token)
-          return axios.request(error?.config)
+      return refreshApi.get('/users/refresh-token').then(
+        (refreshResponse) => {
+          const data = refreshResponse?.data?.data;
+          if (data?.token) {
+            setRefreshToken(data?.refresh_token);
+            setAccessToken(data?.token);
+            return axios.request(error?.config);
+          }
+          return Promise.reject(error);
+        },
+        (refreshError) => {
+          if (__DEV__) {
+            console.log('refreshError: ', refreshError);
+          }
+          return Promise.reject(error);
         }
-        return Promise.reject(error)
-      }, (refreshError) => {
-        if (__DEV__) {
-          console.log('refreshError: ', refreshError);
-        }
-        return Promise.reject(error)
-      })
+      );
     }
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
 export default api;

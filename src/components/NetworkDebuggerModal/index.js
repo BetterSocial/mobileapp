@@ -3,20 +3,24 @@ import {SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import Modal from 'react-native-modal';
 import NetworkLogger, {startNetworkLogging} from 'react-native-network-logger';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {useUserWhitelist} from '../../hooks/useUserWhitelist';
 import {ENV} from '../../libraries/Configs/ENVConfig';
+import {debugAtom} from '../../service/debug';
 
 const NetworkDebuggerModal = ({onPress}) => {
   const [isNetworkModalVisible, setIsNetworkVIsible] = useState(false);
   const isWhitelisted = useUserWhitelist();
+  const isDebug = useRecoilValue(debugAtom);
 
+  console.log(isDebug);
   React.useEffect(() => {
-    if (isWhitelisted || ENV !== 'Prod') {
+    if ((isWhitelisted && isDebug) || ENV !== 'Prod') {
       startNetworkLogging({forceEnable: true});
     }
-  }, [isWhitelisted]);
+  }, [isWhitelisted, isDebug, ENV]);
 
-  if (isWhitelisted) {
+  if ((isWhitelisted && isDebug) || ENV !== 'Prod') {
     return (
       <>
         <Modal
