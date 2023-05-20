@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Pressable, StyleSheet, TouchableNativeFeedback, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableNativeFeedback, View} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 
 import Card from '../../../components/Card/CardInLinkPreview';
@@ -11,7 +11,10 @@ const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress}) => {
 
   return (
     <View style={styles.contentFeed}>
-      <TouchableNativeFeedback disabled={isTouchableDisabled} onPress={onPress} testID='contentLinkContentPressable'>
+      <TouchableNativeFeedback
+        disabled={isTouchableDisabled}
+        onPress={onPress}
+        testID="contentLinkContentPressable">
         <>
           {smartRender(Card, {
             domain: og.domain,
@@ -22,7 +25,7 @@ const ContentLink = ({og, onPress, onHeaderPress, onCardContentPress}) => {
             image: og.image,
             url: og.url,
             onHeaderPress,
-            onCardContentPress,
+            onCardContentPress
           })}
         </>
       </TouchableNativeFeedback>
@@ -38,6 +41,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
     // justifyContent: 'center',
     // alignItems: 'center',
-    marginHorizontal: 6,
-  },
+    marginHorizontal: 6
+  }
 });

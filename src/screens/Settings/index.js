@@ -1,9 +1,18 @@
 import * as React from 'react';
 import VersionNumber from 'react-native-version-number';
 import analytics from '@react-native-firebase/analytics';
-import {Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
+import {useSetRecoilState} from 'recoil';
 import Header from '../../components/Header';
 import Loading from '../Loading';
 import ProfileSettingItem from './element/ProfileSettingItem';
@@ -11,13 +20,17 @@ import useSettings from './hooks/useSettings';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {debugAtom} from '../../service/debug';
 
 const {width} = Dimensions.get('screen');
 
 const Settings = () => {
   const navigation = useNavigation();
+  const [toggleDebug, setToggleDebug] = React.useState(0);
+  const setDebugMode = useSetRecoilState(debugAtom);
 
   const {isLoadingDeletingAccount, logout, showDeleteAccountAlert, setStartupValue} = useSettings();
+
   React.useEffect(() => {
     analytics().logScreenView({
       screen_class: 'Settings',
@@ -35,6 +48,14 @@ const Settings = () => {
       id: null,
       deeplinkProfile: false
     });
+  };
+
+  const turnOnDebugMode = () => {
+    if (toggleDebug > 7) {
+      setDebugMode(true);
+    } else {
+      setToggleDebug(toggleDebug + 1);
+    }
   };
 
   return (
@@ -61,8 +82,12 @@ const Settings = () => {
           <ProfileSettingItem text="Delete Account" onPress={showDeleteAccountAlert} />
           <ProfileSettingItem text="Logout" onPress={doLogout} />
         </View>
-        <View style={styles.footer}>
-          <Text style={styles.textVersion}>{`Version ${VersionNumber.appVersion}`}</Text>
+        <View>
+          <TouchableOpacity onPress={turnOnDebugMode}>
+            <View style={styles.versionContainer}>
+              <Text style={styles.textVersion}>{`Version ${VersionNumber.appVersion}`}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
 
         <Loading visible={isLoadingDeletingAccount} />
@@ -97,11 +122,12 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
-    flexDirection: 'column'
+    flex: 20
   },
   footer: {
-    position: 'absolute',
-    bottom: 0,
+    zIndex: 999
+  },
+  versionContainer: {
     width,
     height: 40,
     flexDirection: 'row',

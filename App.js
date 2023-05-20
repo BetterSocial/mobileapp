@@ -18,13 +18,15 @@ import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance'
 import Store from './src/context/Store';
 import {linking} from './src/navigations/linking';
 import {RootNavigator} from './src/navigations/root-stack';
-import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
 import {toastConfig} from './src/configs/ToastConfig';
 import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
+import NetworkDebuggerModal from './src/components/NetworkDebuggerModal';
+import useFirebaseRemoteConfig from './src/libraries/Configs/RemoteConfig';
 
 const App = () => {
   const {bottom, top} = useSafeAreaInsets();
   const {height} = useSafeAreaFrame();
+  const {initializeFirebaseRemoteConfig} = useFirebaseRemoteConfig();
   const streami18n = new Streami18n({
     language: 'en'
   });
@@ -32,17 +34,13 @@ const App = () => {
   const routeNameRef = React.useRef();
 
   React.useEffect(() => {
-    const init = async () => {
-      try {
-        fetchRemoteConfig();
-      } catch (error) {
-        if (__DEV__) {
-          console.log('app ', error);
-        }
+    try {
+      initializeFirebaseRemoteConfig();
+    } catch (error) {
+      if (__DEV__) {
+        console.log('app init: ', error);
       }
-    };
-
-    init();
+    }
     // return unsubscribe;
   }, []);
 
@@ -106,6 +104,7 @@ const App = () => {
             </View>
           </NavigationContainer>
         </Store>
+        <NetworkDebuggerModal />
       </RecoilRoot>
       {/* </RealmProvider> */}
       <Toast config={toastConfig} />

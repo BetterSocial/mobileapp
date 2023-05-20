@@ -151,7 +151,6 @@ export const fcmTokenService = async (body) => {
     const result = await api.post('/users/fcmtoken', body);
     return result.data;
   } catch (e) {
-    console.log(e, 'siman');
     crashlytics().recordError(new Error(e));
     return null;
   }

@@ -5,6 +5,7 @@
 import * as React from 'react';
 import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
+import {Image} from 'react-native-compressor';
 import _, {debounce} from 'lodash';
 import {
   Alert,
@@ -75,6 +76,8 @@ import {getSpecificCache} from '../../utils/cache';
 import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
+import {composeImageMeta} from '../../utils/string/file';
+import {uploadPhoto} from '../../service/file';
 
 const IS_GEO_SELECT_ENABLED = false;
 
@@ -302,22 +305,45 @@ const CreatePost = () => {
     setAudienceEstimations(data.data);
   };
 
+  const uploadPhotoImage = async (pathImg) => {
+    const compressionResult = await Image.compress(pathImg, {
+      compressionMethod: 'auto'
+    });
+
+    const newArr = {
+      id: mediaStorage.length,
+      data: compressionResult
+    };
+
+    const asset = new FormData();
+    asset.append('photo', composeImageMeta(compressionResult));
+
+    try {
+      const responseUpload = await uploadPhoto(asset);
+
+      setMediaStorage((val) => [...val, newArr]);
+      setDataImage((val) => [...val, responseUpload.data.url]);
+      sheetMediaRef.current.close();
+    } catch (e) {
+      if (__DEV__) {
+        console.log('CreatePost (upload photo):', e);
+      }
+      showMessage({
+        message: StringConstant.UploadPhotoFailed,
+        type: 'danger'
+      });
+    }
+  };
   const uploadMediaFromLibrary = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo', includeBase64: true}, (res) => {
+      launchImageLibrary({mediaType: 'photo'}, async (res) => {
         if (res.didCancel && __DEV__) {
           console.log('User cancelled image picker');
         } else if (res.uri) {
-          const newArr = {
-            id: mediaStorage.length,
-            data: res.uri
-          };
-          setMediaStorage((val) => [...val, newArr]);
-          setDataImage((val) => [...val, res.base64]);
-          sheetMediaRef.current.close();
-        } else {
-          console.log(res);
+          await uploadPhotoImage(res.uri);
+        } else if (__DEV__) {
+          console.log('CreatePost (launchImageLibrary): ', res);
         }
       });
     } else {
@@ -338,17 +364,11 @@ const CreatePost = () => {
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
-      launchCamera({mediaType: 'photo', includeBase64: true}, (res) => {
+      launchCamera({mediaType: 'photo'}, async (res) => {
         if (res.didCancel && __DEV__) {
           console.log('User cancelled image picker');
         } else if (res.uri) {
-          const newArr = {
-            id: mediaStorage.length,
-            data: res.uri
-          };
-          setMediaStorage((val) => [...val, newArr]);
-          setDataImage((val) => [...val, res.base64]);
-          sheetMediaRef.current.close();
+          await uploadPhotoImage(res.uri);
         }
       });
     } else {
@@ -444,54 +464,55 @@ const CreatePost = () => {
       return true;
     }
 
-    const topicsToPost = _.union(initialTopic, listTopic);
-    const data = {
-      message,
-      topics: topicsToPost,
-      verb: isPollShown ? 'poll' : 'tweet',
-      feedGroup: 'main_feed',
-      privacy: listPrivacy[privacySelect].key,
-      anonimity: typeUser,
-      location: renderLocationString(geoList[geoSelect]),
-      location_id: locationId,
-      duration_feed: postExpired[expiredSelect].value,
-      images_url: dataImage,
-      tagUsers: checkTaggingUser()
-    };
-
-    if (isPollShown) {
-      data.polls = getReducedPoll();
-      data.pollsduration = selectedTime;
-      data.multiplechoice = isPollMultipleChoice;
-    }
-
-    if (typeUser) {
-      data.anon_user_info = {
-        color_name: anonUserInfo?.colorName,
-        color_code: anonUserInfo?.colorCode,
-        emoji_name: anonUserInfo?.emojiName,
-        emoji_code: anonUserInfo?.emojiCode
-      };
-    }
-
-    setDurationId(JSON.stringify(expiredSelect));
-    if (!isInCreatePostTopicScreen) {
-      setLocationId(JSON.stringify(geoSelect));
-      setPrivacyId(JSON.stringify(privacySelect));
-    }
-
-    if (isInCreatePostTopicScreen) {
-      navigateToTopicPage();
-    } else {
-      navigation.navigate('HomeTabs', {
-        screen: 'Feed',
-        params: {
-          refresh: true
-        }
-      });
-    }
-
     try {
+      const topicsToPost = _.union(initialTopic, listTopic);
+      const data = {
+        message,
+        topics: topicsToPost,
+        verb: isPollShown ? 'poll' : 'tweet',
+        feedGroup: 'main_feed',
+        privacy: listPrivacy[privacySelect].key,
+        anonimity: typeUser,
+        location: renderLocationString(geoList[geoSelect]),
+        location_id: locationId,
+        duration_feed: postExpired[expiredSelect].value,
+        images_url: dataImage,
+        tagUsers: checkTaggingUser(),
+        is_photo_uploaded: true
+      };
+
+      if (isPollShown) {
+        data.polls = getReducedPoll();
+        data.pollsduration = selectedTime;
+        data.multiplechoice = isPollMultipleChoice;
+      }
+
+      if (typeUser) {
+        data.anon_user_info = {
+          color_name: anonUserInfo?.colorName,
+          color_code: anonUserInfo?.colorCode,
+          emoji_name: anonUserInfo?.emojiName,
+          emoji_code: anonUserInfo?.emojiCode
+        };
+      }
+
+      setDurationId(JSON.stringify(expiredSelect));
+      if (!isInCreatePostTopicScreen) {
+        setLocationId(JSON.stringify(geoSelect));
+        setPrivacyId(JSON.stringify(privacySelect));
+      }
+
+      if (isInCreatePostTopicScreen) {
+        navigateToTopicPage();
+      } else {
+        navigation.navigate('HomeTabs', {
+          screen: 'Feed',
+          params: {
+            refresh: true
+          }
+        });
+      }
+
       await createPost(data);
       if (params.onRefresh && typeof params.onRefresh === 'function') {
         params.onRefresh();
@@ -503,7 +524,7 @@ const CreatePost = () => {
       });
     } catch (e) {
       if (__DEV__) {
-        console.log(e);
+        console.log('CreatePost : ', e);
       }
     }
     Analytics.logEvent('create_post', {
