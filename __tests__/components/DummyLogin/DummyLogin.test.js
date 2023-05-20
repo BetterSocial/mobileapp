@@ -22,7 +22,7 @@ jest.mock('../../../src/utils/getstream/ClientGetStram', () => ({
   })
 }));
 
-jest.mock('react-native-config', () => ({
+jest.mock('react-native-Configs', () => ({
   ENABLE_DEV_ONLY_FEATURE: 'true'
 }));
 

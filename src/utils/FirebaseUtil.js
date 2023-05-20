@@ -6,7 +6,7 @@ import firebaseRemoteConfig, {
 // set defaults
 remoteConfig().setDefaults(firebaseRemoteConfig);
 
-// fetch remote config
+// fetch remote Configs
 export const fetchRemoteConfig = () => {
   // data is locally cached for FETCH_INTERVAL_IN_MINUTES
   const fetch = remoteConfig().fetch(FETCH_INTERVAL_IN_MINUTES * 60);
@@ -30,7 +30,7 @@ export const fetchRemoteConfig = () => {
     })
     .catch((err) => {
       if (__DEV__) {
-        console.log('remote config error: ', err);
+        console.log('remote Configs error: ', err);
       }
       firebaseRemoteConfig;
     });

@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import Icon from 'react-native-vector-icons/AntDesign';
 
@@ -14,6 +7,7 @@ import {ButtonAddMedia} from '../../../components/Button';
 import Gap from '../../../components/Gap';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+
 const ShowMedia = ({onRemoveAll, onRemoveItem, onAddMedia, data}) => {
   return (
     <View>
@@ -61,14 +55,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fonts.inter[600],
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   imageContainer: {
     width: 120,
     height: 120,
     alignItems: 'flex-end',
     marginTop: 10,
-    marginRight: 12,
+    marginRight: 12
   },
   image: {borderRadius: 8},
   icon: {marginTop: -8, marginRight: -8},
@@ -77,22 +71,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[400],
     width: 91,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   btnMedia: {
     width: 120,
     height: 120,
     justifyContent: 'center',
-    zIndex: 99,
+    zIndex: 99
   },
   contentImage: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'flex-end'
   },
   btnRemove: {
     paddingVertical: 16,
     marginTop: 12,
-    marginBottom: -14,
+    marginBottom: -14
   },
-  gap: {width: 8},
+  gap: {width: 8}
 });
