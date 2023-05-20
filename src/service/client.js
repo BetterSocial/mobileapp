@@ -1,13 +1,9 @@
 import {atom} from 'recoil';
 
 const clientAtom = atom({
-  key: "clientAtom",
+  key: 'clientAtom',
   default: {
     client: null
   },
-  effects_UNSTABLE: [
-    () => {
-
-    }
-  ]
-})
+  effects_UNSTABLE: [() => {}]
+});

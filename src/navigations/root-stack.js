@@ -58,7 +58,6 @@ export const RootNavigator = () => {
   const loadingStartup = useInitialStartup();
 
   React.useEffect(() => {
-    // console.tron.log(NetInfo)
     const unsubscribe = NetInfo.addEventListener((state) => {
       if (state.isConnected && following?.length !== 0) {
         const successValue = [];

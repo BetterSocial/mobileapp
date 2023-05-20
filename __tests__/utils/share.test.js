@@ -20,7 +20,7 @@ jest.mock('react-native/Libraries/Alert/Alert', () => ({
   alert: mockedAlert
 }));
 
-jest.mock('react-native-config', () => ({
+jest.mock('react-native-Configs', () => ({
   POST_SHARE_URL: 'https://www.google.com'
 }));
 
