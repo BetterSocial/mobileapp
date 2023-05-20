@@ -3,7 +3,7 @@ import {SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import Modal from 'react-native-modal';
 import NetworkLogger, {startNetworkLogging} from 'react-native-network-logger';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilValue} from 'recoil';
 import {useUserWhitelist} from '../../hooks/useUserWhitelist';
 import {ENV} from '../../libraries/Configs/ENVConfig';
 import {debugAtom} from '../../service/debug';
@@ -13,7 +13,13 @@ const NetworkDebuggerModal = ({onPress}) => {
   const isWhitelisted = useUserWhitelist();
   const isDebug = useRecoilValue(debugAtom);
 
-  console.log(isDebug);
+  const onPressDebug = () => {
+    if (onPress) {
+      onPress();
+    }
+    setIsNetworkVIsible(true);
+  };
+
   React.useEffect(() => {
     if ((isWhitelisted && isDebug) || ENV !== 'Prod') {
       startNetworkLogging({forceEnable: true});
@@ -35,13 +41,7 @@ const NetworkDebuggerModal = ({onPress}) => {
             <NetworkLogger />
           </SafeAreaView>
         </Modal>
-        <TouchableOpacity
-          style={styles.container}
-          onPress={() => {
-            // eslint-disable-next-line no-unused-expressions
-            onPress && onPress();
-            setIsNetworkVIsible(true);
-          }}>
+        <TouchableOpacity style={styles.container} onPress={onPressDebug}>
           <Text style={styles.content}>{'Network Logs'}</Text>
         </TouchableOpacity>
       </>

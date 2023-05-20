@@ -12,14 +12,18 @@ const useFirebaseRemoteConfig = () => {
       });
       await remoteConfig().fetch(__DEV__ ? 0 : 300); // Time in seconds for telling firebase the cache duration, IF __DEV__ don't cache it ELSE cache for 5 mins
       const status = await remoteConfig().activate();
-      console.log(
-        `Firebase Remote Config status: ${status ? 'Already activated' : 'Just activated'}`
-      );
+      if (__DEV__) {
+        console.log(
+          `Firebase Remote Config status: ${status ? 'Already activated' : 'Just activated'}`
+        );
+      }
     } catch (error) {
-      console.log(
-        'useFirebaseRemoteConfig.ts | firebase remote config initialization failed',
-        error
-      );
+      if (__DEV__) {
+        console.log(
+          'useFirebaseRemoteConfig.ts | firebase remote config initialization failed',
+          error
+        );
+      }
     }
     setInitState(true);
   }, []);

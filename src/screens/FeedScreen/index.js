@@ -9,6 +9,9 @@ import Search from './elements/Search';
 import TiktokScroll from '../../components/TiktokScroll';
 import dimen from '../../utils/dimen';
 import useCoreFeed from './hooks/useCoreFeed';
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {ButtonNewPost} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
@@ -24,6 +27,8 @@ let lastDragY = 0;
 const FeedScreen = (props) => {
   const navigation = useNavigation();
   const offset = React.useRef(new Animated.Value(0)).current;
+  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL, onRefresh);
+
   const refBlockComponent = React.useRef();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
   const {interactionsComplete} = useAfterInteractions();
@@ -146,11 +151,12 @@ const FeedScreen = (props) => {
     refBlockComponent.current.openBlockComponent(value);
   };
 
-  const onRefresh = () => {
+  function onRefresh() {
+    console.log('onRefresh called');
     getDataFeedsHandle(0, true);
     setIsLastPage(false);
     handleScroll(false);
-  };
+  }
 
   const handleOnScrollBeginDrag = (event) => {
     lastDragY = event.nativeEvent.contentOffset.y;
@@ -235,6 +241,7 @@ const FeedScreen = (props) => {
         onContainerClicked={handleSearchBarClicked}
       />
       <TiktokScroll
+        ref={listRef}
         contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
         data={feeds}
         onEndReach={onEndReach}

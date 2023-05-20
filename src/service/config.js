@@ -111,11 +111,11 @@ api.interceptors.response.use(
         headers: {'content-type': 'application/json', authorization: `Bearer ${token}`}
       });
       return refreshApi.get('/users/refresh-token').then(
-        (refreshResponse) => {
+        async (refreshResponse) => {
           const data = refreshResponse?.data?.data;
           if (data?.token) {
-            setRefreshToken(data?.refresh_token);
-            setAccessToken(data?.token);
+            await setRefreshToken(data?.refresh_token);
+            await setAccessToken(data?.token);
             return axios.request(error?.config);
           }
           return Promise.reject(error);

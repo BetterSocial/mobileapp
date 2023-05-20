@@ -79,6 +79,8 @@ import {requestCameraPermission, requestExternalStoragePermission} from '../../u
 import {composeImageMeta} from '../../utils/string/file';
 import {uploadPhoto} from '../../service/file';
 
+const IS_GEO_SELECT_ENABLED = false;
+
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
@@ -212,9 +214,11 @@ const CreatePost = () => {
       setGeoSelect(0);
     }
 
-    const locationId = await getLocationId();
-    if (locationId && !isInCreatePostTopicScreen) {
-      setGeoSelect(locationId);
+    if (IS_GEO_SELECT_ENABLED) {
+      const locationId = await getLocationId();
+      if (locationId && !isInCreatePostTopicScreen) {
+        setGeoSelect(locationId);
+      }
     }
   };
   const getPreviewUrl = async (link) => {
@@ -301,40 +305,43 @@ const CreatePost = () => {
     setAudienceEstimations(data.data);
   };
 
+  const uploadPhotoImage = async (pathImg) => {
+    const compressionResult = await Image.compress(pathImg, {
+      compressionMethod: 'auto'
+    });
+
+    const newArr = {
+      id: mediaStorage.length,
+      data: compressionResult
+    };
+
+    const asset = new FormData();
+    asset.append('photo', composeImageMeta(compressionResult));
+
+    try {
+      const responseUpload = await uploadPhoto(asset);
+
+      setMediaStorage((val) => [...val, newArr]);
+      setDataImage((val) => [...val, responseUpload.data.url]);
+      sheetMediaRef.current.close();
+    } catch (e) {
+      if (__DEV__) {
+        console.log('CreatePost (upload photo):', e);
+      }
+      showMessage({
+        message: StringConstant.UploadPhotoFailed,
+        type: 'danger'
+      });
+    }
+  };
   const uploadMediaFromLibrary = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo', includeBase64: true}, async (res) => {
+      launchImageLibrary({mediaType: 'photo'}, async (res) => {
         if (res.didCancel && __DEV__) {
           console.log('User cancelled image picker');
         } else if (res.uri) {
-          const compressionResult = await Image.compress(res.uri, {
-            compressionMethod: 'auto'
-          });
-
-          const newArr = {
-            id: mediaStorage.length,
-            data: compressionResult
-          };
-          const asset = new FormData();
-          asset.append('photo', composeImageMeta(compressionResult));
-
-          try {
-            const responseUpload = await uploadPhoto(asset);
-
-            setMediaStorage((val) => [...val, newArr]);
-            setDataImage((val) => [...val, responseUpload.data.url]);
-            sheetMediaRef.current.close();
-          } catch (e) {
-            if (__DEV__) {
-              console.log('CreatePost (upload photo):', e);
-            }
-
-            showMessage({
-              message: StringConstant.UploadPhotoFailed,
-              type: 'danger'
-            });
-          }
+          await uploadPhotoImage(res.uri);
         } else if (__DEV__) {
           console.log('CreatePost (launchImageLibrary): ', res);
         }
@@ -357,37 +364,11 @@ const CreatePost = () => {
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
-      launchCamera({mediaType: 'photo', includeBase64: true}, async (res) => {
+      launchCamera({mediaType: 'photo'}, async (res) => {
         if (res.didCancel && __DEV__) {
           console.log('User cancelled image picker');
         } else if (res.uri) {
-          const compressionResult = await Image.compress(res.uri, {
-            compressionMethod: 'auto'
-          });
-
-          const newArr = {
-            id: mediaStorage.length,
-            data: compressionResult
-          };
-
-          const asset = new FormData();
-          asset.append('photo', composeImageMeta(compressionResult));
-
-          try {
-            const responseUpload = await uploadPhoto(asset);
-
-            setMediaStorage((val) => [...val, newArr]);
-            setDataImage((val) => [...val, responseUpload.data.url]);
-            sheetMediaRef.current.close();
-          } catch (e) {
-            if (__DEV__) {
-              console.log('CreatePost (upload photo):', e);
-            }
-            showMessage({
-              message: StringConstant.UploadPhotoFailed,
-              type: 'danger'
-            });
-          }
+          await uploadPhotoImage(res.uri);
         }
       });
     } else {
@@ -822,13 +803,19 @@ const CreatePost = () => {
             labelStyle={styles.listText}
             onPress={() => sheetExpiredRef.current.open()}
           />
-          <Gap style={styles.height(16)} />
-          <ListItem
-            icon={<Location width={16.67} height={16.67} />}
-            label={geoList.length === 0 ? 'Loading...' : renderLocationString(geoList[geoSelect])}
-            labelStyle={styles.listText}
-            onPress={() => sheetGeoRef.current.open()}
-          />
+          {IS_GEO_SELECT_ENABLED && (
+            <>
+              <Gap style={styles.height(16)} />
+              <ListItem
+                icon={<Location width={16.67} height={16.67} />}
+                label={
+                  geoList.length === 0 ? 'Loading...' : renderLocationString(geoList[geoSelect])
+                }
+                labelStyle={styles.listText}
+                onPress={() => sheetGeoRef.current.open()}
+              />
+            </>
+          )}
           <Gap style={styles.height(16)} />
           <ListItem
             icon={<MemoIc_world width={16.67} height={16.67} />}

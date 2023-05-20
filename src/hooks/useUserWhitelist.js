@@ -12,7 +12,7 @@ export const useUserWhitelist = () => {
   React.useEffect(() => {
     const users = getFirebaseRemoteConfigData('user_whitelist');
 
-    if (users && users.includes(userProfile.id)) {
+    if (users?.includes(userProfile.id)) {
       setWhitelisted(true);
     } else {
       setWhitelisted(false);
