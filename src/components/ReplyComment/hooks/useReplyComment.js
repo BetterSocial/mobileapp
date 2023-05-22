@@ -191,6 +191,7 @@ const useReplyComment = ({
       }
     }
   };
+
   const handleUpdateFeed = (data, isSort) => {
     if (data) {
       let oldData = data.data;
