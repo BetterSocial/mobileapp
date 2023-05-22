@@ -184,7 +184,7 @@ const useReplyComment = ({
       console.log(e);
     }
   };
-  console.log(profile, 'sipo');
+
   const handleUpdateFeed = (data, isSort) => {
     if (data) {
       let oldData = data.data;
