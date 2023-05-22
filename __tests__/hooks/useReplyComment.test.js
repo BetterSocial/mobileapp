@@ -3,6 +3,7 @@ import moment from 'moment';
 import useReplyComment from '../../src/components/ReplyComment/hooks/useReplyComment';
 import Store from '../../src/context/Store';
 import * as feedSrvice from '../../src/service/post';
+import * as feedApi from '../../src/service/feeds';
 
 const mockPush = jest.fn();
 
@@ -658,5 +659,18 @@ describe('hooks function should run correctly', () => {
     await result.current.createComment();
     expect(result.current.temporaryText).toEqual('');
     expect(result.current.newCommentList[0].data.text).toEqual('');
+  });
+
+  it('getComment should run as expected', async () => {
+    const updateParent = jest.fn();
+    const spy = jest
+      .spyOn(feedApi, 'getCommentChild')
+      .mockImplementation(() => ({data: itemProp.latest_children}));
+    const {result} = renderHook(() => useReplyComment({itemProp, updateParent}), {wrapper: Store});
+    await result.current.getThisComment(true);
+    expect(result.current.newCommentList).toEqual(itemProp.latest_children);
+    expect(spy).toHaveBeenCalled();
+    await result.current.getThisComment(false);
+    expect(result.current.newCommentList).toEqual(itemProp.latest_children);
   });
 });

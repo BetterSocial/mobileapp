@@ -1,13 +1,15 @@
 import React from 'react';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation, useRoute} from '@react-navigation/core';
 
+import {Dimensions} from 'react-native';
 import StringConstant from '../../../utils/string/StringConstant';
 import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 import {Context} from '../../../context';
 import {createChildComment} from '../../../service/comment';
 import {getFeedDetail} from '../../../service/post';
+import {getCommentChild} from '../../../service/feeds';
 
 const useReplyComment = ({
   itemProp,
@@ -22,6 +24,8 @@ const useReplyComment = ({
   const [textComment, setTextComment] = React.useState('');
   const [newCommentList, setNewCommentList] = React.useState([]);
   const [item, setItem] = React.useState(itemProp);
+  const {params} = useRoute();
+  const [curHeight] = React.useState(Dimensions.get('window').height);
   const navigation = useNavigation();
   const scrollViewRef = React.useRef(null);
   const {updateComment} = useUpdateComment();
@@ -156,7 +160,6 @@ const useReplyComment = ({
     }
     return [];
   };
-
   const showChildrenCommentView = async (itemReply) => {
     const itemParentProps = await {
       ...itemProp,
@@ -172,7 +175,9 @@ const useReplyComment = ({
       updateReply: (comment, parentProps, id) => updateReplyPost(comment, parentProps, id),
       updateVote: (data, dataVote) => updateVoteParentPostHook(data, dataVote, itemParentProps),
       updateVoteLatestChildren: (data, dataVote) =>
-        updateVoteLatestChildrenParentHook(data, dataVote, itemParentProps)
+        updateVoteLatestChildrenParentHook(data, dataVote, itemParentProps),
+      getComment: getThisComment,
+      getCommentParent: params.getComment
     });
   };
 
@@ -181,7 +186,9 @@ const useReplyComment = ({
       const data = await getFeedDetail(item.activity_id);
       handleUpdateFeed(data, isSort);
     } catch (e) {
-      console.log(e);
+      if (__DEV__) {
+        console.log(e);
+      }
     }
   };
 
@@ -200,12 +207,8 @@ const useReplyComment = ({
       }
     }
   };
-  const createComment = async (isAnonimity, anonimityData) => {
-    let sendPostNotif = false;
-    if (page !== 'DetailDomainScreen') {
-      sendPostNotif = true;
-    }
 
+  const handleAddedComment = (isAnonimity, anonimityData) => {
     const commentWillBeAddedData = {
       ...defaultData,
       data: {...defaultData.data, text: textComment}
@@ -227,6 +230,15 @@ const useReplyComment = ({
 
     setTemporaryText('');
     setNewCommentList([...newCommentList, commentWillBeAddedData]);
+  };
+
+  const createComment = async (isAnonimity, anonimityData) => {
+    let sendPostNotif = false;
+    if (page !== 'DetailDomainScreen') {
+      sendPostNotif = true;
+    }
+
+    handleAddedComment(isAnonimity, anonimityData);
 
     try {
       if (textComment.trim() !== '') {
@@ -241,7 +253,7 @@ const useReplyComment = ({
           isAnonimity,
           anonimityData
         );
-        scrollViewRef.current.scrollToEnd();
+        scrollViewRef.current.scrollToEnd({animated: true});
         if (data.code === 200) {
           const newComment = [
             ...newCommentList,
@@ -257,6 +269,9 @@ const useReplyComment = ({
           if (typeof updateReply === 'function') {
             updateReply(newComment, itemParent, item.id);
           }
+          getThisComment(true).catch((e) => {
+            if (__DEV__) console.log(e);
+          });
           updateFeed(true);
           updateComment(item.activity_id);
         } else {
@@ -267,9 +282,18 @@ const useReplyComment = ({
         // setLoadingCMD(false);
       }
     } catch (error) {
-      console.log(error);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
+  };
+
+  const getThisComment = async (isUpdate) => {
+    if (itemProp.latest_children.comment && Array.isArray(itemProp.latest_children.comment)) {
+      if (!isUpdate) {
+        setNewCommentList(itemProp.latest_children?.comment);
+      }
+    }
+    const response = await getCommentChild({activity_id: item?.id});
+    setNewCommentList(response.data);
   };
 
   return {
@@ -296,7 +320,9 @@ const useReplyComment = ({
     updateFeed,
     handleUpdateFeed,
     scrollViewRef,
-    createComment
+    createComment,
+    curHeight,
+    getThisComment
   };
 };
 export default useReplyComment;

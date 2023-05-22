@@ -32,6 +32,7 @@ const AnonymousUsername = (props) => {
   if (version >= POST_VERSION) {
     return (
       <Text
+        testID="newVersion"
         style={styles.feedUsername}>{`${anonUserInfo.colorName} ${anonUserInfo.emojiName}`}</Text>
     );
   }
