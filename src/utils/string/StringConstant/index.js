@@ -87,7 +87,7 @@ const externalStoragePermissionGranted = 'External storage permission denied';
 const externalStoragePermissionDenied = 'External storage permission denied';
 const externalStoragePermissionUnavailable =
   'The external storage feature is not available on this device';
-const UploadPhotoFailed = 'Upload photo failed plz try again later';
+const UploadPhotoFailed = 'Upload photo failed please try again later';
 
 // Contact screen
 const failedCreateChannel = 'Couldn’t create chat. Please try again.';

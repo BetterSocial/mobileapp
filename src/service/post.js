@@ -8,8 +8,7 @@ export const createPost = async (data) => {
     return resApi.data;
   } catch (error) {
     if (__DEV__) {
-      console.log('error');
-      console.log(error.response);
+      console.log('CreatePost API: ', error.response);
     }
     crashlytics().recordError(error.response.data);
     throw new Error(error);
