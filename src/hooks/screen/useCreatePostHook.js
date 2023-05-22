@@ -55,7 +55,8 @@ const useCreatePostHook = (isAnonymous) => {
     initialTopic: topic ? [topic] : [],
     isInCreatePostTopicScreen,
     refreshAnonUserInfo,
-    anonUserInfo
+    anonUserInfo,
+    getAnonUserInfo
   };
 };
 
