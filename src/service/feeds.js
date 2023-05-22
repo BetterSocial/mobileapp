@@ -62,6 +62,8 @@ export const getCommentChild = async (data) => {
     });
     return response.data;
   } catch (e) {
-    console.log(e, 'eman');
+    if (__DEV__) {
+      console.log('get comment child: ', e);
+    }
   }
 };

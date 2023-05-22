@@ -212,23 +212,21 @@ export const useInitialStartup = () => {
   }, [JSON.stringify(profileState)]);
 
   React.useEffect(() => {
-    if (initialStartup.id !== null) {
-      if (initialStartup.id !== '') {
-        getFeedChat();
-        getDomain();
-        getDataFeeds();
-        getDiscoveryData();
-        getProfile();
+    if (initialStartup.id !== null && initialStartup.id !== '') {
+      getFeedChat();
+      getDomain();
+      getDataFeeds();
+      getDiscoveryData();
+      getProfile();
 
-        timeoutSplashScreen.current = setTimeout(() => {
-          SplashScreen.hide();
+      timeoutSplashScreen.current = setTimeout(() => {
+        SplashScreen.hide();
 
-          if (perf.current) {
-            perf.current.stop();
-          }
-          create();
-        }, 700);
-      }
+        if (perf.current) {
+          perf.current.stop();
+        }
+        create();
+      }, 700);
     } else {
       timeoutSplashScreen.current = setTimeout(() => {
         SplashScreen.hide();

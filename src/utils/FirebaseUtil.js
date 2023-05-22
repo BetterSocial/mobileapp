@@ -1,12 +1,11 @@
 import remoteConfig from '@react-native-firebase/remote-config';
-import firebaseRemoteConfig, {
-  FETCH_INTERVAL_IN_MINUTES,
-} from '../configs/FirebaseRemoteConfig';
+
+import firebaseRemoteConfig, {FETCH_INTERVAL_IN_MINUTES} from '../configs/FirebaseRemoteConfig';
 
 // set defaults
 remoteConfig().setDefaults(firebaseRemoteConfig);
 
-// fetch remote config
+// fetch remote Configs
 export const fetchRemoteConfig = () => {
   // data is locally cached for FETCH_INTERVAL_IN_MINUTES
   const fetch = remoteConfig().fetch(FETCH_INTERVAL_IN_MINUTES * 60);
@@ -23,16 +22,16 @@ export const fetchRemoteConfig = () => {
       //   };
       //   let data = snapshot.enable_chat.asBoolean();
       //   console.log(data);
-      Object.entries(res).forEach(($) => {
-        const [key, entry] = $;
+      Object.entries(res).forEach(() => {
+        // const [key, entry] = $;
       });
       return res;
     })
     .catch((err) => {
       if (__DEV__) {
-        console.log('remote config error: ', err);
+        console.log('remote Configs error: ', err);
       }
-      firebaseRemoteConfig;
+      // firebaseRemoteConfig;
     });
 };
 
