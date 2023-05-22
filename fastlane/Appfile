@@ -1,0 +1,10 @@
+
+# iOS
+apple_id(ENV["FASTLANE_APPLE_USERNAME"])
+app_identifier(ENV["FASTLANE_APPLE_BUNDLE_IDENTIFIER"])
+itc_team_id(ENV["FASTLANE_APPLE_ITC_TEAM_ID"])
+team_id(ENV["FASTLANE_APPLE_DEV_TEAM_ID"])
+
+# Android
+json_key_file("./playstore-api-key.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name(ENV["FASTLANE_ANDROID_PACKAGE_NAME"])
