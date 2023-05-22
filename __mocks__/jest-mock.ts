@@ -81,27 +81,6 @@ jest.doMock('react-native', () => {
         ReactNative,
     );
 });
-jest.doMock('@react-native-firebase/remote-Configs', () => {
-    return function () {
-        return {
-            setConfigSettings: (config: object) => { },
-            setDefaults: (defaultSettings: object) => { },
-            fetchAndActivate: async (): Promise<boolean> => {
-                return true;
-            },
-            getValue: (key: string): any => {
-                return {
-                    asNumber: () => {
-                        return 100;
-                    },
-                    asBoolean: () => {
-                        return true;
-                    },
-                };
-            },
-        };
-    };
-});
 jest.mock('@react-native-firebase/crashlytics', () => () => ({
     recordError: jest.fn(),
     logEvent: jest.fn(),
@@ -155,5 +134,27 @@ jest.mock('react-native-vector-icons/AntDesign', () => 'Icon');
 jest.mock('react-native-vector-icons/Ionicons', () => 'Icon');
 jest.mock('react-native-vector-icons/Octicons', () => 'Icon');
 jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon');
-jest.mock('react-native-simple-toast', () => jest.fn())
-jest.mock('react-native-image-crop-picker', () => jest.fn())
+jest.mock('react-native-simple-toast', () => jest.fn());
+jest.mock('react-native-image-crop-picker', () => jest.fn());
+
+jest.mock("@react-native-firebase/remote-config", () => ({
+    __esModule: true,
+    default: () => ({
+        setDefaults: jest.fn(),
+        setConfigSettings: (config: object) => { },
+        fetchAndActivate: async (): Promise<boolean> => {
+                return true;
+            },
+        getValue: (key: string): any => {
+            return {
+                asNumber: () => {
+                    return 100;
+                },
+                asBoolean: () => {
+                    return true;
+                },
+            };
+        },
+
+    }),
+}));

@@ -708,11 +708,13 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     onModalWillShow={[Function]}
     onPress={[MockFunction]}
     onRequestClose={[Function]}
+    panResponderThreshold={4}
     scrollHorizontal={false}
     scrollOffset={0}
     scrollOffsetMax={0}
     scrollTo={null}
     selectedUser={Array []}
+    statusBarTranslucent={false}
     supportedOrientations={
       Array [
         "portrait",
@@ -761,12 +763,14 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
       onModalWillHide={[Function]}
       onModalWillShow={[Function]}
       onPress={[MockFunction]}
+      panResponderThreshold={4}
       pointerEvents="box-none"
       scrollHorizontal={false}
       scrollOffset={0}
       scrollOffsetMax={0}
       scrollTo={null}
       selectedUser={Array []}
+      statusBarTranslucent={false}
       style={
         Object {
           "flex": 1,
