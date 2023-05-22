@@ -1,0 +1,351 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+orbs:
+  node: circleci/node@5.0.2
+  ruby: circleci/ruby@1.8.0
+  dotenv: anilanar/dotenv@1.0.0
+  slack: circleci/slack@4.4.4
+  jira: circleci/jira@1.3.1
+
+parameters:
+  env:
+    type: string
+    default: dev
+  build-type:
+    type: string
+    default: release
+  run-release-android:
+    type: boolean
+    default: false
+  run-release-ios:
+    type: boolean
+    default: false
+  run-release-dev:
+    type: boolean
+    default: false
+  run-release-qa:
+    type: boolean
+    default: false
+  run-release-stg:
+    type: boolean
+    default: false
+  run-release-prod:
+    type: boolean
+    default: false
+  run-codepush-qa:
+    type: boolean
+    default: false
+  run-codepush-stg:
+    type: boolean
+    default: false
+  run-codepush-prod:
+    type: boolean
+    default: false
+  run-register-device:
+    type: boolean
+    default: false
+  register-device-name:
+    type: string
+    default: ''
+  register-device-udid:
+    type: string
+    default: ''
+  register-type:
+    type: string
+    default: adhoc
+  release-notes:
+    type: string
+    default: ''
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  node:
+    working_directory: ~/bettersocial-rn
+    docker:
+      - image: cimg/node:16.14.2
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 8c:b9:a0:02:b1:20:b0:4d:d8:96:b0:1f:c7:c1:0c:cb
+      - checkout
+      - restore_cache:
+          key: v3-yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run: yarn install --frozen-lockfile
+      - save_cache:
+          key: v3-yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  release-android:
+    working_directory: ~/bettersocial-rn
+    docker:
+      - image: cimg/android:2022.09.2-node
+    resource_class: xlarge
+    parameters:
+      env:
+        default: prod
+        type: string
+      build-type:
+        default: release
+        type: string
+    steps:
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          keys:
+            - gem-cache-v1-{{ checksum "Gemfile.lock" }}
+      - run: bundle check || bundle install
+      - save_cache:
+          key: gem-cache-v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: decrypt api key playstore
+          command: openssl aes-256-cbc -d -md sha256 -in fastlane/playstore-api-key.json.enc -out fastlane/playstore-api-key.json -pass pass:$PLAYSTORE_KEY_PASSWORD
+      - run:
+          name: android build
+          command: bundle exec fastlane android release --env <<parameters.env>> build_type:<< pipeline.parameters.build-type >> release_notes:<< pipeline.parameters.release-notes >>
+      - save_cache:
+          key: gradle-v1-{{ .Environment.CACHE_ENV }}-{{ checksum "android/build.gradle" }}
+          paths:
+            - android/.gradle
+  release-ios:
+    working_directory: ~/project
+    macos:
+      xcode: 14.3
+    resource_class: macos.x86.medium.gen2 # new generation resources
+    parameters:
+      env:
+        default: prod
+        type: string
+    steps:
+      - attach_workspace:
+          at: .
+      - add_ssh_keys:
+          fingerprints:
+            - 8c:b9:a0:02:b1:20:b0:4d:d8:96:b0:1f:c7:c1:0c:cb
+      - run:
+          name: create file .netrc
+          command: touch ~/.netrc && chmod -R 0600 ~/.netrc && (echo $GRAB_DEFENSE_MACHINE; echo $GRAB_DEFENSE_USER; echo $GRAB_DEFENSE_PASSWORD)  >> ~/.netrc
+      - run:
+          name: Keyscan bitbucket.org
+          command: ssh-keyscan -H bitbucket.org >> ~/.ssh/known_hosts
+      - restore_cache:
+          keys:
+            - ios-gem-cache-v1-{{ checksum "Gemfile.lock" }}
+      - run: bundle check || bundle install
+      - save_cache:
+          key: ios-gem-cache-v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - restore_cache:
+          keys:
+            - pods-v1-{{ .Environment.CACHE_ENV }}-{{ checksum "ios/Podfile.lock" }}
+            - pods-v1-{{ .Environment.CACHE_ENV }}-
+            - pods-v1-
+      - run:
+          command: bundle check || bundle install
+          working_directory: ios
+      - run:
+          command: pod install
+          working_directory: ios
+      - save_cache:
+          key: pods-v1-{{ .Environment.CACHE_ENV }}-{{ checksum "ios/Podfile.lock" }}
+          paths:
+            - ios/Pods
+      - run:
+          name: decrypt api key appconnect
+          command: openssl aes-256-cbc -d -md sha256 -in fastlane/appconnect-api-key.p8.enc -out fastlane/appconnect-api-key.p8 -pass pass:$APPCONNECT_KEY_PASSWORD
+      - run:
+          name: Fastlane
+          no_output_timeout: 40m
+          command: bundle exec fastlane ios release --env <<parameters.env>> release_notes:<< pipeline.parameters.release-notes >>
+  register-device-ios:
+    working_directory: ~/project
+    macos:
+      xcode: 14.1
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 8c:b9:a0:02:b1:20:b0:4d:d8:96:b0:1f:c7:c1:0c:cb
+      - checkout
+      - restore_cache:
+          keys:
+            - ios-gem-cache-v1-{{ checksum "Gemfile.lock" }}
+      - run: bundle check || bundle install
+      - save_cache:
+          key: ios-gem-cache-v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: decrypt api key appconnect
+          command: openssl aes-256-cbc -d -md sha256 -in fastlane/appconnect-api-key.p8.enc -out fastlane/appconnect-api-key.p8 -pass pass:$APPCONNECT_KEY_PASSWORD
+      - run:
+          name: Fastlane
+          no_output_timeout: 40m
+          command: bundle exec fastlane ios register_new_device name:<<pipeline.parameters.register-device-name>> udid:<<pipeline.parameters.register-device-udid>> type:<<pipeline.parameters.register-type>>
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  release-android:
+    when:
+      or:
+        - equal: [true, << pipeline.parameters.run-release-android >>]
+    jobs:
+      - node
+      - release-android:
+          context: mobile_<<pipeline.parameters.env>>
+          post-steps:
+            - jira/notify:
+                environment_type: testing
+                job_type: deployment
+                scan_commit_body: true
+                environment: android-<<pipeline.parameters.env>>
+          env: <<pipeline.parameters.env>>
+          requires:
+            - node
+  release-ios:
+    when:
+      or:
+        - equal: [true, << pipeline.parameters.run-release-ios >>]
+    jobs:
+      - node
+      - release-ios:
+          context: mobile_<<pipeline.parameters.env>>
+          post-steps:
+            - jira/notify:
+                environment_type: testing
+                job_type: deployment
+                scan_commit_body: true
+                environment: ios-<<pipeline.parameters.env>>
+          env: <<pipeline.parameters.env>>
+          requires:
+            - node
+  release-android-ios-dev:
+    when:
+      or:
+        - equal: [true, << pipeline.parameters.run-release-dev >>]
+        - equal: [/build-dev.*/, << pipeline.git.branch >>]
+    jobs:
+      - node
+      - release-android:
+          context: mobile_dev
+          post-steps:
+            - jira/notify:
+                environment_type: testing
+                job_type: deployment
+                scan_commit_body: true
+                environment: android-dev
+          env: dev
+          requires:
+            - node
+      - release-ios:
+          context: mobile_dev
+          post-steps:
+            - jira/notify:
+                environment_type: testing
+                job_type: deployment
+                scan_commit_body: true
+                environment: ios-dev
+          env: dev
+          requires:
+            - node
+  release-android-ios-qa:
+    when:
+      or:
+        - equal: [true, << pipeline.parameters.run-release-qa >>]
+        - equal: [build/release/beta, << pipeline.git.branch >>]
+    jobs:
+      - node
+      - release-android:
+          context: mobile_qa
+          post-steps:
+            - jira/notify:
+                environment_type: testing
+                job_type: deployment
+                scan_commit_body: true
+                environment: android-qa
+          env: qa
+          requires:
+            - node
+      - release-ios:
+          context: mobile_qa
+          post-steps:
+            - jira/notify:
+                environment_type: testing
+                job_type: deployment
+                scan_commit_body: true
+                environment: ios-qa
+          env: qa.sinarmas
+          requires:
+            - node
+  release-android-ios-stg:
+    when:
+      or:
+        - equal: [true, << pipeline.parameters.run-release-stg >>]
+        - equal: [build/release/hotfix, << pipeline.git.branch >>]
+    jobs:
+      - node
+      - release-android:
+          context: mobile_stg
+          post-steps:
+            - jira/notify:
+                environment_type: staging
+                job_type: deployment
+                scan_commit_body: true
+                environment: android-stg
+          env: stg
+          requires:
+            - node
+      - release-ios:
+          context: mobile_stg
+          post-steps:
+            - jira/notify:
+                environment_type: staging
+                job_type: deployment
+                scan_commit_body: true
+                environment: ios-stg
+          env: stg.sinarmas
+          requires:
+            - node
+  release-android-ios-prod:
+    when:
+      or:
+        - equal: [true, << pipeline.parameters.run-release-prod >>]
+        - equal: [master, << pipeline.git.branch >>]
+    jobs:
+      - node
+      - release-android:
+          context: mobile_prod
+          post-steps:
+            - jira/notify:
+                environment_type: production
+                job_type: deployment
+                scan_commit_body: true
+                environment: android-prod
+          env: prod
+          requires:
+            - node
+      - release-ios:
+          context: mobile_prod
+          post-steps:
+            - jira/notify:
+                environment_type: production
+                job_type: deployment
+                scan_commit_body: true
+                environment: ios-prod
+          env: prod
+          requires:
+            - node
+  register-new-device:
+    when:
+      or:
+        - equal: [true, << pipeline.parameters.run-register-device >>]
+    jobs:
+      - register-device-ios
+# VS Code Extension Version: 1.5.1
