@@ -81,7 +81,7 @@ jest.doMock('react-native', () => {
         ReactNative,
     );
 });
-jest.doMock('@react-native-firebase/remote-Configs', () => {
+jest.doMock('@react-native-firebase/remote-config', () => {
     return function () {
         return {
             setConfigSettings: (config: object) => { },
