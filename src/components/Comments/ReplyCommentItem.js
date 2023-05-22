@@ -11,6 +11,7 @@ import MemoIc_arrow_down_vote_off from '../../assets/arrow/Ic_downvote_off';
 import MemoIc_arrow_upvote_off from '../../assets/arrow/Ic_upvote_off';
 import MemoIc_downvote_on from '../../assets/arrow/Ic_downvote_on';
 import MemoIc_upvote_on from '../../assets/arrow/Ic_upvote_on';
+import useUpdateComment from './hooks/useUpdateComment';
 import {FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
@@ -18,7 +19,6 @@ import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {iVoteComment, voteComment} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
-import useUpdateComment from './hooks/useUpdateComment';
 
 const ReplyCommentItem = ({
   user,
@@ -87,9 +87,7 @@ const ReplyCommentItem = ({
     onVote(dataVote);
   };
   const onVote = async (dataVote) => {
-    console.log(dataVote, 'nana');
     const result = await voteComment(dataVote);
-    console.log(result, 'sipo');
     if (updateVoteParent && typeof updateVoteParent === 'function') {
       updateVoteParent(result, dataVote, comment);
     }

@@ -18,9 +18,9 @@ import ReplyCommentItem from '../Comments/ReplyCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../Comments/WriteComment';
 import useReplyComment from './hooks/useReplyComment';
+import useWriteComment from '../Comments/hooks/useWriteComment';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import useWriteComment from '../Comments/hooks/useWriteComment';
 import {getCommentChild} from '../../service/feeds';
 
 const ReplyCommentId = ({
