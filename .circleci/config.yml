@@ -85,7 +85,7 @@ jobs:
     working_directory: ~/bettersocial-rn
     docker:
       - image: cimg/android:2022.09.2-node
-    resource_class: xlarge
+    resource_class: large
     parameters:
       env:
         default: prod
