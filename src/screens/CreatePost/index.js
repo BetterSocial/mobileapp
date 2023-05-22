@@ -81,6 +81,8 @@ import {uploadPhoto} from '../../service/file';
 
 const IS_GEO_SELECT_ENABLED = false;
 
+const IS_GEO_SELECT_ENABLED = false;
+
 function compire(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
