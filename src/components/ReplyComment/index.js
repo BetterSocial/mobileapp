@@ -18,13 +18,11 @@ import ConnectorWrapper from '../Comments/ConnectorWrapper';
 import ReplyCommentItem from '../Comments/ReplyCommentItem';
 import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../Comments/WriteComment';
+import useCommentAction from '../Comments/hooks/useCommentAction';
 import useReplyComment from './hooks/useReplyComment';
 import useWriteComment from '../Comments/hooks/useWriteComment';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {getCommentChild} from '../../service/feeds';
-import useWriteComment from '../Comments/hooks/useWriteComment';
-import useCommentAction from '../Comments/hooks/useCommentAction';
 
 const ReplyCommentId = ({
   itemProp,
