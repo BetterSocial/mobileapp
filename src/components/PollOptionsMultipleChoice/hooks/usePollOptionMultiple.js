@@ -1,32 +1,32 @@
-export const usePollOptionMultiple = ({ 
-    item,
-    mypoll,
-    index,
-  // total,
-    selectedindex,
-    isexpired,
-    isalreadypolling = false,
-    maxpolls = [],
-     onselected = () => {},
-    totalVotingUser = 0}) => {
+export const usePollOptionMultiple = ({
+  item,
+  mypoll,
+  index,
+  selectedindex,
+  isexpired,
+  isalreadypolling = false,
+  maxpolls = [],
+  onselected = () => {},
+  total = 0
+}) => {
+  const counter = item?.counter || 0;
+  const optionPercentage = total === 0 ? 0 : ((counter / total) * 100).toFixed(0);
 
-    const counter = item?.counter || 0;
-    const optionPercentage = totalVotingUser === 0 ? 0 : ((counter / totalVotingUser) * 100).toFixed(0);
+  const isPollDisabled = () => isalreadypolling || isexpired;
 
-    const isPollDisabled = () => isalreadypolling || isexpired;
+  const selected = selectedindex.includes(index);
 
-    const selected = selectedindex.includes(index);
-
-    const isMyPoll = () => mypoll.reduce((acc, current) => {
-      const isCurrentItemMyPoll =
-        item?.polling_option_id === current?.polling_option_id;
+  const isMyPoll = () =>
+    mypoll?.reduce((acc, current) => {
+      const isCurrentItemMyPoll = item?.polling_option_id === current?.polling_option_id;
       return acc || isCurrentItemMyPoll;
     }, false);
 
-    const onOptionsClicked = () => {
+  const onOptionsClicked = () => {
     if (isPollDisabled()) {
-      return null
+      return;
     }
+
     if (selected) {
       const idx = selectedindex.indexOf(index);
       const newSelectedIndex = [...selectedindex];
@@ -39,34 +39,31 @@ export const usePollOptionMultiple = ({
     }
   };
 
-    const isPollNotEndedAndIsMine = isalreadypolling && isMyPoll() && !isexpired;
-    const isMax = maxpolls.includes(item.polling_option_id);
+  const isPollNotEndedAndIsMine = isalreadypolling && isMyPoll() && !isexpired;
+  const isMax = maxpolls.includes(item.polling_option_id);
 
-    const handleStyleBar = (percent) => {
-      let newPercent = percent
-      if(!percent){
-        newPercent = 0
-      }
-      if(percent > 100) {
-       newPercent = 100
-      }
-      return newPercent
+  const handleStyleBar = (percent) => {
+    let newPercent = percent;
+    if (!percent) {
+      newPercent = 0;
     }
-
-    return {
-        counter,
-        optionPercentage,
-        isPollDisabled, 
-        selected,
-        isMax,
-        isMyPoll,
-        onOptionsClicked,
-        isPollNotEndedAndIsMine,
-        handleStyleBar
+    if (percent > 100) {
+      newPercent = 100;
     }
+    return newPercent;
+  };
 
-}
+  return {
+    counter,
+    optionPercentage,
+    isPollDisabled,
+    selected,
+    isMax,
+    isMyPoll,
+    onOptionsClicked,
+    isPollNotEndedAndIsMine,
+    handleStyleBar
+  };
+};
 
-
-
-export default usePollOptionMultiple
+export default usePollOptionMultiple;

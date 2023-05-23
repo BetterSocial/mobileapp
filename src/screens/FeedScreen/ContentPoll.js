@@ -37,9 +37,7 @@ const ContentPoll = ({
     onSeeResultsClicked,
     modifiedPoll
   } = useContentPoll({isalreadypolling, polls});
-  const initialSetup = () => {
-    if (multiplechoice) onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index);
-  };
+  const initialSetup = () => {};
 
   React.useEffect(() => {
     initialSetup();
@@ -60,9 +58,7 @@ const ContentPoll = ({
                 index={indexPoll}
                 mypoll={item?.mypolling}
                 selectedindex={multipleChoiceSelected}
-                onselected={(indexes) => {
-                  setMultipleChoiceSelected(indexes);
-                }}
+                onselected={setMultipleChoiceSelected}
                 isexpired={isPollExpired(pollexpiredat)}
                 isalreadypolling={isAlreadyPolling}
                 maxpolls={modifiedPoll(polls).maxId}
