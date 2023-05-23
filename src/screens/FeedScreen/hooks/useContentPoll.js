@@ -1,11 +1,11 @@
 /* eslint-disable no-plusplus */
 import React from 'react';
 
+import {NO_POLL_UUID, isPollExpired} from '../../../utils/string/StringUtils';
 import {inputSingleChoicePoll} from '../../../service/post';
-import {isPollExpired} from '../../../utils/string/StringUtils';
 
-const useContentPoll = ({polls}) => {
-  const [isAlreadyPolling, setIsAlreadyPolling] = React.useState(false);
+const useContentPoll = ({polls, isalreadypolling}) => {
+  const [isAlreadyPolling, setIsAlreadyPolling] = React.useState(isalreadypolling);
   const [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = React.useState(-1);
   const [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
   const [newPoll, setNewPoll] = React.useState(null);
@@ -24,7 +24,8 @@ const useContentPoll = ({polls}) => {
     newItem.isalreadypolling = true;
     newItem.refreshtoken = new Date().valueOf();
     if (multipleChoiceSelected.length === 0) {
-      setIsAlreadyPolling(false);
+      setIsAlreadyPolling(true);
+      inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
     } else {
       setIsAlreadyPolling(true);
       const selectedPolls = [];
@@ -34,6 +35,7 @@ const useContentPoll = ({polls}) => {
         const selectedPoll = polls[changedPollIndex];
         newPolls[changedPollIndex].counter = Number(selectedPoll.counter) + 1;
         selectedPolls.push(selectedPoll);
+        inputSingleChoicePoll(polls[0].polling_id, selectedPoll?.polling_option_id);
       }
       newItem.pollOptions = newPolls;
       newItem.mypolling = selectedPolls;
@@ -51,7 +53,7 @@ const useContentPoll = ({polls}) => {
     newItem.refreshtoken = new Date().valueOf();
 
     if (singleChoiceSelectedIndex === -1) {
-      // inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
+      inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
     } else {
       const selectedPoll = polls[singleChoiceSelectedIndex];
       newPolls[singleChoiceSelectedIndex].counter = Number(selectedPoll.counter) + 1;
