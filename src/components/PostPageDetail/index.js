@@ -120,7 +120,7 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const onBottomPage = () => {
-    if (scrollViewRef && scrollViewRef.current) {
+    if (scrollViewRef && scrollViewRef.current && !loadingComment) {
       scrollViewRef.current.scrollToEnd({animated: true});
     }
   };
