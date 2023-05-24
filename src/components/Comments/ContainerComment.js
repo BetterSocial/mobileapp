@@ -32,7 +32,7 @@ const ContainerComment = ({
   const [, setSelectedCommentForDelete] = React.useState(null);
   const [selectedCommentLevelForDelete, setSelectedCommentLevelForDelete] = React.useState(0);
   const {isLast, isLastInParent, hideLeftConnector} = useContainerComment();
-  const {calculationText, calculatedSizeScreen} = usePostDetail();
+  const {calculationText, calculatedSizeScreen, calculatePaddingBtm} = usePostDetail();
   const {deleteCommentFromContext} = usePostContextHook(contextSource);
   const onCommentLongPressed = async (item, level = 0) => {
     const selfId = await getUserId();
@@ -65,6 +65,7 @@ const ContainerComment = ({
   return (
     <View style={[styles.container]}>
       <View
+        nestedScrollEnabled={true}
         style={{
           minHeight:
             Dimensions.get('window').height -
@@ -73,7 +74,8 @@ const ContainerComment = ({
               .containerHeight,
           borderLeftWidth: 1,
           borderLeftColor: '#C4C4C4',
-          marginTop: 2
+          marginTop: 0,
+          paddingBottom: calculatePaddingBtm()
         }}>
         <View style={styles.lineBeforeProfile} />
 

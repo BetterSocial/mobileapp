@@ -125,7 +125,7 @@ const PostPageDetailIdComponent = (props) => {
   };
 
   const onBottomPage = () => {
-    if (scrollViewRef && scrollViewRef.current) {
+    if (scrollViewRef && scrollViewRef.current && !loadingComment) {
       scrollViewRef.current.scrollToEnd({animated: true});
     }
   };
@@ -598,19 +598,16 @@ const PostPageDetailIdComponent = (props) => {
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
             contentContainerStyle={{
-              paddingBottom: calculatePaddingBtm()
+              paddingBottom: 0
             }}>
             <View
-              style={
-                ([styles.content],
-                {
-                  minHeight: calculateMinHeight(
-                    height - calculatedSizeScreen,
-                    calculationText(item?.message, item?.post_type, item?.images_url)
-                      .containerHeight
-                  )
-                })
-              }>
+              style={{
+                minHeight: calculateMinHeight(
+                  height - calculatedSizeScreen,
+                  calculationText(item?.message, item?.post_type, item?.images_url).containerHeight
+                ),
+                paddingBottom: comments.length <= 0 ? calculatePaddingBtm() : 0
+              }}>
               {item.post_type === POST_TYPE_LINK ? (
                 <ContentLink
                   og={item.og}
@@ -633,7 +630,7 @@ const PostPageDetailIdComponent = (props) => {
                   isPostDetail={true}
                 />
               )}
-              <View style={{height: 52, paddingHorizontal: 0, width: '100%'}}>
+              <View style={styles.footerContainer}>
                 <Footer
                   item={item}
                   disableComment={false}
@@ -738,5 +735,12 @@ const styles = StyleSheet.create({
       };
     }
     return {};
+  },
+  footerContainer: {
+    height: 52,
+    paddingHorizontal: 0,
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#C4C4C4'
   }
 });
