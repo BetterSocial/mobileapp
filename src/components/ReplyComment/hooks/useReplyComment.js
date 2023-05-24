@@ -262,7 +262,8 @@ const useReplyComment = ({
               id: data.data.id,
               activity_id: data.data.activity_id,
               user: data.data.user,
-              data: data.data.data
+              data: data.data.data,
+              is_you: true
             }
           ];
           setNewCommentList(newComment);
@@ -285,14 +286,13 @@ const useReplyComment = ({
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
   };
-
   const getThisComment = async (isUpdate) => {
     if (itemProp.latest_children.comment && Array.isArray(itemProp.latest_children.comment)) {
       if (!isUpdate) {
         setNewCommentList(itemProp.latest_children?.comment);
       }
     }
-    const response = await getCommentChild({activity_id: item?.id});
+    const response = await getCommentChild({activity_id: item?.id, feed_id: item.activity_id});
     setNewCommentList(response.data);
   };
 

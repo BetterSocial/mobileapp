@@ -86,7 +86,7 @@ const ContainerComment = ({
                       indexFeed
                     })
                   }
-                  onLongPress={onCommentLongPressed}
+                  onLongPress={() => onCommentLongPressed(item, 0)}
                   // refreshComment={refreshComment}
                   findCommentAndUpdate={findCommentAndUpdate}
                 />
@@ -135,6 +135,7 @@ export const ReplyComment = ({
                     indexFeed={indexFeed}
                     key={`c${index}`}
                     comment={item}
+                    onLongPress={() => onCommentLongPressed(item, 1)}
                     // username={item.user.data.username}
                     user={item.user}
                     level={1}
