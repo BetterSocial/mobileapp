@@ -75,6 +75,7 @@ const ContainerComment = ({
   return (
     <View style={[styles.container]}>
       <View
+        nestedScrollEnabled={true}
         style={{
           minHeight: calculateMinHeight(),
           borderLeftWidth: 1,
