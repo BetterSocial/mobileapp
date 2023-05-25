@@ -63,16 +63,20 @@ const ContainerComment = ({
     }
   };
 
+  const calculateMinHeight = () => {
+    return (
+      Dimensions.get('window').height -
+      calculatedSizeScreen -
+      calculationText(itemParent?.message, itemParent?.post_type, itemParent?.images_url)
+        .containerHeight
+    );
+  };
+
   return (
     <View style={[styles.container]}>
       <View
-        nestedScrollEnabled={true}
         style={{
-          minHeight:
-            Dimensions.get('window').height -
-            calculatedSizeScreen -
-            calculationText(itemParent?.message, itemParent?.post_type, itemParent?.images_url)
-              .containerHeight,
+          minHeight: calculateMinHeight(),
           borderLeftWidth: 1,
           borderLeftColor: '#C4C4C4',
           marginTop: 0,
@@ -81,22 +85,24 @@ const ContainerComment = ({
         <View style={styles.lineBeforeProfile} />
 
         {comments.map((item, index) => (
-         <>
-         {item.user ?  <ListComment
-            key={`p${index}`}
-            indexFeed={indexFeed}
-            index={index}
-            onCommentLongPressed={onCommentLongPressed}
-            item={item}
-            isLast={isLast}
-            isLastInParent={isLastInParent}
-            comments={comments}
-            navigateToReplyView={navigateToReplyView}
-            findCommentAndUpdate={findCommentAndUpdate}
-            hideLeftConnector={hideLeftConnector}
-            navigation={navigation}
-          /> : null}
-         </>
+          <>
+            {item.user ? (
+              <ListComment
+                key={`p${index}`}
+                indexFeed={indexFeed}
+                index={index}
+                onCommentLongPressed={onCommentLongPressed}
+                item={item}
+                isLast={isLast}
+                isLastInParent={isLastInParent}
+                comments={comments}
+                navigateToReplyView={navigateToReplyView}
+                findCommentAndUpdate={findCommentAndUpdate}
+                hideLeftConnector={hideLeftConnector}
+                navigation={navigation}
+              />
+            ) : null}
+          </>
         ))}
       </View>
 
