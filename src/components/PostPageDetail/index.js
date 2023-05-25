@@ -606,12 +606,6 @@ const PostPageDetailIdComponent = (props) => {
               nestedScrollEnabled
               contentContainerStyle={{
                 paddingBottom: comments.length <= 0 ? calculatePaddingBtm() : 0
-              }}
-              style={{
-                minHeight: calculateMinHeight(
-                  height - calculatedSizeScreen,
-                  calculationText(item?.message, item?.post_type, item?.images_url).containerHeight
-                )
               }}>
               {item.post_type === POST_TYPE_LINK ? (
                 <ContentLink
