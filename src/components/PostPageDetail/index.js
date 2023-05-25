@@ -79,7 +79,8 @@ const PostPageDetailIdComponent = (props) => {
     }
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
-    saveComment(response.data.data, dispatchComment);
+    const removeDeletedUser = response.data.data.filter((data) => data.user);
+    saveComment(removeDeletedUser, dispatchComment);
     setLoadingGetComment(false);
     if (scrollToBottom) {
       setTimeout(() => {
