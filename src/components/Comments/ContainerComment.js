@@ -81,7 +81,8 @@ const ContainerComment = ({
         <View style={styles.lineBeforeProfile} />
 
         {comments.map((item, index) => (
-          <ListComment
+         <>
+         {item.user ?  <ListComment
             key={`p${index}`}
             indexFeed={indexFeed}
             index={index}
@@ -94,7 +95,8 @@ const ContainerComment = ({
             findCommentAndUpdate={findCommentAndUpdate}
             hideLeftConnector={hideLeftConnector}
             navigation={navigation}
-          />
+          /> : null}
+         </>
         ))}
       </View>
 
