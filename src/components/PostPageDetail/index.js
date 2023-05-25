@@ -602,13 +602,16 @@ const PostPageDetailIdComponent = (props) => {
             contentContainerStyle={{
               paddingBottom: 0
             }}>
-            <View
+            <ScrollView
+              nestedScrollEnabled
+              contentContainerStyle={{
+                paddingBottom: comments.length <= 0 ? calculatePaddingBtm() : 0
+              }}
               style={{
                 minHeight: calculateMinHeight(
                   height - calculatedSizeScreen,
                   calculationText(item?.message, item?.post_type, item?.images_url).containerHeight
-                ),
-                paddingBottom: comments.length <= 0 ? calculatePaddingBtm() : 0
+                )
               }}>
               {item.post_type === POST_TYPE_LINK ? (
                 <ContentLink
@@ -655,7 +658,7 @@ const PostPageDetailIdComponent = (props) => {
                   isSelf={profile.myProfile.user_id === item.actor.id}
                 />
               </View>
-            </View>
+            </ScrollView>
             {comments.length > 0 && (
               <ContainerComment
                 feedId={feedId}
