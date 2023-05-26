@@ -68,13 +68,8 @@ const PostPageDetailIdComponent = (props) => {
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
   const [, setLoadingGetComment] = React.useState(true);
-  const {
-    updateVoteLatestChildrenLevel3,
-    updateVoteChildrenLevel1,
-    calculationText,
-    calculatedSizeScreen,
-    calculatePaddingBtm
-  } = usePostDetail();
+  const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculatePaddingBtm} =
+    usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {handleUserName} = useWriteComment();
 
@@ -84,8 +79,7 @@ const PostPageDetailIdComponent = (props) => {
     }
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
-    const removeDeletedUser = response.data.data.filter((data) => data.user);
-    saveComment(removeDeletedUser, dispatchComment);
+    saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
     if (scrollToBottom) {
       setTimeout(() => {
@@ -578,8 +572,8 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
-  const calculateMinHeight = (heightC, minHeight) => {
-    return minHeight > heightC ? heightC : minHeight;
+  const handlePaddingBottom = () => {
+    return comments.length <= 0 ? calculatePaddingBtm() : 0;
   };
 
   return (
@@ -600,13 +594,11 @@ const PostPageDetailIdComponent = (props) => {
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
-            contentContainerStyle={{
-              paddingBottom: 0
-            }}>
+            contentContainerStyle={styles.scrollContent}>
             <ScrollView
               nestedScrollEnabled
               contentContainerStyle={{
-                paddingBottom: comments.length <= 0 ? calculatePaddingBtm() : 0
+                paddingBottom: handlePaddingBottom()
               }}>
               {item.post_type === POST_TYPE_LINK ? (
                 <ContentLink
@@ -743,5 +735,8 @@ const styles = StyleSheet.create({
     width: '100%',
     borderBottomWidth: 1,
     borderBottomColor: '#C4C4C4'
+  },
+  scrollContent: {
+    paddingBottom: 0
   }
 });
