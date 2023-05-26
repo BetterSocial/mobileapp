@@ -41,6 +41,7 @@ const ListComment = ({
               }
               // refreshComment={refreshComment}
               findCommentAndUpdate={findCommentAndUpdate}
+              onLongPress={onCommentLongPressed}
             />
           ) : null}
         </View>
