@@ -11,16 +11,16 @@ import {
   View
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
-
 import {useSetRecoilState} from 'recoil';
+
 import Header from '../../components/Header';
 import Loading from '../Loading';
 import ProfileSettingItem from './element/ProfileSettingItem';
 import useSettings from './hooks/useSettings';
 import {colors} from '../../utils/colors';
+import {debugAtom} from '../../service/debug';
 import {fonts} from '../../utils/fonts';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {debugAtom} from '../../service/debug';
 
 const {width} = Dimensions.get('screen');
 
