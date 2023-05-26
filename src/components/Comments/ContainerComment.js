@@ -75,13 +75,13 @@ const ContainerComment = ({
   return (
     <View style={[styles.container]}>
       <View
-        style={{
-          minHeight: calculateMinHeight(),
-          borderLeftWidth: 1,
-          borderLeftColor: '#C4C4C4',
-          marginTop: 0,
-          paddingBottom: calculatePaddingBtm()
-        }}>
+        style={[
+          styles.containerComment,
+          {
+            minHeight: calculateMinHeight() + calculatePaddingBtm(),
+            paddingBottom: calculatePaddingBtm()
+          }
+        ]}>
         <View style={styles.lineBeforeProfile} />
 
         {comments.map((item, index) => (
@@ -215,5 +215,10 @@ export const styles = StyleSheet.create({
   levelOneCommentWrapper: {
     flex: 1,
     marginLeft: 0
+  },
+  containerComment: {
+    borderLeftWidth: 1,
+    borderLeftColor: '#C4C4C4',
+    marginTop: 0
   }
 });
