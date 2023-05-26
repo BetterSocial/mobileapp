@@ -46,7 +46,7 @@ const ContentLink = ({
           ...styles.messageContainer,
           ...messageContainerStyle,
           paddingLeft: isPostDetail ? 12 : 0,
-          height: calculationText(hashtagAtComponent(sanitizeUrl)).containerHeight
+          height: calculationText(item.message, item.post_type).containerHeight
         }}>
         {!isPostDetail ? (
           <Text tyle={[styles.message]}>
@@ -114,7 +114,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 6,
     backgroundColor: COLORS.white,
-    paddingTop: 5
+    paddingTop: 5,
+    height: 300
   },
   message: {
     fontFamily: fonts.inter[400],
