@@ -15,6 +15,7 @@ import {colors} from '../../utils/colors';
 import {deleteComment} from '../../service/comment';
 import {getUserId} from '../../utils/users';
 import usePostDetail from '../PostPageDetail/hooks/usePostDetail';
+import ListComment from './ListComment';
 
 const ContainerComment = ({
   feedId,
@@ -32,11 +33,11 @@ const ContainerComment = ({
   const [, setSelectedCommentForDelete] = React.useState(null);
   const [selectedCommentLevelForDelete, setSelectedCommentLevelForDelete] = React.useState(0);
   const {isLast, isLastInParent, hideLeftConnector} = useContainerComment();
-  const {calculationText, calculatedSizeScreen} = usePostDetail();
+  const {calculationText, calculatedSizeScreen, calculatePaddingBtm} = usePostDetail();
   const {deleteCommentFromContext} = usePostContextHook(contextSource);
   const onCommentLongPressed = async (item, level = 0) => {
     const selfId = await getUserId();
-    if (selfId === item?.user_id) {
+    if (selfId === item?.user_id || item?.is_you) {
       setSelectedCommentForDelete(item);
       setSelectedCommentLevelForDelete(level);
       Alert.alert('', StringConstant.feedDeleteCommentConfirmation, [
@@ -62,64 +63,46 @@ const ContainerComment = ({
     }
   };
 
+  const calculateMinHeight = () => {
+    return (
+      Dimensions.get('window').height -
+      calculatedSizeScreen -
+      calculationText(itemParent?.message, itemParent?.post_type, itemParent?.images_url)
+        .containerHeight
+    );
+  };
+
   return (
     <View style={[styles.container]}>
       <View
-        style={{
-          minHeight:
-            Dimensions.get('window').height -
-            calculatedSizeScreen -
-            calculationText(itemParent?.message, itemParent?.post_type, itemParent?.images_url)
-              .containerHeight,
-          borderLeftWidth: 1,
-          borderLeftColor: '#C4C4C4',
-          marginTop: 2
-        }}>
+        style={[
+          styles.containerComment,
+          {
+            minHeight: calculateMinHeight() + calculatePaddingBtm(),
+            paddingBottom: calculatePaddingBtm()
+          }
+        ]}>
         <View style={styles.lineBeforeProfile} />
 
         {comments.map((item, index) => (
-          <TouchableWithoutFeedback key={index} onLongPress={() => onCommentLongPressed(item, 0)}>
-            <View>
-              <View key={`p${index}`}>
-                {item.user ? (
-                  <Comment
-                    indexFeed={indexFeed}
-                    key={`p${index}`}
-                    comment={item}
-                    user={item.user}
-                    level={0}
-                    time={item.created_at}
-                    photo={item.user.data && item.user.data.profile_pic_url}
-                    isLast={isLast(index, item, comments)}
-                    isLastInParent={isLastInParent(index, comments)}
-                    showLeftConnector={false}
-                    onPress={() =>
-                      navigateToReplyView({
-                        item,
-                        level: 0,
-                        indexFeed
-                      })
-                    }
-                    // refreshComment={refreshComment}
-                    findCommentAndUpdate={findCommentAndUpdate}
-                  />
-                ) : null}
-              </View>
-              {item?.children_counts?.comment > 0 && (
-                <ReplyComment
-                  hideLeftConnector={hideLeftConnector(index, item, comments)}
-                  data={item.latest_children.comment}
-                  countComment={item.children_counts.comment}
-                  navigation={navigation}
-                  indexFeed={indexFeed}
-                  navigateToReplyView={navigateToReplyView}
-                  // refreshComment={(children) => refreshChildComment({parent: item, children: children.data})}
-                  findCommentAndUpdate={findCommentAndUpdate}
-                  onCommentLongPressed={onCommentLongPressed}
-                />
-              )}
-            </View>
-          </TouchableWithoutFeedback>
+          <>
+            {item.user ? (
+              <ListComment
+                key={`p${index}`}
+                indexFeed={indexFeed}
+                index={index}
+                onCommentLongPressed={onCommentLongPressed}
+                item={item}
+                isLast={isLast}
+                isLastInParent={isLastInParent}
+                comments={comments}
+                navigateToReplyView={navigateToReplyView}
+                findCommentAndUpdate={findCommentAndUpdate}
+                hideLeftConnector={hideLeftConnector}
+                navigation={navigation}
+              />
+            ) : null}
+          </>
         ))}
       </View>
 
@@ -232,5 +215,10 @@ export const styles = StyleSheet.create({
   levelOneCommentWrapper: {
     flex: 1,
     marginLeft: 0
+  },
+  containerComment: {
+    borderLeftWidth: 1,
+    borderLeftColor: '#C4C4C4',
+    marginTop: 0
   }
 });
