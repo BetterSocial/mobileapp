@@ -9,9 +9,8 @@ const useCommentAction = () => {
   const [profile] = React.useContext(Context).profile;
   const {params} = useRoute();
   const {goBack} = useNavigation();
-  const showAlertDelete = (item, backToPrevPage) => {
-    console.log(item, 'nana');
-    if (profile.myProfile?.user_id === item?.user_id || item?.is_you) {
+  const showAlertDelete = (item, backToPrevPage, callback) => {
+    if (profile.myProfile?.user_id === item?.user?.id || item?.is_you) {
       Alert.alert(null, StringConstant.feedDeleteCommentConfirmation, [
         {
           text: 'No, cancel',
@@ -20,21 +19,32 @@ const useCommentAction = () => {
         {
           text: 'Yes',
           style: 'destructive',
-          onPress: () => onDeleteCommentClicked(item, backToPrevPage)
+          onPress: () => onDeleteCommentClicked(item, backToPrevPage, callback)
         }
       ]);
     }
   };
 
-  const onDeleteCommentClicked = async (item, backToPrevPage) => {
-    const response = await deleteComment(item?.id);
-    if (response?.success) {
-      if (params.getComment && typeof params.getComment === 'function') {
-        await params.getComment();
+  const onDeleteCommentClicked = async (item, backToPrevPage, callback) => {
+    try {
+      const response = await deleteComment(item?.id);
+
+      if (response?.success) {
+        if (params.getComment && typeof params.getComment === 'function') {
+          params.getComment();
+        }
+        if (params.getCommentParent && typeof params.getCommentParent === 'function') {
+          params.getCommentParent();
+        }
+        if (backToPrevPage) {
+          goBack();
+        }
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
       }
-      if (backToPrevPage) {
-        goBack();
-      }
+    } catch (e) {
+      if (__DEV__) console.log(e, 'error');
     }
   };
 
