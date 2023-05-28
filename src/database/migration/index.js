@@ -3,7 +3,7 @@
 import LocalDatabase from '..';
 import allMigrationsFile from './file/index';
 
-const TARGET_MIGRATION_VERSION = 0;
+const TARGET_MIGRATION_VERSION = 3;
 
 /**
  * PROCEED WITH CAUTION

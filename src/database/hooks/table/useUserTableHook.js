@@ -22,10 +22,10 @@ const useUserTableHook = () => {
   };
 
   const addUser = async (user) => {
-    const query = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+    const query = 'INSERT INTO users (name) VALUES (?)';
 
     try {
-      await db.executeSql(query, [user.name, user.email, user.password]);
+      await db.executeSql(query, [user.name]);
       return Promise.resolve(true);
     } catch (e) {
       return Promise.reject(e);

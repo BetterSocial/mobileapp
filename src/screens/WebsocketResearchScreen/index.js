@@ -5,7 +5,9 @@ import useWebSocket from 'react-native-use-websocket';
 import {Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
+import ChannelList from '../../database/schema/ChannelListSchema';
 import clientStream from '../../utils/getstream/streamer';
+import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {Button} from '../../components/Button';
 
 const WEBSOCKET_URL_SIGNED =
@@ -15,29 +17,45 @@ const WEBSOCKET_URL_ANONYMOUS =
 
 const WebsocketResearchScreen = () => {
   const navigation = useNavigation();
+  /**
+   * @type {[ChannelList[], (messages: ChannelList[]) => void]}
+   */
   const [messages, setMessages] = React.useState([]);
+
+  const {localDb} = useLocalDatabaseHook();
 
   const {lastJsonMessage} = useWebSocket(WEBSOCKET_URL_ANONYMOUS, {
     onOpen: () => console.log('opened'),
     shouldReconnect: () => true
   });
 
+  const initChannelListData = async () => {
+    if (!localDb) return;
+    const data = await ChannelList.getAll(localDb);
+    console.log('data');
+    console.log(data);
+    setMessages(data);
+  };
+
+  const saveChannelListData = async () => {
+    if (!localDb) return;
+    const channelList = ChannelList.fromWebsocketObject(lastJsonMessage);
+    channelList.save(localDb);
+    initChannelListData();
+  };
+
   React.useEffect(() => {
-    if (!lastJsonMessage) return;
+    if (!lastJsonMessage && !localDb) return;
 
     const {type} = lastJsonMessage;
 
-    console.log(lastJsonMessage);
+    console.log(lastJsonMessage?.channel?.members);
     if (type === 'health.check') return;
 
     if (type === 'notification.message_new') {
-      setMessages((prev) => {
-        const newMessages = [...prev];
-        newMessages.push(lastJsonMessage);
-        return newMessages;
-      });
+      saveChannelListData();
     }
-  }, [lastJsonMessage]);
+  }, [lastJsonMessage, localDb]);
 
   React.useEffect(() => {
     const client = clientStream(
@@ -56,102 +74,13 @@ const WebsocketResearchScreen = () => {
       console.log(data);
     });
 
+    initChannelListData();
+
     return () => {
       notifFeed.unsubscribe();
     };
-  }, []);
+  }, [localDb]);
 
-  /**
-   * @type {WebSocket} ws
-   */
-  let ws;
-
-  /**
-   * @type {WebSocket} ws
-   */
-  let ws2;
-
-  // const tryConnectWebsocket = () => {
-  //   ws = new WebSocket(WEBSOCKET_URL_SIGNED);
-  //   ws.onopen = () => {
-  //     // connection opened
-  //     //   ws.send('something'); // send a message
-  //     console.log('connected');
-  //   };
-
-  //   ws.onmessage = (e) => {
-  //     console.log('e?.data');
-  //     console.log(e?.data);
-  //     const data = JSON.parse(e?.data || {});
-  //     const {type} = data;
-  //     if (type === 'health.check') return;
-
-  //     setMessages((prev) => {
-  //       const newMessages = [...prev];
-  //       newMessages.push({
-  //         ...data,
-  //         userType: 'signed'
-  //       });
-  //       return newMessages;
-  //     });
-  //   };
-
-  //   ws.onerror = (e) => {
-  //     // an error occurred
-  //     console.error(e.message);
-  //   };
-
-  //   ws.onclose = (e) => {
-  //     // connection closed
-  //     console.log('onclose');
-  //     console.log(e.code, e.reason);
-  //   };
-  // };
-  // const tryConnectWebsocketAnonymous = () => {
-  //   ws2 = new WebSocket(WEBSOCKET_URL_ANONYMOUS);
-  //   ws2.onopen = () => {
-  //     // connection opened
-  //     //   ws2.send('something'); // send a message
-  //     console.log('connected anonymous');
-  //   };
-
-  //   ws2.onmessage = (e) => {
-  //     console.log('e?.data anonymous');
-  //     console.log(e?.data);
-  //     const data = JSON.parse(e?.data || {});
-  //     const {type} = data;
-  //     if (type === 'health.check') return;
-
-  //     setMessages((prev) => {
-  //       const newMessages = [...prev];
-  //       newMessages.push({
-  //         ...data,
-  //         userType: 'anonymous'
-  //       });
-  //       return newMessages;
-  //     });
-  //   };
-
-  //   ws2.onerror = (e) => {
-  //     // an error occurred
-  //     console.error(e.message);
-  //   };
-
-  //   ws2.onclose = (e) => {
-  //     // connection closed
-  //     console.log('onclose');
-  //     console.log(e.code, e.reason);
-  //   };
-  // };
-
-  React.useEffect(() => {
-    // tryConnectWebsocket();
-    // tryConnectWebsocketAnonymous();
-    // return () => {
-    //   ws.close();
-    //   ws2.close();
-    // };
-  }, []);
   return (
     <View>
       <Button onPress={navigation.goBack}>Back</Button>
@@ -159,7 +88,8 @@ const WebsocketResearchScreen = () => {
       {messages.map((item, index) => {
         return (
           <View key={index}>
-            <Text>{`${item?.userType}: ${item?.message?.text}`}</Text>
+            <Text>{`${item?.name}: ${item?.description}`}</Text>
+            <Text>{item?.last_updated_at}</Text>
           </View>
         );
       })}
