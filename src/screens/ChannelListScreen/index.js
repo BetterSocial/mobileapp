@@ -209,8 +209,8 @@ const ChannelListScreen = () => {
         Promise.resolve(res.data);
       })
       .catch((err) => {
-        setFollowUserList([...followUserList, requestData]);
         Promise.reject(err);
+        setFollowUserList([...followUserList, requestData]);
       });
 
     return true;
