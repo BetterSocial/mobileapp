@@ -195,7 +195,7 @@ const GroupInfo = () => {
                     onPress={() => handlePressContact(item)}
                     fullname={item.user.name}
                     photo={item.user.image}
-                    showArrow={channelState?.channel.data.type === 'group'}
+                    // showArrow={channelState?.channel.data.type === 'group'}
                     userId={profile.myProfile.user_id}
                   />
                 </View>
@@ -203,7 +203,7 @@ const GroupInfo = () => {
             />
           </View>
           <View style={styles.gap} />
-          {channelState?.channel.data.type === 'group' ? (
+          {/* {channelState?.channel.data.type === 'group' ? (
             <View style={styles.actionGroup}>
               <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
                 <View style={styles.imageActContainer}>
@@ -222,7 +222,7 @@ const GroupInfo = () => {
                 </View>
               </TouchableOpacity>
             </View>
-          ) : null}
+          ) : null} */}
         </SafeAreaView>
       </ScrollView>
       {channelState?.channel.data.type === 'group' && (

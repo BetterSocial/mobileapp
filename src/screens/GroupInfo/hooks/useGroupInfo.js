@@ -292,10 +292,10 @@ const useGroupInfo = () => {
 
   // eslint-disable-next-line consistent-return
   const handlePressContact = async (item) => {
-    if (channelState?.channel.data.type === 'group') {
-      await handleSelectUser(item);
-      return true;
-    }
+    // if (channelState?.channel.data.type === 'group') {
+    //   await handleSelectUser(item);
+    //   return true;
+    // }
     handleOpenProfile(item);
   };
 
