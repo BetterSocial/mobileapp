@@ -79,6 +79,10 @@ const Settings = () => {
             text="Help Center"
             onPress={() => goToPage('HelpCenter')}
           />
+          <ProfileSettingItem
+            text="Websocket Research"
+            onPress={() => navigation.navigate('WebsocketResearchScreen')}
+          />
           <ProfileSettingItem text="Delete Account" onPress={showDeleteAccountAlert} />
           <ProfileSettingItem text="Logout" onPress={doLogout} />
         </View>

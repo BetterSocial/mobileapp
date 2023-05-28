@@ -30,6 +30,7 @@ import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
+import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
 import useLocalDatabaseHook from '../database/hooks/useLocalDatabaseHook';
@@ -282,6 +283,11 @@ const AuthenticatedNavigator = () => {
       <AuthenticatedStack.Screen
         name="ChannelScreen"
         component={ChannelScreen}
+        options={{headerShown: false}}
+      />
+      <AuthenticatedStack.Screen
+        name="WebsocketResearchScreen"
+        component={WebsocketResearchScreen}
         options={{headerShown: false}}
       />
     </AuthenticatedStack.Navigator>

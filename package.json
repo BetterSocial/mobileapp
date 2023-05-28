@@ -110,6 +110,7 @@
     "react-native-tab-view": "^2.16.0",
     "react-native-text-size": "^4.0.0-rc.1",
     "react-native-toast-message": "^2.1.5",
+    "react-native-use-websocket": "^0.2.6",
     "react-native-vector-icons": "^8.1.0",
     "react-native-version-number": "^0.3.6",
     "react-native-walkthrough-tooltip": "^1.2.0",
