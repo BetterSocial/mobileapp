@@ -3,14 +3,14 @@ import React from 'react';
 import {Animated, InteractionManager, Pressable} from 'react-native';
 
 const ButtonHightlight = (props) => {
-  const {onPress, style, children} = props;
+  const {onPress, style, children, onLongPress} = props;
   const interactionManagerRef = React.useRef(null);
   const [opacity] = React.useState(new Animated.Value(100));
   const ButtonAnimated = Animated.createAnimatedComponent(Pressable);
 
   React.useEffect(() => {
     return () => {
-      if (interactionManagerRef.current) interactionManagerRef.current.cancel();
+      if (interactionManagerRef?.current) interactionManagerRef?.current?.cancel();
     };
   }, []);
 
@@ -35,6 +35,7 @@ const ButtonHightlight = (props) => {
       accessibilityLabel={props.testID}
       testID={props.testID}
       style={[style, {opacity}]}
+      onLongPress={onLongPress}
       onPress={onPressClick}>
       {children}
     </ButtonAnimated>
