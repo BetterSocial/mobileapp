@@ -96,10 +96,8 @@ end
         upload_to_play_store_internal_testing
         upload_aab_to_firebase_distribution(release_notes: options[:release_notes])
       else
-        clean
         assemble(build_type: options[:build_type])
         upload_apk_to_firebase_distribution(release_notes: options[:release_notes], build_type: options[:build_type])
-        upload_to_lambdatest
       end
       on_success_slack
     rescue => exception
@@ -128,13 +126,6 @@ end
         release_notes: "BRANCH: #{ENV["CIRCLE_BRANCH"]}. #{options[:release_notes]}"
     )
   end
-  lane :upload_to_lambdatest do |options|
-    sh("curl -u '#{ENV['LAMBDATEST_USERNAME']}:#{ENV['LAMBDATEST_ACCESSKEY']}' \
-    --location --request POST 'https://manual-api.lambdatest.com/app/upload/realDevice' \
-    --form 'name=bettersocial_android_#{ENV['ENV']}' \
-    --form 'appFile=@#{ENV["GRADLE_APK_OUTPUT_PATH_#{ENV['ENV']}"]}' \
-    --form 'custom_id=bettersocial_android_#{ENV['ENV']}'")
-  end
 
 
   desc 'upload to playstore internal testing'
@@ -160,21 +151,15 @@ end
      end
      match(
       type: profileType, # "appstore" | "adhoc" | "development"
-      app_identifier: [ENV["BUNDLE_ID"], ENV["BUNDLE_ID_NOTIF"]],
+      app_identifier: [ENV["BUNDLE_ID"]],
       readonly:true,
       verbose:true
      )
     update_code_signing_settings(
+        use_automatic_signing: true,
         path: './ios/BetterSocial.xcodeproj',
         targets: ENV["SCHEME"],
-        profile_name: "match #{options[:type]} #{ENV["BUNDLE_ID"]}",
-        team_id: '4N532AV27T'
-      )
-    update_code_signing_settings(
-        path: './ios/BetterSocial.xcodeproj',
-        targets: ENV["SCHEME_NOTIF"],
-        profile_name: "match #{options[:type]} #{ENV["BUNDLE_ID_NOTIF"]}",
-        team_id: '4N532AV27T'
+        team_id: 'J22M3M9VYU'
       )
     end
 
@@ -252,7 +237,6 @@ end
           upload_testflight
         else
           upload_ipa_to_firebase_distribution(release_notes: options[:release_notes])
-          upload_to_lambdatest
         end
         create_sentry_release
         on_success_slack
@@ -272,32 +256,25 @@ end
       end
       match(
         type: matchType, # "appstore" | "adhoc" | "development"
-        app_identifier: [ENV["BUNDLE_ID"], ENV["BUNDLE_ID_NOTIF"]],
+        app_identifier: [ENV["BUNDLE_ID"]],
         readonly: true,
         verbose:true
       )
       update_code_signing_settings(
+        use_automatic_signing: true,
         path: './ios/BetterSocial.xcodeproj',
         targets: ENV["SCHEME"],
-        profile_name: "match #{profile_name_type} #{ENV["BUNDLE_ID"]}",
-        team_id: '4N532AV27T'
-      )
-      update_code_signing_settings(
-        path: './ios/BetterSocial.xcodeproj',
-        targets: ENV["SCHEME_NOTIF"],
-        profile_name: "match #{profile_name_type} #{ENV["BUNDLE_ID_NOTIF"]}",
-        team_id: '4N532AV27T'
+        team_id: 'J22M3M9VYU'
       )
       build_ios_app(
         scheme: ENV["SCHEME"],
         clean: true,
         configuration: 'Release',
-        export_team_id: '4N532AV27T',
+        export_team_id: 'J22M3M9VYU',
         export_options: {
             method: profileType, # "ad-hoc" | "app-store"
             provisioningProfiles: {
                 ENV["SCHEME"] => "match #{profile_name_type} #{ENV["SCHEME"]}",
-                ENV["SCHEME_NOTIF"] => "match #{profile_name_type} #{ENV["SCHEME_NOTIF"]}"
             }
         },
         workspace: './ios/BetterSocial.xcworkspace',
@@ -400,13 +377,6 @@ end
             app_identifier: 'org.bettersocial',
             ipa: './ios/BetterSocial.ipa'
           )
-      end
-      lane :upload_to_lambdatest do |options|
-        sh("curl -u '#{ENV['LAMBDATEST_USERNAME']}:#{ENV['LAMBDATEST_ACCESSKEY']}' \
-        --location --request POST 'https://manual-api.lambdatest.com/app/upload/realDevice' \
-        --form 'name=BetterSocial_ios_#{ENV['ENV']}' \
-        --form 'appFile=@#{ENV["IPA_OUTPUT_PATH_#{ENV['ENV']}"]}' \
-        --form 'custom_id=BetterSocial_ios_#{ENV['ENV']}'")
       end
     end
 end
