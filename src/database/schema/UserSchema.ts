@@ -1,18 +1,26 @@
-import { SQLiteDatabase } from 'react-native-sqlite-storage';
+import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import BaseDbSchema from './BaseDbSchema';
 
 class UserSchema implements BaseDbSchema {
   userId: string;
+
   username: string;
+
   countryCode: string;
+
   createdAt: string;
+
   updatedAt: string;
+
   lastActiveAt: string;
+
   profilePicture: string;
+
   bio: string;
+
   isBanned: boolean;
-  
+
   constructor({
     userId,
     username,
@@ -33,10 +41,10 @@ class UserSchema implements BaseDbSchema {
     this.profilePicture = profilePicture;
     this.bio = bio;
     this.isBanned = isBanned;
-
   }
-  async save(db: SQLiteDatabase) {
-    const [results] = await db.executeSql(
+
+  async save(db: SQLiteDatabase): Promise<void> {
+    await db.executeSql(
       `INSERT OR REPLACE INTO ${this.getTableName()} (
         userId,
         username,
@@ -59,7 +67,7 @@ class UserSchema implements BaseDbSchema {
         this.bio,
         this.isBanned
       ]
-    )
+    );
   }
 
   static async getAll(db: SQLiteDatabase): Promise<UserSchema[]> {
@@ -68,22 +76,24 @@ class UserSchema implements BaseDbSchema {
   }
 
   static getTableName(): string {
-    return 'users'
+    return 'users';
   }
+
   static fromDatabaseObject(dbObject: any): UserSchema {
     throw new Error('Method not implemented.');
-  }  
-
-  getAll(db: any): Promise<UserSchema[]> {
-    throw new Error('Method not implemented.');
-  }
-  getTableName(): string {
-    throw new Error('Method not implemented.');
   }
 
-  fromDatabaseObject(dbObject: any): UserSchema {
+  getAll = (db: any): Promise<UserSchema[]> => {
     throw new Error('Method not implemented.');
-  }  
+  };
+
+  getTableName = (): string => {
+    throw new Error('Method not implemented.');
+  };
+
+  fromDatabaseObject = (dbObject: any): UserSchema => {
+    throw new Error('Method not implemented.');
+  };
 }
 
 export default UserSchema;

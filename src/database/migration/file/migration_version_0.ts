@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import Migration from './migration.types';

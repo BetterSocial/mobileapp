@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-await-in-loop */
 import LocalDatabase from '..';
 import allMigrationsFile from './file/index';
@@ -11,7 +10,7 @@ const TARGET_MIGRATION_VERSION = 3;
  */
 const DROP_ALL_DB = false;
 
-const __getCurrentMigrationVersion = async () => {
+const getCurrentMigrationVersion = async () => {
   const db = await LocalDatabase.getDBConnection();
 
   try {
@@ -30,11 +29,11 @@ const __getCurrentMigrationVersion = async () => {
   }
 };
 
-const __incrementMigrationVersion = async (nextVersion) => {
+const incrementMigrationVersion = async (nextVersion) => {
   const db = await LocalDatabase.getDBConnection();
 
   try {
-    const currentMigrationVersion = await __getCurrentMigrationVersion();
+    const currentMigrationVersion = await getCurrentMigrationVersion();
     if (currentMigrationVersion === 0 && nextVersion === 0) return;
     if (currentMigrationVersion >= TARGET_MIGRATION_VERSION) return;
 
@@ -48,11 +47,11 @@ const __incrementMigrationVersion = async (nextVersion) => {
   }
 };
 
-const __rollbackAllMigrations = async () => {
+const rollbackAllMigrations = async () => {
   if (!__DEV__) return;
 
   const db = await LocalDatabase.getDBConnection();
-  const currentMigrationVersion = await __getCurrentMigrationVersion();
+  const currentMigrationVersion = await getCurrentMigrationVersion();
 
   if (currentMigrationVersion === -1) return;
 
@@ -74,10 +73,10 @@ const __rollbackAllMigrations = async () => {
 
 const migrateDb = async () => {
   const db = await LocalDatabase.getDBConnection();
-  const currentMigrationVersion = await __getCurrentMigrationVersion();
+  const currentMigrationVersion = await getCurrentMigrationVersion();
 
   if (DROP_ALL_DB) {
-    await __rollbackAllMigrations();
+    await rollbackAllMigrations();
   }
 
   if (currentMigrationVersion === TARGET_MIGRATION_VERSION) return;
@@ -88,7 +87,7 @@ const migrateDb = async () => {
     try {
       const migration = allMigrationsFile[version];
       await migration.up(db);
-      await __incrementMigrationVersion(version);
+      await incrementMigrationVersion(version);
     } catch (e) {
       console.log('error migrating db');
       console.log(e);

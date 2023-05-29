@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from 'react-native-sqlite-storage';
+import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import Migration from './migration.types';
 import UserSchema from '../../schema/UserSchema';
@@ -6,7 +6,7 @@ import UserSchema from '../../schema/UserSchema';
 const TABLE_NAME = UserSchema.getTableName();
 
 class MigrationVersion2 implements Migration {
-  async up(db: SQLiteDatabase): Promise<void> {
+  up = async (db: SQLiteDatabase): Promise<void> => {
     const upQuery = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
       user_id UUID PRIMARY KEY NOT NULL DEFAULT (UUID()),
       username TEXT NOT NULL,
@@ -22,13 +22,12 @@ class MigrationVersion2 implements Migration {
     console.log(`===== MIGRATING: ${TABLE_NAME.toLocaleUpperCase()} TABLE =====`);
     await db.executeSql(upQuery);
     console.log(`===== DONE MIGRATING: ${TABLE_NAME.toLocaleUpperCase()}  TABLE =====`);
-  }
+  };
 
-  async down(db: SQLiteDatabase): Promise<void> {
+  down = async (db: SQLiteDatabase): Promise<void> => {
     const downQuery = `DROP TABLE IF EXISTS ${TABLE_NAME}`;
     await db.executeSql(downQuery);
-  }
-
+  };
 }
 
-export default new MigrationVersion2;
+export default new MigrationVersion2();

@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from 'react-native-sqlite-storage';
+import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import ChannelList from '../../schema/ChannelListSchema';
 import Migration from './migration.types';
@@ -6,7 +6,7 @@ import Migration from './migration.types';
 const TABLE_NAME = ChannelList.getTableName();
 
 class MigrationVersion1 implements Migration {
-  async up(db: SQLiteDatabase): Promise<void> {
+  up = async (db: SQLiteDatabase): Promise<void> => {
     const upQuery = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
       id TEXT PRIMARY KEY NOT NULL,
       channel_picture TEXT,
@@ -21,12 +21,12 @@ class MigrationVersion1 implements Migration {
     console.log(`===== MIGRATING: ${TABLE_NAME.toLocaleUpperCase()} TABLE =====`);
     await db.executeSql(upQuery);
     console.log(`===== DONE MIGRATING: ${TABLE_NAME.toLocaleUpperCase()}  TABLE =====`);
-  }
-  async down(db: SQLiteDatabase): Promise<void> {
+  };
+
+  down = async (db: SQLiteDatabase): Promise<void> => {
     const downQuery = `DROP TABLE IF EXISTS ${TABLE_NAME}`;
     await db.executeSql(downQuery);
-  }
-
+  };
 }
 
-export default new MigrationVersion1;
+export default new MigrationVersion1();

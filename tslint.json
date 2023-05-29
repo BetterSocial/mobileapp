@@ -3,11 +3,16 @@
   "extends": ["tslint:recommended"],
   "jsRules": {},
   "rules": {
+    "@typescript-eslint/object-curly-spacing": {
+      "severity": "warning"
+    },
+    "no-var-requires": true,
     "max-classes-per-file": false,
-    "no-console": false,
+    "no-console": {
+      "severity": "warning"
+    },
     "no-trailing-whitespace": false,
-    "new-parens": false,
-    "variable-name": false
+    "new-parens": false
   },
   "rulesDirectory": []
 }

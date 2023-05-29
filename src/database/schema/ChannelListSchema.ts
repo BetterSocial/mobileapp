@@ -1,58 +1,71 @@
+import {SQLiteDatabase} from 'react-native-sqlite-storage';
+
 import BaseDbSchema from './BaseDbSchema';
 
 class ChannelList implements BaseDbSchema {
   id: string;
-  channel_picture: string;
+
+  channelPicture: string;
+
   name: string;
+
   description: string;
-  unread_count: number;
-  channel_type: string;
-  last_updated_at: string;
-  created_at: string;
-  raw_json: any;
+
+  unreadCount: number;
+
+  channelType: string;
+
+  lastUpdatedAt: string;
+
+  createdAt: string;
+
+  rawJson: any;
 
   constructor({
     id,
-    channel_picture,
+    channelPicture,
     name,
     description,
-    unread_count = 0,
-    channel_type,
-    last_updated_at,
-    created_at,
-    raw_json
+    unreadCount = 0,
+    channelType,
+    lastUpdatedAt,
+    createdAt,
+    rawJson
   }) {
     if (!id) throw new Error('ChannelList must have an id');
 
     this.id = id;
-    this.channel_picture = channel_picture;
+    this.channelPicture = channelPicture;
     this.name = name;
     this.description = description;
-    this.unread_count = unread_count;
-    this.channel_type = channel_type;
-    this.last_updated_at = last_updated_at;
-    this.created_at = created_at;
-    this.raw_json = raw_json;
-  }
-  getAll(db: any): Promise<BaseDbSchema[]> {
-    throw new Error('Method not implemented.');
-  }
-  getTableName(): string {
-    throw new Error('Method not implemented.');
-  }
-  fromDatabaseObject(dbObject: any): BaseDbSchema {
-    throw new Error('Method not implemented.');
+    this.unreadCount = unreadCount;
+    this.channelType = channelType;
+    this.lastUpdatedAt = lastUpdatedAt;
+    this.createdAt = createdAt;
+    this.rawJson = rawJson;
   }
 
-  save(db) {
-    let jsonString:string | null = null;
+  getAll = (db: any): Promise<BaseDbSchema[]> => {
+    throw new Error('Method not implemented.');
+  };
+
+  getTableName = (): string => {
+    throw new Error('Method not implemented.');
+  };
+
+  fromDatabaseObject = (dbObject: any): BaseDbSchema => {
+    throw new Error('Method not implemented.');
+  };
+
+  save(db: SQLiteDatabase): void {
+    let jsonString: string | null = null;
 
     try {
-      jsonString = JSON.stringify(this.raw_json);
+      jsonString = JSON.stringify(this.rawJson);
     } catch (e) {
       console.log(e);
     }
-    return db.executeSql(
+    db.executeSql(
       `INSERT OR REPLACE INTO ${ChannelList.getTableName()} (
         id,
         channel_picture,
@@ -66,42 +79,42 @@ class ChannelList implements BaseDbSchema {
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         this.id,
-        this.channel_picture,
+        this.channelPicture,
         this.name,
         this.description,
-        this.unread_count,
-        this.channel_type,
-        this.last_updated_at,
-        this.created_at,
+        this.unreadCount,
+        this.channelType,
+        this.lastUpdatedAt,
+        this.createdAt,
         jsonString
       ]
     );
   }
 
-  static async getAll(db) {
+  static async getAll(db: SQLiteDatabase): Promise<ChannelList[]> {
     const [results] = await db.executeSql(`SELECT * FROM ${ChannelList.getTableName()}`);
     return results.rows.raw().map(ChannelList.fromDatabaseObject);
   }
 
-  static getTableName() {
+  static getTableName(): string {
     return 'channel_lists';
   }
 
-  static fromWebsocketObject(json) {
+  static fromWebsocketObject(json): ChannelList {
     return new ChannelList({
       id: json?.channel?.id,
-      channel_picture: '',
+      channelPicture: '',
       name: json?.channel?.name,
       description: json?.message?.message,
-      unread_count: json.unread_count,
-      channel_type: 'ANON_PM',
-      last_updated_at: json.last_message_at,
-      created_at: json.created_at,
-      raw_json: json
+      unreadCount: json.unread_count,
+      channelType: 'ANON_PM',
+      lastUpdatedAt: json.last_message_at,
+      createdAt: json.created_at,
+      rawJson: json
     });
   }
 
-  static fromDatabaseObject(json) {
+  static fromDatabaseObject(json): ChannelList {
     let jsonParsed = null;
     try {
       jsonParsed = JSON.parse(json.raw_json);
@@ -110,28 +123,28 @@ class ChannelList implements BaseDbSchema {
     }
     return new ChannelList({
       id: json.id,
-      channel_picture: json.channel_picture,
+      channelPicture: json.channel_picture,
       name: json.name,
       description: json.description,
-      unread_count: json.unread_count,
-      channel_type: json.channel_type,
-      last_updated_at: json.last_updated_at,
-      created_at: json.created_at,
-      raw_json: jsonParsed
+      unreadCount: json.unread_count,
+      channelType: json.channel_type,
+      lastUpdatedAt: json.last_updated_at,
+      createdAt: json.created_at,
+      rawJson: jsonParsed
     });
   }
 
-  static fromPostNotifObject(json) {
+  static fromPostNotifObject(json): ChannelList {
     return new ChannelList({
       id: json?.new?.id,
-      channel_picture: '',
+      channelPicture: '',
       name: '',
       description: json?.new?.message,
-      unread_count: 1,
-      channel_type: 'ANON_POST_NOTIFICATION',
-      last_updated_at: json?.new?.time,
-      created_at: json?.new?.time,
-      raw_json: json
+      unreadCount: 1,
+      channelType: 'ANON_POST_NOTIFICATION',
+      lastUpdatedAt: json?.new?.time,
+      createdAt: json?.new?.time,
+      rawJson: json
     });
   }
 }
