@@ -7,6 +7,7 @@ import {MessageSystem} from 'stream-chat-react-native-core';
 import {useRecoilState} from 'recoil';
 import crashlytics from '@react-native-firebase/crashlytics';
 import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
+import {useNavigation} from '@react-navigation/core';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
@@ -33,6 +34,7 @@ const ChatDetailPage = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
+  const [loadingChannel, setLoadingChannel] = React.useState(true);
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -57,6 +59,7 @@ const ChatDetailPage = ({route}) => {
   };
   const handleChannelClient = async () => {
     try {
+      setLoadingChannel(true);
       const channel = clients.client.getChannelById(
         route.params.data.channel_type,
         route.params.data.channel_id,
@@ -82,9 +85,9 @@ const ChatDetailPage = ({route}) => {
     };
   }, []);
 
-  const onBackHandle = () => {
+  const onBackHandle = async () => {
     if (route?.params?.channel) {
-      setChannel(route.params.channel, dispatchChannel);
+      await setChannel(route.params.channel, dispatchChannel);
     }
   };
 
