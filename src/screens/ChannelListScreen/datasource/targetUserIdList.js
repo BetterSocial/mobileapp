@@ -6,11 +6,9 @@ export const getTargetUserIdList = async () => {
 };
 
 export const setTargetUserIdList = async (value) => {
-  const targetUserIdList = await asyncStorage.setItem('targetUserIdList', value);
-  return JSON.stringify(targetUserIdList);
+  await asyncStorage.setItem('targetUserIdList', JSON.stringify(value));
 };
 
 export const removeTargetUserIdList = async () => {
-  const targetUserIdList = await asyncStorage.setItem('targetUserIdList');
-  return JSON.stringify(targetUserIdList);
+  await asyncStorage.setItem('targetUserIdList');
 };
