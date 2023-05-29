@@ -33,6 +33,7 @@ const ChatDetailPage = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
+  const [loadingChannel, setLoadingChannel] = React.useState(true);
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -57,6 +58,7 @@ const ChatDetailPage = ({route}) => {
   };
   const handleChannelClient = async () => {
     try {
+      setLoadingChannel(true);
       const channel = clients.client.getChannelById(
         route.params.data.channel_type,
         route.params.data.channel_id,
