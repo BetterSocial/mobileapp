@@ -314,12 +314,12 @@ const useGroupInfo = () => {
   const handleOpenProfile = async (item) => {
     await setOpenModal(false);
     if (profile.myProfile.user_id === item.user_id) {
-      navigation.navigate('ProfileScreen', {
+      navigation.push('ProfileScreen', {
         isNotFromHomeTab: true
       });
     }
 
-    navigation.navigate('OtherProfile', {
+    navigation.push('OtherProfile', {
       data: {
         user_id: profile.myProfile.user_id,
         other_id: item.user_id,
