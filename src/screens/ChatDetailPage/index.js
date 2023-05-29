@@ -4,6 +4,10 @@ import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
 
+import {useRecoilState} from 'recoil';
+import crashlytics from '@react-native-firebase/crashlytics';
+import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
+import {useNavigation} from '@react-navigation/core';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
@@ -16,10 +20,7 @@ import {setAsset} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {setChannel} from '../../context/actions/setChannel';
-import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import api from '../../service/config';
-import crashlytics from '@react-native-firebase/crashlytics';
-import {useRecoilState} from 'recoil';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
@@ -34,8 +35,7 @@ const ChatDetailPage = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
-  const [checkFollowing, setCheckFollowing] = React.useState(false);
-  const {getMembersList} = useGroupInfo();
+  const [loadingChannel, setLoadingChannel] = React.useState(true);
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -60,6 +60,7 @@ const ChatDetailPage = ({route}) => {
   };
   const handleChannelClient = async () => {
     try {
+      setLoadingChannel(true);
       const channel = clients.client.getChannelById(
         route.params.data.channel_type,
         route.params.data.channel_id,
@@ -67,7 +68,9 @@ const ChatDetailPage = ({route}) => {
       );
       setChannel(channel, dispatchChannel);
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log(e, 'eman');
+      }
     }
   };
 
@@ -85,11 +88,15 @@ const ChatDetailPage = ({route}) => {
 
   React.useEffect(() => {
     return () => {
-      if (route.params.channel) {
-        setChannel(route.params.channel, dispatchChannel);
-      }
+      onBackHandle();
     };
   }, []);
+
+  const onBackHandle = async () => {
+    if (route?.params?.channel) {
+      await setChannel(route.params.channel, dispatchChannel);
+    }
+  };
 
   const defaultActionsAllowed = (messageActionsProp) => {
     const {
