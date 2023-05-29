@@ -23,7 +23,8 @@ const WebsocketResearchScreen = () => {
             <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
             <Text>{`${item?.name}`}</Text>
             <Text>{`${item?.description}`}</Text>
-            <Text>{item?.last_updated_at}</Text>
+            <Text>{item?.lastUpdatedAt}</Text>
+            <Text>{`Chat Type: ${item?.channelType}`}</Text>
             <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
           </View>
         );

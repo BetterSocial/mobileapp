@@ -92,7 +92,9 @@ class ChannelList implements BaseDbSchema {
   }
 
   static async getAll(db: SQLiteDatabase): Promise<ChannelList[]> {
-    const [results] = await db.executeSql(`SELECT * FROM ${ChannelList.getTableName()}`);
+    const [results] = await db.executeSql(
+      `SELECT * FROM ${ChannelList.getTableName()} ORDER BY last_updated_at DESC`
+    );
     return results.rows.raw().map(ChannelList.fromDatabaseObject);
   }
 
@@ -106,9 +108,9 @@ class ChannelList implements BaseDbSchema {
       channelPicture: '',
       name: json?.channel?.name,
       description: json?.message?.message,
-      unreadCount: json.unread_count,
+      unreadCount: json?.unread_count,
       channelType: 'ANON_PM',
-      lastUpdatedAt: json.last_message_at,
+      lastUpdatedAt: json?.channel?.last_message_at,
       createdAt: json.created_at,
       rawJson: json
     });
@@ -135,15 +137,16 @@ class ChannelList implements BaseDbSchema {
   }
 
   static fromPostNotifObject(json): ChannelList {
+    const object = json?.new[0];
     return new ChannelList({
-      id: json?.new?.id,
+      id: object?.id,
       channelPicture: '',
       name: '',
-      description: json?.new?.message,
+      description: object?.message,
       unreadCount: 1,
       channelType: 'ANON_POST_NOTIFICATION',
-      lastUpdatedAt: json?.new?.time,
-      createdAt: json?.new?.time,
+      lastUpdatedAt: object?.time,
+      createdAt: object?.time,
       rawJson: json
     });
   }
