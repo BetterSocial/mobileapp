@@ -1,11 +1,12 @@
-import { SQLiteDatabase } from "react-native-sqlite-storage";
+/* eslint-disable import/no-unresolved */
+import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
-import Migration from "./migration.types";
+import Migration from './migration.types';
 
 const TABLE_NAME = 'migration_versions';
 
 class MigrationVersion0 implements Migration {
-  async up(db: SQLiteDatabase): Promise<void> {
+  up = async (db: SQLiteDatabase): Promise<void> => {
     const upQuery = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       version INTEGER NOT NULL,
@@ -14,13 +15,12 @@ class MigrationVersion0 implements Migration {
     console.log(`===== MIGRATING: ${TABLE_NAME.toLocaleUpperCase()} TABLE =====`);
     await db.executeSql(upQuery);
     console.log(`===== DONE MIGRATING: ${TABLE_NAME.toLocaleUpperCase()} TABLE =====`);
-  }
-  
-  async down(db: SQLiteDatabase): Promise<void> {
+  };
+
+  down = async (db: SQLiteDatabase): Promise<void> => {
     const downQuery = `DROP TABLE IF EXISTS ${TABLE_NAME}`;
     await db.executeSql(downQuery);
-  }
-
+  };
 }
 
-export default new MigrationVersion0;
+export default new MigrationVersion0();
