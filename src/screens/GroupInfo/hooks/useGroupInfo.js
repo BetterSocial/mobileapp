@@ -46,6 +46,7 @@ const useGroupInfo = () => {
     return membersObject;
   };
   const getMembersList = async () => {
+    setIsLoadingMembers(true);
     try {
       const result = await channel.queryMembers({});
       setNewParticipan(result.members);
@@ -60,7 +61,6 @@ const useGroupInfo = () => {
   const memberName = () => {
     return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
-
   const chatName = getChatName(username, profile.myProfile.username);
   const onProfilePressed = () => {
     if (profile.myProfile.user_id === selectedUser.user_id) {
@@ -164,16 +164,17 @@ const useGroupInfo = () => {
     setOpenModal(false);
   };
 
-  const generateSystemChat = async (message = '') => {
+  const generateSystemChat = async (message = '', userSelected) => {
     try {
       const generatedChannelId = generateRandomId();
       const channelChat = await client.client.channel('system', generatedChannelId, {
         name: channelState?.channel?.data.name,
         type_channel: 'system',
-        channel_type: 2
+        channel_type: 2,
+        image: channelState.channel.data.image
       });
       await channelChat.create();
-      await channelChat.addMembers([profile.myProfile.user_id]);
+      await channelChat.addMembers([userSelected]);
       await channelChat.sendMessage(
         {
           text: message,
@@ -191,7 +192,6 @@ const useGroupInfo = () => {
 
   const onRemoveUser = async () => {
     setOpenModal(false);
-
     try {
       const result = await channel.removeMembers([selectedUser.user_id]);
       const updateParticipant = newParticipant.filter(
@@ -207,10 +207,15 @@ const useGroupInfo = () => {
         },
         {skip_push: true}
       );
-      await generateSystemChat(`${profile.myProfile.username} removed you from this group`);
+      await generateSystemChat(
+        `${profile.myProfile.username} removed you from this group`,
+        selectedUser.user_id
+      );
       setNewParticipan(result.members);
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log(e, 'error');
+      }
     }
   };
 
@@ -273,7 +278,7 @@ const useGroupInfo = () => {
   const leaveGroup = async () => {
     try {
       const response = await channel.removeMembers([profile.myProfile.user_id]);
-      await generateSystemChat('You left this group');
+      await generateSystemChat('You left this group', profile.myProfile.user_id);
       SimpleToast.show('You left this chat');
       navigation.reset({
         index: 1,
@@ -313,19 +318,21 @@ const useGroupInfo = () => {
 
   const handleOpenProfile = async (item) => {
     await setOpenModal(false);
-    if (profile.myProfile.user_id === item.user_id) {
-      navigation.push('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
-    }
-
-    navigation.push('OtherProfile', {
-      data: {
-        user_id: profile.myProfile.user_id,
-        other_id: item.user_id,
-        username: item.user.name
+    setTimeout(() => {
+      if (profile.myProfile.user_id === item.user_id) {
+        navigation.push('ProfileScreen', {
+          isNotFromHomeTab: true
+        });
       }
-    });
+
+      navigation.push('OtherProfile', {
+        data: {
+          user_id: profile.myProfile.user_id,
+          other_id: item.user_id,
+          username: item.user.name
+        }
+      });
+    }, 500);
   };
 
   return {
