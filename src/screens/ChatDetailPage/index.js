@@ -19,7 +19,7 @@ import {fonts} from '../../utils/fonts';
 import {setAsset} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {setChannel} from '../../context/actions/setChannel';
+import {loadingChannel, setChannel} from '../../context/actions/setChannel';
 import api from '../../service/config';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
@@ -62,7 +62,6 @@ const ChatDetailPage = ({route}) => {
   };
   const handleChannelClient = async () => {
     try {
-      setLoadingChannel(true);
       const channel = clients.client.getChannelById(
         route.params.data.channel_type,
         route.params.data.channel_id,
@@ -83,7 +82,7 @@ const ChatDetailPage = ({route}) => {
   }, [channelClient])
 
   React.useEffect(() => {
-    if (clients && route.params && !channelClient.client) {
+    if (clients && route?.params?.data && !channelClient.client) {
       handleChannelClient();
     }
   }, [route.params, clients]);
