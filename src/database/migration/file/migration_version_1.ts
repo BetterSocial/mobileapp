@@ -15,6 +15,7 @@ class MigrationVersion1 implements Migration {
       unread_count INTEGER NOT NULL DEFAULT 0,
       channel_type TEXT NOT NULL CHECK(channel_type IN ('PM', 'ANON_PM', 'GROUP', 'ANON_GROUP', 'TOPIC', 'POST_NOTIFICATION', 'ANON_POST_NOTIFICATION', 'FOLLOW')),
       last_updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      last_updated_by TEXT,
       raw_json TEXT,
       created_at DATETIME NOT NULL)`;
 
@@ -24,8 +25,10 @@ class MigrationVersion1 implements Migration {
   };
 
   down = async (db: SQLiteDatabase): Promise<void> => {
+    console.log(`===== DOWNGRADING: ${TABLE_NAME.toLocaleUpperCase()}  TABLE =====`);
     const downQuery = `DROP TABLE IF EXISTS ${TABLE_NAME}`;
     await db.executeSql(downQuery);
+    console.log(`===== DONE DOWNGRADING: ${TABLE_NAME.toLocaleUpperCase()}  TABLE =====`);
   };
 }
 

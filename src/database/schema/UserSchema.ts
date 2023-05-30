@@ -1,6 +1,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import BaseDbSchema from './BaseDbSchema';
+import ChatSchema from './ChatSchema';
 
 class UserSchema implements BaseDbSchema {
   userId: string;
@@ -43,35 +44,40 @@ class UserSchema implements BaseDbSchema {
     this.isBanned = isBanned;
   }
 
-  async save(db: SQLiteDatabase): Promise<void> {
-    await db.executeSql(
-      `INSERT OR REPLACE INTO ${this.getTableName()} (
-        userId,
+  save = async (db: SQLiteDatabase): Promise<void> => {
+    try {
+      await db.executeSql(
+        `INSERT OR REPLACE INTO ${UserSchema.getTableName()} (
+        user_id,
         username,
-        countryCode,
-        createdAt,
-        updatedAt,
-        lastActiveAt,
-        profilePicture,
+        country_code,
+        created_at,
+        updated_at,
+        last_active_at,
+        profile_picture,
         bio,
-        isBanned
+        is_banned
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        this.userId,
-        this.username,
-        this.countryCode,
-        this.createdAt,
-        this.updatedAt,
-        this.lastActiveAt,
-        this.profilePicture,
-        this.bio,
-        this.isBanned
-      ]
-    );
-  }
+        [
+          this.userId,
+          this.username,
+          this.countryCode,
+          this.createdAt,
+          this.updatedAt,
+          this.lastActiveAt,
+          this.profilePicture,
+          this.bio,
+          this.isBanned
+        ]
+      );
+    } catch (e) {
+      console.log('asdsdsadqewqweqew');
+      console.log(e);
+    }
+  };
 
   static async getAll(db: SQLiteDatabase): Promise<UserSchema[]> {
-    const [results] = await db.executeSql(`SELECT * FROM ${this.getTableName()}`);
+    const [results] = await db.executeSql(`SELECT * FROM ${UserSchema.getTableName()}`);
     return results.rows.raw().map((dbObject) => this.fromDatabaseObject(dbObject));
   }
 
@@ -80,8 +86,38 @@ class UserSchema implements BaseDbSchema {
   }
 
   static fromDatabaseObject(dbObject: any): UserSchema {
-    throw new Error('Method not implemented.');
+    return new UserSchema({
+      userId: dbObject.user_id,
+      username: dbObject.username,
+      countryCode: dbObject.country_code,
+      createdAt: dbObject.created_at,
+      updatedAt: dbObject.updated_at,
+      lastActiveAt: dbObject.last_active_at,
+      profilePicture: dbObject.profile_picture,
+      bio: dbObject.bio,
+      isBanned: dbObject.is_banned
+    });
   }
+
+  static fromWebsocketObject(json: any): UserSchema {
+    return new UserSchema({
+      userId: json?.message?.user_id,
+      username: json?.message?.user?.name,
+      countryCode: '',
+      createdAt: json?.message?.created_at,
+      updatedAt: json?.message?.updated_at,
+      lastActiveAt: json?.message?.last_active_at,
+      profilePicture: json?.message?.image,
+      bio: '',
+      isBanned: json.is_banned
+    });
+  }
+
+  get = async (db: SQLiteDatabase, id: string): Promise<UserSchema> => {
+    const [{rows}] = await db.executeSql('SELECT * FROM users WHERE id = ?', [id]);
+    if (rows?.length === 0) return null;
+    return Promise.resolve(rows[0].raw().map(this.fromDatabaseObject));
+  };
 
   getAll = (db: any): Promise<UserSchema[]> => {
     throw new Error('Method not implemented.');

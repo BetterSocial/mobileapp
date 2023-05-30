@@ -1,21 +1,25 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
+import ChannelList from '../../schema/ChannelListSchema';
+import ChatSchema from '../../schema/ChatSchema';
 import Migration from './migration.types';
 
-const TABLE_NAME = 'channel_list_members';
+const TABLE_NAME = ChatSchema.getTableName();
 
-class MigrationVersion3 implements Migration {
+class MigrationVersion4 implements Migration {
   up = async (db: SQLiteDatabase): Promise<void> => {
     const upQuery = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
-      id UUID PRIMARY KEY NOT NULL DEFAULT (UUID()),
-      channel_id TEXT NOT NULL,
-      user_id UUID NOT NULL,
-      is_moderator INTEGER NOT NULL DEFAULT 0,
-      is_banned INTEGER NOT NULL DEFAULT 0,
-      is_shadow_banned INTEGER NOT NULL DEFAULT 0,
-      joined_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (channel_id) REFERENCES channel_lists (id)
-    );`;
+        id UUID PRIMARY KEY NOT NULL DEFAULT (UUID()),
+        channel_id TEXT NOT NULL,
+        user_id UUID NOT NULL,
+        message TEXT NOT NULL,
+        type TEXT NOT NULL CHECK(type IN ('regular')),
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        raw_json TEXT,
+        FOREIGN KEY (channel_id) REFERENCES ${ChannelList.getTableName()} (id),
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      );`;
 
     console.log(`===== MIGRATING: ${TABLE_NAME.toLocaleUpperCase()} TABLE =====`);
     await db.executeSql(upQuery);
@@ -30,4 +34,4 @@ class MigrationVersion3 implements Migration {
   };
 }
 
-export default new MigrationVersion3();
+export default new MigrationVersion4();

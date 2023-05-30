@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Config from 'react-native-config';
 import useWebSocket from 'react-native-use-websocket';
-import {StreamFeed, UR} from 'getstream';
 
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {getAnonymousToken} from '../../../utils/token';

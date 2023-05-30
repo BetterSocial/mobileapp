@@ -17,6 +17,8 @@ class ChannelList implements BaseDbSchema {
 
   lastUpdatedAt: string;
 
+  lastUpdatedBy: string;
+
   createdAt: string;
 
   rawJson: any;
@@ -29,6 +31,7 @@ class ChannelList implements BaseDbSchema {
     unreadCount = 0,
     channelType,
     lastUpdatedAt,
+    lastUpdatedBy,
     createdAt,
     rawJson
   }) {
@@ -41,6 +44,7 @@ class ChannelList implements BaseDbSchema {
     this.unreadCount = unreadCount;
     this.channelType = channelType;
     this.lastUpdatedAt = lastUpdatedAt;
+    this.lastUpdatedBy = lastUpdatedBy;
     this.createdAt = createdAt;
     this.rawJson = rawJson;
   }
@@ -57,38 +61,41 @@ class ChannelList implements BaseDbSchema {
     throw new Error('Method not implemented.');
   };
 
-  save(db: SQLiteDatabase): void {
+  async save(db: SQLiteDatabase): Promise<void> {
     let jsonString: string | null = null;
 
     try {
       jsonString = JSON.stringify(this.rawJson);
+      db.executeSql(
+        `INSERT OR REPLACE INTO ${ChannelList.getTableName()} (
+          id,
+          channel_picture,
+          name,
+          description,
+          unread_count,
+          channel_type,
+          last_updated_at,
+          last_updated_by,
+          created_at,
+          raw_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          this.id,
+          this.channelPicture,
+          this.name,
+          this.description,
+          this.unreadCount,
+          this.channelType,
+          this.lastUpdatedAt,
+          this.lastUpdatedBy,
+          this.createdAt,
+          jsonString
+        ]
+      );
     } catch (e) {
+      console.log('zxczczxczxce');
       console.log(e);
     }
-    db.executeSql(
-      `INSERT OR REPLACE INTO ${ChannelList.getTableName()} (
-        id,
-        channel_picture,
-        name,
-        description,
-        unread_count,
-        channel_type,
-        last_updated_at,
-        created_at,
-        raw_json
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        this.id,
-        this.channelPicture,
-        this.name,
-        this.description,
-        this.unreadCount,
-        this.channelType,
-        this.lastUpdatedAt,
-        this.createdAt,
-        jsonString
-      ]
-    );
   }
 
   static async getAll(db: SQLiteDatabase): Promise<ChannelList[]> {
@@ -111,6 +118,7 @@ class ChannelList implements BaseDbSchema {
       unreadCount: json?.unread_count,
       channelType: 'ANON_PM',
       lastUpdatedAt: json?.channel?.last_message_at,
+      lastUpdatedBy: json?.message?.user?.id,
       createdAt: json.created_at,
       rawJson: json
     });
@@ -131,6 +139,7 @@ class ChannelList implements BaseDbSchema {
       unreadCount: json.unread_count,
       channelType: json.channel_type,
       lastUpdatedAt: json.last_updated_at,
+      lastUpdatedBy: json.last_updated_by,
       createdAt: json.created_at,
       rawJson: jsonParsed
     });
@@ -146,6 +155,7 @@ class ChannelList implements BaseDbSchema {
       unreadCount: 1,
       channelType: 'ANON_POST_NOTIFICATION',
       lastUpdatedAt: object?.time,
+      lastUpdatedBy: object?.actor?.id,
       createdAt: object?.time,
       rawJson: json
     });

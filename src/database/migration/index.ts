@@ -2,7 +2,7 @@
 import LocalDatabase from '..';
 import allMigrationsFile from './file/index';
 
-const TARGET_MIGRATION_VERSION = 3;
+const TARGET_MIGRATION_VERSION = 4;
 
 /**
  * PROCEED WITH CAUTION
@@ -61,6 +61,7 @@ const rollbackAllMigrations = async () => {
     try {
       const migration = allMigrationsFile[version];
       await migration.down(db);
+      if (version === 0) break;
       await db.executeSql(`DELETE FROM migration_versions WHERE version = ${version}`);
     } catch (e) {
       console.log('error rollbacking db');
@@ -73,12 +74,11 @@ const rollbackAllMigrations = async () => {
 
 const migrateDb = async () => {
   const db = await LocalDatabase.getDBConnection();
-  const currentMigrationVersion = await getCurrentMigrationVersion();
-
   if (DROP_ALL_DB) {
     await rollbackAllMigrations();
   }
 
+  const currentMigrationVersion = await getCurrentMigrationVersion();
   if (currentMigrationVersion === TARGET_MIGRATION_VERSION) return;
 
   console.log('===== MIGRATING DB =====');

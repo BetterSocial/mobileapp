@@ -17,8 +17,10 @@ class MigrationVersion0 implements Migration {
   };
 
   down = async (db: SQLiteDatabase): Promise<void> => {
+    console.log(`===== DOWNGRADING: ${TABLE_NAME.toLocaleUpperCase()}  TABLE =====`);
     const downQuery = `DROP TABLE IF EXISTS ${TABLE_NAME}`;
     await db.executeSql(downQuery);
+    console.log(`===== DONE DOWNGRADING: ${TABLE_NAME.toLocaleUpperCase()}  TABLE =====`);
   };
 }
 
