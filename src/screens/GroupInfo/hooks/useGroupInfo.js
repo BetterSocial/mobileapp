@@ -10,7 +10,6 @@ import {requestExternalStoragePermission} from '../../../utils/permission';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {setChannel} from '../../../context/actions/setChannel';
 import {checkUserBlock} from '../../../service/profile';
-import {setParticipants} from '../../../context/actions/groupChat';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -51,8 +50,6 @@ const useGroupInfo = () => {
     try {
       const result = await channel.queryMembers({});
       setNewParticipan(result.members);
-      setParticipants(result.members, groupPatchDispatch);
-
       setIsLoadingMembers(false);
     } catch (e) {
       if (__DEV__) {
@@ -65,7 +62,21 @@ const useGroupInfo = () => {
     return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
   const chatName = getChatName(username, profile.myProfile.username);
+  const onProfilePressed = () => {
+    if (profile.myProfile.user_id === selectedUser.user_id) {
+      navigation.navigate('ProfileScreen', {
+        isNotFromHomeTab: true
+      });
+    }
 
+    navigation.navigate('OtherProfile', {
+      data: {
+        user_id: profile.myProfile.user_id,
+        other_id: selectedUser.user_id,
+        username: selectedUser.user.name
+      }
+    });
+  };
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
@@ -84,7 +95,7 @@ const useGroupInfo = () => {
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
         return openChatMessage();
       }
-      return handleOpenProfile(selectedUser);
+      return onProfilePressed();
     } catch (e) {
       console.log(e, 'eman');
     }
@@ -153,20 +164,19 @@ const useGroupInfo = () => {
     setOpenModal(false);
   };
   const onRemoveUser = async () => {
+    setOpenModal(false);
+
     try {
       const result = await channel.removeMembers([selectedUser.user_id]);
       const updateParticipant = newParticipant.filter(
         (participant) => participant.user_id !== selectedUser.user_id
       );
       setNewParticipan(updateParticipant);
-      setParticipants(updateParticipant, groupPatchDispatch);
-      setOpenModal(false);
       const generatedChannelId = generateRandomId();
       const channelChat = await client.client.channel('system', generatedChannelId, {
         name: channelState?.channel?.data.name,
         type_channel: 'system',
-        channel_type: 2,
-        image: channelState.channel.data.image
+        channel_type: 2
       });
       await channel.sendMessage(
         {
@@ -188,13 +198,14 @@ const useGroupInfo = () => {
         {skip_push: true}
       );
       setNewParticipan(result.members);
-      setParticipants(result.members, groupPatchDispatch);
     } catch (e) {
       console.log(e, 'eman');
     }
   };
 
   const openChatMessage = async () => {
+    await setOpenModal(false);
+
     const members = [profile.myProfile.user_id];
     members.push(selectedUser.user_id);
     const filter = {type: 'messaging', members: {$eq: members}};
@@ -203,13 +214,11 @@ const useGroupInfo = () => {
       user_id: item,
       channel_role: 'channel_moderator'
     }));
-    navigation.push('ChatDetailPage', {channel});
-    await setOpenModal(false);
+
     const filterMessage = await client.client.queryChannels(filter, sort, {
       watch: true, // this is the default
       state: true
     });
-
     const generatedChannelId = generateRandomId();
 
     if (filterMessage.length > 0) {
@@ -248,7 +257,7 @@ const useGroupInfo = () => {
   const alertRemoveUser = async (status) => {
     if (status === 'view') {
       setOpenModal(false);
-      handleOpenProfile(selectedUser).catch((e) => console.log(e));
+      onProfilePressed();
     }
     if (status === 'remove') {
       Alert.alert(
@@ -310,19 +319,12 @@ const useGroupInfo = () => {
   };
 
   const handleOpenProfile = async (item) => {
-    setOpenModal(false);
-    if (profile.myProfile.user_id === item.user_id) {
-      navigation.push('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
-      return;
-    }
-
-    navigation.push('OtherProfile', {
-      data: {
-        user_id: profile.myProfile.user_id,
-        other_id: item.user_id,
-        username: item.user.name
+    await setOpenModal(false);
+    setTimeout(() => {
+      if (profile.myProfile.user_id === item.user_id) {
+        navigation.push('ProfileScreen', {
+          isNotFromHomeTab: true
+        });
       }
 
       navigation.push('OtherProfile', {
@@ -355,6 +357,7 @@ const useGroupInfo = () => {
     createChat,
     countUser,
     getMembersList,
+    onProfilePressed,
     handleOnNameChange,
     handleOnImageClicked,
     uploadImageBase64,
@@ -372,8 +375,7 @@ const useGroupInfo = () => {
     memberName,
     onLeaveGroup,
     checkUserIsBlockHandle,
-    handlePressContact,
-    handleOpenProfile
+    handlePressContact
   };
 };
 
