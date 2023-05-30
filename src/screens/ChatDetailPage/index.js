@@ -4,6 +4,9 @@ import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
 
+import {useRecoilState} from 'recoil';
+import crashlytics from '@react-native-firebase/crashlytics';
+import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
@@ -16,13 +19,9 @@ import {setAsset} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {setChannel} from '../../context/actions/setChannel';
-import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import api from '../../service/config';
-import crashlytics from '@react-native-firebase/crashlytics';
-import {useRecoilState} from 'recoil';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
-import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 
 const streami18n = new Streami18n({
   language: 'en'
@@ -34,8 +33,6 @@ const ChatDetailPage = ({route}) => {
   const {interactionsComplete} = useAfterInteractions();
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
-  const [checkFollowing, setCheckFollowing] = React.useState(false);
-  const {getMembersList} = useGroupInfo();
   const messageSystemCustom = (props) => {
     const {message, channel} = props;
     if (channel?.data.channel_type === 2 || channel?.data.channel_type === 3)
@@ -67,29 +64,29 @@ const ChatDetailPage = ({route}) => {
       );
       setChannel(channel, dispatchChannel);
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log(e, 'eman');
+      }
     }
   };
 
   React.useEffect(() => {
-    if(channelClient) {
-      getMembersList()
-    }
-  }, [channelClient])
-
-  React.useEffect(() => {
-    if (clients && route.params && !channelClient.client) {
+    if (clients && route?.params?.data && !channelClient.client) {
       handleChannelClient();
     }
   }, [route.params, clients]);
 
   React.useEffect(() => {
     return () => {
-      if (route.params.channel) {
-        setChannel(route.params.channel, dispatchChannel);
-      }
+      onBackHandle();
     };
   }, []);
+
+  const onBackHandle = () => {
+    if (route?.params?.channel) {
+      setChannel(route.params.channel, dispatchChannel);
+    }
+  };
 
   const defaultActionsAllowed = (messageActionsProp) => {
     const {
@@ -146,7 +143,6 @@ const ChatDetailPage = ({route}) => {
         return response.data.data;
       }
     } catch (error) {
-      setCheckFollowing(false);
       crashlytics().recordError(new Error(error));
       throw new Error(error);
     }

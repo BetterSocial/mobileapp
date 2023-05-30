@@ -47,6 +47,7 @@ const useGroupInfo = () => {
     return membersObject;
   };
   const getMembersList = async () => {
+    setIsLoadingMembers(true);
     try {
       const result = await channel.queryMembers({});
       setNewParticipan(result.members);
@@ -63,7 +64,6 @@ const useGroupInfo = () => {
   const memberName = () => {
     return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
-
   const chatName = getChatName(username, profile.myProfile.username);
 
   const handleOnNameChange = () => {
@@ -195,6 +195,8 @@ const useGroupInfo = () => {
   };
 
   const openChatMessage = async () => {
+    await setOpenModal(false);
+
     const members = [profile.myProfile.user_id];
     members.push(selectedUser.user_id);
     const filter = {type: 'messaging', members: {$eq: members}};
@@ -203,13 +205,31 @@ const useGroupInfo = () => {
       user_id: item,
       channel_role: 'channel_moderator'
     }));
-    navigation.push('ChatDetailPage', {channel});
     await setOpenModal(false);
     const filterMessage = await client.client.queryChannels(filter, sort, {
       watch: true, // this is the default
       state: true
     });
-
+    navigation.reset({
+      index: 1,
+      routes: [
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'HomeTabs',
+            params: {
+              screen: 'ChannelList'
+            }
+          }
+        },
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'ChatDetailPage'
+          }
+        }
+      ]
+    });
     const generatedChannelId = generateRandomId();
 
     if (filterMessage.length > 0) {
@@ -290,21 +310,22 @@ const useGroupInfo = () => {
   };
 
   const handleOpenProfile = async (item) => {
-    setOpenModal(false);
-    if (profile.myProfile.user_id === item.user_id) {
-      navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
-      return;
-    }
-
-    navigation.navigate('OtherProfile', {
-      data: {
-        user_id: profile.myProfile.user_id,
-        other_id: item.user_id,
-        username: item.user.name
+    await setOpenModal(false);
+    setTimeout(() => {
+      if (profile.myProfile.user_id === item.user_id) {
+        navigation.push('ProfileScreen', {
+          isNotFromHomeTab: true
+        });
       }
-    });
+
+      navigation.push('OtherProfile', {
+        data: {
+          user_id: profile.myProfile.user_id,
+          other_id: item.user_id,
+          username: item.user.name
+        }
+      });
+    }, 500);
   };
 
   return {
