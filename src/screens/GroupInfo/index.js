@@ -54,8 +54,7 @@ const GroupInfo = () => {
     onLeaveGroup,
     profile,
     channelState,
-    handlePressContact,
-    participants
+    handlePressContact
   } = useGroupInfo();
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -139,10 +138,6 @@ const GroupInfo = () => {
     handleMember();
   }, []);
 
-  React.useEffect(() => {
-    getMembersList();
-  }, []);
-  console.log(openModal, 'laka');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -151,56 +146,10 @@ const GroupInfo = () => {
         <>
           <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
           <View style={styles.lineTop} />
-          <View style={styles.containerMedia(asset && asset.length === 0)}>
-            <TouchableWithoutFeedback
-              testID="groupMedia"
-              onPress={() => navigation.navigate('GroupMedia')}>
-              <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
-            </TouchableWithoutFeedback>
-            <FlatList
-              testID="asset"
-              data={asset}
-              keyExtractor={(item, index) => index.toString()}
-              style={styles.listImage(asset && asset.length === 0)}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={renderItem}
-            />
-          </View>
-          <View style={styles.lineTop} />
-          <View style={styles.users}>
-            <Text style={styles.countUser}>Participants ({participants.length})</Text>
-            <FlatList
-              testID="participants"
-              // nestedScrollEnabled={true}
-              data={participants}
-              // contentContainerStyle={{paddingBottom: 10}}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item, index}) => (
-                <View style={{height: normalize(72)}}>
-                  <ProfileContact
-                    key={index}
-                    item={item}
-                    onPress={() => handlePressContact(item)}
-                    fullname={item.user.name}
-                    photo={item.user.image}
-                    showArrow={channelState?.channel.data.type === 'group'}
-                    userId={profile.myProfile.user_id}
-                  />
-                </View>
-              )}
-            />
-          </View>
-          <View style={styles.gap} />
-          {channelState?.channel.data.type === 'group' ? (
-            <View style={styles.actionGroup}>
-              <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
-                <View style={styles.imageActContainer}>
-                  <FastImage style={styles.imageAction} source={ExitGroup} />
-                </View>
-                <View>
-                  <Text style={styles.textAct}>Exit Group</Text>
-                </View>
+          <ScrollView nestedScrollEnabled={true}>
+            <SafeAreaView>
+              <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
+                <View style={styles.containerPhoto}>{showImageProfile()}</View>
               </TouchableOpacity>
               <View style={styles.row}>
                 <View style={styles.column}>
