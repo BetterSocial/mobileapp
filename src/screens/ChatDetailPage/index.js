@@ -7,7 +7,6 @@ import {MessageSystem} from 'stream-chat-react-native-core';
 import {useRecoilState} from 'recoil';
 import crashlytics from '@react-native-firebase/crashlytics';
 import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
-import {useNavigation} from '@react-navigation/core';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
@@ -19,11 +18,10 @@ import {fonts} from '../../utils/fonts';
 import {setAsset} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {loadingChannel, setChannel} from '../../context/actions/setChannel';
+import {setChannel} from '../../context/actions/setChannel';
 import api from '../../service/config';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
-import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 
 const streami18n = new Streami18n({
   language: 'en'
@@ -71,12 +69,6 @@ const ChatDetailPage = ({route}) => {
       }
     }
   };
-
-  React.useEffect(() => {
-    if(channelClient) {
-      getMembersList()
-    }
-  }, [channelClient])
 
   React.useEffect(() => {
     if (clients && route?.params?.data && !channelClient.client) {
@@ -151,7 +143,6 @@ const ChatDetailPage = ({route}) => {
         return response.data.data;
       }
     } catch (error) {
-      setCheckFollowing(false);
       crashlytics().recordError(new Error(error));
       throw new Error(error);
     }

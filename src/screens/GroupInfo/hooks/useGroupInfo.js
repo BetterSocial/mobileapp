@@ -205,7 +205,6 @@ const useGroupInfo = () => {
       user_id: item,
       channel_role: 'channel_moderator'
     }));
-    navigation.push('ChatDetailPage', {channel});
     await setOpenModal(false);
     const filterMessage = await client.client.queryChannels(filter, sort, {
       watch: true, // this is the default
