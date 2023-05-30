@@ -47,7 +47,7 @@ const useGroupInfo = () => {
     return membersObject;
   };
   const getMembersList = async () => {
-    setIsLoadingMembers(true)
+    setIsLoadingMembers(true);
     try {
       const result = await channel.queryMembers({});
       setNewParticipan(result.members);
@@ -64,7 +64,6 @@ const useGroupInfo = () => {
   const memberName = () => {
     return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
-  console.log(channelState, 'nusuk')
   const chatName = getChatName(username, profile.myProfile.username);
 
   const handleOnNameChange = () => {
