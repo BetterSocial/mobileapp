@@ -157,14 +157,19 @@ const GroupInfo = () => {
               <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
                 <View style={styles.containerPhoto}>{showImageProfile()}</View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={onReportGroup} style={styles.buttonGroup}>
-                <View style={styles.imageActContainer}>
-                  <FastImage style={styles.imageAction} source={ReportGroup} />
+              <View style={styles.row}>
+                <View style={styles.column}>
+                  <View style={styles.containerGroupName}>
+                    <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
+                  </View>
+                  <Text style={styles.dateCreate}>
+                    Created {moment(createChat).format('DD/MM/YY')}
+                  </Text>
                 </View>
                 <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
                   <MemoIc_pencil width={20} height={20} color={colors.gray1} />
                 </TouchableOpacity>
-              </TouchableOpacity>
+              </View>
               <View style={styles.lineTop} />
               <View style={styles.containerMedia(asset && asset.length === 0)}>
                 <TouchableWithoutFeedback
@@ -217,7 +222,7 @@ const GroupInfo = () => {
                       <Text style={styles.textAct}>Exit Group</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.buttonGroup}>
+                  <TouchableOpacity onPress={onReportGroup} style={styles.buttonGroup}>
                     <View style={styles.imageActContainer}>
                       <FastImage style={styles.imageAction} source={ReportGroup} />
                     </View>
