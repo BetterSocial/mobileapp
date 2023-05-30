@@ -221,7 +221,29 @@ const useGroupInfo = () => {
 
   const openChatMessage = async () => {
     await setOpenModal(false);
-    navigation.push('ChatDetailPage', {channel});
+    navigation.reset({
+      index: 1,
+      routes: [
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'HomeTabs',
+            params: {
+              screen: 'ChannelList'
+            }
+          }
+        },
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'ChatDetailPage',
+            params: {
+              channel
+            }
+          }
+        }
+      ]
+    });
 
     const members = [profile.myProfile.user_id];
     members.push(selectedUser.user_id);
