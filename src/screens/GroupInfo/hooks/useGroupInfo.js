@@ -47,6 +47,7 @@ const useGroupInfo = () => {
     return membersObject;
   };
   const getMembersList = async () => {
+    setIsLoadingMembers(true)
     try {
       const result = await channel.queryMembers({});
       setNewParticipan(result.members);
@@ -63,7 +64,7 @@ const useGroupInfo = () => {
   const memberName = () => {
     return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
-
+  console.log(channelState, 'nusuk')
   const chatName = getChatName(username, profile.myProfile.username);
 
   const handleOnNameChange = () => {
@@ -290,21 +291,22 @@ const useGroupInfo = () => {
   };
 
   const handleOpenProfile = async (item) => {
-    setOpenModal(false);
-    if (profile.myProfile.user_id === item.user_id) {
-      navigation.push('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
-      return;
-    }
-
-    navigation.push('OtherProfile', {
-      data: {
-        user_id: profile.myProfile.user_id,
-        other_id: item.user_id,
-        username: item.user.name
+    await setOpenModal(false);
+    setTimeout(() => {
+      if (profile.myProfile.user_id === item.user_id) {
+        navigation.push('ProfileScreen', {
+          isNotFromHomeTab: true
+        });
       }
-    });
+
+      navigation.push('OtherProfile', {
+        data: {
+          user_id: profile.myProfile.user_id,
+          other_id: item.user_id,
+          username: item.user.name
+        }
+      });
+    }, 500);
   };
 
   return {
