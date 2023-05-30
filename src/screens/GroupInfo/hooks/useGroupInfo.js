@@ -211,20 +211,6 @@ const useGroupInfo = () => {
       watch: true, // this is the default
       state: true
     });
-
-    const generatedChannelId = generateRandomId();
-
-    if (filterMessage.length > 0) {
-      setChannel(filterMessage[0], dispatchChannel);
-    } else {
-      const channelChat = await client.client.channel('messaging', generatedChannelId, {
-        name: selectedUser.user.name,
-        type_channel: 1
-      });
-      await channelChat.create();
-      await channelChat.addMembers(memberWithRoles);
-      setChannel(channelChat, dispatchChannel);
-    }
     navigation.reset({
       index: 1,
       routes: [
@@ -245,6 +231,19 @@ const useGroupInfo = () => {
         }
       ]
     });
+    const generatedChannelId = generateRandomId();
+
+    if (filterMessage.length > 0) {
+      setChannel(filterMessage[0], dispatchChannel);
+    } else {
+      const channelChat = await client.client.channel('messaging', generatedChannelId, {
+        name: selectedUser.user.name,
+        type_channel: 1
+      });
+      await channelChat.create();
+      await channelChat.addMembers(memberWithRoles);
+      setChannel(channelChat, dispatchChannel);
+    }
   };
 
   const alertRemoveUser = async (status) => {
