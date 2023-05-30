@@ -25,6 +25,7 @@ import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
 import ReplyCommentLev3 from '../screens/ReplyComment2';
+import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
@@ -33,7 +34,7 @@ import Topics from '../screens/Topics';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
 import api from '../service/config';
-import useLocalDatabaseHook from '../database/hooks/useLocalDatabaseHook';
+import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import {
   AddParticipant,
   ChannelScreen,
@@ -55,7 +56,7 @@ import {useInitialStartup} from '../hooks/useInitialStartup';
 const RootStack = createNativeStackNavigator();
 
 export const RootNavigator = () => {
-  useLocalDatabaseHook();
+  useCoreChatSystemHook();
 
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
@@ -288,6 +289,11 @@ const AuthenticatedNavigator = () => {
       <AuthenticatedStack.Screen
         name="WebsocketResearchScreen"
         component={WebsocketResearchScreen}
+        options={{headerShown: false}}
+      />
+      <AuthenticatedStack.Screen
+        name="SampleChatScreen"
+        component={SampleChatScreen}
         options={{headerShown: false}}
       />
     </AuthenticatedStack.Navigator>

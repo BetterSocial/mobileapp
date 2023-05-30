@@ -2,32 +2,34 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {Text, View} from 'react-native';
+import {Text, Touchable, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
-import useCoreChatSystemHook from '../../hooks/core/useCoreChatSystemHook';
+import useAnonymousChannelListScreenHook from '../../hooks/screen/useAnonymousChannelListHook';
 import {Button} from '../../components/Button';
 
 const WebsocketResearchScreen = () => {
   const navigation = useNavigation();
 
-  const {channelList} = useCoreChatSystemHook();
+  const {channels, goToChatScreen} = useAnonymousChannelListScreenHook();
 
   return (
     <View>
       <Button onPress={navigation.goBack}>Back</Button>
       <Text style={{paddingBottom: 16}}>WebsocketResearchScreen</Text>
-      {channelList?.map((item, index) => {
+      {channels?.map((item, index) => {
         return (
-          <View key={index}>
-            <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
-            <Text>{`${item?.id}`}</Text>
-            <Text>{`${item?.name}`}</Text>
-            <Text>{`${item?.description}`}</Text>
-            <Text>{item?.lastUpdatedAt}</Text>
-            <Text>{`Chat Type: ${item?.channelType}`}</Text>
-            <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
-          </View>
+          <TouchableOpacity key={item?.id} onPress={() => goToChatScreen(item?.id)}>
+            <View>
+              <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
+              <Text>{`${item?.id}`}</Text>
+              <Text>{`${item?.name}`}</Text>
+              <Text>{`${item?.description}`}</Text>
+              <Text>{item?.lastUpdatedAt}</Text>
+              <Text>{`Chat Type: ${item?.channelType}`}</Text>
+              <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
+            </View>
+          </TouchableOpacity>
         );
       })}
     </View>

@@ -25,11 +25,7 @@
     {
       "files": ["**/*.ts", "**/*.tsx"],
       "plugins": ["@typescript-eslint"],
-      "extends": [
-        "eslint:recommended",
-        "airbnb-typescript",
-        "plugin:@typescript-eslint/recommended"
-      ],
+      "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "project": ["./tsconfig.json"]
@@ -37,6 +33,38 @@
       "rules": {
         "@typescript-eslint/comma-dangle": "warn",
         "@typescript-eslint/object-curly-spacing": "warn",
+        "linebreak-style": "off",
+        "no-console": "off",
+        "import/prefer-default-export": "off",
+        "no-use-before-define": "warn",
+        "no-param-reassign": "off",
+        "react/prop-types": "off",
+        "camelcase": "off",
+        "import/no-extraneous-dependencies": "off",
+        "no-useless-escape": "warn",
+        "no-nested-ternary": "off",
+        "no-case-declarations": "warn",
+        "@typescript-eslint/no-loop-func": "warn",
+        "@typescript-eslint/no-redeclare": "warn",
+        "@typescript-eslint/no-shadow": "warn",
+        "@typescript-eslint/space-before-blocks": "warn",
+        "@typescript-eslint/space-infix-ops": "warn",
+        "import/extensions": [
+          "error",
+          "ignorePackages",
+          {
+            "ts": "never",
+            "tsx": "never",
+            "js": "never"
+          }
+        ],
+        "quotes": [
+          2,
+          "single",
+          {
+            "avoidEscape": true
+          }
+        ],
         "comma-dangle": "off",
         "semi": ["error", "always"],
         "prettier/prettier": [
@@ -49,13 +77,6 @@
             "printWidth": 100,
             "trailingComma": "none",
             "proseWrap": "preserve"
-          }
-        ],
-        "quotes": [
-          2,
-          "single",
-          {
-            "avoidEscape": true
           }
         ]
       }
@@ -80,6 +101,15 @@
     "@typescript-eslint/space-before-blocks": "warn",
     "@typescript-eslint/space-infix-ops": "warn",
     "@typescript-eslint/object-curly-spacing": "warn",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "tsx": "never",
+        "js": "never"
+      }
+    ],
     "quotes": [
       2,
       "single",
@@ -105,5 +135,12 @@
   "globals": {
     "__DEV__": true,
     "node": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
   }
 }

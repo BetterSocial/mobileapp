@@ -2,13 +2,18 @@ import * as React from 'react';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
+import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 
 const useCoreChatSystemHook = () => {
-  const {localDb} = useLocalDatabaseHook();
+  const {
+    localDb,
+    refresh,
+    channelList: channelListListener
+  } = useLocalDatabaseHook() as UseLocalDatabaseHook;
   const [messages, setMessages] = React.useState([]);
 
   const initChannelListData = async () => {
@@ -31,16 +36,15 @@ const useCoreChatSystemHook = () => {
     const channelList = ChannelList.fromWebsocketObject(lastJsonMessage);
     await channelList.save(localDb);
 
-    // console.log('lastJsonMessage');
-    // console.log(lastJsonMessage?.message?.id);
-
     const user = UserSchema.fromWebsocketObject(lastJsonMessage);
     await user.save(localDb);
 
     const chat = ChatSchema.fromWebsocketObject(lastJsonMessage);
     await chat.save(localDb);
 
-    initChannelListData();
+    refresh('channelList');
+    refresh('chat');
+    refresh('channelInfo');
   };
 
   React.useEffect(() => {
@@ -55,7 +59,7 @@ const useCoreChatSystemHook = () => {
 
   React.useEffect(() => {
     if (localDb) initChannelListData();
-  }, [localDb]);
+  }, [localDb, channelListListener]);
 
   return {
     lastJsonMessage,

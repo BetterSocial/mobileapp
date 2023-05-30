@@ -2,36 +2,35 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/core';
+import {ScrollView, Text, View} from 'react-native';
 
-import useCoreChatSystemHook from '../../hooks/core/useCoreChatSystemHook';
+import useAnonymousChatScreenHook from '../../hooks/screen/useAnonymousChatScreenHook';
 import {Button} from '../../components/Button';
 
-const WebsocketResearchScreen = () => {
-  const navigation = useNavigation();
-
-  const {channelList} = useCoreChatSystemHook();
+const SampleChatScreen = () => {
+  const {chats, goBackFromChatScreen} = useAnonymousChatScreenHook();
 
   return (
     <View>
-      <Button onPress={navigation.goBack}>Back</Button>
-      <Text style={{paddingBottom: 16}}>WebsocketResearchScreen</Text>
-      {channelList?.map((item, index) => {
-        return (
-          <View key={index}>
-            <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
-            <Text>{`${item?.id}`}</Text>
-            <Text>{`${item?.name}`}</Text>
-            <Text>{`${item?.description}`}</Text>
-            <Text>{item?.lastUpdatedAt}</Text>
-            <Text>{`Chat Type: ${item?.channelType}`}</Text>
-            <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
-          </View>
-        );
-      })}
+      <Button onPress={goBackFromChatScreen}>Back</Button>
+      <Text style={{paddingBottom: 16}}>SampleChatScreen</Text>
+      <ScrollView>
+        {chats?.map((item, index) => {
+          return (
+            <View key={index}>
+              <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
+              <Text>{`${item?.id}`}</Text>
+              <Text>{`From: ${item?.userId}`}</Text>
+              <Text>{`${item?.message}`}</Text>
+              <Text>{item?.lastUpdatedAt}</Text>
+              <Text>{`Chat Type: ${item?.type}`}</Text>
+              <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
+            </View>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 };
 
-export default WebsocketResearchScreen;
+export default SampleChatScreen;
