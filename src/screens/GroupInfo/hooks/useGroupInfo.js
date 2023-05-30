@@ -47,7 +47,7 @@ const useGroupInfo = () => {
     return membersObject;
   };
   const getMembersList = async () => {
-    setIsLoadingMembers(true)
+    setIsLoadingMembers(true);
     try {
       const result = await channel.queryMembers({});
       setNewParticipan(result.members);
@@ -64,7 +64,6 @@ const useGroupInfo = () => {
   const memberName = () => {
     return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
-  console.log(channelState, 'nusuk')
   const chatName = getChatName(username, profile.myProfile.username);
 
   const handleOnNameChange = () => {
@@ -196,6 +195,31 @@ const useGroupInfo = () => {
   };
 
   const openChatMessage = async () => {
+    await setOpenModal(false);
+    navigation.reset({
+      index: 1,
+      routes: [
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'HomeTabs',
+            params: {
+              screen: 'ChannelList'
+            }
+          }
+        },
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'ChatDetailPage',
+            params: {
+              channel
+            }
+          }
+        }
+      ]
+    });
+
     const members = [profile.myProfile.user_id];
     members.push(selectedUser.user_id);
     const filter = {type: 'messaging', members: {$eq: members}};
