@@ -223,6 +223,26 @@ const useGroupInfo = () => {
       await channelChat.addMembers(memberWithRoles);
       setChannel(channelChat, dispatchChannel);
     }
+    navigation.reset({
+      index: 1,
+      routes: [
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'HomeTabs',
+            params: {
+              screen: 'ChannelList'
+            }
+          }
+        },
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'ChatDetailPage'
+          }
+        }
+      ]
+    });
   };
 
   const alertRemoveUser = async (status) => {
