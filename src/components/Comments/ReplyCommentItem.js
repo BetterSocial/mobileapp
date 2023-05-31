@@ -15,7 +15,7 @@ import useUpdateComment from './hooks/useUpdateComment';
 import {FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {iVoteComment, voteComment} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
@@ -261,14 +261,14 @@ const styles = StyleSheet.create({
   }),
   username: {
     fontFamily: fonts.inter[700],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     color: '#828282',
     lineHeight: 14,
     marginLeft: 16
   },
   post: {
     fontFamily: fonts.inter[400],
-    fontSize: 16,
+    fontSize: normalizeFontSize(16),
     color: '#333333',
     marginLeft: 28
   },

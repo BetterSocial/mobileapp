@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   }),
   username: {
     fontFamily: fonts.inter[700],
-    fontSize: normalizeFontSize(12),
+    fontSize: normalizeFontSize(10),
     color: '#828282',
     marginLeft: SIZES.base
   },
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   btnMore: {marginStart: 8},
   commenttext: {
     fontFamily: fonts.inter[400],
-    fontSize: normalizeFontSize(14),
+    fontSize: normalizeFontSize(12),
     lineHeight: 19.36,
     color: COLORS.greyseries
   },
