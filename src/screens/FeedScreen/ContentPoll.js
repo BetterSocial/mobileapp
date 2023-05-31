@@ -46,7 +46,7 @@ const ContentPoll = ({
   const renderSeeResultButtonHandle = () =>
     renderSeeResultButton(multiplechoice, multipleChoiceSelected);
   return (
-    <View style={[styles.containerShowMessage, {height: isPostDetail ? 'auto' : '80%'}]}>
+    <View style={[styles.containerShowMessage, {height: isPostDetail ? 'auto' : 'auto'}]}>
       <View style={styles.pollOptionsContainer}>
         <Text style={styles.voteFont}>All votes are anonymous - even to the poll’s author!</Text>
         <View style={styles.pollContainer}>
