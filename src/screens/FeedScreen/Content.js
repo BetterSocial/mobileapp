@@ -14,7 +14,7 @@ import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 
-const {width: screenWidth} = Dimensions.get('window');
+const {width: screenWidth, height} = Dimensions.get('window');
 
 const Content = ({
   message,
@@ -28,9 +28,11 @@ const Content = ({
   const navigation = useNavigation();
   const route = useRoute();
   const devHeight = Dimensions.get('screen').height;
-  const substringPostImage = devHeight / 2.25 - 40 * 4;
-  const substringNoImageNoTopic = devHeight / 1.6 - 38 * 6.5;
-  const substringNoImageTopic = devHeight / 1.6 - 40 * 7;
+  const substringPostImage = devHeight / 2.5 - 40 * (height / screenWidth);
+  const substringNoImageNoTopic = devHeight / 1.5 - 40 * (height / screenWidth);
+  const substringNoImageTopic = devHeight / 1.6 - 40 * (height / screenWidth);
+  const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
+  const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
 
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
@@ -52,6 +54,14 @@ const Content = ({
     }
     if (images_url.length < 1 && topics.length < 1) {
       substringNumber = substringNoImageNoTopic;
+    }
+
+    if (item.post_type === POST_TYPE_POLL && topics.length < 1) {
+      substringNumber = substringWithPoll;
+    }
+
+    if (item.post_type === POST_TYPE_POLL && topics.length > 1) {
+      substringNumber = substringWithPollTopic;
     }
 
     return (
