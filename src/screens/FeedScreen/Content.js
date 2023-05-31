@@ -131,7 +131,7 @@ export const styles = StyleSheet.create({
   textMedia: {
     fontFamily: fonts.inter[400],
     fontWeight: 'normal',
-    fontSize: 14,
+    fontSize: normalizeFontSize(14),
     color: colors.black,
     lineHeight: 24,
     flex: 1,
