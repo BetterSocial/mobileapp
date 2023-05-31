@@ -9,23 +9,11 @@ import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 
 const useCoreChatSystemHook = () => {
-  const {
-    localDb,
-    refresh,
-    channelList: channelListListener
-  } = useLocalDatabaseHook() as UseLocalDatabaseHook;
-  const [messages, setMessages] = React.useState([]);
-
-  const initChannelListData = async () => {
-    if (!localDb) return;
-    const data = await ChannelList.getAll(localDb);
-    setMessages(data);
-  };
+  const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
 
   const onPostNotifReceived = (data) => {
     const postNotifChannel = ChannelList.fromPostNotifObject(data);
     postNotifChannel.save(localDb);
-    initChannelListData();
   };
 
   usePostNotificationListenerHook(onPostNotifReceived);
@@ -56,15 +44,6 @@ const useCoreChatSystemHook = () => {
       saveChannelListData();
     }
   }, [lastJsonMessage, localDb]);
-
-  React.useEffect(() => {
-    if (localDb) initChannelListData();
-  }, [localDb, channelListListener]);
-
-  return {
-    lastJsonMessage,
-    channelList: messages
-  };
 };
 
 export default useCoreChatSystemHook;

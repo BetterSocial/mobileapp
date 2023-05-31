@@ -22,6 +22,8 @@ class UserSchema implements BaseDbSchema {
 
   isBanned: boolean;
 
+  isMe: boolean;
+
   constructor({
     userId,
     username,
@@ -31,7 +33,8 @@ class UserSchema implements BaseDbSchema {
     lastActiveAt,
     profilePicture,
     bio,
-    isBanned
+    isBanned,
+    isMe = false
   }) {
     this.userId = userId;
     this.username = username;
@@ -42,6 +45,7 @@ class UserSchema implements BaseDbSchema {
     this.profilePicture = profilePicture;
     this.bio = bio;
     this.isBanned = isBanned;
+    this.isMe = isMe;
   }
 
   save = async (db: SQLiteDatabase): Promise<void> => {
@@ -71,7 +75,6 @@ class UserSchema implements BaseDbSchema {
         ]
       );
     } catch (e) {
-      console.log('asdsdsadqewqweqew');
       console.log(e);
     }
   };
@@ -95,19 +98,20 @@ class UserSchema implements BaseDbSchema {
       lastActiveAt: dbObject.last_active_at,
       profilePicture: dbObject.profile_picture,
       bio: dbObject.bio,
-      isBanned: dbObject.is_banned
+      isBanned: dbObject.is_banned,
+      isMe: dbObject.is_me
     });
   }
 
   static fromWebsocketObject(json: any): UserSchema {
     return new UserSchema({
-      userId: json?.message?.user_id,
+      userId: json?.message?.user?.id,
       username: json?.message?.user?.name,
       countryCode: '',
       createdAt: json?.message?.created_at,
       updatedAt: json?.message?.updated_at,
-      lastActiveAt: json?.message?.last_active_at,
-      profilePicture: json?.message?.image,
+      lastActiveAt: json?.message?.user?.last_active_at,
+      profilePicture: json?.message?.user?.image,
       bio: '',
       isBanned: json.is_banned
     });

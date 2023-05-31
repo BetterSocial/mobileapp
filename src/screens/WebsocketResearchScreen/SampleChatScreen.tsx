@@ -20,9 +20,8 @@ const SampleChatScreen = () => {
             <View key={index}>
               <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
               <Text>{`${item?.id}`}</Text>
-              <Text>{`From: ${item?.userId}`}</Text>
-              <Text>{`${item?.message}`}</Text>
-              <Text>{item?.lastUpdatedAt}</Text>
+              <Text>{`${item?.user?.isMe ? 'You' : item?.user?.username}: ${item?.message}`}</Text>
+              <Text>{item?.updatedAt}</Text>
               <Text>{`Chat Type: ${item?.type}`}</Text>
               <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
             </View>

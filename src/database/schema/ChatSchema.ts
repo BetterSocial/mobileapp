@@ -1,6 +1,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import BaseDbSchema from './BaseDbSchema';
+import UserSchema from './UserSchema';
 
 class ChatSchema implements BaseDbSchema {
   id: string;
@@ -19,7 +20,9 @@ class ChatSchema implements BaseDbSchema {
 
   rawJson: string;
 
-  constructor({id, channelId, userId, message, type, createdAt, updatedAt, rawJson}) {
+  user: UserSchema | null;
+
+  constructor({id, channelId, userId, message, type, createdAt, updatedAt, rawJson, user}) {
     if (!id) throw new Error('ChatSchema must have an id');
 
     this.id = id;
@@ -30,6 +33,7 @@ class ChatSchema implements BaseDbSchema {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.rawJson = rawJson;
+    this.user = user;
   }
 
   save = async (db: SQLiteDatabase) => {
@@ -58,15 +62,29 @@ class ChatSchema implements BaseDbSchema {
 
       await db.executeSql(insertQuery, insertParams);
     } catch (e) {
-      console.log('poppoopo');
       console.log(e);
     }
   };
 
-  static async getAll(db: SQLiteDatabase, channelId): Promise<BaseDbSchema[]> {
-    const selectQuery = `SELECT * FROM ${ChatSchema.getTableName()} WHERE channel_id = ? ORDER BY created_at ASC;`;
+  static async getAll(
+    db: SQLiteDatabase,
+    channelId: string,
+    myId: string,
+    myAnonymousId: string
+  ): Promise<BaseDbSchema[]> {
+    const selectQuery = `
+      SELECT *, 
+        CASE A.user_id 
+          WHEN ? THEN 1 
+          WHEN ? THEN 1
+          ELSE 0 END AS is_me
+      FROM 
+      ${ChatSchema.getTableName()} A 
+      INNER JOIN ${UserSchema.getTableName()} B 
+      ON A.user_id = B.user_id 
+      WHERE channel_id = ? ORDER BY created_at DESC;`;
 
-    const [{rows}] = await db.executeSql(selectQuery, [channelId]);
+    const [{rows}] = await db.executeSql(selectQuery, [myId, myAnonymousId, channelId]);
     return Promise.resolve(rows.raw().map(this.fromDatabaseObject));
   }
 
@@ -82,6 +100,7 @@ class ChatSchema implements BaseDbSchema {
     } catch (e) {
       console.log(e);
     }
+    const user = UserSchema.fromDatabaseObject(dbObject);
 
     return new ChatSchema({
       id: dbObject.id,
@@ -91,7 +110,8 @@ class ChatSchema implements BaseDbSchema {
       type: dbObject.type,
       createdAt: dbObject.created_at,
       updatedAt: dbObject.updated_at,
-      rawJson
+      rawJson,
+      user
     });
   }
 
@@ -113,7 +133,8 @@ class ChatSchema implements BaseDbSchema {
       type: json?.message?.type,
       createdAt: json?.message?.created_at,
       updatedAt: json?.message?.created_at,
-      rawJson
+      rawJson,
+      user: null
     });
   }
 

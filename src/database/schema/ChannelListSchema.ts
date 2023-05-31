@@ -1,6 +1,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import BaseDbSchema from './BaseDbSchema';
+import UserSchema from './UserSchema';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -23,6 +24,8 @@ class ChannelList implements BaseDbSchema {
 
   rawJson: any;
 
+  user: UserSchema | null;
+
   constructor({
     id,
     channelPicture,
@@ -33,7 +36,8 @@ class ChannelList implements BaseDbSchema {
     lastUpdatedAt,
     lastUpdatedBy,
     createdAt,
-    rawJson
+    rawJson,
+    user
   }) {
     if (!id) throw new Error('ChannelList must have an id');
 
@@ -47,6 +51,7 @@ class ChannelList implements BaseDbSchema {
     this.lastUpdatedBy = lastUpdatedBy;
     this.createdAt = createdAt;
     this.rawJson = rawJson;
+    this.user = user;
   }
 
   getAll = (db: any): Promise<BaseDbSchema[]> => {
@@ -98,9 +103,22 @@ class ChannelList implements BaseDbSchema {
     }
   }
 
-  static async getAll(db: SQLiteDatabase): Promise<ChannelList[]> {
+  static async getAll(
+    db: SQLiteDatabase,
+    myId: string,
+    myAnonymousId: string
+  ): Promise<ChannelList[]> {
     const [results] = await db.executeSql(
-      `SELECT * FROM ${ChannelList.getTableName()} ORDER BY last_updated_at DESC`
+      `SELECT *, 
+        CASE last_updated_by 
+          WHEN ? THEN 1
+          WHEN ? THEN 1
+          ELSE 0 END AS is_me
+      FROM ${ChannelList.getTableName()} A 
+      INNER JOIN ${UserSchema.getTableName()} B
+      ON A.last_updated_by = B.user_id
+      ORDER BY last_updated_at DESC`,
+      [myId, myAnonymousId]
     );
     return results.rows.raw().map(ChannelList.fromDatabaseObject);
   }
@@ -120,7 +138,8 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedAt: json?.channel?.last_message_at,
       lastUpdatedBy: json?.message?.user?.id,
       createdAt: json.created_at,
-      rawJson: json
+      rawJson: json,
+      user: null
     });
   }
 
@@ -131,6 +150,9 @@ class ChannelList implements BaseDbSchema {
     } catch (e) {
       console.log(e);
     }
+
+    const user = UserSchema.fromDatabaseObject(json);
+
     return new ChannelList({
       id: json.id,
       channelPicture: json.channel_picture,
@@ -141,7 +163,8 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedAt: json.last_updated_at,
       lastUpdatedBy: json.last_updated_by,
       createdAt: json.created_at,
-      rawJson: jsonParsed
+      rawJson: jsonParsed,
+      user
     });
   }
 
@@ -157,7 +180,8 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedAt: object?.time,
       lastUpdatedBy: object?.actor?.id,
       createdAt: object?.time,
-      rawJson: json
+      rawJson: json,
+      user: null
     });
   }
 }
