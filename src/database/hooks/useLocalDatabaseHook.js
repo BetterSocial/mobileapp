@@ -28,7 +28,7 @@ const useLocalDatabaseHook = () => {
     }));
   };
 
-  const {channelInfo, channelList, chat, user} = databaseListener;
+  const {channelInfo, channelList, channelMember, chat, user} = databaseListener;
 
   const initDb = async () => {
     const db = await LocalDatabase.getDBConnection();
@@ -43,6 +43,7 @@ const useLocalDatabaseHook = () => {
     localDb,
     channelInfo,
     channelList,
+    channelMember,
     chat,
     user,
     refresh

@@ -1,12 +1,11 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
+import ChannelListMemberSchema from '../../schema/ChannelListMemberSchema';
 import Migration from './migration.types';
-
-const TABLE_NAME = 'channel_list_members';
 
 class MigrationVersion3 implements Migration {
   up = async (db: SQLiteDatabase): Promise<void> => {
-    const upQuery = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
+    const upQuery = `CREATE TABLE IF NOT EXISTS ${ChannelListMemberSchema.getTableName()} (
       id UUID PRIMARY KEY NOT NULL DEFAULT (UUID()),
       channel_id TEXT NOT NULL,
       user_id UUID NOT NULL,
@@ -17,16 +16,24 @@ class MigrationVersion3 implements Migration {
       FOREIGN KEY (channel_id) REFERENCES channel_lists (id)
     );`;
 
-    console.log(`===== MIGRATING: ${TABLE_NAME.toLocaleUpperCase()} TABLE =====`);
+    console.log(
+      `===== MIGRATING: ${ChannelListMemberSchema.getTableName().toLocaleUpperCase()} TABLE =====`
+    );
     await db.executeSql(upQuery);
-    console.log(`===== DONE MIGRATING: ${TABLE_NAME.toLocaleUpperCase()}  TABLE =====`);
+    console.log(
+      `===== DONE MIGRATING: ${ChannelListMemberSchema.getTableName().toLocaleUpperCase()}  TABLE =====`
+    );
   };
 
   down = async (db: SQLiteDatabase): Promise<void> => {
-    console.log(`===== DOWNGRADING: ${TABLE_NAME.toLocaleUpperCase()} TABLE =====`);
-    const downQuery = `DROP TABLE IF EXISTS ${TABLE_NAME}`;
+    console.log(
+      `===== DOWNGRADING: ${ChannelListMemberSchema.getTableName().toLocaleUpperCase()} TABLE =====`
+    );
+    const downQuery = `DROP TABLE IF EXISTS ${ChannelListMemberSchema.getTableName()}`;
     await db.executeSql(downQuery);
-    console.log(`===== DONE DOWNGRADING: ${TABLE_NAME.toLocaleUpperCase()}  TABLE =====`);
+    console.log(
+      `===== DONE DOWNGRADING: ${ChannelListMemberSchema.getTableName().toLocaleUpperCase()}  TABLE =====`
+    );
   };
 }
 

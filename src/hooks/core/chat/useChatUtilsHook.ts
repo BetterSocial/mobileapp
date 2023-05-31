@@ -29,9 +29,19 @@ const useChatUtilsHook = () => {
     });
   };
 
+  const goToChatInfoScreen = () => {
+    navigation.navigate('SampleChatInfoScreen');
+  };
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
   return {
     selectedChannel,
+    goBack,
     goToChatScreen,
+    goToChatInfoScreen,
     goBackFromChatScreen
   };
 };

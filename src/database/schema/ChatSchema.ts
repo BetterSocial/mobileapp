@@ -124,7 +124,6 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
 
-    console.log('json', json?.message?.id);
     return new ChatSchema({
       id: json?.message?.id,
       channelId: json?.channel_id,

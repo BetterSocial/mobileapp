@@ -9,7 +9,7 @@ import {getUserId} from '../../utils/token';
 
 function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
   const {localDb, chat} = useLocalDatabaseHook();
-  const {selectedChannel, goBackFromChatScreen} = useChatUtilsHook();
+  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
 
   const [chats, setChats] = React.useState([]);
 
@@ -17,8 +17,6 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
     if (!localDb) return;
     const myUserId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
-    console.log('myUserId');
-    console.log(myUserId);
     const data = await ChatSchema.getAll(localDb, selectedChannel, myUserId, myAnonymousId);
     setChats(data);
   };
@@ -29,7 +27,8 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
 
   return {
     chats,
-    goBackFromChatScreen
+    goBackFromChatScreen,
+    goToChatInfoScreen
   };
 }
 

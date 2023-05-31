@@ -11,6 +11,16 @@ export interface UserSchema {
   isMe: boolean;
 }
 
+export interface ChannelListMemberSchema {
+  id: string;
+  channelId: string;
+  userId: string;
+  isModerator: boolean;
+  isBanned: boolean;
+  isShadowBanned: boolean;
+  joinedAt: string;
+  user: UserSchema | null;
+}
 export interface ChannelList {
   id: string;
   channelPicture: string;
@@ -23,6 +33,7 @@ export interface ChannelList {
   createdAt: string;
   rawJson: any;
   user: UserSchema | null;
+  members: ChannelListMemberSchema[] | null;
 }
 
 export interface ChatSchema {

@@ -25,6 +25,7 @@ import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
 import ReplyCommentLev3 from '../screens/ReplyComment2';
+import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
 import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
@@ -294,6 +295,11 @@ const AuthenticatedNavigator = () => {
       <AuthenticatedStack.Screen
         name="SampleChatScreen"
         component={SampleChatScreen}
+        options={{headerShown: false}}
+      />
+      <AuthenticatedStack.Screen
+        name="SampleChatInfoScreen"
+        component={SampleChatInfoScreen}
         options={{headerShown: false}}
       />
     </AuthenticatedStack.Navigator>

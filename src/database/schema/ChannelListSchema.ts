@@ -1,6 +1,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 import BaseDbSchema from './BaseDbSchema';
+import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
 
 class ChannelList implements BaseDbSchema {
@@ -26,6 +27,8 @@ class ChannelList implements BaseDbSchema {
 
   user: UserSchema | null;
 
+  members: ChannelListMemberSchema[] | null;
+
   constructor({
     id,
     channelPicture,
@@ -37,7 +40,8 @@ class ChannelList implements BaseDbSchema {
     lastUpdatedBy,
     createdAt,
     rawJson,
-    user
+    user,
+    members = []
   }) {
     if (!id) throw new Error('ChannelList must have an id');
 
@@ -52,10 +56,32 @@ class ChannelList implements BaseDbSchema {
     this.createdAt = createdAt;
     this.rawJson = rawJson;
     this.user = user;
+    this.members = members;
   }
 
   getAll = (db: any): Promise<BaseDbSchema[]> => {
     throw new Error('Method not implemented.');
+  };
+
+  static getById = async (db: any, id: string): Promise<ChannelList> => {
+    const selectQuery = `SELECT * FROM ${ChannelList.getTableName()} WHERE id = ?`;
+    const selectParams = [id];
+
+    const [results] = await db.executeSql(selectQuery, selectParams);
+    return results.rows.raw().map(ChannelList.fromDatabaseObject);
+  };
+
+  static getChannelInfo = async (
+    db: SQLiteDatabase,
+    channelId: string,
+    myId: string,
+    myAnonymousId: string
+  ): Promise<ChannelList> => {
+    const channel = await this.getById(db, channelId);
+    const members = await ChannelListMemberSchema.getAll(db, channelId, myId, myAnonymousId);
+    channel.members = members;
+
+    return channel;
   };
 
   getTableName = (): string => {
@@ -98,7 +124,6 @@ class ChannelList implements BaseDbSchema {
         ]
       );
     } catch (e) {
-      console.log('zxczczxczxce');
       console.log(e);
     }
   }
@@ -109,12 +134,12 @@ class ChannelList implements BaseDbSchema {
     myAnonymousId: string
   ): Promise<ChannelList[]> {
     const [results] = await db.executeSql(
-      `SELECT *, 
-        CASE last_updated_by 
+      `SELECT *,
+        CASE last_updated_by
           WHEN ? THEN 1
           WHEN ? THEN 1
           ELSE 0 END AS is_me
-      FROM ${ChannelList.getTableName()} A 
+      FROM ${ChannelList.getTableName()} A
       INNER JOIN ${UserSchema.getTableName()} B
       ON A.last_updated_by = B.user_id
       ORDER BY last_updated_at DESC`,

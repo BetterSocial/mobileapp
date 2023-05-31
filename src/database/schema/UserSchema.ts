@@ -117,6 +117,20 @@ class UserSchema implements BaseDbSchema {
     });
   }
 
+  static fromMemberWebsocketObject(json: any): UserSchema {
+    return new UserSchema({
+      userId: json?.user?.id,
+      username: json?.user?.name,
+      countryCode: '',
+      createdAt: json?.user?.created_at,
+      updatedAt: json?.updated_at,
+      lastActiveAt: json?.user?.last_active,
+      profilePicture: json?.user?.image,
+      bio: '',
+      isBanned: json?.banned
+    });
+  }
+
   get = async (db: SQLiteDatabase, id: string): Promise<UserSchema> => {
     const [{rows}] = await db.executeSql('SELECT * FROM users WHERE id = ?', [id]);
     if (rows?.length === 0) return null;

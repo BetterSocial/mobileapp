@@ -6,7 +6,8 @@ const databaseListenerAtom = atom({
     channelList: 0,
     channelInfo: 0,
     chat: 0,
-    user: 0
+    user: 0,
+    channelMember: 0
   }
 });
 

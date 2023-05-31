@@ -8,11 +8,12 @@ import useAnonymousChatScreenHook from '../../hooks/screen/useAnonymousChatScree
 import {Button} from '../../components/Button';
 
 const SampleChatScreen = () => {
-  const {chats, goBackFromChatScreen} = useAnonymousChatScreenHook();
+  const {chats, goBackFromChatScreen, goToChatInfoScreen} = useAnonymousChatScreenHook();
 
   return (
     <View>
       <Button onPress={goBackFromChatScreen}>Back</Button>
+      <Button onPress={goToChatInfoScreen}>To Chat Info</Button>
       <Text style={{paddingBottom: 16}}>SampleChatScreen</Text>
       <ScrollView>
         {chats?.map((item, index) => {

@@ -2,7 +2,7 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
 interface UseLocalDatabaseHook {
   localDb: SQLiteDatabase;
-  refresh: (key: 'channelList' | 'channelInfo' | 'chat' | 'user') => void;
+  refresh: (key: 'channelList' | 'channelInfo' | 'chat' | 'user' | 'channelMember') => void;
   channelInfo: number;
   channelList: number;
   chat: number;
