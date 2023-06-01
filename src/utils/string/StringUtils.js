@@ -329,7 +329,7 @@ const getDurationTimeText = (selectedtime) => {
 };
 
 const getCaptionWithLinkStyle = (text) => {
-  const linkRegex = /(https?:\/\/\S+)/g;
+  const linkRegex = /(https?:\/\/\S+)+/g;
   return reactStringReplace(text, linkRegex, (match) => (
     <HighlightText text={match} onPress={() => onOpenLink(match)} />
   ));
