@@ -56,5 +56,11 @@
 <!--      android:exported="true"-->
 <!--      android:name="com.facebook.react.devsupport.DevSettingsActivity" />-->
     </application>
+       <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" android:host="*" />
+        </intent>
+    </queries>
 
 </manifest>
