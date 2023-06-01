@@ -2,13 +2,14 @@
 import * as React from 'react';
 import moment from 'moment';
 import reactStringReplace from 'react-string-replace';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, Linking} from 'react-native';
 
 import TaggingUserText from '../../components/TaggingUserText';
 import TextBold from '../../components/Text/TextBold';
 import TopicText from '../../components/TopicText';
 // eslint-disable-next-line import/no-cycle
 import removePrefixTopic from '../topics/removePrefixTopic';
+import HighlightText from '../../components/HightlightClickText/HighlightText';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 
@@ -328,6 +329,22 @@ const getDurationTimeText = (selectedtime) => {
   return `${dayText}${hourText}${minuteText}`;
 };
 
+const getCaptionWithLinkStyle = (text) => {
+  const linkRegex = /(https?:\/\/\S+)/g;
+  return reactStringReplace(text, linkRegex, (match) => (
+    <HighlightText text={match} onPress={() => onOpenLink(match)} />
+  ));
+};
+
+const onOpenLink = (url) => {
+  console.log(url, 'url');
+  Linking.canOpenURL(url).then((canOpen) => {
+    if (canOpen) {
+      Linking.openURL(url);
+    }
+  });
+};
+
 export {
   capitalizeFirstText,
   convertString,
@@ -346,5 +363,6 @@ export {
   sanitizeUrl,
   getDurationTimeText,
   isLocationMatch,
-  styles
+  styles,
+  getCaptionWithLinkStyle
 };
