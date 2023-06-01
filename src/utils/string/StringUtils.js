@@ -337,7 +337,6 @@ const getCaptionWithLinkStyle = (text) => {
 };
 
 const onOpenLink = (url) => {
-  console.log(url, 'url');
   Linking.canOpenURL(url).then((canOpen) => {
     if (canOpen) {
       Linking.openURL(url);
