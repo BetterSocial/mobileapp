@@ -19,6 +19,7 @@ import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {removeWhiteSpace} from '../../utils/Utils';
 import BlockComponent from '../BlockComponent';
+import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 
 const Comment = ({
   user,
@@ -152,12 +153,13 @@ const Comment = ({
           </View>
         </ButtonHightlight>
       </View>
-      <TouchableOpacity testID="textPress" onPress={onTextPress} style={styles.flexStartContainer}>
-        <ButtonHightlight
-          onLongPress={handleOnLongPress}
-          style={styles.flexStartContainer}
-          onPress={onTextPress}>
-          <Text style={styles.post}>{comment.data.text}</Text>
+      <TouchableOpacity
+        activeOpacity={1}
+        testID="textPress"
+        onPress={onTextPress}
+        style={styles.flexStartContainer}>
+        <ButtonHightlight style={styles.flexStartContainer} onPress={onTextPress}>
+          <Text style={styles.post}>{getCaptionWithLinkStyle(comment.data.text)}</Text>
         </ButtonHightlight>
       </TouchableOpacity>
       <View style={styles.constainerFooter}>
