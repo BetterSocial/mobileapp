@@ -1,8 +1,8 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/core';
-
+import SimpleToast from 'react-native-simple-toast';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {Alert} from 'react-native';
+import {Alert, Linking} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
 import {Context} from '../../../context';
 import {uploadFile} from '../../../service/file';
@@ -271,15 +271,8 @@ const useGroupInfo = () => {
 
   const leaveGroup = async () => {
     try {
-      await channel.sendMessage(
-        {
-          text: `${profile.myProfile.username} left`,
-          isRemoveMember: true,
-          silent: true
-        },
-        {skip_push: true}
-      );
       const response = await channel.removeMembers([profile.myProfile.user_id]);
+      SimpleToast.show('You left this chat');
       navigation.reset({
         index: 1,
         routes: [
@@ -298,6 +291,13 @@ const useGroupInfo = () => {
     } catch (e) {
       console.log(e, 'sayu');
     }
+  };
+
+  const onReportGroup = () => {
+    const emailTo = `mailto:contact@bettersocial.org?subject=Reporting a group&body=Reporting group ${
+      channelState.channel?.data?.name || ''
+    }.Please type reason for reporting this group below.Thank you!`;
+    Linking.openURL(emailTo);
   };
 
   // eslint-disable-next-line consistent-return
@@ -366,7 +366,8 @@ const useGroupInfo = () => {
     onLeaveGroup,
     checkUserIsBlockHandle,
     handlePressContact,
-    handleOpenProfile
+    handleOpenProfile,
+    onReportGroup
   };
 };
 
