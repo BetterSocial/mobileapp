@@ -17,8 +17,9 @@ import {generateRandomId} from 'stream-chat-react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 
+import ToggleSwitch from 'toggle-switch-react-native';
 import ArrowUpWhiteIcon from '../../assets/icons/images/arrow-up-white.svg';
-import BlockBlueIcon from '../../assets/icons/images/block-blue.svg';
+import BlockIcon from '../../assets/icons/images/block-blue.svg';
 import BlockProfile from '../../components/Blocking/BlockProfile';
 import BottomSheetBio from '../ProfileScreen/elements/BottomSheetBio';
 import EnveloveBlueIcon from '../../assets/icons/images/envelove-blue.svg';
@@ -54,6 +55,7 @@ import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import Input from '../../components/Input/Input';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -62,7 +64,6 @@ const OtherProfile = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const bottomSheetBio = React.useRef(null);
-  const postRef = React.useRef(null);
   const blockUserRef = React.useRef();
   const reportUserRef = React.useRef();
   const specificIssueRef = React.useRef();
@@ -97,12 +98,15 @@ const OtherProfile = () => {
   const [isLastPage, setIsLastPage] = React.useState(false);
   const [, setIsHitApiFirstTime] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [isAnonimity, setIsAnonimity] = React.useState(false);
 
   const create = useClientGetstream();
   const {interactionsComplete} = useAfterInteractions();
 
   const {params} = route;
   const {feeds} = otherProfileFeeds;
+
+  console.log({otherProfileFeeds});
 
   const getOtherFeeds = async (userId, offset = 0) => {
     try {
@@ -230,6 +234,11 @@ const OtherProfile = () => {
     bottomSheetBio.current.open();
   };
 
+  const toggleSwitch = () => {
+    setIsAnonimity((prevState) => !prevState);
+    // getAnonUser();
+  };
+
   const __renderBio = (string) => (
     <View style={styles.containerBio}>
       {string === null || string === undefined ? (
@@ -254,7 +263,11 @@ const OtherProfile = () => {
           </View>
         );
 
-      return <BlockBlueIcon width={20} height={20} fill={colors.bondi_blue} />;
+      return (
+        <View style={{...styles.btnMsg, borderColor: colors.gray1}}>
+          <BlockIcon width={20} height={20} style={{color: colors.gray1}} />
+        </View>
+      );
     };
 
     const handleOpenFollowerUser = () => {
@@ -289,7 +302,7 @@ const OtherProfile = () => {
               </View>
             ) : null}
           </View>
-          {__renderBio(dataMain.bio)}
+          {/* {__renderBio(dataMain.bio)} */}
         </React.Fragment>
       );
     };
@@ -322,39 +335,61 @@ const OtherProfile = () => {
       if (blockStatus.blocker) return <></>;
       return (
         <React.Fragment>
+          {__renderFollowingButton()}
           <GlobalButton onPress={onCreateChannel}>
             <View style={styles.btnMsg}>
               <EnveloveBlueIcon width={20} height={20} fill={colors.bondi_blue} />
             </View>
           </GlobalButton>
-
-          {__renderFollowingButton()}
         </React.Fragment>
       );
     };
 
     if (blockStatus.blocked) return <></>;
     return (
-      <React.Fragment>
-        <View style={styles.containerProfile}>
-          <View style={styles.wrapImageAndStatus}>
-            <Image
-              style={styles.profileImage}
-              source={{
-                uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
-              }}
-            />
+      <>
+        <View style={{display: 'flex', flexDirection: 'row'}}>
+          <Image
+            style={styles.profileImage}
+            source={{
+              uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
+            }}
+          />
 
-            <View style={styles.wrapButton}>
-              <GlobalButton onPress={onBlockReaction}>{__renderBlockIcon()}</GlobalButton>
-
+          <View>
+            <View style={{display: 'flex', flexDirection: 'row'}}>
+              <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={onBlockReaction}>
+                {__renderBlockIcon()}
+              </GlobalButton>
               {__renderMessageAndFollowButtonGroup()}
             </View>
+            {__renderFollowerDetail()}
           </View>
-          {dataMain.real_name && <Text style={styles.nameProfile}>{dataMain.real_name}</Text>}
         </View>
-        {__renderFollowerDetail()}
-      </React.Fragment>
+        <View style={{backgroundColor: colors.bondi_blue, borderRadius: 15, padding: 10}}>
+          {__renderBio(dataMain.bio)}
+          <Input
+            multiline={true}
+            style={{
+              backgroundColor: colors.white,
+              height: 150,
+              borderRadius: 8,
+              marginVertical: 10
+            }}
+          />
+          <View style={{display: 'flex', alignSelf: 'flex-end'}}>
+            <ToggleSwitch
+              isOn={isAnonimity}
+              onColor={colors.bondi_blue}
+              label="Anonymity"
+              offColor="#F5F5F5"
+              size="small"
+              labelStyle={styles.switch}
+              onToggle={toggleSwitch}
+            />
+          </View>
+        </View>
+      </>
     );
   };
 
@@ -608,11 +643,6 @@ const OtherProfile = () => {
                 headerHeightRef.current = headerHeightLayout;
               }}>
               <View style={styles.content}>{__renderListHeader()}</View>
-              <View>
-                <View style={styles.tabs} ref={postRef}>
-                  <Text style={styles.postText}>Posts</Text>
-                </View>
-              </View>
             </View>
           }>
           {({item, index}) => {
@@ -629,7 +659,6 @@ const OtherProfile = () => {
                   onPressDomain={onPressDomain}
                   onPress={() => onPress(item, index)}
                   onPressComment={() => onPressComment(item, item.id)}
-                  // onPressBlock={() => onPressBlock(item)}
                   onPressUpvote={(post) => setUpVote(post, index)}
                   selfUserId={yourselfId}
                   onPressDownVote={(post) => setDownVote(post, index)}
@@ -699,7 +728,8 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 100,
-    marginBottom: 12
+    marginBottom: 12,
+    marginRight: 12
   },
   containerProfile: {
     marginTop: 24
@@ -718,8 +748,7 @@ const styles = StyleSheet.create({
   },
   wrapFollower: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 12
+    alignItems: 'center'
   },
   wrapRow: {
     flexDirection: 'row',
@@ -733,7 +762,6 @@ const styles = StyleSheet.create({
     paddingRight: 4
   },
   textFollow: {
-    fontFamily: fonts.inter[800],
     fontSize: 14,
     color: colors.black,
     paddingRight: 4
@@ -840,7 +868,14 @@ const styles = StyleSheet.create({
     flex: 1
   },
   btnMsg: {
-    paddingVertical: 0
+    width: 36,
+    height: 36,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: colors.bondi_blue,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   containerLoading: {
     height: '100%',
