@@ -9,6 +9,7 @@ import {Dot, Gap} from '../index';
 import {calculateTime} from '../../utils/time';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
+import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 
 const PreviewComment = ({comment, time, image, totalComment, onPress, user, item}) => {
   const navigation = useNavigation();
@@ -86,7 +87,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
           </SeeMore> */}
           <TouchableOpacity onPress={onPress}>
             <Text style={styles.commenttext} numberOfLines={3} ellipsizeMode="tail">
-              {`${comment?.substring(0, 100).trim()} `}
+              {getCaptionWithLinkStyle(comment?.substring(0, 100).trim())}
               {comment?.length > 100 ? <Text style={styles.seemore}>more</Text> : <></>}
             </Text>
           </TouchableOpacity>
