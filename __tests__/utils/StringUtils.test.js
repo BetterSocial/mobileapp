@@ -27,12 +27,13 @@ describe('SringUtils should be run correctly', () => {
 
     const expiredHourse = moment().subtract('hours', 2);
     const expiredDays = moment().subtract('day', 2);
-
+    const minute = moment().add(40, 'minute');
     expect(getPollTime(hours)).toEqual('1h 59m left');
     expect(getPollTime(days)).toEqual('1d left');
     expect(getPollTime(minutes)).toEqual('1m left');
     expect(getPollTime(expiredDays)).toEqual('Poll closed 2d ago');
     expect(getPollTime(expiredHourse)).toEqual('Poll closed 0m ago');
+    expect(getPollTime(minute)).toEqual('39m left');
   });
 
   it('isPollExpired should run correctly', () => {
@@ -46,6 +47,7 @@ describe('SringUtils should be run correctly', () => {
     const city1 = 'Jakarta';
     const starte = 'Jakarta Barat';
     expect(displayCityName(city1, starte)).toEqual('Jakarta, Jakarta Barat');
+    expect(displayCityName(null, starte)).toEqual(null);
   });
 
   it('isLocationMatch should run correctly', () => {
@@ -65,6 +67,7 @@ describe('SringUtils should be run correctly', () => {
     expect(getChatName(username3)).toEqual('elon musk, steve jobs');
     expect(getChatName(username4, 'agita')).toEqual('elon');
     expect(getChatName(username5, 'agita')).toEqual('No Name');
+    expect(getChatName('', '')).toEqual('No Name');
   });
 
   it('getGroupMemberCount should run correctly', () => {

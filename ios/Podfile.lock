@@ -186,7 +186,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.11.1):
     - GoogleUtilities/Logger
-  - human-id-react-native-humanid (2.4.10):
+  - human-id-react-native-humanid (2.4.9):
     - React-Core
     - Toast (~> 4.0.0)
   - libevent (2.1.12)
