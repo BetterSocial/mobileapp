@@ -7,6 +7,7 @@ orbs:
   dotenv: anilanar/dotenv@1.0.0
   slack: circleci/slack@4.4.4
   jira: circleci/jira@1.3.1
+  doppler: conpago/doppler@1.3.5
 
 parameters:
   env:
@@ -70,13 +71,11 @@ jobs:
           fingerprints:
             - 8c:b9:a0:02:b1:20:b0:4d:d8:96:b0:1f:c7:c1:0c:cb
       - checkout
-      - restore_cache:
-          key: v3-yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run: yarn install --frozen-lockfile
-      - save_cache:
-          key: v3-yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules
+      - doppler/install
+      - run: doppler secrets download -p bettersocial --no-file --format env-no-quotes --config prd > .env.production --token $DOPPLER_TOKEN_PREVIEW
+      - run: echo "$FILE_KEYSTORE_PROPERTIES" | base64 --decode > ./android/keystore.properties
+      - run: echo "$ANDROID_KEYSTORE" | base64 --decode > ./android/app/bettersocial.keystore
       - persist_to_workspace:
           root: .
           paths:

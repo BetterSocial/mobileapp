@@ -74,16 +74,16 @@ end
         json_key: 'fastlane/playstore-api-key.json'
       )[0]
     else
+
+      puts 'latest release #{latest_release}'
+      puts 'testing doang #{ENV["FIREBASE_APP_ID_ANDROID"]}'
       firebase_release = firebase_app_distribution_get_latest_release(
           app: ENV["FIREBASE_APP_ID_ANDROID"],
           firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
       )
+      puts 'test #{:buildVersion}'
       latest_release += firebase_release[:buildVersion].to_i
     end
-    android_set_version_code(
-      version_code: latest_release,
-      gradle_file: "./android/app/build.gradle"
-    )
     ENV['APP_VERSION'] = "#{version_name}(#{latest_release})"
   end
 
@@ -96,12 +96,12 @@ end
         upload_to_play_store_internal_testing
         upload_aab_to_firebase_distribution(release_notes: options[:release_notes])
       else
+      puts 'testing'
         assemble(build_type: options[:build_type])
         upload_apk_to_firebase_distribution(release_notes: options[:release_notes], build_type: options[:build_type])
       end
-      on_success_slack
     rescue => exception
-      on_error_slack(exception)
+      puts exception
     end
   end
 
@@ -238,10 +238,9 @@ end
         else
           upload_ipa_to_firebase_distribution(release_notes: options[:release_notes])
         end
-        create_sentry_release
         on_success_slack
       rescue => exception
-        on_error_slack(exception)
+        puts exception
       end
     end
 
@@ -281,77 +280,6 @@ end
         output_directory: './ios/',
       )
       ENV["IPA_OUTPUT_PATH_#{ENV['ENV']}"] = lane_context[SharedValues::IPA_OUTPUT_PATH]
-      end
-
-      desc 'Upload Sentry'
-      lane :create_sentry_release do |options|
-        version = get_version_number(
-          xcodeproj: "./ios/BetterSocial.xcodeproj",
-          target: ENV["SCHEME"]
-        )
-        build_number = get_build_number(
-          xcodeproj: "./ios/BetterSocial.xcodeproj"
-        )
-        sentry_create_release(
-          auth_token: ENV["SENTRY_AUTH_TOKEN"],
-          org_slug: 'BetterSocial',
-          project_slug: 'BetterSocial',
-          version: version,
-          app_identifier: ENV["BUNDLE_ID"], # pass in the bundle_identifer of your app
-          finalize: false # Whether to finalize the release. If not provided or false, the release can be finalized using the sentry_finalize_release action
-        )
-        sentry_set_commits(
-          auth_token: ENV["SENTRY_AUTH_TOKEN"],
-          org_slug: 'BetterSocial',
-          project_slug: 'BetterSocial',
-          version: version,
-          app_identifier: ENV["BUNDLE_ID"], # pass in the bundle_identifer of your app
-          build: build_number, # Optionally pass in the build number of your app
-          auto: true, # enable completely automated commit management
-          clear: false, # clear all current commits from the release
-        )
-        sentry_upload_dsym(
-          auth_token: ENV["SENTRY_AUTH_TOKEN"],
-          org_slug: 'BetterSocial',
-          project_slug: 'BetterSocial',
-          dsym_path: "ios/#{ENV["SCHEME"]}.app.dSYM.zip",
-        )
-        begin
-          sentry_upload_file(
-            auth_token: ENV["SENTRY_AUTH_TOKEN"],
-            org_slug: 'BetterSocial',
-            project_slug: 'BetterSocial',
-            version: version,
-            app_identifier: ENV["BUNDLE_ID"], # pass in the bundle_identifer of your app
-            build: build_number, # Optionally pass in the build number of your app
-            dist: build_number, # optional distribution of the release usually the buildnumber
-            file: 'ios/main.jsbundle' # file to upload
-          )
-        rescue => ex
-          # handle error
-        ensure
-          # do something that always run like clean up
-        end
-        sentry_upload_sourcemap(
-          auth_token: ENV["SENTRY_AUTH_TOKEN"],
-          org_slug: 'BetterSocial',
-          project_slug: 'BetterSocial',
-          version: version,
-          app_identifier: ENV["BUNDLE_ID"], # pass in the bundle_identifer of your app
-          build: build_number, # Optionally pass in the build number of your app
-          dist: build_number, # optional distribution of the release usually the buildnumber
-          sourcemap: 'ios/main.jsbundle.map', # Sourcemap(s) to upload. Path(s) can be a comma-separated string or an array of strings.
-          rewrite: true
-        )
-        sentry_create_deploy(
-          auth_token: ENV["SENTRY_AUTH_TOKEN"],
-          org_slug: 'BetterSocial',
-          project_slug: 'BetterSocial',
-          version: version,
-          app_identifier: ENV["BUNDLE_ID"], # pass in the bundle_identifer of your app
-          build: build_number, # Optionally pass in the build number of your app
-          env: "[ios] #{ENV["ENV"]}", # The environment for this deploy. Required.
-        )
       end
 
       desc 'Build and upload to firebase distribution'
