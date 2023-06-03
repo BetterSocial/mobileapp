@@ -31,11 +31,10 @@
     "reset-all": "rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules && npm cache clean --force && npm install && npm start -- --reset-cache",
     "update-stream": "rm -rf yarn.lock && yarn cache clean && rm -rf node_modules/stream-chat && rm -rf node_modules/stream-chat-react-native-core && yarn",
     "update-env-dev": "doppler secrets download -p bettersocial --no-file --format env-no-quotes --config dev > .env.development",
-    "update-env-prod": "doppler secrets download -p bettersocial --no-file --format env-no-quotes --config prd > .env.production",
-    "postinstall": "patch-package"
+    "update-env-prod": "doppler secrets download -p bettersocial --no-file --format env-no-quotes --config prd > .env.production"
   },
   "dependencies": {
-    "@human-internet/react-native-humanid": "^2.4.10",
+    "@human-internet/react-native-humanid": "^2.4.4",
     "@react-native-async-storage/async-storage": "^1.15.2",
     "@react-native-community/blur": "^3.6.0",
     "@react-native-community/cameraroll": "^4.0.3",
@@ -65,7 +64,6 @@
     "lodash": "^4.17.21",
     "metro-config": "^0.73.3",
     "moment": "^2.29.1",
-    "patch-package": "^7.0.0",
     "psl": "^1.9.0",
     "react": "18.0.0",
     "react-native": "0.64.4",

@@ -72,6 +72,7 @@ android/app/src/release/google-services.json
 android/app/keystore.properties
 
 *.bak
+yarn.lock
 android/debug.keystore
 
 # Jest testing
