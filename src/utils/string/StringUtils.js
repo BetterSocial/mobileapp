@@ -2,13 +2,14 @@
 import * as React from 'react';
 import moment from 'moment';
 import reactStringReplace from 'react-string-replace';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, Linking} from 'react-native';
 
 import TaggingUserText from '../../components/TaggingUserText';
 import TextBold from '../../components/Text/TextBold';
 import TopicText from '../../components/TopicText';
 // eslint-disable-next-line import/no-cycle
 import removePrefixTopic from '../topics/removePrefixTopic';
+import HighlightText from '../../components/HightlightClickText/HighlightText';
 
 const NO_POLL_UUID = '00000000-0000-0000-0000-000000000000';
 
@@ -61,9 +62,8 @@ const detectStateInCity = (city) => {
  * @returns {String}
  */
 const displayCityName = (city, state) => {
-  if (city === null || city === undefined || city === '') throw new Error('City must be defined');
-  if (state === null || state === undefined || state === '')
-    throw new Error('State must be defined');
+  if (city === null || city === undefined || city === '') return null;
+  if (state === null || state === undefined || state === '') return null;
   if (detectStateInCity(city)) return city;
 
   return `${city}, ${state}`;
@@ -160,6 +160,7 @@ const displayFormattedSearchLocationsV2 = (searchQuery, locationObject) => {
   return null;
 };
 
+// eslint-disable-next-line consistent-return
 const getChatName = (usernames, me) => {
   if (!usernames) {
     return 'No Name';
@@ -180,7 +181,6 @@ const getChatName = (usernames, me) => {
   if (userArraysWithoutMe.length === 1) {
     return userArraysWithoutMe[0].trim();
   }
-  return 'No name';
 };
 
 const getGroupMemberCount = (channel) => Object.keys(channel?.state?.members).length;
@@ -328,6 +328,21 @@ const getDurationTimeText = (selectedtime) => {
   return `${dayText}${hourText}${minuteText}`;
 };
 
+const getCaptionWithLinkStyle = (text) => {
+  const linkRegex = /(https?:\/\/\S+)+/g;
+  return reactStringReplace(text, linkRegex, (match) => (
+    <HighlightText text={match} onPress={() => onOpenLink(match)} />
+  ));
+};
+
+const onOpenLink = (url) => {
+  Linking.canOpenURL(url).then((canOpen) => {
+    if (canOpen) {
+      Linking.openURL(url);
+    }
+  });
+};
+
 export {
   capitalizeFirstText,
   convertString,
@@ -346,5 +361,6 @@ export {
   sanitizeUrl,
   getDurationTimeText,
   isLocationMatch,
-  styles
+  styles,
+  getCaptionWithLinkStyle
 };

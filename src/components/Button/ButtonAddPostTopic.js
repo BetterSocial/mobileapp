@@ -7,11 +7,11 @@ import dimen from '../../utils/dimen';
 import useBetterNavigationHook from '../../hooks/navigation/useBetterNavigationHook';
 import {colors} from '../../utils/colors';
 
-const ButtonAddPostTopic = ({topicName}) => {
+const ButtonAddPostTopic = ({topicName, onRefresh}) => {
   const {toCreatePostWithTopic} = useBetterNavigationHook();
 
   const onAddPostPressed = () => {
-    toCreatePostWithTopic(topicName);
+    toCreatePostWithTopic(topicName, {onRefresh});
   };
 
   return (

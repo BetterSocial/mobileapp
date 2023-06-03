@@ -1,4 +1,5 @@
 import * as React from 'react';
+import SimpleToast from 'react-native-simple-toast';
 import {StatusBar, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -66,6 +67,9 @@ const TopicPageScreen = (props) => {
           setTopicFeeds(resultGetTopicPages.data, dispatch);
           setOffset(resultGetTopicPages.offset);
           setIsInitialLoading(false);
+
+          if (resultGetTopicPages?.length === 0)
+            SimpleToast.show('No posts yet', SimpleToast.SHORT);
         } else {
           setTempResponse(cacheTopic);
           setTopicFeeds(cacheTopic.data, dispatch);
@@ -319,7 +323,7 @@ const TopicPageScreen = (props) => {
           renderItem={renderItem}
         />
       </View>
-      <ButtonAddPostTopic topicName={topicName} />
+      <ButtonAddPostTopic topicName={topicName} onRefresh={onRefresh} />
       <BlockComponent
         ref={refBlockComponent}
         refresh={onBlockCompleted}

@@ -61,6 +61,7 @@ import {
 import {PROFILE_CACHE} from '../../utils/cache/constant';
 import {ShowingAudience, createPost} from '../../service/post';
 import {colors} from '../../utils/colors';
+import {composeImageMeta} from '../../utils/string/file';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {
   getDurationId,
@@ -76,7 +77,6 @@ import {getSpecificCache} from '../../utils/cache';
 import {getUrl, isContainUrl} from '../../utils/Utils';
 import {getUserId} from '../../utils/users';
 import {requestCameraPermission, requestExternalStoragePermission} from '../../utils/permission';
-import {composeImageMeta} from '../../utils/string/file';
 import {uploadPhoto} from '../../service/file';
 
 const IS_GEO_SELECT_ENABLED = false;

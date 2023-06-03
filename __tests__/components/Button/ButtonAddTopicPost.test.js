@@ -33,7 +33,16 @@ describe('Testing Button Add Topic Post', () => {
     });
   });
 
-  it('dummy', () => {
-    expect(1).toEqual(1);
+  it('Should navigate to create post screen when clicked and on refresh param if provided', () => {
+    const mockOnRefresh = jest.fn();
+
+    const {getByTestId} = render(
+      <ButtonAddPostTopic topicName={'TestTopic'} onRefresh={mockOnRefresh} />
+    );
+    fireEvent.press(getByTestId('onaddtopicbutton'));
+    expect(mockNavigate).toHaveBeenCalledWith('CreatePost', {
+      topic: 'TestTopic',
+      onRefresh: mockOnRefresh
+    });
   });
 });

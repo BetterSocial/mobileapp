@@ -67,14 +67,9 @@ const PostPageDetailIdComponent = (props) => {
   const {getTotalReaction} = useFeed();
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
-  const [loadingComment, setLoadingGetComment] = React.useState(true);
-  const {
-    updateVoteLatestChildrenLevel3,
-    updateVoteChildrenLevel1,
-    calculationText,
-    calculatedSizeScreen,
-    calculatePaddingBtm
-  } = usePostDetail();
+  const [, setLoadingGetComment] = React.useState(true);
+  const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculatePaddingBtm} =
+    usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {handleUserName} = useWriteComment();
 
@@ -205,7 +200,8 @@ const PostPageDetailIdComponent = (props) => {
           activity_id: item.id,
           message: textComment,
           sendPostNotif: true,
-          anonimity: isAnonimity
+          anonimity: isAnonimity,
+          is_you: true
         };
 
         const anonUser = {
@@ -213,7 +209,8 @@ const PostPageDetailIdComponent = (props) => {
           color_name: anonimityData.colorName,
           emoji_code: anonimityData.emojiCode,
           color_code: anonimityData.colorCode,
-          is_anonymous: isAnonimity
+          is_anonymous: isAnonimity,
+          is_you: true
         };
         if (isAnonimity) {
           sendData = {...sendData, anon_user_info: anonUser};
@@ -514,12 +511,12 @@ const PostPageDetailIdComponent = (props) => {
     await setUpVote(!statusUpvote);
   };
 
-  const handleRefreshComment = () => {
-    updateFeed();
+  const handleRefreshComment = async () => {
+    await getComment(false, true);
   };
 
-  const handleRefreshChildComment = () => {
-    updateFeed();
+  const handleRefreshChildComment = async () => {
+    await getComment(false, true);
   };
 
   const checkVotes = () => {
@@ -575,8 +572,8 @@ const PostPageDetailIdComponent = (props) => {
     }
   };
 
-  const calculateMinHeight = (heightC, minHeight) => {
-    return minHeight > heightC ? heightC : minHeight;
+  const handlePaddingBottom = () => {
+    return comments.length <= 0 ? calculatePaddingBtm() : 0;
   };
 
   return (
@@ -597,20 +594,12 @@ const PostPageDetailIdComponent = (props) => {
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
-            contentContainerStyle={{
-              paddingBottom: calculatePaddingBtm()
-            }}>
-            <View
-              style={
-                ([styles.content],
-                {
-                  minHeight: calculateMinHeight(
-                    height - calculatedSizeScreen,
-                    calculationText(item?.message, item?.post_type, item?.images_url)
-                      .containerHeight
-                  )
-                })
-              }>
+            contentContainerStyle={styles.scrollContent}>
+            <ScrollView
+              nestedScrollEnabled
+              contentContainerStyle={{
+                paddingBottom: handlePaddingBottom()
+              }}>
               {item.post_type === POST_TYPE_LINK ? (
                 <ContentLink
                   og={item.og}
@@ -633,7 +622,7 @@ const PostPageDetailIdComponent = (props) => {
                   isPostDetail={true}
                 />
               )}
-              <View style={{height: 52, paddingHorizontal: 0, width: '100%'}}>
+              <View style={styles.footerContainer}>
                 <Footer
                   item={item}
                   disableComment={false}
@@ -656,8 +645,8 @@ const PostPageDetailIdComponent = (props) => {
                   isSelf={profile.myProfile.user_id === item.actor.id}
                 />
               </View>
-            </View>
-            {comments.length > 0 && !loadingComment && (
+            </ScrollView>
+            {comments.length > 0 && (
               <ContainerComment
                 feedId={feedId}
                 itemParent={item}
@@ -671,7 +660,8 @@ const PostPageDetailIdComponent = (props) => {
                     updateParentPost,
                     findCommentAndUpdate,
                     item,
-                    updateVoteLatestChildren
+                    updateVoteLatestChildren,
+                    getComment
                   )
                 }
                 findCommentAndUpdate={findCommentAndUpdate}
@@ -738,5 +728,15 @@ const styles = StyleSheet.create({
       };
     }
     return {};
+  },
+  footerContainer: {
+    height: 52,
+    paddingHorizontal: 0,
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#C4C4C4'
+  },
+  scrollContent: {
+    paddingBottom: 0
   }
 });

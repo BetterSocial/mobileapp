@@ -23,8 +23,7 @@ const ContentPoll = ({
   pollexpiredat,
   index = -1,
   voteCount = 0,
-  currentMoment = moment(),
-  isPostDetail
+  currentMoment = moment()
 }) => {
   const {
     renderSeeResultButton,
@@ -37,9 +36,7 @@ const ContentPoll = ({
     onSeeResultsClicked,
     modifiedPoll
   } = useContentPoll({isalreadypolling, polls});
-  const initialSetup = () => {
-    if (multiplechoice) onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index);
-  };
+  const initialSetup = () => {};
 
   React.useEffect(() => {
     initialSetup();
@@ -48,7 +45,7 @@ const ContentPoll = ({
   const renderSeeResultButtonHandle = () =>
     renderSeeResultButton(multiplechoice, multipleChoiceSelected);
   return (
-    <View style={[styles.containerShowMessage, {height: isPostDetail ? 'auto' : '80%'}]}>
+    <View style={[styles.containerShowMessage]}>
       <View style={styles.pollOptionsContainer}>
         <Text style={styles.voteFont}>All votes are anonymous - even to the poll’s author!</Text>
         <View style={styles.pollContainer}>
@@ -60,9 +57,7 @@ const ContentPoll = ({
                 index={indexPoll}
                 mypoll={item?.mypolling}
                 selectedindex={multipleChoiceSelected}
-                onselected={(indexes) => {
-                  setMultipleChoiceSelected(indexes);
-                }}
+                onselected={setMultipleChoiceSelected}
                 isexpired={isPollExpired(pollexpiredat)}
                 isalreadypolling={isAlreadyPolling}
                 maxpolls={modifiedPoll(polls).maxId}
@@ -129,7 +124,8 @@ const styles = StyleSheet.create({
   containerShowMessage: {
     justifyContent: 'flex-start',
     marginBottom: 0,
-    paddingVertical: 0
+    paddingVertical: 0,
+    height: 'auto'
   },
   imageList: {flex: 1, width: screenWidth - 32, borderRadius: 16},
   rowSpaceBeetwen: {
