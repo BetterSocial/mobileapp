@@ -74,14 +74,10 @@ end
         json_key: 'fastlane/playstore-api-key.json'
       )[0]
     else
-
-      puts 'latest release #{latest_release}'
-      puts 'testing doang #{ENV["FIREBASE_APP_ID_ANDROID"]}'
       firebase_release = firebase_app_distribution_get_latest_release(
           app: ENV["FIREBASE_APP_ID_ANDROID"],
           firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
       )
-      puts 'test #{:buildVersion}'
       latest_release += firebase_release[:buildVersion].to_i
     end
     ENV['APP_VERSION'] = "#{version_name}(#{latest_release})"

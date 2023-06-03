@@ -108,7 +108,7 @@ jobs:
 #          command: openssl aes-256-cbc -d -md sha256 -in fastlane/playstore-api-key.json.enc -out fastlane/playstore-api-key.json -pass pass:$PLAYSTORE_KEY_PASSWORD
       - run:
           name: android build
-          command: bundle exec fastlane android release --env <<parameters.env>> build_type:<< pipeline.parameters.build-type >> release_notes:<< pipeline.parameters.release-notes >>
+          command: bundle exec fastlane android release --env <<parameters.env>> build_type:<< parameters.build-type >> release_notes:<< pipeline.parameters.release-notes >>
       - save_cache:
           key: gradle-v1-{{ .Environment.CACHE_ENV }}-{{ checksum "android/build.gradle" }}
           paths:
@@ -199,13 +199,8 @@ workflows:
       - node
       - release-android:
           context: mobile_<<pipeline.parameters.env>>
-          post-steps:
-            - jira/notify:
-                environment_type: testing
-                job_type: deployment
-                scan_commit_body: true
-                environment: android-<<pipeline.parameters.env>>
           env: <<pipeline.parameters.env>>
+          build-type: <<pipeline.parameters.build-type>>
           requires:
             - node
   release-ios:
@@ -216,12 +211,6 @@ workflows:
       - node
       - release-ios:
           context: mobile_<<pipeline.parameters.env>>
-          post-steps:
-            - jira/notify:
-                environment_type: testing
-                job_type: deployment
-                scan_commit_body: true
-                environment: ios-<<pipeline.parameters.env>>
           env: <<pipeline.parameters.env>>
           requires:
             - node
@@ -234,81 +223,30 @@ workflows:
       - node
       - release-android:
           context: mobile_dev
-          post-steps:
-            - jira/notify:
-                environment_type: testing
-                job_type: deployment
-                scan_commit_body: true
-                environment: android-dev
           env: dev
+          build-type: dev
           requires:
             - node
       - release-ios:
           context: mobile_dev
-          post-steps:
-            - jira/notify:
-                environment_type: testing
-                job_type: deployment
-                scan_commit_body: true
-                environment: ios-dev
           env: dev
-          requires:
-            - node
-  release-android-ios-qa:
-    when:
-      or:
-        - equal: [true, << pipeline.parameters.run-release-qa >>]
-        - equal: [build/release/beta, << pipeline.git.branch >>]
-    jobs:
-      - node
-      - release-android:
-          context: mobile_qa
-          post-steps:
-            - jira/notify:
-                environment_type: testing
-                job_type: deployment
-                scan_commit_body: true
-                environment: android-qa
-          env: qa
-          requires:
-            - node
-      - release-ios:
-          context: mobile_qa
-          post-steps:
-            - jira/notify:
-                environment_type: testing
-                job_type: deployment
-                scan_commit_body: true
-                environment: ios-qa
-          env: qa.sinarmas
           requires:
             - node
   release-android-ios-stg:
     when:
       or:
         - equal: [true, << pipeline.parameters.run-release-stg >>]
-        - equal: [build/release/hotfix, << pipeline.git.branch >>]
+        - equal: [build/release/staging, << pipeline.git.branch >>]
     jobs:
       - node
       - release-android:
           context: mobile_stg
-          post-steps:
-            - jira/notify:
-                environment_type: staging
-                job_type: deployment
-                scan_commit_body: true
-                environment: android-stg
           env: stg
+          build-type: release
           requires:
             - node
       - release-ios:
           context: mobile_stg
-          post-steps:
-            - jira/notify:
-                environment_type: staging
-                job_type: deployment
-                scan_commit_body: true
-                environment: ios-stg
           env: stg.sinarmas
           requires:
             - node
@@ -321,23 +259,12 @@ workflows:
       - node
       - release-android:
           context: mobile_prod
-          post-steps:
-            - jira/notify:
-                environment_type: production
-                job_type: deployment
-                scan_commit_body: true
-                environment: android-prod
           env: prod
+          build-type: release
           requires:
             - node
       - release-ios:
           context: mobile_prod
-          post-steps:
-            - jira/notify:
-                environment_type: production
-                job_type: deployment
-                scan_commit_body: true
-                environment: ios-prod
           env: prod
           requires:
             - node
