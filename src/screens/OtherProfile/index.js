@@ -55,7 +55,7 @@ import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import Input from '../../components/Input/Input';
+import TextAreaChat from '../../components/TextAreaChat';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -368,15 +368,7 @@ const OtherProfile = () => {
         </View>
         <View style={{backgroundColor: colors.bondi_blue, borderRadius: 15, padding: 10}}>
           {__renderBio(dataMain.bio)}
-          <Input
-            multiline={true}
-            style={{
-              backgroundColor: colors.white,
-              height: 150,
-              borderRadius: 8,
-              marginVertical: 10
-            }}
-          />
+          <TextAreaChat profile={profile} />
           <View style={{display: 'flex', alignSelf: 'flex-end'}}>
             <ToggleSwitch
               isOn={isAnonimity}
