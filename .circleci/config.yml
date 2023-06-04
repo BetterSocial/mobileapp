@@ -129,9 +129,6 @@ jobs:
           fingerprints:
             - 8c:b9:a0:02:b1:20:b0:4d:d8:96:b0:1f:c7:c1:0c:cb
       - run:
-          name: create file .netrc
-          command: touch ~/.netrc && chmod -R 0600 ~/.netrc && (echo $GRAB_DEFENSE_MACHINE; echo $GRAB_DEFENSE_USER; echo $GRAB_DEFENSE_PASSWORD)  >> ~/.netrc
-      - run:
           name: Keyscan bitbucket.org
           command: ssh-keyscan -H bitbucket.org >> ~/.ssh/known_hosts
       - restore_cache:
@@ -157,9 +154,6 @@ jobs:
           key: pods-v1-{{ .Environment.CACHE_ENV }}-{{ checksum "ios/Podfile.lock" }}
           paths:
             - ios/Pods
-      - run:
-          name: decrypt api key appconnect
-          command: openssl aes-256-cbc -d -md sha256 -in fastlane/appconnect-api-key.p8.enc -out fastlane/appconnect-api-key.p8 -pass pass:$APPCONNECT_KEY_PASSWORD
       - run:
           name: Fastlane
           no_output_timeout: 40m

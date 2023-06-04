@@ -241,24 +241,13 @@ end
     end
 
     lane :build do |options|
-      profile_name_type = 'AdHoc'
-      matchType = 'adhoc'
-      profileType = 'ad-hoc'
       if ENV["ENV"] === 'prod'
         profile_name_type = 'AppStore'
         matchType = 'appstore'
         profileType = 'ad-hoc'
       end
-      match(
-        type: matchType, # "appstore" | "adhoc" | "development"
-        app_identifier: [ENV["BUNDLE_ID"]],
-        readonly: true,
-        verbose:true
-      )
-      update_code_signing_settings(
-        use_automatic_signing: true,
+      enable_automatic_code_signing(
         path: './ios/BetterSocial.xcodeproj',
-        targets: ENV["SCHEME"],
         team_id: 'J22M3M9VYU'
       )
       build_ios_app(
