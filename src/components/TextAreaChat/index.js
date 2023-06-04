@@ -6,12 +6,11 @@ import MemoSendComment from '../../assets/icon/IconSendComment';
 import {S} from './styles';
 
 const TextAreaChat = (props) => {
-  const {profile} = props;
+  const {profile, placeholder} = props;
   const [value, onChangeText] = React.useState();
 
   return (
     <View style={S.container}>
-      {/* <View style={S.placeholderAvatar} /> */}
       <FastImage
         style={S.placeholderAvatar}
         source={{
@@ -21,8 +20,9 @@ const TextAreaChat = (props) => {
       <TextInput
         multiline={true}
         onChangeText={onChangeText}
-        placeholder="Write a message..."
+        placeholder={placeholder}
         style={S.textArea}
+        placeholderTextColor={colors.gray}
       />
       <View style={S.sendIconContainer(value)}>
         <MemoSendComment fill={colors.gray1} style={{alignSelf: 'center'}} />

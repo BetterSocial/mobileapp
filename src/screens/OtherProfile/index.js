@@ -245,7 +245,7 @@ const OtherProfile = () => {
         <Text>No Bio</Text>
       ) : (
         <TouchableOpacity onPress={openBio}>
-          <Text linkStyle={styles.seeMore}>
+          <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
             {trimString(string, 121)}{' '}
             {string.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
           </Text>
@@ -348,7 +348,7 @@ const OtherProfile = () => {
     if (blockStatus.blocked) return <></>;
     return (
       <>
-        <View style={{display: 'flex', flexDirection: 'row'}}>
+        <View style={styles.headerImageContainer}>
           <Image
             style={styles.profileImage}
             source={{
@@ -357,7 +357,7 @@ const OtherProfile = () => {
           />
 
           <View>
-            <View style={{display: 'flex', flexDirection: 'row'}}>
+            <View style={styles.rightHeaderContentContainer}>
               <GlobalButton buttonStyle={{paddingLeft: 0}} onPress={onBlockReaction}>
                 {__renderBlockIcon()}
               </GlobalButton>
@@ -366,20 +366,21 @@ const OtherProfile = () => {
             {__renderFollowerDetail()}
           </View>
         </View>
-        <View style={{backgroundColor: colors.bondi_blue, borderRadius: 15, padding: 10}}>
+
+        <View style={styles.bioAndSendChatContainer(isAnonimity)}>
           {__renderBio(dataMain.bio)}
-          <TextAreaChat profile={profile} />
-          <View style={{display: 'flex', alignSelf: 'flex-end'}}>
+          <TextAreaChat profile={profile} placeholder="Send a direct message" />
+          <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
             <ToggleSwitch
               isOn={isAnonimity}
-              onColor={colors.bondi_blue}
+              onToggle={toggleSwitch}
+              onColor={'#9DEDF1'}
               label="Anonymity"
               offColor="#F5F5F5"
               size="small"
-              labelStyle={styles.switch}
-              onToggle={toggleSwitch}
+              labelStyle={{color: colors.white}}
             />
-          </View>
+          </TouchableOpacity>
         </View>
       </>
     );
@@ -759,7 +760,7 @@ const styles = StyleSheet.create({
     paddingRight: 4
   },
   containerBio: {
-    marginTop: 8
+    marginBottom: 10
   },
   seeMore: {
     fontFamily: fonts.inter[500],
@@ -873,6 +874,16 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center'
-  }
+  },
+  toggleSwitchContainer: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 10},
+  rightHeaderContentContainer: {display: 'flex', flexDirection: 'row'},
+  headerImageContainer: {display: 'flex', flexDirection: 'row'},
+  bioAndSendChatContainer: (isAnonimity) => ({
+    backgroundColor: isAnonimity ? colors.bondi_blue : colors.blue,
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    paddingTop: 10
+  }),
+  bioText: (isAnonimity) => ({color: isAnonimity ? colors.black : colors.white})
 });
 export default withInteractionsManaged(OtherProfile);

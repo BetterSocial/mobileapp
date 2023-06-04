@@ -7,8 +7,7 @@ export const S = StyleSheet.create({
     borderRadius: 8,
     display: 'flex',
     flexDirection: 'row',
-    padding: 10,
-    marginVertical: 10
+    padding: 10
   },
   placeholderAvatar: {
     borderRadius: 50,
