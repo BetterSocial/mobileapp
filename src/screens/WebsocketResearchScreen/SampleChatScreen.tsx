@@ -14,7 +14,7 @@ const SampleChatScreen = () => {
     <View>
       <Button onPress={goBackFromChatScreen}>Back</Button>
       <Button onPress={goToChatInfoScreen}>To Chat Info</Button>
-      <Button onPress={sendChat}>Send chat</Button>
+      <Button onPress={() => sendChat(undefined)}>Send chat</Button>
       <Text style={{paddingBottom: 16}}>SampleChatScreen</Text>
       <ScrollView>
         {chats?.map((item, index) => {
@@ -25,6 +25,7 @@ const SampleChatScreen = () => {
               <Text>{`${item?.user?.isMe ? 'You' : item?.user?.username}: ${item?.message}`}</Text>
               <Text>{item?.updatedAt}</Text>
               <Text>{`Chat Type: ${item?.type}`}</Text>
+              <Text>{`Status: ${item?.status}`}</Text>
               <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
             </View>
           );

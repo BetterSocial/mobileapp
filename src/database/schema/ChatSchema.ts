@@ -147,6 +147,48 @@ class ChatSchema implements BaseDbSchema {
     });
   }
 
+  static generateSendingChat(
+    id: string,
+    userId: string,
+    channelId: string,
+    message: string
+  ): ChatSchema {
+    return new ChatSchema({
+      channelId,
+      message,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      id,
+      type: 'regular',
+      rawJson: null,
+      user: null,
+      userId
+    });
+  }
+
+  updateChatSentStatus = async (db: SQLiteDatabase, response: any) => {
+    try {
+      const updateQuery = `UPDATE ${ChatSchema.getTableName()}
+        SET status = ?, created_at = ?, updated_at = ?, raw_json = ?, id = ?
+        WHERE id = ?;`;
+
+      const updateReplacement = [
+        'sent',
+        response?.message?.created_at,
+        response?.message?.updated_at,
+        JSON.stringify(response),
+        response?.message?.id,
+        this.id
+      ];
+
+      await db.executeSql(updateQuery, updateReplacement);
+    } catch (e) {
+      console.log('error updating chat status');
+      console.log(e);
+    }
+  };
+
   getAll = (db: any): Promise<BaseDbSchema[]> => {
     throw new Error('Method not implemented. 1');
   };

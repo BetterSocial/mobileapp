@@ -46,4 +46,5 @@ export interface ChatSchema {
   updatedAt: string;
   rawJson: string;
   user: UserSchema | null;
+  status: string;
 }
