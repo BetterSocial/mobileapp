@@ -55,7 +55,6 @@ const GroupInfo = () => {
     profile,
     channelState,
     handlePressContact,
-    participants,
     onReportGroup
   } = useGroupInfo();
   React.useEffect(() => {
