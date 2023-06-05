@@ -322,7 +322,7 @@ const useGroupInfo = () => {
         data: {
           user_id: profile.myProfile.user_id,
           other_id: item.user_id,
-          username: item.user.name
+          username: item.user?.name
         }
       });
     }, 500);
