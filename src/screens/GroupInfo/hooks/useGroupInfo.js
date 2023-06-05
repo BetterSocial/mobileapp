@@ -153,8 +153,9 @@ const useGroupInfo = () => {
     setOpenModal(false);
   };
 
-  const generateSystemChat = async (message = '', userSelected) => {
+  const generateSystemChat = async (message, userSelected) => {
     try {
+      if (!message) message = '';
       const generatedChannelId = generateRandomId();
       const channelChat = await client.client.channel('system', generatedChannelId, {
         name: channelState?.channel?.data.name,
