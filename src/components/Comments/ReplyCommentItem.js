@@ -19,6 +19,7 @@ import {fonts} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {iVoteComment, voteComment} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
+import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 
 const ReplyCommentItem = ({
   user,
@@ -180,7 +181,7 @@ const ReplyCommentItem = ({
       <TouchableOpacity activeOpacity={1} testID="ontextpress" onPress={onTextPress}>
         <ButtonHightlight onPress={onTextPress}>
           <Text testID="commentText" style={styles.post}>
-            {comment.data.text}
+            {getCaptionWithLinkStyle(comment?.data?.text)}
           </Text>
         </ButtonHightlight>
       </TouchableOpacity>

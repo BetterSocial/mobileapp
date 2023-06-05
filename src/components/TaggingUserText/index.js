@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default TaggingUserText;
+export default React.memo(TaggingUserText);
