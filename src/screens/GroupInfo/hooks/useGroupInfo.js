@@ -152,15 +152,9 @@ const useGroupInfo = () => {
   const handleCloseSelectUser = async () => {
     setOpenModal(false);
   };
-  const onRemoveUser = async () => {
+
+  const generateSystemChat = async (message = '') => {
     try {
-      const result = await channel.removeMembers([selectedUser.user_id]);
-      const updateParticipant = newParticipant.filter(
-        (participant) => participant.user_id !== selectedUser.user_id
-      );
-      setNewParticipan(updateParticipant);
-      setParticipants(updateParticipant, groupPatchDispatch);
-      setOpenModal(false);
       const generatedChannelId = generateRandomId();
       const channelChat = await client.client.channel('system', generatedChannelId, {
         name: channelState?.channel?.data.name,
@@ -168,6 +162,32 @@ const useGroupInfo = () => {
         channel_type: 2,
         image: channelState.channel.data.image
       });
+      await channelChat.create();
+      await channelChat.addMembers([profile.myProfile.user_id]);
+      await channelChat.sendMessage(
+        {
+          text: message,
+          isRemoveMember: true,
+          silent: true
+        },
+        {skip_push: true}
+      );
+    } catch (e) {
+      if (__DEV__) {
+        console.log(e);
+      }
+    }
+  };
+
+  const onRemoveUser = async () => {
+    setOpenModal(false);
+
+    try {
+      const result = await channel.removeMembers([selectedUser.user_id]);
+      const updateParticipant = newParticipant.filter(
+        (participant) => participant.user_id !== selectedUser.user_id
+      );
+      setNewParticipan(updateParticipant);
       await channel.sendMessage(
         {
           text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this group`,
@@ -177,16 +197,7 @@ const useGroupInfo = () => {
         },
         {skip_push: true}
       );
-      await channelChat.create();
-      await channelChat.addMembers([selectedUser.user_id]);
-      await channelChat.sendMessage(
-        {
-          text: `${profile.myProfile.username} removed you from this group`,
-          isRemoveMember: true,
-          silent: true
-        },
-        {skip_push: true}
-      );
+      await generateSystemChat(`${profile.myProfile.username} removed you from this group`);
       setNewParticipan(result.members);
       setParticipants(result.members, groupPatchDispatch);
     } catch (e) {
@@ -272,6 +283,7 @@ const useGroupInfo = () => {
   const leaveGroup = async () => {
     try {
       const response = await channel.removeMembers([profile.myProfile.user_id]);
+      await generateSystemChat('You left this group');
       SimpleToast.show('You left this chat');
       navigation.reset({
         index: 1,
