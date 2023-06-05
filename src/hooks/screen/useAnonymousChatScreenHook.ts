@@ -6,6 +6,7 @@ import useChatUtilsHook from '../core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import {getAnonymousUserId} from '../../utils/users';
 import {getUserId} from '../../utils/token';
+import {randomString} from '../../utils/string/StringUtils';
 
 function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
   const {localDb, chat} = useLocalDatabaseHook();
@@ -17,8 +18,13 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
     if (!localDb) return;
     const myUserId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
-    const data = await ChatSchema.getAll(localDb, selectedChannel, myUserId, myAnonymousId);
+    const data = await ChatSchema.getAll(localDb, selectedChannel?.id, myUserId, myAnonymousId);
     setChats(data);
+  };
+
+  const sendChat = async (message: string = randomString(20)) => {
+    console.log('message');
+    console.log(message);
   };
 
   React.useEffect(() => {
@@ -28,7 +34,8 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
   return {
     chats,
     goBackFromChatScreen,
-    goToChatInfoScreen
+    goToChatInfoScreen,
+    sendChat
   };
 }
 

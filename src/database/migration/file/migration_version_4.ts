@@ -14,6 +14,7 @@ class MigrationVersion4 implements Migration {
         user_id UUID NOT NULL,
         message TEXT NOT NULL,
         type TEXT NOT NULL CHECK(type IN ('regular')),
+        status TEXT NOT NULL CHECK(status IN ('pending', 'sent', 'delivered', 'read')),
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         raw_json TEXT,

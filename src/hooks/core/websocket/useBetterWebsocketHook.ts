@@ -54,7 +54,7 @@ const useBetterWebsocketHook = () => {
   }, []);
 
   const {lastJsonMessage} = useWebSocket(getSocketUrl, {
-    onOpen: () => console.log('opened'),
+    onOpen: () => console.log('opened 123'),
     shouldReconnect: (closeEvent) => true
   });
 

@@ -18,7 +18,7 @@ const WebsocketResearchScreen = () => {
       <Text style={{paddingBottom: 16}}>WebsocketResearchScreen</Text>
       {channels?.map((item) => {
         return (
-          <TouchableOpacity key={item?.id} onPress={() => goToChatScreen(item?.id)}>
+          <TouchableOpacity key={item?.id} onPress={() => goToChatScreen(item)}>
             <View>
               <View style={{borderBottomColor: 'black', borderBottomWidth: 1}} />
               <Text>{`${item?.id}`}</Text>

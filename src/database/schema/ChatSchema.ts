@@ -22,7 +22,9 @@ class ChatSchema implements BaseDbSchema {
 
   user: UserSchema | null;
 
-  constructor({id, channelId, userId, message, type, createdAt, updatedAt, rawJson, user}) {
+  status: string;
+
+  constructor({id, channelId, userId, message, type, createdAt, updatedAt, rawJson, user, status}) {
     if (!id) throw new Error('ChatSchema must have an id');
 
     this.id = id;
@@ -34,6 +36,7 @@ class ChatSchema implements BaseDbSchema {
     this.updatedAt = updatedAt;
     this.rawJson = rawJson;
     this.user = user;
+    this.status = status;
   }
 
   save = async (db: SQLiteDatabase) => {
@@ -44,10 +47,11 @@ class ChatSchema implements BaseDbSchema {
         user_id,
         message,
         type,
+        status,
         created_at,
         updated_at,
         raw_json
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`;
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
       const insertParams = [
         this.id,
@@ -55,6 +59,7 @@ class ChatSchema implements BaseDbSchema {
         this.userId,
         this.message,
         this.type,
+        this.status,
         this.createdAt,
         this.updatedAt,
         this.rawJson
@@ -62,6 +67,7 @@ class ChatSchema implements BaseDbSchema {
 
       await db.executeSql(insertQuery, insertParams);
     } catch (e) {
+      console.log('error saving chat schema');
       console.log(e);
     }
   };
@@ -81,7 +87,7 @@ class ChatSchema implements BaseDbSchema {
       FROM 
       ${ChatSchema.getTableName()} A 
       INNER JOIN ${UserSchema.getTableName()} B 
-      ON A.user_id = B.user_id 
+      ON A.user_id = B.user_id
       WHERE channel_id = ? ORDER BY created_at DESC;`;
 
     const [{rows}] = await db.executeSql(selectQuery, [myId, myAnonymousId, channelId]);
@@ -98,6 +104,7 @@ class ChatSchema implements BaseDbSchema {
     try {
       rawJson = JSON.parse(dbObject.raw_json);
     } catch (e) {
+      console.log('error parse');
       console.log(e);
     }
     const user = UserSchema.fromDatabaseObject(dbObject);
@@ -111,7 +118,8 @@ class ChatSchema implements BaseDbSchema {
       createdAt: dbObject.created_at,
       updatedAt: dbObject.updated_at,
       rawJson,
-      user
+      user,
+      status: dbObject.status
     });
   }
 
@@ -121,6 +129,7 @@ class ChatSchema implements BaseDbSchema {
     try {
       rawJson = JSON.stringify(json);
     } catch (e) {
+      console.log('error stringify');
       console.log(e);
     }
 
@@ -133,7 +142,8 @@ class ChatSchema implements BaseDbSchema {
       createdAt: json?.message?.created_at,
       updatedAt: json?.message?.created_at,
       rawJson,
-      user: null
+      user: null,
+      status: 'sent'
     });
   }
 
