@@ -17,6 +17,7 @@ import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 import {fcmTokenService} from '../service/users';
+import {getAnonymousToken} from '../utils/token';
 
 const Tab = createBottomTabNavigator();
 
@@ -170,6 +171,8 @@ function HomeBottomTabs({navigation}) {
   React.useEffect(() => {
     createChannel();
     requestPermission();
+
+    getAnonymousToken().then((token) => console.log('anonymous token', token));
 
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       // eslint-disable-next-line no-unused-expressions

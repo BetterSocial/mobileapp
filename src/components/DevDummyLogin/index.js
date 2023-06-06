@@ -10,7 +10,13 @@ import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
 import {demoVerifyUser} from '../../service/users';
 import {randomString} from '../../utils/string/StringUtils';
-import {removeLocalStorege, setAccessToken, setRefreshToken, setUserId} from '../../utils/token';
+import {
+  removeLocalStorege,
+  setAccessToken,
+  setAnonymousToken,
+  setRefreshToken,
+  setUserId
+} from '../../utils/token';
 import {setDataHumenId} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
@@ -65,6 +71,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
         if (response.data) {
           setAccessToken(response.token);
           setRefreshToken(response.refresh_token);
+          setAnonymousToken(response.anonymousToken);
           streamChat(response.token).then(() => {
             // navigation.dispatch(StackActions.replace('HomeTabs'));
             // let strObj = {
