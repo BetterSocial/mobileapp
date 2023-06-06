@@ -55,7 +55,7 @@ const GroupInfo = () => {
     profile,
     channelState,
     handlePressContact,
-    participants
+    onReportGroup
   } = useGroupInfo();
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -221,7 +221,7 @@ const GroupInfo = () => {
                       <Text style={styles.textAct}>Exit Group</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.buttonGroup}>
+                  <TouchableOpacity onPress={onReportGroup} style={styles.buttonGroup}>
                     <View style={styles.imageActContainer}>
                       <FastImage style={styles.imageAction} source={ReportGroup} />
                     </View>

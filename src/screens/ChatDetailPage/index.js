@@ -82,7 +82,7 @@ const ChatDetailPage = ({route}) => {
     };
   }, []);
 
-  const onBackHandle = () => {
+  const onBackHandle = async () => {
     if (route?.params?.channel) {
       setChannel(route.params.channel, dispatchChannel);
     }
