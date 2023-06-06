@@ -72,7 +72,7 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
           setAccessToken(response.token);
           setRefreshToken(response.refresh_token);
           try {
-            setAnonymousToken(response.anonymousToken);
+            await setAnonymousToken(response.anonymousToken);
           } catch (e) {
             console.log(e);
           }
