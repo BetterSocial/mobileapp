@@ -71,13 +71,12 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
         if (response.data) {
           setAccessToken(response.token);
           setRefreshToken(response.refresh_token);
-          setAnonymousToken(response.anonymousToken);
+          try {
+            setAnonymousToken(response.anonymousToken);
+          } catch (e) {
+            console.log(e);
+          }
           streamChat(response.token).then(() => {
-            // navigation.dispatch(StackActions.replace('HomeTabs'));
-            // let strObj = {
-            //     id: response.token,
-            //     deeplinkProfile: false
-            // }
             const testObj = {
               id: response.token,
               deeplinkProfile: false

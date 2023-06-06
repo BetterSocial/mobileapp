@@ -166,13 +166,17 @@ const WhotoFollow = () => {
     };
 
     registerUser(data)
-      .then((res) => {
+      .then(async (res) => {
         setFetchRegister(false);
         if (res.code === 200) {
           setToken(res.token);
           setAccessToken(res.token);
           setRefreshToken(res.refresh_token);
-          setAnonymousToken(res.anonymousToken);
+          try {
+            await setAnonymousToken(res.anonymousToken);
+          } catch (e) {
+            crashlytics().recordError(new Error(e));
+          }
           showMessage({
             message: 'Welcome to Better Social',
             type: 'success',
