@@ -229,18 +229,15 @@ end
       begin
         bump_version
         build
-        if ENV["ENV"] === 'prod'
-          upload_testflight
-        else
-          upload_ipa_to_firebase_distribution(release_notes: options[:release_notes])
-        end
-        on_success_slack
       rescue => exception
         puts exception
       end
     end
 
     lane :build do |options|
+      profile_name_type = 'AdHoc'
+      matchType = 'adhoc'
+      profileType = 'ad-hoc'
       if ENV["ENV"] === 'prod'
         profile_name_type = 'AppStore'
         matchType = 'appstore'
@@ -253,25 +250,26 @@ end
         verbose: true
       )
       update_code_signing_settings(
-        use_automatic_signing: false,
         path: './ios/BetterSocial.xcodeproj',
         targets: ENV["SCHEME"],
+        profile_name: "match #{profile_name_type} #{ENV["BUNDLE_ID"]}",
         team_id: 'J22M3M9VYU'
       )
+      puts "testing #{profile_name_type} #{matchType}"
       build_ios_app(
-        scheme: ENV["SCHEME"],
-        clean: true,
-        configuration: 'Release',
-        export_team_id: 'J22M3M9VYU',
-        export_options: {
-            method: profileType, # "ad-hoc" | "app-store"
-            provisioningProfiles: {
-                ENV["SCHEME"] => "match #{profile_name_type} #{ENV["SCHEME"]}",
-            }
-        },
-        workspace: './ios/BetterSocial.xcworkspace',
-        output_directory: './ios/',
-      )
+              scheme: ENV["SCHEME"],
+              clean: true,
+              configuration: 'Release',
+              export_team_id: 'J22M3M9VYU',
+              export_options: {
+                  method: profileType, # "ad-hoc" | "app-store"
+                  provisioningProfiles: {
+                      ENV["SCHEME"] => "match #{profile_name_type} #{ENV["SCHEME"]}",
+                  }
+              },
+              workspace: './ios/BetterSocial.xcworkspace',
+              output_directory: './ios/',
+            )
       ENV["IPA_OUTPUT_PATH_#{ENV['ENV']}"] = lane_context[SharedValues::IPA_OUTPUT_PATH]
       end
 
