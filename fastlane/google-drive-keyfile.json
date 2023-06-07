@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "foodylife-7db5b",
+  "private_key_id": "cc3c1d552037e1ac15eb36d7575f5b07ea310be0",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDu/rhJqgmy4sTx\nJimhbcVbavBmXyYlqT28tV+V/UkeZxllvraADx6qEQZ1pc2YLoLIvrIyQwOXPCkw\nspQMU48Pph1ZFKI0PGLapG65M/hx5bs4G+tOgF3tmecw7mzluiqWQZTvMefLLfwU\nr6eONcYhNT6CUn8P4dfQDwzN5+MLVZg5iSWS7+Xsx3GYl8zdXCkUbQ2kBd5vQQwm\nYxHacBbPfBWByQC+H2FDe3/DHCKsnIlqd6z0uL6QNR9X3sYrAdkiT33AgdBxgvWP\n7VOEEPDqjF4CsKrt6GFAcxbdJ/eAgv1vu43mkCeYslZuJYExm9OoKy2tY/nqnL8W\nG9BOWv6dAgMBAAECggEAGt6gHoa+UhKFHNhIYZdYqHdZ8XsswUWJT4rpZRDAeeln\n0BTEf5pI6CBDjyeQeVXFVhzRJlh6x16NV6XELQHvTs2YysKd8pcqxV/WTlPa+1yI\n6NKEE+PXwOuxiUKiaKOTv9KTaYm9VeO6IyM/3dEK5lc49hL1/nWgO1/tyxqRNV1M\na/2RS5mxylPiYW7KpG+EVt669ZmMP4BcbfIPIBFBq7ImZ10DP54kVxFm7PhjSQd7\nzrpBOeWD0sld6fuMiUHW1kci6CXuR4P3GnavMw55ZB5ZcQqUHnRpP0aMsFRvnRSE\nLL50tveGMwu8DLPIa6NqgmJzgjjGGTs8KEGhGhObWwKBgQD6XFRGGxmsvUq9iIRO\neJlCE6HJirqvmAbULKSjQApXRSSv4ygzAkyk9UQgREDJpdSiuu5cAuxJMZ5ulZOU\ngP8Q/URu+9ifnSQvLUvg91yBsZ0ykHL7tQGRHtn6vSNB5bknn3/qxI9nHxI9VrvK\nmw2emLJbWubCosYTzkXpLY6wJwKBgQD0YNolcU4m7rlTE0iznpBqXNuIO2UMpp9a\n7085tmTI0xKeHO51YXyVVqyBzc6+gVNMyQxGIMmUIu6pRt9e9yuP8S7NizGvbthq\nYTOyaBiOnEVPSd4fBBJ9qOSI31OQIHerEbWaFa2IuFRBFAl5RfviIiAGd5ATnZwr\nc6TGHTZRmwKBgGbBEk2bvdPp9Q0JRNQ4Jx65lAN2Dt0W1maq0/+0vwnGdSJDZzJY\nVUC28XkUykp452bKth3JjVUVKmNUvLeMoiNE75tlfik0g69hNe1lWPBaB5zDMI4i\nYjw/n1OL4TagpHegvQ2MExdN51yJhpXHQbXAEiPwkRl9WTKzzHnBmvitAoGBAMS0\ncONSoKWV4naMPyjVqUj0FYFCzcOxGvQHTK4Xsmgz/fhnMUoqfi125sRU9OVDE9nq\nuoZ4PcmPlKuM8J9wNRBYAmRQdl3Py0NVmlcwkxO3ldKMks5EaN3c5JeHq6uHdsus\nJZExgc1bEfaQOk/zlRwge8a41q/zXZFcNHWDbgWhAoGBAI9PCFWa8BW1RsHj4bqk\nPXtFqwPnbJgCA528zZQDxYlP2fSakNyknhP7O6xL7jTauyUuN6IgYuzLKNqfMd+e\nBOw4erP+bWYTlHqbR4fu02m5gpmeY5BZm34Nu2S/v2e9rGHI6fvGpUwWaApSU1KE\nSzcQHQ0wdSit7OUDkQoMsfNm\n-----END PRIVATE KEY-----\n",
+  "client_email": "google-drive@foodylife-7db5b.iam.gserviceaccount.com",
+  "client_id": "112286819762552688081",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/google-drive%40foodylife-7db5b.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

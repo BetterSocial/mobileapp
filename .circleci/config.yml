@@ -65,7 +65,7 @@ jobs:
   node:
     working_directory: ~/bettersocial-rn
     docker:
-      - image: cimg/node:16.14.2
+      - image: cimg/node:18.16.0
     steps:
       - add_ssh_keys:
           fingerprints:

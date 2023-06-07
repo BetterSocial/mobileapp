@@ -231,6 +231,12 @@ end
         build
       rescue => exception
         puts exception
+        upload_to_google_drive(
+            drive_keyfile: './fastlane/google-drive-keyfile.json',
+            service_account: true,
+            folder_id: '0BzxfL9EJ4WpQRXlPOFpBSFJ0VWc',
+            upload_files: ['/Users/distiller/Library/Logs/gym/BetterSocial-BetterSocial.log']
+        )
       end
     end
 
@@ -239,23 +245,25 @@ end
       matchType = 'adhoc'
       profileType = 'ad-hoc'
       if ENV["ENV"] === 'prod'
+        puts "prod bro"
         profile_name_type = 'AppStore'
         matchType = 'appstore'
         profileType = 'ad-hoc'
       end
+      update_code_signing_settings(
+        use_automatic_signing: false,
+        path: './ios/BetterSocial.xcodeproj',
+        targets: ENV["SCHEME"],
+        profile_name: "match #{profile_name_type} #{ENV["BUNDLE_ID"]}",
+        team_id: 'J22M3M9VYU'
+      )
       match(
         type: matchType, # "appstore" | "adhoc" | "development"
         app_identifier: [ENV["BUNDLE_ID"]],
         readonly: true,
         verbose: true
       )
-      update_code_signing_settings(
-        path: './ios/BetterSocial.xcodeproj',
-        targets: ENV["SCHEME"],
-        profile_name: "match #{profile_name_type} #{ENV["BUNDLE_ID"]}",
-        team_id: 'J22M3M9VYU'
-      )
-      puts "testing #{profile_name_type} #{matchType}"
+      puts "testing #{profile_name_type} #{matchType} #{ENV["ENV"]}"
       build_ios_app(
               scheme: ENV["SCHEME"],
               clean: true,
