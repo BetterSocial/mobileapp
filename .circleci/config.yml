@@ -125,6 +125,12 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - add_ssh_keys:
+          fingerprints:
+            - 1c:72:eb:dc:45:fd:f3:9b:0b:0d:dd:69:63:e9:27:e9
+      - run:
+          name: Keyscan github.com
+          command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
       - restore_cache:
           keys:
             - ios-gem-cache-v1-{{ checksum "Gemfile.lock" }}
