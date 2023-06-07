@@ -4,7 +4,6 @@ import {
   requestExternalStoragePermission,
   requestCameraPermission
 } from '../../src/utils/permission';
-import * as Permissions from '../../src/utils/permission';
 import StringConstant from '../../src/utils/string/StringConstant';
 
 jest.mock('react-native-permissions', () => {
