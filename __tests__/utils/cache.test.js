@@ -1,7 +1,8 @@
 import {act} from 'react-test-renderer';
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 
-import {getSpecificCache, removeAllCache, saveToCache} from '../../src/utils/cache';
+import {removeAllCache, saveToCache} from '../../src/utils/cache';
+
 describe('utils cache should run correctly', () => {
   it('remove all cache shoule run correctly', () => {
     const mockRemoveCache = jest.spyOn(mockAsyncStorage, 'clear');
