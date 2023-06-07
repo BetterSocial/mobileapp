@@ -341,7 +341,9 @@ const OtherProfile = () => {
             <Image
               style={styles.profileImage}
               source={{
-                uri: dataMain.profile_pic_path ?? DEFAULT_PROFILE_PIC_PATH
+                uri: dataMain.profile_pic_path
+                  ? dataMain.profile_pic_path
+                  : DEFAULT_PROFILE_PIC_PATH
               }}
             />
 

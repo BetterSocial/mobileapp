@@ -55,8 +55,8 @@ const AddParticipant = ({navigation, route}) => {
   };
   const filterDataUser = (dataUsers) => {
     return dataUsers.filter((itm1) => {
-      return !Object.keys(participants).some((itm2) => {
-        return itm1.user_id === itm2;
+      return !participants.some((itm2) => {
+        return itm1.user_id === itm2.user_id;
       });
     });
   };
@@ -130,7 +130,7 @@ const AddParticipant = ({navigation, route}) => {
         followedName.forEach(async (name) => {
           await channel.channel.sendMessage(
             {
-              text: `${name} was added to this chat by ${profile.myProfile.username}`,
+              text: `${name} was added to this group by ${profile.myProfile.username}`,
               isRemoveMember: true,
               silent: true
             },
