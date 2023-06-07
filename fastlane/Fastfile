@@ -246,8 +246,16 @@ end
         matchType = 'appstore'
         profileType = 'ad-hoc'
       end
-      enable_automatic_code_signing(
+      match(
+        type: matchType, # "appstore" | "adhoc" | "development"
+        app_identifier: [ENV["BUNDLE_ID"]],
+        readonly: true,
+        verbose: true
+      )
+      update_code_signing_settings(
+        use_automatic_signing: false,
         path: './ios/BetterSocial.xcodeproj',
+        targets: ENV["SCHEME"],
         team_id: 'J22M3M9VYU'
       )
       build_ios_app(
