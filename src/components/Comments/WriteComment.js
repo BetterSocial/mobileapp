@@ -127,7 +127,6 @@ const WriteComment = ({
             value={value}
             multiline
             textAlignVertical="top"
-            numberOfLines={2}
           />
         </View>
         <TouchableOpacity
