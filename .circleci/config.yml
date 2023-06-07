@@ -125,12 +125,6 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - add_ssh_keys:
-          fingerprints:
-            - 8c:b9:a0:02:b1:20:b0:4d:d8:96:b0:1f:c7:c1:0c:cb
-      - run:
-          name: Keyscan bitbucket.org
-          command: ssh-keyscan -H bitbucket.org >> ~/.ssh/known_hosts
       - restore_cache:
           keys:
             - ios-gem-cache-v1-{{ checksum "Gemfile.lock" }}
