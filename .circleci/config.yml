@@ -158,6 +158,8 @@ jobs:
           name: Fastlane
           no_output_timeout: 40m
           command: bundle exec fastlane ios release --env <<parameters.env>> release_notes:<< pipeline.parameters.release-notes >>
+      - store_artifacts:
+            path: /Users/distiller/Library/Logs/gym/BetterSocial-BetterSocial.log
   register-device-ios:
     working_directory: ~/project
     macos:
