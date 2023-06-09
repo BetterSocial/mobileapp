@@ -144,7 +144,10 @@ const PostPageDetailIdComponent = (props) => {
           }, 300);
         }
       } catch (e) {
-        Toast.show(e?.response?.data?.message || "Can't get detail feed", Toast.LONG);
+        Toast.show(
+          e?.response?.data?.message || 'Failed to load feed - please try again',
+          Toast.LONG
+        );
         navigation.goBack();
       }
     } else {
