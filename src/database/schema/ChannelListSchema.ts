@@ -3,7 +3,8 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import BaseDbSchema from './BaseDbSchema';
 import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
-import {ChannelData} from '../../../types/repo/anonymousmessagerepo.types';
+import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/ChannelData';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -65,11 +66,12 @@ class ChannelList implements BaseDbSchema {
   };
 
   static getById = async (db: any, id: string): Promise<ChannelList> => {
-    const selectQuery = `SELECT * FROM ${ChannelList.getTableName()} WHERE id = ?`;
+    const selectQuery = `SELECT * FROM ${ChannelList.getTableName()} WHERE id = ? LIMIT 1`;
     const selectParams = [id];
 
     const [results] = await db.executeSql(selectQuery, selectParams);
-    return results.rows.raw().map(ChannelList.fromDatabaseObject);
+    if (results.rows.length === 0) return null;
+    return results.rows.raw()[0];
   };
 
   static getChannelInfo = async (
@@ -133,7 +135,6 @@ class ChannelList implements BaseDbSchema {
     try {
       const existingChannel = await ChannelList.getById(db, this.id);
       if (!existingChannel) {
-        console.log('save if latest - no existing channel');
         await this.save(db);
         return;
       }
@@ -142,7 +143,6 @@ class ChannelList implements BaseDbSchema {
       const newLastUpdatedAt = new Date(this.lastUpdatedAt);
 
       if (newLastUpdatedAt > existingLastUpdatedAt) {
-        console.log('save if latest - new last updated at is greater than existing');
         await this.save(db);
       }
     } catch (e) {
@@ -163,7 +163,7 @@ class ChannelList implements BaseDbSchema {
           WHEN ? THEN 1
           ELSE 0 END AS is_me
       FROM ${ChannelList.getTableName()} A
-      LEFT OUTER JOIN ${UserSchema.getTableName()} B
+      LEFT JOIN ${UserSchema.getTableName()} B
       ON A.last_updated_by = B.user_id
       ORDER BY last_updated_at DESC`,
       [myId, myAnonymousId]
@@ -244,6 +244,23 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedAt: data?.last_message_at,
       lastUpdatedBy: '',
       createdAt: data?.created_at,
+      rawJson: data,
+      user: null,
+      members: null
+    });
+  }
+
+  static fromAnonymousPostNotificationAPI(data: AnonymousPostNotification): ChannelList {
+    return new ChannelList({
+      id: data?.activity_id,
+      channelPicture: '',
+      name: data?.titlePost,
+      description: data?.titlePost,
+      unreadCount: 0,
+      channelType: 'ANON_POST_NOTIFICATION',
+      lastUpdatedAt: data?.data?.updated_at,
+      lastUpdatedBy: '',
+      createdAt: new Date().toISOString(),
       rawJson: data,
       user: null,
       members: null

@@ -82,6 +82,32 @@ const useCoreChatSystemHook = () => {
     }
   };
 
+  const getAllAnonymousPostNotifications = async () => {
+    if (!localDb) return;
+    let anonymousPostNotifications = [];
+
+    try {
+      anonymousPostNotifications = await AnonymousMessageRepo.getAllAnonymousPostNotifications();
+    } catch (e) {
+      console.log('error on getting anonymousPostNotifications');
+      console.log(e);
+    }
+
+    try {
+      const allPromises = [];
+      anonymousPostNotifications.forEach((postNotification) => {
+        const channelList = ChannelList.fromAnonymousPostNotificationAPI(postNotification);
+        allPromises.push(channelList.saveIfLatest(localDb).catch((e) => console.log(e)));
+      });
+
+      await Promise.all(allPromises);
+      refresh('channelList');
+    } catch (e) {
+      console.log('error on saving anonymousPostNotifications');
+      console.log(e);
+    }
+  };
+
   React.useEffect(() => {
     if (!lastJsonMessage && !localDb) return;
 
@@ -94,6 +120,7 @@ const useCoreChatSystemHook = () => {
 
   React.useEffect(() => {
     getAllAnonymousChannels().catch((e) => console.log(e));
+    getAllAnonymousPostNotifications().catch((e) => console.log(e));
   }, [localDb]);
 };
 

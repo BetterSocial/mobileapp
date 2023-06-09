@@ -17,7 +17,12 @@ function useAnonymousChatInfoScreenHook(): UseAnonymousChatInfoScreenHook {
     if (!localDb) return;
     const myId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
-    const data = await ChannelList.getChannelInfo(localDb, selectedChannel, myId, myAnonymousId);
+    const data = await ChannelList.getChannelInfo(
+      localDb,
+      selectedChannel?.id,
+      myId,
+      myAnonymousId
+    );
     setChannelInfo(data);
   };
 
