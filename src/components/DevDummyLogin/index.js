@@ -72,6 +72,8 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
         }
         if (response.data) {
           setAccessToken(response.token);
+          console.log('response.anonymous_token', response);
+          setAnonymousToken(response.anonymousToken);
           setRefreshToken(response.refresh_token);
           try {
             await setAnonymousToken(response.anonymousToken);
