@@ -1,26 +1,27 @@
 import * as React from 'react';
-import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
-import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
-import {MessageSystem} from 'stream-chat-react-native-core';
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
-import {useRecoilState} from 'recoil';
+import {MessageSystem} from 'stream-chat-react-native-core';
 
+import {useRecoilState} from 'recoil';
+import crashlytics from '@react-native-firebase/crashlytics';
+import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
-import api from '../../service/config';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
-import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {fonts} from '../../utils/fonts';
-import {setAsset, setParticipants} from '../../context/actions/groupChat';
-import {setChannel} from '../../context/actions/setChannel';
+import {setAsset} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {setChannel} from '../../context/actions/setChannel';
+import api from '../../service/config';
+import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
+import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 
 const streami18n = new Streami18n({
   language: 'en'
@@ -29,6 +30,7 @@ const streami18n = new Streami18n({
 const ChatDetailPage = ({route}) => {
   const [clients] = React.useContext(Context).client;
   const [channelClient, dispatchChannel] = React.useContext(Context).channel;
+  const {interactionsComplete} = useAfterInteractions();
   const [followUserList, setFollowUserList] = useRecoilState(followersOrFollowingAtom);
   const [, dispatch] = React.useContext(Context).groupChat;
   const messageSystemCustom = (props) => {
@@ -67,6 +69,7 @@ const ChatDetailPage = ({route}) => {
       }
     }
   };
+
   React.useEffect(() => {
     if (clients && route?.params?.data && !channelClient.client) {
       handleChannelClient();
@@ -79,7 +82,7 @@ const ChatDetailPage = ({route}) => {
     };
   }, []);
 
-  const onBackHandle = () => {
+  const onBackHandle = async () => {
     if (route?.params?.channel) {
       setChannel(route.params.channel, dispatchChannel);
     }
@@ -121,7 +124,6 @@ const ChatDetailPage = ({route}) => {
   }, []);
   React.useEffect(() => {
     searchUserMessages(channelClient.channel?.cid);
-    setParticipants(channelClient.channel?.state?.members, dispatch);
   }, [clients.client]);
   const searchUserMessages = async (channelID) => {
     const messages = await clients.client.search(
@@ -140,8 +142,6 @@ const ChatDetailPage = ({route}) => {
       if (response?.data) {
         return response.data.data;
       }
-
-      return null;
     } catch (error) {
       crashlytics().recordError(new Error(error));
       throw new Error(error);
@@ -173,36 +173,38 @@ const ChatDetailPage = ({route}) => {
     return (
       <SafeAreaView>
         <StatusBar backgroundColor="white" translucent={false} />
-        <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
-          <Chat client={clients.client} i18nInstance={streami18n}>
-            <Channel
-              channel={channelClient.channel}
-              DateHeader={CustomDateHeader}
-              hasFilePicker={false}
-              ImageUploadPreview={<ImageSendPreview />}
-              keyboardVerticalOffset={0}
-              mutesEnabled={false}
-              reactionsEnabled={false}
-              readEventsEnabled={true}
-              threadRepliesEnabled={false}
-              MessageStatus={ChatStatusIcon}
-              MessageSystem={(props) => messageSystemCustom(props)}
-              // MessageContent={(props) => <CustomMessageContent {...props} />}
-              messageActions={(props) => defaultActionsAllowed(props)}
-              ReactionList={() => null}>
-              <>
-                <Header />
-                <MessageList
-                  tDateTimeParser={testDate}
-                  InlineDateSeparator={CustomInlineDateSeparator}
-                  loading={false}
-                />
+        {interactionsComplete ? (
+          <EasyFollowSystem valueCallback={checkFollowBack} followButtonAction={followButtonAction}>
+            <Chat client={clients.client} i18nInstance={streami18n}>
+              <Channel
+                channel={channelClient.channel}
+                DateHeader={CustomDateHeader}
+                hasFilePicker={false}
+                ImageUploadPreview={<ImageSendPreview />}
+                keyboardVerticalOffset={0}
+                mutesEnabled={false}
+                reactionsEnabled={false}
+                readEventsEnabled={true}
+                threadRepliesEnabled={false}
+                MessageStatus={ChatStatusIcon}
+                MessageSystem={(props) => messageSystemCustom(props)}
+                // MessageContent={(props) => <CustomMessageContent {...props} />}
+                messageActions={(props) => defaultActionsAllowed(props)}
+                ReactionList={() => null}>
+                <>
+                  <Header />
+                  <MessageList
+                    tDateTimeParser={testDate}
+                    InlineDateSeparator={CustomInlineDateSeparator}
+                    loading={false}
+                  />
 
-                <MessageInput Input={InputMessage} />
-              </>
-            </Channel>
-          </Chat>
-        </EasyFollowSystem>
+                  <MessageInput Input={InputMessage} />
+                </>
+              </Channel>
+            </Chat>
+          </EasyFollowSystem>
+        ) : null}
       </SafeAreaView>
     );
   }
