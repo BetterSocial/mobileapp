@@ -23,8 +23,7 @@ const styles = StyleSheet.create({
  * @param {CommenUsernameComponentProps} props
  */
 
-const CommentUserName = ({comment, user}) => {
-  console.log(comment, 'lakal');
+const CommentUsername = ({comment, user}) => {
   return (
     <Text style={styles.username}>
       {comment.data?.anon_user_info_color_name
@@ -35,4 +34,4 @@ const CommentUserName = ({comment, user}) => {
   );
 };
 
-export default CommentUserName;
+export default CommentUsername;
