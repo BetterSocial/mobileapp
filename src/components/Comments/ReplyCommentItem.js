@@ -20,6 +20,7 @@ import {getUserId} from '../../utils/users';
 import {iVoteComment, voteComment} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import CommentUserName from '../CommentUsername';
 
 const ReplyCommentItem = ({
   user,
@@ -175,12 +176,7 @@ const ReplyCommentItem = ({
             )}
 
             <View style={styles.containerUsername}>
-              <Text style={styles.username}>
-                {user?.data?.username
-                  ? user.data.username
-                  : `${comment.data.anon_user_info_color_name} ${comment.data.anon_user_info_emoji_name}`}{' '}
-                •
-              </Text>
+              <CommentUserName comment={comment} user={user} />
               <Text style={styles.time}> {calculateTime(time)}</Text>
             </View>
           </View>
