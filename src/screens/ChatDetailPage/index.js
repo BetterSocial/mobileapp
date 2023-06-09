@@ -7,7 +7,6 @@ import {MessageSystem} from 'stream-chat-react-native-core';
 import {useRecoilState} from 'recoil';
 import crashlytics from '@react-native-firebase/crashlytics';
 import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
-import {useNavigation} from '@react-navigation/core';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
@@ -19,7 +18,7 @@ import {fonts} from '../../utils/fonts';
 import {setAsset, setParticipants} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
-import {loadingChannel, setChannel} from '../../context/actions/setChannel';
+import {setChannel} from '../../context/actions/setChannel';
 import api from '../../service/config';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 
