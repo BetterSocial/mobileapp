@@ -20,6 +20,7 @@ import {getUserId} from '../../utils/users';
 import {removeWhiteSpace} from '../../utils/Utils';
 import BlockComponent from '../BlockComponent';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import CommentUserName from '../CommentUsername';
 
 const Comment = ({
   user,
@@ -142,12 +143,7 @@ const Comment = ({
             )}
 
             <View style={styles.containerUsername}>
-              <Text style={styles.username}>
-                {comment.data?.anon_user_info_color_name
-                  ? `${comment.data?.anon_user_info_color_name} ${comment.data?.anon_user_info_emoji_name}`
-                  : user?.data?.username}
-                {comment.is_you ? '(You)' : ''} {comment.is_author ? '(Post Author)' : ''} •
-              </Text>
+              <CommentUserName comment={comment} user={user} />
               <Text style={styles.time}> {calculateTime(time)}</Text>
             </View>
           </View>
