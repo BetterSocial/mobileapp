@@ -260,9 +260,19 @@ function HomeBottomTabs({navigation}) {
             />
           )
         })}>
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Feed"
           component={FeedScreen}
+          initialParams={{isBottomTab: true}}
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: renderTabLabelIcon('Feed')
+            // unmountOnBlur: true
+          }}
+        /> */}
+        <Tab.Screen
+          name="Feed"
+          component={WebsocketResearchScreen}
           initialParams={{isBottomTab: true}}
           options={{
             activeTintColor: colors.holytosca,

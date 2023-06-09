@@ -3,6 +3,7 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import BaseDbSchema from './BaseDbSchema';
 import ChannelListMemberSchema from './ChannelListMemberSchema';
 import UserSchema from './UserSchema';
+import {ChannelData} from '../../../types/repo/anonymousmessagerepo.types';
 
 class ChannelList implements BaseDbSchema {
   id: string;
@@ -128,6 +129,28 @@ class ChannelList implements BaseDbSchema {
     }
   }
 
+  async saveIfLatest(db: SQLiteDatabase): Promise<void> {
+    try {
+      const existingChannel = await ChannelList.getById(db, this.id);
+      if (!existingChannel) {
+        console.log('save if latest - no existing channel');
+        await this.save(db);
+        return;
+      }
+
+      const existingLastUpdatedAt = new Date(existingChannel.lastUpdatedAt);
+      const newLastUpdatedAt = new Date(this.lastUpdatedAt);
+
+      if (newLastUpdatedAt > existingLastUpdatedAt) {
+        console.log('save if latest - new last updated at is greater than existing');
+        await this.save(db);
+      }
+    } catch (e) {
+      console.log('save if latest error');
+      console.log(e);
+    }
+  }
+
   static async getAll(
     db: SQLiteDatabase,
     myId: string,
@@ -140,7 +163,7 @@ class ChannelList implements BaseDbSchema {
           WHEN ? THEN 1
           ELSE 0 END AS is_me
       FROM ${ChannelList.getTableName()} A
-      INNER JOIN ${UserSchema.getTableName()} B
+      LEFT OUTER JOIN ${UserSchema.getTableName()} B
       ON A.last_updated_by = B.user_id
       ORDER BY last_updated_at DESC`,
       [myId, myAnonymousId]
@@ -207,6 +230,23 @@ class ChannelList implements BaseDbSchema {
       createdAt: object?.time,
       rawJson: json,
       user: null
+    });
+  }
+
+  static fromAnonymousChannelAPI(data: ChannelData): ChannelList {
+    return new ChannelList({
+      id: data?.id,
+      channelPicture: '',
+      name: data?.name,
+      description: '',
+      unreadCount: 0,
+      channelType: 'ANON_PM',
+      lastUpdatedAt: data?.last_message_at,
+      lastUpdatedBy: '',
+      createdAt: data?.created_at,
+      rawJson: data,
+      user: null,
+      members: null
     });
   }
 }

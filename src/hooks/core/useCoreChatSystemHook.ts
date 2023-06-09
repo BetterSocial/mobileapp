@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
 import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
@@ -14,7 +15,7 @@ const useCoreChatSystemHook = () => {
 
   const onPostNotifReceived = (data) => {
     const postNotifChannel = ChannelList.fromPostNotifObject(data);
-    postNotifChannel.save(localDb);
+    postNotifChannel.save(localDb).catch((e) => console.log(e));
   };
 
   usePostNotificationListenerHook(onPostNotifReceived);
@@ -55,15 +56,45 @@ const useCoreChatSystemHook = () => {
     refresh('channelMember');
   };
 
+  const getAllAnonymousChannels = async () => {
+    if (!localDb) return;
+    let anonymousChannel = [];
+
+    try {
+      anonymousChannel = await AnonymousMessageRepo.getAllAnonymousChannels();
+    } catch (e) {
+      console.log('error on getting anonymousChannel');
+      console.log(e);
+    }
+
+    try {
+      const allPromises = [];
+      anonymousChannel.forEach((channel) => {
+        const channelList = ChannelList.fromAnonymousChannelAPI(channel);
+        allPromises.push(channelList.saveIfLatest(localDb).catch((e) => console.log(e)));
+      });
+
+      await Promise.all(allPromises);
+      refresh('channelList');
+    } catch (e) {
+      console.log('error on saving anonymousChannel');
+      console.log(e);
+    }
+  };
+
   React.useEffect(() => {
     if (!lastJsonMessage && !localDb) return;
 
     const {type} = lastJsonMessage;
     if (type === 'health.check') return;
     if (type === 'notification.message_new') {
-      saveChannelListData();
+      saveChannelListData().catch((e) => console.log(e));
     }
   }, [lastJsonMessage, localDb]);
+
+  React.useEffect(() => {
+    getAllAnonymousChannels().catch((e) => console.log(e));
+  }, [localDb]);
 };
 
 export default useCoreChatSystemHook;
