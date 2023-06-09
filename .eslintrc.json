@@ -101,6 +101,8 @@
     "@typescript-eslint/space-before-blocks": "warn",
     "@typescript-eslint/space-infix-ops": "warn",
     "@typescript-eslint/object-curly-spacing": "warn",
+    "@typescript-eslint/no-empty-function": "warn",
+    "import/no-cycle": "warn",
     "import/extensions": [
       "error",
       "ignorePackages",
