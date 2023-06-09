@@ -255,11 +255,11 @@ describe('useGroupInfo should run correctly', () => {
     act(() => {
       result.current.onProfilePressed('a3c59170-c110-4fac-929e-7834f6c6827f');
     });
-    expect(mockedNavigateNavigation).toHaveBeenCalled();
+    expect(mockedPushNavigation).toHaveBeenCalled();
     act(() => {
       result.current.onProfilePressed('b3c59170-c110-4fac-929e-7834f6c6827d');
     });
-    expect(mockedNavigateNavigation).toHaveBeenCalled();
+    expect(mockedPushNavigation).toHaveBeenCalled();
   });
 
   it('serializeMembersList should run correctly', () => {

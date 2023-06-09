@@ -4,6 +4,9 @@ import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
 
+import {useRecoilState} from 'recoil';
+import crashlytics from '@react-native-firebase/crashlytics';
+import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
@@ -16,10 +19,7 @@ import {setAsset, setParticipants} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {setChannel} from '../../context/actions/setChannel';
-import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import api from '../../service/config';
-import crashlytics from '@react-native-firebase/crashlytics';
-import {useRecoilState} from 'recoil';
 import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 
 const streami18n = new Streami18n({
@@ -62,23 +62,28 @@ const ChatDetailPage = ({route}) => {
       );
       setChannel(channel, dispatchChannel);
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log(e, 'eman');
+      }
     }
   };
   React.useEffect(() => {
-    if (clients && route.params && !channelClient.client) {
+    if (clients && route?.params?.data && !channelClient.client) {
       handleChannelClient();
     }
   }, [route.params, clients]);
 
   React.useEffect(() => {
     return () => {
-      console.log(route, 'sinar');
-      if (route.params.channel) {
-        setChannel(route.params.channel, dispatchChannel);
-      }
+      onBackHandle();
     };
   }, []);
+
+  const onBackHandle = () => {
+    if (route?.params?.channel) {
+      setChannel(route.params.channel, dispatchChannel);
+    }
+  };
 
   const defaultActionsAllowed = (messageActionsProp) => {
     const {
