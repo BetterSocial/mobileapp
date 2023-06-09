@@ -22,6 +22,18 @@ export const S = StyleSheet.create({
     display: 'flex',
     flex: 1
   },
+  image: {
+    width: 36,
+    height: 36,
+    marginLeft: -7,
+    zIndex: -10,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  emojyStyle: {
+    fontSize: 18
+  },
   sendIconContainer: (value) => ({
     borderRadius: 18,
     width: 35,

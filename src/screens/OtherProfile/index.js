@@ -56,6 +56,7 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import TextAreaChat from '../../components/TextAreaChat';
+import {generateUserInfoOtherProfile} from '../../service/users';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -106,7 +107,17 @@ const OtherProfile = () => {
   const {params} = route;
   const {feeds} = otherProfileFeeds;
 
-  console.log({otherProfileFeeds});
+  const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
+  const [anonProfile, setAnonProfile] = React.useState();
+
+  console.log({profile});
+
+  const generateAnonProfile = async () => {
+    setLoadingGenerateAnon(true);
+    const anonProfileResult = await generateUserInfoOtherProfile(profile.myProfile.user_id);
+    setLoadingGenerateAnon(false);
+    setAnonProfile(anonProfileResult);
+  };
 
   const getOtherFeeds = async (userId, offset = 0) => {
     try {
@@ -235,8 +246,12 @@ const OtherProfile = () => {
   };
 
   const toggleSwitch = () => {
-    setIsAnonimity((prevState) => !prevState);
-    // getAnonUser();
+    if (!dataMain.isAnonMessageEnabled) {
+      SimpleToast.show('This user does not want to receive anonymous messages', SimpleToast.LONG);
+    } else {
+      setIsAnonimity((prevState) => !prevState);
+      generateAnonProfile();
+    }
   };
 
   const __renderBio = (string) => (
@@ -369,16 +384,22 @@ const OtherProfile = () => {
 
         <View style={styles.bioAndSendChatContainer(isAnonimity)}>
           {__renderBio(dataMain.bio)}
-          <TextAreaChat profile={profile} placeholder="Send a direct message" />
+          <TextAreaChat
+            isAnonimity={isAnonimity}
+            loadingUser={loadingGenerateAnon}
+            avatarUrl={profile.myProfile.profile_pic_path}
+            anon={anonProfile}
+            placeholder="Send a direct message"
+          />
           <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
             <ToggleSwitch
               isOn={isAnonimity}
               onToggle={toggleSwitch}
               onColor={'#9DEDF1'}
-              label="Anonymity"
+              label={dataMain.isAnonMessageEnabled ? 'Anonymity' : 'Anonymity disabled'}
               offColor="#F5F5F5"
               size="small"
-              labelStyle={{color: colors.white}}
+              labelStyle={{color: dataMain.isAnonMessageEnabled ? colors.white : '#648ABF'}}
             />
           </TouchableOpacity>
         </View>
