@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
-    "jsx": "react",
-    "baseUrl": "src"
+    "jsx": "react"
+    // "baseUrl": "./src",
+    // "paths": {
+    //   "~/hooks/*": ["./src/hooks/*"],
+    // }
   }
 }
