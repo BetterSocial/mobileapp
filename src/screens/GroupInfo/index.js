@@ -1,4 +1,5 @@
 import * as React from 'react';
+import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import {
   FlatList,
@@ -12,22 +13,21 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import ExitGroup from '../../assets/images/exit-group.png';
-import ReportGroup from '../../assets/images/report.png';
 
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
+import ExitGroup from '../../assets/images/exit-group.png';
 import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import ModalAction from './elements/ModalAction';
+import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
-import ModalAction from './elements/ModalAction';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -57,6 +57,7 @@ const GroupInfo = () => {
     handlePressContact,
     onReportGroup
   } = useGroupInfo();
+
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (route?.params?.from === 'AddParticipant') {
