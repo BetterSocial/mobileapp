@@ -158,7 +158,7 @@ const Comment = ({
           onLongPress={handleOnLongPress}
           style={styles.flexStartContainer}
           onPress={onTextPress}>
-          <Text style={styles.post}>{comment.data.text}</Text>
+          <Text style={styles.post}>{getCaptionWithLinkStyle(comment.data.text)}</Text>
         </ButtonHightlight>
       </TouchableOpacity>
       <View style={styles.constainerFooter}>
