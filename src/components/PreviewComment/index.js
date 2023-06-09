@@ -10,7 +10,7 @@ import {calculateTime} from '../../utils/time';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
-import CommentUserName from '../CommentUsername';
+import CommentUserName from '../CommentUsername/CommentUsername';
 
 const PreviewComment = ({comment, time, image, totalComment, onPress, user, item}) => {
   const navigation = useNavigation();

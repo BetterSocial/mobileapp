@@ -20,7 +20,7 @@ import {getUserId} from '../../utils/users';
 import {iVoteComment, voteComment} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
-import CommentUserName from '../CommentUsername';
+import CommentUserName from '../CommentUsername/CommentUsername';
 
 const ReplyCommentItem = ({
   user,

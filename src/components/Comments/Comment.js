@@ -20,7 +20,7 @@ import {getUserId} from '../../utils/users';
 import {removeWhiteSpace} from '../../utils/Utils';
 import BlockComponent from '../BlockComponent';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
-import CommentUserName from '../CommentUsername';
+import CommentUserName from '../CommentUsername/CommentUsername';
 
 const Comment = ({
   user,
