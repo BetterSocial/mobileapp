@@ -262,7 +262,7 @@ function HomeBottomTabs({navigation}) {
         })}>
         <Tab.Screen
           name="Feed"
-          component={WebsocketResearchScreen}
+          component={FeedScreen}
           initialParams={{isBottomTab: true}}
           options={{
             activeTintColor: colors.holytosca,
