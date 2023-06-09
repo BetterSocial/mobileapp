@@ -56,7 +56,8 @@ import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import TextAreaChat from '../../components/TextAreaChat';
-import {generateUserInfoOtherProfile} from '../../service/users';
+import {generateAnonProfileOtherProfile} from '../../service/anonymousProfile';
+import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../service/chat';
 
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
@@ -108,15 +109,69 @@ const OtherProfile = () => {
   const {feeds} = otherProfileFeeds;
 
   const [loadingGenerateAnon, setLoadingGenerateAnon] = React.useState(false);
+  const [loadingSendDM, setLoadingSendDM] = React.useState(false);
   const [anonProfile, setAnonProfile] = React.useState();
-
-  console.log({profile});
+  const [dmChat, setDMChat] = React.useState();
 
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
-    const anonProfileResult = await generateUserInfoOtherProfile(profile.myProfile.user_id);
+    const anonProfileResult = await generateAnonProfileOtherProfile(profile.myProfile.user_id);
+    console.log({anonProfileResult});
     setLoadingGenerateAnon(false);
     setAnonProfile(anonProfileResult);
+  };
+
+  const sentAnonDM = async () => {
+    try {
+      setLoadingSendDM(true);
+      const {
+        anon_user_info_emoji_name,
+        anon_user_info_emoji_code,
+        anon_user_info_color_name,
+        anon_user_info_color_code
+      } = anonProfile ?? {};
+
+      const anonDMParams = {
+        user_id: profile.myProfile.user_id,
+        message: dmChat,
+        anon_user_info_emoji_name,
+        anon_user_info_emoji_code,
+        anon_user_info_color_name,
+        anon_user_info_color_code
+      };
+      const result = await sendAnonymousDMOtherProfile(anonDMParams);
+      console.log(JSON.stringify({ANON_DM_SENT: result}, null, 2));
+      setDMChat('');
+    } catch (_) {
+      SimpleToast.show('Send message failed', SimpleToast.SHORT);
+    } finally {
+      setLoadingSendDM(false);
+    }
+  };
+
+  const sendSignedDM = async () => {
+    try {
+      setLoadingSendDM(true);
+      const signedMParams = {
+        user_id: profile.myProfile.user_id,
+        message: dmChat
+      };
+      const result = await sendSignedDMOtherProfile(signedMParams);
+      console.log(JSON.stringify({SIGNED_DM_SENT: result}, null, 2));
+      setDMChat('');
+    } catch (error) {
+      SimpleToast.show('Send message failed', SimpleToast.SHORT);
+    } finally {
+      setLoadingSendDM(false);
+    }
+  };
+
+  const onSendDM = async () => {
+    if (isAnonimity) {
+      sentAnonDM();
+    } else {
+      sendSignedDM();
+    }
   };
 
   const getOtherFeeds = async (userId, offset = 0) => {
@@ -257,7 +312,7 @@ const OtherProfile = () => {
   const __renderBio = (string) => (
     <View style={styles.containerBio}>
       {string === null || string === undefined ? (
-        <Text>No Bio</Text>
+        <Text style={styles.bioText(isAnonimity)}>No Bio</Text>
       ) : (
         <TouchableOpacity onPress={openBio}>
           <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
@@ -386,10 +441,14 @@ const OtherProfile = () => {
           {__renderBio(dataMain.bio)}
           <TextAreaChat
             isAnonimity={isAnonimity}
-            loadingUser={loadingGenerateAnon}
+            loadingAnonUser={loadingGenerateAnon}
             avatarUrl={profile.myProfile.profile_pic_path}
-            anon={anonProfile}
+            anonUser={anonProfile}
             placeholder="Send a direct message"
+            onSend={onSendDM}
+            onChangeMessage={setDMChat}
+            disabledButton={loadingSendDM}
+            defaultValue={dmChat}
           />
           <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
             <ToggleSwitch

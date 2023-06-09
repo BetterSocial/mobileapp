@@ -17,31 +17,30 @@ export const S = StyleSheet.create({
     marginRight: 6
   },
   textArea: {
-    marginTop: 2,
     minHeight: 88,
     display: 'flex',
-    flex: 1
+    flex: 1,
+    fontSize: 12
   },
   image: {
-    width: 36,
-    height: 36,
-    marginLeft: -7,
-    zIndex: -10,
+    width: 24,
+    height: 24,
+    marginTop: 1,
     borderRadius: 18,
+    marginRight: 6,
     alignItems: 'center',
     justifyContent: 'center'
   },
   emojyStyle: {
-    fontSize: 18
+    fontSize: 12
   },
-  sendIconContainer: (value) => ({
+  sendIconContainer: {
     borderRadius: 18,
     width: 35,
     height: 35,
     display: 'flex',
     justifyContent: 'center',
     marginBottom: 1.5,
-    alignSelf: 'flex-end',
-    backgroundColor: value ? colors.bondi_blue : colors.gray1
-  })
+    alignSelf: 'flex-end'
+  }
 });

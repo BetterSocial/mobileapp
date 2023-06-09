@@ -178,17 +178,3 @@ export const verifyHumanIdExchangeToken = async (exchangeToken) => {
     return Promise.reject(error?.response?.data);
   }
 };
-
-export const generateUserInfoOtherProfile = async (userId) => {
-  try {
-    console.log({userId});
-    const result = await api.post(`/chat/users/${userId}`);
-    console.log({result});
-
-    return Promise.resolve(result?.data);
-  } catch (error) {
-    crashlytics().recordError(new Error(error));
-    console.error({error});
-    return Promise.reject(error?.response?.data);
-  }
-};
