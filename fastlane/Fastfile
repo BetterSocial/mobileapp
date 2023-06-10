@@ -229,14 +229,14 @@ end
       begin
         bump_version
         build
+        if ENV["ENV"] === 'prod'
+           upload_testflight
+           create_release_tag('builds/iosrelease/*')
+        else
+           upload_ipa_to_firebase_distribution(release_notes: options[:release_notes])
+        end
       rescue => exception
         puts exception
-        upload_to_google_drive(
-            drive_keyfile: './fastlane/google-drive-keyfile.json',
-            service_account: true,
-            folder_id: '0BzxfL9EJ4WpQRXlPOFpBSFJ0VWc',
-            upload_files: ['/Users/distiller/Library/Logs/gym/BetterSocial-BetterSocial.log']
-        )
       end
     end
 
@@ -263,25 +263,25 @@ end
         readonly: true,
         verbose: true
       )
-      puts "testing #{profile_name_type} #{matchType} #{ENV["ENV"]}"
-      build_ios_app(
-              scheme: ENV["SCHEME"],
-              clean: true,
-              configuration: 'Release',
-              export_team_id: 'J22M3M9VYU',
-              export_options: {
-                  method: profileType, # "ad-hoc" | "app-store"
-                  provisioningProfiles: {
-                      ENV["SCHEME"] => "match #{profile_name_type} #{ENV["SCHEME"]}",
-                  }
-              },
-              workspace: './ios/BetterSocial.xcworkspace',
-              output_directory: './ios/',
-            )
-      ENV["IPA_OUTPUT_PATH_#{ENV['ENV']}"] = lane_context[SharedValues::IPA_OUTPUT_PATH]
-      end
 
-      desc 'Build and upload to firebase distribution'
+      build_ios_app(
+          scheme: ENV["SCHEME"],
+          clean: true,
+          configuration: 'Release',
+          export_team_id: 'J22M3M9VYU',
+          export_options: {
+              method: profileType, # "ad-hoc" | "app-store"
+              provisioningProfiles: {
+                   ENV["SCHEME"] => "match #{profile_name_type} #{ENV["SCHEME"]}",
+              }
+          },
+          workspace: './ios/BetterSocial.xcworkspace',
+          output_directory: './ios/',
+      )
+      ENV["IPA_OUTPUT_PATH_#{ENV['ENV']}"] = lane_context[SharedValues::IPA_OUTPUT_PATH]
+    end
+
+    desc 'Build and upload to firebase distribution'
         lane :upload_ipa_to_firebase_distribution do |options|
             firebase_app_distribution(
                 app: ENV["FIREBASE_APP_ID_IOS"],
@@ -308,15 +308,40 @@ end
     end
 end
 
-platform :general do
-    desc 'Create git release tag'
-    lane :release_tag do |options|
-        version_name = android_get_version_name(
-          gradle_file: "./android/app/build.gradle"
-        )
-        last_tag = last_git_tag()
-        puts "lastTag #{last_tag}"
+def create_release_tag(lanePattern)
+    sh("git", "config", "user.email", "fastlane@nanovest.io")
+    sh("git", "config", "user.name", "CircleCI@Fastlane")
+
+    last_tag = last_git_tag(pattern: lanePattern)
+    if last_tag == nil
+        last_tag = "v0.0.0-1"
     end
+
+    currentBuildVersion = ENV['VERSION_NAME'].split('.')
+    versionBuildLastTag = last_tag.split('v')[1].split('-')
+    versionNumberLastTag = versionBuildLastTag[0].split('.')
+
+    if currentBuildVersion[0] > versionNumberLastTag[0] || currentBuildVersion[1] > versionNumberLastTag[1] || currentBuildVersion[2] > versionNumberLastTag[2]
+        add_git_tag(
+          includes_lane: true,
+          prefix: "v",
+          postfix: "-1",
+          build_number: "#{ENV['VERSION_NAME']}",
+          message: "#{ENV['ENV']}, Build Number: #{ENV['BUILD_NUMBER']}"
+        )
+    elsif versionNumberLastTag[0] == currentBuildVersion[0] && versionNumberLastTag[1] > currentBuildVersion[1] && versionNumberLastTag[2] > currentBuildVersion[2]
+        add_git_tag(
+          includes_lane: true,
+          prefix: "v",
+          postfix: "-#{versionBuildLastTag[1].to_i + 1}",
+          build_number: "#{ENV['VERSION_NAME']}",
+          message: "#{ENV['ENV']}, Build Number: #{ENV['BUILD_NUMBER']}"
+        )
+    end
+    push_to_git_remote(
+        tags: true,
+        no_verify: true
+    )
 end
 
 def on_success_device_register_slack

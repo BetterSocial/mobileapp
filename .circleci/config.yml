@@ -155,6 +155,9 @@ jobs:
           paths:
             - ios/Pods
       - run:
+          name: decrypt api key appconnect
+          command: openssl aes-256-cbc -d -md sha256 -in fastlane/appconnect-api-key.p8.enc -out fastlane/appconnect-api-key.p8 -pass pass:$APPCONNECT_KEY_PASSWORD
+      - run:
           name: Fastlane
           no_output_timeout: 40m
           command: bundle exec fastlane ios release --env <<parameters.env>> release_notes:<< pipeline.parameters.release-notes >>
