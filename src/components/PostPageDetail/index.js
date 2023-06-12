@@ -68,8 +68,13 @@ const PostPageDetailIdComponent = (props) => {
   const [commentContext, dispatchComment] = React.useContext(Context).comments;
   const {comments} = commentContext;
   const [, setLoadingGetComment] = React.useState(true);
-  const {updateVoteLatestChildrenLevel3, updateVoteChildrenLevel1, calculatePaddingBtm} =
-    usePostDetail();
+  const {
+    updateVoteLatestChildrenLevel3,
+    updateVoteChildrenLevel1,
+    calculationText,
+    calculatedSizeScreen,
+    calculatePaddingBtm
+  } = usePostDetail();
   const {updateFeedContext} = usePostContextHook(contextSource);
   const {handleUserName} = useWriteComment();
 
@@ -79,6 +84,7 @@ const PostPageDetailIdComponent = (props) => {
     }
     const queryParam = new URLSearchParams(commenListParam).toString();
     const response = await getCommentList(feedId, queryParam);
+    console.log(response, 'response');
     saveComment(response.data.data, dispatchComment);
     setLoadingGetComment(false);
     if (scrollToBottom) {
@@ -138,7 +144,10 @@ const PostPageDetailIdComponent = (props) => {
           }, 300);
         }
       } catch (e) {
-        Toast.show(e?.response?.data?.message || "Can't get detail feed", Toast.LONG);
+        Toast.show(
+          e?.response?.data?.message || 'Failed to load feed - please try again',
+          Toast.LONG
+        );
         navigation.goBack();
       }
     } else {

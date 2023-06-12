@@ -48,6 +48,7 @@ const usePostDetail = () => {
   };
 
   const calculationText = (message, post_type, image) => {
+    if (!message) message = '';
     let fontSize = shortTextFontSize;
     let lineHeight = shortTextLineHeight;
     let containerHeight = 0;

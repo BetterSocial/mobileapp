@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24
-    // marginLeft: 8,
   },
   defaultGroupImage: {
     width: 48,
