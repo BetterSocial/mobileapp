@@ -1,26 +1,25 @@
+import * as React from 'react';
+import FlashMessage from 'react-native-flash-message';
+import Toast from 'react-native-toast-message';
+import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {NavigationContainer} from '@react-navigation/native';
-import * as React from 'react';
-import Toast from 'react-native-toast-message';
-
-import {BackHandler, View, KeyboardAvoidingView, Platform} from 'react-native';
-import FlashMessage from 'react-native-flash-message';
+import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
+import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
+import {RecoilRoot} from 'recoil';
 import {
   SafeAreaProvider,
   useSafeAreaFrame,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import {RecoilRoot} from 'recoil';
-import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
-import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
-import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 
 import Store from './src/context/Store';
-import {linking} from './src/navigations/linking';
+import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
 import {RootNavigator} from './src/navigations/root-stack';
 import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
+import {linking} from './src/navigations/linking';
+import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 import {toastConfig} from './src/configs/ToastConfig';
-import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
 
 const App = () => {
   const {bottom, top} = useSafeAreaInsets();

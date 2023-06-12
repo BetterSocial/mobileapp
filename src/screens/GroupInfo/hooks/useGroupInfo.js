@@ -1,8 +1,8 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/core';
-
+import SimpleToast from 'react-native-simple-toast';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {Alert} from 'react-native';
+import {Alert, Linking} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
 import {Context} from '../../../context';
 import {uploadFile} from '../../../service/file';
@@ -46,6 +46,7 @@ const useGroupInfo = () => {
     return membersObject;
   };
   const getMembersList = async () => {
+    setIsLoadingMembers(true);
     try {
       const result = await channel.queryMembers({});
       setNewParticipan(result.members);
@@ -60,7 +61,6 @@ const useGroupInfo = () => {
   const memberName = () => {
     return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
-
   const chatName = getChatName(username, profile.myProfile.username);
   const onProfilePressed = () => {
     if (profile.myProfile.user_id === selectedUser.user_id) {
@@ -163,21 +163,42 @@ const useGroupInfo = () => {
   const handleCloseSelectUser = async () => {
     setOpenModal(false);
   };
+
+  const generateSystemChat = async (message, userSelected) => {
+    if (!message) message = '';
+    try {
+      const generatedChannelId = generateRandomId();
+      const channelChat = await client.client.channel('system', generatedChannelId, {
+        name: channelState?.channel?.data.name,
+        type_channel: 'system',
+        channel_type: 2,
+        image: channelState.channel.data.image
+      });
+      await channelChat.create();
+      await channelChat.addMembers([userSelected]);
+      await channelChat.sendMessage(
+        {
+          text: message,
+          isRemoveMember: true,
+          silent: true
+        },
+        {skip_push: true}
+      );
+    } catch (e) {
+      if (__DEV__) {
+        console.log(e);
+      }
+    }
+  };
+
   const onRemoveUser = async () => {
     setOpenModal(false);
-
     try {
       const result = await channel.removeMembers([selectedUser.user_id]);
       const updateParticipant = newParticipant.filter(
         (participant) => participant.user_id !== selectedUser.user_id
       );
       setNewParticipan(updateParticipant);
-      const generatedChannelId = generateRandomId();
-      const channelChat = await client.client.channel('system', generatedChannelId, {
-        name: channelState?.channel?.data.name,
-        type_channel: 'system',
-        channel_type: 2
-      });
       await channel.sendMessage(
         {
           text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this group`,
@@ -187,25 +208,20 @@ const useGroupInfo = () => {
         },
         {skip_push: true}
       );
-      await channelChat.create();
-      await channelChat.addMembers([selectedUser.user_id]);
-      await channelChat.sendMessage(
-        {
-          text: `${profile.myProfile.username} removed you from this group`,
-          isRemoveMember: true,
-          silent: true
-        },
-        {skip_push: true}
+      await generateSystemChat(
+        `${profile.myProfile.username} removed you from this group`,
+        selectedUser.user_id
       );
       setNewParticipan(result.members);
     } catch (e) {
-      console.log(e, 'eman');
+      if (__DEV__) {
+        console.log(e, 'error');
+      }
     }
   };
 
   const openChatMessage = async () => {
     await setOpenModal(false);
-    navigation.push('ChatDetailPage', {channel});
 
     const members = [profile.myProfile.user_id];
     members.push(selectedUser.user_id);
@@ -219,6 +235,26 @@ const useGroupInfo = () => {
     const filterMessage = await client.client.queryChannels(filter, sort, {
       watch: true, // this is the default
       state: true
+    });
+    navigation.reset({
+      index: 1,
+      routes: [
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'HomeTabs',
+            params: {
+              screen: 'ChannelList'
+            }
+          }
+        },
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'ChatDetailPage'
+          }
+        }
+      ]
     });
     const generatedChannelId = generateRandomId();
 
@@ -261,15 +297,9 @@ const useGroupInfo = () => {
 
   const leaveGroup = async () => {
     try {
-      await channel.sendMessage(
-        {
-          text: `${profile.myProfile.username} left`,
-          isRemoveMember: true,
-          silent: true
-        },
-        {skip_push: true}
-      );
       const response = await channel.removeMembers([profile.myProfile.user_id]);
+      await generateSystemChat('You left this group', profile.myProfile.user_id);
+      SimpleToast.show('You left this chat');
       navigation.reset({
         index: 1,
         routes: [
@@ -290,6 +320,13 @@ const useGroupInfo = () => {
     }
   };
 
+  const onReportGroup = () => {
+    const emailTo = `mailto:contact@bettersocial.org?subject=Reporting a group&body=Reporting group ${
+      channelState.channel?.data?.name || ''
+    }.Please type reason for reporting this group below.Thank you!`;
+    Linking.openURL(emailTo);
+  };
+
   // eslint-disable-next-line consistent-return
   const handlePressContact = async (item) => {
     if (channelState?.channel.data.type === 'group') {
@@ -301,19 +338,19 @@ const useGroupInfo = () => {
 
   const handleOpenProfile = async (item) => {
     await setOpenModal(false);
-    if (profile.myProfile.user_id === item.user_id) {
-      navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
-    }
-
-    navigation.navigate('OtherProfile', {
-      data: {
-        user_id: profile.myProfile.user_id,
-        other_id: item.user_id,
-        username: item.user.name
+    setTimeout(() => {
+      if (profile.myProfile.user_id === item.user_id) {
+        return null;
       }
-    });
+
+      return navigation.push('OtherProfile', {
+        data: {
+          user_id: profile.myProfile.user_id,
+          other_id: item.user_id,
+          username: item.user.name
+        }
+      });
+    }, 500);
   };
 
   return {
@@ -354,7 +391,8 @@ const useGroupInfo = () => {
     memberName,
     onLeaveGroup,
     checkUserIsBlockHandle,
-    handlePressContact
+    handlePressContact,
+    onReportGroup
   };
 };
 

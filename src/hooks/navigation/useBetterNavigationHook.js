@@ -9,12 +9,12 @@ const useBetterNavigationHook = () => {
     navigation.navigate(NavigationConstants.CREATE_POST_SCREEN);
   };
 
-  const toCreatePostWithTopic = (topic) => {
+  const toCreatePostWithTopic = (topic, otherParam) => {
     if (topic === undefined || topic === null) throw new Error('topic is undefined');
     if (typeof topic !== 'string') throw new Error('topic is not a string');
     if (topic?.trim().length === 0) throw new Error('topic is empty');
 
-    navigation.navigate(NavigationConstants.CREATE_POST_SCREEN, {topic});
+    navigation.navigate(NavigationConstants.CREATE_POST_SCREEN, {topic, ...otherParam});
   };
 
   return {

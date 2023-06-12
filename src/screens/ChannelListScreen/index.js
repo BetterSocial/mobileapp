@@ -1,12 +1,13 @@
 import * as React from 'react';
 // eslint-disable-next-line import/no-unresolved
 import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
+import Toast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {ActivityIndicator, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {ChannelList, ChannelPreviewTitle, Chat, Streami18n} from 'stream-chat-react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/core';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import Toast from 'react-native-simple-toast';
+
 import ChannelStatusIcon from '../../components/ChannelStatusIcon';
 import CustomPreviewAvatar from './elements/CustomPreviewAvatar';
 import CustomPreviewUnreadCount from './elements/CustomPreviewUnreadCount';
@@ -16,6 +17,9 @@ import Search from './elements/Search';
 import api from '../../service/config';
 import streamFeed from '../../utils/getstream/streamer';
 import useChannelList from './hooks/useChannelList';
+import useOnBottomNavigationTabPressHook, {
+  LIST_VIEW_TYPE
+} from '../../hooks/navigation/useOnBottomNavigationTabPressHook';
 import {CHANNEL_TYPE_TOPIC} from '../../utils/constants';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
@@ -31,10 +35,14 @@ import {setTotalUnreadPostNotif} from '../../context/actions/unReadMessageAction
 import {traceMetricScreen} from '../../libraries/performance/firebasePerformance';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 
-const ChannelListScreen = ({navigation}) => {
+const ChannelListScreen = () => {
   const streami18n = new Streami18n({
     language: 'en'
   });
+
+  const navigation = useNavigation();
+  const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.SCROLL_VIEW);
+
   const listPostNotif = useRecoilValue(feedChatAtom);
   const [client] = React.useContext(Context).client;
   const [, dispatch] = React.useContext(Context).channel;
@@ -209,9 +217,9 @@ const ChannelListScreen = ({navigation}) => {
   };
 
   return (
-    <SafeAreaProvider style={{height: '100%'}}>
+    <>
       <StatusBar translucent={false} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
+      <ScrollView ref={listRef} contentInsetAdjustmentBehavior="automatic">
         <View style={{height: 52}}>
           <Search animatedValue={0} onPress={() => navigation.navigate('ContactScreen')} />
         </View>
@@ -247,7 +255,7 @@ const ChannelListScreen = ({navigation}) => {
           )}
         </EasyFollowSystem>
       </ScrollView>
-    </SafeAreaProvider>
+    </>
   );
 };
 

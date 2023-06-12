@@ -1,12 +1,23 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { KEY_ACCESS_TOKEN, KEY_REFRESH_TOKEN } from '../constants';
+
+import {KEY_ACCESS_TOKEN, KEY_ANONYMOUS_TOKEN, KEY_REFRESH_TOKEN} from '../constants';
 
 export const setToken = async (value) => {
   try {
     await AsyncStorage.setItem('tkn-getstream', value);
   } catch (e) {
+    console.log(e);
   }
 };
+
+const setAnonymousToken = async (value) => {
+  try {
+    await AsyncStorage.setItem(KEY_ANONYMOUS_TOKEN, value);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getToken = async () => {
   try {
     const value = await AsyncStorage.getItem('tkn-getstream');
@@ -19,6 +30,7 @@ export const setUserId = async (value) => {
   try {
     await AsyncStorage.setItem('userId', value);
   } catch (e) {
+    console.log(e);
   }
 };
 export const getUserId = async () => {
@@ -34,6 +46,7 @@ export const removeLocalStorege = async (value) => {
   try {
     await AsyncStorage.removeItem(value);
   } catch (e) {
+    console.log(e);
   }
 };
 
@@ -41,7 +54,18 @@ const getAccessToken = async () => {
   const accessToken = await AsyncStorage.getItem(KEY_ACCESS_TOKEN);
   return JSON.parse(accessToken);
 };
-const clearLocalStorege = async () => await AsyncStorage.clear();
+
+const getAnonymousToken = async () => {
+  try {
+    const value = await AsyncStorage.getItem(KEY_ANONYMOUS_TOKEN);
+    return value;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+const clearLocalStorege = async () => Promise.resolve(AsyncStorage.clear());
 
 const setAccessToken = async (token) => {
   const value = JSON.stringify(token);
@@ -53,7 +77,7 @@ const removeAccessToken = () => {
 };
 
 const setRefreshToken = async (value) => {
-      await AsyncStorage.setItem(KEY_REFRESH_TOKEN, JSON.stringify(value));
+  await AsyncStorage.setItem(KEY_REFRESH_TOKEN, JSON.stringify(value));
 };
 
 const getRefreshToken = async () => {
@@ -68,8 +92,10 @@ const getRefreshToken = async () => {
 export {
   getAccessToken,
   setAccessToken,
+  setAnonymousToken,
+  getAnonymousToken,
   removeAccessToken,
   setRefreshToken,
   getRefreshToken,
-  clearLocalStorege,
+  clearLocalStorege
 };

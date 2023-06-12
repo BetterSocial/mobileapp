@@ -26,7 +26,7 @@ import {ProgressBar} from '../../components/ProgressBar';
 import {colors} from '../../utils/colors';
 import {get} from '../../api/server';
 import {registerUser} from '../../service/users';
-import {setAccessToken, setRefreshToken, setToken} from '../../utils/token';
+import {setAccessToken, setAnonymousToken, setRefreshToken, setToken} from '../../utils/token';
 import {setImage} from '../../context/actions/users';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 
@@ -166,12 +166,17 @@ const WhotoFollow = () => {
     };
 
     registerUser(data)
-      .then((res) => {
+      .then(async (res) => {
         setFetchRegister(false);
         if (res.code === 200) {
           setToken(res.token);
           setAccessToken(res.token);
           setRefreshToken(res.refresh_token);
+          try {
+            await setAnonymousToken(res.anonymousToken);
+          } catch (e) {
+            crashlytics().recordError(new Error(e));
+          }
           showMessage({
             message: 'Welcome to Better Social',
             type: 'success',
