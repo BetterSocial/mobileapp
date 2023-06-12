@@ -10,6 +10,7 @@ import {calculateTime} from '../../utils/time';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import CommentUserName from '../CommentUsername/CommentUsername';
 
 const PreviewComment = ({comment, time, image, totalComment, onPress, user, item}) => {
   const navigation = useNavigation();
@@ -69,11 +70,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
             )}
 
             <View style={styles.containerUsername}>
-              <Text style={styles.username}>
-                {user?.data?.username
-                  ? user.data.username
-                  : `${item?.data?.anon_user_info_color_name} ${item?.data?.anon_user_info_emoji_name}`}
-              </Text>
+              <CommentUserName isPreviewComment comment={item} user={user} />
               <Gap width={4} />
               <Dot size={4} color={'#828282'} />
               <Gap width={4} />
