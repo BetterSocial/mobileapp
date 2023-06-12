@@ -327,7 +327,7 @@ const useGroupInfo = () => {
       subject: 'Reporting a group',
       body: `Reporting group ${
         channelState.channel?.data?.name || ''
-      }.Please type reason for reporting this group below.Thank you!`
+      }. Please type reason for reporting this group below. Thank you!`
     });
   };
 
