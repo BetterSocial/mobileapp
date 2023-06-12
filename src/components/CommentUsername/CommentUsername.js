@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet} from 'react-native';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
+import {SIZES} from '../../utils/theme';
 
 const styles = StyleSheet.create({
   username: {
@@ -9,6 +10,9 @@ const styles = StyleSheet.create({
     color: '#828282',
     lineHeight: 14,
     marginLeft: 16
+  },
+  previewContainer: {
+    marginLeft: SIZES.base
   }
 });
 
@@ -16,6 +20,7 @@ const styles = StyleSheet.create({
  * @typedef {Object} CommenUsernameComponentProps
  * @property {Object} comment
  * @property {Object} user
+ * @property {boolean} isPreviewComment
  */
 
 /**
@@ -23,7 +28,16 @@ const styles = StyleSheet.create({
  * @param {CommenUsernameComponentProps} props
  */
 
-const CommentUsername = ({comment, user}) => {
+const CommentUsername = ({comment, user, isPreviewComment}) => {
+  if (isPreviewComment) {
+    return (
+      <Text style={[styles.username, styles.previewContainer]}>
+        {comment.data?.anon_user_info_color_name
+          ? `Anonymous ${comment.data?.anon_user_info_emoji_name}`
+          : user?.data?.username}{' '}
+      </Text>
+    );
+  }
   return (
     <Text style={styles.username}>
       {comment.data?.anon_user_info_color_name
