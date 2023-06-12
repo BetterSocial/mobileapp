@@ -148,7 +148,7 @@ const GroupInfo = () => {
         <>
           <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
           <View style={styles.lineTop} />
-          <ScrollView nestedScrollEnabled={true}>
+          <ScrollView contentContainerStyle={styles.scrollContainer} nestedScrollEnabled={true}>
             <SafeAreaView>
               <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
                 <View style={styles.containerPhoto}>{showImageProfile()}</View>
@@ -399,5 +399,8 @@ export const styles = StyleSheet.create({
   textAct: {
     color: '#FF2E63',
     fontSize: 14
+  },
+  scrollContainer: {
+    paddingBottom: 30
   }
 });
