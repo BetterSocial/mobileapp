@@ -10,6 +10,7 @@ import {requestExternalStoragePermission} from '../../../utils/permission';
 import {getChatName} from '../../../utils/string/StringUtils';
 import {setChannel} from '../../../context/actions/setChannel';
 import {checkUserBlock} from '../../../service/profile';
+import {setParticipants} from '../../../context/actions/groupChat';
 
 const useGroupInfo = () => {
   const [groupChatState, groupPatchDispatch] = React.useContext(Context).groupChat;
@@ -50,6 +51,8 @@ const useGroupInfo = () => {
     try {
       const result = await channel.queryMembers({});
       setNewParticipan(result.members);
+      setParticipants(result.members, groupPatchDispatch);
+
       setIsLoadingMembers(false);
     } catch (e) {
       if (__DEV__) {
@@ -62,21 +65,7 @@ const useGroupInfo = () => {
     return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
   };
   const chatName = getChatName(username, profile.myProfile.username);
-  const onProfilePressed = () => {
-    if (profile.myProfile.user_id === selectedUser.user_id) {
-      navigation.navigate('ProfileScreen', {
-        isNotFromHomeTab: true
-      });
-    }
 
-    navigation.navigate('OtherProfile', {
-      data: {
-        user_id: profile.myProfile.user_id,
-        other_id: selectedUser.user_id,
-        username: selectedUser.user.name
-      }
-    });
-  };
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
@@ -95,7 +84,7 @@ const useGroupInfo = () => {
       if (!processGetBlock.data.data.blocked && !processGetBlock.data.data.blocker) {
         return openChatMessage();
       }
-      return onProfilePressed();
+      return handleOpenProfile(selectedUser);
     } catch (e) {
       console.log(e, 'eman');
     }
@@ -165,8 +154,8 @@ const useGroupInfo = () => {
   };
 
   const generateSystemChat = async (message, userSelected) => {
-    if (!message) message = '';
     try {
+      if (!message) message = '';
       const generatedChannelId = generateRandomId();
       const channelChat = await client.client.channel('system', generatedChannelId, {
         name: channelState?.channel?.data.name,
@@ -213,6 +202,7 @@ const useGroupInfo = () => {
         selectedUser.user_id
       );
       setNewParticipan(result.members);
+      setParticipants(result.members, groupPatchDispatch);
     } catch (e) {
       if (__DEV__) {
         console.log(e, 'error');
@@ -231,7 +221,7 @@ const useGroupInfo = () => {
       user_id: item,
       channel_role: 'channel_moderator'
     }));
-
+    await setOpenModal(false);
     const filterMessage = await client.client.queryChannels(filter, sort, {
       watch: true, // this is the default
       state: true
@@ -274,7 +264,7 @@ const useGroupInfo = () => {
   const alertRemoveUser = async (status) => {
     if (status === 'view') {
       setOpenModal(false);
-      onProfilePressed();
+      handleOpenProfile(selectedUser).catch((e) => console.log(e));
     }
     if (status === 'remove') {
       Alert.alert(
@@ -347,7 +337,7 @@ const useGroupInfo = () => {
         data: {
           user_id: profile.myProfile.user_id,
           other_id: item.user_id,
-          username: item.user.name
+          username: item.user?.name
         }
       });
     }, 500);
@@ -373,7 +363,6 @@ const useGroupInfo = () => {
     createChat,
     countUser,
     getMembersList,
-    onProfilePressed,
     handleOnNameChange,
     handleOnImageClicked,
     uploadImageBase64,
@@ -392,6 +381,7 @@ const useGroupInfo = () => {
     onLeaveGroup,
     checkUserIsBlockHandle,
     handlePressContact,
+    handleOpenProfile,
     onReportGroup
   };
 };
