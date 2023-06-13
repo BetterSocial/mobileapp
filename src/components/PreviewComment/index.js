@@ -70,7 +70,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
             )}
 
             <View style={styles.containerUsername}>
-              <CommentUserName comment={item} user={user} />
+              <CommentUserName isPreviewComment comment={item} user={user} />
               <Gap width={4} />
               <Dot size={4} color={'#828282'} />
               <Gap width={4} />

@@ -20,6 +20,7 @@ export const styles = StyleSheet.create({
   }),
   avatarV2Emoji: (emojiRadius) => ({
     fontSize: emojiRadius,
+    textAlign: 'center',
     alignSelf: 'center'
   })
 });
