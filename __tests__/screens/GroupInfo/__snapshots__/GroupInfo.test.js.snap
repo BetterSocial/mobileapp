@@ -102,6 +102,11 @@ exports[`GroupInfo should run correctly GroupInfo should match snapshot 1`] = `
     }
   />
   <RCTScrollView
+    contentContainerStyle={
+      Object {
+        "paddingBottom": 30,
+      }
+    }
     nestedScrollEnabled={true}
   >
     <View>
