@@ -218,14 +218,14 @@ const GroupInfo = () => {
                       <Text style={styles.textAct}>Exit Group</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={onReportGroup} style={styles.buttonGroup}>
+                  {/* <TouchableOpacity onPress={onReportGroup} style={styles.buttonGroup}>
                     <View style={styles.imageActContainer}>
                       <FastImage style={styles.imageAction} source={ReportGroup} />
                     </View>
                     <View>
                       <Text style={styles.textAct}>Report Group</Text>
                     </View>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
               ) : null}
             </SafeAreaView>
