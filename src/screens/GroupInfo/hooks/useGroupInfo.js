@@ -1,6 +1,7 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/core';
 import SimpleToast from 'react-native-simple-toast';
+import {openComposer} from 'react-native-email-link';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {Alert, Linking} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
@@ -311,10 +312,13 @@ const useGroupInfo = () => {
   };
 
   const onReportGroup = () => {
-    const emailTo = `mailto:contact@bettersocial.org?subject=Reporting a group&body=Reporting group ${
-      channelState.channel?.data?.name || ''
-    }.Please type reason for reporting this group below.Thank you!`;
-    Linking.openURL(emailTo);
+    openComposer({
+      to: 'contact@bettersocial.org',
+      subject: 'Reporting a group',
+      body: `Reporting group ${
+        channelState.channel?.data?.name || ''
+      }. Please type reason for reporting this group below. Thank you!`
+    });
   };
 
   // eslint-disable-next-line consistent-return
