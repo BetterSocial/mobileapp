@@ -79,22 +79,6 @@ Build and upload to firebase distribution
 
 
 
-### android upload_to_lambdatest
-
-```sh
-[bundle exec] fastlane android upload_to_lambdatest
-```
-
-
-
-### android codepush_appcenter
-
-```sh
-[bundle exec] fastlane android codepush_appcenter
-```
-
-codepush to appcenter
-
 ### android upload_to_play_store_internal_testing
 
 ```sh
@@ -156,14 +140,6 @@ release ios
 
 
 
-### ios create_sentry_release
-
-```sh
-[bundle exec] fastlane ios create_sentry_release
-```
-
-Upload Sentry
-
 ### ios upload_ipa_to_firebase_distribution
 
 ```sh
@@ -179,22 +155,6 @@ Build and upload to firebase distribution
 ```
 
 Build and upload to Test Flight for Beta Testing.
-
-### ios upload_to_lambdatest
-
-```sh
-[bundle exec] fastlane ios upload_to_lambdatest
-```
-
-
-
-### ios codepush_appcenter
-
-```sh
-[bundle exec] fastlane ios codepush_appcenter
-```
-
-codepush to appcenter
 
 ----
 

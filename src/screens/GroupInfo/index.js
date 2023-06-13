@@ -54,10 +54,8 @@ const GroupInfo = () => {
     onLeaveGroup,
     profile,
     channelState,
-    handlePressContact,
-    onReportGroup
+    handlePressContact
   } = useGroupInfo();
-
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (route?.params?.from === 'AddParticipant') {
@@ -140,6 +138,10 @@ const GroupInfo = () => {
     handleMember();
   }, []);
 
+  React.useEffect(() => {
+    getMembersList();
+  }, []);
+  console.log(openModal, 'laka');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -216,14 +218,6 @@ const GroupInfo = () => {
                     </View>
                     <View>
                       <Text style={styles.textAct}>Exit Group</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={onReportGroup} style={styles.buttonGroup}>
-                    <View style={styles.imageActContainer}>
-                      <FastImage style={styles.imageAction} source={ReportGroup} />
-                    </View>
-                    <View>
-                      <Text style={styles.textAct}>Report Group</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
