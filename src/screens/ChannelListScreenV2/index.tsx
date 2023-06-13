@@ -2,6 +2,7 @@ import * as React from 'react';
 import {ScrollView, StatusBar, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
+import AnonymousChannelListScreen from './AnonymousChannelListScreen';
 import AnonymousProfile from '../../assets/images/AnonymousProfile.png';
 import ChannelListScreen from '../ChannelListScreen';
 import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabItem';
@@ -50,7 +51,9 @@ const ChannelListScreenV2 = () => {
         <View style={{display: selectedTab === 0 ? 'flex' : 'none'}}>
           <ChannelListScreen />
         </View>
-        <></>
+        <View style={{display: selectedTab === 1 ? 'flex' : 'none'}}>
+          <AnonymousChannelListScreen />
+        </View>
       </ScrollView>
     </>
   );

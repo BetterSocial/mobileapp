@@ -56,9 +56,6 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}) => {
     }
   });
 
-  console.log('tabs');
-  console.log(tabs);
-
   return (
     <View style={styles.tabs}>
       {tabs.map((tab, index) => (
