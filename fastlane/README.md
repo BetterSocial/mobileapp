@@ -158,19 +158,6 @@ Build and upload to Test Flight for Beta Testing.
 
 ----
 
-
-## general
-
-### general release_tag
-
-```sh
-[bundle exec] fastlane general release_tag
-```
-
-Create git release tag
-
-----
-
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 
 More information about _fastlane_ can be found on [fastlane.tools](https://fastlane.tools).
