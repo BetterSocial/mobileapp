@@ -61,11 +61,15 @@ const GroupSetting = ({navigation, route}) => {
         <View style={styles.users}>
           <Text style={styles.countUser}>{`Participants (${countUser})`}</Text>
           <FlatList
-            data={participants}
+            data={Object.keys(participants)}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (
               <View style={{height: 72}}>
-                <ProfileContact key={item} fullname={item.user.name} photo={item.user.image} />
+                <ProfileContact
+                  key={item}
+                  fullname={participants[item].user.name}
+                  photo={participants[item].user.image}
+                />
               </View>
             )}
           />

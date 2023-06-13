@@ -26,7 +26,6 @@ import {TOPICS_PICK} from '../../utils/cache/constant';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getSpecificCache} from '../../utils/cache';
-import {Monitoring} from '../../libraries/monitoring/sentry';
 import {setTopics as setTopicsContext} from '../../context/actions/topics';
 
 const {width} = Dimensions.get('screen');
@@ -44,7 +43,6 @@ const Topics = () => {
   const getCacheTopic = async () => {
     getSpecificCache(TOPICS_PICK, (cache) => {
       if (cache) {
-        Monitoring.logActions('set topics data from cache', cache);
         setTopics(cache);
         setIspreload(false);
       } else {
@@ -54,6 +52,7 @@ const Topics = () => {
     });
   };
   React.useEffect(() => {
+    // console.log(topicCollection, 'lusi')
     if (topicCollection.length > 0) {
       setTopics(topicCollection);
     }
@@ -99,7 +98,6 @@ const Topics = () => {
       handleSelectedLanguage={handleSelectedLanguage}
     />
   );
-
   const onBack = () => {
     navigation.goBack();
   };
@@ -334,4 +332,4 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline'
   }
 });
-export default Topics;
+export default React.memo(Topics);

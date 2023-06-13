@@ -111,10 +111,7 @@ const useFeed = () => {
       const totalLevel2Comment = feedDetail?.latest_reactions?.comment?.map(
         (child) => child?.children_counts?.comment || 0
       ) || [0];
-      let total2 = 0;
-      if (totalLevel2Comment?.length) {
-        total2 = totalLevel2Comment?.reduce((a, b) => a + b);
-      }
+      const total2 = totalLevel2Comment?.reduce((a, b) => a + b);
       const level3Comment = [];
       feedDetail?.latest_reactions?.comment?.forEach((feed) => {
         const mapCount = feed?.latest_children?.comment?.map(

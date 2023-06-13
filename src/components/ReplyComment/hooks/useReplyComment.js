@@ -1,9 +1,8 @@
 import React from 'react';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
-import {useNavigation, useRoute} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/core';
 
-import {Dimensions} from 'react-native';
 import StringConstant from '../../../utils/string/StringConstant';
 import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 import {Context} from '../../../context';
@@ -24,8 +23,6 @@ const useReplyComment = ({
   const [textComment, setTextComment] = React.useState('');
   const [newCommentList, setNewCommentList] = React.useState([]);
   const [item, setItem] = React.useState(itemProp);
-  const {params} = useRoute();
-  const [curHeight] = React.useState(Dimensions.get('window').height);
   const navigation = useNavigation();
   const scrollViewRef = React.useRef(null);
   const {updateComment} = useUpdateComment();
@@ -160,6 +157,7 @@ const useReplyComment = ({
     }
     return [];
   };
+
   const showChildrenCommentView = async (itemReply) => {
     const itemParentProps = await {
       ...itemProp,
@@ -176,8 +174,7 @@ const useReplyComment = ({
       updateVote: (data, dataVote) => updateVoteParentPostHook(data, dataVote, itemParentProps),
       updateVoteLatestChildren: (data, dataVote) =>
         updateVoteLatestChildrenParentHook(data, dataVote, itemParentProps),
-      getComment: getThisComment,
-      getCommentParent: params.getComment
+      getComment: getThisComment
     });
   };
 
@@ -186,9 +183,7 @@ const useReplyComment = ({
       const data = await getFeedDetail(item.activity_id);
       handleUpdateFeed(data, isSort);
     } catch (e) {
-      if (__DEV__) {
-        console.log(e);
-      }
+      console.log(e);
     }
   };
   const handleUpdateFeed = (data, isSort) => {
@@ -206,8 +201,12 @@ const useReplyComment = ({
       }
     }
   };
+  const createComment = async (isAnonimity, anonimityData) => {
+    let sendPostNotif = false;
+    if (page !== 'DetailDomainScreen') {
+      sendPostNotif = true;
+    }
 
-  const handleAddedComment = (isAnonimity, anonimityData) => {
     const commentWillBeAddedData = {
       ...defaultData,
       data: {...defaultData.data, text: textComment}
@@ -229,15 +228,6 @@ const useReplyComment = ({
 
     setTemporaryText('');
     setNewCommentList([...newCommentList, commentWillBeAddedData]);
-  };
-
-  const createComment = async (isAnonimity, anonimityData) => {
-    let sendPostNotif = false;
-    if (page !== 'DetailDomainScreen') {
-      sendPostNotif = true;
-    }
-
-    handleAddedComment(isAnonimity, anonimityData);
 
     try {
       if (textComment.trim() !== '') {
@@ -252,7 +242,7 @@ const useReplyComment = ({
           isAnonimity,
           anonimityData
         );
-        scrollViewRef.current.scrollToEnd({animated: true});
+        scrollViewRef.current.scrollToEnd();
         if (data.code === 200) {
           const newComment = [
             ...newCommentList,
@@ -269,9 +259,6 @@ const useReplyComment = ({
           if (typeof updateReply === 'function') {
             updateReply(newComment, itemParent, item.id);
           }
-          getThisComment(true).catch((e) => {
-            if (__DEV__) console.log(e);
-          });
           updateFeed(true);
           updateComment(item.activity_id);
         } else {
@@ -282,6 +269,7 @@ const useReplyComment = ({
         // setLoadingCMD(false);
       }
     } catch (error) {
+      console.log(error);
       Toast.show(StringConstant.generalCommentFailed, Toast.LONG);
     }
   };
@@ -320,7 +308,6 @@ const useReplyComment = ({
     handleUpdateFeed,
     scrollViewRef,
     createComment,
-    curHeight,
     getThisComment
   };
 };

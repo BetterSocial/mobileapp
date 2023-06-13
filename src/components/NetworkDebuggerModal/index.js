@@ -20,7 +20,6 @@ const NetworkDebuggerModal = ({onPress}) => {
     setIsNetworkVIsible(true);
   };
 
-  console.log(isDebug);
   React.useEffect(() => {
     if ((isWhitelisted && isDebug) || ENV !== 'Prod') {
       startNetworkLogging({forceEnable: true});

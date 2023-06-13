@@ -5,7 +5,6 @@
 import * as React from 'react';
 import PSL from 'psl';
 import Toast from 'react-native-simple-toast';
-import {Image} from 'react-native-compressor';
 import _, {debounce} from 'lodash';
 import {
   Alert,
@@ -19,6 +18,7 @@ import {
   Text,
   View
 } from 'react-native';
+import {Image} from 'react-native-compressor';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';

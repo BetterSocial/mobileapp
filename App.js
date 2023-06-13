@@ -1,32 +1,29 @@
+import * as React from 'react';
+import FlashMessage from 'react-native-flash-message';
+import Toast from 'react-native-toast-message';
+import {BackHandler, KeyboardAvoidingView, Platform, View} from 'react-native';
 import {HumanIDProvider} from '@human-internet/react-native-humanid';
 import {NavigationContainer} from '@react-navigation/native';
-import * as React from 'react';
-import Toast from 'react-native-toast-message';
-
-import {BackHandler, View, KeyboardAvoidingView, Platform} from 'react-native';
-import FlashMessage from 'react-native-flash-message';
+import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
+import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
+import {RecoilRoot} from 'recoil';
 import {
   SafeAreaProvider,
   useSafeAreaFrame,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import {RecoilRoot} from 'recoil';
-import {OverlayProvider, Streami18n} from 'stream-chat-react-native';
-import {RecoilDebugObserver} from 'reactotron-recoil-plugin';
-import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
 
 import Store from './src/context/Store';
-import {linking} from './src/navigations/linking';
-import {RootNavigator} from './src/navigations/root-stack';
-import {toastConfig} from './src/configs/ToastConfig';
 import {Analytics} from './src/libraries/analytics/firebaseAnalytics';
-import NetworkDebuggerModal from './src/components/NetworkDebuggerModal';
-import useFirebaseRemoteConfig from './src/libraries/Configs/RemoteConfig';
+import {RootNavigator} from './src/navigations/root-stack';
+import {fetchRemoteConfig} from './src/utils/FirebaseUtil';
+import {linking} from './src/navigations/linking';
+import {reactotronInstance} from './src/libraries/reactotron/reactotronInstance';
+import {toastConfig} from './src/configs/ToastConfig';
 
 const App = () => {
   const {bottom, top} = useSafeAreaInsets();
   const {height} = useSafeAreaFrame();
-  const {initializeFirebaseRemoteConfig} = useFirebaseRemoteConfig();
   const streami18n = new Streami18n({
     language: 'en'
   });
@@ -34,13 +31,17 @@ const App = () => {
   const routeNameRef = React.useRef();
 
   React.useEffect(() => {
-    try {
-      initializeFirebaseRemoteConfig();
-    } catch (error) {
-      if (__DEV__) {
-        console.log('app init: ', error);
+    const init = async () => {
+      try {
+        fetchRemoteConfig();
+      } catch (error) {
+        if (__DEV__) {
+          console.log('app ', error);
+        }
       }
-    }
+    };
+
+    init();
     // return unsubscribe;
   }, []);
 
@@ -104,7 +105,6 @@ const App = () => {
             </View>
           </NavigationContainer>
         </Store>
-        <NetworkDebuggerModal />
       </RecoilRoot>
       {/* </RealmProvider> */}
       <Toast config={toastConfig} />

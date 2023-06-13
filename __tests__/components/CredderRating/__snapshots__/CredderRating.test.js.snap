@@ -14,14 +14,10 @@ exports[`Credder Rating testing should match snapshot 1`] = `
   }
 >
   <View
-    style={
-      Object {
-        "alignSelf": "center",
-      }
-    }
     testID="credder-rating-green"
   >
     <View />
+    ;
   </View>
   <Text
     style={

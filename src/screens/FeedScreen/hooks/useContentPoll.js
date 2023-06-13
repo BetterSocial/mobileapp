@@ -1,11 +1,11 @@
 /* eslint-disable no-plusplus */
 import React from 'react';
 
-import {NO_POLL_UUID, isPollExpired} from '../../../utils/string/StringUtils';
 import {inputSingleChoicePoll} from '../../../service/post';
+import {isPollExpired} from '../../../utils/string/StringUtils';
 
-const useContentPoll = ({polls, isalreadypolling}) => {
-  const [isAlreadyPolling, setIsAlreadyPolling] = React.useState(isalreadypolling);
+const useContentPoll = ({polls}) => {
+  const [isAlreadyPolling, setIsAlreadyPolling] = React.useState(false);
   const [singleChoiceSelectedIndex, setSingleChoiceSelectedIndex] = React.useState(-1);
   const [multipleChoiceSelected, setMultipleChoiceSelected] = React.useState([]);
   const [newPoll, setNewPoll] = React.useState(null);
@@ -24,8 +24,7 @@ const useContentPoll = ({polls, isalreadypolling}) => {
     newItem.isalreadypolling = true;
     newItem.refreshtoken = new Date().valueOf();
     if (multipleChoiceSelected.length === 0) {
-      setIsAlreadyPolling(true);
-      inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID).catch((e) => console.log(e));
+      setIsAlreadyPolling(false);
     } else {
       setIsAlreadyPolling(true);
       const selectedPolls = [];
@@ -35,9 +34,6 @@ const useContentPoll = ({polls, isalreadypolling}) => {
         const selectedPoll = polls[changedPollIndex];
         newPolls[changedPollIndex].counter = Number(selectedPoll.counter) + 1;
         selectedPolls.push(selectedPoll);
-        inputSingleChoicePoll(polls[0].polling_id, selectedPoll?.polling_option_id).catch((e) =>
-          console.log(e)
-        );
       }
       newItem.pollOptions = newPolls;
       newItem.mypolling = selectedPolls;
@@ -55,16 +51,14 @@ const useContentPoll = ({polls, isalreadypolling}) => {
     newItem.refreshtoken = new Date().valueOf();
 
     if (singleChoiceSelectedIndex === -1) {
-      inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID).catch((e) => console.log(e));
+      // inputSingleChoicePoll(polls[0].polling_id, NO_POLL_UUID);
     } else {
       const selectedPoll = polls[singleChoiceSelectedIndex];
       newPolls[singleChoiceSelectedIndex].counter = Number(selectedPoll.counter) + 1;
       newItem.pollOptions = newPolls;
       newItem.mypolling = selectedPoll;
       newItem.voteCount++;
-      inputSingleChoicePoll(selectedPoll.polling_id, selectedPoll.polling_option_id).catch((e) =>
-        console.log(e)
-      );
+      inputSingleChoicePoll(selectedPoll.polling_id, selectedPoll.polling_option_id);
     }
     if (onnewpollfetched && typeof onnewpollfetched === 'function') {
       onnewpollfetched(newItem, index);

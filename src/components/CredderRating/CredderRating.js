@@ -12,26 +12,26 @@ const CredderRating = ({containerStyle = {}, score}) => {
   const renderCredderRatingIcon = () => {
     if (!score || score < 0)
       return (
-        <View testID="credder-rating-grey" style={{alignSelf: 'center'}}>
-          <CredderRatingGray />
+        <View testID="credder-rating-grey">
+          <CredderRatingGray style={{alignSelf: 'center'}} />
         </View>
       );
     if (score <= 35)
       return (
-        <View testID="credder-rating-red" style={{alignSelf: 'center'}}>
-          <CredderRatingRed testID="credder-rating-red" />
+        <View testID="credder-rating-red">
+          <CredderRatingRed testID="credder-rating-red" style={{alignSelf: 'center'}} />;
         </View>
       );
     if (score > 35 && score <= 65)
       return (
-        <View testID="credder-rating-yellow" style={{alignSelf: 'center'}}>
-          <CredderRatingYellow testID="credder-rating-yellow" />
+        <View testID="credder-rating-yellow">
+          <CredderRatingYellow testID="credder-rating-yellow" style={{alignSelf: 'center'}} />;
         </View>
       );
 
     return (
-      <View testID="credder-rating-green" style={{alignSelf: 'center'}}>
-        <CredderRatingGreen testID="credder-rating-green" />
+      <View testID="credder-rating-green">
+        <CredderRatingGreen testID="credder-rating-green" style={{alignSelf: 'center'}} />;
       </View>
     );
   };

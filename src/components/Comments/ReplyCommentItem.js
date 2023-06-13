@@ -20,7 +20,6 @@ import {getUserId} from '../../utils/users';
 import {iVoteComment, voteComment} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
-import CommentUserName from '../CommentUsername/CommentUsername';
 
 const ReplyCommentItem = ({
   user,
@@ -107,11 +106,11 @@ const ReplyCommentItem = ({
     }
   };
 
-  const onBlock = () => {
+  const onBlock = (commentBlock) => {
     refBlockComponent.current.openBlockComponent({
       anonimity: false,
-      actor: comment.user,
-      id: comment.id
+      actor: commentBlock.user,
+      id: commentBlock.id
     });
   };
   React.useEffect(() => {
@@ -176,7 +175,12 @@ const ReplyCommentItem = ({
             )}
 
             <View style={styles.containerUsername}>
-              <CommentUserName comment={comment} user={user} />
+              <Text style={styles.username}>
+                {user?.data?.username
+                  ? user.data.username
+                  : `${comment.data.anon_user_info_color_name} ${comment.data.anon_user_info_emoji_name}`}{' '}
+                •
+              </Text>
               <Text style={styles.time}> {calculateTime(time)}</Text>
             </View>
           </View>
@@ -205,10 +209,10 @@ const ReplyCommentItem = ({
             </ButtonHightlight>
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={onBlock} testID="btnBlock" activeOpacity={1}>
+        <TouchableOpacity onPress={() => onBlock(comment)} testID="btnBlock" activeOpacity={1}>
           <ButtonHightlight
             onLongPress={handleLongPress}
-            onPress={onBlock}
+            onPress={() => onBlock(comment)}
             style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
             <IconEn name="block" size={15.02} color={colors.gray1} />
           </ButtonHightlight>

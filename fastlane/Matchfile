@@ -1,4 +1,4 @@
-git_url("git@github.com:BetterSocial/ios-certificates.git")
+git_url("git@bitbucket.org:nano-vest/ios-certificates.git")
 
 storage_mode("git")
 
