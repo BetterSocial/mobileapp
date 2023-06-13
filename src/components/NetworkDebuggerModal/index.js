@@ -9,7 +9,7 @@ import {ENV} from '../../libraries/Configs/ENVConfig';
 import {debugAtom} from '../../service/debug';
 
 const NetworkDebuggerModal = ({onPress}) => {
-  const [isNetworkModalVisible, setIsNetworkVIsible] = useState(false);
+  const [isNetworkModalVisible, setIsNetworkVisible] = useState(false);
   const isWhitelisted = useUserWhitelist();
   const isDebug = useRecoilValue(debugAtom);
 
@@ -17,7 +17,7 @@ const NetworkDebuggerModal = ({onPress}) => {
     if (onPress) {
       onPress();
     }
-    setIsNetworkVIsible(true);
+    setIsNetworkVisible(true);
   };
 
   console.log(isDebug);
@@ -33,10 +33,10 @@ const NetworkDebuggerModal = ({onPress}) => {
         <Modal
           style={styles.modal}
           isVisible={isNetworkModalVisible}
-          onBackButtonPress={() => setIsNetworkVIsible(false)}
+          onBackButtonPress={() => setIsNetworkVisible(false)}
           backdropTransitionOutTiming={0}>
           <SafeAreaView style={styles.contentContainer}>
-            <TouchableOpacity style={styles.closeButton} onPress={() => setIsNetworkVIsible(false)}>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setIsNetworkVisible(false)}>
               <Text style={styles.closeButtonTitle}>{'CLOSE'}</Text>
             </TouchableOpacity>
             <NetworkLogger />

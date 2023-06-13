@@ -1584,7 +1584,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 286;
+				CURRENT_PROJECT_VERSION = 287;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				ENABLE_BITCODE = NO;
@@ -1619,7 +1619,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 286;
+				CURRENT_PROJECT_VERSION = 287;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				EXCLUDED_ARCHS = "";
@@ -1880,7 +1880,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 286;
+				CURRENT_PROJECT_VERSION = 287;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				ENABLE_BITCODE = NO;
@@ -1914,7 +1914,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 286;
+				CURRENT_PROJECT_VERSION = 287;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				EXCLUDED_ARCHS = "";
@@ -1947,7 +1947,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 286;
+				CURRENT_PROJECT_VERSION = 287;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				ENABLE_BITCODE = NO;
@@ -1981,7 +1981,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 286;
+				CURRENT_PROJECT_VERSION = 287;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J22M3M9VYU;
 				EXCLUDED_ARCHS = "";
