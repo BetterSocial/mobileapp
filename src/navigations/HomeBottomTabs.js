@@ -6,6 +6,7 @@ import {Platform, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilValue} from 'recoil';
 
+import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
 import FirebaseConfig from '../configs/FirebaseConfig';
 import MemoFeed from '../assets/icon/Feed';
 import MemoHome from '../assets/icon/Home';
@@ -260,7 +261,7 @@ function HomeBottomTabs({navigation}) {
             />
           )
         })}>
-        {/* <Tab.Screen
+        <Tab.Screen
           name="Feed"
           component={FeedScreen}
           initialParams={{isBottomTab: true}}
@@ -269,8 +270,8 @@ function HomeBottomTabs({navigation}) {
             tabBarIcon: renderTabLabelIcon('Feed')
             // unmountOnBlur: true
           }}
-        /> */}
-        <Tab.Screen
+        />
+        {/* <Tab.Screen
           name="Feed"
           component={WebsocketResearchScreen}
           initialParams={{isBottomTab: true}}
@@ -279,10 +280,23 @@ function HomeBottomTabs({navigation}) {
             tabBarIcon: renderTabLabelIcon('Feed')
             // unmountOnBlur: true
           }}
-        />
-        <Tab.Screen
+        /> */}
+        {/* <Tab.Screen
           name="ChannelList"
           component={ChannelListScreen}
+          initialParams={{isBottomTab: true}}
+          options={{
+            activeTintColor: colors.holytosca,
+            tabBarIcon: renderTabLabelIcon('ChannelList'),
+            tabBarBadge:
+              unReadMessage.total_unread_count + unReadMessage.unread_post > 0
+                ? unReadMessage.total_unread_count + unReadMessage.unread_post
+                : null
+          }}
+        /> */}
+        <Tab.Screen
+          name="ChannelList"
+          component={ChannelListScreenV2}
           initialParams={{isBottomTab: true}}
           options={{
             activeTintColor: colors.holytosca,
