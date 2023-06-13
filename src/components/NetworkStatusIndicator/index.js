@@ -10,17 +10,29 @@ import {COLORS} from '../../utils/theme';
  * @returns
  */
 const NetworkStatusIndicator = ({hide = false}) => {
-  const [isOnline, setIsOnline] = React.useState(false);
-  const {isInternetReachable} = useNetInfo();
+  const [isOnline, setIsOnline] = React.useState(true);
+  const {isConnected} = useNetInfo();
+  const removeTimeout = React.useRef();
 
-  // eslint-disable-next-line consistent-return
   React.useEffect(() => {
-    const removeTimeOut = setTimeout(() => {
-      setIsOnline(isInternetReachable);
-    }, 3500);
+    return () => {
+      if (removeTimeout.current) {
+        clearTimeout(removeTimeout.current);
+      }
+    };
+  }, []);
 
-    return () => clearTimeout(removeTimeOut);
-  }, [isInternetReachable]);
+  React.useEffect(() => {
+    if (isConnected && isOnline) {
+      clearTimeout(removeTimeout.current);
+    }
+
+    if (!removeTimeout.current && isOnline !== isConnected) {
+      removeTimeout.current = setTimeout(() => {
+        setIsOnline(isConnected);
+      }, 3500);
+    }
+  }, [isConnected]);
 
   if (hide) return <View testID="isHide" />;
 
