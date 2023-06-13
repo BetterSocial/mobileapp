@@ -113,6 +113,13 @@ const OtherProfile = () => {
   const [anonProfile, setAnonProfile] = React.useState();
   const [dmChat, setDMChat] = React.useState();
 
+  const isSignedMessageEnabled = dataMain.isSignedMessageEnabled ?? true;
+  const isAnonimityEnabled = dataMain.isAnonMessageEnabled && isSignedMessageEnabled;
+
+  React.useEffect(() => {
+    setDMChat('');
+  }, [isSignedMessageEnabled]);
+
   const generateAnonProfile = async () => {
     setLoadingGenerateAnon(true);
     const anonProfileResult = await generateAnonProfileOtherProfile(profile.myProfile.user_id);
@@ -146,6 +153,15 @@ const OtherProfile = () => {
       SimpleToast.show('Send message failed', SimpleToast.SHORT);
     } finally {
       setLoadingSendDM(false);
+    }
+  };
+
+  const showSignedMessageDisableToast = () => {
+    if (!isSignedMessageEnabled) {
+      SimpleToast.show(
+        `Only users ${dataMain.username} follows can send messages`,
+        SimpleToast.SHORT
+      );
     }
   };
 
@@ -301,7 +317,9 @@ const OtherProfile = () => {
   };
 
   const toggleSwitch = () => {
-    if (!dataMain.isAnonMessageEnabled) {
+    if (!isSignedMessageEnabled) {
+      showSignedMessageDisableToast();
+    } else if (!isAnonimityEnabled) {
       SimpleToast.show('This user does not want to receive anonymous messages', SimpleToast.LONG);
     } else {
       setIsAnonimity((prevState) => !prevState);
@@ -439,26 +457,38 @@ const OtherProfile = () => {
 
         <View style={styles.bioAndSendChatContainer(isAnonimity)}>
           {__renderBio(dataMain.bio)}
-          <TextAreaChat
-            isAnonimity={isAnonimity}
-            loadingAnonUser={loadingGenerateAnon}
-            avatarUrl={profile.myProfile.profile_pic_path}
-            anonUser={anonProfile}
-            placeholder="Send a direct message"
-            onSend={onSendDM}
-            onChangeMessage={setDMChat}
-            disabledButton={loadingSendDM}
-            defaultValue={dmChat}
-          />
+          <TouchableOpacity
+            disabled={isSignedMessageEnabled}
+            activeOpacity={1}
+            onPress={showSignedMessageDisableToast}>
+            <TextAreaChat
+              isAnonimity={isAnonimity}
+              loadingAnonUser={loadingGenerateAnon}
+              avatarUrl={profile.myProfile.profile_pic_path}
+              anonUser={anonProfile}
+              placeholder="Send a direct message"
+              disabledInput={!isSignedMessageEnabled}
+              onSend={onSendDM}
+              onChangeMessage={setDMChat}
+              disabledButton={loadingSendDM || !isSignedMessageEnabled}
+              defaultValue={
+                isSignedMessageEnabled
+                  ? dmChat
+                  : `Only users ${dataMain.username} follows can send messages`
+              }
+            />
+          </TouchableOpacity>
           <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
             <ToggleSwitch
               isOn={isAnonimity}
               onToggle={toggleSwitch}
               onColor={'#9DEDF1'}
-              label={dataMain.isAnonMessageEnabled ? 'Anonymity' : 'Anonymity disabled'}
+              label={
+                isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
+              }
               offColor="#F5F5F5"
               size="small"
-              labelStyle={{color: dataMain.isAnonMessageEnabled ? colors.white : '#648ABF'}}
+              labelStyle={{color: isAnonimityEnabled ? colors.white : '#648ABF'}}
             />
           </TouchableOpacity>
         </View>

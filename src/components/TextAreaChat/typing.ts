@@ -5,6 +5,7 @@ export interface PhotoProfileProps {
   isAnonimity: boolean;
   loadingAnonUser: boolean;
   avatarUrl: string;
+  chatDisabled?: boolean;
 }
 
 export interface TextAreaChatProps extends PhotoProfileProps {
@@ -13,4 +14,5 @@ export interface TextAreaChatProps extends PhotoProfileProps {
   onChangeMessage: (message: string) => void;
   onSend: () => void;
   disabledButton?: boolean;
+  disabledInput?: boolean;
 }
