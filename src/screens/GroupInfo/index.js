@@ -1,4 +1,5 @@
 import * as React from 'react';
+import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import {
   FlatList,
@@ -12,22 +13,20 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import ExitGroup from '../../assets/images/exit-group.png';
-import ReportGroup from '../../assets/images/report.png';
 
 import DefaultChatGroupProfilePicture from '../../assets/images/default-chat-group-picture.png';
+import ExitGroup from '../../assets/images/exit-group.png';
 import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
+import ModalAction from './elements/ModalAction';
 import useGroupInfo from './hooks/useGroupInfo';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
 import {colors} from '../../utils/colors';
 import {fonts, normalize, normalizeFontSize} from '../../utils/fonts';
 import {trimString} from '../../utils/string/TrimString';
-import ModalAction from './elements/ModalAction';
 
 const GroupInfo = () => {
   const navigation = useNavigation();
@@ -143,108 +142,106 @@ const GroupInfo = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
       {/* <Header title={chatName} /> */}
-      <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
-      <View style={styles.lineTop} />
-      <ScrollView nestedScrollEnabled={true}>
-        <SafeAreaView>
-          <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
-            <View style={styles.containerPhoto}>{showImageProfile()}</View>
-          </TouchableOpacity>
-          <View style={styles.row}>
-            <View style={styles.column}>
-              <View style={styles.containerGroupName}>
-                <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
+      {isLoadingMembers ? null : (
+        <>
+          <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
+          <View style={styles.lineTop} />
+          <ScrollView nestedScrollEnabled={true}>
+            <SafeAreaView>
+              <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
+                <View style={styles.containerPhoto}>{showImageProfile()}</View>
+              </TouchableOpacity>
+              <View style={styles.row}>
+                <View style={styles.column}>
+                  <View style={styles.containerGroupName}>
+                    <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
+                  </View>
+                  <Text style={styles.dateCreate}>
+                    Created {moment(createChat).format('DD/MM/YY')}
+                  </Text>
+                </View>
+                <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
+                  <MemoIc_pencil width={20} height={20} color={colors.gray1} />
+                </TouchableOpacity>
               </View>
-              <Text style={styles.dateCreate}>Created {moment(createChat).format('DD/MM/YY')}</Text>
-            </View>
-            <TouchableOpacity onPress={handleOnNameChange} style={styles.pencilIconTouchable}>
-              <MemoIc_pencil width={20} height={20} color={colors.gray1} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.lineTop} />
-          <View style={styles.containerMedia(asset && asset.length === 0)}>
-            <TouchableWithoutFeedback
-              testID="groupMedia"
-              onPress={() => navigation.navigate('GroupMedia')}>
-              <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
-            </TouchableWithoutFeedback>
-            <FlatList
-              testID="asset"
-              data={asset}
-              keyExtractor={(item, index) => index.toString()}
-              style={styles.listImage(asset && asset.length === 0)}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={renderItem}
-            />
-          </View>
-          <View style={styles.lineTop} />
-          <View style={styles.users}>
-            <Text style={styles.countUser}>Participants ({newParticipant.length})</Text>
-            <FlatList
-              testID="participants"
-              // nestedScrollEnabled={true}
-              data={newParticipant}
-              // contentContainerStyle={{paddingBottom: 10}}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item, index}) => (
-                <View style={{height: normalize(72)}}>
-                  <ProfileContact
-                    key={index}
-                    item={item}
-                    onPress={() => handlePressContact(item)}
-                    fullname={item.user.name}
-                    photo={item.user.image}
-                    showArrow={channelState?.channel.data.type === 'group'}
-                    userId={profile.myProfile.user_id}
-                  />
+              <View style={styles.lineTop} />
+              <View style={styles.containerMedia(asset && asset.length === 0)}>
+                <TouchableWithoutFeedback
+                  testID="groupMedia"
+                  onPress={() => navigation.navigate('GroupMedia')}>
+                  <Text style={styles.btnToMediaGroup}>{'Media & Links >'}</Text>
+                </TouchableWithoutFeedback>
+                <FlatList
+                  testID="asset"
+                  data={asset}
+                  keyExtractor={(item, index) => index.toString()}
+                  style={styles.listImage(asset && asset.length === 0)}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={renderItem}
+                />
+              </View>
+              <View style={styles.lineTop} />
+              <View style={styles.users}>
+                <Text style={styles.countUser}>Participants ({newParticipant.length})</Text>
+                <FlatList
+                  testID="participants"
+                  // nestedScrollEnabled={true}
+                  data={newParticipant}
+                  // contentContainerStyle={{paddingBottom: 10}}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({item, index}) => (
+                    <View style={{height: normalize(72)}}>
+                      <ProfileContact
+                        key={index}
+                        item={item}
+                        onPress={() => handlePressContact(item)}
+                        fullname={item.user.name}
+                        photo={item.user.image}
+                        showArrow={channelState?.channel.data.type === 'group'}
+                        userId={profile.myProfile.user_id}
+                      />
+                    </View>
+                  )}
+                />
+              </View>
+              <View style={styles.gap} />
+              {channelState?.channel.data.type === 'group' ? (
+                <View style={styles.actionGroup}>
+                  <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
+                    <View style={styles.imageActContainer}>
+                      <FastImage style={styles.imageAction} source={ExitGroup} />
+                    </View>
+                    <View>
+                      <Text style={styles.textAct}>Exit Group</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              )}
-            />
-          </View>
-          <View style={styles.gap} />
-          {channelState?.channel.data.type === 'group' ? (
-            <View style={styles.actionGroup}>
-              <TouchableOpacity onPress={onLeaveGroup} style={styles.buttonGroup}>
-                <View style={styles.imageActContainer}>
-                  <FastImage style={styles.imageAction} source={ExitGroup} />
-                </View>
-                <View>
-                  <Text style={styles.textAct}>Exit Group</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonGroup}>
-                <View style={styles.imageActContainer}>
-                  <FastImage style={styles.imageAction} source={ReportGroup} />
-                </View>
-                <View>
-                  <Text style={styles.textAct}>Report Group</Text>
-                </View>
+              ) : null}
+            </SafeAreaView>
+          </ScrollView>
+          {channelState?.channel.data.type === 'group' && (
+            <View style={styles.btnAdd}>
+              <TouchableOpacity
+                testID="addParticipant"
+                onPress={() => navigation.push('AddParticipant', {refresh: getMembersList})}>
+                <Text style={styles.btnAddText}>+ Add Participants</Text>
               </TouchableOpacity>
             </View>
-          ) : null}
-        </SafeAreaView>
-      </ScrollView>
-      {channelState?.channel.data.type === 'group' && (
-        <View style={styles.btnAdd}>
-          <TouchableOpacity
-            testID="addParticipant"
-            onPress={() => navigation.push('AddParticipant', {refresh: getMembersList})}>
-            <Text style={styles.btnAddText}>+ Add Participants</Text>
-          </TouchableOpacity>
-        </View>
+          )}
+          <View style={styles.containerLoading}>
+            <Loading visible={isLoadingMembers} />
+          </View>
+          <Loading visible={isUploadingImage} />
+          <ModalAction
+            name={selectedUser?.user?.name}
+            isOpen={openModal}
+            onCloseModal={handleCloseSelectUser}
+            selectedUser={selectedUser}
+            onPress={alertRemoveUser}
+          />
+        </>
       )}
-      <View style={styles.containerLoading}>
-        <Loading visible={isLoadingMembers} />
-      </View>
-      <Loading visible={isUploadingImage} />
-      <ModalAction
-        name={selectedUser?.user?.name}
-        isOpen={openModal}
-        onCloseModal={handleCloseSelectUser}
-        selectedUser={selectedUser}
-        onPress={alertRemoveUser}
-      />
     </SafeAreaView>
   );
 };

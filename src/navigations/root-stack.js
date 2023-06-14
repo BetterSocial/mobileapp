@@ -1,9 +1,9 @@
 import * as React from 'react';
+import NetInfo from '@react-native-community/netinfo';
 import {View} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
-import NetInfo from '@react-native-community/netinfo';
 import Blocked from '../screens/Blocked';
 import ChooseUsername from '../screens/InputUsername';
 import CreatePost from '../screens/CreatePost';
@@ -25,12 +25,17 @@ import ProfilePostDetail from '../screens/ProfilePostDetail';
 import ProfileReplyComment from '../screens/ProfileReplyComment';
 import ReplyComment from '../screens/ReplyComment';
 import ReplyCommentLev3 from '../screens/ReplyComment2';
+import SampleChatInfoScreen from '../screens/WebsocketResearchScreen/SampleChatInfoScreen';
+import SampleChatScreen from '../screens/WebsocketResearchScreen/SampleChatScreen';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignInV2';
 import TermsAndCondition from '../screens/WebView/TermsAndCondition';
 import TopicPageScreen from '../screens/TopicPageScreen';
 import Topics from '../screens/Topics';
+import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import WhotoFollow from '../screens/WhotoFollow';
+import api from '../service/config';
+import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
 import {
   AddParticipant,
   ChannelScreen,
@@ -46,13 +51,14 @@ import {
 } from '../screens';
 import {InitialStartupAtom, LoadingStartupContext} from '../service/initialStartup';
 import {NavigationConstants} from '../utils/constants';
-import {useInitialStartup} from '../hooks/useInitialStartup';
 import {followersOrFollowingAtom} from '../screens/ChannelListScreen/model/followersOrFollowingAtom';
-import api from '../service/config';
+import {useInitialStartup} from '../hooks/useInitialStartup';
 
 const RootStack = createNativeStackNavigator();
 
 export const RootNavigator = () => {
+  // useCoreChatSystemHook();
+
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const [following, setFollowing] = useRecoilState(followersOrFollowingAtom);
   const loadingStartup = useInitialStartup();
@@ -279,6 +285,21 @@ const AuthenticatedNavigator = () => {
       <AuthenticatedStack.Screen
         name="ChannelScreen"
         component={ChannelScreen}
+        options={{headerShown: false}}
+      />
+      <AuthenticatedStack.Screen
+        name="WebsocketResearchScreen"
+        component={WebsocketResearchScreen}
+        options={{headerShown: false}}
+      />
+      <AuthenticatedStack.Screen
+        name="SampleChatScreen"
+        component={SampleChatScreen}
+        options={{headerShown: false}}
+      />
+      <AuthenticatedStack.Screen
+        name="SampleChatInfoScreen"
+        component={SampleChatInfoScreen}
         options={{headerShown: false}}
       />
     </AuthenticatedStack.Navigator>

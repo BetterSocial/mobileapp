@@ -12,7 +12,7 @@ import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import {getChatName, getGroupMemberCount} from '../../utils/string/StringUtils';
 
-const Header = () => {
+const Header = ({onBack}) => {
   const navigation = useNavigation();
   const [channelClient] = React.useContext(Context).channel;
   const [profileContext] = React.useContext(Context).profile;
@@ -64,15 +64,22 @@ const Header = () => {
     );
   };
 
+  const handleBackBtn = () => {
+    if (onBack && typeof onBack === 'function') {
+      return onBack();
+    }
+    return navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <View style={[styles.row, {flex: 1}]}>
-        <GlobalButton buttonStyle={styles.backContainer} onPress={() => navigation.goBack()}>
+        <GlobalButton buttonStyle={styles.backContainer} onPress={handleBackBtn}>
           <MemoIc_arrow_back_white width={20} height={12} />
         </GlobalButton>
         <GlobalButton
           buttonStyle={styles.backContainer}
-          onPress={() => navigation.navigate('GroupInfo')}>
+          onPress={() => navigation.push('GroupInfo')}>
           <View style={styles.touchable}>
             {renderHeaderImage()}
             <Text numberOfLines={1} style={styles.name}>
@@ -85,7 +92,7 @@ const Header = () => {
         <GlobalButton
           style={styles.btnOptions}
           onPress={() =>
-            navigation.navigate('GroupSetting', {
+            navigation.push('GroupSetting', {
               username,
               focusChatName: true
             })

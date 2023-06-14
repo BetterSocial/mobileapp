@@ -80,10 +80,6 @@ end
       )
       latest_release += firebase_release[:buildVersion].to_i
     end
-    android_set_version_code(
-      version_code: latest_release,
-      gradle_file: "./android/app/build.gradle"
-    )
     ENV['APP_VERSION'] = "#{version_name}(#{latest_release})"
   end
 
@@ -96,14 +92,12 @@ end
         upload_to_play_store_internal_testing
         upload_aab_to_firebase_distribution(release_notes: options[:release_notes])
       else
-        clean
+      puts 'testing'
         assemble(build_type: options[:build_type])
         upload_apk_to_firebase_distribution(release_notes: options[:release_notes], build_type: options[:build_type])
-        upload_to_lambdatest
       end
-      on_success_slack
     rescue => exception
-      on_error_slack(exception)
+      puts exception
     end
   end
 
@@ -127,13 +121,6 @@ end
         firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
         release_notes: "BRANCH: #{ENV["CIRCLE_BRANCH"]}. #{options[:release_notes]}"
     )
-  end
-  lane :upload_to_lambdatest do |options|
-    sh("curl -u '#{ENV['LAMBDATEST_USERNAME']}:#{ENV['LAMBDATEST_ACCESSKEY']}' \
-    --location --request POST 'https://manual-api.lambdatest.com/app/upload/realDevice' \
-    --form 'name=bettersocial_android_#{ENV['ENV']}' \
-    --form 'appFile=@#{ENV["GRADLE_APK_OUTPUT_PATH_#{ENV['ENV']}"]}' \
-    --form 'custom_id=bettersocial_android_#{ENV['ENV']}'")
   end
 
 
@@ -160,21 +147,15 @@ end
      end
      match(
       type: profileType, # "appstore" | "adhoc" | "development"
-      app_identifier: [ENV["BUNDLE_ID"], ENV["BUNDLE_ID_NOTIF"]],
+      app_identifier: [ENV["BUNDLE_ID"]],
       readonly:true,
       verbose:true
      )
     update_code_signing_settings(
+        use_automatic_signing: true,
         path: './ios/BetterSocial.xcodeproj',
         targets: ENV["SCHEME"],
-        profile_name: "match #{options[:type]} #{ENV["BUNDLE_ID"]}",
-        team_id: '4N532AV27T'
-      )
-    update_code_signing_settings(
-        path: './ios/BetterSocial.xcodeproj',
-        targets: ENV["SCHEME_NOTIF"],
-        profile_name: "match #{options[:type]} #{ENV["BUNDLE_ID_NOTIF"]}",
-        team_id: '4N532AV27T'
+        team_id: 'J22M3M9VYU'
       )
     end
 
@@ -249,15 +230,13 @@ end
         bump_version
         build
         if ENV["ENV"] === 'prod'
-          upload_testflight
+           upload_testflight
+           create_release_tag('builds/iosrelease/*')
         else
-          upload_ipa_to_firebase_distribution(release_notes: options[:release_notes])
-          upload_to_lambdatest
+           upload_ipa_to_firebase_distribution(release_notes: options[:release_notes])
         end
-        create_sentry_release
-        on_success_slack
       rescue => exception
-        on_error_slack(exception)
+        puts exception
       end
     end
 
@@ -266,118 +245,43 @@ end
       matchType = 'adhoc'
       profileType = 'ad-hoc'
       if ENV["ENV"] === 'prod'
+        puts "prod bro"
         profile_name_type = 'AppStore'
         matchType = 'appstore'
         profileType = 'ad-hoc'
       end
-      match(
-        type: matchType, # "appstore" | "adhoc" | "development"
-        app_identifier: [ENV["BUNDLE_ID"], ENV["BUNDLE_ID_NOTIF"]],
-        readonly: true,
-        verbose:true
-      )
       update_code_signing_settings(
+        use_automatic_signing: false,
         path: './ios/BetterSocial.xcodeproj',
         targets: ENV["SCHEME"],
         profile_name: "match #{profile_name_type} #{ENV["BUNDLE_ID"]}",
-        team_id: '4N532AV27T'
+        team_id: 'J22M3M9VYU'
       )
-      update_code_signing_settings(
-        path: './ios/BetterSocial.xcodeproj',
-        targets: ENV["SCHEME_NOTIF"],
-        profile_name: "match #{profile_name_type} #{ENV["BUNDLE_ID_NOTIF"]}",
-        team_id: '4N532AV27T'
+      match(
+        type: matchType, # "appstore" | "adhoc" | "development"
+        app_identifier: [ENV["BUNDLE_ID"]],
+        readonly: true,
+        verbose: true
       )
+
       build_ios_app(
-        scheme: ENV["SCHEME"],
-        clean: true,
-        configuration: 'Release',
-        export_team_id: '4N532AV27T',
-        export_options: {
-            method: profileType, # "ad-hoc" | "app-store"
-            provisioningProfiles: {
-                ENV["SCHEME"] => "match #{profile_name_type} #{ENV["SCHEME"]}",
-                ENV["SCHEME_NOTIF"] => "match #{profile_name_type} #{ENV["SCHEME_NOTIF"]}"
-            }
-        },
-        workspace: './ios/BetterSocial.xcworkspace',
-        output_directory: './ios/',
+          scheme: ENV["SCHEME"],
+          clean: true,
+          configuration: 'Release',
+          export_team_id: 'J22M3M9VYU',
+          export_options: {
+              method: profileType, # "ad-hoc" | "app-store"
+              provisioningProfiles: {
+                   ENV["SCHEME"] => "match #{profile_name_type} #{ENV["SCHEME"]}",
+              }
+          },
+          workspace: './ios/BetterSocial.xcworkspace',
+          output_directory: './ios/',
       )
       ENV["IPA_OUTPUT_PATH_#{ENV['ENV']}"] = lane_context[SharedValues::IPA_OUTPUT_PATH]
-      end
+    end
 
-      desc 'Upload Sentry'
-      lane :create_sentry_release do |options|
-        version = get_version_number(
-          xcodeproj: "./ios/BetterSocial.xcodeproj",
-          target: ENV["SCHEME"]
-        )
-        build_number = get_build_number(
-          xcodeproj: "./ios/BetterSocial.xcodeproj"
-        )
-        sentry_create_release(
-          auth_token: ENV["SENTRY_AUTH_TOKEN"],
-          org_slug: 'BetterSocial',
-          project_slug: 'BetterSocial',
-          version: version,
-          app_identifier: ENV["BUNDLE_ID"], # pass in the bundle_identifer of your app
-          finalize: false # Whether to finalize the release. If not provided or false, the release can be finalized using the sentry_finalize_release action
-        )
-        sentry_set_commits(
-          auth_token: ENV["SENTRY_AUTH_TOKEN"],
-          org_slug: 'BetterSocial',
-          project_slug: 'BetterSocial',
-          version: version,
-          app_identifier: ENV["BUNDLE_ID"], # pass in the bundle_identifer of your app
-          build: build_number, # Optionally pass in the build number of your app
-          auto: true, # enable completely automated commit management
-          clear: false, # clear all current commits from the release
-        )
-        sentry_upload_dsym(
-          auth_token: ENV["SENTRY_AUTH_TOKEN"],
-          org_slug: 'BetterSocial',
-          project_slug: 'BetterSocial',
-          dsym_path: "ios/#{ENV["SCHEME"]}.app.dSYM.zip",
-        )
-        begin
-          sentry_upload_file(
-            auth_token: ENV["SENTRY_AUTH_TOKEN"],
-            org_slug: 'BetterSocial',
-            project_slug: 'BetterSocial',
-            version: version,
-            app_identifier: ENV["BUNDLE_ID"], # pass in the bundle_identifer of your app
-            build: build_number, # Optionally pass in the build number of your app
-            dist: build_number, # optional distribution of the release usually the buildnumber
-            file: 'ios/main.jsbundle' # file to upload
-          )
-        rescue => ex
-          # handle error
-        ensure
-          # do something that always run like clean up
-        end
-        sentry_upload_sourcemap(
-          auth_token: ENV["SENTRY_AUTH_TOKEN"],
-          org_slug: 'BetterSocial',
-          project_slug: 'BetterSocial',
-          version: version,
-          app_identifier: ENV["BUNDLE_ID"], # pass in the bundle_identifer of your app
-          build: build_number, # Optionally pass in the build number of your app
-          dist: build_number, # optional distribution of the release usually the buildnumber
-          sourcemap: 'ios/main.jsbundle.map', # Sourcemap(s) to upload. Path(s) can be a comma-separated string or an array of strings.
-          rewrite: true
-        )
-        sentry_create_deploy(
-          auth_token: ENV["SENTRY_AUTH_TOKEN"],
-          org_slug: 'BetterSocial',
-          project_slug: 'BetterSocial',
-          version: version,
-          app_identifier: ENV["BUNDLE_ID"], # pass in the bundle_identifer of your app
-          build: build_number, # Optionally pass in the build number of your app
-          env: "[ios] #{ENV["ENV"]}", # The environment for this deploy. Required.
-        )
-      end
-
-      desc 'Build and upload to firebase distribution'
+    desc 'Build and upload to firebase distribution'
         lane :upload_ipa_to_firebase_distribution do |options|
             firebase_app_distribution(
                 app: ENV["FIREBASE_APP_ID_IOS"],
@@ -401,25 +305,43 @@ end
             ipa: './ios/BetterSocial.ipa'
           )
       end
-      lane :upload_to_lambdatest do |options|
-        sh("curl -u '#{ENV['LAMBDATEST_USERNAME']}:#{ENV['LAMBDATEST_ACCESSKEY']}' \
-        --location --request POST 'https://manual-api.lambdatest.com/app/upload/realDevice' \
-        --form 'name=BetterSocial_ios_#{ENV['ENV']}' \
-        --form 'appFile=@#{ENV["IPA_OUTPUT_PATH_#{ENV['ENV']}"]}' \
-        --form 'custom_id=BetterSocial_ios_#{ENV['ENV']}'")
-      end
     end
 end
 
-platform :general do
-    desc 'Create git release tag'
-    lane :release_tag do |options|
-        version_name = android_get_version_name(
-          gradle_file: "./android/app/build.gradle"
-        )
-        last_tag = last_git_tag()
-        puts "lastTag #{last_tag}"
+def create_release_tag(lanePattern)
+    sh("git", "config", "user.email", "fastlane@nanovest.io")
+    sh("git", "config", "user.name", "CircleCI@Fastlane")
+
+    last_tag = last_git_tag(pattern: lanePattern)
+    if last_tag == nil
+        last_tag = "v0.0.0-1"
     end
+
+    currentBuildVersion = ENV['VERSION_NAME'].split('.')
+    versionBuildLastTag = last_tag.split('v')[1].split('-')
+    versionNumberLastTag = versionBuildLastTag[0].split('.')
+
+    if currentBuildVersion[0] > versionNumberLastTag[0] || currentBuildVersion[1] > versionNumberLastTag[1] || currentBuildVersion[2] > versionNumberLastTag[2]
+        add_git_tag(
+          includes_lane: true,
+          prefix: "v",
+          postfix: "-1",
+          build_number: "#{ENV['VERSION_NAME']}",
+          message: "#{ENV['ENV']}, Build Number: #{ENV['BUILD_NUMBER']}"
+        )
+    elsif versionNumberLastTag[0] == currentBuildVersion[0] && versionNumberLastTag[1] > currentBuildVersion[1] && versionNumberLastTag[2] > currentBuildVersion[2]
+        add_git_tag(
+          includes_lane: true,
+          prefix: "v",
+          postfix: "-#{versionBuildLastTag[1].to_i + 1}",
+          build_number: "#{ENV['VERSION_NAME']}",
+          message: "#{ENV['ENV']}, Build Number: #{ENV['BUILD_NUMBER']}"
+        )
+    end
+    push_to_git_remote(
+        tags: true,
+        no_verify: true
+    )
 end
 
 def on_success_device_register_slack

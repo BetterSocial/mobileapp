@@ -35,4 +35,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default TopicText;
+export default React.memo(TopicText);
