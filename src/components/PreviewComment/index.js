@@ -11,6 +11,7 @@ import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
 import CommentUserName from '../CommentUsername/CommentUsername';
+import ReadMore from '../ReadMore';
 
 const PreviewComment = ({comment, time, image, totalComment, onPress, user, item}) => {
   const navigation = useNavigation();
@@ -78,17 +79,15 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
             </View>
           </View>
         </TouchableOpacity>
-        <View style={styles.text}>
-          {/* <SeeMore seeMoreText={'More'} seeLessText={'Less'} numberOfLines={2}>
-            {comment}
-          </SeeMore> */}
+        <ReadMore style={styles.text} text={comment} />
+        {/* <View onLayout={({nativeEvent}) => console.log(nativeEvent.layout.width, 'width')} style={styles.text}>
           <TouchableOpacity onPress={onPress}>
-            <Text style={styles.commenttext} numberOfLines={3} ellipsizeMode="tail">
+            <Text onTextLayout={({nativeEvent}) => console.log(nativeEvent.lines, 'lisa')} style={styles.commenttext} numberOfLines={3} ellipsizeMode="tail">
               {getCaptionWithLinkStyle(comment?.substring(0, 100).trim())}
               {comment?.length > 100 ? <Text style={styles.seemore}>more</Text> : <></>}
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         <Gap height={4} />
       </View>
       {totalComment >= 1 && (
