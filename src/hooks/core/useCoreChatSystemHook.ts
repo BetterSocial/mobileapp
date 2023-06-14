@@ -9,6 +9,7 @@ import UserSchema from '../../database/schema/UserSchema';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
+import {getAnonymousChatName} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
@@ -23,6 +24,11 @@ const useCoreChatSystemHook = () => {
 
   const saveChannelListData = async () => {
     if (!localDb) return;
+
+    const chatName = await getAnonymousChatName(lastJsonMessage?.channel?.members);
+
+    lastJsonMessage.targetName = chatName?.name;
+    lastJsonMessage.targetImage = chatName?.image;
 
     const channelList = ChannelList.fromWebsocketObject(lastJsonMessage);
     await channelList.save(localDb);

@@ -178,9 +178,9 @@ class ChannelList implements BaseDbSchema {
   static fromWebsocketObject(json): ChannelList {
     return new ChannelList({
       id: json?.channel?.id,
-      channelPicture: '',
-      name: json?.channel?.name,
-      description: json?.message?.message,
+      channelPicture: json?.targetImage,
+      name: json?.targetName,
+      description: json?.message?.text || json?.message?.message,
       unreadCount: json?.unread_count,
       channelType: 'ANON_PM',
       lastUpdatedAt: json?.channel?.last_message_at,

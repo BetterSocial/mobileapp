@@ -20,9 +20,6 @@ const ChannelListScreenV2 = () => {
     navigation.navigate('ContactScreen');
   };
 
-  console.log('profile');
-  console.log(profile);
-
   return (
     <>
       <StatusBar translucent={false} />
