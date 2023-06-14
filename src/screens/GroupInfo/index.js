@@ -57,7 +57,6 @@ const GroupInfo = () => {
     handlePressContact,
     onReportGroup
   } = useGroupInfo();
-
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (route?.params?.from === 'AddParticipant') {
@@ -140,6 +139,10 @@ const GroupInfo = () => {
     handleMember();
   }, []);
 
+  React.useEffect(() => {
+    getMembersList();
+  }, []);
+  console.log(openModal, 'laka');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -148,7 +151,7 @@ const GroupInfo = () => {
         <>
           <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
           <View style={styles.lineTop} />
-          <ScrollView nestedScrollEnabled={true}>
+          <ScrollView contentContainerStyle={styles.scrollContainer} nestedScrollEnabled={true}>
             <SafeAreaView>
               <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
                 <View style={styles.containerPhoto}>{showImageProfile()}</View>
@@ -399,5 +402,8 @@ export const styles = StyleSheet.create({
   textAct: {
     color: '#FF2E63',
     fontSize: 14
+  },
+  scrollContainer: {
+    paddingBottom: 30
   }
 });
