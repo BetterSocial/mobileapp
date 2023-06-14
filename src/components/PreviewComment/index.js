@@ -79,7 +79,7 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
             </View>
           </View>
         </TouchableOpacity>
-        <ReadMore style={styles.text} text={comment} />
+        <ReadMore containerStyle={styles.text} numberLine={2} style={styles.text} text={comment} />
         {/* <View onLayout={({nativeEvent}) => console.log(nativeEvent.layout.width, 'width')} style={styles.text}>
           <TouchableOpacity onPress={onPress}>
             <Text onTextLayout={({nativeEvent}) => console.log(nativeEvent.lines, 'lisa')} style={styles.commenttext} numberOfLines={3} ellipsizeMode="tail">

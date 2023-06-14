@@ -130,7 +130,7 @@ const FeedScreen = (props) => {
       // index: index,
       isalreadypolling: item.isalreadypolling,
       feedId: item.id,
-      // refreshParent:  getDataFeedsHandle,
+      // refreshParent: () =>  getDataFeedsHandle(postOffset),
       data: item,
       isCaching: false
     });
