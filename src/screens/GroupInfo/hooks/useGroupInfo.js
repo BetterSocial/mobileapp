@@ -280,10 +280,7 @@ const useGroupInfo = () => {
     }
   };
   const onLeaveGroup = () => {
-    Alert.alert('Leave group', 'Are you sure you want to leave group ?', [
-      {text: 'Yes', onPress: leaveGroup},
-      {text: 'No'}
-    ]);
+    Alert.alert('', 'Exit this group?', [{text: 'Yes', onPress: leaveGroup}, {text: 'No'}]);
   };
 
   const leaveGroup = async () => {
