@@ -280,7 +280,7 @@ const useGroupInfo = () => {
     }
   };
   const onLeaveGroup = () => {
-    Alert.alert('', 'Exit this group?', [{text: 'Yes', onPress: leaveGroup}, {text: 'No'}]);
+    Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
   };
 
   const leaveGroup = async () => {
