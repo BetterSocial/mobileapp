@@ -29,13 +29,16 @@ const ReadMore = (props) => {
     if (!lines) {
       lines = 2;
     }
-    let cutText = '';
+    let characterNumber = 0;
+    let textWidth = 0;
+    const parentWidth = layoutWidth * nativeEvent.lines.length;
     // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < lines; i++) {
-      cutText += nativeEvent.lines[i - 1]?.text;
+    for (let i = 0; i < nativeEvent.lines.length; i++) {
+      console.log(nativeEvent.lines[i], 'lala');
+      characterNumber += nativeEvent.lines[i].text.length;
+      textWidth += nativeEvent.lines[i].width;
     }
-    console.log(cutText, 'remina');
-    setCutText(cutText);
+    console.log(characterNumber, textWidth, props.text, parentWidth, 'lele');
     // if (nativeEvent.lines.length < lines) {
     //   setLayoutTextWidth(nativeEvent.lines[nativeEvent.lines.length - 1].width);
     //   setTextLength(nativeEvent.lines[nativeEvent.lines.length - 1].text.length);
@@ -52,11 +55,9 @@ const ReadMore = (props) => {
     return 'sudah';
   };
 
-  console.log(layoutWidth, layoutTextWidth, textLength, props.text, 'rere');
   return (
     <View style={props.containerStyle} onLayout={handleLayoutWidth}>
       <Text onTextLayout={handleLayoutText}>{props.text}</Text>
-      <Text>{newCutText} </Text>
     </View>
   );
 };
