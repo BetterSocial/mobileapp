@@ -62,6 +62,72 @@ import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../servi
 const {width, height} = Dimensions.get('screen');
 // let headerHeight = 0;
 
+const BioAndChat = (props) => {
+  const {
+    isAnonimity,
+    bio,
+    openBio,
+    isSignedMessageEnabled,
+    showSignedMessageDisableToast,
+    loadingGenerateAnon,
+    avatarUrl,
+    anonProfile,
+    onSendDM,
+    setDMChat,
+    loadingSendDM,
+    dmChat,
+    username,
+    toggleSwitch,
+    isAnonimityEnabled
+  } = props;
+  return (
+    <View style={styles.bioAndSendChatContainer(isAnonimity)}>
+      <View style={styles.containerBio}>
+        {bio === null || bio === undefined ? (
+          <Text style={styles.bioText(isAnonimity)}>No Bio</Text>
+        ) : (
+          <TouchableOpacity onPress={openBio}>
+            <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
+              {trimString(bio, 121)}{' '}
+              {bio.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      <TouchableOpacity
+        disabled={isSignedMessageEnabled}
+        activeOpacity={1}
+        onPress={showSignedMessageDisableToast}>
+        <TextAreaChat
+          isAnonimity={isAnonimity}
+          loadingAnonUser={loadingGenerateAnon}
+          avatarUrl={avatarUrl}
+          anonUser={anonProfile}
+          placeholder="Send a direct message"
+          disabledInput={!isSignedMessageEnabled}
+          onSend={onSendDM}
+          onChangeMessage={setDMChat}
+          disabledButton={loadingSendDM || !isSignedMessageEnabled}
+          defaultValue={
+            isSignedMessageEnabled ? dmChat : `Only users ${username} follows can send messages`
+          }
+        />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
+        <ToggleSwitch
+          isOn={isAnonimity}
+          onToggle={toggleSwitch}
+          onColor={'#9DEDF1'}
+          label={isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'}
+          offColor="#F5F5F5"
+          size="small"
+          labelStyle={{color: isAnonimityEnabled ? colors.white : '#648ABF'}}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const OtherProfile = () => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -184,9 +250,9 @@ const OtherProfile = () => {
 
   const onSendDM = async () => {
     if (isAnonimity) {
-      sentAnonDM();
+      await sentAnonDM();
     } else {
-      sendSignedDM();
+      await sendSignedDM();
     }
   };
 
@@ -316,31 +382,16 @@ const OtherProfile = () => {
     bottomSheetBio.current.open();
   };
 
-  const toggleSwitch = () => {
+  const toggleSwitch = async () => {
     if (!isSignedMessageEnabled) {
       showSignedMessageDisableToast();
     } else if (!isAnonimityEnabled) {
       SimpleToast.show('This user does not want to receive anonymous messages', SimpleToast.LONG);
     } else {
       setIsAnonimity((prevState) => !prevState);
-      generateAnonProfile();
+      await generateAnonProfile();
     }
   };
-
-  const __renderBio = (string) => (
-    <View style={styles.containerBio}>
-      {string === null || string === undefined ? (
-        <Text style={styles.bioText(isAnonimity)}>No Bio</Text>
-      ) : (
-        <TouchableOpacity onPress={openBio}>
-          <Text linkStyle={styles.seeMore} style={styles.bioText(isAnonimity)}>
-            {trimString(string, 121)}{' '}
-            {string.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
-          </Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
 
   const __renderListHeader = () => {
     const __renderBlockIcon = () => {
@@ -390,7 +441,6 @@ const OtherProfile = () => {
               </View>
             ) : null}
           </View>
-          {/* {__renderBio(dataMain.bio)} */}
         </React.Fragment>
       );
     };
@@ -454,44 +504,23 @@ const OtherProfile = () => {
             {__renderFollowerDetail()}
           </View>
         </View>
-
-        <View style={styles.bioAndSendChatContainer(isAnonimity)}>
-          {__renderBio(dataMain.bio)}
-          <TouchableOpacity
-            disabled={isSignedMessageEnabled}
-            activeOpacity={1}
-            onPress={showSignedMessageDisableToast}>
-            <TextAreaChat
-              isAnonimity={isAnonimity}
-              loadingAnonUser={loadingGenerateAnon}
-              avatarUrl={profile.myProfile.profile_pic_path}
-              anonUser={anonProfile}
-              placeholder="Send a direct message"
-              disabledInput={!isSignedMessageEnabled}
-              onSend={onSendDM}
-              onChangeMessage={setDMChat}
-              disabledButton={loadingSendDM || !isSignedMessageEnabled}
-              defaultValue={
-                isSignedMessageEnabled
-                  ? dmChat
-                  : `Only users ${dataMain.username} follows can send messages`
-              }
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={toggleSwitch} style={styles.toggleSwitchContainer}>
-            <ToggleSwitch
-              isOn={isAnonimity}
-              onToggle={toggleSwitch}
-              onColor={'#9DEDF1'}
-              label={
-                isAnonimityEnabled || !isSignedMessageEnabled ? 'Anonymity' : 'Anonymity disabled'
-              }
-              offColor="#F5F5F5"
-              size="small"
-              labelStyle={{color: isAnonimityEnabled ? colors.white : '#648ABF'}}
-            />
-          </TouchableOpacity>
-        </View>
+        <BioAndChat
+          isAnonimity={isAnonimity}
+          bio={dataMain.bio}
+          openBio={openBio}
+          isSignedMessageEnabled={isSignedMessageEnabled}
+          showSignedMessageDisableToast={showSignedMessageDisableToast}
+          loadingGenerateAnon={loadingGenerateAnon}
+          avatarUrl={profile.myProfile.profile_pic_path}
+          anonProfile={anonProfile}
+          onSendDM={onSendDM}
+          setDMChat={setDMChat}
+          loadingSendDM={loadingSendDM}
+          dmChat={dmChat}
+          username={dataMain.username}
+          toggleSwitch={toggleSwitch}
+          isAnonimityEnabled={isAnonimityEnabled}
+        />
       </>
     );
   };
