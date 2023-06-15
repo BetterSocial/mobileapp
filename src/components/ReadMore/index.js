@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import {colors} from '../../utils/colors';
 
 const styles = StyleSheet.create({
@@ -25,7 +25,11 @@ const ReadMore = (props) => {
   const [layoutTextWidth, setLayoutTextWidth] = React.useState(0);
   const [curNumberLine, setNumberLine] = React.useState(0);
   const [charLength, setCharLength] = React.useState(0);
+  const [widthPerChar, setWidthPerChar] = React.useState(0);
   const [isFinishSetLayout, setIsFinishSetLayout] = React.useState(false);
+  const [amountTxtPerLine, setAmountTxtPerLine] = React.useState(0);
+  const [lengthTextFirstLine, setLengthTextFirstLine] = React.useState(0);
+  const widthScreen = Dimensions.get('screen').width;
   const handleLayoutWidth = ({nativeEvent}) => {
     setLayoutWidth(nativeEvent.layout.width);
   };
@@ -38,42 +42,58 @@ const ReadMore = (props) => {
     }
     let characterNumber = 0;
     let textWidth = 0;
+    let lengthFirstLine = 0;
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < nativeEvent.lines.length; i++) {
-      console.log(nativeEvent.lines[i], 'lala');
       characterNumber += nativeEvent.lines[i].text.length;
       textWidth += nativeEvent.lines[i].width;
+      if (i === 0) {
+        lengthFirstLine = nativeEvent.lines[i].text.length;
+      }
     }
     await setLayoutTextWidth(textWidth);
     await setNumberLine(nativeEvent.lines.length);
     await setCharLength(characterNumber);
+    await setLengthTextFirstLine(lengthFirstLine);
     setIsFinishSetLayout(true);
   };
   const handleReadMoreText = () => {
     if (props.numberLine < curNumberLine) {
-      const widhthPerCharacter = layoutTextWidth / charLength;
-      const amountTextPerLine = Math.ceil(layoutWidth / (widhthPerCharacter + 2));
-      const substringText = props.numberLine * amountTextPerLine;
+      const substringText = props.numberLine * (lengthTextFirstLine - 5);
       const longText = substringText;
 
       return longText;
     }
     return charLength;
   };
-  console.log(curNumberLine, 'simak');
+
+  React.useEffect(() => {
+    if (layoutTextWidth > 0 && charLength > 0) {
+      setWidthPerChar(layoutTextWidth / charLength);
+    }
+  }, [layoutTextWidth, charLength]);
+
+  React.useEffect(() => {
+    if (layoutWidth > 0 && widthPerChar > 0) {
+      setAmountTxtPerLine(Math.ceil(layoutWidth / widthPerChar));
+    }
+  }, [layoutWidth, widthPerChar]);
+
+  React.useEffect(() => {
+    setIsFinishSetLayout(false);
+  }, [props.text]);
+
   return (
     <View style={props.containerStyle} onLayout={handleLayoutWidth}>
-      <Text>
-        {props.text.substring(0, handleReadMoreText())}{' '}
-        {props.numberLine < curNumberLine && isFinishSetLayout ? (
-          <Text style={styles.moreText}>More...</Text>
-        ) : null}{' '}
-      </Text>
+      {isFinishSetLayout ? (
+        <Text>
+          {props.text.substring(0, handleReadMoreText())}{' '}
+          {props.numberLine < curNumberLine ? <Text style={styles.moreText}>More...</Text> : null}{' '}
+        </Text>
+      ) : null}
       {!isFinishSetLayout ? <Text onTextLayout={handleLayoutText}>{props.text} </Text> : null}
     </View>
   );
 };
 
-export default React.memo(ReadMore, (prevProps, nextProps) => {
-  return prevProps === nextProps;
-});
+export default ReadMore;
