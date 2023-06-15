@@ -21,18 +21,10 @@ const styles = StyleSheet.create({
  */
 
 const ReadMore = (props) => {
-  const [layoutWidth, setLayoutWidth] = React.useState(0);
-  const [layoutTextWidth, setLayoutTextWidth] = React.useState(0);
   const [curNumberLine, setNumberLine] = React.useState(0);
   const [charLength, setCharLength] = React.useState(0);
-  const [widthPerChar, setWidthPerChar] = React.useState(0);
   const [isFinishSetLayout, setIsFinishSetLayout] = React.useState(false);
-  const [amountTxtPerLine, setAmountTxtPerLine] = React.useState(0);
   const [lengthTextFirstLine, setLengthTextFirstLine] = React.useState(0);
-  const widthScreen = Dimensions.get('screen').width;
-  const handleLayoutWidth = ({nativeEvent}) => {
-    setLayoutWidth(nativeEvent.layout.width);
-  };
 
   const handleLayoutText = async ({nativeEvent}) => {
     console.log(nativeEvent, 'native');
@@ -51,7 +43,6 @@ const ReadMore = (props) => {
         lengthFirstLine = nativeEvent.lines[i].text.length;
       }
     }
-    await setLayoutTextWidth(textWidth);
     await setNumberLine(nativeEvent.lines.length);
     await setCharLength(characterNumber);
     await setLengthTextFirstLine(lengthFirstLine);
@@ -68,23 +59,11 @@ const ReadMore = (props) => {
   };
 
   React.useEffect(() => {
-    if (layoutTextWidth > 0 && charLength > 0) {
-      setWidthPerChar(layoutTextWidth / charLength);
-    }
-  }, [layoutTextWidth, charLength]);
-
-  React.useEffect(() => {
-    if (layoutWidth > 0 && widthPerChar > 0) {
-      setAmountTxtPerLine(Math.ceil(layoutWidth / widthPerChar));
-    }
-  }, [layoutWidth, widthPerChar]);
-
-  React.useEffect(() => {
     setIsFinishSetLayout(false);
   }, [props.text]);
 
   return (
-    <View style={props.containerStyle} onLayout={handleLayoutWidth}>
+    <View style={props.containerStyle}>
       {isFinishSetLayout ? (
         <Text>
           {props.text.substring(0, handleReadMoreText())}{' '}
