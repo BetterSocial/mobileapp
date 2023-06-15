@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {colors} from '../../utils/colors';
 
 const styles = StyleSheet.create({
@@ -27,11 +27,6 @@ const ReadMore = (props) => {
   const [lengthTextFirstLine, setLengthTextFirstLine] = React.useState(0);
 
   const handleLayoutText = async ({nativeEvent}) => {
-    console.log(nativeEvent, 'native');
-    let lines = props.numberLine;
-    if (!lines) {
-      lines = 2;
-    }
     let characterNumber = 0;
     let textWidth = 0;
     let lengthFirstLine = 0;
