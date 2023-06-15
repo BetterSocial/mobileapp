@@ -205,7 +205,7 @@ const OtherProfile = () => {
       } = anonProfile ?? {};
 
       const anonDMParams = {
-        user_id: profile.myProfile.user_id,
+        user_id: dataMain.user_id,
         message: dmChat,
         anon_user_info_emoji_name,
         anon_user_info_emoji_code,
