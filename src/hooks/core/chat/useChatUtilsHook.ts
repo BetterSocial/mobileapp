@@ -3,6 +3,7 @@ import {atom, useRecoilState} from 'recoil';
 import {useNavigation} from '@react-navigation/native';
 
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
 import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 
@@ -15,18 +16,19 @@ const chatAtom = atom({
 
 function useChatUtilsHook(): UseChatUtilsHook {
   const [chat, setChat] = useRecoilState(chatAtom);
+  const {localDb, refresh} = useLocalDatabaseHook();
   const navigation = useNavigation();
   const {selectedChannel} = chat;
 
-  const onAnonPostNotification = (channel: ChannelList) => {
-    return SimpleToast.show(
-      'This is a post notification channel. You cannot chat here.',
-      SimpleToast.SHORT
-    );
+  const setChannelAsRead = (channel: ChannelList) => {
+    if (!localDb) return;
+    channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
+    refresh('channelList');
   };
 
   const goToChatScreen = (channel: ChannelList) => {
-    if (channel?.channelType === 'ANON_POST_NOTIFICATION') return onAnonPostNotification(channel);
+    setChannelAsRead(channel);
+    if (channel?.channelType === 'ANON_POST_NOTIFICATION') return goToPostDetailScreen(channel);
     navigation.navigate('SampleChatScreen');
     setChat({
       ...chat,
@@ -36,11 +38,12 @@ function useChatUtilsHook(): UseChatUtilsHook {
   };
 
   const goToPostDetailScreen = (channel: ChannelList) => {
+    setChannelAsRead(channel);
     const postNotificationChannel = channel as PostNotificationChannelList;
-    console.log(
-      'postNotificationChannel',
-      JSON.stringify(postNotificationChannel?.rawJson?.activity_id, null, 2)
-    );
+    // console.log(
+    //   'postNotificationChannel',
+    //   JSON.stringify(postNotificationChannel?.rawJson?.activity_id, null, 2)
+    // );
 
     if (!postNotificationChannel?.rawJson?.activity_id)
       return SimpleToast.show('Failed to get id', SimpleToast.SHORT);

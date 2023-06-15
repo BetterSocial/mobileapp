@@ -26,7 +26,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   postNotificationMessageText = '',
   postNotificationMessageUser = null,
   anonPostNotificationUserInfo = null,
-  unreadCount = 1,
+  unreadCount = 0,
   time = '12:00 PM',
   upvote = 15,
   downvote = 3,

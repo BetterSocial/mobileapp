@@ -1,11 +1,14 @@
 import * as React from 'react';
 import {StreamFeed, UR} from 'getstream';
 
+import UseLocalDatabaseHook from '../../../../types/database/localDatabase.types';
 import clientStream from '../../../utils/getstream/streamer';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {getAnonymousToken} from '../../../utils/token';
 import {getAnonymousUserId} from '../../../utils/users';
 
 const usePostNotificationListenerHook = (onPostNotifReceived) => {
+  const {localDb} = useLocalDatabaseHook() as UseLocalDatabaseHook;
   const feedSubscriptionRef = React.useRef<StreamFeed<UR, UR, UR, UR, UR, UR> | undefined>(
     undefined
   );
@@ -31,7 +34,7 @@ const usePostNotificationListenerHook = (onPostNotifReceived) => {
     return () => {
       feedSubscriptionRef.current?.unsubscribe();
     };
-  }, []);
+  }, [localDb]);
 
   return {
     feedSubscriptionRef

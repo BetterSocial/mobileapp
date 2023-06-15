@@ -151,6 +151,17 @@ class ChannelList implements BaseDbSchema {
     }
   }
 
+  async setRead(db: SQLiteDatabase): Promise<void> {
+    try {
+      await db.executeSql(
+        `UPDATE ${ChannelList.getTableName()} SET unread_count = 0 WHERE id = ?`,
+        [this.id]
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   static async getAll(
     db: SQLiteDatabase,
     myId: string,
@@ -239,7 +250,7 @@ class ChannelList implements BaseDbSchema {
       channelPicture: '',
       name: data?.name,
       description: '',
-      unreadCount: 0,
+      unreadCount: 1,
       channelType: 'ANON_PM',
       lastUpdatedAt: data?.last_message_at,
       lastUpdatedBy: '',
@@ -256,7 +267,7 @@ class ChannelList implements BaseDbSchema {
       channelPicture: '',
       name: data?.titlePost,
       description: data?.titlePost,
-      unreadCount: 0,
+      unreadCount: 1,
       channelType: 'ANON_POST_NOTIFICATION',
       lastUpdatedAt: data?.data?.updated_at,
       lastUpdatedBy: '',

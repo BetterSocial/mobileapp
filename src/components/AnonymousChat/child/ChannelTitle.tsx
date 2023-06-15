@@ -76,9 +76,11 @@ const ChannelTitle = ({type, name, time, message, unreadCount}) => {
             {message}
           </Text>
           {/* Unread Count */}
-          <View style={styles.chatContentUnreadCountContainer}>
-            <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
-          </View>
+          {unreadCount > 0 && (
+            <View style={styles.chatContentUnreadCountContainer}>
+              <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
+            </View>
+          )}
         </View>
       </>
     );
@@ -97,9 +99,11 @@ const ChannelTitle = ({type, name, time, message, unreadCount}) => {
       </Text>
       <View style={styles.chatContentUnreadCountPostNotificationContainer}>
         <Text style={styles.chatContentTime}>{time}</Text>
-        <View style={styles.chatContentUnreadCountContainer}>
-          <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
-        </View>
+        {unreadCount > 0 && (
+          <View style={styles.chatContentUnreadCountContainer}>
+            <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
+          </View>
+        )}
       </View>
     </View>
   );

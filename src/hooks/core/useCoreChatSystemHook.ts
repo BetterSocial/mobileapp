@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useRecoilState} from 'recoil';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
@@ -6,6 +7,7 @@ import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSche
 import ChatSchema from '../../database/schema/ChatSchema';
 import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
+import localDatabaseAtom from '../../database/atom/localDatabaseAtom';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
@@ -20,7 +22,8 @@ const useCoreChatSystemHook = () => {
     // const postNotifChannel = ChannelList.fromPostNotifObject(data);
     // postNotifChannel.save(localDb).catch((e) => console.log(e));
     try {
-      await getSingleAnonymousPostNotification(data?.new[0]?.object?.id || data?.new[0]?.id);
+      const activityId = data?.new[0]?.object?.id || data?.new[0]?.id;
+      await getSingleAnonymousPostNotification(activityId);
     } catch (e) {
       console.log('error getSingleAnonymousPostNotification');
       console.log(e);
