@@ -212,8 +212,7 @@ const OtherProfile = () => {
         anon_user_info_color_name,
         anon_user_info_color_code
       };
-      const result = await sendAnonymousDMOtherProfile(anonDMParams);
-      console.log(JSON.stringify({ANON_DM_SENT: result}, null, 2));
+      await sendAnonymousDMOtherProfile(anonDMParams);
       setDMChat('');
     } catch (_) {
       SimpleToast.show('Send message failed', SimpleToast.SHORT);
@@ -235,11 +234,10 @@ const OtherProfile = () => {
     try {
       setLoadingSendDM(true);
       const signedMParams = {
-        user_id: profile.myProfile.user_id,
+        user_id: dataMain.user_id,
         message: dmChat
       };
-      const result = await sendSignedDMOtherProfile(signedMParams);
-      console.log(JSON.stringify({SIGNED_DM_SENT: result}, null, 2));
+      await sendSignedDMOtherProfile(signedMParams);
       setDMChat('');
     } catch (error) {
       SimpleToast.show('Send message failed', SimpleToast.SHORT);

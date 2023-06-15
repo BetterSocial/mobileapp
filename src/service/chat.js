@@ -5,6 +5,7 @@ import {StreamChat} from 'stream-chat';
 import {getAccessToken} from '../utils/token';
 import {getUserId} from '../utils/users';
 import anonymousApi from './anonymousConfig';
+import api from './config';
 
 const chatClient = new StreamChat(Config.STREAM_API_KEY);
 const createChannel = async (channelType, members, channelName) => {
@@ -90,7 +91,7 @@ const sendSignedDMOtherProfile = async ({user_id, message}) => {
     message
   };
 
-  const response = await anonymousApi.post('/chat/init-chat', payload);
+  const response = await api.post('/chat/init-chat', payload);
 
   if (response.status === 200) {
     return Promise.resolve(response.data?.data);
