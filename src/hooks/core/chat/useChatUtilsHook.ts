@@ -2,8 +2,9 @@ import SimpleToast from 'react-native-simple-toast';
 import {atom, useRecoilState} from 'recoil';
 import {useNavigation} from '@react-navigation/native';
 
-import ChannelList from '../../../database/schema/ChannelListSchema';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
+import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
+import {PostNotificationChannelList} from '../../../../types/database/schema/PostNotificationChannelList.types';
 
 const chatAtom = atom({
   key: 'chatAtom',
@@ -34,6 +35,23 @@ function useChatUtilsHook(): UseChatUtilsHook {
     return null;
   };
 
+  const goToPostDetailScreen = (channel: ChannelList) => {
+    const postNotificationChannel = channel as PostNotificationChannelList;
+    console.log(
+      'postNotificationChannel',
+      JSON.stringify(postNotificationChannel?.rawJson?.activity_id, null, 2)
+    );
+
+    if (!postNotificationChannel?.rawJson?.activity_id)
+      return SimpleToast.show('Failed to get id', SimpleToast.SHORT);
+
+    return navigation.navigate('PostDetailPage', {
+      feedId: postNotificationChannel?.rawJson?.activity_id,
+      // refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
+      isCaching: false
+    });
+  };
+
   const goBackFromChatScreen = () => {
     navigation.goBack();
     setChat({
@@ -54,6 +72,7 @@ function useChatUtilsHook(): UseChatUtilsHook {
     selectedChannel,
     goBack,
     goToChatScreen,
+    goToPostDetailScreen,
     goToChatInfoScreen,
     goBackFromChatScreen
   };

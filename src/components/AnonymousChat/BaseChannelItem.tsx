@@ -25,6 +25,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   // postNotificationMessageText = 'Help all of us to bring good food to more people in the villages, we will hold a party for tonight',
   postNotificationMessageText = '',
   postNotificationMessageUser = null,
+  anonPostNotificationUserInfo = null,
   unreadCount = 1,
   time = '12:00 PM',
   upvote = 15,
@@ -32,6 +33,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   comments = 155,
   block = 11,
   type = BaseChannelItemType.ANON_PM,
+  isCommentExists = false,
   onPress = function () {
     console.log('onPress');
   }
@@ -43,6 +45,8 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
           mainPicture={picture}
           postNotificationPicture={postNotificationPicture}
           type={type}
+          anonPostNotificationUserInfo={anonPostNotificationUserInfo}
+          isCommentExists={isCommentExists}
         />
 
         <View style={styles.chatContentContainer}>

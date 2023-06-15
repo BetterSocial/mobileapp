@@ -1,8 +1,9 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
+import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';
 import ChatIcon from '../../../assets/chat-icon.png';
 import FeedIcon from '../../../assets/images/feed-icon.png';
 import {BaseChannelItemType} from '../BaseChannelItem';
@@ -11,6 +12,8 @@ import {colors} from '../../../utils/colors';
 const ChannelImage = ({
   mainPicture,
   postNotificationPicture,
+  anonPostNotificationUserInfo = null,
+  isCommentExists = false,
   type = BaseChannelItemType.ANON_PM
 }) => {
   const styles = StyleSheet.create({
@@ -44,6 +47,28 @@ const ChannelImage = ({
     }
   });
 
+  const isAnonymous =
+    anonPostNotificationUserInfo?.anon_user_info_emoji_code !== null &&
+    anonPostNotificationUserInfo?.anon_user_info_emoji_code !== undefined;
+
+  const renderMyPostNotificationSubImage = () => {
+    if (!isCommentExists)
+      return (
+        <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
+          <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
+        </View>
+      );
+
+    if (isAnonymous)
+      return (
+        <ChannelAnonymousSubImage anonPostNotificationUserInfo={anonPostNotificationUserInfo} />
+      );
+
+    return (
+      <FastImage source={{uri: postNotificationPicture}} style={styles.postNotificationImage} />
+    );
+  };
+
   // ANON PM CHANNEL IMAGE
   if (type === BaseChannelItemType.ANON_PM)
     return (
@@ -60,7 +85,11 @@ const ChannelImage = ({
     return (
       <View>
         <FastImage source={{uri: mainPicture}} style={styles.image} />
-        <FastImage source={{uri: postNotificationPicture}} style={styles.postNotificationImage} />
+        {isAnonymous ? (
+          <ChannelAnonymousSubImage anonPostNotificationUserInfo={anonPostNotificationUserInfo} />
+        ) : (
+          <FastImage source={{uri: postNotificationPicture}} style={styles.postNotificationImage} />
+        )}
       </View>
     );
 
@@ -80,9 +109,7 @@ const ChannelImage = ({
         {/* Chat Image */}
         <FastImage source={AnonymousProfile} style={styles.image} />
         {/* Post Notification Image */}
-        <View style={[styles.postNotificationImage, styles.myPostNotificationImageContainer]}>
-          <FastImage source={FeedIcon} style={styles.postNotificationIcon} />
-        </View>
+        {renderMyPostNotificationSubImage()}
       </View>
     );
 

@@ -22,7 +22,8 @@ const ChannelPostNotificationStats = ({
       flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginTop: 7
+      marginTop: 7,
+      marginRight: 45
     },
     avatarContainer: {},
     avatarNoHeight: {},

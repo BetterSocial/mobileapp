@@ -39,17 +39,17 @@ const NetworkStatusIndicator = ({hide = false}) => {
 
   if (hide) return <View testID="isHide" />;
 
-  if (!isOnline)
-    return (
-      <View testID="internet-not-available" style={styles.container}>
-        <View style={styles.bottomContainer}>
-          <ActivityIndicator color={COLORS.white} size={14} />
-          <Text style={styles.text}>No Internet Connection</Text>
-        </View>
-      </View>
-    );
+  // if (!isOnline)
+  //   return (
+  //     <View testID="internet-not-available" style={styles.container}>
+  //       <View style={styles.bottomContainer}>
+  //         <ActivityIndicator color={COLORS.white} size={14} />
+  //         <Text style={styles.text}>No Internet Connection</Text>
+  //       </View>
+  //     </View>
+  //   );
 
-  return null;
+  return <></>;
 };
 
 const styles = StyleSheet.create({

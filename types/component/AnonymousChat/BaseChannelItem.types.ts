@@ -7,6 +7,7 @@ export enum BaseChannelItemTypeProps {
 }
 
 export interface BaseChannelItemProps {
+  anonPostNotificationUserInfo: any;
   picture: string;
   name: string;
   message: string;
@@ -20,5 +21,6 @@ export interface BaseChannelItemProps {
   downvote?: number;
   comments?: number;
   block?: number;
+  isCommentExists?: boolean;
   onPress?: () => void;
 }

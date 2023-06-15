@@ -9,14 +9,22 @@ import UserSchema from '../../database/schema/UserSchema';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
+import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {getAnonymousChatName} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
 
-  const onPostNotifReceived = (data) => {
-    const postNotifChannel = ChannelList.fromPostNotifObject(data);
-    postNotifChannel.save(localDb).catch((e) => console.log(e));
+  const onPostNotifReceived: (data: GetstreamFeedListenerObject) => void = async (data) => {
+    // const postNotifChannel = ChannelList.fromPostNotifObject(data);
+    // postNotifChannel.save(localDb).catch((e) => console.log(e));
+    try {
+      await getSingleAnonymousPostNotification(data?.new[0]?.object?.id || data?.new[0]?.id);
+    } catch (e) {
+      console.log('error getSingleAnonymousPostNotification');
+      console.log(e);
+    }
   };
 
   usePostNotificationListenerHook(onPostNotifReceived);
@@ -88,6 +96,33 @@ const useCoreChatSystemHook = () => {
     }
   };
 
+  const getSingleAnonymousPostNotification = async (activityId) => {
+    if (!localDb) return;
+    let anonymousPostNotification: AnonymousPostNotification = null;
+
+    try {
+      anonymousPostNotification = await AnonymousMessageRepo.getSingleAnonymousPostNotifications(
+        activityId
+      );
+      console.log('anonymousPostNotification response');
+      console.log(anonymousPostNotification);
+    } catch (e) {
+      console.log('error on getting anonymousPostNotifications');
+      console.log(e);
+    }
+
+    try {
+      if (!anonymousPostNotification) return;
+      const channelList = ChannelList.fromAnonymousPostNotificationAPI(anonymousPostNotification);
+      await channelList.save(localDb).catch((e) => console.log(e));
+
+      refresh('channelList');
+    } catch (e) {
+      console.log('error on saving anonymousPostNotifications');
+      console.log(e);
+    }
+  };
+
   const getAllAnonymousPostNotifications = async () => {
     if (!localDb) return;
     let anonymousPostNotifications = [];
@@ -125,8 +160,8 @@ const useCoreChatSystemHook = () => {
   }, [lastJsonMessage, localDb]);
 
   React.useEffect(() => {
-    getAllAnonymousChannels().catch((e) => console.log(e));
-    getAllAnonymousPostNotifications().catch((e) => console.log(e));
+    // getAllAnonymousChannels().catch((e) => console.log(e));
+    // getAllAnonymousPostNotifications().catch((e) => console.log(e));
   }, [localDb]);
 };
 

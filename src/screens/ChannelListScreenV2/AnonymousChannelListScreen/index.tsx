@@ -9,7 +9,9 @@ import MessageChannelItem from '../../../components/AnonymousChat/MessageChannel
 import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymousChannelListHook';
 
 const AnonymousChannelListScreen = () => {
-  const {channels, goToChatScreen} = useAnonymousChannelListScreenHook();
+  const {channels, goToChatScreen, goToPostDetailScreen} = useAnonymousChannelListScreenHook();
+  // console.log('item');
+  // console.log(channels[0]);
   return (
     <ScrollView>
       <View>
@@ -22,7 +24,7 @@ const AnonymousChannelListScreen = () => {
               {item?.channelType === 'ANON_POST_NOTIFICATION' && (
                 <AnonPostNotificationChannelItem
                   item={item}
-                  onChannelPressed={() => goToChatScreen(item)}
+                  onChannelPressed={() => goToPostDetailScreen(item)}
                 />
               )}
             </>
