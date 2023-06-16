@@ -8,14 +8,10 @@ import ChannelPostNotificationStats from './child/ChannelPostNotificationStats';
 import ChannelTitle from './child/ChannelTitle';
 import CustomPressable from '../CustomPressable';
 import styles from './BaseChannelItemStyles';
-import {BaseChannelItemProps} from '../../../types/component/AnonymousChat/BaseChannelItem.types';
-
-export const BaseChannelItemType = {
-  ANON_PM: 'ANON_PM',
-  ANON_POST_NOTIFICATION: 'ANON_POST_NOTIFICATION',
-  MY_ANON_POST_NOTIFICATION: 'MY_ANON_POST_NOTIFICATION',
-  ANON_POST_NOTIFICATION_I_COMMENTED: 'ANON_POST_NOTIFICATION_I_COMMENTED'
-};
+import {
+  BaseChannelItemProps,
+  BaseChannelItemTypeProps
+} from '../../../types/component/AnonymousChat/BaseChannelItem.types';
 
 const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   picture = 'https://fastly.picsum.photos/id/173/400/400.jpg?hmac=TU_DMkn7FSRRwiEpVveLvmyATg-y4hNrNKT-Cs4VQ1M',
@@ -32,7 +28,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   downvote = 3,
   comments = 155,
   block = 11,
-  type = BaseChannelItemType.ANON_PM,
+  type = BaseChannelItemTypeProps.ANON_PM,
   isCommentExists = false,
   onPress = function () {
     console.log('onPress');

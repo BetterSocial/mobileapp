@@ -17,6 +17,11 @@ const ChannelAnonymousSubImage = ({anonPostNotificationUserInfo = null}) => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center'
+    },
+    anonPostNotificationEmoji: {
+      fontSize: 10,
+      alignSelf: 'center',
+      textAlign: 'center'
     }
   });
 
@@ -26,7 +31,9 @@ const ChannelAnonymousSubImage = ({anonPostNotificationUserInfo = null}) => {
         styles.postNotificationImage,
         {backgroundColor: anonPostNotificationUserInfo?.anon_user_info_color_code}
       ]}>
-      <Text>{anonPostNotificationUserInfo?.anon_user_info_emoji_code}</Text>
+      <Text style={styles.anonPostNotificationEmoji}>
+        {anonPostNotificationUserInfo?.anon_user_info_emoji_code}
+      </Text>
     </View>
   );
 };

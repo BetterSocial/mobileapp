@@ -41,8 +41,10 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
   const isOwnPost = postNotifItem?.rawJson?.isOwnPost;
 
   let type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION;
-  if (isOwnPost) type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION;
-  if (firstComment?.reaction?.isOwningReaction)
+  if (isOwnPost && firstComment?.reaction?.isOwningReaction)
+    type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED;
+  else if (isOwnPost) type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION;
+  else if (firstComment?.reaction?.isOwningReaction)
     type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED;
 
   return (

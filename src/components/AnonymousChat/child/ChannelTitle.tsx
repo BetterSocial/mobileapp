@@ -2,7 +2,7 @@ import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import baseStyles from '../BaseChannelItemStyles';
-import {BaseChannelItemType} from '../BaseChannelItem';
+import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
@@ -20,7 +20,7 @@ const ChannelTitle = ({type, name, time, message, unreadCount}) => {
       fontSize: 14,
       lineHeight: 22,
       marginLeft: 20,
-      alignSelf: 'center'
+      alignSelf: 'flex-start'
     },
     chatContentMessage: {
       fontFamily: fonts.inter[400],
@@ -47,8 +47,12 @@ const ChannelTitle = ({type, name, time, message, unreadCount}) => {
     },
     chatContentUnreadCountPostNotificationContainer: {
       display: 'flex',
+      position: 'absolute',
+      top: 22,
+      right: 20,
       alignItems: 'flex-end',
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-start',
+      alignSelf: 'flex-start'
     },
     postNotificationMessage: {
       fontFamily: fonts.inter[400],
@@ -59,7 +63,7 @@ const ChannelTitle = ({type, name, time, message, unreadCount}) => {
     }
   });
 
-  if (type === BaseChannelItemType.ANON_PM)
+  if (type === BaseChannelItemTypeProps.ANON_PM)
     return (
       <>
         <View style={baseStyles.chatContentSection}>
@@ -86,26 +90,46 @@ const ChannelTitle = ({type, name, time, message, unreadCount}) => {
     );
 
   const title =
-    type === BaseChannelItemType.MY_ANON_POST_NOTIFICATION ? 'Your post: ' : `${name}'s post: `;
+    type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION ||
+    type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED
+      ? 'Your post: '
+      : `${name}'s post: `;
+
+  const getTitle = () => {
+    if (
+      type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION ||
+      type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED
+    ) {
+      if (message?.length === 0) return 'Your media post 📸 🖼';
+      return 'Your post: ';
+    }
+
+    if (message?.length === 0) return `${name}'s media post 📸 🖼`;
+    return `${name}'s post: `;
+  };
 
   return (
-    <View style={baseStyles.chatContentSection}>
-      <Text
-        numberOfLines={2}
-        ellipsizeMode="tail"
-        style={[styles.chatContentName, styles.postNotificationMessage]}>
-        <Text style={styles.postNotificationMessageBold}>{title}</Text>
-        {message}
-      </Text>
+    <>
+      <View style={baseStyles.chatContentSection}>
+        <View style={{display: 'flex', flexDirection: 'row'}}>
+          <Text
+            numberOfLines={2}
+            ellipsizeMode="tail"
+            style={[styles.chatContentName, styles.postNotificationMessage]}>
+            <Text style={styles.postNotificationMessageBold}>{getTitle()}</Text>
+            {message}
+          </Text>
+          <Text style={styles.chatContentTime}>{time}</Text>
+        </View>
+      </View>
       <View style={styles.chatContentUnreadCountPostNotificationContainer}>
-        <Text style={styles.chatContentTime}>{time}</Text>
         {unreadCount > 0 && (
           <View style={styles.chatContentUnreadCountContainer}>
             <Text style={styles.chatContentUnreadCount}>{unreadCount}</Text>
           </View>
         )}
       </View>
-    </View>
+    </>
   );
 };
 

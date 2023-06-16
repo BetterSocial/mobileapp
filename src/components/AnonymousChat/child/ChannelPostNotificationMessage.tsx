@@ -2,18 +2,18 @@ import * as React from 'react';
 import {StyleSheet, Text} from 'react-native';
 
 import useProfileHook from '../../../hooks/core/profile/useProfileHook';
-import {BaseChannelItemType} from '../BaseChannelItem';
+import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
 const ChannelPostNotificationMessage = ({
-  type = BaseChannelItemType.ANON_PM,
+  type = BaseChannelItemTypeProps.ANON_PM,
   commenterId,
   commenterName,
   message
 }) => {
   const {profile} = useProfileHook();
-  if (type === BaseChannelItemType.ANON_PM) return <></>;
+  if (type === BaseChannelItemTypeProps.ANON_PM) return <></>;
   if (!commenterName) return <></>;
 
   const styles = StyleSheet.create({
@@ -22,7 +22,8 @@ const ChannelPostNotificationMessage = ({
       fontSize: 12,
       lineHeight: 20,
       color: colors.gray,
-      marginRight: 29
+      marginRight: 29,
+      marginBottom: 7
     },
     chatContentPostNotificationMessageBold: {
       fontFamily: fonts.inter[600],

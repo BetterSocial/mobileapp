@@ -6,7 +6,7 @@ import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';
 import ChatIcon from '../../../assets/chat-icon.png';
 import FeedIcon from '../../../assets/images/feed-icon.png';
-import {BaseChannelItemType} from '../BaseChannelItem';
+import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {colors} from '../../../utils/colors';
 
 const ChannelImage = ({
@@ -14,7 +14,7 @@ const ChannelImage = ({
   postNotificationPicture,
   anonPostNotificationUserInfo = null,
   isCommentExists = false,
-  type = BaseChannelItemType.ANON_PM
+  type = BaseChannelItemTypeProps.ANON_PM
 }) => {
   const styles = StyleSheet.create({
     image: {
@@ -70,7 +70,7 @@ const ChannelImage = ({
   };
 
   // ANON PM CHANNEL IMAGE
-  if (type === BaseChannelItemType.ANON_PM)
+  if (type === BaseChannelItemTypeProps.ANON_PM)
     return (
       <View>
         <FastImage source={{uri: mainPicture}} style={styles.image} />
@@ -81,7 +81,7 @@ const ChannelImage = ({
     );
 
   // ANON POST NOTIFICATION CHANNEL IMAGE
-  if (type === BaseChannelItemType.ANON_POST_NOTIFICATION)
+  if (type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION)
     return (
       <View>
         <FastImage source={{uri: mainPicture}} style={styles.image} />
@@ -94,7 +94,7 @@ const ChannelImage = ({
     );
 
   // ANON POST NOTIFICATION I COMMENTED CHANNEL IMAGE
-  if (type === BaseChannelItemType.ANON_POST_NOTIFICATION_I_COMMENTED)
+  if (type === BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED)
     return (
       <View>
         <FastImage source={{uri: mainPicture}} style={styles.image} />
@@ -102,8 +102,19 @@ const ChannelImage = ({
       </View>
     );
 
+  // MY POST NOTIFICATION I COMMENTED CHANNEL IMAGE
+  if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED)
+    return (
+      <View>
+        {/* Chat Image */}
+        <FastImage source={AnonymousProfile} style={styles.image} />
+        {/* Post Notification Image */}
+        <FastImage source={AnonymousProfile} style={styles.postNotificationImage} />
+      </View>
+    );
+
   // MY POST NOTIFICATION CHANNEL IMAGE
-  if (type === BaseChannelItemType.MY_ANON_POST_NOTIFICATION)
+  if (type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION)
     return (
       <View>
         {/* Chat Image */}

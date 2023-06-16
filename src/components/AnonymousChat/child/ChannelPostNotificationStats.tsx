@@ -7,14 +7,14 @@ import MemoIc_arrow_down_vote_on from '../../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_on from '../../../assets/arrow/Ic_upvote_on';
 import MemoIc_block_inactive from '../../../assets/block/Ic_block_inactive';
 import MemoIc_comment from '../../../assets/icons/Ic_comment';
-import {BaseChannelItemType} from '../BaseChannelItem';
+import {BaseChannelItemTypeProps} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 
 const ChannelPostNotificationStats = ({
   upvote = 0,
   downvote = 0,
   comments = 0,
   block = 0,
-  type = BaseChannelItemType.MY_ANON_POST_NOTIFICATION
+  type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION
 }) => {
   const styles = StyleSheet.create({
     descriptionContainer: {
@@ -22,7 +22,6 @@ const ChannelPostNotificationStats = ({
       flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginTop: 7,
       marginRight: 45
     },
     avatarContainer: {},
@@ -39,7 +38,7 @@ const ChannelPostNotificationStats = ({
     }
   });
 
-  if (type === BaseChannelItemType.ANON_PM) return <></>;
+  if (type === BaseChannelItemTypeProps.ANON_PM) return <></>;
 
   return (
     <View style={styles.descriptionContainer}>
