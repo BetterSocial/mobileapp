@@ -85,11 +85,7 @@ const ChannelImage = ({
     return (
       <View>
         <FastImage source={{uri: mainPicture}} style={styles.image} />
-        {isAnonymous ? (
-          <ChannelAnonymousSubImage anonPostNotificationUserInfo={anonPostNotificationUserInfo} />
-        ) : (
-          <FastImage source={{uri: postNotificationPicture}} style={styles.postNotificationImage} />
-        )}
+        {renderMyPostNotificationSubImage()}
       </View>
     );
 
