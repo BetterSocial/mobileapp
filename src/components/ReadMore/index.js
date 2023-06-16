@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {colors} from '../../utils/colors';
 
 const styles = StyleSheet.create({
@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
  * @property {any} containerStyle
  * @property {string} text
  * @property {number} numberLine
+ * @property {Function} onPress
  */
 
 /**
@@ -60,10 +61,12 @@ const ReadMore = (props) => {
   return (
     <View style={props.containerStyle}>
       {isFinishSetLayout ? (
-        <Text>
-          {props.text.substring(0, handleReadMoreText())}{' '}
-          {props.numberLine < curNumberLine ? <Text style={styles.moreText}>More...</Text> : null}{' '}
-        </Text>
+        <TouchableOpacity onPress={props.onPress}>
+          <Text>
+            {props.text.substring(0, handleReadMoreText())}{' '}
+            {props.numberLine < curNumberLine ? <Text style={styles.moreText}>More...</Text> : null}{' '}
+          </Text>
+        </TouchableOpacity>
       ) : null}
       {!isFinishSetLayout ? <Text onTextLayout={handleLayoutText}>{props.text} </Text> : null}
     </View>
