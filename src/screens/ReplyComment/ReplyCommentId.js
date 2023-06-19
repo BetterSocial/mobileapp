@@ -22,7 +22,7 @@ import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
-import {createChildComment} from '../../service/comment';
+import {createChildComment, createChildCommentV3} from '../../service/comment';
 import {fonts} from '../../utils/fonts';
 import {getComment} from '../../utils/getstream/getComment';
 import {getFeedDetail} from '../../service/post';
@@ -150,7 +150,7 @@ const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
     ]);
     try {
       if (textComment.trim() !== '') {
-        const data = await createChildComment(textComment, item.id, item.user.id);
+        const data = await createChildCommentV3(textComment, item.id, item.user.id);
         if (data.code === 200) {
           // setNewCommentList([...newCommentList, { ...defaultData, id: data.data.id, activity_id: data.data.activity_id, user: data.data.user, data: data.data.data }])
           // setLoadingCMD(false);

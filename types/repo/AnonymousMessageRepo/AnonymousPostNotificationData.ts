@@ -45,6 +45,10 @@ export interface Comment {
   actor: any;
 }
 
+export interface LatestChildren {
+  comment: Comment[];
+}
+
 export interface Reaction {
   created_at: string;
   updated_at: string;
@@ -56,11 +60,10 @@ export interface Reaction {
   data: Data3;
   target_feeds: string[];
   parent: string;
-  latest_children: any;
+  latest_children: LatestChildren;
   children_counts: any;
   isOwningReaction: boolean;
 }
-
 export interface Data3 {
   anon_user_info_color_code: string;
   anon_user_info_color_name: string;

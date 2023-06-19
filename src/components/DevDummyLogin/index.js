@@ -1,10 +1,12 @@
 import * as React from 'react';
+import JwtDecode from 'jwt-decode';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import configEnv from 'react-native-config';
 import {Button, Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {useSetRecoilState} from 'recoil';
 
+import useProfileHook from '../../hooks/core/profile/useProfileHook';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {InitialStartupAtom} from '../../service/initialStartup';
@@ -24,6 +26,7 @@ const heightBs = Dimensions.get('window').height * 0.85;
 
 const DevDummyLogin = ({resetClickTime = () => {}}) => {
   const {ENABLE_DEV_ONLY_FEATURE} = configEnv;
+  const {setProfileId} = useProfileHook();
 
   const [dummyUsers] = React.useState([
     {name: 'fajarismv2', humanId: 'fajarismv2'},
@@ -69,13 +72,20 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
           return;
         }
         if (response.data) {
-          setAccessToken(response.token);
-          console.log('response.anonymous_token', response);
-          setAnonymousToken(response.anonymousToken);
+          await setAnonymousToken(response.anonymousToken);
+          await setAccessToken(response.token);
           setRefreshToken(response.refresh_token);
+
+          const userId = await JwtDecode(response.token).user_id;
+          const anonymousUserId = await JwtDecode(response.anonymousToken).user_id;
+          setProfileId({
+            anonProfileId: anonymousUserId,
+            signedProfileId: userId
+          });
           try {
             await setAnonymousToken(response.anonymousToken);
           } catch (e) {
+            console.log('e');
             console.log(e);
           }
           streamChat(response.token).then(() => {

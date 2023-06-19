@@ -29,6 +29,10 @@ export interface AdditionalData {
   text: string;
 }
 
+export interface LatestChildren {
+  comment: Reaction[];
+}
+
 export interface Reaction {
   created_at: string;
   updated_at: string;
@@ -40,7 +44,7 @@ export interface Reaction {
   data: AdditionalData;
   target_feeds: string[];
   parent: string;
-  latest_children: any[];
+  latest_children: LatestChildren;
   children_counts: any;
   isOwningReaction: boolean;
 }

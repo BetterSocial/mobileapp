@@ -1,10 +1,13 @@
 import * as React from 'react';
 
-import BaseChannelItem, {BaseChannelItemType} from './BaseChannelItem';
+import BaseChannelItem from './BaseChannelItem';
 import {BaseChannelItemTypeProps} from '../../../types/component/AnonymousChat/BaseChannelItem.types';
-import {Comment} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {
+  Comment,
+  PostNotificationChannelList,
+  Reaction
+} from '../../../types/database/schema/PostNotificationChannelList.types';
 import {MessageChannelItemProps} from '../../../types/component/AnonymousChat/MessageChannelItem.types';
-import {PostNotificationChannelList} from '../../../types/database/schema/PostNotificationChannelList.types';
 import {calculateTime} from '../../utils/time';
 import {capitalizeFirstText} from '../../utils/string/StringUtils';
 
@@ -19,7 +22,19 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
   let anonymousPostNotificationUserInfo = null;
   let firstComment: Comment = null;
 
+  let level1FirstComment: Reaction = null;
+  let level2FirstComment: Reaction = null;
+
   if (postNotifItem?.rawJson?.comments?.length > 0) {
+    if (postNotifItem?.rawJson?.comments[0]?.reaction?.latest_children?.comment?.length > 0) {
+      const level1 = postNotifItem?.rawJson?.comments[0]?.reaction?.latest_children?.comment[0];
+      level1FirstComment = level1;
+
+      if (level1?.latest_children?.comment?.length > 0) {
+        level2FirstComment = level1?.latest_children?.comment[0];
+      }
+    }
+
     firstComment = postNotifItem?.rawJson?.comments[0];
     const anonymousCommenterName = firstComment?.reaction?.data?.anon_user_info_emoji_name;
     anonymousPostNotificationUserInfo = {
@@ -34,7 +49,10 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
       postNotificationPicture = firstComment?.reaction?.user?.data?.profile_pic_url;
     }
 
-    postNotificationMessageText = firstComment?.reaction?.data?.text;
+    postNotificationMessageText =
+      level2FirstComment?.data?.text ||
+      level1FirstComment?.data?.text ||
+      firstComment?.reaction?.data?.text;
   }
 
   const postMaker = postNotifItem?.rawJson?.postMaker;
@@ -46,6 +64,9 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
   else if (isOwnPost) type = BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION;
   else if (firstComment?.reaction?.isOwningReaction)
     type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED;
+
+  // console.log('postNotifItem?.rawJson');
+  // console.log(postNotifItem?.rawJson);
 
   return (
     <BaseChannelItem

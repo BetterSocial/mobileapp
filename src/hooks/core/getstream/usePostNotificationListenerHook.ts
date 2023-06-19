@@ -20,7 +20,7 @@ const usePostNotificationListenerHook = (onPostNotifReceived) => {
     const client = clientStream(token);
     const notifFeed = client?.feed('notification', userId, token);
     notifFeed?.subscribe((data) => {
-      console.log('postnotif received', data?.new[0]);
+      // console.log('postnotif received', data?.new[0]);
       if (!data || !onPostNotifReceived || typeof onPostNotifReceived !== 'function') return;
       onPostNotifReceived(data);
     });
