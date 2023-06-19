@@ -67,6 +67,11 @@ import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import WarningCircleOutline from '../../../assets/icons/warning-circle-outline.svg';
+import {KarmaScore} from './elements/KarmaScore';
+import BioAndDMSetting from './elements/BioAndDMSetting';
+import {DEFAULT_PROFILE_PIC_PATH} from '../../utils/constants';
+import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -116,6 +121,8 @@ const ProfileScreen = ({route}) => {
   const updateUserClient = useUpdateClientGetstreamHook();
 
   const LIMIT_PROFILE_FEED = 10;
+
+  console.log(JSON.stringify(dataMain, null, 2));
 
   const {feeds} = myProfileFeed;
   const {
@@ -369,6 +376,7 @@ const ProfileScreen = ({route}) => {
         });
       });
   };
+
   const changeBio = () => {
     if (dataMain.bio !== null || dataMain.bio !== undefined) {
       setTempBio(dataMain.bio);
@@ -417,21 +425,6 @@ const ProfileScreen = ({route}) => {
     setTempBio(text);
   };
 
-  const renderBio = (string) => (
-    <GlobalButton buttonStyle={styles.bioText} onPress={() => changeBio()}>
-      <View style={styles.containerBio}>
-        {string === null || string === undefined ? (
-          <Text style={{color: colors.blue}}>Add Bio</Text>
-        ) : (
-          <Text style={styles.seeMore}>
-            {trimString(string, 121)}{' '}
-            {string.length > 121 ? <Text style={{color: colors.blue}}>see more</Text> : null}
-          </Text>
-        )}
-      </View>
-    </GlobalButton>
-  );
-
   const onPressDomain = (item) => {
     const param = linkContextScreenParamBuilder(
       item,
@@ -473,6 +466,7 @@ const ProfileScreen = ({route}) => {
     await upVote(post);
     updateFeed(post, index);
   };
+
   const setDownVote = async (post, index) => {
     await downVote(post);
     updateFeed(post, index);
@@ -549,17 +543,33 @@ const ProfileScreen = ({route}) => {
         headerHeightRef.current = headerHeightLayout;
       }}>
       <View style={styles.content}>
-        <ProfilePicture
-          onImageContainerClick={changeImage}
-          profilePicPath={dataMain.profile_pic_path}
-        />
-        <FollowInfoRow
-          follower={dataMain.follower_symbol}
-          following={dataMain.following_symbol}
-          onFollowingContainerClicked={() => goToFollowings(dataMain.user_id, dataMain.username)}
+        <View style={{flexDirection: 'row'}}>
+          <ProfilePicture
+            onImageContainerClick={changeImage}
+            profilePicPath={dataMain.profile_pic_path}
+          />
+          <View style={{marginLeft: 20}}>
+            <FollowInfoRow
+              follower={dataMain.follower_symbol}
+              following={dataMain.following_symbol}
+              onFollowingContainerClicked={() =>
+                goToFollowings(dataMain.user_id, dataMain.username)
+              }
+            />
+            <View style={{flexDirection: 'row'}}>
+              <KarmaScore score={86} />
+              <WarningCircleOutline height={15} width={15} style={{marginLeft: 5}} />
+            </View>
+          </View>
+        </View>
+
+        <BioAndDMSetting
+          avatarUrl={DEFAULT_PROFILE_PIC_PATH}
+          bio={dataMain.bio}
+          changeBio={changeBio}
         />
 
-        {renderBio(dataMainBio)}
+        <LinkAndSocialMedia />
       </View>
       <View>
         <View style={styles.tabs} ref={postRef}>
@@ -776,4 +786,5 @@ const styles = StyleSheet.create({
     paddingLeft: 0
   }
 });
+
 export default React.memo(withInteractionsManaged(ProfileScreen));
