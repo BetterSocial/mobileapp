@@ -36,6 +36,7 @@ exports[`AnonymousAvatar test Should match version 2 snapshot 1`] = `
       Object {
         "alignSelf": "center",
         "fontSize": 10,
+        "textAlign": "center",
       }
     }
   >
