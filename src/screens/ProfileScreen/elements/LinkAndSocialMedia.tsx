@@ -108,7 +108,8 @@ const LinkAndSocialMedia = () => {
           borderRadius: 8,
           marginVertical: 10
         }}>
-        <Text style={{color: colors.darkBlue, fontWeight: '600', textAlign: 'center'}}>
+        <Text
+          style={{color: colors.darkBlue, fontWeight: '600', textAlign: 'center', fontSize: 12}}>
           Step 1: Copy your link
         </Text>
         <CopyLink />
