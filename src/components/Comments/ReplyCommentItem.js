@@ -15,11 +15,12 @@ import useUpdateComment from './hooks/useUpdateComment';
 import {FONTS} from '../../utils/theme';
 import {calculateTime} from '../../utils/time';
 import {colors} from '../../utils/colors';
-import {fonts} from '../../utils/fonts';
+import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getUserId} from '../../utils/users';
 import {iVoteComment, voteComment} from '../../service/vote';
 import {removeWhiteSpace} from '../../utils/Utils';
 import {getCaptionWithLinkStyle} from '../../utils/string/StringUtils';
+import CommentUserName from '../CommentUsername/CommentUsername';
 
 const ReplyCommentItem = ({
   user,
@@ -34,7 +35,8 @@ const ReplyCommentItem = ({
   showLeftConnector = true,
   disableOnTextPress = false,
   refreshComment,
-  updateVoteParent
+  updateVoteParent,
+  onLongPress
 }) => {
   const navigation = useNavigation();
   const refBlockComponent = React.useRef();
@@ -124,7 +126,6 @@ const ReplyCommentItem = ({
   }, []);
 
   React.useEffect(() => {
-    console.log(comment.data, 'lupa');
     setTotalVote(comment.data.count_upvote - comment.data.count_downvote);
   }, [JSON.stringify(comment.data)]);
 
@@ -137,8 +138,17 @@ const ReplyCommentItem = ({
     }
     return '#C4C4C4';
   };
+
+  const handleLongPress = () => {
+    if (onLongPress && typeof onLongPress === 'function') {
+      onLongPress();
+    }
+  };
+
   return (
-    <View
+    <TouchableOpacity
+      onLongPress={handleLongPress}
+      activeOpacity={1}
       style={styles.container({
         isLast,
         style,
@@ -147,7 +157,7 @@ const ReplyCommentItem = ({
         showLeftConnector
       })}>
       <TouchableOpacity activeOpacity={1} onPress={openProfile} testID="profileOpen">
-        <ButtonHightlight onPress={openProfile}>
+        <ButtonHightlight onLongPress={handleLongPress} onPress={openProfile}>
           <View style={styles.profile}>
             {comment.data.anon_user_info_emoji_name || comment.data.is_anonymous ? (
               <View
@@ -166,12 +176,7 @@ const ReplyCommentItem = ({
             )}
 
             <View style={styles.containerUsername}>
-              <Text style={styles.username}>
-                {user?.data?.username
-                  ? user.data.username
-                  : `${comment.data.anon_user_info_color_name} ${comment.data.anon_user_info_emoji_name}`}{' '}
-                •
-              </Text>
+              <CommentUserName comment={comment} user={user} />
               <Text style={styles.time}> {calculateTime(time)}</Text>
             </View>
           </View>
@@ -179,7 +184,7 @@ const ReplyCommentItem = ({
       </TouchableOpacity>
 
       <TouchableOpacity activeOpacity={1} testID="ontextpress" onPress={onTextPress}>
-        <ButtonHightlight onPress={onTextPress}>
+        <ButtonHightlight onLongPress={handleLongPress} onPress={onTextPress}>
           <Text testID="commentText" style={styles.post}>
             {getCaptionWithLinkStyle(comment?.data?.text)}
           </Text>
@@ -191,7 +196,10 @@ const ReplyCommentItem = ({
           <View style={styles.gap} />
         ) : (
           <TouchableOpacity testID="replyBtn" activeOpacity={1} onPress={onPress}>
-            <ButtonHightlight style={styles.btnReply} onPress={onPress}>
+            <ButtonHightlight
+              onLongPress={handleLongPress}
+              style={styles.btnReply}
+              onPress={onPress}>
               <MemoCommentReply />
               <Text style={styles.btnReplyText}>Reply</Text>
             </ButtonHightlight>
@@ -199,6 +207,7 @@ const ReplyCommentItem = ({
         )}
         <TouchableOpacity onPress={() => onBlock(comment)} testID="btnBlock" activeOpacity={1}>
           <ButtonHightlight
+            onLongPress={handleLongPress}
             onPress={() => onBlock(comment)}
             style={[styles.btnBlock(comment.user.id === yourselfId), styles.btn]}>
             <IconEn name="block" size={15.02} color={colors.gray1} />
@@ -206,7 +215,10 @@ const ReplyCommentItem = ({
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onDownVote} testID="downvoteBtn">
-          <ButtonHightlight style={[styles.arrowup, styles.btn]} onPress={onDownVote}>
+          <ButtonHightlight
+            onLongPress={handleLongPress}
+            style={[styles.arrowup, styles.btn]}
+            onPress={onDownVote}>
             {statusVote === 'downvote' ? (
               <MemoIc_downvote_on width={20} height={18} />
             ) : (
@@ -216,7 +228,10 @@ const ReplyCommentItem = ({
         </TouchableOpacity>
         <Text style={styles.vote(voteStyle())}>{totalVote}</Text>
         <TouchableOpacity onPress={onUpVote} testID="upvotebtn" activeOpacity={1}>
-          <ButtonHightlight style={[styles.arrowdown, styles.btn]} onPress={onUpVote}>
+          <ButtonHightlight
+            onLongPress={handleLongPress}
+            style={[styles.arrowdown, styles.btn]}
+            onPress={onUpVote}>
             {statusVote === 'upvote' ? (
               <MemoIc_upvote_on width={20} height={18} />
             ) : (
@@ -227,7 +242,7 @@ const ReplyCommentItem = ({
       </View>
 
       <BlockComponent ref={refBlockComponent} refresh={() => {}} screen="reply_screen" />
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -262,14 +277,14 @@ const styles = StyleSheet.create({
   }),
   username: {
     fontFamily: fonts.inter[700],
-    fontSize: 12,
+    fontSize: normalizeFontSize(12),
     color: '#828282',
     lineHeight: 14,
     marginLeft: 16
   },
   post: {
     fontFamily: fonts.inter[400],
-    fontSize: 16,
+    fontSize: normalizeFontSize(16),
     color: '#333333',
     marginLeft: 28
   },

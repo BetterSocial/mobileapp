@@ -74,14 +74,10 @@ end
         json_key: 'fastlane/playstore-api-key.json'
       )[0]
     else
-
-      puts 'latest release #{latest_release}'
-      puts 'testing doang #{ENV["FIREBASE_APP_ID_ANDROID"]}'
       firebase_release = firebase_app_distribution_get_latest_release(
           app: ENV["FIREBASE_APP_ID_ANDROID"],
           firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
       )
-      puts 'test #{:buildVersion}'
       latest_release += firebase_release[:buildVersion].to_i
     end
     ENV['APP_VERSION'] = "#{version_name}(#{latest_release})"
@@ -234,11 +230,11 @@ end
         bump_version
         build
         if ENV["ENV"] === 'prod'
-          upload_testflight
+           upload_testflight
+           create_release_tag('builds/iosrelease/*')
         else
-          upload_ipa_to_firebase_distribution(release_notes: options[:release_notes])
+           upload_ipa_to_firebase_distribution(release_notes: options[:release_notes])
         end
-        on_success_slack
       rescue => exception
         puts exception
       end
@@ -249,40 +245,43 @@ end
       matchType = 'adhoc'
       profileType = 'ad-hoc'
       if ENV["ENV"] === 'prod'
+        puts "prod bro"
         profile_name_type = 'AppStore'
         matchType = 'appstore'
         profileType = 'ad-hoc'
       end
+      update_code_signing_settings(
+        use_automatic_signing: false,
+        path: './ios/BetterSocial.xcodeproj',
+        targets: ENV["SCHEME"],
+        profile_name: "match #{profile_name_type} #{ENV["BUNDLE_ID"]}",
+        team_id: 'J22M3M9VYU'
+      )
       match(
         type: matchType, # "appstore" | "adhoc" | "development"
         app_identifier: [ENV["BUNDLE_ID"]],
         readonly: true,
-        verbose:true
+        verbose: true
       )
-      update_code_signing_settings(
-        use_automatic_signing: true,
-        path: './ios/BetterSocial.xcodeproj',
-        targets: ENV["SCHEME"],
-        team_id: 'J22M3M9VYU'
-      )
+
       build_ios_app(
-        scheme: ENV["SCHEME"],
-        clean: true,
-        configuration: 'Release',
-        export_team_id: 'J22M3M9VYU',
-        export_options: {
-            method: profileType, # "ad-hoc" | "app-store"
-            provisioningProfiles: {
-                ENV["SCHEME"] => "match #{profile_name_type} #{ENV["SCHEME"]}",
-            }
-        },
-        workspace: './ios/BetterSocial.xcworkspace',
-        output_directory: './ios/',
+          scheme: ENV["SCHEME"],
+          clean: true,
+          configuration: 'Release',
+          export_team_id: 'J22M3M9VYU',
+          export_options: {
+              method: profileType, # "ad-hoc" | "app-store"
+              provisioningProfiles: {
+                   ENV["SCHEME"] => "match #{profile_name_type} #{ENV["SCHEME"]}",
+              }
+          },
+          workspace: './ios/BetterSocial.xcworkspace',
+          output_directory: './ios/',
       )
       ENV["IPA_OUTPUT_PATH_#{ENV['ENV']}"] = lane_context[SharedValues::IPA_OUTPUT_PATH]
-      end
+    end
 
-      desc 'Build and upload to firebase distribution'
+    desc 'Build and upload to firebase distribution'
         lane :upload_ipa_to_firebase_distribution do |options|
             firebase_app_distribution(
                 app: ENV["FIREBASE_APP_ID_IOS"],
@@ -309,15 +308,40 @@ end
     end
 end
 
-platform :general do
-    desc 'Create git release tag'
-    lane :release_tag do |options|
-        version_name = android_get_version_name(
-          gradle_file: "./android/app/build.gradle"
-        )
-        last_tag = last_git_tag()
-        puts "lastTag #{last_tag}"
+def create_release_tag(lanePattern)
+    sh("git", "config", "user.email", "fastlane@nanovest.io")
+    sh("git", "config", "user.name", "CircleCI@Fastlane")
+
+    last_tag = last_git_tag(pattern: lanePattern)
+    if last_tag == nil
+        last_tag = "v0.0.0-1"
     end
+
+    currentBuildVersion = ENV['VERSION_NAME'].split('.')
+    versionBuildLastTag = last_tag.split('v')[1].split('-')
+    versionNumberLastTag = versionBuildLastTag[0].split('.')
+
+    if currentBuildVersion[0] > versionNumberLastTag[0] || currentBuildVersion[1] > versionNumberLastTag[1] || currentBuildVersion[2] > versionNumberLastTag[2]
+        add_git_tag(
+          includes_lane: true,
+          prefix: "v",
+          postfix: "-1",
+          build_number: "#{ENV['VERSION_NAME']}",
+          message: "#{ENV['ENV']}, Build Number: #{ENV['BUILD_NUMBER']}"
+        )
+    elsif versionNumberLastTag[0] == currentBuildVersion[0] && versionNumberLastTag[1] > currentBuildVersion[1] && versionNumberLastTag[2] > currentBuildVersion[2]
+        add_git_tag(
+          includes_lane: true,
+          prefix: "v",
+          postfix: "-#{versionBuildLastTag[1].to_i + 1}",
+          build_number: "#{ENV['VERSION_NAME']}",
+          message: "#{ENV['ENV']}, Build Number: #{ENV['BUILD_NUMBER']}"
+        )
+    end
+    push_to_git_remote(
+        tags: true,
+        no_verify: true
+    )
 end
 
 def on_success_device_register_slack

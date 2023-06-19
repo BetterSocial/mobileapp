@@ -240,7 +240,7 @@ describe('useGroupInfo should run correctly', () => {
     expect(mockedPushNavigation).toHaveBeenCalled();
   });
 
-  it('onProfilePressed should run correctly', () => {
+  it('handleOpenProfile should run correctly', () => {
     const navigation = {
       push: jest.fn(),
       navigate: jest.fn()
@@ -253,13 +253,14 @@ describe('useGroupInfo should run correctly', () => {
       });
     });
     act(() => {
-      result.current.onProfilePressed('a3c59170-c110-4fac-929e-7834f6c6827f');
+      result.current.handleOpenProfile({user_id: 'c6c91b04-795c-404e-b012-ea28813a2006'});
     });
-    expect(mockedNavigateNavigation).toHaveBeenCalled();
+    expect(result.current.openModal).toBeFalsy();
+    expect(mockedPushNavigation).toHaveBeenCalled();
     act(() => {
-      result.current.onProfilePressed('b3c59170-c110-4fac-929e-7834f6c6827d');
+      result.current.handleOpenProfile({user_id: 'b3c59170-c110-4fac-929e-7834f6c6827d'});
     });
-    expect(mockedNavigateNavigation).toHaveBeenCalled();
+    expect(mockedPushNavigation).toHaveBeenCalled();
   });
 
   it('serializeMembersList should run correctly', () => {

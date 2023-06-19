@@ -130,7 +130,7 @@ const AddParticipant = ({navigation, route}) => {
         followedName.forEach(async (name) => {
           await channel.channel.sendMessage(
             {
-              text: `${name} was added to this chat by ${profile.myProfile.username}`,
+              text: `${name} was added to this group by ${profile.myProfile.username}`,
               isRemoveMember: true,
               silent: true
             },

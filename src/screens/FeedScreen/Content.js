@@ -8,14 +8,13 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
-import useContentFeed from './hooks/useContentFeed';
-import {COLORS, SIZES} from '../../utils/theme';
+import {COLORS} from '../../utils/theme';
 import {POST_TYPE_POLL} from '../../utils/constants';
 import {colors} from '../../utils/colors';
 import {fonts, normalizeFontSize} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 
-const {width: screenWidth} = Dimensions.get('window');
+const {width: screenWidth, height} = Dimensions.get('window');
 
 const Content = ({
   message,
@@ -29,10 +28,11 @@ const Content = ({
   const navigation = useNavigation();
   const route = useRoute();
   const devHeight = Dimensions.get('screen').height;
-  const substringPostImage = devHeight / 2.25 - 40 * 4;
-  const substringNoImageNoTopic = devHeight / 1.6 - 40 * 5;
-  const substringNoImageTopic = devHeight / 1.6 - 40 * 7;
-  const {hashtagAtComponent} = useContentFeed({navigation});
+  const substringPostImage = devHeight / 2.5 - 40 * (height / screenWidth);
+  const substringNoImageNoTopic = devHeight / 1.5 - 40 * (height / screenWidth);
+  const substringNoImageTopic = devHeight / 1.6 - 40 * (height / screenWidth);
+  const substringWithPoll = devHeight / 3 - 40 * (height / screenWidth);
+  const substringWithPollTopic = devHeight / 5 - 40 * (height / screenWidth);
 
   const onImageClickedByIndex = (index) => {
     navigation.push('ImageViewer', {
@@ -45,71 +45,54 @@ const Content = ({
     });
   };
   const renderHandleTextContent = () => {
+    let substringNumber = 0;
     if (images_url.length > 0) {
-      return (
-        <View testID="postTypePoll" style={{height: '100%', flexDirection: 'row'}}>
-          <Text style={styles.textMedia}>
-            {getCaptionWithTopicStyle(
-              route?.params?.id,
-              message,
-              navigation,
-              substringPostImage,
-              item?.topics,
-              item
-            )}{' '}
-            {message.length > substringPostImage ? (
-              <Text style={{color: '#2F80ED'}}>More...</Text>
-            ) : null}
-          </Text>
-        </View>
-      );
+      substringNumber = substringPostImage;
     }
+    if (images_url.length < 1 && topics.length > 0) {
+      substringNumber = substringNoImageTopic;
+    }
+    if (images_url.length < 1 && topics.length < 1) {
+      substringNumber = substringNoImageNoTopic;
+    }
+
+    if (item.post_type === POST_TYPE_POLL && topics.length < 1) {
+      substringNumber = substringWithPoll;
+    }
+
+    if (item.post_type === POST_TYPE_POLL && topics.length > 1) {
+      substringNumber = substringWithPollTopic;
+    }
+
     return (
-      <View testID="postTypeStatus" style={{height: '50%'}}>
-        {topics.length > 0 ? (
-          <Text style={styles.textMedia}>
-            {getCaptionWithTopicStyle(
-              route?.params?.id,
-              message,
-              navigation,
-              substringNoImageTopic,
-              item?.topics,
-              item
-            )}{' '}
-            {message.length > substringNoImageTopic ? (
-              <Text style={{color: '#2F80ED'}}>More...</Text>
-            ) : null}
-          </Text>
-        ) : (
-          <Text style={styles.textMedia}>
-            {getCaptionWithTopicStyle(
-              route?.params?.id,
-              message,
-              navigation,
-              substringNoImageNoTopic,
-              item?.topics,
-              item
-            )}{' '}
-            {message.length > substringNoImageNoTopic ? (
-              <Text style={{color: '#2F80ED'}}>More...</Text>
-            ) : null}
-          </Text>
-        )}
+      <View testID="postTypePoll" style={styles.containerText}>
+        <Text style={styles.textMedia}>
+          {getCaptionWithTopicStyle(
+            route?.params?.id,
+            message,
+            navigation,
+            substringNumber,
+            item?.topics,
+            item
+          )}{' '}
+          {message.length > substringPostImage ? (
+            <Text style={{color: '#2F80ED'}}>More...</Text>
+          ) : null}
+        </Text>
       </View>
     );
   };
 
   return (
     <Pressable onPress={onPress} style={[styles.contentFeed, style]}>
-      <View style={styles.container}>
-        <View style={styles.containerMainText}>{renderHandleTextContent()}</View>
-      </View>
+      {message?.length > 0 ? (
+        <View>
+          <View style={styles.containerMainText}>{renderHandleTextContent()}</View>
+        </View>
+      ) : null}
+
       {item && item.post_type === POST_TYPE_POLL ? (
         <View style={styles.containerMainText}>
-          <Text style={styles.textMedia}>
-            {hashtagAtComponent(message, 100)}{' '}
-            {message.length > 100 ? <Text style={{color: '#2F80ED'}}>More...</Text> : null}{' '}
-          </Text>
           <ContentPoll
             message={item.message}
             images_url={item.images_url}
@@ -147,11 +130,6 @@ Content.propTypes = {
 export default Content;
 
 export const styles = StyleSheet.create({
-  container: {
-    overflow: 'hidden',
-    flex: 1,
-    paddingVertical: 5
-  },
   containerImage: {
     flex: 1
   },
@@ -215,32 +193,7 @@ export const styles = StyleSheet.create({
   },
   contentFeed: {
     flex: 1,
-    marginTop: SIZES.base
-  },
-  textContentFeed: {
-    fontFamily: fonts.inter[400],
-    fontSize: normalizeFontSize(26),
-    lineHeight: 24,
-    color: colors.black
-  },
-  textComment: {
-    fontFamily: fonts.inter[400],
-    fontSize: normalizeFontSize(12),
-    lineHeight: 18,
-    color: colors.gray
-  },
-  usernameComment: {
-    fontFamily: fonts.inter[500],
-    fontWeight: '900',
-    fontSize: normalizeFontSize(12),
-    lineHeight: 24,
-    color: colors.black
-  },
-  usernameTextComment: {
-    fontFamily: fonts.inter[500],
-    fontSize: normalizeFontSize(12),
-    lineHeight: 24,
-    color: colors.gray
+    marginTop: 0
   },
   item: {
     width: screenWidth - 20,
@@ -268,11 +221,11 @@ export const styles = StyleSheet.create({
   },
   textContainer: {},
   containerMainText: {
-    paddingLeft: 16,
-    paddingRight: 16,
-    height: '100%'
-    // backgroundColor: 'red'
-
-    // marginBottom: 7
+    paddingHorizontal: 16,
+    paddingVertical: 10
+  },
+  containerText: {
+    height: 'auto',
+    flexDirection: 'row'
   }
 });
