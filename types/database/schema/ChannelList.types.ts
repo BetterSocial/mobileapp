@@ -1,3 +1,5 @@
+import {ChatListDetail} from './ChatListDetail.types';
+
 export interface UserSchema {
   id: string;
   username: string;
@@ -44,7 +46,7 @@ export interface ChatSchema {
   type: string;
   createdAt: string;
   updatedAt: string;
-  rawJson: string;
+  rawJson: ChatListDetail | null;
   user: UserSchema | null;
   status: string;
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
+import ChannelList from '../../database/schema/ChannelListSchema';
 import ChatSchema from '../../database/schema/ChatSchema';
 import UseAnonymousChatScreenHook from '../../../types/hooks/screens/useAnonymousChatScreenHook.types';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
@@ -13,14 +14,24 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
 
-  const [chats, setChats] = React.useState([]);
+  const [chats, setChats] = React.useState<ChatSchema[]>([]);
+  const [chatInfo, setChatInfo] = React.useState<ChannelList>(null);
 
   const initChatData = async () => {
     if (!localDb) return;
     const myUserId = await getUserId();
     const myAnonymousId = await getAnonymousUserId();
-    const data = await ChatSchema.getAll(localDb, selectedChannel?.id, myUserId, myAnonymousId);
+    const data = (await ChatSchema.getAll(
+      localDb,
+      selectedChannel?.id,
+      myUserId,
+      myAnonymousId
+    )) as ChatSchema[];
     setChats(data);
+  };
+
+  const initChatInfoData = async () => {
+    console.log('initChatInfoData');
   };
 
   const sendChat = async (message: string = randomString(20)) => {
@@ -52,6 +63,7 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
 
   React.useEffect(() => {
     initChatData();
+    initChatInfoData();
   }, [localDb, chat, selectedChannel]);
 
   return {
