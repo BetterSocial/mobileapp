@@ -86,14 +86,6 @@ const PreviewComment = ({comment, time, image, totalComment, onPress, user, item
           style={styles.text}
           text={comment}
         />
-        {/* <View onLayout={({nativeEvent}) => console.log(nativeEvent.layout.width, 'width')} style={styles.text}>
-          <TouchableOpacity onPress={onPress}>
-            <Text onTextLayout={({nativeEvent}) => console.log(nativeEvent.lines, 'lisa')} style={styles.commenttext} numberOfLines={3} ellipsizeMode="tail">
-              {getCaptionWithLinkStyle(comment?.substring(0, 100).trim())}
-              {comment?.length > 100 ? <Text style={styles.seemore}>more</Text> : <></>}
-            </Text>
-          </TouchableOpacity>
-        </View> */}
         <Gap height={4} />
       </View>
       {totalComment >= 1 && (
