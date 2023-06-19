@@ -154,7 +154,7 @@ const GroupInfo = () => {
               <View style={styles.row}>
                 <View style={styles.column}>
                   <View style={styles.containerGroupName}>
-                    <Text style={styles.groupName}>{trimString(chatName, 20)}</Text>
+                    <Text style={styles.groupName}>{memberName()}</Text>
                   </View>
                   <Text style={styles.dateCreate}>
                     Created {moment(createChat).format('DD/MM/YY')}

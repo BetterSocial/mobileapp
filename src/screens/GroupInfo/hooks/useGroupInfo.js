@@ -24,7 +24,7 @@ const useGroupInfo = () => {
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
-  const username = channelState.channel?.data?.name;
+  const [username, setUsername] = React.useState(channelState.channel?.data?.name);
   const createChat = channelState.channel?.data?.created_at;
   const countUser = Object.entries(participants).length;
   const [selectedUser, setSelectedUser] = React.useState(null);
@@ -62,10 +62,9 @@ const useGroupInfo = () => {
     }
   };
   const memberName = () => {
-    return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
+    return getChatName(username, profile.myProfile.username);
   };
   const chatName = getChatName(username, profile.myProfile.username);
-
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
@@ -180,6 +179,18 @@ const useGroupInfo = () => {
     }
   };
 
+  const updateMemberName = (members = []) => {
+    if (!channel.data.isEditName && members.length > 0) {
+      members = members.map((member) => member.user.name).join(',');
+      setUsername(members);
+      if (members.length > 1) {
+        channel?.update({
+          name: members
+        });
+      }
+    }
+  };
+
   const onRemoveUser = async () => {
     setOpenModal(false);
     try {
@@ -201,6 +212,7 @@ const useGroupInfo = () => {
         `${profile.myProfile.username} removed you from this group`,
         selectedUser.user_id
       );
+      updateMemberName(result.members);
       setNewParticipan(result.members);
       setParticipants(result.members, groupPatchDispatch);
     } catch (e) {
