@@ -1,26 +1,25 @@
 import * as React from 'react';
+import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
+import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import {Channel, Chat, MessageInput, MessageList, Streami18n} from 'stream-chat-react-native';
-import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {MessageSystem} from 'stream-chat-react-native-core';
-
+import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {useRecoilState} from 'recoil';
-import crashlytics from '@react-native-firebase/crashlytics';
-import EasyFollowSystem from 'stream-chat-react-native-core/src/components/ChannelList/EasyFollowSystem';
 import ChatStatusIcon from '../../components/ChatStatusIcon';
 import Header from '../../components/Chat/Header';
 import ImageSendPreview from './elements/ImageSendPreview';
 import InputMessage from '../../components/Chat/InputMessage';
+import api from '../../service/config';
 import {COLORS} from '../../utils/theme';
 import {Context} from '../../context';
 import {CustomMessageSystem} from '../../components';
+import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {fonts} from '../../utils/fonts';
 import {setAsset} from '../../context/actions/groupChat';
 import {useClientGetstream} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
 import {setChannel} from '../../context/actions/setChannel';
-import api from '../../service/config';
-import {followersOrFollowingAtom} from '../ChannelListScreen/model/followersOrFollowingAtom';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 
 const streami18n = new Streami18n({
@@ -82,7 +81,7 @@ const ChatDetailPage = ({route}) => {
     };
   }, []);
 
-  const onBackHandle = async () => {
+  const onBackHandle = () => {
     if (route?.params?.channel) {
       setChannel(route.params.channel, dispatchChannel);
     }
@@ -142,6 +141,8 @@ const ChatDetailPage = ({route}) => {
       if (response?.data) {
         return response.data.data;
       }
+
+      return null;
     } catch (error) {
       crashlytics().recordError(new Error(error));
       throw new Error(error);

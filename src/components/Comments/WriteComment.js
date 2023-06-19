@@ -115,20 +115,17 @@ const WriteComment = ({
           </>
         )}
 
-        <View style={styles.content}>
-          <TextInput
-            testID="changeinput"
-            ref={commentInputRef}
-            placeholder={StringConstant.commentBoxDefaultPlaceholder}
-            // multiline={isAndroid}
-            placeholderTextColor={colors.gray}
-            style={styles.text}
-            onChangeText={onChangeText}
-            value={value}
-            multiline
-            textAlignVertical="top"
-          />
-        </View>
+        <TextInput
+          testID="changeinput"
+          ref={commentInputRef}
+          placeholder={StringConstant.commentBoxDefaultPlaceholder}
+          placeholderTextColor={colors.gray}
+          style={[styles.text, styles.content]}
+          onChangeText={onChangeText}
+          value={value}
+          multiline
+          textAlignVertical="center"
+        />
         <TouchableOpacity
           testID="iscommentenable"
           onPress={() => onPress(isAnonimity, anonimityData)}
@@ -191,7 +188,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 6,
     paddingRight: 8,
     marginEnd: 8,
-    flex: 1
+    flex: 1,
   },
   btn: (isDisableSubmit) => ({
     backgroundColor: !isDisableSubmit ? colors.bondi_blue : '#f2f2f2',
@@ -218,7 +215,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[400],
     color: colors.black,
-    lineHeight: 14.52,
+    lineHeight: 19,
     paddingTop: 5,
     paddingBottom: 5,
     maxHeight: 100
