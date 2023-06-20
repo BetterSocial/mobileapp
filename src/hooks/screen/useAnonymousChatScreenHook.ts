@@ -37,7 +37,7 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
   const sendChat = async (message: string = randomString(20)) => {
     const myAnonymousId = await getAnonymousUserId();
     try {
-      const randomId = randomString(20);
+      const randomId = randomString(36);
       const sendingChatSchema = ChatSchema.generateSendingChat(
         randomId,
         myAnonymousId,

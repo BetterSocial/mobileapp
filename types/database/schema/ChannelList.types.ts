@@ -49,4 +49,6 @@ export interface ChatSchema {
   rawJson: ChatListDetail | null;
   user: UserSchema | null;
   status: string;
+  isMe: boolean;
+  isContinuous: boolean;
 }

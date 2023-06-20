@@ -12,10 +12,9 @@ import {
 } from 'react-native';
 
 import AnonymousChatHeader from '../../components/AnonymousChat/AnonymousChatHeader';
-import ChatItemMyText from '../../components/AnonymousChat/child/ChatItemMyText';
-import ChatItemTargetText from '../../components/AnonymousChat/child/ChatItemTargetText';
+import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import useAnonymousChatScreenHook from '../../hooks/screen/useAnonymousChatScreenHook';
-import {calculateTime} from '../../utils/time';
+import {Button} from '../../components/Button';
 import {colors} from '../../utils/colors';
 
 const {height} = Dimensions.get('window');
@@ -60,6 +59,7 @@ const SampleChatScreen = () => {
         avatar={'https://picsum.photos/200/300'}
         user={'Marlyn'}
       />
+      <Button onPress={() => sendChat()}>Send Chat</Button>
       <FlatList
         style={styles.chatContainer}
         data={chats}
@@ -67,27 +67,7 @@ const SampleChatScreen = () => {
         alwaysBounceVertical={false}
         bounces={false}
         renderItem={({item, index}) => {
-          console.log(JSON.stringify(item, null, 2));
-          if (index % 2 !== 0)
-            return (
-              <ChatItemTargetText
-                message={item?.message}
-                avatar={item?.user?.profilePicture}
-                username={item?.user?.username}
-                time={calculateTime(item?.rawJson?.message?.created_at)}
-                isContinuous={false}
-              />
-            );
-
-          return (
-            <ChatItemMyText
-              message={item?.message}
-              avatar={item?.user?.profilePicture}
-              username={item?.user?.username}
-              time={calculateTime(item?.rawJson?.message?.created_at)}
-              isContinuous={false}
-            />
-          );
+          return <BaseChatItem item={item} index={index} />;
         }}
       />
       <TextInput style={styles.inputContainer} />

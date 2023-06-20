@@ -1,16 +1,37 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
-
 import {
-  BaseChatItemProps,
-  ChatItemMyTextProps
-} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
+  Dimensions,
+  NativeSyntheticEvent,
+  StyleSheet,
+  Text,
+  TextLayoutEventData,
+  View
+} from 'react-native';
+
+import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
+import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
 const {width} = Dimensions.get('screen');
+
+const AVATAR_SIZE = 24;
+const CONTAINER_LEFT_PADDING = 60;
+const CONTAINER_RIGHT_PADDING = 10;
+const AVATAR_LEFT_MARGIN = 8;
+const BUBBLE_LEFT_PADDING = 8;
+const BUBBLE_RIGHT_PADDING = 8;
+
+const targetLastLineWidth =
+  width -
+  CONTAINER_LEFT_PADDING -
+  CONTAINER_RIGHT_PADDING -
+  AVATAR_SIZE -
+  AVATAR_LEFT_MARGIN -
+  BUBBLE_LEFT_PADDING -
+  BUBBLE_RIGHT_PADDING;
 
 const ChatItemMyText = ({
   avatar = DEFAULT_PROFILE_PIC_PATH,
@@ -19,6 +40,9 @@ const ChatItemMyText = ({
   isContinuous = false,
   message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di'
 }: ChatItemMyTextProps) => {
+  const messageRef = React.useRef<Text>(null);
+  const [textComponent, setTextComponent] = React.useState<Text[]>([]);
+
   const styles = StyleSheet.create({
     chatContainer: {
       display: 'flex',
@@ -26,8 +50,8 @@ const ChatItemMyText = ({
       marginTop: 4,
       marginBottom: 4,
       maxWidth: width,
-      paddingLeft: 60,
-      paddingRight: 10
+      paddingLeft: CONTAINER_LEFT_PADDING,
+      paddingRight: CONTAINER_RIGHT_PADDING
     },
     chatTitleContainer: {
       display: 'flex',
@@ -35,8 +59,8 @@ const ChatItemMyText = ({
     },
     textContainer: {
       backgroundColor: colors.halfBaked,
-      paddingLeft: 8,
-      paddingRight: 8,
+      paddingLeft: BUBBLE_LEFT_PADDING,
+      paddingRight: BUBBLE_RIGHT_PADDING,
       paddingTop: 4,
       paddingBottom: 4,
       borderRadius: 8,
@@ -52,11 +76,30 @@ const ChatItemMyText = ({
       fontSize: 16,
       lineHeight: 19.36
     },
+    textHidden: {
+      position: 'absolute',
+      opacity: 0,
+      left: 0,
+      right: 0
+    },
+    lastLineMargin: {
+      flexGrow: 1,
+      minWidth: 0
+    },
+    lastLineContainer: {
+      display: 'flex',
+      flexDirection: 'row'
+    },
+    lastLineContainerColumn: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      flexDirection: 'column'
+    },
     avatar: {
-      width: 24,
-      height: 24,
+      width: AVATAR_SIZE,
+      height: AVATAR_SIZE,
       borderRadius: 12,
-      marginLeft: 8
+      marginLeft: AVATAR_LEFT_MARGIN
     },
     dot: {
       width: 3,
@@ -72,8 +115,60 @@ const ChatItemMyText = ({
       fontSize: 10,
       lineHeight: 12.19,
       alignSelf: 'center'
+    },
+    checkContainerOnLayoutColumn: {
+      flexBasis: '100%',
+      alignSelf: 'flex-end'
+    },
+    checkContainerOnLayout: {
+      alignSelf: 'flex-end'
+    },
+    textStackContainer: {
+      marginTop: 4,
+      marginBottom: 4
     }
   });
+
+  const handleTextWidthLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
+    const {lines} = event.nativeEvent;
+    const lineTextComponent = lines?.map((line, index) => {
+      const isLastLine = index === lines?.length - 1;
+      if (!isLastLine)
+        return (
+          <Text key={index} style={styles.text}>
+            {line?.text}
+          </Text>
+        );
+
+      const lastLine = lines[lines.length - 1];
+      const lastLineWidth = lastLine?.width;
+      const lastLineStyle = [styles.text, styles.lastLineMargin];
+      if (targetLastLineWidth - lastLineWidth < 24)
+        return (
+          <View key={index} style={styles.lastLineContainerColumn}>
+            <Text key={index} style={lastLineStyle}>
+              {line?.text}
+            </Text>
+            <View style={styles.checkContainerOnLayoutColumn}>
+              <IconChatCheckMark />
+            </View>
+          </View>
+        );
+
+      return (
+        <View key={index} style={styles.lastLineContainer}>
+          <Text key={index} style={lastLineStyle}>
+            {line?.text}
+          </Text>
+          <View style={styles.checkContainerOnLayout}>
+            <IconChatCheckMark />
+          </View>
+        </View>
+      );
+    });
+
+    setTextComponent(lineTextComponent);
+  };
 
   return (
     <View style={styles.chatContainer}>
@@ -85,14 +180,26 @@ const ChatItemMyText = ({
             <Text style={styles.timeText}>{time}</Text>
           </View>
         )}
-        <Text style={styles.text}>{message}</Text>
+        <Text
+          ref={messageRef}
+          style={[styles.text, styles.textHidden]}
+          onTextLayout={handleTextWidthLayout}>
+          {message}
+        </Text>
+        <View style={styles.textStackContainer}>
+          {textComponent?.map((component) => component)}
+        </View>
       </View>
-      <FastImage
-        style={styles.avatar}
-        source={{
-          uri: avatar
-        }}
-      />
+      {isContinuous ? (
+        <View style={styles.avatar} />
+      ) : (
+        <FastImage
+          style={styles.avatar}
+          source={{
+            uri: avatar
+          }}
+        />
+      )}
     </View>
   );
 };

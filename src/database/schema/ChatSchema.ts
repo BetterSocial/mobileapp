@@ -24,7 +24,24 @@ class ChatSchema implements BaseDbSchema {
 
   status: string;
 
-  constructor({id, channelId, userId, message, type, createdAt, updatedAt, rawJson, user, status}) {
+  isMe: boolean;
+
+  isContinuous: boolean;
+
+  constructor({
+    id,
+    channelId,
+    userId,
+    message,
+    type,
+    createdAt,
+    updatedAt,
+    rawJson,
+    user,
+    status,
+    isMe,
+    isContinuous
+  }) {
     if (!id) throw new Error('ChatSchema must have an id');
 
     this.id = id;
@@ -37,6 +54,8 @@ class ChatSchema implements BaseDbSchema {
     this.rawJson = rawJson;
     this.user = user;
     this.status = status;
+    this.isMe = isMe;
+    this.isContinuous = isContinuous;
   }
 
   save = async (db: SQLiteDatabase) => {
@@ -83,7 +102,8 @@ class ChatSchema implements BaseDbSchema {
         CASE A.user_id 
           WHEN ? THEN 1 
           WHEN ? THEN 1
-          ELSE 0 END AS is_me
+          ELSE 0 END AS is_me,
+        CASE WHEN A.user_id = LAG(A.user_id) OVER (ORDER BY A.created_at) THEN 1 ELSE 0 END AS is_continuous
       FROM 
       ${ChatSchema.getTableName()} A 
       INNER JOIN ${UserSchema.getTableName()} B 
@@ -119,7 +139,9 @@ class ChatSchema implements BaseDbSchema {
       updatedAt: dbObject.updated_at,
       rawJson,
       user,
-      status: dbObject.status
+      status: dbObject.status,
+      isMe: dbObject.is_me,
+      isContinuous: dbObject.is_continuous
     });
   }
 
@@ -143,7 +165,9 @@ class ChatSchema implements BaseDbSchema {
       updatedAt: json?.message?.created_at,
       rawJson,
       user: null,
-      status: 'sent'
+      status: 'sent',
+      isMe: false,
+      isContinuous: false
     });
   }
 
@@ -163,7 +187,9 @@ class ChatSchema implements BaseDbSchema {
       type: 'regular',
       rawJson: null,
       user: null,
-      userId
+      userId,
+      isMe: true,
+      isContinuous: true
     });
   }
 
