@@ -53,7 +53,8 @@ const GroupInfo = () => {
     onLeaveGroup,
     profile,
     channelState,
-    handlePressContact
+    handlePressContact,
+    setUsername
   } = useGroupInfo();
 
   React.useEffect(() => {
@@ -66,6 +67,12 @@ const GroupInfo = () => {
 
     return unsubscribe;
   }, [navigation]);
+
+  React.useEffect(() => {
+    if (channel?.data?.name) {
+      setUsername(channel.data.name);
+    }
+  }, [JSON.stringify(channel.data)]);
 
   const showImageProfile = () => {
     if (profileChannel || channel?.data?.image) {

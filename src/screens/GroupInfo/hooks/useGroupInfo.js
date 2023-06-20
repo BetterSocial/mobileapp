@@ -199,6 +199,7 @@ const useGroupInfo = () => {
         (participant) => participant.user_id !== selectedUser.user_id
       );
       setNewParticipan(updateParticipant);
+      updateMemberName(result.members);
       await channel.sendMessage(
         {
           text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this group`,
@@ -212,7 +213,6 @@ const useGroupInfo = () => {
         `${profile.myProfile.username} removed you from this group`,
         selectedUser.user_id
       );
-      updateMemberName(result.members);
       setNewParticipan(result.members);
       setParticipants(result.members, groupPatchDispatch);
     } catch (e) {
@@ -394,7 +394,8 @@ const useGroupInfo = () => {
     checkUserIsBlockHandle,
     handlePressContact,
     handleOpenProfile,
-    onReportGroup
+    onReportGroup,
+    setUsername
   };
 };
 
