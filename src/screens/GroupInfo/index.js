@@ -21,6 +21,7 @@ import Header from '../../components/Header';
 // eslint-disable-next-line camelcase
 import MemoIc_pencil from '../../assets/icons/Ic_pencil';
 import ModalAction from './elements/ModalAction';
+import ReportGroup from '../../assets/images/report.png';
 import useGroupInfo from './hooks/useGroupInfo';
 import {Loading} from '../../components';
 import {ProfileContact} from '../../components/Items';
@@ -54,9 +55,9 @@ const GroupInfo = () => {
     profile,
     channelState,
     handlePressContact,
-    setUsername
+    setUsername,
+    onReportGroup
   } = useGroupInfo();
-
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (route?.params?.from === 'AddParticipant') {
@@ -145,6 +146,10 @@ const GroupInfo = () => {
     handleMember();
   }, []);
 
+  React.useEffect(() => {
+    getMembersList();
+  }, []);
+  console.log(openModal, 'laka');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} />
@@ -153,7 +158,7 @@ const GroupInfo = () => {
         <>
           <Header isCenter onPress={() => navigation.goBack()} title={memberName()} />
           <View style={styles.lineTop} />
-          <ScrollView nestedScrollEnabled={true}>
+          <ScrollView contentContainerStyle={styles.scrollContainer} nestedScrollEnabled={true}>
             <SafeAreaView>
               <TouchableOpacity testID="imageClick" onPress={handleOnImageClicked}>
                 <View style={styles.containerPhoto}>{showImageProfile()}</View>
@@ -221,6 +226,14 @@ const GroupInfo = () => {
                     </View>
                     <View>
                       <Text style={styles.textAct}>Exit Group</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={onReportGroup} style={styles.buttonGroup}>
+                    <View style={styles.imageActContainer}>
+                      <FastImage style={styles.imageAction} source={ReportGroup} />
+                    </View>
+                    <View>
+                      <Text style={styles.textAct}>Report Group</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -396,5 +409,8 @@ export const styles = StyleSheet.create({
   textAct: {
     color: '#FF2E63',
     fontSize: 14
+  },
+  scrollContainer: {
+    paddingBottom: 30
   }
 });

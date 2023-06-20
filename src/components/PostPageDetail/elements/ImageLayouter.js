@@ -25,6 +25,8 @@ const ImageLayouter = ({images = [], onimageclick}) => {
   };
 
   if (images.length === 1) {
+    const heightCalc = Dimensions.get('window').width * ratio?.image_0 || 0;
+    const widthCalc = Dimensions.get('window').width;
     return (
       <View style={[styles.twoPhotoLayout, {flexWrap: 'wrap'}]}>
         <Pressable style={{justifyContent: 'center'}} onPress={() => onimageclick(0)}>
