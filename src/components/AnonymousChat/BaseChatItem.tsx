@@ -18,6 +18,7 @@ const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
         time={calculateTime(item?.updatedAt)}
         username={item?.user?.username}
         type={BaseChatItemTypeProps.MY_ANON_CHAT}
+        status={item?.status}
       />
     );
 

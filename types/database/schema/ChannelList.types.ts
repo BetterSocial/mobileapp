@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import {ChatListDetail} from './ChatListDetail.types';
 
 export interface UserSchema {
@@ -51,4 +52,11 @@ export interface ChatSchema {
   status: string;
   isMe: boolean;
   isContinuous: boolean;
+}
+
+export enum ChatStatus {
+  PENDING = 'pending',
+  SENT = 'sent',
+  DELIVERED = 'delivered',
+  READ = 'read'
 }

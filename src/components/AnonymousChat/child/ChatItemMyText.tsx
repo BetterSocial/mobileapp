@@ -10,7 +10,9 @@ import {
 } from 'react-native';
 
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
+import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import {ChatItemMyTextProps} from '../../../../types/component/AnonymousChat/BaseChatItem.types';
+import {ChatStatus} from '../../../../types/database/schema/ChannelList.types';
 import {DEFAULT_PROFILE_PIC_PATH} from '../../../utils/constants';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
@@ -38,7 +40,8 @@ const ChatItemMyText = ({
   username = 'Anonymous Clown',
   time = '4h',
   isContinuous = false,
-  message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di'
+  message = 'Ultrices neque op semper blahbla blahri mauris amet, penatibus. pi Amet, mollis quam venenatis di',
+  status = ChatStatus.PENDING
 }: ChatItemMyTextProps) => {
   const messageRef = React.useRef<Text>(null);
   const [textComponent, setTextComponent] = React.useState<Text[]>([]);
@@ -150,7 +153,11 @@ const ChatItemMyText = ({
               {line?.text}
             </Text>
             <View style={styles.checkContainerOnLayoutColumn}>
-              <IconChatCheckMark />
+              {status === ChatStatus.PENDING ? (
+                <IconChatClockGrey height={16} width={16} />
+              ) : (
+                <IconChatCheckMark />
+              )}
             </View>
           </View>
         );
@@ -161,7 +168,11 @@ const ChatItemMyText = ({
             {line?.text}
           </Text>
           <View style={styles.checkContainerOnLayout}>
-            <IconChatCheckMark />
+            {status === ChatStatus.PENDING ? (
+              <IconChatClockGrey height={16} width={16} />
+            ) : (
+              <IconChatCheckMark />
+            )}
           </View>
         </View>
       );

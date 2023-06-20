@@ -1,4 +1,5 @@
 import ChatSchema from '../../../src/database/schema/ChatSchema';
+import {ChatStatus} from '../../database/schema/ChannelList.types';
 
 /* eslint-disable no-shadow */
 export enum BaseChatItemTypeProps {
@@ -21,6 +22,7 @@ export interface BaseChatItemProps {
 
 export interface ChatItemMyTextProps extends BaseChatItemProps {
   type?: BaseChatItemTypeProps.MY_ANON_CHAT;
+  status: ChatStatus;
 }
 
 export interface ChatItemTargetText extends BaseChatItemProps {

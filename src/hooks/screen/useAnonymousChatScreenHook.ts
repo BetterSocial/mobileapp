@@ -1,4 +1,7 @@
+import 'react-native-get-random-values';
+
 import * as React from 'react';
+import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
@@ -37,7 +40,7 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
   const sendChat = async (message: string = randomString(20)) => {
     const myAnonymousId = await getAnonymousUserId();
     try {
-      const randomId = randomString(36);
+      const randomId = uuid();
       const sendingChatSchema = ChatSchema.generateSendingChat(
         randomId,
         myAnonymousId,
