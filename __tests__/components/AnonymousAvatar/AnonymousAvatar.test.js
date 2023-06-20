@@ -13,7 +13,8 @@ describe('AnonymousAvatar should match run correctly', () => {
     });
     expect(styles.avatarV2Emoji(10)).toEqual({
       fontSize: 10,
-      alignSelf: 'center'
+      alignSelf: 'center',
+      textAlign: 'center'
     });
   });
 
