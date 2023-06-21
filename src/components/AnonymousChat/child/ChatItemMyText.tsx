@@ -35,6 +35,92 @@ const targetLastLineWidth =
   BUBBLE_LEFT_PADDING -
   BUBBLE_RIGHT_PADDING;
 
+const styles = StyleSheet.create({
+  chatContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 4,
+    marginBottom: 4,
+    maxWidth: width,
+    paddingLeft: CONTAINER_LEFT_PADDING,
+    paddingRight: CONTAINER_RIGHT_PADDING
+  },
+  chatTitleContainer: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  textContainer: {
+    backgroundColor: colors.halfBaked,
+    paddingLeft: BUBBLE_LEFT_PADDING,
+    paddingRight: BUBBLE_RIGHT_PADDING,
+    paddingTop: 4,
+    paddingBottom: 4,
+    borderRadius: 8,
+    flex: 1
+  },
+  userText: {
+    fontFamily: fonts.inter[600],
+    fontSize: 12,
+    lineHeight: 19.36
+  },
+  text: {
+    fontFamily: fonts.inter[400],
+    fontSize: 16,
+    lineHeight: 19.36
+  },
+  textHidden: {
+    position: 'absolute',
+    opacity: 0,
+    left: 0,
+    right: 0
+  },
+  lastLineMargin: {
+    flexGrow: 1,
+    minWidth: 0
+  },
+  lastLineContainer: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  lastLineContainerColumn: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'column'
+  },
+  avatar: {
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: 12,
+    marginLeft: AVATAR_LEFT_MARGIN
+  },
+  dot: {
+    width: 3,
+    height: 3,
+    borderRadius: 2,
+    marginLeft: 5,
+    marginRight: 5,
+    backgroundColor: colors.black,
+    alignSelf: 'center'
+  },
+  timeText: {
+    fontFamily: fonts.inter[200],
+    fontSize: 10,
+    lineHeight: 12.19,
+    alignSelf: 'center'
+  },
+  checkContainerOnLayoutColumn: {
+    flexBasis: '100%',
+    alignSelf: 'flex-end'
+  },
+  checkContainerOnLayout: {
+    alignSelf: 'flex-end'
+  },
+  textStackContainer: {
+    marginTop: 4,
+    marginBottom: 4
+  }
+});
+
 const ChatItemMyText = ({
   avatar = DEFAULT_PROFILE_PIC_PATH,
   username = 'Anonymous Clown',
@@ -45,92 +131,6 @@ const ChatItemMyText = ({
 }: ChatItemMyTextProps) => {
   const messageRef = React.useRef<Text>(null);
   const [textComponent, setTextComponent] = React.useState<Text[]>([]);
-
-  const styles = StyleSheet.create({
-    chatContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      marginTop: 4,
-      marginBottom: 4,
-      maxWidth: width,
-      paddingLeft: CONTAINER_LEFT_PADDING,
-      paddingRight: CONTAINER_RIGHT_PADDING
-    },
-    chatTitleContainer: {
-      display: 'flex',
-      flexDirection: 'row'
-    },
-    textContainer: {
-      backgroundColor: colors.halfBaked,
-      paddingLeft: BUBBLE_LEFT_PADDING,
-      paddingRight: BUBBLE_RIGHT_PADDING,
-      paddingTop: 4,
-      paddingBottom: 4,
-      borderRadius: 8,
-      flex: 1
-    },
-    userText: {
-      fontFamily: fonts.inter[600],
-      fontSize: 12,
-      lineHeight: 19.36
-    },
-    text: {
-      fontFamily: fonts.inter[400],
-      fontSize: 16,
-      lineHeight: 19.36
-    },
-    textHidden: {
-      position: 'absolute',
-      opacity: 0,
-      left: 0,
-      right: 0
-    },
-    lastLineMargin: {
-      flexGrow: 1,
-      minWidth: 0
-    },
-    lastLineContainer: {
-      display: 'flex',
-      flexDirection: 'row'
-    },
-    lastLineContainerColumn: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      flexDirection: 'column'
-    },
-    avatar: {
-      width: AVATAR_SIZE,
-      height: AVATAR_SIZE,
-      borderRadius: 12,
-      marginLeft: AVATAR_LEFT_MARGIN
-    },
-    dot: {
-      width: 3,
-      height: 3,
-      borderRadius: 2,
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: colors.black,
-      alignSelf: 'center'
-    },
-    timeText: {
-      fontFamily: fonts.inter[200],
-      fontSize: 10,
-      lineHeight: 12.19,
-      alignSelf: 'center'
-    },
-    checkContainerOnLayoutColumn: {
-      flexBasis: '100%',
-      alignSelf: 'flex-end'
-    },
-    checkContainerOnLayout: {
-      alignSelf: 'flex-end'
-    },
-    textStackContainer: {
-      marginTop: 4,
-      marginBottom: 4
-    }
-  });
 
   const handleTextWidthLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
     const {lines} = event.nativeEvent;
@@ -215,4 +215,4 @@ const ChatItemMyText = ({
   );
 };
 
-export default ChatItemMyText;
+export default React.memo(ChatItemMyText);

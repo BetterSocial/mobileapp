@@ -7,6 +7,7 @@ import {
   BaseChatItemComponentProps,
   BaseChatItemTypeProps
 } from '../../../types/component/AnonymousChat/BaseChatItem.types';
+import {ChatStatus} from '../../../types/database/schema/ChannelList.types';
 import {calculateTime} from '../../utils/time';
 
 const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
@@ -19,7 +20,7 @@ const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
         time={calculateTime(item?.updatedAt)}
         username={item?.user?.username}
         type={BaseChatItemTypeProps.MY_ANON_CHAT}
-        status={item?.status}
+        status={item?.status as ChatStatus}
       />
     );
 

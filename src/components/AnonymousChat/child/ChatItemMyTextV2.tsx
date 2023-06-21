@@ -1,6 +1,13 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  NativeSyntheticEvent,
+  StyleSheet,
+  Text,
+  TextLayoutEventData,
+  View
+} from 'react-native';
 
 import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
@@ -19,6 +26,87 @@ const AVATAR_LEFT_MARGIN = 8;
 const BUBBLE_LEFT_PADDING = 8;
 const BUBBLE_RIGHT_PADDING = 8;
 
+const styles = StyleSheet.create({
+  chatContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 4,
+    marginBottom: 4,
+    maxWidth: width,
+    paddingLeft: CONTAINER_LEFT_PADDING,
+    paddingRight: CONTAINER_RIGHT_PADDING
+  },
+  chatTitleContainer: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  textContainer: {
+    backgroundColor: colors.halfBaked,
+    paddingLeft: BUBBLE_LEFT_PADDING,
+    paddingRight: BUBBLE_RIGHT_PADDING,
+    paddingTop: 4,
+    paddingBottom: 4,
+    borderRadius: 8,
+    flex: 1
+  },
+  textContainerNewLine: {
+    paddingBottom: 14
+  },
+  userText: {
+    fontFamily: fonts.inter[600],
+    fontSize: 12,
+    lineHeight: 19.36
+  },
+  text: {
+    fontFamily: fonts.inter[400],
+    fontSize: 16,
+    lineHeight: 19.36,
+    marginBottom: 4
+  },
+  avatar: {
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: 12,
+    marginLeft: AVATAR_LEFT_MARGIN
+  },
+  dot: {
+    width: 3,
+    height: 3,
+    borderRadius: 2,
+    marginLeft: 5,
+    marginRight: 5,
+    backgroundColor: colors.black,
+    alignSelf: 'center'
+  },
+  timeText: {
+    fontFamily: fonts.inter[200],
+    fontSize: 10,
+    lineHeight: 12.19,
+    alignSelf: 'center'
+  },
+  icon: {
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 6,
+    right: 8
+  },
+  iconNewLine: {
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 6,
+    right: 8
+  }
+});
+
+const targetLastLineWidth =
+  width -
+  CONTAINER_LEFT_PADDING -
+  CONTAINER_RIGHT_PADDING -
+  AVATAR_SIZE -
+  AVATAR_LEFT_MARGIN -
+  BUBBLE_LEFT_PADDING -
+  BUBBLE_RIGHT_PADDING;
+
 const ChatItemMyTextV2 = ({
   avatar = DEFAULT_PROFILE_PIC_PATH,
   username = 'Anonymous Clown',
@@ -28,97 +116,36 @@ const ChatItemMyTextV2 = ({
   status = ChatStatus.PENDING
 }: ChatItemMyTextProps) => {
   const messageRef = React.useRef<Text>(null);
-  const [textComponent, setTextComponent] = React.useState<Text[]>([]);
+  const [isNewLine, setIsNewLine] = React.useState(true);
 
-  const styles = StyleSheet.create({
-    chatContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      marginTop: 4,
-      marginBottom: 4,
-      maxWidth: width,
-      paddingLeft: CONTAINER_LEFT_PADDING,
-      paddingRight: CONTAINER_RIGHT_PADDING
-    },
-    chatTitleContainer: {
-      display: 'flex',
-      flexDirection: 'row'
-    },
-    textContainer: {
-      backgroundColor: colors.halfBaked,
-      paddingLeft: BUBBLE_LEFT_PADDING,
-      paddingRight: BUBBLE_RIGHT_PADDING,
-      paddingTop: 4,
-      paddingBottom: 4,
-      borderRadius: 8,
-      flex: 1
-    },
-    userText: {
-      fontFamily: fonts.inter[600],
-      fontSize: 12,
-      lineHeight: 19.36
-    },
-    text: {
-      fontFamily: fonts.inter[400],
-      fontSize: 16,
-      lineHeight: 19.36,
-      marginBottom: 4
-    },
-    lastLineMargin: {
-      flexGrow: 1,
-      minWidth: 0
-    },
-    lastLineContainer: {
-      display: 'flex',
-      flexDirection: 'row'
-    },
-    lastLineContainerColumn: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      flexDirection: 'column'
-    },
-    avatar: {
-      width: AVATAR_SIZE,
-      height: AVATAR_SIZE,
-      borderRadius: 12,
-      marginLeft: AVATAR_LEFT_MARGIN
-    },
-    dot: {
-      width: 3,
-      height: 3,
-      borderRadius: 2,
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: colors.black,
-      alignSelf: 'center'
-    },
-    timeText: {
-      fontFamily: fonts.inter[200],
-      fontSize: 10,
-      lineHeight: 12.19,
-      alignSelf: 'center'
-    },
-    checkContainerOnLayoutColumn: {
-      flexBasis: '100%',
-      alignSelf: 'flex-end'
-    },
-    checkContainerOnLayout: {
-      alignSelf: 'flex-end'
-    },
-    textStackContainer: {
-      marginTop: 4,
-      marginBottom: 4
-    },
-    icon: {
-      alignSelf: 'flex-end',
-      bottom: 4,
-      right: 4
-    }
-  });
+  const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
+    const {lines} = event.nativeEvent;
+    const lastLine = lines[lines.length - 1];
+    const lastLineWidth = lastLine?.width;
+    const isCalculatedNewLine = targetLastLineWidth - lastLineWidth < 24;
+    setIsNewLine(isCalculatedNewLine);
+  };
+
+  const renderIcon = React.useCallback(() => {
+    if (status === ChatStatus.PENDING)
+      return (
+        <View style={styles.icon}>
+          <IconChatClockGrey width={12} height={12} />
+        </View>
+      );
+
+    return (
+      <View style={styles.icon}>
+        <IconChatCheckMark />
+      </View>
+    );
+  }, []);
+
+  const textContainerStyle = [styles.textContainer, isNewLine && styles.textContainerNewLine];
 
   return (
     <View style={styles.chatContainer}>
-      <View style={styles.textContainer}>
+      <View style={textContainerStyle}>
         {!isContinuous && (
           <View style={styles.chatTitleContainer}>
             <Text style={styles.userText}>{username}</Text>
@@ -126,16 +153,11 @@ const ChatItemMyTextV2 = ({
             <Text style={styles.timeText}>{time}</Text>
           </View>
         )}
-        <Text ref={messageRef} style={styles.text}>
-          {message}
+        <Text ref={messageRef} style={styles.text} onTextLayout={onTextLayout}>
+          {`${message}`}
         </Text>
-        <View style={styles.icon}>
-          {status === ChatStatus.PENDING ? (
-            <IconChatClockGrey width={12} height={12} />
-          ) : (
-            <IconChatCheckMark />
-          )}
-        </View>
+
+        {renderIcon()}
       </View>
       {isContinuous ? (
         <View style={styles.avatar} />
@@ -151,4 +173,4 @@ const ChatItemMyTextV2 = ({
   );
 };
 
-export default ChatItemMyTextV2;
+export default React.memo(ChatItemMyTextV2);

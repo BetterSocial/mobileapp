@@ -48,6 +48,10 @@ const SampleChatScreen = () => {
     }
   });
 
+  const renderChatItem = React.useCallback(({item, index}) => {
+    return <BaseChatItem item={item} index={index} />;
+  }, []);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -65,12 +69,11 @@ const SampleChatScreen = () => {
         style={styles.chatContainer}
         data={chats}
         inverted={true}
+        initialNumToRender={20}
         alwaysBounceVertical={false}
         bounces={false}
         keyExtractor={(item, index) => item?.id || index.toString()}
-        renderItem={({item, index}) => {
-          return <BaseChatItem item={item} index={index} />;
-        }}
+        renderItem={renderChatItem}
       />
       <TextInput style={styles.inputContainer} />
     </KeyboardAvoidingView>
