@@ -90,7 +90,7 @@ class UserSchema implements BaseDbSchema {
 
   static fromDatabaseObject(dbObject: any): UserSchema {
     return new UserSchema({
-      userId: dbObject.user_id,
+      userId: dbObject?.user_id,
       username: dbObject.username,
       countryCode: dbObject.country_code,
       createdAt: dbObject.created_at,

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import ChatItemMyText from './child/ChatItemMyText';
+import ChatItemMyTextV2 from './child/ChatItemMyTextV2';
 import ChatItemTargetText from './child/ChatItemTargetText';
 import {
   BaseChatItemComponentProps,
@@ -11,7 +12,7 @@ import {calculateTime} from '../../utils/time';
 const BaseChatItem = ({item, index}: BaseChatItemComponentProps) => {
   if (item?.isMe)
     return (
-      <ChatItemMyText
+      <ChatItemMyTextV2
         avatar={item?.user?.profilePicture}
         isContinuous={item?.isContinuous}
         message={item?.message}

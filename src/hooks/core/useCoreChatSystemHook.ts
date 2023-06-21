@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {useRecoilState} from 'recoil';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../database/schema/ChannelListSchema';
@@ -7,20 +6,19 @@ import ChannelListMemberSchema from '../../database/schema/ChannelListMemberSche
 import ChatSchema from '../../database/schema/ChatSchema';
 import UseLocalDatabaseHook from '../../../types/database/localDatabase.types';
 import UserSchema from '../../database/schema/UserSchema';
-import localDatabaseAtom from '../../database/atom/localDatabaseAtom';
 import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
+import useProfileHook from './profile/useProfileHook';
 import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {getAnonymousChatName} from '../../utils/string/StringUtils';
 
 const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
+  const {anonProfileId, signedProfileId} = useProfileHook();
 
   const onPostNotifReceived: (data: GetstreamFeedListenerObject) => void = async (data) => {
-    // const postNotifChannel = ChannelList.fromPostNotifObject(data);
-    // postNotifChannel.save(localDb).catch((e) => console.log(e));
     try {
       const activityId = data?.new[0]?.object?.id || data?.new[0]?.id;
       await getSingleAnonymousPostNotification(activityId);
@@ -42,7 +40,11 @@ const useCoreChatSystemHook = () => {
     lastJsonMessage.targetImage = chatName?.image;
 
     const channelList = ChannelList.fromWebsocketObject(lastJsonMessage);
-    await channelList.save(localDb);
+    const isMyMessage =
+      lastJsonMessage?.message?.user?.id === signedProfileId ||
+      lastJsonMessage?.message?.user?.id === anonProfileId;
+
+    if (!isMyMessage) await channelList.save(localDb);
 
     const user = UserSchema.fromWebsocketObject(lastJsonMessage);
     await user.save(localDb);

@@ -1,4 +1,5 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
+import {v4 as uuid} from 'uuid';
 
 import BaseDbSchema from './BaseDbSchema';
 import UserSchema from './UserSchema';
@@ -114,6 +115,17 @@ class ChatSchema implements BaseDbSchema {
     return Promise.resolve(rows.raw().map(this.fromDatabaseObject));
   }
 
+  static async getByid(db: SQLiteDatabase, id: string): Promise<ChatSchema> {
+    const selectQuery = `SELECT * FROM ${ChatSchema.getTableName()} A
+      INNER JOIN ${UserSchema.getTableName()} B
+      ON A.user_id = B.user_id
+      WHERE A.id = ?;`;
+
+    const [{rows}] = await db.executeSql(selectQuery, [id]);
+    if (rows.length === 0) return Promise.resolve(null);
+    return Promise.resolve(this.fromDatabaseObject(rows.raw()[0]));
+  }
+
   static getTableName(): string {
     return 'chats';
   }
@@ -122,17 +134,18 @@ class ChatSchema implements BaseDbSchema {
     let rawJson = null;
 
     try {
-      rawJson = JSON.parse(dbObject.raw_json);
+      rawJson = JSON.parse(dbObject?.raw_json || '{}');
     } catch (e) {
       console.log('error parse');
       console.log(e);
     }
     const user = UserSchema.fromDatabaseObject(dbObject);
+    // console.log('dbObject', dbObject);
 
     return new ChatSchema({
       id: dbObject.id,
       channelId: dbObject.channel_id,
-      userId: dbObject.user_id,
+      userId: dbObject?.user_id,
       message: dbObject.message,
       type: dbObject.type,
       createdAt: dbObject.created_at,
@@ -171,19 +184,26 @@ class ChatSchema implements BaseDbSchema {
     });
   }
 
-  static generateSendingChat(
+  static async generateSendingChat(
     id: string,
     userId: string,
     channelId: string,
-    message: string
-  ): ChatSchema {
+    message: string,
+    localDb: SQLiteDatabase
+  ): Promise<ChatSchema> {
+    let newRandomId = id;
+    const existingChat = await ChatSchema.getByid(localDb, newRandomId);
+    if (existingChat) {
+      newRandomId = uuid();
+    }
+
     return new ChatSchema({
       channelId,
       message,
       status: 'pending',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      id,
+      id: newRandomId,
       type: 'regular',
       rawJson: null,
       user: null,
@@ -210,6 +230,7 @@ class ChatSchema implements BaseDbSchema {
 
       await db.executeSql(updateQuery, updateReplacement);
     } catch (e) {
+      console.log('error updatedRandomId', this.id, response?.message?.id);
       console.log('error updating chat status');
       console.log(e);
     }

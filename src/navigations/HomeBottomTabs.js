@@ -4,7 +4,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import {Platform, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 
 import ChannelListScreenV2 from '../screens/ChannelListScreenV2';
 import FirebaseConfig from '../configs/FirebaseConfig';
@@ -14,11 +14,13 @@ import MemoNews from '../assets/icon/News';
 import MemoProfileIcon from '../assets/icon/Profile';
 import UniversalLink from '../configs/UniversalLink';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
+import profileAtom from '../atom/profileAtom';
 import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
 import {colors} from '../utils/colors';
 import {fcmTokenService} from '../service/users';
+import {getAnonymousUserId, getUserId} from '../utils/users';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,6 +28,7 @@ function HomeBottomTabs({navigation}) {
   const isIos = Platform.OS === 'ios';
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
+  const [, setProfileAtom] = useRecoilState(profileAtom);
   const [unReadMessage] = React.useContext(Context).unReadMessage;
   let isOpenNotification = false;
 
@@ -169,9 +172,19 @@ function HomeBottomTabs({navigation}) {
     }
   };
 
+  const updateProfileAtomId = async () => {
+    const signedUserId = await getUserId();
+    const anonUserId = await getAnonymousUserId();
+    setProfileAtom({
+      anonProfileId: anonUserId,
+      signedProfileId: signedUserId
+    });
+  };
+
   React.useEffect(() => {
     createChannel();
     requestPermission();
+    updateProfileAtomId();
 
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       // eslint-disable-next-line no-unused-expressions

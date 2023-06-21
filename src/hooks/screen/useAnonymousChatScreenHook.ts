@@ -41,11 +41,12 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
     const myAnonymousId = await getAnonymousUserId();
     try {
       const randomId = uuid();
-      const sendingChatSchema = ChatSchema.generateSendingChat(
+      const sendingChatSchema = await ChatSchema.generateSendingChat(
         randomId,
         myAnonymousId,
         selectedChannel?.id,
-        message
+        message,
+        localDb
       );
 
       await sendingChatSchema.save(localDb);
@@ -71,6 +72,7 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
 
   return {
     chats,
+    selectedChannel,
     goBackFromChatScreen,
     goToChatInfoScreen,
     sendChat

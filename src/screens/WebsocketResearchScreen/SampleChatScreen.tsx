@@ -20,7 +20,8 @@ import {colors} from '../../utils/colors';
 const {height} = Dimensions.get('window');
 
 const SampleChatScreen = () => {
-  const {chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} = useAnonymousChatScreenHook();
+  const {selectedChannel, chats, goBackFromChatScreen, goToChatInfoScreen, sendChat} =
+    useAnonymousChatScreenHook();
   const styles = StyleSheet.create({
     keyboardAvoidingView: {
       flex: 1,
@@ -56,8 +57,8 @@ const SampleChatScreen = () => {
         onAvatarPress={goToChatInfoScreen}
         onBackPress={goBackFromChatScreen}
         onThreeDotPress={goToChatInfoScreen}
-        avatar={'https://picsum.photos/200/300'}
-        user={'Marlyn'}
+        avatar={selectedChannel?.channelPicture}
+        user={selectedChannel?.name}
       />
       <Button onPress={() => sendChat()}>Send Chat</Button>
       <FlatList
@@ -66,6 +67,7 @@ const SampleChatScreen = () => {
         inverted={true}
         alwaysBounceVertical={false}
         bounces={false}
+        keyExtractor={(item, index) => item?.id || index.toString()}
         renderItem={({item, index}) => {
           return <BaseChatItem item={item} index={index} />;
         }}
