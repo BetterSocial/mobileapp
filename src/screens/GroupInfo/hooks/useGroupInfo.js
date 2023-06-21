@@ -1,6 +1,7 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/core';
 import SimpleToast from 'react-native-simple-toast';
+import {openComposer} from 'react-native-email-link';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {Alert, Linking} from 'react-native';
 import {generateRandomId} from 'stream-chat-react-native-core';
@@ -24,7 +25,7 @@ const useGroupInfo = () => {
   const [isLoadingMembers, setIsLoadingMembers] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState('');
   const [isUploadingImage, setIsUploadingImage] = React.useState(false);
-  const username = channelState.channel?.data?.name;
+  const [username, setUsername] = React.useState(channelState.channel?.data?.name);
   const createChat = channelState.channel?.data?.created_at;
   const countUser = Object.entries(participants).length;
   const [selectedUser, setSelectedUser] = React.useState(null);
@@ -62,10 +63,9 @@ const useGroupInfo = () => {
     }
   };
   const memberName = () => {
-    return getChatName(channelState?.channel?.data.name, profile.myProfile.username);
+    return getChatName(username, profile.myProfile.username);
   };
   const chatName = getChatName(username, profile.myProfile.username);
-
   const handleOnNameChange = () => {
     navigation.push('GroupSetting', {
       username: chatName,
@@ -180,6 +180,18 @@ const useGroupInfo = () => {
     }
   };
 
+  const updateMemberName = (members = []) => {
+    if (!channel.data.isEditName && members.length > 0) {
+      members = members.map((member) => member.user.name).join(',');
+      setUsername(members);
+      if (members.length > 1) {
+        channel?.update({
+          name: members
+        });
+      }
+    }
+  };
+
   const onRemoveUser = async () => {
     setOpenModal(false);
     try {
@@ -188,6 +200,7 @@ const useGroupInfo = () => {
         (participant) => participant.user_id !== selectedUser.user_id
       );
       setNewParticipan(updateParticipant);
+      updateMemberName(result.members);
       await channel.sendMessage(
         {
           text: `${profile.myProfile.username} removed ${selectedUser.user.name} from this group`,
@@ -279,10 +292,7 @@ const useGroupInfo = () => {
     }
   };
   const onLeaveGroup = () => {
-    Alert.alert('Leave group', 'Are you sure you want to leave group ?', [
-      {text: 'Yes', onPress: leaveGroup},
-      {text: 'No'}
-    ]);
+    Alert.alert('', 'Exit this group?', [{text: 'Cancel'}, {text: 'Exit', onPress: leaveGroup}]);
   };
 
   const leaveGroup = async () => {
@@ -311,10 +321,13 @@ const useGroupInfo = () => {
   };
 
   const onReportGroup = () => {
-    const emailTo = `mailto:contact@bettersocial.org?subject=Reporting a group&body=Reporting group ${
-      channelState.channel?.data?.name || ''
-    }.Please type reason for reporting this group below.Thank you!`;
-    Linking.openURL(emailTo);
+    openComposer({
+      to: 'contact@bettersocial.org',
+      subject: 'Reporting a group',
+      body: `Reporting group ${
+        channelState.channel?.data?.name || ''
+      }. Please type reason for reporting this group below. Thank you!`
+    });
   };
 
   // eslint-disable-next-line consistent-return
@@ -382,7 +395,8 @@ const useGroupInfo = () => {
     checkUserIsBlockHandle,
     handlePressContact,
     handleOpenProfile,
-    onReportGroup
+    onReportGroup,
+    setUsername
   };
 };
 
