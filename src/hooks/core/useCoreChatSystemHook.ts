@@ -18,7 +18,9 @@ const useCoreChatSystemHook = () => {
   const {localDb, refresh} = useLocalDatabaseHook() as UseLocalDatabaseHook;
   const {anonProfileId, signedProfileId} = useProfileHook();
 
-  const onPostNotifReceived: (data: GetstreamFeedListenerObject) => void = async (data) => {
+  const onPostNotifReceived: (data: GetstreamFeedListenerObject) => Promise<void> = async (
+    data
+  ) => {
     try {
       const activityId = data?.new[0]?.object?.id || data?.new[0]?.id;
       await getSingleAnonymousPostNotification(activityId);

@@ -1,8 +1,5 @@
 import anonymousApi from '../anonymousConfig';
-import {
-  AnonymousPostNotification,
-  AnonymousPostNotificationData
-} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {ChannelData} from '../../../types/repo/AnonymousMessageRepo/ChannelData';
 
 const baseUrl = {

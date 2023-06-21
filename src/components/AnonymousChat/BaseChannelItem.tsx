@@ -1,6 +1,5 @@
 import * as React from 'react';
-import FastImage from 'react-native-fast-image';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {View} from 'react-native';
 
 import ChannelImage from './child/ChannelImage';
 import ChannelPostNotificationMessage from './child/ChannelPostNotificationMessage';
@@ -30,7 +29,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   block = 11,
   type = BaseChannelItemTypeProps.ANON_PM,
   isCommentExists = false,
-  onPress = function () {
+  onPress = () => {
     console.log('onPress');
   }
 }) => {

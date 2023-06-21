@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import ChatItemMyText from './child/ChatItemMyText';
 import ChatItemMyTextV2 from './child/ChatItemMyTextV2';
 import ChatItemTargetText from './child/ChatItemTargetText';
 import {

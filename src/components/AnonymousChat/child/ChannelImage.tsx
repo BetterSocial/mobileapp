@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import AnonymousProfile from '../../../assets/images/AnonymousProfile.png';
 import ChannelAnonymousSubImage from './ChannelAnonymousSubImage';

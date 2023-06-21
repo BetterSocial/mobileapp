@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 
-import BlockIcon from '../../../assets/block.png';
 import Imageblock from '../../../assets/images/block.png';
 import MemoIc_arrow_down_vote_on from '../../../assets/arrow/Ic_downvote_on';
 import MemoIc_arrow_upvote_on from '../../../assets/arrow/Ic_upvote_on';

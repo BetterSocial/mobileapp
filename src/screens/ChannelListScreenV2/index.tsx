@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ScrollView, StatusBar, Text, View} from 'react-native';
+import {ScrollView, StatusBar, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import AnonymousChannelListScreen from './AnonymousChannelListScreen';

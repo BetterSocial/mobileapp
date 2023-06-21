@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 
 import CustomPressable from '../CustomPressable';
 import {colors} from '../../utils/colors';
@@ -60,7 +60,7 @@ const HorizontalTab = ({selectedTab, onSelectedTabChange, tabs = []}) => {
     <View style={styles.tabs}>
       {tabs.map((tab, index) => (
         <CustomPressable
-          key={index}
+          key={tab}
           onPress={() => onSelectedTabChange(index)}
           style={index === selectedTab ? styles.activeTabItem : styles.tabItem}>
           <View style={styles.childTabContainer}>{tab}</View>

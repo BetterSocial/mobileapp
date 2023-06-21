@@ -65,9 +65,6 @@ const AnonPostNotificationChannelItem: (props: MessageChannelItemProps) => React
   else if (firstComment?.reaction?.isOwningReaction)
     type = BaseChannelItemTypeProps.ANON_POST_NOTIFICATION_I_COMMENTED;
 
-  // console.log('postNotifItem?.rawJson');
-  // console.log(postNotifItem?.rawJson);
-
   return (
     <BaseChannelItem
       message={item?.description}

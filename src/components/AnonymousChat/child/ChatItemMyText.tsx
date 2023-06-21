@@ -138,7 +138,7 @@ const ChatItemMyText = ({
       const isLastLine = index === lines?.length - 1;
       if (!isLastLine)
         return (
-          <Text key={index} style={styles.text}>
+          <Text key={line?.text} style={styles.text}>
             {line?.text}
           </Text>
         );
@@ -148,8 +148,8 @@ const ChatItemMyText = ({
       const lastLineStyle = [styles.text, styles.lastLineMargin];
       if (targetLastLineWidth - lastLineWidth < 24)
         return (
-          <View key={index} style={styles.lastLineContainerColumn}>
-            <Text key={index} style={lastLineStyle}>
+          <View key={line?.text} style={styles.lastLineContainerColumn}>
+            <Text key={line?.text} style={lastLineStyle}>
               {line?.text}
             </Text>
             <View style={styles.checkContainerOnLayoutColumn}>
@@ -163,8 +163,8 @@ const ChatItemMyText = ({
         );
 
       return (
-        <View key={index} style={styles.lastLineContainer}>
-          <Text key={index} style={lastLineStyle}>
+        <View key={line?.text} style={styles.lastLineContainer}>
+          <Text key={line?.text} style={lastLineStyle}>
             {line?.text}
           </Text>
           <View style={styles.checkContainerOnLayout}>

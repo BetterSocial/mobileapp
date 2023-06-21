@@ -10,8 +10,6 @@ import useAnonymousChannelListScreenHook from '../../../hooks/screen/useAnonymou
 
 const AnonymousChannelListScreen = () => {
   const {channels, goToChatScreen, goToPostDetailScreen} = useAnonymousChannelListScreenHook();
-  // console.log('item');
-  // console.log(channels[0]);
   return (
     <ScrollView>
       <View>

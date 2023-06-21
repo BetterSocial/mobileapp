@@ -89,12 +89,6 @@ const ChannelTitle = ({type, name, time, message, unreadCount}) => {
       </>
     );
 
-  const title =
-    type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION ||
-    type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION_I_COMMENTED
-      ? 'Your post: '
-      : `${name}'s post: `;
-
   const getTitle = () => {
     if (
       type === BaseChannelItemTypeProps.MY_ANON_POST_NOTIFICATION ||
