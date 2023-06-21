@@ -42,17 +42,20 @@ const useCoreChatSystemHook = () => {
     lastJsonMessage.targetImage = chatName?.image;
 
     const channelList = ChannelList.fromWebsocketObject(lastJsonMessage);
-    const isMyMessage =
-      lastJsonMessage?.message?.user?.id === signedProfileId ||
-      lastJsonMessage?.message?.user?.id === anonProfileId;
 
-    if (!isMyMessage) await channelList.save(localDb);
+    await channelList.save(localDb);
 
     const user = UserSchema.fromWebsocketObject(lastJsonMessage);
     await user.save(localDb);
 
-    const chat = ChatSchema.fromWebsocketObject(lastJsonMessage);
-    await chat.save(localDb);
+    const isMyMessage =
+      lastJsonMessage?.message?.user?.id === signedProfileId ||
+      lastJsonMessage?.message?.user?.id === anonProfileId;
+
+    if (!isMyMessage) {
+      const chat = ChatSchema.fromWebsocketObject(lastJsonMessage);
+      await chat.save(localDb);
+    }
 
     try {
       lastJsonMessage?.channel?.members?.forEach(async (member) => {
