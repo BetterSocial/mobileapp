@@ -99,7 +99,16 @@ class ChatSchema implements BaseDbSchema {
     myAnonymousId: string
   ): Promise<BaseDbSchema[]> {
     const selectQuery = `
-      SELECT *, 
+      SELECT A.*, 
+        B.user_id, 
+        B.username, 
+        B.country_code, 
+        B.created_at as user_created_at, 
+        B.updated_at as user_updated_at, 
+        B.last_active_at, 
+        B.profile_picture, 
+        B.bio, 
+        B.is_banned,
         CASE A.user_id 
           WHEN ? THEN 1 
           WHEN ? THEN 1
@@ -116,7 +125,16 @@ class ChatSchema implements BaseDbSchema {
   }
 
   static async getByid(db: SQLiteDatabase, id: string): Promise<ChatSchema> {
-    const selectQuery = `SELECT * FROM ${ChatSchema.getTableName()} A
+    const selectQuery = `SELECT A.*,
+      B.username, 
+      B.country_code, 
+      B.created_at as user_created_at, 
+      B.updated_at as user_updated_at, 
+      B.last_active_at, 
+      B.profile_picture, 
+      B.bio, 
+      B.is_banned
+      FROM ${ChatSchema.getTableName()} A
       INNER JOIN ${UserSchema.getTableName()} B
       ON A.user_id = B.user_id
       WHERE A.id = ?;`;
