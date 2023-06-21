@@ -1,7 +1,15 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import ToggleSwitch from 'toggle-switch-react-native';
-import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
 import MemoSendComment from '../../assets/icon/IconSendComment';
@@ -196,9 +204,9 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[400],
     color: colors.black,
-    paddingTop: 10,
-    paddingBottom: 10,
-    maxHeight: 100
+    maxHeight: 100,
+    paddingTop: Platform.OS === 'ios' ? 10 : 5,
+    paddingBottom: Platform.OS === 'ios' ? 10 : 5
   },
   icSendButton: {
     alignSelf: 'center'
