@@ -169,7 +169,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 6,
     paddingRight: 8,
     marginEnd: 8,
-    flex: 1,
+    flex: 1
   },
   btn: (isDisableSubmit) => ({
     backgroundColor: !isDisableSubmit ? colors.bondi_blue : '#f2f2f2',
@@ -196,9 +196,8 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[400],
     color: colors.black,
-    lineHeight: 19,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 10,
+    paddingBottom: 10,
     maxHeight: 100
   },
   icSendButton: {
