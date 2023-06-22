@@ -25,5 +25,6 @@ export const colors = {
   tradewind: '#58B1B5',
   elm: '#22878B',
   blockColor: '#FF2E63',
-  darkBlue: '#2C67BC'
+  darkBlue: '#2C67BC',
+  blueSea10: '#55C2FF'
 };

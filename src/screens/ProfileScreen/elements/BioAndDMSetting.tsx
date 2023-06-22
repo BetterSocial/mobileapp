@@ -5,29 +5,36 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import SimpleToast from 'react-native-simple-toast';
 import TextAreaChat from '../../../components/TextAreaChat';
 import {colors} from '../../../utils/colors';
-import GlobalButton from '../../../components/Button/GlobalButton';
 import {trimString} from '../../../utils/string/TrimString/index';
+import {profileSettingsDMpermission} from '../../../service/profile';
 
 type BioAndDMSettingProps = {
   bio: string;
   avatarUrl: string;
   changeBio: () => void;
   following: number;
+  isAnonymous: boolean;
+  onlyReceivedDmFromUserFollowing: boolean;
 };
 
 const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
   bio,
   changeBio,
   avatarUrl,
-  following
+  following,
+  isAnonymous,
+  onlyReceivedDmFromUserFollowing
 }) => {
-  const [isAnonimity, setIsAnonimity] = React.useState(false);
-  const [isAllowFollowingSendDM, setIsAllowFollowingSendDM] = React.useState(false);
+  const [isAnonymity, setIsAnonymity] = React.useState(isAnonymous);
+  const [isAllowFollowingSendDM, setIsAllowFollowingSendDM] = React.useState(
+    onlyReceivedDmFromUserFollowing
+  );
 
   const toggleSwitchAnon = () => {
-    setIsAnonimity((current) => !current);
+    setIsAnonymity((current) => !current);
     setIsAllowFollowingSendDM(false);
   };
+
   const toggleSwitchAnonAllowFollowing = () => {
     if (following >= 20) {
       setIsAllowFollowingSendDM((current) => !current);
@@ -39,6 +46,27 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
     }
   };
 
+  const updateProfileSetting = () => {
+    try {
+      profileSettingsDMpermission(isAnonymity, isAllowFollowingSendDM);
+    } catch (error) {
+      setIsAnonymity(isAnonymous);
+      setIsAllowFollowingSendDM(onlyReceivedDmFromUserFollowing);
+    }
+  };
+
+  const ref = React.useRef(true);
+
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current = false;
+    } else {
+      updateProfileSetting();
+    }
+  }, [isAnonymity, isAllowFollowingSendDM]);
+
+  const isBioEmpty = bio === null || bio === undefined;
+
   return (
     <View
       style={{
@@ -47,18 +75,22 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
         paddingHorizontal: 10,
         marginTop: 18
       }}>
-      <GlobalButton onPress={() => changeBio()}>
-        <>
-          {bio === null || bio === undefined ? (
-            <Text style={{color: colors.darkBlue}}>Add Bio</Text>
-          ) : (
-            <Text style={{color: colors.white, fontSize: 14}}>
-              {trimString(bio, 121)}{' '}
-              {bio.length > 121 ? <Text style={{color: colors.darkBlue}}>see more</Text> : null}
+      <View style={{paddingVertical: 10}}>
+        {isBioEmpty ? (
+          <Text style={{color: colors.white}}>Add Bio</Text>
+        ) : (
+          <Text style={{color: colors.white, fontSize: 14}}>
+            {trimString(bio, 121)}
+            {'. '}
+            {bio.length > 121 ? <Text style={{color: colors.white}}>see more</Text> : null}
+            <Text
+              onPress={() => changeBio()}
+              style={{color: colors.blueSea10, textDecorationLine: 'underline'}}>
+              Edit Prompt
             </Text>
-          )}
-        </>
-      </GlobalButton>
+          </Text>
+        )}
+      </View>
 
       <TextAreaChat
         isAnonimity={false}
@@ -72,16 +104,17 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
       />
       <TouchableOpacity onPress={toggleSwitchAnon} style={styles.toggleSwitchAnon}>
         <ToggleSwitch
-          isOn={isAnonimity}
+          isOn={isAnonymity}
           onToggle={toggleSwitchAnon}
           onColor={'#9DEDF1'}
+          circleColor={isAnonymity ? '#00ADB5' : colors.white}
           label={'Allow anonymous messages? '}
           offColor="#F5F5F5"
           size="small"
           labelStyle={{color: colors.white, marginRight: 2, fontSize: 12}}
         />
       </TouchableOpacity>
-      {isAnonimity && (
+      {isAnonymity && (
         <TouchableOpacity
           onPress={toggleSwitchAnonAllowFollowing}
           style={styles.toggleSwitchAnonFollowing}>
@@ -91,6 +124,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             onColor={'#9DEDF1'}
             label={'Only allow anon DMs from users you follow?'}
             offColor="#F5F5F5"
+            circleColor={isAllowFollowingSendDM ? '#00ADB5' : colors.white}
             size="small"
             labelStyle={{color: colors.white, marginRight: 5, fontSize: 12}}
           />

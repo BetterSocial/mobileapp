@@ -5,10 +5,10 @@ import {useNavigation} from '@react-navigation/native';
 
 import ArrowLeftIcon from '../../../assets/icons/images/arrow-left.svg';
 import SettingIcon from '../../../assets/icons/images/setting.svg';
-import ShareIcon from '../../../assets/icons/images/share.svg';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import GlobalButton from '../../../components/Button/GlobalButton';
+import ShareButtonIcon from '../../../components/ShareIcon/index';
 
 const ProfileHeader = ({
   onShareClicked = () => {},
@@ -48,9 +48,7 @@ const ProfileHeader = ({
       </Text>
       <View style={styles.wrapHeaderButton}>
         <View style={hideSetting ? styles.btnShareWithoutSetting : styles.btnShare}>
-          <TouchableOpacity onPress={onShareClicked}>
-            <ShareIcon width={20} height={20} fill={colors.black} />
-          </TouchableOpacity>
+          <ShareButtonIcon onPress={onShareClicked} />
         </View>
 
         {__renderSettings()}

@@ -122,8 +122,6 @@ const ProfileScreen = ({route}) => {
 
   const LIMIT_PROFILE_FEED = 10;
 
-  console.log(JSON.stringify(dataMain, null, 2));
-
   const {feeds} = myProfileFeed;
   const {
     feeds: mainFeeds,
@@ -569,7 +567,7 @@ const ProfileScreen = ({route}) => {
           changeBio={changeBio}
         />
 
-        <LinkAndSocialMedia />
+        <LinkAndSocialMedia username={dataMain.username} />
       </View>
       <View>
         <View style={styles.tabs} ref={postRef}>

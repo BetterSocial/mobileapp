@@ -1,11 +1,18 @@
-import React, {FC} from 'react';
+import * as React from 'react';
 import {Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import config from 'react-native-config';
+import SimpleToast from 'react-native-simple-toast';
 import {colors} from '../../../utils/colors';
 import InstagramIcon from '../../../assets/social-media/instagram.svg';
 import TwitterIcon from '../../../assets/social-media/twitter.svg';
+import ShareUtils from '../../../utils/share/index';
 
-const Button: FC<{onPress: () => void; color: string; styles?: ViewStyle}> = ({
+interface LinkProps {
+  username: string;
+}
+
+const Button: React.FC<{onPress: () => void; color: string; styles?: ViewStyle}> = ({
   onPress,
   color,
   styles,
@@ -29,34 +36,39 @@ const Button: FC<{onPress: () => void; color: string; styles?: ViewStyle}> = ({
   );
 };
 
-const CopyLink = () => (
-  <View
-    style={{
-      backgroundColor: '#F5F5F5',
-      borderRadius: 8,
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'row',
-      marginVertical: 10,
-      marginHorizontal: 8
-    }}>
-    <Text
-      numberOfLines={1}
-      ellipsizeMode="tail"
-      style={{padding: 10, flex: 1, fontWeight: '600', color: colors.gray1, fontSize: 9}}>
-      https//:me.bettersocial.org/u/bayubayubayu
-    </Text>
+const CopyLink: React.FC<LinkProps> = ({username}) => {
+  const handleCopyLink = () => {
+    ShareUtils.copyToClipboard(username);
+    SimpleToast.showWithGravity(
+      `Link Copied! \n${config.SHARE_URL}/u/${username}`,
+      SimpleToast.SHORT,
+      SimpleToast.CENTER
+    );
+  };
+  return (
+    <View
+      style={{
+        backgroundColor: '#F5F5F5',
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginVertical: 10,
+        marginHorizontal: 8
+      }}>
+      <Text
+        numberOfLines={1}
+        ellipsizeMode="tail"
+        style={{padding: 10, flex: 1, fontWeight: '600', color: colors.gray1, fontSize: 9}}>
+        {`${config.SHARE_URL}/u/${username}`}
+      </Text>
 
-    <Button
-      color={colors.darkBlue}
-      onPress={() => {
-        // TODO: action here
-      }}
-      styles={{alignSelf: 'center'}}>
-      <Text style={{color: colors.white, fontWeight: '600', fontSize: 12}}>Copy Link</Text>
-    </Button>
-  </View>
-);
+      <Button color={colors.darkBlue} onPress={handleCopyLink} styles={{alignSelf: 'center'}}>
+        <Text style={{color: colors.white, fontWeight: '600', fontSize: 12}}>Copy Link</Text>
+      </Button>
+    </View>
+  );
+};
 
 const InstagramButton = () => (
   <LinearGradient
@@ -87,7 +99,7 @@ const InstagramButton = () => (
   </LinearGradient>
 );
 
-const LinkAndSocialMedia = () => {
+const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
   return (
     <View
       style={{
@@ -112,7 +124,7 @@ const LinkAndSocialMedia = () => {
           style={{color: colors.darkBlue, fontWeight: '600', textAlign: 'center', fontSize: 12}}>
           Step 1: Copy your link
         </Text>
-        <CopyLink />
+        <CopyLink username={username} />
       </View>
 
       <View
@@ -158,7 +170,7 @@ const LinkAndSocialMedia = () => {
           <Button
             color={colors.darkBlue}
             onPress={() => {
-              // TODO: action here
+              ShareUtils.shareUserLink(username);
             }}
             styles={{alignSelf: 'center', flex: 1}}>
             <Text
