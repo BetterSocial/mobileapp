@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import {Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -148,9 +150,8 @@ const LinkAndSocialMedia: React.FC<LinkProps> = ({username}) => {
         <View style={{flexDirection: 'row'}}>
           <Button
             color="#26A7DE"
-            onPress={() => {
-              // TODO: action here
-            }}
+            // tslint:disable-next-line: no-empty
+            onPress={() => {}}
             styles={{alignSelf: 'center', flex: 1, flexDirection: 'row'}}>
             <Text
               style={{
