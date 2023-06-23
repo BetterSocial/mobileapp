@@ -23,6 +23,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {openSettings} from 'react-native-permissions';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation, useRoute} from '@react-navigation/core';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import ContentLink from './elements/ContentLink';
 import CreatePollContainer from './elements/CreatePollContainer';
@@ -337,15 +338,20 @@ const CreatePost = () => {
   const uploadMediaFromLibrary = async () => {
     const {success} = await requestExternalStoragePermission();
     if (success) {
-      launchImageLibrary({mediaType: 'photo'}, async (res) => {
-        if (res.didCancel && __DEV__) {
-          console.log('User cancelled image picker');
-        } else if (res.uri) {
-          await uploadPhotoImage(res.uri);
-        } else if (__DEV__) {
-          console.log('CreatePost (launchImageLibrary): ', res);
-        }
-      });
+      ImagePicker.openPicker({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo'
+      })
+        .then((data) => {
+          uploadPhotoImage(data.sourceURL);
+        })
+        .catch((e) => {
+          if (__DEV__) {
+            console.log(e, 'error crop');
+          }
+        });
     } else {
       Alert.alert(
         'Permission denied',
@@ -364,13 +370,20 @@ const CreatePost = () => {
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
-      launchCamera({mediaType: 'photo'}, async (res) => {
-        if (res.didCancel && __DEV__) {
-          console.log('User cancelled image picker');
-        } else if (res.uri) {
-          await uploadPhotoImage(res.uri);
-        }
-      });
+      ImagePicker.openCamera({
+        width: 512,
+        height: 512,
+        cropping: true,
+        mediaType: 'photo'
+      })
+        .then((data) => {
+          uploadPhotoImage(data.sourceURL);
+        })
+        .catch((e) => {
+          if (__DEV__) {
+            console.log(e, 'error crop');
+          }
+        });
     } else {
       Toast.show(message, Toast.SHORT);
     }
