@@ -68,13 +68,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
   const isBioEmpty = bio === null || bio === undefined;
 
   return (
-    <View
-      style={{
-        backgroundColor: colors.darkBlue,
-        borderRadius: 15,
-        paddingHorizontal: 10,
-        marginTop: 18
-      }}>
+    <View style={styles.container}>
       <View style={{paddingVertical: 10}}>
         {isBioEmpty ? (
           <Text style={{color: colors.white}}>Add Bio</Text>
@@ -83,9 +77,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             {trimString(bio, 121)}
             {'. '}
             {bio.length > 121 ? <Text style={{color: colors.white}}>see more</Text> : null}
-            <Text
-              onPress={() => changeBio()}
-              style={{color: colors.blueSea10, textDecorationLine: 'underline'}}>
+            <Text onPress={() => changeBio()} style={styles.editPromptLabel}>
               Edit Prompt
             </Text>
           </Text>
@@ -102,6 +94,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
         disabledInput
         placeholder="Other users will be able to reply to your prompt and direct message you."
       />
+
       <TouchableOpacity onPress={toggleSwitchAnon} style={styles.toggleSwitchAnon}>
         <ToggleSwitch
           isOn={isAnonymity}
@@ -111,9 +104,10 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
           label={'Allow anonymous messages? '}
           offColor="#F5F5F5"
           size="small"
-          labelStyle={{color: colors.white, marginRight: 2, fontSize: 12}}
+          labelStyle={styles.toggleLabel}
         />
       </TouchableOpacity>
+
       {isAnonymity && (
         <TouchableOpacity
           onPress={toggleSwitchAnonAllowFollowing}
@@ -126,7 +120,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
             offColor="#F5F5F5"
             circleColor={isAllowFollowingSendDM ? '#00ADB5' : colors.white}
             size="small"
-            labelStyle={{color: colors.white, marginRight: 5, fontSize: 12}}
+            labelStyle={styles.toggleLabelFollowingDM}
           />
         </TouchableOpacity>
       )}
@@ -134,9 +128,18 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
   );
 };
 
-export default BioAndDMSetting;
-
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.darkBlue,
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    marginTop: 18
+  },
+  editPromptLabel: {color: colors.blueSea10, textDecorationLine: 'underline'},
+  toggleLabel: {color: colors.white, marginRight: 2, fontSize: 12},
+  toggleLabelFollowingDM: {color: colors.white, marginRight: 5, fontSize: 12},
   toggleSwitchAnon: {display: 'flex', alignSelf: 'flex-end', paddingVertical: 8},
   toggleSwitchAnonFollowing: {display: 'flex', alignSelf: 'flex-end', paddingBottom: 8}
 });
+
+export default BioAndDMSetting;

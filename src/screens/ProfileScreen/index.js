@@ -25,7 +25,6 @@ import BottomSheetImage from './elements/BottomSheetImage';
 import BottomSheetRealname from './elements/BottomSheetRealname';
 import CustomPressable from '../../components/CustomPressable';
 import FollowInfoRow from './elements/FollowInfoRow';
-import GlobalButton from '../../components/Button/GlobalButton';
 import PostOptionModal from '../../components/Modal/PostOptionModal';
 import ProfileHeader from './elements/ProfileHeader';
 import ProfilePicture from './elements/ProfilePicture';
