@@ -10,6 +10,7 @@ import {
   Alert,
   Animated,
   BackHandler,
+  Platform,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -345,7 +346,8 @@ const CreatePost = () => {
         mediaType: 'photo'
       })
         .then((data) => {
-          uploadPhotoImage(data.sourceURL);
+          const file = Platform.OS === 'ios' ? data.sourceURL : data.path;
+          uploadPhotoImage(file);
         })
         .catch((e) => {
           if (__DEV__) {
@@ -377,7 +379,8 @@ const CreatePost = () => {
         mediaType: 'photo'
       })
         .then((data) => {
-          uploadPhotoImage(data.sourceURL);
+          const file = Platform.OS === 'ios' ? data.sourceURL : data.path;
+          uploadPhotoImage(file);
         })
         .catch((e) => {
           if (__DEV__) {
