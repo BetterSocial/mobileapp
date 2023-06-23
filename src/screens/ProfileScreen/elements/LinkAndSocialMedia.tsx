@@ -112,7 +112,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginVertical: 10
   },
-  shareStepLabel: {color: colors.darkBlue, fontWeight: '600', textAlign: 'center', fontSize: 12},
+  shareStepLabel: {
+    color: colors.darkBlue,
+    fontWeight: '600',
+    textAlign: 'center',
+    fontSize: 12,
+    marginBottom: 10
+  },
   buttonContainer: {
     paddingVertical: 9,
     paddingHorizontal: 12,
@@ -127,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    marginVertical: 10,
+    marginBottom: 10,
     marginHorizontal: 8
   },
   copyLinkUrl: {padding: 10, flex: 1, fontWeight: '600', color: colors.gray1, fontSize: 9},
