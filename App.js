@@ -93,8 +93,7 @@ const App = () => {
     appName: DeviceInfo.getApplicationName(), // Your app name
     appVersion: DeviceInfo.getVersion(), // Your app version
     platform: Platform.OS, // App Platform, android or ios
-    environment: ENV, // App Environment, production, development
-    appLanguage: 'en' // Your app language ex: en, es etc. Optional.
+    environment: ENV // App Environment, production, development
   };
 
   // Alert config is optional
