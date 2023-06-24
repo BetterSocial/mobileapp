@@ -38,7 +38,7 @@ const ChannelListScreenV2 = () => {
               unreadCount={4}
             />,
             <ChannelListTabItem
-              key={0}
+              key={1}
               name="Anonymous"
               picture={AnonymousProfile}
               unreadCount={4}

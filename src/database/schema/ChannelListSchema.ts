@@ -84,7 +84,7 @@ class ChannelList implements BaseDbSchema {
     const members = await ChannelListMemberSchema.getAll(db, channelId, myId, myAnonymousId);
     channel.members = members;
 
-    return channel;
+    return ChannelList.fromDatabaseObject(channel);
   };
 
   getTableName = (): string => {
@@ -223,6 +223,7 @@ class ChannelList implements BaseDbSchema {
       lastUpdatedBy: json.last_updated_by,
       createdAt: json.created_at,
       rawJson: jsonParsed,
+      members: json.members,
       user
     });
   }
