@@ -2,19 +2,12 @@
 /* eslint-disable import/no-unresolved */
 
 import * as React from 'react';
-import {
-  Dimensions,
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  TextInput
-} from 'react-native';
+import {Dimensions, FlatList, KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
 
 import AnonymousChatHeader from '../../components/AnonymousChat/AnonymousChatHeader';
+import AnonymousInputMessage from '../../components/Chat/AnonymousInputMessage';
 import BaseChatItem from '../../components/AnonymousChat/BaseChatItem';
 import useAnonymousChatScreenHook from '../../hooks/screen/useAnonymousChatScreenHook';
-import {Button} from '../../components/Button';
 import {colors} from '../../utils/colors';
 
 const {height} = Dimensions.get('window');
@@ -35,16 +28,20 @@ const SampleChatScreen = () => {
     chatContainer: {
       display: 'flex',
       height: '100%',
-      marginBottom: 50
+      marginBottom: 72
     },
     inputContainer: {
-      backgroundColor: 'red',
+      backgroundColor: colors.white,
       position: 'absolute',
       bottom: 0,
-      height: 50,
+      // height: 50,
       left: 0,
       right: 0,
-      zIndex: 100
+      zIndex: 100,
+      padding: 8,
+      paddingBottom: 16,
+      borderTopColor: colors.lightgrey,
+      borderTopWidth: 1
     }
   });
 
@@ -64,7 +61,6 @@ const SampleChatScreen = () => {
         avatar={selectedChannel?.channelPicture}
         user={selectedChannel?.name}
       />
-      <Button onPress={() => sendChat()}>Send Chat</Button>
       <FlatList
         style={styles.chatContainer}
         data={chats}
@@ -75,7 +71,9 @@ const SampleChatScreen = () => {
         keyExtractor={(item, index) => item?.id || index.toString()}
         renderItem={renderChatItem}
       />
-      <TextInput style={styles.inputContainer} />
+      <View style={styles.inputContainer}>
+        <AnonymousInputMessage onSendButtonClicked={sendChat} />
+      </View>
     </KeyboardAvoidingView>
   );
 };
