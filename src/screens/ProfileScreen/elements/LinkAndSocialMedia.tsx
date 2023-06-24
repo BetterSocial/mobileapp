@@ -13,7 +13,12 @@ interface LinkProps {
   username: string;
 }
 
-const Button: React.FC<{onPress: () => void; style?: ViewStyle}> = ({onPress, style, children}) => {
+interface ButtonProps {
+  onPress: () => void;
+  style?: ViewStyle;
+}
+
+const Button: React.FC<ButtonProps> = ({onPress, style, children}) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.buttonContainer, style]}>
       {children}

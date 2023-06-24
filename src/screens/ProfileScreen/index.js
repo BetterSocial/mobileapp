@@ -73,6 +73,74 @@ import LinkAndSocialMedia from './elements/LinkAndSocialMedia';
 
 const {height, width} = Dimensions.get('screen');
 
+const Header = (props) => {
+  const {
+    headerHeightRef,
+    changeImage,
+    dataMain,
+    goToFollowings,
+    dataMainBio,
+    changeBio,
+    postRef,
+    profileTabIndex,
+    setTabIndexToSigned,
+    setTabIndexToAnonymous
+  } = props;
+  return (
+    <View
+      onLayout={(event) => {
+        const headerHeightLayout = event.nativeEvent.layout.height;
+        headerHeightRef.current = headerHeightLayout;
+      }}>
+      <View style={styles.content}>
+        <View style={{flexDirection: 'row'}}>
+          <ProfilePicture
+            onImageContainerClick={changeImage}
+            profilePicPath={dataMain.profile_pic_path}
+          />
+          <View style={{marginLeft: 20}}>
+            <FollowInfoRow
+              follower={dataMain.follower_symbol}
+              following={dataMain.following_symbol}
+              onFollowingContainerClicked={() =>
+                goToFollowings(dataMain.user_id, dataMain.username)
+              }
+            />
+            <View style={{flexDirection: 'row'}}>
+              <KarmaScore score={86} />
+              <WarningCircleOutline height={15} width={15} style={{marginLeft: 5}} />
+            </View>
+          </View>
+        </View>
+
+        <BioAndDMSetting
+          avatarUrl={DEFAULT_PROFILE_PIC_PATH}
+          bio={dataMainBio}
+          changeBio={changeBio}
+          allowAnonDm={dataMain.allow_anon_dm}
+          onlyReceivedDmFromUserFollowing={dataMain.only_received_dm_from_user_following}
+        />
+
+        <LinkAndSocialMedia username={dataMain.username} />
+      </View>
+      <View>
+        <View style={styles.tabs} ref={postRef}>
+          <CustomPressable
+            style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED)}
+            onPress={setTabIndexToSigned}>
+            <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
+          </CustomPressable>
+          <CustomPressable
+            style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
+            onPress={setTabIndexToAnonymous}>
+            <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
+          </CustomPressable>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 const ProfileScreen = ({route}) => {
   const navigation = useNavigation();
   const {listRef} = useOnBottomNavigationTabPressHook(LIST_VIEW_TYPE.TIKTOK_SCROLL);
@@ -532,57 +600,7 @@ const ProfileScreen = ({route}) => {
     return reloadFetchAnonymousPost();
   };
 
-  const renderHeader = () => (
-    <View
-      onLayout={(event) => {
-        const headerHeightLayout = event.nativeEvent.layout.height;
-        headerHeightRef.current = headerHeightLayout;
-      }}>
-      <View style={styles.content}>
-        <View style={{flexDirection: 'row'}}>
-          <ProfilePicture
-            onImageContainerClick={changeImage}
-            profilePicPath={dataMain.profile_pic_path}
-          />
-          <View style={{marginLeft: 20}}>
-            <FollowInfoRow
-              follower={dataMain.follower_symbol}
-              following={dataMain.following_symbol}
-              onFollowingContainerClicked={() =>
-                goToFollowings(dataMain.user_id, dataMain.username)
-              }
-            />
-            <View style={{flexDirection: 'row'}}>
-              <KarmaScore score={86} />
-              <WarningCircleOutline height={15} width={15} style={{marginLeft: 5}} />
-            </View>
-          </View>
-        </View>
-
-        <BioAndDMSetting
-          avatarUrl={DEFAULT_PROFILE_PIC_PATH}
-          bio={dataMain.bio}
-          changeBio={changeBio}
-        />
-
-        <LinkAndSocialMedia username={dataMain.username} />
-      </View>
-      <View>
-        <View style={styles.tabs} ref={postRef}>
-          <CustomPressable
-            style={styles.tabItem(profileTabIndex === TAB_INDEX_SIGNED)}
-            onPress={setTabIndexToSigned}>
-            <Text style={styles.postText(profileTabIndex === TAB_INDEX_SIGNED)}>Signed Posts</Text>
-          </CustomPressable>
-          <CustomPressable
-            style={styles.tabItem(profileTabIndex === TAB_INDEX_ANONYMOUS)}
-            onPress={setTabIndexToAnonymous}>
-            <AnonymousTab isActive={profileTabIndex === TAB_INDEX_ANONYMOUS} />
-          </CustomPressable>
-        </View>
-      </View>
-    </View>
-  );
+  console.log({dataMain, an: dataMain.only_received_dm_from_user_following});
 
   return (
     <>
@@ -614,7 +632,20 @@ const ProfileScreen = ({route}) => {
               );
               return [0, ...posts];
             })()}
-            ListHeaderComponent={renderHeader}>
+            ListHeaderComponent={
+              <Header
+                headerHeightRef={headerHeightRef}
+                changeImage={changeImage}
+                dataMain={dataMain}
+                goToFollowings={goToFollowings}
+                dataMainBio={dataMainBio}
+                changeBio={changeBio}
+                postRef={postRef}
+                profileTabIndex={profileTabIndex}
+                setTabIndexToSigned={setTabIndexToSigned}
+                setTabIndexToAnonymous
+              />
+            }>
             {({item, index}) => {
               const dummyItemHeight =
                 height -

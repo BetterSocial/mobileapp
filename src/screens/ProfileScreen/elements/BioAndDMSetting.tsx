@@ -13,7 +13,7 @@ type BioAndDMSettingProps = {
   avatarUrl: string;
   changeBio: () => void;
   following: number;
-  isAnonymous: boolean;
+  allowAnonDm: boolean;
   onlyReceivedDmFromUserFollowing: boolean;
 };
 
@@ -22,13 +22,22 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
   changeBio,
   avatarUrl,
   following,
-  isAnonymous,
+  allowAnonDm,
   onlyReceivedDmFromUserFollowing
 }) => {
-  const [isAnonymity, setIsAnonymity] = React.useState(isAnonymous);
+  const [isAnonymity, setIsAnonymity] = React.useState(allowAnonDm);
   const [isAllowFollowingSendDM, setIsAllowFollowingSendDM] = React.useState(
     onlyReceivedDmFromUserFollowing
   );
+
+  const updateProfileSetting = async () => {
+    try {
+      await profileSettingsDMpermission(isAnonymity, isAllowFollowingSendDM);
+    } catch (error) {
+      setIsAnonymity(allowAnonDm);
+      setIsAllowFollowingSendDM(onlyReceivedDmFromUserFollowing);
+    }
+  };
 
   const toggleSwitchAnon = () => {
     setIsAnonymity((current) => !current);
@@ -40,18 +49,9 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
       setIsAllowFollowingSendDM((current) => !current);
     } else {
       SimpleToast.show(
-        'To protect your connections anonymity, you need to follow at least 20 users to enable this option',
+        'To protect your connections` anonymity, you need to follow at least 20 users to enable this option',
         SimpleToast.LONG
       );
-    }
-  };
-
-  const updateProfileSetting = () => {
-    try {
-      profileSettingsDMpermission(isAnonymity, isAllowFollowingSendDM);
-    } catch (error) {
-      setIsAnonymity(isAnonymous);
-      setIsAllowFollowingSendDM(onlyReceivedDmFromUserFollowing);
     }
   };
 
@@ -142,4 +142,4 @@ const styles = StyleSheet.create({
   toggleSwitchAnonFollowing: {display: 'flex', alignSelf: 'flex-end', paddingBottom: 8}
 });
 
-export default BioAndDMSetting;
+export default React.memo(BioAndDMSetting);
