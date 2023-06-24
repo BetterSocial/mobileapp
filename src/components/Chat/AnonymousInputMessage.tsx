@@ -83,7 +83,7 @@ const AnonymousInputMessage = ({onSendButtonClicked}: AnonymousInputMessageProps
   const onChangeInput = (v) => {
     setText(v);
   };
-  const onSelectImoji = () => {
+  const onSelectEmoji = () => {
     refEmoji.current.close();
   };
 
@@ -116,7 +116,7 @@ const AnonymousInputMessage = ({onSendButtonClicked}: AnonymousInputMessageProps
         </View>
       </View>
 
-      <SheetEmoji ref={refEmoji} selectEmoji={(emoji) => onSelectImoji()} />
+      <SheetEmoji ref={refEmoji} selectEmoji={onSelectEmoji} />
     </>
   );
 };
