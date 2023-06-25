@@ -119,6 +119,7 @@ const Header = (props) => {
           changeBio={changeBio}
           allowAnonDm={dataMain.allow_anon_dm}
           onlyReceivedDmFromUserFollowing={dataMain.only_received_dm_from_user_following}
+          following={dataMain.following}
         />
 
         <LinkAndSocialMedia username={dataMain.username} />
@@ -226,13 +227,7 @@ const ProfileScreen = ({route}) => {
       getAccessToken().then((val) => {
         setTokenJwt(val);
       });
-      getSpecificCache(PROFILE_CACHE, (res) => {
-        if (!res) {
-          fetchMyProfile();
-        } else {
-          saveProfileState(res);
-        }
-      });
+      fetchMyProfile();
     }
   }, [interactionsComplete]);
 
@@ -241,6 +236,7 @@ const ProfileScreen = ({route}) => {
     if (id) {
       setUserId(id);
       const result = await getMyProfile(id);
+      console.log({result: result.data.allow_anon_dm});
       if (result.code === 200) {
         saveToCache(PROFILE_CACHE, result.data);
         saveProfileState(result?.data);
@@ -600,8 +596,6 @@ const ProfileScreen = ({route}) => {
     return reloadFetchAnonymousPost();
   };
 
-  console.log({dataMain, an: dataMain.only_received_dm_from_user_following});
-
   return (
     <>
       {!loadingContainer ? (
@@ -643,7 +637,7 @@ const ProfileScreen = ({route}) => {
                 postRef={postRef}
                 profileTabIndex={profileTabIndex}
                 setTabIndexToSigned={setTabIndexToSigned}
-                setTabIndexToAnonymous
+                setTabIndexToAnonymous={setTabIndexToAnonymous}
               />
             }>
             {({item, index}) => {

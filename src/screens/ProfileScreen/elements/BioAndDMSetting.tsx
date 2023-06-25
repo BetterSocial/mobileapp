@@ -34,6 +34,7 @@ const BioAndDMSetting: React.FC<BioAndDMSettingProps> = ({
     try {
       await profileSettingsDMpermission(isAnonymity, isAllowFollowingSendDM);
     } catch (error) {
+      SimpleToast.show('Update settings failed, please try again.', SimpleToast.SHORT);
       setIsAnonymity(allowAnonDm);
       setIsAllowFollowingSendDM(onlyReceivedDmFromUserFollowing);
     }
@@ -142,4 +143,4 @@ const styles = StyleSheet.create({
   toggleSwitchAnonFollowing: {display: 'flex', alignSelf: 'flex-end', paddingBottom: 8}
 });
 
-export default React.memo(BioAndDMSetting);
+export default BioAndDMSetting;
