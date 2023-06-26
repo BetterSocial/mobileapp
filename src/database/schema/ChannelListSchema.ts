@@ -131,6 +131,21 @@ class ChannelList implements BaseDbSchema {
     }
   }
 
+  async saveAndUpdateIncrementCount(db: SQLiteDatabase, incrementCount: number): Promise<void> {
+    const jsonString: string | null = null;
+
+    const unreadCountResponse = await db.executeSql(
+      `SELECT unread_count FROM ${ChannelList.getTableName()} WHERE id = ?`,
+      [this.id]
+    );
+
+    const unreadCount = unreadCountResponse[0]?.rows?.raw()[0]?.unread_count ?? 0;
+    const incrementUnreadCount = unreadCount + incrementCount;
+
+    this.unreadCount = incrementUnreadCount;
+    this.save(db);
+  }
+
   async saveIfLatest(db: SQLiteDatabase): Promise<void> {
     try {
       const existingChannel = await ChannelList.getById(db, this.id);
@@ -281,7 +296,7 @@ class ChannelList implements BaseDbSchema {
       channelPicture: '',
       name: data?.titlePost,
       description: data?.titlePost,
-      unreadCount: 1,
+      unreadCount: 0,
       channelType: 'ANON_POST_NOTIFICATION',
       lastUpdatedAt: data?.data?.updated_at,
       lastUpdatedBy: '',

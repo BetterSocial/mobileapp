@@ -14,7 +14,6 @@ const ChannelPostNotificationMessage = ({
 }) => {
   const {profile} = useProfileHook();
   if (type === BaseChannelItemTypeProps.ANON_PM) return <></>;
-  if (!commenterName) return <></>;
 
   const styles = StyleSheet.create({
     chatContentPostNotificationMessage: {
@@ -32,6 +31,16 @@ const ChannelPostNotificationMessage = ({
       color: colors.gray
     }
   });
+  if (!commenterName)
+    return (
+      <Text
+        numberOfLines={2}
+        ellipsizeMode="tail"
+        style={styles.chatContentPostNotificationMessage}>
+        <Text style={styles.chatContentPostNotificationMessageBold}>{'No comments yet'}</Text>
+        {message}
+      </Text>
+    );
 
   const commenter = commenterId === profile?.user_id ? 'You' : commenterName;
 

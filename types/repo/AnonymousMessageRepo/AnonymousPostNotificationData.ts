@@ -45,8 +45,23 @@ export interface Comment {
   actor: any;
 }
 
+export interface LatestChildrenComment {
+  created_at: string;
+  updated_at: string;
+  id: string;
+  user_id: string;
+  user: any;
+  kind: string;
+  activity_id: string;
+  data: Data3;
+  target_feeds: string[];
+  parent: string;
+  latest_children: LatestChildren;
+  children_counts: any;
+}
+
 export interface LatestChildren {
-  comment: Comment[];
+  comment: LatestChildrenComment[];
 }
 
 export interface Reaction {

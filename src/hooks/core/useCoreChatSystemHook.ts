@@ -10,7 +10,11 @@ import useBetterWebsocketHook from './websocket/useBetterWebsocketHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import usePostNotificationListenerHook from './getstream/usePostNotificationListenerHook';
 import useProfileHook from './profile/useProfileHook';
-import {AnonymousPostNotification} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
+import {
+  AnonymousPostNotification,
+  Comment,
+  LatestChildrenComment
+} from '../../../types/repo/AnonymousMessageRepo/AnonymousPostNotificationData';
 import {GetstreamFeedListenerObject} from '../../../types/hooks/core/getstreamFeedListener/feedListenerObject';
 import {getAnonymousChatName} from '../../utils/string/StringUtils';
 
@@ -106,6 +110,49 @@ const useCoreChatSystemHook = () => {
     }
   };
 
+  const unreadCountProcessor = (postNotification: AnonymousPostNotification) => {
+    let latestComment: Comment = null;
+    let latestCommentLatestChild: LatestChildrenComment = null;
+    let isMyComment = false;
+    let isMyChildComment = false;
+
+    const isMyPost = postNotification?.isOwnPost;
+    const postHasComment = postNotification?.comments?.length > 0;
+
+    if (postHasComment) {
+      latestComment = postNotification?.comments[0];
+      isMyComment = latestComment?.reaction?.isOwningReaction;
+      if (latestComment?.reaction?.latest_children?.comment?.length > 0) {
+        latestCommentLatestChild = latestComment?.reaction?.latest_children?.comment[0];
+        const latestCommentLatestChildUserId = latestCommentLatestChild?.user_id;
+        isMyChildComment =
+          latestCommentLatestChildUserId === signedProfileId ||
+          latestCommentLatestChildUserId === anonProfileId;
+      }
+    }
+
+    if (isMyPost && postHasComment) {
+      // Return 1 if the post is my post and has comment from other user(PoN2)
+      // Return 0 if the post is my post and is my comment(PoN3)
+      return isMyComment ? 0 : 1;
+    }
+
+    // Return 0 if the post is my post and has no comment yet (PoN1)
+    if (isMyPost && !postHasComment) return 0;
+
+    // Return 0 if the post is other's post, has comment and has my child comment(PoN7)
+    if (!isMyPost && postHasComment && isMyComment && isMyChildComment) return 0;
+
+    // Return 1 if the post is other's post, not my comment and has my child comment(PoN6)
+    if (!isMyPost && postHasComment && !isMyComment && isMyChildComment) return 1;
+
+    if (!isMyPost && postHasComment && isMyComment)
+      // Return 0 if the post is other's post and has my comment(PoN4)
+      return 0;
+
+    return 0;
+  };
+
   const getSingleAnonymousPostNotification = async (activityId) => {
     if (!localDb) return;
     let anonymousPostNotification: AnonymousPostNotification = null;
@@ -114,8 +161,6 @@ const useCoreChatSystemHook = () => {
       anonymousPostNotification = await AnonymousMessageRepo.getSingleAnonymousPostNotifications(
         activityId
       );
-      console.log('anonymousPostNotification response');
-      console.log(anonymousPostNotification);
     } catch (e) {
       console.log('error on getting anonymousPostNotifications');
       console.log(e);
@@ -123,8 +168,9 @@ const useCoreChatSystemHook = () => {
 
     try {
       if (!anonymousPostNotification) return;
+      const unreadCount = unreadCountProcessor(anonymousPostNotification);
       const channelList = ChannelList.fromAnonymousPostNotificationAPI(anonymousPostNotification);
-      await channelList.save(localDb).catch((e) => console.log(e));
+      channelList.saveAndUpdateIncrementCount(localDb, unreadCount).catch((e) => console.log(e));
 
       refresh('channelList');
     } catch (e) {
