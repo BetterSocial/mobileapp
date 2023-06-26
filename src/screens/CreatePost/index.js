@@ -322,7 +322,6 @@ const CreatePost = () => {
 
     try {
       const responseUpload = await uploadPhoto(asset);
-
       setMediaStorage((val) => [...val, newArr]);
       setDataImage((val) => [...val, responseUpload.data.url]);
       sheetMediaRef.current.close();
@@ -346,7 +345,7 @@ const CreatePost = () => {
         mediaType: 'photo'
       })
         .then((data) => {
-          const file = Platform.OS === 'ios' ? data.sourceURL : data.path;
+          const file = data.path;
           uploadPhotoImage(file);
         })
         .catch((e) => {
@@ -368,7 +367,6 @@ const CreatePost = () => {
       );
     }
   };
-
   const takePhoto = async () => {
     const {success, message} = await requestCameraPermission();
     if (success) {
@@ -379,7 +377,7 @@ const CreatePost = () => {
         mediaType: 'photo'
       })
         .then((data) => {
-          const file = Platform.OS === 'ios' ? data.sourceURL : data.path;
+          const file = data.path;
           uploadPhotoImage(file);
         })
         .catch((e) => {
