@@ -15,6 +15,7 @@ import MemoProfileIcon from '../assets/icon/Profile';
 import UniversalLink from '../configs/UniversalLink';
 import WebsocketResearchScreen from '../screens/WebsocketResearchScreen';
 import profileAtom from '../atom/profileAtom';
+import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
 import {ChannelListScreen, FeedScreen, NewsScreen, ProfileScreen} from '../screens';
 import {Context} from '../context';
 import {InitialStartupAtom, otherProfileAtom} from '../service/initialStartup';
@@ -29,7 +30,8 @@ function HomeBottomTabs({navigation}) {
   const initialStartup = useRecoilValue(InitialStartupAtom);
   const otherProfileData = useRecoilValue(otherProfileAtom);
   const [, setProfileAtom] = useRecoilState(profileAtom);
-  const [unReadMessage] = React.useContext(Context).unReadMessage;
+  const {totalUnreadCount} = useRootChannelListHook();
+
   let isOpenNotification = false;
 
   const handleNotification = async (notification) => {
@@ -161,7 +163,6 @@ function HomeBottomTabs({navigation}) {
   };
 
   const handlePushNotif = (remoteMessage) => {
-    console.log(remoteMessage, 'jahat');
     const {data} = remoteMessage;
     if (data.channel_type !== 3) {
       if (isIos) {
@@ -314,10 +315,7 @@ function HomeBottomTabs({navigation}) {
           options={{
             activeTintColor: colors.holytosca,
             tabBarIcon: renderTabLabelIcon('ChannelList'),
-            tabBarBadge:
-              unReadMessage.total_unread_count + unReadMessage.unread_post > 0
-                ? unReadMessage.total_unread_count + unReadMessage.unread_post
-                : null
+            tabBarBadge: totalUnreadCount > 0 ? totalUnreadCount : null
           }}
         />
         <Tab.Screen

@@ -51,6 +51,9 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
   });
 
   const {name, picture, unreadCount} = props;
+  let unreadCountString = unreadCount.toString();
+  if (unreadCount > 9) unreadCountString = '9+';
+
   return (
     <View style={styles.container}>
       {typeof picture === 'string' ? (
@@ -61,9 +64,11 @@ const ChannelListTabItem = (props: ChannelListTabItemProps) => {
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
         as {name}
       </Text>
-      <View style={styles.unreadCountContainer}>
-        <Text style={styles.unreadCount}>{unreadCount}</Text>
-      </View>
+      {unreadCount > 0 && (
+        <View style={styles.unreadCountContainer}>
+          <Text style={styles.unreadCount}>{unreadCountString}</Text>
+        </View>
+      )}
     </View>
   );
 };

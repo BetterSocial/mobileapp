@@ -9,10 +9,12 @@ import ChannelListTabItem from '../../components/HorizontalTab/ChannelListTabIte
 import HorizontalTab from '../../components/HorizontalTab';
 import Search from '../ChannelListScreen/elements/Search';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import useRootChannelListHook from '../../hooks/screen/useRootChannelListHook';
 
 const ChannelListScreenV2 = () => {
   const navigation = useNavigation();
   const {profile} = useProfileHook();
+  const {anonymousChannelUnreadCount, signedChannelUnreadCount} = useRootChannelListHook();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
 
@@ -35,13 +37,13 @@ const ChannelListScreenV2 = () => {
               key={0}
               name={`@${profile?.username}`}
               picture={profile?.profile_pic_path}
-              unreadCount={4}
+              unreadCount={signedChannelUnreadCount}
             />,
             <ChannelListTabItem
               key={1}
               name="Anonymous"
               picture={AnonymousProfile}
-              unreadCount={4}
+              unreadCount={anonymousChannelUnreadCount}
             />
           ]}
         />

@@ -182,6 +182,19 @@ class ChannelList implements BaseDbSchema {
     return results.rows.raw().map(ChannelList.fromDatabaseObject);
   }
 
+  static async getUnreadCount(db: SQLiteDatabase): Promise<number> {
+    try {
+      const [results] = await db.executeSql(
+        `SELECT SUM(unread_count) as unread_count FROM ${ChannelList.getTableName()}`
+      );
+
+      return Promise.resolve(results?.rows?.raw()[0]?.unread_count || 0);
+    } catch (e) {
+      console.log(e);
+      return Promise.resolve(0);
+    }
+  }
+
   static getTableName(): string {
     return 'channel_lists';
   }
