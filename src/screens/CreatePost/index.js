@@ -345,9 +345,9 @@ const CreatePost = () => {
         mediaType: 'photo',
         compressImageQuality: 0.5
       })
-        .then((data) => {
+        .then(async (data) => {
           const file = data.path;
-          uploadPhotoImage(file);
+          await uploadPhotoImage(file);
         })
         .catch((e) => {
           if (__DEV__) {
@@ -378,9 +378,9 @@ const CreatePost = () => {
         mediaType: 'photo',
         compressImageQuality: 0.5
       })
-        .then((data) => {
+        .then(async (data) => {
           const file = data.path;
-          uploadPhotoImage(file);
+          await uploadPhotoImage(file);
         })
         .catch((e) => {
           if (__DEV__) {
