@@ -6,7 +6,8 @@ const baseUrl = {
   sendAnonymousMessage: '/chat/anonymous',
   getAllAnonymousChannels: '/chat/channels',
   getAllAnonymousPostNotifications: '/feeds/feed-chat/anonymous',
-  getSingleAnonymousPostNotifications: (activityId) => `/feeds/feed-chat/${activityId}`
+  getSingleAnonymousPostNotifications: (activityId: string) => `/feeds/feed-chat/${activityId}`,
+  setChannelAsRead: (channelId: string) => `/chat/channels/${channelId}/read`
 };
 
 interface AnonymousMessageRepoTypes {
@@ -14,6 +15,7 @@ interface AnonymousMessageRepoTypes {
   getAllAnonymousChannels: () => Promise<ChannelData[]>;
   getAllAnonymousPostNotifications: () => Promise<AnonymousPostNotification[]>;
   getSingleAnonymousPostNotifications: (activityId: string) => Promise<AnonymousPostNotification>;
+  setChannelAsRead: (channelId: string) => Promise<boolean>;
 }
 
 async function sendAnonymousMessage(channelId: string, message: string) {
@@ -82,11 +84,29 @@ async function getSingleAnonymousPostNotifications(
   }
 }
 
+async function setChannelAsRead(channelId: string): Promise<boolean> {
+  try {
+    const data = {
+      channelType: 'messaging'
+    };
+    const response = await anonymousApi.post(baseUrl.setChannelAsRead(channelId), data);
+    if (response.status === 200) {
+      return Promise.resolve(true);
+    }
+
+    return Promise.reject(response.data?.status);
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e);
+  }
+}
+
 const AnonymousMessageRepo: AnonymousMessageRepoTypes = {
   sendAnonymousMessage,
   getAllAnonymousChannels,
   getAllAnonymousPostNotifications,
-  getSingleAnonymousPostNotifications
+  getSingleAnonymousPostNotifications,
+  setChannelAsRead
 };
 
 export default AnonymousMessageRepo;

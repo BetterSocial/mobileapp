@@ -15,7 +15,8 @@ import {randomString} from '../../utils/string/StringUtils';
 
 function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
   const {localDb, chat, refresh} = useLocalDatabaseHook();
-  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen} = useChatUtilsHook();
+  const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen, setSelectedChannelAsRead} =
+    useChatUtilsHook();
 
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
   const [chatInfo, setChatInfo] = React.useState<ChannelList>(null);
@@ -68,6 +69,7 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
   React.useEffect(() => {
     initChatData();
     initChatInfoData();
+    setSelectedChannelAsRead();
   }, [localDb, chat, selectedChannel]);
 
   return {

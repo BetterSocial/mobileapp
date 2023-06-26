@@ -2,6 +2,7 @@ import SimpleToast from 'react-native-simple-toast';
 import {atom, useRecoilState} from 'recoil';
 import {useNavigation} from '@react-navigation/native';
 
+import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import UseChatUtilsHook from '../../../../types/hooks/screens/useChatUtilsHook.types';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import {ChannelList} from '../../../../types/database/schema/ChannelList.types';
@@ -23,7 +24,17 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const setChannelAsRead = (channel: ChannelList) => {
     if (!localDb) return;
     channel.setRead(localDb).catch((e) => console.log('setChannelAsRead error', e));
+
+    AnonymousMessageRepo.setChannelAsRead(channel?.id).catch((e) => {
+      console.log('setChannelAsRead error', e);
+    });
+
     refresh('channelList');
+  };
+
+  const setSelectedChannelAsRead = () => {
+    if (!selectedChannel) return;
+    setChannelAsRead(selectedChannel);
   };
 
   const goToChatScreen = (channel: ChannelList) => {
@@ -77,7 +88,8 @@ function useChatUtilsHook(): UseChatUtilsHook {
     goToChatScreen,
     goToPostDetailScreen,
     goToChatInfoScreen,
-    goBackFromChatScreen
+    goBackFromChatScreen,
+    setSelectedChannelAsRead
   };
 }
 
