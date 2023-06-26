@@ -342,7 +342,8 @@ const CreatePost = () => {
         width: 512,
         height: 512,
         cropping: true,
-        mediaType: 'photo'
+        mediaType: 'photo',
+        compressImageQuality: 0.5
       })
         .then((data) => {
           const file = data.path;
@@ -374,7 +375,8 @@ const CreatePost = () => {
         width: 512,
         height: 512,
         cropping: true,
-        mediaType: 'photo'
+        mediaType: 'photo',
+        compressImageQuality: 0.5
       })
         .then((data) => {
           const file = data.path;
