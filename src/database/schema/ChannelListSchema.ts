@@ -224,7 +224,7 @@ class ChannelList implements BaseDbSchema {
       channelType: 'ANON_PM',
       lastUpdatedAt: json?.channel?.last_message_at,
       lastUpdatedBy: json?.message?.user?.id,
-      createdAt: json.created_at,
+      createdAt: json?.channel?.created_at,
       rawJson: json,
       user: null
     });

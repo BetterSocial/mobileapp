@@ -76,7 +76,14 @@ class ChannelListMemberSchema implements BaseDbSchema {
     myAnonymousId: string
   ): Promise<ChannelListMemberSchema[]> {
     const selectQuery = `
-        SELECT *,
+        SELECT A.*,
+            B.user_id,
+            B.username,
+            B.country_code,
+            B.profile_picture,
+            B.bio,
+            B.is_banned,
+            B.last_active_at,
             CASE A.user_id 
                 WHEN ? THEN true
                 WHEN ? THEN true
