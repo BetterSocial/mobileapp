@@ -10,7 +10,6 @@ import {
   Alert,
   Animated,
   BackHandler,
-  Platform,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -342,8 +341,7 @@ const CreatePost = () => {
         width: 512,
         height: 512,
         cropping: true,
-        mediaType: 'photo',
-        compressImageQuality: 0.5
+        mediaType: 'photo'
       })
         .then(async (data) => {
           const file = data.path;
@@ -375,8 +373,7 @@ const CreatePost = () => {
         width: 512,
         height: 512,
         cropping: true,
-        mediaType: 'photo',
-        compressImageQuality: 0.5
+        mediaType: 'photo'
       })
         .then(async (data) => {
           const file = data.path;
