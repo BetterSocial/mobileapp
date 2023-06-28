@@ -1,7 +1,15 @@
 import * as React from 'react';
 import FastImage from 'react-native-fast-image';
 import ToggleSwitch from 'toggle-switch-react-native';
-import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AnonUserInfoRepo from '../../service/repo/anonUserInfoRepo';
@@ -188,7 +196,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 6,
     paddingRight: 8,
     marginEnd: 8,
-    flex: 1,
+    flex: 1
   },
   btn: (isDisableSubmit) => ({
     backgroundColor: !isDisableSubmit ? colors.bondi_blue : '#f2f2f2',
@@ -215,10 +223,9 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.inter[400],
     color: colors.black,
-    lineHeight: 19,
-    paddingTop: 5,
-    paddingBottom: 5,
-    maxHeight: 100
+    maxHeight: 100,
+    paddingTop: Platform.OS === 'ios' ? 10 : 5,
+    paddingBottom: Platform.OS === 'ios' ? 10 : 5
   },
   icSendButton: {
     alignSelf: 'center'

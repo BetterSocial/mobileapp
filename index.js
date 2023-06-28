@@ -18,12 +18,10 @@ const code = DeviceInfo.getReadableVersion().split('.');
 const bundleId = DeviceInfo.getBundleId();
 
 const getEnvironmentName = () => {
-  switch (bundleId) {
-    case 'org.bettersocial':
-      return 'production';
-    default:
-      return 'development';
+  if (bundleId === 'org.bettersocial') {
+    return 'production';
   }
+  return 'development';
 };
 
 Sentry.init({

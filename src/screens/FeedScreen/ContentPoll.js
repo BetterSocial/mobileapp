@@ -36,11 +36,6 @@ const ContentPoll = ({
     onSeeResultsClicked,
     modifiedPoll
   } = useContentPoll({isalreadypolling, polls});
-  const initialSetup = () => {};
-
-  React.useEffect(() => {
-    initialSetup();
-  }, [singleChoiceSelectedIndex]);
 
   const renderSeeResultButtonHandle = () =>
     renderSeeResultButton(multiplechoice, multipleChoiceSelected);
