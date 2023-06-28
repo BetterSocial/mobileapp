@@ -3,6 +3,7 @@ import {Dimensions, StatusBar} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import dimen from '../../../utils/dimen';
+import {Context} from '../../../context';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 
 const useFeed = () => {
@@ -13,6 +14,7 @@ const useFeed = () => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
+  const [profile] = React.useContext(Context).profile;
 
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
@@ -149,7 +151,8 @@ const useFeed = () => {
     onPressUpvoteHook,
     onPressDownVoteHook,
     handleTextCountStyle,
-    getTotalReaction
+    getTotalReaction,
+    showScoreButton: profile?.myProfile?.is_backdoor_user
   };
 };
 
