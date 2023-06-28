@@ -67,6 +67,7 @@ import {trimString} from '../../utils/string/TrimString';
 import {useAfterInteractions} from '../../hooks/useAfterInteractions';
 import {useUpdateClientGetstreamHook} from '../../utils/getstream/ClientGetStram';
 import {withInteractionsManaged} from '../../components/WithInteractionManaged';
+import {ButtonNewPost} from '../../components/Button';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -677,6 +678,7 @@ const ProfileScreen = ({route}) => {
             onClose={onHeaderOptionClosed}
             onDeleteClicked={onDeletePost}
           />
+          <ButtonNewPost isShowArrow={isShowButton} />
         </SafeAreaProvider>
       ) : null}
     </>
