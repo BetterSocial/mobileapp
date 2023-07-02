@@ -169,6 +169,9 @@ const ChatDetailPage = ({route}) => {
 
     return true;
   };
+
+  const members = channelClient.channel?.state?.members;
+
   if (clients.client && channelClient.channel) {
     return (
       <SafeAreaView>
@@ -198,7 +201,7 @@ const ChatDetailPage = ({route}) => {
                   loading={false}
                 />
 
-                <MessageInput Input={InputMessage} />
+                <MessageInput Input={() => <InputMessage members={members} />} />
               </>
             </Channel>
           </Chat>

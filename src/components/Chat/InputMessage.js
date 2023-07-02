@@ -6,8 +6,18 @@ import MemoIc_Picture from '../../assets/icons/Ic_Picture';
 import {colors} from '../../utils/colors';
 import IconSend from '../../assets/icon/IconSendComment';
 import SheetEmoji from './SheetEmoji';
+import {
+  deleteDraftChat,
+  getDraftChat,
+  getDraftChatStorageKey,
+  saveDraftChat
+} from '../../service/draftChat';
 
-const InputMessage = () => {
+const InputMessage = (props) => {
+  const {members} = props;
+
+  const draftChatStorageKey = getDraftChatStorageKey(members);
+
   const refEmoji = React.useRef(null);
   const {
     setText,
@@ -21,9 +31,11 @@ const InputMessage = () => {
   } = useMessageInputContext();
   const {isOnline} = useChatContext();
 
-  const onChangeInput = (v) => {
-    setText(v);
+  const onChangeInput = (message) => {
+    setText(message);
+    saveDraftChat(draftChatStorageKey, message);
   };
+
   const onSelectImoji = (emoji) => {
     appendText(emoji);
     refEmoji.current.close();
@@ -32,6 +44,7 @@ const InputMessage = () => {
   const handleSendMessage = () => {
     sendMessage();
     closeAttachmentPicker();
+    deleteDraftChat(draftChatStorageKey);
   };
 
   const handleDelete = (item) => {
@@ -48,6 +61,13 @@ const InputMessage = () => {
     }
     return true;
   };
+
+  React.useEffect(() => {
+    const draftMessage = getDraftChat(draftChatStorageKey);
+    if (draftMessage) {
+      setText(draftMessage);
+    }
+  }, []);
 
   return (
     <>
