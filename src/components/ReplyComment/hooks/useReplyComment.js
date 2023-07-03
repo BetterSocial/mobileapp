@@ -237,8 +237,8 @@ const useReplyComment = ({
           item.user.id,
           sendPostNotif,
           dataFeed?.actor?.id,
-          dataFeed.id,
-          dataFeed.message,
+          dataFeed?.id ?? dataFeed?.reaction_id,
+          dataFeed?.message,
           isAnonimity,
           anonimityData
         );
