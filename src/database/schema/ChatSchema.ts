@@ -158,7 +158,6 @@ class ChatSchema implements BaseDbSchema {
       console.log(e);
     }
     const user = UserSchema.fromDatabaseObject(dbObject);
-    // console.log('dbObject', dbObject);
 
     return new ChatSchema({
       id: dbObject.id,

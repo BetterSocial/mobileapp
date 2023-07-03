@@ -51,17 +51,12 @@ function useChatUtilsHook(): UseChatUtilsHook {
   const goToPostDetailScreen = (channel: ChannelList) => {
     setChannelAsRead(channel);
     const postNotificationChannel = channel as PostNotificationChannelList;
-    // console.log(
-    //   'postNotificationChannel',
-    //   JSON.stringify(postNotificationChannel?.rawJson?.activity_id, null, 2)
-    // );
 
     if (!postNotificationChannel?.rawJson?.activity_id)
       return SimpleToast.show('Failed to get id', SimpleToast.SHORT);
 
     return navigation.navigate('PostDetailPage', {
       feedId: postNotificationChannel?.rawJson?.activity_id,
-      // refreshCache: () => handleUpdateCache(item.activity_id, item.totalCommentBadge),
       isCaching: false
     });
   };

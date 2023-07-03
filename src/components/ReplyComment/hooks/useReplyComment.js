@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/core';
 import StringConstant from '../../../utils/string/StringConstant';
 import useUpdateComment from '../../Comments/hooks/useUpdateComment';
 import {Context} from '../../../context';
-import {createChildComment, createChildCommentV3} from '../../../service/comment';
+import {createChildCommentV3} from '../../../service/comment';
 import {getCommentChild} from '../../../service/feeds';
 import {getFeedDetail} from '../../../service/post';
 

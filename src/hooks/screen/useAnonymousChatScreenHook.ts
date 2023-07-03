@@ -20,7 +20,6 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
     useChatUtilsHook();
 
   const [chats, setChats] = React.useState<ChatSchema[]>([]);
-  const [chatInfo, setChatInfo] = React.useState<ChannelList>(null);
 
   const initChatData = async () => {
     if (!localDb) return;

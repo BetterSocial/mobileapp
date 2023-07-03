@@ -22,12 +22,10 @@ import StringConstant from '../../utils/string/StringConstant';
 import WriteComment from '../../components/Comments/WriteComment';
 import {Context} from '../../context';
 import {colors} from '../../utils/colors';
-import {createChildComment, createChildCommentV3} from '../../service/comment';
+import {createChildCommentV3} from '../../service/comment';
 import {fonts} from '../../utils/fonts';
 import {getComment} from '../../utils/getstream/getComment';
 import {getFeedDetail} from '../../service/post';
-
-// import {temporaryComment} from '../../utils/string/LoadingComment';
 
 const ReplyCommentId = ({itemProp, indexFeed, level, updateParent}) => {
   console.log('indexFeed');

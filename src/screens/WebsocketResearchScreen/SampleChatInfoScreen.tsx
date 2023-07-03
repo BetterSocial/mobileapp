@@ -158,8 +158,8 @@ export const styles = StyleSheet.create({
 const SampleChatInfoScreen = () => {
   const {channelInfo, goBack, onContactPressed} = useAnonymousChatInfoScreenHook();
 
-  const [isLoadingMembers, setIsLoadingMembers] = React.useState<boolean>(false);
-  const {signedProfileId, anonProfileId} = useProfileHook();
+  const [isLoadingMembers] = React.useState<boolean>(false);
+  const {signedProfileId} = useProfileHook();
 
   const showImageProfile = () => {
     return (
@@ -199,9 +199,7 @@ const SampleChatInfoScreen = () => {
                 <Text style={styles.countUser}>Participants ({2})</Text>
                 <FlatList
                   testID="participants"
-                  // nestedScrollEnabled={true}
                   data={channelInfo?.members}
-                  // contentContainerStyle={{paddingBottom: 10}}
                   keyExtractor={(item, index) => index?.toString()}
                   renderItem={({item, index}) => (
                     <View style={{height: normalize(72)}}>
@@ -211,7 +209,7 @@ const SampleChatInfoScreen = () => {
                         onPress={() => onContactPressed(item)}
                         fullname={item?.user?.isMe ? 'You' : item?.user?.username}
                         photo={item?.user?.profilePicture}
-                        // showArrow={channelState?.channel.data.type === 'group'}
+                        showArrow={!item?.user?.isMe}
                         userId={signedProfileId}
                       />
                     </View>
