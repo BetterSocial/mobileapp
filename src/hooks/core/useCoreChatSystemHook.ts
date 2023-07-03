@@ -168,6 +168,7 @@ const useCoreChatSystemHook = () => {
 
     try {
       if (!anonymousPostNotification) return;
+      console.log('anonymousPostNotification', anonymousPostNotification);
       const unreadCount = unreadCountProcessor(anonymousPostNotification);
       const channelList = ChannelList.fromAnonymousPostNotificationAPI(anonymousPostNotification);
       channelList.saveAndUpdateIncrementCount(localDb, unreadCount).catch((e) => console.log(e));
