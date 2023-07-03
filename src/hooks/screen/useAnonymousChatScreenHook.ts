@@ -1,6 +1,7 @@
 import 'react-native-get-random-values';
 
 import * as React from 'react';
+import SimpleToast from 'react-native-simple-toast';
 import {v4 as uuid} from 'uuid';
 
 import AnonymousMessageRepo from '../../service/repo/anonymousMessageRepo';
@@ -38,31 +39,52 @@ function useAnonymousChatScreenHook(): UseAnonymousChatScreenHook {
     console.log('initChatInfoData');
   };
 
-  const sendChat = async (message: string = randomString(20)) => {
+  const sendChat = async (
+    message: string = randomString(20),
+    iteration = 0,
+    sendingChatSchema: ChatSchema = null
+  ) => {
+    if (iteration > 5) {
+      SimpleToast.show("Can't send message, please check your connection");
+      return;
+    }
+
+    let currentChatSchema = sendingChatSchema;
+
     const myAnonymousId = await getAnonymousUserId();
     try {
       const randomId = uuid();
-      const sendingChatSchema = await ChatSchema.generateSendingChat(
-        randomId,
-        myAnonymousId,
-        selectedChannel?.id,
-        message,
-        localDb
-      );
 
-      await sendingChatSchema.save(localDb);
-      refresh('chat');
-      refresh('channelList');
+      if (currentChatSchema === null) {
+        currentChatSchema = await ChatSchema.generateSendingChat(
+          randomId,
+          myAnonymousId,
+          selectedChannel?.id,
+          message,
+          localDb
+        );
+
+        await currentChatSchema.save(localDb);
+        refresh('chat');
+        refresh('channelList');
+      }
+
       const response = await AnonymousMessageRepo.sendAnonymousMessage(
         selectedChannel?.id,
         message
       );
 
-      await sendingChatSchema.updateChatSentStatus(localDb, response);
+      await currentChatSchema.updateChatSentStatus(localDb, response);
       refresh('chat');
       refresh('channelList');
     } catch (e) {
       console.log(e);
+
+      setTimeout(() => {
+        sendChat(message, iteration + 1, currentChatSchema).catch((sendChatError) => {
+          console.log(sendChatError);
+        });
+      }, 1000);
     }
   };
 
