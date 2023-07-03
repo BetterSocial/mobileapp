@@ -25,6 +25,8 @@ function useAnonymousChannelListScreenHook(): UseAnonymousChannelListScreenHook 
     initChannelListData();
   }, [localDb, channelList]);
 
+  console.log('channels', JSON.stringify(channels, null, 2));
+
   return {
     channels,
     goToChatScreen,

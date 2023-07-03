@@ -25,6 +25,8 @@ class ChannelList implements BaseDbSchema {
 
   createdAt: string;
 
+  expiredAt: string;
+
   rawJson: any;
 
   user: UserSchema | null;
@@ -43,6 +45,7 @@ class ChannelList implements BaseDbSchema {
     createdAt,
     rawJson,
     user,
+    expiredAt = null,
     members = []
   }) {
     if (!id) throw new Error('ChannelList must have an id');
@@ -59,6 +62,7 @@ class ChannelList implements BaseDbSchema {
     this.rawJson = rawJson;
     this.user = user;
     this.members = members;
+    this.expiredAt = expiredAt;
   }
 
   getAll = (db: any): Promise<BaseDbSchema[]> => {
@@ -111,8 +115,9 @@ class ChannelList implements BaseDbSchema {
           last_updated_at,
           last_updated_by,
           created_at,
+          expired_at,
           raw_json
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           this.id,
           this.channelPicture,
@@ -123,6 +128,7 @@ class ChannelList implements BaseDbSchema {
           this.lastUpdatedAt,
           this.lastUpdatedBy,
           this.createdAt,
+          this.expiredAt,
           jsonString
         ]
       );
@@ -191,6 +197,7 @@ class ChannelList implements BaseDbSchema {
       FROM ${ChannelList.getTableName()} A
       LEFT JOIN ${UserSchema.getTableName()} B
       ON A.last_updated_by = B.user_id
+      WHERE expired_at IS NULL OR datetime(expired_at) >= datetime('now')
       ORDER BY last_updated_at DESC`,
       [myId, myAnonymousId]
     );
@@ -252,6 +259,7 @@ class ChannelList implements BaseDbSchema {
       createdAt: json.created_at,
       rawJson: jsonParsed,
       members: json.members,
+      expiredAt: json.expired_at,
       user
     });
   }
