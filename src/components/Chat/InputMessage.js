@@ -2,10 +2,13 @@ import * as React from 'react';
 import {StyleSheet, View, TextInput, TouchableOpacity, Image, FlatList} from 'react-native';
 import FA from 'react-native-vector-icons/FontAwesome';
 import {useChatContext, useMessageInputContext} from 'stream-chat-react-native';
+import {debounce} from 'lodash';
 import MemoIc_Picture from '../../assets/icons/Ic_Picture';
 import {colors} from '../../utils/colors';
 import IconSend from '../../assets/icon/IconSendComment';
 import SheetEmoji from './SheetEmoji';
+
+import {Context} from '../../context/Store';
 import {
   deleteDraftChat,
   getDraftChat,
@@ -13,8 +16,9 @@ import {
   saveDraftChat
 } from '../../service/draftChat';
 
-const InputMessage = (props) => {
-  const {members} = props;
+const InputMessage = () => {
+  const [channelClient] = React.useContext(Context).channel;
+  const members = channelClient.channel?.state?.members;
 
   const draftChatStorageKey = getDraftChatStorageKey(members);
 
@@ -29,11 +33,16 @@ const InputMessage = (props) => {
     closeAttachmentPicker,
     setImageUploads
   } = useMessageInputContext();
+
   const {isOnline} = useChatContext();
+
+  const saveMessageToDraftDebounced = debounce((message) => {
+    saveDraftChat(draftChatStorageKey, message);
+  }, 500);
 
   const onChangeInput = (message) => {
     setText(message);
-    saveDraftChat(draftChatStorageKey, message);
+    saveMessageToDraftDebounced(message);
   };
 
   const onSelectImoji = (emoji) => {
