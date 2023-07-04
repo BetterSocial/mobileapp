@@ -7,16 +7,16 @@ import * as useLocalCommunity from '../../../src/screens/LocalCommunity/hooks/us
 
 jest.mock('react-native/Libraries/Pressability/usePressability');
 
-describe('it should run correctly', () => {
-  const wrapper = ({children}) => (
-    <Context.Provider
-      value={{
-        localCommunity: [{localCommunity: []}]
-      }}>
-      {children}
-    </Context.Provider>
-  );
+const wrapper = ({children}) => (
+  <Context.Provider
+    value={{
+      localCommunity: [{localCommunity: []}]
+    }}>
+    {children}
+  </Context.Provider>
+);
 
+describe('it should run correctly', () => {
   const mockInterpolate = jest.fn();
   const mockTiming = jest.fn();
   const mockDeleteLocation = jest.fn();
