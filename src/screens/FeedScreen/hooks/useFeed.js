@@ -3,6 +3,7 @@ import {Dimensions, StatusBar} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import dimen from '../../../utils/dimen';
+import {Context} from '../../../context';
 import {linkContextScreenParamBuilder} from '../../../utils/navigation/paramBuilder';
 
 const useFeed = () => {
@@ -13,6 +14,7 @@ const useFeed = () => {
   const [voteStatus, setVoteStatus] = React.useState('none');
   const [statusUpvote, setStatusUpvote] = React.useState(false);
   const [statusDownvote, setStatusDowvote] = React.useState(false);
+  const [profile] = React.useContext(Context).profile;
 
   const handleVote = (data = {}) => {
     const upvote = data.upvotes ? data.upvotes : 0;
@@ -111,7 +113,10 @@ const useFeed = () => {
       const totalLevel2Comment = feedDetail?.latest_reactions?.comment?.map(
         (child) => child?.children_counts?.comment || 0
       ) || [0];
-      const total2 = totalLevel2Comment?.reduce((a, b) => a + b);
+      let total2 = 0;
+      if (totalLevel2Comment?.length > 0) {
+        total2 = totalLevel2Comment?.reduce((a, b) => a + b);
+      }
       const level3Comment = [];
       feedDetail?.latest_reactions?.comment?.forEach((feed) => {
         const mapCount = feed?.latest_children?.comment?.map(
@@ -123,7 +128,7 @@ const useFeed = () => {
       });
       let total3 = 0;
       if (level3Comment.length > 0) {
-        total3 = level3Comment.reduce((a, b) => a + b);
+        total3 = level3Comment?.reduce((a, b) => a + b);
       }
       return parentComment + total2 + total3;
     }
@@ -149,7 +154,8 @@ const useFeed = () => {
     onPressUpvoteHook,
     onPressDownVoteHook,
     handleTextCountStyle,
-    getTotalReaction
+    getTotalReaction,
+    showScoreButton: profile?.myProfile?.is_backdoor_user
   };
 };
 
