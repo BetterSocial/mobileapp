@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: colors.lightgrey
+    backgroundColor: colors.lightgrey,
+    maxHeight: 100
   },
   btn: {
     borderRadius: 18,
@@ -100,13 +101,7 @@ const AnonymousInputMessage = ({onSendButtonClicked}: AnonymousInputMessageProps
     <>
       <View style={styles.container}>
         <View style={styles.containerInput}>
-          <TextInput
-            multiline
-            style={styles.input}
-            numberOfLines={5}
-            onChangeText={onChangeInput}
-            value={text}
-          />
+          <TextInput multiline style={styles.input} onChangeText={onChangeInput} value={text} />
           <TouchableOpacity
             style={[styles.btn, isDisableButton() ? styles.disableButton : styles.enableButton]}
             disabled={isDisableButton()}
