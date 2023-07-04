@@ -8,29 +8,21 @@ import {
   TouchableNativeFeedback,
   View
 } from 'react-native';
-import {debounce} from 'lodash';
-import {showMessage} from 'react-native-flash-message';
-import {useNavigation} from '@react-navigation/core';
 
 import PinIcon from '../../../assets/icons/pin.svg';
 import PlusIcon from '../../../assets/icons/plus.svg';
 import StringConstant from '../../utils/string/StringConstant';
 import TrashIcon from '../../../assets/icons/trash.svg';
-import {Analytics} from '../../libraries/analytics/firebaseAnalytics';
 import {Button} from '../../components/Button';
-import {Context} from '../../context';
 import {Header} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {SearchModal} from '../../components/Search';
 import {colors} from '../../utils/colors';
 import {locationValidation} from '../../utils/Utils';
-import {post} from '../../api/server';
-import {setLocalCommunity} from '../../context/actions/localCommunity';
 import useLocalCommunity from './hooks/useLocalCommunity';
 
 const {width} = Dimensions.get('screen');
 const LocalCommunity = () => {
-  const navigation = useNavigation();
   const {
     search,
     setSearch,
@@ -41,19 +33,10 @@ const LocalCommunity = () => {
     isVisibleFirstLocation,
     onPressFirstLocation,
     location,
-    setLocation,
     onBack,
     handleKeyExtractor,
-    locationPost,
-    setLocationPost,
     optionsSearch,
-    setOptionsSearch,
     isLoading,
-    setIsLoading,
-    locationLog,
-    setLocationLog,
-    capitalizeFirstLetter,
-    handleSearch,
     onChangeLocationSearchText,
     handleSelectedSearch,
     handleDelete,
