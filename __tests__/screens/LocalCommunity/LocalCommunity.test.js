@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, cleanup, fireEvent, act} from '@testing-library/react-native';
+import {render, fireEvent} from '@testing-library/react-native';
 import {Animated} from 'react-native';
 import LocalCommunity from '../../../src/screens/LocalCommunity';
 import {Context} from '../../../src/context/Store';
@@ -30,7 +30,6 @@ describe('it should run correctly', () => {
   const mocksetIsVisibleFirstLocation = jest.fn();
   const mockHandleSelectedSearch = jest.fn();
   const mockSetSearch = jest.fn();
-  const onPressFirstLocationMock = jest.fn();
 
   beforeEach(() => {
     jest
@@ -162,7 +161,6 @@ describe('onPress first location should run correctly', () => {
   const mocksetIsVisibleFirstLocation = jest.fn();
   const mockHandleSelectedSearch = jest.fn();
   const mockSetSearch = jest.fn();
-  const onPressFirstLocationMock = jest.fn();
 
   beforeEach(() => {
     jest

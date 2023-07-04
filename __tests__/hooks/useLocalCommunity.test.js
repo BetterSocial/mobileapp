@@ -2,10 +2,8 @@ import React from 'react';
 import {renderHook} from '@testing-library/react-hooks';
 import {act} from 'react-test-renderer';
 import useLocalCommunity from '../../src/screens/LocalCommunity/hooks/useLocalCommunity';
-import * as useDefaultLocalCommunity from '../../src/screens/LocalCommunity/hooks/useLocalCommunity';
 import * as apiServer from '../../src/api/server';
 import {Context} from '../../src/context';
-import * as localCommunityAct from '../../src/context/actions/localCommunity';
 
 const mockGoBack = jest.fn();
 const mockNavigate = jest.fn();

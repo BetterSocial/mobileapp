@@ -1,7 +1,6 @@
 import React from 'react';
-import {render, cleanup, fireEvent} from '@testing-library/react-native';
+import {render} from '@testing-library/react-native';
 import {Animated} from 'react-native';
-import {act} from 'react-test-renderer';
 import {ProgressBar} from '../../../src/components/ProgressBar';
 
 describe('Progress Bar should run correctly', () => {
@@ -16,8 +15,5 @@ describe('Progress Bar should run correctly', () => {
   it('should match with snapshot', () => {
     const {toJSON} = render(<ProgressBar />);
     expect(toJSON).toMatchSnapshot();
-  });
-  it('useInterval sshould run correctly', () => {
-    const mockCallback = jest.fn();
   });
 });

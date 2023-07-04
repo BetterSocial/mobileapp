@@ -83,7 +83,7 @@ const useLocalCommunity = () => {
     setSearch(capitalizeFirstLetter(val.neighborhood));
     setOptionsSearch([]);
     const locLog = [];
-    const returnTempLocation = await tempLocation.map((item) => {
+    const returnTempLocation = tempLocation.map((item) => {
       locLog.push({
         location: `${item.city}, ${item.zip}`,
         location_level: item.location_level
