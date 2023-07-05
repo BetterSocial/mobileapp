@@ -26,49 +26,63 @@ const ReadMore = (props) => {
   const [charLength, setCharLength] = React.useState(0);
   const [isFinishSetLayout, setIsFinishSetLayout] = React.useState(false);
   const [lengthTextFirstLine, setLengthTextFirstLine] = React.useState(0);
-
+  const [realNumberLine, setRealNumberLine] = React.useState(0);
+  const [textShown, setTextShown] = React.useState('');
+  const [layoutWidth, setLayoutWidth] = React.useState(0);
   const handleLayoutText = async ({nativeEvent}) => {
     let characterNumber = 0;
     let textWidth = 0;
     let lengthFirstLine = 0;
+    let text = '';
     // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < nativeEvent.lines.length; i++) {
+    for (let i = 0; i < props.numberLine; i++) {
       characterNumber += nativeEvent.lines[i].text.length;
       textWidth += nativeEvent.lines[i].width;
       if (i === 0) {
         lengthFirstLine = nativeEvent.lines[i].text.length;
       }
+      if (i === props.numberLine - 1) {
+        let newText = `${nativeEvent.lines[i].text}`.replace(/\n/g, '');
+        if (nativeEvent.lines[i].width >= layoutWidth) {
+          newText = newText.substring(10);
+        }
+        text += newText;
+      } else {
+        text += nativeEvent.lines[i].text;
+      }
     }
-    await setNumberLine(nativeEvent.lines.length);
-    await setCharLength(characterNumber);
-    await setLengthTextFirstLine(lengthFirstLine);
+    setTextShown(text);
+    setRealNumberLine(nativeEvent.lines.length);
+    setNumberLine(props.numberLine);
+    setCharLength(characterNumber);
+    setLengthTextFirstLine(lengthFirstLine);
     setIsFinishSetLayout(true);
   };
-  const handleReadMoreText = () => {
-    if (props.numberLine < curNumberLine) {
-      const substringText = props.numberLine * (lengthTextFirstLine - 5);
-      const longText = substringText;
 
-      return longText;
-    }
-    return charLength;
+  const handleLayoutWidth = ({nativeEvent}) => {
+    setLayoutWidth(Math.floor(nativeEvent.layout.width));
   };
 
   React.useEffect(() => {
     setIsFinishSetLayout(false);
-  }, [props.text]);
-
+  }, [layoutWidth]);
   return (
-    <View style={props.containerStyle}>
+    <View onLayout={handleLayoutWidth} style={props.containerStyle}>
       {isFinishSetLayout ? (
         <TouchableOpacity onPress={props.onPress}>
           <Text>
-            {props.text.substring(0, handleReadMoreText())}{' '}
-            {props.numberLine < curNumberLine ? <Text style={styles.moreText}>More...</Text> : null}{' '}
+            {textShown}{' '}
+            {props.numberLine < realNumberLine ? (
+              <Text style={styles.moreText}>More...</Text>
+            ) : null}{' '}
           </Text>
         </TouchableOpacity>
       ) : null}
-      {!isFinishSetLayout ? <Text onTextLayout={handleLayoutText}>{props.text} </Text> : null}
+      {!isFinishSetLayout ? (
+        <Text numberOfLines={props.numberLine} onTextLayout={handleLayoutText}>
+          {props.text}{' '}
+        </Text>
+      ) : null}
     </View>
   );
 };
