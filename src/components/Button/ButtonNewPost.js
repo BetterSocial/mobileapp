@@ -7,7 +7,7 @@ import {NavigationConstants, SOURCE_FEED_TAB} from '../../utils/constants';
 import {setTimer} from '../../context/actions/feeds';
 import {viewTimePost} from '../../service/post';
 
-const ButtonAddPost = ({onRefresh}) => {
+const ButtonAddPost = ({onRefresh, isShowArrow}) => {
   const navigator = useNavigation();
   const [feedsContext, dispatch] = React.useContext(Context).feeds;
 
@@ -21,7 +21,13 @@ const ButtonAddPost = ({onRefresh}) => {
     setTimer(new Date(), dispatch);
   };
 
-  return <BaseButtonAddPost onAddPostPressed={__handleOnAddPostButtonClicked} testID="onpress" />;
+  return (
+    <BaseButtonAddPost
+      isShowArrow={isShowArrow}
+      onAddPostPressed={__handleOnAddPostButtonClicked}
+      testID="onpress"
+    />
+  );
 };
 
 export default ButtonAddPost;
