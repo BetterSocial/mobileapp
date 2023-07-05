@@ -60,12 +60,12 @@ const ReadMore = (props) => {
   };
 
   const handleLayoutWidth = ({nativeEvent}) => {
-    setLayoutWidth(Math.ceil(nativeEvent.layout.width * 0.85));
+    setLayoutWidth(Math.floor(nativeEvent.layout.width));
   };
 
   React.useEffect(() => {
     setIsFinishSetLayout(false);
-  }, [props.text]);
+  }, [layoutWidth]);
   return (
     <View onLayout={handleLayoutWidth} style={props.containerStyle}>
       {isFinishSetLayout ? (
@@ -78,7 +78,11 @@ const ReadMore = (props) => {
           </Text>
         </TouchableOpacity>
       ) : null}
-      {!isFinishSetLayout ? <Text onTextLayout={handleLayoutText}>{props.text} </Text> : null}
+      {!isFinishSetLayout ? (
+        <Text numberOfLines={props.numberLine} onTextLayout={handleLayoutText}>
+          {props.text}{' '}
+        </Text>
+      ) : null}
     </View>
   );
 };
