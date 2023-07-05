@@ -27,18 +27,9 @@ const ReadMore = (props) => {
   const [textShown, setTextShown] = React.useState('');
   const [layoutWidth, setLayoutWidth] = React.useState(0);
   const handleLayoutText = async ({nativeEvent}) => {
-    let characterNumber = 0;
-    let textWidth = 0;
-    let lengthFirstLine = 0;
     let text = '';
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < props.numberLine; i++) {
-      characterNumber += nativeEvent.lines[i].text.length;
-      textWidth += nativeEvent.lines[i].width;
-
-      if (i === 0) {
-        lengthFirstLine = nativeEvent.lines[i]?.text.length;
-      }
       if (i === props.numberLine - 1) {
         let newText = `${nativeEvent.lines[i]?.text}`.replace(/\n/g, '');
         if (nativeEvent.lines[i]?.width >= layoutWidth * 0.85) {
