@@ -44,7 +44,7 @@ const ReadMore = (props) => {
       if (i === props.numberLine - 1) {
         let newText = `${nativeEvent.lines[i].text}`.replace(/\n/g, '');
         if (nativeEvent.lines[i].width >= layoutWidth) {
-          newText = newText.substring(10);
+          newText = newText.substring(15);
         }
         text += newText;
       } else {
