@@ -389,5 +389,8 @@ export const styles = StyleSheet.create({
   textAct: {
     color: '#FF2E63',
     fontSize: 14
+  },
+  scrollContainer: {
+    paddingBottom: 30
   }
 });
