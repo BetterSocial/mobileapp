@@ -56,8 +56,7 @@ const ReadMore = (props) => {
       {isFinishSetLayout ? (
         <TouchableOpacity onPress={props.onPress}>
           <Text>
-            {textShown}
-            {''}
+            {textShown}{' '}
             {props.numberLine < realNumberLine ? (
               <Text style={styles.moreText}>More...</Text>
             ) : null}{' '}
