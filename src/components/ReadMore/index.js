@@ -38,17 +38,19 @@ const ReadMore = (props) => {
     for (let i = 0; i < props.numberLine; i++) {
       characterNumber += nativeEvent.lines[i].text.length;
       textWidth += nativeEvent.lines[i].width;
+      console.log(nativeEvent.lines[i], i, 'lines');
+
       if (i === 0) {
-        lengthFirstLine = nativeEvent.lines[i].text.length;
+        lengthFirstLine = nativeEvent.lines[i]?.text.length;
       }
       if (i === props.numberLine - 1) {
-        let newText = `${nativeEvent.lines[i].text}`.replace(/\n/g, '');
-        if (nativeEvent.lines[i].width >= layoutWidth) {
+        let newText = `${nativeEvent.lines[i]?.text}`.replace(/\n/g, '');
+        if (nativeEvent.lines[i]?.width >= layoutWidth * 0.85) {
           newText = newText.substring(10);
         }
         text += newText;
       } else {
-        text += nativeEvent.lines[i].text;
+        text += nativeEvent.lines[i]?.text;
       }
     }
     setTextShown(text);
@@ -62,10 +64,10 @@ const ReadMore = (props) => {
   const handleLayoutWidth = ({nativeEvent}) => {
     setLayoutWidth(Math.floor(nativeEvent.layout.width));
   };
-
+  // console.log({layoutWidth, numberLine: props.numberLine, textShown}, 'nusi');
   React.useEffect(() => {
     setIsFinishSetLayout(false);
-  }, [layoutWidth]);
+  }, [layoutWidth, props.text]);
   return (
     <View onLayout={handleLayoutWidth} style={props.containerStyle}>
       {isFinishSetLayout ? (
@@ -78,11 +80,7 @@ const ReadMore = (props) => {
           </Text>
         </TouchableOpacity>
       ) : null}
-      {!isFinishSetLayout ? (
-        <Text numberOfLines={props.numberLine} onTextLayout={handleLayoutText}>
-          {props.text}{' '}
-        </Text>
-      ) : null}
+      {!isFinishSetLayout ? <Text onTextLayout={handleLayoutText}>{props.text} </Text> : null}
     </View>
   );
 };
