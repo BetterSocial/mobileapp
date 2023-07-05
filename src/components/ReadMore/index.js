@@ -22,27 +22,14 @@ const styles = StyleSheet.create({
  */
 
 const ReadMore = (props) => {
-  const [curNumberLine, setNumberLine] = React.useState(0);
-  const [charLength, setCharLength] = React.useState(0);
   const [isFinishSetLayout, setIsFinishSetLayout] = React.useState(false);
-  const [lengthTextFirstLine, setLengthTextFirstLine] = React.useState(0);
   const [realNumberLine, setRealNumberLine] = React.useState(0);
   const [textShown, setTextShown] = React.useState('');
   const [layoutWidth, setLayoutWidth] = React.useState(0);
   const handleLayoutText = async ({nativeEvent}) => {
-    let characterNumber = 0;
-    let textWidth = 0;
-    let lengthFirstLine = 0;
     let text = '';
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < props.numberLine; i++) {
-      characterNumber += nativeEvent.lines[i].text.length;
-      textWidth += nativeEvent.lines[i].width;
-      console.log(nativeEvent.lines[i], i, 'lines');
-
-      if (i === 0) {
-        lengthFirstLine = nativeEvent.lines[i]?.text.length;
-      }
       if (i === props.numberLine - 1) {
         let newText = `${nativeEvent.lines[i]?.text}`.replace(/\n/g, '');
         if (nativeEvent.lines[i]?.width >= layoutWidth * 0.85) {
@@ -55,16 +42,12 @@ const ReadMore = (props) => {
     }
     setTextShown(text);
     setRealNumberLine(nativeEvent.lines.length);
-    setNumberLine(props.numberLine);
-    setCharLength(characterNumber);
-    setLengthTextFirstLine(lengthFirstLine);
     setIsFinishSetLayout(true);
   };
 
   const handleLayoutWidth = ({nativeEvent}) => {
     setLayoutWidth(Math.floor(nativeEvent.layout.width));
   };
-  // console.log({layoutWidth, numberLine: props.numberLine, textShown}, 'nusi');
   React.useEffect(() => {
     setIsFinishSetLayout(false);
   }, [layoutWidth, props.text]);
