@@ -55,7 +55,7 @@ const chatTabHeaderPlaceholder = 'Search Users';
 const chatTabHeaderCreateChatButtonText = 'New Chat';
 
 // News Tab
-const newsTabHeaderPlaceholder = 'Search Better';
+const newsTabHeaderPlaceholder = 'Search BetterSocial';
 const newsTabHeaderCreatePostButtonText = 'New Post';
 
 // Link Detail Page
@@ -101,7 +101,7 @@ const discoveryMoreUsers = 'More Users';
 const discoveryMoreTopics = 'More Communities';
 const discoveryMoreDomains = 'More Domains';
 const discoveryMoreNews = 'More News';
-const discoverySearchBarPlaceholder = 'Search Better';
+const discoverySearchBarPlaceholder = 'Search BetterSocial';
 
 // Profile Screeen
 const profileDeleteAccountAlertMessage =
